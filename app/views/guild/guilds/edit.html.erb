@@ -1,0 +1,13 @@
+<%= javascript_include_tag 'guild' %>
+
+<%= error_messages_for :guild, :header_message => '以下原因导致工会创建失败', :message => nil %>
+
+<div class='event-input'>
+<% form_for :guild, :url => guild_url(@guild), :html => {:onsubmit => "return validate_guild();"} do |f| %>
+  <%= f.label '工会名字: ' %>
+  <%= f.text_field :name %><br/>
+  <%= f.label '工会描述: ' %>
+  <%= f.text_area :description, :rows => 8 %><br/>
+  <%= f.submit '提交', :style => "margin-left: 80px;" %>   
+<% end %>
+</div>

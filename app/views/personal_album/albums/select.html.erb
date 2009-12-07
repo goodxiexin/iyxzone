@@ -1,0 +1,11 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %><br/>
+<% end %>
+ 
+<h3>上传照片</h3>
+ 
+<div class="uploadWrap">
+请选择照片专辑
+<%= collection_select :album, :id, @albums, :id, :title, {:prompt => '---'} %>
+<%= button_to_function "下一步", "if(!$('album_id').value){error('请选择一个相册');}else{ window.location.href = '#{new_personal_photo_url}?album_id=' + $('album_id').value;}", :class => 'confirm-button' %>
+</div>

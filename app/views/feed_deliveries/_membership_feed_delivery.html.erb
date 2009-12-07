@@ -1,0 +1,7 @@
+<% delivery = membership_feed_delivery %>
+<% membership = membership_feed_delivery.feed_item.originator %>
+<div class='feed-list' id='feed_delivery_<%= delivery.id %>'>
+  <div class="feed-icon icon-friend"></div>
+  <p><%= profile_link membership.user %> 加入了工会 <%= guild_link membership.guild %> </p>
+  <div><%= yield %></div>
+</div>

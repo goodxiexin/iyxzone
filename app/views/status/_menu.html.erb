@@ -1,0 +1,6 @@
+<% subject = get_subject @user %>
+
+<%= link_to "#{subject}的状态", statuses_url(:id => @user.id) %> |
+<% if @user == current_user %>
+	<%= link_to "好友的状态", status_feeds_url %>
+<% end %>

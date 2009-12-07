@@ -1,0 +1,2 @@
+module GameAttentionsHelper
+end

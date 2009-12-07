@@ -1,0 +1,23 @@
+<% @user_array.each do |user_info| %>
+<% @user = User.find(user_info[0]) %>
+<div class='friend' id='<%= "friend_suggestion_#{user_info[0]}"%>'>
+  <%= avatar @user %>
+  <div class='user-link'>
+    <%= profile_link @user %><br/>
+    <span class='friend-tiny'>
+      <%= user_info[1] %>
+    </span>
+  </div>
+  <div class='operation'>
+    <% if current_user.id == @user.id %>
+    <% elsif current_user.has_friend?(@user) %>
+      已为好友
+    <% elsif current_user.wait_for?(@user)%>
+      以发出邀请
+    <% else %>
+      <%= facebox_link "加为好友", new_friend_request_url(:friend_id => user_info[0]) %>
+    <% end %>
+  </div>
+</div>
+<% end %>
+<%= will_paginate @user_array %>

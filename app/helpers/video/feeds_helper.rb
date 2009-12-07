@@ -1,0 +1,2 @@
+module Video::FeedsHelper
+end

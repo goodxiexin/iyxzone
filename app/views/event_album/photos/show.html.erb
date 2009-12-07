@@ -1,0 +1,89 @@
+<%= javascript_include_tag 'photo_tag' %>
+<%= javascript_include_tag 'photo_slide' %>
+
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+  
+<div class='crumb'>
+<div class='left'>
+<% subject = get_subject @user %>
+<%= event_link @event %> -> <%= album_link @album %> -> 照片<br/>
+</div>
+</div>
+
+<div class='photo-view'>
+  <div class='photo-wrap'>
+    <%= image_tag @photo.public_filename, :id => "photo_#{@photo.id}" %>
+  </div>
+  <div class='photo-info'>
+	<% if @user == current_user %>
+    <%= in_place_text_field :span, @photo, :notation, true, event_photo_url(@photo), {}, {:empty_text => '点击增加照片描述', :parameter_name => 'photo[notation]', :rows => 2, :cols => 70} %>
+	<% else %>
+		<%= @photo.notation %>
+	<% end %>
+  </div>
+	<div id='photo_tags'>
+    <%= render :partial => 'event_album/tags/tag', :collection => @photo.tags %>
+  </div>
+</div>
+
+<div style="display:none" id='square'>
+  <div></div>
+</div>
+<div style="display:none" id='input'>
+  <div>
+    <%= label_tag '这是谁...' %><br/>
+    <%= auto_complete_text_field :tag, :tagged_user, "/photo_tags/friends", {}, {:after_update_element => "select_friend"} %>
+    <%= button_to_function '', "tag_builder.toggle_friends('#{form_authenticity_token}');" %><br/>
+    <% form_remote_for :tag, :url => event_photo_tags_url(@photo), :html => {:id => 'tag_form'} do |f| %>
+      <%= f.label '说点什么吧' %><br/>
+      <%= hidden_field_tag 'tag[tagged_user_id]', '' %>
+      <%= f.text_area 'content', :rows => 2, :cols => 40 %><br/>
+      <%= button_to_function '确定', "", :id => 'confirm_btn'%>
+      <%= button_to_function '取消', "", :id => 'cancel_btn'%>
+    <% end %>
+  </div>
+</div>
+
+
+<div id='photo_options'>
+  <%= dig_link @photo %> |
+	<% if @participation and [3,4,5].include? @participation.status %>
+		<%= link_to_function '标记', "tag_builder.start();" %> |
+	<% end %>
+  <% if @user == current_user %>
+    <%= link_to '编辑', edit_event_photo_url(@photo), :rel => 'facebox' %> |
+    <%= facebox_confirm 'x', event_photo_url(@photo), {:method => :delete, :msg => '你确定要删除这张照片吗?'} %>  
+  <% end %>
+</div>
+
+<div id='photo_preview'>
+  <div class='prev'>
+    <% if @album.photos_count > 4 %>
+      <%= link_to_function '上一张', "slide.prev();" %>
+    <% end %>
+  </div>
+  <div class='photo-list'>
+    <ul id='frames'>
+    <% window_size = (@album.photos_count > 4)? 4 : @album.photos_count %>
+    <% window_size.times do |i| %>
+      <li></li>
+    <% end %>
+    </ul>
+  <div class='next'>
+    <% if @album.photos_count > 4 %>
+      <%= link_to_function '下一张', "slide.next();" %>
+    <% end %>
+  </div>
+</div>
+
+<%= render :partial => 'comments/comment_box', :locals => {:comment_template => '/event_album/photo_comments/comment', :commentable => @photo, :recipients => @photo.poster} %>
+
+<% photo_ids = array_or_string_for_javascript @album.photos.map(&:id) %>
+<% urls = array_or_string_for_javascript @album.photos.map {|p| p.public_filename(:small)} %>
+<%= javascript_tag "
+  slide = new PhotoSlide('event_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames').childElements(), #{@photo.id});
+  tag_builder = new PhotoTagBuilder('event_photo', #{@photo.id}); 
+"%>
+

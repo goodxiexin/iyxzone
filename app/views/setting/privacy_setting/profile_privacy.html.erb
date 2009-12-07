@@ -1,0 +1,58 @@
+<h3>隐私设置 - 个人主页</h3>
+在dayday3，默认只有和你玩同样游戏的人或者你的朋友才能浏览你的个人主页，你还可以对你个人主页中的内容设置不同的浏览权限。<br/>
+<%= link_to '不保存修改，并返回隐私设置首页', privacy_setting_url %>
+<br/><br/><br/>
+
+<% form_for :setting, :url => privacy_setting_url, :html => {:method => :put} do |f| %>
+<div class='configure-privacy-setting'>
+  <h3><%= link_to '个人主页', "#" %></h3>
+  <div class='part'>
+    <%= label_tag '', '谁可以浏览我的个人主页:' %>
+    <%= privacy_select_tag :setting, :personal %><br/>
+  </div>
+  <p>你可以设置能<strong>浏览你个人主页</strong>的人中谁可以看到以下信息。</p>
+  <div class='part'>
+    <%= label_tag '', '基本信息:' %>
+    <%= privacy_select_tag :setting, :basic_info %><br/>
+  </div>
+  <div class='part'>
+    <%= label_tag '', '角色信息:' %>
+    <%= privacy_select_tag :setting, :character_info %><br/>
+  </div>
+  <div class='part'>
+    <%= label_tag '', '留言板:' %>
+    <%= privacy_select_tag :setting, :wall %><br/>
+  </div>
+  <br/>
+  <h3><%= link_to '联系方式', "#" %></h3>
+  <div class='part'>
+    <%= label_tag '', '邮箱:' %>
+    <%= privacy_select_tag :setting, :email %><br/>
+  </div>
+  <div class='part'>
+    <%= label_tag '', 'qq:' %>
+    <%= privacy_select_tag :setting, :qq %><br/>
+  </div>
+  <div class='part'>
+    <%= label_tag '', '手机:' %>
+    <%= privacy_select_tag :setting, :phone %><br/>
+  </div>
+  <div class='part'>
+    <%= label_tag '', '个人网站:' %>
+    <%= privacy_select_tag :setting, :website %><br/>
+  </div>
+  <br/>
+  <h3><%= link_to '个人主页中的应用', "#" %></h3>
+  <div class='part'>
+    <%= label_tag '', '相册' %>
+    <%= '(相关浏览权限需要在每个相册中单独设置)' %>
+  </div>
+  <div class='part'>
+    <%= label_tag '', '日志' %>
+    <%= '(相关浏览权限需要在每个日志中单独设置)' %>
+  </div>  
+</div>
+  <br/>
+  <%= f.submit '保存修改' %>
+<% end %>
+

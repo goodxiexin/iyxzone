@@ -1,0 +1,2 @@
+module GuildAlbum::AlbumsHelper
+end

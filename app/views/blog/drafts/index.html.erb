@@ -1,0 +1,14 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %><br/>
+<% end %>
+
+<%= render :partial => 'blog/menu' %>
+
+<div><%= "共#{@user.drafts.count}篇草稿" %></div>
+
+<div id='drafts'>
+  <%= render :partial => 'draft_item', :collection => @blogs %>
+</div>
+
+<%= will_paginate @blogs %>
+

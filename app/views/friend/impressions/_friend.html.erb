@@ -1,0 +1,15 @@
+<li>
+	<div><%= avatar friend %><%= profile_link friend %></div>
+	<div>
+		<% subject = get_subject friend %>
+		<% profile = friend.profile %>
+		<% if profile.tagged_by? current_user %>
+			<%= "已经评价" %>
+		<% else %>
+			<%= link_to "去#{subject}的主页评价", profile_url(profile) %>
+		<% end %>
+	</div>
+	<div>
+		<%= profile.tag_list %>
+	</div>
+</li>

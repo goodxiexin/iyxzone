@@ -1,0 +1,2 @@
+module Mailbox::MessagesHelper
+end

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网游交友SNS</title>
+  <link href="/stylesheets/common.css?1260091461" media="screen" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/welcome.css?1256718509" media="screen" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/prototype.js?1258102373" type="text/javascript"></script>
+<script src="/javascripts/effects.js?1258099817" type="text/javascript"></script>
+<script src="/javascripts/dragdrop.js?1258099817" type="text/javascript"></script>
+<script src="/javascripts/controls.js?1258099817" type="text/javascript"></script>
+<script src="/javascripts/application.js?1258099817" type="text/javascript"></script>
+	<script src="/javascripts/swfobject.js?1258287713" type="text/javascript"></script>
+</head>
+
+
+
+<body class="body_bg01">
+	<div class="welcome-box">
+		<div class="top_link">
+	    <a href="http://localhost:3000/signup">注册</a> |
+	    <a href="http://localhost:3000/login">登录</a> | 
+ 	    <a href="#" onclick="bookmark(); return false;">加入收藏</a> |
+ 	    <a href="#" onclick="homepage(); return false;">设为主页</a> |
+ 	    <a href="/sessions/new">关于我们</a>
+    </div>
+    <div class="welcome">
+			<div class="login-box">
+				<div class="logo png">
+					欢迎您！这里是您的互动家园！
+        </div>
+        <form action="http://localhost:3000/sessions" method="post"><div style="margin:0;padding:0"><input name="authenticity_token" type="hidden" value="j2C1UZ5cwMflOoncCbmhXGmTj+nVeonnFaDxQ+6WZHA=" /></div>
+					<div class="rows">
+						<div class="fldid"><label for="email">电子邮箱：</label></div>
+            <div class="fldvalue">
+						  <div class="textfield"><input id="email" name="email" type="text" /></div>
+            </div>
+          </div>
+          <div class="rows">
+						<div class="fldid"><label for="password">密码：</label></div>
+            <div class="fldvalue">
+							<div class="textfield"><input id="password" name="password" type="password" /></div>
+            </div>
+            <a href="http://localhost:3000/forgot_password">忘记密码？</a>
+          </div>
+          <div class="rows">
+						<div class="fldid">&nbsp;</div>
+            <div class="fldis"><input checked="checked" id="remember_me" name="remember_me" type="checkbox" value="1" /><label class="blue" for="auto">下次自动登录</label></div>
+          </div>
+          <div class="btn-rows">
+						<div class="fldid">&nbsp;</div>
+            <div class="fldvalue"><input class="login png" name="commit" type="submit" value="" /></div>
+          </div>
+				</form>
+        <div class="sperator"></div>
+        <div class="rows">
+					<div class="fldid">&nbsp;</div>
+          <div class="fldvalue"><span class="red">网络游戏玩家的集中营，就差你了！</span></div>
+        </div>
+        <div class="btn-rows">
+					<div class="fldid">&nbsp;</div>
+          <div class="fldvalue"><a href="http://localhost:3000/signup" class="regist png"></a></div>
+        </div>
+      </div>
+      <div class="right">
+				<p><a href="#"><img class="png" src="images/banner/img01.png" alt="" /></a></p>
+        <p class="later">
+<script type="text/javascript">
+//<![CDATA[
+swfobject.embedSWF("/swfs/hero.swf?1258099818","hero_div","100%","100%","7","/swfs/expressInstall.swf?1258287713",{"id": "hero"},{},{"id": "hero"})
+//]]>
+</script><div id="hero_div">
+              <a href="http://www.adobe.com/go/getflashplayer">
+ 	 <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+ </a>
+            </div><script type="text/javascript">
+//<![CDATA[
+            if (typeof swfobject == 'undefined') {
+              document.getElementById('hero_div').innerHTML = '<strong>Warning:</strong> SWFObject.js was not loaded properly. Make sure you <tt>&lt;%= javascript_include_tag :defaults %></tt> or <tt>&lt;%= javascript_include_tag :swfobject %></tt>';
+            }
+
+//]]>
+</script>
+					<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="618" height="252" id="~hero" align="middle">
+						<param name="allowScriptAccess" value="sameDomain" />
+						<param name="movie" value="swf/~hero.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#ffffff" /><embed src="swf/~hero.swf" quality="high" bgcolor="#ffffff" width="618" height="252" name="~hero" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+					</object>
+				</p>
+      </div>
+    </div>
+  </div>
+</div>
+    
+<div id="footer">
+	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
+    <p><a href="#">网游公司 版权所有</a></p>
+</div>
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,23 @@
+<div id='comment_<%= comment.id %>' class=''>
+  <div class='avatar'><%= avatar comment.poster %></div>
+  <div class='content'>
+    <div class='head'>
+      <%= profile_link comment.poster %>
+      <%= ftime comment.created_at %>
+      <% if current_user != comment.poster %>
+        <%= link_to_function '回复', "$('comment_content').value = '回复#{comment.poster.login}:'; $('comment_content').focus();" %>
+      <% end %>
+    </div>
+    <div class='body'>
+      <%= comment.content %>
+    </div>
+  </div>
+  <div class='option'>
+    <% if comment.whisper %>
+      <%= "悄悄话" %>
+    <% end %>
+    <% if current_user == @user %>
+      <%= facebox_confirm 'x', profile_comment_url(@profile, comment), {:method => :delete, :msg => '你确定要删除这条评论吗'}, {:id => "delete_comment_#{comment.id}"} %>
+    <% end %>
+  </div>
+</div>

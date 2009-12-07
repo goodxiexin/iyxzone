@@ -1,0 +1,28 @@
+.body_bg01{background:url(../images/skin/bg01.png) no-repeat center top}
+.top_link{margin-right:35px;height:39px;line-height:39px;text-align:right;color:#7E7F80;overflow:hidden}
+
+.welcome-box{width:972px;margin:0 auto;}
+.welcome{margin-top:41px;height:546px;overflow:hidden}
+.welcome .login-box{float:left;padding:19px 7px 19px 17px;width:313px;height:100%;background:url(../images/welcome/loginBg01.png) no-repeat left top;}
+.welcome .login-box .logo{margin-left:3px;padding:39px 0 0 105px;height:66px;background:url(../images/welcome/logo.png) no-repeat left top;color:#BF3A00}
+.welcome .login-box .rows{padding:8px 0;height:26px;line-height:26px;overflow:hidden}
+.welcome .login-box .btn-rows{padding:8px 0;height:36px;overflow:hidden}
+
+.welcome .login-box .fldid{float:left;width:75px;text-align:right;overflow:hidden}
+.welcome .login-box .fldvalue,.welcome .login-box .fldis{float:left;}
+.welcome .login-box .fldis input{float:left;margin:7px 5px 0 5px;_margin:6px 0 0;height:14px;display:block;}
+* +html .welcome .login-box .fldis input{margin-top:6px;}
+
+.welcome .login-box .textfield{width:160px}
+.welcome .login-box a.pass{margin-left:3px;_margin:0;}
+.welcome .login-box .fldid label{color:#0A3100;font-size:14px;font-weight:bold;line-height:28px}
+.welcome .login-box .sperator{clear:both;margin:12px 15px 12px 3px;border-bottom:1px #98BE7D dotted;height:1px;font-size:1px;}
+
+.welcome .login-box .login{border:0;background:url(../images/welcome/login01.png) no-repeat;width:164px;height:36px}
+.welcome .login-box .regist{display:block;background:url(../images/welcome/regist01.png) no-repeat;width:164px;height:36px; cursor:pointer}
+.welcome .login-box .gobtn{margin:3px 0 0 10px;_margin-left:7px;}
+
+.welcome .right{margin-top:3px;width:618px;}
+.welcome .right p.later{margin-top:17px;}
+
+#footer{width:972px;margin:0 auto;padding:15px 0;}

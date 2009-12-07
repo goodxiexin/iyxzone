@@ -1,0 +1,11 @@
+<% subject = get_subject @user %>
+
+<%= link_to '热门活动', hot_events_url(:id => @user.id) %> |
+<%= link_to '最新活动', recent_events_url(:id => @user.id) %> |
+<%= link_to "#{subject}发起的活动", events_url(:id => @user.id) %> |
+<%= link_to "#{subject}要参加的活动", upcoming_events_url(:id => @user.id) %> |
+<%= link_to "#{subject}参加过的活动", participated_events_url(:id => @user.id) %>|
+<% if @user == current_user %>
+<%= link_to '朋友的活动', event_feeds_url %>|
+<%= link_to '创建新活动', new_event_url %>
+<% end %>

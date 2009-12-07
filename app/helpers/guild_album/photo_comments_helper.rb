@@ -1,0 +1,2 @@
+module GuildAlbum::PhotoCommentsHelper
+end

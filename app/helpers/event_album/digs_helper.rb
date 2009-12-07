@@ -1,0 +1,2 @@
+module EventAlbum::DigsHelper
+end

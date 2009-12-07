@@ -1,0 +1,61 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<% subject = get_subject @user %>
+<%= link_to "热门相片", hot_personal_albums_url(:id => @user.id) %> |
+<%= link_to "最新相册", recent_personal_albums_url(:id => @user.id) %> |
+<%= link_to "#{subject}的相册", personal_albums_url(:id => @user.id) %> |
+<% if @user == current_user %>
+  <%= link_to "好友相册" %> |
+<% end %>
+<%= link_to "#{subject}的相关相片" %> |
+<% if @user == current_user %>
+  <%= link_to "上传照片", select_personal_albums_url(:id => @user.id) %> |
+  <%= link_to "新专辑", new_personal_album_url, :rel => 'facebox' %>
+<% end %>
+
+<div class='crumb'>
+<div class='left'>
+  <%= link_to "#{subject}的照片", personal_albums_url(:id => @user.id) %> -> <%= "#{@album.title}" %>
+</div>
+<div class='right'>
+  <%= link_to "更改头像", new_avatar_url(:album => 1), :rel => 'facebox' %>
+</div>
+</div>
+
+<% i = 0 %>
+<table class='photo-list'>
+<% @album.photos.each do |p| %>
+  <% if i == 0 %>
+    <tr>
+  <% end %>
+  <td>
+    <%= photo_link p %><p>
+    <% if @user == current_user %>
+      <% if @user.avatar != p %>
+        <%= link_to_remote '头像', :url => set_avatar_url(p) %> |
+      <% end %>
+      <%= link_to '编辑', edit_avatar_url(p), :rel => 'facebox' %>|
+      <% if @user.avatar != p %>
+        <%= facebox_confirm '删除', avatar_url(p), {:msg => "你确定要删除这个头像吗?", :method => :delete} %>
+      <% end %>  
+    <% end %>
+  </td>
+  <% i = i + 1 %>
+  <% if i== 4 %>
+    <% i = 0 %>
+    <tr/>
+  <% end %>
+<% end %>
+</table>
+
+<p class="albumTime">
+  <% unless @album.uploaded_at.blank? %>
+    <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
+  <% end %>
+	<span class="time-create"><%= ftime @album.created_at %>创建</span>
+</p>
+
+<%= render :partial => 'comments/comment_box', :locals => {:comment_template => '/avatar_album/album_comments/comment', :commentable => @album, :recipient => @user} %>
+

@@ -1,0 +1,26 @@
+<%= javascript_include_tag 'invitation' %>
+
+<div>
+<div class='invitation-search'>
+  搜索好友
+  <%= text_field_tag 'search' %>
+  <%= observe_field :search,
+                    :complete  => "invitation_builder.reset();",
+                    :update    => "invitations",
+                    :frequency => 1,
+                    :url       => search_guild_invitations_url(@guild),
+                    :with      => "'key='+$('search').value",
+                    :method    => :get  %>
+</div> 
+
+<div id='invitations'>
+  <%= render :partial => 'friends' %>
+</div>
+
+<% form_tag create_multiple_guild_invitations_url(@guild), :id => 'invitation_form' do %>
+<% end %>
+<%= button_to_function '提交邀请', "invitation_builder.submit_invitations($('invitation_form'))", :class => 'confirm-button' %>
+  
+<%= javascript_tag "invitation_builder = new InvitationBuilder();" %>
+
+

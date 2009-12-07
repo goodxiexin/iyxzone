@@ -1,0 +1,2 @@
+module Event::FeedsHelper
+end

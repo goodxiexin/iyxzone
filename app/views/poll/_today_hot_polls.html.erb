@@ -1,0 +1,9 @@
+<% polls = Poll.find(:all, :limit => 10, :conditions => ["created_at BETWEEN ? AND ?", Time.now.beginning_of_day.to_s(:db), Time.now.to_s(:db)], :order => 'voters_count DESC') %>
+<div class='blog-right-bar'>
+  <h3>今日十大投票</h3>
+  <% polls.each do |poll| %>
+    <%= link_to (truncate poll.name, 20), poll_url(poll) %> 
+    <span class='poll-tiny'> by </span>
+    <%= link_to_user poll.user %><br/>
+  <% end %> 
+</div>

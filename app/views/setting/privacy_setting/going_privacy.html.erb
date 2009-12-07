@@ -1,0 +1,20 @@
+<h3>隐私设置 - 打招呼、好友申请</h3>
+在dayday3，默认所有人可以给你打招呼，发好友申请。<br/>
+<%= link_to '不保存修改，并返回隐私设置首页', privacy_setting_url %>
+<br/><br/><br/>
+
+<% form_for :setting, :url => privacy_setting_url, :html => {:method => :put} do |f| %>
+<div class='configure-privacy-setting'>
+  <div class='part'>
+    <%= label_tag '', '谁可以给我打招呼:' %>
+    <%= privacy_select_tag :setting, :poke %><br/>
+  </div>
+  <div class='part'>
+    <%= label_tag '', '谁可以给我发好友申请:' %>
+    <%= friend_privacy_select_tag :setting, :friend %><br/>
+  </div>
+</div>
+<br/>
+<%= f.submit '保存修改' %>
+<% end %>
+

@@ -1,0 +1,12 @@
+<div class="picitem">
+  <div class="picbox01">
+    <a class="btn" href="#"></a>
+    <div class="picwrap">
+      <table cellpadding="0">
+        <tr><td><%= album_cover album_item, :class => 'imgbox01' %></td></tr>
+      </table>
+    </div>
+  </div>
+  <p><b><%= album_link album_item %></b></p>
+  <p>共<span><%= album_item.photos_count %></span>张</p>
+</div>

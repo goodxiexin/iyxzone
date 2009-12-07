@@ -1,0 +1,13 @@
+<%= javascript_include_tag 'status' %>
+
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<%= render :partial => 'status/menu' %>
+
+<div class='status-list'>
+<ul id='feed_items'>
+  <%= render :partial => 'status_items', :object => @feed_items %> 
+</ul>
+</div>

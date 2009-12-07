@@ -1,0 +1,59 @@
+<%= javascript_include_tag 'event' %>
+
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<%= render :partial => 'event/menu' %>
+
+<%= error_messages_for :event, :header_message => '以下原因导致保存失败', :message => nil %>
+
+<div class='event-input'>
+<% form_for @event, :html => {:id => "event_form"} do |f| %>
+  <div>
+    <%= f.label "标题：" %>
+    <%= f.text_field :title %>
+  </div>
+  <div>
+    <%= f.label "游戏：" %>
+    <%= collection_select :event, :game_id, Game.all, :id, :name, {:prompt => '---'}, {:onchange => "game_onchange(this.value)"} %>
+  </div>
+<div id='game_details'>
+  <div id='areas'>
+    <%= f.label "服务区：" %>
+    <% if @event.game.no_areas %>
+      <%= collection_select :event, :game_area_id, [], :id, :name %>
+    <% else %>
+      <%= collection_select :event, :game_area_id, @event.game.areas, :id, :name %>
+    <% end %>
+  </div>
+  <div id='servers'>
+    <%= f.label "服务器：" %>
+    <% if @event.game.no_areas %>
+      <%= collection_select :event, :game_server_id, @event.game.servers, :id, :name %>
+    <% else %>
+      <%= collection_select :event, :game_server_id, @event.game_area.servers, :id, :name %>
+    <% end %>
+  </div>
+</div>
+  <div>
+    <%= f.label "开始时间：" %>
+    <%= calendar_date_select :event, :start_time %> 
+  </div>
+  <div>
+    <%= f.label "结束时间：" %>
+    <%= calendar_date_select :event, :end_time %>
+  </div>
+  <div>
+    <%= f.label "任务描述:" %>
+    <%= f.text_area :description, :rows => 8 %>
+    <a id='event_description_form'></a>
+  </div>
+  <%= button_to_function '保存', "event_builder.update(#{@event.id});" %>
+<% end %>
+</div>
+
+<%= javascript_tag "
+  var event_builder = new EventBuilder();
+"%>
+

@@ -1,0 +1,61 @@
+<%= javascript_include_tag 'mailbox' %>
+
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+	<div class="round_m"><div class="round_body">
+  <h1 class="big-mygame">站内信</h1>
+  <div class="box02 canvas_int">
+		<div class="tab tab01">
+      <ul>
+				<li><span><%= link_to "收件箱", mails_url(:type => 1) %></span></li>
+        <li><span><%= link_to "发件箱", mails_url(:type => 0) %></span></li>
+        <li class="nobg"><%= link_to "写站内信", new_mail_url %></li>
+			</ul>
+    </div>
+		<div class="appcontent01">
+			<h3>写站内信</h3>
+      <div class="inbox-form formcontent">
+			<% form_for :mail, :url => mails_url, :html => {:onsubmit => 'return validate_mail();' }  do |f| %>
+				<div class="rows s_clear">
+					<div class="fldid"><%= f.label '收件人：' %></div>
+          <div class="fldvalue">
+						<div class="selector">
+							<%= auto_complete_text_field :mail, :recipients, auto_complete_for_mail_recipients_url, {}, {:tokens => ','} %>
+            </div>
+          </div>
+        </div>
+        <div class="rows s_clear">
+					<div class="fldid"><%= f.label '标题：' %></div>
+          <div class="fldvalue">
+						<div class="textfield"><%= f.text_field 'title' %></div>
+          </div>
+        </div>
+        <div class="emptions s_clear">
+					<div class="fldid">&nbsp;</div>
+          <div class="fldvalue">
+						<%= emotion_link 'mail_content' %>
+          </div>
+        </div>
+        <div class="rows s_clear">
+					<div class="fldid"><%= f.label '内容：' %></div>
+          <div class="fldvalue"><%= f.text_area 'content' %></div>
+        </div>
+        <div class="rows s_clear">
+					<div class="fldid">&nbsp;</div>
+          <div class="fldvalue">
+						<span class="button"><span><button type="submit">查找</button></span></span>
+            <span class="button button-gray"><span><button type="reset">取消</button></span></span>
+					</div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+</div></div>
+</div></div></div></div>
+
+<% unless @recipient.blank? %>
+<script type="text/javascript">
+  $('mail_recipients').value = '<%= @recipient.login %>';
+  $('mail_recipients').disabled = true;     
+</script>
+<% end %>

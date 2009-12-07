@@ -1,0 +1,6 @@
+<div id='tag_<%= tag.id %>' tag_id=<%= tag.id %> x=<%= tag.x %> y=<%= tag.y %> width=<%= tag.width %> height=<%= tag.height %> info='<%= "#{tag.poster.login} 标记了 #{tag.tagged_user.login} : #{tag.content}" %>'>
+	<span><%= profile_link tag.poster %></span> 标记了 <span><%= profile_link tag.tagged_user, :onmouseover => "tag_builder.show_tag_with_info(#{tag.id});", :onmouseout => "tag_builder.hide_tag_with_info(#{tag.id});" %></span> : <%= tag.content %>
+	<% if @user == current_user %>
+		<%= link_to_function 'x', "tag_builder.remove_tag(#{tag.id}, '#{form_authenticity_token}');" %>
+	<% end %>
+</div>

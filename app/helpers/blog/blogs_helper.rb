@@ -1,0 +1,3 @@
+module Blog::BlogsHelper
+
+end

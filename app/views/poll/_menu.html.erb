@@ -1,0 +1,10 @@
+<% subject = get_subject @user %>
+
+<%= link_to '精彩投票', hot_polls_url(:id => @user.id) %> |
+<%= link_to '最新投票', recent_polls_url(:id => @user.id) %> |
+<%= link_to "#{subject}发起的投票", polls_url(:id => @user.id)%> |
+<%= link_to "#{subject}参与的投票", participated_polls_url(:id => @user.id) %> |
+<% if @user == current_user %>
+  <%= link_to '好友的投票', poll_feeds_url %> |
+  <%= link_to '新投票', new_poll_url %>
+<% end %>

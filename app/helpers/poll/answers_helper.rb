@@ -1,0 +1,2 @@
+module Poll::AnswersHelper
+end

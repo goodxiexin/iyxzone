@@ -1,0 +1,2 @@
+module Poll::CommentsHelper
+end

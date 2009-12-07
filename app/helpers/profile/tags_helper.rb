@@ -1,0 +1,2 @@
+module Profile::TagsHelper
+end

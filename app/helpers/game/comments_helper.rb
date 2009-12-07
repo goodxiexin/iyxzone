@@ -1,0 +1,2 @@
+module Game::CommentsHelper
+end

@@ -1,0 +1,2 @@
+module PersonalAlbum::TagsHelper
+end

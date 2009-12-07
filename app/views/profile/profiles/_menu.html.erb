@@ -1,0 +1,10 @@
+<% subject = get_subject(@user) %>
+<ul>
+	<li class='icon-data'><%= link_to "#{subject}的档案", edit_profile_url(@profile) %></li>
+  <li class='icon-share'><%= link_to "#{subject}的照片", personal_albums_url(:id => @user.id) %></li>
+  <li class='icon-blog'><%= link_to "#{subject}的博客", blogs_url(:id => @user.id) %></li>
+  <li class='icon-share'><%= link_to "#{subject}的视频", videos_url(:id => @user.id) %></li>
+  <li class='icon-music'><%= link_to "#{subject}的活动", events_url(:id => @user.id) %></li>
+  <li class='icon-blog'><%= link_to "#{subject}的投票", polls_url(:id => @user.id) %></li>
+  <li class='icon-cons'><%= link_to "#{subject}的工会", guilds_url(:id => @user.id) %></li>
+</ul>

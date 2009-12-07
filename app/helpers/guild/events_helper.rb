@@ -1,0 +1,2 @@
+module Guild::EventsHelper
+end

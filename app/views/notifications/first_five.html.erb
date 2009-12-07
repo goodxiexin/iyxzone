@@ -1,0 +1,10 @@
+<% if @notifications.blank? %>
+	暂时没有受到任何消息
+<% else %>
+<% @notifications.each do |notification| %>
+<li>
+  <%= notification.data %>
+  <span class='time'> <%= ftime notification.created_at %> </span>
+</li>
+<% end %>
+<% end %>

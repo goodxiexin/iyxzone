@@ -1,0 +1,8 @@
+<dd id='draft_<%= draft_item.id %>'>
+  <span class='title'><%= link_to draft_item.title, edit_draft_url(draft_item) %></span>
+  <span class='option'>
+    <%= ftime draft_item.created_at %>
+    <%= link_to "编辑", edit_draft_url(draft_item) %>
+    <%= facebox_confirm 'x', draft_url(draft_item), {:msg => "你确定要删除这篇草稿吗?", :method => :delete} %>
+  </span>
+</dd> 

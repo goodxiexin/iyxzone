@@ -1,0 +1,3 @@
+page.insert_html :bottom, "personal_photo_comments_#{@photo.id}", :partial => 'comment', :object => @comment
+page << "$('personal_photo_comment_content_#{@photo.id}').value = '';"
+page << "hide_comment_form('personal_photo', #{@photo.id});"

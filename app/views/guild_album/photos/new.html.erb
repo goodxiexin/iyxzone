@@ -1,0 +1,12 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<div class='crumb'>
+  工会<%= guild_link @guild %> -> <%= album_link @album %> -> 上传照片
+</div>  
+
+<div id='flash_upload_area'>
+<%= swfupload_head %>
+<%= swfupload :controller => 'guild_album/photos', :action => 'create', :album_id => @album.id %>
+</div>

@@ -1,0 +1,27 @@
+<% if wall_viewable? %>
+<div class="bookbox">
+  <h3><label for="book">留言板</label></h3>
+  <div class="formcontent s_clear">
+    <% form_remote_for :comment, :url => profile_comments_url(@profile), :condition => "validate_comment($('comment_content'))" do |f| %>
+      <%= hidden_field_tag 'comment[recipient_id]', @profile.user_id %>
+      <div class="rows">
+        <div class="textarea-wrap"><div class="textarea-wide">
+          <%= f.text_area 'content', :class => 'textarea' %>
+        </div></div>
+      </div>
+      <div class="buttons">
+        <span class="button"><span><button type="submit">发布</button></span></span>
+        <%= emotion_link 'comment_content' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<% else %>
+  <%= "你必须加入活动才能留言，点击#{ link_to '这里', profile_url(@profile) }查看活动详情" %>
+<% end %>
+
+<div class="feed-box" id='comments'>
+  <%= render :partial => 'profile/comments/comment', :collection => @comments %>
+</div>
+
+<%= will_paginate @comments %>

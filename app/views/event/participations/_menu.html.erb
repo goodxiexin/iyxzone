@@ -1,0 +1,7 @@
+<%= link_to '一定去的人', event_participations_url(@event, :type => 0) %> |
+<%= link_to '可能去的人', event_participations_url(@event, :type => 1) %> |
+<%= link_to '去他娘的人', event_participations_url(@event, :type => 2) %> |
+<% if !@event.past %>
+<%= link_to '受邀请的人', event_participations_url(@event, :type => 3) %> |
+<%= link_to '请求加入的人', event_participations_url(@event, :type => 4) %>
+<% end %>

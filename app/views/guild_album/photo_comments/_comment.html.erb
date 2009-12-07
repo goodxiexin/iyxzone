@@ -1,0 +1,5 @@
+<% render :layout => '/comments/comment', :object => comment do %>
+  <% if @user == current_user || comment.poster == current_user %>
+    <%= link_to_remote 'x', :url => guild_photo_comment_url(comment.commentable, comment), :method => :delete, :class => "icon-active" %>
+  <% end %>
+<% end %>

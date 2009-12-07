@@ -1,0 +1,2 @@
+module Poll::FeedsHelper
+end

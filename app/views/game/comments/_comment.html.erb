@@ -1,0 +1,17 @@
+<div class="feed-img-list" id='comment_<%= comment.id %>'>
+	<div class="feed-list">
+  <div class="feed-img"><%= avatar comment.poster %></div>
+		<p>
+			<%= profile_link comment.poster %> 
+			<%= ftime comment.created_at %> 
+			<%= link_to_function '回复', "$('comment_content').value = '回复#{comment.poster.login}：'; $('comment_content').focus(); " %>
+		</p>
+    <p><%= comment.content  %></p>
+  </div>
+	<div class='option'>
+    <% if @user == current_user %>
+      <%= facebox_confirm 'x', game_comment_url(comment.commentable, comment), {:method => :delete, :msg => '你确定要删除这条评论吗'}, {:id => "delete_comment_#{comment.id}"} %>
+    <% end %>
+  </div>
+</div>
+

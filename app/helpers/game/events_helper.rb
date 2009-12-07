@@ -1,0 +1,2 @@
+module Game::EventsHelper
+end

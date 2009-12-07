@@ -1,0 +1,10 @@
+<h3>隐私设置 - 站外搜索</h3>
+在dayday3，默认所有人可以给你打招呼，发好友申请。<br/>
+<%= link_to '不保存修改，并返回隐私设置首页', privacy_setting_url %>
+<br/><br/><br/>
+
+<% form_for :setting, :url => privacy_setting_url, :html => {:method => :put} do |f| %>
+  <%= label_tag '', '允许站外的人在登录页上或通过搜索引擎搜索到我的帐号'%>
+  <%= f.check_box 'search' %><br/><br/>
+  <%= f.submit '保存修改' %>
+<% end %>

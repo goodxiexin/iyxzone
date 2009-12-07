@@ -1,0 +1,6 @@
+<% render :layout => '/comments/wall_message', :object => comment do %>
+  <% if @user == current_user %>
+    <%= facebox_confirm 'x', event_comment_url(comment.commentable, comment), {:method => :delete, :msg => '你确定要删除这条评论吗'}, {:id => "delete_comment_#{comment.id}"} %>
+  <% end %>
+<% end %>
+

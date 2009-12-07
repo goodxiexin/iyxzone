@@ -1,0 +1,2 @@
+module Mailbox::ConversationsHelper
+end

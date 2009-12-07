@@ -1,0 +1,17 @@
+<table>  
+  <% i = 0 %>
+  <% @friends.each do |friend| %>
+    <% if i == 0%>
+      <tr>
+    <% end %>
+    <td class='icon' onmouseover="invitation_builder.mouseover(this);" onmouseout="invitation_builder.mouseout(this);" onclick="invitation_builder.click(this);" friend_id=<%= friend.id %>>
+      <%= avatar_image friend %>
+      <%= friend.login %>
+    </td>
+    <% i = i + 1 %>
+    <% if i == 4 %>
+      </tr>
+      <% i = 0 %>
+    <% end %>
+  <% end %>
+</table>

@@ -1,0 +1,47 @@
+<% delivery = personal_album_feed_delivery %>
+<% album = delivery.feed_item.originator %>
+<% user = album.user %>
+<% photos = Photo.find(delivery.feed_item.data[:ids]) %>
+
+<div class="feed-list" id='delivery_<%= delivery.id %>'>
+	<div class="feed-icon icon-photo"></div>
+	<p><%= profile_link user %> <span>更新了<%=photos.count%>张照片至相册</span> <%= album_link album %></p>
+  <div class="feed-pic s_clear">
+		<div class="img">
+			<%= avatar album.poster %>
+		</div>
+		<div class="pics">
+		  <div>
+      <% if photos.count >= 4 %>
+        <%= link_to_function '上一张', "slide_manager.get(#{delivery.id}).prev();" %>
+      <% end %>
+			</div>
+			<div>
+				<ul id='frames_<%= delivery.id %>'>
+					<% window_size = (photos.count > 4)? 4 : photos.count %>
+					<% window_size.times do |i| %>
+						<li id='frame_<%= i %>'></li>
+					<% end %>
+				</ul>
+			</div>
+			<div>
+				<% if photos.count >= 4 %>
+				  <%= link_to_function '下一张', "slide_manager.get(#{delivery.id}).next();" %>
+				<% end %>
+			</div>
+		</div>
+		<p><%= ftime delivery.created_at %> <%= link_to_function "回复", "show_comment_form('personal_album', #{album.id}, null);" %></p>
+	</div>
+  <% if with_comments %>
+	  <%= render :partial => 'comments/folded_comment_box', :locals => {:comment_template => '/personal_album/album_comments/comment', :commentable => album, :recipient => album.poster} %>
+  <% end %>
+	<div><%= yield %></div> 
+</div>
+
+<% photo_ids = array_or_string_for_javascript photos.map(&:id) %>
+<% urls = array_or_string_for_javascript photos.map {|p| p.public_filename(:medium)} %>
+<%= javascript_tag "
+  slide = new PhotoSlide('personal_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames_#{delivery.id}').childElements(), #{photos[(window_size/2).to_i].id});
+  slide_manager.set(#{delivery.id}, slide);
+" %>
+

@@ -1,0 +1,127 @@
+<%= javascript_include_tag 'photo_slide' %>
+<%= javascript_include_tag 'home' %>
+<%= javascript_include_tag 'friend_suggestor' %>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+	<div class="round_m"><div class="round_body canvas_wrap s_clear">
+		<div class="canvas_m">
+			<div class="canvas_c">
+				<div class="box02 canvas_con">
+					<div id="homeComposer">
+						<div class="img">
+							<div class="mcAvatar">
+								<a href="#"></a>
+                <div class="picwrap">
+                  <div class="middle"><div class="middle-center"><div class="center">
+										<img src="images/photo/photo14.png" alt="" />
+                  </div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="mcContent">
+							<div class="showbar">Hi，我是 <%= current_user.login %></div>
+							<div class="mcPanel round02 round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+								<div class="round_m"><div class="round_body">
+									<% form_remote_for :status, :url => statuses_url(:home => 1), :html => {:class => "formcontent s_clear"} do |f| %>
+                  <div class="fldvalue">
+										<div id="mcStatus" class="textfield"><%= f.text_field :content %></div>
+                  </div>
+                  <div class="fldbtn">
+										<span class="button"><span><%= button_submit '发布' %></span></span>
+                  </div>
+                  <% end %>
+                  <div id='latest_status'>
+										<% unless current_user.latest_status.nil? %>
+											<%= distance_of_time_in_words_to_now(current_user.latest_status.created_at) %> ago: <%= current_user.latest_status.content %>
+										<% end %>
+									</div>
+									<div class='buttons'>
+										<%= emotion_link 'status_content', :class => 'icon-share' %>
+                  </div>
+                </div></div>
+              </div></div></div></div>
+            </div>
+          </div>
+          <div class="feed-message-box" id='my_notices'>
+						在读取...
+          </div>
+					<div class="feed-box">
+						<div class="tab tab01">
+							<ul id='feed_menu'>
+								<li class='hover'><span><%= link_to_function "全部", "home_manager.show_feeds();" %></span></li>
+								<li><span><%= link_to_function "状态", "home_manager.show_feeds(0);" %></span></li>
+								<li><span><%= link_to_function "日志", "home_manager.show_feeds(1);" %></span></li>
+								<li><span><%= link_to_function "视频", "home_manager.show_feeds(2);" %></span></li>
+								<li><span><%= link_to_function "照片", "home_manager.show_feeds(3);" %></span></li>
+								<li><span><%= link_to_function "活动", "home_manager.show_feeds(4);" %></span></li>
+								<li><span><%= link_to_function "投票", "home_manager.show_feeds(5);" %></span></li>
+								<li><span><%= link_to_function "工会", "home_manager.show_feeds(6);" %></span></li>
+              </ul>
+            </div>
+            <div class="feed-wrap" id='feed_list'>
+							<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
+            </div>
+						<div id='more_feed'>
+							<span><%= link_to_function "更多新鲜事", "home_manager.more_feeds();" %></span>
+						</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="rightsidebar" class="canvas_r">
+			<% if current_user.requests_count != 0 or current_user.invitations_count != 0 or current_user.poke_deliveries_count != 0 %>	
+			<div class="multibox">
+				<div class="title">
+					<b>请求</b>
+        </div>
+        <div class="request menu-icon-list01">
+					<ul>
+						<% if current_user.requests_count != 0 %>
+							<li class="icon-add"><span><%= link_to current_user.requests_count, requests_url %></span> 个请求</li>
+						<% end %>
+						<% if current_user.invitations_count != 0 %>
+							<li class='icon-add'><span><%= link_to current_user.invitations_count, invitations_url %></span> 个邀请</li>
+            <% end %>
+						<% if current_user.poke_deliveries_count != 0 %>
+							<li class='icon-invite'><%= link_to "<span>#{current_user.poke_deliveries.count}</span>", pokes_url %>个招呼</li>
+						<% end %>
+					</ul>
+        </div>
+      </div>
+			<% end %>
+      <div class="multibox">
+				<div class="title">
+          <%= facebox_link "更多", visitor_records_url %>
+					<b>最近来访</b>
+        </div>
+        <div class="photolist-box">
+					<ul class="collection s_clear">
+						<% current_user.profile.visitor_records.each do |r| %>
+              <li>
+								<div class="middle"><div class="middle-center"><div class="center"><%= avatar r.visitor, :class => 'imgbox01' %></div></div></div>
+								<p><%= profile_link r.visitor %></p>
+                <p class="btns"></p>
+              </li>
+						<% end %>
+          </ul>
+        </div>
+      </div>
+      <div class="multibox">
+				<div class="title">
+					<%= link_to "更多", friend_suggestions_url %>
+					<b>你可能认识</b>
+        </div>
+        <div class="photolist-box">
+					<ul class="collection s_clear" id='friend_suggestions'>
+						<%= render :partial => 'friend/suggestions/friend_suggestion', :collection => @friend_suggestions %>
+          </ul>
+        </div>
+      </div>
+    </div>
+	</div></div>
+</div></div></div></div>
+
+<%= javascript_tag "
+	home_manager = new HomeManager(#{@idx});	
+	home_manager.fetch_notices('#{first_ten_notices_url}');
+	friend_suggestor = new FriendSuggestor();
+"%>

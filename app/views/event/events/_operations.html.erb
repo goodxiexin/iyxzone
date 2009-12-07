@@ -1,0 +1,13 @@
+<div class="formcontent">
+  <table class="title"><tr><td><h3 class="icon-sinker">操作</h3></td></tr></table>
+  <div class="rows s_clear">
+    <div class="fldid"><%= link_to '编辑活动', edit_event_url(@event) %></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><%= link_to '邀请更多人', new_event_invitation_url(@event) %></div>
+  </div>
+  <div class="rows s_clear">
+  <div class="fldid"><%= facebox_confirm '放所有人鸽子', event_url(@event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></div>
+  </div>
+</div>
+

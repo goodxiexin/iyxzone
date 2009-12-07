@@ -1,0 +1,55 @@
+<%= javascript_include_tag 'mailbox.js' %>
+
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+  <h1 class="big-mygame">站内信</h1>
+  <div class="box02 canvas_int">
+    <div class="tab tab01">
+    <ul>
+      <li><span><%= link_to "收件箱", mails_url(:type => 1) %></span></li>
+      <li class='hover'><span><%= link_to "发件箱", mails_url(:type => 0) %></span></li>
+      <li class="nobg"><%= link_to "写站内信", new_mail_url %></li>
+    </ul>
+  </div>
+	<div class="inbox-box">
+    <div class="inbox-topbar s_clear">
+			<%= mail_select_tag %>
+      <%= link_to_function "删除", "mailbox.destroy(#{form_authenticity_token}, 0);", :class => 'icon-inbox icon-clear' %>
+    </div>
+    <div class="box03 inbox-tip">
+      通知：近期有不法分子通过站内信、留言、评论等方式，散发“幸运用户”之类的虚假中奖消息，请玩家们提高警惕！天天官方活动会通过本站发布，官方不会以任何>形式向用户索取钱物。如果发现假消息，请立即举报。<a href="#">如何识虚假消息？</a>
+    </div>
+    <div class="inbox-content">
+      <div class="box02 index-list">
+        <table cellpadding="0">
+          <% @mails.each do |mail| %>
+          <tr>
+            <td class="status"><%= check_box_tag '', 1, false, :id => "mail_select_#{mail.id}" %></td>
+            <td class="photo"><%= avatar mail.recipient %></td>
+            <td class="data">
+              <h3><%= profile_link mail.recipient %></h3>
+							<p><%= ftime mail.created_at %></p>
+            </td>
+            <td class="cont">
+              <span id='mail_title_<%= mail.id %>'><%= link_to mail.title, mail_url(mail) %></span>
+              <p><%= truncate mail.content, 80 %></p>
+            </td>
+            <td class="end">
+              <%= facebox_confirm '', mail_url(mail, :type => 0), {:msg => '你确定要删除这个邮件吗?', :method => :delete}, {:class => 'icon-active'} %>
+            </td>
+          </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div></div>
+</div></div></div></div>
+
+<% ids = array_or_string_for_javascript @mails.map(&:id) %>
+<% read = array_or_string_for_javascript @mails.map { |m| true} %>
+<%= javascript_tag "
+  var mailbox = new Mailbox(#{ids}, #{read});
+"%>
+

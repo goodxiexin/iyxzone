@@ -1,0 +1,24 @@
+<h1 class="big-ploy">活动</h1>
+<div class="box02 canvas_int">
+  <div class="tab tab01">
+    <% if @user == current_user %>
+    <div class="right">
+      <%= link_to "新建投票", new_poll_url %>
+    </div>
+    <% end %>
+    <ul>
+      <li><span><%= link_to "热门投票", hot_polls_url(:id => @user.id) %></span></li>
+      <li><span><%= link_to "最近投票", recent_polls_url(:id => @user.id) %></span></li>
+      <li class='hover'><span><%= link_to "#{get_subject @user}的投票", polls_url(:id => @user.id) %></span></li>
+      <% if @user == current_user %>
+      <li><span><%= link_to "朋友的投票", poll_feeds_url(:id => @user.id) %></span></li>
+      <% end %>
+    </ul>
+  </div>
+	<%= link_to "我发起的(#{@user.polls_count})", polls_url(:id => @user.id) %>
+  <%= link_to "我参加过的(#{@polls.total_entries})", participated_polls_url(:id => @user.id) %>
+  <div class="piclist-rows" id='polls'>
+    <%= render :partial => 'poll_item', :collection => @polls %>
+  </div>
+</div>
+

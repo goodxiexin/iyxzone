@@ -1,0 +1,60 @@
+<%= javascript_include_tag 'game' %>
+<%= javascript_include_tag 'chinese_region' %>
+<%= javascript_include_tag 'profile' %>
+
+<% content_for :left do %>
+  <%= render :partial => 'menu' %>
+<% end %>
+
+<div class='head'>
+<% if @user == current_user %>
+  <h3>我的档案</h3>
+<% else %>  
+  <h3 class='user'>
+    <%= avatar @user %><br/>
+    <%= profile_link @user %>的档案
+  </h3>
+<% end %>
+</div>
+
+<div class='body'>
+  <div id='basic_info' class='section'>
+    <div class='section-header'>
+      基本信息
+      <% if @user == current_user %>
+        <%= link_to_function '(编辑)', "profile_manager.edit_basic_info()" %>
+      <% end %>
+    </div>
+    <div class='section-body'>
+			<%= render :partial => 'basic_info' %>
+    </div>
+  </div>
+  <div id='contact_info' class='section'>
+    <div class='section-header'>
+      联系信息
+      <% if @user == current_user %>
+        <%= link_to_function '(编辑)', "profile_manager.edit_contact_info()" %>
+      <% end %>
+    </div>
+    <div class='section-body'>
+			<%= render :partial => 'contact_info' %>
+    </div>
+  </div>
+  <div id='character_info' class='section'>
+    <div class='section-header'>
+      游戏信息
+      <% if @user == current_user %>
+        <%= link_to_function '(增加)', "profile_manager.new_character_info();" %>
+      <% end %> 
+    </div>
+    <div class='section-body'>
+			<ul id='characters'>
+				<%= render :partial => 'characters/character', :collection => @user.characters %> 
+			</ul>
+		</div>
+  </div>
+</div>
+
+<%= javascript_tag "
+  profile_manager = new ProfileManager(#{@profile.id});
+"%>

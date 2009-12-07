@@ -1,0 +1,16 @@
+<div>
+<% feed_items.each do |feed| %>
+<% blog = feed.originator %>
+<div>
+	<%= avatar blog.poster %>
+	<%= ftime blog.created_at %>
+	<%= blog_link blog %>
+</div>
+<% end %>
+</div>
+
+<% if @remote %>
+	<%= will_paginate feed_items, :renderer => :RemoteLinkRenderer, :remote => @remote %>
+<% else %>
+	<%= will_paginate feed_items %>
+<% end %>

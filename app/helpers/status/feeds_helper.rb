@@ -1,0 +1,2 @@
+module Status::FeedsHelper
+end

@@ -1,0 +1,34 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<div class='crumb'>
+  活动<%= guild_link @guild %> -> <%= album_link @album %> -> 编辑照片
+</div> 
+
+<div id='photoEdit'>
+<% form_tag update_multiple_guild_photos_url(:album_id => @album.id), :method => :put do %>
+  <ul class='uploaded'>
+    <% @photos.each do |p| %>
+    <% fields_for 'photos[]', p do |f| %>
+    <li id='photo_<%= p.id %>'>
+      <div class='cover'>
+        <%= image_tag p.public_filename(:medium) %>
+      </div>
+      <div class='info'>
+        <dl class='fieldset'>
+          <dt><%= f.label '描述' %></dt>
+          <dd><%= f.text_area 'notation', :rows => 5, :cols => 50 %></dd>
+          <dt><%= f.label '封面' %></dt>
+					<% if current_user == @user %>
+          <dd><%= radio_button_tag 'cover_id', p.id, false %>设置为工会封面</dd>
+					<% end %>
+				</dl>
+      </div>
+    </li>
+    <% end %>
+    <% end %>
+  </ul>
+  <%= submit_tag '保存修改' %>
+<% end %>
+</div>

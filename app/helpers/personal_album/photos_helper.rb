@@ -1,0 +1,2 @@
+module PersonalAlbum::PhotosHelper
+end

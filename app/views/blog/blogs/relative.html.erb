@@ -1,0 +1,20 @@
+<% content_for :left do %>
+	<% cache("app/app_menu/#{current_user.id}") do %>
+  <%= render :partial => '/app_menu' %><br/>
+	<% end %>
+  <div class='blog-right-bar'>
+    <div class='part'>
+      <h3>日志分类: </h3>
+      <% game_options = [['全部', nil]] %>
+      <% @user.games.each {|g| game_options << [g.name, g.id] } %>
+      <%= select_tag '', options_for_select(game_options, params[:game_id].to_i), :onchange => "window.location.href = '#{relative_blogs_url(:id => @user.id)}' + '&game_id=' + this.value;" %>
+    </div>
+  </div>
+<% end %>
+
+<%= render :partial => 'blog/menu' %>
+
+<div id='blogs'>
+  <%= render :partial => 'blog_item', :collection => @blogs %>
+</div>
+<%= will_paginate @blogs %>

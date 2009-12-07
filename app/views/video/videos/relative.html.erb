@@ -1,0 +1,21 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %><br/>
+  <div class='blog-right-bar'>
+    <div class='part'>
+      <h3>视频分类: </h3>
+      <% game_options = [['全部', nil]] %>
+      <% @user.games.each {|g| game_options << [g.name, g.id] } %>
+      <%= select_tag '', options_for_select(game_options, params[:game_id].to_i), :onchange => "window.location.href = '#{relative_videos_url(:id => @user.id)}' + '&game_id=' + this.value;" %>
+    </div>
+  </div>
+<% end %>
+
+<%= render :partial => 'video/menu' %>
+
+<div id='blogs'>
+  <%= render :partial => 'video_item', :collection => @videos %>
+</div>
+
+<%= will_paginate @videos %>
+
+

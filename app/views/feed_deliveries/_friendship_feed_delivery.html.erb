@@ -1,0 +1,15 @@
+<% delivery = friendship_feed_delivery %>
+<% friendship_feed = delivery.feed_item %>
+<% friendship = friendship_feed.originator %>
+<% if friendship_feed.data[:friend] == friendship.user_id  %>
+	<% user = friendship.user %>
+	<% friend = friendship.friend %>
+<% else %>
+	<% user = friendship.friend %>
+	<% friend = friendship.user %>
+<% end %>
+<div class='feed-list' id='feed_delivery_<%= delivery.id %>'>
+	<div class="feed-icon icon-friend"></div>
+	<p><%= profile_link user %> 和 <%= profile_link friend %> 成为了好朋友 <%= ftime delivery.created_at %></p>
+	<div><%= yield %></div> 
+</div>	

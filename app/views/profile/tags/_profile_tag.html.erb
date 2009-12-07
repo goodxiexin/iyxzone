@@ -1,0 +1,3 @@
+<% Tag.profile_tags.map(&:name).each do |name| %>
+	<%= link_to_remote name, :url => profile_tags_url(@profile, "tag[name]" => name) %>
+<% end %>

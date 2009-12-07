@@ -1,0 +1,3 @@
+page.insert_html :bottom, "poll_comments_#{@poll.id}", :partial => 'comment', :object => @comment
+page << "$('poll_comment_content_#{@poll.id}').value = '';"
+page << "hide_comment_form('poll', #{@poll.id});"

@@ -1,0 +1,16 @@
+<h3>隐私设置</h3>
+<p>在dayday3，默认和你玩同样游戏的人或者你的朋友才能浏览你的个人主页</p>
+
+<div class='privacy-setting'>
+  <h3><%= link_to '个人主页', edit_privacy_setting_url(:type => 0) %></h3>
+  <div class='edit'><%= link_to '编辑设置', edit_privacy_setting_url(:type => 0) %></div>
+  <div class='show' id='personal_show'>你可以对个人主页的每一项内容单独设置浏览权限</div>
+  <h3><%= link_to '打招呼、好友请求', edit_privacy_setting_url(:type => 1) %></h3>
+  <div class='edit'><%= link_to '编辑设置', edit_privacy_setting_url(:type => 1) %></div>
+  <div class='show' id='friend_show'>默认所有人都可以向你打招呼和发送好友申请</div>
+<!--
+   <h3><%= link_to '站外搜索', edit_privacy_setting_url(:type => 2) %></h3>
+  <div class='edit'><%= link_to '编辑设置', edit_privacy_setting_url(:type => 2) %></div>
+  <div class='show' id='search_show'>设置不登录人人网的人是否可以在登录页上搜索到你的帐号</div>
+-->
+</div>

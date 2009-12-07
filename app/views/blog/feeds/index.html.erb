@@ -1,0 +1,9 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %><br/>
+<% end %>
+
+<%= render :partial => 'blog/menu' %>
+
+<div id='blogs'>
+  <%= render :partial => 'blogs', :locals => {:feed_items => @feed_items} %>
+</div>

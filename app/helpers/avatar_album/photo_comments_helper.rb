@@ -1,0 +1,2 @@
+module AvatarAlbum::PhotoCommentsHelper
+end

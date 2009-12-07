@@ -1,0 +1,2 @@
+module AvatarAlbum::DigsHelper
+end

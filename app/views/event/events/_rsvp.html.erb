@@ -1,0 +1,35 @@
+<div class='formcontent'>
+		<% if @participation.blank? %>
+      <% if @event.participantable? current_user %>
+				<table class="title"><tr><td><h3 class="icon-sinker">你要参加吗？</h3></td></tr></table>
+				<% form_remote_for :request, :url => event_requests_url(@event, :show => 1) do |f| %>
+          <%= f.radio_button 'status', 1 %><%= label_tag '', '肯定参加' %><br/>
+          <%= f.radio_button 'status', 2 %><%= label_tag '', '可能参加' %><br/>
+					<div class="buttons">
+                            <table><tr><td><span class="button"><span><button type="submit">提交</button></span></span></td></tr></table>
+                        </div>  
+					<% end %>
+      <% else %>
+        <table class="title"><tr><td><h3 class="icon-sinker">你要参加吗？</h3></td></tr></table>
+				只有他的好友可以参家，<%= link_to '加他为好友', new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %>
+      <% end %>
+    <% elsif @participation.status == 0 %>
+			<table class="title"><tr><td><h3 class="icon-sinker">你已经被邀请了</h3></td></tr></table>
+			 <%= radio_button :invitation, :status, 1, :onclick => "new Ajax.Request('#{event_invitation_url(@event, @participation, 'invitation[status]' => 3, :show => 1, :authenticity_token => form_authenticity_token)}', {method: 'put'});" %><%= label_tag '', '肯定去' %><br/>
+			<%= radio_button :invitation, :status, 2, :onclick => "new Ajax.Request('#{event_invitation_url(@event, @participation, 'invitation[status]' => 4, :show => 1, :authenticity_token => form_authenticity_token)}', {method: 'put'});" %><%= label_tag '', '可能去' %><br/>
+			<%= radio_button :invitation, :status, 3, :onclick => "if(confirm('are you sure?')){new Ajax.Request('#{event_invitation_url(@event, @participation, 'invitation[status]' => 5, :show => 1, :authenticity_token => form_authenticity_token)}', {method: 'put'});}" %><%= label_tag '', '不鸟他' %><br/>
+		<% elsif @participation.status == 1 or @participation.status == 2 %>
+			<table class="title"><tr><td><h3 class="icon-sinker">你已经发送请求了，请等候</h3></td></tr></table>
+		<% else %>
+      <table class="title"><tr><td><h3 class="icon-sinker">你改变主意了?</h3></td></tr></table>
+			<% form_remote_for :participation, :url => event_participation_url(@event, @participation, :show => 1), :html => {:method => :put} do |f| %>
+        <%= f.radio_button 'status', 3 %><%= label_tag '', '肯定参加' %><br/>
+        <%= f.radio_button 'status', 4 %><%= label_tag '', '可能参加' %><br/>
+        <%= f.radio_button 'status', 5 %><%= label_tag '', '不参加' %><br/>
+				<div class="buttons">
+                            <table><tr><td><span class="button"><span><button type="submit">提交</button></span></span></td></tr></table>
+                        </div>
+			<% end %>
+    <% end %>
+</div>
+

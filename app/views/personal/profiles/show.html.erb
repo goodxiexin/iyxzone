@@ -1,0 +1,36 @@
+<% content_for :left do %>
+  <%= render :partial => 'menu' %>
+<% end %>
+
+<% content_for :right do %>
+<% end %>
+
+<% if @user == current_user %>
+  <%= in_place_text_field @profile, :about_me %>
+<% else %>
+  <div id='about_me'><%= @profile.about_me %></div>
+<% end %>
+
+<div class='msg-header'>
+<h3>留言版</h3>
+</div>
+<div class='msg-body'>
+  <% form_remote_for :comment, :url => profile_comments_url(@profile) do |f| %>
+  <div class='composer'>
+    <%= hidden_field_tag 'comment[recipient_id]', @user.id %>
+    <%= f.text_area 'content', :rows => 5, :cols => 75 %>
+  </div>
+  <div class='emotion'>
+    <%= emotion_link 'comment_content' %>
+  </div>
+  <div class='button'>
+    <%= f.submit '提交', :class => 'confirm-button' %>
+    <%= f.label '悄悄话' %><%= f.check_box 'whisper' %>
+  </div>
+  <% end %>
+</div>
+
+<div id='profile_comments'>
+  <%= render :partial => 'profile/comments/comment', :collection => @comments %>
+</div>
+

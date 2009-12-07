@@ -1,0 +1,5 @@
+page.insert_html :top, "comments", :partial => 'comment', :object => @comment
+if @user == current_user
+  page << "facebox.watchClickEvent($('delete_comment_#{@comment.id}'));"
+end
+page << "$('comment_content').value = '';"

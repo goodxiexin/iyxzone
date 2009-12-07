@@ -1,0 +1,2 @@
+module AvatarAlbum::TagsHelper
+end

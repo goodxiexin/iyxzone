@@ -1,0 +1,45 @@
+<%= javascript_include_tag 'nicEdit' %>
+<%= javascript_include_tag 'blog' %>
+<%= javascript_include_tag 'friend_tag' %>
+
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<%= render :partial => 'blog/menu' %>
+
+<%= error_messages_for :blog, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
+
+<div>
+<% form_for :blog, :url => blog_url(@blog), :html => {:method => 'put', :id => 'blog_form'} do |f| %>
+  <div class='title'>
+    <%= f.label "title" %><br/>
+    <%= f.text_field 'title' %>
+  </div>
+  <div class='content'>
+    <%= f.text_area 'content' %>
+  </div>
+  <div class='options'>
+    <%= f.label "category: " %><%= f.collection_select 'game_id', @user.games, :id, :name, {:prompt => '---'} %><br/>
+    <%= f.label "privilege: "%><%= privilege_select_tag(:blog) %>
+  </div>
+  <div class='submit'>
+    <%= button_to_function "保存", "blog_builder.update_blog();", :class => "confirm-button" %>
+  </div>
+  <div class='tag'>
+    添加和日志相关的好友<br/>
+    <%= auto_complete_text_field :friend, :login, '/friend_tags/auto_complete_for_friend_login', {}, {:after_update_element => 'add_friend_tag'} %>
+    <%= button_to_function '', :id => 'toggle_button' %>
+  </div>
+  <div id='friend_tags'>
+    <%= render :partial => 'friend_tags/tag', :collection => @blog.tags %>
+  </div>
+<% end %>
+</div>
+
+<% user_ids = array_or_string_for_javascript @blog.tags.map(&:tagged_user_id) %>
+<%= javascript_tag "
+  var tag_builder = new FriendTagBuilder(#{user_ids}); 
+  var blog_builder = new BlogBuilder(tag_builder);
+" %>
+

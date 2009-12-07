@@ -1,0 +1,33 @@
+<ul>
+<% @friends.each do |f| %>
+	<li id='friend_<%= f.id %>'>
+		<div class="box04 card">
+			<div class="img">
+				<div class="middle"><div class="middle-center"><div class="center">
+					<%= avatar f %>
+				</div></div></div>
+			</div>
+			<div class="info">
+				<h4><%= profile_link f %></h4>
+				<div class="selector01">
+				</div>
+			</div>
+			<div>
+				<% if @user == current_user %>
+					<%= facebox_confirm_with_validation 'x', friend_url(f), {:method => :delete, :msg => "你确定要和他解除好友关系吗?"} %> 
+				<% else %>
+          <% unless current_user.has_friend? f %>
+					  <%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %>
+          <% end %>
+				<% end %>
+			</div>
+    </div>
+  </li>
+<% end %>
+</ul>
+
+<% if @remote %>
+  <%= will_paginate friends, :renderer => 'RemoteLinkRenderer', :remote => @remote %>
+<% else %>
+  <%= will_paginate friends %>
+<% end %>

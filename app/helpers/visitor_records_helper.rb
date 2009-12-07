@@ -1,0 +1,2 @@
+module VisitorRecordsHelper
+end

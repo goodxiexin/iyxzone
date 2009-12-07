@@ -1,0 +1,2 @@
+module GuildAlbum::TagsHelper
+end

@@ -1,0 +1,31 @@
+class SearchController < ApplicationController
+
+  layout 'app'
+
+  before_filter :login_required, :setup
+
+  def user
+    @users = User.search(params[:key]).paginate :page => params[:page], :per_page => 16 
+  end
+
+  def character
+    cond = {}
+    cond.merge!({:game_id => @game.id}) unless @game.nil? 
+    cond.merge!({:area_id => @area.id}) unless @area.nil? 
+    cond.merge!({:server_id => @server.id}) unless @server.nil? 
+    @users = GameCharacter.search(params[:key], :conditions => cond).group_by(&:user_id).to_a.paginate :page => params[:page], :per_page => 10
+  end
+
+protected
+
+  def setup
+    if ["character"].include? params[:action]
+      @game = Game.find(params[:game][:id]) unless params[:game][:id].blank?
+      @area = @game.areas.find(params[:area][:id]) unless params[:area][:id].blank?
+      @server = @game.servers.find(params[:server][:id]) unless params[:server][:id].blank?
+    end
+  rescue
+    not_found
+  end
+
+end

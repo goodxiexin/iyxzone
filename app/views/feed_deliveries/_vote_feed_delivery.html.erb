@@ -1,0 +1,7 @@
+<% delivery = vote_feed_delivery %>
+<% vote = delivery.feed_item.originator %>
+<div class='feed-list' id='feed_delivery_<%= delivery.id %>'>
+  <div class="feed-icon icon-friend"></div>
+  <p><%= profile_link vote.voter %> 参与了投票 <%= poll_link vote.poll %> </p>
+  <div><%= yield %></div> 
+</div> 

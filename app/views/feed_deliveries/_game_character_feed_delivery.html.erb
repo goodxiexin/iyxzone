@@ -1,0 +1,15 @@
+<% delivery = game_character_feed_delivery %>
+<% item = delivery.feed_item %>
+<% character = item.originator %>
+<div id='feed_delivery_<%= delivery.id %>'>
+	<div><%= avatar character.user %></div>
+<% if item.data[:type] == 0 %>
+  <div><%= profile_link character.user %>创建了游戏角色<%= link_to character.name, edit_profile_url(character.user.profile) %></div>
+<% elsif item.data[:type] == 1 %>
+  <div><%= profile_link character.user %>放弃了游戏角色<%= link_to character.name, edit_profile_url(character.user.profile) %></div>
+<% elsif item.data[:type] == 2 %>
+  <div><%= profile_link character.user %>开始玩游戏角色<%= link_to character.name, edit_profile_url(character.user.profile) %></div>
+<% end %>
+	<div><%= yield %></div> 
+	<div><%= ftime delivery.created_at %></div>
+</div>

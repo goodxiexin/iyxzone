@@ -1,0 +1,17 @@
+<% delivery = blog_feed_delivery %>
+<% blog = delivery.feed_item.originator %>
+<div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
+	<div class="feed-icon icon-blog"></div>
+  <p>
+		<%= profile_link blog.poster %>
+		编写了日志
+	</p>
+  <div class="feed-content">
+		<%= truncate blog.content, :length => 80, :omission => '...' %>
+	</div>
+  <p><%= ftime delivery.created_at %><%= link_to_function '评论', "show_comment_form('blog', #{blog.id}, null)" %></p>
+  <% if with_comments %>
+	  <%= render :partial => 'comments/folded_comment_box', :locals => {:commentable => blog, :recipient => blog.poster} %>
+  <% end %>
+	<div><%= yield %></div> 
+</div>

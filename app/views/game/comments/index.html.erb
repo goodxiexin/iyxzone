@@ -1,0 +1,24 @@
+<div class='box02 canvas_con'>
+<div class="bookbox">
+    <h3><label for="book">留言板</label>(<%= link_to "查看所有", game_comments_url(@game) %>)</h3>
+    <div class="formcontent s_clear">
+      <% form_remote_for :comment, :url => game_comments_url(@game), :condition => "validate_comment($('comment_content'))" do |f| %>
+        <div class="rows">
+          <div class="textarea-wrap"><div class="textarea-wide">
+            <%= f.text_area 'content', :class => 'textarea' %>
+          </div></div>
+        </div> 
+        <div class="buttons">
+          <span class="button"><span><button type="submit">发布</button></span></span>
+          <%= emotion_link 'comment_content' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+<div class="feed-box" id='comments'>
+  <%= render :partial => 'game/comments/comment', :collection => @comments %>
+</div>
+
+<%= will_paginate @comments %>
+</div>
