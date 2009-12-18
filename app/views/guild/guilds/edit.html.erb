@@ -6,8 +6,10 @@
 <% form_for :guild, :url => guild_url(@guild), :html => {:onsubmit => "return validate_guild();"} do |f| %>
   <%= f.label '工会名字: ' %>
   <%= f.text_field :name %><br/>
+  <%= f.label '游戏: ' %>
+  <%= game_link @guild.game %><br/>
   <%= f.label '工会描述: ' %>
   <%= f.text_area :description, :rows => 8 %><br/>
-  <%= f.submit '提交', :style => "margin-left: 80px;" %>   
+  <%= button_to_function '提交', "Iyxzone.Guild.Builder.update();" %>
 <% end %>
 </div>

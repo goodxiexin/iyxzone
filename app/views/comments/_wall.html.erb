@@ -2,7 +2,7 @@
 <div class="bookbox">
   <h3><label for="book">留言板</label>(<%= link_to "查看所有#{commentable.comments_count}条留言", eval("#{type}_comments_url(commentable)") %>)</h3>
   <div class="formcontent s_clear">
-    <% form_remote_for :comment, :url => eval("#{type}_comments_url(commentable)"), :condition => "validate_comment($('comment_content'))" do |f| %>
+    <% form_for :comment, :html => {:id => 'wall_message_form'} do |f| %>
       <%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id %>
       <div class="rows">
         <div class="textarea-wrap"><div class="textarea-wide">
@@ -10,7 +10,7 @@
         </div></div>
       </div>
       <div class="buttons">
-      <span class="button"><span><button type="submit">发布</button></span></span>
+      <span class="button"><span><%= button_to_function '发布', "Iyxzone.WallMessage.save('#{type}', #{commentable.id}, this)" %></span></span>
         <%= emotion_link 'comment_content' %>
       </div>
     <% end %>

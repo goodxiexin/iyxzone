@@ -65,7 +65,7 @@
 		<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
   </div>
   <div id='more_feed'>
-		<span><%= link_to_function "更多新鲜事", "guild_feeder.more_feeds();" %></span>
+		<span><%= link_to_function "更多新鲜事", "Iyxzone.Guild.Feeder.moreFeeds(#{@guild.id});" %></span>
   </div>
 </div>
 
@@ -82,10 +82,6 @@
 </div>
 
 </div>
-
-<%= javascript_tag "
-	guild_feeder = new GuildFeeder(#{@guild.id});
-" %>
 
 <% if @membership and [3,4,5].include?(@membership.status) and params[:reply_to] %>
 <%= javascript_tag "

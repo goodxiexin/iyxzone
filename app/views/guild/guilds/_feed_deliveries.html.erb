@@ -1,3 +1,6 @@
+<% if feed_deliveries.blank? %>
+  <%= 'no feeds' %>
+<% else %>
 <% group_deliveries(feed_deliveries).each do |time, deliveries| %> 
 <div class='feed-list-box'>
 	<h4><%= time %></h4>
@@ -9,4 +12,5 @@
     <% end %>
 	<% end %>
 </div>
+<% end %>
 <% end %>

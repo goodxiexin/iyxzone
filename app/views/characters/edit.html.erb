@@ -1,11 +1,15 @@
-<% rating = @character.game.find_rating_by_user(current_user).rating %>
+<% rating = @game.find_rating_by_user(current_user).rating %>
+<% game_areas = @game.no_areas ? [] : @game.areas %>
+<% game_servers = @game.no_areas ? @game.servers : @character.area.servers %>
+<% game_professions = @game.professions %>
+<% game_races = @game.races %>
 <% form_remote_for :character, :html => {:id => 'character_info_form'} do |f| %>
   <%= f.label '人物昵称: ' %>
   <%= f.text_field :name, :size => 10 %><br/>
   <%= f.label '级别: ' %>
   <%= f.text_field :level, :size => 10 %><br/>
 	<%= f.label '游戏: ' %>
-    <%= collection_select :character, :game_id, Game.all, :id, :name, {:prompt => '---'}, {:onchange => "profile_manager.change_game()"} %><br/>
+    <%= collection_select :character, :game_id, @games, :id, :name, {:prompt => '---'} %><br/>
     <%= label_tag '', '请给这款游戏打分' %>
     <div id='star-ratings-block'>
 <ul class='star-rating'>
@@ -13,38 +17,32 @@
           Currently <%= rating %>/5 Stars.
     </li></div>
     <li>
-        <%= link_to_function( "1", "profile_manager.setup_rating_info(1)" ,:class => 'one-star', :name => '1 star out of 5') %>
+        <%= link_to_function( "1", "Iyxzone.Profile.Editor.setupRatingInfo(1)" ,:class => 'one-star', :name => '1 star out of 5') %>
     </li>
     <li>
-        <%= link_to_function( "2", "profile_manager.setup_rating_info(2)" ,:class => 'two-star', :name => '2 star out of 5') %>
+        <%= link_to_function( "2", "Iyxzone.Profile.Editor.setupRatingInfo(2)" ,:class => 'two-star', :name => '2 star out of 5') %>
     </li>
     <li>
-        <%= link_to_function( "3", "profile_manager.setup_rating_info(3)" ,:class => 'three-star', :name => '3 star out of 5') %>
+        <%= link_to_function( "3", "Iyxzone.Profile.Editor.setupRatingInfo(3)" ,:class => 'three-star', :name => '3 star out of 5') %>
     </li>
     <li>
-        <%= link_to_function( "4", "profile_manager.setup_rating_info(4)" ,:class => 'four-star', :name => '4 star out of 5') %>
+        <%= link_to_function( "4", "Iyxzone.Profile.Editor.setupRatingInfo(4)" ,:class => 'four-star', :name => '4 star out of 5') %>
     </li>
     <li>
-        <%= link_to_function( "5", "profile_manager.setup_rating_info(5)" ,:class => 'five-star', :name => '5 star out of 5') %>
+        <%= link_to_function( "5", "Iyxzone.Profile.Editor.setupRatingInfo(5)" ,:class => 'five-star', :name => '5 star out of 5') %>
     </li>
 </ul>
     </div>
     <div id='star_value'><%= hidden_field_tag('game_rate', rating)%></div>
-	<% unless @character.game.no_areas %>
 	<%= f.label '区域: ' %>
-	<%= collection_select :character, :area_id, @character.game.areas, :id, :name, {:prompt => '---'}, {:onchange => "profile_manager.change_area();"} %><br/>
-	<% end %>
+	<%= collection_select :character, :area_id, game_areas, :id, :name, {:prompt => '---'} %><br/>
 	<%= f.label '服务器: '%>
-	<%= collection_select :character, :server_id, @character.game.no_areas ? @character.game.servers : @character.area.servers, :id, :name, {:prompt => '---'} %><br/>
-  <% unless @character.game.no_races %>
+	<%= collection_select :character, :server_id, game_servers, :id, :name, {:prompt => '---'} %><br/>
   <%= f.label '种族: '%>
-  <%= collection_select :character, :race_id, @character.game.races, :id, :name, {:prompt => '---'} %><br/>
-  <% end %>
-  <% unless @character.game.no_professions %>
+  <%= collection_select :character, :race_id, game_races, :id, :name, {:prompt => '---'} %><br/>
 	<%= f.label '职业: '%>
-  <%= collection_select :character, :profession_id, @character.game.professions, :id, :name, {:prompt => '---'} %><br/>
-  <% end %>
+  <%= collection_select :character, :profession_id, game_professions, :id, :name, {:prompt => '---'} %><br/>
   <%= f.label '正在玩：' %> <%= f.check_box :playing %>
-	<%= button_to_function '更新', "profile_manager.update_character_info(#{@character.id})" %>
-  <%= link_to_function '取消', "profile_manager.leave_edit_character_info(#{@character.id})" %>
+	<%= button_to_function '更新', "Iyxzone.Profile.Editor.updateCharacterInfo(#{@character.id}, this)" %>
+  <%= link_to_function '取消', "Iyxzone.Profile.Editor.cancelEditCharacterInfo()" %>
 <% end %>

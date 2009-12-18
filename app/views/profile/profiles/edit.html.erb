@@ -1,6 +1,7 @@
 <%= javascript_include_tag 'game' %>
 <%= javascript_include_tag 'chinese_region' %>
 <%= javascript_include_tag 'profile' %>
+<%= javascript_include_tag 'event.simulate' %>
 
 <% content_for :left do %>
   <%= render :partial => 'menu' %>
@@ -22,7 +23,7 @@
     <div class='section-header'>
       基本信息
       <% if @user == current_user %>
-        <%= link_to_function '(编辑)', "profile_manager.edit_basic_info()" %>
+        <%= link_to_function '(编辑)', "Iyxzone.Profile.Editor.editBasicInfo(#{@profile.id})" %>
       <% end %>
     </div>
     <div class='section-body'>
@@ -33,7 +34,7 @@
     <div class='section-header'>
       联系信息
       <% if @user == current_user %>
-        <%= link_to_function '(编辑)', "profile_manager.edit_contact_info()" %>
+        <%= link_to_function '(编辑)', "Iyxzone.Profile.Editor.editContactInfo(#{@profile.id})" %>
       <% end %>
     </div>
     <div class='section-body'>
@@ -44,7 +45,7 @@
     <div class='section-header'>
       游戏信息
       <% if @user == current_user %>
-        <%= link_to_function '(增加)', "profile_manager.new_character_info();" %>
+        <%= link_to_function '(增加)', "Iyxzone.Profile.Editor.newCharacterInfo();" %>
       <% end %> 
     </div>
     <div class='section-body'>
@@ -54,7 +55,7 @@
 		</div>
   </div>
 </div>
-
+<div id='info'></div>
 <%= javascript_tag "
-  profile_manager = new ProfileManager(#{@profile.id});
-"%>
+  Iyxzone.Profile.Editor.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '')}, 'character_game_id', 'character_area_id', 'character_server_id', 'character_race_id', 'character_profession_id', {});
+" %>

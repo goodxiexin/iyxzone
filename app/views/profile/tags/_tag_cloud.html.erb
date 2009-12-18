@@ -1,12 +1,13 @@
 <% if @profile.tags.blank? %>
 	还没有好友对你进行评价
 <% else %>
+<ul class='holder' style="border:0px">
 <% tag_cloud @profile, %w(css1 css2 css3 css4) do |tag, css_class| %>
-	<span id='tag_<%= tag.id %>' class=<%= css_class %>>
-		<%= tag.name %>
-		<% if @user == current_user %>
-			<%= link_to_remote 'x', :url => profile_tag_url(@profile, tag), :method => :delete, :html => {:class => css_class} %>
-		<% end %>
-	</span>
+	<li class='bit-box' id='tag_<%= tag.id %>'><span class='<%= css_class %>'><%= tag.name %></span>
+	<% if @user == current_user %>
+		<%= link_to_remote '', :url => profile_tag_url(@profile, tag), :method => :delete, :html => {:class => 'closebutton'} %>
+	<% end %>
+  </li>
 <% end %>
+</ul>
 <% end %>

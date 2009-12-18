@@ -1,6 +1,8 @@
-<%= javascript_include_tag 'photo_slide' %>
+<%= javascript_include_tag 'photo' %>
 <%= javascript_include_tag 'home' %>
 <%= javascript_include_tag 'friend_suggestor' %>
+<%= javascript_include_tag 'status' %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body canvas_wrap s_clear">
 		<div class="canvas_m">
@@ -21,12 +23,13 @@
 							<div class="showbar">Hi，我是 <%= current_user.login %></div>
 							<div class="mcPanel round02 round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 								<div class="round_m"><div class="round_body">
-									<% form_remote_for :status, :url => statuses_url(:home => 1), :html => {:class => "formcontent s_clear"} do |f| %>
+									<% form_remote_for :status, :html => {:id => 'status_form', :class => "formcontent s_clear"} do |f| %>
+                  <%= hidden_field_tag 'home', 1 %>
                   <div class="fldvalue">
 										<div id="mcStatus" class="textfield"><%= f.text_field :content %></div>
                   </div>
                   <div class="fldbtn">
-										<span class="button"><span><%= button_submit '发布' %></span></span>
+										<span class="button"><span><%= button_to_function '发布', "Iyxzone.Status.Builder.save(this)" %></span></span>
                   </div>
                   <% end %>
                   <div id='latest_status'>
@@ -47,21 +50,21 @@
 					<div class="feed-box">
 						<div class="tab tab01">
 							<ul id='feed_menu'>
-								<li class='hover'><span><%= link_to_function "全部", "home_manager.show_feeds();" %></span></li>
-								<li><span><%= link_to_function "状态", "home_manager.show_feeds(0);" %></span></li>
-								<li><span><%= link_to_function "日志", "home_manager.show_feeds(1);" %></span></li>
-								<li><span><%= link_to_function "视频", "home_manager.show_feeds(2);" %></span></li>
-								<li><span><%= link_to_function "照片", "home_manager.show_feeds(3);" %></span></li>
-								<li><span><%= link_to_function "活动", "home_manager.show_feeds(4);" %></span></li>
-								<li><span><%= link_to_function "投票", "home_manager.show_feeds(5);" %></span></li>
-								<li><span><%= link_to_function "工会", "home_manager.show_feeds(6);" %></span></li>
+								<li class='hover'><span><%= link_to_function "全部", "Iyxzone.Home.Feeder.showFeeds();" %></span></li>
+								<li><span><%= link_to_function "状态", "Iyxzone.Home.Feeder.showFeeds(0);" %></span></li>
+								<li><span><%= link_to_function "日志", "Iyxzone.Home.Feeder.showFeeds(1);" %></span></li>
+								<li><span><%= link_to_function "视频", "Iyxzone.Home.Feeder.showFeeds(2);" %></span></li>
+								<li><span><%= link_to_function "照片", "Iyxzone.Home.Feeder.showFeeds(3);" %></span></li>
+								<li><span><%= link_to_function "活动", "Iyxzone.Home.Feeder.showFeeds(4);" %></span></li>
+								<li><span><%= link_to_function "投票", "Iyxzone.Home.Feeder.showFeeds(5);" %></span></li>
+								<li><span><%= link_to_function "工会", "Iyxzone.Home.Feeder.showFeeds(6);" %></span></li>
               </ul>
             </div>
             <div class="feed-wrap" id='feed_list'>
 							<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
             </div>
 						<div id='more_feed'>
-							<span><%= link_to_function "更多新鲜事", "home_manager.more_feeds();" %></span>
+							<span><%= link_to_function "更多新鲜事", "Iyxzone.Home.Feeder.moreFeeds();" %></span>
 						</div>
           </div>
         </div>
@@ -121,7 +124,5 @@
 </div></div></div></div>
 
 <%= javascript_tag "
-	home_manager = new HomeManager(#{@idx});	
-	home_manager.fetch_notices('#{first_ten_notices_url}');
-	friend_suggestor = new FriendSuggestor();
+	Iyxzone.Home.NoticeManager.fetch('#{first_ten_notices_url}');
 "%>

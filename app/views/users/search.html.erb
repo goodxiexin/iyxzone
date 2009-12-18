@@ -1,4 +1,6 @@
 <%= javascript_include_tag 'search' %>
+<%= javascript_include_tag 'event.simulate' %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
 		<h1 class="big-mygame">寻找用户...</h1>
@@ -35,7 +37,7 @@
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '游戏: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :character, :game_id, Game.all, :id, :name, {:prompt => '---'}, {:onchange => "user_searcher.game_onchange();"} %>
+              <%= collection_select :character, :game_id, Game.all, :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             <div class="rows s_clear">
@@ -83,4 +85,5 @@
 
 <%= javascript_tag "
   user_searcher = new UserSearcher();
+  good_selector = new GoodSelector('game_id', #{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')});
 " %>

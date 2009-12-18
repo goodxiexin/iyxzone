@@ -13,20 +13,20 @@
 		<div class="pics">
 		  <div>
       <% if photos.count >= 4 %>
-        <%= link_to_function '上一张', "slide_manager.get(#{delivery.id}).prev();" %>
+        <%= link_to_function '上一张', "Iyxzone.Photo.SlideManager.get(#{delivery.id}).prev();" %>
       <% end %>
 			</div>
 			<div>
-				<ul id='frames_<%= delivery.id %>'>
+				<table><tr id='frames_<%= delivery.id %>'>
 					<% window_size = (photos.count > 4)? 4 : photos.count %>
 					<% window_size.times do |i| %>
-						<li id='frame_<%= i %>'></li>
+						<td id='frame_<%= i %>'></td>
 					<% end %>
-				</ul>
+				</td></table>
 			</div>
 			<div>
 				<% if photos.count >= 4 %>
-				  <%= link_to_function '下一张', "slide_manager.get(#{delivery.id}).next();" %>
+				  <%= link_to_function '下一张', "Iyxzone.Photo.SlideManager.get(#{delivery.id}).next();" %>
 				<% end %>
 			</div>
 		</div>
@@ -41,7 +41,7 @@
 <% photo_ids = array_or_string_for_javascript photos.map(&:id) %>
 <% urls = array_or_string_for_javascript photos.map {|p| p.public_filename(:medium)} %>
 <%= javascript_tag "
-  slide = new PhotoSlide('personal_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames_#{delivery.id}').childElements(), #{photos[(window_size/2).to_i].id});
-  slide_manager.set(#{delivery.id}, slide);
+  slide = new Iyxzone.Photo.Slide('personal_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames_#{delivery.id}').childElements(), #{photos[(window_size/2).to_i].id});
+  Iyxzone.Photo.SlideManager.set(#{delivery.id}, slide);
 " %>
 

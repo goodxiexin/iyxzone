@@ -18,12 +18,12 @@
   </div>
   <div>
     <%= f.label "游戏：" %>
-    <%= collection_select :event, :game_id, current_user.games.all, :id, :name, {:prompt => '---'}, {:onchange => "event_builder.change_game();"} %>
+    <%= collection_select :event, :game_id, current_user.games.all, :id, :name, {:prompt => '---'} %>
   </div>
 <div id='game_details'>
   <div id='areas'>
     <%= f.label "服务区：" %>
-    <%= collection_select :event, :game_area_id, [], :id, :name, {:prompt => '---'}, {:onchange => "event_builder.change_area();"} %>
+    <%= collection_select :event, :game_area_id, [], :id, :name, {:prompt => '---'} %>
   </div>
   <div id='servers'>
     <%= f.label "服务器：" %>
@@ -46,10 +46,11 @@
     <%= f.label "谁可以申请加入:" %>
     <%= privilege_select_tag :event %>
   </div>
-  <%= button_to_function "提交", "event_builder.save();" %>
+  <%= button_to_function "提交", "Iyxzone.Event.Builder.save();" %>
 <% end %>
 </div>
 
 <%= javascript_tag "
-  event_builder = new EventBuilder();
+  Iyxzone.Event.Builder.gameSelector.setEvents();
+  Iyxzone.Event.Builder.gameSelector.reset();
 " %>

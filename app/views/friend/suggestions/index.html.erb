@@ -1,6 +1,8 @@
 <%= javascript_include_tag "game.js" %>
 <%= javascript_include_tag "search.js" %>
-<%= javascript_include_tag "friend_suggestor.js" %>
+<%= javascript_include_tag "friend.js" %>
+<%= javascript_include_tag "event.simulate" %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
 		<h1 class="big-mygame">好友</h1>
@@ -20,30 +22,35 @@
               <div class="fldvalue">
 								<div class="textfield"><%= text_field_tag 'key', '好友名字', :onclick => "this.clear();" %></div>
               </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
-              <div class='link'><%= link_to_function "找游戏角色", "user_searcher.show_character_form();" %></div>
+              <div class="fldbtn">
+                <span class="button"><span><button type="submit" onclick="Iyxzone.Search.searchUsers(this)">查找</button></span></span>
+              </div>
+              <div class='link'><%= link_to_function "找游戏角色", "Iyxzone.Search.showCharacterForm()" %></div>
             </div>
 					<% end %>
-					<% form_tag search_characters_url, :class => "formcontent", :onsubmit => "return user_searcher.validate_character();", :id => 'character_form', :style => "display:none" do %>
+          <div id='info'></div>
+					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :style => "display:none" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
                 <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', params[:key], :onclick => "this.clear();" %></div></div>
-                <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
-                <div class="link"><%= link_to_function "找好友", "user_searcher.show_normal_form();" %></div>
-                <span> <%= link_to_function "高级", "user_searcher.toggle_character_options();" %> </span>
+                <div class="fldbtn">
+                  <span class="button"><span><button type="submit" onclick="Iyxzone.Search.searchCharacters(this)">查找</button></span></span>
+                </div>
+                <div class="link"><%= link_to_function "找好友", "Iyxzone.Search.showUserForm()" %></div>
+                <span> <%= link_to_function "高级", "Iyxzone.Search.toggleCharacterOptions()" %> </span>
               </div>
             </div>
             <div id='character_options' style="display:none">
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '游戏: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :game, :id, Game.all, :id, :name, {:prompt => '---'}, {:onchange => "user_searcher.game_onchange();"} %>
+              <%= collection_select :game, :id, @games, :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务区: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :area, :id, [], :id, :name, {:prompt => '---'}, {:onchange => "user_searcher.area_onchange();"} %>
+              <%= collection_select :area, :id, [], :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             <div class="rows s_clear">
@@ -119,6 +126,6 @@
 </div></div></div></div>
 
 <%= javascript_tag "
-	user_searcher = new UserSearcher();
-	friend_suggestor = new FriendSuggestor();
+  Iyxzone.Search.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')}, 'game_id', 'area_id', 'server_id', null, null, {});
+  Iyxzone.Search.gameSelector.setEvents(); 
 " %>

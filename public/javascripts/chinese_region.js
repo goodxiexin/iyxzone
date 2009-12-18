@@ -1,62 +1,102 @@
-ChineseRegion = Class.create({
+Iyxzone.ChineseRegion = {
+  version: '1.0',
+  author: ['高侠鸿']
+};
 
-  initialize: function(){
+Iyxzone.ChineseRegion.Selector = Class.create({
+
+  initialize: function(regionSelectorID, citySelectorID, districtSelectorID, options){
+    this.regionSelectorID = regionSelectorID;
+    this.citySelectorID = citySelectorID;
+    this.districtSelectorID = districtSelectorID;
+
+    this.options = Object.extend({
+      onRegionChange: Prototype.emptyFunction,
+      onCityChange: Prototype.emptyFunction,
+      onDistrictChange: Prototype.emptyFunction
+    }, options || {});
+
   },
 
-  prepare: function(region_selector, city_selector, district_selector){
-    this.region_selector = region_selector;
-    this.city_selector = city_selector;
-    this.district_selector = district_selector;
+  setEvents: function(){
+    Event.observe(this.regionSelectorID, 'change', this.onRegionChange.bind(this));
+    Event.observe(this.citySelectorID, 'change', this.onCityChange.bind(this));
+    Event.observe(this.districtSelectorID, 'change', this.onDistrictChange.bind(this));
   },
 
-  reset_city_info: function(){
-    this.city_selector.innerHTML = '<option value="">---</option>'; 
+  resetCityInfo: function(){
+    $(this.citySelectorID).innerHTML = '<option value="">---</option>'; 
   },
 
-  setup_city_info: function(cities){
-    var html = ''; //<option value="">---</option>';
+  setupCityInfo: function(cities){
+    var html = '<option value="">---</option>';
     for(var i=0;i<cities.length;i++){
       html += "<option value='" + cities[i].city.id + "'>" + cities[i].city.name + "</option>";
     }
-    this.city_selector.innerHTML = html;
+    $(this.citySelectorID).innerHTML = html;
   },
 
-  reset_district_info: function(){
-    this.district_selector.innerHTML = '<option value="">---</option>'; 
+  resetDistrictInfo: function(){
+    $(this.districtSelectorID).innerHTML = '<option value="">---</option>'; 
   },
 
-  setup_district_info: function(districts){
-    var html = ''; //<option value="">---</option>';
+  setupDistrictInfo: function(districts){
+    var html = '<option value="">---</option>';
     for(var i=0;i<districts.length;i++){
       html += "<option value='" + districts[i].district.id + "'>" + districts[i].district.name + "</option>";
     }
-    this.district_selector.innerHTML = html;
+    $(this.districtSelectorID).innerHTML = html;
   },
 
-  region_onchange: function(){
+  onRegionChange: function(){
+    if(this.regionSelectorID && $(this.regionSelectorID).value == ''){
+      this.resetCityInfo();
+      this.resetDistrictInfo();
+      return;
+    }
     new Ajax.Request('/cities', {
       method: 'get',
-      parameters: {region_id: this.region_selector.value},
+      parameters: {region_id: $(this.regionSelectorID).value},
       onSuccess: function(transport){
         details = transport.responseText.evalJSON();
-        this.reset_city_info();
-        this.reset_district_info();
-        this.setup_city_info(details);
-        this.city_onchange();
+        if(this.citySelectorID)
+          this.resetCityInfo();
+        if(this.districtSelectorID)
+          this.resetDistrictInfo();
+        if(this.citySelectorID)
+          this.setupCityInfo(details);
+      
+        this.options.onRegionChange($(this.regionSelectorID).value);
       }.bind(this)
     });
   },
 
-  city_onchange: function(){
+  onCityChange: function(){
+    if(this.citySelectorID && $(this.citySelectorID).value == ''){
+      if(this.citySelectorID)
+        this.resetDistrictInfo();
+      return;
+    }
     new Ajax.Request('/districts', {
       method: 'get',
-      parameters: {region_id: this.region_selector.value, city_id: this.city_selector.value},
+      parameters: {region_id: $(this.regionSelectorID).value, city_id: $(this.citySelectorID).value},
       onSuccess: function(transport){
         details = transport.responseText.evalJSON();
-        this.reset_district_info();
-        this.setup_district_info(details);
+        if(this.districtSelectorID){
+          this.resetDistrictInfo();
+          this.setupDistrictInfo(details);
+        }
+
+        this.options.onCityChange($(this.citySelectorID).value);
       }.bind(this)
     });
+  },
+
+  onDistrictChange: function(){
+    if(this.districtSelectorID && $(this.districtSelectorID).value == ''){
+      return;
+    }
+    this.options.onDistrictChange($(this.districtSelectorID).value);
   }
 
 });

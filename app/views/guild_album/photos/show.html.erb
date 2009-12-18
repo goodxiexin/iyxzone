@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag 'cropper' %>
+<%= javascript_include_tag 'cropper' %>
 <%= javascript_include_tag 'photo_tag' %>
 <%= javascript_include_tag 'photo_slide' %>
 
@@ -11,8 +13,7 @@
 <%= guild_link @guild %> -> <%= album_link @album %> -> 照片<br/>
 </div>
 </div>
-
-
+<br/>
 <div class='photo-view'>
   <div class='photo-wrap'>
     <%= image_tag @photo.public_filename, :id => "photo_#{@photo.id}" %>
@@ -29,20 +30,33 @@
   </div>	
 </div>
 
-<div style="display:none" id='square'>
-  <div></div>
-</div>
-<div style="display:none" id='input'>
+<div id='control_panel' style="display:none" >
   <div>
     <%= label_tag '这是谁...' %><br/>
-    <%= auto_complete_text_field :tag, :tagged_user, "/photo_tags/friends", {}, {:after_update_element => "select_friend"} %>
-    <%= button_to_function '', "tag_builder.toggle_friends('#{form_authenticity_token}');" %><br/>
+    <%= text_field_tag 'tag[tagged_user]', '', :id => 'tag_tagged_user' %>
+    <%= button_to_function '', "tag_manager.toggle_friend_list('#{form_authenticity_token}');" %><br/>
+    <div id='friend_dropdown_list'></div>
+    <div id="friend_radio_list" class="box05" style="display:none">
+      <div class="title01">
+        <div class="right">
+          <select name="" onchange="tag_manager.get_friends(this.value)" >
+            <option value=0>全部好友</option>
+            <% current_user.games.each do |game| %>
+              <option value=<%= game.id %>><%= game.name %></option>
+            <% end %>
+          </select>
+        </div>
+        <h1>限选1人</h1>
+      </div>
+      <div class="checkgroup" id='friend_names'>
+      </div>
+    </div>
     <% form_remote_for :tag, :url => guild_photo_tags_url(@photo), :html => {:id => 'tag_form'} do |f| %>
       <%= f.label '说点什么吧' %><br/>
       <%= hidden_field_tag 'tag[tagged_user_id]', '' %>
       <%= f.text_area 'content', :rows => 2, :cols => 40 %><br/>
-      <%= button_to_function '确定', "", :id => 'confirm_btn'%>
-      <%= button_to_function '取消', "", :id => 'cancel_btn'%>
+      <%= button_to_function '确定', "tag_manager.submit_tag();", :id => 'confirm_btn'%>
+      <%= button_to_function '取消', "tag_manager.reset();", :id => 'cancel_btn'%>
     <% end %>
   </div>
 </div>
@@ -50,7 +64,7 @@
 <div id='photo_options'>
   <%= dig_link @photo %> |
 	<% if @membership and [3,4,5].include? @membership.status %>
-  <%= link_to_function '标记', "tag_builder.start();" %> |
+  <%= link_to_function '标记', "tag_manager.start();" %> |
 	<% end %>
   <% if @user == current_user %>
     <%= link_to '编辑', edit_guild_photo_url(@photo), :rel => 'facebox' %> |
@@ -84,6 +98,6 @@
 <% urls = array_or_string_for_javascript @album.photos.map {|p| p.public_filename(:small)} %>
 <%= javascript_tag "
   slide = new PhotoSlide('guild_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames').childElements(), #{@photo.id});
-  tag_builder = new PhotoTagBuilder('guild_photo', #{@photo.id}); 
+  tag_manager = new PhotoTagManager('guild_photo', #{@photo.id}, 'control_panel', '#{form_authenticity_token}'); 
 " %>
 

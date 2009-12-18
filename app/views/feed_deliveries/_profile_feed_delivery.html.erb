@@ -1,6 +1,6 @@
 <% delivery = profile_feed_delivery %>
 <% profile = delivery.feed_item.originator %>
-<% modified = profile_feed.data[:modified].map { |m| link_to m, edit_profile_url(profile) }.join(',') %>
+<% modified = delivery.feed_item.data[:modified].map { |m| link_to m, edit_profile_url(profile) }.join(',') %>
 <div id='feed_delivery_<%= delivery.id %>'>
 	<div><%= avatar profile.user %></div>
 	<div><%= profile_link profile.user %>更改了<%= modified %></div>

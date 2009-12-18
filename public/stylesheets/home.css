@@ -247,18 +247,18 @@ a:hover{color:#D63200;}
 #photoUpload #addFile{margin-left:168px;}
 #photoUpload .buttons{margin-left:152px;}
 
-#facebox{width:401px;overflow:hidden}
-#facebox .formcontent{padding:16px 10px 16px 20px}
-#facebox .textfield{width:257px;}
-#facebox textarea{width:266px;height:73px;}
-#facebox .buttons{padding:12px 0;border-top:1px #E7F0E0 solid;background:#F8FCF6;text-align:center}
-#facebox .buttons .button{margin:0 4px;}
-#facebox .checkgroup{padding:6px;}
-#facebox .checkgroup .rows{border-bottom:1px #E7F0E0 solid;}
-#facebox .checkgroup th,#facebox .checkgroup td{padding:5px 2px;line-height:20px;}
-#facebox .checkgroup td{width:100px;vertical-align:middle}
-#facebox .checkgroup th input{_margin-top:-2px;}
-#facebox .loading {text-align: center}
+.box05{width:401px;overflow:hidden}
+.box05 .formcontent{padding:16px 10px 16px 20px}
+.box05 .textfield{width:257px;}
+.box05 textarea{width:266px;height:73px;}
+.box05 .buttons{padding:12px 0;border-top:1px #E7F0E0 solid;background:#F8FCF6;text-align:center}
+.box05 .buttons .button{margin:0 4px;}
+.box05 .checkgroup{padding:6px;max-height: 250px;overflow: auto;}
+.box05 .checkgroup .rows{border-bottom:1px #E7F0E0 solid;}
+.box05 .checkgroup th,.box05 .checkgroup td{padding:5px 2px;line-height:20px;}
+.box05 .checkgroup td{width:100px;vertical-align:middle}
+.box05 .checkgroup th input{_margin-top:-2px;}
+.box05 .loading {text-align: center}
 
 .inbox-box .icon-emailoff{background:url(../images/icons/inboxIcon.gif) no-repeat left -49px;}
 .inbox-box .inbox-topbar{padding:9px 12px 7px 15px;border-bottom:1px #BBD2AA solid;background:#F8FCF6;line-height:19px;}

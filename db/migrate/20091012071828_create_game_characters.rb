@@ -9,7 +9,7 @@ class CreateGameCharacters < ActiveRecord::Migration
       t.integer :race_id
       t.string :name
       t.integer :level
-      t.boolean :playing
+      t.boolean :playing, :default => true
       t.timestamps
     end
   end

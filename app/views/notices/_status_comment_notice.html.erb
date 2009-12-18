@@ -5,14 +5,14 @@
 	<% page = (status.poster.statuses_count / 10) + 1%>
 <% end %>
 <% if home_page %>
-<% link = "#{link_to_function truncate(status.content, :length => 20, :omission => '...'), "home_manager.read_notice('#{read_notice_url(notice)}', '#{form_authenticity_token}'); window.open('/statuses?id=#{status.poster_id}&page=#{page}&status_id=#{status.id}&reply_to=#{comment.poster_id}');"}" %>
+<% link = "#{link_to_function truncate(status.content, :length => 20, :omission => '...'), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/statuses?id=#{status.poster_id}&page=#{page}&status_id=#{status.id}&reply_to=#{comment.poster_id}');"}" %>
 <% else %>
 <% link = "#{link_to_function truncate(status.content, :length => 20, :omission => '...'), "window.open('/statuses?id=#{status.poster_id}&page=#{page}&status_id=#{status.id}&reply_to=#{comment.poster_id}');"}" %>
 <% end %>
 <li>
 	<div class="feed-message">
     <% if home_page %>
-		<%= link_to_function '', "home_manager.read_notice('#{read_notice_url(notice)}', '#{form_authenticity_token}')", :class => 'icon-active' %>
+		<%= link_to_function '', "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}')", :class => 'icon-active' %>
     <% end %>
 		<% if notice.data == 'comment' %>
 			<%= profile_link comment.poster %> 评论了你的状态 <%= link %>

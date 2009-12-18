@@ -25,6 +25,7 @@ class PersonalAlbum::PhotosController < ApplicationController
 
   def show
     @comments = @photo.comments
+    @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
   end
 
 	def create

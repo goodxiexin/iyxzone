@@ -8,9 +8,13 @@ class PhotoTagsController < ApplicationController
 
   before_filter :owner_required, :only => [:destroy]
 
+  def index
+    render :json => @photo.tags
+  end
+
   def create
     if @tag = @photo.tags.create(params[:tag].merge({:poster_id => current_user.id}))
-			render :partial => "tag", :object => @tag
+			render :text => (@tag.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:poster => {:only => [:login, :id]}, :tagged_user => {:only => [:login, :id]}})
 		else
       render :update do |page|
         page << "alert('错误，稍后再试');"
@@ -28,15 +32,20 @@ class PhotoTagsController < ApplicationController
     end
   end
 
-  def friends
-    @friends = current_user.friends.find_all {|f| f.login.include? params[:tag][:tagged_user]}
-    render :partial => 'friends', :object => @friends
+  def auto_complete_for_friends
+    @friends = current_user.friends.find_all {|f| f.pinyin.starts_with? params[:friend][:login]}
+    render :partial => 'auto_complete_friends', :object => @friends
   end
 
-	def all_friends
-		@friends = current_user.friends
-		render :partial => 'all_friends', :object => @friends
-	end
+  def friends
+    case params[:type].to_i
+    when 0
+      @friends = current_user.friends
+    when 1
+      @friends = current_user.friends.find_all {|f| f.characters.map(&:game_id).include?(params[:game_id].to_i) }
+    end
+    render :partial => 'friends', :object => @friends
+  end
 	
 
 protected

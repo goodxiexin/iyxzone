@@ -4,7 +4,7 @@
 
 <%= error_messages_for :topic, :header_message => '以下原因导致无法保存', :message => nil %>
 
-<% form_for :topic, :url => forum_topics_url(@forum), :html => {:onsubmit => "return validate_topic();"} do |f| -%>
+<% form_for :topic, :url => forum_topics_url(@forum), :html => {:onsubmit => "return Iyxzone.Forum.validateTopic();"} do |f| -%>
   <%= f.label '' 'subject:' %>
   <%= f.text_field :subject, :size => 40 %><br/>
   <%= f.label '' 'content:' %>
@@ -12,4 +12,4 @@
   <%= f.submit 'Save' %>
 <% end -%>
 
-<%= javascript_tag "editor = new nicEditor({iconsPath:'/images/nicEditorIcons.gif'}).panelInstance('topic_content');" %>
+<%= javascript_tag "Iyxzone.Forum.editor = new nicEditor({iconsPath:'/images/nicEditorIcons.gif'}).panelInstance('topic_content');" %>

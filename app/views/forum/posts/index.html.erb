@@ -16,7 +16,7 @@
       <span class='forum-tiny'>
         <%= ftime @topic.created_at %><br/>
         <%= link_to '发站内信', new_mail_url(:recipient_id => @topic.poster_id) %><br/>
-        <%= link_to_function '回复', "reply_topic();" %>
+        <%= link_to_function '回复', "Iyxzone.Forum.setPost();" %>
       </span>
     </td>
     <td class='post'><%= @topic.content %></td>
@@ -29,7 +29,7 @@
         <span class='forum-tiny'>
           <%= ftime post.created_at %><br/>
           <%= link_to '发站内信', new_mail_url(:recipient_id => post.poster_id) %><br/>
-          <%= link_to_function '回复', "reply_post(#{post.floor}, '#{post.poster.login}');" %>
+          <%= link_to_function '回复', "Iyxzone.Forum.setPost(#{post.floor}, '#{post.poster.login}');" %>
         </span>
       </td>
       <td class="post"><%= post.content %><span class='forum-tiny'><%= post.floor %>楼</span></td>
@@ -46,11 +46,11 @@
 
 <div id='new_post' class='new-post'>
 <%= error_messages_for :post, :header_message => '以下原因导致保存失败', :message => nil %>
-<% form_for :post, :url => forum_topic_posts_url(@forum, @topic), :html => {:onsubmit => 'return validate_post();'} do |f| %>
+<% form_for :post, :url => forum_topic_posts_url(@forum, @topic), :html => {:onsubmit => "return Iyxzone.Forum.validatePost()"} do |f| %>
   <div class='content'><%= f.text_area :content %></div><br/>
   <%= f.submit '提交', :class => 'confirm-button' %>
 <% end %>
 </div>
 
-<%= javascript_tag "editor = new nicEditor({iconsPath:'/images/nicEditorIcons.gif'}).panelInstance('post_content');" %>
+<%= javascript_tag "Iyxzone.Forum.editor = new nicEditor({iconsPath:'/images/nicEditorIcons.gif'}).panelInstance('post_content');" %>
 

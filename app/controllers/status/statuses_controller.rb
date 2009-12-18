@@ -12,22 +12,9 @@ class Status::StatusesController < ApplicationController
 
   def create
     @status = @user.statuses.build(params[:status])
-    if @status.save
-      if params[:home].to_i == 1
-        render :update do |page|
-          page.replace_html "latest_status", :inline => "<%= distance_of_time_in_words_to_now(current_user.latest_status.created_at) %> ago: <span id='latest_status_content'><%= current_user.latest_status.content %></span>"
-          page.visual_effect :highlight, 'latest_status', :duration => 2
-					page << "$('status_content').clear();"
-        end
-      else
-        render :update do |page|
-          page.insert_html :top, 'statuses', :partial => 'status', :object => @status
-          page << "facebox.watchClickEvent($('delete_status_#{@status.id}'));$('status_content').value = '';"
-        end
-      end
-    else
+    unless @status.save
 			render :update do |page|
-				page << "保存时发生错误"
+				page << "error(保存时发生错误)"
 			end
 		end
   end

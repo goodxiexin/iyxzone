@@ -1,21 +1,34 @@
-StatusBuilder = Class.create({
+Iyxzone.Status = {
+  version: '1.0',
+  author: ['高侠鸿'],
+  Builder: {}
+};
 
-  initialize: function(){
-    this.content = $('status_content');
-    this.form = $('status_form');
-  },
+Object.extend(Iyxzone.Status.Builder, {
 
   validate: function(){
-    if(this.content.value == ''){
+    if($('status_content').value == ''){
       error('状态不能为空');
       return false;
     }
     return true;
   },
 
-  submit: function(){
-    if(this.validate())
-      new Ajax.Request('/statuses?home=0', {method: 'post', parameters: this.form.serialize()});
+  save: function(button){
+    if(this.validate()){
+      var form = $('status_form');
+      new Ajax.Request('/statuses', {
+        method: 'post', 
+        parameters: form.serialize(),
+        onLoading: function(){
+          Iyxzone.disableButton(button, '等待');
+        },
+        onComplete: function(){
+          Iyxzone.enableButton(button, '发布');
+        }
+      });
+    }
   }
+
 
 });

@@ -1,6 +1,6 @@
 if @feed_deliveries.blank?
-	page.replace_html 'more_feed', "没有更多了..."
+  page.replace_html 'more_feed', '没有更多了...'
 else
-	page.insert_html :bottom, 'feed_list', :partial => 'feed_deliveries', :object => @feed_deliveries
-	page.replace_html 'more_feed', "#{link_to_function "更多新鲜事", "guild_feeder.more_feeds();"}"
+  page.insert_html :bottom, 'feed_list', :partial => 'feed_deliveries', :object => @feed_deliveries
+  page.replace_html 'more_feed', "#{link_to_function '更多新鲜事', "Iyxzone.Guild.Feeder.moreFeeds(#{@guild.id})"}"
 end

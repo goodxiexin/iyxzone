@@ -25,10 +25,6 @@
     <%= form.label '封面: ' %>
     <%= form.file_field :uploaded_data %>
   <% end %>
-  <%= button_to_function '提交',  "guild_builder.save();"%>   
+  <%= button_to_function '提交',  "Iyxzone.Guild.Builder.save();"%>   
 <% end %>
 </div>
-
-<%= javascript_tag "
-  var guild_builder = new GuildBuilder();
-" %>

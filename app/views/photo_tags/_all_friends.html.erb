@@ -1,8 +1,0 @@
-<div>
-	<%= label_tag '限选一人' %>
-<ul>
-<% all_friends.each do |f| %>
-	<li><%= radio_button_tag '', f.id, false, :id => "radio_#{f.id}", :onclick => "tag_builder.after_select_friend('#{f.login}', #{f.id});" %><%= f.login %></li>
-<% end %>
-</ul>
-</div>

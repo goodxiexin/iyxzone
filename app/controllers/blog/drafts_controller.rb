@@ -13,14 +13,19 @@ class Blog::DraftsController < ApplicationController
   end
 
   def create
-    if @blog = current_user.drafts.create(params[:blog])
+    if @blog = current_user.drafts.create(params[:blog].merge({:poster_id => current_user.id, :draft => true}))
       render :update do |page|
-        page.alert "保存成功,继续写吧"
-        page << "blog_builder.set_draft_id(#{@blog.id});"
+        page.redirect_to edit_draft_url(@blog)
       end
+      #render :json => {:draft_id => @blog.id, :tags => @blog.tags.map{|t| {:id => t.id, :friend_login => t.tagged_user.login, :friend_id => t.tagged_user_id}}}
+      #render :update do |page|
+      #  page.alert "保存成功,继续写吧"
+      #  page << "Iyxzone.Blog.Builder.draftID = #{@blog.id};"
+      #  page << "$('errors').innerHTML = '';"
+      #end
     else
       render :update do |page|
-        page << "error('保存的时候发生错误');"
+        page.replace_html :errors, :partial => 'blog/validation_errors'
       end
     end
   rescue FriendTag::TagNoneFriendError
@@ -32,12 +37,14 @@ class Blog::DraftsController < ApplicationController
 
   def update
     if @blog.update_attributes(params[:blog])
-      render :update do |page|
-        page.alert "保存成功,继续写吧"
-      end
+      render :json => {:draft_id => @blog.id, :tags => @blog.tags.map{|t| {:id => t.id, :friend_login => t.tagged_user.login, :friend_id => t.tagged_user_id}}}
+      #render :update do |page|
+      #  page.alert "保存成功,继续写吧"
+      #  page << "$('errors').innerHTML = '';"
+      #end
     else
       render :update do |page|
-        page << "error('发生错误，稍后再试');"
+        page.replace_html 'errors', :partial => 'blog/validation_errors'
       end
     end
   rescue FriendTag::TagNoneFriendError

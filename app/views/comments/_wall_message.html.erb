@@ -4,7 +4,7 @@
     <p>
       <%= profile_link wall_message.poster %> 
       <%= ftime wall_message.created_at %> 
-      <%= link_to_function '回复', "$('comment_content').value = '回复#{wall_message.poster.login}：'; $('comment_content').focus(); " %>
+      <%= link_to_function '回复', "Iyxzone.WallMessage.set('#{wall_message.poster.login}');" %>
     </p>
     <p><%= wall_message.content  %></p>
   </div>

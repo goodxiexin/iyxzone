@@ -1,4 +1,6 @@
 <%= stylesheet_link_tag 'tag_cloud' %>
+<%= stylesheet_link_tag 'test' %>
+<%= javascript_include_tag 'chinese_region' %>
 <%= javascript_include_tag 'profile' %>
 
 <% content_for :left do %>
@@ -146,7 +148,7 @@
 		<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
 	</div>
 	<div id='more_feed'>
-		<span><%= link_to_function "更多新鲜事", "profile_feeder.more_feeds(#{@profile.id});" %></span>
+		<span><%= link_to_function "更多新鲜事", "Iyxzone.Profile.Feeder.moreFeeds(#{@profile.id});" %></span>
 	</div>
 </div>
 
@@ -155,10 +157,6 @@
 <% end %>
 
 </div>
-
-<%= javascript_tag "
-  profile_feeder = new ProfileFeeder(#{@profile.id});
-"%>
 
 <% if wall_viewable? and params[:reply_to] %>
 <%= javascript_tag "

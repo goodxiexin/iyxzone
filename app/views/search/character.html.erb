@@ -1,5 +1,7 @@
 <%= javascript_include_tag 'game' %>
 <%= javascript_include_tag 'search' %>
+<%= javascript_include_tag 'event.simulate' %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
 		<h1 class="big-mygame">寻找用户...</h1>
@@ -24,23 +26,24 @@
                 <span> <%= link_to_function "高级", "user_searcher.toggle_character_options();" %> </span>
               </div>
             </div>
-            <div id='character_options' style="display:none">
+            <% style = @game.nil? ? "display:none" : "display: block" %>
+            <div id='character_options' style="<%= style %>">
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '游戏: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :game, :id, Game.all, :id, :name, {:prompt => '---'}, {:onchange => "user_searcher.game_onchange();"} %>
+              <%= collection_select :game, :id, @games, :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务区: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :area, :id, [] , :id, :name, {:prompt => '---'}, {:onchange => "user_searcher.area_onchange();"} %>
+              <%= collection_select :area, :id, @areas , :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务器: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :server, :id, [], :id, :name, {:prompt => '---'} %>
+              <%= collection_select :server, :id, @servers, :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             </div>
@@ -74,4 +77,5 @@
 
 <%= javascript_tag "
   user_searcher = new UserSearcher();
+  good_selector = new GoodSelector('game_id', #{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')});
 " %>

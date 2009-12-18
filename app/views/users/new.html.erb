@@ -4,8 +4,10 @@
   <%= stylesheet_link_tag 'home' %>
   <%= stylesheet_link_tag 'rating' %>
   <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag 'iyxzone' %>
   <%= javascript_include_tag 'register' %>
   <%= javascript_include_tag 'facebox' %>
+  <%= javascript_include_tag 'event.simulate' %>
   <%= javascript_include_tag 'game' %>
 </head>
 <body>
@@ -32,13 +34,13 @@
 <% form_for :user, :html => {:id => 'register_form'} do |f| -%>
 <p>
   <label>Login</label><br/>
-  <%= f.text_field :login, :onblur => "register_manager.validate_login()", :onfocus => "register_manager.show_login_requirement();" %>
+  <%= f.text_field :login, :onblur => "Iyxzone.Register.Manager.validateLogin()", :onfocus => "Iyxzone.Register.Manager.showLoginRequirement();" %>
   <a id='login_info'></a>
 </p>
 
 <p>
   <label>Email</label><br/>
-  <%= f.text_field :email, :onblur => "register_manager.validate_email()", :onfocus => "register_manager.show_email_requirement();" %>
+  <%= f.text_field :email, :onblur => "Iyxzone.Register.Manager.validateEmail()", :onfocus => "Iyxzone.Register.Manager.showEmailRequirement();" %>
   <a id='email_info'></a>
 </p>
 
@@ -49,31 +51,31 @@
 
 <p>
   <label for="password">Password</label><br/>
-  <%= f.password_field :password, :onblur => "register_manager.validate_password()", :onfocus => "register_manager.show_password_requirement();"%>
+  <%= f.password_field :password, :onblur => "Iyxzone.Register.Manager.validatePassword()", :onfocus => "Iyxzone.Register.Manager.showPasswordRequirement();"%>
   <a id='password_info'></a>
 </p>
 
 <p>
   <label for="password_confirmation">Confirm Password</label><br/>
-  <%= f.password_field :password_confirmation, :onblur => "register_manager.validate_password_confirmation()", :onclick => "register_manager.show_password_confirm_requirement()" %>
+  <%= f.password_field :password_confirmation, :onblur => "Iyxzone.Register.Manager.validatePasswordConfirmation()", :onclick => "Iyxzone.Register.Manager.showPasswordConfirmRequirement()" %>
   <a id='password_confirmation_info'></a>
 </p>
 
 <p> Game Characters: </p>
 <h4>游戏信息, 你必须添加你玩过的游戏角色（至少一个）以完成注册</h4>
 <div id='character_info'>
-<%= link_to_function '添加游戏角色', "register_manager.new_character();" %>
+<%= link_to_function '添加游戏角色', "Iyxzone.Register.Manager.newCharacter();" %>
   <ul id='characters'>
   </ul>
 </div>
 <% end -%>
 
-<%= link_to_function '注册', "register_manager.submit()" %>
+<%= link_to_function '注册', "Iyxzone.Register.Manager.submit()" %>
 
 <%= javascript_tag "
-  var register_manager = new RegisterManager();
-"%>
-
+  Iyxzone.Register.Manager.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '')}, 'character_game_id', 'character_area_id', 'character_server_id', 'character_race_id', 'character_profession_id', {});
+" %>
+<div id='info'></div>
 		  </div>
     </div>
 　　<div id="footer">

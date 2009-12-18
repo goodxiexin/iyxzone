@@ -1,13 +1,13 @@
 <% album = comment.commentable %>
 <% if home_page %>
-<% link = "#{link_to_function album.title, "home_manager.read_notice('#{read_notice_url(notice)}', '#{form_authenticity_token}'); window.open('/#{album.class.to_s.underscore}s/#{album.id}?reply_to=#{comment.poster_id}');"}" %>
+<% link = "#{link_to_function album.title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/#{album.class.to_s.underscore}s/#{album.id}?reply_to=#{comment.poster_id}');"}" %>
 <% else %>
 <% link = "#{link_to_function album.title, "window.open('/#{album.class.to_s.underscore}s/#{album.id}?reply_to=#{comment.poster_id}');"}" %>
 <% end %>
 <li>
 	<div class="feed-message">
     <% if home_page %>
-		<%= link_to_function '', "home_manager.read_notice('#{read_notice_url(notice)}', '#{form_authenticity_token}')", :class => 'icon-active' %>
+		<%= link_to_function '', "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}')", :class => 'icon-active' %>
     <% end %>
 		<% if notice.data == 'comment' %>
 			<%= profile_link comment.poster %> 评论了相册 <%= link %>

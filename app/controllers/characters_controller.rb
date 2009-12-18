@@ -5,6 +5,7 @@ class CharactersController < ApplicationController
 	before_filter :owner_required, :only => [:edit, :update]
 
 	def new
+    @games = Game.find(:all, :order => 'pinyin ASC')
 	end
 	
 	def create
@@ -18,7 +19,8 @@ class CharactersController < ApplicationController
 	end
 
 	def edit
-		@rating = @character.game.find_rating_by_user(current_user)
+    @games = Game.find(:all, :order => 'pinyin ASC')
+    @game = @character.game
 	end
 
 	def update

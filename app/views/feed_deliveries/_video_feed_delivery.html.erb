@@ -7,7 +7,7 @@
 		<div class="img">
 			<%= avatar video.poster %> 
     </div>
-    <div class="pics" id='video_<%= video.id %>'> <%= image_tag video.thumbnail_url, :onclick => "play_video(#{video.id}, '#{video.embed_html}');" %> </div>
+    <div class="pics" id='video_<%= video.id %>'> <%= image_tag video.thumbnail_url, :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');" %> </div>
 		<p><%= ftime video.created_at %> <%= link_to_function "评论", "show_comment_form('video', #{video.id}, null)" %></p>
   </div>
   <% if with_comments %>

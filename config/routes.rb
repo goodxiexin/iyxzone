@@ -40,7 +40,7 @@ ActionController::Routing::Routes.draw do |map|
   #
   map.search_users '/search/users', :controller => 'search', :action => 'user'
 
-  map.search_characters 'search/characters', :controller => 'search', :action => 'character'
+  map.search_characters '/search/characters', :controller => 'search', :action => 'character'
 
   map.search_comrades 'search/comrades', :controller => 'search', :action => 'comrade'
 
@@ -310,7 +310,7 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.resources :notices, :collection => {:first_ten => :get}, :member => {:read => :put}
 
-	map.resources :mails, :member => {:reply => :post}, :collection => {:read_multiple => :put, :unread_multiple => :put, :destroy_multiple => :delete}
+	map.resources :mails, :member => {:reply => :post}, :collection => {:auto_complete_for_mail_recipients => :get, :read_multiple => :put, :unread_multiple => :put, :destroy_multiple => :delete}
 
 	map.resources :pokes, :collection => {:destroy_all => :delete}
 

@@ -5,6 +5,7 @@ class Friend::SuggestionsController < ApplicationController
 	before_filter :login_required, :setup
 
 	def index
+    @games = Game.find(:all, :order => 'pinyin ASC')
 		@friend_suggestions = current_user.find_or_create_friend_suggestions.paginate :page => params[:page], :per_page => 16
 		@comrade_suggestions = {}
 		current_user.servers.each do |s|

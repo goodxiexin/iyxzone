@@ -6,9 +6,9 @@ class Guild::GuildsController < ApplicationController
 
   before_filter :owner_required, :only => [:edit, :update]
 
-	FirstFetchSize = 2
+	FirstFetchSize = 5
 	
-	FetchSize = 2
+	FetchSize = 5
 
   def index
 		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
@@ -67,7 +67,7 @@ class Guild::GuildsController < ApplicationController
 
 	def more_feeds
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize)
-	end
+  end
 
   def search
     case params[:type].to_i

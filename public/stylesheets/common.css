@@ -124,6 +124,11 @@ input.gobtn{border:0;background:url(../images/skin/gobtn.png) no-repeat;width:22
 .selector .drop-menu li{height:21px;line-height:21px;overflow:hidden;}
 .selector .drop-menu li a{float:none;padding:0 5px;width:266px;height:100%;color:#333;background:#FFF}
 .selector .drop-menu li a:hover{background:#74BC20;color:#fff;}
+.drop-menu{border:1px #699D3F solid;width:278px;}
+.drop-menu ul{border:1px #fff solid;}
+.drop-menu li{height:21px;line-height:21px;overflow:hidden;}
+.drop-menu li a{float:none;padding:0 5px;width:266px;height:100%;color:#333;background:#FFF}
+.drop-menu li a:hover{float:none;padding:0 5px;width:266px;height:100%;color:#333;background:#74BC20;}
 
 .textfield{padding:0 5px;width:100px;height:24px;line-height:24px;border:1px #6C9F43 solid;background:url(../images/skin/tf01.png) no-repeat;}
 .textfield input{margin:4px 0 0;width:100%;height:16px;color:#7E7F80;border:0;background:none}
@@ -135,6 +140,7 @@ input.gobtn{border:0;background:url(../images/skin/gobtn.png) no-repeat;width:22
 .button{float:left;cursor:pointer;display:block;background-image:url(../images/skin/btns01.gif);background-repeat:no-repeat;background-position:right top;padding:0 10px 0 0;}
 .button span{display:block;padding:0 0 0 10px;background-image:url(../images/skin/btns01.gif);background-repeat:no-repeat;}
 .button span button{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:20px;line-height:20px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
+.button span input{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:20px;line-height:20px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
 
 a.button,a.button:hover{height:20px;line-height:19px;_line-height:21px;padding:0 16px 0 0;color:#fff;font-weight:bold;overflow:hidden}
 a.button span{float:left;height:100%;padding:0 0 0 16px;}
@@ -267,3 +273,9 @@ table.table01 td{background:#fff;}
 div.table01{border-top:1px #E7F0E0 solid;border-left:1px #E7F0E0 solid;border-right:1px #E7F0E0 solid;}
 div.table01 td,div.table01 th{border-bottom:1px #E7F0E0 solid;}
 /*表格样式*/
+
+/* tag cloud */
+.css1 { font-size: 1.0em; font-weight: 100; }
+.css2 { font-size: 1.5em; font-weight: 200; }
+.css3 { font-size: 2.0em; font-weight: 300; }
+.css4 { font-size: 2.5em; font-weight: 400; }

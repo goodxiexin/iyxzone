@@ -1,4 +1,4 @@
-<%= javascript_include_tag 'mailbox' %>
+<%= javascript_include_tag 'mail' %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
@@ -18,12 +18,12 @@
         <%= mail_select_tag %>
       </div>
       <div class="fldvalue">
-        <%= link_to_function "标记已读", "mailbox.read('#{form_authenticity_token}')" %>
-        <%= link_to_function "标记未读", "mailbox.unread('#{form_authenticity_token}')" %>
-        <%= link_to_function "删除", "mailbox.destroy('#{form_authenticity_token}', 1)" %>
+        <%= link_to_function "标记已读", "Iyxzone.Mail.Manager.read('#{form_authenticity_token}')" %>
+        <%= link_to_function "标记未读", "Iyxzone.Mail.Manager.unread('#{form_authenticity_token}')" %>
+        <%= link_to_function "删除", "Iyxzone.Mail.Manager.destroy('#{form_authenticity_token}', 1)" %>
       </div>
       <div class="right">
-        <a href="#">2封未读/共2封</a>
+        <%= current_user.unread_recv_mails.count %>封未读/共<%= current_user.recv_mails.count %>封
       </div>
     </div>
     <div class="inbox-content">
@@ -32,7 +32,7 @@
 					<% @mails.each do |mail| %>
 					<tr>
 						<td class="status">
-							<%= check_box_tag '', 1, false, :id => "mail_select_#{mail.id}" %>
+							<%= check_box_tag '', 1, false, :mail_id => mail.id, :id => "mail_#{mail.id}_select", :read => mail.read_by_recipient, :class => 'mail-check' %>
 						</td>
             <td class="photo"><%= avatar mail.sender %></td>
             <td class="data">
@@ -52,12 +52,7 @@
       </div>
     </div>
   </div>
+  <div id='info'></div>
 </div>
 </div></div>
 </div></div></div></div>
-
-<% ids = array_or_string_for_javascript @mails.map(&:id) %>
-<% read = array_or_string_for_javascript @mails.map(&:read_by_recipient) %>
-<%= javascript_tag "
-	var mailbox = new Mailbox(#{ids}, #{read});
-"%>

@@ -1,6 +1,8 @@
+<%= stylesheet_link_tag 'test' %>
+<%= javascript_include_tag 'textboxlist' %>
 <%= javascript_include_tag 'nicEdit' %>
 <%= javascript_include_tag 'blog' %>
-<%= javascript_include_tag 'friend_tag' %>
+<%= javascript_include_tag 'friend' %>
 
 <% content_for :left do %>
   <%= render :partial => '/app_menu' %>
@@ -8,10 +10,10 @@
 
 <%= render :partial => 'blog/menu' %>
 
-<%= error_messages_for :blog, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
+<div id='errors'></div>
 
 <div>
-<% form_for :blog, :url => blog_url(@blog), :html => {:method => 'put', :id => 'blog_form'} do |f| %>
+<% form_for :blog, :html => {:method => 'put', :id => 'blog_form'} do |f| %>
   <div class='title'>
     <%= f.label "title" %><br/>
     <%= f.text_field 'title' %>
@@ -24,22 +26,45 @@
     <%= f.label "privilege: "%><%= privilege_select_tag(:blog) %>
   </div>
   <div class='submit'>
-    <%= button_to_function "保存", "blog_builder.update_blog();", :class => "confirm-button" %>
+    <%= button_to_function "保存", "Iyxzone.Blog.Builder.updateBlog(#{@blog.id});", :class => "confirm-button" %>
   </div>
-  <div class='tag'>
+    <div class='tag'>
     添加和日志相关的好友<br/>
-    <%= auto_complete_text_field :friend, :login, '/friend_tags/auto_complete_for_friend_login', {}, {:after_update_element => 'add_friend_tag'} %>
-    <%= button_to_function '', :id => 'toggle_button' %>
-  </div>
-  <div id='friend_tags'>
-    <%= render :partial => 'friend_tags/tag', :collection => @blog.tags %>
+    <%= text_field_tag 'friend[login]', '', :size => 50 %><%= button_to_function '', :id => 'toggle_button' %>
+    <div id='friend_list' style="display:none"></div>
+    <div id="friend_table" class="box05" style="display:none">
+      <div class="title01">
+        <div class="right">
+          <select name="" id="game_selector" >
+            <option value='all'>全部好友</option>
+            <% current_user.games.each do |game| %>
+              <option value=<%= game.id %>><%= game.name %></option>
+            <% end %>
+          </select>
+        </div>
+        <h1>选择你的好友</h1>
+      </div>
+      <div class="checkgroup" id='friend_items'></div>
+      <div class="buttons s_clear">
+        <table class="center" cellpadding="0"><tr>
+          <td>
+            <span class="button"><span><button onclick="" id="confirm_btn">确定</button></span></span>
+          </td>
+          <td>
+            <span class='button'><span><button onclick="" id='cancel_btn'>取消</button></span></span>
+          </td>
+        </tr></table>
+      </div>
+    </div>
   </div>
 <% end %>
 </div>
 
-<% user_ids = array_or_string_for_javascript @blog.tags.map(&:tagged_user_id) %>
+<% tagged_user_ids = '[' + @blog.tags.map(&:tagged_user_id).join(',') + ']' %>
+<% tag_ids = '[' + @blog.tags.map(&:id).join(',') + ']' %>
+<% user_ids = '[' + @blog.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
 <%= javascript_tag "
-  var tag_builder = new FriendTagBuilder(#{user_ids}); 
-  var blog_builder = new BlogBuilder(tag_builder);
+  Iyxzone.Blog.Builder.editor = new nicEditor({iconsPath: '/images/nicEditorIcons.gif'}).panelInstance('blog_content'); 
+  Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(#{tagged_user_ids}, #{tag_ids}, #{user_ids}, 'toggle_button', 'friend_login', 'friend_list', 'friend_table', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', '#{form_authenticity_token}');
 " %>
 

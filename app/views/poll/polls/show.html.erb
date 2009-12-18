@@ -34,7 +34,7 @@
   <div class='part'><label>投票人数: </label><%= @poll.voters_count %></div>
 </div>
 
-<% form_tag poll_votes_url(@poll), {:onsubmit => "return validate_multiple_selection()"} do %>
+<% form_tag poll_votes_url(@poll) do %>
 <table>
 <% @poll.answers.each do |answer| %>
   <tr class='poll-answer'>
@@ -42,7 +42,7 @@
     <td class='result'><div class='bar'><%= generate_result_bar answer.votes_count, (@poll.votes_count == 0)? 1 : @poll.votes_count %></div></td>
     <td class='select'>
       <% if !@poll.past and !@vote and @votable %>
-        <%= check_box_tag "votes[]", answer.id, false, :onclick => "validate_multiple_selection(#{@poll.max_multiple}, this);"%>
+        <%= check_box_tag "votes[]", answer.id, false, :onclick => "Iyxzone.Poll.checkMultipleSelection(#{@poll.max_multiple}, this);"%>
       <% elsif @vote %>
 				<%= check_box_tag "votes[]", answer.id, @vote.answer_ids.include?(answer.id), :disabled => true %>
 			<% end %>

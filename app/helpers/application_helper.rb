@@ -132,17 +132,17 @@ module ApplicationHelper
 	def mail_link mail
 		if mail.recipient == current_user # in recv box
 			if mail.read_by_recipient
-				link_to mail.title, mail_url(mail, :type => 1), :id => "mail_title_#{mail.id}"
+				link_to mail.title, mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title"
 			else
-				link_to "<h3>#{mail.title}</h3>", mail_url(mail, :type => 1), :id => "mail_title_#{mail.id}"
+				link_to "<h3>#{mail.title}</h3>", mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title"
 			end
 		else # in sent box
-			link_to mail.title, mail_url(mail, :type => 0), :id => "mail_title_#{mail.id}"
+			link_to mail.title, mail_url(mail, :type => 0), :id => "mail_#{mail.id}_title"
 		end
 	end
 
 	def mail_select_tag
-    select_tag 'select', options_for_select([['---', '^_^'], ['全部选中','all'], ['选读过的', 'read'], ['选没读的', 'unread'], ['取消全选', 'none']], "---"), :onchange => "mailbox.select_dropdown_onchange()"
+    select_tag 'select', options_for_select([['---', '^_^'], ['全部选中','all'], ['选读过的', 'read'], ['选没读的', 'unread'], ['取消全选', 'none']], "---"), :onchange => "Iyxzone.Mail.Manager.onDropdownChange()"
   end
 
 	def button_submit text
@@ -156,5 +156,21 @@ module ApplicationHelper
 			"#{game_link server.game}, #{server.area.name}, #{server.name}"
 		end
 	end
+
+  def advanced_collection_select object, method, collection, value_method, text_method, options={}, html_options={}, extra_attributes={}
+    html_code = "<select>";
+    collection.each do |c|
+      value = eval("c.#{value_method}")
+      text = eval("c.#{text_method}")
+      html_code += "<option value='#{value}' "
+      extra_attributes.each do |k, v|
+        val = eval("c.#{v}")
+        html_code += "#{k}='#{val}' "
+      end
+      html_code += ">#{text}</option>"
+    end
+    html_code += "</select>"
+    return html_code
+  end
 
 end

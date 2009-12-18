@@ -31,6 +31,7 @@ class TagObserver < ActiveRecord::Observer
   end
 
   def after_blog_tag_save(tag)
+    return if tag.taggable.draft
 		return if tag.taggable.privilege == 4 # return if this blog is only open for owner
     tag.notices.create(:user_id => tag.tagged_user_id)
 		#tag.notifications.create(:data => "#{profile_link tag.poster} 在博客 #{blog_link tag.taggable} 里标记了你", :user_id => tag.tagged_user_id)

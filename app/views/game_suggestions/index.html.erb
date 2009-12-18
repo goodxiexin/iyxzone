@@ -1,4 +1,6 @@
-<%= javascript_include_tag 'game_suggestion' %>
+<%= stylesheet_link_tag 'test' %>
+<%= javascript_include_tag 'textboxlist' %>
+<%= javascript_include_tag 'game' %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body canvas_wrap s_clear">
@@ -11,11 +13,11 @@
               <div class="rows s_clear">
                 <div class="fldid">&nbsp;</div>
                 <div class="fldvalue">
-                  <div class="widefield textfield"><%= text_field_tag 'tags', '', :id => 'the_game_tags' %></div>
+                  <%= text_field_tag 'tags', '', :size => 50, :id => 'game_tags' %>
                 </div>
                 <div class="fldbtn">
-                  <span class="button"><span><button type="reset" onclick="game_suggestor.suggest()">推荐</button></span></span>
-                  <%= link_to_function "高级", "game_suggestor.toggle_advanced_options();" %>
+                  <span class="button"><span><button type="reset" onclick="Iyxzone.Game.Suggestor.suggest(this)">推荐</button></span></span>
+                  <%= link_to_function "高级", "Iyxzone.Game.Suggestor.toggleAdvancedOptions();" %>
                 </div>
               </div>
               <div class="rows s_clear" id="advanced_options" style="display:none">
@@ -29,7 +31,7 @@
               </div>
               <div class="keybtn-box s_clear">
                 <% @game_tags.each do |tag| %>
-                  <%= link_to_function "<span>#{tag.name}</span>", "game_suggestor.add_tag('#{tag.name}')", :class => "mbutton" %>
+                  <%= link_to_function "<span>#{tag.name}</span>", "Iyxzone.Game.Suggestor.addTag('#{tag.name}')", :class => "mbutton" %>
                 <% end %>
               </div>
             </div>
@@ -84,7 +86,8 @@
     </div>
   </div></div>
 </div></div></div></div>
+<div id='log'></div>
 
 <%= javascript_tag "
-	game_suggestor = new GameSuggestor();
+  Iyxzone.Game.Suggestor.tagList = new TextBoxList('game_tags', {onBoxDispose: Iyxzone.Game.Suggestor.removeTag});
 " %>

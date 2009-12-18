@@ -1,5 +1,6 @@
 var Facebox = Class.create({
-	initialize: function(extra_set){
+	
+  initialize: function(extra_set){
 		this.settings = {
 			loading_image	: '/images/loading.gif',
 			image_types		: new RegExp('\.' + ['png', 'jpg', 'jpeg', 'gif'].join('|') + '$', 'i'),
@@ -233,8 +234,8 @@ var facebox;
 document.observe('dom:loaded', function(){
 	facebox = new Facebox();
 
-	window.tip = function(mess){
-		return facebox.show_tip(mess);
+	window.notice = function(mess){
+		return facebox.show_notice(mess);
 	};
 	
  	// override default alert

@@ -12,7 +12,7 @@ parameters:
 	<% end %>
 </div>
 <div class="box04 comment-box">
-    <%= text_area_tag 'add-comment', '添加评论...', :id => "add_#{type}_comment_#{commentable.id}", :class => "textarea txt-add-comment", :onclick => "show_comment_form('#{type}', #{commentable.id}, null)" %>
+    <%= text_area_tag 'add-comment', '添加评论...', :id => "add_#{type}_comment_#{commentable.id}", :class => "textarea txt-add-comment", :onclick => "Iyxzone.Comment.showForm('#{type}', #{commentable.id}, null)" %>
     <div class="formcontent" id='<%= type %>_comment_<%= commentable.id %>' style="display:none">
       <% form_remote_for :comment, :html => {:id => "#{type}_comment_form_#{commentable.id}"} do |f| %>
 				<%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id, :id => "#{type}_comment_recipient_#{commentable.id}" %>
@@ -20,8 +20,8 @@ parameters:
           <%= f.text_area 'content', :class => "textarea", :id => "#{type}_comment_content_#{commentable.id}" %>
         </div>
         <div class="rows s_clear">
-          <span class="button"><span><button type="button" onclick="submit_comment(<%= "'#{type}'" %>, <%= commentable.id %>)">发表</button></span></span>
-          <span class="button button-gray"><span><button type="button" onclick="hide_comment_form(<%= "'#{type}'" %>, <%= commentable.id %>)" >取消</button></span></span>
+          <span class="button"><span><button type="button" onclick="Iyxzone.Comment.save(<%= "'#{type}'" %>, <%= commentable.id %>, this)">发表</button></span></span>
+          <span class="button button-gray"><span><button type="button" onclick="Iyxzone.Comment.hide(<%= "'#{type}'" %>, <%= commentable.id %>)" >取消</button></span></span>
           <%= emotion_link "#{type}_comment_content_#{commentable.id}" %>
         </div>
       <% end %>
@@ -31,6 +31,6 @@ parameters:
 
 <% if params[:reply_to] %>
 <script type="text/javascript">
-	set_comment_box('<%= type %>', <%= commentable.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
+	Iyxzone.Comment.set('<%= type %>', <%= commentable.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
 </script>
 <% end %>

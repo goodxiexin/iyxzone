@@ -35,6 +35,14 @@ class User < ActiveRecord::Base
     end.sort {|a,b| b.created_at <=> a.created_at }
   end
 
+  def unread_recv_mails
+    mails = self.in_mails.group_by { |mail| mail.parent_id }
+    mails = mails.map do |parent_id, mail_array|
+      mail_array.max {|a,b| a.created_at <=> b.created_at}
+    end.sort {|a,b| b.created_at <=> a.created_at }
+    mails.find_all {|m| !m.read_by_recipient}
+  end
+
   def interested_in_game? game
 		!game_attentions.find_by_game_id(game.id).nil?
   end
@@ -61,7 +69,7 @@ class User < ActiveRecord::Base
 
   has_many :friendships, :dependent => :destroy, :conditions => {:status => 1}
 
-	has_many :friends, :through => :friendships, :source => 'friend', :order => 'login ASC'
+	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
   def has_friend? user
 		friendships.find_by_friend_id(user.id) 

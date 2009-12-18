@@ -9,7 +9,7 @@ module Poll::PollsHelper
   end
 
   def generate_result_bar(answer_votes, poll_votes)
-    "<script language='javascript'>drawPercentBar(200, #{100*answer_votes/poll_votes}, '#{cycle '#f7ca9b','#bde877', '#6c81b6', '#a5cbd6', '#d843b3', '#e2fea7', '#ee335f', '#ffc535', '#d8e929' }', '#efefef'); </script>"
+    "<script language='javascript'>Iyxzone.Poll.drawPercentBar(200, #{100*answer_votes/poll_votes}, '#{cycle '#f7ca9b','#bde877', '#6c81b6', '#a5cbd6', '#d843b3', '#e2fea7', '#ee335f', '#ffc535', '#d8e929' }', '#efefef'); </script>"
   end
 
   def votable? poll, user

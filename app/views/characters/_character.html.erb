@@ -2,7 +2,7 @@
 <li id='character_<%= character.id %>'>
 	<h4><%= label_tag '', '人物昵称: '%> <%= character.name %>
 	<% if character.user == current_user %>
-		<%= link_to_function "编辑", "profile_manager.edit_character_info(#{character.id});" %>
+		<%= link_to_function "编辑", "Iyxzone.Profile.Editor.editCharacterInfo(#{character.id});" %>
 	<% end %>
 	</h4>
   <p><%= label_tag '', '等级: '%><%= character.level %></p>

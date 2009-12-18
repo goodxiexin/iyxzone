@@ -1,34 +1,42 @@
-InvitationBuilder = Class.create({
-  initialize: function(){
-    this.selected = new Hash();
-  },
+/**
+ * this only workds for event & guild & poll
+ */
+Iyxzone.Invitation = {
+  version: '1.0',
 
-  click: function(td){
-    var friend_id = td.readAttribute('friend_id');
-    if(this.selected.get(friend_id)){
+  author: ['高侠鸿'],
+
+  Builder: {}  
+
+};
+
+Object.extend(Iyxzone.Invitation.Builder, {
+
+  selected: new Hash(),
+
+  onClick: function(td, friendID){
+    if(this.selected.get(friendID)){
       td.setStyle({background: 'white'});
-      this.selected.unset(friend_id);
+      this.selected.unset(friendID);
     }else{
-      this.selected.set(friend_id, td);
+      this.selected.set(friendID, td);
       td.setStyle({background: '#526ea6'});
-    }
+    } 
   },
-
-  mouseover: function(td){
-    var friend_id = td.readAttribute('friend_id');
-    if(!this.selected.get(friend_id)){
+  
+  onMouseOver: function(td, friendID){
+    if(!this.selected.get(friendID)){
       td.setStyle({background: '#e7ebf5'});
     }
   },
 
-  mouseout: function(td){
-    var friend_id = td.readAttribute('friend_id');
-    if(!this.selected.get(friend_id)){
+  onMouseOut: function(td, friendID){
+    if(!this.selected.get(friendID)){
       td.setStyle({background: 'white'});
     }
   },
 
-  submit_invitations: function(form){
+  submit: function(form){
     form.action += '?';
     if(this.selected.size() == 0){
       error('你必须至少邀请一个人');
@@ -39,10 +47,6 @@ InvitationBuilder = Class.create({
       });
       form.submit();
     }
-  },
-
-  reset: function(){
-    this.selected = new Hash();
   }
 
 });

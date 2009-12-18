@@ -1,3 +1,4 @@
+<%= javascript_include_tag 'game' %>
 <%= javascript_include_tag 'event' %>
 
 <% content_for :left do %>
@@ -16,7 +17,7 @@
   </div>
   <div>
     <%= f.label "游戏：" %>
-    <%= collection_select :event, :game_id, Game.all, :id, :name, {:prompt => '---'}, {:onchange => "game_onchange(this.value)"} %>
+    <%= collection_select :event, :game_id, current_user.games, :id, :name, {:prompt => '---'} %>
   </div>
 <div id='game_details'>
   <div id='areas'>
@@ -49,11 +50,7 @@
     <%= f.text_area :description, :rows => 8 %>
     <a id='event_description_form'></a>
   </div>
-  <%= button_to_function '保存', "event_builder.update(#{@event.id});" %>
+  <%= button_to_function '保存', "Iyxzone.Event.Builder.update(#{@event.id});" %>
 <% end %>
 </div>
-
-<%= javascript_tag "
-  var event_builder = new EventBuilder();
-"%>
 

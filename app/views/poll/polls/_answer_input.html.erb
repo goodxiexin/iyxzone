@@ -3,6 +3,6 @@
 <% fields_for "answers[]", answer do |form| %>
   <%= label_tag '', "选项" %>
   <%= form.text_field :description %>
-  <%= link_to_function "delete", "$(this).up('.poll_answer').remove();" %>
+  <%= link_to_function "delete", "Iyxzone.Poll.Builder.removeAnswer(this);" %>
 <% end %>
 </div>

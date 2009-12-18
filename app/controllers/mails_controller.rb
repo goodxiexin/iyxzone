@@ -10,6 +10,8 @@ class MailsController < ApplicationController
 
   before_filter :catch_recipient, :only => [:new]
 
+  before_filter :catch_recipients, :only => [:create]
+
   def index
     if params[:type].to_i == 0
       @mails = current_user.sent_mails.paginate :page => params[:page], :per_page => 10
@@ -29,12 +31,9 @@ class MailsController < ApplicationController
 
   def create
     Mail.transaction do
-      params[:mail][:recipients].split(%r{,\s*}).each do |recipient_name|
-        recipient = current_user.friends.find_by_login(recipient_name)
-        if recipient
-          mail = Mail.create(params[:mail].merge({:sender_id => current_user.id, :recipient_id => recipient.id}))
-          mail.update_attribute('parent_id', mail.id)
-        end
+      @recipients.each do |recipient|
+        mail = Mail.create(params[:mail].merge({:sender_id => current_user.id, :recipient_id => recipient.id}))
+        mail.update_attribute('parent_id', mail.id)
       end
     end
     redirect_to mails_url(:type => 0)
@@ -93,8 +92,8 @@ class MailsController < ApplicationController
   end
 
   def auto_complete_for_mail_recipients
-    @friends = current_user.friends.find_all {|f| f.login.include?(params[:mail][:recipients]) }
-    render :partial => 'friends', :object => @friends
+    @friends = current_user.friends.find_all {|f| f.pinyin.starts_with?(params[:mail][:recipient])}
+    render :partial => 'friends', :object => @friends #json => @friends.map {|f| {:id => f.id, :login => f.login}} 
   end
 
 protected
@@ -120,6 +119,12 @@ protected
 
   def catch_recipient
     @recipient = User.find(params[:recipient_id]) unless params[:recipient_id].blank?
+  rescue
+    not_found
+  end
+
+  def catch_recipients
+    @recipients = current_user.friends.find(params[:recipient_ids].split(%r{,\s*}))
   rescue
     not_found
   end

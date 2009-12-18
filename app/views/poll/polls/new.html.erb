@@ -12,7 +12,7 @@
 
 <% form_for :poll, :html => {:id => 'poll_form'} do |f| %>
   <%= f.label '投票主题' %>
-  <%= f.text_field 'name' %><%= link_to_function "增加投票描述", "$('description').toggle();" %><br/>
+  <%= f.text_field 'name' %><%= link_to_function "增加投票描述", "Iyxzone.Poll.Builder.toggleDescriptionInput();" %><br/>
   <div id='description' style='display:none'>
     <%= f.label '投票描述' %>
     <%= f.text_area 'description', :rows => 7 %>
@@ -25,7 +25,7 @@
   <%= link_to_function '添加选项' do |page|
         page.insert_html :bottom, :poll_answers, :partial => 'answer_input', :object => PollAnswer.new
       end %><br/>
-  <%= link_to_function '增加选项说明', "$('explanation').toggle();" %><br/>
+  <%= link_to_function '增加选项说明', "Iyxzone.Poll.Builder.toggleExplanation();" %><br/>
   <div id='explanation' style="display:none">
     <%= f.label '选项说明' %>
     <%= f.text_area 'explanation', :rows => 7 %>
@@ -38,9 +38,5 @@
   <%= poll_privilege_select_tag :poll %><br/>
   <%= f.label '游戏类别: '%>
   <%= f.collection_select 'game_id', @user.games, :id, :name, {:prompt => '---'} %><br/>
-  <%= button_to_function '投票', "poll_builder.save();", :class => 'confirm-button' %>
+  <%= button_to_function '投票', "Iyxzone.Poll.Builder.save();", :class => 'confirm-button' %>
 <% end %>
-
-<%= javascript_tag "
-  poll_builder = new PollBuilder();
-" %>

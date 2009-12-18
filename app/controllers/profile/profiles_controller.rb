@@ -26,6 +26,7 @@ class Profile::ProfilesController < ApplicationController
   def edit
     case params[:type].to_i
     when 0
+      @games = Game.find(:all, :order => 'pinyin ASC')
 			render :action => 'edit', :layout => 'app'
 		when 1
       render :partial => 'edit_basic_info'

@@ -1,5 +1,14 @@
-<ul>
+<% i = 0 %>
 <% friends.each do |f| %>
-	<li id=<%= f.id %>><%= f.login %></li>
+  <% if i == 0 %>
+    <div class="rows">
+    <table cellpadding="0"><tr>
+  <% end %>
+  <% i = i + 1 %>
+  <th><%= radio_button_tag '', f.id, false, :onclick => "tagger.friendSelector.afterClickFriend(#{f.id}, #{f.profile.id}, '#{f.login}')"%></th>
+  <td><label for="c1"><%= f.login %></label></td>
+  <% if i == 3 %>
+    </tr></table></div><% i = 0 %>
+  <% end %>
 <% end %>
-</ul>
+</tr></table></div>

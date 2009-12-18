@@ -4,9 +4,9 @@ class HomeController < ApplicationController
 
   before_filter :login_required
 
-	FirstFetchSize = 2
+	FirstFetchSize = 5
 
-	FetchSize = 2
+	FetchSize = 5
 
 	FeedCategory = ['status', 'blog', 'video', 'all_album_related', 'all_event_related', 'all_poll_related', 'all_guild_related']
 

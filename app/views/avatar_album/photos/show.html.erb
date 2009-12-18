@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag 'cropper' %>
+<%= javascript_include_tag 'cropper' %>
 <%= javascript_include_tag 'photo_tag' %>
 <%= javascript_include_tag 'photo_slide' %>
 
@@ -28,33 +30,46 @@
   </div>
 </div>
 
+<div id='control_panel' style="display:none" >
+  <div>
+    <%= label_tag '这是谁...' %><br/>
+    <%= text_field_tag 'tag[tagged_user]', '', :id => 'tag_tagged_user' %>
+    <%= button_to_function '', "tag_manager.toggle_friend_list('#{form_authenticity_token}');" %><br/>
+    <div id='friend_dropdown_list'></div>
+    <div id="friend_radio_list" class="box05" style="display:none">
+      <div class="title01">
+        <div class="right">
+          <select name="" onchange="tag_manager.get_friends(this.value)" >
+            <option value=0>全部好友</option>
+            <% current_user.games.each do |game| %>
+              <option value=<%= game.id %>><%= game.name %></option>
+            <% end %>
+          </select>
+        </div>
+        <h1>限选1人</h1>
+      </div>
+      <div class="checkgroup" id='friend_names'>
+      </div>
+    </div>
+    <% form_remote_for :tag, :url => avatar_tags_url(@photo), :html => {:id => 'tag_form'} do |f| %>
+      <%= f.label '说点什么吧' %><br/>
+      <%= hidden_field_tag 'tag[tagged_user_id]', '' %>
+      <%= f.text_area 'content', :rows => 2, :cols => 40 %><br/>
+      <%= button_to_function '确定', "tag_manager.submit_tag();", :id => 'confirm_btn'%>
+      <%= button_to_function '取消', "tag_manager.reset();", :id => 'cancel_btn'%>
+    <% end %>
+  </div>
+</div>
+
+
 <div id='photo_options'>
   <%= dig_link @photo %> |
-	<%= link_to_function '标记', "tag_builder.start();" %> |
+	<%= link_to_function '标记', "tag_manager.start();" %> |
   <% if @user == current_user %>
     <%= link_to '编辑', edit_avatar_url(@photo), :rel => 'facebox' %> |
     <%= facebox_confirm 'x', avatar_url(@photo), {:method => :delete, :msg => '你确定要删除这张照片吗?'} %>  
   <% end %>
 </div>
-
-<div style="display:none" id='square'>
-  <div></div>
-</div>
-<div style="display:none" id='input'>
-  <div>
-    <%= label_tag '这是谁...' %><br/>
-    <%= auto_complete_text_field :tag, :tagged_user, "/photo_tags/friends", {}, {:after_update_element => "select_friend"} %>
-    <%= button_to_function '', "tag_builder.toggle_friends('#{form_authenticity_token}');" %><br/>
-    <% form_remote_for :tag, :url => personal_photo_tags_url(@photo), :html => {:id => 'tag_form'} do |f| %>
-      <%= f.label '说点什么吧' %><br/>
-      <%= hidden_field_tag 'tag[tagged_user_id]', '' %>
-      <%= f.text_area 'content', :rows => 2, :cols => 40 %><br/>
-      <%= button_to_function '确定', "", :id => 'confirm_btn'%>
-      <%= button_to_function '取消', "", :id => 'cancel_btn'%>
-    <% end %>
-  </div>
-</div>
-
 
 <div id='photo_preview'>
   <div class='prev'>
@@ -82,5 +97,5 @@
 <% urls = array_or_string_for_javascript @album.photos.map {|p| p.public_filename(:small)} %>
 <%= javascript_tag "
   slide = new PhotoSlide('avatar', #{photo_ids}, #{urls}, #{window_size}, $('frames').childElements(), #{@photo.id});
-  tag_builder = new PhotoTagBuilder('avatar', #{@photo.id}); 
+  tag_manager = new PhotoTagManager('avatar', #{@photo.id}, 'control_panel', '#{form_authenticity_token}');
 "%>

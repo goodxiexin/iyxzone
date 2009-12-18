@@ -4,6 +4,6 @@
 <span> <%= profile_link f %></span>
 <p class="btns">
 	<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "icon-active icon-active-add" %>
-	<%= link_to_function '', "friend_suggestor.new_friend_suggestion(#{friend_suggestion.id}, '#{form_authenticity_token}')", :class => 'icon-active icon-active-del' %>
+	<%= link_to_function '', "Iyxzone.Friend.Suggestor.newSuggestion(#{friend_suggestion.id}, '#{form_authenticity_token}')", :class => 'icon-active icon-active-del' %>
 </p>
 </li>

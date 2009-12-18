@@ -41,10 +41,14 @@ class Blog::BlogsController < ApplicationController
   end
 
   def create
-    if @blog = current_user.blogs.create(params[:blog].merge({:poster_id => current_user.id}))
-      redirect_to blog_url(@blog)
+    if @blog = current_user.blogs.create(params[:blog].merge({:poster_id => current_user.id, :draft => false}))
+      render :update do |page|
+        page.redirect_to blog_url(@blog)
+      end
     else
-      render :action => 'new'
+      render :update do |page|
+        page.replace_html 'errors', :partial => 'blog/validation_errors'
+      end
     end
   end
 
@@ -53,9 +57,13 @@ class Blog::BlogsController < ApplicationController
 
   def update
     if @blog.update_attributes(params[:blog].merge({:draft => false}))
-      redirect_to blog_url(@blog)
+      render :update do |page|
+        page.redirect_to blog_url(@blog)
+      end
     else
-      render :action => 'edit'
+      render :update do |page|
+        page.replace_html 'errors', :partial => 'blog/validation_errors'
+      end
     end
   rescue FriendTag::TagNoneFriendError
     render :text => '只能标记你的朋友'
