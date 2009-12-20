@@ -30,7 +30,7 @@
 				<% end %>
 			</div>
 		</div>
-		<p><%= ftime delivery.created_at %> <%= link_to_function "回复", "show_comment_form('personal_album', #{album.id}, null);" %></p>
+		<p><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('personal_album', #{album.id}, null);" %></p>
 	</div>
   <% if with_comments %>
 	  <%= render :partial => 'comments/folded_comment_box', :locals => {:comment_template => '/personal_album/album_comments/comment', :commentable => album, :recipient => album.poster} %>

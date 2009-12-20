@@ -11,7 +11,7 @@ parameters:
     <% c = commentable.comments.first %>
 		<%= render :partial => "#{comment_template}", :object => c %>
     <div class="box04 comment-box">
-      <%= link_to_function "显示更多#{commentable.comments_count}条评论", "show_more_comments('#{type}', #{commentable.id}, this);" %>
+      <%= link_to_function "显示更多#{commentable.comments_count}条评论", "Iyxzone.Comment.more('#{type}', #{commentable.id}, this);" %>
     </div>
     <% c = commentable.comments.last %>
 		<%= render :partial => "#{comment_template}", :object => c %>
