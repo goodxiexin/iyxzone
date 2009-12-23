@@ -1,0 +1,32 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %><br/>
+  <div class='video-right-bar'>
+    <div class='part'>
+      <h3>日志分类: </h3>
+      <% game_options = [['全部', nil]] %>
+      <% @user.games.each {|g| game_options << [g.name, g.id] } %>
+      <%= select_tag '', options_for_select(game_options, params[:game_id].to_i), :onchange => "window.location.href = '#{hot_videos_url(:id => @user.id)}&game_id='+this.value;" %> 
+    </div>
+  </div>
+<% end %>
+
+<% subject = get_subject @user %>
+
+<%= link_to "热门视频", hot_videos_url(:id => @user.id) %> |
+<%= link_to "最新视频", recent_videos_url(:id => @user.id) %> |
+<%= link_to "#{subject}的视频", videos_url(:id => @user.id) %> |
+<% if @user == current_user %>
+  <%= link_to "好友视频", friends_videos_url %> |
+<% end %>
+<%= link_to "#{subject}的相关视频", relative_videos_url(:id => @user.id)%> |
+<% if @user == current_user %>
+  <%= link_to "新视频", new_video_url %> 
+<% end %>
+
+
+<% cache(:page => params[:page], :game_id => params[:game_id]) do %>
+<div id='videos'>
+  <%= render :partial => 'video_item', :collection => @videos %>
+</div>
+<%= will_paginate @videos %>
+<% end %>

@@ -1,0 +1,45 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+  
+<% subject = get_subject @user %>
+
+<%= link_to "热门日志", hot_blogs_url(:id => @user.id) %> |
+<%= link_to "最新日志", recent_blogs_url(:id => @user.id) %> |
+<%= link_to "#{subject}的日志", blogs_url(:id => @user.id) %> |
+<% if @user == current_user %>
+  <%= link_to "好友日志", friends_blogs_url %> |
+<% end %>
+<%= link_to "#{subject}的相关日志", relative_blogs_url(:id => @user.id) %> |
+<% if @user == current_user %>
+  <%= link_to "草稿箱", drafts_url %> |
+  <%= link_to "新日志", new_blog_url %>
+<% end %>
+
+
+<div class='prev-next'>
+<%= "共#{@user.blogs.count}篇博客" %>
+<%= link_to 'prev', blog_url(@blog.prev) %> |
+<%= link_to 'next', blog_url(@blog.next) %> <br/>
+</div>
+
+<div class='blog-view'>
+  <div class='title'>
+    <h3 style="width: 75%;"><%= @blog.title %><span class='meta'><%= ftime @blog.created_at %></span></h3>
+    <div class='option'>
+      <% if @user == current_user %>
+      <%= link_to "编辑", edit_blog_url(@blog) %>
+      <%= facebox_confirm "删除", blog_url(@blog), {:msg => '你确定要删除这篇博客吗', :method => :delete} %>
+      <% end %>
+      <%= dig_link @blog %>
+    </div>
+  </div>
+  <div class='view'>
+    <%= @blog.content %>
+  </div>
+  <div id='friend_tags'>
+  标签: <%= @blog.tags.map { |t| profile_link t.tagged_user }.join(',') %>
+  </div>
+</div>
+
+<%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @blog, :recipient => @blog.poster} %>

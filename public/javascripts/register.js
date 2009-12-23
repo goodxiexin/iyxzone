@@ -260,7 +260,8 @@ Object.extend(Iyxzone.Register.Manager, {
         professionID: $('character_profession_id').value,
         professionName: $('character_profession_id').options[$('character_profession_id').selectedIndex].text,
         raceID: $('character_race_id').value,
-        raceName: $('character_race_id').options[$('character_race_id').selectedIndex].text
+        raceName: $('character_race_id').options[$('character_race_id').selectedIndex].text,
+        playing: $('character_playing').value
       };
       $('character_info').innerHTML = this.oldCharacterHTML;
       // update existing ratings
@@ -329,7 +330,8 @@ Object.extend(Iyxzone.Register.Manager, {
         professionID: $('character_profession_id').value,
         professionName: $('character_profession_id').options[$('character_profession_id').selectedIndex].text,
         raceID: $('character_race_id').value,
-        raceName: $('character_race_id').options[$('character_race_id').selectedIndex].text
+        raceName: $('character_race_id').options[$('character_race_id').selectedIndex].text,
+        updating: $('character_playing').value
       }; 
       this.characters.set(characterID, newInfo);
       $('character_info').innerHTML = this.oldCharacterHTML;

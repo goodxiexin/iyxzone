@@ -6,7 +6,7 @@ Iyxzone.Event = {
 
 Object.extend(Iyxzone.Event.Builder, {
 
-  gameSelector: new Iyxzone.Game.Selector('event_game_id', 'event_game_area_id', 'event_game_server_id', null, null, {}),
+  gameSelector: null, 
 
   validate: function(){
     var title = $('event_title');

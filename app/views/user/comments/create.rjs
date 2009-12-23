@@ -1,0 +1,4 @@
+commentable_type = @commentable.class.name.underscore
+page.insert_html :bottom, "#{commentable_type}_comments_#{@commentable.id}", :partial => 'comment', :object => @comment
+page << "$('#{commentable_type}_comment_content_#{@commentable.id}').value = '';"
+page << "Iyxzone.Comment.hideForm('#{commentable_type}', #{@commentable.id});" 

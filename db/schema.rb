@@ -186,7 +186,7 @@ ActiveRecord::Schema.define(:version => 20091121151424) do
     t.integer  "race_id"
     t.string   "name"
     t.integer  "level"
-    t.boolean  "playing"
+    t.boolean  "playing",       :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -393,6 +393,7 @@ ActiveRecord::Schema.define(:version => 20091121151424) do
     t.date     "end_date"
     t.text     "summary"
     t.integer  "privilege",      :default => 2
+    t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "votes_count",    :default => 0
     t.integer  "voters_count",   :default => 0
@@ -503,6 +504,7 @@ ActiveRecord::Schema.define(:version => 20091121151424) do
     t.integer  "privacy_setting",           :limit => 8,  :default => 1441706
     t.integer  "mail_setting",              :limit => 8,  :default => 8796093022207
     t.integer  "application_setting",       :limit => 8,  :default => 65535
+    t.integer  "notifications_count",                     :default => 0
     t.integer  "friends_count",                           :default => 0
     t.integer  "personal_albums_count",                   :default => 0
     t.integer  "events_count",                            :default => 0

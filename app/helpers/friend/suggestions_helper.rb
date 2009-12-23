@@ -1,2 +1,0 @@
-module Friend::SuggestionsHelper
-end

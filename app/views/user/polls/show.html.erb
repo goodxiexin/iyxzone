@@ -1,0 +1,100 @@
+<%= javascript_include_tag 'poll' %>
+
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<% subject = get_subject @user %>
+
+<%= link_to '精彩投票', hot_polls_url(:id => @user.id) %> |
+<%= link_to '最新投票', recent_polls_url(:id => @user.id) %> |
+<%= link_to "#{subject}发起的投票", polls_url(:id => @user.id)%> |
+<%= link_to "#{subject}参与的投票", participated_polls_url(:id => @user.id) %> |
+<% if @user == current_user %>
+  <%= link_to '好友的投票', friends_polls_url %> |
+  <%= link_to '新投票', new_poll_url %>
+<% end %>
+
+<% if current_user == @user %>
+<div>
+<%= link_to '增加侯选项', new_poll_answer_url(@poll), :rel => 'facebox' %>|
+<%= link_to '修改截至时间', edit_poll_url(@poll, :type => 0), :rel => 'facebox' %>|
+<%= link_to '邀请更多人', new_poll_invitation_url(@poll) %>|
+<%= facebox_confirm '删除本投票', poll_url(@poll), {:msg => '你确定要删除该投票吗?', :method => :delete} %>|
+<%= link_to '写写投票总结', edit_poll_url(@poll, :type => 1), :rel => 'facebox' %>
+</div>
+<% end %>
+
+<div style="text-align:center;font-size: 14px;font-weight:bold;padding: 10px">
+<%= @poll.name %><span class='poll-tiny'>(最多选<%= @poll.max_multiple %>项)</span><br/>
+</div>
+
+<div>
+  <% if @poll.past %>
+    <%= "该投票已经过期" %>
+  <% elsif @vote %>
+    <%= "你已经投过票了" %>
+  <% elsif !@votable %>
+    该投票只对他的好友开放<%= link_to '加他为好友',  new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %>
+  <% end %>
+</div>
+
+<div>
+  <div class='part'><label>发起时间: </label><%= ftime @poll.created_at %></div>
+  <div class='part'><label>截至时间: </label><span id='end_date'><%= ftime2 @poll.end_date %></span></div>
+  <div class='part'><label>投票人数: </label><%= @poll.voters_count %></div>
+</div>
+
+<% form_tag poll_votes_url(@poll) do %>
+<table>
+<% @poll.answers.each do |answer| %>
+  <tr class='poll-answer'>
+    <td class='description'><%= answer.description %></td>
+    <td class='result'><div class='bar'><%= generate_result_bar answer.votes_count, (@poll.votes_count == 0)? 1 : @poll.votes_count %></div></td>
+    <td class='select'>
+      <% if !@poll.past and !@vote and @votable %>
+        <%= check_box_tag "votes[]", answer.id, false, :onclick => "Iyxzone.Poll.checkMultipleSelection(#{@poll.max_multiple}, this);"%>
+      <% elsif @vote %>
+				<%= check_box_tag "votes[]", answer.id, @vote.answer_ids.include?(answer.id), :disabled => true %>
+			<% end %>
+      (<%= answer.votes_count %>票)
+    </td>
+  </tr>
+<% end %>
+  <tr>
+    <td></td>
+    <td>
+      <% if !@poll.past and !@vote and @votable %>
+        <%= submit_tag '投票' %>
+      <% end %>
+    </td>
+    <td></td>
+  </tr>
+</table>
+<% end %>
+
+<div class='explanation'>
+  <h3>投票选项说明</h3>
+  <% if @vote or @poll.past %>
+  <p id='explanation'>
+    <%= @poll.description %>
+  </p>
+  <% else %>
+    投票后才能看
+  <% end %>
+</div>
+
+<div>
+  <h3>投票情况</h3>
+	<% @poll.votes.each do |v| %>
+		<% if current_user.friends.include? v.voter %>
+			<div>你的好友<%= profile_link v.voter %>选了: <%= v.answers.map(&:description).join(',') %></div>
+		<% end %>
+	<% end %>
+</div>
+
+<div>
+评论(<%= @poll.comments_count %>)
+</div>
+
+<%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @poll, :recipient => @poll.poster} %>

@@ -1,2 +1,0 @@
-module Video::CommentsHelper
-end

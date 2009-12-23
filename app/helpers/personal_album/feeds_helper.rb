@@ -1,2 +1,0 @@
-module PersonalAlbum::FeedsHelper
-end

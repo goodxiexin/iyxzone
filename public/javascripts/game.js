@@ -29,7 +29,6 @@ Iyxzone.Game.Selector = Class.create({
   },
 
   setEvents: function(){
-    alert(this.areaSelectorID);
     if(this.gameSelectorID)
       Event.observe($(this.gameSelectorID), 'change', this.gameChange.bind(this));
 
@@ -309,7 +308,7 @@ Object.extend(Iyxzone.Game.Suggestor, {
       tip('你已经选择了该标签');
       return;
     }
-    this.tagList.add(tagName);
+    this.tagList.add(null, tagName);
     this.tagNames.push(tagName);
   },
 

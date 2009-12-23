@@ -23,7 +23,7 @@ module Diggable
   module InstanceMethods
 
 		def digged_by? user
-			digs.find_by_poster_id(user.id)
+			!digs.find_by_poster_id(user.id).nil?
 		end
 
   end

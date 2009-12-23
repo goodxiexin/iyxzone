@@ -187,8 +187,8 @@ Iyxzone.Friend.Tagger = Class.create({
     }.bind(this));
 
     // game selector event
-    Event.observe(this.gameSelector, 'change', function(value){
-      this.getFriends(value);
+    Event.observe(this.gameSelector, 'change', function(e){
+      this.getFriends(this.gameSelector.value);
     }.bind(this)); 
 
     // set text box list
@@ -200,7 +200,7 @@ Iyxzone.Friend.Tagger = Class.create({
       this.taggedUserList.add(friendIDs[i], friendNames[i]);
     }
     // custom auto completer
-    new Iyxzone.Friend.Autocompleter(this.taggedUserList.getMainInput(), this.friendList, '/friend_tags/auto_complete_for_friend_login', {
+    new Iyxzone.Friend.Autocompleter(this.taggedUserList.getMainInput(), this.friendList, '/auto_complete_for_friend_tags', {
       method: 'get',
       emptyText: '没有匹配的好友...',
       afterUpdateElement: this.afterSelectFriend.bind(this),
@@ -230,7 +230,7 @@ Iyxzone.Friend.Tagger = Class.create({
     var tagID = this.tags.unset(friendID);
     if(tagID){
       // remove exsiting tag
-      new Ajax.Request('/friend_tags/destroy?id=' + tagID, {method: 'delete', parameters: 'authenticity_token=' + encodeURIComponent(this.token)});
+      new Ajax.Request('/friend_tags/' + tagID, {method: 'delete', parameters: 'authenticity_token=' + encodeURIComponent(this.token)});
     }else{
       // remove new tag
       this.newTags.unset(friendID);
@@ -253,8 +253,9 @@ Iyxzone.Friend.Tagger = Class.create({
   },
 
   getFriends: function(game_id){
+    alert(game_id);
     this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-    new Ajax.Request('/friend_tags/friend_table?game_id=' + game_id, {
+    new Ajax.Request('/friend_table_for_friend_tags?game_id=' + game_id, {
       method: 'get',
       onSuccess: function(transport){
         this.friendItems.innerHTML = transport.responseText;
@@ -273,7 +274,7 @@ Iyxzone.Friend.Tagger = Class.create({
       this.friendTable.show();
       if(this.friendItems.innerHTML == ''){
         this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-        new Ajax.Request('/friend_tags/friend_table?game_id=all', {
+        new Ajax.Request('/friend_table_for_friend_tags?game_id=all', {
           method: 'get',
           onSuccess: function(transport){
             this.friendItems.innerHTML = transport.responseText;

@@ -1,0 +1,18 @@
+<%= javascript_include_tag 'status' %>
+
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<% subject = get_subject @user %>
+
+<%= link_to "#{subject}的状态", statuses_url(:id => @user.id) %> |
+<% if @user == current_user %>
+  <%= link_to "好友的状态", friends_statuses_url %>
+<% end %>
+
+<div class='status-list'>
+<ul id='feed_items'>
+  <%= render :partial => 'status', :collection => @statuses %>
+</ul>
+</div>

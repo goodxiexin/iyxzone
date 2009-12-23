@@ -67,7 +67,7 @@ Iyxzone.Poll.Builder = {
     var inputs = $$('input');
     var cnt = 0;
     for(var i=0;i<inputs.length;i++){
-      if(inputs[i].type == 'text' && inputs[i].readAttribute('id') == 'answers__description' && inputs[i].value != ''){
+      if(inputs[i].type == 'text' && inputs[i].readAttribute('id') == 'poll_answers__description' && inputs[i].value != ''){
         cnt++;
       }
     }

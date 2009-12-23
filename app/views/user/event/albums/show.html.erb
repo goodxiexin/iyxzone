@@ -1,0 +1,47 @@
+<% content_for :left do %>
+  <%= render :partial => '/app_menu' %>
+<% end %>
+
+<div class='crumb'>
+  活动<%= event_link @event %> -> 活动相册
+</div>
+
+<% if @participation and [3,4,5].include? @participation.status %>
+  <%= link_to '上传照片', new_event_photo_url(:album_i => @album) %>
+<% end %>
+
+<% i = 0 %>
+<table class='photo-list'>
+<% @album.photos.each do |p| %>
+  <% if i == 0 %>
+    <tr>
+  <% end %>
+  <td>
+    <%= photo_link p, :size => :large %><p>
+    <% if @user == current_user %>
+      <%= link_to '编辑', edit_event_photo_url(p), :rel => 'facebox' %>|
+      <%= facebox_confirm '删除', event_photo_url(p), {:msg => "你确定要删除这张照片吗?", :method => :delete} %>
+    <% end %>
+  </td>
+  <% i = i + 1 %>
+  <% if i== 4 %>
+    <% i = 0 %>
+    <tr/>
+<% end %>
+<% end %>
+</table>
+
+<% if @user ==  current_user %>
+	<%= in_place_text_field :span, @album, :description, true, event_album_url(@album), {}, {:empty_text => '点击添加相册描述', :rows => 3, :cols => 90}, {} %>
+<% else %>
+	<%= @album.description %>
+<% end %>
+
+<p class="albumTime">
+  <% unless @album.uploaded_at.blank? %>
+    <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
+  <% end %>
+  <span class="time-create"><%= ftime @album.created_at %>创建</span>
+</p>
+
+<%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @album, :recipient => @event.poster} %>

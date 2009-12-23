@@ -12,4 +12,8 @@ class Vote < ActiveRecord::Base
 		PollAnswer.find(answer_ids)
 	end
 
+  def validate_on_create
+    errors.add_to_base('你已经投过票了') if poll.voters.include?(voter)
+  end
+
 end

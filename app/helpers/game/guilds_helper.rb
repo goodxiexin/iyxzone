@@ -1,2 +1,0 @@
-module Game::GuildsHelper
-end

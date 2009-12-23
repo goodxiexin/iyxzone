@@ -6,7 +6,7 @@ class Blog < ActiveRecord::Base
 
 	acts_as_diggable
 
-	acts_as_list :order => 'created_at', :scope => 'poster_id'
+	acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 
 	acts_as_privileged_resources
 
@@ -29,6 +29,7 @@ class Blog < ActiveRecord::Base
 
 	# virtual attribute tags
 	# this is convenient for mass assignment
+  # only "build" is allowed here, since parent object is not saved yet
   def tags=(ids)
     poster.friends.find(ids).each { |f| tags.build(:tagged_user_id => f.id, :poster_id => poster_id) }
   end

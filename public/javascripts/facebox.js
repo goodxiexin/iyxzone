@@ -125,7 +125,7 @@ var Facebox = Class.create({
 	show_confirm: function(confirm_message, url, token, method){
     var html = "<div class='title01'><a class='icon-active icon-active-close' href='#' onclick='facebox.close();'></a><h1>请确认</h1></div>";
     html += "<div class='formcontent'>" + confirm_message + "</div>";
-    html += "<div class='buttons s_clear'><table class='center' cellpadding='0'><tr><td><span class='button'><span><button type='submit' onclick=\"new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "'});\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></td></tr></table></div>";
+    html += "<div class='buttons s_clear'><table class='center' cellpadding='0'><tr><td><span class='button'><span><button type='submit' onclick=\"new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onComplete: function(transport){facebox.close();}});\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></td></tr></table></div>";
 		this.remove_loading();
 		this.set_content(html);
 		this.locate();

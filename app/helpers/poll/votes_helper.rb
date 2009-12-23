@@ -1,2 +1,0 @@
-module Poll::VotesHelper
-end

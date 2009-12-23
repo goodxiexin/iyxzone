@@ -1,0 +1,14 @@
+<li id='status_<%= status.id %>'>
+  <span class='float-right'>
+  <% if status.poster == current_user %>
+    <%= facebox_confirm 'x', status_url(status), {:method => :delete, :msg => '你确定要删除这条状态吗?'}, {:id => "delete_status_#{status.id}"} %></span>
+  <% end %>
+  <%= avatar status.poster %>
+  <div class='status-content'>
+    <p class='title'><span class='time'><%= ftime status.created_at %></span></p>
+    <p class='body'>
+      <%= status.content %>
+    </p>
+  </div>
+	<%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => status, :recipient => status.poster } %>
+</li>

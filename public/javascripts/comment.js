@@ -43,7 +43,7 @@ Object.extend(Iyxzone.Comment, {
 
   save: function(commentableType, commentableID, button){
     if(Iyxzone.Comment.validate($(commentableType + '_comment_content_' + commentableID))){
-      new Ajax.Request('/' + Iyxzone.Comment.pluralize(commentableType) + '/' + commentableID + '/comments', {
+      new Ajax.Request('/comments?commentable_id=' + commentableID + '&commentable_type=' + commentableType, {
         method: 'post',
         parameters: $(commentableType+'_comment_form_' + commentableID).serialize(),
         onLoading: function(){
@@ -67,7 +67,7 @@ Object.extend(Iyxzone.Comment, {
 
   more: function(commentableType, commentableID, link){
     link.innerHTML = '<img src="/images/loading.gif" />';
-    new Ajax.Request('/' + Iyxzone.Comment.pluralize(commentableType) + '/' + commentableID + '/comments', {
+    new Ajax.Request('/comments?commentable_id=' + commentableID + '&commentable_type=' + commentableType, {
       method: 'get',
       onSuccess: function(transport){
         $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
@@ -76,9 +76,9 @@ Object.extend(Iyxzone.Comment, {
   }
 });
 
-Iyxzone.wallMessage = Class.create({});
+Iyxzone.WallMessage = Class.create({});
 
-Object.extend(Iyxzone.wallMessage, {
+Object.extend(Iyxzone.WallMessage, {
 
   validate: function(content){
     if(content.value.length == 0){
@@ -92,9 +92,9 @@ Object.extend(Iyxzone.wallMessage, {
     return true;  
   },
 
-  save: function(commentableType, commentableID, button){
-    if(Iyxzone.wallMessage.validate($('comment_content'))){
-      new Ajax.Request('/' + commentableType + 's/' + commentableID + '/comments', {
+  save: function(wallType, wallID, button){
+    if(Iyxzone.WallMessage.validate($('comment_content'))){
+      new Ajax.Request('/wall_messages?wall_type=' + wallType + '&wall_id=' + wallID, {
         method: 'post',
         parameters: $('wall_message_form').serialize(),
         onLoading: function(){

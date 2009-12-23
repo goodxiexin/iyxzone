@@ -7,8 +7,6 @@ Iyxzone.Blog = {
 
 Object.extend(Iyxzone.Blog.Builder, {
 
-  draftID: null, // useful in new blog page
-
   editor: null, // initialize this in your page
 
   tagBuilder: null, // initialize this in your page
@@ -56,10 +54,11 @@ Object.extend(Iyxzone.Blog.Builder, {
 
   saveBlog: function(){
     if(this.validate()){
-        new Ajax.Request('/blogs', {
-          method: 'post',
-          parameters: this.parameters,
-        });
+      this.prepare();
+      new Ajax.Request('/blogs', {
+        method: 'post',
+        parameters: this.parameters,
+      });
     }
   },
   
@@ -90,11 +89,10 @@ Object.extend(Iyxzone.Blog.Builder, {
         method: 'put',
         parameters: this.parameters,
         onSuccess: function(transport){
-              var ret = transport.responseText.evalJSON();alert(transport.responseText);
-    this.draftID = ret.draft_id;
-    this.tagBuilder.reset(ret.tags);
-    tip('保存成功，可以继续写了');
-    $('errors').innerHTML = '';
+          var ret = transport.responseText.evalJSON();
+          this.tagBuilder.reset(ret.tags);
+          tip('保存成功，可以继续写了');
+          $('errors').innerHTML = '';
         }.bind(this)
       });
     }

@@ -1,2 +1,0 @@
-module Video::TagsHelper
-end

@@ -1,2 +1,0 @@
-module GuildAlbum::DigsHelper
-end

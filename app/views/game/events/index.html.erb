@@ -13,7 +13,7 @@
 			<li><span><%= link_to "最近活动", recent_events_url(:id => @user.id) %></span></li>
 			<li><span><%= link_to "#{get_subject @user}的活动", events_url(:id => @user.id) %></span></li>
 			<% if @user == current_user %>
-			<li><span><%= link_to "朋友的活动", event_feeds_url(:id => @user.id) %></span></li>
+			<li><span><%= link_to "朋友的活动", friends_events_url(:id => @user.id) %></span></li>
 			<% end %>
 			<li class='hover'><span><%= link_to "游戏#{@game.name}的活动", game_events_url(@game) %></span></li>
 		</ul>

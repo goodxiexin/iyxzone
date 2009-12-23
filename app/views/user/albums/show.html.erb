@@ -1,0 +1,68 @@
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+        <div class="round_m"><div class="round_body">
+    
+<h1 class="big-photo">照片</h1>
+<div class="box02 canvas_int">
+  <div class="tab tab01">
+    <% if @user == current_user %>
+    <div class="right">
+      <%= link_to "上传照片", new_personal_photo_url(:album_id => @album.id)  %>
+      <%= link_to "新建相册", new_personal_album_url, :rel => 'facebox' %>
+    </div>
+    <% end %>
+    <ul>
+      <% subject = get_subject @user %>
+      <li><span><%= link_to "热门照片", hot_personal_photos_url(:id => @user.id) %></span></li>
+      <li><span><%= link_to '最新照片', recent_personal_albums_url(:id => @user.id) %></span></li>
+      <li class='hover'><span><%= link_to "#{subject}的相册", personal_albums_url(:id => @user.id) %></span></li>
+      <% if @user == current_user %> 
+        <li><span><%= link_to '好友相册' %></span></li>
+      <% end %>
+      <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
+    </ul>        
+  </div>
+	
+	<div class='crumb'>
+		<% subject = get_subject @user %>
+		<%= link_to "#{subject}的照片", personal_albums_url(:id => @user.id) %> -> <%= "#{@album.title}" %>
+	</div>
+
+	<% i = 0 %>
+<table class='photo-list'>
+<% @album.photos.each do |p| %>
+  <% if i == 0 %>
+    <tr>
+  <% end %>
+  <td>
+    <%= photo_link p %><p>
+    <% if @user == current_user %>
+      <%= link_to '编辑', edit_personal_photo_url(p), :rel => 'facebox' %>|
+      <%= facebox_confirm '删除', personal_photo_url(p), {:msg => "你确定要删除这张照片吗?", :method => :delete} %>
+    <% end %>
+  </td>
+  <% i = i + 1 %>
+  <% if i== 4 %>
+    <% i = 0 %>
+    <tr/>
+  <% end %>
+<% end %>
+</table>
+
+<% if @user == current_user %>
+  <%= in_place_text_field :span, @album, :description, true, personal_album_url(@album), {}, {:empty_text => '点击添加相册描述', :parameter_name => 'album[description]', :rows => 2, :cols => 90}, {} %>
+<% else %>
+	<%= @album.description %>
+<% end %>
+
+<p class="albumTime">
+  <% unless @album.uploaded_at.blank? %>
+    <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
+  <% end %>
+  <span class="time-create"><%= ftime @album.created_at %>创建</span>
+</p>
+
+<%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @album, :recipient => @user} %>   
+ 
+</div></div>
+</div></div></div></div>
+

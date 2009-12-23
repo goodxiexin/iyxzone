@@ -1,2 +1,0 @@
-module EventAlbum::TagsHelper
-end

@@ -1,2 +1,0 @@
-module Guild::FeedsHelper
-end

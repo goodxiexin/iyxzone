@@ -1,3 +1,0 @@
-page.insert_html :bottom, "blog_comments_#{@blog.id}", :partial => 'comment', :object => @comment
-page << "$('blog_comment_content_#{@blog.id}').value = '';"
-page << "hide_comment_form('blog', #{@blog.id});"

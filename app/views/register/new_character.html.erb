@@ -47,6 +47,8 @@
 	<%= f.label '职业: '%>
   <%= collection_select :character, :profession_id, [], :id, :name, {:prompt => '---'} %><br/>
 	<a id='character_profession_info'></a>
+  <%= f.label '正在玩: ' %>
+  <%= f.check_box 'playing', {}, 1 %><br/>
 	<%= button_to_function '创建', "Iyxzone.Register.Manager.createCharacter();" %>
   <%= link_to_function '取消', "Iyxzone.Register.Manager.cancelNewCharacter();" %>
 <% end %>

@@ -1,0 +1,11 @@
+<% region = @profile.region %>
+<% city = @profile.city %>
+<% form_for :profile, :html => {:id => 'basic_info_form'} do |f| %>
+  <%= f.label '性别' %> <%= gender_select_tag @profile %><br/>
+  <%= f.label '生日' %> <%= calendar_date_select :profile, :birthday %><br/>
+  <%= f.label '省份' %> <%= collection_select :profile, :region_id, Region.all, :id, :name, {:prompt => '---'} %><br/>
+  <%= f.label '城市' %> <%= collection_select :profile, :city_id, region.nil? ? [] : region.cities, :id, :name, {:prompt => '---'} %><br/>
+  <%= f.label '地区' %> <%= collection_select :profile, :district_id, city.nil? ? [] : city.districts, :id, :name, {:prompt => '---'}%><br/>
+	<%= button_to_function '保存', "Iyxzone.Profile.Editor.updateBasicInfo(#{@profile.id}, this);" %>
+  <%= link_to_function "取消", "Iyxzone.Profile.Editor.cancelEditBasicInfo();" %>
+<% end %>

@@ -21,6 +21,7 @@ class CreateUsers < ActiveRecord::Migration
 			t.integer :application_setting, :limit => 8, :default => ApplicationSetting.default
 
       # counters
+      t.integer :notifications_count, :default => 0
       t.integer :friends_count, :default => 0 # done
 			t.integer :personal_albums_count, :default => 0 # done
 			t.integer :events_count, :default => 0

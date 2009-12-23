@@ -1,16 +1,32 @@
-1. menu js DONE
+1. friend_tags controller friend_table / auto_complete								DONE
 
-2. photo js DONE
+2. photo tag 的auto_complete和friend_tag的重复
 
-3. 就是没法弄那个博客保存为草稿 DONE
+3. dig bug																														DONE
 
+4. event/poll invitations search??																		DONE
 
-1. home page: feed分类
+5. 更新 event participation的时候，如果数字超出范围？？
 
-2. 下拉菜单的javascript事件 DONE
+6. game_details 和 area_details的位置？？？														DONE
 
-3. 表情的javascript DONE
+8. event wall message怎么判断是否应该让他看到
 
-4. disable button while waiting DONE
+9. event album																												DONE
 
-5. cursor change during submitting a form
+10. photo_tag auto_complete_method and friends method 
+
+11. comments controller: get_commentable => rescue
+
+12. friend impression不是应该和tags差不多吗
+
+13. friend_suggestion 和 search下严重重复
+
+14. search button 即使输入空也能提交表单
+		character search : 判断这么多是否输入了至少一个
+
+15. character playing or not																					DONE
+
+16. guild/game/profile feed_deliveries
+
+17. 热门活动和自己游戏有关，热门工会

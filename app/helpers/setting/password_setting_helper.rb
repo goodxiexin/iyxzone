@@ -1,2 +1,0 @@
-module Setting::PasswordSettingHelper
-end

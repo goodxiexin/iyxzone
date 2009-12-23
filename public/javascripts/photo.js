@@ -35,7 +35,7 @@ Iyxzone.Photo.FriendSelector = Class.create({
     this.textboxList = new TextBoxList(input, {});
     
     // custom auto completer
-    new Iyxzone.Friend.Autocompleter(this.textboxList.getMainInput(), this.friendList, '/photo_tags/auto_complete_for_friends', {
+    new Iyxzone.Friend.Autocompleter(this.textboxList.getMainInput(), this.friendList, '/auto_complete_for_photo_tags', {
       method: 'get',
       emptyText: '没有匹配的好友...',
       afterUpdateElement: this.afterSelectFriend.bind(this),
@@ -72,7 +72,7 @@ Iyxzone.Photo.FriendSelector = Class.create({
   getFriends: function(){
     var gameID = this.gameSelector.value;
     this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-    new Ajax.Request('/friend_tags/friend_table?game_id=' + gameID, {
+    new Ajax.Request('/friend_table_for_photo_tags?game_id=' + gameID, {
       method: 'get',
       onSuccess: function(transport){
         this.friendItems.innerHTML = transport.responseText;
@@ -91,7 +91,7 @@ Iyxzone.Photo.FriendSelector = Class.create({
       this.friendTable.show();
       if(this.friendItems.innerHTML == ''){
         this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-        new Ajax.Request('/photo_tags/friends?game_id=all', {
+        new Ajax.Request('/friend_table_for_photo_tags?game_id=all', {
           method: 'get',
           onSuccess: function(transport){
             this.friendItems.innerHTML = transport.responseText;
@@ -155,7 +155,8 @@ Iyxzone.Photo.Tagger = Class.create({
      * save and insert all tag
      */
     this.isLoading = true;
-    this.tagsHolder.innerHTML = '<img src="/images/loading.gif" />';
+    if(tagInfos.length != 0)
+      this.tagsHolder.innerHTML = '<img src="/images/loading.gif" />';
     for(var i=0;i<tagInfos.length;i++){
       this.insertTag(tagInfos[i]);
     }
@@ -272,7 +273,7 @@ Iyxzone.Photo.Tagger = Class.create({
   },
 
   remove: function(tagID){
-    new Ajax.Request('/' + this.type + 's/' + this.photoID + '/tags/' + tagID, {
+    new Ajax.Request('/photo_tags/' + tagID, {
       method: 'delete',
       parameters: 'authenticity_token=' + encodeURIComponent(this.token),
       onSuccess: function(transport){
@@ -293,7 +294,7 @@ Iyxzone.Photo.Tagger = Class.create({
       params += "&tag[y]=" + this.cropImg.areaCoords.y1;
       params += "&tag[width]=" + this.cropImg.calcW();
       params += "&tag[height]=" + this.cropImg.calcH();
-      new Ajax.Request('/' + this.type + 's/' + this.photoID + '/tags', {
+      new Ajax.Request('/photo_tags?photo_type=' + this.type + '&photo_id=' + this.photoID, {
         method: 'post', 
         parameters: params,
         onSuccess: function(transport){

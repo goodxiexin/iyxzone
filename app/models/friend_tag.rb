@@ -1,3 +1,8 @@
+#
+# 说明
+# FriendTag就是blog, video的标签（谁和这个资源有关）
+#
+
 class FriendTag < ActiveRecord::Base
 
   belongs_to :tagged_user, :class_name => 'User'

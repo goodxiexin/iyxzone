@@ -84,16 +84,16 @@ module ApplicationHelper
   end
 
   def album_link album
-    link_to (truncate album.title, :length => 20), eval("#{album.type.underscore}_url(album)")
+    link_to (truncate album.title, :length => 20), eval("#{album.class.name.underscore}_url(album)")
   end
 
   def photo_link(photo, opts={})
 		size = opts.delete(:size) || "large"
-    link_to (image_tag photo.public_filename(size), opts), eval("#{photo.type.underscore}_url(photo)")
+    link_to (image_tag photo.public_filename(size), opts), eval("#{photo.class.name.underscore}_url(photo)")
   end
 
   def dig_link diggable
-    (link_to_remote '挖', :url => eval("#{diggable.class.to_s.underscore}_digs_url(diggable)")) + 
+    (link_to_remote '挖', :url => digs_url(:diggable_type => diggable.class.name.underscore, :diggable_id => diggable)) +
     "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>)"
   end
 

@@ -1,3 +1,0 @@
-page.insert_html :bottom, "video_comments_#{@video.id}", :partial => 'comment', :object => @comment
-page << "$('video_comment_content_#{@video.id}').value = '';"
-page << "hide_comment_form('video', #{@video.id});"

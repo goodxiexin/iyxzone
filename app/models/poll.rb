@@ -12,6 +12,8 @@ class Poll < ActiveRecord::Base
 
 	has_many :invitations, :class_name => 'PollInvitation', :dependent => :destroy, :order => 'created_at DESC'
 
+  acts_as_diggable
+
 	acts_as_commentable :order => 'created_at ASC'
 
 	named_scope :hot, :conditions => ["end_date > ?", Date.today.to_s(:db)], :order => "voters_count DESC"
@@ -32,8 +34,9 @@ class Poll < ActiveRecord::Base
     end_date < Time.now.to_date
   end
 
-	def votable? user
-		user == poster || privilege == 1 || (privilege == 2 and poster.has_friend? user)
-	end
+  def answers=(answer_attributes)
+    answer_attributes.each { |answer_attribute| answers.build(answer_attribute) unless answer_attribute[:description].blank? }
+  end 
 
 end
+

@@ -12,9 +12,19 @@ module ActsAsList
 	
 			self.list_opts = opts
 
+      cattr_accessor :list_conds
+
+      if opts[:conditions]
+        self.list_conds = sanitize_sql_for_conditions opts[:conditions]
+      else
+        self.list_conds = ""
+      end
+
 			extend ActsAsList::SingletonMethods
 
 			include ActsAsList::InstanceMethods
+
+      
 
 		end
 
@@ -41,20 +51,24 @@ module ActsAsList
 			send(order_name)
 		end
 
+    def cond
+      self.class.list_conds == "" ?  "" : "AND (" + self.class.list_conds + ")"
+    end
+
 		def first
-			self.class.find(:first, :conditions => ["#{scope_name} = ?", scope], :order => "#{order_name} ASC")
+			self.class.find(:first, :conditions => ["#{scope_name} = ? #{cond}", scope], :order => "#{order_name} ASC")
 		end
 
 		def last
-			self.class.find(:first, :conditions => ["#{scope_name} = ?", scope], :order => "#{order_name} DESC")
+			self.class.find(:first, :conditions => ["#{scope_name} = ? #{cond}", scope], :order => "#{order_name} DESC")
 		end
 
 		def next
-			self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} > ?", scope, order], :order => "#{order_name} ASC") || first 
+			self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} > ? #{cond}", scope, order], :order => "#{order_name} ASC") ||first 
 		end
 
 		def prev
-			self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} < ?", scope, order], :order => "#{order_name} DESC") || last 
+			self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} < ? #{cond}", scope, order], :order => "#{order_name} DESC") ||last 
 		end
 	
 	end

@@ -1,2 +1,0 @@
-module CropImagesHelper
-end

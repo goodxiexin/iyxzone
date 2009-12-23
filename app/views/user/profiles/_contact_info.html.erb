@@ -1,0 +1,13 @@
+<% if email_viewable? %>
+  <%= label_tag 'email', 'email'%><%= @user.email %><br/>
+<% end %>
+<% if qq_viewable? %>
+  <%= label_tag 'qq', 'qq' %><%=  @profile.qq %><br/>
+<% end %>
+<% if phone_viewable? %>
+  <%= label_tag '电话', 'phone' %><%= @profile.phone %><br/>
+<% end %>
+<% if website_viewable? %>
+  <%= label_tag '个人网站', 'website' %><%= @profile.website %><br/>
+<% end %>
+
