@@ -3,19 +3,10 @@ Iyxzone.Poll = {
 
   author: ['高侠鸿'],
 
-  drawPercentBar: function(width, percent, color, background) {
+  drawPercentBar: function(width, percent, color, votes) {
     var pixels = width * (percent / 100);
-    if(!background){ 
-      background = "none"; 
-    }
-    document.write("<div style=\"position: relative; line-height: 1em; background-color: "
-                   + background + "; border: 1px solid black; width: "
-                   + width + "px\">");
-    document.write("<div style=\"height: 1.5em; width: " + pixels + "px; background-color: "
-                  + color + ";\"></div>");
-    document.write("<div style=\"position: absolute; text-align: center; padding-top: .25em; width: "
-                   + width + "px; top: 0; left: 0\">" + percent + "%</div>");
-    document.write("</div>");
+    document.write("<td class='percent'><span class='percent01'><span class='"+color+"' style='width: " + percent + "%'><span/></span></span></td>");
+    document.write("<td class='status'>" + votes + "(" + percent + "%)</td>");
   },
 
   checkMultipleSelection: function(max, checkbox){
@@ -109,7 +100,7 @@ Iyxzone.Poll.Builder = {
   },
 
   removeAnswer: function(link){
-    $(link).up('.poll_answer').remove();
+    link.up().remove();
   }
 
 };

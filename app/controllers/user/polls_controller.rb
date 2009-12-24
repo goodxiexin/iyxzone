@@ -10,7 +10,7 @@ class User::PollsController < ApplicationController
 
   def index
 		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @polls = @user.polls.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @polls = @user.polls.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 1
   end
 
 	def hot

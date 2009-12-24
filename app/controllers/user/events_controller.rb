@@ -12,12 +12,14 @@ class User::EventsController < ApplicationController
   end
 
 	def hot
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
+		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
+    cond = user_game_conds
     @events = Event.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 5
   end
 
   def recent
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
+		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
+    cond = user_game_conds
     @events = Event.recent.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 5
 	end
 

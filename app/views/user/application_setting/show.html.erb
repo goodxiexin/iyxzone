@@ -1,34 +1,55 @@
-<% content_for :left do %>
-	<%= render :partial => '/app_menu' %>
-<% end %>
-
-<table class='mail-setting'>
-<tr class='category' id='general'>
-  <td><strong>应用设置</strong></td>
-  <td></td>
-</tr>
-<tr>
-  <td class='name'><%= link_to "日志", blogs_url(:id => current_user.id) %></td>
-  <td class='check'><%= link_to "设置", edit_application_setting_url(:type => 0), :rel => 'facebox' %></td>
-</tr>
-<tr>
-  <td class='name'><%= link_to "视频", videos_url(:id => current_user.id) %></td>
-  <td class='check'><%= link_to "设置", edit_application_setting_url(:type => 1), :rel => 'facebox' %></td>
-</tr>
-<tr>
-  <td class='name'><%= link_to "照片", personal_albums_url(:id => current_user.id) %></td>
-  <td class='check'><%= link_to "设置", edit_application_setting_url(:type => 2), :rel => 'facebox' %></td>
-</tr>
-<tr>
-  <td class='name'><%= link_to "投票", polls_url(:id => current_user.id) %></td>
-  <td class='check'><%= link_to "设置", edit_application_setting_url(:type => 3), :rel => 'facebox' %></td>
-</tr>
-<tr>
-  <td class='name'><%= link_to "活动", events_url(:id => current_user.id) %></td>
-  <td class='check'><%= link_to "设置", edit_application_setting_url(:type => 4), :rel => 'facebox' %></td>
-</tr>
-<tr>
-  <td class='name'><%= link_to "工会", guilds_url(:id => current_user.id) %></td>
-  <td class='check'><%= link_to "设置", edit_application_setting_url(:type => 5), :rel => 'facebox' %></td>
-</tr>
-</table>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <div class="canvas-status"></div>
+    <h1 class="app-setting">应用设置</h1>
+    <div class="box02 canvas_int">
+      <div class="app-list-box">
+        <div class="app-header">
+          共有 5 个应用
+        </div>
+        <div class="app-list">
+          <div class="link">
+            <%= facebox_link "设置", edit_application_setting_url(:type => 0) %>
+            <%= facebox_link "关于", "" %>
+          </div>
+          <h2 class="app-log">日志</h2>
+        </div>
+        <div class="app-list">
+          <div class="link">
+            <%= facebox_link "设置", edit_application_setting_url(:type => 1) %>
+            <%= facebox_link "关于", "" %>
+          </div>
+          <h2 class="app-gift">视频</h2>
+        </div>
+        <div class="app-list">
+          <div class="link">
+            <%= facebox_link "设置", edit_application_setting_url(:type => 2) %>
+            <%= facebox_link "关于", "" %>
+          </div>
+          <h2 class="app-photo">照片</h2>
+        </div>
+        <div class="app-list">
+          <div class="link">
+            <%= facebox_link "设置", edit_application_setting_url(:type => 3) %>
+            <%= facebox_link "关于", "" %>
+          </div>
+          <h2 class="app-log">投票</h2>
+        </div>
+        <div class="app-list">
+          <div class="link">
+            <%= facebox_link "设置", edit_application_setting_url(:type => 4) %>
+            <%= facebox_link "关于", "" %>
+          </div>
+          <h2 class="app-photo">活动</h2>
+        </div>
+        <div class="app-list">
+          <div class="link">
+            <%= facebox_link "设置", edit_application_setting_url(:type => 5) %>
+            <%= facebox_link "关于", "" %>
+          </div>
+          <h2 class="app-photo">工会</h2>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>

@@ -29,7 +29,11 @@ class User::ApplicationSettingController < ApplicationController
 			render :update do |page|
 				page << "facebox.close();"
 			end
-		end	
+		else
+      render :update do |page|
+        page << "error('发生错误');"
+      end
+    end	
 	end
 
 protected

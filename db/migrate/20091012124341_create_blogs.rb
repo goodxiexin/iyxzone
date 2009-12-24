@@ -8,6 +8,7 @@ class CreateBlogs < ActiveRecord::Migration
       t.integer :digs_count, :default => 0
       t.integer :comments_count, :default => 0
       t.integer :tags_count, :default => 0
+      t.integer :viewings_count, :default => 0
       t.boolean :draft, :default => true
       t.integer :privilege, :default => 1 # 1:all, 2:friend or same game, 3:friend, 4:owner
       t.timestamps

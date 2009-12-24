@@ -1,0 +1,2 @@
+module User::ProfileViewingsHelper
+end

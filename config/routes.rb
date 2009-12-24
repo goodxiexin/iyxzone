@@ -46,9 +46,11 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :notifications, :collection => {:destroy_all => :delete, :first_five => :get}
 
+    users.resources :profile_viewings
+
     users.resources :profiles, :member => {:more_feeds => :get} do |profiles|
 
-      profiles.resources :tags
+      profiles.resources :tags, :controller => 'profiles/tags'
 
     end
 

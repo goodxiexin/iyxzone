@@ -97,6 +97,10 @@ module ApplicationHelper
     "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>)"
   end
 
+  def blog_content blog, opts
+    truncate blog.content, opts
+  end
+
   def blog_link blog
     link_to (truncate blog.title, :length => 20), blog_url(blog)
   end

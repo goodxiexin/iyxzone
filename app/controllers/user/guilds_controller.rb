@@ -21,12 +21,14 @@ class User::GuildsController < ApplicationController
 	end
 
 	def hot
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
+		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
+    cond = user_game_conds
     @guilds = Guild.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10	
   end
 
   def recent
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
+		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
+    cond = user_game_conds
     @guilds = Guild.recent.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
 	end
 

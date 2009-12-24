@@ -2,6 +2,8 @@ class Blog < ActiveRecord::Base
 
 	belongs_to :poster, :class_name => 'User'
 
+  acts_as_viewable
+
 	acts_as_commentable :order => 'created_at ASC'
 
 	acts_as_diggable

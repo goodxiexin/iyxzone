@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091121151424) do
+ActiveRecord::Schema.define(:version => 20091223160309) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20091121151424) do
     t.integer  "digs_count",                         :default => 0
     t.integer  "comments_count",                     :default => 0
     t.integer  "tags_count",                         :default => 0
+    t.integer  "viewings_count",                     :default => 0
     t.boolean  "draft",                              :default => true
     t.integer  "privilege",                          :default => 1
     t.datetime "created_at"
@@ -423,6 +424,7 @@ ActiveRecord::Schema.define(:version => 20091121151424) do
     t.string   "website"
     t.datetime "birthday"
     t.text     "about_me"
+    t.integer  "viewings_count", :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -501,7 +503,7 @@ ActiveRecord::Schema.define(:version => 20091121151424) do
     t.boolean  "enabled",                                 :default => false
     t.integer  "avatar_id"
     t.string   "pinyin"
-    t.integer  "privacy_setting",           :limit => 8,  :default => 1441706
+    t.integer  "privacy_setting",           :limit => 8,  :default => 106299306
     t.integer  "mail_setting",              :limit => 8,  :default => 8796093022207
     t.integer  "application_setting",       :limit => 8,  :default => 65535
     t.integer  "notifications_count",                     :default => 0
@@ -540,10 +542,11 @@ ActiveRecord::Schema.define(:version => 20091121151424) do
     t.datetime "updated_at"
   end
 
-  create_table "visitor_records", :force => true do |t|
-    t.integer  "visitor_id"
-    t.integer  "profile_id"
-    t.datetime "created_at"
+  create_table "viewings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "viewable_id"
+    t.string   "viewable_type"
+    t.datetime "viewed_at"
   end
 
   create_table "votes", :force => true do |t|

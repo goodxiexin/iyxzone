@@ -4,9 +4,9 @@ class User::ProfilesController < ApplicationController
 
   before_filter :login_required, :setup
 
-	after_filter :record_visiting, :only => [:show]
-
   before_filter :privilege_required, :only => [:show, :more_feeds]
+
+  increment_viewing 'profile', :only => [:show]
 
 	FirstFetchSize = 2
 
@@ -68,11 +68,6 @@ protected
 		end
   rescue
     not_found
-  end
-
-	def record_visiting
-		return if current_user == @user
-	  @profile.create_or_update_visitor_record(current_user)
   end
 
 end

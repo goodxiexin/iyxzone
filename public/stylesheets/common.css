@@ -46,7 +46,18 @@ a:active {text-decoration: none;}
 .s_clear{zoom:1;}
 .rows,.buttons{clear:both;}
 
+.sperator{clear:both;margin:12px 0; background:url(../images/skin/sperator01.gif) repeat-x;height:1px;font-size:1px;}
+.sperator-wrap{margin:12px 0;background:url(../images/skin/sperator01.gif) repeat-x;}
+.sperator-wrap .sperator{margin:0;}
+.sperator-wrap .sperator-main{background:url(../images/skin/sperator01.gif) repeat-y center top}
+
+.path-box{height:17px;line-height:17px;overflow:hidden}
+.path-box label,.path-box span{display:block;float:left;margin-right:12px;}
+.path-box label{color:#25700D}
+.path-box span{padding-left:13px;background:url(../images/skin/rightArrow01.gif) no-repeat left 1px;color:#7E7F80}
+
 table.center{margin:0 auto;}
+table.center td{vertical-align:top}
 
 #footer{padding:18px 0 9px;text-align:center;line-height:15px;color:#7E7F80}
 
@@ -58,8 +69,6 @@ table.center{margin:0 auto;}
 .box05 .title01{padding:0 5px 0 10px;border:1px #EDF8D8 solid;border-bottom:0;height:26px;line-height:26px;background:url(../images/skin/titles01.png) repeat-x;overflow:hidden;color:#fff;}
 .box05 .title01 .icon-active{margin-top:6px;float:right;}
 .box05 .title01 select{margin-top:2px;_margin-top:1px;}
-.box05 .title02{padding:0 5px 0 10px;border:1px #EDF8D8 solid;border-bottom:0;height:26px;line-height:26px;background:#ffebe8;overflow:hidden;color:#fff;}
-
 /*图片样式*/
 .imgbox01{border:1px #E7F0E0 solid;background:#fff;padding:4px;}
 .imgbox02{border:1px #BBD2AA solid;background:#fff;padding:4px;}
@@ -67,11 +76,25 @@ table.center{margin:0 auto;}
 
 .picbox01{padding:4px 4px 8px;width:112px;height:112px;background:url(../images/skin/picBox01.gif) no-repeat;overflow:hidden;position:relative}
 .picbox01 a.btn{display:block;width:120px;height:124px;position:absolute;left:0;top:0;background:url(../images/skin/picBox01.gif);background-repeat:no-repeat;background-position:left -500px;}
-.picbox01 a.new{background-position:left -131px;}
+.picbox01 a.new{background-position:left -261px;}
 .picbox01 .picwrap{width:100%;height:100%;overflow:hidden}
 .picbox01 .picwrap table{width:100%;height:100%;}
 .picbox01 .picwrap td{text-align:center;}
 
+.picbox01-wide{padding:13px 6px 16px 17px;width:297px;height:95px;overflow:hidden; background:url(../images/skin/picBox01.gif) no-repeat left -131px;position:relative} 
+.picbox01-wide .new{width:36px;height:36px;position:absolute;left:0;top:0;background:url(../images/skin/picBox01.gif) no-repeat left -261px;}
+.picbox01-wide .img{float:left;width:86px;height:95px;overflow:hidden}
+.picbox01-wide .img table{height:100%;margin:0 auto;}
+.picbox01-wide .info{margin-left:95px;_margin-left:92px;line-height:16px;}
+.picbox01-wide .info h4{padding-left:4px;height:16px;overflow:hidden}
+.picbox01-wide .info h4 a{margin-right:19px;font-weight:bold;}
+.picbox01-wide .info h4 span{color:#D63200}
+.picbox01-wide .info p{padding-left:4px;color:#7E7F80}
+.picbox01-wide .info ul{display:block;margin:3px -5px 0 -4px;height:60px;overflow:hidden}
+.picbox01-wide .info li{_display:inline;float:left;margin:0 5px 0 4px;}
+
+.comment-simple-box{padding:0 5px 20px;background:url(../images/skin/comment-bg01.gif) no-repeat;width:44px;height:20px;line-height:20px;text-align:center;color:#199D09;font-size:14px;overflow:hidden}
+.comment-simple-box b{display:block;height:100%;overflow:hidden}
 /*图片样式*/
 
 /*图片展示*/
@@ -112,8 +135,15 @@ table.center{margin:0 auto;}
 .menu-list li a{color:#666}
 .menu-list li a:hover{color:#D63200}
 /*菜单列表*/
+.gobtn{display:block;width:22px;height:19px;background:url(../images/skin/gobtn.png) no-repeat;cursor:pointer}
+.loginbtn{display:block;background:url(../images/skin/login01.png) no-repeat;width:164px;height:36px;cursor:pointer}
+.registbtn{display:block;background:url(../images/skin/regist01.png) no-repeat;width:164px;height:36px;cursor:pointer}
+.active-main-btn{display:block;background:url(../images/skin/active-mail-btn01.png) no-repeat;width:164px;height:36px;cursor:pointer}
+.active-btn{display:block;background:url(../images/skin/activebtn01.png) no-repeat;width:164px;height:36px;cursor:pointer}
+.vote-icon{display:block;padding-left:41px;height:31px;line-height:normal;background:url(../images/icons/icons-30.gif) no-repeat;overflow:hidden}
+.vote-icon h5{font-size:14px;color:#055A83}
 
-input.gobtn{border:0;background:url(../images/skin/gobtn.png) no-repeat;width:22px;height:19px;}
+input.gobtn,input.loginbtn,input.registbtn{display:inline-block;border:0;}
 
 /*特殊组件*/
 .selector{width:278px;height:24px;line-height:24px;border:1px #6C9F43 solid;background:url(../images/skin/tf01.png) no-repeat;position:relative;}
@@ -124,11 +154,6 @@ input.gobtn{border:0;background:url(../images/skin/gobtn.png) no-repeat;width:22
 .selector .drop-menu li{height:21px;line-height:21px;overflow:hidden;}
 .selector .drop-menu li a{float:none;padding:0 5px;width:266px;height:100%;color:#333;background:#FFF}
 .selector .drop-menu li a:hover{background:#74BC20;color:#fff;}
-.drop-menu{border:1px #699D3F solid;width:278px;}
-.drop-menu ul{border:1px #fff solid;}
-.drop-menu li{height:21px;line-height:21px;overflow:hidden;}
-.drop-menu li a{float:none;padding:0 5px;width:266px;height:100%;color:#333;background:#FFF}
-.drop-menu li a:hover{float:none;padding:0 5px;width:266px;height:100%;color:#333;background:#74BC20;}
 
 .textfield{padding:0 5px;width:100px;height:24px;line-height:24px;border:1px #6C9F43 solid;background:url(../images/skin/tf01.png) no-repeat;}
 .textfield input{margin:4px 0 0;width:100%;height:16px;color:#7E7F80;border:0;background:none}
@@ -140,7 +165,6 @@ input.gobtn{border:0;background:url(../images/skin/gobtn.png) no-repeat;width:22
 .button{float:left;cursor:pointer;display:block;background-image:url(../images/skin/btns01.gif);background-repeat:no-repeat;background-position:right top;padding:0 10px 0 0;}
 .button span{display:block;padding:0 0 0 10px;background-image:url(../images/skin/btns01.gif);background-repeat:no-repeat;}
 .button span button{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:20px;line-height:20px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
-.button span input{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:20px;line-height:20px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
 
 a.button,a.button:hover{height:20px;line-height:19px;_line-height:21px;padding:0 16px 0 0;color:#fff;font-weight:bold;overflow:hidden}
 a.button span{float:left;height:100%;padding:0 0 0 16px;}
@@ -150,6 +174,8 @@ a.button-gray,a.button-gray:hover{font-weight:normal;color:#666}
 .button-gray span{background-position:left -25px;}
 .button-gray span button{font-weight:normal;color:#666}
 
+.attention-btn{display:block;width:58px;height:20px;line-height:21px;padding-right:12px;background:url(../images/skin/btns10.gif) no-repeat;text-align:right;overflow:hidden}
+.love-btn{display:block;width:58px;height:20px;line-height:21px;padding-right:12px;background:url(../images/skin/btns10.gif) no-repeat left -30px;text-align:right;overflow:hidden}
 
 .icon-active{display:block;width:8px;height:8px;line-height:normal;font-size:1px;background:url(../images/icons/activeIcon.gif) no-repeat;}
 .icon-active-del{background-position:left -26px;}
@@ -175,6 +201,7 @@ a.mbutton-orange{background-position:right -210px;}
 a.mbutton-orange span{background-position:left -210px;}
 a.mbutton-navy{background-position:right -240px;}
 a.mbutton-navy span{background-position:left -240px;}
+
 
 /*临时*/
 a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;background:url(../images/skin/dropArrow01.gif) no-repeat}
@@ -216,7 +243,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;backg
 
 /*选项卡*/
 .tab01{height:30px;line-height:30px;background-image:url(../images/skin/tabs01.gif);background-repeat:repeat-x; background-position:left bottom;overflow:hidden;position:relative}
-.tab01 li{margin-right:1px;float:left;height:30px;padding-left:23px;background-image:url(../images/skin/tabs01.gif);background-repeat:no-repeat;cursor:pointer;}
+.tab01 li{margin-right:1px;float:left;height:30px;padding-left:23px;background-image:url(../images/skin/tabs01.gif);background-repeat:no-repeat;}
 .tab01 li span{display:block;padding-right:23px;background-image:url(../images/skin/tabs01.gif);background-repeat:no-repeat;background-position:right -33px;}
 .tab01 li span a{display:block;position:relative;margin:0 -23px;padding:0 23px;color:#25700D;}
 .tab01 li a:hover{color:#D63200;}
@@ -225,17 +252,27 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;backg
 .tab01 li.hover span a,.tab01 li.hover span a:hover{color:#0A3100}
 .tab01 li.hover a:hover{color:#25700D;}
 .tab01 li.nobg{background:none;padding:0;}
-.tab01 li.nobg a{padding:0 15px;color:#D63200}
+.tab01 li.nobg a{_display:inline-block;margin:0 15px;color:#D63200}
 .tab01 li.nobg a:hover{text-decoration:underline}
 
 .tab01 .right{word-spacing:10px;}
-.tab01 .right a{color:#D63200}
+.tab01 .right a,.tab01 .gray a:hover{color:#D63200}
+.tab01 .gray a{color:#7E7F80}
 .tab01 .right a:hover{text-decoration:underline}
 .tab01 .icon{position:absolute;right:14px;top:0;}
 .tab01 .icon a{display:block;float:right;height:30px;line-height:30px;margin-left:15px;padding-left:22px;color:#D63200}
 .tab01 .icon a:hover{ text-decoration:underline}
 .tab01 .icon a.inbox-read{background:url(../images/icons/inboxIcon.gif) no-repeat left 7px;}
 .tab01 .icon a.inbox-clear{background:url(../images/icons/inboxIcon.gif) no-repeat left -18px;}
+
+.nav-link{margin-bottom:8px;line-height:17px;}
+.nav-link li{float:left;margin:0 3px 0 2px;height:17px;} 
+.nav-link li a{float:left;display:block;padding-left:9px;}
+.nav-link li a span{float:left;display:block;padding-right:11px;height:100%;cursor:pointer}
+.nav-link li.hover a{background:url(../images/skin/nav-links01.gif) no-repeat;color:#fff;}
+.nav-link li.hover a span{background:url(../images/skin/nav-links01.gif) no-repeat right -26px}
+.nav-link li.hover a:hover{color:#fff}
+.nav-link li.right{float:right;}
 /*选项卡*/
 
 /*圆角*/
@@ -261,10 +298,18 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;backg
 .round_m .app-game{background:url(../images/icons/app-icons.png) no-repeat left -353px;}
 .round_m .app-vgame{background:url(../images/icons/app-icons.png) no-repeat left -398px;}
 .round_m .app-friend{background:url(../images/icons/app-icons.png) no-repeat left -447px;}
+.round_m .app-lock{background:url(../images/icons/app-icons.png) no-repeat left -543px;}
+.round_m .app-setting{background:url(../images/icons/app-icons.png) no-repeat left -591px;}
+.round_m .app-gift{background:url(../images/icons/app-icons.png) no-repeat left -636px;}
 
 .round02,.round02 .round_l_t,.round02 .round_l_b,.round02 .round_r_b{background-image:url(../images/skin/roundBoxbg02.gif);}
 .round02 .round_m{border-left:1px #E7F0E0 solid;border-right:1px #E7F0E0 solid;background:#F8FCF6;}
 /*圆角*/
+
+/*列表样式*/
+ul.lister01 li{padding-left:13px;line-height:21px;background:url(../images/skin/list-symbol01.png) no-repeat left 9px;color:#7E7F80}
+ul.lister02 li{height:21px;line-height:21px;overflow:hidden}
+/*列表样式*/
 
 /*表格样式*/
 table.table01{background:#E7F0E0;border-collapse:separate;border-spacing:1px;}
@@ -274,8 +319,30 @@ div.table01{border-top:1px #E7F0E0 solid;border-left:1px #E7F0E0 solid;border-ri
 div.table01 td,div.table01 th{border-bottom:1px #E7F0E0 solid;}
 /*表格样式*/
 
-/* tag cloud */
-.css1 { font-size: 1.0em; font-weight: 100; }
-.css2 { font-size: 1.5em; font-weight: 200; }
-.css3 { font-size: 2.0em; font-weight: 300; }
-.css4 { font-size: 2.5em; font-weight: 400; }
+/*页数设计*/
+.pages{height:40px;overflow:hidden}
+.pages a{display:block;float:right;margin:0 5px;padding:0 7px 0 6px;height:18px;line-height:18px;border:1px #E7F0E0 solid;color:#7E7F80}
+.pages a:hover{color:#D63200;}
+.pages a.hover,.pages a.hover:hover{border-color:#fff;font-weight:bold;color:#25700D}
+/*页数设计*/
+
+/*进度条样式*/
+.percent01{display:block;width:211px;height:16px;background:#BBD2AA;overflow:hidden}
+.percent01 *{display:block;width:0%;height:100%;background-image:url(../images/skin/percent01.gif);background-repeat:no-repeat;overflow:hidden;background-position:right -21px;}
+.percent01 .blue span{padding-right:1px;background-position:left top;}
+
+.percent01 .purple{background-position:right -108px}
+.percent01 .purple span{padding-right:1px;background-position:left -86px;}
+
+.percent01 .gold{background-position:right -152px}
+.percent01 .gold span{padding-right:1px;background-position:left -130px;}
+
+.percent01 .red{background-position:right -196px}
+.percent01 .red span{padding-right:1px;background-position:left -174px;}
+
+.percent01 .green{background-position:right -64px}
+.percent01 .green span{padding-right:1px;background-position:left -42px;}
+
+.percent01 .black{background-position:right -240px}
+.percent01 .black span{padding-right:1px;background-position:left -218px;}
+/*进度条样式*

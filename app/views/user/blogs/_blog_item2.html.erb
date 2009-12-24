@@ -1,0 +1,16 @@
+<% blog = blog_item2 %>
+<div class="feed-img-list">
+          <div class="feed-list">
+            <div class="feed-img"><%= avatar blog.poster %><a href="#"></div>
+            <div class="feed-header">
+              <a class="right love-btn" href="#">分享</a>
+              <h3><%= blog_link blog %>></h3>
+              <p><%= profile_link blog.poster %> <%= ftime blog.created_at %></p>
+            </div>
+            <div class="feeds">
+              <p><%= blog_content blog, :length => 20, :omission => '...' %></p>
+            </div>
+            <div class="feeds"><%= link_to "阅读(#{blog.viewings_count})", blog_url(blog) %> | <%= link_to "评论(#{blog.comments_count})", blog_url(blog) %> | <a href="#">分享(0)</a></div>
+          </div>
+        </div>
+

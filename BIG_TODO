@@ -9,3 +9,13 @@
 5. 工会dkp系统
 
 6. 内容管理
+
+7. profile page.. music, customize style
+
+8. setting 应该弄个全局的借口，这样方便作为一个模块开发
+
+9. msn grabber, yahoo talk grabber, mailbox contact list grabber
+
+10. 怎么监控每个功能多少人使用过，每个页面多少人看过
+Answer:
+	应该可以通过一个叫做railsmon的插件监控每个页面多少人看过

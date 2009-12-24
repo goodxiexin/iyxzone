@@ -2,11 +2,15 @@ class User::BlogsController < ApplicationController
 
   layout 'app'
 
-  before_filter :login_required, :setup, :not_draft_required
+  before_filter :login_required, :setup
+
+  before_filter :not_draft_required, :except => [:update]
 
   before_filter :friend_or_owner_required, :only => [:index, :relative]
 
   before_filter :privilege_required, :only => [:show]
+
+  increment_viewing 'blog', :only => [:show]
 
   before_filter :owner_required, :only => [:edit]
 

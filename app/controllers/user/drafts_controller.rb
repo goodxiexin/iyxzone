@@ -1,4 +1,4 @@
-class Blog::DraftsController < ApplicationController
+class User::DraftsController < ApplicationController
 
   layout 'app'
 

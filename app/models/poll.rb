@@ -38,5 +38,11 @@ class Poll < ActiveRecord::Base
     answer_attributes.each { |answer_attribute| answers.build(answer_attribute) unless answer_attribute[:description].blank? }
   end 
 
+  def self.random
+    ids = connection.select_all("SELECT id FROM polls")
+    find(ids[rand(ids.length)]["id"].to_i) unless ids.blank?
+  end
+
+
 end
 

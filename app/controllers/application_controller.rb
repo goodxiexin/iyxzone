@@ -15,4 +15,8 @@ class ApplicationController < ActionController::Base
     send_data validation_image.image, :type => 'image/jpeg', :disposition => 'inline'
   end 
 
+  def user_game_conds
+    {:game_id => current_user.characters.map(&:game_id).uniq}
+  end
+
 end

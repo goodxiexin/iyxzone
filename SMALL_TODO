@@ -1,12 +1,12 @@
 1. friend_tags controller friend_table / auto_complete								DONE
 
-2. photo tag 的auto_complete和friend_tag的重复
+2. photo tag 的auto_complete和friend_tag的重复						其实无所谓	DONE
 
 3. dig bug																														DONE
 
 4. event/poll invitations search??																		DONE
 
-5. 更新 event participation的时候，如果数字超出范围？？
+5. participaton, membership由于token是否还需要检查那些东东
 
 6. game_details 和 area_details的位置？？？														DONE
 
@@ -14,9 +14,9 @@
 
 9. event album																												DONE
 
-10. photo_tag auto_complete_method and friends method 
+10. photo_tag auto_complete_method and friends method									DONE 
 
-11. comments controller: get_commentable => rescue
+11. comments controller: get_commentable => rescue										DONE
 
 12. friend impression不是应该和tags差不多吗
 
@@ -27,6 +27,6 @@
 
 15. character playing or not																					DONE
 
-16. guild/game/profile feed_deliveries
+16. guild/game/profile feed_deliveries.taggable
 
-17. 热门活动和自己游戏有关，热门工会
+17. 热门活动和自己游戏有关，热门工会																	DONE
