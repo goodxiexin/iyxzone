@@ -9,10 +9,6 @@ class User::TagsController < ApplicationController
 	def create
 		@tagging.destroy unless @tagging.nil?
 		@taggable.taggings.create(:tag_id => @tag.id, :poster_id => current_user.id)
-		render :update do |page|
-			page.replace_html 'tag_cloud_head', "好友印象"
-			page.replace_html 'tag_cloud', :partial => 'tag_cloud'
-		end
 	end
 
 	def destroy
@@ -27,6 +23,7 @@ protected
 	def setup
 		if ["create"].include? params[:action]
       @taggable = get_taggable
+      logger.error @taggable
 			@tag = Tag.find_or_create(:name => params[:tag][:name], :taggable_type => @taggable.class.name)
 		elsif ["destroy"].include? params[:action]
 			@tag = Tag.find(params[:id])

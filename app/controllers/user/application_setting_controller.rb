@@ -21,6 +21,8 @@ class User::ApplicationSettingController < ApplicationController
 			render :action => 'event_config', :layout => false
 		when 5
 			render :action => 'guild_config', :layout => false
+    when 6
+      render :action => 'sharing_config', :layout => false
 		end	
 	end
 

@@ -144,6 +144,23 @@ class User < ActiveRecord::Base
 		events & user.events
 	end
 
+  # sharings
+  has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC'
+
+  with_options :class_name => 'Sharing', :foreign_key => 'poster_id', :order => 'created_at DESC' do |user|
+
+    user.has_many :blog_sharings, :conditions => {:shareable_type => 'Blog'}
+
+    user.has_many :video_sharings, :conditions => {:shareable_type => 'Video'}
+
+    user.has_many :link_sharings, :conditions => {:shareable_type => 'Link'}
+
+    user.has_many :photo_sharings, :conditions => {:shareable_type => 'Photo'}
+
+    user.has_many :album_sharings, :conditions => {:shareable_type => 'Album'}
+
+  end
+
   # polls
   has_many :votes, :foreign_key => 'voter_id'
 
@@ -227,6 +244,8 @@ class User < ActiveRecord::Base
 
 		user.has_many :all_guild_related_feed_deliveries, :conditions => {:item_type => ['Guild', 'Membership']}	
 
+    user.has_many :sharing_feed_deliveries, :conditions => {:item_type => 'Sharing'}
+
 	end
 
 	acts_as_resource_feeds
@@ -260,6 +279,8 @@ class User < ActiveRecord::Base
 		user.has_many :all_album_related_feed_items, :through => :all_album_related_feed_deliveries
 
 		user.has_many :personal_album_feed_items, :through => :personal_album_feed_deliveries
+
+    user.has_many :sharing_feed_items, :through => :sharing_feed_deliveries
 	
 	end
 

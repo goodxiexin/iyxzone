@@ -4,6 +4,7 @@ class CreatePhotos < ActiveRecord::Migration
       t.string :type
       t.integer :digs_count, :default => 0
       t.integer :tags_count, :default => 0
+      t.integer :sharings_count, :default => 0
       t.integer :comments_count, :default => 0
       t.integer :album_id
 			t.integer :game_id

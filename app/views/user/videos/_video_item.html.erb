@@ -2,6 +2,7 @@
   <span class='title'><%= video_link video_item %></span>
   <span class='option'>
     <%= ftime video_item.created_at %>
+    <%= facebox_link "分享", new_sharing_url(:shareable_type => 'Video', :shareable_id => video_item.id, :id => @user.id) %>
     <% if @user == current_user %>
       <%= link_to "编辑", edit_video_url(video_item) %>
       <%= facebox_confirm 'x', video_url(video_item), {:msg => "你确定要删除这个视频吗?", :method => :delete} %>

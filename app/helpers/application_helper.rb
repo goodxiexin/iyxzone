@@ -177,4 +177,40 @@ module ApplicationHelper
     return html_code
   end
 
+  def sharing_link sharing
+    shareable = sharing.shareable
+    url = ""
+    case shareable.class.name
+    when "Blog"
+      url = blog_url(shareable)
+    when "Video"
+      url = video_url(shareable)
+    when 'EventAlbum'
+      url = event_album_url(shareable)
+    when 'GuildAlbum'
+      url = guild_album_url(shareable)
+    when 'PersonalAlbum'
+      url = personal_album_url(shareable)
+    when 'AvatarAlbum'
+      url = avatar_album_url(shareable)
+    when 'EventPhoto'
+      url = event_photo_url(shareable)
+    when 'GuildPhoto'
+      url = guild_photo_url(shareable)
+    when 'Avatar'
+      url = avatar_url(shareable)
+    when 'PersonalPhoto'
+      url = personal_photo_url(shareable)
+    end
+    link_to sharing.title, url
+  end
+
+  def gender user
+    if user.gender == 'male' 
+      "男"
+    else
+      "女"
+    end
+  end
+
 end

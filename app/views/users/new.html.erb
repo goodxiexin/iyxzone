@@ -1,85 +1,85 @@
-<html>
-<head>
-  <%= stylesheet_link_tag 'common' %>
-  <%= stylesheet_link_tag 'home' %>
-  <%= stylesheet_link_tag 'rating' %>
-  <%= javascript_include_tag :defaults %>
-  <%= javascript_include_tag 'iyxzone' %>
-  <%= javascript_include_tag 'register' %>
-  <%= javascript_include_tag 'facebox' %>
-  <%= javascript_include_tag 'event.simulate' %>
-  <%= javascript_include_tag 'game' %>
-</head>
-<body>
-  <div id="container">
-　　<div id="header">
-			<div id='menu'>
-				<%= link_to 'register', signup_url %> |
-				<%= link_to 'login', login_url %> |
-				<%= link_to_function "bookmark", "bookmark()" %> |
-				<%= link_to_function "homepage", "homepage()" %> |
-				<%= link_to 'help'%>
-			</div>
-　　</div>
-    <div id='containter'>
-　　  <div id="left">
-        <% if flash[:notice] %>
-          <div id='notice'><%= flash[:notice] %></div>
-        <% end -%>
-        <% if flash[:error] %>
-          <div id='error'><%= flash[:error] %></div>
-        <% end -%>
+<%= stylesheet_link_tag 'common' %>
+<%= stylesheet_link_tag 'home' %>
+<%= stylesheet_link_tag 'rating' %>
+<%= javascript_include_tag 'register' %>
+<%= javascript_include_tag 'game' %>
+
+<div class="regist-box">
+  <div class="regist-content">
+    <div class="logo png">欢迎您！这里是您的互动家园！</div>
+      <div class="help">
+        <div class="prompt">快速注册</div>请写您的基本信息，这样能帮助您找到更多身边的战友。
       </div>
-　    <div id="middle">
-<% form_for :user, :html => {:id => 'register_form'} do |f| -%>
-<p>
-  <label>Login</label><br/>
-  <%= f.text_field :login, :onblur => "Iyxzone.Register.Manager.validateLogin()", :onfocus => "Iyxzone.Register.Manager.showLoginRequirement();" %>
-  <a id='login_info'></a>
-</p>
-
-<p>
-  <label>Email</label><br/>
-  <%= f.text_field :email, :onblur => "Iyxzone.Register.Manager.validateEmail()", :onfocus => "Iyxzone.Register.Manager.showEmailRequirement();" %>
-  <a id='email_info'></a>
-</p>
-
-<p>
-  <%= f.radio_button 'gender', 'male' %> male
-  <%= f.radio_button 'gender', 'female' %> female
-</p>
-
-<p>
-  <label for="password">Password</label><br/>
-  <%= f.password_field :password, :onblur => "Iyxzone.Register.Manager.validatePassword()", :onfocus => "Iyxzone.Register.Manager.showPasswordRequirement();"%>
-  <a id='password_info'></a>
-</p>
-
-<p>
-  <label for="password_confirmation">Confirm Password</label><br/>
-  <%= f.password_field :password_confirmation, :onblur => "Iyxzone.Register.Manager.validatePasswordConfirmation()", :onclick => "Iyxzone.Register.Manager.showPasswordConfirmRequirement()" %>
-  <a id='password_confirmation_info'></a>
-</p>
-
-<p> Game Characters: </p>
-<h4>游戏信息, 你必须添加你玩过的游戏角色（至少一个）以完成注册</h4>
-<div id='character_info'>
-<%= link_to_function '添加游戏角色', "Iyxzone.Register.Manager.newCharacter();" %>
-  <ul id='characters'>
-  </ul>
+      <div class="sperator"></div>
+      <% form_for :user, :html => {:id => 'register_form'} do |f| -%>
+        <div class="formcontent">
+          <div class="rows s_clear">
+            <div class="fldid"><label for="mail">邮箱：</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= f.text_field :email, :onblur => "Iyxzone.Register.Manager.validateEmail()", :onfocus => "Iyxzone.Register.Manager.showEmailRequirement();" %></div>
+            </div>
+            <div class="" id='email_info'></div>
+          </div>
+          <div class="rows s_clear">
+            <div class="fldid"><label for="mail">昵称：</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= f.text_field :login, :onblur => "Iyxzone.Register.Manager.validateLogin()", :onfocus => "Iyxzone.Register.Manager.showLoginRequirement();" %></div>
+            </div>
+            <div class="" id='login_info'></div>
+          </div>
+          <div class="rows s_clear">
+            <div class="fldid"><label for="mail">密码：</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= f.password_field :password, :onblur => "Iyxzone.Register.Manager.validatePassword()", :onfocus => "Iyxzone.Register.Manager.showPasswordRequirement();"%></div>
+            </div>
+            <div class="" id='password_info'></div>
+          </div>
+          <div class="rows s_clear">
+            <div class="fldid"><label for="mail">确认密码：</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= f.password_field :password_confirmation, :onblur => "Iyxzone.Register.Manager.validatePasswordConfirmation()", :onclick => "Iyxzone.Register.Manager.showPasswordConfirmRequirement()" %></div>
+            </div>
+            <div class="" id='password_confirmation_info'></div>
+          </div>
+          <div class="rows s_clear">
+            <div class="fldid"><label>性别：</label></div>
+            <div class="fldrd"><%= f.radio_button 'gender', 'male' %></div>
+            <div class="fldrdvalue"><label for="man">男</label></div>
+            <div class="fldrd"><%= f.radio_button 'gender', 'female' %></div>
+            <div class="fldrdvalue"><label for="woman">女</label></div>
+          </div>
+          <div class="rows s_clear">
+            <div class="fldid"></div>
+            <div class="fldvalue"></div>
+          </div>
+          <div class="help">
+            <div class="prompt">游戏信息</div>你必须添加你玩过的游戏角色（至少一个）以完成注册
+          </div>
+          <div class='sperator'></div>
+          <div id='character_info'>
+            <%= link_to_function '添加游戏角色', "Iyxzone.Register.Manager.newCharacter();" %>
+            <ul id='characters'></ul>
+          </div><div id='info'></div>
+          <div class="seperator"></div>
+          <div class="btn-rows">
+            <table class="center">
+              <tr><td><%= button_to_function '', "Iyxzone.Register.Manager.submit()", :type => "submit", :class => "registbtn png" %></td></tr>
+            </table>
+          </div>
+          <div class="rows">
+            <table class="center">
+              <tr><td>
+                <div class="fldcb"><input id="allow" type="checkbox" value="ok" /></div>
+                <div class="fldvalue"><label for="allow" class="simple gray">同意ady3用户发布<a href="#">信息协议</a></label></div>
+              </td></tr>
+            </table>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
-<% end -%>
-
-<%= link_to_function '注册', "Iyxzone.Register.Manager.submit()" %>
 
 <%= javascript_tag "
   Iyxzone.Register.Manager.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '')}, 'character_game_id', 'character_area_id', 'character_server_id', 'character_race_id', 'character_profession_id', {});
 " %>
-<div id='info'></div>
-		  </div>
-    </div>
-　　<div id="footer">
-      Dayday3 Group: xiahong gao, xin xie
-　　</div>
-</div>
-</body>

@@ -1,7 +1,10 @@
 Iyxzone.Video = {
   version: '1.0',
   author: ['高侠鸿'],
-  Builder: {}
+  Builder: {},
+  play: function(videoID, videoLink){
+     $('video_' + videoID).innerHTML = videoLink;
+  }
 };
 
 Object.extend(Iyxzone.Video.Builder, {
@@ -40,9 +43,4 @@ Object.extend(Iyxzone.Video.Builder, {
     }
   },
 
-  play: function(videoID, videoLink){
-     $('video_' + videoID).innerHTML = videoLink;
-  }
-
 });
-

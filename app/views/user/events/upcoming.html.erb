@@ -17,13 +17,15 @@
 			<% end %>
 		</ul>
   </div>
-	<div>
-		<%= link_to "#{get_subject @user}发起的", events_url(:id => @user.id) %>
-		<%= link_to "#{get_subject @user}要参加的", upcoming_events_url(:id => @user.id) %>
-		<%= link_to "#{get_subject @user}参加过的", participated_events_url(:id => @user.id) %>
-	</div>
   <div class="piclist-rows" id='events'>
-		<%= render :partial => 'event_items', :object => @events %>
+	  <div class="nav-link">
+      <ul class="s_clear">
+        <li><%= link_to "<span>#{get_subject @user}发起的</span>", events_url(:id => @user.id) %></li>
+        <li class='hover'><%= link_to "<span>#{get_subject @user}要参加的</span>", upcoming_events_url(:id => @user.id) %></li>
+        <li><%= link_to "<span>#{get_subject @user}参加过的</span>", participated_events_url(:id => @user.id) %></li>
+      </ul>
+    </div>
+	  <%= render :partial => 'event_items', :object => @events %>
   </div>
 </div>
 </div></div>

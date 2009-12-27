@@ -1,2 +1,0 @@
-page.insert_html :top, "comments", :partial => 'comment', :object => @comment
-page << "$('comment_content').value = '';"

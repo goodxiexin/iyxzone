@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new
     @games = Game.find(:all, :order => "pinyin ASC")
+    render :action => 'new', :layout => 'root'
   end
 
   def create

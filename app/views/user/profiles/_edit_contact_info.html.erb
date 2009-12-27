@@ -7,6 +7,6 @@
     <%= f.label 'website', '个人网站' %>
     <%= f.text_field 'website', :size => 20 %><br/>
   </div>
-  <%= button_to_function '更新', "Iyxzone.Profile.Editor.updateContactInfo(#{@profile.id});" %>
+  <%= button_to_function '更新', "Iyxzone.Profile.Editor.updateContactInfo(#{@profile.id}, this);" %>
   <%= link_to_function '取消', "Iyxzone.Profile.Editor.cancelEditContactInfo();", :class => 'cancel-button' %>
 <% end %>

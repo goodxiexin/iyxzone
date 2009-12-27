@@ -202,4 +202,8 @@ class CommentObserver < ActiveRecord::Observer
 	def after_game_comment_create comment
 	end
 
+  def after_sharing_comment_create comment
+    # nothing to do right now
+  end
+
 end

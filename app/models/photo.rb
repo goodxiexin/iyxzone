@@ -6,6 +6,8 @@ class Photo < ActiveRecord::Base
 
 	belongs_to :album, :counter_cache => :photos_count
 
+  acts_as_shareable
+
   acts_as_commentable :order => 'created_at ASC'
 
   acts_as_diggable

@@ -73,7 +73,18 @@ Object.extend(Iyxzone.Comment, {
         $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
       }
     });
+  },
+
+  toggleBox: function(commentableType, commentableID){
+    var box = $(commentableType + '_comment_box_' + commentableID);
+    if(!box.visible()){
+      Effect.BlindDown(box);
+      $(commentableType + '_comment_content_' + commentableID).focus();
+    }else{
+      Effect.BlindUp(box);
+    }
   }
+
 });
 
 Iyxzone.WallMessage = Class.create({});
@@ -94,7 +105,7 @@ Object.extend(Iyxzone.WallMessage, {
 
   save: function(wallType, wallID, button){
     if(Iyxzone.WallMessage.validate($('comment_content'))){
-      new Ajax.Request('/wall_messages?wall_type=' + wallType + '&wall_id=' + wallID, {
+      new Ajax.Request('/' + wallType + 's/' + wallID + '/wall_messages', {
         method: 'post',
         parameters: $('wall_message_form').serialize(),
         onLoading: function(){

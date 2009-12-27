@@ -2,7 +2,19 @@
   <%= render :partial => '/app_menu' %>
 <% end %>
 
-<%= render :partial => 'video/menu' %>
+<% subject = get_subject @user %>
+
+<%= link_to "热门视频", hot_videos_url(:id => @user.id) %> |
+<%= link_to "最新视频", recent_videos_url(:id => @user.id) %> |
+<%= link_to "#{subject}的视频", videos_url(:id => @user.id) %> |
+<% if @user == current_user %> 
+  <%= link_to "好友视频", friends_videos_url %> |
+<% end %> 
+<%= link_to "#{subject}的相关视频", relative_videos_url(:id => @user.id)%> |
+<% if @user == current_user %>
+  <%= link_to "新视频", new_video_url %>
+<% end %>
+
 
 <div class='prev-next'>
 <%= "共#{@user.videos.count}篇视频" %>
@@ -14,6 +26,7 @@
   <div class='title'>
     <h3 style="width: 75%;"><%= @video.title %><span class='meta'><%= ftime @video.created_at %></span></h3>
     <div class='option'>
+      <%= facebox_link "分享", new_sharing_url(:shareable_type => 'Video', :shareable_id => @video.id, :id => @user.id) %>
       <% if @user == current_user %>
       <%= link_to "编辑", edit_video_url(@video) %>
       <%= facebox_confirm "删除", video_url(@video), {:msg => '你确定要删除这个视频吗', :method => :delete} %>

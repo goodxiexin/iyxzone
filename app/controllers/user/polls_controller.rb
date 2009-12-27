@@ -53,7 +53,7 @@ class User::PollsController < ApplicationController
 
   def edit
     if params[:type].to_i == 0
-      render :action => 'edit_end_date', :layout => false
+      render :action => 'edit_deadline', :layout => false
     else
       render :action => 'edit_summary', :layout => false
     end
@@ -63,7 +63,6 @@ class User::PollsController < ApplicationController
     if @poll.update_attributes(params[:poll])
       render :update do |page|
         page << "facebox.close();"
-        page << "$('end_date').innerHTML = '#{@poll.end_date.strftime("%Y-%m-%d")}';"
       end
     else
       render :update do |page|

@@ -14,6 +14,8 @@ class User::ProfilesController < ApplicationController
 
   def show
 		@comments = @profile.comments.paginate :page => params[:page], :per_page => 10
+    @can_reply = @profile.user == current_user || @profile.user.friends.include?(current_user) || (@profile.user.privacy_setting.leave_wall_message == 1)
+    @can_delete = (current_user == @profile.user) 
     @tagging = @profile.taggings.find_by_poster_id(current_user.id)
 		@taggable = @user.friends.include?(current_user) && (@tagging.nil? || @tagging.created_at < 1.week.ago)
 		@blogs = @user.blogs[0..2]

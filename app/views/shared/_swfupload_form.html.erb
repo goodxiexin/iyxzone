@@ -1,4 +1,11 @@
-<% photo_controller = "/user/#{@album.class.name.underscore.split('_').first}/photos" %>
+<% if @album.class.name == 'PersonalAlbum' %>
+  <% photo_controller = '/user/photos' %>
+<% elsif @album.class.name == 'EventAlbum' %>
+  <% photo_controller = '/user/events/photos' %>
+<% elsif @album.class.name == 'GuildAlbum' %>
+  <% photo_controller = '/user/guilds/photos' %>
+<% end %>
+
 <script type="text/javascript" charset="utf-8">
 var swfu;
 window.onload = function(){

@@ -17,30 +17,35 @@
       </div>
 			<div class="friend-box">
 				<div class="box04 friend-one-search" id='search_panel'>
-					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :onsumbit => "return user_searcher.validate_user();", :style => "display:none" do %>
+					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :onsumbit => "return Iyxzone.Search.validateUserForm();", :style => "display:none" do %>
 						<div class="rows s_clear">
               <div class="fldvalue">
 								<div class="textfield"><%= text_field_tag 'key', '好友名字', :onclick => "this.clear();" %></div>
               </div>
               <div class="fldbtn">
-                <span class="button"><span><button type="submit" onclick="Iyxzone.Search.searchUsers(this)">查找</button></span></span>
+                <span class="button"><span><button type="submit">查找</button></span></span>
               </div>
               <div class='link'><%= link_to_function "找游戏角色", "Iyxzone.Search.showCharacterForm()" %></div>
             </div>
 					<% end %>
           <div id='info'></div>
-					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form' do %>
+					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :onsubmit => "return Iyxzone.Search.validateCharacterForm();" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
                 <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', params[:key], :onclick => "this.clear();" %></div></div>
                 <div class="fldbtn">
-                  <span class="button"><span><button type="submit" onclick="Iyxzone.Search.searchCharacters(this)">查找</button></span></span>
+                  <span class="button"><span><button type="submit">查找</button></span></span>
                 </div>
                 <div class="link"><%= link_to_function "找好友", "Iyxzone.Search.showUserForm()" %></div>
                 <span> <%= link_to_function "高级", "Iyxzone.Search.toggleCharacterOptions()" %> </span>
               </div>
             </div>
-            <div id='character_options' style="display:none">
+            <% if @game.nil? %>
+              <% style = "display:none" %>
+            <% else %>
+              <% style = "" %>
+            <% end %>
+            <div id='character_options' style="<%= style %>">
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '游戏: ' %></div>
               <div class='fldvalue'>
@@ -50,13 +55,13 @@
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务区: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :area, :id, [], :id, :name, {:prompt => '---'} %>
+              <%= collection_select :area, :id, @areas, :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务器: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :server, :id, [], :id, :name, {:prompt => '---'} %>
+              <%= collection_select :server, :id, @servers, :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             </div>

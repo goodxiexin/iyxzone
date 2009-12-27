@@ -1,10 +1,17 @@
 class User::WallMessagesController < ApplicationController
 
+  layout 'app'
+
   before_filter :login_required, :setup
 
   def create
     @message = @wall.comments.build(params[:comment].merge({:poster_id => current_user.id}))
-    unless @message.save
+    if @message.save
+      render :update do |page|
+        page.insert_html :top, "comments", :partial => 'user/wall_messages/wall_message', :object => @message
+        page << "$('comment_content').value = '';"
+      end
+    else
       render :update do |page|
         page << "error('发生错误');"
       end
@@ -24,8 +31,7 @@ class User::WallMessagesController < ApplicationController
   end
 
   def index
-    @messages = @wall.comments
-    render :partial => 'wall_message', :collection => @messages
+    @messages = @wall.comments.paginate :page => params[:page], :per_page => 20
   end
 
 protected
@@ -33,18 +39,12 @@ protected
   def setup
     if ['index', 'create'].include? params[:action]
       @wall = get_wall
+      @can_view = can_view?
+      @can_reply = can_reply?
+      @can_delete = can_delete?
     elsif ['destroy'].include? params[:action]
       @message = Comment.find(params[:id])
     end
-  rescue
-    not_found
-  end
-
-  def get_wall
-    @klass = params[:wall_type].camelize.constantize
-    @klass.find(params[:wall_id])
-  rescue
-    not_found
   end
 
 end

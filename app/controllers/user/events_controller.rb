@@ -41,6 +41,8 @@ class User::EventsController < ApplicationController
     @participation = @event.participations.find_by_participant_id(current_user.id)
     @album = @event.album
     @comments = @event.comments.paginate :page => params[:page], :per_page => 10
+    @can_reply = !(@participation.nil? || !@participation.is_authorized?)
+    @can_delete = (current_user == @event.poster)
 		render :action => 'show', :layout => 'app2'
   end
 

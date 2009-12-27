@@ -5,6 +5,7 @@ class CreateBlogs < ActiveRecord::Migration
       t.integer :game_id
       t.string :title, :limit => 64
       t.text :content, :limit => 100000
+      t.integer :sharings_count, :default => 0
       t.integer :digs_count, :default => 0
       t.integer :comments_count, :default => 0
       t.integer :tags_count, :default => 0

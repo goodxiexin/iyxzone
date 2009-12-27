@@ -1,0 +1,8 @@
+1. character validation js	DONE
+
+3. sharing 周末要做完
+
+9. guild/game/profile feed_deliveries.	DONE
+	怎么在每个wall_message, comment, feed_delivery里判断要怎么才能删除？目前有3种方法，在helper里if/else判断。@can_view, @can_delete. 3. code block
+
+10. sharing, dig, tag routes的时候都是single level的，因此所有的相册都可以保存为type = Album，但是feed item 和 notice为什么要分EventALbum,还是GuildAlbum呢

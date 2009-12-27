@@ -54,9 +54,9 @@
 	</div>
 	<div id='tag_cloud'> 
   <% if @user == current_user %>
-    <%= render :partial => 'profile/tags/tag_cloud' %>
+    <%= render :partial => 'user/profiles/tags/tag_cloud' %>
   <% elsif @taggable %>
-    <%= render :partial => 'profile/tags/profile_tag' %>
+    <%= render :partial => 'user/profiles/tags/profile_tag' %>
     <% form_remote_for :tag, :url => profile_tags_url(@profile) do |f| %>
       都不贴切？自己想个<br/>
       <%= f.text_field 'name' %>
@@ -150,8 +150,13 @@
 	</div>
 </div>
 
+<% if @can_reply %>
+  <%= render :layout => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user} %>
+<% end %>
 <% if wall_viewable? %>
-  <%= render :layout => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user, :with_comments => true} %>
+  <div class='feed-box' id='comments'>
+    <%= render :partial => 'user/wall_messages/wall_message', :collection => @comments %>
+  </div>
 <% end %>
 
 </div>

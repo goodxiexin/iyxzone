@@ -37,7 +37,8 @@ Object.extend(Iyxzone.Register.Manager, {
     first = login.value[0];
     if((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')){
       if(login.value.match(/[A-Za-z0-9\_]+/)){
-        loginInfo.innerHTML = '合法';
+        loginInfo.innerHTML = '';
+        loginInfo.addClassName('fldstatus');
         return true;
       }else{
         loginInfo.innerHTML = '只允许字母和数字';
@@ -68,7 +69,8 @@ Object.extend(Iyxzone.Register.Manager, {
         method: 'get',
         onSuccess: function(transport){
           if(transport.responseText == 'yes'){
-            emailInfo.innerHTML = '合法';
+            emailInfo.innerHTML = '';
+            emailInfo.addClassName('fldstatus');
           }else{
             emailInfo.innerHTML = '该邮箱已被注册';
           }
@@ -171,6 +173,11 @@ Object.extend(Iyxzone.Register.Manager, {
       if(gameDetails.no_servers){
         tip("由于游戏数量庞大，很多游戏已经停服，我们没有把所有游戏统计完成。这个游戏的资料就还不完全，请您在左边的意见／建议中告诉我们您所在游戏的所在服务器，我们会以最快速度为您添加。对您带来得不便，我们道歉。");
         return false;
+      }else{
+        if($('character_server_id').value == ''){
+          info.innerHTML = '没有选择服务器';
+          return false;
+        }
       }
       if(!gameDetails.no_areas && $('character_area_id').value == ''){
         info.innerHTML = '没有选择区域，如有问题，请看提示';
@@ -362,6 +369,11 @@ Object.extend(Iyxzone.Register.Manager, {
 
     if(this.characters.size() == 0){
       error('至少要有1个游戏角色');
+      return;
+    }
+
+    if(!$('allow').checked){
+      error('必须同意才能注册');
       return;
     }
 

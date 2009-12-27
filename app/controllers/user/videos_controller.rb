@@ -46,7 +46,7 @@ class User::VideosController < ApplicationController
       render :action => 'new'
     end
 	rescue ActsAsVideo::NotRecognizedURL
-		render :action => 'new'
+    render :action => 'new'
   end
 
   def show

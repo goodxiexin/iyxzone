@@ -6,6 +6,7 @@
   <div class="tab tab01">
     <% if @user == current_user %>
     <div class="right">
+      <%= facebox_link "分享", new_sharing_url(:shareable_type => 'Album', :shareable_id => @album.id) %>
       <%= link_to "上传照片", new_personal_photo_url(:album_id => @album.id)  %>
       <%= link_to "新建相册", new_personal_album_url, :rel => 'facebox' %>
     </div>

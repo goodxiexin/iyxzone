@@ -28,9 +28,16 @@
           <li><span><%= link_to "草稿箱", drafts_url %></span></li>
         </ul>
       </div>
-      <div class="feed-box01">
-        <div class="page">共<%= @user.blogs_count %>篇</div>
-        <%= render :partial => 'blog_item', :collection => @blogs %>
+      <div class="appcontent05">
+        <div class="myblog">
+          <h4 class="gray">共<%= @user.blogs_count %>篇日志</h4>
+          <div class="myblog-table">
+            <table cellpadding="0">
+              <%= render :partial => 'blog_item', :collection => @blogs %>
+            </table>
+          </div>
+        </div>
+        <%= will_paginate @blogs %>
       </div>
     </div>
   </div></div>

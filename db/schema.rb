@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091223160309) do
+ActiveRecord::Schema.define(:version => 20091225062455) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.integer  "cover_id"
     t.string   "title"
     t.text     "description"
+    t.integer  "sharings_count", :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "uploaded_at"
     t.datetime "created_at"
@@ -31,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.integer  "game_id"
     t.string   "title",          :limit => 64
     t.text     "content",        :limit => 16777215
+    t.integer  "sharings_count",                     :default => 0
     t.integer  "digs_count",                         :default => 0
     t.integer  "comments_count",                     :default => 0
     t.integer  "tags_count",                         :default => 0
@@ -263,6 +265,11 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.datetime "updated_at"
   end
 
+  create_table "links", :force => true do |t|
+    t.string  "url"
+    t.integer "sharings_count", :default => 0
+  end
+
   create_table "mails", :force => true do |t|
     t.integer  "sender_id"
     t.integer  "recipient_id"
@@ -339,6 +346,7 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.string   "type"
     t.integer  "digs_count",     :default => 0
     t.integer  "tags_count",     :default => 0
+    t.integer  "sharings_count", :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "album_id"
     t.integer  "game_id"
@@ -390,8 +398,9 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.integer  "game_id"
     t.text     "description"
     t.text     "explanation"
-    t.integer  "max_multiple"
-    t.date     "end_date"
+    t.integer  "max_multiple",   :default => 1
+    t.boolean  "no_deadline",    :default => true
+    t.date     "deadline"
     t.text     "summary"
     t.integer  "privilege",      :default => 2
     t.integer  "digs_count",     :default => 0
@@ -445,11 +454,15 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
   end
 
   create_table "sharings", :force => true do |t|
+    t.string   "title"
+    t.text     "reason"
+    t.string   "link"
     t.integer  "shareable_id"
     t.string   "shareable_type"
     t.integer  "poster_id"
+    t.integer  "digs_count",     :default => 0
+    t.integer  "comments_count", :default => 0
     t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "statuses", :force => true do |t|
@@ -534,6 +547,7 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.string   "video_url"
     t.string   "embed_html"
     t.string   "thumbnail_url"
+    t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "tags_count",     :default => 0

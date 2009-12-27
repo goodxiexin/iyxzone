@@ -30,6 +30,8 @@ class User::GamesController < ApplicationController
     @tagging = @game.taggings.find_by_poster_id(current_user.id)
     @taggable = @tagging.nil? || (@tagging.created_at < 1.week.ago) || false
     @comments = @game.comments.paginate :page => 1, :per_page => 10
+    @can_reply = true
+    @can_delete = false
   end
 
   def hot
@@ -43,6 +45,31 @@ class User::GamesController < ApplicationController
     @remote = {:update => 'beta_games_list', :url => {:action => 'beta'}}
     render :action => 'beta', :layout => false
   end
+
+    # ugly ..
+  # how to fix it?? 
+  def game_details
+    if current_user.nil? # so, in register page
+      @rating = Rating::DEFAULT
+    else
+      @rating = @game.find_rating_by_user(current_user)
+      if @rating.nil?
+        @rating = Rating::DEFAULT
+      else
+        @rating = @rating.rating
+      end
+    end
+    if @game.no_areas
+      render :json => {:no_areas => true, :no_servers => @game.no_servers, :no_races => @game.no_races, :no_professions => @game.no_professions, :servers => @game.servers, :professions => @game.professions, :races => @game.races, :rating => @rating }
+    else
+      render :json => {:no_areas => false, :no_servers => @game.no_servers, :no_races => @game.no_races, :no_professions => @game.no_professions, :areas => @game.areas, :professions => @game.professions, :races => @game.races, :rating => @rating }
+    end
+  end
+
+  def area_details
+    render :json => @area.servers
+  end
+
 
 protected
 

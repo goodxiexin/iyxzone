@@ -55,20 +55,14 @@ Iyxzone.Poll.Builder = {
       return false;
     }
 
-    var inputs = $$('input');
-    var cnt = 0;
-    for(var i=0;i<inputs.length;i++){
-      if(inputs[i].type == 'text' && inputs[i].readAttribute('id') == 'poll_answers__description' && inputs[i].value != ''){
-        cnt++;
-      }
-    }
+    var cnt = this.countAnswers(false);
     if(cnt < 2){
       error('至少要有2个选项');
       return false;
     }
-
-    var endDate = $('poll_end_date');
-    if(endDate.value == ''){
+    
+    var endDate = $('poll_deadline');
+    if($('poll_no_deadline_false').checked && endDate.value == ''){
       error('结束日期不能为空');
       return false;
     }
@@ -99,9 +93,83 @@ Iyxzone.Poll.Builder = {
     $('explanation').toggle();
   },
 
+  toggleAdvancedOptions: function(){
+    $('advanced_options').toggle();
+  },
+
+  showMaxMultiple: function(){
+    $('max_multiple_select').show();
+  },
+
+  hideMaxMultiple: function(){
+    $('max_multiple_select').hide();
+  },
+
+  showEndDate: function(){
+    $('deadline_select').show();
+  },
+
+  hideEndDate: function(){
+    $('deadline_select').hide();
+  },
+
+  countAnswers: function(allowEmpty){
+    var inputs = $$('input');
+    var cnt = 0;
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'text' && inputs[i].readAttribute('id') == 'poll_answers__description'){
+        if(allowEmpty)
+          cnt++;
+        else if(inputs[i].value != '')
+          cnt++;
+      }
+    }
+    return cnt;
+  },
+
+  changeMaxMultiple: function(){
+    var selector = $('max_multiple_select').childElements()[0];
+    $('max2').value = selector.value;
+  },
+  
   removeAnswer: function(link){
+    var cnt = this.countAnswers(true);
+    if(cnt <= 2){
+      error('至少要有2个选项，不能再删除了');
+      return;
+    }
     link.up().remove();
+    var maxSelector = $('max_multiple_select').childElements()[0];
+    var originValue = maxSelector.value;
+    maxSelector.innerHTML = '';
+    if(originValue > cnt - 1){
+      originValue = cnt - 1;
+    }
+    for(var i=0;i<cnt-2;i++){
+      var html = '<option value=' + (i+2);
+      if(i+2 == originValue){
+        html += ' selected="selected"';
+        $('max2').value = originValue;
+      }
+      html += '>最多选' + (i+2) + '项</option>';
+      maxSelector.innerHTML += html;
+    }
+  },
+
+  incrementMaxSelector: function(){
+    var cnt = this.countAnswers(true);
+    var maxSelector = $('max_multiple_select').childElements()[0];
+    var originValue = maxSelector.value;
+    maxSelector.innerHTML = '';
+    for(var i=0;i<cnt-1;i++){
+      var html = '<option value=' + (i+2);
+      if(i+2 == originValue){
+        html += ' selected="selected"';
+        $('max2').value = originValue;
+      }
+      html += '>最多选' + (i+2) + '项</option>';
+      maxSelector.innerHTML += html;
+    }
   }
 
 };
-

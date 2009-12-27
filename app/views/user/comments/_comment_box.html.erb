@@ -19,12 +19,11 @@ parameters:
         </div>
         <div class="rows s_clear">
           <span class="button"><span><button type="button" onclick="Iyxzone.Comment.save('<%= type %>', <%= commentable.id %>, this)">发表</button></span></span>
-          <span class="button button-gray"><span><button type="button" onclick="Iyxzone.Comment.hide('<%= type %>', <%= commentable.id %>)" >取消</button></span></span>
+          <span class="button button-gray"><span><button type="button" onclick="Iyxzone.Comment.hideForm('<%= type %>', <%= commentable.id %>)" >取消</button></span></span>
           <%= emotion_link "#{type}_comment_content_#{commentable.id}" %>
         </div>
       <% end %>
     </div>
-  </div>
 </div>
 
 <% if params[:reply_to] %>

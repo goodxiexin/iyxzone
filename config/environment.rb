@@ -35,7 +35,8 @@ Rails::Initializer.run do |config|
 		:poll_observer, :poll_feed_observer, :vote_counter_observer, :vote_feed_observer, :poll_invitation_observer, # poll
 		:guild_observer, :guild_feed_observer, :membership_feed_observer, :membership_observer,
 		:post_counter_observer,
-		:cover_observer, :avatar_feed_observer, :personal_album_observer
+		:cover_observer, :avatar_feed_observer, :personal_album_observer,
+    :sharing_feed_observer
 
 	# reset mailer path to app/mailers
 	config.load_paths += %W(#{RAILS_ROOT}/app/mailers)
