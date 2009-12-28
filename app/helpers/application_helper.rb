@@ -185,6 +185,8 @@ module ApplicationHelper
       url = blog_url(shareable)
     when "Video"
       url = video_url(shareable)
+    when "Link"
+      url = '#'
     when 'EventAlbum'
       url = event_album_url(shareable)
     when 'GuildAlbum'

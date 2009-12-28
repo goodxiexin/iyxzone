@@ -9,9 +9,11 @@ protected
   end
 
   def can_view?
-    true
+    @participation = @wall.participations.find_by_participant_id(current_user.id)
+    return true
   end
 
+=begin
   def can_reply?
     @participation = @wall.participations.find_by_participant_id(current_user.id)
     !@participation.nil? and @participation.is_authorized?
@@ -20,5 +22,6 @@ protected
   def can_delete?
     @wall.poster == current_user
   end
+=end
 
 end

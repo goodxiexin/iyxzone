@@ -15,7 +15,6 @@ class Sharing < ActiveRecord::Base
   named_scope :recent, :conditions => ["created_at >?", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
 
   def validate_on_create
-    return if shareable_type == 'Link'
     if shareable.shared_by? poster
       errors.add_to_base('已经分享过了')
     end

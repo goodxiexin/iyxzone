@@ -16,6 +16,7 @@ protected
     not_found 
   end
 
+=begin
   def can_reply?
     current_user == @wall.user || @wall.user.friends.include?(current_user) 
   end
@@ -23,5 +24,5 @@ protected
   def can_delete?
     @wall.user == current_user
   end
-
+=end
 end

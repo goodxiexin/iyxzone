@@ -8,7 +8,8 @@
     </div>
     <div>
       <h3><%= sharing_link link_sharing %></h3>
-      <p><%= link_to link.url, sharing_url(link_sharing) %></p>
+      <p><%= link_to link.url, sharing_url(link_sharing), :popup => true %></p>
+      <p><%= link_sharing.reason %></p>
       <p class="green"><%= link_to_function "评论", "Iyxzone.Comment.toggleBox('sharing', #{link_sharing.id})" %>(<%= link_sharing.comments_count %>)-<%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => link.id) %><span>(<%= link.sharings_count %>)</span></a> -<%= link_to "更多分享", sharings_url(:id => link.first_sharer.id) %></p>
     </div>
     <div id="sharing_comment_box_<%= link_sharing.id %>" style="display:none">

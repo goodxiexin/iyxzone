@@ -29,7 +29,7 @@
 										<div id="mcStatus" class="textfield"><%= f.text_field :content %></div>
                   </div>
                   <div class="fldbtn">
-										<span class="button"><span><%= button_to_function '发布', "Iyxzone.Status.Builder.save(this)" %></span></span>
+										<span class="button"><span><button type='submit' onclick="Iyxzone.Status.Builder.save(this)">发布</button></span></span>
                   </div>
                   <% end %>
                   <div id='latest_status'>
@@ -93,16 +93,15 @@
 			<% end %>
       <div class="multibox">
 				<div class="title">
-          <%= facebox_link "更多", visitor_records_url %>
+          <%= facebox_link "更多", profile_viewings_url %>
 					<b>最近来访</b>
         </div>
         <div class="photolist-box">
 					<ul class="collection s_clear">
-						<% current_user.profile.visitor_records.each do |r| %>
+						<% current_user.profile.viewings.each do |r| %>
               <li>
-								<div class="middle"><div class="middle-center"><div class="center"><%= avatar r.visitor, :class => 'imgbox01' %></div></div></div>
-								<p><%= profile_link r.visitor %></p>
-                <p class="btns"></p>
+								<div class="middle"><div class="middle-center"><div class="center"><%= avatar r.viewer, :class => 'imgbox01' %></div></div></div>
+								<p><%= profile_link r.viewer %></p>
               </li>
 						<% end %>
           </ul>

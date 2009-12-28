@@ -1,6 +1,12 @@
+<%= javascript_include_tag 'share' %>
+<%= javascript_include_tag 'video' %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="app-photo">照片</h1>
+    <label>输入url来分享连接</label>
+    <%= text_field_tag 'link[url]' %>
+    <%= button_to_function '分享', 'Iyxzone.Share.shareLink()' %>
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right gray"><a href="#">如何分享视频？</a> <a href="#">如何分享更方便？</a></div>

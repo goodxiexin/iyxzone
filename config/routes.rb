@@ -34,6 +34,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
 
+    users.resources :links
+
     users.resources :sharings, :collection => {:hot => :get, :recent => :get, :friends => :get}
 
     users.resources :notices, :collection => {:first_ten => :get}

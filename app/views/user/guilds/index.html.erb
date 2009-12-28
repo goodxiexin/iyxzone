@@ -1,8 +1,11 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="big-cons">公会</h1>
+    <h1 class="app-cons">公会</h1>
     <div class="box02 canvas_int">
 	    <div class="tab tab01">
+        <div class="icon">
+          <%= link_to "新建工会", new_guild_url, :class => "icon-add-table" %>
+        </div>
 		  <% subject = get_subject @user %>
 		    <ul>
 			    <li><span><%= link_to "热门工会", hot_guilds_url(:id => @user.id) %></span></li>
@@ -12,18 +15,16 @@
 			    <li><span><%= link_to "好友工会", friends_guilds_url %></span></li>
         <% end %>
 		    </ul>
-		    <div class='right'>
-			    <%= link_to "新工会", new_guild_url %>
-		    </div>
       </div>
-	  <div>
-	  <%= link_to "#{get_subject @user}发起的(#{@user.guilds_count})", guilds_url(:id => @user.id) %>
-		<%= link_to "#{get_subject @user}参加的(#{@user.participated_guilds_count})", participated_guilds_url(:id => @user.id) %>
-	</div>
-	<div class="piclist-rows">
-		<%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
-  </div>
-</div>
-
-</div></div>
+	    <div class="piclist-rows">
+        <div class='nav-link'>
+          <ul class='s_clear'>
+            <li class='hover'><%= link_to "<span>#{subject}发起的(#{@user.guilds_count})</span>", guilds_url(:id => @user.id) %></li>
+            <li><%= link_to "<span>#{subject}参加的(#{@user.participated_guilds_count})</span>", participated_guilds_url(:id => @user.id) %></li>
+          </ul>
+        </div>
+		    <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
+      </div>
+    </div>
+  </div></div>
 </div></div></div></div>

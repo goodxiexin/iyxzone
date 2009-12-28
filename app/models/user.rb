@@ -281,8 +281,8 @@ class User < ActiveRecord::Base
 		user.has_many :personal_album_feed_items, :through => :personal_album_feed_deliveries
 
     user.has_many :sharing_feed_items, :through => :sharing_feed_deliveries
-	
-	end
+
+  end
 
   attr_accessor :password, :password_confirmation
 

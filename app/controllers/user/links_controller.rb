@@ -1,18 +1,16 @@
 class User::LinksController < ApplicationController
 
-  before_filter :login_required, :setup
-
-  def show
-  end
-
-protected
-
-  def setup
-    @link = Link.find(params[:id])
-    @sharing = @link.sharing
-    @user = @sharing.poster
-  rescue
-    not_found
+  def create
+    @link = Link.new(params[:link])
+    if @link.save
+      render :update do |page|
+        page << ".redirect_to sharings_url(:id => current_user.id)
+      end
+    else
+      render :update do |page|
+        page << "error('发生错误');"
+      end
+    end
   end
 
 end

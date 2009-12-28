@@ -9,6 +9,9 @@ Iyxzone.Comment = {
 };
 
 Object.extend(Iyxzone.Comment, {
+
+  mappings: new Hash(),
+
   pluralize: function(str){
     if(str == 'status')
       return 'statuses';
@@ -75,13 +78,19 @@ Object.extend(Iyxzone.Comment, {
     });
   },
 
-  toggleBox: function(commentableType, commentableID){
+  toggleBox: function(commentableType, commentableID, link, commentsCount){
     var box = $(commentableType + '_comment_box_' + commentableID);
     if(!box.visible()){
       Effect.BlindDown(box);
       $(commentableType + '_comment_content_' + commentableID).focus();
+      if(link){
+        link.update('收起回复');
+      }
     }else{
       Effect.BlindUp(box);
+      if(link){
+        link.update(commentsCount + '条回复')
+      }
     }
   }
 

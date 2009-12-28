@@ -62,15 +62,15 @@ class User::SharingsController < ApplicationController
     when 0
       @sharings = current_user.sharing_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 20
     when 1
-      @sharings = current_user.sharing_feed_items.map(&:originator).find_all{|s| s.shareable_type == 'Blog'}.paginate :page => params[:page], :per_page => 20
+      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Blog'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     when 2
-      @sharings = current_user.sharing_feed_items.map(&:originator).find_all{|s| s.shareable_type == 'Video'}.paginate :page => params[:page], :per_page => 20
+      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Video'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     when 3
-      @sharings = current_user.sharing_feed_items.map(&:originator).find_all{|s| s.shareable_type == 'Link'}.paginate :page => params[:page], :per_page => 20
+      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Link'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     when 4
-      @sharings = current_user.sharing_feed_items.map(&:originator).find_all{|s| s.shareable_type == 'Photo'}.paginate :page => params[:page], :per_page => 20
+      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Photo'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     when 5
-      @sharings = current_user.sharing_feed_items.map(&:originator).find_all{|s| s.shareable_type == 'Album'}.paginate :page => params[:page], :per_page => 20
+      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Album'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     end
   end
 
@@ -84,11 +84,19 @@ class User::SharingsController < ApplicationController
     @sharing = @shareable.sharings.build(params[:sharing].merge({:poster_id => current_user.id}))
     if @sharing.save
       render :update do |page|
-        page << "notice('分享成功');"
+        if @sharing.shareable_type == 'Link'
+          page.redirect_to sharings_url(:id => current_user.id)
+        else
+          page << "notice('分享成功');"
+        end
       end
     else
       render :update do |page|
-        page << "error('你已经分享过了，该资源你只能分享一次');"
+        if @sharing.shareable_type == 'Link'
+          page << "error('保存过程中发生错误');"
+        else
+          page << "error('你已经分享过了，该资源你只能分享一次');"
+        end
       end
     end
   end
@@ -102,9 +110,20 @@ class User::SharingsController < ApplicationController
 protected
 
   def setup
-    if ["new", "create"].include? params[:action]
-      @klass = params[:shareable_type].camelize.constantize
-      @shareable = @klass.find(params[:shareable_id])
+    if ["new"].include? params[:action]
+      if params[:shareable_type] == 'Link'
+        @shareable = Link.new(params[:link])
+      else
+        @klass = params[:shareable_type].camelize.constantize
+        @shareable = @klass.find(params[:shareable_id])
+      end
+    elsif ["create"].include? params[:action]
+      if params[:shareable_type] == 'Link'
+        @shareable = Link.create(params[:link])
+      else
+        @klass = params[:shareable_type].camelize.constantize
+        @shareable = @klass.find(params[:shareable_id])
+      end
     elsif ["index", "hot", "recent"].include? params[:action]
       @user = User.find(params[:id])
     elsif ["show"].include? params[:action]
@@ -126,6 +145,8 @@ protected
       shareable.title
     when 'Video'
       shareable.title
+    when 'Link'
+      shareable.url
     when 'PersonalAlbum'
       shareable.title
     when 'AvatarAlbum'

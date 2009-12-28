@@ -456,7 +456,6 @@ ActiveRecord::Schema.define(:version => 20091225062455) do
   create_table "sharings", :force => true do |t|
     t.string   "title"
     t.text     "reason"
-    t.string   "link"
     t.integer  "shareable_id"
     t.string   "shareable_type"
     t.integer  "poster_id"
@@ -518,7 +517,7 @@ ActiveRecord::Schema.define(:version => 20091225062455) do
     t.string   "pinyin"
     t.integer  "privacy_setting",           :limit => 8,  :default => 106299306
     t.integer  "mail_setting",              :limit => 8,  :default => 8796093022207
-    t.integer  "application_setting",       :limit => 8,  :default => 65535
+    t.integer  "application_setting",       :limit => 8,  :default => 262143
     t.integer  "notifications_count",                     :default => 0
     t.integer  "friends_count",                           :default => 0
     t.integer  "personal_albums_count",                   :default => 0

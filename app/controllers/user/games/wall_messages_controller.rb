@@ -9,9 +9,9 @@ protected
   end
 
   def can_view?
-    true
+    return true
   end
-
+=begin
   def can_reply?
     true
   end
@@ -19,5 +19,5 @@ protected
   def can_delete?
     false
   end
-
+=end
 end

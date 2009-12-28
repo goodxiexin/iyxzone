@@ -39,8 +39,6 @@ class User::GuildsController < ApplicationController
   def show
     @comments = @guild.comments.paginate :page => 1, :per_page => 10
     @membership = @guild.memberships.find_by_user_id(current_user.id)
-    @can_reply = !(@membership.nil? || !@membership.is_authorized?)
-    @can_delete = (@membership.status == Membership::President)
     @album = @guild.album
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize)
 		render :action => 'show', :layout => 'app2'

@@ -3,7 +3,6 @@ class CreateSharings < ActiveRecord::Migration
     create_table :sharings do |t|
       t.string  :title
       t.text    :reason # 分享理由
-      t.string  :link
 			t.integer :shareable_id
 			t.string	:shareable_type
 			t.integer :poster_id

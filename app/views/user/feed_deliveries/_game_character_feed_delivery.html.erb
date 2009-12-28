@@ -10,6 +10,6 @@
 <% elsif item.data[:type] == 2 %>
   <div><%= profile_link character.user %>开始玩游戏角色<%= link_to character.name, edit_profile_url(character.user.profile) %></div>
 <% end %>
-	<div><%= yield %></div> 
+	<div><% if feed_delivery_deleteable_by_current_user delivery %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div> 
 	<div><%= ftime delivery.created_at %></div>
 </div>

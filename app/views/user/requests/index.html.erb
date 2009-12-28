@@ -10,12 +10,30 @@
         </ul>
       </div>
       <div class="box02 appcontent03">
-        <div>
-          <%= link_to "所有请求", requests_url %> |
-          <%= link_to "好友请求", requests_url(:type => 0) %> |
-          <%= link_to "活动请求", requests_url(:type => 1) %> |
-          <%= link_to "工会请求", requests_url(:type => 2) %>
-        </div>
+        <div class='nav-link'>
+          <ul class='s_clear'>
+            <% if params[:type].blank? %>
+              <li class='hover'><%= link_to "<span>所有请求</span>", requests_url %></li>
+            <% else %>
+              <li><%= link_to "<span>所有请求</span>", requests_url %></li>
+            <% end %>
+            <% if params[:type].to_i == 1 %>
+              <li class='hover'><%= link_to "<span>好友请求</span>", requests_url(:type => 1) %></li>
+            <% else %>
+              <li><%= link_to "<span>好友请求</span>", requests_url(:type => 1) %></li>
+            <% end %>
+            <% if params[:type].to_i == 2 %>
+              <li class='hover'><%= link_to "<span>活动请求</span>", requests_url(:type => 2) %></li>
+            <% else %>
+              <li><%= link_to "<span>活动请求</span>", requests_url(:type => 2) %></li>
+            <% end %>
+            <% if params[:type].to_i == 3 %>
+              <li class='hover'><%= link_to "<span>工会请求</span>", requests_url(:type => 3) %></li>
+            <% else %>
+              <li><%= link_to "<span>工会请求</span>", requests_url(:type => 3) %></li>
+            <% end %>
+          </ul>
+        </div>        
         <% @requests.each do |request| %>
           <% if request.instance_of? Friendship %>
             <%= render :partial => 'friend_request', :object => request %>

@@ -1,0 +1,3 @@
+<% game.tags.map(&:name).each do |name| %>
+	<%= link_to_remote name, :url => game_tags_url(game, "tag[name]" => name) %>
+<% end %>

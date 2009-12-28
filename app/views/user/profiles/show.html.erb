@@ -46,7 +46,7 @@
 	<div class='title' id='tag_cloud_head'>
 	<% if @user == current_user %>
 		<b>大家对你的印象是</b>
-	<% elsif @taggable %>
+	<% elsif @can_tag %>
 		<b>你对他的印象是</b>
 	<% else %>
 		<b>好友印象</b>
@@ -54,16 +54,16 @@
 	</div>
 	<div id='tag_cloud'> 
   <% if @user == current_user %>
-    <%= render :partial => 'user/profiles/tags/tag_cloud' %>
-  <% elsif @taggable %>
-    <%= render :partial => 'user/profiles/tags/profile_tag' %>
+    <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>
+  <% elsif @can_tag %>
+    <%= render :partial => 'user/profiles/tags/profile_tag', :locals => {:profile => @profile} %>
     <% form_remote_for :tag, :url => profile_tags_url(@profile) do |f| %>
       都不贴切？自己想个<br/>
       <%= f.text_field 'name' %>
       <%= f.submit '提交' %>
     <% end %>
   <% else %>
-    <%= render :partial => 'profile/tags/tag_cloud' %>
+    <%= render :partial => 'profile/tags/tag_cloud', :locals => {:profile => @profile} %>
   <% end %>
 	</div>
 </div>

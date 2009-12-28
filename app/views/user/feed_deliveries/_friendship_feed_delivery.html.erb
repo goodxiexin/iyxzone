@@ -11,5 +11,5 @@
 <div class='feed-list' id='feed_delivery_<%= delivery.id %>'>
 	<div class="feed-icon icon-friend"></div>
 	<p><%= profile_link user %> 和 <%= profile_link friend %> 成为了好朋友 <%= ftime delivery.created_at %></p>
-	<div><%= yield %></div> 
+	<div><% if feed_delivery_deleteable_by_current_user delivery %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div> 
 </div>	

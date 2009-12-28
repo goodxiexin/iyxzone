@@ -1,5 +1,5 @@
 <ul class='holder' style="border: 0px">
 <% Tag.profile_tags.map(&:name).each do |name| %>
-	<li class='bit-box'><%= link_to_remote name, :url => profile_tags_url(@profile, "tag[name]" => name) %></li>
+	<li class='bit-box'><%= link_to_remote name, :url => profile_tags_url(profile, "tag[name]" => name) %></li>
 <% end %>
 </ul>

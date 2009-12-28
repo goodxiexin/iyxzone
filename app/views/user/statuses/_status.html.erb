@@ -1,14 +1,18 @@
-<li id='status_<%= status.id %>'>
-  <span class='float-right'>
-  <% if status.poster == current_user %>
-    <%= facebox_confirm 'x', status_url(status), {:method => :delete, :msg => '你确定要删除这条状态吗?'}, {:id => "delete_status_#{status.id}"} %></span>
-  <% end %>
-  <%= avatar status.poster %>
-  <div class='status-content'>
-    <p class='title'><span class='time'><%= ftime status.created_at %></span></p>
-    <p class='body'>
-      <%= status.content %>
+<div class="feed-img-list" id='status_<%= status.id %>'>
+  <div class="feed-list">
+    <div class="feed-img"><%= avatar status.poster, :class => 'imgbox01' %></div>
+    <p><%= link_to "<b>#{status.poster.login}</b>", profile_url(status.poster.profile) %> </p>
+    <p><%= status.content %></p>
+    <p>
+      <%= ftime status.created_at %> <%= link_to_function "#{status.comments_count}条回复", "Iyxzone.Comment.toggleBox('status', #{status.id}, this, #{status.comments_count})" %>
+      <% if status.poster == current_user %>
+        <%= facebox_confirm 'x', status_url(status), {:method => :delete, :msg => '你确定要删除这条状态吗?'}, {:id => "delete_status_#{status.id}"} %></span>  
+      <% else %>
+        <%= link_to "更多", statuses_url(:id => status.poster_id) %>
+      <% end %>
     </p>
+    <div id='status_comment_box_<%= status.id %>' style="display:none">
+    <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => status, :recipient => status.poster} %>
+    </div>
   </div>
-	<%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => status, :recipient => status.poster } %>
-</li>
+</div>

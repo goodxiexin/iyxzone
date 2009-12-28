@@ -39,9 +39,9 @@ protected
   def setup
     if ['index', 'create'].include? params[:action]
       @wall = get_wall
-      @can_view = can_view?
-      @can_reply = can_reply?
-      @can_delete = can_delete?
+      can_view?
+      #@can_reply = can_reply?
+      #@can_delete = can_delete?
     elsif ['destroy'].include? params[:action]
       @message = Comment.find(params[:id])
     end

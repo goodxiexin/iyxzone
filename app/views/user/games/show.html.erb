@@ -20,22 +20,22 @@
 
 <div class="multibox">
 	<div class="title"><b id='tag_cloud_head'>
-		<% if @taggable %>
+		<% if @can_tag %>
 			你对这个游戏的印象是
 		<% else %>
 			玩家印象
 		<% end %>
 	</b></div>
 	<div id='tag_cloud'>
-  <% if @taggable %>
-    <%= render :partial => 'user/game/tags/game_tag' %>
+  <% if @can_tag %>
+    <%= render :partial => 'user/games/tags/game_tag', :locals => {:game => @game} %>
     <% form_remote_for :tag, :url => game_tags_url(@game) do |f| %>
       都不贴切？自己想个<br/>
       <%= f.text_field 'name' %>
       <%= f.submit '提交' %>
     <% end %>
   <% else %>
-    <%= render :partial => 'game/tags/tag_cloud' %>
+    <%= render :partial => 'user/games/tags/tag_cloud', :locals => {:game => @game} %>
   <% end %>
   </div>
 </div>

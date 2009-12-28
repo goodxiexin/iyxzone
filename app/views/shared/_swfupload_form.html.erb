@@ -56,12 +56,24 @@ swfu = new SWFUpload(settings);
 </script>    
 <div id='photo_ids'></div>
 <form action="<%=upload_url-%>" enctype="multipart/form-data">
+<div class='photo-upload-form box05'>
+  <div class="title title01">
+    <div class="right">
+      <span>照片</span>
+      <span>状态</span>
+    </div>
+    <h5>照片</h5>
+  </div>
+  <div class='upload-body'>
+    <ul id='fsUploadProgress'>
+    </ul>
+  </div>
   <div id="fsUploadProgress" class="fieldset flash">
     <span class="legend">上传的图片</span>
   </div>
-  <div id="divStatus">0 Files Uploaded</div>
   <div>
     <span id="spanButtonPlaceHolder"></span>
     <input id="btnCancel" type="button" value="取消上传" onclick="swfu.cancelQueue();" disabled="disabled" class="cancel-button"/>  
   </div>
+</div>
 </form>  
