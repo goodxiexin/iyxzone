@@ -6,6 +6,8 @@ class Guild < ActiveRecord::Base
 
   has_many :memberships
 
+	has_many :guild_rules
+
   has_many :invitations, :class_name => 'Membership', :conditions => {:status => 0}
 
   has_many :requests, :class_name => 'Membership', :conditions => {:status => [1,2]}

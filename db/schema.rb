@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091223160309) do
+ActiveRecord::Schema.define(:version => 20091225083001) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -39,6 +39,11 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.integer  "privilege",                          :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "bosses", :force => true do |t|
+    t.string  "name"
+    t.integer "reward"
   end
 
   create_table "chinese_characters", :force => true do |t|
@@ -187,6 +192,7 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.integer  "race_id"
     t.string   "name"
     t.integer  "level"
+    t.integer  "dkp"
     t.boolean  "playing",       :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -240,6 +246,12 @@ ActiveRecord::Schema.define(:version => 20091223160309) do
     t.integer  "last_week_characters_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "gears", :force => true do |t|
+    t.string  "name"
+    t.string  "type"
+    t.integer "cost"
   end
 
   create_table "guild_friendships", :force => true do |t|

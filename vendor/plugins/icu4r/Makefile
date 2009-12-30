@@ -37,7 +37,7 @@ datadir = $(datarootdir)
 localstatedir = $(DESTDIR)/var
 sitelibdir = $(sitedir)/$(ruby_version)
 
-CC = cc
+CC = gcc
 LIBRUBY = $(LIBRUBY_SO)
 LIBRUBY_A = lib$(RUBY_SO_NAME)-static.a
 LIBRUBYARG_SHARED = -l$(RUBY_SO_NAME)
@@ -86,9 +86,9 @@ extout =
 extout_prefix = 
 target_prefix = 
 LOCAL_LIBS = 
-LIBS = $(LIBRUBYARG_SHARED) -licui18n  -lpthread -ldl -lcrypt -lm   -lc
-SRCS = collator.c uregex.c calendar.c ustring.c converter.c ubundle.c icu4r.c ucore_ext.c fmt.cpp
-OBJS = collator.o uregex.o calendar.o ustring.o converter.o ubundle.o icu4r.o ucore_ext.o fmt.o
+LIBS = $(LIBRUBYARG_SHARED) -licui18n  -lpthread -lrt -ldl -lcrypt -lm   -lc
+SRCS = icu4r.c ustring.c uregex.c converter.c ubundle.c calendar.c ucore_ext.c collator.c fmt.cpp
+OBJS = icu4r.o ustring.o uregex.o converter.o ubundle.o calendar.o ucore_ext.o collator.o fmt.o
 TARGET = icu4r
 DLLIB = $(TARGET).so
 EXTSTATIC = 
@@ -148,7 +148,7 @@ site-install-rb: install-rb
 .c.o:
 	$(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) -c $<
 
-$(DLLIB): $(OBJS)
+$(DLLIB): $(OBJS) Makefile
 	@-$(RM) $@
 	$(LDSHARED) -o $@ $(OBJS) $(LIBPATH) $(DLDFLAGS) $(LOCAL_LIBS) $(LIBS)
 
