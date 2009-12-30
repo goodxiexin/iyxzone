@@ -1,8 +1,6 @@
-class User::Events::ParticipationsController < ApplicationController
+class User::Events::ParticipationsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :participation_required, :only => [:edit]
 

@@ -1,8 +1,6 @@
-class User::ApplicationSettingController < ApplicationController
+class User::ApplicationSettingController < UserBaseController
 
 	layout 'app'
-
-	before_filter :login_required, :setup
 
 	def show
 	end

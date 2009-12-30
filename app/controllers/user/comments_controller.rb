@@ -5,9 +5,7 @@
 # 其实我觉得上面这种做法更好，我只是为了偷懒才弄成这样
 # 所有的polymorphism都有这样的问题，比如wall message, tag, viewing等
 #
-class User::CommentsController < ApplicationController
-
-  before_filter :login_required, :setup
+class User::CommentsController < UserBaseController
 
   def create
     @comment = @commentable.comments.build(params[:comment].merge({:poster_id => current_user.id}))

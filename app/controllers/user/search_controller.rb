@@ -1,8 +1,6 @@
-class User::SearchController < ApplicationController
+class User::SearchController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def user
     @games = Game.find(:all, :order => 'pinyin ASC')

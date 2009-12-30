@@ -1,8 +1,6 @@
-class User::GamesController < ApplicationController
+class User::GamesController < UserBaseController
 
   layout 'app2'
-
-  before_filter :login_required, :setup
 
   def index
     @games = @user.games.paginate :page => params[:page], :per_page => 10

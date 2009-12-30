@@ -1,8 +1,6 @@
-class User::SharingsController < ApplicationController
+class User::SharingsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :link_required, :only => [:show]
 

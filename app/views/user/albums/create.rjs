@@ -1,0 +1,7 @@
+if params[:show] == 'select'
+  page << "$('album_id').innerHTML += '<option value=#{@album.id}>#{@album.title}</option>';"
+  page << "$('album_id').value = #{@album.id};"
+  page << "facebox.close();"
+else
+  page.redirect_to personal_albums_url(:id => @user.id)
+end

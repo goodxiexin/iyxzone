@@ -1,7 +1,5 @@
-class Blog::ImagesController < ApplicationController
+class Blog::ImagesController < UserBaseController
 
-  before_filter :login_required
-  
   def upload
     @image = BlogImage.new(params[:photo])
     if @image.save

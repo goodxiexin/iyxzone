@@ -1,6 +1,4 @@
-class User::TagsController < ApplicationController
-
-	before_filter :login_required, :setup
+class User::TagsController < UserBaseController
 
 	def create
 		@tagging.destroy unless @tagging.nil?

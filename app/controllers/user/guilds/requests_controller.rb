@@ -1,8 +1,6 @@
-class User::Guilds::RequestsController < ApplicationController
+class User::Guilds::RequestsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def new
     render :action => 'new', :layout => false

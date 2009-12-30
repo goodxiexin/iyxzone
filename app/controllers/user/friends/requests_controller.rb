@@ -1,6 +1,4 @@
-class User::Friends::RequestsController < ApplicationController
-
-	before_filter :login_required, :setup
+class User::Friends::RequestsController < UserBaseController
 
 	def new
 	end

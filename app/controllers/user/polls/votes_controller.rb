@@ -1,6 +1,6 @@
-class User::Polls::VotesController < ApplicationController
+class User::Polls::VotesController < UserBaseController
 
-  before_filter :login_required, :setup, :privilege_required
+  before_filter :privilege_required
 
   def create
 		if @poll.votes.create(:voter_id => current_user.id, :answer_ids => params[:votes])

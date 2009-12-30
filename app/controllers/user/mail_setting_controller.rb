@@ -1,8 +1,6 @@
-class User::MailSettingController < ApplicationController
+class User::MailSettingController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :catch_setting
 
   def edit
   end

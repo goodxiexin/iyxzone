@@ -1,6 +1,4 @@
-class User::FeedDeliveriesController < ApplicationController
-
-	before_filter :login_required, :setup
+class User::FeedDeliveriesController < UserBaseController
 
 	def destroy
 		if @feed_delivery.destroy

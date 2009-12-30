@@ -1,6 +1,4 @@
-class User::CharactersController < ApplicationController
-
-	before_filter :login_required, :setup
+class User::CharactersController < UserBaseController
 
 	before_filter :owner_required, :only => [:edit]
 

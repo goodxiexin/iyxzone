@@ -1,6 +1,6 @@
-class User::Polls::AnswersController < ApplicationController
+class User::Polls::AnswersController < UserBaseController
 
-  before_filter :login_required, :setup, :owner_required
+  before_filter :owner_required
 
   def new
   end

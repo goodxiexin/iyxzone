@@ -1,8 +1,6 @@
-class User::RequestsController < ApplicationController
+class User::RequestsController < UserBaseController
 
 	layout 'app'
-
-	before_filter :login_required, :setup
 
 	def index
 		@requests = []

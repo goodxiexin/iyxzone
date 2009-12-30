@@ -1,6 +1,6 @@
 class CreateDistricts < ActiveRecord::Migration
   def self.up
-    create_table :districts do |t|
+    create_table :districts, :force => true do |t|
       t.string :name
       t.integer :city_id
     end

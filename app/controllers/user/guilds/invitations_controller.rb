@@ -1,8 +1,6 @@
-class User::Guilds::InvitationsController < ApplicationController
+class User::Guilds::InvitationsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :owner_required, :only => [:new]
 

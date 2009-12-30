@@ -1,5 +1,30 @@
 module AuthenticatedSystem
+
+  def self.included recipient
+    recipient.class_eval do 
+      include AuthenticatedSystem::InstanceMethods
+    end
   
+    recipient.extend(AuthenticatedSystem::ClassMethods)
+
+    recipient.send :helper_method, :current_user, :current_profile, :logged_in?
+
+  end
+ 
+  module ClassMethods
+    
+    def require_login opts={}
+      before_filter :login_required, opts
+    end
+
+    def require_logout opts={}
+      before_filter :logout_required, opts
+    end
+
+  end
+
+  module InstanceMethods
+ 
 protected
     # Returns true or false if the user is logged in.
     # Preloads @current_user with the user model if they're logged in.
@@ -58,6 +83,10 @@ protected
       authorized? || access_denied
     end
 
+    def logout_required
+      !logged_in? || access_denied# 如果没有怎么办
+    end
+
     # Redirect as appropriate when an access request fails.
     #
     # The default action is to redirect to the login screen.
@@ -94,9 +123,9 @@ protected
 
     # Inclusion hook to make #current_user and #logged_in?
     # available as ActionView helper methods.
-    def self.included(base)
-      base.send :helper_method, :current_user, :current_profile, :logged_in?
-    end
+    #def self.included(base)
+    #  base.send :helper_method, :current_user, :current_profile, :logged_in?
+    #end
 
     # Called from #current_user.  First attempt to login by the user id stored in the session.
     def login_from_session
@@ -118,5 +147,7 @@ protected
         self.current_user = user
       end
     end
+
+  end
 
 end

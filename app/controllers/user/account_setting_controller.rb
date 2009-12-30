@@ -1,2 +1,2 @@
-class User::AccountSettingController < ApplicationController
+class User::AccountSettingController < UserBaseController
 end

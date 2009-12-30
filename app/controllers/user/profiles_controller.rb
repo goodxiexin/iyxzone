@@ -1,8 +1,6 @@
-class User::ProfilesController < ApplicationController
+class User::ProfilesController < UserBaseController
 
   layout 'app2'
-
-  before_filter :login_required, :setup
 
   before_filter :privilege_required, :only => [:show, :more_feeds]
 

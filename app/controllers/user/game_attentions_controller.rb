@@ -1,6 +1,4 @@
-class User::GameAttentionsController < ApplicationController
-
-  before_filter :login_required, :setup
+class User::GameAttentionsController < UserBaseController
 
 	def index
 		@games = current_user.interested_games.paginate :page => params[:page], :per_page => 1

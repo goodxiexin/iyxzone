@@ -1,8 +1,6 @@
-class User::WallMessagesController < ApplicationController
+class User::WallMessagesController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def create
     @message = @wall.comments.build(params[:comment].merge({:poster_id => current_user.id}))

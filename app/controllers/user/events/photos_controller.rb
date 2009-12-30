@@ -1,8 +1,6 @@
-class User::Events::PhotosController < ApplicationController
+class User::Events::PhotosController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :participant_required, :only => [:new, :edit_multiple]
 

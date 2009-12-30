@@ -1,8 +1,6 @@
-class User::Guilds::AlbumsController < ApplicationController
+class User::Guilds::AlbumsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def show
     @membership = @guild.memberships.find_by_user_id(current_user.id)

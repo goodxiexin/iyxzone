@@ -1,8 +1,6 @@
-class User::Guilds::EventsController < ApplicationController
+class User::Guilds::EventsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def index
     @events = @guild.events.paginate :page => params[:page], :per_page => 10

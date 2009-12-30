@@ -1,8 +1,6 @@
-class User::EventsController < ApplicationController
+class User::EventsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :owner_required, :only => [:edit]
 

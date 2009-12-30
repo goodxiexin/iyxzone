@@ -1,6 +1,4 @@
-class User::DigsController < ApplicationController
-
-  before_filter :login_required, :setup
+class User::DigsController < UserBaseController
 
   def create
     #

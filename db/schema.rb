@@ -403,6 +403,7 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.date     "deadline"
     t.text     "summary"
     t.integer  "privilege",      :default => 2
+    t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "votes_count",    :default => 0

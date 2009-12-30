@@ -1,8 +1,6 @@
-class User::AlbumsController < ApplicationController
+class User::AlbumsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :owner_required, :only => [:select, :edit, :confirm_destroy]
 
@@ -41,11 +39,7 @@ class User::AlbumsController < ApplicationController
 
   def create
     @album = @user.albums.build(params[:album].merge({:poster_id => @user.id}))
-    if @album.save
-			render :update do |page|
-				page.redirect_to personal_albums_url(:id => @user.id)
-			end
-    else
+    unless @album.save
       render :update do |page|
         page.replace_html 'errors', :partial => 'validation_errors'
       end

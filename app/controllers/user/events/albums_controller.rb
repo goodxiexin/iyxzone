@@ -1,8 +1,6 @@
-class User::Events::AlbumsController < ApplicationController
+class User::Events::AlbumsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def show
     @participation = @event.participations.find_by_participant_id(current_user.id)

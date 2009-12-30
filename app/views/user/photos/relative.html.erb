@@ -12,7 +12,7 @@
         <ul>
 					<% subject = get_subject @user %>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:id => @user.id) %></span></li>
-					<li><span><%= link_to '最新照片', recent_personal_albums_url(:id => @user.id) %></span></li>
+					<!-- <li><span><%= link_to '最新照片', recent_personal_albums_url(:id => @user.id) %></span></li> -->
           <li><span><%= link_to "#{subject}的相册", personal_albums_url(:id => @user.id) %></span></li>
 					<% if @user == current_user %>
 						<li><span><%= link_to '好友相册', friends_personal_albums_url(:id => @user.id) %></span></li>
@@ -20,32 +20,27 @@
           <li class='hover'><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
         </ul>				
 			</div>
-      <div class='piclist-rows'>
-        <% if @photos.blank? %>
-          <div class='gray'>你的好友都不鸟你</div>
-        <% else %>
-        <table class="table01 big" cellpadding="0" cellspacing="1">
-          <% @photos.each do |photo| %>
-          <tr>
-            <td>
-              <div class="imgwrap">
-                <%= photo_link photo, :size => :large, :class => 'imgbox01' %>
-              </div>
-              <div class="data">
-                <h3><%= profile_link photo.poster %> 圈了你</h3>
-                <p>创建于 <%= ftime photo.created_at %></p>
-                <p class="link">
-                  <%= link_to '查看相片', eval("#{photo.class.name.underscore}_url(photo)") %> | 
-                  <%= link_to '查看相册', eval("#{photo.album.class.name.underscore}_url(photo.album)") %>
-                </p>
-              </div>
-            </td>
-          </tr>
+      <% if @photos.total_entries != 0 %>
+      <div class='box04 pic-box'>
+        <ul>
+          <% @photos.each do |p| %>
+          <li>
+            <div class="img">
+              <div class="middle"><div class="middle-center"><div class="center">
+                <%= photo_link p, :class => 'imgbox01' %>
+              </div></div></div>
+            </div>
+            <% if @album.poster == current_user %>
+              <p><%= facebox_link "编辑", edit_personal_photo_url(p) %> | <%= facebox_confirm '删除', personal_photo_url(p), {:msg => '你确定要删除这张图>片吗', :method => 'delete'} %> </p>
+            <% end %>
+          </li>
           <% end %>
-        </table>
+        </ul>
         <%= will_paginate @albums %>
-        <% end %>
       </div>
+      <% else %>
+      <div class='gray'>你的好友都不鸟你</div>
+      <% end %>
     </div>
 	</div></div>
 </div></div></div></div>

@@ -1,8 +1,6 @@
-class User::ForumsController < ApplicationController
+class User::ForumsController < UserBaseController
 
   layout 'forum'
-
-	before_filter :login_required
 
   def index
     @forums = Forum.all

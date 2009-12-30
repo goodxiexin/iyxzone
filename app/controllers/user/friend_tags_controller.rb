@@ -1,6 +1,4 @@
-class User::FriendTagsController < ApplicationController
-
-	before_filter :login_required, :setup
+class User::FriendTagsController < UserBaseController
 
   def friend_table 
     if params[:game_id] == 'all'

@@ -1,8 +1,8 @@
-class User::DraftsController < ApplicationController
+class User::DraftsController < UserBaseController
 
   layout 'app'
 
-  before_filter :login_required, :setup, :draft_required
+  before_filter :draft_required
 
   before_filter :owner_required, :only => [:edit]
 

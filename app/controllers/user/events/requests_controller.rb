@@ -1,8 +1,6 @@
-class User::Events::RequestsController < ApplicationController
+class User::Events::RequestsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :privilege_required, :only => [:new]
 

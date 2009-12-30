@@ -1,8 +1,6 @@
-class User::InvitationsController < ApplicationController
+class User::InvitationsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def index
     @invitations = []

@@ -1,8 +1,6 @@
-class User::BlogsController < ApplicationController
+class User::BlogsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :not_draft_required, :except => [:update]
 

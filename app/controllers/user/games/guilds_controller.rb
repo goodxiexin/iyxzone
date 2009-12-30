@@ -1,8 +1,6 @@
-class User::Games::GuildsController < ApplicationController
+class User::Games::GuildsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def index
     @guilds = @game.guilds.paginate :page => params[:page], :per_page => 10

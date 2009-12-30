@@ -1,8 +1,6 @@
-class User::PollsController < ApplicationController
+class User::PollsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :friend_or_owner_required, :only => [:index]
 

@@ -1,8 +1,6 @@
-class User::Guilds::MembershipsController < ApplicationController
+class User::Guilds::MembershipsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :owner_required, :only => [:edit]
 

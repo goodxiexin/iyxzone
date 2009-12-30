@@ -1,8 +1,6 @@
-class User::PostsController < ApplicationController
+class User::PostsController < UserBaseController
 
   layout 'forum'
-
-  before_filter :login_required, :setup
 
   before_filter :moderator_required, :only => [:destroy]
 

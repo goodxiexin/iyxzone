@@ -1,8 +1,6 @@
-class User::PokesController < ApplicationController
+class User::PokesController < UserBaseController
 
 	layout 'app'
-
-  before_filter :login_required, :setup
 
   def index
     @deliveries = current_user.poke_deliveries.paginate :page => params[:page], :per_page => 10

@@ -1,8 +1,6 @@
-class User::Guilds::PhotosController < ApplicationController
+class User::Guilds::PhotosController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :president_or_veteran_required, :only => [:new, :edit_multiple]
 
