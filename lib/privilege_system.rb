@@ -1,3 +1,10 @@
+#
+# 这个写的很烂很烂，主要用于当前用户和资源（博客，视频，相册）的拥有者(@user)的关系以及current_user是否有权限浏览该资源
+# 这里做了几个假设：
+# 1. 在调用这些方法前，@user被赋值为资源的拥有者
+# 2. 资源的权限分为1，2，3，4这4个等级，1表示全部人，2表示“好友或者相同游戏”， 3表示“好友”， 4表示“自己”
+# 总的来说，这个module局限性满大的，使用得小心
+#
 module PrivilegeSystem
 
 protected
@@ -23,8 +30,6 @@ protected
   end
 
   def friend_or_same_game_required
-    logger.error "is_friend? = #{is_friend?}"
-    logger.error "is_same_game? = #{is_same_game?}"
     is_friend? || is_same_game? || friend_denied
   end
 

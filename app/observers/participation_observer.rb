@@ -24,9 +24,6 @@ class ParticipationObserver < ActiveRecord::Observer
 			event.poster.raw_increment :requests_count
 			event.raw_increment :requestors_count
 			EventMailer.deliver_request event, participant if participant.mail_setting.request_to_attend_my_event
-		elsif participation.is_confirmed?
-			event.raw_increment :confirmed_count
-			event.poster.raw_increment :upcoming_events_count
 		end	
 	end
 

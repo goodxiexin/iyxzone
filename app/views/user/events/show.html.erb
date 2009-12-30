@@ -10,15 +10,14 @@
 <div class="avatarbox">
 	<b>组织者：</b><span><%= profile_link @event.poster %></span>
 </div>
-<% if current_user == @user and !@event.past%>
+<% if !@event.past%>
 	<%= render :partial => 'operations' %>
-<% end %>
-<% if !@event.past %>
 	<%= render :partial => 'rsvp' %>
 <% end %>
 <% end %>
 
 <% content_for :right do %>
+<% if @event.maybe_count != 0 %>
 <div class="multibox">
 	<div class="title">
 		<%= link_to "更多", event_participations_url(@event, :type => 1) %>
@@ -28,13 +27,15 @@
 		<ul class="collection s_clear">
 			<% @event.maybe_participants[0..5].each do |p| %>
 			<li>
-				<div class="middle"><div class="middle-center"><div class="center"><%= avatar p %></div></div></div>
+				<div class="middle"><div class="middle-center"><div class="center"><%= avatar p, :class => 'imgbox01' %></div></div></div>
         <p><%= profile_link p %></p>
 			</li>
 			<% end %>
     </ul>
   </div>
 </div>
+<% end %>
+<% if @event.declined_count != 0 %>
 <div class="multibox">
   <div class="title">
     <%= link_to "更多", event_participations_url(@event, :type => 1) %>
@@ -44,13 +45,15 @@
     <ul class="collection s_clear">
       <% @event.declined_participants[0..5].each do |p| %>
       <li>
-        <div class="middle"><div class="middle-center"><div class="center"><%= avatar p %></div></div></div>
+        <div class="middle"><div class="middle-center"><div class="center"><%= avatar p, :class => 'imgbox01' %></div></div></div>
         <p><%= profile_link p %></p>
       </li>
       <% end %>
     </ul>
   </div>
 </div>
+<% end %>
+<% if @event.invitees_count != 0%>
 <div class="multibox">
   <div class="title">
     <%= link_to "更多", event_participations_url(@event, :type => 1) %>
@@ -60,13 +63,14 @@
     <ul class="collection s_clear">
       <% @event.invitees[0..5].each do |p| %>
       <li>
-        <div class="middle"><div class="middle-center"><div class="center"><%= avatar p %></div></div></div>
+        <div class="middle"><div class="middle-center"><div class="center"><%= avatar p, :class => 'imgbox01' %></div></div></div>
         <p><%= profile_link p %></p>
       </li>
       <% end %>
     </ul>
   </div>
 </div>
+<% end %>
 <% end %>
 
 <div class='box02 canvas_con'>
@@ -101,6 +105,7 @@
 		</div>
   </div>
 
+  <% if @album.photos_count != 0 %>
 	<div class="multibox">
 		<div class="title"><%= link_to "更多", event_album_url(@album) %><b>照片</b></div>
     <div class="photolist-big-box">
@@ -109,12 +114,15 @@
 					<li>
 						<div class="middle"><div class="middle-center"><div class="center"><%= photo_link p, :class => 'imgbox02' %></div></div></div>
           </li>
-				<% end %>
+        <% end %>
       </ul>
     </div>
   </div>
+  <% end %>
+
+  <% if @event.confirmed_count != 0 %>
 	<div class="multibox">
-		<div class="title"><%= link_to "更多(#{@event.confirmed_count})", event_participations_url(@event, :type => 0) %><b>参加的人</b></div>
+		<div class="title"><%= link_to "更多", event_participations_url(@event, :type => 0) %><b>参加的人</b></div>
     <div class="photolist-box">
 			<ul class="collection s_clear">
 				<% @event.confirmed_participants[0..6].each do |p| %>
@@ -126,6 +134,7 @@
       </ul>
     </div>
   </div>
+  <% end %>
 
 <% if @participation and [3,4].include? @participation.status %>
   <%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @event, :recipient => @event.poster, :with_comments => false} %>

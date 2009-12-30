@@ -28,7 +28,7 @@ protected
   
   def setup_email(user)
     recipients	user.email
-    from				SITE_EMAIL
+    from				SITE_MAIL
     sent_on			Time.now
   end
 

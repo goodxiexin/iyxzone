@@ -14,6 +14,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate'
 
+  map.activation_mail_sent '/activation_mail_sent', :controller => 'users', :action => 'activation_mail_sent'
+
+  map.resend_activation_mail '/resend_activation_mail', :controller => 'users', :action => 'resend_activation_mail'
+
   map.forgot_password '/forgot_password', :controller => 'passwords', :action => 'new'
 
   map.reset_password '/reset_password/:password_reset_code', :controller => 'passwords', :action => 'edit'
@@ -81,7 +85,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :feed_deliveries
 
-    users.resource :home, :controller => 'home', :member => {:more_feeds => :get}
+    users.resource :home, :controller => 'home', :member => {:more_feeds => :get, :feeds => :get}
 
     users.resource :privacy_setting, :controller => 'privacy_setting'
 
@@ -120,7 +124,7 @@ ActionController::Routing::Routes.draw do |map|
                     :member => {:confirm_destroy => :get}
 
     users.resources :personal_photos, :controller => 'photos',
-                    :collection => {:hot => :get, :relative => :get, :edit_multiple => :get, :update_multiple => :put}
+                    :collection => {:hot => :get, :relative => :get, :edit_multiple => :get, :update_multiple => :put, :record_upload => :post}
 
     users.resources :avatar_albums, :controller => 'avatars/albums'
 
@@ -142,9 +146,9 @@ ActionController::Routing::Routes.draw do |map|
 
     end
 
-    users.resources :guild_albums, :controller => 'guild/albums'
+    users.resources :guild_albums, :controller => 'guilds/albums'
 
-    users.resources :guild_photos, :controller => 'guild/photos', :collection => {:edit_multiple => :get, :update_multiple => :put}
+    users.resources :guild_photos, :controller => 'guilds/photos', :collection => {:edit_multiple => :get, :update_multiple => :put}
 
     users.resources :guilds, :member => {:more_feeds => :get},
                     :collection => {:hot => :get, :recent => :get , :participated => :get, :friends => :get} do |guilds|

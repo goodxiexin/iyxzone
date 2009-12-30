@@ -18,12 +18,22 @@
       <div class="piclist-rows" id='events'>
 	      <div class="nav-link">
           <ul class="s_clear">
-            <li><%= link_to "<span>#{get_subject @user}发起的</span>", events_url(:id => @user.id) %></li>
-            <li class='hover'><%= link_to "<span>#{get_subject @user}要参加的</span>", upcoming_events_url(:id => @user.id) %></li>
-            <li><%= link_to "<span>#{get_subject @user}参加过的</span>", participated_events_url(:id => @user.id) %></li>
+            <li><%= link_to "<span>#{get_subject @user}发起的(#{@user.events_count})</span>", events_url(:id => @user.id) %></li>
+            <li class='hover'><%= link_to "<span>#{get_subject @user}要参加的(#{@user.upcoming_events_count})</span>", upcoming_events_url(:id => @user.id) %></li>
+            <li><%= link_to "<span>#{get_subject @user}参加过的(#{@user.past_events_count})</span>", participated_events_url(:id => @user.id) %></li>
           </ul>
         </div>
-	      <%= render :partial => 'event_items', :object => @events %>
+        <% if @user.upcoming_events_count != 0 %> 
+	        <%= render :partial => 'event_items', :object => @events %>
+        <% else %>
+          <div class='gray'>
+          <% if @user == current_user %>
+            你还没参加任何别人的活动，你可以从 <%= link_to '好友最近创建的活动', friends_events_url %> 或者 <%= link_to '热门活动', hot_events_url(:id => current_user.id) %> 或者 <%= link_to '最近别人创建的活动', recent_events_url(:id => current_user.id) %> 来寻找适合你的活动
+          <% else %>
+            <%= get_subject @user %>没有参加别人的活动
+          <% end %>
+          </div> 
+        <% end %>
       </div>
     </div>
   </div></div>

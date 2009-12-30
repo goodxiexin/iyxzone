@@ -17,7 +17,7 @@ class User::ProfilesController < ApplicationController
     @tagging = @profile.taggings.find_by_poster_id(current_user.id)
 		@can_tag = @user.friends.include?(current_user) && (@tagging.nil? || @tagging.created_at < 1.week.ago)
 		@blogs = @user.blogs[0..2]
-		@albums = @user.albums.viewable(relationship).push(@user.avatar_album)[0..2]
+		@albums = @user.active_albums[0..2]
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize)
 	end
 

@@ -186,6 +186,8 @@ function queueComplete(numFilesUploaded) {
 	var url = this.customSettings.recordUploadURL;
 	var params = "";
 	var photo_ids = this.customSettings.uploadedPhotoIds;
+  if(photo_ids.length == 0)
+    return;
 	for(var i=0;i< photo_ids.length;i++){
 		params += "ids[]=" + photo_ids[i] + "&";
 	}

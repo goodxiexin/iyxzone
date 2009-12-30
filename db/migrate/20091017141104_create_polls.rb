@@ -11,6 +11,7 @@ class CreatePolls < ActiveRecord::Migration
       t.date :deadline
       t.text :summary
       t.integer :privilege, :default => 2 # 1. all 2. only friends
+      t.integer :sharings_count, :default => 0
       t.integer :digs_count, :default => 0
       t.integer :comments_count, :default => 0
 			t.integer :votes_count, :default => 0 

@@ -3,6 +3,6 @@
   <td class="time"><%= ftime blog_item.created_at %></td>
   <% if @user == current_user %>
   <td class="icon"><%= link_to '', edit_blog_url(blog_item), :class => "icon-active icon-active-edit" %></td>
-  <td class="icon"><%= link_to '', blog_url(blog_item), :class => "icon-active", :method => :delete %></td>
+  <td class="icon"><%= link_to_remote '', blog_url(blog_item), :class => "icon-active", :method => :delete %></td>
   <% end %>
 </tr> 

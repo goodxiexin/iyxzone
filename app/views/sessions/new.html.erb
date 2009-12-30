@@ -24,6 +24,9 @@
 				<div class="logo png">
 					欢迎您！这里是您的互动家园！
         </div>
+          <% unless flash[:error].nil? %>
+            <div><%= flash[:error] %></div>
+          <% end %>
         <% form_tag sessions_url do %>
 					<div class="rows">
 						<div class="fldid"><%= label_tag 'email', '电子邮箱：' %></div>

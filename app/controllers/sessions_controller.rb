@@ -4,12 +4,14 @@ class SessionsController < ApplicationController
   end
 
   def create
+    @user = User.find_by_email(params[:email])
+    if !@user.nil? and !@user.active?
+      redirect_to :controller => 'users', :action => 'activation_mail_sent', :email => @user.email, :show => 1
+      return
+    end
     self.current_user = User.authenticate(params[:email], params[:password])
     if current_user == nil
       flash.now[:error] = "用户名密码不正确"
-      render :action => 'new'
-    elsif !current_user.active?
-      flash.now[:error] = "帐户还没激活，检查你的邮箱"
       render :action => 'new'
     elsif current_user.enabled == false
       flash.now[:error] = "你的帐号被删除了"

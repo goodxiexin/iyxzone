@@ -1,20 +1,59 @@
-<% content_for :left do %>
-	<%= render :partial => '/app_menu' %>
-  <%= render :partial => 'search' %>
-<% end %>
-
-<div>
-<%= guild_link @guild %> -> 工会成员
-</div>
-
-<%= render :partial => 'menu' %>
-
-<div id='members'>
-	<% if params[:type].to_i == 2 %>
-		<%= render :partial => 'invitees', :object => @members %>
-	<% elsif params[:type].to_i == 3 %>
-		<%= render :partial => 'requestors', :object => @members %>
-	<% else %>
-		<%= render :partial => 'members', :object => @members %>
-	<% end %>
-</div>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-ploy">活动</h1>
+    <div class="box02 canvas_int">
+      <div class="tab tab01">
+        <div class="icon">
+          <%= render :partial => 'search' %>
+        </div>
+        <ul>
+        <% if params[:type].to_i == 0 %>
+          <li class='hover'><span><%= link_to "长老", guild_memberships_url(@guild, :type => 0) %></span></li>
+        <% else %>
+          <li><span><%= link_to "长老", guild_memberships_url(@guild, :type => 0) %></span></li>
+        <% end %>
+        <% if params[:type].to_i == 1 %>
+          <li class='hover'><span><%= link_to "普通会员", guild_memberships_url(@guild, :type => 1) %></span></li>
+        <% else %>
+          <li><span><%= link_to "普通会员", guild_memberships_url(@guild, :type => 1) %></span></li>
+        <% end %>
+        <% if params[:type].to_i == 2 %>
+          <li class='hover'><span><%= link_to "被邀请的人", guild_memberships_url(@guild, :type => 2) %></span></li>
+        <% else %>
+          <li><span><%= link_to "被邀请的人", guild_memberships_url(@guild, :type => 2) %></span></li>
+        <% end %>
+        <% if params[:type].to_i == 3 %> 
+          <li class='hover'><span><%= link_to "请求加入的人", guild_memberships_url(@guild, :type => 3) %></span></li>
+        <% else %>
+          <li><span><%= link_to "请求加入的人", guild_memberships_url(@guild, :type => 3) %></span></li>
+        <% end %>
+      </div>
+      <div class="piclist-rows" id='events'>
+        <div id='members'>
+        <% if params[:type].to_i == 2 %>
+          <% if @members.total_entries == 0 %>
+            <div class='gray'>你还没邀请别人加入你的工会，赶紧去<%= link_to '邀请', new_guild_invitation_url(@guild) %>你的好友</div>
+          <% else %>
+            <%= render :partial => 'invitees', :object => @members %>
+            <%= will_paginate @members %>      
+          <% end %>
+        <% elsif params[:type].to_i == 3 %>
+          <% if @members.total_entries == 0 %>
+            <div class='gray'>没人请求加入你的工会，你行不行？</div>
+          <% else %>
+            <%= render :partial => 'requestors', :object => @members %>
+            <%= will_paginate @members %>
+          <% end %>
+        <% else %>
+          <% if @members.total_entries == 0 %>
+            <div class='gray'>没有成员。。囧，赶紧去<%= link_to '邀请', new_guild_invitation_url(@guild) %>你的好友</div>
+          <% else %>
+            <%= render :partial => 'members', :object => @members %>
+            <%= will_paginate @members %>
+          <% end %>
+        <% end %>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>

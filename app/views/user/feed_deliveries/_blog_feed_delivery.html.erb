@@ -2,10 +2,10 @@
 <% blog = delivery.feed_item.originator %>
 <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
 	<div class="feed-icon icon-blog"></div>
-  <p>
-		<%= profile_link blog.poster %>
-		编写了日志
-	</p>
+  <% if feed_delivery_deleteable_by_current_user delivery %>
+    <%= link_to_remote '', :url => feed_delivery_url(delivery), :method => :delete, :class => 'icon-active' %>
+  <% end %>
+  <p><%= profile_link blog.poster %>编写了日志</p>
   <div class="feed-content">
 		<%= truncate blog.content, :length => 80, :omission => '...' %>
 	</div>
@@ -13,7 +13,4 @@
   <% if with_comments %>
 	  <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => blog, :recipient => blog.poster} %>
   <% end %>
-	<div>
-    <% if feed_delivery_deleteable_by_current_user delivery %><%= link_to_remote 'x', :url => feed_delivery_url(delivery), :method => :delete %><% end %>
-  </div> 
 </div>

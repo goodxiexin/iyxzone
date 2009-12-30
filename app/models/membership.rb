@@ -35,6 +35,14 @@ class Membership < ActiveRecord::Base
     status == Membership::President
   end
 
+  def is_veteran?
+    status == Membership::Veteran
+  end
+
+  def is_member?
+    status == Membership::Member
+  end
+
   def is_authorized?
     status == Membership::Member or status == Membership::Veteran
   end

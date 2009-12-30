@@ -87,7 +87,7 @@ class User::PollsController < ApplicationController
 protected
 
   def setup
-    if ['index', 'participated', 'hot', 'recent'].include? params[:action]
+    if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:id])
     elsif ['show', 'edit', 'update', 'destroy'].include? params[:action]
       @poll = Poll.find(params[:id])

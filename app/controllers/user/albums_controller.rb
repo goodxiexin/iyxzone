@@ -22,7 +22,7 @@ class User::AlbumsController < ApplicationController
   end
 
   def friends
-    @albums = current_user.personal_album_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10 
+    @albums = current_user.personal_album_feed_items.map(&:originator).uniq.paginate :page => params[:page], :per_page => 10 
   end
 
   def select
@@ -30,7 +30,8 @@ class User::AlbumsController < ApplicationController
   end
 
   def show
-		@comments = @album.comments 
+		@comments = @album.comments
+    @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
   end
 
   def new

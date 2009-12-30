@@ -30,7 +30,7 @@ Rails::Initializer.run do |config|
 		:blog_observer, :blog_feed_observer,
 		:video_feed_observer,
 		:status_feed_observer,
-		#:friendship_observer, :friendship_feed_observer,
+		:friendship_observer, :friendship_feed_observer,
 		:event_observer, :event_feed_observer, :participation_observer, :participation_feed_observer, # event
 		:poll_observer, :poll_feed_observer, :vote_counter_observer, :vote_feed_observer, :poll_invitation_observer, # poll
 		:guild_observer, :guild_feed_observer, :membership_feed_observer, :membership_observer,

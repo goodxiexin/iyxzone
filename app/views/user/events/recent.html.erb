@@ -7,16 +7,24 @@
           <%= link_to "新建活动", new_event_url, :class => 'icon-add-table' %>
         </div>
 		    <ul>
-			    <li><span><%= link_to "热门活动", hot_events_url(:id => @user.id) %></span></li>
-			    <li class='hover'><span><%= link_to "最近活动", recent_events_url(:id => @user.id) %></span></li>
-			    <li><span><%= link_to "#{get_subject @user}的活动", events_url(:id => @user.id) %></span></li>
-			    <% if @user == current_user %>
-			      <li><span><%= link_to "朋友的活动", friends_events_url %></span></li>
-			    <% end %>
+			    <li class='hover'><span><%= link_to "热门活动", hot_events_url(:id => current_user.id) %></span></li>
+			    <li><span><%= link_to "我的活动", events_url(:id => current_user.id) %></span></li>
+			    <li><span><%= link_to "朋友的活动", friends_events_url %></span></li>
 		    </ul>
       </div>
       <div class="piclist-rows" id='events'>
+        <div class="nav-link">
+          <ul class="s_clear">
+            <li><%= link_to "<span>人气最高</span>", hot_events_url %></li>
+            <li class='hover'><%= link_to "<span>最新创建</span>", recent_events_url %></li>
+          </ul>
+        </div>
+      <% if @events.total_entries != 0 %>
 	      <%= render :partial => 'event_items', :object => @events %>
+        <%= will_paginate @events %>
+      <% else %>
+        <div class='gray'>最近大家都很懒，你赶紧<%= link_to '创建一个', new_event_url %>吧</div>
+      <% end %>
       </div>
     </div>
   </div></div>

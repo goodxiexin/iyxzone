@@ -22,7 +22,7 @@ class User::Events::InvitationsController < ApplicationController
   end
 
   def update
-    unless @invitation.update_attributes(params[:invitation].to_i)
+    unless @invitation.update_attributes(params[:invitation])
       render :update do |page|
         page << "error('发生错误')"
       end

@@ -18,7 +18,7 @@ Iyxzone.Game.Selector = Class.create({
     this.serverSelectID = serverSelectID;
     this.raceSelectorID = raceSelectorID;
     this.professionSelectorID = professionSelectorID;
-    
+ 
     this.options = Object.extend({
       onGameChange: Prototype.emptyFunction,
       onAreaChange: Prototype.emptyFunction,

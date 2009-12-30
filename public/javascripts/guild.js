@@ -27,7 +27,8 @@ Object.extend(Iyxzone.Guild.Builder, {
     return true;
   },
 
-  save: function(){
+  save: function(event){
+    Event.stop(event);
     if(this.validate()){
       var form = $('guild_form');
       form.action = '/guilds';
@@ -36,7 +37,8 @@ Object.extend(Iyxzone.Guild.Builder, {
     }
   },
 
-  update: function(guildID){
+  update: function(guildID, event){
+    Event.stop(event);
     if(this.validate()){
       var form = $('guild_form');
       form.action = '/guilds/' + guildID;

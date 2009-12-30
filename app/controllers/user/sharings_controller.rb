@@ -20,6 +20,8 @@ class User::SharingsController < ApplicationController
       @sharings = @user.photo_sharings.paginate :page => params[:page], :per_page => 20
     when 5
       @sharings = @user.album_sharings.paginate :page => params[:page], :per_page => 20
+    when 6
+      @sharings = @user.poll_sharings.paginate :page => params[:page], :per_page => 20
     end
   end
 
@@ -37,23 +39,27 @@ class User::SharingsController < ApplicationController
       @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Photo'}).paginate :page => params[:page], :per_page => 20
     when 5
       @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Album'}).paginate :page => params[:page], :per_page => 20
+    when 6
+      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Poll'}).paginate :page => params[:page], :per_page => 20
     end
   end
 
   def recent
     case params[:type].to_i
     when 0
-      @sharings = Sharing.hot.paginate :page => params[:page], :per_page => 20
+      @sharings = Sharing.recent.paginate :page => params[:page], :per_page => 20
     when 1
-      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Blog'}).paginate :page => params[:page], :per_page => 20
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Blog'}).paginate :page => params[:page], :per_page => 20
     when 2
-      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Video'}).paginate :page => params[:page], :per_page => 20
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Video'}).paginate :page => params[:page], :per_page => 20
     when 3
-      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Link'}).paginate :page => params[:page], :per_page => 20
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Link'}).paginate :page => params[:page], :per_page => 20
     when 4
-      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Photo'}).paginate :page => params[:page], :per_page => 20
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Photo'}).paginate :page => params[:page], :per_page => 20
     when 5
-      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Album'}).paginate :page => params[:page], :per_page => 20
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Album'}).paginate :page => params[:page], :per_page => 20
+    when 6
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Poll'}).paginate :page => params[:page], :per_page => 20
     end
   end
 
@@ -71,6 +77,8 @@ class User::SharingsController < ApplicationController
       @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Photo'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     when 5
       @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Album'}.map(&:originator).paginate :page => params[:page], :per_page => 20
+    when 6
+      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Poll'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     end
   end
 
@@ -124,7 +132,7 @@ protected
         @klass = params[:shareable_type].camelize.constantize
         @shareable = @klass.find(params[:shareable_id])
       end
-    elsif ["index", "hot", "recent"].include? params[:action]
+    elsif ["index"].include? params[:action]
       @user = User.find(params[:id])
     elsif ["show"].include? params[:action]
       @sharing = Sharing.find(params[:id])
@@ -147,6 +155,8 @@ protected
       shareable.title
     when 'Link'
       shareable.url
+    when 'Poll'
+      shareable.name
     when 'PersonalAlbum'
       shareable.title
     when 'AvatarAlbum'

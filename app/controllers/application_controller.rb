@@ -9,11 +9,7 @@ class ApplicationController < ActionController::Base
 
   include PrivilegeSystem
 
-  def new_validation_image
-    validation_image = ValidationImage.new
-    session[:validation_text] = validation_image.text
-    send_data validation_image.image, :type => 'image/jpeg', :disposition => 'inline'
-  end 
+  include RoleRequirementSystem
 
   def user_game_conds
     {:game_id => current_user.characters.map(&:game_id).uniq}

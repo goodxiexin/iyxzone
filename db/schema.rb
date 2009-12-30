@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091225062455) do
+ActiveRecord::Schema.define(:version => 20091228153258) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -450,6 +450,15 @@ ActiveRecord::Schema.define(:version => 20091225062455) do
   add_index "ratings", ["rateable_id", "rating"], :name => "index_ratings_on_rateable_id_and_rating"
 
   create_table "regions", :force => true do |t|
+    t.string "name"
+  end
+
+  create_table "role_users", :force => true do |t|
+    t.integer "role_id"
+    t.integer "user_id"
+  end
+
+  create_table "roles", :force => true do |t|
     t.string "name"
   end
 

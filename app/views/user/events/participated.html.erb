@@ -16,14 +16,20 @@
 		    </ul>
       </div>
       <div class="piclist-rows" id='events'>
-	      <div class="nav-link">
+        <div class="nav-link">
           <ul class="s_clear">
-            <li><%= link_to "<span>#{get_subject @user}发起的</span>", events_url(:id => @user.id) %></li>
-            <li><%= link_to "<span>#{get_subject @user}要参加的</span>", upcoming_events_url(:id => @user.id) %></li>
-            <li class='hover'><%= link_to "<span>#{get_subject @user}参加过的</span>", participated_events_url(:id => @user.id) %></li>
+            <li><%= link_to "<span>#{get_subject @user}发起的(#{@user.events_count})</span>", events_url(:id => @user.id) %></li>
+            <li><%= link_to "<span>#{get_subject @user}要参加的(#{@user.upcoming_events_count})</span>", upcoming_events_url(:id => @user.id) %></li>
+            <li class='hover'><%= link_to "<span>#{get_subject @user}参加过的(#{@user.past_events_count})</span>", participated_events_url(:id => @user.id) %></li>
           </ul>
         </div>
-	      <%= render :partial => 'event_items', :object => @events %>
+        <% if @user.past_events_count != 0 %> 
+          <%= render :partial => 'event_items', :object => @events %>
+        <% else %>
+          <div class='gray'>
+            <%= get_subject @user %>的过去一片空白
+          </div>
+        <% end %>
       </div>
     </div>
   </div></div>

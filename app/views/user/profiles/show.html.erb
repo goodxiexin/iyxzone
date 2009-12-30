@@ -5,10 +5,9 @@
 
 <% content_for :left do %>
 	<div class="mcAvatar">
-		<a href="#"></a>
 	  <div class="picwrap">
 			<div class="middle"><div class="middle-center"><div class="center" id='avatar'>
-				<%= avatar @user, :size => :large %>
+				<%= avatar_image @user, :size => :large, :width => '100px', :height => '112px' %>
 			</div></div></div>
 	  </div>
 	</div>
@@ -98,6 +97,7 @@
 
 <div class="box02 canvas_con">
 
+<% unless @albums.blank? %>
 <div class="multibox">
 	<div class="title"><b>最近照片</b></div>
   <div class="piclist s_clear">
@@ -119,12 +119,11 @@
 					<% end %>
       </div>	
 		<% end %>	
-		<div class="diary-more">
-			<%= link_to '全部相册', personal_albums_url(:id => @user.id) %>
-		</div>
 	</div>
 </div>
+<% end %>
 
+<% unless @blogs.blank? %>
 <div class="multibox">
 	<div class="title"><b>最近日志</b></div>
 	<% @blogs.each do |blog| %>
@@ -132,14 +131,16 @@
 			<div class="diary-header">
 				<p><%= blog_link blog %> <%= ftime blog.created_at %> </p>
 			</div>
-			<p> <%= truncate blog.content, :length => 80, :omission => '...' %> </p>
+			<p> <%= blog_content blog, :length => 80, :omission => '...' %> </p>
 		</div>
 	<% end %>
   <div class="diary-more">
-		<%= link_to '全部日志', blogs_url(:id => @user.id) %>
+    <%= link_to "全部日志 >>", blogs_url(:id => @user.id) %>
   </div>
 </div>
+<% end %>
 
+<% unless @feed_deliveries.blank? %>
 <div class='multibox'>
 	<div class='title'><b>新鲜事</b></div>
   <div class="feed-wrap" id='feed_list'>
@@ -149,8 +150,9 @@
 		<span><%= link_to_function "更多新鲜事", "Iyxzone.Profile.Feeder.moreFeeds(#{@profile.id});" %></span>
 	</div>
 </div>
+<% end %>
 
-<% if @can_reply %>
+<% if wall_repliable? %>
   <%= render :layout => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user} %>
 <% end %>
 <% if wall_viewable? %>

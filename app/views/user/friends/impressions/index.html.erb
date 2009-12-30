@@ -1,7 +1,7 @@
 <%= stylesheet_link_tag "tag_cloud" %>
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="big-mygame">好友</h1>
+    <h1 class="app-friend">好友</h1>
       <div class="box02 canvas_int">
         <div class="tab tab01">
           <ul>
@@ -15,7 +15,7 @@
             <% @friends.each do |f| %>
               <% tagged = f.profile.tagged_by? current_user %>
               <tr>
-                <th class="img"><%= avatar f %></th>
+                <th class="img"><%= avatar f, :class => 'imgbox01' %></th>
                 <td>
                   <h4><%= profile_link f %></h4>
                   <% unless tagged %>

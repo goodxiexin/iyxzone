@@ -258,7 +258,7 @@ a:hover{color:#D63200;}
 
 .appcontent04{padding:9px 14px;}
 
-.appcontent05{padding:15px 0;}
+.appcontent05{padding:15px 0;min-height: 367px;}
 .appcontent05 h3,.appcontent05 h4{padding-left:22px;line-height:25px;}
 .appcontent05 .formcontent .form-rows{padding:9px 0 9px 22px;}
 .appcontent05 .formcontent .form-sperator{border-bottom:1px #E7F0E0 solid;}

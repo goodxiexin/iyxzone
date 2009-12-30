@@ -1,4 +1,4 @@
-class User::Guild::MembershipsController < ApplicationController
+class User::Guilds::MembershipsController < ApplicationController
 
   layout 'app'
 
@@ -60,7 +60,7 @@ class User::Guild::MembershipsController < ApplicationController
     elsif params[:type].to_i == 3
       @members = @guild.requestors
     end 
-		@members = @members.find_all {|m| m.login.include?(params[:key]) }.paginate :page => params[:page], :per_page => 10, :order => 'login ASC'
+		@members = @members.find_all {|m| m.pinyin.starts_with?(params[:key]) }.paginate :page => params[:page], :per_page => 10, :order => 'login ASC'
     @remote = {:update => 'members', :url => search_guild_memberships_url(@guild, :type => params[:type], :key => params[:key])}
     if params[:type].to_i == 2
 			render :partial => 'invitees', :object => @members

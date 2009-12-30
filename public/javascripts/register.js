@@ -366,12 +366,12 @@ Object.extend(Iyxzone.Register.Manager, {
     if(!this.validateEmail()) return;
     if(!this.validatePassword()) return;
     if(!this.validatePasswordConfirmation()) return;
-
+/*
     if(this.characters.size() == 0){
       error('至少要有1个游戏角色');
       return;
     }
-
+*/
     if(!$('allow').checked){
       error('必须同意才能注册');
       return;

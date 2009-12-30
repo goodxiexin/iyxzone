@@ -9,20 +9,17 @@ protected
   end
 
   def can_view?
-    current_user == @wall.user || 
-    @wall.user.friends.include?(current_user) || 
-    @wall.user.privacy_setting.wall == 1 || 
-    (@wall.user.privacy_setting.wall == 2 and @wall.user.has_same_game_with(current_user)) || 
-    not_found 
+    @user = @wall.user
+    is_owner? || is_friend? || @user.privacy_setting.wall == 1 || (@user.privacy_setting.wall == 2 and is_same_game?) || not_found 
   end
 
 =begin
   def can_reply?
-    current_user == @wall.user || @wall.user.friends.include?(current_user) 
+    current_user == @user || @user.friends.include?(current_user) 
   end
 
   def can_delete?
-    @wall.user == current_user
+    @user == current_user
   end
 =end
 end

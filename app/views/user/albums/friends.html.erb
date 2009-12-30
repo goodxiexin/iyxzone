@@ -1,6 +1,6 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="big-photo">照片</h1>
+    <h1 class="app-photo">照片</h1>
     <div class="box02 canvas_int">
 	    <div class="tab tab01">
 		    <% if current_user == current_user %>
@@ -12,19 +12,42 @@
         <ul>
 			    <% subject = get_subject current_user %>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:id => current_user.id) %></span></li>
-			    <li><span><%= link_to '最新照片', recent_personal_albums_url(:id => current_user.id) %></span></li>
+			    <li><span><%= link_to '最新相册', recent_personal_albums_url(:id => current_user.id) %></span></li>
           <li><span><%= link_to "#{subject}的相册", personal_albums_url(:id => current_user.id) %></span></li>
 			    <li class='hover'><span><%= link_to '好友相册', friends_personal_albums_url(:id => current_user.id) %></span></li>
           <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => current_user.id) %></span></li>
         </ul>				
 	    </div>
       <div class="box02 appcontent01">
-        <div class="piclist s_clear">
-			    <%= render :partial => 'album_item', :collection => @albums %>
+        <% if @albums.total_entries != 0 %>
+        <h3>你的好友最近共更新 <span><%= @albums.total_entries %></span> 个专辑</h3>
+        <div class="piclist">
+          <ul class='pics-list s_clear'>
+            <% @albums.each do |album| %>
+            <li>
+              <div class="picbox01-wide">
+                <div class="new"></div>
+                <div class="img">
+                  <table cellpadding="0"><tr><td>
+                    <%= album_cover album, :class => 'imgbox01', :width => '75px', :height => '86px' %>
+                  </td></tr></table>
+                </div>
+                <div class="info">
+                  <h4><%= album_link album %>共<span><%= album.photos_count %></span>张</h4>
+                  <p><%= profile_link album.poster %></p>
+                  <p><%= ftime album.created_at %>创建</p>
+                  <p><%= ftime album.uploaded_at %>更新</p>
+                </div>
+              </div>
+            </li>
+            <% end %>
+          <%= will_paginate @albums %>
         </div>
+        <% else %>
+          <div class='gray'>你的好友最近比较懒，没有更新什么相册</div>
+        <% end %>
       </div>
     </div>
-    <%= will_paginate @albums %>
   </div></div>
 </div></div></div></div>
 

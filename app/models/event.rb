@@ -2,7 +2,7 @@ class Event < ActiveRecord::Base
 
   has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id'
 
-  belongs_to :poster, :class_name => 'User'
+  belongs_to :poster, :class_name => 'User', :counter_cache => true
 
   belongs_to :game
 

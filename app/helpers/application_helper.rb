@@ -1,11 +1,12 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
-  def avatar_image(user, size="small")
+  def avatar_image(user, opts={})
+    size = opts.delete(:size) || "medium"
     if user.avatar.blank?
-      image_tag "default_#{size}.png"
+      image_tag "default_#{size}.png", opts
     else
-      image_tag user.avatar.public_filename(size)
+      image_tag user.avatar.public_filename(size), opts
     end
   end
 
@@ -74,6 +75,15 @@ module ApplicationHelper
     end
   end
 
+  def album_cover_image album, opts={}
+    size = opts.delete(:size) || 'medium'
+    if album.cover_id.blank?
+      image_tag "default_cover_#{size}.png", opts
+    else
+      image_tag album.cover.public_filename(size), opts
+    end
+  end
+
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'medium'
     if album.cover_id.blank?
@@ -98,7 +108,11 @@ module ApplicationHelper
   end
 
   def blog_content blog, opts
-    truncate blog.content, opts
+    if blog.content.length > opts[:length]
+      (truncate blog.content, opts) + (link_to '查看全文>>', blog_url(blog))
+    else
+      truncate blog.content, opts
+    end
   end
 
   def blog_link blog

@@ -19,7 +19,6 @@
         <ul>
           <% subject = get_subject @user %>
           <li><span><%= link_to "热门日志", hot_blogs_url(:id => @user.id) %></a></span></li>
-          <li><span><%= link_to "最新日志", recent_blogs_url(:id => @user.id) %></span></li>
           <li class='hover'><span><%= link_to "#{subject}的日志", blogs_url(:id => @user.id) %></span></li>
         <% if @user == current_user %>
           <li><span><%= link_to "好友日志", friends_blogs_url %></span></li>
@@ -30,14 +29,22 @@
       </div>
       <div class="appcontent05">
         <div class="myblog">
+        <% if @user.blogs_count == 0 %>
+          <% if @user == current_user %>
+          <h4 class='gray'>你还没有日志，赶紧<%= link_to '写一篇', new_blog_url %>?</h4>
+          <% else %>
+          <h4 class='gray'><%= subject %>还没写日志，是个懒货</h4>
+          <% end %>
+        <% else %>
           <h4 class="gray">共<%= @user.blogs_count %>篇日志</h4>
           <div class="myblog-table">
             <table cellpadding="0">
               <%= render :partial => 'blog_item', :collection => @blogs %>
             </table>
           </div>
+          <%= will_paginate @blogs %>
         </div>
-        <%= will_paginate @blogs %>
+        <% end %>
       </div>
     </div>
   </div></div>

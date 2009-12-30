@@ -15,7 +15,16 @@
 		</ul>
   </div>
   <div class="piclist-rows" id='events'>
-		<%= render :partial => 'user/events/event_items', :object => @events %>
+    <div class='path-box'>
+      <label>工会"<%= guild_link @guild %>"</label>
+      <span>活动</span>
+    </div>
+    <% if @events.total_entries != 0 %>
+		  <%= render :partial => 'user/events/event_items', :object => @events %>
+      <%= will_paginate @events %>
+    <% else %>
+      <div class='gray'>该工会还没有相关活动</div>
+    <% end %>
   </div>
 </div>
 </div></div>

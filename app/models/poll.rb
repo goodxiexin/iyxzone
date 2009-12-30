@@ -14,6 +14,8 @@ class Poll < ActiveRecord::Base
 
   acts_as_diggable
 
+  acts_as_shareable
+  
 	acts_as_commentable :order => 'created_at ASC'
 
 	named_scope :hot, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Date.today.to_s(:db)], :order => "voters_count DESC"

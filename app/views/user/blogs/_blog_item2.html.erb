@@ -1,7 +1,7 @@
 <% blog = blog_item2 %>
 <div class="feed-img-list">
   <div class='feed-list'>
-    <div class='feed-img'><%= avatar blog.poster %></div>
+    <div class='feed-img'><%= avatar blog.poster, :class => 'imgbox01' %></div>
     <div class='feed-header'>
       <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Blog', :shareable_id => blog.id), :class => 'right love-btn' %>
       <h3><%= blog_link blog %></h3>

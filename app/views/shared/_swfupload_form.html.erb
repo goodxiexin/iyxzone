@@ -1,11 +1,19 @@
 <% if @album.class.name == 'PersonalAlbum' %>
-  <% photo_controller = '/user/photos' %>
-<% elsif @album.class.name == 'EventAlbum' %>
-  <% photo_controller = '/user/events/photos' %>
+<% 
+  photo_controller = "/user/photos" 
+  upload_url = personal_photos_url
+%>
 <% elsif @album.class.name == 'GuildAlbum' %>
-  <% photo_controller = '/user/guilds/photos' %>
+<% 
+  photo_controller = '/user/guilds/photos' 
+  upload_url = guild_photos_url
+%>
+<% elsif @album.class.name == 'EventAlbum' %>
+<% 
+  photo_controller = '/user/events/photos' 
+  upload_url = event_photos_url
+%>
 <% end %>
-
 <script type="text/javascript" charset="utf-8">
 var swfu;
 window.onload = function(){
@@ -13,7 +21,7 @@ window.onload = function(){
 var settings = {
 	flash_url : "/flash/swfupload.swf",
 	upload_url: "<%= upload_url-%>",
-	post_params: {authenticity_token : "<%= form_authenticity_token-%>"},
+	post_params: {authenticity_token : "<%= form_authenticity_token %>"},
 	file_size_limit : "100 MB",
 	file_types : "*.*",
 	file_types_description : "All Files",
@@ -56,24 +64,12 @@ swfu = new SWFUpload(settings);
 </script>    
 <div id='photo_ids'></div>
 <form action="<%=upload_url-%>" enctype="multipart/form-data">
-<div class='photo-upload-form box05'>
-  <div class="title title01">
-    <div class="right">
-      <span>照片</span>
-      <span>状态</span>
-    </div>
-    <h5>照片</h5>
-  </div>
-  <div class='upload-body'>
-    <ul id='fsUploadProgress'>
-    </ul>
-  </div>
   <div id="fsUploadProgress" class="fieldset flash">
     <span class="legend">上传的图片</span>
   </div>
+  <div id="divStatus">0 Files Uploaded</div>
   <div>
     <span id="spanButtonPlaceHolder"></span>
     <input id="btnCancel" type="button" value="取消上传" onclick="swfu.cancelQueue();" disabled="disabled" class="cancel-button"/>  
   </div>
-</div>
 </form>  
