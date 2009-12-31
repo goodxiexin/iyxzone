@@ -112,7 +112,8 @@ protected
   end
 
   def president_or_veteran_required
-    @guild.president == current_user || @guild.veterans.include?(current_user) || not_found
+    @membership = @guild.memberships.find_by_user_id(current_user.id)
+    (@membership and (@membership.is_president? or @membership.is_veteran?)) || not_found
   end 
 
 end

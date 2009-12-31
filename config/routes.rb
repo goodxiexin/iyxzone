@@ -132,7 +132,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :event_albums, :controller => 'events/albums'
 
-    users.resources :event_photos, :controller => 'events/photos', :collection => {:edit_multiple => :get, :update_multiple => :put}
+    users.resources :event_photos, :controller => 'events/photos', :collection => {:edit_multiple => :get, :update_multiple => :put, :record_upload => :post}
 
     users.resources :events, :collection => [:hot, :recent, :participated, :upcoming, :friends] do |events|
 
@@ -148,7 +148,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :guild_albums, :controller => 'guilds/albums'
 
-    users.resources :guild_photos, :controller => 'guilds/photos', :collection => {:edit_multiple => :get, :update_multiple => :put}
+    users.resources :guild_photos, :controller => 'guilds/photos', :collection => {:edit_multiple => :get, :update_multiple => :put, :record_upload => :post}
 
     users.resources :guilds, :member => {:more_feeds => :get},
                     :collection => {:hot => :get, :recent => :get , :participated => :get, :friends => :get} do |guilds|

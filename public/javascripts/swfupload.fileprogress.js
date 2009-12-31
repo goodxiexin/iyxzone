@@ -13,7 +13,6 @@ function FileProgress(file, targetID) {
 
 	this.opacity = 100;
 	this.height = 0;
-	
 
 	this.fileProgressWrapper = document.getElementById(this.fileProgressID);
 
@@ -24,56 +23,19 @@ function FileProgress(file, targetID) {
     
     this.fileProgressInfo = document.createElement('div');
     this.fileProgressInfo.className = 'right';    
-    this.fileProgressInfo.innerHTML = '<span>' + file.size + '</span><span><a class="icon-active" onclick="" href="#"></a></span>';
+    this.fileProgressInfo.innerHTML = '<span>' + abbreviateSize(file.size) + '</span><span><a class="icon-active" onclick="swfu.cancelUpload(\'' + file.id +'\');" href="#"></a></span>';
     this.fileProgressStatus = this.fileProgressInfo.childNodes[1];
     
     this.fileProgressWrapper.appendChild(this.fileProgressInfo);    
     this.fileProgressWrapper.appendChild(document.createTextNode(file.name));
 
-
     document.getElementById(targetID).appendChild(this.fileProgressWrapper);
-/*
-		this.fileProgressWrapper = document.createElement("div");
-		this.fileProgressWrapper.className = "progressWrapper";
-		this.fileProgressWrapper.id = this.fileProgressID;
-
-		this.fileProgressElement = document.createElement("div");
-		this.fileProgressElement.className = "progressContainer";
-
-		var progressCancel = document.createElement("a");
-		progressCancel.className = "progressCancel";
-		progressCancel.href = "#";
-		progressCancel.style.visibility = "hidden";
-		progressCancel.appendChild(document.createTextNode(" "));
-
-		var progressText = document.createElement("div");
-		progressText.className = "progressName";
-		progressText.appendChild(document.createTextNode(file.name));
-
-		var progressBar = document.createElement("div");
-		progressBar.className = "progressBarInProgress";
-
-		var progressStatus = document.createElement("div");
-		progressStatus.className = "progressBarStatus";
-		progressStatus.innerHTML = "&nbsp;";
-
-		this.fileProgressElement.appendChild(progressCancel);
-		this.fileProgressElement.appendChild(progressText);
-		this.fileProgressElement.appendChild(progressStatus);
-		this.fileProgressElement.appendChild(progressBar);
-
-		this.fileProgressWrapper.appendChild(this.fileProgressElement);
-
-		document.getElementById(targetID).appendChild(this.fileProgressWrapper);
-*/
 	} else {
 		this.fileProgressInfo = this.fileProgressWrapper.firstChild;
     this.fileProgressStatus = this.fileProgressInfo.childNodes[1];
-    //this.fileProgressElement = this.fileProgressWrapper.firstChild;
-		this.reset();
 	}
-/*	alert(targetID)*/
-	this.height = this.fileProgressWrapper.offsetHeight;
+	
+  this.height = this.fileProgressWrapper.offsetHeight;
 	this.setTimer(null);
 
 
@@ -89,69 +51,36 @@ FileProgress.prototype.getTimer = function (timer) {
 };
 
 FileProgress.prototype.reset = function () {
-	/*this.fileProgressElement.className = "progressContainer";
-
-	this.fileProgressElement.childNodes[2].innerHTML = "&nbsp;";
-	this.fileProgressElement.childNodes[2].className = "progressBarStatus";
-	
-	this.fileProgressElement.childNodes[3].className = "progressBarInProgress";
-	this.fileProgressElement.childNodes[3].style.width = "0%";
-	
-	this.appear();*/	
+  // nothing to do right now
 };
 
 FileProgress.prototype.setProgress = function (percentage) {
-	this.fileProgressElement.className = "progressContainer green";
-	this.fileProgressElement.childNodes[3].className = "progressBarInProgress";
-	this.fileProgressElement.childNodes[3].style.width = percentage + "%";
-
-	this.appear();	
+  // no progress now... show progress in status column
 };
 FileProgress.prototype.setComplete = function () {
-	/*this.fileProgressElement.className = "progressContainer blue";
-	this.fileProgressElement.childNodes[3].className = "progressBarComplete";
-	this.fileProgressElement.childNodes[3].style.width = "";
-*/
-	var oSelf = this;
+	// do some css things
+  var oSelf = this;
 	this.setTimer(setTimeout(function () {
 		oSelf.disappear();
 	}, 10000));
 };
 FileProgress.prototype.setError = function () {
-	this.fileProgressElement.className = "progressContainer red";
-	this.fileProgressElement.childNodes[3].className = "progressBarError";
-	this.fileProgressElement.childNodes[3].style.width = "";
-
-	var oSelf = this;
-	this.setTimer(setTimeout(function () {
+	// do some css things
+  var oSelf = this;
+  this.setTimer(setTimeout(function () {
 		oSelf.disappear();
 	}, 5000));
 };
 FileProgress.prototype.setCancelled = function () {
-	this.fileProgressElement.className = "progressContainer";
-	this.fileProgressElement.childNodes[3].className = "progressBarError";
-	this.fileProgressElement.childNodes[3].style.width = "";
-
+  // do some css things
 	var oSelf = this;
 	this.setTimer(setTimeout(function () {
 		oSelf.disappear();
-	}, 2000));
+	}, 1000));
 };
 FileProgress.prototype.setStatus = function (status) {
 	this.fileProgressStatus.innerHTML = status;
   //this.fileProgressElement.childNodes[2].innerHTML = status;
-};
-
-// Show/Hide the cancel button
-FileProgress.prototype.toggleCancel = function (show, swfUploadInstance) {
-	this.fileProgressElement.childNodes[0].style.visibility = show ? "visible" : "hidden";
-	if (swfUploadInstance) {
-		var fileID = this.fileProgressID;
-		this.fileProgressElement.childNodes[0].onclick = function () {
-			swfUploadInstance.cancelUpload(fileID);
-			return false;
-		};
-	}
 };
 
 FileProgress.prototype.appear = function () {
