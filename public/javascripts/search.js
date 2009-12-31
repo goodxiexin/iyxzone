@@ -45,10 +45,15 @@ Iyxzone.Search = {
 
   validateCharacterForm: function(){
     var value = $('character_form').getInputs('text')[0].value;
-    if(value  == '角色名字' || value == ''){
-      error('请输入角色名字');
+    var gameID = $('game_id').value;
+    var areaID = $('area_id').value;
+    var serverID = $('server_id').value;
+    if((value  == '角色名字' || value == '') && gameID == '' && areaID == '' && serverID == ''){
+      error('请输入你要查找的玩家的信息');
       return false;
     }
+    if(value  == '角色名字' || value == '')
+      $('character_form').getInputs('text')[0].clear();
     return true;
   },
 

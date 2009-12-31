@@ -14,6 +14,8 @@ class Blog < ActiveRecord::Base
 
   acts_as_resource_feeds
 
+  acts_as_shareable
+
 	named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
 
 	named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"

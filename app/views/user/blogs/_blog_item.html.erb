@@ -1,10 +1,8 @@
-<dd id='blog_<%= blog_item.id %>'>
-  <span class='title'><%= blog_link blog_item %></span>
-  <span class='option'>
-    <%= ftime blog_item.created_at %>
-    <% if blog_item.poster == current_user %>
-	    <%= link_to "编辑", edit_blog_url(blog_item) %>
-	    <%= facebox_confirm 'x', blog_url(blog_item), {:msg => "你确定要删除这篇博客吗?", :method => :delete} %>
-    <% end %>
-  </span>
-</dd> 
+<tr id='blog_<%= blog_item.id %>'>
+  <td class="title"><div><%= blog_link blog_item %></div></td>
+  <td class="time"><%= ftime blog_item.created_at %></td>
+  <% if @user == current_user %>
+  <td class="icon"><%= link_to '', edit_blog_url(blog_item), :class => "icon-active icon-active-edit" %></td>
+  <td class="icon"><%= link_to_remote '', blog_url(blog_item), :class => "icon-active", :method => :delete %></td>
+  <% end %>
+</tr> 

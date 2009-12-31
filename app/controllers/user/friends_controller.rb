@@ -1,8 +1,6 @@
-class User::FriendsController < ApplicationController
+class User::FriendsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
 	before_filter :not_friend_required, :only => [:new]
 

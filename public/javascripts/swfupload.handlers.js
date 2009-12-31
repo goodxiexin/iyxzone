@@ -16,8 +16,8 @@ function fileQueued(file) {
 	try {
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
 		
-		progress.setStatus("正在上传...");
-		progress.toggleCancel(true, this);
+		progress.setStatus("等待");
+		//progress.toggleCancel(true, this);
 
 	} catch (ex) {
 		this.debug(ex);
@@ -83,8 +83,8 @@ function uploadStart(file) {
 		 */
 
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		progress.setStatus("Uploading...");
-		progress.toggleCancel(true, this);
+		progress.setStatus("开始上传");
+		//progress.toggleCancel(true, this);
 	}
 	catch (ex) {}
 	
@@ -96,8 +96,8 @@ function uploadProgress(file, bytesLoaded, bytesTotal) {
 		var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
 
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		progress.setProgress(percent);
-		progress.setStatus("正在上传...");
+		//progress.setProgress(percent);
+		progress.setStatus("正在上传"+percent);
 	} catch (ex) {
 		this.debug(ex);
 	}
@@ -108,7 +108,7 @@ function uploadSuccess(file, serverData) {
 		var progress = new FileProgress(file, this.customSettings.progressTarget);
 		progress.setComplete();
 		progress.setStatus("完成");
-		progress.toggleCancel(false);
+		//progress.toggleCancel(false);
 		this.customSettings.uploadedPhotoIds.push(serverData);
 	} catch (ex) {
 		this.debug(ex);
@@ -175,8 +175,8 @@ function uploadComplete(file) {
 
 // This event comes from the Queue Plugin
 function queueComplete(numFilesUploaded) {
-	var status = document.getElementById("divStatus");
-	status.innerHTML = this.getStats().successful_uploads; //numFilesUploaded + " file" + (numFilesUploaded === 1 ? "" : "s") + " uploaded.";
+	//var status = document.getElementById("divStatus");
+	//status.innerHTML = this.getStats().successful_uploads; //numFilesUploaded + " file" + (numFilesUploaded === 1 ? "" : "s") + " uploaded.";
 
 /*	$.post(update_files_url, "", function(data) {*/
 /*                jQuery('#').html(data);*/

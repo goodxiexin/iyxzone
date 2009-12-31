@@ -1,6 +1,4 @@
-class User::GameAttentionsController < ApplicationController
-
-  before_filter :login_required, :setup
+class User::GameAttentionsController < UserBaseController
 
 	def index
 		@games = current_user.interested_games.paginate :page => params[:page], :per_page => 1
@@ -11,7 +9,7 @@ class User::GameAttentionsController < ApplicationController
     if @attention = @game.attentions.create(:user_id => current_user.id)
 			render :update do |page|
 				page.replace_html "game_attention_#{@game.id}", "已关注"
-				page.insert_html :top, 'my_attentions', :partial => 'game_suggestions/interested_game', :object => @game
+				page.insert_html :top, 'my_attentions', :partial => 'user/game_suggestions/interested_game', :object => @game
 			end
 		else
 			render :update do |page|

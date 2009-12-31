@@ -1,6 +1,6 @@
 <% type = wall.class.to_s.underscore %>
 <div class="bookbox">
-  <h3><label for="book">留言板</label>(<%= link_to "查看所有#{wall.comments_count}条留言", wall_messages_url(wall) %>)</h3>
+  <h3><label for="book">留言板</label>(<%= link_to "查看所有#{wall.comments_count}条留言", eval("#{type}_wall_messages_url(wall)") %>)</h3>
   <div class="formcontent s_clear">
     <% form_for :comment, :html => {:id => 'wall_message_form'} do |f| %>
       <%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id %>
@@ -10,14 +10,9 @@
         </div></div>
       </div>
       <div class="buttons">
-      <span class="button"><span><%= button_to_function '发布', "Iyxzone.WallMessage.save('#{type}', #{wall.id}, this)" %></span></span>
+      <span class="button"><span><button type='button' onclick="Iyxzone.WallMessage.save('<%= type %>', <%= wall.id %>, this);" >发布</button></span></span>
         <%= emotion_link 'comment_content' %>
       </div>
     <% end %>
   </div>
 </div>
-<% if with_comments %>
-  <div class="feed-box" id='comments'>
-    <%= render :partial => 'user/wall_messages/wall_message', :collection => @messages %>
-  </div>
-<% end %>

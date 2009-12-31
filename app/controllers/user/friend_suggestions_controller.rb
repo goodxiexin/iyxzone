@@ -1,8 +1,6 @@
-class User::FriendSuggestionsController < ApplicationController
+class User::FriendSuggestionsController < UserBaseController
 
 	layout 'app'
-
-	before_filter :login_required, :setup
 
 	def index
     @games = Game.find(:all, :order => 'pinyin ASC')

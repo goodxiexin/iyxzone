@@ -1,8 +1,6 @@
-class User::ApplicationSettingController < ApplicationController
+class User::ApplicationSettingController < UserBaseController
 
 	layout 'app'
-
-	before_filter :login_required, :setup
 
 	def show
 	end
@@ -21,6 +19,8 @@ class User::ApplicationSettingController < ApplicationController
 			render :action => 'event_config', :layout => false
 		when 5
 			render :action => 'guild_config', :layout => false
+    when 6
+      render :action => 'sharing_config', :layout => false
 		end	
 	end
 

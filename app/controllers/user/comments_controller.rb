@@ -1,6 +1,11 @@
-class User::CommentsController < ApplicationController
-
-  before_filter :login_required, :setup
+#
+# 这个类有个问题：
+# 如果我们某一天突然对评论也有了对博客一样的浏览权限，那么这个polymorphism controller就不能适用了
+# 真有那一天，请在更深层次的域名里定义一个commentsController，并继承该controller
+# 其实我觉得上面这种做法更好，我只是为了偷懒才弄成这样
+# 所有的polymorphism都有这样的问题，比如wall message, tag, viewing等
+#
+class User::CommentsController < UserBaseController
 
   def create
     @comment = @commentable.comments.build(params[:comment].merge({:poster_id => current_user.id}))

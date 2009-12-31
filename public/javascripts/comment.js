@@ -9,6 +9,9 @@ Iyxzone.Comment = {
 };
 
 Object.extend(Iyxzone.Comment, {
+
+  mappings: new Hash(),
+
   pluralize: function(str){
     if(str == 'status')
       return 'statuses';
@@ -73,7 +76,24 @@ Object.extend(Iyxzone.Comment, {
         $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
       }
     });
+  },
+
+  toggleBox: function(commentableType, commentableID, link, commentsCount){
+    var box = $(commentableType + '_comment_box_' + commentableID);
+    if(!box.visible()){
+      Effect.BlindDown(box);
+      $(commentableType + '_comment_content_' + commentableID).focus();
+      if(link){
+        link.update('收起回复');
+      }
+    }else{
+      Effect.BlindUp(box);
+      if(link){
+        link.update(commentsCount + '条回复')
+      }
+    }
   }
+
 });
 
 Iyxzone.WallMessage = Class.create({});
@@ -94,7 +114,7 @@ Object.extend(Iyxzone.WallMessage, {
 
   save: function(wallType, wallID, button){
     if(Iyxzone.WallMessage.validate($('comment_content'))){
-      new Ajax.Request('/wall_messages?wall_type=' + wallType + '&wall_id=' + wallID, {
+      new Ajax.Request('/' + wallType + 's/' + wallID + '/wall_messages', {
         method: 'post',
         parameters: $('wall_message_form').serialize(),
         onLoading: function(){

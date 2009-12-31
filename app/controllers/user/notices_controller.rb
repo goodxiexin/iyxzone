@@ -1,6 +1,4 @@
-class User::NoticesController < ApplicationController
-
-	before_filter :login_required, :setup
+class User::NoticesController < UserBaseController
 
 	def index
     @notices = current_user.notices

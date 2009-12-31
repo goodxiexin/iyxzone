@@ -1,3 +1,0 @@
-wall_type = @wall.class.name.underscore
-page.insert_html :top, "comments", :partial => 'wall_message', :object => @message
-page << "$('comment_content').value = '';"

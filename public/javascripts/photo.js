@@ -198,15 +198,31 @@ Iyxzone.Photo.Tagger = Class.create({
       poster_id: tagInfo.photo_tag.poster.id,
       poster_login: tagInfo.photo_tag.poster.login
     });
-  
-    // add li element to page
+
+    /*
+    <li>
+                      <div class="rect-box">
+                        <div class="rect-wrap"><div class="rect">
+                          <a class="icon-active" href="#"></a>
+                          <a href="#">张一</a> 标记了 <a href="#">吕诃</a> ：11 
+                        </div></div>
+                      </div>
+                    </li>
+    */
     var li = new Element('li', {id: 'tag_' + tagInfo.photo_tag.id});
+    var rectBox = new Element('div', {class: 'rect-box'});
+    var rectWrap = new Element('div', {class: 'rect-wrap'});
+    var rect = new Element('div', {class: 'rect'});
     var posterLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.poster.id}).update('<span>' + tagInfo.photo_tag.poster.login + '</span>');
     var taggedUserLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.tagged_user.id}).update('<span>' + tagInfo.photo_tag.tagged_user.login + '</span>');
-    li.appendChild(posterLink);
-    li.innerHTML += ('标记了');
-    li.appendChild(taggedUserLink);
-    li.innerHTML += (' : ' + tagInfo.photo_tag.content);
+    rect.appendChild(posterLink);
+    rect.innerHTML += ('标记了');
+    rect.appendChild(taggedUserLink);
+    rect.innerHTML += (' : ' + tagInfo.photo_tag.content);
+    rectWrap.appendChild(rect);
+    rectBox.appendChild(rectWrap);
+    li.appendChild(rectBox);
+
     if(this.isLoading){
       this.tagsHolder.innerHTML = '';
       Element.insert(this.tagsHolder, {bottom: li});
@@ -223,8 +239,8 @@ Iyxzone.Photo.Tagger = Class.create({
       this.hideTagWithContent(tagInfo.photo_tag.id);
     }.bind(this));
     if(this.isCurrentUser){
-      var deleteLink = new Element('a', {href: '#'}).update('x');
-      li.appendChild(deleteLink);
+      var deleteLink = new Element('a', {href: '#', class: 'icon-active'});
+      rect.appendChild(deleteLink);
       deleteLink.observe('click', function(e){
         this.remove(tagInfo.photo_tag.id);
       }.bind(this));
@@ -442,7 +458,7 @@ Iyxzone.Photo.Slide = Class.create({
       img.src = this.photoURLs[photoIdx];
       this.mappings.set(this.photoIDs[photoIdx], img);
     }
-    this.frames[idx].innerHTML = "<a class='imgbox01' href='http://localhost:3000/" + this.photoType + "/" + this.photoIDs[photoIdx] +"'><img src='" +  img.src +"' /></a>";
+    this.frames[idx].innerHTML = "<a href='http://localhost:3000/" + this.photoType + "/" + this.photoIDs[photoIdx] +"'><img src='" +  img.src +"' class='imgbox01' width=50 height=50/></a>";
   },
 
   next: function(){

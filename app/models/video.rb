@@ -4,6 +4,8 @@ class Video < ActiveRecord::Base
 
   belongs_to :game
 
+  acts_as_shareable
+
 	acts_as_commentable :order => 'created_at ASC'
 
 	acts_as_diggable

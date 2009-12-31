@@ -6,7 +6,7 @@
   <a href="#"></a>
   <div class="picwrap">
     <div class="middle"><div class="middle-center"><div class="center">
-			<%= album_cover @album %>
+			<%= album_cover_image @album %>
 		</div></div></div>
 	</div>
 </div>
@@ -19,9 +19,15 @@
 <% end %>
 
 <% content_for :right do %>
+<% if @guild.forum.topics_count != 0 %>
 	<%= render :partial => 'guild_topics' %>
+<% end %>
+<% if @guild.events.count != 0 %>
 	<%= render :partial => 'guild_events' %>
+<% end %>
+<% if false %>
 	<%= render :partial => 'guild_friends' %>
+<% end %>
 <% end %>
 
 <div class='box02 canvas_con'>
@@ -32,6 +38,8 @@
 		<%= @guild.description %>
   </div>
 </div>
+
+<% if @album.photos_count != 0 %>
 <div class="multibox">
 	<div class="title"><%= link_to '更多', guild_album_url(@album) %><b>照片</b></div>
   <div class="photolist-big-box">
@@ -44,6 +52,7 @@
 		</ul>
 	</div>
 </div>
+<% end %>
 
 <div class="multibox">
 	<div class="title"><%= link_to "更多(#{@guild.all_count})", guild_memberships_url(@guild, :type => 0) %><b>会员</b></div>
@@ -59,6 +68,7 @@
   </div>
 </div>
 
+<% unless @feed_deliveries.blank? %>
 <div class='multibox'>
   <div class='title'><b>新鲜事</b></div>
 	<div class="feed-wrap" id='feed_list'>
@@ -68,8 +78,9 @@
 		<span><%= link_to_function "更多新鲜事", "Iyxzone.Guild.Feeder.moreFeeds(#{@guild.id});" %></span>
   </div>
 </div>
+<% end %>
 
-<% if @membership and [3,4,5].include? @membership.status %>
+<% if @membership and (@membership.is_authorized? or @membership.is_president?)%>
   <%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @guild, :recipient => @guild.president, :with_comments => false} %>
 <% else %>
   <div class='bookbox'>

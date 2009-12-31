@@ -1,8 +1,6 @@
-class User::PasswordSettingController < ApplicationController
+class User::PasswordSettingController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required
 
   def edit
   end

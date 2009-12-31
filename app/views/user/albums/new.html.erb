@@ -4,7 +4,7 @@
 </div>
 
 <div id='errors'></div>
-<% form_remote_for :album, :url => personal_albums_url do |f| %>
+<% form_remote_for :album, :url => personal_albums_url(:show => params[:show]) do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
     <div class="fldid"><label for="name">专辑名称：</label></div>

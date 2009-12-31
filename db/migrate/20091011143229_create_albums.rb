@@ -10,6 +10,7 @@ class CreateAlbums < ActiveRecord::Migration
       t.integer :cover_id
       t.string :title
       t.text :description
+      t.integer :sharings_count, :default => 0
       t.integer :comments_count, :default => 0
       t.datetime :uploaded_at
       t.datetime :created_at

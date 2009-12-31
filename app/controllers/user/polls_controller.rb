@@ -1,8 +1,6 @@
-class User::PollsController < ApplicationController
+class User::PollsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :friend_or_owner_required, :only => [:index]
 
@@ -53,7 +51,7 @@ class User::PollsController < ApplicationController
 
   def edit
     if params[:type].to_i == 0
-      render :action => 'edit_end_date', :layout => false
+      render :action => 'edit_deadline', :layout => false
     else
       render :action => 'edit_summary', :layout => false
     end
@@ -63,7 +61,6 @@ class User::PollsController < ApplicationController
     if @poll.update_attributes(params[:poll])
       render :update do |page|
         page << "facebox.close();"
-        page << "$('end_date').innerHTML = '#{@poll.end_date.strftime("%Y-%m-%d")}';"
       end
     else
       render :update do |page|
@@ -88,7 +85,7 @@ class User::PollsController < ApplicationController
 protected
 
   def setup
-    if ['index', 'participated', 'hot', 'recent'].include? params[:action]
+    if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:id])
     elsif ['show', 'edit', 'update', 'destroy'].include? params[:action]
       @poll = Poll.find(params[:id])

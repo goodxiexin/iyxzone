@@ -1,54 +1,93 @@
 <%= error_messages_for :character %>
 
 <% form_remote_for :character, :html => {:id => 'character_info_form'} do |f| %>
-  <%= f.label '人物昵称: ' %>
-  <%= f.text_field :name, :size => 10 %><br/>
-	<a id='character_name_info'></a>
-  <%= f.label '级别: ' %>
-  <%= f.text_field :level, :size => 10 %> <br/>
-  <a id='character_level_info'></a> 
-	<%= f.label '游戏: ' %>
-  <%= collection_select :character, :game_id, @games, :id, :name, {:prompt => '---'} %>
-  <a id='character_game_info'></a>
-    <div id='tips'><%= link_to_function "提示", "tip(\"由于游戏数量庞大，很多游戏已经停服，我们没有把所有游戏统计完成。这个游戏的资料就还不完全，请您在左边的意见／建议中告诉我们您所在游戏的所在服务器，我们会以最快速度为您添加。对您带来得不便，我们道歉。\");" %></div>
-  <%= f.label '请给这款游戏打分' %>
-  <div id='star-ratings-block'>
-    <ul class='star-rating'>
-      <div id='current_rate'>
-        <li class='current-rating' style='width:<%= (Rating::DEFAULT * 30).to_i -%>px;'>Currently <%= Rating::DEFAULT %>/5 Stars.</li>
-      </div>
-      <li>
-        <%= link_to_function( "1", "Iyxzone.Register.Manager.setupRating(1)" ,:class => 'one-star', :name => '1 star out of 5') %>
-      </li>
-      <li>
-        <%= link_to_function( "2", "Iyxzone.Register.Manager.setupRating(2)" ,:class => 'two-star', :name => '2 star out of 5') %>
-      </li>
-      <li>
-        <%= link_to_function( "3", "Iyxzone.Register.Manager.setupRating(3)" ,:class => 'three-star', :name => '3 star out of 5') %>
-      </li>
-      <li>
-        <%= link_to_function( "4", "Iyxzone.Register.Manager.setupRating(4)" ,:class => 'four-star', :name => '4 star out of 5') %>
-      </li>
-      <li>
-        <%= link_to_function( "5", "Iyxzone.Register.Manager.setupRating(5)" ,:class => 'five-star', :name => '5 star out of 5') %>
-      </li>
-    </ul>
+  <div class="rows s_clear">
+    <div class="fldid"><label>游戏角色名字：</label></div>
+    <div class="fldvalue">
+      <div class="textfield"><%= f.text_field :name, :size => 10 %></div>
+    </div>
+    <div class="" id='character_name_info'></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><label>游戏角色等级：</label></div>
+    <div class="fldvalue">
+      <div class="textfield"><%= f.text_field :level, :size => 10 %></div>
+    </div>
+    <div class="" id='character_level_info'></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><label>游戏：</label></div>
+    <div class="fldvalue">
+      <%= collection_select :character, :game_id, @games, :id, :name, {:prompt => '---'} %>
+    </div>
+    <div class="" id='character_game_info'><div id='tips'><%= link_to_function "提示", "tip(\"由于游戏数量庞大，很多游戏已经停服，我们没有把所有游戏统计完成。这个游戏的资料就还不完全，请您在左边的意见／建议中告诉我们您所在游戏的所在服务器，我们会以最快速度为您添加。对您带来得不便，我们道歉。\");" %></div></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><label>请给这款游戏打分：</label></div>
+    <div class="fldvalue">
+      <div id='star-ratings-block'>
+        <ul class='star-rating'>
+        <div id='current_rate'>
+          <li class='current-rating' style='width:<%= (Rating::DEFAULT * 30).to_i -%>px;'>Currently <%= Rating::DEFAULT %>/5 Stars.</li>
+        </div>
+        <li>
+          <%= link_to_function( "1", "Iyxzone.Register.Manager.setupRating(1)" ,:class => 'one-star', :name => '1 star out of 5') %>
+        </li>
+        <li>
+          <%= link_to_function( "2", "Iyxzone.Register.Manager.setupRating(2)" ,:class => 'two-star', :name => '2 star out of 5') %>
+        </li>
+        <li>
+          <%= link_to_function( "3", "Iyxzone.Register.Manager.setupRating(3)" ,:class => 'three-star', :name => '3 star out of 5') %>
+        </li>
+        <li>
+          <%= link_to_function( "4", "Iyxzone.Register.Manager.setupRating(4)" ,:class => 'four-star', :name => '4 star out of 5') %>
+        </li>
+        <li>
+          <%= link_to_function( "5", "Iyxzone.Register.Manager.setupRating(5)" ,:class => 'five-star', :name => '5 star out of 5') %>
+        </li>
+        </ul>
+      </div> 
+    </div>
+    <div class="" id='rate_info'></div>
   </div>
   <%= hidden_field_tag 'game_rate', Rating::DEFAULT %>
-	<%= f.label '区域: ' %>
-  <%= collection_select :character, :area_id, [], :id, :name, {:prompt => '---'} %><br/>
-  <a id='character_area_info'></a>
-	<%= f.label '服务器: '%>
-  <%= collection_select :character, :server_id, [], :id, :name, {:prompt => '---'} %><br/>
-	<a id='character_server_info'></a>
-	<%= f.label '种族: '%>
-  <%= collection_select :character, :race_id, [], :id, :name, {:prompt => '---'} %><br/>
-	<a id='character_race_info'></a>
-	<%= f.label '职业: '%>
-  <%= collection_select :character, :profession_id, [], :id, :name, {:prompt => '---'} %><br/>
-	<a id='character_profession_info'></a>
-  <%= f.label '正在玩: ' %>
-  <%= f.check_box 'playing', {}, 1 %><br/>
-	<%= button_to_function '创建', "Iyxzone.Register.Manager.createCharacter();" %>
-  <%= link_to_function '取消', "Iyxzone.Register.Manager.cancelNewCharacter();" %>
+  <div class="rows s_clear">
+    <div class="fldid"><label>游戏角色所在服务区：</label></div>
+    <div class="fldvalue">
+      <%= collection_select :character, :area_id, [], :id, :name, {:prompt => '---'} %>
+    </div>
+    <div class="" id='character_area_info'></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><label>游戏角色所在服务器：</label></div>
+    <div class="fldvalue">
+      <%= collection_select :character, :server_id, [], :id, :name, {:prompt => '---'} %>
+    </div>
+    <div class="" id='character_server_info'></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><label>游戏角色种族：</label></div>
+    <div class="fldvalue">
+      <%= collection_select :character, :race_id, [], :id, :name, {:prompt => '---'} %>
+    </div>
+    <div class="" id='character_race_info'></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><label>游戏角色职业：</label></div>
+    <div class="fldvalue">
+      <%= collection_select :character, :profession_id, [], :id, :name, {:prompt => '---'} %>
+    </div>
+    <div class="" id='character_profession_info'></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><label>是否在玩该游戏：</label></div>
+    <div class="fldvalue"><%= check_box_tag 'character[playing]', 1, true %></div>
+    <div class="" id='character_playing_info'></div>
+  </div>
+  <div class="btn-rows">
+    <table class="center">
+      <tr><td><%= button_to_function '创建', "Iyxzone.Register.Manager.createCharacter()", :class => "registbtn png" %></td></tr>
+      <tr><td><%= link_to_function '取消', "Iyxzone.Register.Manager.cancelCharacter()" %></td></tr> 
+    </table>
+  </div>
 <% end %>

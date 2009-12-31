@@ -15,23 +15,60 @@ class Membership < ActiveRecord::Base
 	Veteran					= 4
 	Member					= 5
 
-	def before_create
-		return if status == Membership::President
-		self.president_id = guild.president.id
-	end
+  def is_invitation?
+    status == Membership::Invitation
+  end
+
+  def was_invitation?
+    status_was == Membership::Invitation
+  end
+
+  def is_request?
+    status == Membership::VeteranRequest or status == Membership::MemberRequest
+  end
+
+  def was_request?
+    status_was == Membership::VeteranRequest or status_was == Membership::MemberRequest
+  end
+
+  def is_president?
+    status == Membership::President
+  end
+
+  def is_veteran?
+    status == Membership::Veteran
+  end
+
+  def is_member?
+    status == Membership::Member
+  end
+
+  def is_authorized?
+    status == Membership::Member or status == Membership::Veteran
+  end
+
+  def was_authorized?
+    status_was == Membership::Member or status_was == Membership::Veteran
+  end  
 
   def validate_on_create
     membership = guild.memberships.find_by_user_id(user_id)
     return true if membership.blank?
-    if membership.status == Membership::Invitation
+    if membership.is_invitation?
       errors.add_to_base('你已经被邀请了')
-    elsif membership.status == Membership::VeteranRequest or membership.status == Membership::MemberRequest
+    elsif membership.is_request?
       errors.add_to_base('你已经发送请求了')
-    elsif membership.status == Membership::President or membership.status == Membership::Veteran or membership.status == Membership::Member
+    elsif membership.is_authorized?
       errors.add_to_base('你已经加入了该工会')
     else
 			errors.add_to_base('unknown status')
 		end
+  end
+
+  def validate_on_update
+    unless self.is_authorized?
+      errors.add_to_base('参数不对')
+    end
   end
 
 	def accept_request
@@ -46,4 +83,9 @@ class Membership < ActiveRecord::Base
 		update_attribute('status', Membership::Member)
 	end
 
+  def before_create
+    return if status == Membership::President
+    self.president_id = guild.president.id
+  end
+  
 end

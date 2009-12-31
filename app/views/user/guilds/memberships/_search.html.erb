@@ -1,0 +1,12 @@
+<div class='blog-right-bar'>
+  <div class='part'>
+    <%= text_field_tag 'search' %>
+    <%= observe_field :search,
+                  :complete  => "facebox.watchClickEvents();",
+                  :update    => "members",
+                  :frequency => 1,
+                  :url       => search_guild_memberships_url(@guild),
+                  :with      => "'key=' + $('search').value + '&type=#{params[:type]}'",
+                  :method    => :get %>
+  </div>
+</div>

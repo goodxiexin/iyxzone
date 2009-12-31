@@ -1,7 +1,18 @@
-  <%= label_tag 'login', 'virtual name '%><%= @user.login %><br/>
-  <%= label_tag 'gender', 'gender '%><%= @profile.gender %><br/>
-  <%= label_tag 'birthday', 'birthday '%><%= ftime2 @profile.birthday %><br/>
-  <%= label_tag '省份', 'country '%><%= @profile.region.nil? ? '' : @profile.region.name %><br/>
-	<%= label_tag '城市', 'city' %><%= @profile.city.nil? ? '' : @profile.city.name %><br/>
-  <%= label_tag '地区', 'district'%><%= @profile.district.nil? ? '' : @profile.district.name %></br>
-
+<div class="rows s_clear">
+  <div class="id">昵称：</div> 
+  <div class="left"><%= @user.login %></div>
+</div>
+<div class="rows s_clear">
+  <div class="id">性别：</div>
+  <div class="left"><%= gender @user %></div>
+</div>
+<div class="rows s_clear">
+  <div class="id">生日：</div>
+  <div class="left"><%= ftime2 @profile.birthday %></div>
+</div>
+<div class="rows s_clear">
+  <div class="id">地址：</div>
+  <div class="left">
+    <%= @profile.region.name unless @profile.region.nil?%> <%= @profile.city.name unless @profile.city.nil?%> <%= @profile.district.name unless @profile.district.nil? %>
+  </div>
+</div>

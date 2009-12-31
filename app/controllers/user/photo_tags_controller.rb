@@ -1,6 +1,4 @@
-class User::PhotoTagsController < ApplicationController
-
-  before_filter :login_required, :setup
+class User::PhotoTagsController < UserBaseController
 
   def index
     render :json => @photo.tags

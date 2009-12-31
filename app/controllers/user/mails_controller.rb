@@ -1,8 +1,6 @@
-class User::MailsController < ApplicationController
+class User::MailsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required
 
   before_filter :catch_mail, :only => [:show, :reply, :destroy]
 

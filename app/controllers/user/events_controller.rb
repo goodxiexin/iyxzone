@@ -1,8 +1,6 @@
-class User::EventsController < ApplicationController
+class User::EventsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :owner_required, :only => [:edit]
 
@@ -105,7 +103,7 @@ protected
       @event = Event.find(params[:id])
 			@user = @event.poster
 			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
-    elsif ['index', 'hot', 'recent', 'upcoming', 'participated'].include? params[:action]
+    elsif ['index', 'upcoming', 'participated'].include? params[:action]
       @user = User.find(params[:id])
     elsif ['new', 'create', 'friends'].include? params[:action]
       @user = current_user

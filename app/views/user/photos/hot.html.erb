@@ -1,6 +1,6 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
-		<h1 class="big-photo">照片</h1>
+		<h1 class="app-photo">照片</h1>
 		<div class="box02 canvas_int">
 			<div class="tab tab01">
 				<% if @user == current_user %>
@@ -12,7 +12,7 @@
         <ul>
 					<% subject = get_subject @user %>
           <li class='hover'><span><%= link_to "热门照片", hot_personal_photos_url(:id => @user.id) %></span></li>
-					<li><span><%= link_to '最新照片', recent_personal_albums_url(:id => @user.id) %></span></li>
+					<!-- <li><span><%= link_to '最新照片', recent_personal_albums_url(:id => @user.id) %></span></li> -->
           <li><span><%= link_to "#{subject}的相册", personal_albums_url(:id => @user.id) %></span></li>
 					<% if @user == current_user %>
 						<li><span><%= link_to '好友相册', friends_personal_albums_url(:id => @user.id) %></span></li>
@@ -20,16 +20,33 @@
           <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
         </ul>				
 			</div>
-      <div class="box02 appcontent01">
-        <div class="piclist s_clear">
-					<% @photos.each do |p| %>
-						<%= image_tag p.public_filename(:medium) %>
-					<% end %>
-        </div>
+      <div class='piclist-rows'>
+        <% if @photos.blank? %>
+          <div class='gray'>没人上传图片阿，你赶紧上传吧</div>
+        <% else %>
+        <table class="table01 big" cellpadding="0" cellspacing="1">
+          <% @photos.each do |photo| %>
+          <tr>
+            <td>
+              <div class="imgwrap">
+                <%= photo_link photo, :size => :large, :class => 'imgbox01' %>
+              </div>
+              <div class="data">
+                <h3><%= profile_link photo.poster %> 上传</h3>
+                <p>创建于 <%= ftime photo.created_at %></p>
+                <p class="link">
+                  <%= link_to '查看相片', eval("#{photo.class.name.underscore}_url(photo)") %> | 
+                  <%= link_to '查看相册', eval("#{photo.album.class.name.underscore}_url(photo.album)") %>
+                </p>
+              </div>
+            </td>
+          </tr>
+          <% end %>
+        </table>
+        <%= will_paginate @albums %>
+        <% end %>
       </div>
     </div>
 	</div></div>
 </div></div></div></div>
-
-<%= will_paginate @albums %>
 

@@ -1,8 +1,8 @@
-class User::PrivacySettingController < ApplicationController
+class User::PrivacySettingController < UserBaseController
 
   layout 'app'
 
-  before_filter :login_required, :catch_setting
+  before_filter :catch_setting
 
   def show
   end

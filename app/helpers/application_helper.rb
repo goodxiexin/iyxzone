@@ -1,11 +1,12 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
-  def avatar_image(user, size="small")
+  def avatar_image(user, opts={})
+    size = opts.delete(:size) || "medium"
     if user.avatar.blank?
-      image_tag "default_#{size}.png"
+      image_tag "default_#{size}.png", opts
     else
-      image_tag user.avatar.public_filename(size)
+      image_tag user.avatar.public_filename(size), opts
     end
   end
 
@@ -74,6 +75,15 @@ module ApplicationHelper
     end
   end
 
+  def album_cover_image album, opts={}
+    size = opts.delete(:size) || 'medium'
+    if album.cover_id.blank?
+      image_tag "default_cover_#{size}.png", opts
+    else
+      image_tag album.cover.public_filename(size), opts
+    end
+  end
+
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'medium'
     if album.cover_id.blank?
@@ -98,7 +108,11 @@ module ApplicationHelper
   end
 
   def blog_content blog, opts
-    truncate blog.content, opts
+    if blog.content.length > opts[:length]
+      (truncate blog.content, opts) + (link_to '查看全文>>', blog_url(blog))
+    else
+      truncate blog.content, opts
+    end
   end
 
   def blog_link blog
@@ -175,6 +189,44 @@ module ApplicationHelper
     end
     html_code += "</select>"
     return html_code
+  end
+
+  def sharing_link sharing
+    shareable = sharing.shareable
+    url = ""
+    case shareable.class.name
+    when "Blog"
+      url = blog_url(shareable)
+    when "Video"
+      url = video_url(shareable)
+    when "Link"
+      url = '#'
+    when 'EventAlbum'
+      url = event_album_url(shareable)
+    when 'GuildAlbum'
+      url = guild_album_url(shareable)
+    when 'PersonalAlbum'
+      url = personal_album_url(shareable)
+    when 'AvatarAlbum'
+      url = avatar_album_url(shareable)
+    when 'EventPhoto'
+      url = event_photo_url(shareable)
+    when 'GuildPhoto'
+      url = guild_photo_url(shareable)
+    when 'Avatar'
+      url = avatar_url(shareable)
+    when 'PersonalPhoto'
+      url = personal_photo_url(shareable)
+    end
+    link_to sharing.title, url
+  end
+
+  def gender user
+    if user.gender == 'male' 
+      "男"
+    else
+      "女"
+    end
   end
 
 end

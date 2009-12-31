@@ -1,6 +1,6 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
-		<h1 class="big-photo">照片</h1>
+		<h1 class="app-photo">照片</h1>
 		<div class="box02 canvas_int">
 			<div class="tab tab01">
 				<% if @user == current_user %>
@@ -12,7 +12,7 @@
         <ul>
 					<% subject = get_subject @user %>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:id => @user.id) %></span></li>
-					<li><span><%= link_to '最新照片', recent_personal_albums_url(:id => @user.id) %></span></li>
+					<!-- <li><span><%= link_to '最新照片', recent_personal_albums_url(:id => @user.id) %></span></li> -->
           <li><span><%= link_to "#{subject}的相册", personal_albums_url(:id => @user.id) %></span></li>
 					<% if @user == current_user %>
 						<li><span><%= link_to '好友相册', friends_personal_albums_url(:id => @user.id) %></span></li>
@@ -20,20 +20,28 @@
           <li class='hover'><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
         </ul>				
 			</div>
-      <div class="box02 appcontent01">
-        <div class="piclist s_clear">
-				<% @photos.each do |p| %>
-					<li>
-						<div><%= photo_link p %></div>
-						<div>相册: <%= album_link p.album %></div>
-						<div><%= ftime p.created_at %></div>
-					</li>
-				<% end %>
-        </div>
+      <% if @photos.total_entries != 0 %>
+      <div class='box04 pic-box'>
+        <ul>
+          <% @photos.each do |p| %>
+          <li>
+            <div class="img">
+              <div class="middle"><div class="middle-center"><div class="center">
+                <%= photo_link p, :class => 'imgbox01' %>
+              </div></div></div>
+            </div>
+            <% if @album.poster == current_user %>
+              <p><%= facebox_link "编辑", edit_personal_photo_url(p) %> | <%= facebox_confirm '删除', personal_photo_url(p), {:msg => '你确定要删除这张图>片吗', :method => 'delete'} %> </p>
+            <% end %>
+          </li>
+          <% end %>
+        </ul>
+        <%= will_paginate @albums %>
       </div>
+      <% else %>
+      <div class='gray'>你的好友都不鸟你</div>
+      <% end %>
     </div>
 	</div></div>
 </div></div></div></div>
-
-<%= will_paginate @photos %>
 

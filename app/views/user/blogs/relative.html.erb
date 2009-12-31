@@ -19,7 +19,6 @@
         <ul>
           <% subject = get_subject @user %>
           <li><span><%= link_to "热门日志", hot_blogs_url(:id => @user.id) %></a></span></li>
-          <li><span><%= link_to "最新日志", recent_blogs_url(:id => @user.id) %></span></li>
           <li><span><%= link_to "#{subject}的日志", blogs_url(:id => @user.id) %></span></li>
         <% if @user == current_user %>
           <li><span><%= link_to "好友日志", friends_blogs_url %></span></li>
@@ -29,9 +28,13 @@
         </ul>
       </div>
       <div class="feed-box01">
+        <% if @blogs.total_entries != 0 %>
         <div class="page">共<%= "查api" %>篇</div>
         <%= render :partial => 'blog_item2', :collection => @blogs %>
         <%= will_paginate @blogs %>
+        <% else %>
+          <div class='page'><%= subject %>人缘不行，没有和<%= subject %>相关的日志</div>
+        <% end %>
       </div>
     </div>
   </div></div>

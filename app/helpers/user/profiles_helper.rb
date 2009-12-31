@@ -8,6 +8,10 @@ module User::ProfilesHelper
     is_owner? || relationship == 'friend' || @setting.wall == 1 || (@setting.wall == 2 and relationship == 'same_game')
   end
 
+  def wall_repliable?
+    is_owner? || relationship == 'friend' || @setting.leave_wall_message == 1
+  end
+
   def basic_info_viewable?
     is_owner? || relationship == 'friend' || @setting.basic_info == 1 || (@setting.basic_info == 2 and relationship == 'same_game')
   end

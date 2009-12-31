@@ -1,9 +1,6 @@
-class User::GameSuggestionsController < ApplicationController
-
+class User::GameSuggestionsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required
 
   def index
     @game_tags = Tag.game_tags 

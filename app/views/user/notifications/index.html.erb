@@ -13,9 +13,13 @@
         </ul>
       </div>
       <div class="box02 appcontent02">
+      <% if @notifications.blank? %>
+        <%= "没有任何通知" %>
+      <% else %>  
         <% group_notifications(@notifications).each do |range, notifications| %>
           <%= render :partial => 'notification_box', :locals => {:notifications => notifications, :title => range} %>
         <% end %>
+      <% end %>
       </div>
     </div>
   </div></div>

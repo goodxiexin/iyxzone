@@ -1,0 +1,18 @@
+<% blog = blog_sharing.shareable %>
+<div class="share-side-list">
+  <div class="comment-simple-box"><b><%= blog_sharing.digs_count %></b></div>
+  <div class="box02 share-content s_clear">
+    <div class="right">
+      <p><%= ftime blog_sharing.created_at %></p>
+      <p>首次分享人：<%= avatar blog.first_sharer, :width => '27px', :height => '27px' %> <%= profile_link blog.first_sharer %></p>
+    </div>
+    <div>
+      <h3><%= sharing_link blog_sharing %></h3>
+      <p><%= blog_content blog, :length => 80, :omission => '...'  %></p>
+      <p class="green"><%= link_to_function "评论", "Iyxzone.Comment.toggleBox('sharing', #{blog_sharing.id})" %>(<%= blog_sharing.comments_count %>)-<%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Blog', :shareable_id => blog.id) %><span>(<%= blog.sharings_count %>)</span></a> -<%= link_to "更多分享", sharings_url(:id => blog.first_sharer.id) %></p>
+    </div>
+    <div id ="sharing_comment_box_<%= blog_sharing.id %>" style="display:none">
+      <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => blog_sharing, :recipient => nil} %>
+    </div>
+  </div>
+</div>

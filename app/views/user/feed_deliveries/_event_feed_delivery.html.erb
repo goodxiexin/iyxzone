@@ -4,5 +4,5 @@
   <div class="feed-icon icon-friend"></div>
   <p><%= profile_link event.poster %>组织了活动<%= event_link event %></p>
 	<p> <%= ftime delivery.created_at %> </p>
-  <div><%= yield %></div> 
+  <div><% if feed_delivery_deleteable_by_current_user delivery %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div> 
 </div>

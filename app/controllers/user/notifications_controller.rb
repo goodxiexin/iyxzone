@@ -1,8 +1,6 @@
-class User::NotificationsController < ApplicationController
+class User::NotificationsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required
 
   before_filter :catch_notification, :only => [:destroy]
 

@@ -1,8 +1,6 @@
-class User::GuildsController < ApplicationController
+class User::GuildsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :owner_required, :only => [:edit, :update]
 
@@ -86,14 +84,14 @@ class User::GuildsController < ApplicationController
     when 2
       @guilds = Guild.recent.search(params[:key]).paginate :page => params[:page], :per_page => 5
     end
-    @remote = {:update => 'guilds', :url => {:action => 'search', :controller => 'guild/guilds', :type => params[:type], :key => params[:key]}}
-    render :partial => 'guild/guilds', :object => @guilds
+    @remote = {:update => 'guilds', :url => {:action => 'search', :controller => 'user/guilds', :type => params[:type], :key => params[:key]}}
+    render :partial => 'user/guilds/guilds', :object => @guilds
   end
 
 protected
 
   def setup
-    if ['index', 'participated', 'hot', 'recent'].include? params[:action]
+    if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:id])
     elsif ['show', 'edit', 'update', 'more_feeds'].include? params[:action]
       @guild = Guild.find(params[:id])

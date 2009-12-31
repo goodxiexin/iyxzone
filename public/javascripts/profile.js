@@ -48,6 +48,33 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   validateBasicInfo: function(){
+    var login = $('profile_login');
+
+    if(login.value == ''){
+      error('昵称不能为空');
+      return false;
+    }
+
+    if(login.value.length < 6){
+      error('昵称至少要4个字符');
+      return false;
+    }
+    if(login.value.length > 16){
+      error('昵称最多16个字符');
+      return false;
+    }
+
+    first = login.value[0];
+    if((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')){
+      if(!login.value.match(/[A-Za-z0-9\_]+/)){
+        error('昵称只允许字母和数字');
+        return false;
+      }
+    }else{
+      error('昵称必须以字母开头');
+      return false;
+    }
+
     return true;
   },
 
@@ -100,10 +127,41 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   validateContactInfo: function(){
+    var qq = $('profile_qq').value;
+
+    if(qq.match(/\d+/)){
+      if(qq.length < 6 || qq.length > 20){
+        error('qq号码长度不对');
+        return false;
+      }
+    }else{
+      error('qq号码只能由数字组成');
+      return false;
+    }
+  
+    var phone = $('profile_phone').value;
+
+    if(phone.match(/\d+/)){
+      if(qq.length < 8 || qq.length > 20){
+        error('联系电话长度不对');
+        return false;
+      }
+    }else{
+      error('联系电话只能由数字组成');
+      return false;
+    }
+
+    var url = $('profile_website').value;
+
+    if(!url.match(/^((https?:\/\/)?)(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/)){
+      error('非法的url地址');
+      return false;
+    }
+
     return true;
   },
 
-  updateContactInfo: function(profileID){
+  updateContactInfo: function(profileID, button){
     if(this.validateContactInfo()){
       new Ajax.Request('/profiles/' + profileID + '?type=2', {
         method: 'put',
@@ -202,6 +260,48 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   validateCharacterInfo: function(){
+    var name = $('character_name').value;
+    if(name == ''){
+      error('人物昵称应该有的吧');
+      return false;
+    }
+
+    var level = $('character_level').value;
+    if(level.value == ''){
+      error('等级不能不添啊');
+      return false;
+    }
+
+    if($('character_game_id').value == ''){
+      error('没有选择游戏，如有问题，请看提示');
+      return false;
+    }
+
+    var gameDetails = this.gameSelector.getDetails();
+    if(gameDetails){
+      if(gameDetails.no_servers){
+        tip('由于游戏数量庞大，很多游戏已经停服，我们没有把所有游戏统计完成。这个游戏的资料就还不完全，请您在左边的意见建议中告诉我们您所在游戏的所在服务器，我们会以最快速度为您添加。对您带来得不便，我们道歉');
+        return false;
+      }else{
+        if($('character_server_id').value == ''){
+          error('没有选择服务器');
+          return false;
+        }
+      }
+      if(!gameDetails.no_areas && $('character_area_id').value == ''){
+        error('没有选择区域，如有问题，请看提示');
+        return false;
+      }
+      if(!gameDetails.no_races && $('character_race_id').value == ''){
+        error('没有选择种族');
+        return false;
+      }
+      if(!gameDetails.no_professions && $('character_profession_id').value == ''){
+        error('没有选择职业');
+        return false;
+      }
+    }
+
     return true;
   },
 

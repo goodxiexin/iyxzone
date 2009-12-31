@@ -1,8 +1,6 @@
-class User::HomeController < ApplicationController
+class User::HomeController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required
 
   FirstFetchSize = 5
 

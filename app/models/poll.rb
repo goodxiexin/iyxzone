@@ -14,11 +14,13 @@ class Poll < ActiveRecord::Base
 
   acts_as_diggable
 
+  acts_as_shareable
+  
 	acts_as_commentable :order => 'created_at ASC'
 
-	named_scope :hot, :conditions => ["end_date > ?", Date.today.to_s(:db)], :order => "voters_count DESC"
+	named_scope :hot, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Date.today.to_s(:db)], :order => "voters_count DESC"
 
-	named_scope :recent, :conditions => ["end_date > ?", Date.today.to_s(:db)], :order => 'created_at DESC'
+	named_scope :recent, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Date.today.to_s(:db)], :order => 'created_at DESC'
 
 	acts_as_resource_feeds
 
@@ -26,12 +28,12 @@ class Poll < ActiveRecord::Base
     poll.errors.add_to_base("名字不能为空") if poll.name.blank?
     poll.errors.add_to_base("名字不能超过100个字符") if poll.name.length > 100
     poll.errors.add_to_base("描述不能超过5000个字符") if poll.description and poll.description.length > 5000
-    poll.errors.add_to_base("结束时间要比今天晚阿") if poll.end_date and poll.end_date <= Time.now.to_date 
+    poll.errors.add_to_base("结束时间要比今天晚阿") if !poll.no_deadline and poll.deadline <= Time.now.to_date 
     poll.errors.add_to_base("游戏类别不能为空") if poll.game_id.blank?
   end
 
   def past
-    end_date < Time.now.to_date
+    !self.no_deadline and self.deadline < Time.now.to_date
   end
 
   def answers=(answer_attributes)

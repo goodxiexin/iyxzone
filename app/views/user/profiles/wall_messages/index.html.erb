@@ -1,0 +1,15 @@
+<div class='box02 canvas_con'>
+  <div class='path-box'> 
+    <label>用户"<%= profile_link @wall.user %>"</label>
+    <span>留言版</span>
+  </div>
+  <% if wall_repliable? %>
+    <%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @wall, :recipient => @wall.user} %>
+  <% else %> 
+    <%= "你必须加他为好友才能留言" %>
+  <% end %>
+  <div class="feed-box" id='comments'>
+    <%= render :partial => 'user/wall_messages/wall_message', :collection => @messages %>
+  </div>
+  <%= will_paginate @messages %>
+</div>

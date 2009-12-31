@@ -3,59 +3,66 @@
 <%= javascript_include_tag 'profile' %>
 <%= javascript_include_tag 'event.simulate' %>
 
-<% content_for :left do %>
-  <%= render :partial => 'menu' %>
-<% end %>
-
-<div class='head'>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+<div class="round_m"><div class="round_body">
 <% if @user == current_user %>
-  <h3>我的档案</h3>
-<% else %>  
-  <h3 class='user'>
-    <%= avatar @user %><br/>
-    <%= profile_link @user %>的档案
-  </h3>
+<h1 class="app-archives">档案</h1>
+<% else %>
+<%= avatar @user %><h1><%= profile_link @user %>的档案</h1>
 <% end %>
-</div>
-
-<div class='body'>
-  <div id='basic_info' class='section'>
-    <div class='section-header'>
-      基本信息
+<div class="box02 canvas_int">
+  <div class="archives-box">
+    <div class="percent-box">
+      <h3>档案完成度：</h3>
+      <div class="percent">
+        <span style="width:43%"></span>
+      </div>
+      <div class="left">100%</div>
+      <div class="right">
+        <ul><li><a href="#">编辑个人档案</a></li></ul>
+      </div>
+    </div>
+    <div class="archives-info" id='basic_info'>
+      <div class='archives-info head'>
+      <h3>基本信息</h3>
       <% if @user == current_user %>
-        <%= link_to_function '(编辑)', "Iyxzone.Profile.Editor.editBasicInfo(#{@profile.id})" %>
+      <div class='right'>
+        <%= link_to_function '编辑', "Iyxzone.Profile.Editor.editBasicInfo(#{@profile.id})" %>
+      </div>
       <% end %>
+      </div>
+      <div><%= render :partial => 'basic_info' %></div>
     </div>
-    <div class='section-body'>
-			<%= render :partial => 'basic_info' %>
-    </div>
-  </div>
-  <div id='contact_info' class='section'>
-    <div class='section-header'>
-      联系信息
+    <div class="archives-info" id='contact_info'>
+      <div class='archives-info head'>
+      <h3>联系信息</h3> 
       <% if @user == current_user %>
-        <%= link_to_function '(编辑)', "Iyxzone.Profile.Editor.editContactInfo(#{@profile.id})" %>
+      <div class='right'>
+        <%= link_to_function '编辑', "Iyxzone.Profile.Editor.editContactInfo(#{@profile.id})" %>
+      </div>
       <% end %>
+      </div>
+      <div><%= render :partial => 'contact_info' %></div>
     </div>
-    <div class='section-body'>
-			<%= render :partial => 'contact_info' %>
-    </div>
-  </div>
-  <div id='character_info' class='section'>
-    <div class='section-header'>
-      游戏信息
+    <div class="archives-info" id='character_info'>
+      <div class='archives-info head'>
+      <h3>游戏信息</h3>
       <% if @user == current_user %>
-        <%= link_to_function '(增加)', "Iyxzone.Profile.Editor.newCharacterInfo();" %>
-      <% end %> 
+      <div class='right'>
+        <%= link_to_function '增加游戏角色', "Iyxzone.Profile.Editor.newCharacterInfo()" %>
+      </div>
+      <% end %>
+      </div>
+      <ul id='characters'>
+        <%= render :partial => 'user/characters/character', :collection => @user.characters %>
+      </ul>
     </div>
-    <div class='section-body'>
-			<ul id='characters'>
-				<%= render :partial => 'user/characters/character', :collection => @user.characters %> 
-			</ul>
-		</div>
   </div>
 </div>
 <div id='info'></div>
+</div></div>
+</div></div></div></div>
+
 <%= javascript_tag "
   Iyxzone.Profile.Editor.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '')}, 'character_game_id', 'character_area_id', 'character_server_id', 'character_race_id', 'character_profession_id', {});
 " %>

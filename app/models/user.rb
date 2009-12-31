@@ -115,7 +115,10 @@ class User < ActiveRecord::Base
 
   has_one :avatar_album, :foreign_key => 'owner_id'
 
+  # 为了保证avatar album一定在最后一个，我们不在这里加上avatar album
   has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'uploaded_at DESC'
+
+  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
   # blogs
   has_many :blogs, :conditions => {:draft => false}, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
@@ -134,7 +137,8 @@ class User < ActiveRecord::Base
 
 		user.has_many :all_events
 
-		user.has_many :upcoming_events, :conditions => ["events.start_time >= ?", Time.now.to_s(:db)]
+    # 不包括我发起的，这样的都在events里
+		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ?', Time.now.to_s(:db)]
 
 		user.has_many :participated_events, :conditions => ["events.start_time < ?", Time.now.to_s(:db)]
 
@@ -143,6 +147,23 @@ class User < ActiveRecord::Base
 	def common_events_with user
 		events & user.events
 	end
+
+  # sharings
+  has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC'
+
+  with_options :class_name => 'Sharing', :foreign_key => 'poster_id', :order => 'created_at DESC' do |user|
+
+    user.has_many :blog_sharings, :conditions => {:shareable_type => 'Blog'}
+
+    user.has_many :video_sharings, :conditions => {:shareable_type => 'Video'}
+
+    user.has_many :link_sharings, :conditions => {:shareable_type => 'Link'}
+
+    user.has_many :photo_sharings, :conditions => {:shareable_type => 'Photo'}
+
+    user.has_many :album_sharings, :conditions => {:shareable_type => 'Album'}
+
+  end
 
   # polls
   has_many :votes, :foreign_key => 'voter_id'
@@ -155,8 +176,6 @@ class User < ActiveRecord::Base
 	has_many :memberships
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC' do |user|
-
-		user.has_many :all_guilds
 
 		user.has_many :guilds, :conditions => "memberships.status = 3"
 
@@ -227,9 +246,9 @@ class User < ActiveRecord::Base
 
 		user.has_many :all_guild_related_feed_deliveries, :conditions => {:item_type => ['Guild', 'Membership']}	
 
-	end
+    user.has_many :sharing_feed_deliveries, :conditions => {:item_type => 'Sharing'}
 
-	acts_as_resource_feeds
+	end
 
 	with_options :order => 'created_at DESC', :source => 'feed_item' do |user|
 	
@@ -260,131 +279,26 @@ class User < ActiveRecord::Base
 		user.has_many :all_album_related_feed_items, :through => :all_album_related_feed_deliveries
 
 		user.has_many :personal_album_feed_items, :through => :personal_album_feed_deliveries
-	
-	end
 
-  attr_accessor :password, :password_confirmation
+    user.has_many :sharing_feed_items, :through => :sharing_feed_deliveries
 
-	attr_reader :enabled
-
-  # callbacks
-  before_save :encrypt_password
-  before_create :make_activation_code
-
-  # prevents a user from submitting a crafted form that bypasses activation
-  # anything else you want your user to change should be added here.
-  attr_accessible :login, :password, :password_confirmation, :gender
-
-  # Activates the user in the database.
-  def activate
-    @activated = true
-    self.activated_at = Time.now.utc
-    self.activation_code = nil
-    save(false)
   end
 
-  def active?
-    # the existence of an activation code means they have not activated yet
-    activation_code.nil?
+  # role
+  has_many :role_users, :dependent => :destroy
+
+  has_many :roles, :through => :role_users
+
+  def has_roles? names
+    required_roles = names.uniq.map {|name| Role.find_by_name(name)}
+    required_roles && roles == required_roles
   end
 
-  # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
-  def self.authenticate(email, password)
-    u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
-    u && u.authenticated?(password) ? u : nil
+  def add_role name
+    role = Role.find_by_name(name)
+    role_users.create(:role_id => role.id) unless role.nil?
   end
 
-  # Encrypts some data with the salt.
-  def self.encrypt(password, salt)
-    Digest::SHA1.hexdigest("--#{salt}--#{password}--")
-  end
+  include UserAuthentication 
 
-  # Encrypts the password with the user salt
-  def encrypt(password)
-    self.class.encrypt(password, salt)
-  end
-
-  def authenticated?(password)
-    crypted_password == encrypt(password)
-  end
-
-  def remember_token?
-    remember_token_expires_at && Time.now.utc < remember_token_expires_at
-  end
-
-  # These create and unset the fields required for remembering users between browser closes
-  def remember_me
-    remember_me_for 2.weeks
-  end
-
-  def remember_me_for(time)
-    remember_me_until time.from_now.utc
-  end
-
-  def remember_me_until(time)
-    self.remember_token_expires_at = time
-    self.remember_token = encrypt("#{email}--#{remember_token_expires_at}")
-    save(false)
-  end
-
-  def forget_me
-    self.remember_token_expires_at = nil
-    self.remember_token = nil
-    save(false)
-  end
-
-  def forgot_password
-    @forgotten_password = true
-    self.make_password_reset_code
-  end
-
-  def reset_password
-    update_attribute(:password_reset_code, nil)
-    @reset_password = true
-  end
-
-  def has_role?(name)
-    self.roles.find_by_name(name) ? true : false
-  end
-
-  # Returns true if the user has just been activated.
-  def recently_activated?
-    @activated
-  end
-
-  def recently_forgot_password?
-    @forgotten_password
-  end
-
-  def recently_reset_password?
-    @reset_password
-  end
-
-  def invitation_token
-    invitation.token if invitation
-  end
-
-  def invitation_token=(token)
-    self.invitation = BetaInvitation.find_by_token(token)
-  end
-
-protected
-  def encrypt_password
-    return if password.blank?
-    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
-    self.crypted_password = encrypt(password)
-  end
-
-  def make_activation_code
-    self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-  end
-
-  def make_password_reset_code
-    self.password_reset_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-  end
-
-  def set_invitation_limit
-    self.invitation_limit = 5
-  end   
- 
 end

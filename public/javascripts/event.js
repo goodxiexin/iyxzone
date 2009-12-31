@@ -80,11 +80,10 @@ Object.extend(Iyxzone.Event.Builder, {
     }
   },
 
-  update: function(eventID){
+  update: function(event){
+    Event.stop(event);
     if(this.validate()){
       var form = $('event_form');
-      form.action = '/events/' + event_id;
-      form.method = 'put';
       form.submit();
     }
   }

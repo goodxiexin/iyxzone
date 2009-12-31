@@ -9,20 +9,31 @@
         <ul>
           <li><span><%= link_to "热门投票", hot_polls_url(:id => @user.id) %></span></li>
           <li><span><%= link_to "最近投票", recent_polls_url(:id => @user.id) %></span></li>
-          <li class='hover'><span><%= link_to "#{get_subject @user}的投票", polls_url(:id => @user.id) %></span></li>
           <% if @user == current_user %>
-          <li><span><%= link_to "朋友的投票", friends_polls_url(:id => @user.id) %></span></li>
+            <li class='hover'><span><%= link_to "我的投票", polls_url(:id => @user.id) %></span></li>
+          <% else %>
+            <li><span><%= link_to "我的投票", polls_url(:id => @user.id) %></span></li>
           <% end %>
+          <li><span><%= link_to "朋友的投票", friends_polls_url(:id => @user.id) %></span></li>
         </ul>
       </div>
       <div class="appcontent06">
         <div class="nav-link">
+          <% if @user == current_user %>
           <ul class="s_clear">
             <li><%= link_to '增加侯选项', new_poll_answer_url(@poll), :rel => 'facebox' %></li>
+            <% unless @poll.no_deadline %>
             <li><%= link_to '修改截至时间', edit_poll_url(@poll, :type => 0), :rel => 'facebox' %></li>
+            <% end %>
             <li><%= link_to '邀请更多人', new_poll_invitation_url(@poll) %></li>
             <li><%= facebox_confirm '删除本投票', poll_url(@poll), {:msg => '你确定要删除该投票吗?', :method => :delete} %></li>
           </ul>
+          <% else %>
+          <div class='path-box'>
+            <label><%= link_to "#{@user.login}的投票", polls_url(:id => @user.id) %></label>
+            <span>投票</span>
+          </div>
+          <% end %>
         </div>
         <div class="vote-box">
           <table class="vote-header-table" cellpadding="0">
@@ -39,7 +50,7 @@
                   <p>参与投票</p>
                 </div>
               </td>
-              <td class="btn"><a class="right love-btn" href="#">分享</a></td>
+              <td class="btn"><%= facebox_link '分享', new_sharing_url(:shareable_type => 'Poll', :shareable_id => @poll.id), :class => "right love-btn" %></td>
             </tr>
           </table>
           <% form_tag poll_votes_url(@poll) do %>

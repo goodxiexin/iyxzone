@@ -1,3 +1,4 @@
+<% if @user == current_user %>
 <div class="formcontent">
   <table class="title"><tr><td><h3 class="icon-sinker">操作</h3></td></tr></table>
   <div class="rows s_clear">
@@ -7,7 +8,17 @@
     <div class="fldid"><%= link_to '邀请更多人', new_event_invitation_url(@event) %></div>
   </div>
   <div class="rows s_clear">
-  <div class="fldid"><%= facebox_confirm '放所有人鸽子', event_url(@event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></div>
+    <div class="fldid"><%= facebox_confirm '放所有人鸽子', event_url(@event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></div>
   </div>
 </div>
-
+<% elsif @participation and @participation.is_authorized? %>
+  <div class="rows s_clear">
+    <div class="fldid"><%= link_to '给组织者发信', new_mail_url(:recipient_id => @event.poster_id) %></div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></div>
+  </div>
+<% end %>

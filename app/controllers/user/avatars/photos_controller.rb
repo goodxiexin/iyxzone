@@ -1,8 +1,6 @@
-class User::Avatars::PhotosController < ApplicationController
+class User::Avatars::PhotosController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :owner_required, :only => [:edit]
 

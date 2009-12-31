@@ -1,8 +1,6 @@
-class User::StatusesController < ApplicationController
+class User::StatusesController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def index
     @statuses = @user.statuses.paginate :page => params[:page], :per_page => 10

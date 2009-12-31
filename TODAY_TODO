@@ -1,11 +1,11 @@
-1. integrate viewing and visitor records		DONE
+1. sharing, dig, tag routes的时候都是single level的，因此所有的相册都可以保存为type = Album，但是feed item 和 notice为什么要分EventALbum,还是GuildAlbum呢
 
-2. github
+2. 所有的view，已经确认哪些地方是可以改进的
 
-3. poll 功能修改， register 合并html，功能修改
+3. event 过期问题
 
-4. game/profile tags
+4. textilize
 
-5. to see if we can stuff some controller to plugin
+5. deploy文档
 
-6. sharing
+6. poll random

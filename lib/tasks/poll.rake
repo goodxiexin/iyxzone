@@ -1,7 +1,7 @@
 namespace :poll do
 
   task :send_result => :environment do
-    polls = Poll.find(:all, :conditions => ["end_date <= ?", Time.now.to_s(:db)])
+    polls = Poll.find(:all, :conditions => ["no_deadline = 0 AND deadline <= ?", Time.now.to_s(:db)])
     polls.each do |poll|
       poll.subscribers.each do |user|
         poll.notifications.create(:user_id => user.id) 

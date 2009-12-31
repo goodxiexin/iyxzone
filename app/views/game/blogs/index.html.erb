@@ -1,9 +1,0 @@
-<% content_for :left do %>
-  <%= render :partial => '/app_menu' %><br/>
-<% end %>
-
-<div id='blogs'>
-  <%= render :partial => 'blog/blogs/blog_item', :collection => @blogs %>
-</div>
-
-<%= will_paginate @blogs %>

@@ -27,17 +27,17 @@ class MembershipObserver < ActiveRecord::Observer
 	def after_create membership
 		guild = membership.guild
 		user = membership.user
-		if membership.status == Membership::Invitation
+		if membership.is_invitation?
 			# invitation created
 			user.raw_increment :invitations_count
 			guild.raw_increment :invitees_count
 			GuildMailer.deliver_invitation guild, user if user.mail_setting.invite_me_to_guild
-		elsif membership.status == Membership::VeteranRequest or membership.status == Membership::MemberRequest
+		elsif membership.is_request?
 			# request created
 			guild.president.raw_increment :requests_count
 			guild.raw_increment :requestors_count
 			GuildMailer.deliver_request guild, user if user.mail_setting.request_to_attend_my_guild
-		elsif membership.status == Membership::President
+		elsif membership.is_president?
 			guild.raw_increment :presidents_count
 			guild.president.raw_increment :guilds_count
 		end
@@ -46,19 +46,19 @@ class MembershipObserver < ActiveRecord::Observer
 	def after_update membership
 		guild = membership.guild
     user = membership.user
-		if membership.status_was == 0 and [3,4,5].include? membership.status
+		if membership.was_invitation? and membership.is_authorized?
 			# invitation accepted
 			user.raw_decrement :invitations_count
 			user.raw_increment :participated_guilds_count
 			guild.raw_decrement :invitees_count
 			guild.president.notifications.create(:data => "#{profile_link user}接受了你的邀请，参加工会#{guild_link guild}")
-		elsif [1,2].include? membership.status_was and [3,4,5].include? membership.status
+		elsif membership.was_request? and membership.is_authorized?
 			# request accepted
 			guild.president.raw_decrement :requests_count
 			user.raw_increment :participated_guilds_count
 			guild.raw_decrement :requestors_count
 			user.notifications.create(:data => "#{profile_link guild.president}同意你加入工会#{guild_link guild}的请求")
-		elsif [4,5].include? membership.status_was and [4,5].include? membership.status and membership.status_changed?
+		elsif membership.was_authorized? and membership.is_authorized?
 			# nomination
 			guild.raw_decrement field(membership.status_was)
 			user.notifications.create(:data => "你在工会#{guild_link guild}里的职务更改为#{role membership.status}")
@@ -69,12 +69,12 @@ class MembershipObserver < ActiveRecord::Observer
 	def after_destroy membership
 		guild = membership.guild
     user = membership.user
-		if membership.status == Membership::Invitation
+		if membership.is_invitation?
 			# invitation declined
 			user.raw_decrement :invitations_count
 			guild.raw_decrement :invitees_count
 			guild.president.notifications.create(:data => "#{profile_link user}拒绝了你的邀请，参加工会#{guild_link guild}")
-		elsif [1,2].include? membership.status
+		elsif membership.is_request?
 			# request declined
 			guild.president.raw_decrement :requests_count
 			guild.raw_decrement :requestors_count

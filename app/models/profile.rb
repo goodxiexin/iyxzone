@@ -20,6 +20,14 @@ class Profile < ActiveRecord::Base
 
 	has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'
 
+  # virtual attribute: login
+  def login
+    user.login
+  end
+
+  def login= new_login
+    user.update_attribute('login', new_login)
+  end
 
 end
 

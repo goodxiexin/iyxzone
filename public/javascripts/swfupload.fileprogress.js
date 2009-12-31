@@ -17,7 +17,22 @@ function FileProgress(file, targetID) {
 
 	this.fileProgressWrapper = document.getElementById(this.fileProgressID);
 
+  /* html = <li><div class="right"><span>18.7 KB</span><span><a class="icon-active" href="#"></a></span></div>01.gif</li> */
 	if (!this.fileProgressWrapper) {
+    this.fileProgressWrapper = document.createElement('li');
+    this.fileProgressWrapper.id = this.fileProgressID;
+    
+    this.fileProgressInfo = document.createElement('div');
+    this.fileProgressInfo.className = 'right';    
+    this.fileProgressInfo.innerHTML = '<span>' + file.size + '</span><span><a class="icon-active" onclick="" href="#"></a></span>';
+    this.fileProgressStatus = this.fileProgressInfo.childNodes[1];
+    
+    this.fileProgressWrapper.appendChild(this.fileProgressInfo);    
+    this.fileProgressWrapper.appendChild(document.createTextNode(file.name));
+
+
+    document.getElementById(targetID).appendChild(this.fileProgressWrapper);
+/*
 		this.fileProgressWrapper = document.createElement("div");
 		this.fileProgressWrapper.className = "progressWrapper";
 		this.fileProgressWrapper.id = this.fileProgressID;
@@ -50,8 +65,11 @@ function FileProgress(file, targetID) {
 		this.fileProgressWrapper.appendChild(this.fileProgressElement);
 
 		document.getElementById(targetID).appendChild(this.fileProgressWrapper);
+*/
 	} else {
-		this.fileProgressElement = this.fileProgressWrapper.firstChild;
+		this.fileProgressInfo = this.fileProgressWrapper.firstChild;
+    this.fileProgressStatus = this.fileProgressInfo.childNodes[1];
+    //this.fileProgressElement = this.fileProgressWrapper.firstChild;
 		this.reset();
 	}
 /*	alert(targetID)*/
@@ -62,14 +80,16 @@ function FileProgress(file, targetID) {
 }
 
 FileProgress.prototype.setTimer = function (timer) {
-	this.fileProgressElement["FP_TIMER"] = timer;
+	this.fileProgressWrapper["FP_TIMER"] = timer;
+  //this.fileProgressElement["FP_TIMER"] = timer;
 };
 FileProgress.prototype.getTimer = function (timer) {
-	return this.fileProgressElement["FP_TIMER"] || null;
+  return this.fileProgressWrapper["FP_TIMER"] || null;
+	//return this.fileProgressElement["FP_TIMER"] || null;
 };
 
 FileProgress.prototype.reset = function () {
-	this.fileProgressElement.className = "progressContainer";
+	/*this.fileProgressElement.className = "progressContainer";
 
 	this.fileProgressElement.childNodes[2].innerHTML = "&nbsp;";
 	this.fileProgressElement.childNodes[2].className = "progressBarStatus";
@@ -77,7 +97,7 @@ FileProgress.prototype.reset = function () {
 	this.fileProgressElement.childNodes[3].className = "progressBarInProgress";
 	this.fileProgressElement.childNodes[3].style.width = "0%";
 	
-	this.appear();	
+	this.appear();*/	
 };
 
 FileProgress.prototype.setProgress = function (percentage) {
@@ -88,10 +108,10 @@ FileProgress.prototype.setProgress = function (percentage) {
 	this.appear();	
 };
 FileProgress.prototype.setComplete = function () {
-	this.fileProgressElement.className = "progressContainer blue";
+	/*this.fileProgressElement.className = "progressContainer blue";
 	this.fileProgressElement.childNodes[3].className = "progressBarComplete";
 	this.fileProgressElement.childNodes[3].style.width = "";
-
+*/
 	var oSelf = this;
 	this.setTimer(setTimeout(function () {
 		oSelf.disappear();
@@ -118,7 +138,8 @@ FileProgress.prototype.setCancelled = function () {
 	}, 2000));
 };
 FileProgress.prototype.setStatus = function (status) {
-	this.fileProgressElement.childNodes[2].innerHTML = status;
+	this.fileProgressStatus.innerHTML = status;
+  //this.fileProgressElement.childNodes[2].innerHTML = status;
 };
 
 // Show/Hide the cancel button

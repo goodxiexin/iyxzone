@@ -6,10 +6,12 @@ class CreatePolls < ActiveRecord::Migration
       t.integer :game_id
       t.text :description
       t.text :explanation
-      t.integer :max_multiple
-      t.date :end_date
+      t.integer :max_multiple, :default => 1
+      t.boolean :no_deadline, :default => true # no_deadline是为了创建的时候偷个懒
+      t.date :deadline
       t.text :summary
       t.integer :privilege, :default => 2 # 1. all 2. only friends
+      t.integer :sharings_count, :default => 0
       t.integer :digs_count, :default => 0
       t.integer :comments_count, :default => 0
 			t.integer :votes_count, :default => 0 

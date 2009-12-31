@@ -1,8 +1,6 @@
-class User::AlbumsController < ApplicationController
+class User::AlbumsController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   before_filter :owner_required, :only => [:select, :edit, :confirm_destroy]
 
@@ -22,7 +20,7 @@ class User::AlbumsController < ApplicationController
   end
 
   def friends
-    @albums = current_user.personal_album_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10 
+    @albums = current_user.personal_album_feed_items.map(&:originator).uniq.paginate :page => params[:page], :per_page => 10 
   end
 
   def select
@@ -30,7 +28,8 @@ class User::AlbumsController < ApplicationController
   end
 
   def show
-		@comments = @album.comments 
+		@comments = @album.comments
+    @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
   end
 
   def new
@@ -40,11 +39,7 @@ class User::AlbumsController < ApplicationController
 
   def create
     @album = @user.albums.build(params[:album].merge({:poster_id => @user.id}))
-    if @album.save
-			render :update do |page|
-				page.redirect_to personal_albums_url(:id => @user.id)
-			end
-    else
+    unless @album.save
       render :update do |page|
         page.replace_html 'errors', :partial => 'validation_errors'
       end

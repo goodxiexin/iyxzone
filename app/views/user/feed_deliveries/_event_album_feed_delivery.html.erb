@@ -36,7 +36,7 @@
   <% if with_comments %>
 	  <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => album, :recipient => event.poster} %>
   <% end %>		
-	<div><%= yield %></div> 
+	<div><% if feed_delivery_deleteable_by_current_user delivery %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div> 
 </div>
 
 <% photo_ids = array_or_string_for_javascript photos.map(&:id) %>

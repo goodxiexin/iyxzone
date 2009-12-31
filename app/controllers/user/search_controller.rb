@@ -1,8 +1,6 @@
-class User::SearchController < ApplicationController
+class User::SearchController < UserBaseController
 
   layout 'app'
-
-  before_filter :login_required, :setup
 
   def user
     @games = Game.find(:all, :order => 'pinyin ASC')
@@ -26,7 +24,7 @@ class User::SearchController < ApplicationController
       @servers = @game.servers
     end
     @games = Game.find(:all, :order => 'pinyin ASC')
-    @users = GameCharacter.search(params[:key], :conditions => cond).group_by(&:user_id).to_a.paginate :page => params[:page], :per_page => 10
+    @users = GameCharacter.search(params[:key], :conditions => cond).group_by(&:user_id).to_a.paginate :page => params[:page], :per_page => 16
   end
 
 protected
