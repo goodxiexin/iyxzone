@@ -5,6 +5,7 @@ class User::Guilds::AlbumsController < UserBaseController
   def show
     @membership = @guild.memberships.find_by_user_id(current_user.id)
     @comments = @album.comments
+    @photos = @album.photos.paginate :page => params[:page], :per_page => 12
   end
 
   def update

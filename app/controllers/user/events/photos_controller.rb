@@ -105,7 +105,8 @@ protected
   end
 
   def participant_required
-    [3,4,5].include? @event.participations.find_by_participant_id(current_user.id).status || not_found
+    @participation = @event.participations.find_by_participant_id(current_user.id)
+    (@participation and @participation.is_authorized?) || not_found
   end
 
 end
