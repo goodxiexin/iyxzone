@@ -1,3 +1,6 @@
+#
+# 个人的相册是有权限设置的，如果相册的权限改变，所有相片的权限也改变
+#
 class PersonalAlbumObserver < ActiveRecord::Observer
 
   def after_update album

@@ -1,4 +1,6 @@
-class BlogObserver < ActiveRecord::Observer
+class BlogCounterObserver < ActiveRecord::Observer
+
+  observe :blog
 
   def after_create(blog)
 		if blog.draft

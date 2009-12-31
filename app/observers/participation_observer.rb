@@ -19,7 +19,6 @@ class ParticipationObserver < ActiveRecord::Observer
 			participant.raw_increment :invitations_count
 			event.raw_increment :invitees_count	
 			EventMailer.deliver_invitation event, participant if participant.mail_setting.invite_me_to_event
-			participant.increment! :invitations_count
 		elsif participation.is_request?
 			event.poster.raw_increment :requests_count
 			event.raw_increment :requestors_count

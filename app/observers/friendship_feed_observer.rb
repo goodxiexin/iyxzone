@@ -8,7 +8,7 @@ class FriendshipFeedObserver < ActiveRecord::Observer
 			recipients.concat friendship.user.friends
 			friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.user_id}
 			recipients = [friendship.friend.profile]
-			recipients.concat friendship.friend.friends
+			recipients.concat(friendship.friend.friends - friendship.user.friends) # this prevents people from receiving two feeds
 			friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.friend_id}
 		end
 	end

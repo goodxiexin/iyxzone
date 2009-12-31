@@ -1,3 +1,6 @@
+#
+# 如果活动的时间地点发生了变化，发通知
+#
 require 'app/mailer/event_mailer'
 
 class EventObserver < ActiveRecord::Observer

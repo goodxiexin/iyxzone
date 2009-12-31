@@ -1,3 +1,6 @@
+#
+# 如果你的好友最近开始玩某个游戏（或者停止玩某个游戏）
+#
 class CharacterFeedObserver < ActiveRecord::Observer
 
 	observe :game_character

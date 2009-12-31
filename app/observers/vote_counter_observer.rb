@@ -1,3 +1,8 @@
+#
+# 增加用户参加过的投票的计数器
+# 增加选择的那个答案的计数器
+# 增加该投票的投票人数
+#
 class VoteCounterObserver < ActiveRecord::Observer
 
 	observe :vote
