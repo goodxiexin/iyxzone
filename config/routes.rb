@@ -32,7 +32,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :admin do |admin|
   
-    admin.resources :users
+    admin.resources :users, :member => {:enable => :put, :disable => :put, :activate => :put}, :collection => {:pending => :get}
+
+    admin.resources :blogs
 
   end
 

@@ -9,6 +9,22 @@ class Friendship < ActiveRecord::Base
 	Request	= 0
 	Friend	= 1
 
+  def is_request?
+    status == Friendship::Request
+  end
+
+  def was_request?
+    status_was == Friendship::Request
+  end
+
+  def is_friend?
+    status == Friendship::Friend
+  end
+
+  def was_friend?
+    status_was == Friendship::Friend
+  end
+
 	def validate_on_create
 		friendship = user.all_friendships.find_by_friend_id(friend_id)
 		return if friendship.nil?
@@ -23,5 +39,7 @@ class Friendship < ActiveRecord::Base
 		update_attribute('status', Friendship::Friend)
 		Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friendship::Friend)
 	end
+
+
 
 end

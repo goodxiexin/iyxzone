@@ -1,5 +1,7 @@
 class AdminBaseController < ApplicationController
 
+  layout 'admin'
+
   require_login
 
   require_role 'admin'

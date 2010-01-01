@@ -37,26 +37,6 @@ class UsersController < ApplicationController
       #end
   end
 
-  def destroy
-    @user = User.find(params[:id])
-    if @user.update_attribute(:enabled, false)
-      flash[:notice] = "User disabled"
-    else
-      flash[:error] = "There was a problem disabling this user"
-    end
-    redirect_to :action => 'index'
-  end
-
-  def enable
-    @user = User.find(params[:id])
-    if @user.update_attribute(:enabled, true)
-      flash[:notice] = "User enabled"
-    else
-      flash[:error] = "There was a problem enabling this user"
-    end
-    redirect_to :action => 'index'
-  end
-
   def activate
     self.current_user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
     if logged_in? && !current_user.active?

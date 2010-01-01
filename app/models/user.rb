@@ -6,8 +6,6 @@ class User < ActiveRecord::Base
 
 	searcher_column :pinyin
 
-	include FriendSuggestor
-
 	has_many :friend_suggestions
 
 	has_many :comrade_suggestions
@@ -300,5 +298,7 @@ class User < ActiveRecord::Base
   end
 
   include UserAuthentication 
+
+  include FriendSuggestor
 
 end
