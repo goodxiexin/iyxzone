@@ -24,10 +24,6 @@ class User::GuildsController < UserBaseController
     @guilds = Guild.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10	
   end
 
-	def rule
-		 
-	end
-
   def recent
 		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
     cond = user_game_conds

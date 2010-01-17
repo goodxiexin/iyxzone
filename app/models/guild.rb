@@ -8,6 +8,20 @@ class Guild < ActiveRecord::Base
 
 	has_many :guild_rules
 
+	has_many :attendance_rules, :class_name => 'GuildRule', :conditions => {:rule_type => 'attendance'}
+
+	accepts_nested_attributes_for :guild_rules, :allow_destroy => true
+
+	accepts_nested_attributes_for :attendance_rules, :allow_destroy => true
+
+	has_many :bosses
+
+	accepts_nested_attributes_for :bosses, :allow_destroy => true
+
+	has_many :gears
+
+	accepts_nested_attributes_for :gears, :allow_destroy => true
+
   has_many :invitations, :class_name => 'Membership', :conditions => {:status => 0}
 
   has_many :requests, :class_name => 'Membership', :conditions => {:status => [1,2]}
@@ -69,12 +83,21 @@ class Guild < ActiveRecord::Base
 		@president_id
 	end
 
+#	def guild_rules=(rule_attributes)
+#		rule_attributes.each { |rule_attribute| guild_rules.build(rule_attribute) unless rule_attribute[:reason].blank?}
+#	end
+
 	def president_id=(id)
 		@president_id = id
 	end
 
 	def all_count
 		veterans_count + presidents_count + members_count
+	end
+
+	def after_create
+		self.attendance_rules_attributes=[{:reason => "准时", :outcome => "2", :rule_type => "attendance"}, {:reason => "迟到", :outcome => "-5", :rule_type => "attendance"}]
+		self.save
 	end
 
 end

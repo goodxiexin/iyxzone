@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
 
   create_table "bosses", :force => true do |t|
     t.string  "name"
+    t.integer "game_id"
+    t.integer "guild_id"
     t.integer "reward"
   end
 
@@ -253,6 +255,8 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
   create_table "gears", :force => true do |t|
     t.string  "name"
     t.string  "type"
+    t.integer "boss_id"
+    t.integer "guild_id"
     t.integer "cost"
   end
 
@@ -261,6 +265,13 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.integer  "friend_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "guild_rules", :force => true do |t|
+    t.string  "reason"
+    t.integer "outcome"
+    t.string  "rule_type"
+    t.integer "guild_id"
   end
 
   create_table "guilds", :force => true do |t|

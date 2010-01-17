@@ -49,10 +49,6 @@ Object.extend(Iyxzone.Guild.Builder, {
 
 });
 
-Object.extend(Iyxzone.Guild.Editor, {
-
-});
-
 Object.extend(Iyxzone.Guild.Feeder, {
   
   idx: 0,

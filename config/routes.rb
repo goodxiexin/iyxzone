@@ -155,6 +155,12 @@ ActionController::Routing::Routes.draw do |map|
 
       guilds.resources :friends
 
+			guilds.resources :guild_rules, :controller => 'guilds/guild_rules', :collection => {:update_rules => :put, :add_basic_rules => :get}
+
+			guilds.resources :bosses, :controller => 'guilds/bosses', :collection => {:edit => :get, :update => :put}
+
+			guilds.resources :gears, :controller => 'guilds/gears', :collection => {:edit => :get, :update => :put}
+
       guilds.resources :memberships, :controller => 'guilds/memberships', :collection => {:search => :get}
 
       guilds.resources :invitations, :controller => 'guilds/invitations', :collection => {:search => :get, :create_multiple => :post}, :member => {:accept => :put, :decline => :delete}

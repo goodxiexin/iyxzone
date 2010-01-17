@@ -2,7 +2,7 @@ class CreateGears < ActiveRecord::Migration
   def self.up
 		create_table "gears", :force => true do |t|
 			t.string :name
-			t.string :type
+			t.string :gear_type
 			t.integer :boss_id
 			t.integer :guild_id
 			t.integer :cost
