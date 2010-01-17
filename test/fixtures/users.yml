@@ -1,19 +1,60 @@
-quentin:
+<% salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--高侠鸿--") %>
+one:
   id: 1
-  login: quentin
-  email: quentin@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%= 5.days.ago.to_s :db %>
-  activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9b 
-  activated_at: <%= 5.days.ago.to_s :db %> 
+  login: '高侠鸿'
+  email: 'gaoxh04@gmail.com'
+  gender: 'male'
+  pinyin: 'gaoxiahong'
+  salt: <%= salt %>
+  crypted_password: <%= User.encrypt('111111', salt) %>
+  friends_count: 2
+  albums_count: 1
 
-aaron:
+<% salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--明非--") %>
+two:
   id: 2
-  login: aaron
-  email: aaron@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%= 1.days.ago.to_s :db %>
-  activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a 
+  login: '明非'
+  email: 'mingfei@gmail.com'
+  gender: 'male'
+  pinyin: 'mingfei'
+  salt: <%= salt %>
+  crypted_password: <%= User.encrypt('111111', salt) %>
+  friends_count: 1
+  albums_count: 1
+
+<% salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--谢心--") %>
+three:
+  id: 3
+  login: '谢心'
+  email: 'xiexin@gmail.com'
+  gender: 'male'
+  pinyin: 'xiexin'
+  salt: <%= salt %>
+  crypted_password: <%= User.encrypt('111111', salt) %>
+  friends_count: 1
+  albums_count: 1
+
+<% salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--民好--") %>
+four:
+  id: 4
+  login: '民好'
+  email: 'minhao@gmail.com'
+  gender: 'male'
+  pinyin: 'minhao'
+  salt: <%= salt %>
+  crypted_password: <%= User.encrypt('111111', salt) %>
+  friends_count: 0
+  albums_count: 1
+
+<% salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--民好--") %>
+five:
+  id: 5
+  login: '米粒'
+  email: 'mili@gmail.com'
+  gender: 'female'
+  pinyin: 'mili'
+  salt: <%= salt %>
+  crypted_password: <%= User.encrypt('111111', salt) %>
+  friends_count: 0
+  albums_count: 1
 

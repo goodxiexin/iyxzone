@@ -1,3 +1,5 @@
+# comment, photo_tag, friend_tag会产生一些notice
+# 这些notice会显示在主页上
 class Notice < ActiveRecord::Base
 
 	belongs_to :producer, :polymorphic => true # only for comment, and tag
@@ -6,7 +8,7 @@ class Notice < ActiveRecord::Base
 
 	named_scope :unread, :conditions => {:read => false}
 
-	def has_same_source? notice
+	def has_same_source_with? notice
 		return false if producer_type != notice.producer_type
 		if producer_type == 'Comment'
 			(producer.commentable_id == notice.producer.commentable_id) and (producer.commentable_type == notice.producer.commentable_type)
@@ -16,5 +18,27 @@ class Notice < ActiveRecord::Base
 			(producer.photo_id == notice.producer.photo_id)
 		end
 	end
+
+  # 把所有same source的通知都标记为以读
+  def read_by user
+    notices = user.notices.unread.find_all {|n| self.has_same_source_with? n}
+    Notice.update_all("notices.read = 1", {:user_id => user.id, :id => notices.map(&:id)})
+    user.raw_decrement :unread_notices_count, notices.count
+  end
+  
+  def validate
+    if user_id.blank?
+      errors.add_to_base("没有接受者")
+      return
+    end
+
+    if producer_id.blank? or producer_type.blank?
+      errors.add_to_base("没有产生通知的资源")
+      return
+    elsif producer_type.constantize.find(:first, :conditions => {:id => producer_id}).blank?
+      errors.add_to_base("产生通知的资源不存在")
+      return
+    end
+  end
 
 end

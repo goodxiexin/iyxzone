@@ -2,13 +2,11 @@ class User::PollsController < UserBaseController
 
   layout 'app'
 
-  before_filter :friend_or_owner_required, :only => [:index]
-
-  before_filter :owner_required, :only => [:edit]
+  before_filter :friend_or_owner_required, :only => [:index, :participated]
 
   def index
 		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @polls = @user.polls.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 1
+    @polls = @user.polls.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
   end
 
 	def hot
@@ -32,7 +30,7 @@ class User::PollsController < UserBaseController
 
   def show
 		@vote = @poll.votes.find_by_voter_id(current_user.id)
-		@votable = (current_user == @user) || (@poll.privilege == 1) || (@poll.privilege == 2 and @user.has_friend? current_user)
+    @vote_feeds = current_user.vote_feed_items.map(&:originator).find_all {|v| v.poll_id == @poll.id}
     @comments = @poll.comments
   end
 
@@ -41,7 +39,7 @@ class User::PollsController < UserBaseController
   end
 
   def create
-    @poll = Poll.new(params[:poll].merge({:poster_id => @user.id}))
+    @poll = Poll.new((params[:poll] || {}).merge({:poster_id => current_user.id}))
     if @poll.save
       redirect_to poll_url(@poll)
     else
@@ -58,7 +56,7 @@ class User::PollsController < UserBaseController
   end
 
   def update
-    if @poll.update_attributes(params[:poll])
+    if @poll.update_attributes((params[:poll] || {}).merge({:poster_id => current_user.id}))
       render :update do |page|
         page << "facebox.close();"
       end
@@ -73,7 +71,7 @@ class User::PollsController < UserBaseController
     if @poll.destroy
       render :update do |page|
         page << "facebox.close();"
-        page.redirect_to polls_url(:id => @user.id)
+        page.redirect_to polls_url(:id => current_user.id)
       end
     else
       render :update do |page|
@@ -87,15 +85,15 @@ protected
   def setup
     if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:id])
-    elsif ['show', 'edit', 'update', 'destroy'].include? params[:action]
+    elsif ['show'].include? params[:action]
       @poll = Poll.find(params[:id])
       @user = @poll.poster
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
-    elsif ['new', 'create', 'friends'].include? params[:action]
-      @user = current_user
+			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+    elsif ['edit', 'update', 'destroy'].include? params[:action]
+      @poll = current_user.polls.find(params[:id])
     end
   rescue
-    not_found  
+    not_found
   end
 
 end

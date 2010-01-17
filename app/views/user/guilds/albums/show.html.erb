@@ -32,7 +32,7 @@
                 <%= photo_link p, :class => 'imgbox01' %>
               </div></div></div>
             </div>
-            <% if @membership.is_president? %>
+            <% if @membership and @membership.is_president? %>
             <p>
               <%= facebox_link "编辑", edit_guild_photo_url(p) %> | <%= facebox_confirm '删除', guild_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'} %>
               
@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="pic-desc">
-        <% if @membership.is_president? %>
+        <% if @membership and @membership.is_president? %>
           <%= in_place_text_field :span, @album, :description, true, guild_album_url(@album), {}, {:empty_text => '点击添加相册描述', :parameter_name => 'album[description]', :rows => 2, :cols => 90}, {} %>
         <% else %>
           <%= @album.description %>

@@ -3,8 +3,8 @@ require 'app/mailer/user_mailer'
 class UserObserver < ActiveRecord::Observer
   
 	def after_create(user)
-    user.create_profile(:gender => user.gender)
-    user.create_avatar_album(:privilege => 2, :poster_id => user.id, :title => "头像相册") # avatar album has a default privilege of 2
+    user.create_profile
+    user.create_avatar_album
     UserMailer.deliver_signup_notification(user)
   end
 

@@ -2,7 +2,7 @@ class User::EventsController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:edit]
+  before_filter :friend_or_owner_required, :only => [:index, :upcoming, :participated]
 
   def index
 		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
@@ -10,13 +10,11 @@ class User::EventsController < UserBaseController
   end
 
 	def hot
-		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
     cond = user_game_conds
     @events = Event.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 5
   end
 
   def recent
-		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
     cond = user_game_conds
     @events = Event.recent.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 5
 	end
@@ -47,7 +45,7 @@ class User::EventsController < UserBaseController
   end
 
   def create
-    @event = Event.new(params[:event].merge({:poster_id => current_user.id}))
+    @event = Event.new((params[:event] || {}).merge({:poster_id => current_user.id}))
     if @event.save
       redirect_to new_event_invitation_url(@event)
     else
@@ -59,7 +57,7 @@ class User::EventsController < UserBaseController
   end
 
   def update
-    if @event.update_attributes(params[:event])
+    if @event.update_attributes((params[:event] || {}).merge({:poster_id => current_user.id}))
       redirect_to event_url(@event)
     else
       render :action => 'edit'
@@ -69,7 +67,7 @@ class User::EventsController < UserBaseController
   def destroy
     if @event.destroy
       render :update do |page|
-        page.redirect_to events_url(:id => @user.id)
+        page.redirect_to events_url(:id => current_user.id)
       end
     else
       render :update do |page|
@@ -99,14 +97,14 @@ class User::EventsController < UserBaseController
 protected
 
   def setup
-    if ['show', 'edit', 'update', 'destroy'].include? params[:action]
+    if ['show'].include? params[:action]
       @event = Event.find(params[:id])
 			@user = @event.poster
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+    elsif ['edit', 'update', 'destroy'].include? params[:action]
+      @event = current_user.events.find(params[:id])
     elsif ['index', 'upcoming', 'participated'].include? params[:action]
       @user = User.find(params[:id])
-    elsif ['new', 'create', 'friends'].include? params[:action]
-      @user = current_user
     end
   rescue
     not_found

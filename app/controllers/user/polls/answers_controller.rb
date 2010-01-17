@@ -1,12 +1,10 @@
 class User::Polls::AnswersController < UserBaseController
 
-  before_filter :owner_required
-
   def new
   end
  
   def create
-    if @poll.update_attributes(params[:poll])
+    if @poll.update_attributes(:answers => params[:poll][:answers])
       render :update do |page|
         page << "facebox.close();"
         page.redirect_to poll_url(@poll)
@@ -21,8 +19,7 @@ class User::Polls::AnswersController < UserBaseController
 protected
 
   def setup
-    @poll = Poll.find(params[:poll_id])
-    @user = @poll.poster
+    @poll = current_user.polls.find(params[:poll_id])
   rescue
     not_found
   end

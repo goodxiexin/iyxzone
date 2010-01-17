@@ -6,14 +6,16 @@ class Tag < ActiveRecord::Base
 
 	named_scope :profile_tags, :conditions => {:taggable_type => 'Profile'}
 
-	def create_on_validate
-		if self.name.nil?
-			errors.add_to_base('名字不能为空')
-		else
-			tag = Tag.find_by_name_and_taggable_type(name, taggable_type)
-			unless tag.nil?
-				errors.add_to_base('名字已经有了')
-			end
+	def validate_on_create
+		if name.nil?
+			errors.add_to_base('没有名字')
+      return
+    end
+
+    if taggable_type.blank?
+      errors.add_to_base('没有类型')
+		elsif !Tag.find_by_name_and_taggable_type(name, taggable_type).blank?
+			errors.add_to_base('名字已经有了')
 		end
 	end
 

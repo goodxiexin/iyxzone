@@ -13,7 +13,7 @@ class GuildMailer < ActionMailer::Base
 	end
 
 	def request guild, member
-		setup_email member
+		setup_email guild.president
 		subject		 "Dayday3 - #{member.login}请求加入工会#{guild.name}"
 		body			 :user => member, :url => "#{SITE_URL}/requests?type=2"
 	end

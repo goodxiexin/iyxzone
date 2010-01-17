@@ -35,7 +35,7 @@ Object.extend(Iyxzone.Video.Builder, {
     if(this.validate()){
       var newTags = this.tagBuilder.getNewTags();
       for(var i=0;i<newTags.length;i++){
-        var el = new Element("input", {type: 'hidden', value: newTags[i], id: 'video[tags][]', name: 'video[tags][]' });
+        var el = new Element("input", {type: 'hidden', value: newTags[i], id: 'video[friend_tags][]', name: 'video[friend_tags][]' });
         $('video_form').appendChild(el);
       }
       Iyxzone.disableButton(button, '等待...');

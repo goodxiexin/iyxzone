@@ -4,5 +4,5 @@ elsif params[:show].to_i == 1
   flash[:notice] = '成功提交'
   page.redirect_to event_url(@event)
 elsif params[:show].to_i == 2
-  page << "$('event_request_operation_#{@request.id}').innerHTML = '#{msg params[:request][:status].to_i}';"
+  page << "$('event_request_operation_#{@request.id}').innerHTML = '#{@request.to_s}';"
 end

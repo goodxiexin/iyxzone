@@ -2,9 +2,9 @@ class User::Events::PhotosController < UserBaseController
 
   layout 'app'
 
-  before_filter :participant_required, :only => [:new, :edit_multiple]
+  before_filter :participant_required, :only => [:new, :create, :record_upload]
 
-  before_filter :owner_required, :only => [:edit]
+  before_filter :owner_required, :only => [:edit, :update, :edit_multiple, :update_multiple, :destroy]
 
   def new
   end
@@ -26,8 +26,12 @@ class User::Events::PhotosController < UserBaseController
 	def record_upload
 		if @album.record_upload current_user, @photos
 			render :update do |page|
-				page.redirect_to edit_multiple_event_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
-			end
+        if @user == current_user
+				  page.redirect_to edit_multiple_event_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+			  else
+          page.redirect_to event_album_url(@album)
+        end
+      end
 		else
       render :update do |page|
         page << "error('发生错误');"
@@ -41,7 +45,7 @@ class User::Events::PhotosController < UserBaseController
 
   def update
     @album.update_attribute('cover_id', @photo.id) if params[:cover]
-    if @photo.update_attributes(params[:photo])
+    if @photo.update_attributes((params[:photo] || {}).merge({:poster_id => @photo.poster_id}))
 			respond_to do |format|
 				format.json { render :json => @photo }
 				format.html {  

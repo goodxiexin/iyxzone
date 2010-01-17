@@ -7,13 +7,13 @@ module CounterWithRawSql
 			attr, by = *args
 			by ||= 1
 			self.increment attr, by
-      ActiveRecord::Base.connection.execute("UPDATE #{self.class.table_name} SET #{attr} = #{self[attr]} WHERE id = #{id}")
+      ActiveRecord::Base.connection.execute("UPDATE #{self.class.table_name} SET #{attr} = #{attr} + #{by} WHERE id = #{id}")
 		end
 		define_method(:raw_decrement) do |*args|
 			attr, by = *args
 			by ||= 1
       self.decrement attr, by
-      ActiveRecord::Base.connection.execute("UPDATE #{self.class.table_name} SET #{attr} = #{self[attr]} WHERE id = #{id}")
+      ActiveRecord::Base.connection.execute("UPDATE #{self.class.table_name} SET #{attr} = #{attr} - #{by} WHERE id = #{id}")
     end
 	end
 

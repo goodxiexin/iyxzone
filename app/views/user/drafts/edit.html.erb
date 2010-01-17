@@ -4,25 +4,23 @@
 <%= javascript_include_tag 'friend' %>
 <%= javascript_include_tag 'textboxlist' %>
 
-<% content_for :left do %>
-  <%= render :partial => '/app_menu' %>
-<% end %>
-
-<ul>
-          <% subject = get_subject @user %>
-          <li><span><%= link_to "热门日志", hot_blogs_url(:id => @user.id) %></a></span></li>
-          <li><span><%= link_to "最新日志", recent_blogs_url(:id => @user.id) %></span></li>
-          <li><span><%= link_to "#{subject}的日志", blogs_url(:id => @user.id) %></span></li>
-        <% if @user == current_user %>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-log">日志</h1>
+    <div class="box02 canvas_int">
+      <div class="tab tab01">
+        <div class="right"><%= link_to "写新日志", new_blog_url %></div>
+        <ul>
+          <li><span><%= link_to "热门日志", hot_blogs_url(:id => current_user.id) %></a></span></li>
+          <li><span><%= link_to "我的日志", blogs_url(:id => current_user.id) %></span></li>
           <li><span><%= link_to "好友日志", friends_blogs_url %></span></li>
-        <% end %>
-          <li><span><%= link_to "与#{subject}相关的日志", relative_blogs_url(:id => @user.id) %></span></li>
-          <li class='hover'><span><%= link_to "草稿箱", drafts_url %></span></li>
+          <li><span><%= link_to "与我相关的日志", relative_blogs_url(:id => current_user.id) %></span></li>
+          <li><span><%= link_to "草稿箱", drafts_url %></span></li>
         </ul>
-
-<div id='errors'></div>
-
-<div>
+      </div>
+      <div class='appcontent05'>
+        <div id='errors'></div>
+        <div>
 <% form_for :blog, :html => {:method => 'put', :id => 'blog_form'} do |f| %>
   <div class='title'>
     <%= f.label "title" %><br/>
@@ -32,7 +30,7 @@
     <%= f.text_area 'content' %>
   </div>
   <div class='options'>
-    <%= f.label "category: " %><%= f.collection_select 'game_id', @user.games, :id, :name, {:prompt => '---'} %><br/>
+    <%= f.label "category: " %><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %><br/>
     <%= f.label "privilege: "%><%= privilege_select_tag(:blog) %>
   </div>
   <div class='submit'>
@@ -69,7 +67,11 @@
     </div>
   </div>
 <% end %>
-</div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>
 
 <% tagged_user_ids = '[' + @blog.tags.map(&:tagged_user_id).join(',') + ']' %>
 <% tag_ids = '[' + @blog.tags.map(&:id).join(',') + ']' %>

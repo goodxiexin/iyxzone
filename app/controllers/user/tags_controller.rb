@@ -1,29 +1,42 @@
 class User::TagsController < UserBaseController
 
+  before_filter :deleteable_required, :only => [:destroy]
+
 	def create
-		@tagging.destroy unless @tagging.nil?
-		@taggable.taggings.create(:tag_id => @tag.id, :poster_id => current_user.id)
+    unless @taggable.add_tag current_user, params[:name]
+      render :update do |page|
+        page << "error('发生错误');"
+      end
+    end
 	end
 
 	def destroy
-		Tagging.destroy_all(:tag_id => @tag.id, :taggable_id => @profile.id, :taggable_type => 'Profile')
-		render :update do |page|
-			page << "$('tag_#{@tag.id}').remove();"
-		end
+		if @taggable.destroy_tag @tag.name 
+		  render :update do |page|
+			  page << "$('tag_#{@tag.id}').remove();"
+		  end
+    else
+      render :update do |page|
+        page << "error('发生错误')"
+      end
+    end
 	end
 
 protected
 
 	def setup
-		if ["create"].include? params[:action]
+    if ["create"].include? params[:action]
       @taggable = get_taggable
-      can_create?
-			@tag = Tag.find_or_create(:name => params[:tag][:name], :taggable_type => @taggable.class.name)
 		elsif ["destroy"].include? params[:action]
+      @taggable = get_taggable
 			@tag = Tag.find(params[:id])
 		end
 	rescue
 		not_found
 	end
+
+  def deleteable_required
+    @taggable.is_tag_deleteable_by?(current_user) || not_found
+  end
 
 end

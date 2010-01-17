@@ -4,14 +4,14 @@ class User::Friends::RequestsController < UserBaseController
 	end
 
   def create
-    @request = @recipient.friend_requests.build(params[:request].merge({:user_id => current_user.id}))
+    @request = Friendship.new((params[:request] || {}).merge({:user_id => current_user.id, :status => 0}))
     if @request.save
       render :update do |page|
         page << "tip('成功，请耐心等待回复');"
       end
     else
       render :update do |page|
-        page << "error('你已经发送过请求了，请等待回复');"
+        page << "error('发生错误');"
       end
     end  
   end
@@ -21,14 +21,23 @@ class User::Friends::RequestsController < UserBaseController
 			render :update do |page|
 				page << "$('friend_request_option_#{@request.id}').innerHTML = '已接受';"
 			end
-		end		
+		else
+      render :update do |page|
+        page << "error('发生错误')"
+      end
+    end		
 	end
 
 	def decline
-		@request.destroy
-		render :update do |page|
-			page << "$('friend_request_option_#{@request.id}').innerHTML = '已拒绝';"
-		end 
+		if @request.destroy
+		  render :update do |page|
+			  page << "$('friend_request_option_#{@request.id}').innerHTML = '已拒绝';"
+		  end
+    else
+      render :update do |page|
+        page << "error('发生错误');"
+      end
+    end 
 	end
 
 protected
@@ -36,19 +45,11 @@ protected
 	def setup
 		if ["new"].include? params[:action]
 			@recipient = User.find(params[:friend_id])
-		elsif ["create"].include? params[:action]
-			@recipient = User.find(params[:request][:friend_id])
 		elsif ["accept", "decline"].include? params[:action]
-			@request = Friendship.find(params[:id])
+			@request = current_user.friend_requests.find(params[:id])
 		end
 	rescue
 		not_found
 	end
 
-# no longer needed due to form authenticity token
-=begin
-	def recipient_required
-		current_user == @request.friend || not_found
-	end
-=end
 end

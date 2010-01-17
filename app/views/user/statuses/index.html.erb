@@ -51,9 +51,11 @@
   </div></div>
 </div></div></div></div>
 
-<% if @user == current_user and params[:reply_to] %>
+<% @reply_to = User.find(params[:reply_to]) unless params[:reply_to].nil?%>
+<% @status = Status.find(params[:status_id]) unless params[:status_id].nil?%>
+<% if @reply_to and @status %>
 <script type="text/javascript">
-  set_comment_box('status', <%= @status.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
+  Iyxzone.Comment.set('status', <%= @status.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
 </script>
 <% end %>
 

@@ -6,7 +6,7 @@
     <%= profile_link requestor %><br/>
   </div><br/>
   <div class='operation' id='guild_request_option_<%= request.id %>'>
-		<% if current_user == @user %>
+		<% if current_user == @guild.president %>
 			<%= link_to_remote '接受', :url => accept_guild_request_url(@guild, request, :show => 2), :method => :put  %> |
 			<%= facebox_confirm '拒绝', decline_guild_request_url(@guild, request, :show => 2), {:method => :delete, :msg => '你确定吗'} %>
 		<% end %>

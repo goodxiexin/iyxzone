@@ -2,6 +2,6 @@
           flash[:notice] = "修改成功"
           page.redirect_to event_url(@event)
       else
-          page << "facebox.close(); $('event_status_#{@event.id}').innerHTML = '#{msg @participation.status}'"
+          page << "facebox.close(); $('event_status_#{@event.id}').innerHTML = '#{@participation.to_s}'"
       end
 

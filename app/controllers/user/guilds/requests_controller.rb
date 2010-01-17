@@ -7,9 +7,8 @@ class User::Guilds::RequestsController < UserBaseController
   end
 
   def create
-    @request = @guild.requests.build(params[:request].merge({:user_id => current_user.id}))
-    if @request.save
-    else
+    @request = @guild.requests.build(:user_id => current_user.id, :status => params[:status])
+    unless @request.save
       render :update do |page|
         page << "error('发生错误');"
       end
@@ -47,8 +46,7 @@ protected
       @guild = Guild.find(params[:guild_id])
       @user = @guild.president
     elsif ['accept', 'decline'].include? params[:action]
-      @guild = Guild.find(params[:guild_id])
-      @user = @guild.president
+      @guild = current_user.guilds.find(params[:guild_id])
       @request = @guild.requests.find(params[:id])
     end
   rescue

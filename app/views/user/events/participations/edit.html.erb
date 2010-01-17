@@ -6,9 +6,9 @@
 <% form_remote_for :participation, :url => event_participation_url(@event, @participation, :show => 0), :html => {:method => :put} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
-    <%= f.radio_button 'status', 3 %><%= label_tag '', '肯定去' %><br/>
-    <%= f.radio_button 'status', 4 %><%= label_tag '', '可能去' %><br/>
-    <%= f.radio_button 'status', 5 %><%= label_tag '', '去他娘的' %><br/>
+    <%= radio_button_tag 'status', 3 %><%= label_tag '', '肯定去' %><br/>
+    <%= radio_button_tag 'status', 4 %><%= label_tag '', '可能去' %><br/>
+    <%= radio_button_tag 'status', 5 %><%= label_tag '', '去他娘的' %><br/>
   </div>
 </div>
 <div class="buttons s_clear">

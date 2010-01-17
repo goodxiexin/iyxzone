@@ -2,14 +2,13 @@ class User::Events::RequestsController < UserBaseController
 
   layout 'app'
 
-  before_filter :privilege_required, :only => [:new]
-
   def new
     render :action => 'new', :layout => false
   end
 
   def create
-    unless @request = @event.requests.create(params[:request].merge({:participant_id => current_user.id}))
+    @request = @event.requests.build(:participant_id => current_user.id, :status => params[:status])
+    unless @request.save
       render :update do |page|
         page << "error('发生错误');"
       end
@@ -17,7 +16,7 @@ class User::Events::RequestsController < UserBaseController
   end
 
   def accept
-    if @request.update_attribute('status', @request.status + 2)
+    if @request.accept
       render :update do |page|
         page << "$('event_request_operation_#{@request.id}').innerHTML = '已成功接受';"
       end
@@ -46,23 +45,13 @@ protected
     if ['new', 'create'].include? params[:action]
       @event = Event.find(params[:event_id])
       @user = @event.poster
-      @privilege = @event.privilege
     elsif ['accept', 'decline'].include? params[:action]
-      @event = Event.find(params[:event_id])
-      @user = @event.poster
-      @privilege = @event.privilege
+      @event = current_user.events.find(params[:event_id])
       @request = @event.requests.find(params[:id])
     end
   rescue
     not_found
   end
-
-  # due to authenticity token, this is no longer needed
-=begin
-  def poster_required
-    @user == current_user || not_found
-  end
-=end
 
 end
 

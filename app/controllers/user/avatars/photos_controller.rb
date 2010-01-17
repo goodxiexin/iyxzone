@@ -2,11 +2,6 @@ class User::Avatars::PhotosController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:edit]
-
-  # do this in model
-	#before_filter :not_current_avatar_required, :only => [:destroy]
-
   before_filter :friend_or_owner_required, :only => [:show]
 
   def show
@@ -23,14 +18,15 @@ class User::Avatars::PhotosController < UserBaseController
   end
 
   def create
-    if @photo = @album.photos.create(params[:photo].merge({:poster_id => current_user.id, :privilege => @album.privilege})) 
+    @photo = @album.photos.build(params[:photo])
+    if @photo.save
 			responds_to_parent do
         render :update do |page|
           page << "facebox.close()"
           if params[:album].to_i == 1
             page.redirect_to avatar_album_url(@album)
           else
-						@album.reload # i dont know why this is needed
+						@album.reload
             page.replace_html 'avatar', album_cover(@album, :size => :large)
           end
         end
@@ -45,13 +41,10 @@ class User::Avatars::PhotosController < UserBaseController
   end
 
   def set
-		Avatar.transaction do 
-			@user.update_attribute('avatar_id', @photo.id)
-			@album.update_attribute('cover_id', @photo.id)
-		end
-    flash[:notice] = "修改成功"
-    render :update do |page|
-      page.redirect_to avatar_album_url(@album)
+    unless @album.set_cover @photo
+      render :update do |page|
+        page << "error('发生错误');"
+      end
     end
   end
 
@@ -87,22 +80,19 @@ class User::Avatars::PhotosController < UserBaseController
 protected
 
   def setup
-    if ['show', 'edit', 'set', 'update', 'destroy', 'update_notation'].include? params[:action]
+    if ['show'].include? params[:action]
       @photo = Avatar.find(params[:id])
       @album = @photo.album
       @user = @album.user
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+    elsif ['edit', 'set', 'update', 'destroy', 'update_notation'].include? params[:action]
+      @album = current_user.avatar_album
+      @photo = @album.photos.find(params[:id])
     elsif ['new', 'create'].include? params[:action]
-      @user = current_user
-      @album = @user.avatar_album
+      @album = current_user.avatar_album
     end
   rescue
     not_found 
   end
-
-	def not_current_avatar_required
-		@user.avatar_id != @photo.id || not_found
-	end
 	
 end
 

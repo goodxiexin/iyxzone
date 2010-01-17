@@ -11,7 +11,7 @@
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right">
-          <% if @membership and (@membership.is_president? or @membership.is_president?) %>
+          <% if @membership and (@membership.is_veteran? or @membership.is_president?) %>
           <%= link_to "上传照片", new_guild_photo_url(:album_id => @album.id) %>
           <% end %>
         </div>
@@ -34,7 +34,7 @@
                   <% if @membership and (@membership.is_authorized? or @membership.is_president?) %>
                     <li><%= link_to_function "标记", "tagger.start();" %></li>
                   <% end %>
-                  <% if @membership.is_president? %>
+                  <% if @membership and @membership.is_president? %>
                     <li class="icon-photo"><%= link_to '编辑', edit_guild_photo_url(@photo), :rel => 'facebox' %>
                     <li class="icon-del" ><%= facebox_confirm '删除', guild_photo_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %></li>
                   <% end %>

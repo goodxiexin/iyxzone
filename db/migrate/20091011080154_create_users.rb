@@ -11,7 +11,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string	:activation_code
       t.datetime	:activated_at
       t.string	:password_reset_code
-      t.boolean	:enabled,	:default => false
+      t.boolean	:enabled,	:default => true
 			t.integer :avatar_id
       t.string :pinyin # a duplicate which boosts search
 
@@ -21,9 +21,14 @@ class CreateUsers < ActiveRecord::Migration
 			t.integer :application_setting, :limit => 8, :default => ApplicationSetting.default
 
       # counters
+      t.integer :characters_count, :default => 0 
+      t.integer :notices_count, :default => 0
+      t.integer :unread_notices_count, :default => 0
       t.integer :notifications_count, :default => 0
+      t.integer :unread_notifications_count, :default => 0
       t.integer :friends_count, :default => 0 # done
-			t.integer :personal_albums_count, :default => 0 # done
+			t.integer :albums_count, :default => 0 # done
+      t.integer :photos_count, :default => 0
 			t.integer :events_count, :default => 0
 			t.integer :upcoming_events_count, :default => 0
 			t.integer :past_events_count, :default => 0
@@ -35,8 +40,12 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :drafts_count, :default => 0 # done
       t.integer :videos_count, :default => 0 # done
       t.integer :statuses_count, :default => 0 # done
-      t.integer :requests_count, :default => 0 # done 
-      t.integer :invitations_count, :default => 0 # done
+      t.integer :friend_requests_count, :default => 0
+      t.integer :guild_requests_count, :default => 0
+      t.integer :event_requests_count, :default => 0
+      t.integer :guild_invitations_count, :default => 0
+      t.integer :event_invitations_count, :default => 0
+      t.integer :poll_invitations_count, :default => 0 
 			t.integer :poke_deliveries_count, :default => 0
 
       t.timestamps

@@ -4,19 +4,41 @@ class Topic < ActiveRecord::Base
 
   named_scope :normals, :conditions => ["top = false"]
 
-  belongs_to :forum, :counter_cache => true
+  belongs_to :forum
 
   belongs_to :poster, :class_name => 'User'
 
-  has_many :posts, :dependent => :delete_all
+  has_many :posts, :dependent => :destroy
 
-  belongs_to :last_post, :class_name => 'Post'
+  def validate
+    if poster_id.blank?
+      errors.add_to_base('没有发布者')
+      return
+    end
 
-  validate do |topic|
-    topic.errors.add_to_base('标题不能为空') if topic.subject.blank?
-    topic.errors.add_to_base('标题最长100个字符') if topic.subject.length > 100
-    topic.errors.add_to_base('内容不能为空') if topic.content.blank?
-    topic.errors.add_to_base('内容最长10000个字符') if topic.content.length > 10000
+    if forum_id.blank?
+      errors.add_to_base('没有论坛')
+      return
+    elsif Forum.find(:first, :conditions => {:id => forum_id}).nil?
+      errors.add_to_base('论坛不存在')
+      return
+    end
+
+    if subject.blank?
+      errors.add_to_base('没有标题')
+      return
+    elsif subject.length > 100
+      errors.add_to_base('标题太长')
+      return
+    end
+
+    if content.blank?
+      errors.add_to_base('没有内容')
+      return
+    elsif content.length > 10000
+      errors.add_to_base('内容太长')
+      return
+    end
   end
 
 end

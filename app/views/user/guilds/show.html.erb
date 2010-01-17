@@ -39,7 +39,6 @@
   </div>
 </div>
 
-<% if @album.photos_count != 0 %>
 <div class="multibox">
 	<div class="title"><%= link_to '更多', guild_album_url(@album) %><b>照片</b></div>
   <div class="photolist-big-box">
@@ -52,7 +51,6 @@
 		</ul>
 	</div>
 </div>
-<% end %>
 
 <div class="multibox">
 	<div class="title"><%= link_to "更多(#{@guild.all_count})", guild_memberships_url(@guild, :type => 0) %><b>会员</b></div>

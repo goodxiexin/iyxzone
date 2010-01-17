@@ -4,35 +4,32 @@ class Admin::UsersController < AdminBaseController
     @users = User.activated.paginate :page => params[:page], :per_page => 20
   end
 
-  def unactivated
-    @users = User.pending.paginate :page => params[:page], :per_page => 20
-  end
-
   def destroy
     if @user.destroy
-      flash[:notice] = "成功删除"
+      render :update do |page|
+        page.redirect_to admin_users_url
+      end
     else
-      flash[:error] = "发生错误"
+      render :update do |page|
+        page << "error('发生错误');"
+      end
     end
-    redirect_to :action => 'index'
   end
 
   def enable
-    if @user.update_attribute(:enabled, true)
-      flash[:notice] = "User enabled"
-    else
-      flash[:error] = "There was a problem enabling this user"
+    unless @user.update_attribute(:enabled, true)
+      render :update do |page|
+        page << "error('发生错误');"
+      end
     end
-    redirect_to :action => 'index'
   end
 
   def disable
-    if @user.update_attribute(:enabled, false)
-      flash[:notice] = "User enabled"
-    else
-      flash[:error] = "There was a problem enabling this user"
+    unless @user.update_attribute(:enabled, false)
+      render :update do |page|
+        page << "error('发生错误');"
+      end
     end
-    redirect_to :action => 'index'
   end
 
   def activate
@@ -41,6 +38,12 @@ class Admin::UsersController < AdminBaseController
       redirect_to :action => 'index'
     end
   end 
+
+  def search
+    @users = User.search(params[:key]).paginate :page => params[:page], :per_page => 20
+    @remote = {:update => 'users', :url => {:controller => 'admin/users', :action => 'search', :key => params[:key]}}
+    render :partial => 'users', :object => @users
+  end
 
 protected
 

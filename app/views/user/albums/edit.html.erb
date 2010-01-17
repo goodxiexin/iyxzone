@@ -21,7 +21,7 @@
   <div class="rows s_clear">
     <div class="fldid"><label for="des">游戏分类：</label></div>
     <div class="fldvalue">
-      <%= f.collection_select 'game_id', @user.games, :id, :name, {:prompt => '---'} %>  
+      <%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %>  
     </div>
   </div>
   <div class="rows s_clear">

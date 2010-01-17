@@ -10,7 +10,8 @@ class CreatePolls < ActiveRecord::Migration
       t.boolean :no_deadline, :default => true # no_deadline是为了创建的时候偷个懒
       t.date :deadline
       t.text :summary
-      t.integer :privilege, :default => 2 # 1. all 2. only friends
+      t.integer :privilege, :default => 1 # 1. all 2. only friends
+      t.integer :invitees_count, :default => 0
       t.integer :sharings_count, :default => 0
       t.integer :digs_count, :default => 0
       t.integer :comments_count, :default => 0

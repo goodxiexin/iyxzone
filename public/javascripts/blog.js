@@ -40,7 +40,7 @@ Object.extend(Iyxzone.Blog.Builder, {
     this.parameters = $('blog_form').serialize();
     var newTags = this.tagBuilder.getNewTags();
     for(var i=0;i<newTags.length;i++){
-      this.parameters += "&blog[tags][]=" + newTags[i];
+      this.parameters += "&blog[friend_tags][]=" + newTags[i];
     }
   },
 

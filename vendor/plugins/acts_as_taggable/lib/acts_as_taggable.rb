@@ -7,7 +7,7 @@ module Taggable
 
   module ClassMethods
 
-    def acts_as_taggable
+    def acts_as_taggable opts={}
 
       has_many :taggings, :as => 'taggable', :dependent => :destroy
 
@@ -21,6 +21,10 @@ module Taggable
 
 			alias_method_chain :reload, :tag_list
 
+      cattr_accessor :taggable_opts
+
+      self.taggable_opts = opts
+  
     end   
 
   end
@@ -78,9 +82,34 @@ module Taggable
 			reload_without_tag_list(*args)
 		end
 
+    def add_tag user, name
+      Tagging.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id, :tag_name => name)
+    end
+
 		def tagged_by? user
-			taggings.find_by_poster_id user.id
+      user_id = (user.is_a? Integer)? user : user.id
+			!taggings.find_by_poster_id(user_id).blank?
 		end
+
+    def is_taggable_by? user
+      tagging = taggings.find_by_poster_id user.id  
+      proc = self.class.taggable_opts[:create_conditions] || lambda { true }
+      proc.call tagging, self, user
+    end
+
+    def is_tag_deleteable_by? user
+      proc = self.class.taggable_opts[:delete_conditions] || lambda { false }
+      proc.call self, user
+    end
+
+    def destroy_tag tag_name
+      tag = Tag.find_by_name(tag_name)
+      if tag.blank?
+        false
+      else
+        Tagging.destroy_all(:taggable_id => id, :taggable_type => self.class.to_s, :tag_id => tag.id)
+      end
+    end
 
   end
 

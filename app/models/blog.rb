@@ -1,14 +1,19 @@
 class Blog < ActiveRecord::Base
 
+  belongs_to :game
+
 	belongs_to :poster, :class_name => 'User'
+
+  named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
+
+  named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
+
+  acts_as_friend_taggable :delete_conditions => lambda {|user, blog| blog.poster == user},
+                          :create_conditions => lambda {|user, blog| blog.poster == user}
 
   acts_as_viewable
 
-	acts_as_commentable :order => 'created_at ASC'
-
-	acts_as_diggable
-
-	acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
+	acts_as_diggable :create_conditions => lambda {|user, blog| blog.privilege != 4 or blog.poster == user}
 
 	acts_as_privileged_resources
 
@@ -16,26 +21,37 @@ class Blog < ActiveRecord::Base
 
   acts_as_shareable
 
-	named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
+  acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 
-	named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
+  acts_as_commentable :order => 'created_at ASC',
+                      :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster}, 
+                      :create_conditions => lambda {|user, blog| (user == blog.poster) || (blog.privilege == 1) || (blog.privilege == 2 and (blog.poster.has_friend? user or blog.poster.has_same_game_with? user)) || (blog.privilege == 3 and blog.poster.has_friend? user) || false}
 
-	has_many :tags, :class_name => 'FriendTag', :as => 'taggable', :dependent => :destroy
+  def validate
+    # check title
+    if title.blank?
+      errors.add_to_base('标题不能为空')
+    elsif title.length > 100
+      errors.add_to_base('标题最长100个字符')
+    end
 
-	has_many :relative_users, :through => :tags, :source => 'tagged_user'
+    # check poster
+    errors.add_to_base('没有作者') if poster_id.blank?
+   
+    # check content
+    if content.blank?   
+      errors.add_to_base('内容不能为空')
+    elsif content.length >= 10000
+      errors.add_to_base('内容最长10000个字符')
+    end
 
-  validate do |blog|
-    blog.errors.add_to_base('标题不能为空') if blog.title.blank?
-    blog.errors.add_to_base('请选择游戏类别') if blog.game_id.blank?
-    blog.errors.add_to_base('标题最长100个字符') if blog.title.length >= 100
-    blog.errors.add_to_base('内容最长10000个字符') if blog.content.length >= 10000
-  end
+    # check game
+    if game_id.blank?
+      errors.add_to_base('请选择游戏类别')
+    elsif Game.find(:first, :conditions => {:id => game_id}).nil?
+      errors.add_to_base('游戏不存在')
+    end
 
-	# virtual attribute tags
-	# this is convenient for mass assignment
-  # only "build" is allowed here, since parent object is not saved yet
-  def tags=(ids)
-    poster.friends.find(ids).each { |f| tags.build(:tagged_user_id => f.id, :poster_id => poster_id) }
   end
 
 end

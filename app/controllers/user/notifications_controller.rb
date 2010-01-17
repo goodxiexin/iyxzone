@@ -2,17 +2,15 @@ class User::NotificationsController < UserBaseController
 
   layout 'app'
 
-  before_filter :catch_notification, :only => [:destroy]
-
   def index
     @notifications = current_user.notifications
-    Notification.update_all("notifications.read = 1", {:user_id => current_user.id})
+    Notification.read_all current_user
   end
 
 	def first_five
 		@notifications = current_user.notifications.find(:all, :limit => 5)
-    Notification.update_all("notifications.read = 1", {:id => @notifications.map(&:id)}) 
-		render :action => 'first_five', :layout => false
+		Notification.read @notifications, current_user
+    render :action => 'first_five', :layout => false
 	end
 
   def destroy
@@ -34,8 +32,10 @@ class User::NotificationsController < UserBaseController
 
 protected
         
-  def catch_notification
-    @notification = current_user.notifications.find(params[:id])
+  def setup
+    if ["destroy"].include? params[:action]
+      @notification = current_user.notifications.find(params[:id])
+    end
   rescue
     not_found
   end

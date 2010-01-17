@@ -2,15 +2,11 @@ class User::BlogsController < UserBaseController
 
   layout 'app'
 
-  before_filter :not_draft_required, :except => [:update]
+  increment_viewing 'blog', :only => [:show]
 
   before_filter :friend_or_owner_required, :only => [:index, :relative]
 
   before_filter :privilege_required, :only => [:show]
-
-  increment_viewing 'blog', :only => [:show]
-
-  before_filter :owner_required, :only => [:edit]
 
   def index
 		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
@@ -45,14 +41,14 @@ class User::BlogsController < UserBaseController
   end
 
   def create
-    # merge({:poster_id => current_user.id 必须有，不然tags=方法里poster_id = nil
-    if @blog = current_user.blogs.create(params[:blog].merge({:poster_id => current_user.id, :draft => false}))
+    @blog = Blog.new((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => false}))
+    if @blog.save
       render :update do |page|
         page.redirect_to blog_url(@blog)
       end
     else
       render :update do |page|
-        page.replace_html 'errors', :partial => 'blog/validation_errors'
+        page.replace_html 'errors', :partial => 'user/blogs/validation_errors'
       end
     end
   end
@@ -61,23 +57,21 @@ class User::BlogsController < UserBaseController
   end
 
   def update
-    if @blog.update_attributes(params[:blog].merge({:draft => false}))
+    if @blog.update_attributes((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => false}))
       render :update do |page|
         page.redirect_to blog_url(@blog)
       end
     else
       render :update do |page|
-        page.replace_html 'errors', :partial => 'blog/validation_errors'
+        page.replace_html 'errors', :partial => 'user/blogs/validation_errors'
       end
     end
-  rescue FriendTag::TagNoneFriendError
-    render :text => '只能标记你的朋友'
   end
 
   def destroy
     if @blog.destroy
 			render :update do |page|
-				page.redirect_to blogs_url(:id => @user.id)
+				page.redirect_to blogs_url(:id => current_user.id)
 			end
 		else
 			render :update do |page|
@@ -91,20 +85,18 @@ protected
   def setup
     if ['index', 'hot', 'recent', 'relative'].include? params[:action]
       @user = User.find(params[:id])
-    elsif ['new', 'create', 'friends'].include? params[:action]
-      @user = current_user
-    elsif ['show', 'edit', 'update', 'destroy'].include? params[:action]
+    elsif ['show'].include? params[:action]
       @blog = Blog.find(params[:id])
       @user = @blog.poster
 			@privilege = @blog.privilege
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+    elsif ['edit', 'destroy'].include? params[:action]
+      @blog = current_user.blogs.find(params[:id])
+    elsif ['update'].include? params[:action]
+      @blog = current_user.blogs_and_drafts.find(params[:id])
     end
   rescue
     not_found
-  end
-
-  def not_draft_required
-    @blog.nil? || !@blog.draft || not_found
   end
 
 end

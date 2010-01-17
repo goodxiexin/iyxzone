@@ -70,7 +70,8 @@ class User < ActiveRecord::Base
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
   def has_friend? user
-		friendships.find_by_friend_id(user.id) 
+    user_id = (user.is_a? Integer)? user : user.id
+		!friendships.find_by_friend_id(user_id).blank? 
   end
 
   def wait_for? user
@@ -80,9 +81,6 @@ class User < ActiveRecord::Base
 	def common_friends_with user
 		friends & user.friends
 	end
-
-  # profile
-  has_one :profile, :dependent => :destroy
 
   # settings
 	has_setting :application_setting
@@ -104,8 +102,8 @@ class User < ActiveRecord::Base
     !game_attentions.find_by_game_id(game.id).nil?
   end
 
-	def has_same_game_with user
-		!(user.games & games).blank?
+	def has_same_game_with? user
+		!(user.characters.map(&:game_id) & characters.map(&:game_id)).blank?
 	end
 
   # album
@@ -119,9 +117,15 @@ class User < ActiveRecord::Base
   has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
   # blogs
-  has_many :blogs, :conditions => {:draft => false}, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
+  with_options :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id do |user|
+    
+    user.has_many :blogs, :conditions => {:draft => false}
 
-  has_many :drafts, :class_name => 'Blog', :conditions => {:draft => true}, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
+    user.has_many :drafts, :class_name => 'Blog', :conditions => {:draft => true}
+
+    user.has_many :blogs_and_drafts, :class_name => 'Blog'
+  
+  end
 
   # videos
   has_many :videos, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
@@ -173,9 +177,9 @@ class User < ActiveRecord::Base
 	# guilds
 	has_many :memberships
 
-	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC' do |user|
+  has_many :guilds, :foreign_key => 'president_id'
 
-		user.has_many :guilds, :conditions => "memberships.status = 3"
+	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC' do |user|
 
 		user.has_many :participated_guilds, :conditions => "memberships.status = 4 or memberships.status = 5"
 
@@ -184,7 +188,7 @@ class User < ActiveRecord::Base
 	end
 
 	def common_guilds_with user
-        all_guilds & user.all_guilds
+    all_guilds & user.all_guilds
 	end
 
 	# invitation and requests
@@ -194,11 +198,19 @@ class User < ActiveRecord::Base
 
 	has_many :poll_invitations 
 
-	has_many :guild_requests, :class_name => 'Membership', :foreign_key => 'president_id', :conditions => {:status => [1,2]}
+	has_many :guild_requests, :through => :guilds, :source => :requests 
 
 	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => 0}
 
 	has_many :friend_requests, :class_name => 'Friendship', :foreign_key => 'friend_id', :conditions => {:status => 0}
+
+  def invitations_count
+    guild_invitations_count + event_invitations_count + poll_invitations_count
+  end
+
+  def requests_count
+    friend_requests_count + guild_requests_count + event_requests_count
+  end
 
 	# tags
 	has_many :friend_tags, :foreign_key => 'tagged_user_id'
@@ -246,6 +258,10 @@ class User < ActiveRecord::Base
 
     user.has_many :sharing_feed_deliveries, :conditions => {:item_type => 'Sharing'}
 
+    user.has_many :profile_feed_deliveries, :conditions => {:item_type => 'Profile'}
+
+    user.has_many :friendship_feed_deliveries, :conditions => {:item_type => 'Friendship'}
+
 	end
 
 	with_options :order => 'created_at DESC', :source => 'feed_item' do |user|
@@ -279,6 +295,10 @@ class User < ActiveRecord::Base
 		user.has_many :personal_album_feed_items, :through => :personal_album_feed_deliveries
 
     user.has_many :sharing_feed_items, :through => :sharing_feed_deliveries
+
+    user.has_many :profile_feed_items, :through => :profile_feed_deliveries
+
+    user.has_many :friendship_feed_items, :through => :friendship_feed_deliveries
 
   end
 

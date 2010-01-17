@@ -18,7 +18,7 @@
         </ul>				
 	    </div>
       <div class="box02 appcontent01">
-		    <h3>共 <span><%= @user.personal_albums_count + 1%></span> 个专辑</h3>
+		    <h3>共 <span><%= @user.albums_count %></span> 个专辑</h3>
         <div class="piclist">
           <ul class='pics-list s_clear'>
 			      <%= render :partial => 'album_item', :collection => @albums %>

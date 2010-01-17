@@ -17,9 +17,11 @@ class User::FriendsController < UserBaseController
     end
   end
 
+=begin
   def new
 		render :action => 'new', :layout => 'app2'
   end
+=end
 
 	# other people's friends list
 	def other
@@ -32,12 +34,14 @@ class User::FriendsController < UserBaseController
 	end
 
   def destroy
-    Friendship.transaction do
-      Friendship.find(:first, :conditions => {:user_id => current_user.id, :friend_id => @friend.id}).destroy
-      Friendship.find(:first, :conditions => {:user_id => @friend.id, :friend_id => current_user.id}).destroy
-    end
-    render :update do |page|
-      page << "alert('成功');$('friend_#{params[:id]}').remove();"
+    if @friendship.cancel
+      render :update do |page|
+        page << "alert('成功');$('friend_#{params[:id]}').remove();"
+      end
+    else
+      render :update do |page|
+        page << "error('发生错误');"
+      end
     end
   end
 
@@ -52,11 +56,10 @@ protected
 
   def setup
     if ["index"].include? params[:action]
-			@user = current_user
 			@game = Game.find(params[:game_id]) unless params[:game_id].nil?
 			@guild = Guild.find(params[:guild_id]) unless params[:guild_id].nil?
 		elsif ["destroy"].include? params[:action]
-      @friend = current_user.friends.find(params[:id])
+      @friendship = current_user.friendships.find_by_friend_id(params[:id])#friends.find(params[:id])
     elsif ["new"].include? params[:action]
 			@user = User.find(params[:id])
 			@profile = @user.profile

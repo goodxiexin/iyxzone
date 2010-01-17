@@ -2,16 +2,12 @@ class User::Guilds::InvitationsController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:new]
-
-  before_filter :invitee_required, :only => [:edit]
-
   def new
-    @friends = @user.friends
+    @friends = current_user.friends
   end
 
   def create_multiple
-    @users.each { |user| @guild.invitations.create(:user_id => user.id) }
+    (params[:users] || {}).each { |user_id| @guild.invitations.create(:user_id => user_id) }
     redirect_to guild_url(@guild)
   end
 
@@ -43,24 +39,14 @@ class User::Guilds::InvitationsController < UserBaseController
 protected
 
   def setup
-    if ['new'].include? params[:action]
-      @guild = Guild.find(params[:guild_id])
-      @user = @guild.president
-    elsif ['create_multiple'].include? params[:action]
-      @guild = Guild.find(params[:guild_id])
-      @user = @guild.president
-      @users = params[:users].blank? ? [] : @user.friends.find(params[:users])
+    if ['new', 'create_multiple'].include? params[:action]
+      @guild = current_user.guilds.find(params[:guild_id])
     elsif ['edit', 'accept', 'decline'].include? params[:action]
-      @guild = Guild.find(params[:guild_id])
-      @user = @guild.president
-      @invitation = @guild.invitations.find(params[:id])
+      @invitation = current_user.guild_invitations.find(params[:id])
+      @guild = @invitation.guild
     end
   rescue
     not_found
-  end
-
-  def invitee_required
-    @invitation.user == current_user || not_found
   end
 
 end

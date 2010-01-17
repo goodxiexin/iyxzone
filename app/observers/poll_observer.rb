@@ -6,7 +6,19 @@ require 'app/mailer/poll_mailer'
 #
 class PollObserver < ActiveRecord::Observer
 
-  def after_update(poll)
+  def after_create poll
+    # increment user's counter
+    poll.poster.raw_increment :polls_count
+
+    # issue feeds if necessary
+    return unless poll.poster.application_setting.emit_poll_feed
+    recipients = [poll.poster.profile]
+    recipients.concat poll.poster.guilds
+    recipients.concat poll.poster.friends.find_all{|f| f.application_setting.recv_poll_feed}
+    poll.deliver_feeds :recipients => recipients
+  end
+
+  def after_update poll
     if poll.summary_changed?
       poll.voters.each do |voter|
         if voter.mail_setting.poll_summary_change and voter != poll.poster
@@ -14,6 +26,10 @@ class PollObserver < ActiveRecord::Observer
         end
       end
     end
+  end
+
+  def after_destroy poll
+    poll.poster.raw_decrement :polls_count
   end
 
 end

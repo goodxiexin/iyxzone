@@ -3,7 +3,7 @@ module FaceboxMacroHelpers
   def facebox_link(text, url, options={})
     options = options.merge({
 			:rel => 'facebox',
-			:type => 'normal'})
+			:facebox_type => 'normal'})
 
     link_to text, url, options
   end

@@ -7,7 +7,6 @@ class CreateTopics < ActiveRecord::Migration
 			t.text :content
       t.integer :posts_count, :default => 0
       t.boolean :top, :default => false
-			t.integer :last_post_id
       t.timestamps
     end
   end

@@ -105,7 +105,6 @@
 		</div>
   </div>
 
-  <% if @album.photos_count != 0 %>
 	<div class="multibox">
 		<div class="title"><%= link_to "更多", event_album_url(@album) %><b>照片</b></div>
     <div class="photolist-big-box">
@@ -118,7 +117,6 @@
       </ul>
     </div>
   </div>
-  <% end %>
 
   <% if @event.confirmed_count != 0 %>
 	<div class="multibox">

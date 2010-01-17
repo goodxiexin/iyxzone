@@ -7,15 +7,21 @@ module FriendTaggable
   module ClassMethods
 
     def acts_as_friend_taggable opts={}
-      has_many :tags, :class_name => opts[:class_name], :as => 'taggable', :dependent => :destroy
+      
+      has_many :tags, :class_name => 'FriendTag', :as => 'taggable', :dependent => :destroy
+
+      has_many :relative_users, :through => :tags, :source => :tagged_user
 
 			cattr_accessor :friend_taggable_opts
 
 			self.friend_taggable_opts = opts
 
+      after_create :save_friend_tags
+
       include FriendTaggable::InstanceMethods
 
       extend FriendTaggable::SingletonMethods
+
     end
 
   end
@@ -32,10 +38,31 @@ module FriendTaggable
 
   module InstanceMethods
 
-		def relative_users
-			tags.map {|tag| tag.friend}
-		end
+    def friend_tags= ids
+      @tagged_user_ids = ids  
+    end
 
+    def friend_tags
+      @tagged_user_ids
+    end
+
+    def is_taggable_by? user
+      proc = self.class.friend_taggable_opts[:create_conditions] || lambda { true }
+      proc.call user, self  
+    end
+
+    def is_tag_deleteable_by? user, tag
+      proc = self.class.friend_taggable_opts[:delete_conditions] || lambda { true }
+      proc.call user, self
+    end
+
+  protected
+
+    def save_friend_tags
+      return if @tagged_user_ids.blank?
+      @tagged_user_ids.each { |id| tags.create(:tagged_user_id => id, :poster_id => poster_id) } 
+    end
+  
   end
 
 end

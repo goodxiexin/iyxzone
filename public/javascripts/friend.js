@@ -253,7 +253,6 @@ Iyxzone.Friend.Tagger = Class.create({
   },
 
   getFriends: function(game_id){
-    alert(game_id);
     this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
     new Ajax.Request('/friend_table_for_friend_tags?game_id=' + game_id, {
       method: 'get',

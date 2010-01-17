@@ -142,7 +142,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     var phone = $('profile_phone').value;
 
     if(phone.match(/\d+/)){
-      if(qq.length < 8 || qq.length > 20){
+      if(phone.length < 8 || phone.length > 20){
         error('联系电话长度不对');
         return false;
       }

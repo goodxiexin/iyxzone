@@ -2,8 +2,6 @@ class User::AlbumsController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:select, :edit, :confirm_destroy]
-
   before_filter :friend_or_owner_required, :only => [:index]
 
   before_filter :privilege_required, :only => [:show]
@@ -24,7 +22,7 @@ class User::AlbumsController < UserBaseController
   end
 
   def select
-    @albums = @user.albums
+    @albums = current_user.albums
   end
 
   def show
@@ -38,7 +36,7 @@ class User::AlbumsController < UserBaseController
   end
 
   def create
-    @album = @user.albums.build(params[:album].merge({:poster_id => @user.id}))
+    @album = current_user.albums.build(params[:album] || {})
     unless @album.save
       render :update do |page|
         page.replace_html 'errors', :partial => 'validation_errors'
@@ -51,7 +49,7 @@ class User::AlbumsController < UserBaseController
   end
 
   def update
-    if @album.update_attributes(params[:album])
+    if @album.update_attributes((params[:album] || {}).merge({:owner_id => current_user.id}))
 			respond_to do |format|
         format.json { render :json => @album }
         format.html {    
@@ -74,11 +72,17 @@ class User::AlbumsController < UserBaseController
   def destroy
     if params[:migration] and params[:migration].to_i == 1 and !params[:album][:id].blank?
       Photo.update_all("album_id = #{params[:album][:id]}", "album_id = #{@album.id}")
+      Album.update_all("photos_count = photos_count + #{@album.photos_count}", "id = #{params[:album][:id]}")
     end
-    @album.destroy
-		render :update do |page|
-			page.redirect_to personal_albums_url(:id => @user.id)  
-		end
+    if @album.destroy
+		  render :update do |page|
+			  page.redirect_to personal_albums_url(:id => current_user.id)  
+		  end
+    else
+      render :update do |page|
+        page << "error('发生错误');"
+      end
+    end
 	end
 
 protected
@@ -86,13 +90,12 @@ protected
   def setup
     if ["index", "recent"].include? params[:action]
       @user = User.find(params[:id])
-    elsif ["show", "edit", "update", "confirm_destroy", "destroy"].include? params[:action]
+    elsif ["show"].include? params[:action]
       @album = PersonalAlbum.find(params[:id])
       @user = @album.user
 			@privilege = @album.privilege
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
-    elsif ["new", "create", "select"].include? params[:action]
-      @user = current_user
+    elsif ["edit", "update", "confirm_destroy", "destroy"].include? params[:action]
+      @album = current_user.albums.find(params[:id])
     end
   rescue
     not_found

@@ -2,10 +2,6 @@ class User::Events::ParticipationsController < UserBaseController
 
   layout 'app'
 
-  before_filter :participation_required, :only => [:edit]
-
-  before_filter :participant_required, :only => [:edit]
-
   def index
     case params[:type].to_i
     when 0
@@ -26,7 +22,7 @@ class User::Events::ParticipationsController < UserBaseController
   end
 
   def update
-    unless @participation.update_attributes(params[:participation])
+    unless @participation.update_attributes(:status => params[:status])
       render :update do |page|
         page << "error('发生错误');"
       end
@@ -40,21 +36,14 @@ protected
       @event = Event.find(params[:event_id])
       @user = @event.poster
     elsif ["edit", "update"].include? params[:action]
-      @event = Event.find(params[:event_id])
-      @user = @event.poster
-      @participation = @event.participations.find(params[:id])
+      @participation = current_user.participations.find(params[:id])
+      @event = @participation.event
+      #@event = Event.find(params[:event_id])
+      #@user = @event.poster
+      #@participation = @event.participations.find(params[:id], :conditions => {:status => [3,4,5]})
     end
   rescue
     not_found
-  end
-
-	# guarantee it's not request or invitation
-  def participation_required
-    [3,4,5].include? @participation.status || not_found
-  end
-
-  def participant_required
-    current_user == @participation.participant || not_found
   end
 
 end

@@ -6,13 +6,13 @@
     <p>
       <%= profile_link wall_message.poster %> 
       <%= ftime wall_message.created_at %>
-      <% if wall_message_repliable_by_current_user wall_message %>
+      <% if wall.is_commentable_by current_user %>
         <%= link_to_function '回复', "Iyxzone.WallMessage.set('#{wall_message.poster.login}');" %>
       <% end %>
     </p>
     <p><%= wall_message.content  %></p>
   </div>
-  <% if wall_message_deleteable_by_current_user wall_message %>
+  <% if wall_message.is_deleteable_by current_user %>
     <%= link_to_remote 'x', :url => eval("#{type}_wall_message_url(wall, wall_message)"), :method => :delete, :class => 'icon-active' %>
   <% end %>
 </div>

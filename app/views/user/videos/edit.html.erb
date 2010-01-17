@@ -4,16 +4,23 @@
 <%= javascript_include_tag 'video' %>
 <%= javascript_include_tag 'friend' %>
 
-<% content_for :left do %>
-  <%= render :partial => '/app_menu' %>
-<% end %>
-
-<%= render :partial => 'video/menu' %>
-
-<%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
-
-<div>
-<% form_for :video, :url => video_url(@video), :html => {:method => :put, :id => 'video_form'} do |f| %>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-video">视频</h1>
+    <div class="box02 canvas_int">
+      <div class="tab tab01">
+        <div class="right"><%= link_to "新视频", new_video_url %></div>
+        <ul>
+          <li><span><%= link_to "热门视频", hot_videos_url(:id => current_user.id) %></span></li>
+          <li><span><%= link_to "我的视频", videos_url(:id => current_user.id) %></span></li>
+          <li><span><%= link_to "我的相关视频", relative_videos_url(:id => current_user.id) %></span></li>
+          <li><span><%= link_to "好友的视频", friends_videos_url %>
+        </ul>
+      </div>
+      <div>
+        <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
+        <div>
+        <% form_for :video, :url => video_url(@video), :html => {:method => :put, :id => 'video_form'} do |f| %>
   <div class='title'>
     <%= f.label "title" %><br/>
     <%= f.text_field 'title' %>
@@ -23,7 +30,7 @@
     <%= f.text_field 'video_url', :disabled => true, :id => 'video_url' %>
   </div>
   <div class='options'>
-    <%= f.label "category: " %><%= f.collection_select 'game_id', @user.games, :id, :name, {:prompt => '---'} %><br/>
+    <%= f.label "category: " %><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %><br/>
     <%= f.label "privilege: "%><%= privilege_select_tag(:video) %>
   </div>
   <div class='submit'>
@@ -59,7 +66,10 @@
     </div>
   </div>
 <% end %>
-</div>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>
 
 <% tagged_user_ids = '[' + @video.tags.map(&:tagged_user_id).join(',') + ']' %>
 <% tag_ids = '[' + @video.tags.map(&:id).join(',') + ']' %>

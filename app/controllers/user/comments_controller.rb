@@ -1,14 +1,12 @@
-#
-# 这个类有个问题：
-# 如果我们某一天突然对评论也有了对博客一样的浏览权限，那么这个polymorphism controller就不能适用了
-# 真有那一天，请在更深层次的域名里定义一个commentsController，并继承该controller
-# 其实我觉得上面这种做法更好，我只是为了偷懒才弄成这样
-# 所有的polymorphism都有这样的问题，比如wall message, tag, viewing等
-#
 class User::CommentsController < UserBaseController
 
+  # 我想不出怎么在before_destroy里优雅的做到这一点，那只能这样了
+  before_filter :deleteable_required, :only => [:destroy]
+
+  before_filter :privilege_required, :only => [:index]
+
   def create
-    @comment = @commentable.comments.build(params[:comment].merge({:poster_id => current_user.id}))
+    @comment = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
     unless @comment.save
       render :update do |page|
         page << "error('发生错误');"
@@ -36,8 +34,8 @@ class User::CommentsController < UserBaseController
 protected
 
   def setup
-    if ['index', 'create'].include? params[:action]
-      @commentable = get_commentable
+    if ['index'].include? params[:action]
+      @commentable = params[:commentable_type].constantize.find(params[:commentable_id])
     elsif ['destroy'].include? params[:action]
       @comment = Comment.find(params[:id])
     end
@@ -45,11 +43,12 @@ protected
     not_found
   end
 
-  def get_commentable
-    @klass = params[:commentable_type].camelize.constantize
-    @klass.find(params[:commentable_id])
-  rescue
-    not_found
+  def deleteable_required
+    @comment.is_deleteable_by?(current_user) || not_found
+  end
+
+  def privilege_required
+    @commentable.is_commentable_by?(current_user) || not_found
   end
 
 end

@@ -1,5 +1,7 @@
 class User::FriendTagsController < UserBaseController
 
+  before_filter :deleteable_required, :only => [:destroy]
+
   def friend_table 
     if params[:game_id] == 'all'
       @friends = current_user.friends
@@ -25,10 +27,14 @@ protected
 	def setup
     if ['destroy'].include? params[:action]
 		  @tag = FriendTag.find(params[:id])
-		  @taggable = @tag.taggable
-		  @user = @taggable.poster # a hack. currently, only blog and video are available here
     end
-	end
+	rescue
+    not_found
+  end
+
+  def deleteable_required
+    @tag.is_deleteable_by?(current_user) || not_found
+  end
 
 end
 

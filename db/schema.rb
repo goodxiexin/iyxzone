@@ -136,10 +136,9 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
   create_table "forums", :force => true do |t|
     t.string   "name"
     t.text     "description"
-    t.integer  "topics_count",  :default => 0
-    t.integer  "posts_count",   :default => 0
+    t.integer  "topics_count", :default => 0
+    t.integer  "posts_count",  :default => 0
     t.integer  "guild_id"
-    t.integer  "last_topic_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -255,9 +254,9 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.string   "name"
     t.integer  "game_id"
     t.string   "description"
+    t.integer  "president_id"
     t.integer  "members_count",    :default => 0
     t.integer  "veterans_count",   :default => 0
-    t.integer  "presidents_count", :default => 0
     t.integer  "invitees_count",   :default => 0
     t.integer  "requestors_count", :default => 0
     t.integer  "comments_count",   :default => 0
@@ -322,17 +321,16 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
   create_table "participations", :force => true do |t|
     t.integer  "participant_id"
     t.integer  "event_id"
-    t.integer  "status",         :default => 0
+    t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "photo_tags", :force => true do |t|
     t.integer  "poster_id"
-    t.integer  "photo_id"
     t.integer  "tagged_user_id"
-    t.integer  "taggable_id"
-    t.string   "taggable_type"
+    t.integer  "photo_id"
+    t.string   "photo_type"
     t.integer  "x"
     t.integer  "y"
     t.integer  "width"
@@ -402,7 +400,8 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.boolean  "no_deadline",    :default => true
     t.date     "deadline"
     t.text     "summary"
-    t.integer  "privilege",      :default => 2
+    t.integer  "privilege",      :default => 1
+    t.integer  "invitees_count", :default => 0
     t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
@@ -426,11 +425,12 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
   create_table "profiles", :force => true do |t|
     t.integer  "user_id"
     t.string   "gender"
+    t.string   "login"
     t.integer  "region_id"
     t.integer  "city_id"
     t.integer  "district_id"
-    t.integer  "qq"
-    t.integer  "phone"
+    t.string   "qq"
+    t.string   "phone"
     t.string   "website"
     t.datetime "birthday"
     t.text     "about_me"
@@ -504,9 +504,8 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.integer  "poster_id"
     t.string   "subject"
     t.text     "content"
-    t.integer  "posts_count",  :default => 0
-    t.boolean  "top",          :default => false
-    t.integer  "last_post_id"
+    t.integer  "posts_count", :default => 0
+    t.boolean  "top",         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -515,36 +514,45 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.string   "login"
     t.string   "email"
     t.string   "gender"
-    t.string   "crypted_password",          :limit => 40
-    t.string   "salt",                      :limit => 40
+    t.string   "crypted_password",           :limit => 40
+    t.string   "salt",                       :limit => 40
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.datetime "activated_at"
     t.string   "password_reset_code"
-    t.boolean  "enabled",                                 :default => false
+    t.boolean  "enabled",                                  :default => true
     t.integer  "avatar_id"
     t.string   "pinyin"
-    t.integer  "privacy_setting",           :limit => 8,  :default => 106299306
-    t.integer  "mail_setting",              :limit => 8,  :default => 8796093022207
-    t.integer  "application_setting",       :limit => 8,  :default => 262143
-    t.integer  "notifications_count",                     :default => 0
-    t.integer  "friends_count",                           :default => 0
-    t.integer  "personal_albums_count",                   :default => 0
-    t.integer  "events_count",                            :default => 0
-    t.integer  "upcoming_events_count",                   :default => 0
-    t.integer  "past_events_count",                       :default => 0
-    t.integer  "guilds_count",                            :default => 0
-    t.integer  "participated_guilds_count",               :default => 0
-    t.integer  "polls_count",                             :default => 0
-    t.integer  "participated_polls_count",                :default => 0
-    t.integer  "blogs_count",                             :default => 0
-    t.integer  "drafts_count",                            :default => 0
-    t.integer  "videos_count",                            :default => 0
-    t.integer  "statuses_count",                          :default => 0
-    t.integer  "requests_count",                          :default => 0
-    t.integer  "invitations_count",                       :default => 0
-    t.integer  "poke_deliveries_count",                   :default => 0
+    t.integer  "privacy_setting",            :limit => 8,  :default => 106299306
+    t.integer  "mail_setting",               :limit => 8,  :default => 4398046511103
+    t.integer  "application_setting",        :limit => 8,  :default => 262143
+    t.integer  "characters_count",                         :default => 0
+    t.integer  "notices_count",                            :default => 0
+    t.integer  "unread_notices_count",                     :default => 0
+    t.integer  "notifications_count",                      :default => 0
+    t.integer  "unread_notifications_count",               :default => 0
+    t.integer  "friends_count",                            :default => 0
+    t.integer  "albums_count",                             :default => 0
+    t.integer  "photos_count",                             :default => 0
+    t.integer  "events_count",                             :default => 0
+    t.integer  "upcoming_events_count",                    :default => 0
+    t.integer  "past_events_count",                        :default => 0
+    t.integer  "guilds_count",                             :default => 0
+    t.integer  "participated_guilds_count",                :default => 0
+    t.integer  "polls_count",                              :default => 0
+    t.integer  "participated_polls_count",                 :default => 0
+    t.integer  "blogs_count",                              :default => 0
+    t.integer  "drafts_count",                             :default => 0
+    t.integer  "videos_count",                             :default => 0
+    t.integer  "statuses_count",                           :default => 0
+    t.integer  "friend_requests_count",                    :default => 0
+    t.integer  "guild_requests_count",                     :default => 0
+    t.integer  "event_requests_count",                     :default => 0
+    t.integer  "guild_invitations_count",                  :default => 0
+    t.integer  "event_invitations_count",                  :default => 0
+    t.integer  "poll_invitations_count",                   :default => 0
+    t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

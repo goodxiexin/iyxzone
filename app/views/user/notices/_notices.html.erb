@@ -5,11 +5,11 @@
 <% notices.each do |notice| %>
 <% producer = notice.producer %>
 <% if notice.producer_type == 'Comment' %>
-	<%= render :partial => "notices/#{producer.commentable_type.underscore}_comment_notice", :locals => {:notice => notice, :comment => producer, :home_page => true } %>
+	<%= render :partial => "user/notices/#{producer.commentable_type.underscore}_comment_notice", :locals => {:notice => notice, :comment => producer, :home_page => true } %>
 <% elsif notice.producer_type == 'FriendTag' %>
-	<%= render :partial => "notices/#{producer.taggable_type.underscore}_tag_notice", :locals => {:notice => notice, :tag => producer, :home_page => true } %>
+	<%= render :partial => "user/notices/#{producer.taggable_type.underscore}_tag_notice", :locals => {:notice => notice, :tag => producer, :home_page => true } %>
 <% elsif notice.producer_type == 'PhotoTag' %>
-	<%= render :partial => "notices/photo_tag_notice", :locals => {:notice => notice, :tag => producer, :home_page => true} %>
+	<%= render :partial => "user/notices/photo_tag_notice", :locals => {:notice => notice, :tag => producer, :home_page => true} %>
 <% end %>
 <% end %>
 </ul>

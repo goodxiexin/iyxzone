@@ -4,8 +4,6 @@ class User::PhotosController < UserBaseController
 
   before_filter :privilege_required, :only => [:show]
 
-  before_filter :owner_required, :only => [:new, :edit, :edit_multiple]
-
 	before_filter :friend_or_owner_required, :only => [:relative]
 
 	def hot
@@ -27,10 +25,11 @@ class User::PhotosController < UserBaseController
   end
 
 	def create
-		if @photo = @album.photos.create(:poster_id => current_user.id, :game_id => @album.game_id, :privilege => @album.privilege, :swf_uploaded_data => params[:Filedata])
+    puts "in create"
+    @photo = @album.photos.build(:swf_uploaded_data => params[:Filedata])
+		puts "photo_id: #{@photo.id}"
+    if @photo.save
 			render :text => @photo.id	
-		else
-			# TODO
 		end
 	end
 
@@ -95,26 +94,28 @@ class User::PhotosController < UserBaseController
 protected
 
   def setup
-    if ['show', 'edit', 'update', 'destroy'].include? params[:action]
+    if ['show'].include? params[:action]
       @photo = PersonalPhoto.find(params[:id])
       @album = @photo.album
       @user = @album.user
 			@privilege = @album.privilege
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
     elsif ['new', 'create'].include? params[:action]
-      @user = current_user
-      @album = PersonalAlbum.find(params[:album_id])
+      @album = current_user.albums.find(params[:album_id])
     elsif ['record_upload', 'edit_multiple'].include? params[:action]
-      @user = current_user
-      @album = PersonalAlbum.find(params[:album_id])
+      @album = current_user.albums.find(params[:album_id])
       @photos = params[:ids].blank? ? [] : @album.photos.find(params[:ids])
     elsif ['update_multiple'].include? params[:action]
-      @user = current_user
-      @album = PersonalAlbum.find(params[:album_id])
+      @album = current_user.albums.find(params[:album_id])
       @photos = params[:photos].blank? ? [] : @album.photos.find(params[:photos].map {|id, attribute| id})
 		elsif ['hot', 'relative'].include? params[:action]
 			@user = User.find(params[:id])
+    elsif ['edit', 'update', 'destroy'].include? params[:action]
+      @photo = PersonalPhoto.find(params[:id])
+      @album = current_user.albums.find(@photo.album_id) 
     end
+  rescue
+    not_found
   end
 
 end

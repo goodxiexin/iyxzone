@@ -19,7 +19,7 @@
       </div>
       <div class="appcontent06">
         <div class="nav-link">
-          <% if @user == current_user %>
+          <% if !@poll.past and @user == current_user %>
           <ul class="s_clear">
             <li><%= link_to '增加侯选项', new_poll_answer_url(@poll), :rel => 'facebox' %></li>
             <% unless @poll.no_deadline %>
@@ -50,7 +50,11 @@
                   <p>参与投票</p>
                 </div>
               </td>
-              <td class="btn"><%= facebox_link '分享', new_sharing_url(:shareable_type => 'Poll', :shareable_id => @poll.id), :class => "right love-btn" %></td>
+              <td class="btn">
+                <% unless @poll.past %>
+                  <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Poll', :shareable_id => @poll.id), :class => "right love-btn" %>
+                <% end %>
+              </td>
             </tr>
           </table>
           <% form_tag poll_votes_url(@poll) do %>
@@ -60,21 +64,46 @@
               <td class="title"><%= answer.description %>：</td>
               <%= generate_percentage_bar answer, @poll %>
               <td class="cb">
-                <% if !@poll.past and !@vote and @votable %>
+                <% if !@poll.past and !@vote and @poll.votable_by current_user %>
                   <%= check_box_tag "votes[]", answer.id, false, :onclick => "Iyxzone.Poll.checkMultipleSelection(#{@poll.max_multiple}, this);"%>
                 <% elsif @vote %>
                   <%= check_box_tag "votes[]", answer.id, @vote.answer_ids.include?(answer.id), :disabled => true %>
                 <% end %>
               </td>
               <td class="btn">
-              <% if i == 0 and !@poll.past and !@vote and @votable %>
-                <span class="button"><span><button type="submit">投票</button></span></span>
+              <% if i == 0 and !@poll.past %>
+                <% if @vote %>
+                  你已经投过票了
+                <% elsif @poll.votable_by current_user %>
+                  <span class="button"><span><button type="submit">投票</button></span></span>
+                <% else %>
+                  只有<%= get_subject @user %>才能投票
+                <% end %> 
               <% end %>
               </td>
             </tr>
           <% end %>
           </table>
         <% end %>
+        <div>
+          <h3>投票说明</h3>
+          <% if @poll.past %>
+            <div id='poll_explanation'><%= @poll.explanation %></div>
+          <% elsif @vote %>
+            <div id='poll_explanation'><%= @poll.explanation %></div>
+          <% else %>
+            投票后才能看
+          <% end %>
+        </div>
+        <div>
+          <h3>投票情况</h3>
+          <% if @vote %>
+            <%= profile_link current_user %> 投给了 <%= @vote.answers.map{|a| "\"#{truncate a.description, :length => 20, :omission => '...'}\""}.join(',') %>
+          <% end %>
+          <% @vote_feeds.each do |v| %>
+            <%= profile_link v.voter %> 投给了 <%= v.answers.map{|a| "\"#{truncate a.description, :length => 20, :omission => '...'}\""}.join(',') %>
+          <% end %>
+        </div>
         <div class="foot">
           <div class="prompt-list-box">
             <h5>随便看看</h5>

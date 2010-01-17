@@ -30,7 +30,7 @@
                 <%= photo_link p, :class => 'imgbox01' %>
               </div></div></div>
             </div>
-            <% if @album.poster == current_user %>
+            <% if p.album.poster == current_user %>
               <p><%= facebox_link "编辑", edit_personal_photo_url(p) %> | <%= facebox_confirm '删除', personal_photo_url(p), {:msg => '你确定要删除这张图>片吗', :method => 'delete'} %> </p>
             <% end %>
           </li>

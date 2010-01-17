@@ -12,7 +12,7 @@
     <% else %>
       如果确定删除，请选择专辑中的照片如何处理：
       <%= radio_button_tag 'migration', 0, true %>将照片一起删除<br/>
-      <%= radio_button_tag 'migration', 1, false %>将照片转移到<%= collection_select :album, :id, @user.albums.delete_if {|a| a == @album}, :id, :title %>
+      <%= radio_button_tag 'migration', 1, false %>将照片转移到<%= collection_select :album, :id, current_user.albums.delete_if {|a| a == @album}, :id, :title %>
     <% end %>
     </div>
   </div>

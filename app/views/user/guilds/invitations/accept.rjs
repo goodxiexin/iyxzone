@@ -1,5 +1,5 @@
 if params[:show].to_i == 0
-	page << "$('guild_status_#{@guild.id}').innerHTML = '#{membership_msg @invitation.status}'; $('reply_guild_#{@guild.id}').innerHTML = '';facebox.close()"	
+	page << "$('guild_status_#{@guild.id}').innerHTML = '#{@invitation.to_s}'; $('reply_guild_#{@guild.id}').innerHTML = '';facebox.close()"	
 elsif params[:show].to_i == 1
 	flash[:notice] = "提交成功"
 	page.redirect_to guild_url(@guild)

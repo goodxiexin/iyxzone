@@ -7,7 +7,9 @@ class AddUsers < ActiveRecord::Migration
     user.email = 'gaoxh04@gmail.com'
     user.gender = 'male'
     user.save(false)
+    puts "activating"
     user.activate
+    puts "activated"
     user = User.new
     user.login = '谢心'
     user.password = '111111'

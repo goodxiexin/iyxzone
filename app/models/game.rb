@@ -10,7 +10,7 @@ class Game < ActiveRecord::Base
 
 	has_many :events, :order => 'confirmed_count DESC'
 
-	has_many :guilds, :order => '(members_count + veterans_count + presidents_count) DESC'
+	has_many :guilds, :order => '(members_count + veterans_count + 1) DESC'
 
 	has_many :albums, :class_name => 'PersonalAlbum', :order => "uploaded_at DESC", :conditions => ["photos_count != ?", 0]
 
@@ -20,21 +20,23 @@ class Game < ActiveRecord::Base
 
 	has_many :users, :through => :characters, :uniq => true
 
+  has_many :attentions, :class_name => 'GameAttention'
+
   named_scope :sex, :order => "(characters_count - last_week_characters_count) DESC"
 
 	named_scope :hot, :conditions => "attentions_count != 0", :order => "attentions_count DESC" 
 
 	named_scope :beta, :conditions => ["sale_date > ?", Time.now.to_s(:db)], :order => 'sale_date DESC'
 
-	acts_as_taggable
+	acts_as_taggable :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 1.week.ago }
   
 	acts_as_rateable
 
-	acts_as_commentable :order => 'created_at DESC'
+	acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, game, comment| false }
 
   acts_as_pinyin :name => "pinyin" 
 
-	has_many :attentions, :class_name => 'GameAttention'
+  acts_as_resource_feeds
 
 	def new_game?
 		sale_date.nil? or sale_date > Date.today
@@ -43,5 +45,10 @@ class Game < ActiveRecord::Base
   def relative_new?
 		sale_date.nil? or sale_date > Date.today<<(6)
 	end  
+
+  def validate
+    errors.add_to_base('没有公司') if company.blank?
+    errors.add_to_base('没有名字') if name.blank?
+  end
 
 end

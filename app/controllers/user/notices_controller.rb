@@ -11,8 +11,7 @@ class User::NoticesController < UserBaseController
 	end
 
 	def read
-		@notices = current_user.notices.unread.find_all {|n| n.has_same_source? @notice }
-		Notice.update_all("notices.read = 1", {:user_id => current_user.id, :id => @notices.map(&:id)})
+    @notice.read_by current_user
 		@notices = current_user.notices.unread.find(:all, :limit => 10)
 		render :partial => 'notices', :object => @notices
 	end
@@ -22,7 +21,6 @@ protected
 	def setup
 		if ["read"].include? params[:action] 
 			@notice = current_user.notices.find(params[:id])
-			@user = @notice.user
 		end
 	rescue
 		not_found

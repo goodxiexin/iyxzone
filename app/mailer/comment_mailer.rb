@@ -72,6 +72,11 @@ class CommentMailer < ActionMailer::Base
 		body				:user => user, :url => "#{SITE_URL}/profiles/#{comment.commentable_id}/comments"
 	end
 
+  def game_comment(comment,user)
+    setup_email user
+    subject     "Dayday3 - #{comment.poster.login}在游戏#{comment.commentable.name}的留言版上留言了"
+    body        :user => user, :url => "#{SITE_URL}/games/#{comment.commentable_id}/comments"
+  end
 
 protected
 

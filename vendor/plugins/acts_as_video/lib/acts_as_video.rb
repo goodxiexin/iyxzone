@@ -40,7 +40,8 @@ module ActsAsVideo
 				video_type = self.type
 				if video_type.blank?
 					errors.add_to_base("不能识别的视频url")
-					raise ActsAsVideo::NotRecognizedURL
+          return false
+					#raise ActsAsVideo::NotRecognizedURL
 				else 
 					video = video_type.new(self)
 					self.embed_html = video.embed_html

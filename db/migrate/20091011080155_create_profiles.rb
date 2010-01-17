@@ -2,12 +2,13 @@ class CreateProfiles < ActiveRecord::Migration
   def self.up
     create_table :profiles do |t|
       t.integer :user_id
-      t.string :gender
+      t.string :gender # duplication of gender in user table
+      t.string :login # duplication of login in user table
       t.integer :region_id
       t.integer :city_id
       t.integer :district_id
-      t.integer :qq
-      t.integer :phone
+      t.string :qq
+      t.string :phone
       t.string :website
       t.datetime :birthday
       t.text :about_me

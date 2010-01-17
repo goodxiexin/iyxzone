@@ -38,7 +38,10 @@
                   <% end %>
                   <% if @user == current_user %>
                     <li class="icon-photo"><%= link_to '编辑', edit_avatar_url(@photo), :rel => 'facebox' %>
+                    <% if @user.avatar != @photo %>
                     <li class="icon-del" ><%= facebox_confirm '删除', avatar_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %></li>
+                    <li class="icon-del" ><%= link_to_remote "设置为头像", :url => set_avatar_url(@photo, :show => 1), :method => :put %></li> 
+                    <% end %>
                   <% end %>
                 </ul>
                 <label>

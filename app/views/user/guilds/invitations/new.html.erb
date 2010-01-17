@@ -19,4 +19,4 @@
 
 <% form_tag create_multiple_guild_invitations_url(@guild), :id => 'invitation_form' do %>
 <% end %>
-<%= button_to_function '提交邀请', "Iyxzone.Invitation.Builder.submit_invitations($('invitation_form'))", :class => 'confirm-button' %>
+<%= button_to_function '提交邀请', "Iyxzone.Invitation.Builder.submit($('invitation_form'))", :class => 'confirm-button' %>

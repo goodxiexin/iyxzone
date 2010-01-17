@@ -2,16 +2,12 @@ class User::Polls::InvitationsController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:new, :create_multiple]
-
-  before_filter :invitee_required, :only => [:destroy]
-
   def new
-    @friends = @user.friends
+    @friends = current_user.friends
   end
 
   def create_multiple
-    @users.each { |user| @poll.invitations.create(:user_id => user.id) }
+    params[:users].each { |user_id| @poll.invitations.create(:user_id => user_id) }
     redirect_to poll_url(@poll)
   end
 
@@ -35,24 +31,17 @@ class User::Polls::InvitationsController < UserBaseController
 protected
 
 	def setup
-		if ['new'].include? params[:action]
-			@poll = Poll.find(params[:poll_id])
-			@user = @poll.poster
-		elsif ['create_multiple'].include? params[:action]
-			@poll = Poll.find(params[:poll_id])
-      @user = @poll.poster
-			@users = params[:users].blank? ? [] : @user.friends.find(params[:users])
+		if ['new', 'create_multiple'].include? params[:action]
+			@poll = current_user.polls.find(params[:poll_id])
 		elsif ['destroy'].include? params[:action]
-			@poll = Poll.find(params[:poll_id])
-      @user = @poll.poster
-			@invitation = @poll.invitations.find(params[:id])
+      @invitation = current_user.poll_invitations.find(params[:id])
+			@poll = @invitation.poll
+      #@poll = Poll.find(params[:poll_id])
+      #@user = @poll.poster
+			#@invitation = @poll.invitations.find(params[:id])
 		end
 	rescue
 		not_found
 	end
-
-	def invitee_required
-    @invitation.user == current_user || not_found
-  end
 
 end

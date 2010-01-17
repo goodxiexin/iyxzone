@@ -2,11 +2,11 @@ class User::GuildsController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:edit, :update]
-
 	FirstFetchSize = 5
 	
 	FetchSize = 5
+
+  before_filter :friend_or_owner_required, :only => [:index, :participated]
 
   def index
 		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
@@ -19,13 +19,11 @@ class User::GuildsController < UserBaseController
 	end
 
 	def hot
-		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
     cond = user_game_conds
     @guilds = Guild.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10	
   end
 
   def recent
-		#cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
     cond = user_game_conds
     @guilds = Guild.recent.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
 	end
@@ -46,7 +44,7 @@ class User::GuildsController < UserBaseController
   end
 
   def create
-    @guild = Guild.new(params[:guild].merge({:president_id => current_user.id}))# virtual attribute
+    @guild = Guild.new((params[:guild] || {}).merge({:president_id => current_user.id}))
     if @guild.save
 			unless params[:photo].blank?
 				@photo = @guild.album.photos.create(params[:photo])
@@ -89,12 +87,10 @@ protected
   def setup
     if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:id])
-    elsif ['show', 'edit', 'update', 'more_feeds'].include? params[:action]
+    elsif ['show', 'more_feeds'].include? params[:action]
       @guild = Guild.find(params[:id])
-      @user = @guild.president
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
-		elsif ['new', 'create'].include? params[:action]
-			@user = current_user
+    elsif ['edit', 'update'].include? params[:action]
+      @guild = current_user.guilds.find(params[:id])
     end
   rescue
     not_found

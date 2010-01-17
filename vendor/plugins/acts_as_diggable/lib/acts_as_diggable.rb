@@ -6,9 +6,13 @@ module Diggable
 
   module ClassMethods
 
-    def acts_as_diggable
+    def acts_as_diggable opts={}
 
       has_many :digs, :as => 'diggable', :dependent => :destroy
+
+      cattr_accessor :diggable_opts
+
+      self.diggable_opts = opts
 
       include Diggable::InstanceMethods
 
@@ -25,6 +29,11 @@ module Diggable
 		def digged_by? user
 			!digs.find_by_poster_id(user.id).nil?
 		end
+
+    def is_diggable_by? user
+      proc = self.class.diggable_opts[:create_conditions] || lambda { true }
+      proc.call user, self
+    end
 
   end
 

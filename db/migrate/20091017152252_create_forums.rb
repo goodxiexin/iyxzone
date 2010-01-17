@@ -6,7 +6,6 @@ class CreateForums < ActiveRecord::Migration
       t.integer :topics_count, :default => 0
       t.integer :posts_count, :default => 0
       t.integer :guild_id
-			t.integer :last_topic_id
       t.timestamps
     end
   end

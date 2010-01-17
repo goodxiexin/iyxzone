@@ -2,8 +2,6 @@ class User::VideosController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:edit]
-
   before_filter :friend_or_owner_required, :only => [:index, :relative]
 
   before_filter :privilege_required, :only => [:show]
@@ -37,14 +35,12 @@ class User::VideosController < UserBaseController
   end
 
   def create
-		@video = Video.new(params[:video].merge({:poster_id => current_user.id}))
+		@video = Video.new((params[:video] || {}).merge({:poster_id => current_user.id}))
     if @video.save
       redirect_to video_url(@video)
     else
       render :action => 'new'
     end
-	rescue ActsAsVideo::NotRecognizedURL
-    render :action => 'new'
   end
 
   def show
@@ -54,19 +50,17 @@ class User::VideosController < UserBaseController
   end
 
   def update
-    if @video.update_attributes(params[:video])
+    if @video.update_attributes((params[:video] || {}).merge({:poster_id => current_user.id}))
       redirect_to video_url(@video)
     else
       render :action => 'edit'
     end
-  rescue FriendTag::TagNoneFriendError
-    render :text => 'not friend'
   end
 
   def destroy
 		if @video.destroy
 			render :update do |page|
-				page.redirect_to videos_url(:id => @user.id)
+				page.redirect_to videos_url(:id => current_user.id)
 			end
 		else
 			render :update do |page|
@@ -80,14 +74,13 @@ protected
   def setup
     if ['index', 'hot', 'recent', 'relative'].include? params[:action]
       @user = User.find(params[:id])
-    elsif ['new', 'create', 'friends'].include? params[:action]
-      @user = current_user
-    elsif ['show', 'edit', 'update', 'destroy'].include? params[:action]
+    elsif ['show'].include? params[:action]
       @video = Video.find(params[:id])
       @user = @video.poster
 			@privilege = @video.privilege
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
-    end
+    elsif ['edit', 'update', 'destroy'].include? params[:action]
+      @video = current_user.videos.find(params[:id])
+    end  
   rescue
     not_found
   end

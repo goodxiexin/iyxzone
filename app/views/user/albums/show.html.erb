@@ -22,7 +22,7 @@
         <div class="path-box">
           <label>
             <% if @user == current_user %>
-              我的相册
+              <%= link_to "我的相册", personal_albums_url(:id => current_user.id) %>
             <% else %>
               <%= @user.login %>的相册
             <% end %>

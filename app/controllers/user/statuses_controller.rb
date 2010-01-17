@@ -2,6 +2,8 @@ class User::StatusesController < UserBaseController
 
   layout 'app'
 
+  before_filter :friend_or_owner_required, :only => [:index]
+
   def index
     @statuses = @user.statuses.paginate :page => params[:page], :per_page => 10
   end
@@ -11,7 +13,7 @@ class User::StatusesController < UserBaseController
   end
 
   def create
-    @status = @user.statuses.build(params[:status])
+    @status = current_user.statuses.build((params[:status] || {}).merge({:poster_id => current_user.id}))
     unless @status.save
 			render :update do |page|
 				page << "error(保存时发生错误)"
@@ -36,13 +38,8 @@ protected
   def setup
     if ["index"].include? params[:action]
       @user = User.find(params[:id])
-			@status = Status.find(params[:status_id]) if params[:status_id]
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
-		elsif ["create", "friends"].include? params[:action]
-			@user = current_user
     elsif ["destroy"].include? params[:action]
-      @user = current_user
-      @status = Status.find(params[:id])
+      @status = current_user.statuses.find(params[:id])
     end
   rescue
     not_found

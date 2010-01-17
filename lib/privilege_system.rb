@@ -22,7 +22,7 @@ protected
   end
 
   def owner_required
-    is_owner? || owner_deneid
+    is_owner? || not_found 
   end
 
   def friend_required
@@ -41,10 +41,6 @@ protected
     render :template => 'not_found'
   end
 
-  def owner_denied
-    not_found
-  end
-
   def friend_denied
     flash[:notice] = "只有他的好朋友才有权限看该资源"
     redirect_to new_friend_url(:id => @user.id)
@@ -56,7 +52,7 @@ protected
       @relationship = 'owner'
     elsif @user.has_friend?(current_user) or @user.wait_for?(current_user)
       @relationship = 'friend'
-    elsif @user.has_same_game_with(current_user)
+    elsif @user.has_same_game_with?(current_user)
       @relationship = 'same_game'
     else
       @relationship = 'stranger'

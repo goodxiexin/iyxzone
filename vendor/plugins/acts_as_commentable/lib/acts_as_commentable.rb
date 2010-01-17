@@ -12,7 +12,11 @@ module Commentable
 			include Commentable::InstanceMethods
 
 			extend Commentable::SingletonMethods
-		end		
+		
+      cattr_accessor :commentable_opts
+
+      self.commentable_opts = opts
+    end		
 
 	end
 
@@ -20,6 +24,17 @@ module Commentable
 	end
 
 	module InstanceMethods
+  
+    def is_commentable_by? user
+      proc = self.class.commentable_opts[:create_conditions] || lambda { true }
+      proc.call user, self
+    end
+
+    def is_comment_deleteable_by? user, comment
+      proc = self.class.commentable_opts[:delete_conditions] || lambda { true }
+      proc.call user, self, comment
+    end
+
 	end
 
 end

@@ -6,12 +6,17 @@
         <div class="right"><%= link_to "新投票", new_poll_url %></a></div>
         <ul>
           <li class='hover'><span><%= link_to "热门投票", hot_polls_url %></span></li>
-          <li><span><%= link_to "最近投票", recent_polls_url %></span></li>
           <li><span><%= link_to "我的投票", polls_url(:id => current_user.id) %></span></li>
           <li><span><%= link_to "朋友的投票", friends_polls_url %></span></li>
         </ul>
       </div>
       <div class="vote-box">
+        <div class="nav-link">
+          <ul class="s_clear">
+            <li class='hover'><%= link_to "<span>人气最高</span>", hot_polls_url %></li>
+            <li><%= link_to "<span>最新创建</span>", recent_polls_url %></li>
+          </ul>
+        </div>
         <% if @polls.total_entries != 0 %>
           <%= render :partial => 'poll_items', :object => @polls %>
           <%= will_paginate @polls %>

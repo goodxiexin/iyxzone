@@ -58,7 +58,7 @@ module FriendSuggestor
 	end
 
 	def destroy_obsoleted_friend_suggestions friend
-		FriendSuggestion.destroy_all(:user_id => id, :friend_id => friend.id)
+		FriendSuggestion.destroy_all(:user_id => id, :suggested_friend_id => friend.id)
 	end
 
 	def find_or_create_friend_suggestions
@@ -97,7 +97,7 @@ module FriendSuggestor
 	end
 
 	def destroy_obsoleted_comrade_suggestions comrade
-		ComradeSuggestions.destroy_all(:user_id => id, :comrade_id => comrade.id)
+		ComradeSuggestion.destroy_all(:user_id => id, :comrade_id => comrade.id)
 	end
 
 	def find_or_create_comrade_suggestions server

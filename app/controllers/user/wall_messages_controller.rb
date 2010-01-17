@@ -3,7 +3,7 @@ class User::WallMessagesController < UserBaseController
   layout 'app'
 
   def create
-    @message = @wall.comments.build(params[:comment].merge({:poster_id => current_user.id}))
+    @message = @wall.comments.build((params[:comment] || {}).merge({:poster_id => current_user.id}))
     if @message.save
       render :update do |page|
         page.insert_html :top, "comments", :partial => 'user/wall_messages/wall_message', :object => @message

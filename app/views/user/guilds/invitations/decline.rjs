@@ -1,5 +1,5 @@
 if params[:show].to_i == 0
-	page.redirect_to guilds_url(:id => @user.id)
+	page.redirect_to guilds_url(:id => current_user.id)
 elsif params[:show].to_i == 1
   page.redirect_to guild_url(@guild)
 elsif params[:show].to_i == 2

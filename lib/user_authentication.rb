@@ -17,7 +17,7 @@ module UserAuthentication
 
       # prevents a user from submitting a crafted form that bypasses activation
       # anything else you want your user to change should be added here.
-      attr_accessible :login, :password, :password_confirmation, :gender
+      attr_accessible :login, :password, :password_confirmation, :gender, :avatar_id
 
       named_scope :activated, :conditions => {:activation_code => nil}
       

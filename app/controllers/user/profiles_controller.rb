@@ -12,8 +12,6 @@ class User::ProfilesController < UserBaseController
 
   def show
 		@comments = @profile.comments.paginate :page => params[:page], :per_page => 10
-    @tagging = @profile.taggings.find_by_poster_id(current_user.id)
-		@can_tag = @user.friends.include?(current_user) && (@tagging.nil? || @tagging.created_at < 1.week.ago)
 		@blogs = @user.blogs[0..2]
 		@albums = @user.active_albums[0..2]
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize)

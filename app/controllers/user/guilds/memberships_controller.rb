@@ -2,8 +2,6 @@ class User::Guilds::MembershipsController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:edit]
-
   def index
 		if params[:type].to_i == 0
 			@members = @guild.veterans.paginate :page => params[:page], :per_page => 10
@@ -22,7 +20,7 @@ class User::Guilds::MembershipsController < UserBaseController
   
   def update
     @old_status = @membership.status
-    if @membership.update_attributes(params[:membership])
+    if @membership.update_attributes(:status => params[:status])
       render :update do |page|
         page << "facebox.close();"
         if @old_status != @membership.status
@@ -76,8 +74,7 @@ protected
       @guild = Guild.find(params[:guild_id])
       @user = @guild.president
     elsif ['edit', 'update', 'destroy'].include? params[:action]
-      @guild = Guild.find(params[:guild_id])
-      @user = @guild.president
+      @guild = current_user.guilds.find(params[:guild_id])
       @membership = @guild.memberships.find(params[:id])
     end
   rescue

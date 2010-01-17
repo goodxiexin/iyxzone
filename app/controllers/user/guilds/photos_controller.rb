@@ -2,9 +2,9 @@ class User::Guilds::PhotosController < UserBaseController
 
   layout 'app'
 
-  before_filter :president_or_veteran_required, :only => [:new, :edit_multiple]
+  before_filter :president_or_veteran_required, :only => [:new, :create, :record_upload]
 
-  before_filter :owner_required, :only => [:edit]
+  before_filter :owner_required, :only => [:edit, :update, :edit_multiple, :update_multiple, :update_notation, :destroy]
 
   def new
   end
@@ -26,7 +26,11 @@ class User::Guilds::PhotosController < UserBaseController
   def record_upload 
 		if @album.record_upload current_user, @photos
 			render :update do |page|
-				page.redirect_to edit_multiple_guild_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+        if current_user == @guild.president 
+				  page.redirect_to edit_multiple_guild_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+        else
+          page.redirect_to guild_album_url(@album)
+        end
 			end
 	  else
       render :update do |page|
@@ -86,12 +90,17 @@ class User::Guilds::PhotosController < UserBaseController
 protected
 
   def setup
-    if ['show', 'edit', 'update', 'update_notation', 'destroy'].include? params[:action]
+    if ['show'].include? params[:action]
       @photo = GuildPhoto.find(params[:id])
       @album = @photo.album
       @guild = @album.guild
       @user = @guild.president
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+    elsif ['edit', 'update', 'update_notation', 'destroy'].include? params[:action]
+      @photo = GuildPhoto.find(params[:id])
+      @album = @photo.album
+      @guild = @album.guild
+      @user = @guild.president
     elsif ['new', 'create'].include? params[:action]
       @album = GuildAlbum.find(params[:album_id])
       @guild = @album.guild
