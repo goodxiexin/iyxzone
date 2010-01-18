@@ -4,17 +4,20 @@
     <div class="box02 canvas_int">
 	    <div class="tab tab01">
 		    <ul>
-			    <li class='hover'><span><%= link_to "热门游戏", sex_games_url(:id => @user.id) %></span></li>
-	  		  <li><span><%= link_to "我的游戏", games_url(:id => @user.id) %></span></li>
+			    <li><span><%= link_to "热门游戏", sex_games_url(:id => @user.id) %></span></li>
+          <% if @user == current_user %>
+	  		    <li class='hover'><span><%= link_to "我的游戏", games_url(:id => @user.id) %></span></li>
+          <% else %>
+            <li><span><%= link_to "我的游戏", games_url(:id => @user.id) %></span></li>
+          <% end %>
 			    <li><span><%= link_to "好友的游戏", friends_games_url %></span></li>
 		    </ul>
       </div>
 	    <div class="piclist-rows">
         <div class='nav-link'>
           <ul class="s_clear">
-            <li><%= link_to "<span>大家都在玩的游戏</span>", sex_games_url %></li>
-            <li class='hover'><%= link_to "<span>大家都关注的游戏</span>", hot_games_url %></li>
-            <li><%= link_to "<span>要内测的游戏</span>", beta_games_url %></li>
+            <li><%= link_to "<span>#{get_subject @user}玩的游戏</span>", games_url(:id => @user.id) %></li>
+            <li class='hover'><%= link_to "<span>#{get_subject @user}关注的游戏</span>", interested_games_url(:id => @user.id) %></li>
           </ul>
         </div>
 		    <%= render :partial => 'game_items', :object => @games %>

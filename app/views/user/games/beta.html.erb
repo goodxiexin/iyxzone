@@ -1,32 +1,24 @@
-<div id='beta_games_list'>
-<div class='title01'>
-  <%= link_to_function '', "facebox.close();", :class => "icon-active icon-active-close" %>
-  <h3>测试游戏榜</h3>
-</div>
-
-<div class='formcontent'>
-<table>
-  <tr>
-    <td>封面</td>
-    <td>名称</td>
-    <td>特点</td>
-    <td>关注人数</td>
-  </tr>
-<% @games.each do |game| %>
-  <tr>
-    <td></td>
-    <td><%= game_link game %></td>
-    <td><%= game.tag_list %></td>
-    <td><%= game.attentions_count %></td>
-  </tr>
-<% end %>
-</table>
-</div>
-
-<div class="buttons s_clear">
-  <table class="center" cellpadding="0"><tr><td>
-    <%= will_paginate @games, :renderer => 'RemoteLinkRenderer', :remote => @remote %>
-  </td></tr></table>
-</div>
-
-</div>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+  <h1 class="big-cons">游戏</h1>
+    <div class="box02 canvas_int">
+	    <div class="tab tab01">
+		    <ul>
+			    <li class='hover'><span><%= link_to "热门游戏", sex_games_url(:id => @user.id) %></span></li>
+	  		  <li><span><%= link_to "我的游戏", games_url(:id => @user.id) %></span></li>
+			    <li><span><%= link_to "好友的游戏", friends_games_url %></span></li>
+		    </ul>
+      </div>
+	    <div class="piclist-rows">
+        <div class='nav-link'>
+          <ul class="s_clear">
+            <li><%= link_to "<span>大家都在玩的游戏</span>", sex_games_url %></li>
+            <li><%= link_to "<span>大家都关注的游戏</span>", hot_games_url %></li>
+            <li class='hover'><%= link_to "<span>要内测的游戏</span>", beta_games_url %></li>
+          </ul>
+        </div>
+		    <%= render :partial => 'game_items', :object => @games %>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>

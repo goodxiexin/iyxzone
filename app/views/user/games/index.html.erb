@@ -5,17 +5,19 @@
 	    <div class="tab tab01">
 		    <ul>
 			    <li><span><%= link_to "热门游戏", sex_games_url(:id => @user.id) %></span></li>
-	  		  <li class='hover'><span><%= link_to "#{get_subject @user}的游戏", games_url(:id => @user.id) %></span></li>
           <% if @user == current_user %>
-			      <li><span><%= link_to "好友的游戏", friends_games_url %></span></li>
+	  		    <li class='hover'><span><%= link_to "我的游戏", games_url(:id => @user.id) %></span></li>
+          <% else %>
+            <li><span><%= link_to "我的游戏", games_url(:id => @user.id) %></span></li>
           <% end %>
+			    <li><span><%= link_to "好友的游戏", friends_games_url %></span></li>
 		    </ul>
       </div>
 	    <div class="piclist-rows">
         <div class='nav-link'>
           <ul class="s_clear">
-            <li class='hover'><%= link_to "<span>我玩的游戏</span>", games_url(:id => @user.id) %></li>
-            <li><%= link_to "<span>我关注的游戏</span>", interested_blogs_url(:id => @user.id) %></li>
+            <li class='hover'><%= link_to "<span>#{get_subject @user}玩的游戏</span>", games_url(:id => @user.id) %></li>
+            <li><%= link_to "<span>#{get_subject @user}关注的游戏</span>", interested_games_url(:id => @user.id) %></li>
           </ul>
         </div>
 		    <%= render :partial => 'game_items', :object => @games %>

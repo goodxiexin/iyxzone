@@ -38,13 +38,13 @@ class User::GamesController < UserBaseController
   def hot
     @games = Game.hot.paginate :page => params[:page], :per_page => 1
     @remote = {:update => 'hot_games_list', :url => {:action => 'hot'}} 
-    render :action => 'hot', :layout => false
+    render :action => 'hot', :layout => 'app'
   end
 
   def beta
     @games = Game.beta.paginate :page => params[:page], :per_page => 1
     @remote = {:update => 'beta_games_list', :url => {:action => 'beta'}}
-    render :action => 'beta', :layout => false
+    render :action => 'beta', :layout => 'app'
   end
 
     # ugly ..
@@ -75,11 +75,11 @@ class User::GamesController < UserBaseController
 protected
 
   def setup
-    if ["index", "sex"].include? params[:action]
+    if ["index", "interested"].include? params[:action]
       @user = User.find(params[:id]) 
     elsif ["show"].include? params[:action]
       @game = Game.find(params[:id])
-    elsif ["hot", "beta"].include? params[:action]
+    elsif ["sex", "hot", "beta"].include? params[:action]
       @user = current_user
     elsif ["game_details"].include? params[:action]
       @game = Game.find(params[:id])

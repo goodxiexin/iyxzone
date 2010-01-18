@@ -44,7 +44,7 @@
     <div id="rightsidebar" class="canvas_r">
       <div class="multibox">
         <div class="title">
-          <%= facebox_link "更多", interested_games_url(:id => current_user.id) %>
+          <%= link_to "更多", interested_games_url(:id => current_user.id) %>
           <b>我关注</b>
         </div>
         <div class="chart-list chart-list01 menu-list">
@@ -57,7 +57,7 @@
       </div>
       <div class="multibox">
         <div class="title">
-          <%= facebox_link "更多", hot_games_url %>
+          <%= link_to "更多", hot_games_url %>
           <b>关注榜</b>
         </div>
         <div class="chart-list chart-list01 menu-list">
