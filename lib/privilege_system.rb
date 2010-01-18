@@ -41,8 +41,8 @@ protected
     render :template => 'not_found'
   end
 
-  def friend_denied
-    flash[:notice] = "只有他的好朋友才有权限看该资源"
+  def friend_denied msg=nil
+    flash[:notice] = msg || "只有他的好朋友才有权限看该资源"
     redirect_to new_friend_url(:id => @user.id)
   end
 
