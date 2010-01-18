@@ -2,7 +2,7 @@ class User::ProfilesController < UserBaseController
 
   layout 'app2'
 
-  before_filter :privilege_required, :only => [:show, :more_feeds]
+  before_filter :privilege_required, :only => [:show, :more_feeds, :edit]
 
   increment_viewing 'profile', :only => [:show]
 
@@ -52,16 +52,16 @@ class User::ProfilesController < UserBaseController
 protected
 
   def setup
-		if ["more_feeds", "show"].include? params[:action]
+		if ["more_feeds", "show", "edit"].include? params[:action]
 			@profile = Profile.find(params[:id])
 			@user = @profile.user
 			@setting = @user.privacy_setting
 			@privilege = @setting.personal
 			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
-		elsif ["edit", "update"].include? params[:action]
-			@profile = Profile.find(params[:id])
-			@user = @profile.user
-		end
+    elsif ["update"].include? params[:action]
+      @profile = Profile.find(params[:id])
+		  @profile.user == current_user || not_found
+    end
   rescue
     not_found
   end

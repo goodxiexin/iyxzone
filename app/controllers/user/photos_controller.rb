@@ -25,9 +25,7 @@ class User::PhotosController < UserBaseController
   end
 
 	def create
-    puts "in create"
     @photo = @album.photos.build(:swf_uploaded_data => params[:Filedata])
-		puts "photo_id: #{@photo.id}"
     if @photo.save
 			render :text => @photo.id	
 		end

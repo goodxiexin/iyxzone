@@ -1,8 +1,13 @@
 require 'test_helper'
 
 class FeedItemTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+
+  test "没有产生者" do
+    f = FeedItem.create(:originator_id => nil, :originator_type => 'Blog')
+    assert_equal f.errors.on_base, "没有产生者"
+  
+    f = FeedItem.create(:originator_id => 1, :originator_type => nil)
+    assert_equal f.errors.on_base, "没有产生者"
   end
+
 end

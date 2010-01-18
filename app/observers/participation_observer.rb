@@ -58,6 +58,7 @@ class ParticipationObserver < ActiveRecord::Observer
     # issue feeds if necessary
     return unless participant.application_setting.emit_event_feed
     return if participation.was_authorized? and participation.is_authorized?
+    
     recipients = [participant.profile]
     recipients.concat participant.guilds
     recipients.concat participant.friends.find_all{|f| f.application_setting.recv_event_feed}

@@ -68,7 +68,7 @@ class MembershipObserver < ActiveRecord::Observer
 
     # issue feeds if necessary
     return unless user.application_setting.emit_guild_feed
-    return unless membership.is_authorized?
+    return if membership.was_authorized? and membership.is_authorized?
     recipients = [user.profile]
     recipients.concat user.friends.find_all{|f| f.application_setting.recv_guild_feed}
     membership.deliver_feeds :recipients => recipients

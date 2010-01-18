@@ -2,7 +2,7 @@
 <div class='feed-list-box'>
 	<h4><%= time %></h4>
 	<% deliveries.each do |f| %>
-    <%= render :layout => "user/feed_deliveries/#{f.feed_item.originator.class.to_s.underscore}_feed_delivery", :object => f, :locals => {:with_comments => true}  %>
+    <%= render :layout => "#{f.feed_item.originator.class.to_s.underscore}_feed_delivery", :object => f, :locals => {:with_comments => true}  %>
 	<% end %>
 </div>
 <% end %>

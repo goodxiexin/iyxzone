@@ -14,7 +14,16 @@ class VideoObserver < ActiveRecord::Observer
 	end
 
   def after_update video
-    video.destroy_feeds if video.privilege == 4 and video.privilege_was != 4
+    if video.privilege == 4 and video.privilege_was != 4
+      video.destroy_feeds
+    else
+      if video.privilege != 4 and video.privilege_was == 4 and video.poster.application_setting.emit_video_feed
+        recipients = [video.poster.profile]
+        recipients.concat video.poster.guilds
+        recipients.concat video.poster.friends.find_all{|f| f.application_setting.recv_video_feed}
+        video.deliver_feeds :recipients => recipients
+      end
+    end
   end
 
   def after_destroy video

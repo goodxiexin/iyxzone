@@ -8,9 +8,18 @@ class Profile < ActiveRecord::Base
 
 	belongs_to :district
 
-  has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'
-
   acts_as_viewable
+
+  acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
+                         :categories => {
+                            :video => 'Video',
+                            :poll => 'Poll',
+                            :vote => 'Vote',
+                            :event => 'Event',
+                            :participation => 'Participation',
+                            :guild => 'Guild',
+                            :membership => 'Membership'
+                          }
 
 	acts_as_resource_feeds
 

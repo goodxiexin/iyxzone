@@ -1,2 +1,2 @@
-require File.dirname(__FILE__) + '/lib/acts_as_resource_feeds'
-ActiveRecord::Base.send(:include, ActsAsResourceFeeds)
+require File.dirname(__FILE__) + '/lib/resource_feeds'
+ActiveRecord::Base.send(:include, ResourceFeeds)

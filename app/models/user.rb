@@ -224,83 +224,29 @@ class User < ActiveRecord::Base
 	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4"
 
 	# feeds
-	has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'
-
-	with_options :class_name => 'FeedDelivery', :as => 'recipient', :order => 'created_at DESC' do |user|
-	
-		user.has_many :status_feed_deliveries, :conditions => {:item_type => 'Status'}
-
-		user.has_many :blog_feed_deliveries, :conditions => {:item_type => 'Blog'}
-
-		user.has_many :video_feed_deliveries, :conditions => {:item_type => 'Video'}
-
-		user.has_many :personal_album_feed_deliveries, :conditions => {:item_type => 'PersonalAlbum'}
-
-		user.has_many :all_album_related_feed_deliveries, :conditions => {:item_type => ['EventAlbum', 'GuildAlbum', 'PersonalAlbum', 'Avatar']}
-
-		user.has_many :poll_feed_deliveries, :conditions => {:item_type => 'Poll'}
-
-		user.has_many :vote_feed_deliveries, :conditions => {:item_type => 'Vote'}
-
-		user.has_many :all_poll_related_feed_deliveries, :conditions => {:item_type => ['Poll', 'Vote']}
-
-		user.has_many :event_feed_deliveries, :conditions => {:item_type => 'Event'}
-
-    user.has_many :participation_feed_deliveries, :conditions => {:item_type => 'Participation'} 
-
-		user.has_many :all_event_related_feed_deliveries, :conditions => {:item_type => ['Event', 'Participation']}
-
-		user.has_many :guild_feed_deliveries, :conditions => {:item_type => 'Guild'}
-	
-		user.has_many :membership_feed_deliveries, :conditions => {:item_type => 'Membership'}
-
-		user.has_many :all_guild_related_feed_deliveries, :conditions => {:item_type => ['Guild', 'Membership']}	
-
-    user.has_many :sharing_feed_deliveries, :conditions => {:item_type => 'Sharing'}
-
-    user.has_many :profile_feed_deliveries, :conditions => {:item_type => 'Profile'}
-
-    user.has_many :friendship_feed_deliveries, :conditions => {:item_type => 'Friendship'}
-
-	end
-
-	with_options :order => 'created_at DESC', :source => 'feed_item' do |user|
-	
-		user.has_many :status_feed_items, :through => :status_feed_deliveries
-
-		user.has_many :blog_feed_items, :through => :blog_feed_deliveries
-
-		user.has_many :video_feed_items, :through => :video_feed_deliveries
-
-		user.has_many :event_feed_items, :through => :event_feed_deliveries
-
-		user.has_many :participation_feed_items, :through => :participation_feed_deliveries
-
-		user.has_many :all_event_related_feed_items, :through => :all_event_related_feed_deliveries
-
-		user.has_many :guild_feed_items, :through => :guild_feed_deliveries
-
-		user.has_many :membership_feed_items, :through => :membership_feed_deliveries
-
-		user.has_many :all_guild_related_feed_items, :through => :all_guild_related_feed_deliveries
-
-		user.has_many :poll_feed_items, :through => :poll_feed_deliveries
-
-		user.has_many :vote_feed_items, :through => :vote_feed_deliveries
-
-		user.has_many :all_poll_related_feed_items, :through => :all_poll_related_feed_deliveries
-
-		user.has_many :all_album_related_feed_items, :through => :all_album_related_feed_deliveries
-
-		user.has_many :personal_album_feed_items, :through => :personal_album_feed_deliveries
-
-    user.has_many :sharing_feed_items, :through => :sharing_feed_deliveries
-
-    user.has_many :profile_feed_items, :through => :profile_feed_deliveries
-
-    user.has_many :friendship_feed_items, :through => :friendship_feed_deliveries
-
-  end
+	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'
+  acts_as_feed_recipient :delete_conditions => lambda {|requestor, user| requestor == user},
+                         :categories => {
+                            :status => 'Status', 
+                            :blog => 'Blog', 
+                            :video => 'Video', 
+                            :personal_album => 'PersonalAlbum',
+                            :avatar => 'Avatar',
+                            :event_album => 'EventAlbum',
+                            :guild_album => 'GuildAlbum',
+                            :all_album_related => ['EventAlbum', 'GuildAlbum', 'PersonalAlbum', 'Avatar'],
+                            :poll => 'Poll',
+                            :vote => 'Vote',
+                            :all_poll_related => ['Poll', 'Vote'],
+                            :event => 'Event',
+                            :participation => 'Participation',
+                            :all_event_related => ['Event', 'Participation'],
+                            :guild => 'Guild',
+                            :membership => 'Membership',
+                            :all_guild_related => ['Guild', 'Membership'],
+                            :sharing => 'Sharing',
+                            :profile => 'Profile',
+                            :friendship => 'Friendship'}                                                                                
 
   # role
   has_many :role_users, :dependent => :destroy

@@ -8,13 +8,11 @@ class Guild < ActiveRecord::Base
 
   has_many :memberships
 
-  has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id'
+  has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
 
   has_many :guild_friendships
 
   has_many :friends, :through => :guild_friendships, :source => 'friend'
-
-  has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC' 
 
   has_many :invitations, :class_name => 'Membership', :conditions => {:status => 0}
 
@@ -41,6 +39,17 @@ class Guild < ActiveRecord::Base
 		guild.has_many :president_and_veterans, :conditions => "memberships.status = 3 or memberships.status = 4"
 
 	end
+
+  acts_as_feed_recipient :delete_conditions => lambda {|user, guild| guild.president == user },
+                         :categories => {
+                            :blog => 'Blog',
+                            :video => 'Video',
+                            :poll => 'Poll',
+                            :vote => 'Vote',
+                            :event => 'Event',
+                            :participation => 'Participation',
+                            :personal_album => 'PersonalAlbum'
+                          }
 
 	acts_as_resource_feeds
 

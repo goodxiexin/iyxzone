@@ -1,4 +1,4 @@
-<% rating = character.game.find_rating_by_user(current_user).rating %>
+<% rating = character.game.find_rating_by_user(character.user).rating %>
 <li id='character_<%= character.id %>'>
 	<h4><%= label_tag '', '人物昵称: '%> <%= character.name %>
 	<% if character.user == current_user %>

@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
 
-  has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id'
+  has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id', :dependent => :destroy
 
   belongs_to :poster, :class_name => 'User'
 
