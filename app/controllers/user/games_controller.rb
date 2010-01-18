@@ -22,6 +22,11 @@ class User::GamesController < UserBaseController
     render :action => "sex", :layout => "app"
   end
 
+  def interested
+    @games = current_user.interested_games.paginate :page => params[:page], :per_page => 1
+    render :action => 'interested', :layout => 'app'
+  end
+
   def show
     @blogs = @game.blogs.find(:all, :limit => 3)
     @albums = @game.albums.find(:all, :limit => 3)

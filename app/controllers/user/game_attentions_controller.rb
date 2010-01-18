@@ -1,10 +1,5 @@
 class User::GameAttentionsController < UserBaseController
 
-	def index
-		@games = current_user.interested_games.paginate :page => params[:page], :per_page => 1
-		@remote = {:update => 'my_games_list', :url => {:action => 'index'}}
-	end
-  
   def create
     if @attention = @game.attentions.create(:user_id => current_user.id)
 			render :update do |page|

@@ -12,6 +12,12 @@
 		    </ul>
       </div>
 	    <div class="piclist-rows">
+        <div class='nav-link'>
+          <ul class="s_clear">
+            <li class='hover'><%= link_to "<span>我玩的游戏</span>", games_url(:id => @user.id) %></li>
+            <li><%= link_to "<span>我关注的游戏</span>", interested_blogs_url(:id => @user.id) %></li>
+          </ul>
+        </div>
 		    <%= render :partial => 'game_items', :object => @games %>
       </div>
     </div>
