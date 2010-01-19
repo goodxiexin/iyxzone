@@ -1,7 +1,0 @@
-  <%= label_tag 'login', 'virtual name '%><%= @user.login %><br/>
-  <%= label_tag 'gender', 'gender '%><%= @profile.gender %><br/>
-  <%= label_tag 'birthday', 'birthday '%><%= ftime2 @profile.birthday %><br/>
-  <%= label_tag '省份', 'country '%><%= @profile.region.nil? ? '' : @profile.region.name %><br/>
-	<%= label_tag '城市', 'city' %><%= @profile.city.nil? ? '' : @profile.city.name %><br/>
-  <%= label_tag '地区', 'district'%><%= @profile.district.nil? ? '' : @profile.district.name %></br>
-

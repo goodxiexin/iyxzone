@@ -1,14 +1,14 @@
 <% subject = get_subject @user %>
 
 <% if @user == current_user %>
-	<%= link_to "修改头像", new_avatar_url(:album => 0), :rel => 'facebox' %>
+	<%= facebox_link "修改头像", new_avatar_url(:album => 0) %>
 <% elsif @user.has_friend? current_user %>
   <%= link_to "发站内信", new_mail_url(:recipient_id => @user.id) %>
   <%= link_to_function "给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %> 
   <%= link_to "打招呼", new_poke_url(:id => @user.id), :rel => 'facebox' %>
 <% else %>
   <%= link_to "发站内信", new_mail_url(:recipient_id => @user.id) %>
-  <% if wall_viewable? %>
+  <% if @setting.wall_viewable_by? current_user %>
 		<%= link_to_function "给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %>
   <% end %>
 	<%= link_to "打招呼", new_poke_url(:id => @user.id), :rel => 'facebox' %>

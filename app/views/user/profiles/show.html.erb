@@ -64,7 +64,7 @@
       <%= f.submit '提交' %>
     <% end %>
   <% else %>
-    <%= render :partial => 'profile/tags/tag_cloud', :locals => {:profile => @profile} %>
+    <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>
   <% end %>
 	</div>
 </div>
@@ -154,10 +154,10 @@
 </div>
 <% end %>
 
-<% if wall_repliable? %>
+<% if @setting.leave_wall_message_viewable_by? current_user %>
   <%= render :layout => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user} %>
 <% end %>
-<% if wall_viewable? %>
+<% if @setting.wall_viewable_by? current_user %>
   <div class='feed-box' id='comments'>
     <%= render :partial => 'user/wall_messages/wall_message', :collection => @comments %>
   </div>
@@ -165,7 +165,7 @@
 
 </div>
 
-<% if wall_viewable? and params[:reply_to] %>
+<% if @setting.wall_viewable_by?(current_user) and params[:reply_to] %>
 <%= javascript_tag "
 	set_wall_box('#{@reply_to.login}', #{@reply_to.id})
 " %>
