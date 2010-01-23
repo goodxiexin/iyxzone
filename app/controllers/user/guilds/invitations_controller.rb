@@ -3,12 +3,15 @@ class User::Guilds::InvitationsController < UserBaseController
   layout 'app'
 
   def new
-    @friends = current_user.friends
+    @characters = current_user.friend_characters(:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id) - @guild.all_characters
   end
 
-  def create_multiple
-    (params[:users] || {}).each { |user_id| @guild.invitations.create(:user_id => user_id) }
-    redirect_to guild_url(@guild)
+  def create
+    if @guild.update_attributes(:invitations => params[:invitations])
+      redirect_to guild_url(@guild)
+    else
+      render :action => 'new'
+    end
   end
 
   def edit
@@ -16,7 +19,7 @@ class User::Guilds::InvitationsController < UserBaseController
   end
 
 	def accept
-		unless @invitation.accept_invitation 
+		unless @invitation.update_attributes(:status => Membership::Member)
 	    render :update do |page|
         page << "error('发生错误');"
       end
@@ -32,14 +35,15 @@ class User::Guilds::InvitationsController < UserBaseController
   end
 
   def search
-    @friends = current_user.friends.find_all {|f| f.login.include?(params[:key])}
-    render :partial => 'friends'
+    @characters = current_user.friend_characters(:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id) - @guild.all_characters
+    @characters = @characters.find_all {|f| f.name.include?(params[:key])}
+    render :partial => 'characters'
   end
 
 protected
 
   def setup
-    if ['new', 'create_multiple'].include? params[:action]
+    if ['new', 'create', 'search'].include? params[:action]
       @guild = current_user.guilds.find(params[:guild_id])
     elsif ['edit', 'accept', 'decline'].include? params[:action]
       @invitation = current_user.guild_invitations.find(params[:id])

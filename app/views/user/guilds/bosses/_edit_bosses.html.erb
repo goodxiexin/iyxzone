@@ -1,0 +1,20 @@
+<h3>编辑BOSS</h3>
+
+<% form_for :guild, :html => {:id => 'bosses_form'} do |f| %>
+<div id='guild_bosses'>
+  <% @guild.bosses.each do |boss| %>
+  <div id='boss_<%= boss.id %>'>
+    <% fields_for "guild[existing_bosses][]", boss do |b| %>
+      <div><label>名称: </label></div>
+      <div><%= b.text_field :name %></div>
+      <div><label>奖励: </label></div>
+      <div><%= b.text_field :reward %></div>
+    <% end %>
+    <%= link_to_function "x", "Iyxzone.Guild.Editor.removeBoss(#{boss.id}, #{@guild.id}, '#{form_authenticity_token}')" %>
+  </div>
+  <% end %>
+</div>
+  <%= link_to_function '添加规则', "Iyxzone.Guild.Editor.newBoss();" %>
+  <%= button_to_function '保存', "Iyxzone.Guild.Editor.updateBosses(#{@guild.id})" %>
+  <%= link_to_function "取消", "Iyxzone.Guild.Editor.cancelEditBosses()" %>
+<% end %>

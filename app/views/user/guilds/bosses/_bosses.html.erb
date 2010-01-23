@@ -1,0 +1,11 @@
+<div>
+  <h3>BOSS</h3> 
+  <div>
+    <%= link_to_function "(编辑)", "Iyxzone.Guild.Editor.editBosses(#{guild.id})" %><br>
+  </div>
+  <div>
+  <% guild.bosses.each do |boss|%>
+    <%= boss.name -%>  <%= boss.reward %><br>
+  <% end %>
+  </div>
+</div>

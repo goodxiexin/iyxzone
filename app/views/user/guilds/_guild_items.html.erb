@@ -10,7 +10,7 @@
         <p><%= label_tag '', '会长：' %><span><%= profile_link guild.president %></span></p>
         <p><%= label_tag '', '名称：' %><span><%= guild_link guild %></span></p>
         <p><%= label_tag '', '游戏：' %><span><%= guild.game.name %></span></p>
-        <p><%= label_tag '', '会员数：' %><span><%= guild.all_count %></span></p>
+        <p><%= label_tag '', '会员数：' %><span><%= guild.people_count %></span></p>
         <p><%= label_tag '', '创建于：' %><span><%= ftime guild.created_at %></span></p>
         <p><%= label_tag '', '你的状态：' %><span><%= show_membership_info membership, guild %></span></p>
       </div>

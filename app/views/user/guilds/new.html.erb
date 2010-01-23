@@ -26,9 +26,9 @@
               </div>
             </div>
             <div class="rows s_clear">
-              <div class="fldid"><label for="name">游戏：</label></div>
+              <div class="fldid"><label for="name">会长游戏角色：</label></div>
               <div class="fldvalue">
-                <%= collection_select :guild, :game_id, current_user.games, :id, :name, {:prompt => '---'} %>
+                <%= collection_select :guild, :character_id, current_user.characters, :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             <div class="rows s_clear">
@@ -37,12 +37,14 @@
                 <%= f.text_area :description %>
               </div>
             </div>
+<!--
             <div class="rows s_clear">
             <% fields_for "photo" do |form| %>
               <div class="fldid"><label for="fengmian">封面：</label></div>
               <div class="fldfilevalue"><%= form.file_field :uploaded_data %></div>
             <% end %>
             </div>
+-->
             <div class="rows s_clear">
               <div class="fldid">&nbsp;</div>
               <div class="fldvalue">

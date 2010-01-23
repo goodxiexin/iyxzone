@@ -310,7 +310,9 @@ Iyxzone.Photo.Tagger = Class.create({
       params += "&tag[y]=" + this.cropImg.areaCoords.y1;
       params += "&tag[width]=" + this.cropImg.calcW();
       params += "&tag[height]=" + this.cropImg.calcH();
-      new Ajax.Request('/photo_tags?photo_type=' + this.type + '&photo_id=' + this.photoID, {
+      params += "&tag[photo_id]=" + this.photoID;
+      params += "&tag[photo_type]=" + this.photoType;
+      new Ajax.Request('/photo_tags', {
         method: 'post', 
         parameters: params,
         onSuccess: function(transport){

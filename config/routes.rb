@@ -152,7 +152,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :guild_photos, :controller => 'guilds/photos', :collection => {:edit_multiple => :get, :update_multiple => :put, :record_upload => :post}
 
-    users.resources :guilds, :member => {:more_feeds => :get},
+    users.resources :guilds, :member => {:more_feeds => :get, :edit_rules => :get},
                     :collection => {:hot => :get, :recent => :get , :participated => :get, :friends => :get} do |guilds|
 
       guilds.resources :friends
@@ -166,6 +166,12 @@ ActionController::Routing::Routes.draw do |map|
       guilds.resources :events, :controller => 'guilds/events', :collection => {:search => :get}
 
       guilds.resources :wall_messages, :controller => 'guilds/wall_messages'
+
+      guilds.resources :bosses, :controller => 'guilds/bosses', :collection => {:create_or_update => :post}
+    
+      guilds.resources :rules, :controller => 'guilds/rules', :collection => {:create_or_update => :post}
+
+      guilds.resources :gears, :controller => 'guilds/gears', :collection => {:create_or_update => :post}
 
     end
 

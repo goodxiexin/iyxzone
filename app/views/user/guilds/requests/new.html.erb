@@ -6,6 +6,7 @@
 <div id='error'></div>
 <% form_remote_for :request, :url => guild_requests_url(@guild, :show => params[:show]), :html => {:method => :post} do |f| %>
 <div class='content'>
+  <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %>
   <%= f.radio_button 'status', 1 %><%= label_tag '', '申请成为长老' %><br/>
   <%= f.radio_button 'status', 2 %><%= label_tag '', '申请成为会员' %><br/>
 </div>

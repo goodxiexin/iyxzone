@@ -2,7 +2,9 @@ require 'app/mailer/comment_mailer'
 
 class CommentObserver < ActiveRecord::Observer
 
-  def after_create(comment)
+  def after_create comment
+    puts "commentable_type = #{comment.commentable_type}"
+
     # increment counter
     comment.commentable.raw_increment :comments_count
     
@@ -10,7 +12,7 @@ class CommentObserver < ActiveRecord::Observer
     eval("after_#{comment.commentable_type.underscore}_comment_create(comment)")
   end  
 
-  def after_blog_comment_create(comment)
+  def after_blog_comment_create comment
     blog = comment.commentable
     return if blog.privilege == 4
 		poster = blog.poster
@@ -58,6 +60,22 @@ class CommentObserver < ActiveRecord::Observer
     end
 	end
 
+  def after_avatar_comment_create comment
+    after_photo_comment_create comment
+  end
+
+  def after_personal_photo_comment_create comment
+    after_photo_comment_create comment
+  end
+
+  def after_event_photo_comment_create comment
+    after_photo_comment_create comment
+  end
+
+  def after_guild_photo_comment_create comment
+    after_photo_comment_create comment 
+  end
+
   def after_photo_comment_create(comment)
 		photo = comment.commentable
     return if photo.privilege == 4
@@ -82,6 +100,22 @@ class CommentObserver < ActiveRecord::Observer
       end
     end	
 	end
+
+  def after_avatar_album_comment_create comment
+    after_album_comment_create comment
+  end
+
+  def after_personal_album_comment_create comment
+    after_album_comment_create comment
+  end
+
+  def after_event_album_comment_create comment
+    after_album_comment_create comment
+  end
+
+  def after_guild_album_comment_create comment
+    after_album_comment_create comment
+  end
 
 	def after_album_comment_create(comment)
 	  album = comment.commentable

@@ -5,22 +5,30 @@ require 'app/mailer/event_mailer'
 
 class EventObserver < ActiveRecord::Observer
 
-  def time_changed? event
-    event.start_time_changed? or event.end_time_changed?
-  end
-
-  def place_changed? event
-    event.game_id_changed? or event.game_server_id_changed? or event.game_area_id_changed?
+  def before_create event
+    if event.is_guild_event?
+      g = event.guild
+      event.game_id = g.game_id
+      event.game_server_id = g.game_server_id
+      event.game_area_id = g.game_area_id
+    else
+      c = event.poster_character
+      event.game_id = c.game_id
+      event.game_server_id = c.server_id
+      event.game_area_id = g.area_id
+    end
   end
 
   def after_create event
-    # create album and participation
+    # create album
     event.create_album
-    event.participations.create(:participant_id => event.poster_id, :status => Participation::Confirmed)
-  
+
+    # create participation
+    event.participations.create(:participant_id => event.poster_id, :character_id => event.character_id, :status => Participation::Confirmed)
+
     # increment user's counter
     event.poster.raw_increment :events_count
-  
+ 
     # issue feeds
     return unless event.poster.application_setting.emit_event_feed
     recipients = [event.poster.profile]
@@ -29,29 +37,20 @@ class EventObserver < ActiveRecord::Observer
     event.deliver_feeds :recipients => recipients
   end
 
-  def after_update event
-    # notify participants if time or place changes
-    poster = event.poster
-    if time_changed? event and place_changed? event
-      event.participants.each do |p|
-				p.notifications.create(:data => "#{profile_link poster}改变了活动#{event_link event}的时间和地点")
-				EventMailer.deliver_time_and_place_change(event, p) if p != poster and p.mail_setting.change_event
-      end
-    elsif time_changed? event
-      event.participants.each do |p|
-        p.notifications.create(:data => "#{profile_link poster}改变了活动#{event_link event}的时间")
-        EventMailer.deliver_time_change(event, p) if p != poster and p.mail_setting.change_event
-      end
-    elsif place_changed? event
-      event.participants.each do |p|
-				p.notifications.create(:data => "#{profile_link poster}改变了活动#{event_link event}的地点")
-        EventMailer.deliver_place_change(event, p) if p != poster and p.mail_setting.change_event
-			end
-    end
-  end
-
-  def after_destroy event
+  def before_destroy event
     event.poster.raw_decrement :events_count
+    event.poster.raw_decrement :event_requests_count, event.requests_count
+
+    event.memberships.each do |m|
+      if m.is_invitation?
+        m.participant.raw_decrement :event_invitations_count
+      elsif m.is_request?
+        m.participant.notifications.create(:data => "活动 #{event_link event} 被取消了，你的请求作废了")
+      elsif m.is_authorized? and m != event.poster
+        m.participant.raw_decrement :upcoming_events_count
+        m.participant.notifications.create(:data => "活动 #{event_link event} 被取消了")
+      end
+    end
   end
 
 end

@@ -1,22 +1,22 @@
-<% members.each do |member| %>
-	<% membership = @guild.memberships.find_by_user_id(member.id) %>
-	<div class='friend' id='<%= "membership_#{membership.id}" %>'>
-    <%= avatar member %>
+<% memberships.each do |membership| %>
+	<% user = membership.user %>
+  <div class='friend' id='<%= "membership_#{membership.id}" %>'>
+    <%= avatar user %>
     <div class='user-link' >
-      <%= profile_link member %><br/>
+      <%= profile_link user %><br/>
     </div>
     <div class='operation'>
       <% if current_user == @guild.president %>
-        <%= link_to '任命', edit_guild_membership_url(@guild, membership), :rel => 'facebox' %><br/>
-        <%= facebox_confirm '删除', guild_membership_url(@guild, membership), {:method => :delete, :msg => '你确定要剔除这个会员吗'}%>
-      <% end %>
+      <% else %>
+        <%= membership.to_s %>
+      <% end %> 
     </div>
   </div>
 <% end %>
 
 <% if @remote %>
-  <%= will_paginate members, :renderer => "RemoteLinkRenderer", :remote => @remote %>
+  <%= will_paginate memberships, :renderer => "RemoteLinkRenderer", :remote => @remote %>
 <% else %>
-  <%= will_paginate members %>
+  <%= will_paginate memberships %>
 <% end %>
 

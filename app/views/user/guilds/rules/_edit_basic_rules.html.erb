@@ -1,0 +1,19 @@
+<h3>编辑其他规则</h3>
+<% form_for :guild, :html => {:id => 'basic_rules_form'} do |f| %>
+<div id='basic_rules'>
+<% @guild.basic_rules.each do |rule| %>
+  <div id='rule_<%= rule.id %>'>
+  <% fields_for "guild[existing_rules][]", rule do |r| %>
+    <div><label>原因: </label></div>
+    <div><%= r.text_field :reason %></div>
+    <div><label>赏罚: </label></div>
+    <div><%= r.text_field :outcome %></div>
+  <% end %>
+  <%= link_to_function "x", "Iyxzone.Guild.Editor.removeBasicRule(#{rule.id}, #{@guild.id}, '#{form_authenticity_token}')" %>
+  </div>
+<% end %>
+</div>
+<%= link_to_function '添加规则', "Iyxzone.Guild.Editor.newBasicRule(#{@guild.id});" %>
+<%= button_to_function '完成', "Iyxzone.Guild.Editor.updateBasicRules(#{@guild.id})" %>
+<%= button_to_function '取消', "Iyxzone.Guild.Editor.cancelEditBasicRules(#{@guild.id})" %>
+<% end %>

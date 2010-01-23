@@ -24,7 +24,7 @@ class Comment < ActiveRecord::Base
       errors.add_to_base('没有被评论的东西')
       return
     else
-      commentable = commentable_type.constantize.find(:first, :conditions => {:id => commentable_id})
+      commentable = commentable_type.camelize.constantize.find(:first, :conditions => {:id => commentable_id})
       if commentable.blank?
         errors.add_to_base('被评论的东西不存在')
         return

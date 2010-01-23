@@ -45,7 +45,8 @@ class User::EventsController < UserBaseController
   end
 
   def create
-    @event = Event.new((params[:event] || {}).merge({:poster_id => current_user.id}))
+    event_opts = (params[:event] || {}).merge({:poster_id => current_user.id})
+    @event = Event.new(event_opts)
     if @event.save
       redirect_to new_event_invitation_url(@event)
     else
@@ -57,7 +58,8 @@ class User::EventsController < UserBaseController
   end
 
   def update
-    if @event.update_attributes((params[:event] || {}).merge({:poster_id => current_user.id}))
+    event_opts = (params[:event] || {}).merge({:poster_id => current_user.id})
+    if @event.update_attributes(event_opts)
       redirect_to event_url(@event)
     else
       render :action => 'edit'

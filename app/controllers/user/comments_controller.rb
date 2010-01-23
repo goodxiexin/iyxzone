@@ -9,7 +9,7 @@ class User::CommentsController < UserBaseController
     @comment = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
     unless @comment.save
       render :update do |page|
-        page << "error('发生错误');"
+        page << "error('#{@comment.errors.on_base}');"
       end
     end
   end
@@ -35,7 +35,7 @@ protected
 
   def setup
     if ['index'].include? params[:action]
-      @commentable = params[:commentable_type].constantize.find(params[:commentable_id])
+      @commentable = params[:commentable_type].camelize.constantize.find(params[:commentable_id])
     elsif ['destroy'].include? params[:action]
       @comment = Comment.find(params[:id])
     end

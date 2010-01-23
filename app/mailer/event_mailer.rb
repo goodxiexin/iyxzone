@@ -1,5 +1,5 @@
 class EventMailer < ActionMailer::Base
-
+=begin
   def place_change event, participant 
     setup_email	participant
 		subject			"Dayday3 - 活动#{event.title}的地点改了"
@@ -17,7 +17,7 @@ class EventMailer < ActionMailer::Base
     subject     "Dayday3 - 活动'#{event.title}'的时间和地点改了"
     body        :user => participant, :url => "#{SITE_URL}/events/#{event.id}"
   end
-
+=end
   def event_cancel event, participant 
     setup_email	participant
 		subject			"Dayday3 - 活动'#{event.title}'取消了"
@@ -30,15 +30,15 @@ class EventMailer < ActionMailer::Base
     body				:user => participant, :url => "#{SITE_URL}/events/#{event.id}"
   end
 
-	def invitation event, participant
-		setup_email participant
-		subject			"Dayday3 - 你被邀请加入活动'#{event.title}'"
-		body				:user => participant, :url => "#{SITE_URL}/events/#{event.id}"
+	def invitation event, invitation
+		setup_email invitation.participant
+		subject			"Dayday3 - 你的游戏角色 #{invitation.character.name} 被邀请加入活动'#{event.title}'"
+		body				:user => invitation.participant, :url => "#{SITE_URL}/events/#{event.id}"
 	end
 
-	def request event, participant
+	def request event, request
 		setup_email event.poster
-		subject			"Dayday3 - #{participant.login}请求加入活动'#{event.title}'"
+		subject			"Dayday3 - #{request.participant.login}请求让游戏角色 #{request.character.name} 加入活动'#{event.title}'"
 		body				:user => event.poster, :url => "#{SITE_URL}/events/#{event.id}"
 	end
 

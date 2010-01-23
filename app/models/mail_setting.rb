@@ -1,3 +1,4 @@
+# 全部 0 或者 1
 class MailSetting
 
   include ActsAsSetting

@@ -4,13 +4,12 @@ class User::Guilds::MembershipsController < UserBaseController
 
   def index
 		if params[:type].to_i == 0
-			@members = @guild.veterans.paginate :page => params[:page], :per_page => 10
+			@memberships = @guild.memberships.find(:all, :conditions => {:status => [Membership::Veteran, Membership::Member]}).paginate :page => params[:page], :per_page => 10
     elsif params[:type].to_i == 1
-      @members = @guild.members.paginate :page => params[:page], :per_page => 10
+      @memberships = @guild.invitations.paginate :page => params[:page], :per_page => 10
+      logger.error "多少 ：#{@memberships.count}"
     elsif params[:type].to_i == 2
-      @members = @guild.invitees.paginate :page => params[:page], :per_page => 10
-    elsif params[:type].to_i == 3
-			@members = @guild.requestors.paginate :page => params[:page], :per_page => 10
+			@memberships = @guild.requests.paginate :page => params[:page], :per_page => 10
 		end
   end
 
@@ -19,11 +18,11 @@ class User::Guilds::MembershipsController < UserBaseController
   end
   
   def update
-    @old_status = @membership.status
+    old_status = @membership.status
     if @membership.update_attributes(:status => params[:status])
       render :update do |page|
         page << "facebox.close();"
-        if @old_status != @membership.status
+        if old_status != @membership.status
           page << "$('membership_#{@membership.id}').remove();"
         end
       end
@@ -48,22 +47,22 @@ class User::Guilds::MembershipsController < UserBaseController
 
   def search
 		if params[:type].to_i == 0
-      @members = @guild.veterans
+      @memberships = @guild.veteran_characters
     elsif params[:type].to_i == 1
-      @members = @guild.member
+      @memberships = @guild.member_characters
     elsif params[:type].to_i == 2
-      @members = @guild.invitees
+      @memberships = @guild.invite_characters
     elsif params[:type].to_i == 3
-      @members = @guild.requestors
+      @memberships = @guild.request_characters
     end 
-		@members = @members.find_all {|m| m.pinyin.starts_with?(params[:key]) }.paginate :page => params[:page], :per_page => 10, :order => 'login ASC'
+		@memberships = @memberships.find_all {|c| c.name.starts_with?(params[:key]) }.paginate :page => params[:page], :per_page => 10, :order => 'login ASC'
     @remote = {:update => 'members', :url => search_guild_memberships_url(@guild, :type => params[:type], :key => params[:key])}
     if params[:type].to_i == 2
-			render :partial => 'invitees', :object => @members
+			render :partial => 'invitees', :locals => {:memberships => @memberships}
     elsif params[:type].to_i == 3
-			render :partial => 'requestors', :object => @members
+			render :partial => 'requestors', :locals => {:memberships => @memberships}
     else
-			render :partial => 'members', :object => @members
+			render :partial => 'members', :locals => {:memberships => @memberships}
     end
 	end
  

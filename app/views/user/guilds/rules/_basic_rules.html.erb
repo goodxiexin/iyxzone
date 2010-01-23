@@ -1,0 +1,11 @@
+<div>
+  <h3> 其他规则 </h3>
+  <div>
+    <%= link_to_function "(编辑)", "Iyxzone.Guild.Editor.editBasicRules(#{guild.id})" %><br>
+  </div>
+  <div>
+  <% guild.basic_rules.each do |rule|%>
+    <%= rule.reason -%>  <%= rule.outcome %><br>
+  <% end %>
+  </div>
+</div>

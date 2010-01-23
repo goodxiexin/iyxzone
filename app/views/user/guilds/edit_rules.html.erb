@@ -1,0 +1,17 @@
+<%= javascript_include_tag 'guild' %>
+
+<div id='attendance_rule_frame'>
+  <%= render :partial => 'user/guilds/rules/attendance_rules', :locals => {:guild => @guild} %>
+</div>
+
+<div id='boss_frame'>
+  <%= render :partial => 'user/guilds/bosses/bosses', :locals => {:guild => @guild}%>
+</div>
+
+<div id='gear_frame'>
+  <%= render :partial => 'user/guilds/gears/gears', :locals => {:guild => @guild} %>
+</div>
+
+<div id='basic_rule_frame'>
+  <%= render :partial => 'user/guilds/rules/basic_rules', :locals => {:guild => @guild} %>
+</div>

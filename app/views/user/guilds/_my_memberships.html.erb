@@ -1,0 +1,25 @@
+<div class="multibox">
+  <div class="title">
+    <b>状态</b>
+  </div>    
+  <div class="news-list menu-list">
+    <ul>
+      <% @memberships.group_by(&:status).each do |status, memberships| %>
+        <% memberships.each do |m| %>
+          <% if status == Membership::President %>
+            <li><span>[会长]</span> <%= m.character.name %></li>
+          <% elsif status == Membership::Veteran %>
+            <li><span>[长老]</span> <%= m.character.name %></li>
+          <% elsif status == Membership::Member %>
+            <li><span>[会员]</span> <%= m.character.name %></li>
+          <% elsif status == Membership::Invitation %>
+            <li><span>[<%= facebox_link "回复", edit_guild_invitation_url(@guild, m) %>]</span> <%= m.character.name %></li>
+          <% elsif status == Membership::Request %>
+            <li><span>[请求加入...]</span> <%= m.character.name %></li>
+          <% end %>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>
+

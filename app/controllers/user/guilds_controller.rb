@@ -34,7 +34,8 @@ class User::GuildsController < UserBaseController
 
   def show
     @comments = @guild.comments.paginate :page => 1, :per_page => 10
-    @membership = @guild.memberships.find_by_user_id(current_user.id)
+    @memberships = @guild.memberships_for current_user
+    @role = @guild.role_for current_user
     @album = @guild.album
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize)
 		render :action => 'show', :layout => 'app2'
@@ -44,12 +45,9 @@ class User::GuildsController < UserBaseController
   end
 
   def create
-    @guild = Guild.new((params[:guild] || {}).merge({:president_id => current_user.id}))
+    guild_params = (params[:guild] || {}).merge({:president_id => current_user.id})
+    @guild = Guild.new(guild_params)
     if @guild.save
-			unless params[:photo].blank?
-				@photo = @guild.album.photos.create(params[:photo])
-				@guild.album.update_attribute('cover_id', @photo.id) 
-			end
       redirect_to guild_url(@guild)
     else
       render :action => 'new'
@@ -57,13 +55,22 @@ class User::GuildsController < UserBaseController
   end
 
   def edit
+    render :action => 'edit', :layout => false
+  end
+
+  def edit_rules
+    render :action => 'edit_rules'
   end
 
   def update
     if @guild.update_attributes(params[:guild])
-      redirect_to guild_url(@guild)
+      render :update do |page|
+        page.redirect_to guild_url(@guild)
+      end
     else
-      render :action => 'edit'
+      render :update do |page|
+        page << "error('发生错误');"
+      end
     end
   end
 
@@ -89,7 +96,7 @@ protected
       @user = User.find(params[:id])
     elsif ['show', 'more_feeds'].include? params[:action]
       @guild = Guild.find(params[:id])
-    elsif ['edit', 'update'].include? params[:action]
+    elsif ['edit', 'edit_rules', 'update'].include? params[:action]
       @guild = current_user.guilds.find(params[:id])
     end
   rescue

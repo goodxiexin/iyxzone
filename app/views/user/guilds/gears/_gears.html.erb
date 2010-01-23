@@ -1,0 +1,12 @@
+<div>
+  <h3> 装备 </h3>
+  <div>
+    <%= link_to_function "(编辑)", "Iyxzone.Guild.Editor.editGears(#{@guild.id})" %><br>
+  </div>
+  <div>
+  <% guild.gears.each do |gear|%>
+    <%= gear.name -%>  <%= gear.cost %><br>
+  <% end %>
+  </div>
+</div>
+

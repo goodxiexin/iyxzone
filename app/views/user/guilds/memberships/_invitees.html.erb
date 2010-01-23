@@ -1,21 +1,19 @@
-<% invitees.each do |invitee| %>
-<% invitation = @guild.invitations.find_by_user_id(invitee.id) %>
-<div class='friend' id='guild_invitation_<%= invitation.id %>'>
-  <%= avatar invitee %>
+<% memberships.each do |membership| %>
+<% character = membership.character %>
+<% user = membership.user %>
+<div class='friend' id='guild_invitation_<%= membership.id %>'>
+  <%= avatar user %>
   <div class='user-link'>
-    <%= profile_link invitee %><br/>
-    <span class='friend-tiny'>
-      <%= "邀请发送于#{ftime invitation.created_at }" %>
-    </span>
+    <%= membership.character.name %><br/>
   </div>
   <div class='operation'>
-    <%= link_to '发站内信', new_mail_url(:recipient_id => invitee.id) %>
+    <%= link_to '发站内信', new_mail_url(:recipient_id => user.id) %>
   </div> 
 </div>
 <% end %>
 
 <% if @remote %>
-	<%= will_paginate invitees, :renderer => "RemoteLinkRenderer", :remote => @remote %>
+	<%= will_paginate memberships, :renderer => "RemoteLinkRenderer", :remote => @remote %>
 <% else %>
-	<%= will_paginate invitees %>
+	<%= will_paginate memberships %>
 <% end %>

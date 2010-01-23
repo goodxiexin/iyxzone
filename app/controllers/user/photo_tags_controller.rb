@@ -4,12 +4,12 @@ class User::PhotoTagsController < UserBaseController
   before_filter :deleteable_required, :only => [:destroy]
 
   def create
-    @tag = Photo.new((params[:tag] || {}).merge({:poster_id => current_user.id}))
+    @tag = PhotoTag.new((params[:tag] || {}).merge({:poster_id => current_user.id}))
     if @tag.save
 			render :text => (@tag.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:poster => {:only => [:login, :id]}, :tagged_user => {:only => [:login, :id]}})
 		else
       render :update do |page|
-        page << "alert('错误，稍后再试');"
+        page << "alert('#{@tag.errors.on_base}');"
       end
     end
   end

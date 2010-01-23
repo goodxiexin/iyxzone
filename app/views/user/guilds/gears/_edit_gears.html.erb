@@ -1,0 +1,20 @@
+<h3>编辑装备</h3>
+
+<% form_for :guild, :html => {:id => 'gears_form'} do |f| %>
+<div id='guild_gears'>
+  <% @guild.gears.each do |gear| %>
+    <div id='gear_<%= gear.id %>'>
+    <% fields_for "guild[existing_gears][]", gear do |b| %>
+      <div><label>名称: </label></div>
+      <div><%= b.text_field :name %></div>
+      <div><label>成本: </label></div>
+      <div><%= b.text_field :cost %></div>
+    <% end %>
+    <%= link_to_function "x", "Iyxzone.Guild.Editor.removeGear(#{gear.id}, #{@guild.id}, '#{form_authenticity_token}')" %>
+    </div>
+  <% end %>
+</div>
+  <%= link_to_function '添加装备', "Iyxzone.Guild.Editor.newGear()" %>
+  <%= button_to_function '保存', "Iyxzone.Guild.Editor.updateGears(#{@guild.id})" %>
+  <%= link_to_function "取消", "Iyxzone.Guild.Editor.cancelEditGears()" %>
+<% end %>

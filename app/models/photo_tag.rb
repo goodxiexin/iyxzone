@@ -4,7 +4,7 @@ class PhotoTag < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User'
 
-  belongs_to :photo, :polymorphic => true
+  belongs_to :photo
 
 	has_many :notices, :as => 'producer', :dependent => :destroy
 

@@ -1,0 +1,18 @@
+<table>  
+  <% i = 0 %>
+  <% @characters.each do |character| %>
+    <% if i == 0%>
+      <tr>
+    <% end %>
+    <td class='icon' onclick="Iyxzone.Invitation.Builder.onClick(this, <%= character.id %>, <%= character.user_id %>);" onmouseout="Iyxzone.Invitation.Builder.onMouseOut(this, <%= character.id %>);" onmouseover="Iyxzone.Invitation.Builder.onMouseOver(this, <%= character.id %>);">
+      <%= avatar_image character.user %>
+      <%= character.user.login %>
+      <%= character.name %>
+    </td>
+    <% i = i + 1 %>
+    <% if i == 4 %>
+      </tr>
+      <% i = 0 %>
+    <% end %>
+  <% end %>
+</table>

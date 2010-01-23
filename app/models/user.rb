@@ -98,6 +98,12 @@ class User < ActiveRecord::Base
 
 	has_many :servers, :through => :characters, :uniq => true
 
+  def friend_characters opts={}
+    game_cond = ActiveRecord::Base.send(:sanitize_sql_hash_for_conditions, opts, "game_characters")
+    game_cond = "AND #{game_cond}" unless game_cond.blank?
+    GameCharacter.find(:all, :joins => "INNER JOIN friendships where friendships.user_id = #{id} AND friendships.friend_id = game_characters.id #{game_cond}")
+  end
+
 	def interested_in_game? game
     !game_attentions.find_by_game_id(game.id).nil?
   end

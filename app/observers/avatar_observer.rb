@@ -18,6 +18,9 @@ class AvatarObserver < ActiveRecord::Observer
 	def after_create avatar
     return unless avatar.thumbnail.blank?
 
+    # set cover
+    avatar.album.update_attributes(:cover_id => avatar.id)
+
     # increment counter
     avatar.poster.raw_increment :photos_count
     avatar.album.raw_increment :photos_count

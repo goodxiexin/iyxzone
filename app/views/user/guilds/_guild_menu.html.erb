@@ -1,26 +1,27 @@
-  <div class='formcontent'>
-		<% if @membership.blank? %>
-			<span class='subtitle'>你还没加入这个工会里，是否<%= link_to '加入', new_guild_request_url(@guild, :show => 1), :rel => 'facebox' %></span>
-		<% elsif @membership.is_invitation? %>
-			<span class='subtitle'>你被邀请加入这个工会</span>
-			<%= radio_button :invitation, :status, 1, :onclick => "new Ajax.Request('#{accept_guild_invitation_url(@guild, @membership, :show => 1, :authenticity_token => form_authenticity_token )}', {method: 'put'});" %><%= label_tag '', '接受' %><br/>
-			<%= radio_button :invitation, :status, 2, :onclick => "new Ajax.Request('#{decline_guild_invitation_url(@guild, @membership, :show => 1, :authenticity_token => form_authenticity_token)}', {method: 'delete'});" %><%= label_tag '', '拒绝' %><br/>
-		<% elsif @membership.is_request? %>
-      <span class='subtitle'>你已经申请加入这个工会了，请耐心等待会长回复</span>
-    <% elsif @membership.is_president? %>
-      <li><%= link_to '编辑工会', edit_guild_url(@guild) %></li>
-      <li><%= link_to '邀请更多人', new_guild_invitation_url(@guild) %></li>
-			<li><%= link_to '创建活动', new_event_url %></li>
-			<li><%= link_to '人事任命', guild_memberships_url(@guild) %></li>
-      <li><%= link_to '上传图片', new_guild_photo_url(:album_id => @guild.album.id) %></li>
-      <li><%= link_to '到论坛去看看', forum_url(@guild.forum) %></li>
-    <% elsif @membership.is_veteran? %>
-      <li><%= link_to '到论坛去看看', forum_url(@guild.forum) %></li>
-			<li><%= link_to '创建活动', new_event_url %></li>
-      <li><%= link_to '上传图片', new_guild_photo_url(:album_id => @guild.album.id) %></li>
-      <li><%= link_to '发信给会长', new_mail_url(:recipient_id => @guild.president_id) %></li>
-    <% elsif @membership.is_member? %>
-      <li><%= link_to '到论坛去看看', forum_url(@guild.forum) %></li>
-      <li><%= link_to '发信给会长', new_mail_url(:recipient_id => @guild.president_id) %></li>
+<div class='formcontent'>
+  <% if @role.blank? %>
+    <% if @guild.is_requestable_by? current_user %>
+		<span class='subtitle'>你还没加入这个工会里，是否 <%= facebox_link '加入', new_guild_request_url(@guild, :show => 1) %></span>
+    <% else %>
+    <span class='subtitle'>你没有游戏角色可以加入这个工会</span>
     <% end %>
-  </div>
+  <% elsif @role.is_president? %>
+    <li><%= facebox_link '编辑工会', edit_guild_url(@guild) %></li>
+    <li><%= link_to '邀请更多人', new_guild_invitation_url(@guild) %></li>
+    <li><%= link_to '创建活动', new_event_url(:guild_id => @guild.id) %></li>
+    <li><%= link_to '人事任命', guild_memberships_url(@guild) %></li>
+    <li><%= link_to '编辑规则', edit_rules_guild_url(@guild) %></li>
+    <li><%= link_to '上传图片', new_guild_photo_url(:album_id => @guild.album.id) %></li>
+    <li><%= link_to '逛逛论坛', forum_url(@guild.forum) %></li>
+  <% elsif @role.is_veteran? %>
+		<li><%= link_to '创建活动', new_event_url(:guild_id => @guild.id) %></li>
+    <li><%= link_to '上传图片', new_guild_photo_url(:album_id => @guild.album.id) %></li>
+    <li><%= link_to '编辑规则', {:controller => 'user/guilds', :action => 'edit_rules'} %></li>
+    <li><%= link_to '到论坛去看看', forum_url(@guild.forum) %></li>
+    <li><%= link_to '发信给会长', new_mail_url(:recipient_id => @guild.president_id) %></li>
+  <% elsif @membership.is_member? %>
+    <li><%= link_to '逛逛论坛', forum_url(@guild.forum) %></li>
+    <li><%= link_to '编辑规则', {:controller => 'user/guilds', :action => 'edit_rules'} %></li>
+    <li><%= link_to '发信给会长', new_mail_url(:recipient_id => @guild.president_id) %></li>
+  <% end %>
+</div>

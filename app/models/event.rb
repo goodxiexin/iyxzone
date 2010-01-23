@@ -4,37 +4,53 @@ class Event < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User'
 
+  belongs_to :poster_character, :class_name => 'GameCharacter', :foreign_key => 'character_id'
+
   belongs_to :game
 
   belongs_to :game_server
 
   belongs_to :game_area
 
-	named_scope :hot, :conditions => ["start_time > ?", Time.now.to_s(:db)], :order => 'confirmed_count DESC'
+  belongs_to :guild
+
+	named_scope :hot, :conditions => {:expired => 0}, :order => 'confirmed_count DESC'
 	
-	named_scope :recent, :conditions => ["start_time > ?", Time.now.to_s(:db)], :order => 'start_time DESC'
+	named_scope :recent, :conditions => {:expired => 0}, :order => 'start_time DESC'
 
-  has_many :participations, :dependent => :destroy
+  has_many :participations, :dependent => :delete_all # we dont want to trigger participation destroy callback here, it's slow.
 
-  has_many :invitations, :class_name => 'Participation', :conditions => {:status => 0}, :dependent => :destroy
+  has_many :invitations, :class_name => 'Participation', :conditions => {:status => 0}
   
-  has_many :requests, :class_name => 'Participation', :conditions => {:status => [1,2]}, :dependent => :destroy
+  has_many :requests, :class_name => 'Participation', :conditions => {:status => [1,2]}
 
-	with_options :through => :participations, :source => 'participant' do |event|
+	with_options :through => :participations, :source => 'participant', :uniq => true do |event|
 
 		event.has_many :invitees, :conditions => "participations.status = 0"
 
-		event.has_many :requestors, :conditions => "participations.status = 1 OR participations.status = 2"
+		event.has_many :requestors, :conditions => "participations.status = 1"
 
 		event.has_many :confirmed_participants, :conditions => "participations.status = 3"
 
 		event.has_many :maybe_participants, :conditions => "participations.status = 4"
 
-		event.has_many :declined_participants, :conditions => "participations.status = 5"
-
-		event.has_many :participants, :conditions => "participations.status = 3 or participations.status = 4 or participations.status = 5"
+		event.has_many :participants, :conditions => "participations.status = 3 or participations.status = 4"
 
 	end
+
+  with_options :through => :participations, :source => 'character' do |event|
+
+    event.has_many :invite_characters, :conditions => "participations.status = 0"
+
+    event.has_many :request_characters, :conditions => "participations.status = 1"
+
+    event.has_many :confirmed_characters, :conditions => "participations.status = 3"
+
+    event.has_many :maybe_characters, :conditions => "participations.status = 4"
+
+    event.has_many :characters, :conditions => "participations.status = 3 or participations.status = 4"
+
+  end
 
   acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, event, comment| event.poster == user}, 
@@ -45,75 +61,117 @@ class Event < ActiveRecord::Base
 	searcher_column :title
 
   def has_participant? user
-    !participations.find(:first, :conditions => {:status => [3,4,5], :participant_id => user.id}).blank?
+    !participations.find(:first, :conditions => {:status => [3,4], :participant_id => user.id}).blank?
   end
 
-  def past
-    start_time < Time.now
+  def has_character? character
+    !participations.find(:first, :conditions => {:status => [3,4], :character_id => character.id}).blank?
   end
 
-  def requestable_by user
-    privilege == 1 || (privilege == 2 and poster.has_friend? user)
+  def participations_for user
+    participations.find(:all, :conditions => {:status => [3,4], :participant_id => user.id})
   end
+
+  def is_guild_event?
+    !guild_id.nil?
+  end
+
+  def was_guild_event?
+    !guild_id_was.nil?
+  end
+
+  def requestable_by? user
+    return false if expired
+
+    if is_guild_event?
+      guild.has_member? user
+    else
+      privilege == 1 || (privilege == 2 and poster.has_friend? user)
+    end
+  end
+
+  # poster_id, game_server_id, game_area_id, game_id 不能改
+  # guild_id 不能改，如果存在的话
 
   def validate
-    # check poster
-    errors.add_to_base("没有作者") if poster_id.blank?
-
     # check title
     if title.blank?
       errors.add_to_base("标题不能为空")
+      return
     elsif title.length > 100
       errors.add_to_base("标题太长，最长100个字符")
+      return
     end
 
     # check description
     if description.blank? 
       errors.add_to_base("描述不能为空")
+      return
     elsif description.length > 10000
       errors.add_to_base("描述最长10000个字符")
+      return
     end
-
-    # check game, game area, game server
-    if game_id.blank?
-      errors.add_to_base("游戏类别不能为空")
-    else
-      game = Game.find(:first, :conditions => {:id => game_id})
-      if game.nil?
-        errors.add_to_base("游戏不存在")
-      elsif game.no_areas
-        if !game_area_id.blank?
-          errors.add_to_base("游戏服务区应该为空")
-        elsif game_server_id.blank?
-          errors.add_to_base("游戏服务器不能为空")
-        elsif game.servers.find(:first, :conditions => {:id => game_server_id}).nil?
-          errors.add_to_base("游戏服务器不存在或者不属于该游戏")
-        end
-      else
-        area = game.areas.find(:first, :conditions => {:id => game_area_id})
-        if area.nil?
-          errors.add_to_base("游戏服务区不能为空")
-        elsif game_server_id.blank?
-          errors.add_to_base("游戏服务器不能为空")
-        elsif area.servers.find(:first, :conditions => {:id => game_server_id}).nil?
-          errors.add_to_base("游戏服务器不存在或者不属于该区域")
-        end
-      end
-    end 
 
     # check start time
     if start_time.blank?
       errors.add_to_base("开始时间不能为空")
+      return
     elsif start_time <= Time.now 
       errors.add_to_base("开始时间不能比现在早")
+      return
     end
 
     # check end time
     if end_time.blank?
       errors.add_to_base("结束时间不能为空")
+      return
     elsif start_time and end_time <= start_time
       errors.add_to_base("结束时间不能比开始时间早")
+      return
+    end
+
+  end
+
+  def validate_on_create
+    # poster_id = current_user.id, 不能改变
+
+    if is_guild_event?
+      if Guild.find(:first, :conditions => {:id => guild_id}).blank?
+        errors.add_to_base("工会不存在")
+        return
+      end
+      # game_id, game_area_id和game_server_id都是被自动赋值，不需要检查
+    else
+      if character_id.blank?
+        errors.add_to_base("没有游戏角色")
+        return
+      elsif GameCharacter.find(:first, :conditions => {:user_id => poster_id, :id => character_id}).blank? 
+        errors.add_to_base("游戏角色不存在")
+        return
+      end
     end
   end
+
+  attr_readonly :poster_id, :character_id, :game_id, :game_area_id, :game_server_id, :guild_id
+
+  attr_protected :expired
+
+=begin
+  def validate_on_update
+    if poster_id_changed?
+      errors.add_to_base("不能修改poster_id")
+    elsif character_id_changed?
+      errors.add_to_base("不能修改character_id")
+    elsif game_id_changed?
+      errors.add_to_base("不能修改game_id")
+    elsif game_area_id_changed?
+      errors.add_to_base("不能修改game_area_id")
+    elsif game_server_id_changed?
+      errors.add_to_base("不能修改game_server_id")
+    elsif was_guild_event? and guild_id_changed?
+      errors.add_to_base("不能修改guild_id")
+    end
+  end
+=end
 
 end

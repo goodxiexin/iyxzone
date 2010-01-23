@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091228153258) do
+ActiveRecord::Schema.define(:version => 20100119075038) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -39,6 +39,15 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.integer  "viewings_count",                     :default => 0
     t.boolean  "draft",                              :default => true
     t.integer  "privilege",                          :default => 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "bosses", :force => true do |t|
+    t.string   "name"
+    t.integer  "game_id"
+    t.integer  "guild_id"
+    t.integer  "reward"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -101,19 +110,21 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
   create_table "events", :force => true do |t|
     t.string   "title"
     t.integer  "poster_id"
+    t.integer  "character_id"
     t.integer  "game_id"
     t.integer  "game_server_id"
     t.integer  "game_area_id"
+    t.integer  "guild_id"
     t.datetime "start_time"
     t.datetime "end_time"
+    t.boolean  "expired",           :default => false
     t.text     "description"
-    t.integer  "privilege",        :default => 1
-    t.integer  "comments_count",   :default => 0
-    t.integer  "invitees_count",   :default => 0
-    t.integer  "requestors_count", :default => 0
-    t.integer  "confirmed_count",  :default => 0
-    t.integer  "maybe_count",      :default => 0
-    t.integer  "declined_count",   :default => 0
+    t.integer  "privilege",         :default => 1
+    t.integer  "comments_count",    :default => 0
+    t.integer  "invitations_count", :default => 0
+    t.integer  "requests_count",    :default => 0
+    t.integer  "confirmed_count",   :default => 0
+    t.integer  "maybe_count",       :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -243,6 +254,16 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.datetime "updated_at"
   end
 
+  create_table "gears", :force => true do |t|
+    t.string   "name"
+    t.string   "gear_type"
+    t.integer  "boss_id"
+    t.integer  "guild_id"
+    t.integer  "cost"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "guild_friendships", :force => true do |t|
     t.integer  "guild_id"
     t.integer  "friend_id"
@@ -250,16 +271,28 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.datetime "updated_at"
   end
 
+  create_table "guild_rules", :force => true do |t|
+    t.string   "reason"
+    t.integer  "outcome"
+    t.integer  "rule_type"
+    t.integer  "guild_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "guilds", :force => true do |t|
     t.string   "name"
     t.integer  "game_id"
+    t.integer  "game_area_id"
+    t.integer  "game_server_id"
     t.string   "description"
     t.integer  "president_id"
-    t.integer  "members_count",    :default => 0
-    t.integer  "veterans_count",   :default => 0
-    t.integer  "invitees_count",   :default => 0
-    t.integer  "requestors_count", :default => 0
-    t.integer  "comments_count",   :default => 0
+    t.integer  "character_id"
+    t.integer  "members_count",     :default => 0
+    t.integer  "veterans_count",    :default => 0
+    t.integer  "invitations_count", :default => 0
+    t.integer  "requests_count",    :default => 0
+    t.integer  "comments_count",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -285,7 +318,7 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
     t.integer  "guild_id"
-    t.integer  "president_id"
+    t.integer  "character_id"
     t.integer  "status"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -320,6 +353,7 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
 
   create_table "participations", :force => true do |t|
     t.integer  "participant_id"
+    t.integer  "character_id"
     t.integer  "event_id"
     t.integer  "status"
     t.datetime "created_at"

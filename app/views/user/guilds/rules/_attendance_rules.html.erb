@@ -1,0 +1,11 @@
+<div>
+<h3> 出勤规则</h3>
+<div>
+  <%= link_to_function '(编辑)', "Iyxzone.Guild.Editor.editAttendanceRules(#{guild.id})" %>
+</div>
+<div>
+<% guild.attendance_rules.each do |rule|%>
+  <%= rule.reason -%>  <%= rule.outcome %><br>
+<% end %>
+</div>
+</div>

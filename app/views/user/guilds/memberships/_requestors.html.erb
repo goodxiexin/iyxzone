@@ -1,22 +1,23 @@
-<% requestors.each do |requestor| %>
-<% request = @guild.requests.find_by_user_id(requestor.id) %>
-<div class='friend' id='guild_request_<%= request.id%>'>
-  <%= avatar requestor %>
+<% memberships.each do |membership| %>
+<% character = membership.character %>
+<% user = membership.user %>
+<div class='friend' id='guild_request_<%= membership.id%>'>
+  <%= avatar user %>
   <div class='user-link'>
-    <%= profile_link requestor %><br/>
+    <%= membership.character.name %><br/>
   </div><br/>
-  <div class='operation' id='guild_request_option_<%= request.id %>'>
+  <div class='operation' id='guild_request_option_<%= membership.id %>'>
 		<% if current_user == @guild.president %>
-			<%= link_to_remote '接受', :url => accept_guild_request_url(@guild, request, :show => 2), :method => :put  %> |
-			<%= facebox_confirm '拒绝', decline_guild_request_url(@guild, request, :show => 2), {:method => :delete, :msg => '你确定吗'} %>
+			<%= link_to_remote '接受', :url => accept_guild_request_url(@guild, membership, :show => 2), :method => :put  %> |
+			<%= facebox_confirm '拒绝', decline_guild_request_url(@guild, membership, :show => 2), {:method => :delete, :msg => '你确定吗'} %>
 		<% end %>
 	</div>
 </div>
 <% end %>
 
 <% if @remote %>
-  <%= will_paginate requestors, :renderer => "RemoteLinkRenderer", :remote => @remote %>
+  <%= will_paginate memberships, :renderer => "RemoteLinkRenderer", :remote => @remote %>
 <% else %>
-  <%= will_paginate requestors %>
+  <%= will_paginate memberships %>
 <% end %>
 

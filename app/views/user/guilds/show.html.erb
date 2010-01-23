@@ -11,14 +11,17 @@
 	</div>
 </div>
 <div class="info-list">
-	<%= render :partial => 'guild_menu' %>
+	<%= render :partial => 'guild_info' %>
 </div>
 <div class="info-list">
-	<%= render :partial => 'guild_info' %>
+  <%= render :partial => 'guild_menu' %>
 </div>
 <% end %>
 
 <% content_for :right do %>
+<% if @memberships.count != 0 %>
+  <%= render :partial => 'my_memberships' %>
+<% end %>
 <% if @guild.forum.topics_count != 0 %>
 	<%= render :partial => 'guild_topics' %>
 <% end %>
@@ -53,10 +56,10 @@
 </div>
 
 <div class="multibox">
-	<div class="title"><%= link_to "更多(#{@guild.all_count})", guild_memberships_url(@guild, :type => 0) %><b>会员</b></div>
+	<div class="title"><%= link_to "更多(#{@guild.people_count})", guild_memberships_url(@guild, :type => 0) %><b>会员</b></div>
   <div class="photolist-box">
 		<ul class="collection s_clear">
-		<% @guild.all_members[0..6].each do |m| %>
+		<% @guild.people[0..6].each do |m| %>
 			<li>
 				<div class="middle"><div class="middle-center"><div class="center"><%= avatar m, :class => 'imgbox01' %></div></div></div>
         <p><%= profile_link m %></p>
@@ -78,7 +81,7 @@
 </div>
 <% end %>
 
-<% if @membership and (@membership.is_authorized? or @membership.is_president?)%>
+<% if @role and (@role.is_president? or @role.is_authorized?) %>
   <%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @guild, :recipient => @guild.president, :with_comments => false} %>
 <% else %>
   <div class='bookbox'>
@@ -92,7 +95,7 @@
 
 </div>
 
-<% if @membership and [3,4,5].include?(@membership.status) and params[:reply_to] %>
+<% if @role and (@role.is_president? or @role.is_authorized?) and params[:reply_to] %>
 <%= javascript_tag "
   set_wall_box('#{@reply_to.login}', #{@reply_to.id})
 " %>
