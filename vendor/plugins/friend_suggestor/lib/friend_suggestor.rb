@@ -24,7 +24,7 @@ module FriendSuggestor
 
 		#	guilds
 		all_guilds.sort_by{rand}.each do |guild|
-			guild.all_members.sort_by{rand}.each do |p|
+			guild.people.sort_by{rand}.each do |p|
 				if p != self and !self.has_friend?(p) and !self.wait_for?(p) and !p.wait_for?(self) 
 					friend_suggestions[p.id] += 1
 				end

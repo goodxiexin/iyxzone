@@ -1,61 +1,145 @@
-<%= javascript_include_tag 'status' %>
-
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="app-status">状态</h1>
     <div class="box02 canvas_int">
-      <div class="tab tab01">
-        <ul>
-        <% if @user == current_user %>
-          <li class='hover'><span><%= link_to "我的状态", statuses_url(:id => @user.id) %></span></li>
-        <% else %>
-          <li><span><%= link_to "我的状态", statuses_url(:id => current_user.id) %></span></li>
-        <% end %>
-          <li><span><%= link_to "好友的状态", friends_statuses_url %></span></li>
-        </ul>
-      </div>
-      <div class="piclist-rows">
-      <% if current_user == @user %>
-        <div class="bookbox">
-          <h3><label>你正在干什么?</label></h3>
-          <div class="formcontent s_clear">
-          <% form_for :status, :html => {:id => 'status_form'} do |f| %>
-            <%= hidden_field_tag 'home', 0 %>
-            <div class="rows">
-              <div class="textarea-wrap"><div class="textarea-wide">
-                <%= f.text_area 'content', :class => 'textarea', :onkeyup => "limit_words_of_textarea(this, 140, 'words_count');" %>
-              </div></div>
-            </div>
-            <div class="buttons">
-              <span class="button"><span>
-                <button type='button' onclick="Iyxzone.Status.Builder.save(this)" class='confirm-button' >发布</button>
-              </span></span>   
-              <%= emotion_link 'comment_content' %>
-              <div id="words_count" class="status-count">0/140</div>
-            </div>
-          <% end %>
-          </div>
-        </div>
-      <% else %>
-        <div class='path-box'>
-          <label><%= profile_link @user %></label>
-          <span>状态(<%= @user.statuses_count %>个)</span>
-        </div>
-      <% end %>
-        <div id='statuses'>
-        <%= render :partial => 'status', :collection => @statuses %>
-        </div> 
-      </div>
-      <%= will_paginate @statuses %>
-    </div>
-  </div></div>
-</div></div></div></div>
+                        <div class="tab tab01">
 
-<% @reply_to = User.find(params[:reply_to]) unless params[:reply_to].nil?%>
-<% @status = Status.find(params[:status_id]) unless params[:status_id].nil?%>
-<% if @reply_to and @status %>
-<script type="text/javascript">
-  Iyxzone.Comment.set('status', <%= @status.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
-</script>
-<% end %>
+                          
 
+                            <ul>
+
+                                 <li><span><a href="#">我的状态</a></span></li>
+
+                                 <li class="hover"><span><a href="#">好友的状态</a></span></li>
+
+                      </ul>
+
+                        
+
+                        </div>
+
+                        
+
+                        <div id="homeComposer" class="cmt-space">
+
+                          <div class="img">
+
+                            <div class="mcAvatar jl-mcAvatar"> <a href="#"></a>
+
+                              <div class="picwrap"> <a href="#"><img alt="" src="images/photo/photo13.png" class="imgbox01"/></a> </div>
+
+                            </div>
+
+                          </div>
+
+                          <div class="mcContent">
+
+                            <div class="mcPanel round02 round_r_t">
+
+                              <div class="round_l_t">
+
+                                <div class="round_r_b">
+
+                                  <div class="round_l_b">
+
+                                    <div class="round_m jl-round_m"> <span class="arrow-dialog"></span>
+
+                                      <div class="round_body">
+
+                                        <form class="formcontent s_clear" action="">
+
+                                          <div class="fldvalue">
+
+                                            <div id="mcStatus" class="textfield02" style="width:500px;">
+
+                                              <textarea name="textfield">你正在干嘛呢？</textarea>
+
+                                            </div>
+
+                                          </div>
+
+                                          <div class="fldbtn jl-fldbtn"> <span class="button03"><span>
+
+                                            <button type="submit">发布</button>
+
+                                            </span></span> </div>
+
+                                        </form>
+
+                                        <div class="buttons home-dialog"> <span class="left">40/160</span> <span class="right"><a class="icon-face" href="#">表情</a></span> </div>
+
+                                      </div>
+
+                                    </div>
+
+                                  </div>
+
+                                </div>
+
+                              </div>
+
+                            </div>
+
+                          </div>
+
+                        </div>
+
+                          
+
+                        <div class="feed-box01 list-v2">
+
+                          
+
+                            <div class="list-v2-head">以下是您所发布过的所有状态</div>
+
+                            
+
+                            <div class="feed-img-list">
+
+                                <div class="feed-list">
+
+                                    <div class="feed-img"><a href="#"><img alt="" src="images/photo/photo11.png" class="imgbox01"/></a></div>
+
+                                    <div class="feed-header">
+
+                                      <a href="#" class="icon2-close right"></a>
+
+                                        <p><a href="#">沈文博</a>：我太不会讲话，只能等，静静的，但愿能有彩虹 我太不会讲话，只能等，静静的 我太不会讲话，只能等，静静的</p>
+
+                                    </div>
+
+                                    <div class="feeds">2009-9-29 7:29am <a href="#">12条回复</a></div>
+
+                                </div>
+
+                                <div class="feed-list">
+
+                                    <div class="feed-img"><a href="#"><img alt="" src="images/photo/photo11.png" class="imgbox01"/></a></div>
+
+                                    <div class="feed-header">
+
+                                      <a href="#" class="icon2-close right"></a>
+
+                                        <p><a href="#">沈文博</a>：我太不会讲话，只能等，静静的，但愿能有彩虹 我太不会讲话，只能等，静静的 我太不会讲话，只能等，静静的</p>
+
+                                    </div>
+
+                                    <div class="feeds">2009-9-29 7:29am <a href="#">12条回复</a></div>
+
+                                </div>                            </div>
+
+                            
+
+                        </div>
+
+                        
+
+                    </div>
+
+                    
+
+            </div></div>
+
+                
+
+            </div></div></div></div>
