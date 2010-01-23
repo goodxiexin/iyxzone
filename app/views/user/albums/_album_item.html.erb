@@ -18,13 +18,8 @@
   </div>
   <p class="link">
     <% if album_item.poster == current_user %>
-    <% if album_item.class.name == 'AvatarAlbum' %>
-      <%= facebox_link "编辑", edit_avatar_album_url(album_item) %> 
-    <% else %>
-      <%= facebox_link '编辑', edit_personal_album_url(album_item) %>
-    <% end %>
     <% if album_item.class.name != 'AvatarAlbum' %>
-      | <%= facebox_link '删除', confirm_destroy_personal_album_url(album_item) %> 
+      <%= facebox_link '编辑相册', edit_personal_album_url(album_item) %> | <%= facebox_link '删除相册', confirm_destroy_personal_album_url(album_item) %> 
     <% end %>
     <% end %>
   </p>

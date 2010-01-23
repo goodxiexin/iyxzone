@@ -46,7 +46,7 @@ Object.extend(Iyxzone.Comment, {
 
   save: function(commentableType, commentableID, button){
     if(Iyxzone.Comment.validate($(commentableType + '_comment_content_' + commentableID))){
-      new Ajax.Request('/comments?commentable_id=' + commentableID + '&commentable_type=' + commentableType, {
+      new Ajax.Request('/comments', { 
         method: 'post',
         parameters: $(commentableType+'_comment_form_' + commentableID).serialize(),
         onLoading: function(){

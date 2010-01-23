@@ -55,6 +55,7 @@ Object.extend(Iyxzone.Blog.Builder, {
   saveBlog: function(){
     if(this.validate()){
       this.prepare();
+			alert("saveblog");
       new Ajax.Request('/blogs', {
         method: 'post',
         parameters: this.parameters,

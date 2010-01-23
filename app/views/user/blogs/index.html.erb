@@ -33,7 +33,7 @@
           <% if @user == current_user %>
           <h4 class='gray'>你还没有日志，赶紧<%= link_to '写一篇', new_blog_url %>?</h4>
           <% else %>
-          <h4 class='gray'><%= subject %>还没写日志，是个懒货</h4>
+          <h4 class='gray'><%= subject %>还没写日志，是个懒虫</h4>
           <% end %>
         <% else %>
           <h4 class="gray">共<%= @user.blogs_count %>篇日志</h4>

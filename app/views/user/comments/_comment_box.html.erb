@@ -9,22 +9,27 @@ parameters:
 		<%= render :partial => "user/comments/comment", :object => c %>
 	<% end %>
 </div>
-<div class="box04 comment-box">
+<%= "<div class='box04 comment-box' id= 'add_#{type}_comment_#{commentable.id}'>" %>
     <%= text_area_tag 'add-comment', '添加评论...', :id => "add_#{type}_comment_#{commentable.id}", :class => "textarea txt-add-comment", :onclick => "Iyxzone.Comment.showForm('#{type}', #{commentable.id}, null)" %>
-    <div class="formcontent" id='<%= type %>_comment_<%= commentable.id %>' style="display:none">
+</div>
+    <div class="box04 word-box s_clear" id='<%= type %>_comment_<%= commentable.id %>' style="display:none">
+		<div class="img"><%= avatar current_user, :size => :small %></div>
+		<div class="form-wrap">
+			<div class="formcontent">
       <% form_remote_for :comment, :html => {:id => "#{type}_comment_form_#{commentable.id}"} do |f| %>
+				<%= hidden_field_tag 'comment[commentable_id]', commentable.id %>
+				<%= hidden_field_tag 'comment[commentable_type]', commentable.class.to_s %>
 				<%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id, :id => "#{type}_comment_recipient_#{commentable.id}" %>
         <div class="rows">
-          <%= f.text_area 'content', :class => "textarea", :id => "#{type}_comment_content_#{commentable.id}" %>
+          <%= f.text_area 'content', :class => "textarea",  :id => "#{type}_comment_content_#{commentable.id}" %>
         </div>
-        <div class="rows s_clear">
-          <span class="button"><span><button type="button" onclick="Iyxzone.Comment.save('<%= type %>', <%= commentable.id %>, this)">发表</button></span></span>
-          <span class="button button-gray"><span><button type="button" onclick="Iyxzone.Comment.hideForm('<%= type %>', <%= commentable.id %>)" >取消</button></span></span>
-          <%= emotion_link "#{type}_comment_content_#{commentable.id}" %>
+        <div class="buttons">
+          <span class="button"><span><button type="submit" onclick="Iyxzone.Comment.save('<%= type %>', <%= commentable.id %>, this)">发布</button></span></span>
+          <span class="left"><%= emotion_link "#{type}_comment_content_#{commentable.id}", :class => "icon-face"%></span>
         </div>
       <% end %>
+			</div>
     </div>
-</div>
 
 <% if params[:reply_to] %>
 <script type="text/javascript">

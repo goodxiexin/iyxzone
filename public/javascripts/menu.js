@@ -30,14 +30,6 @@ Iyxzone.Menu.Dropdown = Class.create({
       this.menu.hide();
     }else{
       Event.stop(e);
-      this.menu.setStyle({
-        position: 'absolute',
-        left: (this.root.positionedOffset().left) + 'px',
-        top: (this.root.positionedOffset().top + this.root.getHeight() + 10) + 'px',
-        width: '200px',
-        background: 'black',
-        color: 'white'
-      });
       this.menu.show();
     }
   }
@@ -69,14 +61,6 @@ Iyxzone.Menu.AjaxDropdown = Class.create({
       this.container.hide();
     }else{
       Event.stop(e);
-      this.container.setStyle({
-        position: 'absolute',
-        left: (this.root.positionedOffset().left) + 'px',
-        top: (this.root.positionedOffset().top + this.root.getHeight()) + 'px',
-        width: '200px',
-        background: 'black',
-        color: 'white'
-      });
       this.container.show();
       if(this.update.innerHTML == ''){
         this.update.innerHTML = '<img src="/images/loading.gif />';

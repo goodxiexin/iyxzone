@@ -1,11 +1,18 @@
 <% blog = blog_item2 %>
 <div class="feed-img-list">
-  <div class='feed-list'>
-    <div class='feed-img'><%= avatar blog.poster, :class => 'imgbox01' %></div>
+  <div class='feed-list eval-list'>
+		<div class="evaluate">
+		<span><%=blog.digs_count%></span>
+		<% if blog.digged_by? current_user %>
+			<a href="#">赞过了</a>
+		<% else %>
+			<%= dig_link blog %>
+		<% end %>
+		</div>
     <div class='feed-header'>
       <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Blog', :shareable_id => blog.id), :class => 'right love-btn' %>
       <h3><%= blog_link blog %></h3>
-      <p><%= profile_link blog.poster %> <%= ftime blog.created_at %></p>
+      <p><%= profile_link blog.poster, :class => "shine"%> <%= ftime blog.created_at %></p>
     </div>
     <div class='feeds'>
       <p><%= blog_content blog, :length => 20, :omission => '...' %></p>

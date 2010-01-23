@@ -10,35 +10,32 @@
 				<div class="box02 canvas_con">
 					<div id="homeComposer">
 						<div class="img">
-							<div class="mcAvatar">
+							<div class="mcAvatar jl-mcAvatar">
 								<a href="#"></a>
                 <div class="picwrap">
-                  <div class="middle"><div class="middle-center"><div class="center">
-										<img src="images/photo/photo14.png" alt="" />
-                  </div></div></div>
+										<%= avatar current_user, :class => "imgbox01" %>
                 </div>
               </div>
             </div>
             <div class="mcContent">
-							<div class="showbar">Hi，我是 <%= current_user.login %></div>
 							<div class="mcPanel round02 round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-								<div class="round_m"><div class="round_body">
+								<div class="round_m jl-round_m"><span class="arrow-dialog"></span><div class="round_body">
 									<% form_remote_for :status, :html => {:id => 'status_form', :class => "formcontent s_clear"} do |f| %>
                   <%= hidden_field_tag 'home', 1 %>
                   <div class="fldvalue">
-										<div id="mcStatus" class="textfield"><%= f.text_field :content %></div>
+										<div id="mcStatus" class="textfield02"><%= f.text_area :content %></div>
                   </div>
-                  <div class="fldbtn">
-										<span class="button"><span><button type='submit' onclick="Iyxzone.Status.Builder.save(this)">发布</button></span></span>
+                  <div class="fldbtn jl-fldbtn">
+										<span class="button03"><span><button type='submit' onclick="Iyxzone.Status.Builder.save(this)">发布</button></span></span>
                   </div>
                   <% end %>
-                  <div id='latest_status'>
+									<div class='buttons home-dialog'>
+                  <span class='left'>
 										<% unless current_user.latest_status.nil? %>
 											<%= distance_of_time_in_words_to_now(current_user.latest_status.created_at) %> ago: <%= current_user.latest_status.content %>
 										<% end %>
-									</div>
-									<div class='buttons'>
-										<%= emotion_link 'status_content', :class => 'icon-share' %>
+									</span>
+										<span class="right"><%= emotion_link 'status_content', :class => 'icon-face' %></span>
                   </div>
                 </div></div>
               </div></div></div></div>
@@ -49,27 +46,38 @@
           </div>
 					<div class="feed-box">
 						<div class="tab tab01">
-							<ul id='feed_menu'>
-								<li class='hover'><span><%= link_to_function "全部", "Iyxzone.Home.Feeder.showFeeds();" %></span></li>
+							<ul>
+								<li class='hover'><span><%= link_to_function "新鲜事", "Iyxzone.Home.Feeder.showFeeds();" %></span></li>
 								<li><span><%= link_to_function "状态", "Iyxzone.Home.Feeder.showFeeds(0);" %></span></li>
 								<li><span><%= link_to_function "日志", "Iyxzone.Home.Feeder.showFeeds(1);" %></span></li>
-								<li><span><%= link_to_function "视频", "Iyxzone.Home.Feeder.showFeeds(2);" %></span></li>
 								<li><span><%= link_to_function "照片", "Iyxzone.Home.Feeder.showFeeds(3);" %></span></li>
-								<li><span><%= link_to_function "活动", "Iyxzone.Home.Feeder.showFeeds(4);" %></span></li>
-								<li><span><%= link_to_function "投票", "Iyxzone.Home.Feeder.showFeeds(5);" %></span></li>
-								<li><span><%= link_to_function "工会", "Iyxzone.Home.Feeder.showFeeds(6);" %></span></li>
+								<li><span><%= link_to_function "分享", "Iyxzone.Home.Feeder.showFeeds(7);" %></span></li>
               </ul>
             </div>
-            <div class="feed-wrap" id='feed_list'>
+            <div class="feed-wrap">
+							<div id="feed-list">
 							<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
-            </div>
-						<div id='more_feed'>
-							<span><%= link_to_function "更多新鲜事", "Iyxzone.Home.Feeder.moreFeeds();" %></span>
+							</div>
+							<div class="s_clear"></div>
+								<div class="round04 round_r_t jl-read-more space s_clear">
+                  <div class="round_l_t">
+                    <div class="round_r_b">
+                      <div class="round_l_b">
+                        <div class="round_m">
+                          <div class="round_body" id="more_feed_button">
+														<%= link_to_function "更多新鲜事", "Iyxzone.Home.Feeder.moreFeeds();", :class => "jl-more"%>
+                          </div>
+												</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 						</div>
+							<!-- feedwrap end-->
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+				</div>
+			</div>
     <div id="rightsidebar" class="canvas_r">
 			<% if current_user.requests_count != 0 or current_user.invitations_count != 0 or current_user.poke_deliveries_count != 0 %>	
 			<div class="multibox">
