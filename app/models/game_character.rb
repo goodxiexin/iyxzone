@@ -14,6 +14,8 @@ class GameCharacter < ActiveRecord::Base
 
   belongs_to :profession, :class_name => 'GameProfession'
 
+	belongs_to :guild
+
 	acts_as_resource_feeds
 
   def validate

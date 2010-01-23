@@ -1,0 +1,16 @@
+<div class="gear_rule_rows">
+<% form_for @guild, :html => {:id => 'gear_form'} do |f| %>
+		<% f.fields_for :gears do |gr| %>
+			<div id="gear_rows">
+				<%= gr.text_field 'name' -%>
+				<%= gr.text_field 'cost' -%>
+				<% unless gr.object.new_record? %>
+					<%= gr.check_box '_delete' %>
+				  <%= gr.label '_delete', '删除' %>
+				<% end %>
+			</div>
+		<% end %>
+  <%= button_to_function '保存', "Iyxzone.GuildRule.Editor.updateGearRule(#{@guild.id}, this, #{@guild.gears.size})" %>
+  <%= link_to_function "取消", "Iyxzone.GuildRule.Editor.cancelEditGearRule()" %>
+<% end %>
+</div>

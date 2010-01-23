@@ -1,5 +1,6 @@
 <%= javascript_include_tag 'photo_slide' %>
 <%= javascript_include_tag 'guild' %>
+<<<<<<< HEAD:app/views/user/guilds/show.html.erb
 
 <% content_for :left do %>
 <div class="mcAvatar">
@@ -97,3 +98,104 @@
   set_wall_box('#{@reply_to.login}', #{@reply_to.id})
 " %>
 <% end %>
+=======
+ 
+ <% content_for :left do %>
+ <div class="mcAvatar">
+   <a href="#"></a>
+	   <div class="picwrap">
+		     <div class="middle"><div class="middle-center"><div class="center">
+				 <%= album_cover_image @album %>
+				 </div></div></div>
+				 </div>
+				 </div>
+				 <div class="info-list">
+				 <%= render :partial => 'guild_menu' %>
+				 </div>
+				 <div class="info-list">
+				 <%= render :partial => 'guild_info' %>
+				 </div>
+				 <% end %>
+				  
+					<% content_for :right do %>
+					<% if @guild.forum.topics_count != 0 %>
+					<%= render :partial => 'guild_topics' %>
+					<% end %>
+					<% if @guild.events.count != 0 %>
+					<%= render :partial => 'guild_events' %>
+					<% end %>
+					<% if false %>
+					<%= render :partial => 'guild_friends' %>
+					<% end %>
+					<% end %>
+					 
+					 <div class='box02 canvas_con'>
+					  
+						<div class="multibox">
+						<div class="title"><b>"<%= @guild.name %>"简介</b></div>
+						<div class="photolist-big-box">
+						<%= @guild.description %>
+						  </div>
+							</div>
+							 
+							 <% if @album.photos_count != 0 %>
+							 <div class="multibox">
+							 <div class="title"><%= link_to '更多', guild_album_url(@album) %><b>照片</b></div>
+							   <div class="photolist-big-box">
+								 <ul class="collection s_clear">
+								 <% @album.photos[0..4].each do |p| %>
+								 <li>
+								 <div class="middle"><div class="middle-center"><div class="center"><%= photo_link p, :class => 'imgbox02' %></a></div></div></div>
+								 </li>
+								 <% end %>
+								 </ul>
+								 </div>
+								 </div>
+								 <% end %>
+								  
+									<div class="multibox">
+									<div class="title"><%= link_to "更多(#{@guild.all_count})", guild_memberships_url(@guild, :type => 0) %><b>会员</b></div>
+									  <div class="photolist-box">
+										<ul class="collection s_clear">
+										<% @guild.all_members[0..6].each do |m| %>
+										<li>
+										<div class="middle"><div class="middle-center"><div class="center"><%= avatar m, :class => 'imgbox01' %></div></div></div>
+										        <p><%= profile_link m %></p>
+														      </li>
+																	<% end %>
+																	    </ul>
+																			  </div>
+																				</div>
+																				 
+																				 <% unless @feed_deliveries.blank? %>
+																				 <div class='multibox'>
+																				   <div class='title'><b>新鲜事</b></div>
+																					 <div class="feed-wrap" id='feed_list'>
+																					 <%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
+																					   </div>
+																						   <div id='more_feed'>
+																							 <span><%= link_to_function "更多新鲜事", "Iyxzone.Guild.Feeder.moreFeeds(#{@guild.id});" %></span>
+																							   </div>
+																								 </div>
+																								 <% end %>
+																								  
+																									<% if @membership and (@membership.is_authorized? or @membership.is_president?)%>
+																									  <%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @guild, :recipient => @guild.president, :with_comments => false} %>
+																										<% else %>
+																										  <div class='bookbox'>
+																											    只有会员才能留言
+																													  </div>
+																														<% end %>
+																														 
+																														 <div class="feed-box" id='comments'>
+																														   <%= render :partial => 'user/wall_messages/wall_message', :collection => @comments %>
+																															 </div>
+																															  
+																																</div>
+																																 
+																																 <% if @membership and [3,4,5].include?(@membership.status) and params[:reply_to] %>
+																																 <%= javascript_tag "
+																																 set_wall_box('#{@reply_to.login}', #{@reply_to.id})
+																																 " %>
+																																 <% end %>
+>>>>>>> 5e3aa790c5c5ea77594929b6f6b022f2181937c5:app/views/user/guilds/show.html.erb
