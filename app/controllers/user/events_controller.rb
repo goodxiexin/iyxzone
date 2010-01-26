@@ -34,9 +34,8 @@ class User::EventsController < UserBaseController
   end
 
   def show
-    @participation = @event.participations.find_by_participant_id(current_user.id)
+    @participations = @event.participations_for current_user
     @album = @event.album
-    @comments = @event.comments.paginate :page => params[:page], :per_page => 10
 		render :action => 'show', :layout => 'app2'
   end
 
@@ -55,6 +54,7 @@ class User::EventsController < UserBaseController
   end
 
   def edit
+    render :action => 'edit', :layout => false
   end
 
   def update

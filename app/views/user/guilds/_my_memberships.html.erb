@@ -1,25 +1,26 @@
 <div class="multibox">
   <div class="title">
     <b>状态</b>
-  </div>    
-  <div class="news-list menu-list">
-    <ul>
+  </div>
+  <table class="data-table jl-data-table" cellpadding="0">
+    <tr>
+      <th class="name name02">游戏角色名称</th>
+      <th class="level level02">公会状态</th>
+    </tr>
       <% @memberships.group_by(&:status).each do |status, memberships| %>
         <% memberships.each do |m| %>
           <% if status == Membership::President %>
-            <li><span>[会长]</span> <%= m.character.name %></li>
+            <tr><td><%= m.character.name %></td><td>会长</td></tr>
           <% elsif status == Membership::Veteran %>
-            <li><span>[长老]</span> <%= m.character.name %></li>
+            <tr><td><%= m.character.name %></td><td>长老</td></tr>
           <% elsif status == Membership::Member %>
-            <li><span>[会员]</span> <%= m.character.name %></li>
+            <tr><td><%= m.character.name %></td><td>会员</td></tr>
           <% elsif status == Membership::Invitation %>
-            <li><span>[<%= facebox_link "回复", edit_guild_invitation_url(@guild, m) %>]</span> <%= m.character.name %></li>
+            <tr><td><%= m.character.name %></td><td><%= facebox_link "回复", edit_guild_invitation_url(@guild, m) %>]</td></tr>
           <% elsif status == Membership::Request %>
-            <li><span>[请求加入...]</span> <%= m.character.name %></li>
+            <tr><td><%= m.character.name %></td><td><%= "请求加入.." %></td></tr>
           <% end %>
         <% end %>
       <% end %>
-    </ul>
-  </div>
+  </table>
 </div>
-

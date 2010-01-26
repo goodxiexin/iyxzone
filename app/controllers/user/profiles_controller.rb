@@ -11,7 +11,6 @@ class User::ProfilesController < UserBaseController
 	FetchSize = 2
 
   def show
-		@comments = @profile.comments.paginate :page => params[:page], :per_page => 10
 		@blogs = @user.blogs[0..2]
 		@albums = @user.active_albums[0..2]
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize)

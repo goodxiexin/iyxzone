@@ -1,6 +1,4 @@
-<div class='blog-right-bar'>
-  <div class='part'>
-    <%= text_field_tag 'search' %>
+    <%= text_field_tag 'search', '输入游戏角色的名字', :onclick => "this.clear();", :class => 'ipt' %>
     <%= observe_field :search,
                   :complete  => "facebox.watchClickEvents();",
                   :update    => "members",
@@ -8,5 +6,3 @@
                   :url       => search_guild_memberships_url(@guild),
                   :with      => "'key=' + $('search').value + '&type=#{params[:type]}'",
                   :method    => :get %>
-  </div>
-</div>

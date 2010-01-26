@@ -4,7 +4,7 @@ table{border:0;border-collapse:collapse;border-spacing:0;}
 h1,h2,h3,h4,h5,h6,fieldset{margin:0; padding:0;}
 
 ul {list-style:none;}
-input{font-size:12px;}
+input{font-size:12px;vertical-align:middle}
 textarea{font-size:12px;overflow:auto;color:#7E7F80;border:1px solid #bdd6ad}
 select{color:#7E7F80;}
 
@@ -57,7 +57,7 @@ a:active {text-decoration: none;}
 .rows,.buttons{clear:both;}
 
 .blk{display:block}
-
+.nowrap{overflow:hidden;word-break:keep-all;white-space:nowrap}
 
 .sperator{clear:both;margin:12px 0; background:url(../images/skin/sperator01.gif) repeat-x;height:1px;font-size:1px;}
 .sperator-wrap{margin:12px 0;background:url(../images/skin/sperator01.gif) repeat-x;}
@@ -196,7 +196,7 @@ span.icon-trash,span.icon-read,span.icon-data,span.icon-state,span.icon-game,spa
 input.gobtn,input.loginbtn,input.registbtn{display:inline-block;border:0;}
 
 /*特殊组件*/
-.selector{width:278px;height:24px;line-height:24px;border:1px #bdd6ad solid;background:#fff;/*background:url(../images/skin/tf01.png) no-repeat;*/}
+.selector{width:278px;height:24px;line-height:24px;border:1px #bdd6ad solid;background:#fff;position:relative;/*background:url(../images/skin/tf01.png) no-repeat;*/}
 .selector .dropbox{position:relative;clear:both;}
 .selector input{margin:4px 5px 0;height:16px;color:#7E7F80;border:0;background:none}
 .selector a{float:right;display:block;width:24px;height:24px;background:url(../images/skin/selectorToggle.png) no-repeat center center;overflow:hidden}
@@ -264,7 +264,6 @@ a.mbutton-navy span{background-position:left -240px;}
 /*临时*/
 a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;background:url(../images/skin/dropArrow01.gif) no-repeat}
 
-.selector01 a{display:inline-block;padding-right:13px;background:url(../images/skin/dropArrow01.gif) no-repeat right center;display:inline-block;height:15px;line-height:15px;position:relative}
 /*临时*/
 
 /*按钮样式*/
@@ -367,7 +366,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;backg
 .round_title_r_t .round_title{color:#fff;width:100%;height:35px;line-height:27px;text-align:center;overflow:hidden}
 
 .round_m{margin-right:-6px;padding:0 6px;border-left:1px #BBD2AA solid;border-right:1px #BBD2AA solid;background:#F8FCF6;word-wrap:break-word;word-break:normal;}
-.round_m .round_body{width:100%;overflow:hidden}
+.round_m .round_body{width:100%;/*overflow:hidden好友管理弹出框显示*/}
 .round_m .app-log{background:url(../images/icons/app-icons.png) no-repeat}
 .round_m .app-video{background:url(../images/icons/app-icons.png) no-repeat left -50px;}
 .round_m .app-photo{background:url(../images/icons/app-icons.png) no-repeat left -100px;}
@@ -511,6 +510,24 @@ a.msg-btn{background:url(../images/skin/msg-btn.gif) no-repeat;width:82px;height
 .cmt-box .con .submit{margin:5px 0 0 5px}
 .cmt-box textarea{width:345px;height:42px}
 
+/*通用下拉框*/
+.select-toggle{border:0}
+.selector a.toggle{position:absolute;z-index:1;right:0;display:block;width:24px;height:24px;background:url(../images/skin/selectorToggle.png) no-repeat center center;overflow:hidden}
+.drop-wrap{background:#fff;position:absolute;top:100%;left:0;z-index:100;overflow:hidden;display:block}
+.drop-wrap iframe{position:absolute;z-index:0;height:300px;width:100%;border:0;}
+/*背景阴影*/
+/*.wrap-bg{position:absolute;filter:alpha(opacity=20);opacity:0.2;z-index:-1;background:#333;margin:0;right:-2px;bottom:-2px;width:100%;height:100%}
+*/
+.drop-wrap .con{position:relative;z-index:2;border:1px solid #65a41c;margin-top:-1px}
+.drop-wrap .head{padding:5px;background:#73bd21;border-bottom:1px solid #65a41c;margin:1px;color:#fff}
+.drop-wrap .foot{text-align:center;background:#f4fdef;border-top:1px solid #bdd6ad;padding:10px 0}
+.drop-wrap .foot .button{float:none;display:inline-block}
+.drop-wrap .checkboxes li{float:left;margin:5px}
 
-
-
+/*下拉框 如：好友标记*/
+.selector01 span a{padding-right:13px;color:#333;background:url(../images/skin/dropArrow01.gif) no-repeat right center;display:inline-block;width:50px;overflow:hidden;height:15px;line-height:15px;position:relative;z-index:99999}
+.selector01 .drop-wrap{width:65px;border:1px solid #add97f;overflow:visible}
+.selector01 dl{background:#fff;position:relative;z-index:1;}
+.selector01 dl dd{text-align:center;padding:0;margin:3px;zoom:1}
+.selector01 dl dd a{display:block;padding:3px;}
+.selector01 dl dd a:hover{background-color:#73bd21;color:#fff;}

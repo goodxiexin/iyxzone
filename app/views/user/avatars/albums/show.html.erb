@@ -17,68 +17,76 @@
           <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
         </ul>       
       </div>
-      <div class="box02 pic-box">
+      <div class="pic-box">
         <div class="path-box">
-          <label>
+          <p class="left"><label>
             <% if @user == current_user %>
               <%= link_to "我的相册", personal_albums_url(:id => current_user.id) %>
             <% else %>
               <%= @user.login %>的相册
             <% end %>
           </label>
-          <span><%= album_link @album %></span><span>照片</span>
+          <span><%= album_link @album %></span><span>照片</span></p>
           <% if @user == current_user %>
-            <%= facebox_link '更改头像', new_avatar_url(:album_id => @album.id, :album => 1) %>
+            <%= facebox_link '替换头像', new_avatar_url(:album_id => @album.id, :album => 1) %>
+					<% else %>
+					<%= facebox_link '分享', new_sharing_url(:shareable_type => 'Album', :shareable_id => @album.id), :class => 'right love-btn' %>
           <% end %>
         </div>
-        <div class="piclist s_clear">
+        <table class="photo-edit-list">
+				<% k = @photos.size/4 %>
         <% if @photos.total_entries != 0 %>
-        <ul>
-        <% @photos.each do |p| %>                         
-          <li>
-            <div class="img">
-              <div class="middle"><div class="middle-center"><div class="center">
-                <%= photo_link p, :class => 'imgbox01' %>
-              </div></div></div>
-            </div>
-            <% if @user == current_user %>
-            <p>
-              <% if @user.avatar != p %>
-                <%= link_to_remote '设置为头像', :url => set_avatar_url(p) %> |
-              <% end %>
-              <%= link_to '编辑', edit_avatar_url(p), :rel => 'facebox' %>|
-              <% if @user.avatar != p %>
-                <%= facebox_confirm '删除', avatar_url(p), {:msg => "你确定要删除这个头像吗?", :method => :delete} %>
-              <% end %>
-            </p>
-            <% end %>
-          </li>
+				<% 0.upto(k) { |i| %>
+				<% if k == i%>
+					<% n = @photos.size % 4 - 1 %>
+				<% else %>
+					<% n = 3 %>
+				<% end %>
+				<% j = i*4 %>
+				<tr>
+        <% @photos[j..j+n].each do |p| %>                         
+          <td valign="bottom" width=25%>
+            <%= photo_link p, :class => 'imgbox02' %>
+					</td>
+				<% end %>
+				</tr>
+        <% if @album.poster == current_user %>
+					<tr>
+					<% @photos[j..j+n].each do |p| %>                         
+						<td> 
+						<% if @user.avatar != p %>
+						<span><%= link_to_remote '设置为头像', :url => set_avatar_url(p) %></span>
+						<% end %>
+						<%= facebox_link "", edit_avatar_url(p), :class => "icon-active icon-active-edit" %>  <%= facebox_confirm '', avatar_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete', :class => "icon-active"} %>
+						</td>
+					<% end %>
+					</tr>
         <% end %>
-        </ul>
+        <% } %>
         <%= will_paginate @photos %>
         <% else %>
-        <% if @user == current_user %>
-        <div class='gray'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :album => 1) %>吧</div>
-        <% else %>
-        <div class='gray'>还没有图片</div>
+					<% if @user == current_user %>
+					<div class='gray'>还没有图片，你赶紧<%= link_to '上传', new_personal_photo_url(:album_id => @album.id) %>吧</div>
+					<% else %>
+					<div class='gray'>还没有图片</div>
+					<% end %>
         <% end %>
-        <% end %>
-        </div>
-      </div>
+				</table>
       <div class="pic-desc">
         <% if @user == current_user %>
-          <%= in_place_text_field :span, @album, :description, true, personal_album_url(@album), {}, {:empty_text => '点击添加相册描述', :parameter_name => 'album[description]', :rows => 2, :cols => 90}, {} %>
+          <h4 class="box06"><%= in_place_text_field :span, @album, :description, true, personal_album_url(@album), {}, {:empty_text => '点击添加相册描述', :parameter_name => 'album[description]', :rows => 2, :cols => 90}, {} %></h4>
         <% else %>
-          <%= @album.description %>
+          <h4 class="box06"><%= @album.description %></h4>
         <% end %>
-        <p class="albumTime">
+        <p class="gray">
         <% unless @album.uploaded_at.blank? %>
             <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
           <% end %>
           <span class="time-create"><%= ftime @album.created_at %>创建</span>
         </p>
       </div>
-      <div class="foot">
+			</div>
+      <div class="foot cmt-space">
         <div class="feed-list">
           <h4>评论(<%= @album.comments_count %>)</h4>
           <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @album, :recipient => @user} %>

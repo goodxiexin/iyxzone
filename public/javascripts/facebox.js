@@ -131,6 +131,19 @@ var Facebox = Class.create({
 		this.locate();
 	},
 
+  show_confirm_with_callbacks: function(confirm_message, callbacks, args){
+    var html = "<div class='title01'><a class='icon-active icon-active-close' href='#' onclick='facebox.close();'></a><h1>请确认</h1></div>";
+    html += "<div class='formcontent'>" + confirm_message + "</div>";
+    html += "<div class='buttons s_clear'><table class='center' cellpadding='0'><tr><td><span class='button'><span><button type='submit' id='facebox_confirm'>确定</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></td></tr></table></div>";
+    this.remove_loading();
+    this.set_content(html);
+    this.locate();
+    Event.observe('facebox_confirm', 'click', function(){
+      callbacks(args);
+      this.close();
+    }.bind(this));
+  },
+
 	generate_validate_code: function(digits){
     this.codes = new Array(digits);       //用于存储随机验证码
     var colors = new Array("Red","Green","Gray","Blue","Maroon","Aqua","Fuchsia","Lime","Olive","Silver");
@@ -220,7 +233,8 @@ var Facebox = Class.create({
 					onFailure: function(transport){
             fb.reveal(transport.responseText, klass);
           },
-          onSuccess: function(transport){
+          onComplete: function(transport){
+            alert(transport.responseText);
             fb.reveal(transport.responseText, klass);
           }
         });

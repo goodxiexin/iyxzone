@@ -5,15 +5,13 @@ class User::Events::ParticipationsController < UserBaseController
   def index
     case params[:type].to_i
     when 0
-      @participants = @event.confirmed_participants.paginate :page => params[:page], :per_page => 20
+      @participations = @event.confirmed_participations
     when 1
-      @participants = @event.maybe_participants.paginate :page => params[:page], :per_page => 20
-    when 2
-      @participants = @event.declined_participants.paginate :page => params[:page], :per_page => 20
+      @participations = @event.maybe_participations
+		when 2
+			@participations = @event.invitations
 		when 3
-			@participants = @event.invitees.paginate :page => params[:page], :per_page => 20
-		when 4
-			@participants = @event.requestors.paginate :page => params[:page], :per_page => 20
+			@participations = @event.requests
     end
   end
 
@@ -29,6 +27,18 @@ class User::Events::ParticipationsController < UserBaseController
     end
   end
 
+  def destroy
+    if @participation.destroy
+      render :update do |page|
+        page << "$('participation_#{@participation.id}').remove();"
+      end
+    else
+      render :update do |page|
+        page << "error('发生错误');"
+      end
+    end 
+  end
+  
 protected
 
   def setup

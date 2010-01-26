@@ -155,11 +155,11 @@
 <% end %>
 
 <% if @setting.leave_wall_message_viewable_by? current_user %>
-  <%= render :layout => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user} %>
+  <%= render :layout => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>
 <% end %>
 <% if @setting.wall_viewable_by? current_user %>
   <div class='feed-box' id='comments'>
-    <%= render :partial => 'user/wall_messages/wall_message', :collection => @comments %>
+    <%= javascript_tag "Iyxzone.WallMessage.fetch('Profile', #{@profile.id})" %>
   </div>
 <% end %>
 

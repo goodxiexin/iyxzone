@@ -33,7 +33,6 @@ class User::GuildsController < UserBaseController
   end
 
   def show
-    @comments = @guild.comments.paginate :page => 1, :per_page => 10
     @memberships = @guild.memberships_for current_user
     @role = @guild.role_for current_user
     @album = @guild.album

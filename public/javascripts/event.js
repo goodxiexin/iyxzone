@@ -8,7 +8,7 @@ Object.extend(Iyxzone.Event.Builder, {
 
   gameSelector: null, 
 
-  validate: function(){
+  validate: function(onCreate){
     var title = $('event_title');
     if(title.value == ''){
       error('标题不能为空');
@@ -26,23 +26,6 @@ Object.extend(Iyxzone.Event.Builder, {
     }
     if(description.value.length > 10000){
       error('描述最长10000个字符');
-      return false;
-    }
-
-    var details = this.gameSelector.getDetails();
-    var game = $('event_game_id');
-    var server = $('event_game_server_id');
-    var area = $('event_game_area_id');
-    if(game.value == ''){
-      error('游戏类别不能为空');
-      return false;
-    }
-    if(!details.no_servers && server.value == ''){
-      error('服务器不能为空');
-      return false;
-    }
-    if(!details.no_areas && area.value == ''){
-      error('服务区不能为空');
       return false;
     }
 
@@ -69,23 +52,84 @@ Object.extend(Iyxzone.Event.Builder, {
       return false;
     }
 
+    if(onCreate){
+      var is_guild_event = $('is_guild_event').checked;
+      if(is_guild_event){
+        var guild_id = $('event_guild_id').value;
+        if(guild_id == ''){
+          error('工会活动必须选择工会');
+          return false;
+        }
+      }
+      
+      var character_id = $('event_character_id').value;
+      if(character_id == ''){
+        error('游戏角色必须选择');
+        return false
+      }
+    }
+
     return true;
   },
 
-  save: function(){
-    if(this.validate()){
+  save: function(event){
+    Event.stop(event);
+    if(this.validate(true)){
       var form = $('event_form');
       form.action = '/events';
+      form.method = 'post';
       form.submit();
     }
   },
 
-  update: function(event){
+  update: function(eventID, event){
     Event.stop(event);
-    if(this.validate()){
+    if(this.validate(false)){
       var form = $('event_form');
+      form.action = '/events/' + eventID;
+      form.method = 'put';
       form.submit();
     }
+  },
+
+  userCharactersHTML: null,
+
+  checkGuild: function(checkBox){
+    if(checkBox.checked){
+      this.userCharactersHTML = $('event_character_id').innerHTML;
+      $('event_guild_selector').show();
+      $('event_guild_id').value = '';
+      $('event_character_id').innerHTML = "<option value=''>---</option>";
+    }else{
+      $('event_guild_id').value = '';
+      $('event_guild_selector').hide();
+      $('event_character_id').innerHTML = this.userCharactersHTML;
+    }
+  },
+
+  guildOnChange: function(guildID){
+    if(guildID == ''){
+      $('event_character_id').innerHTML = "<option value=''>---</option>";
+      return;
+    }
+
+    new Ajax.Request('/guilds/' + guildID + '/characters', {
+      method: 'get',
+      onSuccess: function(transport){
+        var characters = transport.responseText.evalJSON();
+        var selector = new Element('select');
+        $('event_character_id').innerHTML = "<option value=''>---</option>";
+        for(var i=0;i <characters.length;i++){
+          var option = new Element('option', {value: characters[i].game_character.id}).update(characters[i].game_character.name);
+          Element.insert($('event_character_id'), {bottom: option});
+        }
+      }.bind(this)
+    });
+  },
+
+  reset: function(){
+    $('event_character_id').value = '';
+    $('is_guild_event').checked = false;
   }
-  
+
 });

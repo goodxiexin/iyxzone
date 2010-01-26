@@ -193,7 +193,9 @@ Iyxzone.Friend.Tagger = Class.create({
 
     // set text box list
     this.taggedUserList = new TextBoxList(input, {
-      onBoxDispose: this.removeTag.bind(this)
+      onBoxDispose: this.removeTag.bind(this),
+      holderClassName: 'friend-select-list s_clear',
+      bitClassName: '' 
     });
       
     for(var i=0;i<friendIDs.length;i++){

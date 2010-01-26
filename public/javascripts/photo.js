@@ -170,6 +170,7 @@ Iyxzone.Photo.Tagger = Class.create({
      * confirm button events 
      */
     Event.observe(this.confirmButton, 'click', function(e){
+      Event.stop(e);
       this.save();  
     }.bind(this));
 
@@ -177,6 +178,7 @@ Iyxzone.Photo.Tagger = Class.create({
      * cancel button event
      */
     Event.observe(this.cancelButton, 'click', function(e){
+      Event.stop(e);
       this.reset();
     }.bind(this));
 
@@ -242,7 +244,7 @@ Iyxzone.Photo.Tagger = Class.create({
       var deleteLink = new Element('a', {href: '#', class: 'icon-active'});
       rect.appendChild(deleteLink);
       deleteLink.observe('click', function(e){
-        this.remove(tagInfo.photo_tag.id);
+        facebox.show_confirm_with_callbacks('你确定要删除这个标价吗?', this.remove.bind(this), tagInfo.photo_tag.id);// this.remove(tagInfo.photo_tag.id);
       }.bind(this));
     }
   },
@@ -311,7 +313,7 @@ Iyxzone.Photo.Tagger = Class.create({
       params += "&tag[width]=" + this.cropImg.calcW();
       params += "&tag[height]=" + this.cropImg.calcH();
       params += "&tag[photo_id]=" + this.photoID;
-      params += "&tag[photo_type]=" + this.photoType;
+      params += "&tag[photo_type]=" + this.type;
       new Ajax.Request('/photo_tags', {
         method: 'post', 
         parameters: params,

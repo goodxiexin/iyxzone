@@ -187,6 +187,8 @@ class User < ActiveRecord::Base
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC' do |user|
 
+    user.has_many :privileged_guilds, :conditions => "memberships.status = 3 or memberships.status = 4"
+
 		user.has_many :participated_guilds, :conditions => "memberships.status = 4 or memberships.status = 5"
 
 		user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"

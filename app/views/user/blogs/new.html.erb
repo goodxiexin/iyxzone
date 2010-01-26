@@ -18,58 +18,49 @@
           <li><span><%= link_to "草稿箱", drafts_url %></span></li>
         </ul>
       </div>
-      <div class='appcontent05'>
+      <div class='appcontent01'>
         <div id='errors'></div>
-        <div>
-<% form_for :blog, :html => {:id => 'blog_form', :method => :post} do |f| %>
-  <div class='title'>
-    <%= f.label "title" %><br/>
-    <%= f.text_field 'title' %>
-  </div>
-  <div class='content'>
-    <%= f.text_area 'content' %>
-  </div>
-  <div class='options'>
-    <%= f.label "category: " %><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %><br/>
-    <%= f.label "privilege: "%><%= privilege_select_tag(:blog) %>
-  </div>
-  <div class='submit'>
-    <%= button_to_function "保存", "Iyxzone.Blog.Builder.saveBlog()", :class => "confirm-button" %>
-    <%= button_to_function "保存为草稿", "Iyxzone.Blog.Builder.saveDraft();", :class => "cancel-button" %>
-  </div>
-  <div class='tag'>
-    添加和日志相关的好友<br/>
-    <%= text_field_tag 'friend[login]', '', :size => 50 %><%= button_to_function '', :id => 'toggle_button' %>
-    <div id='friend_list' style="display:none"></div>
-    <div id="friend_table" class="box05" style="display:none">
-      <div class="title01">
-        <div class="right">
-          <select name="" id='game_selector' >
-            <option value='all'>全部好友</option>
-            <% current_user.games.each do |game| %>
-              <option value=<%= game.id %>><%= game.name %></option>
-            <% end %>
-          </select>
-        </div>
-        <h1>选择你的好友</h1>
-      </div>
-      <div class="checkgroup" id='friend_items'></div>
-      <div class="buttons s_clear">
-        <table class="center" cellpadding="0"><tr>
-          <td>
-            <span class="button"><span><button onclick="" id="confirm_btn">确定</button></span></span>
-          </td>
-          <td>
-            <span class='button'><span><button onclick="" id='cancel_btn'>取消</button></span></span>
-          </td>
-        </tr></table>
-      </div>
-    </div>
-  </div>
-  <div id='friend_tags'>
-    <%= render :partial => 'blog/tags/tag', :collection => @blog.tags %>
-  </div>
-<% end %>
+        <div class="cons-form formcontent">
+        <% form_for :blog, :html => {:id => 'blog_form', :method => :post} do |f| %>
+          <div class='rows s_clear'>
+            <div class='fldid'><%= f.label "日志标题：" %></div>
+            <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
+          </div>
+          <div class='rows s_clear'>
+            <%= f.text_area 'content', :style =>"width: 100%; height: 300px;" %>
+          </div>
+          <div class='rows s_clear'>
+            <div class='fldid'>
+              <%= f.label "日志类别: " %>
+            </div>
+            <div class='fldvalue'>
+              <%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class => "selector selector02"%>
+            </div>
+	        </div>
+        	<div class='rows s_clear'>
+           <div class='fldid'>
+              <%= f.label "浏览权限: "%>
+            </div>
+            <div class='fldvalue'>
+              <%= privilege_select_tag(:blog, :class => "selector selector02") %>
+            </div>
+          </div>
+          <div class='rows s_clear'>
+            <div class='fldid'>点名相关好友</div>
+            <div class='fldvalue'>
+              <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @blog} %>
+            </div>
+          </div>
+          <div class='rows s_clear'>
+	  	      <div class='fldid'>&nbsp;</div>
+        		<div class='fldvalue'><span class="button03 w-l"><span><%= button_to_function("发布", "Iyxzone.Blog.Builder.saveBlog()") %></span></span>
+            <%= link_to_function "保存为草稿", "Iyxzone.Blog.Builder.saveDraft()", :class => "red w-l" %>
+      		  </div>
+          </div>
+          <div id='friend_tags'>
+            <%= render :partial => 'blog/tags/tag', :collection => @blog.tags %>
+          </div>
+        <% end %>
         </div>
       </div>
     </div>
@@ -77,6 +68,6 @@
 </div></div></div></div>
 
 <%= javascript_tag "
-  Iyxzone.Blog.Builder.editor = new nicEditor({iconsPath: '/images/nicEditorIcons.gif'}).panelInstance('blog_content');
+  Iyxzone.Blog.Builder.editor = new nicEditor({iconsPath: '/images/nicEditorIcons.gif'}).panelInstance('blog_content', {token: '#{form_authenticity_token}'});
   Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger([], [], [], 'toggle_button', 'friend_login', 'friend_list', 'friend_table', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', '#{form_authenticity_token}');  
 " %>

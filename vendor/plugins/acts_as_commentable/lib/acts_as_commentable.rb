@@ -35,6 +35,11 @@ module Commentable
       proc.call user, self, comment
     end
 
+    def is_comment_viewable_by? user
+      proc = self.class.commentable_opts[:view_conditions] || self.class.commentable_opts[:create_conditions] || lambda { true }
+      proc.call user, self  
+    end
+
 	end
 
 end

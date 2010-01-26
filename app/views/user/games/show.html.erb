@@ -76,10 +76,10 @@
   <% end %>
 </div>
 
-<%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @game, :recipient => nil, :with_comments => false} %>
+<%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @game, :recipient => nil, :with_comments => false} %>
 
 <div class="feed-box" id='comments'>
-  <%= render :partial => 'user/wall_messages/wall_message', :collection => @comments %>
+  <%= javascript_tag "Iyxzone.WallMessage.fetch('Game', #{@game.id});" %>
 </div>
 
 </div>

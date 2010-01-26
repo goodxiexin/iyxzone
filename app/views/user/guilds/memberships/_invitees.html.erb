@@ -1,19 +1,14 @@
+<ul id='members'>
 <% memberships.each do |membership| %>
-<% character = membership.character %>
-<% user = membership.user %>
-<div class='friend' id='guild_invitation_<%= membership.id %>'>
-  <%= avatar user %>
-  <div class='user-link'>
-    <%= membership.character.name %><br/>
-  </div>
-  <div class='operation'>
-    <%= link_to '发站内信', new_mail_url(:recipient_id => user.id) %>
-  </div> 
-</div>
+  <% character = membership.character %>
+  <% user = membership.user %>
+  <li id='<%= "guild_invitation_#{membership.id}" %>' >
+    <%= avatar user, :class => 'imgbox01' %>
+    <p>
+      <%= profile_link user, :class => 'blk' %>
+      <span class='red blk'> <%= membership.character.name %></span>
+      <%= link_to '<span>发站内信</span>', new_mail_url(:recipient_id => user.id), :class => "blk gray02" %>
+    </p>
+  </li>
 <% end %>
-
-<% if @remote %>
-	<%= will_paginate memberships, :renderer => "RemoteLinkRenderer", :remote => @remote %>
-<% else %>
-	<%= will_paginate memberships %>
-<% end %>
+</ul>

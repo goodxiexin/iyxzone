@@ -2,7 +2,7 @@ body{color:#333;}
 a{color:#25700D;}
 a:hover{color:#D63200;}
 
-.main .foot{margin:7px 0 8px;}
+.main .foot{margin:7px 0 0;}
 .main .foot .feed-list{width:420px;}
 .main .foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
 .main .foot .feed-list .word-box .textarea{width:350px;}
@@ -417,14 +417,20 @@ a:hover{color:#D63200;}
 .friend-box .friend-wrap .friend-list .friend-content{margin-left:150px;padding-left:10px;width:auto;}
 .friend-list .friend-list-header{padding:4px 6px 4px 11px;height:27px;line-height:27px;background:#F1F9E1;overflow:hidden}
 .friend-list .friend-list-header .textfield{width:150px}
-.friend-list .friend-list-body{margin:3px -3px;}
-.friend-list .friend-list-body li{_display:inline;float:left;padding:3px;width:32.18%;}
+.friend-list .friend-list-body{margin:3px 0;}
+.friend-list .friend-list-body li{float:left;padding:3px;margin:5px 10px;width:200px;border:1px solid #fff;}
+.friend-list .friend-list-body li.bg{border:1px #E7F0E0 solid;background:url(../images/skin/hover-bg.gif) repeat-x;}
+.friend-list .friend-list-body li a.icon-active{visibility:hidden}
+.friend-list .friend-list-body li.bg a.icon-active{visibility: visible}
+
 .friend-list .friend-list-body .card{padding:7px;height:60px;position:relative}
 .friend-list .friend-list-body .card .img{float:left;width:60px;height:100%;text-align:center;overflow:hidden}
-.friend-list .friend-list-body .card .info{margin-left:70px;_margin-left:67px;}
+.friend-list .friend-list-body .card .info{margin-left:70px;position:relative;}
 .friend-list .friend-list-body .card .info h4{padding:9px 0 15px 0;}
-.friend-list .friend-list-body .card .info h4 a{color:#D63200}
-.friend-list .friend-list-body .card .info h4 a:hover{text-decoration:underline}
+/*.friend-list .friend-list-body .card .info h4 a{color:#D63200}
+*/.friend-list .friend-list-body .card .info h4 a:hover{text-decoration:underline}
+
+#friend-man li{width:160px}
 
 .friend-table table{width:100%}
 .friend-table th,.friend-table td{padding:15px 6px;}
@@ -816,10 +822,13 @@ button.add-friend{background:url(../images/skin/add-friend.png) no-repeat;width:
 .icon-mail{background-position:0 -20px;}
 
 /*会员管理*/
-.level-toggle{color:#333;padding:1px 5px 1px 8px;margin-top:5px;text-align:center;position:relative}
+.member{line-height:18px}
+.friend-list .friend-list-body .card .member h4{padding:0;}
+.member .selector01{margin-top:5px}
+/*.level-toggle{color:#333;padding:1px 5px 1px 8px;margin-top:5px;text-align:center;position:relative}
 .level-toggle:hover{color:#333;background:#e4fcc9}
 .level-toggle span{display:block;padding-right:10px;background:url(../images/skin/dropArrow01.gif) no-repeat right;}
-
+*/
 /*公会活动游戏标题*/
 .big-head{line-height:24px}
 .big-head img{ vertical-align:middle;margin-right:10px}
@@ -974,7 +983,17 @@ ul.private-set li p.left{margin-left:10px}
 .archives-box .edit .con p.foot{border-bottom:1px solid #9ace5f;line-height:30px;margin:0 20px}
 
 
-
+/*好友下拉选择列表*/
+.selector03{height:auto;position:relative;z-index:9999}
+.selector03 ul.friend-select-list{position:relative;cursor:text;line-height:18px;min-height:20px;padding:2px 3px 0;border:1px solid #bdd6ad}
+.selector03 ul.friend-select-list li{padding:0 4px 0 0;margin:2px 0;position:relative;float:left;}
+.selector03 ul.friend-select-list li a {border-color:#d1e2c5;border-style:solid;border-width:1px 0;color:#333;display:block;float:left;text-decoration:none;background:#f4fdef;width:auto;height:auto;overflow:visible;position:relative;}
+.selector03 ul.friend-select-list li a span {position:relative;border-color:#d1e2c5;border-style:solid;border-width:0 1px;cursor:pointer;display:block;float:left;height:16px;line-height:16px;margin:0 -1px;padding:0 5px 0;white-space:nowrap;}
+.selector03 ul.friend-select-list li a .x {background:url(../images/icons/activeIcon.gif) no-repeat;cursor:pointer;display:inline-block;height:9px;
+width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
+.selector03 ul.friend-select-list li a:hover,.selector03 ul.friend-select-list li a:hover span{background:#73bd21;border-color:#73bd21;color:#fff}
+.selector03 ul.friend-select-list li a:hover .x {background:url(../images/icons/activeIcon.gif) no-repeat 0 -128px;}
+.selector03 ul.friend-select-list li input{width:80px;height:16px;margin:0;}
 
 
 

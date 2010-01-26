@@ -28,6 +28,7 @@ class User::Guilds::RulesController < UserBaseController
   # create new rules, or update existing rules 
   def create_or_update
     if @guild.update_attributes(params[:guild])
+      @guild.reload
       if params[:type].to_i == 0
         render :partial => 'attendance_rules', :locals => {:guild => @guild}
       elsif params[:type].to_i == 1
@@ -41,9 +42,7 @@ class User::Guilds::RulesController < UserBaseController
 
   def destroy
     if @rule.destroy
-      render :update do |page|
-        page << "$('rule_#{@rule.id}').remove;"
-      end
+      render :partial => 'basic_rules', :locals => {:guild => @guild}
     else
       render :update do |page|
         page << "error('发生错误，无法删除')"
@@ -58,7 +57,7 @@ protected
       @guild = current_user.guilds.find(params[:guild_id])
     elsif ["destroy"].include? params[:action]
       @guild = current_user.guilds.find(params[:guild_id])
-      @rule = @guild.rules.find(params[:id])
+      @rule = @guild.basic_rules.find(params[:id])
     end
   rescue
     not_found

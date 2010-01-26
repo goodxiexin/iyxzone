@@ -7,21 +7,9 @@ class User::Guilds::BossesController < UserBaseController
   def new 
   end
 
-  def create
-    @boss = @guild.bosses.build(params[:boss])
-    if @boss.save
-      render :update do |page|
-        # insert a new row
-      end
-    else
-      render :update do |page|
-        page << "error('发生错误')"
-      end
-    end
-  end
-  
   def create_or_update
     if @guild.update_attributes(params[:guild])
+      @guild.reload
       render :partial => 'bosses', :locals => {:guild => @guild}
     else
       flash[:error] = "发生错误"
@@ -31,9 +19,7 @@ class User::Guilds::BossesController < UserBaseController
 
   def destroy
     if @boss.destroy
-      render :update do |page|
-        page << "$('boss_#{@boss.id}').remove();"
-      end
+      render :partial => 'bosses', :locals => {:guild => @guild}
     else
       render :update do |page|
         page << "error('发生错误, 无法删除')"

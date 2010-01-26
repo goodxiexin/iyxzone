@@ -1,6 +1,6 @@
 class User::CharactersController < UserBaseController
 
-	before_filter :owner_required, :only => [:edit]
+	before_filter :owner_required, :only => [:edit, :update]
 
 	def new
     @games = Game.find(:all, :order => 'pinyin ASC')

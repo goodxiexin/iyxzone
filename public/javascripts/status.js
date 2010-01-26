@@ -10,6 +10,9 @@ Object.extend(Iyxzone.Status.Builder, {
     if($('status_content').value == ''){
       error('状态不能为空');
       return false;
+    }else if($('status_content').value.length > 160){
+      error('字数不能超过160');
+      return false;
     }
     return true;
   },
@@ -29,6 +32,5 @@ Object.extend(Iyxzone.Status.Builder, {
       });
     }
   }
-
 
 });

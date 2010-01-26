@@ -3,16 +3,21 @@
   <h1>请求加入</h1>
 </div>
 
-<% form_remote_for :request, :url => event_requests_url(@event, :show => 0), :html => {:method => :post} do |f| %>
+<% form_remote_for :request, :url => event_requests_url(@event, :show => params[:show]), :html => {:method => :post} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
-    <%= radio_button_tag 'status', 1 %><%= label_tag '', '肯定参加' %><br/>
-    <%= radio_button_tag 'status', 2 %><%= label_tag '', '可能参加' %><br/>
+    <% if @characters.blank? %>
+      你所有的游戏角色都已经在这个活动了，或者被邀请，或者已经发送请求了
+    <% else %>
+      <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %>
+    <% end %>
   </div>
 </div>
 <div class="buttons s_clear">
   <table class="center" cellpadding="0"><tr><td>
+    <% unless @characters.blank? %>
     <span class="button"><span><button type="submit">完成</button></span></span>
+    <% end %>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>

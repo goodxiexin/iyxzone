@@ -6,6 +6,6 @@
     <p><%= comment.content %></p>
   </div>
   <% if comment.is_deleteable_by? current_user %>
-    <%= link_to_remote 'x', :url => comment_url(comment), :method => :delete, :class => 'icon-active' %>
+    <%= link_to_remote '', :url => comment_url(comment), :method => :delete, :class => 'icon-active' %>
   <% end %>
 </div>

@@ -27,21 +27,19 @@
               </div>
             </div>
             <div class="rows s_clear">
-              <div class="fldid"><label for="name">游戏名称：</label></div>
+              <div class="fldid"><label for="name">工会活动：</label></div>
               <div class="fldvalue">
-                <%= collection_select :event, :game_id, current_user.games, :id, :name, {:prompt => '---'} %>
+                <%= check_box_tag 'is_guild_event', 1, false, :onchange => "Iyxzone.Event.Builder.checkGuild(this)" %>
+                <span id='event_guild_selector' style="display:none">
+                  所属工会
+                  <%= collection_select :event, :guild_id, current_user.privileged_guilds, :id, :name, {:prompt => '---'}, {:onchange => "Iyxzone.Event.Builder.guildOnChange(this.value)"} %>
+                </span>
               </div>
             </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">游戏服务区：</label></div>
-              <div class="fldvalue">
-                <%= collection_select :event, :game_area_id, [], :id, :name, {:prompt => '---'} %>
-              </div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">游戏服务器：</label></div>
-              <div class="fldvalue">
-                <%= collection_select :event, :game_server_id, [], :id, :name, {:prompt => '---'} %>
+            <div class='rows s_clear'>
+              <div class='fldid'><label for='name'>游戏角色：</label></div>
+              <div class='fldvalue'>
+                <%= collection_select :event, :character_id, current_user.characters, :id, :name, {:prompt => '---'} %>
               </div>
             </div>
             <div class="rows s_clear">
@@ -63,7 +61,7 @@
             <div class="rows s_clear">
               <div class="fldid">&nbsp;</div>
               <div class="fldvalue">
-                <span class="button"><span><button onclick="Iyxzone.Event.Builder.save();">提交</button></span></span>
+                <span class="button"><span><button onclick="Iyxzone.Event.Builder.save(event);">提交</button></span></span>
               </div>
             </div>
           <% end %>
@@ -74,7 +72,7 @@
 </div></div></div></div>
 
 <%= javascript_tag "
-  Iyxzone.Event.Builder.gameSelector = new Iyxzone.Game.Selector('event_game_id', 'event_game_area_id', 'event_game_server_id', null, null, {});
-  Iyxzone.Event.Builder.gameSelector.setEvents();
-  Iyxzone.Event.Builder.gameSelector.reset();
+  document.observe('dom:loaded', function(){
+    Iyxzone.Event.Builder.reset();
+  });
 " %>

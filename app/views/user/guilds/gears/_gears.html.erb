@@ -1,12 +1,17 @@
-<div>
-  <h3> 装备 </h3>
-  <div>
-    <%= link_to_function "(编辑)", "Iyxzone.Guild.Editor.editGears(#{@guild.id})" %><br>
-  </div>
-  <div>
-  <% guild.gears.each do |gear|%>
-    <%= gear.name -%>  <%= gear.cost %><br>
-  <% end %>
+<div class="edit-toggle space">
+  <h3 class="s_clear">
+    <strong class="left">装备</strong>
+    <%= link_to_function "<span class='icon-active icon-active-edit w-l'></span>编辑", "Iyxzone.Guild.Editor.editGears(#{guild.id})", :class => "right red"  %>
+  </h3>
+  <div class="formcontent con con2">
+    <div class="item space">
+      <% guild.gears.each do |gear| %>
+      <div class="rows s_clear" id='gear_<%= gear.id %>'>
+        <div class="fldid"><label><%= gear.name %>：</label></div>
+        <div class="fldvalue"><%= gear.cost %></div>
+      </div>
+      <% end %>
+    </div>
   </div>
 </div>
 

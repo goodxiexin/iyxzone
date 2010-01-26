@@ -3,11 +3,13 @@ class User::Events::RequestsController < UserBaseController
   layout 'app'
 
   def new
+    @characters = current_user.characters.find(:all, :conditions => {:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id}) - @event.characters_for(current_user)
     render :action => 'new', :layout => false
   end
 
   def create
-    @request = @event.requests.build(:participant_id => current_user.id, :status => params[:status])
+    request_params = (params[:request] || {}).merge({:participant_id => current_user.id})
+    @request = @event.requests.build request_params
     unless @request.save
       render :update do |page|
         page << "error('发生错误');"

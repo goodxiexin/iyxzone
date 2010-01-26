@@ -1,14 +1,13 @@
 class User::WallMessagesController < UserBaseController
 
-  layout 'app'
+  before_filter :deleteable_required, :only => [:destroy]
+
+  before_filter :privilege_required, :only => [:index]
 
   def create
-    @message = @wall.comments.build((params[:comment] || {}).merge({:poster_id => current_user.id}))
+    @message = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
     if @message.save
-      render :update do |page|
-        page.insert_html :top, "comments", :partial => 'user/wall_messages/wall_message', :object => @message
-        page << "$('comment_content').value = '';"
-      end
+      render :partial => 'user/wall_messages/wall_message', :object => @message
     else
       render :update do |page|
         page << "error('发生错误');"
@@ -29,20 +28,29 @@ class User::WallMessagesController < UserBaseController
   end
 
   def index
-    @messages = @wall.comments.paginate :page => params[:page], :per_page => 20
+    @messages = @wall.comments.paginate :page => params[:page], :per_page => 2
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => params[:wall_id], :wall_type => params[:wall_type]}}
+    render :partial => 'wall_messages', :locals => {:messages => @messages}    
   end
 
 protected
 
   def setup
-    if ['index', 'create'].include? params[:action]
-      @wall = get_wall
-      can_view?
-      #@can_reply = can_reply?
-      #@can_delete = can_delete?
+    if ['index'].include? params[:action]
+      @wall = params[:wall_type].camelize.constantize.find(params[:wall_id])
     elsif ['destroy'].include? params[:action]
       @message = Comment.find(params[:id])
     end
+  rescue
+    not_found
+  end
+
+  def deleteable_required
+    @message.is_deleteable_by?(current_user) || not_found
+  end
+
+  def privilege_required
+    @wall.is_comment_viewable_by?(current_user) || not_found
   end
 
 end

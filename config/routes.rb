@@ -22,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.reset_password '/reset_password/:password_reset_code', :controller => 'passwords', :action => 'edit'
 
-	map.upload_image '/upload_images', :controller => 'blog/images', :action => 'upload'
+	map.upload_image '/upload_blog_images', :controller => 'user/blog_images', :action => 'upload'
 
   map.regions '/regions', :controller => 'chinese_region', :action => 'regions'
 
@@ -65,8 +65,6 @@ ActionController::Routing::Routes.draw do |map|
     users.resources :profiles, :member => {:more_feeds => :get} do |profiles|
 
       profiles.resources :tags, :controller => 'profiles/tags'
-
-      profiles.resources :wall_messages, :controller => 'profiles/wall_messages'
 
     end
 
@@ -113,6 +111,8 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :comments
 
+    users.resources :wall_messages
+
     users.resources :digs
 
     users.friend_table_for_friend_tags '/friend_table_for_friend_tags', :controller => 'friend_tags', :action => 'friend_table'
@@ -140,11 +140,9 @@ ActionController::Routing::Routes.draw do |map|
 
       events.resources :participations, :controller => 'events/participations'
 
-      events.resources :invitations, :controller => 'events/invitations', :collection => {:search => :get, :create_multiple => :post}
+      events.resources :invitations, :controller => 'events/invitations', :collection => {:search => :get}, :member => {:accept => :put, :decline => :delete}
   
       events.resources :requests, :controller => 'events/requests', :member => {:accept => :put, :decline => :put}
-
-      events.resources :wall_messages, :controller => 'events/wall_messages'
 
     end
 
@@ -159,19 +157,19 @@ ActionController::Routing::Routes.draw do |map|
 
       guilds.resources :memberships, :controller => 'guilds/memberships', :collection => {:search => :get}
 
-      guilds.resources :invitations, :controller => 'guilds/invitations', :collection => {:search => :get, :create_multiple => :post}, :member => {:accept => :put, :decline => :delete}
+      guilds.resources :invitations, :controller => 'guilds/invitations', :collection => {:search => :get}, :member => {:accept => :put, :decline => :delete}
 
       guilds.resources :requests, :controller => 'guilds/requests', :member => {:accept => :put, :decline => :delete}
 
       guilds.resources :events, :controller => 'guilds/events', :collection => {:search => :get}
-
-      guilds.resources :wall_messages, :controller => 'guilds/wall_messages'
 
       guilds.resources :bosses, :controller => 'guilds/bosses', :collection => {:create_or_update => :post}
     
       guilds.resources :rules, :controller => 'guilds/rules', :collection => {:create_or_update => :post}
 
       guilds.resources :gears, :controller => 'guilds/gears', :collection => {:create_or_update => :post}
+
+      guilds.resources :characters, :controller => 'guilds/characters'
 
     end
 
@@ -199,8 +197,6 @@ ActionController::Routing::Routes.draw do |map|
 
       games.resources :tags, :controller => 'games/tags'
 
-      games.resources :wall_messages, :controller => 'games/wall_messages'
- 
     end
 
     users.resources :forums do |forums|

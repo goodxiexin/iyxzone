@@ -39,14 +39,15 @@ Object.extend(Iyxzone.Comment, {
     $(commentableType + '_comment_content_' + commentableID).focus();
   },
 
-  hideForm: function(commentableType, commentableID){
-    $(commentableType + '_comment_' + commentableID).hide();
-    $('add_' + commentableType + '_comment_' + commentableID).show();
+  hideForm: function(commentableType, commentableID, event){
+      $(commentableType + '_comment_' + commentableID).hide();
+      $('add_' + commentableType + '_comment_' + commentableID).show();
   },
 
-  save: function(commentableType, commentableID, button){
+  save: function(commentableType, commentableID, button, event){
+    Event.stop(event);
     if(Iyxzone.Comment.validate($(commentableType + '_comment_content_' + commentableID))){
-      new Ajax.Request('/comments?commentable_id=' + commentableID + '&commentable_type=' + commentableType, {
+      new Ajax.Request('/comments', { 
         method: 'post',
         parameters: $(commentableType+'_comment_form_' + commentableID).serialize(),
         onLoading: function(){
@@ -114,7 +115,7 @@ Object.extend(Iyxzone.WallMessage, {
 
   save: function(wallType, wallID, button){
     if(Iyxzone.WallMessage.validate($('comment_content'))){
-      new Ajax.Request('/' + wallType + 's/' + wallID + '/wall_messages', {
+      new Ajax.Request('/wall_messages', {
         method: 'post',
         parameters: $('wall_message_form').serialize(),
         onLoading: function(){
@@ -122,14 +123,35 @@ Object.extend(Iyxzone.WallMessage, {
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
+        },
+        onSuccess: function(transport){
+          var temp = new Element('div');
+          temp.innerHTML = transport.responseText;
+          var msg = temp.childElements()[0];
+          msg.setStyle({display: 'none'});
+          Element.insert($('comments'), {top: msg});
+          Effect.BlindDown(msg);
+          $('comment_content').clear();
         }
       });
     } 
   },
 
+  fetch: function(wallType, wallID){
+    new Ajax.Request('/wall_messages?wall_type=' + wallType + '&wall_id=' + wallID, {
+      method: 'get',
+      onLoading: function(){
+        $('comments').innerHTML = '<img src="images/loading.gif" />';
+      },
+      onSuccess: function(transport){
+        $('comments').innerHTML = transport.responseText;
+      }
+    });
+  },
+
   set: function(login){
     $('comment_content').value = '回复' + login + '：';
     $('comment_content').focus();
-  }
+  },
 
 });

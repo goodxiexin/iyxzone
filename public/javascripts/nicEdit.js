@@ -1415,37 +1415,37 @@ var nicUploadButton = nicEditorAdvancedButton.extend({
 		this.requestInterval = 1000;
 		this.uri = "/upload_images";//this.ne.options.uploadURI || this.nicURI;
 		nicUploadButton.lastPlugin = this;
-                var html = '<div class="header"><h3>上传图片</h3></div>';
-		html += '<div id="upload_form">';
-                html += '<form action="/upload_images" enctype="multipart/form-data" method="post" target="upload_frame">';
+    var html = '<div class="header"><h3>上传图片</h3></div>';
+		html += '<div id="upload_form_panel">';
+    html += '<form action="/upload_blog_images?authenticity_token=\'' + encodeURIComponent(this.ne.instanceById('blog_content').options.token) + '\'" enctype="multipart/form-data" method="post" target="upload_frame">';
 		html += '<div class="content">';
-                html += '<a href="javascript:void(0)" onclick="$(\'upload_form\').show();$(\'url_form\').hide();" >本地上传</a><a href="javascript:void(0)" onclick="$(\'upload_form\').hide();$(\'url_form\').show();" >URL</a><hr/>';
-                html += '<label for="photo_support jpg, gif, png maxium size is 4MB">Support jpg, gif, png maxium size is 4mb</label><br>';
-  		html += '<input id="photo_uploaded_data" name="photo[uploaded_data]" size="20" type="file"><br>';
-                html += '</div>';
-                html += '<div class="footer">';
-  		html += '<input id="photo_submit" name="commit" value="上传" type="submit" class="confirm-button">';
-                html += '<input class="cancel-button" value="取消" type="button" class="cancel-button" onclick="facebox.close()">';
+    html += '<a href="javascript:void(0)" onclick="$(\'upload_form_panel\').show();$(\'url_form_panel\').hide();" >本地上传</a><a href="javascript:void(0)" onclick="$(\'upload_form_panel\').hide();$(\'url_form_panel\').show();" >URL图片</a><hr/>';
+    html += '<label>支持jpg, gif, png, 最大2MB</label><br>';
+  	html += '<input id="photo_uploaded_data" name="photo[uploaded_data]" size="20" type="file"><br>';
+    html += '</div>';
+    html += '<div class="footer">';
+  	html += '<input id="photo_submit" name="commit" value="上传" type="submit" class="confirm-button">';
+    html += '<input class="cancel-button" value="取消" type="button" class="cancel-button" onclick="facebox.close()">';
 		html += '</div>';
-                html += '</form>';
-                html += '</div>';
+    html += '</form>';
+    html += '</div>';
 		html += '<iframe id="upload_frame" name="upload_frame" style="border: 0px none ; width: 1px; height: 1px;" src="about:blank"></iframe>';
-                html += '<div style="display:none"><div id="url_form" style="display:none">';
-                html += '<form id="url_form2">';
-                html += '<div class="content">';
-                html += '<a href="javascript:void(0)" onclick="$(\'upload_form\').show();$(\'url_form\').hide();" >本地上传</a><a href="javascript:void(0)" onclick="$(\'upload_form\').hide();$(\'url_form\').show();" >URL</a><hr/>';
-                html += 'URL:<input id="photo_src" type="text">';
-                html += '</div>';
-                html += '<div class="footer">';
-  		html += '<input id="photo_submit" name="commit" value="上传" type="submit" class="confirm-button">';
-                html += '<input class="cancel-button" value="取消" type="button" class="cancel-button" onclick="facebox.close()">';
+    html += '<div id="url_form_panel" style="display:none">';
+    html += '<form id="url_form">';
+    html += '<div class="content">';
+    html += '<a href="javascript:void(0)" onclick="$(\'upload_form_panel\').show();$(\'url_form_panel\').hide();" >本地上传</a><a href="javascript:void(0)" onclick="$(\'upload_form_panel\').hide();$(\'url_form_panel\').show();" >URL</a><hr/>';
+    html += 'URL:<input id="photo_src" type="text">';
+    html += '</div>';
+    html += '<div class="footer">';
+  	html += '<input id="photo_submit" name="commit" value="上传" type="submit" class="confirm-button">';
+    html += '<input class="cancel-button" value="取消" type="button" class="cancel-button" onclick="facebox.close()">';
 		html += '</div>';
-                html += '</form>';
-                html += '</div></div>';
-                this.sss = this.ne.selectedInstance;
+    html += '</form>';
+    html += '</div></div>';
+    this.sss = this.ne.selectedInstance;
 		this.pane.pane.hide();
 		facebox.reveal(html);
-		this.url_form = $('url_form2');
+		this.url_form = $('url_form');
 		this.url_form.observe('submit', function(){
 			var input = $('photo_src');
 			var src =input.value;
@@ -1526,5 +1526,3 @@ nicUploadButton.statusCb = function(o) {
 }
 
 nicEditors.registerPlugin(nicPlugin,nicUploadOptions);
-
-

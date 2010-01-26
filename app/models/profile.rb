@@ -28,7 +28,8 @@ class Profile < ActiveRecord::Base
 
   acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, profile, comment| profile.user == user}, 
-                      :create_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.leave_wall_message == 1}  
+                      :create_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.leave_wall_message == 1},
+                      :view_conditions => lambda {|user, profile| profile.user == user || profiler.user.has_friend?(user) || profile.user.privacy_setting.wall == 1}  
 
   attr_protected :user_id # user_id can't be assigned massively
 

@@ -4,12 +4,11 @@ class User::Guilds::MembershipsController < UserBaseController
 
   def index
 		if params[:type].to_i == 0
-			@memberships = @guild.memberships.find(:all, :conditions => {:status => [Membership::Veteran, Membership::Member]}).paginate :page => params[:page], :per_page => 10
+			@memberships = @guild.memberships.find(:all, :conditions => {:status => [Membership::Veteran, Membership::Member]})
     elsif params[:type].to_i == 1
-      @memberships = @guild.invitations.paginate :page => params[:page], :per_page => 10
-      logger.error "多少 ：#{@memberships.count}"
+      @memberships = @guild.invitations
     elsif params[:type].to_i == 2
-			@memberships = @guild.requests.paginate :page => params[:page], :per_page => 10
+			@memberships = @guild.requests
 		end
   end
 
@@ -36,7 +35,7 @@ class User::Guilds::MembershipsController < UserBaseController
   def destroy
     if @membership.destroy
       render :update do |page|
-        page << "$('member_#{@membership.user_id}').remove();"
+        page << "$('membership_#{@membership.id}').remove();"
       end
     else
       render :update do |page|
@@ -47,19 +46,17 @@ class User::Guilds::MembershipsController < UserBaseController
 
   def search
 		if params[:type].to_i == 0
-      @memberships = @guild.veteran_characters
+      @memberships = @guild.memberships.find(:all, :conditions => {:status => [Membership::Veteran, Membership::Member]})
     elsif params[:type].to_i == 1
-      @memberships = @guild.member_characters
+      @memberships = @guild.invitations
     elsif params[:type].to_i == 2
-      @memberships = @guild.invite_characters
-    elsif params[:type].to_i == 3
-      @memberships = @guild.request_characters
-    end 
-		@memberships = @memberships.find_all {|c| c.name.starts_with?(params[:key]) }.paginate :page => params[:page], :per_page => 10, :order => 'login ASC'
-    @remote = {:update => 'members', :url => search_guild_memberships_url(@guild, :type => params[:type], :key => params[:key])}
-    if params[:type].to_i == 2
+      @memberships = @guild.requests
+    end
+    @memberships = @memberships.find_all {|m| m.character.name.starts_with?(params[:key]) }
+    logger.error "共有: #{@memberships.count}"
+    if params[:type].to_i == 1
 			render :partial => 'invitees', :locals => {:memberships => @memberships}
-    elsif params[:type].to_i == 3
+    elsif params[:type].to_i == 2
 			render :partial => 'requestors', :locals => {:memberships => @memberships}
     else
 			render :partial => 'members', :locals => {:memberships => @memberships}

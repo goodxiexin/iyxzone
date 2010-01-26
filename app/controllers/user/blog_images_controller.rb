@@ -1,4 +1,4 @@
-class Blog::ImagesController < UserBaseController
+class User::BlogImagesController < UserBaseController
 
   def upload
     @image = BlogImage.new(params[:photo])

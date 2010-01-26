@@ -8,7 +8,7 @@ module PhotoTaggable
 
     def acts_as_photo_taggable opts={}
       
-      has_many :tags, :class_name => 'PhotoTag', :as => 'photo', :dependent => :destroy
+      has_many :tags, :class_name => 'PhotoTag', :foreign_key => 'photo_id', :dependent => :destroy
 
       has_many :relative_users, :through => :tags, :source => :tagged_user
 

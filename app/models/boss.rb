@@ -44,4 +44,5 @@ class Boss < ActiveRecord::Base
       return
     end
   end
+
 end

@@ -7,15 +7,15 @@
 <% form_remote_for :album, :url => personal_album_url(@album), :method => :put do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
-    <div class="fldid"><label for="name">标题：</label></div>
+    <div class="fldid"><label for="name">相册名称：</label></div>
     <div class="fldvalue">
       <div class='textfield'><%= f.text_field 'title' %></div>
     </div>
   </div>
   <div class="rows s_clear">
-    <div class="fldid"><label for="des">描述：</label></div>
+    <div class="fldid"><label for="des">相册描述：</label></div>
     <div class="fldvalue">
-      <%= f.text_area 'description' %>
+      <%= f.text_area 'description', :rows => 12, :cols => 36 %>
     </div>
   </div>
   <div class="rows s_clear">
@@ -25,7 +25,7 @@
     </div>
   </div>
   <div class="rows s_clear">
-    <div class="fldid"><label for="des">权限：</label></div>
+    <div class="fldid"><label for="des">谁可以浏览：</label></div>
     <div class="fldvalue">
       <%= privilege_select_tag(:album) %> 
     </div>

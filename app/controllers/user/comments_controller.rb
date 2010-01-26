@@ -48,7 +48,7 @@ protected
   end
 
   def privilege_required
-    @commentable.is_commentable_by?(current_user) || not_found
+    @commentable.is_comment_viewable_by?(current_user) || not_found
   end
 
 end

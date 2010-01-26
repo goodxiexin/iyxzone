@@ -1,23 +1,19 @@
+<ul id='members'>
 <% memberships.each do |membership| %>
-<% character = membership.character %>
-<% user = membership.user %>
-<div class='friend' id='guild_request_<%= membership.id%>'>
-  <%= avatar user %>
-  <div class='user-link'>
-    <%= membership.character.name %><br/>
-  </div><br/>
-  <div class='operation' id='guild_request_option_<%= membership.id %>'>
-		<% if current_user == @guild.president %>
-			<%= link_to_remote '接受', :url => accept_guild_request_url(@guild, membership, :show => 2), :method => :put  %> |
-			<%= facebox_confirm '拒绝', decline_guild_request_url(@guild, membership, :show => 2), {:method => :delete, :msg => '你确定吗'} %>
-		<% end %>
-	</div>
-</div>
+  <% character = membership.character %>
+  <% user = membership.user %>
+  <li id='<%= "guild_request_#{membership.id}" %>' >
+    <%= avatar user, :class => 'imgbox01' %>
+    <p>
+      <%= profile_link user, :class => 'blk' %>
+      <span class='red blk'> <%= membership.character.name %></span>
+      <% if current_user == @guild.president %>
+      <span id='guild_request_option_<%= membership.id %>'>
+        <%= link_to_remote '接受', :url => accept_guild_request_url(@guild, membership), :method => 'put', :class => 'blk gray02' %>
+        <%= link_to_remote '拒绝', :url => decline_guild_request_url(@guild, membership), :method => 'delete' %>
+      </span>
+      <% end %>
+    </p>
+  </li>
 <% end %>
-
-<% if @remote %>
-  <%= will_paginate memberships, :renderer => "RemoteLinkRenderer", :remote => @remote %>
-<% else %>
-  <%= will_paginate memberships %>
-<% end %>
-
+</ul>

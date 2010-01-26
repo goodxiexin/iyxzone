@@ -76,7 +76,8 @@ class Guild < ActiveRecord::Base
 
 	acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, guild, comment| guild.president == user}, 
-                      :create_conditions => lambda {|user, guild| guild.has_member?(user)}
+                      :create_conditions => lambda {|user, guild| guild.has_member?(user)},
+                      :view_conditions => lambda { true } # anyone can view
 
 	searcher_column :name
 
@@ -98,6 +99,10 @@ class Guild < ActiveRecord::Base
 
   def memberships_for user
     memberships.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def characters_for user
+    characters.find(:all, :conditions => {:user_id => user.id})
   end
 
   def role_for user

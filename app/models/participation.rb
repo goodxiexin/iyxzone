@@ -109,7 +109,7 @@ class Participation < ActiveRecord::Base
       if is_invitation?
         errors.add_to_base('不能邀请非好友') if !event.poster.has_friend?(participant_id)
       elsif is_request?
-        errors.add_to_base('权限不够') unless event.requestable_by? participant
+        errors.add_to_base('权限不够') unless event.is_requestable_by? participant
       elsif is_authorized?
         errors.add_to_base('不能直接创建') unless event.poster_id == participant_id
       end

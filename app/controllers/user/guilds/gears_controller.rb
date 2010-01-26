@@ -32,9 +32,7 @@ class User::Guilds::GearsController < UserBaseController
 
   def destroy
     if @gear.destroy
-      render :update do |page|
-        page << "$('gear_#{@gear.id}').remove();"
-      end
+      render :partial => 'gears', :locals => {:guild => @guild}
     else
       render :update do |page|
         page << "error('发生错误');"

@@ -18,7 +18,7 @@ class User::Guilds::RequestsController < UserBaseController
   end
 
   def accept
-    if @request.update_attributes(:status => params[:status])
+    if @request.update_attributes(:status => Membership::Member)
       render :update do |page|
         page << "alert('成功'); $('guild_request_option_#{@request.id}').innerHTML = '已接受';"
       end
@@ -32,7 +32,7 @@ class User::Guilds::RequestsController < UserBaseController
   def decline
     if @request.destroy
       render :update do |page|
-        page << "facebox.close(); $('guild_request_option_#{@request.id}').innerHTML = '已拒绝';"
+        page << "$('guild_request_#{@request.id}').remove();"
       end
     else
       render :update do |page|

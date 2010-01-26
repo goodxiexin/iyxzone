@@ -5,7 +5,7 @@ class User::StatusesController < UserBaseController
   before_filter :friend_or_owner_required, :only => [:index]
 
   def index
-    @statuses = @user.statuses.paginate :page => params[:page], :per_page => 10
+    @statuses = @user.statuses.paginate :page => params[:page], :per_page => 5
   end
 
   def friends

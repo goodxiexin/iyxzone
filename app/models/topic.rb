@@ -10,6 +10,10 @@ class Topic < ActiveRecord::Base
 
   has_many :posts, :dependent => :destroy
 
+  def last_post
+    posts.find(:first, :order => 'created_at DESC')
+  end
+
   def validate
     if poster_id.blank?
       errors.add_to_base('没有发布者')

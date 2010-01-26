@@ -37,11 +37,11 @@ TextBoxList = Class.create({
       /*
        * holder css class name
        */
-      holderClassName: 'holder',
+      holderClassName: '',
       /*
        * box css class name
        */
-      bitClassName: 'bit',
+      bitClassName: '',
       /*
        * parameter name
        */
@@ -220,7 +220,7 @@ TextBoxList = Class.create({
   },
 
   createInput: function(options){
-    var li = new Element('li', {class: this.options.bitClassName + '-input'});
+    var li = new Element('li', {class: this.options.bitClassName});
     var el = new Element('input', Object.extend({type: 'text', name: this.options.paramName}, options || {}));
     li.appendChild(el);
     return li;

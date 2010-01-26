@@ -1,11 +1,16 @@
-<div>
-  <h3>BOSS</h3> 
-  <div>
-    <%= link_to_function "(编辑)", "Iyxzone.Guild.Editor.editBosses(#{guild.id})" %><br>
-  </div>
-  <div>
-  <% guild.bosses.each do |boss|%>
-    <%= boss.name -%>  <%= boss.reward %><br>
-  <% end %>
+<div class="edit-toggle space">
+  <h3 class="s_clear">
+    <strong class="left">BOSS</strong>
+    <%= link_to_function "<span class='icon-active icon-active-edit w-l'></span>编辑", "Iyxzone.Guild.Editor.editBosses(#{guild.id})", :class => "right red"  %>
+  </h3>
+  <div class="formcontent con con2">
+    <div class="item space">
+      <% guild.bosses.each do |boss| %>
+      <div class="rows s_clear" id='boss_<%= boss.id %>'>
+        <div class="fldid"><label><%= boss.name %>：</label></div>
+        <div class="fldvalue"><%= boss.reward %></div>
+      </div>
+      <% end %>
+    </div>
   </div>
 </div>

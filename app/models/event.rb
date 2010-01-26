@@ -20,56 +20,75 @@ class Event < ActiveRecord::Base
 
   has_many :participations, :dependent => :delete_all # we dont want to trigger participation destroy callback here, it's slow.
 
-  has_many :invitations, :class_name => 'Participation', :conditions => {:status => 0}
+  has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
+
+  has_many :maybe_participations, :class_name => 'Participation', :conditions => {:status => Participation::Maybe}
+
+  has_many :invitations, :class_name => 'Participation', :conditions => {:status => Participation::Invitation}
   
-  has_many :requests, :class_name => 'Participation', :conditions => {:status => [1,2]}
+  has_many :requests, :class_name => 'Participation', :conditions => {:status => Participation::Request}
 
-	with_options :through => :participations, :source => 'participant', :uniq => true do |event|
+	with_options :source => 'participant', :uniq => true do |event|
 
-		event.has_many :invitees, :conditions => "participations.status = 0"
+		event.has_many :invitees, :through => :invitations
 
-		event.has_many :requestors, :conditions => "participations.status = 1"
+		event.has_many :requestors, :through => :requests
 
-		event.has_many :confirmed_participants, :conditions => "participations.status = 3"
+		event.has_many :confirmed_participants, :through => :confirmed_participations
 
-		event.has_many :maybe_participants, :conditions => "participations.status = 4"
+		event.has_many :maybe_participants, :through => :maybe_participations
 
-		event.has_many :participants, :conditions => "participations.status = 3 or participations.status = 4"
+		event.has_many :participants, :through => :participations, :conditions => "participations.status = 3 or participations.status = 4"
 
 	end
 
-  with_options :through => :participations, :source => 'character' do |event|
+  with_options :source => 'character' do |event|
 
-    event.has_many :invite_characters, :conditions => "participations.status = 0"
+    event.has_many :invite_characters, :through => :invitations
 
-    event.has_many :request_characters, :conditions => "participations.status = 1"
+    event.has_many :request_characters, :through => :requests
 
-    event.has_many :confirmed_characters, :conditions => "participations.status = 3"
+    event.has_many :confirmed_characters, :through => :confirmed_participations
 
-    event.has_many :maybe_characters, :conditions => "participations.status = 4"
+    event.has_many :maybe_characters, :through => :maybe_participations
 
-    event.has_many :characters, :conditions => "participations.status = 3 or participations.status = 4"
+    event.has_many :characters, :through => :participations, :conditions => "participations.status = 3 or participations.status = 4"
+
+    event.has_many :all_characters, :through => :participations
 
   end
 
   acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, event, comment| event.poster == user}, 
-                      :create_conditions => lambda {|user, event| event.has_participant?(user)}
+                      :create_conditions => lambda {|user, event| event.has_participant?(user)},
+                      :view_conditions => lambda { true } # this means anyone can view
 
 	acts_as_resource_feeds
 
 	searcher_column :title
 
+  def participants_count
+    confirmed_count + maybe_count
+  end
+
   def has_participant? user
-    !participations.find(:first, :conditions => {:status => [3,4], :participant_id => user.id}).blank?
+    !participations.find(:first, :conditions => {:status => [Participation::Confirmed, Participation::Maybe], :participant_id => user.id}).blank?
   end
 
   def has_character? character
-    !participations.find(:first, :conditions => {:status => [3,4], :character_id => character.id}).blank?
+    !participations.find(:first, :conditions => {:status => [Participation::Confirmed, Participation::Maybe], :character_id => character.id}).blank?
+  end
+
+  def has_only_one_character_for? user
+    participations.find(:all, :conditions => {:status => [Participation::Confirmed, Participation::Maybe], :participant_id => user.id}).count == 1
   end
 
   def participations_for user
-    participations.find(:all, :conditions => {:status => [3,4], :participant_id => user.id})
+    participations.find(:all, :conditions => {:participant_id => user.id})
+  end
+
+  def characters_for user
+    all_characters.find(:all, :conditions => {:user_id => user.id})  
   end
 
   def is_guild_event?
@@ -80,13 +99,23 @@ class Event < ActiveRecord::Base
     !guild_id_was.nil?
   end
 
-  def requestable_by? user
-    return false if expired
+  def is_requestable_by? user
+    return -3 if expired 
+    return -1 if user.characters.find(:first, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}).blank?
 
     if is_guild_event?
-      guild.has_member? user
+      return 1 if guild.has_member?(user)
+      return -2
     else
-      privilege == 1 || (privilege == 2 and poster.has_friend? user)
+      return 1 if privilege == 1 || (privilege == 2 and poster.has_friend? user)
+      return 0
+    end
+  end
+
+  def invitations= invitation_attrs
+    return if invitation_attrs.blank?
+    invitation_attrs.each do |attrs|
+      invitations.build(:participant_id => attrs[:user_id], :character_id => attrs[:character_id])
     end
   end
 

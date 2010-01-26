@@ -47,8 +47,8 @@ module ApplicationHelper
     select_tag "#{obj.class.to_s.underscore}[gender]", options_for_select([['男', 'male'], ['女', 'female']], obj.gender) 
   end
   
-  def privilege_select_tag(object)
-    select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]], eval("@#{object}.privilege"))
+  def privilege_select_tag(object, opts={})
+    select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]], eval("@#{object}.privilege")), opts 
   end
 
   def privacy_select_tag(obj, field)
@@ -93,8 +93,8 @@ module ApplicationHelper
     end
   end
 
-  def album_link album
-    link_to (truncate album.title, :length => 20), eval("#{album.class.name.underscore}_url(album)")
+  def album_link album, opts={}
+    link_to (truncate album.title, :length => 20), eval("#{album.class.name.underscore}_url(album)"), opts
   end
 
   def photo_link(photo, opts={})
@@ -103,11 +103,10 @@ module ApplicationHelper
   end
 
   def dig_link diggable
-    (link_to_remote '挖', :url => digs_url(:diggable_type => diggable.class.name.underscore, :diggable_id => diggable)) +
-    "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>)"
+    link_to_remote "赞(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>)", :url => digs_url("dig[diggable_type]" => diggable.class.to_s, "dig[diggable_id]" => diggable)
   end
 
-  def blog_content blog, opts
+  def blog_content blog, opts={}
     if blog.content.length > opts[:length]
       (truncate blog.content, opts) + (link_to '查看全文>>', blog_url(blog))
     else
@@ -115,28 +114,28 @@ module ApplicationHelper
     end
   end
 
-  def blog_link blog
-    link_to (truncate blog.title, :length => 20), blog_url(blog)
+  def blog_link blog, opts={}
+    link_to (truncate blog.title, :length => 20), blog_url(blog), opts
   end
 
-	def video_link video
-		link_to (truncate video.title, :length => 20), video_url(video)
+	def video_link video, opts={}
+		link_to (truncate video.title, :length => 20), video_url(video), opts
 	end
 
   def game_link game
     link_to game.name, game_url(game)
   end
 
-  def event_link event
-    link_to (truncate event.title, :length => 20), event_url(event)
+  def event_link event, opts={}
+    link_to (truncate event.title, :length => 20), event_url(event), opts
   end
 
-	def poll_link poll
-		link_to (truncate poll.name, :length => 20), poll_url(poll)
+	def poll_link poll, opts={}
+		link_to (truncate poll.name, :length => 20), poll_url(poll), opts
 	end
 
-	def guild_link guild
-		link_to (truncate guild.name, :length => 20), guild_url(guild)
+	def guild_link guild, opts={}
+		link_to (truncate guild.name, :length => 20), guild_url(guild), opts
 	end
 
 	def forum_link forum
@@ -165,6 +164,15 @@ module ApplicationHelper
 
 	def button_submit text
 		"<button type='submit'>#{text}</button>"
+	end
+
+	def button_to_function(name, *args, &block) 
+    html_options = args.extract_options!.symbolize_keys
+
+    function = block_given? ? update_page(&block) : args[0] || ''
+    html_options[:onclick] = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function};"
+    
+    content_tag(:button, name, html_options)
 	end
 
 	def server_location server

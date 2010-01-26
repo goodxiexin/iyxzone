@@ -32,7 +32,6 @@ class User::GamesController < UserBaseController
     @albums = @game.albums.find(:all, :limit => 3)
     @tagging = @game.taggings.find_by_poster_id(current_user.id)
     @can_tag = @tagging.nil? || (@tagging.created_at < 1.week.ago) || false
-    @comments = @game.comments.paginate :page => 1, :per_page => 10
   end
 
   def hot
