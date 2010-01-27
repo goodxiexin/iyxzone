@@ -32,7 +32,7 @@ class Game < ActiveRecord::Base
   
 	acts_as_rateable
 
-	acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, game, comment| false }
+	acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, game, comment| false }, :recipient_required => false
 
   acts_as_pinyin :name => "pinyin" 
 

@@ -6,6 +6,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => 'sessions', :action => 'new' 
 
+  map.test '/test', :controller => 'user/test', :action => 'index'
+
   map.signup '/signup', :controller => 'users', :action => 'new'
 
   map.login '/login', :controller => 'sessions', :action => 'new'

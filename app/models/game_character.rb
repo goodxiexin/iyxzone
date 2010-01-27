@@ -33,7 +33,8 @@ class GameCharacter < ActiveRecord::Base
       errors.add_to_base("没有等级")
       return
     end
-    
+
+    if game_id_changed? or area_id_changed? or server_id_changed?    
     if game_id.blank?
       errors.add_to_base("没有游戏")
       return
@@ -103,6 +104,7 @@ class GameCharacter < ActiveRecord::Base
           end
         end
       end
+    end
     end
 
   end

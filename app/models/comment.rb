@@ -14,6 +14,10 @@ class Comment < ActiveRecord::Base
     commentable.is_comment_deleteable_by? user, self
   end
 
+  def is_recipient_required?
+    commentable.is_comment_recipient_required?
+  end
+
   def validate
     if poster_id.blank?
       errors.add_to_base('没有发布者')
@@ -33,8 +37,8 @@ class Comment < ActiveRecord::Base
         return
       end
     end
-
-    if recipient_id.blank?
+    
+    if is_recipient_required? and recipient_id.blank?
       errors.add_to_base('没有接收的人')
     end
 

@@ -31,7 +31,7 @@ class Profile < ActiveRecord::Base
                       :create_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.leave_wall_message == 1},
                       :view_conditions => lambda {|user, profile| profile.user == user || profiler.user.has_friend?(user) || profile.user.privacy_setting.wall == 1}  
 
-  attr_protected :user_id # user_id can't be assigned massively
+  
 
   def viewable_by viewer
     privilege = user.privacy_setting.personal
@@ -45,6 +45,33 @@ class Profile < ActiveRecord::Base
   def contact_info_changed?
     qq_changed? || phone_changed? || website_changed?
   end
+
+  after_save :save_characters
+
+  def new_characters= character_attrs
+    @new_characters_attrs = character_attrs
+  end
+
+  def existing_characters= character_attrs
+    @existing_characters_attrs = character_attrs
+  end  
+
+  def save_characters
+    unless @new_characters_attrs.blank?
+      @new_characters_attrs.each_value do |attrs|
+        user.characters.create(attrs)
+      end
+    end
+    @new_characters_attrs = nil;
+    unless @existing_characters_attrs.blank?
+      @existing_characters_attrs.each do |id, attrs|
+        user.characters.find(id).update_attributes(attrs)
+      end
+    end
+    @existing_characters_attrs = nil;   
+  end
+  
+  attr_readonly :user_id
 
   def validate_on_update
     # check login
@@ -70,7 +97,7 @@ class Profile < ActiveRecord::Base
     end
 
     # check birthday
-    if birthday
+    unless birthday.blank?
       if birthday > Time.now
         errors.add_to_base("生日比今天还晚")
         return
@@ -104,7 +131,7 @@ class Profile < ActiveRecord::Base
     end
     
     # check qq
-    if qq
+    unless qq.blank?
       if !/\d+/.match(qq)   
         errors.add_to_base("qq只能是数字") 
         return
@@ -115,7 +142,7 @@ class Profile < ActiveRecord::Base
     end
 
     # check phone
-    if phone
+    unless phone.blank?
       if !/\d+/.match(phone)
         errors.add_to_base("电话只能是数字")
         return
@@ -126,7 +153,7 @@ class Profile < ActiveRecord::Base
     end
   
     # check website
-    if website 
+    unless website.blank?
       # TODO: 这个regular expression貌似不够强大，不能把adsfadsf视为非法的url
       unless website =~ /^((https?:\/\/)?)(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/
         errors.add_to_base("非法的url")

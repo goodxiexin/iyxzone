@@ -6,11 +6,9 @@ class User::WallMessagesController < UserBaseController
 
   def create
     @message = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
-    if @message.save
-      render :partial => 'user/wall_messages/wall_message', :object => @message
-    else
+    unless @message.save
       render :update do |page|
-        page << "error('发生错误');"
+        page << "error('#{@message.errors.on_base}');"
       end
     end
   end

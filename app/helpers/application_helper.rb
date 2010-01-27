@@ -122,8 +122,8 @@ module ApplicationHelper
 		link_to (truncate video.title, :length => 20), video_url(video), opts
 	end
 
-  def game_link game
-    link_to game.name, game_url(game)
+  def game_link game, opts={}
+    link_to game.name, game_url(game), opts
   end
 
   def event_link event, opts={}

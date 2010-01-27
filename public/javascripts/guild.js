@@ -135,7 +135,7 @@ Object.extend(Iyxzone.Guild.Editor, {
 
   newBasicRule: function(){
     var div = new Element('div', {class: 'rows s_clear'});
-    var html = "<div class='fldid'><label>原因: </label></div>";
+    var html = "<div class='fldid'><label>原因： </label></div>";
     html += "<div class='fldvalue'>";
     html += "<div class='textfield left w-l'><input type='text' name='guild[new_rules][new_" + this.basicRulesCount + "][reason]' /></div>";
     html += "<div class='textfield left' style='width: 50px'>";

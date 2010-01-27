@@ -25,6 +25,8 @@ class User::ProfilesController < UserBaseController
       render :partial => 'edit_basic_info'
     when 2
       render :partial => 'edit_contact_info'
+    when 3
+      render :partial => 'edit_characters'
     end
   end
 
@@ -35,9 +37,11 @@ class User::ProfilesController < UserBaseController
 				format.html {
 					case params[:type].to_i
 					when 1
-					  render :partial => 'basic_info'
+					  render :partial => 'basic_info', :locals => {:profile => @profile}
 					when 2
-					  render :partial => 'contact_info'
+					  render :partial => 'contact_info', :locals => {:profile => @profile, :setting => @profile.user.privacy_setting}
+          when 3
+            render :partial => 'characters', :locals => {:profile => @profile}
 					end
 				}
 			end
@@ -59,10 +63,8 @@ protected
 			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
     elsif ["update"].include? params[:action]
       @profile = Profile.find(params[:id])
-		  @profile.user == current_user || not_found
+		  @profile.user == current_user || (logger.error "not_found")
     end
-  rescue
-    not_found
   end
 
 end

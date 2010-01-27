@@ -24,9 +24,6 @@ class GameCharacterObserver < ActiveRecord::Observer
     # increment counter
     character.game.raw_decrement :characters_count
     character.user.raw_decrement :characters_count
-
-    # issue feeds
-    character.deliver_feeds :recipients => character.user.friends, :data => {:type => 3}
   end
 
 end

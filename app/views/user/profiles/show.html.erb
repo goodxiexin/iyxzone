@@ -60,7 +60,7 @@
     <%= render :partial => 'user/profiles/tags/profile_tag', :locals => {:profile => @profile} %>
     <% form_remote_for :tag, :url => profile_tags_url(@profile) do |f| %>
       都不贴切？自己想个<br/>
-      <%= f.text_field 'name' %>
+      <%= text_field_tag 'tag_name' %>
       <%= f.submit '提交' %>
     <% end %>
   <% else %>

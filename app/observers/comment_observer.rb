@@ -220,7 +220,7 @@ class CommentObserver < ActiveRecord::Observer
     commentor = comment.poster
     recipient = comment.recipient
 
-    if commentor != recipient
+    if commentor != recipient and !recipient.blank?
       comment.notices.create(:user_id => recipient.id, :data => 'reply')
       CommentMailer.deliver_game_comment comment, recipient if recipient.mail_setting.comment_same_game_after_me
     end

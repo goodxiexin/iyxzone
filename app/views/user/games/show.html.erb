@@ -31,7 +31,7 @@
     <%= render :partial => 'user/games/tags/game_tag', :locals => {:game => @game} %>
     <% form_remote_for :tag, :url => game_tags_url(@game) do |f| %>
       都不贴切？自己想个<br/>
-      <%= f.text_field 'name' %>
+      <%= text_field_tag 'tag_name' %>
       <%= f.submit '提交' %>
     <% end %>
   <% else %>

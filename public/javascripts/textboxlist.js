@@ -37,11 +37,11 @@ TextBoxList = Class.create({
       /*
        * holder css class name
        */
-      holderClassName: '',
+      holderClassName: 'holder',
       /*
        * box css class name
        */
-      bitClassName: '',
+      bitClassName: 'bit',
       /*
        * parameter name
        */
@@ -96,7 +96,7 @@ TextBoxList = Class.create({
     /*
      * main input field
      */
-    this.mainInput = this.createInput({class: 'maininput', width: '10px'});
+    this.mainInput = this.createMainInput();
     this.resizableMainInput = new ResizableTextBox(this.mainInput);
 
     /*
@@ -136,7 +136,7 @@ TextBoxList = Class.create({
 	         * return if no box is selected
 	         * otherwise focus on previous box
 	         */
-          if(!this.current) return;
+          if(!this.current || this.current == this.mainInput) return;
           this.boxFocus(this.getPrevious(this.current));
           break;  
         case 39: 
@@ -145,13 +145,15 @@ TextBoxList = Class.create({
 	         * return if no box is selected
 	         * otherwise focus on next box
 	         */
-          if(!this.current) return;
+          if(!this.current || this.current == this.mainInput) return;
           this.boxFocus(this.getNext(this.current));
           break;
         case 8:
+          if(!this.current || this.current == this.mainInput) return;
           this.dispose(this.current, e.keyCode);
           break;
         case 46:
+          if(!this.current || this.current == this.mainInput) return;
           this.dispose(this.current, e.keyCode);
           break;
       }
@@ -216,6 +218,14 @@ TextBoxList = Class.create({
       Event.stop(e);
     }.bind(this));
     
+    return li;
+  },
+
+  createMainInput: function(){
+    var li = new Element('li');//, {class: this.options.bitClassName});
+    var el = new Element('input', {type: 'text'}); //Object.extend({type: 'text', name: this.options.paramName}, options || {}));
+    li.appendChild(el);
+    this.inputTextField = el;
     return li;
   },
 
@@ -382,7 +392,7 @@ TextBoxList = Class.create({
   },
 
   getMainInput: function(){
-    return this.mainInput.childElements()[0];
+    return this.inputTextField;
   },
 
   getValues: function(){

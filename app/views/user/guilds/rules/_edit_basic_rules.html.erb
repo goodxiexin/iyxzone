@@ -9,7 +9,7 @@
           <div class="fldid"><label>原因：</label></div>
           <div class="fldvalue">
             <div class="textfield left w-l"><%= r.text_field :reason %></div>
-            <div class="textfield left" style="width:50px"><%= r.text_field :outcome %>分</div>
+            <div class="textfield left" style="width:50px"><%= r.text_field :outcome %></div>
             <span class="left"><%= link_to_function '', "Iyxzone.Guild.Editor.removeBasicRule(#{rule.id}, #{@guild.id}, '#{form_authenticity_token}')", :class => "icon-active icon-active-del", :href => '#' %></span>
           </div>
         </div>

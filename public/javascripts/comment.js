@@ -124,15 +124,6 @@ Object.extend(Iyxzone.WallMessage, {
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
         },
-        onSuccess: function(transport){
-          var temp = new Element('div');
-          temp.innerHTML = transport.responseText;
-          var msg = temp.childElements()[0];
-          msg.setStyle({display: 'none'});
-          Element.insert($('comments'), {top: msg});
-          Effect.BlindDown(msg);
-          $('comment_content').clear();
-        }
       });
     } 
   },

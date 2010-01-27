@@ -1,6 +1,6 @@
 <% wall = wall_message.commentable %>
 <% type = wall.class.to_s.underscore %>
-<div class="feed-img-list" id='comment_<%= wall_message.id %>'>
+<div class="feed-img-list" id='comment_<%= wall_message.id %>' style="display:none">
   <div class="feed-list">
   <div class="feed-img"><%= avatar wall_message.poster, :class => 'imgbox01' %></div>
     <p>

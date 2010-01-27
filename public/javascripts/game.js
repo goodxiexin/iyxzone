@@ -26,11 +26,13 @@ Iyxzone.Game.Selector = Class.create({
       onRaceChange: Prototype.emptyFunction,
       onProfessionChange: Prototype.emptyFunction
     }, options || {});
+
+    this.setEvents();
   },
 
   setEvents: function(){
     if(this.gameSelectorID)
-      Event.observe($(this.gameSelectorID), 'change', this.gameChange.bind(this));
+      Event.observe(this.gameSelectorID, 'change', this.gameChange.bind(this));
 
     if(this.areaSelectorID)
       Event.observe(this.areaSelectorID, 'change', this.areaChange.bind(this));
@@ -217,6 +219,8 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
   },
 
   setEvents: function($super){
+    $super();
+
     Event.observe($(this.gameSelectorID), 'keyup', function(e){
       Event.stop(e);
       this.onKeyUp(e);
@@ -226,7 +230,6 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
       this.lastPressedAt = null;
       this.keyPressed = '';
     }.bind(this));      
-    $super();
   },
 
   binarySearch: function(keyCode){
@@ -266,13 +269,11 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
     var len = this.keyPressed.length;
     var startPos = this.mappings.get(this.keyPressed.charCodeAt(0));
     if(startPos == null) return;
-    $('info').innerHTML += 'pressed: ' + this.keyPressed + ' start from ' + this.pinyins[startPos] + '<br/>';
     for(var i = startPos;i < this.pinyins.length; i++){
       if(this.pinyins[i].substr(0, len) == this.keyPressed.toLowerCase()){ // start with this.keyPressed?
         if($(this.gameSelectorID).selectedIndex != i){
           $(this.gameSelectorID).value = $(this.gameSelectorID).options[i].value;
           this.currentGameID = $(this.gameSelectorID).value;
-          $('info').innerHTML += 'set currentGameID = ' + this.currentGameID + '<br/>';
           setTimeout(this.fireGameChangeEvent.bind(this), 500);
         }
         return;

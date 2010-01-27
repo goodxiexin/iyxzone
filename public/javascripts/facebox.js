@@ -234,7 +234,6 @@ var Facebox = Class.create({
             fb.reveal(transport.responseText, klass);
           },
           onComplete: function(transport){
-            alert(transport.responseText);
             fb.reveal(transport.responseText, klass);
           }
         });

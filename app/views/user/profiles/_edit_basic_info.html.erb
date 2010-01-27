@@ -1,35 +1,38 @@
 <% region = @profile.region %>
 <% city = @profile.city %>
-<% form_for :profile, :html => {:id => 'basic_info_form'} do |f| %>
-<div class="rows s_clear">
-  <div class="id">昵称：</div>
-  <div class="left"><%= f.text_field 'login' %></div>
-</div>
-<div class="rows s_clear">
-  <div class="id">性别：</div>
-  <div class="left"><%= gender_select_tag @profile %></div>
-</div>
-<div class="rows s_clear">
-  <div class="id">生日：</div>
-  <div class="left"><%= calendar_date_select :profile, :birthday %></div>
-</div>
-<div class="rows s_clear">
-  <div class="id">省份：</div>
-  <div class="left"><%= collection_select :profile, :region_id, Region.all, :id, :name, {:prompt => '---'} %></div>
-</div>
-<div class="rows s_clear">
-  <div class="id">城市：</div>
-  <div class="left"><%= collection_select :profile, :city_id, region.nil? ? [] : region.cities, :id, :name, {:prompt => '---'} %></div>
-</div>
-<div class="rows s_clear">
-  <div class="id">地区：</div>
-  <div class="left"><%= collection_select :profile, :district_id, city.nil? ? [] : city.districts, :id, :name, {:prompt => '---'}%></div>
-</div>
-<div class="rows s_clear">
-  <div class="id"></div>
-  <div class="left">
-    <%= button_to_function '保存', "Iyxzone.Profile.Editor.updateBasicInfo(#{@profile.id}, this);" %>
-    <%= link_to_function "取消", "Iyxzone.Profile.Editor.cancelEditBasicInfo();" %>
+<div class="edit-toggle space edit">
+  <h3 class="s_clear"><strong class="left">基本信息</strong><%= link_to_function '取消', "Iyxzone.Profile.Editor.cancelEditBasicInfo();", :class => "right" %></h3>
+  <div class="formcontent con con2">
+    <% form_for :profile, :html => {:id => 'basic_info_form'} do |f| %>
+      <div class="item space">
+        <div class="rows s_clear">
+          <div class="fldid"><label>昵称：</label></div>
+          <div class="fldvalue">
+            <div class="textfield left"><%= f.text_field 'login' %></div>
+          </div>
+        </div>
+        <div class="rows s_clear">
+          <div class="fldid"><label>生日：</label></div>
+          <div class="fldvalue">
+            <div class="textfield left"><%= calendar_date_select :profile, :birthday %></div>
+          </div>
+        </div>
+        <div class="rows s_clear">
+          <div class="fldid"><label>省份：</label></div>
+          <div class="fldvalue">
+            <%= collection_select :profile, :region_id, Region.all, :id, :name, {:prompt => '---'} %> - 
+            <%= collection_select :profile, :city_id, region.nil? ? [] : region.cities, :id, :name, {:promtp => '---'} %> -
+            <%= collection_select :profile, :district_id, city.nil? ? [] : city.districts, :id, :name, {:promtp => '---'} %>
+          </div>
+        </div>
+      </div>
+      <div class="rows s_clear space">
+        <div class="fldid">&nbsp;</div>
+        <div class="fldvalue">
+          <span class="button"><span><%= button_to_function '保存', "Iyxzone.Profile.Editor.updateBasicInfo(#{@profile.id}, this, event);" %></span></span>
+          <span class="button button-gray"><span><%= button_to_function "取消", "Iyxzone.Profile.Editor.cancelEditBasicInfo();" %></span></span>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
-<% end %>

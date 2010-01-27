@@ -3,7 +3,7 @@ class User::TagsController < UserBaseController
   before_filter :deleteable_required, :only => [:destroy]
 
 	def create
-    unless @taggable.add_tag current_user, params[:name]
+    unless @taggable.add_tag current_user, params[:tag_name]
       render :update do |page|
         page << "error('发生错误');"
       end

@@ -58,24 +58,27 @@ module Taggable
 
   module InstanceMethods
 
-		def tag_list
+    # 下面3个函数是为了照顾xiexin已经写了的代码，因此不检查数据的合法性
+		# BEGIN
+    def tag_list
 			return @tag_list if @tag_list
 			@tag_list = TagList.new(*tags.map(&:name))				
 		end
 
-		# the following 2 methods are only used when poster of tagging is ignored
 		def tag_list=(value)
 			@tag_list = (value.is_a? Array) ? TagList.from(value.join(',')) : TagList.from(value)
 		end
-
+    
 		def save_tags
 			return unless @tag_list
 			new_tag_names = @tag_list - tags.map(&:name)
 			new_tag_names.each do |tag_name|
 				tag = Tag.find_or_create(:name => tag_name, :taggable_type => self.class.to_s)
-				tag.taggings.create(:taggable_type => self.class.to_s, :taggable_id => id)
+        tagging = Tagging.new(:taggable_id => id, :taggable_type => self.class.to_s, :tag_id => tag.id)
+        tagging.save_with_validation(false)
 			end
 		end
+    # END
 
 		def reload_with_tag_list(*args)
 			@tag_list = nil
@@ -83,7 +86,9 @@ module Taggable
 		end
 
     def add_tag user, name
-      Tagging.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id, :tag_name => name)
+      tag = Tag.find_or_create(:name => name, :taggable_type => self.class.to_s)
+      puts "tag.errors: #{tag.errors.on_base}"
+      tag.taggings.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id)
     end
 
 		def tagged_by? user
