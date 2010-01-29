@@ -40,7 +40,10 @@ class Poll < ActiveRecord::Base
   after_save :save_answers
 
   def save_answers
-    @answer_attributes.each { |answer_attribute| answers.create(answer_attribute) }
+    unless @answer_attributes.blank?
+      @answer_attributes.each { |answer_attribute| answers.create(answer_attribute) }
+      @answer_attributes = nil
+    end
   end 
 
   def self.random

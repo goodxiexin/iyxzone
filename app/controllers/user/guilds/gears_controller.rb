@@ -8,15 +8,10 @@ class User::Guilds::GearsController < UserBaseController
   end
 
   def create
-    @gear = @guild.gears.build(params[:gear])
+    gear_params = (params[:gear] || {}).merge({:guild_id => @guild.id})
+    @gear = Gear.new(gear_params)
     if @gear.save
-      render :update do |page|
-        # insert a line
-      end
-    else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render :json => @gear
     end
   end
 
@@ -43,7 +38,7 @@ class User::Guilds::GearsController < UserBaseController
 protected
 
   def setup
-    if ["index", "new", "create_or_update"].include? params[:action]
+    if ["index", "new", "create", "create_or_update"].include? params[:action]
       @guild = current_user.guilds.find(params[:guild_id])
     elsif ["destroy"].include? params[:action]
       @guild = current_user.guilds.find(params[:guild_id])

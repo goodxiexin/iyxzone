@@ -9,6 +9,7 @@ class User::FriendSuggestionsController < UserBaseController
 		current_user.servers.each do |s|
 			@comrade_suggestions[s.id] = current_user.find_or_create_comrade_suggestions(s).paginate :page => params[:page], :per_page => 8
 		end
+    logger.error @comrade_suggestions.values
 	end
 
 	def friend

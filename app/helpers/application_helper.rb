@@ -10,12 +10,13 @@ module ApplicationHelper
     end
   end
 
-  def avatar(user, opts={})
-		size = opts.delete(:size) || "medium"
+  def avatar(user, img_opts={}, a_opts={})
+		size = img_opts.delete(:size) || "medium"
+    a_opts.merge!({:popup => true})
     if user.avatar.blank?
-      link_to image_tag("default_#{size}.png", opts), profile_url(user.profile), :popup => true
+      link_to image_tag("default_#{size}.png", img_opts), profile_url(user.profile), a_opts
     else
-      link_to image_tag(user.avatar.public_filename(size), opts), profile_url(user.profile), :popup => true
+      link_to image_tag(user.avatar.public_filename(size), opts), profile_url(user.profile), a_opts
     end
   end
 
@@ -236,5 +237,20 @@ module ApplicationHelper
       "女"
     end
   end
+
+  def time_ago_in_chinese from_time
+    e = Time.now - from_time
+    if e >= 0 and e < 30
+      "不到1分钟前"
+    elsif e >= 30 and e < 90
+      "1分钟前"
+    elsif e >= 90 and e < 1470
+      min = e / 60 + 1
+      "#{min}分钟前"
+    elsif e >= 1470 and e < 5370
+      "大约一小时前"
+    
+  end
+
 
 end

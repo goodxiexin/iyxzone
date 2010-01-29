@@ -146,6 +146,8 @@ ActionController::Routing::Routes.draw do |map|
   
       events.resources :requests, :controller => 'events/requests', :member => {:accept => :put, :decline => :put}
 
+      events.resource :summary, :controller => 'events/summary', :member => {:next => :post}
+
     end
 
     users.resources :guild_albums, :controller => 'guilds/albums'

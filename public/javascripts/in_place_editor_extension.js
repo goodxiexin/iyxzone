@@ -1,7 +1,3 @@
-/**
- * TODO:
- * 点击后如果不更新返回后text消失
- */
 
 Ajax.InPlaceEditorWithEmptyText = Class.create(Ajax.InPlaceEditor, {
  

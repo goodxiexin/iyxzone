@@ -24,7 +24,7 @@ class User::Polls::InvitationsController < UserBaseController
 	end
 
 	def search
-		@friends = current_user.friends.find_all {|f| f.login.include?(params[:key]) }
+		@friends = current_user.friends.search(params[:key])
 		render :partial => 'friends'
 	end
 

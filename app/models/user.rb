@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   acts_as_pinyin :login => "pinyin"
 
-	searcher_column :pinyin
+	searcher_column :pinyin, :login
 
 	has_many :friend_suggestions
 

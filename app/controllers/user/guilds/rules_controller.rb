@@ -13,15 +13,10 @@ class User::Guilds::RulesController < UserBaseController
   end
 
   def create
-    @rule = @guild.rules.build(params[:rule])
+    rule_params = (params[:rule] || {}).merge({:type => 2, :guild_id => @guild.id})
+    @rule = Guild.new(rule_params)
     if @rule.save
-      render :update do |page|
-        # insert a new row
-      end
-    else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render :json => @rule
     end
   end
 

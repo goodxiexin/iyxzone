@@ -7,6 +7,14 @@ class User::Guilds::BossesController < UserBaseController
   def new 
   end
 
+  def create
+    boss_params = (params[:boss] || {}).merge({:guild_id => @guild.id})
+    @boss = Boss.new(boss_params)
+    if @boss.save
+      render :json => @boss
+    end
+  end
+
   def create_or_update
     if @guild.update_attributes(params[:guild])
       @guild.reload
@@ -30,7 +38,7 @@ class User::Guilds::BossesController < UserBaseController
 protected
 
   def setup
-    if ["index", "new", "create_or_update"].include? params[:action]
+    if ["index", "new", "create", "create_or_update"].include? params[:action]
       @guild = current_user.guilds.find(params[:guild_id])
     elsif ["destroy"].include? params[:action]
       @guild = current_user.guilds.find(params[:guild_id])

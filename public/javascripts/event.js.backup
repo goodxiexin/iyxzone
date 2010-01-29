@@ -519,9 +519,370 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
 
 Object.extend(Iyxzone.Event.Summary.Gear, {
 
+  summary: new Hash(),
+
+  eventID: null,
+
+  guildID: null,
+
+  token: null,
+
+  load: function(eventID, guildID, token, ids, costs, recipientIDs){
+    this.eventID = eventID;
+    this.guildID = guildID;
+    this.token = token;
+
+    for(var i=0;i<ids.length;i++){
+      this.summary.set(ids[i], {cost: costs[i], recipientID: recipientIDs[i]});
+    }
+  },
+
+  reset: function(){
+    $$('input').each(function(input){
+      if(input.type == 'checkbox' && input.readAttribute('gear_id')){
+        input.checked = false;
+        if(this.summary.keys().include(input.readAttribute('gear_id')))
+          input.checked = true;
+      }
+    }.bind(this));
+
+    setTimeout(this.save.bind(this), 20000);
+  },
+
+  selectGears: function(){
+    $('friend-wrap').toggle();
+  },
+
+  resetGears: function(){
+    var newGearIds = [];
+    var delGearIds = [];
+    var gearIds = [];
+    var params;
+
+    $$('input').each(function(e){
+      if(e.type == 'checkbox' && e.readAttribute('gear_id') && e.checked)
+        gearIds.push(e.readAttribute('gear_id'));
+    });
+
+    this.summary.keys().each(function(k){
+      if(!gearIds.include(k))
+        delGearIds.push(k);
+    }.bind(this));
+
+    gearIds.each(function(k){
+      if(!this.summary.keys().include(k))
+        newGearIds.push(k)
+    }.bind(this));
+
+    params = "";
+    delGearIds.each(function(id){
+      params += "gear_ids[]=" + id + "&";
+    });
+
+    if(params != ""){
+      new Ajax.Request('/user/events/summary/remove_gears?step=3&event_id=' + this.eventID, {
+        method: 'get',
+        parameters: params,
+        onSuccess: function(){
+          delGearIds.each(function(id){
+            $('friend-wrap').hide();
+            this.summary.unset(id);
+            $('gear_' + id).remove();
+          }.bind(this));
+        }.bind(this)
+      });
+    }
+
+    params = "";
+    newGearIds.each(function(id){
+      params += "gear_ids[]=" + id + "&";
+    });
+
+    if(params != ""){
+      new Ajax.Request('/user/events/summary/add_gears?step=3&event_id=' + this.eventID, {
+        method: 'get',
+        parameters: params,
+        onSuccess: function(transport){
+          $('friend-wrap').hide();
+          Element.insert($('gears'), {bottom: transport.responseText});
+          newGearIds.each(function(id){
+            var cost = $('gear_' + id).childElements()[1].innerHTML;
+            this.summary.set(id, {cost: cost, recipientID: ''});
+          }.bind(this));
+        }.bind(this)
+      });
+    }
+  },
+
+  showRecipients: function(gearID){
+    $('gear_recipients_' + gearID).toggle();
+  },
+
+  selectRecipient: function(gearID, recipientID, link){
+    $('gear_recipients_' + gearID).toggle();
+
+    var info = this.summary.get(gearID);
+    info.recipientID = recipientID;
+    this.summary.set(gearID, info);
+
+    $('gear_recipient_' + gearID).innerHTML = link.innerHTML;
+  },
+
+  remove: function(gearID){
+    new Ajax.Request('/user/events/summary/remove_gears?step=3&event_id=' + this.eventID, {
+      method: 'get',
+      parameters: "gear_ids[]=" + gearID,
+      onSuccess: function(){
+        this.summary.unset(gearID);
+        new Effect.BlindUp($('gear_' + gearID));
+        $$('input').each(function(input){
+          if(input.type == 'checkbox' && input.readAttribute('gear_id') != null){
+            input.checked = false;
+            if(this.summary.keys().include(input.readAttribute('gear_id'))){
+              input.checked = true;
+            }
+          }
+        }.bind(this));
+      }.bind(this)
+    });
+  },
+
+  save: function(){
+    var params = '';
+
+    this.summary.each(function(pair){
+      params += 'gears[' + pair.key + '][cost]=' + pair.value.cost + '&gears[' + pair.key + '][recipient_id]=' + pair.value.recipientID + '&';
+    });
+
+    new Ajax.Request('/user/events/summary/save?step=3&event_id=' + this.eventID + '&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params,
+      onSuccess: function(){
+        setTimeout(this.save.bind(this), 20000);
+      }.bind(this)
+    });
+  },
+
+  next: function(){
+    var params = '';
+
+    this.summary.each(function(pair){
+      params += 'gears[' + pair.key + '][cost]=' + pair.value.cost + '&gears[' + pair.key + '][recipient_id]=' + pair.value.recipientID + '&';
+    });
+
+    new Ajax.Request('/user/events/summary/next?step=3&event_id=' + this.eventID + '&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params
+    });
+  },
+
+  prev: function(){
+    var params = '';
+  
+    this.summary.each(function(pair){
+      params += 'gears[' + pair.key + '][cost]=' + pair.value.cost + '&gears[' + pair.key + '][recipient_id]=' + pair.value.recipientID + '&';
+    });
+
+    new Ajax.Request('/user/events/summary/prev?step=3&event_id=' + this.eventID + '&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params
+    });
+  },
+
+  newGear: function(){
+    $('new_gear').hide();
+    $('new_gear_name').show();
+    $('gear_name').value = '输入装备名字';
+    $('new_gear_cost').show();
+    $('gear_cost').value = '输入装备成本';
+    $('new_gear_submit').show();
+  },
+
+  cancelGear: function(){
+    $('new_gear_name').hide();
+    $('new_gear_cost').hide();
+    $('new_gear_submit').hide();
+    $('new_gear').show();
+  },
+
+  validateGear: function(){
+    var name = $('new_gear_name').value;
+    var cost = $('new_gear_cost').value;
+
+    if(name == ''){
+      error('名字不能为空');
+      return false;
+    }
+
+    if(cost == ''){
+      error('成本不能为空');
+      return false;
+    }else{
+      cost = parseInt(cost);
+      if(cost == null){
+        error('成本必须是整数');
+        return false;
+      }else if(cost <= 0){
+        error('成本必须是正数');
+        return false;
+      }
+    }
+
+    return true;
+  },
+
+  createGear: function(){
+    if(this.validateGear()){
+      new Ajax.Request('/guilds/' + this.guildID + '/gears?authenticity_token=' + encodeURIComponent(this.token), {
+        method: 'post',
+        parameters: 'gear[name]=' + $('gear_name').value + '&gear[cost]=' + $('gear_cost').value,
+        onSuccess: function(transport){
+          this.cancelGear();
+          var gear = transport.responseText.evalJSON().gear;
+          var gearList = $$('ul.checkboxes')[0];
+          var html = "<li><span><input type='checkbox' checked=1 value=1 gear_id='" + gear.id + "'/>" + gear.name + "-" + gear.cost + "</span></li>";
+          Element.insert(gearList, {bottom: html});
+          this.resetGears();
+        }.bind(this)
+      });
+    }  
+  }
+
 });
 
 Object.extend(Iyxzone.Event.Summary.Reward, {
+
+  summary: new Array(),
+
+  eventID: null,
+
+  guildID: null,
+
+  token: null,
+
+  load: function(eventID, guildID, token, characterIDs, ruleIDs){
+    this.eventID = eventID;
+    this.guildID = guildID;
+    this.token = token;
+
+    for(var i=0;i<characterIDs.length;i++){
+      this.summary.push({characterID: characterIDs[i], ruleID: ruleIDs[i]});
+    }
+  },
+
+  reset: function(){
+    $$('input').each(function(input){
+      if(input.type == 'checkbox' && input.readAttribute('character_id')){
+        input.checked = false;
+      }
+    }.bind(this));
+  },
+
+  selectCharacters: function(){
+    $('friend-wrap').toggle();
+  },
+
+  addCharacters: function(){
+    var newCharacterIds = [];
+    var params;
+    
+    $$('input').each(function(e){
+      if(e.type == 'checkbox' && e.readAttribute('character_id') && e.checked)
+        newCharacterIds.push(e.readAttribute('character_id'));
+    });
+
+    params = "";
+    newCharacterIds.each(function(id){
+      params += "character_ids[]=" + id + "&";
+    });
+
+    if(params != ""){
+      new Ajax.Updater('rewards', '/user/events/summary/add_rewards?step=4&event_id=' + this.eventID, {
+        method: 'get',
+        parameters: params,
+        insertion: 'bottom',
+        onSuccess: function(){
+          newCharacterIds.each(function(id){
+            this.summary.push({characterID: id, ruleID: ''});
+          }.bind(this));
+          $('friend-wrap').hide();
+          $$('input').each(function(e){
+            if(e.type == 'checkbox' && e.readAttribute('character_id'))
+              e.checked = false;
+          });
+        }.bind(this)
+      });
+    }    
+  },
+
+  showRules: function(characterID){
+    
+  },
+
+  selectRule: function(characterID, ruleID, link){
+  },  
+
+  remove: function(characterID, ruleID, link){
+    new Ajax.Request('/user/events/summary/remove_reward?step=4&event_id=' + this.eventID, {
+      method: 'get',
+      parameters: "character_id=" + characterID + "&rule_id=" + ruleID,
+      onSuccess: function(){
+        for(var i=0;i< this.summary.length;i++){
+          if(this.summary[i].characterID == characterID && this.summary[i].ruleID == ruleID){
+            this.summary.splice(i, 1)
+            break;
+          }
+        }
+        new Effect.BlindUp(link.up().up());
+      }.bind(this)
+    });
+  },
+
+  newRule: function(){
+    $('new_rule').hide();
+    $('new_rule_reason').show();
+    $('rule_reason').value = '输入装备名字';
+    $('new_rule_outcome').show();
+    $('rule_outcome').value = '输入装备成本';
+    $('new_rule_submit').show();
+  },
+
+  cancelRule: function(){
+    $('new_rule_reason').hide();
+    $('new_rule_outcome').hide();
+    $('new_rule_submit').hide();
+    $('new_rule').show();
+  },
+
+  validateRule: function(){
+    var reason = $('rule_reason').value;
+    var outcome = $('rule_reason').outcome;
+
+    if(reason == ''){
+      error('原因不能为空');
+      return false;
+    }
+
+    if(outcome == ''){
+      error('赏罚必须有');
+      return false;
+    }else if(!parseInt(outcome)){
+      error('赏罚必须是整数');
+      return false;
+    }
+  },
+
+  createRule: function(){
+    if(this.validateRule()){
+      new Ajax.Request('/guilds/' + this.guildID + '/rules?authenticity_token=' + encodeURIComponent(this.token), {
+        method: 'post',
+        parameters: 'rule[reason]=' + $('rule_reason').value + '&rule[outcome]=' + $('rule_outcome').value,
+        onSuccess: function(transport){
+          this.cancelBoss();
+        }.bind(this)
+      });
+    }
+  }
 
 });
 

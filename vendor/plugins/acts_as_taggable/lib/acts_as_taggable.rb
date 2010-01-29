@@ -87,7 +87,6 @@ module Taggable
 
     def add_tag user, name
       tag = Tag.find_or_create(:name => name, :taggable_type => self.class.to_s)
-      puts "tag.errors: #{tag.errors.on_base}"
       tag.taggings.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id)
     end
 

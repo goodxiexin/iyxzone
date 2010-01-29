@@ -15,7 +15,7 @@ class EventObserver < ActiveRecord::Observer
       c = event.poster_character
       event.game_id = c.game_id
       event.game_server_id = c.server_id
-      event.game_area_id = g.area_id
+      event.game_area_id = c.area_id
     end
   end
 

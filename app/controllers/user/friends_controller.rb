@@ -17,11 +17,9 @@ class User::FriendsController < UserBaseController
     end
   end
 
-=begin
   def new
 		render :action => 'new', :layout => 'app2'
   end
-=end
 
 	# other people's friends list
 	def other
@@ -36,7 +34,7 @@ class User::FriendsController < UserBaseController
   def destroy
     if @friendship.cancel
       render :update do |page|
-        page << "alert('成功');$('friend_#{params[:id]}').remove();"
+        page << "tip('成功');$('friend_#{params[:id]}').remove();"
       end
     else
       render :update do |page|
