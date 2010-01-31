@@ -22,6 +22,8 @@ class Game < ActiveRecord::Base
 
   has_many :attentions, :class_name => 'GameAttention'
 
+  has_many :news
+
   named_scope :sex, :order => "(characters_count - last_week_characters_count) DESC"
 
 	named_scope :hot, :conditions => "attentions_count != 0", :order => "attentions_count DESC" 
