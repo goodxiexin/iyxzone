@@ -336,4 +336,18 @@ Iyxzone.Friend.Tagger = Class.create({
     this.addTags([{id: id, profileID: profileID, login: login}]);
     input.clear();
   },
+
+  reset: function(tagInfos){
+    // clear current data
+    this.newTags = new Hash();
+    this.tags = new Hash();
+    this.taggedUserList.disposeAll();
+
+    // save new data
+    for(var i=0;i<tagInfos.length;i++){
+      var el = this.taggedUserList.add(tagInfos[i].friend_id, tagInfos[i].friend_login);
+      this.tags.set(tagInfos[i].friend_id, [tagInfos[i].id, el]);
+    }
+  }
+
 });

@@ -20,7 +20,7 @@
       <div class="appcontent01">
 				<div class="cons-form formcontent">
           <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
-          <% form_for :video, :url => videos_url, :html => {:id => 'video_form'} do |f| %>
+          <% form_for :video, :url => video_url(@video), :html => {:method => 'put', :id => 'video_form'} do |f| %>
             <div class="rows s_clear">
 	    				<div class='title'>
 		    			  <div class="fldid"><%= f.label "视频标题：" %></div>

@@ -51,13 +51,9 @@ class User::VideosController < UserBaseController
 
   def update
     if @video.update_attributes((params[:video] || {}).merge({:poster_id => current_user.id}))
-			render :update do |page|
-				page.redirect_to video_url(@video)
-			end
+		  redirect_to video_url(@video)
     else
-			render :update do |page|
-				page << "error('更改的时候发生错误');"
-			end
+      render :action => 'edit'
     end
   end
 
