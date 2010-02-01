@@ -13,13 +13,13 @@ class User::GamesController < UserBaseController
   end
 
   #
-  # sex 和 hot 的区别是
-  # sex是按照过去一周这个游戏有多少游戏角色而定的
+  # sexy 和 hot 的区别是
+  # sexy是按照过去一周这个游戏有多少游戏角色而定的
   # hot是按照这一周里有多少人关注这个游戏而定的
   # 
-  def sex
-    @games = Game.sex.paginate :page => params[:page], :per_page => 10
-    render :action => "sex", :layout => "app"
+  def sexy
+    @games = Game.sexy.paginate :page => params[:page], :per_page => 10
+    render :action => "sexy", :layout => "app"
   end
 
   def interested
@@ -78,7 +78,7 @@ protected
       @user = User.find(params[:id]) 
     elsif ["show"].include? params[:action]
       @game = Game.find(params[:id])
-    elsif ["sex", "hot", "beta"].include? params[:action]
+    elsif ["sexy", "hot", "beta"].include? params[:action]
       @user = current_user
     elsif ["game_details"].include? params[:action]
       @game = Game.find(params[:id])

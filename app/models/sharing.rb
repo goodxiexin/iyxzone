@@ -2,7 +2,7 @@ class Sharing < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User'
 
-  belongs_to :shareable, :polymorphic => true, :counter_cache => true
+  belongs_to :shareable, :polymorphic => true
 
   named_scope :hot, :conditions => ["created_at > ?", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
 

@@ -42,13 +42,13 @@
 				<% j = i*4 %>
 				<tr>
         <% @photos[j..j+n].each do |p| %>                         
-          <td valign="bottom">
+          <td valign="bottom" width=25%>
             <%= photo_link p, :class => 'imgbox02' %>
 					</td>
 				<% end %>
 				<% if n < 3 %>
 					<% n.upto(2){ %>
-						<td valign="bottom"></td>
+						<td valign="bottom" width=25%></td>
 					<% } %>
 				<% end %>
 				</tr>
@@ -57,11 +57,11 @@
 					<% @photos[j..j+n].each do |p| %>                         
 						<td><%= facebox_link "", edit_personal_photo_url(p), :class => "icon-active icon-active-edit" %> | <%= facebox_confirm '', personal_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete', :class => "icon-active"} %></td>
 					<% end %>
-				<% if n < 3 %>
-					<% n.upto(2){ %>
-						<td></td>
-					<% } %>
-				<% end %>
+					<% if n < 3 %>
+						<% n.upto(2){ %>
+							<td></td>
+						<% } %>
+					<% end %>
 					</tr>
         <% end %>
         <% } %>

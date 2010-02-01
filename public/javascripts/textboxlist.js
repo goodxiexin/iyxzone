@@ -41,7 +41,7 @@ TextBoxList = Class.create({
       /*
        * box css class name
        */
-      bitClassName: 'bit',
+      bitClassName: 'bit-box',
       /*
        * parameter name
        */
@@ -97,17 +97,17 @@ TextBoxList = Class.create({
      * main input field
      */
     this.mainInput = this.createMainInput();
-    this.resizableMainInput = new ResizableTextBox(this.mainInput);
+    //this.resizableMainInput = new ResizableTextBox(this.mainInput);
 
     /*
      * root element which contains all related elements
      */
     this.holder = new Element('ul', {class: this.options.holderClassName});
 
-    this.holder.setStyle({
+    /*this.holder.setStyle({
       width: (this.el.getWidth() - 10) + 'px',
       height: (this.el.getHeight()) + 'px'
-    });
+    });*/
 
     this.el.hide();
     this.holder.appendChild(this.mainInput);
@@ -172,14 +172,14 @@ TextBoxList = Class.create({
     /*
      * create box and insert it to the bottom of box list (before main input)
      */
-    var id= this.options.bitClassName + '-' + this.count++;
+    var id= 'bit-' + this.count++;
     var el = this.createBox(text, {id: id});
     Element.insert(this.mainInput, {before: el});
-  
+    
     /*
      * create input and insert it before box element created in previous step
      */
-    var input = this.createInput({class: 'smallInput', value: val});
+    var input = this.createInput({value: val});
     Element.insert(el, {before: input});
     input.hide();
 
@@ -197,7 +197,7 @@ TextBoxList = Class.create({
     /*
      * reset resizable text field
      */
-    this.resizableMainInput.reset(); 
+    //this.resizableMainInput.reset(); 
     
     return el; 
   },
@@ -206,15 +206,19 @@ TextBoxList = Class.create({
     /*
      * create li element and delete button
      */
-    var li = new Element('li', Object.extend({class: this.options.bitClassName + '-box'}, options || {})).update('<span>' + text + '</span>');
-    var a = new Element('a', {class: 'closebutton', href: '#'});
+    var li = new Element('li', Object.extend({class: this.options.bitClassName}, options || {}));
+    var a = new Element('a');
+    var span = new Element('span').update(text);
+    var em = new Element('em', {class: 'x'});
+    span.appendChild(em);
+    a.appendChild(span);
     li.appendChild(a);
 
     /*
      * observe remove event
      */
-    Event.observe(a, 'click', function(e){
-      this.dispose(e.element().parentNode);
+    Event.observe(em, 'click', function(e){
+      this.dispose(e.element().up().up().up());
       Event.stop(e);
     }.bind(this));
     
@@ -292,7 +296,7 @@ TextBoxList = Class.create({
       this.boxBlur(this.current);
     }
 
-    el.addClassName(this.options.bitClassName + '-box-focus');
+    el.addClassName('bit-focus');
     this.current = el;
     
     // invoke callbacks
@@ -304,7 +308,7 @@ TextBoxList = Class.create({
      * if currently focused box is not main input, deselect that bos
      */
     if(this.current && this.mainInput != this.current)
-      this.current.className = this.options.bitClassName + '-box';
+      this.current.className = this.options.bitClassName;
 
     this.current = false; 
 
@@ -380,7 +384,9 @@ TextBoxList = Class.create({
      */
     this.bits.unset(el.id);
     this.options.onBoxDispose(el, el.previous().childElements()[0]);
-    el.previous().remove();
+    if(el.previous()){
+      el.previous().remove();
+    }
     el.remove();
   },
 

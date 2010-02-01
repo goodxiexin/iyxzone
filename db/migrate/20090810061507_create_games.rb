@@ -14,6 +14,7 @@ class CreateGames < ActiveRecord::Migration
       t.boolean :no_servers, :default => false
       t.boolean :no_races, :default => false
       t.boolean :no_professions, :default => false
+      t.integer :sharings_count, :default => 0
       t.integer :areas_count, :default => 0
       t.integer :servers_count, :default => 0
       t.integer :professions_count, :default => 0
@@ -23,6 +24,7 @@ class CreateGames < ActiveRecord::Migration
 			t.integer :comments_count, :default => 0
       t.integer :characters_count, :default => 0
       t.integer :last_week_characters_count, :default => 0
+			t.integer :last_week_attentions_count, :default => 0
       t.timestamps
     end
   end

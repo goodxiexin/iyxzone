@@ -17,7 +17,6 @@
         <ul>
           <% subject = get_subject @user %>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:id => @user.id) %></span></li>
-          <li><span><%= link_to '最新照片', recent_personal_albums_url(:id => @user.id) %></span></li>
           <li class='hover'><span><%= link_to "#{subject}的相册", personal_albums_url(:id => @user.id) %></span></li>
           <% if @user == current_user %>
             <li><span><%= link_to '好友相册', friends_personal_albums_url(:id => @user.id) %></span></li>
@@ -25,25 +24,11 @@
           <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
         </ul>       
       </div>
-      <div class="box02 pic-box">
+      <div class="pic-box">
         <div class="img-container-main s_clear">
           <div class="img-container-wrap">
             <div class="img-container">
               <div class="path-box">
-                <ul>
-                  <li><%= facebox_link "分享", new_sharing_url(:shareable_type => 'Photo', :shareable_id => @photo.id) %></li>
-                  <li><%= dig_link @photo %></li>
-                  <% if relationship == 'owner' or relationship == 'friend' %>
-                    <li><%= link_to_function "标记", "tagger.start();" %></li>
-                  <% end %>
-                  <% if @user == current_user %>
-                    <li class="icon-photo"><%= link_to '编辑', edit_avatar_url(@photo), :rel => 'facebox' %>
-                    <% if @user.avatar != @photo %>
-                    <li class="icon-del" ><%= facebox_confirm '删除', avatar_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %></li>
-                    <li class="icon-del" ><%= link_to_remote "设置为头像", :url => set_avatar_url(@photo, :show => 1), :method => :put %></li> 
-                    <% end %>
-                  <% end %>
-                </ul>
                 <label>
                   <% if @user == current_user %>
                     我的相册
@@ -51,34 +36,48 @@
                     <%= @user.login %>的相册
                   <% end %>
                 </label>
-                <span><%= album_link @album %></span><span>照片</span>
+                <label><%= album_link @album %></label><span>查看照片</span>
               </div>
               <div class="img-main">
-                <div class="imgwrap">
-                  <table cellpadding="0">
-                    <tr>
-                      <th><%= image_tag @photo.public_filename, :id => "photo_#{@photo.id}" %></th>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-              <div class="pic-desc">
-                <h4>
-                  <% if @user == current_user %>
-                    <%= in_place_text_field :span, @photo, :notation, true, avatar_url(@photo), {}, {:empty_text => '点击增加照片描述', :parameter_name => 'photo[notation]', :rows => 2, :cols => 70} %>
-                  <% else %>
-                    <%= @photo.notation %>
-                  <% end %>
-                </h4>
-                <div class="pic-flag s_clear">
-                  <ul id='photo_tags'></ul>
-                </div>
-              </div>
-            </div>
-          </div>
+                <div class="imgwrap box05">
+                  <div class="photo-op">
+										<% if relationship == 'owner' or relationship == 'friend' %>
+										<span class="photo-op-mark"></span>
+										<%= link_to_function "标记", "tagger.start()" %> | 
+										<% end %>
+										<% if @user == current_user %>
+										<span class="photo-op-edit"></span>
+                    <%= facebox_link '编辑', edit_avatar_url(@photo) %> | 
+										<span class="photo-op-del"></span>
+                    <%= facebox_confirm '删除', avatar_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
+										<% end %>
+										<span class="photo-op-share" ></span>
+										<%= facebox_link "分享", new_sharing_url(:shareable_type => 'Photo', :shareable_id => @photo.id) %> |
+										<span class="photo-op-praise" ></span>
+										<div class="right"><%= dig_link @photo %></div>
+									</div>
+                  <p><%= image_tag @photo.public_filename, :id => "photo_#{@photo.id}" %></p>
+									<div class="pic-desc s_clear">
+										<h4 class="box06">
+										<% if @user == current_user %>
+											<%= in_place_text_field :span, @photo, :notation, true, personal_photo_url(@photo), {}, {:empty_text => '点击增加照片描述', :parameter_name => 'photo[notation]', :rows => 2, :cols => 70} %>
+										<% else %>
+											<%= @photo.notation %>
+										<% end %>
+										</h4>
+										<ul class="mark-list s_clear" id='photo_tags'></ul>
+										<div class="rows"></div> 
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
           <div class="album">
+						<span class="num">一共<%= @album.photos_count %>张</span>
             <% if @album.photos_count > 5 %>
-            <div class="btn upbtn" onclick="slide.prev();"></div>
+							<div class="btn upbtn" onclick="slide.prev();"></div>
+						<% else %>
+              <div class="btn upbtn-gray"></div>
             <% end %>
             <div class="small-imgs">
               <div class="imgList" id='frames'>
@@ -89,12 +88,14 @@
               </div>
             </div>
             <% if @album.photos_count > 5 %>
-            <div class="btn downbtn" onclick="slide.next()"></div>
+							<div class="btn downbtn" onclick="slide.next()"></div>
+						<% else %>
+							<div class="btn downbtn-gray"></div>
             <% end %>
           </div>
         </div>
       </div>
-      <div class="foot">
+      <div class="foot cmt-space">
         <div class="feed-list">
           <h4>评论(<%= @photo.comments_count %>)</h4>
           <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @photo, :recipient => @user} %>
@@ -110,6 +111,6 @@
 <% photo_ids = array_or_string_for_javascript @album.photos.map(&:id) %>
 <% urls = array_or_string_for_javascript @album.photos.map {|p| p.public_filename(:medium)} %>
 <%= javascript_tag "
-  slide = new Iyxzone.Photo.Slide('avatar', #{photo_ids}, #{urls}, #{window_size}, $('frames').childElements(), #{@photo.id});
-  tagger = new Iyxzone.Photo.Tagger('avatar', #{@photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{@tags}, 'photo_tags', #{@user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend_table', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
+  slide = new Iyxzone.Photo.Slide('personal_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames').childElements(), #{@photo.id});
+  tagger = new Iyxzone.Photo.Tagger('personal_photo', #{@photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{@tags}, 'photo_tags', #{@user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend_table', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
 "%>

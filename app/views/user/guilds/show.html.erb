@@ -36,7 +36,7 @@
   <div class="multibox space20">
     <div class="title"><b>描述</b></div>
     <div class="feed-box">
-      <%= @guild.description %>
+      <%= in_place_text_field :span, @guild, :description, @user == current_user, guild_url(@guild), {}, {:empty_text => '介绍下工会?', :rows => 2, :cols => 80}, {} %>
     </div>
   </div>
 

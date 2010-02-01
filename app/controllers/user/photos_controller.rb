@@ -51,7 +51,7 @@ class User::PhotosController < UserBaseController
     @album.update_attribute('cover_id', @photo.id) if params[:cover]
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.json { render :json => @photo }
+				format.json { render :text => @photo.notation }
 				format.html {
 					render :update do |page|
 						if @photo.album_id_changed?

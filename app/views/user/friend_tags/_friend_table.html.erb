@@ -1,18 +1,7 @@
-<% if friend_table.blank? %>
+<% if friends.blank? %>
   没有匹配的好友
 <% else %>
-<% i = 0 %>
-<% friend_table.each do |f| %>
-  <% if i == 0 %>
-    <div class="rows">
-    <table cellpadding="0"><tr>
+  <% friends.each do |f| %>
+    <li><span><%= check_box_tag '', f.id, false, :profile_id => f.profile.id, :login => f.login %><%= f.login %></span></li>
   <% end %>
-  <% i = i + 1 %>
-  <th><%= check_box_tag '', f.id, false, :profile_id => f.profile.id, :login => f.login %></th>
-  <td><label for="c1"><%= f.login %></label></td>
-  <% if i == 3 %>
-    </tr></table></div><% i = 0 %>
-  <% end %>
-<% end %>
-</tr></table></div>
 <% end %>

@@ -52,9 +52,19 @@
               <li><%= link_to "<span>相册</span>", sharings_url(:id => @user.id, :type => 5) %></li>
             <% end %>
             <% if params[:type].to_i == 6 %>
-              <li class="hover"><%= link_to "<span>投票</span>", sharings_url(:id => @user.id, :type => 5) %></li>
+              <li class="hover"><%= link_to "<span>投票</span>", sharings_url(:id => @user.id, :type => 6) %></li>
             <% else %>
-              <li><%= link_to "<span>投票</span>", sharings_url(:id => @user.id, :type => 5) %></li>
+              <li><%= link_to "<span>投票</span>", sharings_url(:id => @user.id, :type => 6) %></li>
+            <% end %>
+            <% if params[:type].to_i == 7 %>
+              <li class="hover"><%= link_to "<span>游戏</span>", sharings_url(:id => @user.id, :type => 7) %></li>
+            <% else %>
+              <li><%= link_to "<span>游戏</span>", sharings_url(:id => @user.id, :type => 7) %></li>
+            <% end %>
+            <% if params[:type].to_i == 8 %>
+              <li class="hover"><%= link_to "<span>玩家</span>", sharings_url(:id => @user.id, :type => 8) %></li>
+            <% else %>
+              <li><%= link_to "<span>玩家</span>", sharings_url(:id => @user.id, :type => 8) %></li>
             <% end %>
           </ul>
         </div>

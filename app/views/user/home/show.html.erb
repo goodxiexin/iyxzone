@@ -26,13 +26,13 @@
 										<div id="mcStatus" class="textfield02"><%= f.text_area :content %></div>
                   </div>
                   <div class="fldbtn jl-fldbtn">
-										<span class="button03"><span><button type='submit' onclick="Iyxzone.Status.Builder.save(this)">发布</button></span></span>
+										<span class="button03"><span><button type='submit' onclick="Iyxzone.Status.Builder.save(this, event)">发布</button></span></span>
                   </div>
                   <% end %>
 									<div class='buttons home-dialog'>
-                  <span class='left'>
+                  <span class='left' id='latest_status'>
 										<% unless current_user.latest_status.nil? %>
-											<%= distance_of_time_in_words_to_now(current_user.latest_status.created_at) %> ago: <%= current_user.latest_status.content %>
+											<%= time_ago_in_chinese current_user.latest_status.created_at %> : <%= truncate current_user.latest_status.content, :length => 100, :omission => '...' %>
 										<% end %>
 									</span>
 										<span class="right"><%= emotion_link 'status_content', :class => 'icon-face' %></span>

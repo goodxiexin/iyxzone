@@ -29,7 +29,11 @@ module RoleRequirementSystem
   module InstanceMethods
   
     def check_roles names
-      current_user.has_roles?(names) || not_found
+      current_user.has_roles?(names) || role_denied 
+    end
+
+    def role_denied
+      render :template => 'not_found', :layout => false
     end
 
   end

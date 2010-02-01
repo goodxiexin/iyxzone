@@ -24,15 +24,17 @@ class Game < ActiveRecord::Base
 
   has_many :news
 
-  named_scope :sex, :order => "(characters_count - last_week_characters_count) DESC"
+  named_scope :sexy, :order => "(characters_count - last_week_characters_count) DESC"
 
-	named_scope :hot, :conditions => "attentions_count != 0", :order => "attentions_count DESC" 
+	named_scope :hot, :conditions => "attentions_count != 0", :order => "(attentions_count - last_week_attentions_count) DESC" 
 
 	named_scope :beta, :conditions => ["sale_date > ?", Time.now.to_s(:db)], :order => 'sale_date DESC'
 
 	acts_as_taggable :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 1.week.ago }
   
 	acts_as_rateable
+
+  acts_as_shareable
 
 	acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, game, comment| false }, :recipient_required => false
 

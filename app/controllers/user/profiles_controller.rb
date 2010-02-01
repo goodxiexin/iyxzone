@@ -33,7 +33,7 @@ class User::ProfilesController < UserBaseController
   def update
     if @profile.update_attributes(params[:profile])
 			respond_to do |format|
-				format.json { render :json => @profile }
+				format.json { render :text => @profile.about_me }
 				format.html {
 					case params[:type].to_i
 					when 1

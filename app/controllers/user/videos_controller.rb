@@ -51,7 +51,7 @@ class User::VideosController < UserBaseController
 
   def update
     if @video.update_attributes((params[:video] || {}).merge({:poster_id => current_user.id}))
-      redirect_to video_url(@video)
+		  redirect_to video_url(@video)
     else
       render :action => 'edit'
     end

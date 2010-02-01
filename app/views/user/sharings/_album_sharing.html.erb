@@ -1,13 +1,13 @@
 <% album = album_sharing.shareable %>
 <div class="share-side-list">
-  <div class="comment-simple-box"><b><%= album_sharing.digs_count %></b></div>
+  <%= dig_link album_sharing %>
   <div class="box02 share-content s_clear">
     <div class="right">
       <p><%= ftime album_sharing.created_at %></p>
       <p>首次分享人：<%= avatar album.first_sharer, :width => '27px', :height => '27px' %> <%= profile_link album.first_sharer %></p>
     </div>
     <div>
-      <h3><%= sharing_link album_sharing %></h3>
+      <h3><%= album_link album %></h3>
       <p class="img"> <%= album_cover album, :class => 'imgbox01' %> </p>
       <p><%= truncate album_sharing.reason, :length => 80, :omission => '...'  %></p>
       <p class="green"><%= link_to_function "评论", "Iyxzone.Comment.toggleBox('sharing', #{album_sharing.id})" %>(<%= album_sharing.comments_count %>)-<%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Album', :shareable_id => album.id) %><span>(<%= album.sharings_count %>)</span></a> -<%= link_to "更多分享", sharings_url(:id => album.first_sharer.id) %></p>

@@ -332,7 +332,7 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
 
 Object.extend(Iyxzone.Event.Summary.Boss, {
 
-  summary: new Hash(),
+  summary: new Array(),
 
   eventID: null,
 
@@ -340,13 +340,16 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
 
   token: null,
 
-  load: function(eventID, guildID, token, ids, rewards){
+  id: null,
+
+  load: function(eventID, guildID, token, ids, bossIDs, counts){
     this.eventID = eventID;
     this.guildID = guildID;
     this.token = token;
-    
+    this.id = ids[ids.length - 1] + 1;
+
     for(var i=0;i<ids.length;i++){
-      this.summary.set(ids[i], {reward: rewards[i]});
+      this.summary.push({id: ids[i], bossID: bossIDs[i], count: counts[i]});
     }
   },
 
@@ -364,49 +367,19 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
     $('friend-wrap').toggle();
   },
 
-  resetBosses: function(){
-    var newBossIds = [];
-    var delBossIds = [];
-    var bossIds = [];
-    var params;
-    
+  addBosses: function(){
+    var params = "";
+    var bosses = new Array();    
+
     $$('input').each(function(e){
-      if(e.type == 'checkbox' && e.readAttribute('boss_id') && e.checked)
-        bossIds.push(e.readAttribute('boss_id'));
+      if(e.type == 'checkbox' && e.readAttribute('boss_id') && e.checked){
+        bosses.push({id: this.id, bossID: e.readAttribute('boss_id'), count: 1});
+        this.id++;
+      }
     });
    
-    this.summary.keys().each(function(k){
-      if(!bossIds.include(k))
-        delBossIds.push(k);
-    }.bind(this));
-
-    bossIds.each(function(k){
-      if(!this.summary.keys().include(k))
-        newBossIds.push(k)
-    }.bind(this));
-    
-    params = "";
-    delBossIds.each(function(id){
-      params += "boss_ids[]=" + id + "&";
-    });
-
-    if(params != ""){
-      new Ajax.Request('/user/events/summary/remove_bosses?step=2&event_id=' + this.eventID, {
-        method: 'get',
-        parameters: params,
-        onSuccess: function(){
-          delBossIds.each(function(id){
-            this.summary.unset(id);
-            $('boss_' + id).remove();
-            $('friend-wrap').hide();
-          }.bind(this));
-        }.bind(this)
-      });
-    }
-
-    params = "";
-    newBossIds.each(function(id){
-      params += "boss_ids[]=" + id + "&";
+    bosses.each(function(v){
+      params += "bosses[" + v.id + "][boss_id]=" + v.bossID + "&";
     });
 
     if(params != ""){
@@ -416,32 +389,27 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
         onSuccess: function(transport){
           $('friend-wrap').hide();
           Element.insert($('bosses'), {bottom: transport.responseText});
-          newBossIds.each(function(id){
-            var reward = $('boss_' + id).childElements()[1].innerHTML;
-            alert(reward);
-            this.summary.set(id, {reward: reward});
+          bosses.each(function(v){
+            this.summary.push(v);
           }.bind(this));
+          this.resetBosses();
         }.bind(this)
       });
     }
 
   },
 
-  remove: function(bossID){
+  remove: function(id){
     new Ajax.Request('/user/events/summary/remove_bosses?step=2&event_id=' + this.eventID, {
       method: 'get',
-      parameters: "boss_ids[]=" + bossID,
+      parameters: "ids[]=" + id,
       onSuccess: function(){
-        this.summary.unset(bossID);
-        new Effect.BlindUp($('boss_' + bossID));
-        $$('input').each(function(input){
-          if(input.type == 'checkbox' && input.readAttribute('boss_id') != null){
-            input.checked = false;
-            if(this.summary.keys().include(input.readAttribute('boss_id'))){
-              input.checked = true;
-            }
+        for(var i=0;i<this.summary.length;i++){
+          if(this.summary[i].id == id){
+            this.summary.splice(i,1);
           }
-        }.bind(this));
+        }
+        new Effect.BlindUp($('boss_' + id));
       }.bind(this)
     });
   },

@@ -5,57 +5,17 @@
     <div class="box02 canvas_int">
       <div class="app-list-box">
         <div class="app-header">
-          共有 5 个应用
+          共有 <%= @applications.count %> 个应用
         </div>
+        <% @applications.each_with_index do |app, i| %>
         <div class="app-list">
           <div class="link">
-            <%= facebox_link "设置", edit_application_setting_url(:type => 0) %>
-            <%= facebox_link "关于", "" %>
+            <%= facebox_link "设置", edit_application_setting_url(:type => i) %>
+            <%= link_to "关于", application_url(app) %>
           </div>
-          <h2 class="app-log">日志</h2>
+          <h2 class="<%= app.icon_class %>"><%= app.name %></h2>
         </div>
-        <div class="app-list">
-          <div class="link">
-            <%= facebox_link "设置", edit_application_setting_url(:type => 1) %>
-            <%= facebox_link "关于", "" %>
-          </div>
-          <h2 class="app-gift">视频</h2>
-        </div>
-        <div class="app-list">
-          <div class="link">
-            <%= facebox_link "设置", edit_application_setting_url(:type => 2) %>
-            <%= facebox_link "关于", "" %>
-          </div>
-          <h2 class="app-photo">照片</h2>
-        </div>
-        <div class="app-list">
-          <div class="link">
-            <%= facebox_link "设置", edit_application_setting_url(:type => 3) %>
-            <%= facebox_link "关于", "" %>
-          </div>
-          <h2 class="app-log">投票</h2>
-        </div>
-        <div class="app-list">
-          <div class="link">
-            <%= facebox_link "设置", edit_application_setting_url(:type => 4) %>
-            <%= facebox_link "关于", "" %>
-          </div>
-          <h2 class="app-photo">活动</h2>
-        </div>
-        <div class="app-list">
-          <div class="link">
-            <%= facebox_link "设置", edit_application_setting_url(:type => 5) %>
-            <%= facebox_link "关于", "" %>
-          </div>
-          <h2 class="app-photo">工会</h2>
-        </div>
-        <div class="app-list">
-          <div class="link">
-            <%= facebox_link "设置", edit_application_setting_url(:type => 6) %>
-            <%= facebox_link "关于", "" %>
-          </div>
-          <h2 class="app-photo">分享</h2>
-        </div>
+        <% end %>
       </div>
     </div>
   </div></div>

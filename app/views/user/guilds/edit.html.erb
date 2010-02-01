@@ -4,7 +4,7 @@
 </div>
     
 <div id='errors'></div>
-<% form_for :guild, :html => {:id => "guild_form"} do |f| %>  
+<% form_remote_for :guild, :url => guild_url(@guild), :html => {:method => 'put', :id => "guild_form"} do |f| %>  
   <div class="rows s_clear">
     <div class="fldid"><label for="name">工会名字：</label></div>
     <div class="fldvalue">

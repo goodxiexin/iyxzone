@@ -1,12 +1,8 @@
-class User::GameAttentionsController < UserBaseController
+class User::Games::AttentionsController < UserBaseController
 
   def create
-    if @attention = @game.attentions.create(:user_id => current_user.id)
-			render :update do |page|
-				page.replace_html "game_attention_#{@game.id}", "已关注"
-				page.insert_html :top, 'my_attentions', :partial => 'user/game_suggestions/interested_game', :object => @game
-			end
-		else
+    @attention = @game.attentions.build(:user_id => current_user.id)
+    unless @attention.save
 			render :update do |page|
 				page << "error('发生错误，稍后再试');"
 			end
@@ -14,11 +10,11 @@ class User::GameAttentionsController < UserBaseController
 	end 
     
   def destroy
-    @attention.destroy
-    render :update do |page|
-			page << "$('attention_#{@attention.id}').remove();"
-			page << "facebox.close();"
-		end
+    unless @attention.destroy
+      render :update do |page|
+		    page << "error('发生错误');"
+      end
+    end
   end
   
 protected

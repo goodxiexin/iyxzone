@@ -5,12 +5,13 @@
 <% elsif @user.has_friend? current_user %>
   <%= link_to "发站内信", new_mail_url(:recipient_id => @user.id) %>
   <%= link_to_function "给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %> 
-  <%= link_to "打招呼", new_poke_url(:id => @user.id), :rel => 'facebox' %>
+  <%= facebox_link "分享该玩家", new_sharing_url(:shareable_type => 'Profile', :shareable_id => @user.profile.id) %>
+  <%= facebox_link "打招呼", new_poke_url(:id => @user.id) %>
 <% else %>
   <%= link_to "发站内信", new_mail_url(:recipient_id => @user.id) %>
   <% if @setting.wall_viewable_by? current_user %>
 		<%= link_to_function "给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %>
   <% end %>
-	<%= link_to "打招呼", new_poke_url(:id => @user.id), :rel => 'facebox' %>
-  <%= link_to "加为好友", new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %>
+	<%= facebox_link "打招呼", new_poke_url(:id => @user.id) %>
+  <%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %>
 <% end %>

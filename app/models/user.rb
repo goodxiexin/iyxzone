@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
 
   has_many :game_attentions
 
-	has_many :interested_games, :through => :game_attentions, :source => :game
+	has_many :interested_games, :through => :game_attentions, :source => :game, :order => 'sale_date DESC'
 
 	# notifications
 	has_many :notifications, :order => 'created_at DESC'
@@ -170,6 +170,12 @@ class User < ActiveRecord::Base
     user.has_many :photo_sharings, :conditions => {:shareable_type => 'Photo'}
 
     user.has_many :album_sharings, :conditions => {:shareable_type => 'Album'}
+
+    user.has_many :poll_sharings, :conditions => {:shareable_type => 'Poll'}
+
+    user.has_many :game_sharings, :conditions => {:shareable_type => 'Game'}
+  
+    user.has_many :profile_sharings, :conditions => {:shareable_type => 'Profile'}
 
   end
 

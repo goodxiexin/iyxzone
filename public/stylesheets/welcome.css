@@ -1,6 +1,8 @@
 .body_bg01{background:url(../images/skin/bg01.png) no-repeat center top}
-.top_link{line-height:39px;text-align:right;color:#fff;overflow:hidden}
+.top_link{line-height:39px;text-align:right;color:#fff;overflow:hidden;}
+.welcome-box #navbar #navwrap #navmid{background:#73bd21 url(../images/welcome/top-bg.png) no-repeat 400px 0;}
 
+.logo-v2{background:url(../images/skin/logo-v2.png) no-repeat}
 .login-box .logo,.regist-box .logo{padding:39px 0 0 101px;height:66px;background:url(../images/welcome/logo.png) no-repeat left top;color:#BF3A00}
 .login-box .logo-mail,.regist-box .logo-mail{background:url(../images/welcome/logo-mail.png) no-repeat}
 
@@ -11,10 +13,15 @@
 
 .welcome-box{width:972px;margin:0 auto;}
 .welcome-box02{width:950px;margin:0 auto;}
-.welcome{margin-top:41px;height:546px;overflow:hidden}
-.welcome .login-box{float:left;padding:19px 7px 19px 17px;width:313px;height:100%;background:url(../images/welcome/loginBg01.png) no-repeat left top;}
+.welcome{margin-top:25px;overflow:hidden}
+.welcome .login-box{float:left;width:336px;background:url(../images/welcome/loginBg01.png) no-repeat 0 0;}
+.welcome .login-box .r-m{margin:70px 7px 0 15px}
+.welcome .login-box .r-b{width:336px;height:185px;_height:192px;display:block;background:url(../images/welcome/loginBg01-b.png) no-repeat 0 bottom}
 .welcome .right{margin-top:3px;width:618px;}
-.welcome .right p.later{margin-top:17px;}
+.welcome .right p.later{margin-top:17px;border:1px solid #acd296}
+.welcome .slogon-box{text-align:center;border:1px solid #acd296;background:#fff;padding-top:15px;}
+.slogon{background:url(../images/welcome/slogon-bg.png) no-repeat;width:465px;height:120px;padding-top:26px;_padding-top:35px;margin:0 auto}
+.slogon p{margin:10px 30px;font-size:14px;line-height:24px;color:#006d9a;text-align:left}
 
 .login-box .logo{margin-left:3px;}
 .login-box .rows,.login-box .btn-rows{padding:8px 0;}

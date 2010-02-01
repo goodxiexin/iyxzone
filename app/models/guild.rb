@@ -13,7 +13,7 @@ class Guild < ActiveRecord::Base
   has_one :forum
 
   has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
-
+  
   has_many :events
 
   has_many :gears
@@ -207,14 +207,6 @@ class Guild < ActiveRecord::Base
       return
     end
 
-    # check description
-    if description.blank?
-      errors.add_to_base('描述不能为空')
-      return
-    elsif description.length > 10000
-      errors.add_to_base('描述最长10000个字符')
-      return
-    end
   end
  
   def validate_on_create

@@ -146,13 +146,8 @@ Iyxzone.Friend.Tagger = Class.create({
  
   initialize: function(friendIDs, tagIDs, friendNames, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton, token){
     this.token = token;
-    this.tags = new Hash(); // friendID => tagIDs
+    this.tags = new Hash(); // friendID => [tagIDs, div]
     this.newTags = new Hash(); // friendID => div
-
-    for(var i=0;i<friendIDs.length;i++){
-      this.tags.set(friendIDs[i], tagIDs[i]);
-    }
-
     this.toggleButton = $(toggleButton);
     this.friendList = $(friendList);
     this.friendTable = $(friendTable);
@@ -160,6 +155,27 @@ Iyxzone.Friend.Tagger = Class.create({
     this.confirmButton = $(confirmButton);
     this.cancelButton = $(cancelButton);
     this.gameSelector = $(gameSelector);
+
+    // set text box list
+    this.taggedUserList = new TextBoxList(input, {
+      onBoxDispose: this.removeBox.bind(this),
+      holderClassName: 'friend-select-list s_clear',
+      bitClassName: ''
+    });
+
+    for(var i=0;i<friendIDs.length;i++){
+      var el = this.taggedUserList.add(friendIDs[i], friendNames[i]);
+      this.tags.set(friendIDs[i], [tagIDs[i], el]);
+    }
+
+    var inputs = $$('input');
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox'){
+        inputs[i].checked = false;
+        if(this.tags.keys().include(inputs[i].value))
+          inputs[i].checked = true;
+      }
+    }
 
     // toggle button event
     Event.observe(this.toggleButton, 'click', function(e){
@@ -169,14 +185,26 @@ Iyxzone.Friend.Tagger = Class.create({
     // confirm button event
     Event.observe(this.confirmButton, 'click', function(event){
       Event.stop(event);
+
       var friendInfos = [];
+      var delTags = new Array();
+      var newTags = new Array();
+
       var inputs = $$('input');
       for(var i = 0; i < inputs.length; i++){
-        if(inputs[i].type == 'checkbox' && inputs[i].checked && !this.tags.get(inputs[i].value) && !this.newTags.get(inputs[i].value)){
-          friendInfos.push({id: inputs[i].value, profileID: inputs[i].readAttribute('profileID'), login: inputs[i].readAttribute('login')});
+        if(inputs[i].type == 'checkbox'){
+          if(inputs[i].checked){
+            if(!this.tags.keys().include(inputs[i].value) && !this.newTags.keys().include(inputs[i].value))
+              newTags.push({id: inputs[i].value, profileID: inputs[i].readAttribute('profileID'), login: inputs[i].readAttribute('login')});
+          }else{
+            if(this.newTags.keys().include(inputs[i].value) || this.tags.keys().include(inputs[i].value))
+              delTags.push(inputs[i].value);
+          } 
         }
       }
-      this.add(friendInfos);
+
+      this.addTags(newTags);
+      this.removeTags(delTags);
       this.toggleFriends();
     }.bind(this));
     
@@ -191,16 +219,6 @@ Iyxzone.Friend.Tagger = Class.create({
       this.getFriends(this.gameSelector.value);
     }.bind(this)); 
 
-    // set text box list
-    this.taggedUserList = new TextBoxList(input, {
-      onBoxDispose: this.removeTag.bind(this),
-      holderClassName: 'friend-select-list s_clear',
-      bitClassName: '' 
-    });
-      
-    for(var i=0;i<friendIDs.length;i++){
-      this.taggedUserList.add(friendIDs[i], friendNames[i]);
-    }
     // custom auto completer
     new Iyxzone.Friend.Autocompleter(this.taggedUserList.getMainInput(), this.friendList, '/auto_complete_for_friend_tags', {
       method: 'get',
@@ -227,26 +245,50 @@ Iyxzone.Friend.Tagger = Class.create({
     this.friendList.show();
   }, 
 
-  removeTag: function(el, input){
+  removeBox: function(el, input){
     var friendID = input.value;
-    var tagID = this.tags.unset(friendID);
-    if(tagID){
+  
+    var tagInfo = this.tags.unset(friendID);
+    if(tagInfo){
       // remove exsiting tag
-      new Ajax.Request('/friend_tags/' + tagID, {method: 'delete', parameters: 'authenticity_token=' + encodeURIComponent(this.token)});
+      new Ajax.Request('/friend_tags/' + tagInfo[0], {method: 'delete', parameters: 'authenticity_token=' + encodeURIComponent(this.token)});
     }else{
       // remove new tag
       this.newTags.unset(friendID);
     }
+
+    // uncheck boxes
+    var inputs = $$('input');
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox' && inputs[i].value == friendID){
+        inputs[i].checked = false;
+      }
+    }
   },
 
-  add: function(friends){
+  removeTags: function(friendIDs){
+    for(var i=0;i<friendIDs.length;i++){
+      var friendID = friendIDs[i];
+      var tagInfo = this.tags.unset(friendID);
+      if(tagInfo){
+        // remove exsiting tag
+        new Ajax.Request('/friend_tags/' + tagInfo[0], {method: 'delete', parameters: 'authenticity_token=' + encodeURIComponent(this.token)});
+        tagInfo[1].remove();
+      }else{
+        // remove new tag
+        var div = this.newTags.unset(friendID);
+        div.remove();
+      }
+    }
+  },
+
+  addTags: function(friends){
     if(friends.length == 0)
       return;
     
     for(var i=0;i<friends.length;i++){
-      if(!this.tags.get(friends[i].id) && !this.newTags.get(friends[i].id)){
-        this.newTags.set(friends[i].id, this.taggedUserList.add(friends[i].id, friends[i].login));
-      }
+      var el = this.taggedUserList.add(friends[i].id, friends[i].login);
+      this.newTags.set(friends[i].id, el);
     }
   },
 
@@ -291,7 +333,7 @@ Iyxzone.Friend.Tagger = Class.create({
     var id = selectedLI.readAttribute('id');
     var profileID = selectedLI.readAttribute('profileID');
     var login = selectedLI.innerHTML;
-    this.add([{id: id, profileID: profileID, login: login}]);
+    this.addTags([{id: id, profileID: profileID, login: login}]);
     input.clear();
   },
 
@@ -303,8 +345,8 @@ Iyxzone.Friend.Tagger = Class.create({
 
     // save new data
     for(var i=0;i<tagInfos.length;i++){
-      this.tags.set(tagInfos[i].friend_id, tagInfos[i].id);
-      this.taggedUserList.add(tagInfos[i].friend_id, tagInfos[i].friend_login);
+      var el = this.taggedUserList.add(tagInfos[i].friend_id, tagInfos[i].friend_login);
+      this.tags.set(tagInfos[i].friend_id, [tagInfos[i].id, el]);
     }
   }
 

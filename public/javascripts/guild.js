@@ -36,16 +36,6 @@ Object.extend(Iyxzone.Guild.Builder, {
       form.method = 'post';
       form.submit();
     }
-  },
-
-  update: function(guildID, event){
-    Event.stop(event);
-    if(this.validate()){
-      var form = $('guild_form');
-      form.action = '/guilds/' + guildID;
-      form.method = 'put';
-      form.submit();
-    }
   }
 
 });

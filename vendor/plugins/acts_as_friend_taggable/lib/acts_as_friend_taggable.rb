@@ -16,7 +16,7 @@ module FriendTaggable
 
 			self.friend_taggable_opts = opts
 
-      after_create :save_friend_tags
+      after_save :save_friend_tags
 
       include FriendTaggable::InstanceMethods
 

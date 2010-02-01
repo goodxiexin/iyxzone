@@ -2,10 +2,11 @@
 <%= javascript_include_tag 'textboxlist' %>
 <%= javascript_include_tag 'mail' %>
 <%= javascript_include_tag 'friend' %>
+<%= javascript_include_tag 'emotion' %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
-  <h1 class="big-mygame">站内信</h1>
+  <h1 class="big-letter">站内信</h1>
   <div class="box02 canvas_int">
 		<div class="tab tab01">
       <ul>
@@ -68,13 +69,15 @@
         </div>
         <div class="rows s_clear">
 					<div class="fldid"><%= f.label '内容：' %></div>
-          <div class="fldvalue"><%= f.text_area 'content' %></div>
-        </div>
-        <div class="rows s_clear">
-					<div class="fldid">&nbsp;</div>
           <div class="fldvalue">
-						<span class="button"><span><button onclick="Iyxzone.Mail.Builder.deliver(this);">发送</button></span></span>
-            <span class="button button-gray"><span><button type="reset">取消</button></span></span>
+						<div class='bookbox'>
+							<%= f.text_area 'content' %>
+						</div>
+						<div class='buttons'>
+							<span class="button"><span><button onclick="Iyxzone.Mail.Builder.deliver(this);">发送</button></span></span>
+							<span class="button button-gray"><span><button type="reset">取消</button></span></span>
+						<%= emotion_link 'mail_content', :class => 'icon-face right', :align=>"absmiddle" %>
+						</div>
 					</div>
         </div>
       <% end %>
@@ -93,4 +96,3 @@
   Iyxzone.Mail.Builder.recipientBuilder.add([{id: <%= @recipient.id %>, profileID: <%= @recipient.profile.id %>, login: '<%= @recipient.login %>'}]);
 </script>
 <% end %>
-

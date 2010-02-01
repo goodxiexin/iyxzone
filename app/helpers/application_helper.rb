@@ -104,7 +104,16 @@ module ApplicationHelper
   end
 
   def dig_link diggable
-    link_to_remote "赞(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>)", :url => digs_url("dig[diggable_type]" => diggable.class.to_s, "dig[diggable_id]" => diggable)
+		dig_html="<div class='evaluate'>
+							<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>"
+		if diggable.digged_by? current_user
+		  dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'<a href='#'>已赞</a>"
+		else
+			dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'"
+		  dig_html+= link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable)
+		end
+		dig_html+="</div></div>"
+		return dig_html
   end
 
   def blog_content blog, opts={}
@@ -121,6 +130,15 @@ module ApplicationHelper
 
 	def video_link video, opts={}
 		link_to (truncate video.title, :length => 20), video_url(video), opts
+	end
+
+	def video_thumbnail video, opts={}
+		if (video.thumbnail_url.nil?)
+			tempimg = "/images/photo/video01.png"
+		else
+			tempimg = video.thumbnail_url
+		end
+		image_tag tempimg, :size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"
 	end
 
   def game_link game, opts={}
@@ -172,7 +190,7 @@ module ApplicationHelper
 
     function = block_given? ? update_page(&block) : args[0] || ''
     html_options[:onclick] = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function};"
-    
+
     content_tag(:button, name, html_options)
 	end
 
@@ -200,36 +218,6 @@ module ApplicationHelper
     return html_code
   end
 
-  def sharing_link sharing
-    shareable = sharing.shareable
-    url = ""
-    case shareable.class.name
-    when "Blog"
-      url = blog_url(shareable)
-    when "Video"
-      url = video_url(shareable)
-    when "Link"
-      url = '#'
-    when 'EventAlbum'
-      url = event_album_url(shareable)
-    when 'GuildAlbum'
-      url = guild_album_url(shareable)
-    when 'PersonalAlbum'
-      url = personal_album_url(shareable)
-    when 'AvatarAlbum'
-      url = avatar_album_url(shareable)
-    when 'EventPhoto'
-      url = event_photo_url(shareable)
-    when 'GuildPhoto'
-      url = guild_photo_url(shareable)
-    when 'Avatar'
-      url = avatar_url(shareable)
-    when 'PersonalPhoto'
-      url = personal_photo_url(shareable)
-    end
-    link_to sharing.title, url
-  end
-
   def gender user
     if user.gender == 'male' 
       "男"
@@ -244,13 +232,22 @@ module ApplicationHelper
       "不到1分钟前"
     elsif e >= 30 and e < 90
       "1分钟前"
-    elsif e >= 90 and e < 1470
-      min = e / 60 + 1
-      "#{min}分钟前"
+    elsif e >= 90 and e < 2670
+      min = e / 60
+      "#{min.to_i}分钟前"
     elsif e >= 1470 and e < 5370
       "大约一小时前"
-    
+    elsif e >= 5370 and e < 86370
+      hour = e / 3600
+      "#{hour.to_i}小时前"
+    elsif e >= 86370 and e < 172770
+      "1天前"
+    elsif e >= 172770 and e < 2591970
+      day = e / (3600 * 24)
+      "#{day.to_i}天前"
+    else
+      "#{1}个月前"
+    end    
   end
-
 
 end

@@ -1,0 +1,17 @@
+<% game = game_sharing.shareable %>
+<div class="share-side-list">
+  <%= dig_link game_sharing %>
+  <div class="box02 share-content s_clear">
+    <div class="right">
+      <p><%= ftime game_sharing.created_at %></p>
+      <p>首次分享人：<%= avatar game.first_sharer, :width => '27px', :height => '27px' %> <%= profile_link game.first_sharer %></p>
+    </div>
+    <div>
+      <h3>"<%= game_link game %>" 的游戏主页</h3>
+      <p class="green"><%= link_to_function "评论", "Iyxzone.Comment.toggleBox('sharing', #{game_sharing.id})" %>(<%= game_sharing.comments_count %>)-<%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Game', :shareable_id => game.id) %><span>(<%= game.sharings_count %>)</span></a> -<%= link_to "更多分享", sharings_url(:id => game.first_sharer.id) %></p>
+    </div>
+    <div id ="sharing_comment_box_<%= game_sharing.id %>" style="display:none">
+      <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => game_sharing, :recipient => nil} %>
+    </div>
+  </div>
+</div>

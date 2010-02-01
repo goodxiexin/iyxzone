@@ -10,7 +10,7 @@ module InPlaceEditorMacroHelpers
 		:saving_text => "正在更新..."}
 
 
-	def in_place_editor(field_id, url, object, property, parameter_name, options = {}, ajax_options = {})
+	def in_place_editor(field_id, url, parameter_name, options = {}, ajax_options = {})
     function = "new Ajax.InPlaceEditorWithEmptyText("
     function << "'#{field_id}', "
     function << "'#{url}'"
@@ -22,21 +22,19 @@ module InPlaceEditorMacroHelpers
 				return '#{parameter_name}=' + value + '&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}');
 			}
 		"
-		js_options['onComplete'] = "
-			function(transport, element) {
-				if (transport && transport.status == 200) {
-					new Effect.Highlight(element.id, {startcolor: \"#00ffff\"});
-					var value = transport.responseText.evalJSON().#{object.class.name.underscore}.#{property};
-          element.innerHTML = value.escapeHTML().replace(/\\n/g, '<br/>');
-				}
-			}
-		"
-		js_options['onFailure'] = "
-			function(effect, transport) {
-				new Effect.Highlight(effect.element, {startcolor: \"#ff0000\"});
-			}
-		"
- 
+
+    js_options['onComplete'] = "
+      function(transport, element) {
+        if (transport && transport.status == 200) {
+          new Effect.Highlight(element.id, {startcolor: \"#00ffff\"});
+          var value = transport.responseText;
+          if(value.length != 0){
+            element.innerHTML = value.escapeHTML().replace(/\\n/g, '<br/>');
+          }
+        }
+      }
+    "
+
     js_options['cancelText'] = %('#{options[:cancel_text]}') if options[:cancel_text]
 		js_options['cancelControl'] = options[:cancel_control] unless options[:cancel_control].nil?
     js_options['okText'] = %('#{options[:save_text]}') if options[:save_text]
@@ -73,11 +71,11 @@ module InPlaceEditorMacroHelpers
 		options_for_edit = DEFAULT_TEXT_FIELD_OPTIONS.merge(edit_options)
 		options_for_ajax = ajax_options.merge({:method => "'put'"})
 	
-		parameter_name = edit_options.delete(:parameter_name) || "#{object.class.to_s.underscore}[#{property}]"	
+		parameter_name = edit_options.delete(:parameter_name) || "#{object_name}[#{property}]"	
  
 		tag = content_tag(tag_type, h(object.send(property)).gsub(/\n/, '<br/>'), tag_options)
 		
-		return tag + in_place_editor(tag_options[:id], url, object, property, parameter_name, options_for_edit, options_for_ajax)
+		return tag + in_place_editor(tag_options[:id], url, parameter_name, options_for_edit, options_for_ajax)
   end
 
 end

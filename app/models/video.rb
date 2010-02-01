@@ -31,15 +31,23 @@ class Video < ActiveRecord::Base
     # check title
     if title.blank?
       errors.add_to_base('标题不能为空')
+      return false
     elsif title.length > 100
       errors.add_to_base('标题最长100个字符')
+      return false
     end
 
-    # check poster
-    errors.add_to_base('没有作者') if poster_id.blank?
+    # check description
+    if !description.blank? and description.length > 10000
+      errors.add_to_base('介绍不能超过10000个字符')
+      return false
+    end
 
     # check url
-    errors.add_to_base('url不能为空') if video_url.blank?
+    if video_url.blank?
+      errors.add_to_base('url不能为空')
+      return false
+    end
 
     # check game
     if game_id.blank? 

@@ -157,7 +157,8 @@ a:hover{color:#D63200;}
 .feed-list .word-box,.feed-list .comment-box{margin-top:4px;}
 
 .feed-list .info-box{padding:0 8px;}
-.feed-list .word-box{padding:7px;line-height:18px;}
+.feed-list .word-box{padding:7px;line-height:18px;position:relative}
+.feed-list .word-box .icon-active{position:absolute;right:0;top:0}
 .feed-list .word-box .img{float:left;margin:4px 0;width:27px;text-align:center;overflow:hidden;position:relative}
 .feed-list .word-box .word{margin-left:48px;_margin-left:45px;}
 .feed-list .word-box .form-wrap{float:left;margin-left:-27px;width:100%;}
@@ -306,7 +307,7 @@ a:hover{color:#D63200;}
 .pic-box .pic-flag .rect-box .icon-active{position:absolute;right:0;top:6px;float:right;}
 
 
-.formcontent{clear:both;padding:15px 0;}
+.formcontent{/*clear:both;*/padding:15px 0;}
 .formcontent .rows{padding:5px 0;line-height:27px;}
 .formcontent .buttons{padding:15px 0;}
 .formcontent .emotions{padding:12px 0 2px;}
@@ -321,10 +322,10 @@ a:hover{color:#D63200;}
 .formcontent .fldstatus{float:left;padding-left:16px;margin-right:5px;height:26px;background:url(../images/icons/statusIcons.gif) no-repeat}
 .formcontent a.fldstatus{display:block;}
 .formcontent .fldstatus-none{background:none;margin:0;}
-.formcontent .fldstatus-lock{background-position:left -105px;margin:0;}
-.formcontent .fldstatus-add{background-position:left -220px;margin:0;}
-.formcontent .fldstatus-red-del{background-position:left -271px;margin:0;}
-.formcontent .fldstatus-calendar{background-position:left -346px;}
+.formcontent .fldstatus-lock{background-position:0 -105px;margin:0;}
+.formcontent .fldstatus-add{background-position:0 -220px;margin:0;}
+.formcontent .fldstatus-red-del{background-position:0 -271px;margin:0;}
+.formcontent .fldstatus-calendar{background-position:0 -346px;}
 .formcontent .form-group{margin-bottom:35px;}
 
 .privacy-form{padding-left:32px;padding-right:9px;}
@@ -341,6 +342,8 @@ a:hover{color:#D63200;}
 .photo-form select{width:197px}
 .photo-form .buttons{margin-left:91px;}
 .inbox-form textarea,.cons-form textarea,.poly-form textarea{width:450px;height:90px;}
+.inbox-form .bookbox{width:450px}
+.inbox-form .bookbox .formcontent .buttons .button{float:left}
 .poly-form .left{margin-right:5px;}
 
 
@@ -420,15 +423,15 @@ a:hover{color:#D63200;}
 .friend-list .friend-list-body li{float:left;padding:3px;margin:5px 10px;width:200px;border:1px solid #fff;background:url(../images/skin/dotline.gif) repeat-x bottom;}
 .friend-list .friend-list-body li.bg{border:1px #E7F0E0 solid;background:url(../images/skin/hover-bg.gif) repeat-x;}
 .friend-list .friend-list-body li a.icon-active{visibility:hidden}
-.friend-list .friend-list-body li.bg a.icon-active{visibility: visible}
+.friend-list .friend-list-body li.bg a.icon-active{visibility: visible;position:relative;z-index:2}
 
 .friend-list .friend-list-body .card{padding:5px;height:60px;}
 .friend-list .friend-list-body .card .img{float:left;width:60px;height:100%;text-align:center;overflow:hidden}
 .friend-list .friend-list-body .card .info{margin-left:65px;position:relative;}
 .friend-list .friend-list-body .card .info h4 a:hover{text-decoration:underline}
 
-#friend-man li{width:160px}
-#friend-man .nowrap{width:70px}
+.friend-list .friend-list-body .friend-man li{width:160px}
+.friend-list .friend-list-body .friend-man .nowrap{width:70px}
 
 .friend-table table{width:100%}
 .friend-table th,.friend-table td{padding:15px 6px;}
@@ -600,6 +603,7 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 
 .feed-wrap .feed-list{padding-left:0}
 .jl-list-con{margin-left:75px;padding-bottom:10px;line-height:28px}
+.feed-list .jl-list-con .word-box textarea{width:390px}
 .feed-box .feed-list-box{margin-bottom:10px;}
 .feed-list-box h4{background:url(../images/skin/date-cutline.gif) repeat-x;}
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
@@ -821,7 +825,7 @@ button.add-friend{background:url(../images/skin/add-friend.png) no-repeat;width:
 .icon-mail{background-position:0 -20px;}
 
 /*会员管理*/
-.member{line-height:20px;}
+.member{line-height:20px;z-index:1/*在icon-active之下*/}
 .friend-list .friend-list-body .card .member h4{padding:0;}
 /*.member .selector01{margin-top:3px}
 */
@@ -878,6 +882,12 @@ dl.menu-op dd a{color:#333}
 .feed-list .evaluate{position:absolute;top:0;left:0}
 .feed-img-list .eval-list .feeds{background:url(../images/skin/dotline.gif) repeat-x top;border-top:none}
 
+/*星级评分*/
+#star-ratings-block{margin-top:3px}
+#star-ratings-block span{background:url(../images/skin/star02_01.png) no-repeat;width:16px;height:16px;display:inline-block;}
+#star-ratings-block span.lit-on{background:url(../images/skin/star02_02.png) no-repeat;}
+#star-ratings-block span.lit{background:url(../images/skin/star02_03.png) no-repeat;}
+
 /*投票*/
 .vote-op{padding:0 0 0 10px;text-align:left;}
 /*.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del{display:inline-block;background:url(../images/icons/homeIcons.png) no-repeat;margin:0 5px;width:16px;height:16px; vertical-align:middle !important;_vertical-align:baseline;*vertical-align:baseline !important;}
@@ -922,6 +932,7 @@ a.share-btn{background:url(../images/skin/share-btn.png) no-repeat;display:inlin
 .list-msg table td{padding:10px 5px;}
 .list-msg table tr.first td{border-top:1px solid #c2e299;border-bottom:1px solid #c2e299;}
 .list-msg table tr.me td{background:#eff8ea}
+.list-msg .bookbox{width:350px}
 .sponsor{background:url(../images/skin/sponsor.gif) no-repeat;display:inline-block;width:41px;height:14px}
 
 /*隐私*/
