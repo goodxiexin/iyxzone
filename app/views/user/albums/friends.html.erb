@@ -18,29 +18,26 @@
           <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => current_user.id) %></span></li>
         </ul>				
 	    </div>
-      <div class="box02 appcontent01">
+      <div class="piclist-rows">
         <% if @albums.total_entries != 0 %>
         <h3>你的好友最近共更新 <span><%= @albums.total_entries %></span> 个专辑</h3>
-        <div class="piclist">
-          <ul class='pics-list s_clear'>
+        <div class="piclist-rows">
+          <table class='big' cellpadding="0" cellspacing="1">
             <% @albums.each do |album| %>
-            <li>
-              <div class="picbox01-wide">
-                <div class="new"></div>
-                <div class="img">
-                  <table cellpadding="0"><tr><td>
-                    <%= album_cover album, :class => 'imgbox01', :width => '75px', :height => '86px' %>
-                  </td></tr></table>
+            <tr>
+              <td>
+                <div class="imgwrap">
+                    <%= album_cover album, :size => :large, :class => 'imgbox01' %>
                 </div>
-                <div class="info">
-                  <h4><%= album_link album %>共<span><%= album.photos_count %></span>张</h4>
-                  <p><%= profile_link album.poster %></p>
-                  <p><%= ftime album.created_at %>创建</p>
-                  <p><%= ftime album.uploaded_at %>更新</p>
+                <div class="data">
+                  <h3><%= profile_link album.poster%>的<%= album_link album %>共<span><%= album.photos_count %></span>张</h3>
+                  <p>创建于<%= ftime album.created_at %></p>
+                  <p>更新于<%= ftime album.uploaded_at %></p>
                 </div>
-              </div>
-            </li>
+              </td>
+            </tr>
             <% end %>
+					</table>
           <%= will_paginate @albums %>
         </div>
         <% else %>
@@ -50,4 +47,3 @@
     </div>
   </div></div>
 </div></div></div></div>
-

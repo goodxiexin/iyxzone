@@ -4,6 +4,7 @@ class User::Polls::InvitationsController < UserBaseController
 
   def new
     @friends = current_user.friends
+		@user = current_user
   end
 
   def create_multiple

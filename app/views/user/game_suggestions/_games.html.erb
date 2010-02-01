@@ -6,25 +6,32 @@
   <tr>
     <th>游戏图片</th>
     <th>游戏名称</th>
-    <th>官网</th>
+    <th>公测时间</th>
     <th>玩家评价</th>
     <th>关注</th>
   </tr>
   <% games.each do |g| %>
   <tr>
     <td class="img"><img class="imgbox01" src="images/photo/photo11.png" alt="" /></td>
-    <td class="name"><%= game_link g %></td>
-    <td class="time">
+    <td class="name"><%= game_link g %>
       <% if g.official_web.blank? %>
-        暂无官网
+        (暂无官网)
       <% else %>
-        <%= link_to "官网", g.official_web, :popup => true %>
+        (<%= link_to "官网", g.official_web, :popup => true %>)
       <% end %>
-    <td class="comment">
+		</td>
+    <td class="time">
+			<% if g.sale_date.blank? %>
+				没有公布
+			<% else %>
+				<%= g.sale_date %>
+			<% end %>
+		</td>
+    <td align="center">
       <% if g.average_rating == 0 %>
         还没人打分
       <% else %>
-        <%= g.average_rating %>
+        <span class="star-<%= g.average_rating.to_i %>"></span>
       <% end %>
     </td>
     <td class="attention">

@@ -20,27 +20,49 @@
           <li class='hover'><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
         </ul>				
 			</div>
-      <% if @photos.total_entries != 0 %>
-      <div class='box04 pic-box'>
-        <ul>
-          <% @photos.each do |p| %>
-          <li>
-            <div class="img">
-              <div class="middle"><div class="middle-center"><div class="center">
-                <%= photo_link p, :class => 'imgbox01' %>
-              </div></div></div>
-            </div>
-            <% if p.album.poster == current_user %>
-              <p><%= facebox_link "编辑", edit_personal_photo_url(p) %> | <%= facebox_confirm '删除', personal_photo_url(p), {:msg => '你确定要删除这张图>片吗', :method => 'delete'} %> </p>
-            <% end %>
-          </li>
-          <% end %>
-        </ul>
-        <%= will_paginate @albums %>
+      <div class="pic-box">
+        <table class="photo-edit-list">
+				<% k = @photos.size/4 %>
+        <% if @photos.total_entries != 0 %>
+				<% 0.upto(k) { |i| %>
+				<% if k == i%>
+					<% n = @photos.size % 4 - 1 %>
+				<% else %>
+					<% n = 3 %>
+				<% end %>
+				<% j = i*4 %>
+				<tr>
+        <% @photos[j..j+n].each do |p| %>                         
+          <td valign="bottom" width=25%>
+            <%= photo_link p, :class => 'imgbox02' %>
+					</td>
+				<% end %>
+				<% if n < 3 %>
+					<% n.upto(2){ %>
+						<td valign="bottom" width=25%></td>
+					<% } %>
+				<% end %>
+				</tr>
+        <% if @album.poster == current_user %>
+					<tr>
+					<% @photos[j..j+n].each do |p| %>                         
+						<td><%= facebox_link "", edit_personal_photo_url(p), :class => "icon-active icon-active-edit" %> | <%= facebox_confirm '', personal_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete', :class => "icon-active"} %></td>
+					<% end %>
+				<% if n < 3 %>
+					<% n.upto(2){ %>
+						<td></td>
+					<% } %>
+				<% end %>
+					</tr>
+        <% end %>
+        <% } %>
+        <%= will_paginate @photos %>
+        <% else %>
+					<div class='gray'>还没有圈了你的图片，赶紧自己去圈吧</div>
+        <% end %>
+				</table>
       </div>
-      <% else %>
-      <div class='gray'>你的好友都不鸟你</div>
-      <% end %>
+      </div>
     </div>
 	</div></div>
 </div></div></div></div>

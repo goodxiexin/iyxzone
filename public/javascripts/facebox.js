@@ -73,6 +73,7 @@ var Facebox = Class.create({
 		var pageScroll = document.viewport.getScrollOffsets();
 		this.facebox.setStyle({
       position:'absolute',
+			zIndex: '100000',
 			top: pageScroll.top + (document.viewport.getHeight() / 5) + 'px',
 			left: document.viewport.getWidth() / 2 - (this.facebox.getWidth() / 2) + 'px'
 		});

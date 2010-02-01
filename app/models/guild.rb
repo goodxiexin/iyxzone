@@ -13,7 +13,7 @@ class Guild < ActiveRecord::Base
   has_one :forum
 
   has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
-
+  
   has_many :events
 
   has_many :gears

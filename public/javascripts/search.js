@@ -10,6 +10,11 @@ Iyxzone.Search = {
     $('character_form').hide();
   },
 
+	toggleUserForm: function(){
+    $('user_form').getInputs('text')[0].value = '好友名字';
+    $('user_form').toggle();
+	},
+
   validateUserForm: function(){
     var value = $('user_form').getInputs('text')[0].value;
     if(value  == '好友名字' || value == ''){
@@ -34,6 +39,12 @@ Iyxzone.Search = {
     $('user_form').hide();
   },
 
+	toggleCharacterForm: function(){
+    $('character_form').getInputs('text')[0].value = '角色名字';
+    $('character_form').toggle();
+		//$('character_options').toggle();
+	},
+
   toggleCharacterOptions: function(){
     var characterOptions = $('character_options');
     if(characterOptions.visible()){
@@ -42,6 +53,10 @@ Iyxzone.Search = {
       Effect.BlindDown(characterOptions);
     }
   },
+
+	toggleMSNForm: function(){
+    $('msnform').toggle();
+	},
 
   validateCharacterForm: function(){
     var value = $('character_form').getInputs('text')[0].value;

@@ -18,9 +18,7 @@
 			</div>
 		</div>
 		<p class="gray"><%= ftime status.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('status', #{status.id}, null)", :class => "gray" %></p>
-  <% if with_comments %>
-	  <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => status, :recipient => status.poster} %>
-	<% end %>
+	<%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => status, :recipient => status.poster} %>
 	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :class => "icon-active" %><% end %> 
 	</div>
 </div>

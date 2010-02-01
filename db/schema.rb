@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
     t.integer  "comments_count",             :default => 0
     t.integer  "characters_count",           :default => 0
     t.integer  "last_week_characters_count", :default => 0
+    t.integer  "last_week_attentions_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

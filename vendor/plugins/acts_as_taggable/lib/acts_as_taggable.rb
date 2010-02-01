@@ -74,8 +74,8 @@ module Taggable
 			new_tag_names = @tag_list - tags.map(&:name)
 			new_tag_names.each do |tag_name|
 				tag = Tag.find_or_create(:name => tag_name, :taggable_type => self.class.to_s)
-        tagging = Tagging.new(:taggable_id => id, :taggable_type => self.class.to_s, :tag_id => tag.id)
-        tagging.save_with_validation(false)
+				tagging = tag.taggings.build(:taggable_type => self.class.to_s, :taggable_id => id)
+				tagging.save_with_validation(false)
 			end
 		end
     # END
@@ -86,7 +86,7 @@ module Taggable
 		end
 
     def add_tag user, name
-      tag = Tag.find_or_create(:name => name, :taggable_type => self.class.to_s)
+			tag = Tag.find_or_create(:name => name, :taggable_type => self.class.to_s)
       tag.taggings.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id)
     end
 

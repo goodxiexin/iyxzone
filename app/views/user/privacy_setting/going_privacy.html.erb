@@ -13,7 +13,7 @@
         <div class="path-box">
         </div>
         <div class="privacy-form formcontent">
-          <% form_for :setting, :url => privacy_setting_url, :html => {:method => :put} do |f| %>
+          <% form_for :setting, :url => privacy_setting_url(:type => 1), :html => {:method => :put} do |f| %>
             <h3>谁可以对你进行以下操作？</h3>
             <div class="rows s_clear">
               <div class="fldid"><label for="addfriend">申请加好友</label></div>
