@@ -63,13 +63,7 @@ class User::GuildsController < UserBaseController
 
   def update
     if @guild.update_attributes(params[:guild])
-      render :update do |page|
-        page.redirect_to guild_url(@guild)
-      end
-    else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render :json => @guild
     end
   end
 

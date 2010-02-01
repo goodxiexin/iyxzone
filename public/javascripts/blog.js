@@ -52,10 +52,10 @@ Object.extend(Iyxzone.Blog.Builder, {
     $('errors').innerHTML = '';
   },
 
-  saveBlog: function(){
+  saveBlog: function(event){
+    Event.stop(event);
     if(this.validate()){
       this.prepare();
-			alert("saveblog");
       new Ajax.Request('/blogs', {
         method: 'post',
         parameters: this.parameters,
@@ -63,7 +63,8 @@ Object.extend(Iyxzone.Blog.Builder, {
     }
   },
   
-  saveDraft: function(){
+  saveDraft: function(event){
+    Event.stop(event);
     if(this.validate()){
       this.prepare();
       new Ajax.Request('/drafts', {
@@ -73,7 +74,8 @@ Object.extend(Iyxzone.Blog.Builder, {
     }
   },
 
-  updateBlog: function(blogID){
+  updateBlog: function(blogID, event){
+    Event.stop(event);
     if(this.validate()){
       this.prepare();
       new Ajax.Request('/blogs/' + blogID, {
@@ -83,7 +85,8 @@ Object.extend(Iyxzone.Blog.Builder, {
     }
   },
 
-  updateDraft: function(draftID){
+  updateDraft: function(draftID, event){
+    Event.stop(event);
     if(this.validate()){
       this.prepare();
       new Ajax.Request('/drafts/' + draftID, {

@@ -28,10 +28,11 @@
       <% end %>
     </td>
     <td class="attention">
-      <% if current_user.interested_in_game? g %>
-        已关注
+      <% attention = current_user.game_attentions.find_by_game_id(g.id) %>
+      <% if !attention.blank? %>
+        <span id='game_attention_<%= g.id %>'><%= link_to_remote "取消关注", :url => game_attention_url(g, attention, :at => 0), :method => :delete %></span>
       <% else %>
-			  <span id='game_attention_<%= g.id %>'><%= link_to_remote "关注", :url => game_attentions_url(:game_id => g.id) %></span>
+			  <span id='game_attention_<%= g.id %>'><%= link_to_remote "关注", :url => game_attentions_url(g, :at => 0) %></span>
 		  <% end %>
     </td>
   </tr>

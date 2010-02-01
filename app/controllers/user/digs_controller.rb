@@ -5,7 +5,7 @@ class User::DigsController < UserBaseController
     if @dig.save
       render :update do |page|
         page << "tip('成功')"
-        page << "$('dig_#{params[:dig][:diggable_type].underscore}_#{params[:dig][:diggable_id]}').innerHTML = #{@dig.diggable.digs_count + 1}"
+        page << "$('dig_#{params[:dig][:diggable_type].underscore}_#{params[:dig][:diggable_id]}').innerHTML = #{@dig.diggable.digs_count}"
       end
     else
       render :update do |page|

@@ -40,8 +40,9 @@ Object.extend(Iyxzone.Comment, {
   },
 
   hideForm: function(commentableType, commentableID, event){
-      $(commentableType + '_comment_' + commentableID).hide();
-      $('add_' + commentableType + '_comment_' + commentableID).show();
+    Event.stop(event);
+    $(commentableType + '_comment_' + commentableID).hide();
+    $('add_' + commentableType + '_comment_' + commentableID).show();
   },
 
   save: function(commentableType, commentableID, button, event){
@@ -55,6 +56,8 @@ Object.extend(Iyxzone.Comment, {
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
+          $(commentableType + '_comment_' + commentableID).hide();
+          $('add_' + commentableType + '_comment_' + commentableID).show();
         }
       });
     }

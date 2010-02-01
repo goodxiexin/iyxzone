@@ -12,7 +12,6 @@ class User::GameSuggestionsController < UserBaseController
 
   def game_tags
     @tagged_games = Game.find_tagged_with(params[:selected_tags])
-    logger.error "tagged_games: #{@tagged_games.count}"
     @tagged_games = @tagged_games.select(&:relative_new?) if params[:new_game] == 'true'
     @games = self.game_suggestion unless @tagged_games.empty?
     @remote = {:update => 'game_suggestion_area', :url => {:action => 'game_tags', :selected_tags => params[:selected_tags]}}

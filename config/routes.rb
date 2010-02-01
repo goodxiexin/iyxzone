@@ -187,8 +187,6 @@ ActionController::Routing::Routes.draw do |map|
 
     end
 
-    users.resources :game_attentions
-
     users.resources :games, :collection => {:sex => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:game_details => :get, :area_details => :get} do |games|
 
       games.resources :blogs, :controller => 'games/blogs'
@@ -200,6 +198,8 @@ ActionController::Routing::Routes.draw do |map|
       games.resources :albums, :controller => 'games/albums'
 
       games.resources :tags, :controller => 'games/tags'
+
+      games.resources :attentions, :controller => 'games/attentions'
 
     end
 

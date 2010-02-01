@@ -31,16 +31,30 @@ Object.extend(Iyxzone.Video.Builder, {
     return true;
   },  
 
-  save: function(button){
+  prepare: function(){
+    var newTags = this.tagBuilder.getNewTags();
+    for(var i=0;i<newTags.length;i++){
+      var el = new Element("input", {type: 'hidden', value: newTags[i], id: 'video[friend_tags][]', name: 'video[friend_tags][]' });
+      $('video_form').appendChild(el);
+    }
+  },
+
+  save: function(button, event){
+    Event.stop(event);
     if(this.validate()){
-      var newTags = this.tagBuilder.getNewTags();
-      for(var i=0;i<newTags.length;i++){
-        var el = new Element("input", {type: 'hidden', value: newTags[i], id: 'video[friend_tags][]', name: 'video[friend_tags][]' });
-        $('video_form').appendChild(el);
-      }
+      this.prepare();
       Iyxzone.disableButton(button, '等待...');
       $('video_form').submit();
     }
   },
+
+  update: function(button, event){
+    Event.stop(event);
+    if(this.validate()){
+      this.prepare();
+      Iyxzone.disableButton(button, '等待...');
+      $('video_form').submit();
+    }
+  }
 
 });

@@ -244,13 +244,22 @@ module ApplicationHelper
       "不到1分钟前"
     elsif e >= 30 and e < 90
       "1分钟前"
-    elsif e >= 90 and e < 1470
-      min = e / 60 + 1
-      "#{min}分钟前"
+    elsif e >= 90 and e < 2670
+      min = e / 60
+      "#{min.to_i}分钟前"
     elsif e >= 1470 and e < 5370
       "大约一小时前"
-    
+    elsif e >= 5370 and e < 86370
+      hour = e / 3600
+      "#{hour.to_i}小时前"
+    elsif e >= 86370 and e < 172770
+      "1天前"
+    elsif e >= 172770 and e < 2591970
+      day = e / (3600 * 24)
+      "#{day.to_i}天前"
+    else
+      "#{1}个月前"
+    end    
   end
-
 
 end

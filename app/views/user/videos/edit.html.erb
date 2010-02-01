@@ -34,36 +34,11 @@
     <%= f.label "privilege: "%><%= privilege_select_tag(:video) %>
   </div>
   <div class='submit'>
-    <%= button_to_function "保存", "Iyxzone.Video.Builder.save(this)", :class => "confirm-button" %>
+    <%= button_to_function "保存", "Iyxzone.Video.Builder.save(this, event)", :class => "confirm-button" %>
   </div>
   <div class='tag'>
     添加和视频相关的好友<br/>
-    <%= text_field_tag 'friend[login]', '', :size => 50 %><%= button_to_function '', :id => 'toggle_button' %>
-    <div id='friend_list' style="display:none"></div>
-    <div id="friend_table" class="box05" style="display:none">
-      <div class="title01">
-        <div class="right">
-          <select name="" id='game_selector' >
-            <option value='all'>全部好友</option>
-            <% current_user.games.each do |game| %>
-              <option value=<%= game.id %>><%= game.name %></option>
-            <% end %>
-          </select>
-        </div>
-        <h1>选择你的好友</h1>
-      </div>
-      <div class="checkgroup" id='friend_items'></div>
-      <div class="buttons s_clear">
-        <table class="center" cellpadding="0"><tr>
-          <td>
-            <span class="button"><span><button onclick="" id="confirm_btn">确定</button></span></span>
-          </td>
-          <td>
-            <span class='button'><span><button onclick="" id='cancel_btn'>取消</button></span></span>
-          </td>
-        </tr></table>
-      </div>
-    </div>
+     <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video} %> 
   </div>
 <% end %>
       </div>
@@ -79,7 +54,7 @@
     #{tagged_user_ids},
     #{tag_ids}, 
     #{user_ids},
-    'toggle_button', 'friend_login', 'friend_list', 'friend_table', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn',
+    'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn',
     #{array_or_string_for_javascript form_authenticity_token});
 " %>
 

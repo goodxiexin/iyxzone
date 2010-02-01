@@ -24,7 +24,7 @@ class User::Events::SummaryController < UserBaseController
   def add_bosses
     @bosses = {}
     params[:boss_ids].each do |id|
-      @bosses["#{id}"] = {:reward => Boss.find(id).reward}
+      @bosses["#{id}"] = {:count => 1}
     end
     session[:event_summary][:bosses].merge!(@bosses)
     render :partial => 'boss_info', :locals => {:bosses => @bosses}
@@ -140,13 +140,17 @@ protected
       if session[:event_summary][:bosses].blank?
         session[:event_summary][:bosses] = {}
       end
-      @bosses = Boss.find(session[:event_summary][:bosses].keys)
       @boss_ids = session[:event_summary][:bosses].keys
-      @boss_rewards = session[:event_summary][:bosses].values.map {|v| v[:reward]}
+      @boss_counts = session[:event_summary][:bosses].values.map {|v| v[:count]}
     end 
   end
 
   def save_step2
+    bosses = {}
+    params[:bosses].each do |boss_id, values|
+      bosses["#{id}"] = {:count => values[:count]}
+    end
+    session[:event_summary][:bosses] = bosses
   end
 
   def step3
@@ -156,20 +160,19 @@ protected
       redirect_to event_summary_url(@event, :step => 2)
     else
       if session[:event_summary][:gears].blank?
-        session[:event_summary][:gears] = {}
+        session[:event_summary][:gears] = []
       end
-      @gears = Gear.find(session[:event_summary][:gears].keys)
-      @gear_ids = session[:event_summary][:gears].keys
-      @gear_costs = session[:event_summary][:gears].values.map {|v| v[:cost]}
-      @recipient_ids = session[:event_summary][:gears].values.map {|v| v[:recipient_id]}
-      @participants = User.find(session[:event_summary][:attendances].keys)
+      @gear_ids = session[:event_summary][:gears].map {|v| v[:gear_id]}
+      @gear_counts = session[:event_summary][:gears].map {|v| v[:count] }
+      @character_ids = session[:event_summary][:gears].map {|v| v[:character_id]}
+      @characters = GameCharacter.find(session[:event_summary][:attendances].keys)
     end
   end
 
   def save_step3
-    gears = {}
-    params[:gears].each do |id, values|
-      gears["#{id}"] = {:cost => Gear.find(id).cost, :recipient_id => values[:recipient_id]}
+    gears = []
+    params[:gears].each do |v|
+      gears.push {:gear_id => v[:gear_id], :count => v[:count], :character_id => v[:character_id]}
     end
     session[:event_summary][:gears] = gears
   end
@@ -182,17 +185,18 @@ protected
     elsif session[:event_summary][:gears].blank?
       redirect_to event_summary_url(@event, :step => 3)
     else
-        session[:event_summary][:rewards] = []
-      @character_ids = session[:event_summary][:rewards].map {|a| a[:character_id]}
-      @rule_ids = session[:event_summary][:rewards].map {|a| a[:rule_id]}
-      @participants = GameCharacter.find(session[:event_summary][:attendances].keys)
+      session[:event_summary][:rewards] = []
+      @rule_ids = session[:event_summary][:rewards].map {|v| v[:rule_id]}
+      @rule_counts = session[:event_summary][:rewards].map {|v| v[:count]}
+      @character_ids = session[:event_summary][:rewards].map {|v| v[:character_id]}
+      @characters = GameCharacter.find(session[:event_summary][:attendances].keys)
     end
   end
 
   def save_step4
-    rewards = {}
-    params[:rewards].each do |id, values|
-      rewards["#{id}"] = {:rule_id => values[:rule_id]}
+    rewards = []
+    params[:rewards].each do |v|
+      rewards.push {:rule_id => v[:rule_id], :count => v[:count], :character_id => v[:character_id]} 
     end
     session[:event_summary][:rewards] = rewards
   end
