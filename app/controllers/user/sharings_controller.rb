@@ -20,6 +20,10 @@ class User::SharingsController < UserBaseController
       @sharings = @user.album_sharings.paginate :page => params[:page], :per_page => 20
     when 6
       @sharings = @user.poll_sharings.paginate :page => params[:page], :per_page => 20
+    when 7
+      @sharings = @user.game_sharings.paginate :page => params[:page], :per_page => 20
+    when 8
+      @sharings = @user.profile_sharings.paginate :page => params[:page], :per_page => 20
     end
   end
 
@@ -39,6 +43,10 @@ class User::SharingsController < UserBaseController
       @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Album'}).paginate :page => params[:page], :per_page => 20
     when 6
       @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Poll'}).paginate :page => params[:page], :per_page => 20
+    when 7
+      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Game'}).paginate :page => params[:page], :per_page => 20
+    when 8
+      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Profile'}).paginate :page => params[:page], :per_page => 20
     end
   end
 
@@ -58,6 +66,10 @@ class User::SharingsController < UserBaseController
       @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Album'}).paginate :page => params[:page], :per_page => 20
     when 6
       @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Poll'}).paginate :page => params[:page], :per_page => 20
+    when 7
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Game'}).paginate :page => params[:page], :per_page => 20
+    when 8
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Profile'}).paginate :page => params[:page], :per_page => 20
     end
   end
 
@@ -77,12 +89,15 @@ class User::SharingsController < UserBaseController
       @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Album'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     when 6
       @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Poll'}.map(&:originator).paginate :page => params[:page], :per_page => 20
+    when 7
+      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Game'}.map(&:originator).paginate :page => params[:page], :per_page => 20
+    when 7
+      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Profile'}.map(&:originator).paginate :page => params[:page], :per_page => 20
     end
   end
 
   def new
-    @sharing = Sharing.new
-    @sharing.title = get_default_title @shareable
+    @sharing = Sharing.new(:title => get_default_title(@shareable))
     render :action => 'new', :layout => false
   end
 
@@ -120,15 +135,13 @@ protected
       if params[:shareable_type] == 'Link'
         @shareable = Link.new(params[:link])
       else
-        @klass = params[:shareable_type].camelize.constantize
-        @shareable = @klass.find(params[:shareable_id])
+        @shareable = params[:shareable_type].camelize.constantize.find(params[:shareable_id])
       end
     elsif ["create"].include? params[:action]
       if params[:shareable_type] == 'Link'
         @shareable = Link.create(params[:link])
       else
-        @klass = params[:shareable_type].camelize.constantize
-        @shareable = @klass.find(params[:shareable_id])
+        @shareable = params[:shareable_type].camelize.constantize.find(params[:shareable_id])
       end
     elsif ["index"].include? params[:action]
       @user = User.find(params[:id])
@@ -171,6 +184,10 @@ protected
       shareable.notation
     when 'EventPhoto'
       shareable.notation
+    when 'Game'
+      shareable.name
+    when 'Profile'
+      shareable.login
     end
   end
 

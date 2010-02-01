@@ -54,6 +54,16 @@
             <% else %>
               <li><%= link_to "<span>投票</span>", friends_sharings_url( :type => 6) %></li>
             <% end %>
+            <% if params[:type].to_i == 7 %>
+              <li class="hover"><%= link_to "<span>游戏</span>", friends_sharings_url(:type => 7) %></li>
+            <% else %>
+              <li><%= link_to "<span>游戏</span>", friends_sharings_url(:type => 7) %></li>
+            <% end %>
+            <% if params[:type].to_i == 8 %>
+              <li class="hover"><%= link_to "<span>玩家</span>", friends_sharings_url(:type => 8) %></li>
+            <% else %>
+              <li><%= link_to "<span>玩家</span>", friends_sharings_url(:type => 8) %></li>
+            <% end %>
           </ul>
         </div>
         <% if @sharings.total_entries != 0 %>

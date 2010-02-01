@@ -71,7 +71,7 @@
         <%= will_paginate @photos %>
         <% else %>
 					<% if @user == current_user %>
-					<div class='gray'>还没有图片，你赶紧<%= link_to '上传', new_personal_photo_url(:album_id => @album.id) %>吧</div>
+					<div class='gray'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :album => 1) %>吧</div>
 					<% else %>
 					<div class='gray'>还没有图片</div>
 					<% end %>

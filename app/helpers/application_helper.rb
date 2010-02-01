@@ -141,8 +141,8 @@ module ApplicationHelper
 		image_tag tempimg, :size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"
 	end
 
-  def game_link game
-    link_to game.name, game_url(game)
+  def game_link game, opts={}
+    link_to game.name, game_url(game), opts
   end
 
   def event_link event, opts={}
@@ -216,36 +216,6 @@ module ApplicationHelper
     end
     html_code += "</select>"
     return html_code
-  end
-
-  def sharing_link sharing
-    shareable = sharing.shareable
-    url = ""
-    case shareable.class.name
-    when "Blog"
-      url = blog_url(shareable)
-    when "Video"
-      url = video_url(shareable)
-    when "Link"
-      url = '#'
-    when 'EventAlbum'
-      url = event_album_url(shareable)
-    when 'GuildAlbum'
-      url = guild_album_url(shareable)
-    when 'PersonalAlbum'
-      url = personal_album_url(shareable)
-    when 'AvatarAlbum'
-      url = avatar_album_url(shareable)
-    when 'EventPhoto'
-      url = event_photo_url(shareable)
-    when 'GuildPhoto'
-      url = guild_photo_url(shareable)
-    when 'Avatar'
-      url = avatar_url(shareable)
-    when 'PersonalPhoto'
-      url = personal_photo_url(shareable)
-    end
-    link_to sharing.title, url
   end
 
   def gender user

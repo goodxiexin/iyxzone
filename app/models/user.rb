@@ -171,6 +171,12 @@ class User < ActiveRecord::Base
 
     user.has_many :album_sharings, :conditions => {:shareable_type => 'Album'}
 
+    user.has_many :poll_sharings, :conditions => {:shareable_type => 'Poll'}
+
+    user.has_many :game_sharings, :conditions => {:shareable_type => 'Game'}
+  
+    user.has_many :profile_sharings, :conditions => {:shareable_type => 'Profile'}
+
   end
 
   # polls

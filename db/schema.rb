@@ -252,6 +252,7 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
     t.boolean  "no_servers",                 :default => false
     t.boolean  "no_races",                   :default => false
     t.boolean  "no_professions",             :default => false
+    t.integer  "sharings_count",             :default => 0
     t.integer  "areas_count",                :default => 0
     t.integer  "servers_count",              :default => 0
     t.integer  "professions_count",          :default => 0
@@ -480,6 +481,7 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
     t.string   "website"
     t.datetime "birthday"
     t.text     "about_me"
+    t.integer  "sharings_count", :default => 0
     t.integer  "viewings_count", :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"

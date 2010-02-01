@@ -1,13 +1,13 @@
 <% photo = photo_sharing.shareable %>
 <div class="share-side-list">
-  <div class="comment-simple-box"><b><%= photo_sharing.digs_count %></b></div>
+  <%= dig_link photo_sharing %>
   <div class="box02 share-content s_clear">
     <div class="right">
       <p><%= ftime photo_sharing.created_at %></p>
       <p>首次分享人：<%= avatar photo.first_sharer, :width => '27px', :height => '27px' %> <%= profile_link photo.first_sharer %></p>
     </div>
     <div>
-      <h3><%= sharing_link photo_sharing %></h3>
+      <h3><%= photo_link photo %></h3>
       <p class="img"> <%= photo_link photo, :class => 'imgbox01' %> </p>
       <p><%= truncate photo_sharing.reason, :length => 80, :omission => '...'  %></p>
       <p class="green"><%= link_to_function "评论", "Iyxzone.Comment.toggleBox('sharing', #{photo_sharing.id})" %>(<%= photo_sharing.comments_count %>)-<%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Photo', :shareable_id => photo.id) %><span>(<%= photo.sharings_count %>)</span></a> -<%= link_to "更多分享", sharings_url(:id => photo.first_sharer.id) %></p>

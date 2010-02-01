@@ -17,7 +17,8 @@ Object.extend(Iyxzone.Status.Builder, {
     return true;
   },
 
-  save: function(button){
+  save: function(button, event){
+    Event.stop(event);
     if(this.validate()){
       var form = $('status_form');
       new Ajax.Request('/statuses', {

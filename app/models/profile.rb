@@ -10,16 +10,7 @@ class Profile < ActiveRecord::Base
 
   acts_as_viewable
 
-  acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
-                         :categories => {
-                            :video => 'Video',
-                            :poll => 'Poll',
-                            :vote => 'Vote',
-                            :event => 'Event',
-                            :participation => 'Participation',
-                            :guild => 'Guild',
-                            :membership => 'Membership'
-                          }
+  acts_as_shareable
 
 	acts_as_resource_feeds
 
@@ -31,7 +22,16 @@ class Profile < ActiveRecord::Base
                       :create_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.leave_wall_message == 1},
                       :view_conditions => lambda {|user, profile| profile.user == user || profiler.user.has_friend?(user) || profile.user.privacy_setting.wall == 1}  
 
-  
+  acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
+                         :categories => {
+                            :video => 'Video',
+                            :poll => 'Poll',
+                            :vote => 'Vote',
+                            :event => 'Event',
+                            :participation => 'Participation',
+                            :guild => 'Guild',
+                            :membership => 'Membership'
+                          } 
 
   def viewable_by viewer
     privilege = user.privacy_setting.personal
