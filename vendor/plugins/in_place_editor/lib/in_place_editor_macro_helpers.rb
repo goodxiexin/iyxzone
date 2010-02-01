@@ -10,7 +10,7 @@ module InPlaceEditorMacroHelpers
 		:saving_text => "正在更新..."}
 
 
-	def in_place_editor(field_id, url, json_name, parameter_name, options = {}, ajax_options = {})
+	def in_place_editor(field_id, url, parameter_name, options = {}, ajax_options = {})
     function = "new Ajax.InPlaceEditorWithEmptyText("
     function << "'#{field_id}', "
     function << "'#{url}'"
@@ -23,22 +23,18 @@ module InPlaceEditorMacroHelpers
 			}
 		"
 
-		js_options['onComplete'] = "
-			function(transport, element) {
-				if (transport && transport.status == 200) {
-					new Effect.Highlight(element.id, {startcolor: \"#00ffff\"});
-					var value = transport.responseText.evalJSON().#{json_name};
-          element.innerHTML = value.escapeHTML().replace(/\\n/g, '<br/>');
-				}
-			}
-		"
+    js_options['onComplete'] = "
+      function(transport, element) {
+        if (transport && transport.status == 200) {
+          new Effect.Highlight(element.id, {startcolor: \"#00ffff\"});
+          var value = transport.responseText;
+          if(value.length != 0){
+            element.innerHTML = value.escapeHTML().replace(/\\n/g, '<br/>');
+          }
+        }
+      }
+    "
 
-		js_options['onFailure'] = "
-			function(effect, transport) {
-				new Effect.Highlight(effect.element, {startcolor: \"#ff0000\"});
-			}
-		"
- 
     js_options['cancelText'] = %('#{options[:cancel_text]}') if options[:cancel_text]
 		js_options['cancelControl'] = options[:cancel_control] unless options[:cancel_control].nil?
     js_options['okText'] = %('#{options[:save_text]}') if options[:save_text]
@@ -79,7 +75,7 @@ module InPlaceEditorMacroHelpers
  
 		tag = content_tag(tag_type, h(object.send(property)).gsub(/\n/, '<br/>'), tag_options)
 		
-		return tag + in_place_editor(tag_options[:id], url, "#{object_name}.#{property}", parameter_name, options_for_edit, options_for_ajax)
+		return tag + in_place_editor(tag_options[:id], url, parameter_name, options_for_edit, options_for_ajax)
   end
 
 end

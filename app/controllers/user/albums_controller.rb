@@ -51,7 +51,7 @@ class User::AlbumsController < UserBaseController
   def update
     if @album.update_attributes((params[:album] || {}).merge({:owner_id => current_user.id}))
 			respond_to do |format|
-        format.json { render :json => @album }
+        format.json { render :text => @album.notation }
         format.html {    
 					render :update do |page|
 						page.alert '成功'
