@@ -38,9 +38,13 @@ ActionController::Routing::Routes.draw do |map|
 
     admin.resources :blogs
 
+    admin.resources :applications
+
   end
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
+
+    users.resources :applications
 
     users.resources :links
 

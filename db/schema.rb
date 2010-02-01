@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100119075038) do
+ActiveRecord::Schema.define(:version => 20100201033652) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -25,6 +25,15 @@ ActiveRecord::Schema.define(:version => 20100119075038) do
     t.integer  "comments_count", :default => 0
     t.datetime "uploaded_at"
     t.datetime "created_at"
+  end
+
+  create_table "applications", :force => true do |t|
+    t.string   "name"
+    t.string   "icon_class"
+    t.text     "about"
+    t.integer  "comments_count", :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "blogs", :force => true do |t|
@@ -597,6 +606,7 @@ ActiveRecord::Schema.define(:version => 20100119075038) do
     t.integer  "poster_id"
     t.integer  "game_id"
     t.string   "title"
+    t.text     "description"
     t.string   "video_url"
     t.string   "embed_html"
     t.string   "thumbnail_url"

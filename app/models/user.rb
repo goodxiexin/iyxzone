@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
 
   has_many :game_attentions
 
-	has_many :interested_games, :through => :game_attentions, :source => :game
+	has_many :interested_games, :through => :game_attentions, :source => :game, :order => 'sale_date DESC'
 
 	# notifications
 	has_many :notifications, :order => 'created_at DESC'

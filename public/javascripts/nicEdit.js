@@ -1417,7 +1417,7 @@ var nicUploadButton = nicEditorAdvancedButton.extend({
 		nicUploadButton.lastPlugin = this;
     var html = '<div class="header"><h3>上传图片</h3></div>';
 		html += '<div id="upload_form_panel">';
-    html += '<form action="/upload_blog_images?authenticity_token=\'' + encodeURIComponent(this.ne.instanceById('blog_content').options.token) + '\'" enctype="multipart/form-data" method="post" target="upload_frame">';
+    html += '<form action="/upload_blog_images?authenticity_token=\'' + '\'" enctype="multipart/form-data" method="post" target="upload_frame">';
 		html += '<div class="content">';
     html += '<a href="javascript:void(0)" onclick="$(\'upload_form_panel\').show();$(\'url_form_panel\').hide();" >本地上传</a><a href="javascript:void(0)" onclick="$(\'upload_form_panel\').hide();$(\'url_form_panel\').show();" >URL图片</a><hr/>';
     html += '<label>支持jpg, gif, png, 最大2MB</label><br>';

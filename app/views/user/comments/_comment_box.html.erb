@@ -21,7 +21,7 @@ parameters:
         <%= hidden_field_tag 'comment[commentable_type]', commentable.class.base_class.name %>
 				<%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id, :id => "#{type}_comment_recipient_#{commentable.id}" %>
         <div class="rows">
-          <%= f.text_area 'content', :class => "textarea",  :id => "#{type}_comment_content_#{commentable.id}", :onblur => "Iyxzone.Comment.hideForm('#{type}', #{commentable.id}, event);" %>
+          <%= f.text_area 'content', :class => "textarea",  :id => "#{type}_comment_content_#{commentable.id}" %>
         </div>
         <div class="buttons">
           <span class="button"><span><button type="submit" id="<%= type %>_comment_<%= commentable.id %>_submit" onclick="Iyxzone.Comment.save('<%= type %>', <%= commentable.id %>, this, event)">发布</button></span></span>

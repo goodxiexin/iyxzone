@@ -3,7 +3,8 @@ class User::ApplicationSettingController < UserBaseController
 	layout 'app'
 
 	def show
-	end
+	  @applications = Application.all
+  end
 
 	def edit
 		case params[:type].to_i 

@@ -4,6 +4,8 @@ class CreateVideos < ActiveRecord::Migration
       t.integer :poster_id
       t.integer :game_id
       t.string :title
+      t.text :description
+
 			# the following 3 fields are required by acts_as_video
       t.string :video_url
 			t.string :embed_html
