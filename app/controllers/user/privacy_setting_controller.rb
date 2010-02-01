@@ -21,7 +21,14 @@ class User::PrivacySettingController < UserBaseController
   def update
     if @setting.update_attributes(params[:setting])
       flash[:notice] = "设置保存成功"
-      redirect_to privacy_setting_url
+			case params[:type].to_i
+			when 0
+				redirect_to edit_privacy_setting_url(:type => 0)
+			when 1
+				redirect_to edit_privacy_setting_url(:type => 1)
+			when 2	
+				redirect_to edit_privacy_setting_url(:type => 2)
+			end
     end
   end
 

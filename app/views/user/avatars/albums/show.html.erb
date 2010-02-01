@@ -49,6 +49,11 @@
             <%= photo_link p, :class => 'imgbox02' %>
 					</td>
 				<% end %>
+				<% if n < 3 %>
+					<% n.upto(2){ %>
+						<td valign="bottom" width=25%></td>
+					<% } %>
+				<% end %>
 				</tr>
         <% if @album.poster == current_user %>
 					<tr>

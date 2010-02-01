@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.integer  "area_id"
     t.integer  "profession_id"
     t.integer  "race_id"
+    t.integer  "guild_id"
     t.string   "name"
     t.integer  "level"
     t.integer  "dkp"
@@ -247,13 +248,14 @@ ActiveRecord::Schema.define(:version => 20091228153258) do
     t.integer  "comments_count",             :default => 0
     t.integer  "characters_count",           :default => 0
     t.integer  "last_week_characters_count", :default => 0
+    t.integer  "last_week_attentions_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "gears", :force => true do |t|
     t.string  "name"
-    t.string  "type"
+    t.string  "gear_type"
     t.integer "boss_id"
     t.integer "guild_id"
     t.integer "cost"

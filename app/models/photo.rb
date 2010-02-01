@@ -16,7 +16,7 @@ class Photo < ActiveRecord::Base
 
   acts_as_shareable
 
-  acts_as_diggable :create_conditions => lambda {|user, photo| photo.type != 'PersonalPhoto' or photo.privilege != 4}
+  acts_as_diggable :create_conditions => lambda {|user, photo| (photo.type != 'PersonalPhoto' and photo.type != 'Avatar') or photo.privilege != 4}
 
   def is_cover?
     album.cover_id == id

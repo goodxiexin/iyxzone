@@ -170,6 +170,6 @@ Iyxzone.Poll.Builder = {
       html += '>最多选' + (i+2) + '项</option>';
       maxSelector.innerHTML += html;
     }
-  }
+  },
 
 };

@@ -18,26 +18,25 @@
           <li><span><%= link_to "草稿箱", drafts_url %></span></li>
         </ul>
       </div>
-      <div class='appcontent05'>
+      <div class='appcontent01'>
         <div id='errors'></div>
-        <div>
-<% form_for :blog, :html => {:method => 'put', :id => 'blog_form'} do |f| %>
-  <div class='title'>
-    <%= f.label "title" %><br/>
-    <%= f.text_field 'title' %>
-  </div>
-  <div class='content'>
-    <%= f.text_area 'content' %>
-  </div>
-  <div class='options'>
-    <%= f.label "category: " %><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %><br/>
-    <%= f.label "privilege: "%><%= privilege_select_tag(:blog) %>
-  </div>
-  <div class='submit'>
-    <%= button_to_function "保存", "Iyxzone.Blog.Builder.updateBlog(#{@blog.id});", :class => "confirm-button" %>
-  </div>
-    <div class='tag'>
-    添加和日志相关的好友<br/>
+        <div class="cons-form formcontent">
+				<% form_for :blog, :html => {:method => 'put', :id => 'blog_form'} do |f| %>
+			<div class='rows s_clear'>
+				<div class='fldid'><%= f.label "日志标题：" %></div>
+				<div class='fldvalue'><%= f.text_field 'title' %></div>
+			</div>
+			<div class='rows s_clear'>
+				<%= f.text_area 'content', :style =>"width: 100%; height: 300px;" %>
+			</div>
+			<div class='rows s_clear'>
+				<div class='fldid'><%= f.label "日志类别: " %></div><div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class => "selector selector02"%></div>
+			</div>
+			<div class='rows s_clear'>
+				<div class='fldid'><%= f.label "浏览权限: "%></div><div class='fldvalue'><%= privilege_select_tag(:blog, :class => "selector selector02") %></div>
+			</div>
+    <div class='rows s_clear'>
+    点名相关好友<br/>
     <%= text_field_tag 'friend[login]', '', :size => 50 %><%= button_to_function '', :id => 'toggle_button' %>
     <div id='friend_list' style="display:none"></div>
     <div id="friend_table" class="box05" style="display:none">
@@ -64,6 +63,11 @@
         </tr></table>
       </div>
     </div>
+  </div>
+  <div class='rows s_clear'>
+		<div class='fldid'>&nbsp;</div>
+		<div class='fldvalue'><span class="button03 w-l"><span><%= button_to_function("修改", "Iyxzone.Blog.Builder.updateBlog()") %></span></span>
+		</div>
   </div>
 <% end %>
         </div>

@@ -17,51 +17,59 @@
           <li><span><%= link_to "好友的视频", friends_videos_url %>
         </ul>
       </div>
-      <div>
-        <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
-        <div>
+      <div class="appcontent01">
+				<div class="cons-form formcontent">
+        <!--<%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %> -->
         <% form_for :video, :url => videos_url, :html => {:id => 'video_form'} do |f| %>
-  <div class='title'>
-    <%= f.label "title" %><br/>
-    <%= f.text_field 'title' %>
-  </div>
-  <div class='url'>
-    <%= f.label 'url' %><br/>
-    <%= f.text_field 'video_url', :id => 'video_url' %>
-  </div>
-  <div class='options'>
-    <%= f.label "category: " %><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %><br/>
-    <%= f.label "privilege: "%><%= privilege_select_tag(:video) %>
-  </div>
-  <div class='tag'>
-    添加和视频相关的好友<br/>
-    <%= text_field_tag 'friend[login]', '', :size => 50 %><%= button_to_function '', :id => 'toggle_button' %>
-    <div id='friend_list' style="display:none"></div>
-    <div id="friend_table" class="box05" style="display:none">
-      <div class="title01">
-        <div class="right">
-          <select name="" id='game_selector' >
-            <option value='all'>全部好友</option>
-            <% current_user.games.each do |game| %>
-              <option value=<%= game.id %>><%= game.name %></option>
-            <% end %>
-          </select>
-        </div>
-        <h1>选择你的好友</h1>
-      </div>
-      <div class="checkgroup" id='friend_items'></div>
-      <div class="buttons s_clear">
-        <table class="center" cellpadding="0"><tr>
-          <td>
-            <span class="button"><span><button onclick="" id="confirm_btn">确定</button></span></span>
-          </td>
-          <td>
-            <span class='button'><span><button onclick="" id='cancel_btn'>取消</button></span></span>
-          </td>
-        </tr></table>
-      </div>
-    </div>
-  </div>
+        <div class="rows s_clear">
+					<div class='title'>
+					<div class="fldid"><%= f.label "视频标题：" %></div>
+					<div class="fldvalue"><%= f.text_field 'title' %></div>
+					</div>
+				</div>
+				<div class="rows s_clear">
+					<div class='url'>
+					<div class="fldid"><%= f.label '连接地址：' %></div>
+					<div class="fldvalue"><%= f.text_field 'video_url', :id => 'video_url' %></div>
+					</div>
+				</div>
+				<div class='options'>
+					<div class="rows s_clear">
+					<div class='fldid'><%= f.label "游戏类别:" %></div><div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class=>"selector selector02" %></div>
+					</div>
+					<div class="rows s_clear">
+					<div class='fldid'><%= f.label "浏览权限:"%></div><div class='fldvalue'><%= privilege_select_tag(:video, :class=> "selector selector02") %></div>
+					</div>
+				</div>
+				<div class='tag'>
+					<div class="fldid">添加相关好友：</div>
+					<div class='fldvalue'><%= text_field_tag 'friend[login]', '', :size => 50 %><%= button_to_function '', :id => 'toggle_button' %></div>
+					<div id='friend_list' style="display:none"></div>
+					<div id="friend_table" class="box05" style="display:none">
+						<div class="title01">
+							<div class="right">
+								<select name="" id='game_selector' >
+									<option value='all'>全部好友</option>
+									<% current_user.games.each do |game| %>
+										<option value=<%= game.id %>><%= game.name %></option>
+									<% end %>
+								</select>
+							</div>
+							<h1>选择你的好友</h1>
+						</div>
+						<div class="checkgroup" id='friend_items'></div>
+						<div class="buttons s_clear">
+							<table class="center" cellpadding="0"><tr>
+								<td>
+								<span class="button"><span><button onclick="" id="confirm_btn">确定</button></span></span>
+								</td>
+								<td>
+								<span class='button'><span><button onclick="" id='cancel_btn'>取消</button></span></span>
+								</td>
+							</tr></table>
+						</div>
+					</div>
+				</div>
   <div class='submit'>
     <%= button_to_function "保存", "Iyxzone.Video.Builder.save(this)", :class => "confirm-button" %>
   </div>

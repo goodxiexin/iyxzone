@@ -6,14 +6,20 @@
   <div class="round_m"><div class="round_body canvas_wrap s_clear">
     <div class="canvas_m">
       <div class="canvas_c">
+				<h1 class='app-vgame'>推荐游戏</h1>
         <div class="box02 canvas_con">
           <div class="formComposer">
-            <h3 class="game">你想玩什么样的游戏?</h3>
-            <div class="formcontent">
-              <div class="rows s_clear">
-                <div class="fldid">&nbsp;</div>
+						<div class="multibox">
+            <div class="title">你想玩什么样的游戏?</div>
+            <div class="feed-box">
+                 想玩最新最热的游戏？记不清楚游戏名称？<br />
+                 点击关键字，系统会自动帮你推荐合适的游戏
+            </div>
+						</div>
+            <div class="formcontent" style="padding-top:0">
+              <div class="s_clear">
                 <div class="fldvalue">
-                  <%= text_field_tag 'tags', '', :size => 50, :id => 'game_tags' %>
+                  <%= text_field_tag 'tags', '点击关键字词,支持多个关键字词', :id => 'game_tags', :class=>"textfield", :style =>"width: 350px" %>
                 </div>
                 <div class="fldbtn">
                   <span class="button"><span><button type="reset" onclick="Iyxzone.Game.Suggestor.suggest(this)">推荐</button></span></span>
@@ -29,9 +35,9 @@
               <div class="title">
                 <b>关键词</b>
               </div>
-              <div class="keybtn-box s_clear">
+              <div class="impress-show s_clear space">
                 <% @game_tags.each do |tag| %>
-                  <%= link_to_function "<span>#{tag.name}</span>", "Iyxzone.Game.Suggestor.addTag('#{tag.name}')", :class => "mbutton" %>
+                  <%= link_to_function "<span>#{tag.name}</span>", "Iyxzone.Game.Suggestor.addTag('#{tag.name}')", :class => "impress-0" %>
                 <% end %>
               </div>
             </div>
@@ -50,7 +56,7 @@
         <div class="chart-list chart-list01 menu-list">
           <ul id='my_attentions'>
             <% @interested_games.each_with_index do |g, i| %>
-              <li><%= game_link g %></li>
+              <li><%= game_link g %><span><%=g.sale_date%></span></li>
             <% end %>
           </ul>
         </div>
@@ -63,7 +69,7 @@
         <div class="chart-list chart-list01 menu-list">
           <ul>
             <% @game_list.each_with_index do |g, i| %>
-              <li><%= game_link g %></li>
+              <li><%= game_link g %><span><%=g.attentions_count %></span></li>
             <% end %>
           </ul>
         </div> 

@@ -103,8 +103,16 @@ module ApplicationHelper
   end
 
   def dig_link diggable
-    link_to_remote '赞', :url => digs_url(:diggable_type => diggable.class.name.underscore, :diggable_id => diggable)
-  #  "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>)"
+		dig_html="<div class='evaluate'>
+								<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>"
+		if diggable.digged_by? current_user
+				dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'<a href='#'>已赞</a>"
+		else
+				dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'"
+				dig_html+= link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable)
+		end
+		dig_html+="</div></div>"
+		return dig_html
   end
 
   def blog_content blog, opts={}
@@ -121,6 +129,15 @@ module ApplicationHelper
 
 	def video_link video, opts={}
 		link_to (truncate video.title, :length => 20), video_url(video), opts
+	end
+
+	def video_thumbnail video, opts={}
+		if (video.thumbnail_url.nil?)
+			tempimg = "/images/photo/video01.png"
+		else
+			tempimg = video.thumbnail_url
+		end
+		image_tag tempimg, :size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"
 	end
 
   def game_link game
@@ -171,9 +188,9 @@ module ApplicationHelper
     html_options = args.extract_options!.symbolize_keys
 
     function = block_given? ? update_page(&block) : args[0] || ''
-    onclick = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function};"
+    html_options[:onclick] = "#{"#{html_options[:onclick]}; " if html_options[:onclick]}#{function};"
 
-    content_tag(:button, name, :onclick => onclick)
+    content_tag(:button, name, html_options)
 
 	end
 

@@ -13,18 +13,12 @@ class Tagging < ActiveRecord::Base
       errors.add_to_base("没有发布者")
       return
     end
-=begin
-    if tag_id.blank?
+    
+		if tag_id.blank?
       errors.add_to_base("没有标签")
       return
     elsif Tag.find(:first, :conditions => {:id => tag_id}).blank?
       errors.add_to_base("标签不存在")
-      return
-    end
-=end
-
-    if tag_name.blank?
-      errors.add_to_base("没有标签")
       return
     end
 

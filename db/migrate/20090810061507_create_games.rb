@@ -23,6 +23,7 @@ class CreateGames < ActiveRecord::Migration
 			t.integer :comments_count, :default => 0
       t.integer :characters_count, :default => 0
       t.integer :last_week_characters_count, :default => 0
+			t.integer :last_week_attentions_count, :default => 0
       t.timestamps
     end
   end

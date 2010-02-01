@@ -5,6 +5,7 @@ parameters:
 -->
 <% type = commentable.class.to_s.underscore %>
 <div id='<%= type %>_comments_<%= commentable.id %>'>
+	<%= commentable.comments.map(&:id).join(',') %>
 	<% commentable.comments.each do |c| %>
 		<%= render :partial => "user/comments/comment", :object => c %>
 	<% end %>
@@ -18,13 +19,14 @@ parameters:
 			<div class="formcontent">
       <% form_remote_for :comment, :html => {:id => "#{type}_comment_form_#{commentable.id}"} do |f| %>
 				<%= hidden_field_tag 'comment[commentable_id]', commentable.id %>
-				<%= hidden_field_tag 'comment[commentable_type]', commentable.class.to_s %>
+				<%= hidden_field_tag 'comment[commentable_type]', commentable.class.base_class.to_s %>
 				<%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id, :id => "#{type}_comment_recipient_#{commentable.id}" %>
         <div class="rows">
-          <%= f.text_area 'content', :class => "textarea",  :id => "#{type}_comment_content_#{commentable.id}" %>
+          <%= f.text_area 'content', :class => "textarea",  :id => "#{type}_comment_content_#{commentable.id}"%>
         </div>
         <div class="buttons">
-          <span class="button"><span><button type="submit" onclick="Iyxzone.Comment.save('<%= type %>', <%= commentable.id %>, this)">发布</button></span></span>
+					<span class="button"><span><button onclick='Iyxzone.Comment.hideForm("<%=type%>",<%=commentable.id%>, event)'>取消</button></span></span>
+          <span class="button"><span><button type="submit" onclick="Iyxzone.Comment.save('<%= type %>', <%= commentable.id %>, this, event)">发布</button></span></span>
           <span class="left"><%= emotion_link "#{type}_comment_content_#{commentable.id}", :class => "icon-face"%></span>
         </div>
       <% end %>

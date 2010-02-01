@@ -8,52 +8,43 @@
         <div class="right"><%= link_to "新投票", new_poll_url %></a></div>
         <ul>
           <li><span><%= link_to "热门投票", hot_polls_url(:id => @user.id) %></span></li>
-          <li><span><%= link_to "最近投票", recent_polls_url(:id => @user.id) %></span></li>
-          <% if @user == current_user %>
-            <li class='hover'><span><%= link_to "我的投票", polls_url(:id => @user.id) %></span></li>
-          <% else %>
-            <li><span><%= link_to "我的投票", polls_url(:id => @user.id) %></span></li>
-          <% end %>
+          <li class='hover'><span><%= link_to "#{get_subject @user}的投票", polls_url(:id => @user.id) %></span></li>
           <li><span><%= link_to "朋友的投票", friends_polls_url(:id => @user.id) %></span></li>
         </ul>
       </div>
-      <div class="appcontent06">
-        <div class="nav-link">
+      <div class="vote-box">
           <% if !@poll.past and @user == current_user %>
-          <ul class="s_clear">
-            <li><%= link_to '增加侯选项', new_poll_answer_url(@poll), :rel => 'facebox' %></li>
+          <div class="vote-op left">
+            <span class="vote-op-add"></span><%= link_to '增加侯选项', new_poll_answer_url(@poll), :rel => 'facebox' %>
             <% unless @poll.no_deadline %>
-            <li><%= link_to '修改截至时间', edit_poll_url(@poll, :type => 0), :rel => 'facebox' %></li>
+            <span class=vote-op-time></span><%= link_to '修改截至时间', edit_poll_url(@poll, :type => 0), :rel => 'facebox' %>
             <% end %>
-            <li><%= link_to '邀请更多人', new_poll_invitation_url(@poll) %></li>
-            <li><%= facebox_confirm '删除本投票', poll_url(@poll), {:msg => '你确定要删除该投票吗?', :method => :delete} %></li>
-          </ul>
+						<span></span><%= link_to '修改选项说明', edit_poll_url(@poll, :type => 1), :rel => 'facebox' %>
+            <span class="vote-op-invite"></span><%= link_to '邀请更多人', new_poll_invitation_url(@poll) %>
+            <span class="vote-op-del"></span><%= facebox_confirm '删除本投票', poll_url(@poll), {:msg => '你确定要删除该投票吗?', :method => :delete} %></li>
+          </div>
           <% else %>
           <div class='path-box'>
             <label><%= link_to "#{@user.login}的投票", polls_url(:id => @user.id) %></label>
             <span>投票</span>
           </div>
           <% end %>
-        </div>
-        <div class="vote-box">
+					<div class="vote-state right">
+						<div class="vote-icon left">
+						<h5><%= @poll.votes_count %>人</h5>
+						<p>参与投票</p>
+						</div>
+            <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Poll', :shareable_id => @poll.id), :class => "left love-btn" %>
+					</div>
+					<div class='rows'></div>
           <table class="vote-header-table" cellpadding="0">
             <tr>
-              <td class="vote-content">
+              <td class="vote-content" align='center'>
                 <h5><%= @poll.name %> 
                   <span>（限选<%= @poll.max_multiple %>项）<span><%= distance_of_time_in_words_to_now @poll.created_at %></span></span>
                 </h5>
+								<p>关于<%= @poll.game.name%></p>
                 <p><%= @poll.description %></p>
-              </td>
-              <td class="status">
-                <div class="vote-icon">
-                  <h5><%= @poll.votes_count %>人</h5>
-                  <p>参与投票</p>
-                </div>
-              </td>
-              <td class="btn">
-                <% unless @poll.past %>
-                  <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Poll', :shareable_id => @poll.id), :class => "right love-btn" %>
-                <% end %>
               </td>
             </tr>
           </table>
@@ -85,26 +76,26 @@
           <% end %>
           </table>
         <% end %>
-        <div>
-          <h3>投票说明</h3>
+        <div class='vote-detail gray'>
+          <h3 class='space'>投票选项说明：</h3>
           <% if @poll.past %>
-            <div id='poll_explanation'><%= @poll.explanation %></div>
+            <p class='jl-cutline' id='poll_explanation'><%= @poll.explanation %></p>
           <% elsif @vote %>
-            <div id='poll_explanation'><%= @poll.explanation %></div>
+            <p class='jl-cutline' id='poll_explanation'><%= @poll.explanation %></p>
           <% else %>
-            投票后才能看
+            <p class='jl-cutline'>投票后才能看</p>
           <% end %>
-        </div>
-        <div>
-          <h3>投票情况</h3>
+          <h3 class='space'>投票情况</h3>
+					<ul class='jl-cutline'>
           <% if @vote %>
-            <%= profile_link current_user %> 投给了 <%= @vote.answers.map{|a| "\"#{truncate a.description, :length => 20, :omission => '...'}\""}.join(',') %>
+            <li class='now'><%= profile_link current_user %> 投给了 <%= @vote.answers.map{|a| "\"#{truncate a.description, :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
           <% end %>
           <% @vote_feeds.each do |v| %>
-            <%= profile_link v.voter %> 投给了 <%= v.answers.map{|a| "\"#{truncate a.description, :length => 20, :omission => '...'}\""}.join(',') %>
+            <li class='now'><%= profile_link v.voter %> 投给了 <%= v.answers.map{|a| "\"#{truncate a.description, :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
           <% end %>
+					</ul>
         </div>
-        <div class="foot">
+        <div class="foot s_clear">
           <div class="prompt-list-box">
             <h5>随便看看</h5>
             <div class="list-box box04">

@@ -8,7 +8,6 @@
         <div class="right"><%= link_to "创建新投票", new_poll_url %></div> 
         <ul>
           <li><span><%= link_to "热门投票", hot_polls_url(:id => current_user.id) %></span></li>
-          <li><span><%= link_to "最近投票", recent_polls_url(:id => current_user.id) %></span></li>
           <li><span><%= link_to "#{get_subject current_user}的投票", polls_url(:id => current_user.id) %></span></li>
           <li><span><%= link_to "朋友的投票", friends_polls_url(:id => current_user.id) %></span></li>
         </ul>
@@ -24,12 +23,12 @@
                 <div class="fldvalue">
                   <div class="textfield"><%= f.text_field 'name' %></div>
                 </div>
-                <%= link_to_function "增加投票描述", "Iyxzone.Poll.Builder.toggleDescriptionInput();" %>
+                <%= link_to_function "增加投票描述", "Iyxzone.Poll.Builder.toggleDescriptionInput();", :class=>"fldstats fldsatus-add" %>
               </div>
               <div class="rows s_clear" id='description' style='display:none'>
                 <div class="fldid"><label for="subject">投票描述：</label></div>
                 <div class="fldvalue">
-                  <%= f.text_area 'description' %>
+                  <%= f.text_area 'description', :rows => 7%>
                 </div>
               </div>
             </div>
@@ -90,7 +89,7 @@
               </div>
               <div class="rows s_clear">
                 <div class="fldid">&nbsp;</div>
-                <div class="fldbtn"><span class="button"><span><%= link_to_function "发起投票", "Iyxzone.Poll.Builder.save()" %></span></span></div>
+                <div class="fldbtn"><span class="button"><span><%= button_to_function "发起投票", "Iyxzone.Poll.Builder.save()" %></span></span></div>
               </div>
             </div>
           <% end %>

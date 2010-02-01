@@ -170,14 +170,16 @@ Iyxzone.Photo.Tagger = Class.create({
      * confirm button events 
      */
     Event.observe(this.confirmButton, 'click', function(e){
-      this.save();  
+      Event.stop(e);
+			this.save();  
     }.bind(this));
 
     /*
      * cancel button event
      */
     Event.observe(this.cancelButton, 'click', function(e){
-      this.reset();
+      Event.stop(e);
+			this.reset();
     }.bind(this));
 
     this.mousemoveBind = this.showNearestTagWithContent.bindAsEventListener(this);
@@ -210,18 +212,24 @@ Iyxzone.Photo.Tagger = Class.create({
                     </li>
     */
     var li = new Element('li', {id: 'tag_' + tagInfo.photo_tag.id});
-    var rectBox = new Element('div', {class: 'rect-box'});
+   /* var rectBox = new Element('div', {class: 'rect-box'});
     var rectWrap = new Element('div', {class: 'rect-wrap'});
-    var rect = new Element('div', {class: 'rect'});
-    var posterLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.poster.id}).update('<span>' + tagInfo.photo_tag.poster.login + '</span>');
-    var taggedUserLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.tagged_user.id}).update('<span>' + tagInfo.photo_tag.tagged_user.login + '</span>');
-    rect.appendChild(posterLink);
+    var rect = new Element('div', {class: 'rect'}); */
+		var rectTag = new Element('strong');
+    var posterLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.poster.id}).update(tagInfo.photo_tag.poster.login);
+    var taggedUserLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.tagged_user.id}).update(tagInfo.photo_tag.tagged_user.login);
+		rectTag.appendChild(posterLink);
+		rectTag.innerHTML += ('标记了');
+		rectTag.appendChild(taggedUserLink);
+		rectTag.innerHTML += (' : ' + tagInfo.photo_tag.content);
+		li.appendChild(rectTag);
+  /*  rect.appendChild(posterLink);
     rect.innerHTML += ('标记了');
     rect.appendChild(taggedUserLink);
     rect.innerHTML += (' : ' + tagInfo.photo_tag.content);
     rectWrap.appendChild(rect);
     rectBox.appendChild(rectWrap);
-    li.appendChild(rectBox);
+    li.appendChild(rectBox); */
 
     if(this.isLoading){
       this.tagsHolder.innerHTML = '';
@@ -239,8 +247,10 @@ Iyxzone.Photo.Tagger = Class.create({
       this.hideTagWithContent(tagInfo.photo_tag.id);
     }.bind(this));
     if(this.isCurrentUser){
-      var deleteLink = new Element('a', {href: '#', class: 'icon-active'});
-      rect.appendChild(deleteLink);
+      var deleteLink = new Element('a', {href:'#', class: 'icon-active'});
+			var spaceBar = new Element('span');
+      li.appendChild(deleteLink);
+			li.appendChild(spaceBar);
       deleteLink.observe('click', function(e){
         this.remove(tagInfo.photo_tag.id);
       }.bind(this));

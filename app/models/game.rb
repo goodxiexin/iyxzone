@@ -24,7 +24,7 @@ class Game < ActiveRecord::Base
 
   named_scope :sex, :order => "(characters_count - last_week_characters_count) DESC"
 
-	named_scope :hot, :conditions => "attentions_count != 0", :order => "attentions_count DESC" 
+	named_scope :hot, :conditions => "attentions_count != 0", :order => "(attentions_count - last_week_attentions_count) DESC" 
 
 	named_scope :beta, :conditions => ["sale_date > ?", Time.now.to_s(:db)], :order => 'sale_date DESC'
 

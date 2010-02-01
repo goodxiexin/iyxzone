@@ -63,7 +63,6 @@ module Taggable
 			@tag_list = TagList.new(*tags.map(&:name))				
 		end
 
-		# the following 2 methods are only used when poster of tagging is ignored
 		def tag_list=(value)
 			@tag_list = (value.is_a? Array) ? TagList.from(value.join(',')) : TagList.from(value)
 		end
@@ -73,7 +72,8 @@ module Taggable
 			new_tag_names = @tag_list - tags.map(&:name)
 			new_tag_names.each do |tag_name|
 				tag = Tag.find_or_create(:name => tag_name, :taggable_type => self.class.to_s)
-				tag.taggings.create(:taggable_type => self.class.to_s, :taggable_id => id)
+				tagging = tag.taggings.build(:taggable_type => self.class.to_s, :taggable_id => id)
+				tagging.save_with_validation(false)
 			end
 		end
 
@@ -83,7 +83,8 @@ module Taggable
 		end
 
     def add_tag user, name
-      Tagging.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id, :tag_name => name)
+			tag = Tag.find_or_create(:name => name, :taggable_type => self.class.to_s)
+      tag.taggings.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id)
     end
 
 		def tagged_by? user

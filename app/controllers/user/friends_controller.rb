@@ -7,6 +7,7 @@ class User::FriendsController < UserBaseController
 	before_filter :not_myself_required, :only => [:other, :common]
 	
   def index
+		@user = current_user
     case params[:term].to_i
     when 0
       @friends = current_user.friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
@@ -17,11 +18,9 @@ class User::FriendsController < UserBaseController
     end
   end
 
-=begin
   def new
 		render :action => 'new', :layout => 'app2'
   end
-=end
 
 	# other people's friends list
 	def other
@@ -36,7 +35,7 @@ class User::FriendsController < UserBaseController
   def destroy
     if @friendship.cancel
       render :update do |page|
-        page << "alert('成功');$('friend_#{params[:id]}').remove();"
+        page << "tip('删除成功');$('friend_#{params[:id]}').remove();"
       end
     else
       render :update do |page|

@@ -39,13 +39,15 @@ Object.extend(Iyxzone.Comment, {
     $(commentableType + '_comment_content_' + commentableID).focus();
   },
 
-  hideForm: function(commentableType, commentableID){
+  hideForm: function(commentableType, commentableID, event){
+		Event.stop(event);
     $(commentableType + '_comment_' + commentableID).hide();
     $('add_' + commentableType + '_comment_' + commentableID).show();
   },
 
-  save: function(commentableType, commentableID, button){
-    if(Iyxzone.Comment.validate($(commentableType + '_comment_content_' + commentableID))){
+  save: function(commentableType, commentableID, button, event){
+    Event.stop(event);
+		if(Iyxzone.Comment.validate($(commentableType + '_comment_content_' + commentableID))){
       new Ajax.Request('/comments', { 
         method: 'post',
         parameters: $(commentableType+'_comment_form_' + commentableID).serialize(),
@@ -54,6 +56,8 @@ Object.extend(Iyxzone.Comment, {
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
+					$(commentableType + '_comment_' + commentableID).hide();
+					$('add_' + commentableType + '_comment_' + commentableID).show();
         }
       });
     }

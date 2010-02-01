@@ -8,13 +8,12 @@ class Guild < ActiveRecord::Base
 
   has_many :memberships
 
-<<<<<<< HEAD:app/models/guild.rb
   has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
 
   has_many :guild_friendships
 
   has_many :friends, :through => :guild_friendships, :source => 'friend'
-=======
+
 	has_many :guild_rules
 
 	has_many :attendance_rules, :class_name => 'GuildRule', :conditions => {:rule_type => 'attendance'}
@@ -30,7 +29,6 @@ class Guild < ActiveRecord::Base
 	has_many :gears
 
 	accepts_nested_attributes_for :gears, :allow_destroy => true
->>>>>>> 5e3aa790c5c5ea77594929b6f6b022f2181937c5:app/models/guild.rb
 
   has_many :invitations, :class_name => 'Membership', :conditions => {:status => 0}
 
@@ -81,8 +79,6 @@ class Guild < ActiveRecord::Base
     self.president_and_veterans(:include => :events).map { |member| member.events}.flatten.sort {|a,b| a.created_at <=> b.created_at}
   end
 
-<<<<<<< HEAD:app/models/guild.rb
-=======
 	# virtual attribute
 	def president_id
 		@president_id
@@ -96,12 +92,10 @@ class Guild < ActiveRecord::Base
 		@president_id = id
 	end
 
->>>>>>> 5e3aa790c5c5ea77594929b6f6b022f2181937c5:app/models/guild.rb
 	def all_count
 		veterans_count + members_count + 1
 	end
 
-<<<<<<< HEAD:app/models/guild.rb
   def has_member? user
     !memberships.find(:first, :conditions => {:user_id => user.id, :status => [3,4,5]}).blank? 
   end
@@ -129,11 +123,9 @@ class Guild < ActiveRecord::Base
     end
   end
   
-=======
 	def after_create
 		self.attendance_rules_attributes=[{:reason => "准时", :outcome => "2", :rule_type => "attendance"}, {:reason => "迟到", :outcome => "-5", :rule_type => "attendance"}]
 		self.save
 	end
 
->>>>>>> 5e3aa790c5c5ea77594929b6f6b022f2181937c5:app/models/guild.rb
 end

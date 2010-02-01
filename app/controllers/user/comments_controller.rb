@@ -35,7 +35,7 @@ protected
 
   def setup
     if ['index'].include? params[:action]
-      @commentable = params[:commentable_type].constantize.find(params[:commentable_id])
+      @commentable = params[:commentable_type].camelize.constantize.find(params[:commentable_id])
     elsif ['destroy'].include? params[:action]
       @comment = Comment.find(params[:id])
     end

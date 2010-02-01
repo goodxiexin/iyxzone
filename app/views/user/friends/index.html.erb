@@ -20,7 +20,7 @@
                 <li>
               <% end %>
               <%= link_to "所有好友", friends_url %></li>
-              <li><h3>游戏分类</h3></li>
+              <li>游戏分类</li>
 						  <% current_user.games.each do |g| %>
 						    <% if g.id == params[:game_id].to_i %>
 							  	<li class='current'>
@@ -59,7 +59,7 @@
                 </div>
 							  所有好友(共<%= current_user.friends_count %>个)
               </div>
-              <div class="friend-list-body" id='friends'>
+              <div class="friend-list-body s_clear" id='friends'>
 						    <%= render :partial => 'friends', :object => @friends %>
 						  </div>
             </div>
@@ -69,4 +69,3 @@
     </div>
   </div></div>
 </div></div></div></div>
-

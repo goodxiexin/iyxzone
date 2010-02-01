@@ -30,8 +30,8 @@
         <% if @videos.blank? %>
           <div class='gray'>没有和你有关是视频</div>
         <% else %>
-          <div id='videos'>
-            <%= render :partial => 'video_item', :collection => @videos %>
+          <div class='feed-img-list' id='videos'>
+            <%= render :partial => 'video_item2', :collection => @videos %>
           </div>
           <%= will_paginate @videos %>
         <% end %>
