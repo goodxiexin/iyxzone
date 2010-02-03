@@ -99,7 +99,6 @@
 
 <div class="box02 canvas_con">
 
-<% unless @albums.blank? %>
 <div class="multibox">
 	<div class="title"><b>最近照片</b></div>
   <div class="piclist s_clear">
@@ -123,9 +122,7 @@
 		<% end %>	
 	</div>
 </div>
-<% end %>
 
-<% unless @blogs.blank? %>
 <div class="multibox">
 	<div class="title"><b>最近日志</b></div>
 	<% @blogs.each do |blog| %>
@@ -140,9 +137,7 @@
     <%= link_to "全部日志 >>", blogs_url(:id => @user.id) %>
   </div>
 </div>
-<% end %>
 
-<% unless @feed_deliveries.blank? %>
 <div class='multibox'>
 	<div class='title'><b>新鲜事</b></div>
   <div class="feed-wrap" id='feed_list'>
@@ -152,7 +147,6 @@
 		<span><%= link_to_function "更多新鲜事", "Iyxzone.Profile.Feeder.moreFeeds(#{@profile.id});" %></span>
 	</div>
 </div>
-<% end %>
 
 <% if @setting.leave_wall_message_viewable_by? current_user %>
   <%= render :layout => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>

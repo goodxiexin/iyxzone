@@ -7,15 +7,25 @@ Iyxzone.Profile = {
 
 Object.extend(Iyxzone.Profile.Editor, {
 
-  loadingImage: new Image(),
-
   loading: function(div, title){
     div.innerHTML = '<div class="edit-toggle space edit"><h3 class="s_clear"><strong class="left">' + title + '</strong><a href="#" class="right">取消</a></h3><div class="formcontent con con2"><img src="/images/loading.gif"/></div></div>';
   },
 
-  regionSelector: new Iyxzone.ChineseRegion.Selector('profile_region_id', 'profile_city_id', 'profile_district_id'), 
+  showError: function(div, content){
+    var span = new Element('span', {class: 'icon-warn'});
+    $(div).update(content);
+    Element.insert($(div), {top: span});
+  },
 
-  gameSelector: null,
+  clearError: function(div){
+    $(div).innerHTML = '';
+  },
+
+  regionSelector: null,
+
+  setRegionSelector: function(regionID, cityID, districtID){
+    this.regionSelector = new Iyxzone.ChineseRegion.Selector(regionID, cityID, districtID);
+  },
 
   basicInfoHTML: null,
 
@@ -33,56 +43,61 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.basicInfoHTML = frame.innerHTML;
     if(this.editBasicInfoHTML){
       frame.innerHTML = this.editBasicInfoHTML;
+      this.regionSelector.setEvents();
     }else{
-      new Ajax.Request('/profiles/' + profileID + '/edit?type=1', {
+      new Ajax.Updater('basic_info_frame', '/profiles/' + profileID + '/edit?type=1', {
         method: 'get',
+        evalScripts: true,
         onLoading: function(){
           this.loading(frame, '基本信息');
         }.bind(this),
         onSuccess: function(transport){
           this.editBasicInfoHTML = transport.responseText;
-          frame.innerHTML = this.editBasicInfoHTML;
-          this.regionSelector.setEvents();
         }.bind(this)
       });
     }
   },
 
   cancelEditBasicInfo: function(){
-    var frame = $('basic_info_frame');
-    frame.innerHTML = this.basicInfoHTML;
+    $('basic_info_frame').innerHTML = this.basicInfoHTML;
     this.isEditingBasicInfo = false;
   },
 
-  validateBasicInfo: function(){
+  isLoginValid: function(){
     var login = $('profile_login');
+  
+    this.clearError('login_error');
 
     if(login.value == ''){
-      error('昵称不能为空');
+      this.showError('login_error', '昵称不能为空');
       return false;
     }
 
     if(login.value.length < 6){
-      error('昵称至少要4个字符');
+      this.showError('login_error', '昵称至少要4个字符');
       return false;
     }
     if(login.value.length > 16){
-      error('昵称最多16个字符');
+      this.showError('login_error', '昵称最多16个字符');
       return false;
     }
 
     first = login.value[0];
     if((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')){
       if(!login.value.match(/[A-Za-z0-9\_]+/)){
-        error('昵称只允许字母和数字');
+        this.showError('login_error', '昵称只允许字母和数字');
         return false;
       }
     }else{
-      error('昵称必须以字母开头');
+      this.showError('login_error', '昵称必须以字母开头');
       return false;
     }
 
     return true;
+  },
+
+  validateBasicInfo: function(){
+    return this.isLoginValid();
   },
 
   updateBasicInfo: function(profileID, button, event){
@@ -98,11 +113,10 @@ Object.extend(Iyxzone.Profile.Editor, {
           Iyxzone.enableButton(button, '保存');
         },
         onSuccess: function(transport){
-          this.editBasicInfoHTML = null;
-          //this.basicInfoHead
-          var frame = $('basic_info_frame');
-          frame.innerHTML = transport.responseText;
+          $('basic_info_frame').innerHTML = transport.responseText;
           this.isEditingBasicInfo = false;
+          this.editBasicInfoHTML = null;
+          this.regionSelector = null;
         }.bind(this)
       });
     }
@@ -124,15 +138,15 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.contactInfoHTML = frame.innerHTML;
     if(this.editContactInfoHTML){
       frame.innerHTML = this.editContactInfoHTML;
+      facebox.watchClickEvents();
     }else{
-      new Ajax.Request('/profiles/' + profileID + '/edit?type=2', {
+      new Ajax.Updater('contact_info_frame', '/profiles/' + profileID + '/edit?type=2', {
         method: 'get',
         onLoading: function(){
           this.loading(frame, '联系信息');
         }.bind(this),
         onSuccess: function(transport){
           this.editContactInfoHTML = transport.responseText;
-          frame.innerHTML = this.editContactInfoHTML;
           facebox.watchClickEvents();
         }.bind(this)
       });
@@ -140,50 +154,70 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   cancelEditContactInfo: function(){
-    var frame = $('contact_info_frame');
-    frame.innerHTML = this.contactInfoHTML;
+    $('contact_info_frame').innerHTML = this.contactInfoHTML;
     this.isEditingContactInfo = false;
   },
 
-  validateContactInfo: function(){
+  isQQValid: function(){
     var qq = $('profile_qq').value;
+
+    this.clearError('qq_error');
 
     if(qq != ''){
       if(qq.match(/\d+/)){
         if(qq.length < 4 || qq.length > 15){
-          error('qq号码长度不对');
+          this.showError('qq_error', 'qq号码长度不对');
           return false;
         }
       }else{
-        error('qq号码只能由数字组成');
-        return false;
-      }
-    }
-  
-    var phone = $('profile_phone').value;
-
-    if(phone != ''){
-      if(phone.match(/\d+/)){
-        if(phone.length < 8 || phone.length > 15){
-          error('联系电话长度不对');
-          return false;
-        }
-      }else{
-        error('联系电话只能由数字组成');
-        return false;
-      }
-    }
-
-    var url = $('profile_website').value;
-
-    if(url != ''){
-      if(!url.match(/^((https?:\/\/)?)(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/)){
-        error('非法的url地址');
+        this.showError('qq_error', 'qq号码只能由数字组成');
         return false;
       }
     }
 
     return true;
+  },
+ 
+  isPhoneValid: function(){
+    var phone = $('profile_phone').value;
+
+    this.clearError('phone_error');
+
+    if(phone != ''){
+      if(phone.match(/\d+/)){
+        if(phone.length < 8 || phone.length > 15){
+          this.showError('phone_error', '联系电话长度不对');
+          return false;
+        }
+      }else{
+        this.showError('phone_error', '联系电话只能由数字组成');
+        return false;
+      }
+    }
+
+    return true;
+  },
+
+  isUrlValid: function(){
+    var url = $('profile_website').value;
+
+    this.clearError('url_error');
+
+    if(url != ''){
+      if(!url.match(/^((https?:\/\/)?)(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/)){
+        this.showError('url_error', '非法的url地址');
+        return false;
+      }
+    }
+
+    return true;
+  },
+ 
+  validateContactInfo: function(){
+    var v1 = this.isQQValid();
+    var v2 = this.isPhoneValid();
+    var v3 = this.isUrlValid();
+    return v1 && v2 && v3;
   },
 
   updateContactInfo: function(profileID, button, event){
@@ -200,8 +234,7 @@ Object.extend(Iyxzone.Profile.Editor, {
         }.bind(this),
         onSuccess: function(transport){
           this.editContactInfoHTML = null;
-          var frame = $('contact_info_frame');
-          frame.innerHTML = transport.responseText;
+          $('contact_info_frame').innerHTML = transport.responseText;
           this.isEditingContactInfo = false;
         }.bind(this)
       });
@@ -216,6 +249,39 @@ Object.extend(Iyxzone.Profile.Editor, {
 
   isEditingCharacters: false,
 
+  gameSelectors: new Hash(),
+
+  newGameSelectors: new Hash(),
+
+  delCharacterIDs: new Array(),
+
+  addGameSelector: function(pinyins, characterID, newCharacter, gameDetails){
+    if(newCharacter){
+      prefix = 'new';
+    }else{
+      prefix = 'existing';
+    }
+
+    var selectPrefix = 'profile_' + prefix + '_characters_' + characterID + '_';
+
+    var selector = new Iyxzone.Game.PinyinSelector(
+      pinyins,
+      selectPrefix + 'game_id',
+      selectPrefix + 'area_id',
+      selectPrefix + 'server_id',
+      selectPrefix + 'race_id',
+      selectPrefix + 'profession_id',
+      gameDetails,
+      {}
+    );
+   
+    if(newCharacter){
+      this.newGameSelectors.set(prefix + '_' + characterID, selector);
+    }else{
+      this.gameSelectors.set(prefix + "_" + characterID, selector);
+    }
+  },
+
   editCharacters: function(profileID){
     if(this.isEditingCharacters)
       return
@@ -226,6 +292,9 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.charactersHTML = frame.innerHTML;
     if(this.editCharactersHTML){
       frame.innerHTML = this.editCharactersHTML;
+      this.gameSelectors.values().each(function(selector){
+        selector.setEvents();
+      });
     }else{
       new Ajax.Updater('character_frame', '/profiles/' + profileID + '/edit?type=3', {
         method: 'get',
@@ -233,7 +302,7 @@ Object.extend(Iyxzone.Profile.Editor, {
         onLoading: function(){
           this.loading(frame, '游戏角色信息');
         }.bind(this),
-        onComplete: function(transport){
+        onSuccess: function(transport){
           this.editCharactersHTML = transport.responseText;
         }.bind(this)
       });
@@ -241,114 +310,199 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   cancelEditCharacters: function(){
-    var frame = $('character_frame');
-    frame.innerHTML = this.charactersHTML;
+    $('character_frame').innerHTML = this.charactersHTML;
     this.isEditingCharacters = false;
+    this.delCharacterIDs = new Array();
   },
 
   newCharacter: function(){
     new Ajax.Updater('user_characters', '/characters/new?id=' + this.charactersCount, {
-      insertion: 'bottom',
       method: 'get',
+      insertion: 'bottom',
       evalScripts: true,
+      onLoading: function(){
+        $('new_character_loading').innerHTML = '<img src="images/loading.gif" />';
+      }, 
       onSuccess: function(){
+        $('new_character_loading').innerHTML = '';
         this.charactersCount++;
       }.bind(this)
     });
   },
-  
-  validateCharacterInfo: function(){
-/*    var name = $('character_name').value;
-    if(name == ''){
-      error('人物昵称应该有的吧');
+
+  isCharacterNameValid: function(characterID, newCharacter){
+    if(newCharacter)
+      prefix = 'new';
+    else
+      prefix = 'existing';
+
+    var name = $('profile_' + prefix + '_characters_' + characterID + '_name').value;
+    var div = prefix + '_character_' + characterID + '_name_error';
+    
+    this.clearError(div);
+
+    if(name.length == ''){
+      this.showError(div, '游戏角色的名称不能为空');
       return false;
     }
 
-    var level = $('character_level').value;
-    if(level.value == ''){
-      error('等级不能不添啊');
+    return true
+  },
+
+  isCharacterLevelValid: function(characterID, newCharacter){
+    if(newCharacter)
+      prefix = 'new';
+    else
+      prefix = 'existing';
+    
+    var level = $('profile_' + prefix + '_characters_' + characterID + '_level').value;
+    var div = prefix + '_character_' + characterID + '_level_error';
+    
+    this.clearError(div);
+
+    if(level == ''){
+      this.showError(div, '等级不能为空');
       return false;
     }
 
-    if($('character_game_id').value == ''){
-      error('没有选择游戏，如有问题，请看提示');
+    if(!parseInt(level)){
+      this.showError(div, '等级必须是数字');
       return false;
     }
 
-    var gameDetails = this.gameSelector.getDetails();
-    if(gameDetails){
-      if(gameDetails.no_servers){
-        tip('由于游戏数量庞大，很多游戏已经停服，我们没有把所有游戏统计完成。这个游戏的资料就还不完全，请您在左边的意见建议中告诉我们您所在游戏的所在服务器，我们会以最快速度为您添加。对您带来得不便，我们道歉');
-        return false;
-      }else{
-        if($('character_server_id').value == ''){
-          error('没有选择服务器');
-          return false;
-        }
-      }
-      if(!gameDetails.no_areas && $('character_area_id').value == ''){
-        error('没有选择区域，如有问题，请看提示');
-        return false;
-      }
-      if(!gameDetails.no_races && $('character_race_id').value == ''){
-        error('没有选择种族');
-        return false;
-      }
-      if(!gameDetails.no_professions && $('character_profession_id').value ==, {duration: 2.0});'){
-        error('没有选择职业');
-        return false;
-      }
-    }
-*/
     return true;
   },
 
-  updateCharacters: function(profileID, button, event){
+  isGameValid: function(characterID, newCharacter){
+    var valid = true;
+
+    if(newCharacter)
+      prefix = 'new';
+    else
+      prefix = 'existing';
+   
+    var gameID = $('profile_' + prefix + '_characters_' + characterID + '_game_id').value;
+    var gameDiv = prefix + '_character_' + characterID + '_game_id_error';
+    var areaID = $('profile_' + prefix + '_characters_' + characterID + '_area_id').value;
+    var areaDiv = prefix + '_character_' + characterID + '_area_id_error';
+    var serverID = $('profile_' + prefix + '_characters_' + characterID + '_server_id').value;
+    var serverDiv = prefix + '_character_' + characterID + '_server_id_error';
+    var raceID = $('profile_' + prefix + '_characters_' + characterID + '_race_id').value;
+    var raceDiv = prefix + '_character_' + characterID + '_race_id_error';
+    var professionID = $('profile_' + prefix + '_characters_' + characterID + '_profession_id').value;
+    var professionDiv = prefix + '_character_' + characterID + '_profession_id_error';
+    var game = null;
+    if(newCharacter)
+      game = this.newGameSelectors.get(prefix + '_' + characterID).getDetails();
+    else
+      game = this.gameSelectors.get(prefix + '_' + characterID).getDetails();
+    this.clearError(gameDiv);
+    this.clearError(areaDiv);
+    this.clearError(serverDiv);
+    this.clearError(raceDiv);
+    this.clearError(professionDiv);
+
+    if(gameID == ''){
+      this.showError(gameDiv, "请选择游戏");
+      valid = false;
+    }
+
+    if(game && !game.no_areas && areaID == ''){
+      this.showError(areaDiv, "请选择服务区");
+      valid = false;
+    }
+
+    if(game && !game.no_servers && serverID == ''){
+      this.showError(serverDiv, "请选择服务器");
+      valid = false;
+    }
+
+    if(game && !game.no_races && raceID == ''){
+      this.showError(raceDiv, "请选择种族");
+      valid = false;
+    }
+
+    if(game && !game.no_professions && professionID == ''){
+      this.showError(professionDiv, "请选择职业");
+      valid = false;
+    }
+
+    return valid; 
+  },
+ 
+  validateCharactersInfo: function(){
+    var valid = true;
+    var inputs = $('characters_form').getInputs();
+    var characterIDs = new Array();
+
+    this.gameSelectors.keys().each(function(key){
+      var id = parseInt(key.match(/\d+/)[0]);
+      if(!this.delCharacterIDs.include(id))
+        characterIDs.push(key);
+    }.bind(this));
+
+    this.newGameSelectors.keys().each(function(key){
+      characterIDs.push(key);
+    }.bind(this));
+
+    characterIDs.each(function(key){
+      var id = key.match(/\d+/)[0];
+      var newCharacter = null;
+      if(key.match(/new/))
+        newCharacter = true;
+      else
+        newCharacter = false;
+      valid &= this.isCharacterNameValid(id, newCharacter);
+      valid &= this.isCharacterLevelValid(id, newCharacter);
+      valid &= this.isGameValid(id, newCharacter);
+    }.bind(this));
+
+    return valid;
+  },
+
+  updateCharacters: function(profileID, token, button, event){
     Event.stop(event);
-    if(this.validateCharacterInfo()){
-      var frame = $('character_frame');
+    if(this.validateCharactersInfo()){
+      // construct del character ids
+      var delCharacterParams = '';
+      for(var i = 0; i < this.delCharacterIDs.length; i++){
+        delCharacterParams += "profile[del_characters][]=" + this.delCharacterIDs[i] + "&";
+      }
+
       new Ajax.Request('/profiles/' + profileID + '?type=3', {
         method: 'put',
-        parameters: $('characters_form').serialize(),
-        onLoading: function(){
-          Iyxzone.disableButton(button, '等待...');
-        },
-        onComplete: function(){
-          Iyxzone.enableButton(button, '保存');
-        },
+        parameters: delCharacterParams + $('characters_form').serialize(),
         onSuccess: function(transport){
-          frame.innerHTML = transport.responseText;
+          $('character_frame').innerHTML = transport.responseText;
           this.editCharactersHTML = null;
+          this.gameSelectors = new Hash();
+          this.newGameSelectors = new Hash();
+          this.delCharacterIDs = new Array();
           this.isEditingCharacters = false;
         }.bind(this)
-      });
+      }); 
     }
   },
 
-  removeCharacter: function(characterID, token){
-    new Ajax.Request('/characters/' + characterID, {
-      method: 'delete',
-      parameters: 'authenticity_token=' + encodeURIComponent(token),
-      onSuccess: function(transport){
-        this.charactersHTML = transport.responseText;
-        $('character_' + characterID).remove();
-      }.bind(this)
-    });
-  },
+  removeCharacter: function(characterID, newCharacter, link){
+    if(newCharacter)
+      prefix = 'new';
+    else
+      prefix = 'existing';
 
-  removeNewCharacter: function(div){
-    div.up().up().remove();
+    if(newCharacter){
+      this.newGameSelectors.unset(prefix + '_character_' + characterID);
+    }else{
+      this.delCharacterIDs.push(characterID); 
+    }
+
+    $(prefix + '_character_' + characterID).remove();
   },
 
   edit: function(profileID){
     this.editBasicInfo(profileID);
     this.editContactInfo(profileID);
     this.editCharacters(profileID);    
-  },
-
-  setupRatingInfo: function(rating){
-    $('current_rate').innerHTML = "<li class='current-rating' style='width:"+ rating*30 +"px;'> Currently "+ rating +"/5 Stars.</li>";
-    $('star_value').innerHTML = "<input id='game_rate' type='hidden' value='"+ rating +"' name='game_rate'/>";
   },
 
 });

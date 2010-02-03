@@ -26,7 +26,7 @@ class User::WallMessagesController < UserBaseController
   end
 
   def index
-    @messages = @wall.comments.paginate :page => params[:page], :per_page => 2
+    @messages = @wall.comments.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => params[:wall_id], :wall_type => params[:wall_type]}}
     render :partial => 'wall_messages', :locals => {:messages => @messages}    
   end

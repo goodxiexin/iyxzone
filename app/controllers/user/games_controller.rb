@@ -46,28 +46,14 @@ class User::GamesController < UserBaseController
     render :action => 'beta', :layout => 'app'
   end
 
-    # ugly ..
+  # ugly ..
   # how to fix it?? 
   def game_details
-    if current_user.nil? # so, in register page
-      @rating = Rating::DEFAULT
-    else
-      @rating = @game.find_rating_by_user(current_user)
-      if @rating.nil?
-        @rating = Rating::DEFAULT
-      else
-        @rating = @rating.rating
-      end
-    end
-    if @game.no_areas
-      render :json => {:no_areas => true, :no_servers => @game.no_servers, :no_races => @game.no_races, :no_professions => @game.no_professions, :servers => @game.servers, :professions => @game.professions, :races => @game.races, :rating => @rating }
-    else
-      render :json => {:no_areas => false, :no_servers => @game.no_servers, :no_races => @game.no_races, :no_professions => @game.no_professions, :areas => @game.areas, :professions => @game.professions, :races => @game.races, :rating => @rating }
-    end
+    render :json => @game.to_json(:include => [:servers, :areas, :races, :professions])
   end
 
   def area_details
-    render :json => @area.servers
+    render :json => @area.to_json(:include => :servers)
   end
 
 

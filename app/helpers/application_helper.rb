@@ -16,7 +16,7 @@ module ApplicationHelper
     if user.avatar.blank?
       link_to image_tag("default_#{size}.png", img_opts), profile_url(user.profile), a_opts
     else
-      link_to image_tag(user.avatar.public_filename(size), opts), profile_url(user.profile), a_opts
+      link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
     end
   end
 

@@ -5,6 +5,7 @@ class User::Guilds::BossesController < UserBaseController
   end
 
   def new 
+    @boss = Boss.new
   end
 
   def create

@@ -57,8 +57,8 @@ Object.extend(Iyxzone.Emotion.Manager, {
     // locate faces
     faces.setStyle({
       position: 'absolute',
-      left: (link.positionedOffset().left - 200) + 'px',
-      top: (link.positionedOffset().top) + 'px',
+      left: (link.cumulativeOffset().left - 200) + 'px',
+      top: (link.cumulativeOffset().top) + 'px',
       width: '200px',
       height: '40px'
     });

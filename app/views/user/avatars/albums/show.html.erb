@@ -60,7 +60,7 @@
 					<% @photos[j..j+n].each do |p| %>                         
 						<td> 
 						<% if @user.avatar != p %>
-						<span><%= link_to_remote '设置为头像', :url => set_avatar_url(p) %></span>
+						<span><%= link_to_remote '设置为头像', :url => set_avatar_url(p), :method => :put %></span>
 						<% end %>
 						<%= facebox_link "", edit_avatar_url(p), :class => "icon-active icon-active-edit" %>  <%= facebox_confirm '', avatar_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete', :class => "icon-active"} %>
 						</td>

@@ -14,8 +14,8 @@
           <li><span><%= link_to "好友的状态", friends_statuses_url %></span></li>
         </ul>
       </div>
-      <div id="homeComposer" class="cmt-space">
       <% if @user == current_user %>
+      <div id="homeComposer" class="cmt-space">
         <div class="img">
           <div class="mcAvatar jl-mcAvatar"> 
             <a href="#"></a>
@@ -50,8 +50,8 @@
             </div>
           </div>
         </div>
-      <% end %>
       </div>
+      <% end %>
       <div class="feed-box01 list-v2">
         <% if current_user == @user %>
         <div class="list-v2-head">以下是您所发布过的所有状态</div>

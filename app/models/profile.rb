@@ -8,7 +8,7 @@ class Profile < ActiveRecord::Base
 
 	belongs_to :district
 
-  acts_as_viewable
+  acts_as_viewable :create_conditions => lambda {|user, profile| profile.user != user}
 
   acts_as_shareable
 
@@ -56,19 +56,30 @@ class Profile < ActiveRecord::Base
     @existing_characters_attrs = character_attrs
   end  
 
+  def del_characters= character_ids
+    @del_characters_ids = character_ids
+  end 
+
   def save_characters
     unless @new_characters_attrs.blank?
       @new_characters_attrs.each_value do |attrs|
         user.characters.create(attrs)
       end
     end
-    @new_characters_attrs = nil;
+    @new_characters_attrs = nil
     unless @existing_characters_attrs.blank?
       @existing_characters_attrs.each do |id, attrs|
         user.characters.find(id).update_attributes(attrs)
       end
     end
-    @existing_characters_attrs = nil;   
+    @existing_characters_attrs = nil
+    # 我对这个很不满意，为了敷衍编辑档案那里，但是招不到更好的办法了   
+    unless @del_characters_ids.blank?
+      @del_characters_ids.each do |id|
+        user.characters.find(id).destroy
+      end
+    end
+    @del_characters_ids = nil
   end
   
   attr_readonly :user_id

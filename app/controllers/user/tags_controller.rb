@@ -22,6 +22,11 @@ class User::TagsController < UserBaseController
     end
 	end
 
+  def auto_complete_for_game_tags
+    @tags = Tag.game_tags.search(params[:tag][:name])
+    render :partial => 'game_tag_list'
+  end
+
 protected
 
 	def setup

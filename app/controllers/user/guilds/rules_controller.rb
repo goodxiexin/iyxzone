@@ -10,6 +10,7 @@ class User::Guilds::RulesController < UserBaseController
   end
 
   def new
+    @rule = GuildRule.new
   end
 
   def create

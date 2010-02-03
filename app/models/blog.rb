@@ -11,7 +11,7 @@ class Blog < ActiveRecord::Base
   acts_as_friend_taggable :delete_conditions => lambda {|user, blog| blog.poster == user},
                           :create_conditions => lambda {|user, blog| blog.poster == user}
 
-  acts_as_viewable
+  acts_as_viewable :create_conditions => lambda {|user, blog| blog.poster != user}
 
 	acts_as_diggable :create_conditions => lambda {|user, blog| blog.privilege != 4 or blog.poster == user}
 

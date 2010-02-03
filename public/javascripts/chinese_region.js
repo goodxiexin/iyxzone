@@ -16,6 +16,7 @@ Iyxzone.ChineseRegion.Selector = Class.create({
       onDistrictChange: Prototype.emptyFunction
     }, options || {});
 
+    this.setEvents();
   },
 
   setEvents: function(){

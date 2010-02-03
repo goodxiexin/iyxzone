@@ -2,7 +2,8 @@ class CreateTags < ActiveRecord::Migration
   def self.up
     create_table :tags do |t|
         t.string	:name
-        t.string    :taggable_type
+        t.string  :pinyin
+        t.string  :taggable_type
         t.integer	:taggings_count, :default => 0
         t.timestamps
     end

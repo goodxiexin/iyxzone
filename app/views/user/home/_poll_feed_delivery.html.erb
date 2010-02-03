@@ -1,16 +1,13 @@
 <% delivery = poll_feed_delivery %>
 <% poll = delivery.feed_item.originator %>
 <div class="feed-list-box">
-<div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
-	<div class="img left">
-		<div class="imgbox01"><%= avatar poll.poster %></div>
-	</div>
-	<div class="jl-list-con jl-cutline"><%= profile_link poll.poster %>发布了投票<%= poll_link poll, :class => "shine" %></div>
-	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :class => "icon-active" %><% end %> 
-	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('poll', #{poll.id}, null);", :class => "gray"%></p>
-  <% if with_comments %>
+  <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
+	  <div class="img left">
+		  <div class="imgbox01"><%= avatar poll.poster %></div>
+	  </div>
+	  <div class="jl-list-con jl-cutline"><%= profile_link poll.poster %>发布了投票<%= poll_link poll, :class => "shine" %></div>
+	  <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :class => "icon-active" %><% end %> 
+	  <p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('poll', #{poll.id}, null);", :class => "gray"%></p>
 	  <%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => poll , :recipient => poll.poster} %>
-  <% end %>
 	</div>
-</div>
 </div>

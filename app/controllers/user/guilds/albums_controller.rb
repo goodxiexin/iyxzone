@@ -13,7 +13,7 @@ class User::Guilds::AlbumsController < UserBaseController
   def update
     if @album.update_attributes((params[:album] || {}).merge({:owner_id => @guild.id}))
 			respond_to do |format|
-				format.json { render :text => @album.notation}
+				format.json { render :text => @album.description}
 			end
     end
   end

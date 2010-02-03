@@ -3,11 +3,11 @@ ResizableTextBox = Class.create({
   initialize: function(element, options){
     this.options = Object.extend({
       min: 20,
-      max: 50,
+      max: 500,
       step: 7
-    });
+    }, options || {});
     this.element = element;
-    this.element.setStyle({width: this.options.min + 'px'});
+    this.element.setStyle({width: '500px'});
 
     Event.observe(this.element, 'keyup', function(){
       var newSize = this.options.step * this.element.value.length;
@@ -97,17 +97,16 @@ TextBoxList = Class.create({
      * main input field
      */
     this.mainInput = this.createMainInput();
-    //this.resizableMainInput = new ResizableTextBox(this.mainInput);
 
     /*
      * root element which contains all related elements
      */
     this.holder = new Element('ul', {class: this.options.holderClassName});
 
-    /*this.holder.setStyle({
-      width: (this.el.getWidth() - 10) + 'px',
-      height: (this.el.getHeight()) + 'px'
-    });*/
+    /*
+     * make main input resizable
+     */
+    this.resizableMainInput = new ResizableTextBox(this.inputTextField);
 
     this.el.hide();
     this.holder.appendChild(this.mainInput);
@@ -197,7 +196,7 @@ TextBoxList = Class.create({
     /*
      * reset resizable text field
      */
-    //this.resizableMainInput.reset(); 
+    this.resizableMainInput.reset(); 
     
     return el; 
   },
@@ -226,7 +225,7 @@ TextBoxList = Class.create({
   },
 
   createMainInput: function(){
-    var li = new Element('li');//, {class: this.options.bitClassName});
+    var li = new Element('li', {width: '100%'});//, {class: this.options.bitClassName});
     var el = new Element('input', {type: 'text'}); //Object.extend({type: 'text', name: this.options.paramName}, options || {}));
     li.appendChild(el);
     this.inputTextField = el;

@@ -19,7 +19,10 @@
             <div class="formcontent" style="padding-top:0">
               <div class="s_clear">
                 <div class="fldvalue">
-                  <%= text_field_tag 'tags', '点击关键字词,支持多个关键字词', :id => 'game_tags', :class=>"textfield", :style =>"width: 350px" %>
+                  <div class="selector selector03 select-toggle s_clear">
+                    <%= text_field_tag 'tags', '点击关键字词,支持多个关键字词', :id => 'game_tags', :class=>"textfield", :style =>"width: 350px" %>
+                    <div id='game_tag_list' class='drop-menu' style="display:none"></div>
+                  </div>
                 </div>
                 <div class="fldbtn">
                   <span class="button"><span><button type="reset" onclick="Iyxzone.Game.Suggestor.suggest(this)">推荐</button></span></span>
@@ -92,8 +95,6 @@
     </div>
   </div></div>
 </div></div></div></div>
-<div id='log'></div>
 
-<%= javascript_tag "
-  Iyxzone.Game.Suggestor.tagList = new TextBoxList('game_tags', {onBoxDispose: Iyxzone.Game.Suggestor.removeTag});
-" %>
+<%= javascript_tag "Iyxzone.Game.Suggestor.prepare(); " %>
+

@@ -22,6 +22,7 @@ class CreateUsers < ActiveRecord::Migration
 
       # counters
       t.integer :characters_count, :default => 0 
+      t.integer :games_count, :default => 0
       t.integer :notices_count, :default => 0
       t.integer :unread_notices_count, :default => 0
       t.integer :notifications_count, :default => 0

@@ -71,6 +71,9 @@ module FriendSuggestor
 		# construct new suggestions and insert into database
 		values = []
 		collect_friends.each_key {|friend_id| values << "(NULL,#{id},#{friend_id})" }
+
+    return friend_suggestions if values.blank?
+
 		sql = "insert into friend_suggestions values #{values.join(',')}"
 		ActiveRecord::Base.connection.execute(sql)
 

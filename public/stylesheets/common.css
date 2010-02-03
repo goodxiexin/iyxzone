@@ -150,11 +150,11 @@ table.center td{vertical-align:top}
 .menu-icon-list li a span{color:#25700d}
 
 /*homeIcons*/
-.feed-icon,dl.menu-op dt,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-success,.icon-heart,.icon-warn{background:url(../images/icons/homeIcons.png) no-repeat;}
+.feed-icon,dl.menu-op dt,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-success,.icon-heart,.icon-warn,.icon-camera{background:url(../images/icons/homeIcons.png) no-repeat;}
 /*jl icon*/
 .photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,{display:inline-block;background:url(../images/icons/homeIcons.png) no-repeat;margin:0 5px;width:16px;height:16px; vertical-align:middle !important;_vertical-align:baseline;*vertical-align:baseline !important;}
 
-span.icon-trash,span.icon-read,span.icon-data,span.icon-state,span.icon-game,span.icon-blog,span.icon-photo,span.icon-video,span.icon-share,span.icon-vote,span.icon-act,span.icon-cons,span.icon-friend,span.icon-friend02,span.icon-gift,span.icon-minus,span.icon-plus,span.icon-success,span.icon-heart,.icon-warn{display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle !important;_vertical-align:baseline;*vertical-align:baseline !important;}
+span.icon-trash,span.icon-read,span.icon-data,span.icon-state,span.icon-game,span.icon-blog,span.icon-photo,span.icon-video,span.icon-share,span.icon-vote,span.icon-act,span.icon-cons,span.icon-friend,span.icon-friend02,span.icon-gift,span.icon-minus,span.icon-plus,span.icon-success,span.icon-heart,span.icon-warn,span.icon-camera{display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle !important;_vertical-align:baseline;*vertical-align:baseline !important;}
 .icon-data{background-position:0 0}
 .icon-state{background-position:0 -16px}
 .icon-game{background-position:0 -32px}
@@ -175,6 +175,7 @@ span.icon-trash,span.icon-read,span.icon-data,span.icon-state,span.icon-game,spa
 .icon-success{background-position:0 -416px;}
 .icon-heart{background-position:0 -432px;}
 .icon-warn{background-position:0 -448px;}
+.icon-camera{background-position:0 -464px;}
 /*end*/
 
 .menu-icon-list01 li{padding:3px 0 3px 25px;background:url(../images/icons/homeIcons.gif) no-repeat left -2000px;height:16px;line-height:16px;overflow:hidden}
@@ -242,6 +243,7 @@ a.button-gray,a.button-gray:hover{font-weight:normal;color:#666}
 .icon-active-add{background-position:left -52px;}
 .icon-active-close{width:9px;height:9px;background-position:left -79px}
 .icon-active-edit{width:10px;height:11px;background-position:left -102px}
+.icon-active-camera{background:url(../images/icons/homeIcons.png);width:16px;height:16px;background-position:0 -464px}
 
 /*a.mbutton{float:left;display:block;height:28px;line-height:27px;padding-right:16px;background:url(../images/skin/btns02.gif) no-repeat right top;overflow:hidden;text-align:center;font-size:14px;cursor:pointer;color:#333}
 a.mbutton span{float:left;display:block;height:100%;padding-left:15px;background:url(../images/skin/btns02.gif) no-repeat left top;overflow:hidden}

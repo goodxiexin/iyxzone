@@ -22,9 +22,9 @@ Element.buildAndAppend = function(type, options, style)
 nil = null;
 
 Date.one_day = 24*60*60*1000;
-Date.weekdays = $w("S M T W T F S");
+Date.weekdays = $w("日 一 二 三 四 五 六");
 Date.first_day_of_week = 0;
-Date.months = $w("January February March April May June July August September October November December" );
+Date.months = $w("一月 二月 三月 四月 五月 六月 七月 八月 九月 十月 十一月 十二月" );
 Date.padded2 = function(hour) { var padded2 = parseInt(hour, 10); if (hour < 10) padded2 = "0" + padded2; return padded2; }
 Date.prototype.getPaddedMinutes = function() { return Date.padded2(this.getMinutes()); }
 Date.prototype.getAMPMHour = function() { var hour = this.getHours(); return (hour == 0) ? 12 : (hour > 12 ? hour - 12 : hour ) }
@@ -33,7 +33,7 @@ Date.prototype.stripTime = function() { return new Date(this.getFullYear(), this
 Date.prototype.daysDistance = function(compare_date) { return Math.round((compare_date - this) / Date.one_day); };
 Date.prototype.toFormattedString = function(include_time){
   var hour, str;
-  str = Date.months[this.getMonth()] + " " + this.getDate() + ", " + this.getFullYear();
+  str = Date.months[this.getMonth()] + " " + this.getDate() + "号, " + this.getFullYear();
   
   if (include_time) { hour = this.getHours(); str += " " + this.getAMPMHour() + ":" + this.getPaddedMinutes() + " " + this.getAMPM() }
   return str;
@@ -45,9 +45,9 @@ window.f_scrollTop = function() { return ([window.pageYOffset ? window.pageYOffs
 
 _translations = {
   "OK": "OK",
-  "Now": "Now",
-  "Today": "Today",
-  "Clear": "Clear"
+  "Now": "现在",
+  "Today": "今天",
+  "Clear": "清除"
 }
 SelectBox = Class.create();
 SelectBox.prototype = {

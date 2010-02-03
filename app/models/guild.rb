@@ -26,6 +26,10 @@ class Guild < ActiveRecord::Base
 
   has_many :attendance_rules, :class_name => 'GuildRule', :conditions => {:rule_type => [0, 1]}
 
+  has_one :absence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 0}
+
+  has_one :presence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 1}
+
   has_many :memberships
 
   has_many :invitations, :class_name => 'Membership', :conditions => {:status => 0}
@@ -130,6 +134,10 @@ class Guild < ActiveRecord::Base
     @existing_rules_attrs = rule_attrs
   end
 
+  def del_rules= rule_ids
+    @del_rules_ids = rule_ids
+  end
+
   def save_rules
     unless @new_rules_attrs.blank?
       @new_rules_attrs.each_value do |attrs|
@@ -137,12 +145,20 @@ class Guild < ActiveRecord::Base
       end
     end
     @new_rules_attrs = nil
+    
     unless @existing_rules_attrs.blank?
       @existing_rules_attrs.each do |id, attrs|
         rules.find(id).update_attributes(attrs)
       end
     end
     @existing_rules_attrs = nil
+    
+    unless @del_rules_ids.blank?
+      @del_rules_ids.each do |id|
+        rules.find(id).destroy
+      end
+    end
+    @del_rules_ids = nil
   end
 
   after_save :save_bosses
@@ -155,6 +171,10 @@ class Guild < ActiveRecord::Base
     @existing_bosses_attrs = boss_attrs
   end
 
+  def del_bosses= boss_ids
+    @del_bosses_ids = boss_ids
+  end
+
   def save_bosses
     unless @new_bosses_attrs.blank?
       @new_bosses_attrs.each_value do |attrs|
@@ -162,12 +182,20 @@ class Guild < ActiveRecord::Base
       end
     end
     @new_bosses_attrs = nil
+
     unless @existing_bosses_attrs.blank?
       @existing_bosses_attrs.each do |id, attrs|
         bosses.find(id).update_attributes(attrs)
       end
     end
     @existing_bosses_attrs = nil
+
+    unless @del_bosses_ids.blank?
+      @del_bosses_ids.each do |id|
+        bosses.find(id).destroy
+      end
+    end
+    @del_bosses_ids = nil
   end
 
   after_save :save_gears
@@ -180,6 +208,10 @@ class Guild < ActiveRecord::Base
     @existing_gears_attrs = gear_attrs
   end
 
+  def del_gears= gear_ids
+    @del_gears_ids = gear_ids
+  end
+
   def save_gears
     unless @new_gears_attrs.blank?
       @new_gears_attrs.each_value do |attrs|
@@ -187,12 +219,20 @@ class Guild < ActiveRecord::Base
       end
     end
     @new_gears_attrs = nil
+
     unless @existing_gears_attrs.blank?
       @existing_gears_attrs.each do |id, attrs|
         gears.find(id).update_attributes(attrs)
       end
     end
     @existing_gears_attrs = nil
+
+    unless @del_gears_ids.blank?
+      @del_gears_ids.each do |id|
+        gears.find(id).destroy
+      end
+    end
+    @del_gears_ids = nil
   end
 
   # game_id, president_id, character_id 不能改变

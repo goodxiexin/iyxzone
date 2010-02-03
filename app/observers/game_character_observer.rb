@@ -3,6 +3,11 @@
 #
 class GameCharacterObserver < ActiveRecord::Observer
 
+  def before_create character
+    # increment counter
+    character.user.raw_increment :games_count unless character.user.games.include?(character.game)
+  end
+
 	def after_create character
     # increment counter
     character.game.raw_increment :characters_count

@@ -883,10 +883,10 @@ dl.menu-op dd a{color:#333}
 .feed-img-list .eval-list .feeds{background:url(../images/skin/dotline.gif) repeat-x top;border-top:none}
 
 /*星级评分*/
-#star-ratings-block{margin-top:3px}
-#star-ratings-block span{background:url(../images/skin/star02_01.png) no-repeat;width:16px;height:16px;display:inline-block;}
-#star-ratings-block span.lit-on{background:url(../images/skin/star02_02.png) no-repeat;}
-#star-ratings-block span.lit{background:url(../images/skin/star02_03.png) no-repeat;}
+.star-ratings-block{margin-top:3px}
+.star-ratings-block span{background:url(../images/skin/star02_01.png) no-repeat;width:16px;height:16px;display:inline-block;}
+.star-ratings-block span.lit-on{background:url(../images/skin/star02_02.png) no-repeat;}
+.star-ratings-block span.lit{background:url(../images/skin/star02_03.png) no-repeat;}
 
 /*投票*/
 .vote-op{padding:0 0 0 10px;text-align:left;}
@@ -953,8 +953,8 @@ ul.private-set li p.left{margin-left:10px}
 #w-nav #cmt:hover,#w-nav .current{background:url(../images/skin/navbar01.gif) 0 -180px;}
 #w-nav #cmt span{background:url(../images/skin/navbar01.gif) no-repeat 20px -467px;display:inline-block;padding:0 27px 0 0;margin-left:15px}
 #w-nav #cmt{height:42px;position:relative;display:inline-block;}
-#w-nav #praise{background:url(../images/skin/praise-btn02.png) no-repeat;width:83px;height:30px;line-height:30px;display:inline-block;text-align:right;_margin-top:5px}
-#w-nav #praise strong{color:#66a421;margin-right:15px;}
+#w-nav .praise{background:url(../images/skin/praise-btn02.png) no-repeat;width:83px;height:30px;line-height:30px;display:inline-block;text-align:right;_margin-top:5px}
+#w-nav .praise strong{color:#66a421;margin-right:15px;}
 #w-nav img{vertical-align:middle;border:1px solid #63a21d;background:#fff;padding:1px;margin:0 2px}
 #navextra .close{background:url(../images/icons/close.gif) no-repeat;width:19px;height:19px;display:inline-block;vertical-align:middle}
 
@@ -1011,9 +1011,12 @@ ul.private-set li p.left{margin-left:10px}
 .selector03 ul.friend-select-list li a span {position:relative;border-color:#d1e2c5;border-style:solid;border-width:0 1px;cursor:pointer;display:block;float:left;height:16px;line-height:16px;margin:0 -1px;padding:0 5px 0;white-space:nowrap;}
 .selector03 ul.friend-select-list li a .x {background:url(../images/icons/activeIcon.gif) no-repeat;cursor:pointer;display:inline-block;height:9px;
 width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
-.selector03 ul.friend-select-list li a:hover,.selector03 ul.friend-select-list li a:hover span{background:#73bd21;border-color:#73bd21;color:#fff}
-.selector03 ul.friend-select-list li a:hover .x {background:url(../images/icons/activeIcon.gif) no-repeat 0 -128px;}
+.selector03 ul.friend-select-list li a:hover,.selector03 ul.friend-select-list li a:hover span{background:#DBEFC2;border-color:#d1e2c5;}
+.selector03 ul.friend-select-list li.focus a,.selector03 ul.friend-select-list li.focus a:hover,.selector03 ul.friend-select-list li.focus a:hover span,.selector03 ul.friend-select-list li.focus a span{background:#73bd21;border-color:#73bd21;color:#fff}
+.selector03 ul.friend-select-list li.focus a .x {background:url(../images/icons/activeIcon.gif) no-repeat 0 -128px;}
 .selector03 ul.friend-select-list li input{width:80px;height:16px;margin:0;}
 
-
-
+/*应用设置*/
+.app-set{position:relative}
+.app-set .con{padding:20px 10px;border-bottom:1px solid #bdd6ad }
+.app-set .enter{position: absolute;right:20px;top:20px;border-top:1px solid #bdd6ad;padding:20px;width:100px}

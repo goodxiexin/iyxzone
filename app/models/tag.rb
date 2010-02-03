@@ -6,6 +6,10 @@ class Tag < ActiveRecord::Base
 
 	named_scope :profile_tags, :conditions => {:taggable_type => 'Profile'}
 
+  acts_as_pinyin :name => "pinyin"
+
+  searcher_column :pinyin, :name
+
 	def validate_on_create
 		if name.nil?
 			errors.add_to_base('没有名字')

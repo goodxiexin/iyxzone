@@ -5,6 +5,7 @@ class User::Guilds::GearsController < UserBaseController
   end
 
   def new
+    @gear = Gear.new
   end
 
   def create

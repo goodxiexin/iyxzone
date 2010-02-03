@@ -332,7 +332,7 @@ Iyxzone.Friend.Tagger = Class.create({
   afterSelectFriend: function(input, selectedLI){
     var id = selectedLI.readAttribute('id');
     var profileID = selectedLI.readAttribute('profileID');
-    var login = selectedLI.innerHTML;
+    var login = selectedLI.childElements()[0].innerHTML;
     this.addTags([{id: id, profileID: profileID, login: login}]);
     input.clear();
   },

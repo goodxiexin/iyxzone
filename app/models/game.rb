@@ -30,7 +30,7 @@ class Game < ActiveRecord::Base
 
 	acts_as_taggable :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 1.week.ago }
   
-	acts_as_rateable
+	acts_as_rateable :create_conditions => lambda {|game, user| user.games.include?(game)}
 
   acts_as_shareable
 
@@ -39,6 +39,7 @@ class Game < ActiveRecord::Base
   acts_as_pinyin :name => "pinyin" 
 
   acts_as_resource_feeds
+
 
 	def new_game?
 		sale_date.nil? or sale_date > Date.today

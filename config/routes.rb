@@ -66,11 +66,11 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :notifications, :collection => {:destroy_all => :delete, :first_five => :get}
 
-    users.resources :profile_viewings
-
     users.resources :profiles, :member => {:more_feeds => :get} do |profiles|
 
       profiles.resources :tags, :controller => 'profiles/tags'
+
+      profiles.resources :viewings, :controller => 'profiles/viewings'
 
     end
 
@@ -216,6 +216,8 @@ ActionController::Routing::Routes.draw do |map|
       end
   
     end
+
+    users.auto_complete_for_game_tags '/auto_complete_for_game_tags', :controller => 'tags', :action => 'auto_complete_for_game_tags' 
 
     users.resources :game_suggestions, :collection => {:game_tags => :get}
  

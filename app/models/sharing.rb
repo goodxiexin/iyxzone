@@ -8,7 +8,7 @@ class Sharing < ActiveRecord::Base
 
   named_scope :recent, :conditions => ["created_at >?", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
 
-  acts_as_commentable :order => 'created_at ASC'
+  acts_as_commentable :order => 'created_at ASC', :recipient_required => false
 
   acts_as_resource_feeds
 

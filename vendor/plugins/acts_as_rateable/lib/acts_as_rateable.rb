@@ -12,6 +12,10 @@ module Rateable
     def acts_as_rateable opts={}
       has_many :ratings, :as => 'rateable', :dependent => :destroy
 
+      cattr_accessor :rating_opts
+
+      self.rating_opts = opts
+
       include Rateable::InstanceMethods
 
       extend Rateable::SingletonMethods
@@ -41,6 +45,11 @@ module Rateable
 		def rated_by_user? user
 			!ratings.find_by_user_id(user.id).nil?
 		end 
+
+    def is_rateable_by? user
+      proc = self.class.rating_opts[:create_conditions] || lambda { true }
+      proc.call self, user
+    end
 
 	end
 

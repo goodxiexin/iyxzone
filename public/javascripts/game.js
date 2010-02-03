@@ -12,12 +12,15 @@ Iyxzone.Game = {
 
 Iyxzone.Game.Selector = Class.create({
 
-  initialize: function(gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, options){
+  details: new Hash(),
+
+  initialize: function(gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, gameDetails, options){
     this.gameSelectorID = gameSelectorID;
     this.areaSelectorID = areaSelectorID;
     this.serverSelectID = serverSelectID;
     this.raceSelectorID = raceSelectorID;
     this.professionSelectorID = professionSelectorID;
+    this.details = gameDetails;
  
     this.options = Object.extend({
       onGameChange: Prototype.emptyFunction,
@@ -59,7 +62,7 @@ Iyxzone.Game.Selector = Class.create({
   setupAreaInfo: function(areas){
     var html = '<option value="">---</option>';
     for(var i=0;i<areas.length;i++){
-      html += "<option value='" + areas[i].game_area.id + "'>" + areas[i].game_area.name + "</option>";
+      html += "<option value='" + areas[i].id + "'>" + areas[i].name + "</option>";
     }
     $(this.areaSelectorID).innerHTML = html;
   },
@@ -71,7 +74,7 @@ Iyxzone.Game.Selector = Class.create({
   setupServerInfo: function(servers){
     var html = '<option value="">---</option>';
     for(var i=0;i<servers.length;i++){
-      html += "<option value='" + servers[i].game_server.id + "'>" + servers[i].game_server.name + "</option>";
+      html += "<option value='" + servers[i].id + "'>" + servers[i].name + "</option>";
     }
     $(this.serverSelectID).innerHTML = html;
   },
@@ -83,7 +86,7 @@ Iyxzone.Game.Selector = Class.create({
   setupProfessionInfo: function(professions){
     var html = '<option value="">---</option>';
     for(var i=0;i<professions.length;i++){
-      html += "<option value='" + professions[i].game_profession.id + "'>" + professions[i].game_profession.name + "</option>";
+      html += "<option value='" + professions[i].id + "'>" + professions[i].name + "</option>";
     }
     $(this.professionSelectorID).innerHTML = html;
   },
@@ -95,7 +98,7 @@ Iyxzone.Game.Selector = Class.create({
   setupRaceInfo: function(races){
     var html = '<option value="">---</option>';
     for(var i=0;i<races.length;i++){
-      html += "<option value='" + races[i].game_race.id + "'>" + races[i].game_race.name + "</option>";
+      html += "<option value='" + races[i].id + "'>" + races[i].name + "</option>";
     }
     $(this.raceSelectorID).innerHTML = html;
   },
@@ -108,7 +111,8 @@ Iyxzone.Game.Selector = Class.create({
     new Ajax.Request('/games/' + $(this.gameSelectorID).value + '/game_details', {
       method: 'get',
       onSuccess: function(transport){
-        this.details = transport.responseText.evalJSON();
+        alert(transport.responseText);
+        this.details = transport.responseText.evalJSON().game;
         // reset all details if exists
         if(this.areaSelectorID)
           this.resetAreaInfo();
@@ -120,18 +124,16 @@ Iyxzone.Game.Selector = Class.create({
           this.resetProfessionInfo();
     
         // set all informations
-        if(!this.details.noAreas){
-          this.noAreas = false;
+        if(!this.details.no_areas){
           this.setupAreaInfo(this.details.areas);
         }else{
-          this.noAreas = true;
           this.setupServerInfo(this.details.servers);
         }
-        if(!this.details.noProfessions && this.professionSelectorID)
+        if(!this.details.no_professions && this.professionSelectorID)
           this.setupProfessionInfo(this.details.professions);
-        if(!this.details.noRaces && this.raceSelectorID)
+        if(!this.details.no_races && this.raceSelectorID)
           this.setupRaceInfo(this.details.races);
-
+        
         this.options.onGameChange($(this.gameSelectorID).value);
       }.bind(this)
     });
@@ -146,9 +148,10 @@ Iyxzone.Game.Selector = Class.create({
     new Ajax.Request('/games/' + $(this.gameSelectorID).value + '/area_details?area_id=' + $(this.areaSelectorID).value, {
       method: 'get',
       onSuccess: function(transport){
-        var servers = transport.responseText.evalJSON();
+        var areaInfo = transport.responseText.evalJSON().game_area;
+
         if(this.serverSelectID)
-          this.setupServerInfo(servers);
+          this.setupServerInfo(areaInfo.servers);
 
         this.options.onAreaChange($(this.areaSelectorID).value);
       }.bind(this)
@@ -289,12 +292,109 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
 
 });
 
+Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Base, {
+
+  initialize: function(element, update, url, options) {
+    this.baseInitialize(element, update, options);
+    this.options.asynchronous  = true;
+    this.options.onComplete    = this.onComplete.bind(this);
+    this.options.defaultParams = this.options.parameters || null;
+    this.url                   = url;
+    this.comp = this.options.comp; //位置的参照物，默认是以this.element为参照物
+    this.emptyText = this.options.emptyText || "没有匹配的..."
+    Event.observe(element, 'focus', this.onInputFocus.bindAsEventListener(this));
+  },
+
+  onInputFocus: function(e){
+    this.options.onInputFocus(this.element);
+  },
+
+  getUpdatedChoices: function() {
+    this.startIndicator();
+
+    var entry = encodeURIComponent(this.options.paramName) + '=' + encodeURIComponent(this.getToken());
+
+    this.options.parameters = this.options.callback ? this.options.callback(this.element, entry) : entry;
+
+    if(this.options.defaultParams)
+      this.options.parameters += '&' + this.options.defaultParams;
+
+    this.options.parameters += '&tag[name]=' + this.element.value;
+
+    new Ajax.Request(this.url, this.options);
+  },
+
+  onComplete: function(request) {
+    if(request.responseText.indexOf('li') < 0){
+      this.update.innerHTML = this.options.emptyText;
+    }else{
+      this.updateChoices(request.responseText);
+    }
+    if(this.comp){
+      this.update.setStyle({
+        position: 'absolute',
+        left: this.comp.positionedOffset().left + 'px',
+        top: (this.comp.positionedOffset().top + this.comp.getHeight()) + 'px',
+        width: (this.comp.getWidth() - 10) + 'px',
+        maxHeight: '200px',
+        overflow: 'auto',
+        padding: '5px',
+        background: 'white',
+        border: '1px solid #E7F0E0'
+      });
+    }
+  }
+
+});
+
+
 
 Object.extend(Iyxzone.Game.Suggestor, {
 
   tagNames: new Array(),
 
   tagList: null,
+
+  prepare: function(){
+    // set text box list
+    this.tagList = new TextBoxList($('game_tags'), {
+      onBoxDispose: this.removeTag.bind(this),
+      holderClassName: 'friend-select-list s_clear',
+      bitClassName: ''
+    }); 
+
+    // set custom auto complete
+    new Iyxzone.Game.Autocompleter(this.tagList.getMainInput(), $('game_tag_list'), '/auto_complete_for_game_tags', {
+      method: 'get',
+      emptyText: '没有匹配的关键字...',
+      afterUpdateElement: this.afterSelectTag.bind(this),
+      onInputFocus: this.showTips.bind(this),
+      comp: this.tagList.holder
+    });
+    
+  },
+
+  showTips: function(){
+    $('game_tag_list').innerHTML = '输入游戏特点, 拼音或者汉字';
+    $('game_tag_list').setStyle({
+      position: 'absolute',
+      left: this.tagList.holder.positionedOffset().left + 'px',
+      top: (this.tagList.holder.positionedOffset().top + this.tagList.holder.getHeight()) + 'px',
+      width: (this.tagList.holder.getWidth() - 10) + 'px',
+      maxHeight: '200px',
+      overflow: 'auto',
+      padding: '5px',
+      background: 'white',
+      border: '1px solid #E7F0E0'
+    });
+    $('game_tag_list').show();
+  },
+
+  afterSelectTag: function(input, selectedLI){
+    var text = selectedLI.childElements()[0].innerHTML;
+    this.addTag(text);
+    input.clear();
+  },
 
   hasTag: function(tagName){
     for(var i=0;i<this.tagNames.length;i++){
@@ -309,13 +409,13 @@ Object.extend(Iyxzone.Game.Suggestor, {
       tip('你已经选择了该标签');
       return;
     }
-    this.tagList.add(null, tagName);
+    this.tagList.add(tagName, tagName);
     this.tagNames.push(tagName);
   },
 
-  removeTag: function(box){
+  removeTag: function(box, input){
     var tagNames = Iyxzone.Game.Suggestor.tagNames;
-    var text = box.childElements()[0].innerHTML;
+    var text = input.value;
     for(var i=0;i< tagNames.length;i++){
       if(text == tagNames[i])
         tagNames.splice(i,1);

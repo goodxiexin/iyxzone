@@ -8,11 +8,15 @@ module Model
 
   module ClassMethods
 
-    def acts_as_viewable
+    def acts_as_viewable opts={}
 
       has_many :viewings, :as => 'viewable', :order => 'viewed_at DESC', :dependent => :destroy
 
       has_many :viewers, :through => :viewings, :source => 'user'
+
+      cattr_accessor :viewable_opts
+
+      self.viewable_opts = opts
 
       include Viewable::Model::InstanceMethods
 
@@ -30,6 +34,11 @@ module Model
 		def viewed_by? user
 			!viewings.find_by_user_id(user.id).nil?
 		end
+
+    def is_viewing_createable_by? user
+      proc = self.class.viewable_opts[:create_conditions] || lambda { true }
+      proc.call user, self
+    end
 
   end
 

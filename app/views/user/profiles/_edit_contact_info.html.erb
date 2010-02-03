@@ -6,9 +6,12 @@
         <div class="rows s_clear">
           <div class="fldid"><label>QQ号码：</label></div>
           <div class="fldvalue">
-            <div class="textfield left"><%= f.text_field 'qq' %></div>
+            <div class="textfield left"><%= f.text_field 'qq', :onblur => "Iyxzone.Profile.Editor.isQQValid()" %></div>
+            <span class='red' id='qq_error'></span>
           </div>
-          <%= facebox_link '<div class="round05 round_r_t tip-dialog">
+          <div class="tip-pop s_clear">
+            <%= facebox_link '', edit_privacy_setting_url(:type => 3), :class => "fldstatus fldstatus-lock" %>
+            <div class="round05 round_r_t tip-dialog">
               <div class="round_l_t">
                 <div class="round_r_b">
                   <div class="round_l_b">
@@ -19,19 +22,22 @@
                   </div>
                 </div>
               </div>
-            </div>', edit_privacy_setting_url(:type => 3), :class => "fldstatus fldstatus-lock" %>
+            </div>
+          </div>
         </div>
         <div class="rows s_clear">
           <div class="fldid"><label>电话：</label></div>
           <div class="fldvalue">
-            <div class="textfield left"><%= f.text_field 'phone' %></div>
+            <div class="textfield left"><%= f.text_field 'phone', :onblur => "Iyxzone.Profile.Editor.isPhoneValid()" %></div>
+            <span class='red' id='phone_error'></span>
           </div>
           <%= facebox_link '', edit_privacy_setting_url(:type => 4), :class => "fldstatus fldstatus-lock" %>
         </div>
         <div class="rows s_clear">
           <div class="fldid"><label>个人网页：</label></div>
           <div class="fldvalue">
-            <div class="textfield left"><%= f.text_field 'website' %></div>
+            <div class="textfield left"><%= f.text_field 'website', :onblur => "Iyxzone.Profile.Editor.isUrlValid()" %></div>
+            <span class='red' id='url_error'></span>
           </div>
           <%= facebox_link '', edit_privacy_setting_url(:type => 5), :class => "fldstatus fldstatus-lock" %>
         </div>
