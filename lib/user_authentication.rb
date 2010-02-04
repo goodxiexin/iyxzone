@@ -15,10 +15,6 @@ module UserAuthentication
       before_save :encrypt_password
       before_create :make_activation_code
 
-      # prevents a user from submitting a crafted form that bypasses activation
-      # anything else you want your user to change should be added here.
-      attr_accessible :login, :password, :password_confirmation, :gender, :avatar_id
-
       named_scope :activated, :conditions => {:activation_code => nil}
       
       named_scope :pending, :conditions => "activation_code IS NOT NULL"
@@ -46,7 +42,7 @@ module UserAuthentication
 
 
   module InstanceMethods
-  
+
     # Activates the user in the database.
     def activate
       @activated = true

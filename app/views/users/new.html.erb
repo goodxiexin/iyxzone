@@ -3,7 +3,6 @@
 <%= stylesheet_link_tag 'rating' %>
 <%= javascript_include_tag 'register' %>
 <%= javascript_include_tag 'game' %>
-
 <div class="regist-box">
   <div class="regist-content">
     <div class="logo png">欢迎您！这里是您的互动家园！</div>
@@ -16,30 +15,30 @@
           <div class="rows s_clear">
             <div class="fldid"><label for="mail">邮箱：</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= f.text_field :email, :onblur => "Iyxzone.Register.Manager.validateEmail()", :onfocus => "Iyxzone.Register.Manager.showEmailRequirement();" %></div>
+              <div class="textfield"><%= f.text_field :email, :onblur => "Iyxzone.Register.validateEmail()", :onfocus => "Iyxzone.Register.showEmailRequirement();" %></div>
             </div>
-            <div class="" id='email_info'></div>
+            <span class='' id='email_info'></span>
           </div>
           <div class="rows s_clear">
             <div class="fldid"><label for="mail">昵称：</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= f.text_field :login, :onblur => "Iyxzone.Register.Manager.validateLogin()", :onfocus => "Iyxzone.Register.Manager.showLoginRequirement();" %></div>
+              <div class="textfield"><%= f.text_field :login, :onblur => "Iyxzone.Register.validateLogin()", :onfocus => "Iyxzone.Register.showLoginRequirement();" %></div>
             </div>
-            <div class="" id='login_info'></div>
+            <span class='' id='login_info'></span>
           </div>
           <div class="rows s_clear">
             <div class="fldid"><label for="mail">密码：</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= f.password_field :password, :onblur => "Iyxzone.Register.Manager.validatePassword()", :onfocus => "Iyxzone.Register.Manager.showPasswordRequirement();"%></div>
+              <div class="textfield"><%= f.password_field :password, :onblur => "Iyxzone.Register.validatePassword()", :onfocus => "Iyxzone.Register.showPasswordRequirement();"%></div>
             </div>
-            <div class="" id='password_info'></div>
+            <span class='' id='password_info'></span>
           </div>
           <div class="rows s_clear">
             <div class="fldid"><label for="mail">确认密码：</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= f.password_field :password_confirmation, :onblur => "Iyxzone.Register.Manager.validatePasswordConfirmation()", :onclick => "Iyxzone.Register.Manager.showPasswordConfirmRequirement()" %></div>
+              <div class="textfield"><%= f.password_field :password_confirmation, :onblur => "Iyxzone.Register.validatePasswordConfirmation()", :onclick => "Iyxzone.Register.showPasswordConfirmRequirement()" %></div>
             </div>
-            <div class="" id='password_confirmation_info'></div>
+            <span class="" id='password_confirmation_info'></span>
           </div>
           <div class="rows s_clear">
             <div class="fldid"><label>性别：</label></div>
@@ -56,14 +55,78 @@
             <div class="prompt">游戏信息</div>你必须添加你玩过的游戏角色（至少一个）以完成注册
           </div>
           <div class='sperator'></div>
-          <div id='character_info'>
-            <%= link_to_function '添加游戏角色', "Iyxzone.Register.Manager.newCharacter();" %>
-            <ul id='characters'></ul>
-          </div><div id='info'></div>
+          <div class='edit-toggle space edit'>
+            <div class="formcontent con">
+              <div class='item space' id='characters'>
+                <div id='character_0'>
+                  <% fields_for "profile[new_characters][0]", GameCharacter.new do |c| %>
+                  <div class="rows s_clear">
+                    <div class="fldid"><label>人物昵称：</label></div>
+                    <div class="fldvalue">
+                      <div class="textfield" style="width: 100px"><%= c.text_field :name, :onblur => "Iyxzone.Register.isCharacterNameValid(0)" %></div>
+                    </div>
+                    <span class="red" id='character_0_name_error'></span>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldid"><label>级别：</label></div>
+                    <div class="fldvalue">
+                      <div style="width: 100px;" class="textfield"><%= c.text_field :level, :onblur => "Iyxzone.Register.isCharacterLevelValid(0)" %></div>
+                    </div>
+                    <span class="red" id='character_0_level_error'></span>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldid"><label for="inbox">游戏：</label></div>
+                    <div class="fldvalue">
+                      <%= c.collection_select :game_id, @games, :id, :name, {:prompt => '---'} %>
+                    </div>
+                    <span class='red' id='character_0_game_id_error'></span>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldid"><label for="inbox">区域：</label></div>
+                    <div class="fldvalue">
+                      <%= c.collection_select :area_id, [], :id, :name, {:prompt => '---'} %>
+                    </div>
+                    <span class='red' id='character_0_area_id_error'></span>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldid"><label for="inbox">服务器：</label></div>
+                    <div class="fldvalue">
+                      <%= c.collection_select :server_id, [], :id, :name, {:prompt => '---'} %>
+                    </div>
+                    <span class='red' id='character_0_server_id_error'></span>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldid"><label for="inbox">种族：</label></div>
+                    <div class="fldvalue">
+                      <%= c.collection_select :race_id, [], :id, :name, {:prompt => '---'} %>
+                    </div>
+                    <span class='red' id='character_0_race_id_error'></span>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldid"><label for="inbox">职业：</label></div>
+                    <div class="fldvalue">
+                      <%= c.collection_select :profession_id, [], :id, :name, {:prompt => '---'} %>
+                    </div>
+                    <span class='red' id='character_0_profession_id_error'></span>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldid"><label>正在玩：</label></div>
+                    <div class="fldvalue">
+                      <%= c.check_box 'playing' %>
+                    </div>
+                  </div>
+                  <% end %>
+                  <p class="foot s_clear"><%= link_to_function "删除本游戏角色", "Iyxzone.Register.removeCharacter(0)", :class => 'right red' %></p>
+                  <%= javascript_tag "Iyxzone.Register.addGameSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')}, 0, null)" %>
+                </div>
+              </div>
+              <p class="foot s_clear"><%= link_to_function "增加新的游戏角色", "Iyxzone.Register.newCharacter(event)", :class => 'left red' %></p>
+            </div>
+          </div>
           <div class="seperator"></div>
           <div class="btn-rows">
             <table class="center">
-              <tr><td><%= button_to_function '', "Iyxzone.Register.Manager.submit()", :type => "submit", :class => "registbtn png" %></td></tr>
+              <tr><td><%= button_to_function '', "Iyxzone.Register.submit(event)", :type => "submit", :class => "registbtn png" %></td></tr>
             </table>
           </div>
           <div class="rows">
@@ -79,7 +142,3 @@
     </div>
   </div>
 </div>
-
-<%= javascript_tag "
-  Iyxzone.Register.Manager.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '')}, 'character_game_id', 'character_area_id', 'character_server_id', 'character_race_id', 'character_profession_id', {});
-" %>

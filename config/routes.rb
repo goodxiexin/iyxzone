@@ -32,6 +32,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.districts '/districts', :controller => 'chinese_region', :action => 'districts'
 
+  map.game_details '/game_details', :controller => 'games', :action => 'game_details'
+
+  map.area_details '/area_details', :controller => 'games', :action => 'area_details'
+
   map.namespace :admin do |admin|
   
     admin.resources :users, :member => {:enable => :put, :disable => :put, :activate => :put}, :collection => {:search => :get}

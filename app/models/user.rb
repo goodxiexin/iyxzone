@@ -281,4 +281,43 @@ class User < ActiveRecord::Base
 
   include FriendSuggestor
 
+  # prevents a user from submitting a crafted form that bypasses activation
+  # anything else you want your user to change should be added here.
+  attr_accessible :login, :password, :password_confirmation, :gender, :avatar_id
+
+  def validate_on_create
+    # check login
+    if login.blank?
+      errors.add_to_base("昵称不能为空")
+      return
+    elsif login.length < 4 or login.length > 16
+      errors.add_to_base("昵称长度不对")
+      return
+    elsif /^\d/.match(login)
+      errors.add_to_base("昵称不能以数字开头")
+      return
+    end
+
+    # check gender
+    if gender.blank?
+      errors.add_to_base("性别为空")
+      return
+    elsif gender != 'male' and gender != 'female'
+      errors.add_to_base("未知的性别")
+      return
+    end
+
+    # check email
+    if email.blank?
+      errors.add_to_base("邮件为空")
+      return 
+    elsif !/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.match(email)
+      errors.add_to_base("邮件格式不对")
+      return
+    elsif !User.find_by_email(email).blank?
+      errors.add_to_base("邮件已经被注册了")
+      return
+    end
+  end
+
 end

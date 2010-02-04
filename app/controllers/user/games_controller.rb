@@ -46,17 +46,6 @@ class User::GamesController < UserBaseController
     render :action => 'beta', :layout => 'app'
   end
 
-  # ugly ..
-  # how to fix it?? 
-  def game_details
-    render :json => @game.to_json(:include => [:servers, :areas, :races, :professions])
-  end
-
-  def area_details
-    render :json => @area.to_json(:include => :servers)
-  end
-
-
 protected
 
   def setup

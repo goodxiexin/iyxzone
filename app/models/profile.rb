@@ -15,7 +15,7 @@ class Profile < ActiveRecord::Base
 	acts_as_resource_feeds
 
   acts_as_taggable :delete_conditions => lambda {|profile, user| profile.user == user},
-                   :create_conditions => lambda {|tagging, profile, user| (tagging.nil? || tagging.created_at < 1.week.ago) and (profile.user.has_friend? user)}
+                   :create_conditions => lambda {|tagging, profile, user| true }#(tagging.nil? || tagging.created_at < 1.week.ago) and (profile.user.has_friend? user)}
 
   acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, profile, comment| profile.user == user}, 

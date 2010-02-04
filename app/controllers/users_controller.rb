@@ -13,28 +13,21 @@ class UsersController < ApplicationController
     # uncomment at your own risk
     # reset_session
 
-    # 以防万一，万一客户端那边的email检查没有执行
-    if User.find_by_email(params[:user][:email])
-			render :update do |page|
-				page << "$('email_info').innerHTML = '被占用';"
-			end
-			return
-		end
-      @user = User.new(params[:user])
-      @user.email = params[:user][:email]
-      @user.save!
-      params[:characters].each do |args|
-        @user.characters.create(args)
-      end unless params[:characters].blank?
-      params[:rating].each do |args|
-        Rating.create(args.merge({:rateable_type => 'Game', :user_id => @user.id}))
-      end unless params[:rating].blank?
+    @user = User.new(params[:user])
+    @user.email = params[:user][:email]
+    if @user.save
+      @user.profile.update_attributes(params[:profile]) # TODO
       render :update do |page|
         page.redirect_to "/activation_mail_sent?email=#{@user.email}&show=0"
       end
-      #render :update do |page|
-      #  page.redirect_to '/login'
-      #end
+    else
+      render :update do |page|
+        page << "error('#{@user.errors.on_base}');"
+      end
+    end
+    #render :update do |page|
+    #  page.redirect_to '/login'
+    #end
   end
 
   def activate

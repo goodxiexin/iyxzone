@@ -7,6 +7,7 @@
   <%= javascript_include_tag :defaults %>
   <%= javascript_include_tag 'iyxzone' %>
   <%= javascript_include_tag 'comment' %>
+  <%= javascript_include_tag 'facebox' %>
   <%= stylesheet_link_tag "common.css" %>
   <%= stylesheet_link_tag "home.css" %>
 </head>
@@ -27,10 +28,10 @@
                 </div>
               </li>
               <li>
-                <a href="#" id="praise"><strong>100</strong></a>
+                <%= link_to_remote "<strong><span id='dig_sharing_#{@sharing.id}'>#{@sharing.digs_count}</span></strong>", :url => digs_url("dig[diggable_type]" => 'Sharing', "dig[diggable_id]" => @sharing.id, :at => 1), :html => {:class => 'praise'} %> 
               </li>
               <li>
-                <%= facebox_link "分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => @shareable.id) %>(<%= @shareable.sharings_count %>)
+                <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => @shareable.id) %>(<%= @shareable.sharings_count %>)
               </li>
               <li style="_margin-top:6px">
                 <span>首次分享人：</span><%= avatar_image @shareable.first_sharer, :width => 27, :height => 27 %> <%= profile_link @shareable.first_sharer %></a>

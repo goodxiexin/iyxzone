@@ -6,7 +6,9 @@ class User::DigsController < UserBaseController
       render :update do |page|
         page << "tip('成功')"
 				page << "$('dig_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = #{@dig.diggable.digs_count}"
-				page << "$('digging_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = '<a href=\"#\">已赞</a>'" 
+        if params[:at].to_i != 1
+				  page << "$('digging_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = '<a href=\"#\">已赞</a>'"
+        end 
       end
     else
       render :update do |page|

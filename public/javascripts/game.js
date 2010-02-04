@@ -108,7 +108,7 @@ Iyxzone.Game.Selector = Class.create({
       this.reset();
       return;
     }
-    new Ajax.Request('/games/' + $(this.gameSelectorID).value + '/game_details', {
+    new Ajax.Request('/game_details?game_id=' + $(this.gameSelectorID).value, {
       method: 'get',
       onSuccess: function(transport){
         alert(transport.responseText);
@@ -145,7 +145,7 @@ Iyxzone.Game.Selector = Class.create({
         this.resetServerInfo();
       return;
     }
-    new Ajax.Request('/games/' + $(this.gameSelectorID).value + '/area_details?area_id=' + $(this.areaSelectorID).value, {
+    new Ajax.Request('/area_details?game_id=' + $(this.gameSelectorID).value + '&area_id=' + $(this.areaSelectorID).value, {
       method: 'get',
       onSuccess: function(transport){
         var areaInfo = transport.responseText.evalJSON().game_area;
