@@ -5,7 +5,7 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
-		<h1 class="big-mygame">好友</h1>
+		<h1 class="app-friend">好友</h1>
     <div class="box02 canvas_int">
 			<div class="tab tab01">
 				<div class="right"><%= link_to "激请好友加入" %></div>
@@ -98,28 +98,28 @@
           </div>
 				</div>
 				<div class="box02 appcontent01">
-					<h3>你可能认识的人</h3>
-          <div class="photolist-box">
-						<ul class="collection s_clear" id='friend_suggestions'>
-							<%= render :partial => 'friend_suggestion', :collection => @friend_suggestions %>
+					<div class='d6-head'>
+					<strong class='gray'>你可能认识的人</strong>
+					<span><%= link_to '更多', {:controller => 'user/friend_suggestions', :action => 'friend'}, :class => 'right' %></span>
+					</div>
+          <div class="d6-list s_clear">
+						<ul id='friend_suggestions'>
+							<%= render :partial => 'nicer_friend_suggestion', :collection => @friend_suggestions %>
 						</ul>
-            <div class="pages">
-							<%= link_to '更多', {:controller => 'user/friend_suggestions', :action => 'friend'}, :class => 'more' %>
-            </div>
           </div>
         </div>
 				<% @comrade_suggestions.each do |server_id,suggestions| %>
 					<% unless suggestions.count == 0 %>
 						<% server = GameServer.find(server_id) %>
 						<div class="box02 appcontent01">
-						  <h3>你在<%= server_location server %>可能认识: </h3>
-						  <div class="photolist-box">
-						    <ul class="collection s_clear" id='server_<%= server_id %>_suggestions'>
+							<div class='d6-head'>
+								<strong>你在<%= server_location server %>可能认识: </strong>
+								<span><%= link_to '更多', {:controller => 'user/friend_suggestions', :action => 'comrade', :server_id => server_id}, :class => 'right' %></span>
+							</div>
+						  <div class="d6-list s_clear">
+						    <ul id='server_<%= server_id %>_suggestions'>
 									<%= render :partial => 'comrade_suggestion', :collection => suggestions %>
 						    </ul>
-						    <div class="pages">
-									<%= link_to '更多', {:controller => 'user/friend_suggestions', :action => 'comrade', :server_id => server_id}, :class => 'more' %>
-								</div>
 						  </div>
 						</div>
 					<% end %>

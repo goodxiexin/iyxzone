@@ -22,35 +22,34 @@
           <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
           <% form_for :video, :url => videos_url, :html => {:id => 'video_form'} do |f| %>
             <div class="rows s_clear">
-    					<div class='title'>
-		    			  <div class="fldid"><%= f.label "视频标题：" %></div>
-				    	  <div class="fldvalue"><%= f.text_field 'title' %></div>
-    					</div>
+		    			<div class="fldid"><%= f.label "视频标题：" %></div>
+				    	<div class="fldvalue"><div class='textfield'><%= f.text_field 'title' %></div></div>
 				    </div>
 				    <div class="rows s_clear">
-					    <div class='url'>
-      					<div class="fldid"><%= f.label '连接地址：' %></div>
-			      		<div class="fldvalue"><%= f.text_field 'video_url', :id => 'video_url' %></div>
-    					</div>
+      				<div class="fldid"><%= f.label '连接地址：' %></div>
+			      	<div class="fldvalue"><div class='textfield'><%= f.text_field 'video_url', :id => 'video_url' %></div></div>
 		    		</div>
-    				<div class='options'>
-		    			<div class="rows s_clear">
-					      <div class='fldid'><%= f.label "游戏类别:" %></div>
-                <div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class=>"selector selector02" %></div>
-					    </div>
-					    <div class="rows s_clear">
-      					<div class='fldid'><%= f.label "浏览权限:"%></div>
-                <div class='fldvalue'><%= privilege_select_tag(:video, :class=> "selector selector02") %></div>
-					    </div>
-				    </div>
-    				<div class='tag'>
+				    <div class="rows s_clear">
+      				<div class="fldid"><%= f.label '视频简介：' %></div>
+			      	<div class="fldvalue"><%= f.text_area 'description' %></div>
+		    		</div>
+		    		<div class="rows s_clear">
+					    <div class='fldid'><%= f.label "游戏类别:" %></div>
+              <div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class=>"selector selector02" %></div>
+					  </div>
+					  <div class="rows s_clear">
+      				<div class='fldid'><%= f.label "浏览权限:"%></div>
+              <div class='fldvalue'><%= privilege_select_tag(:video, :class=> "selector selector02") %></div>
+					  </div>
+    				<div class='rows s_clear'>
 		  			  <div class="fldid">添加相关好友：</div>
 					    <div class='fldvalue'>
                 <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video} %>
               </div>
 						</div>
-            <div class='submit'>
-              <%= button_to_function "保存", "Iyxzone.Video.Builder.save(this, event)", :class => "confirm-button" %>
+            <div class='rows s_clear'>
+							<div class='fldid'>&nbsp;</div>
+              <div class='fldvalue'><span class='button03 w-l'><span><%= button_to_function "保存", "Iyxzone.Video.Builder.save(this, event)", :class => "confirm-button" %></span></span></div>
             </div>
           <% end %>
         </div>

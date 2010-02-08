@@ -7,7 +7,8 @@
 		<div class="imgbox01"><%= avatar album.poster %></div>
 	</div>
 	<div class="jl-list-con jlcutline">
-	<p><%= profile_link album.poster %> <span>更新了<%= link_to "个人头像", avatar_albums_url(album), :class => "shine"%></span> </p>
+	<%= profile_link album.poster %> <span>更新了<%= link_to "个人头像", avatar_albums_url(album), :class => "shine"%></span>
+  <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %><% end %>
   <p class="gray jl-con">
 		<div class="mcAvatar jl-gray-bd">
 			<div class="picwrap">
@@ -21,10 +22,8 @@
 			</div>
 		</div>
 	</p>
-	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('avatar', #{avatar.id}, null);", :class => "gray"%></p>
+	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('avatar', #{avatar.id}, null);", :class => "gray"%></p>
 	  <%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => avatar , :recipient => avatar.poster} %>
-	<div>
-  <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :class => "icon-active" %><% end %>
   </div>
 </div>
 </div>

@@ -78,6 +78,7 @@ protected
       @video = Video.find(params[:id])
       @user = @video.poster
 			@privilege = @video.privilege
+			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @video = current_user.videos.find(params[:id])
     end  

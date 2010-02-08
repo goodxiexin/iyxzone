@@ -4,28 +4,31 @@ class User::FriendSuggestionsController < UserBaseController
 
 	def index
     @games = Game.find(:all, :order => 'pinyin ASC')
-		@friend_suggestions = current_user.find_or_create_friend_suggestions.paginate :page => params[:page], :per_page => 16
+		@friend_suggestions = current_user.find_or_create_friend_suggestions.paginate :page => params[:page], :per_page => 6
 		@comrade_suggestions = {}
 		current_user.servers.each do |s|
-			@comrade_suggestions[s.id] = current_user.find_or_create_comrade_suggestions(s).paginate :page => params[:page], :per_page => 8
+			@comrade_suggestions[s.id] = current_user.find_or_create_comrade_suggestions(s).paginate :page => params[:page], :per_page => 3
 		end
     logger.error @comrade_suggestions.values
 	end
 
 	def friend
 		@games = Game.find(:all, :order => 'pinyin ASC')
-    @friend_suggestions = current_user.find_or_create_friend_suggestions.paginate :page => params[:page], :per_page => 24
+    @friend_suggestions = current_user.find_or_create_friend_suggestions.paginate :page => params[:page], :per_page => 10
 	end
 
 	def comrade
     @games = Game.find(:all, :order => 'pinyin ASC')
-		@comrade_suggestions = current_user.find_or_create_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 24
+		@comrade_suggestions = current_user.find_or_create_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 10
 	end
 
 	def new
 		if !params[:server_id].nil?
 			@suggestion = current_user.find_or_create_comrade_suggestions(@server).reject{|s| @except.include?(s)}.sort_by{rand}.first
 			render :partial => 'comrade_suggestion', :object => @suggestion
+		elsif !params[:nicer].nil?
+			@suggestion = current_user.find_or_create_friend_suggestions.reject{|s| @except.include?(s)}.sort_by{rand}.first
+			render :partial => 'nicer_friend_suggestion', :object => @suggestion
 		else
 			@suggestion = current_user.find_or_create_friend_suggestions.reject{|s| @except.include?(s)}.sort_by{rand}.first
 			render :partial => 'friend_suggestion', :object => @suggestion

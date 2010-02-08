@@ -10,12 +10,12 @@
         <% if wall.is_commentable_by? current_user %>
           <%= link_to_function '回复', "Iyxzone.WallMessage.set('#{wall_message.poster.login}');" %>
         <% end %>
+    <% if wall_message.is_deleteable_by? current_user %>
+      <%= link_to_remote '', :url => wall_message_url(wall_message), :method => :delete, :html =>{:class => 'right icon-active'} %>
+    <% end %>
       </p>
       <p><%= wall_message.content  %></p>
     </div>
-    <% if wall_message.is_deleteable_by? current_user %>
-      <%= link_to_remote 'x', :url => wall_message_url(wall_message), :method => :delete, :class => 'icon-active' %>
-    <% end %>
   </div>
 <% end %>
 

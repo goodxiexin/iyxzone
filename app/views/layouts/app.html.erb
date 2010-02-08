@@ -61,7 +61,7 @@
             <li><%= link_to_function "设置", "", :id => "settings_link" %>
 						<div class='box01 set-box' id='settings_dropdown' style="display:none">
 							<%= link_to "隐私设置", privacy_setting_url, :class => "blk" %>
-							<%= link_to "帐号设置", edit_password_setting_url, :class => "blk" %>
+							<%= link_to "密码设置", edit_password_setting_url, :class => "blk" %>
 							<%= link_to "应用设置", application_setting_url, :class => "blk nobd"%>
 						</div>
 						</li>		
@@ -99,13 +99,13 @@
     
 	<div class="main">
 		<div class="content">
-		  <% if flash[:notice] %>
-				<%= flash[:notice] %>
-			<% end %>
-			<% if flash[:error] %>
-				<%= flash[:error] %>
-			<% end %>
-			<%= yield %>
+		<% flash.each do |key, msg| %>
+		  <%= content_tag :div, msg, :class => [key, "-msg"], :id => "notice_#{key}" %>
+			<script type="text/javascript">
+				setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
+			</script>
+		<% end %>
+		<%= yield %>
 		</div>
 	</div>
 

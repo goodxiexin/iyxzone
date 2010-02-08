@@ -102,27 +102,31 @@ module FriendSuggestor
 
 	def find_or_create_comrade_suggestions server
 
-		suggestions = comrade_suggestions.find(:all, :conditions => {:game_id => server.game_id, :server_id => server.id})
+	suggestions = comrade_suggestions.find(:all, :conditions => {:game_id => server.game_id, :server_id => server.id})
 
-		# return if there are enough comrade suggestions in database
-		return suggestions if suggestions.count >= COMRADE_SUGGESTION_MINIMUM
+	# return if there are enough comrade suggestions in database
 
-		# construct new suggestions and insert into database
-		values = []
-		collect_comrades(server).each_key do |friend_id|
-			if server.game.no_areas?
-				values << "(NULL, #{id}, #{friend_id}, #{server.game_id}, NULL, #{server.id})"
-			else
-				values << "(NULL, #{id}, #{friend_id}, #{server.game_id}, #{server.area_id}, #{server.id})"
-			end
+	return suggestions if suggestions.count >= COMRADE_SUGGESTION_MINIMUM
+
+	ComradeSuggestion.destroy_all(:user_id => id, :game_id => server.game_id, :server_id => server.id)
+
+	# construct new suggestions and insert into database
+	values = []
+	collect_comrades(server).each_key do |friend_id|
+		if server.game.no_areas?
+			values << "(NULL, #{id}, #{friend_id}, #{server.game_id}, NULL, #{server.id})"
+		else
+			values << "(NULL, #{id}, #{friend_id}, #{server.game_id}, #{server.area_id}, #{server.id})"
 		end
-
-		return comrade_suggestions if values.blank?
-
-		sql = "insert into comrade_suggestions values #{values.join(',')}"
-		ActiveRecord::Base.connection.execute(sql)
-
-    comrade_suggestions		
 	end
+
+	return suggestions if values.blank?
+
+	sql = "insert into comrade_suggestions values #{values.join(',')}"
+	ActiveRecord::Base.connection.execute(sql)
+	self.reload
+	comrade_suggestions.find(:all, :conditions => {:game_id => server.game_id, :server_id => server.id})
+
+	end 
 
 end

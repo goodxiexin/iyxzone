@@ -5,6 +5,8 @@ class User::SearchController < UserBaseController
   def user
     @games = Game.find(:all, :order => 'pinyin ASC')
     @users = User.search(params[:key]).paginate :page => params[:page], :per_page => 16 
+		@total_users = GameCharacter.search(params[:key]).group_by(&:user_id).to_a
+		@key = params[:key]
   end
 
   def character
@@ -24,7 +26,9 @@ class User::SearchController < UserBaseController
       @servers = @game.servers
     end
     @games = Game.find(:all, :order => 'pinyin ASC')
-    @users = GameCharacter.search(params[:key], :conditions => cond).group_by(&:user_id).to_a.paginate :page => params[:page], :per_page => 16
+		@total_users = GameCharacter.search(params[:key], :conditions => cond).group_by(&:user_id).to_a
+		@key = params[:key]
+    @users = @total_users.paginate :page => params[:page], :per_page => 1
   end
 
 protected

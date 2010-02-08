@@ -97,7 +97,7 @@ protected
       @album = @photo.album
       @user = @album.user
 			@privilege = @album.privilege
-			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
     elsif ['new', 'create'].include? params[:action]
       @album = current_user.albums.find(params[:album_id])
     elsif ['record_upload', 'edit_multiple'].include? params[:action]

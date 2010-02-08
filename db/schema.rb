@@ -574,6 +574,9 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
     t.integer  "mail_setting",               :limit => 8,  :default => 4398046511103
     t.integer  "application_setting",        :limit => 8,  :default => 262143
     t.integer  "characters_count",                         :default => 0
+    t.integer  "games_count",                              :default => 0
+    t.integer  "game_attentions_count",                    :default => 0
+    t.integer  "sharings_count",                           :default => 0
     t.integer  "notices_count",                            :default => 0
     t.integer  "unread_notices_count",                     :default => 0
     t.integer  "notifications_count",                      :default => 0

@@ -1,17 +1,16 @@
 <% delivery = video_feed_delivery %>
 <% video = delivery.feed_item.originator %>
-<div class="feed-list" id='delivery_<%= delivery.id %>'>
-	<div class="feed-icon icon-share"></div>
-  <p><%= profile_link video.poster %> <span>分享视频</span> <%= video_link video %></p>
-	<div class="feed-pic s_clear">
-		<div class="img">
-			<%= avatar video.poster %> 
-    </div>
-    <div class="pics" id='video_<%= video.id %>'> <%= image_tag video.thumbnail_url, :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');" %> </div>
-		<p><%= ftime video.created_at %> <%= link_to_function "评论", "show_comment_form('video', #{video.id}, null)" %></p>
-  </div>
-  <% if with_comments %>
+<div class="feed-list-box">
+<div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
+	<div class="img left">
+		<div class="imgbox01"><%= avatar video.poster %></div>
+	</div>
+  <div class="jl-list-con jl-cutline">
+		<%= profile_link video.poster %> 分享了视频 <%= video_link video, :class => "shine"%>
+	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete,:html=>{ :class => "icon-active"} %><% end %> 
+    <p class="gray jl-con s_clear" id='video_<%= video.id %>'> <%= video_thumbnail video, :class=>'imgbox01' %></p>
+		<p class="gray"><%= ftime video.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('video', #{video.id}, null)", :class => "gray" %></p>
 	  <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => video, :recipient => video.poster} %>
-  <% end %>
-	<div><% if delivery.is_deleteable_by? current_user %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div> 
+	</div>
+</div>
 </div>

@@ -69,7 +69,7 @@ Object.extend(Iyxzone.Comment, {
     $('add_' + commentableType + '_comment_' + commentableID).hide();
     $(commentableType + '_comment_' + commentableID).show();
     $(commentableType + '_comment_content_' + commentableID).focus();
-    window.scrollTo(0, $(commentableType + '_comment_content_' + commentableID).positionedOffset().top);
+		window.scrollTo(0, $(commentableType + '_comment_content_' + commentableID).cumulativeOffset().top);
   },
 
   more: function(commentableType, commentableID, link){

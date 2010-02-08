@@ -84,6 +84,7 @@ protected
       @photo = Avatar.find(params[:id])
       @album = @photo.album
       @user = @album.user
+			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ['edit', 'set', 'update', 'destroy', 'update_notation'].include? params[:action]
       @album = current_user.avatar_album
       @photo = @album.photos.find(params[:id])

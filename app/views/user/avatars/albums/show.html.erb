@@ -60,9 +60,9 @@
 					<% @photos[j..j+n].each do |p| %>                         
 						<td> 
 						<% if @user.avatar != p %>
-						<span><%= link_to_remote '设置为头像', :url => set_avatar_url(p) %></span>
+						<%= link_to_remote '', :method => 'put', :url => set_avatar_url(p), :html=>{:class=>'icon-active icon-active-camera', :title=>'设置为头像'} %>
 						<% end %>
-						<%= facebox_link "", edit_avatar_url(p), :class => "icon-active icon-active-edit" %>  <%= facebox_confirm '', avatar_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete', :class => "icon-active"} %>
+						<%= facebox_link "", edit_avatar_url(p), :class => "icon-active icon-active-edit" %>  <%= facebox_confirm '', avatar_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %>
 						</td>
 					<% end %>
 					</tr>
@@ -71,7 +71,7 @@
         <%= will_paginate @photos %>
         <% else %>
 					<% if @user == current_user %>
-					<div class='gray'>还没有图片，你赶紧<%= link_to '上传', new_personal_photo_url(:album_id => @album.id) %>吧</div>
+					<div class='gray'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :album => 1) %>吧</div>
 					<% else %>
 					<div class='gray'>还没有图片</div>
 					<% end %>

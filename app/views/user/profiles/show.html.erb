@@ -27,17 +27,17 @@
 		<% end %>
     <b>游戏人物资料</b>
   </div>
-  <table class="data-table">
+  <table class="data-table jl-data-table" cellpadding='0'>
 		<tr>
-			<th>游戏名称</th>
-      <th>玩家昵称</th>
-      <th>等级</th>
+			<th class='name'>游戏名称</th>
+      <th class='id'>玩家昵称</th>
+      <th class='level'>等级</th>
     </tr>
 		<% @user.characters.each do |c| %>
     <tr>
-			<td><%= game_link c.game %></td>
-      <td><%= c.name %></td>
-      <td><%= c.level %></td>
+			<td class='name'><%= game_link c.game %></td>
+      <td class='id'><%= c.name %></td>
+      <td class='level'><%= c.level %></td>
     </tr>
 		<% end %>
   </table>
@@ -48,28 +48,26 @@
 	<% if @user == current_user %>
 		<b>大家对你的印象是</b>
 	<% elsif @profile.is_taggable_by? current_user %>
-		<b>你对TA的印象是</b>
+		<b class='space'>你对TA的印象是</b>
 	<% else %>
 		<b>好友印象</b>
 	<% end %>
 	</div>
-	<div id='tag_cloud'> 
   <% if @user == current_user %>
     <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>
   <% elsif @profile.is_taggable_by? current_user %>
     <%= render :partial => 'user/profiles/tags/profile_tag', :locals => {:profile => @profile} %>
     <% form_remote_for :tag, :url => profile_tags_url(@profile) do |f| %>
-      都不贴切？自己想个<br/>
-      <%= text_field_tag 'tag_name', ''%>
-      <%= f.submit '提交' %>
+      <p class='space'>都不贴切？自己想个</p>
+      <div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
+      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
     <% end %>
   <% else %>
     <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>
   <% end %>
-	</div>
 </div>
 
-<div class="multibox">
+<div class="multibox rows">
   <div class="title">
     <%= facebox_link "更多", profile_viewings_url(@profile) %>
     <b>最近来访</b>
@@ -89,20 +87,19 @@
 
 <% end %>
 
-<div class="box03 tipbar">
-<% if @user != current_user and @profile.about_me.blank? %>
-	<span>这家伙很懒，什么都没说...</span>
-<% else %>
-	<%= in_place_text_field :span, @profile, :about_me, @user == current_user, profile_url(@profile), {}, {:empty_text => '介绍下自己?', :rows => 2, :cols => 71}, {} %>
-<% end %>
-</div>
-
 <div class="box02 canvas_con">
+	<div class='tipbar space'>
+	<% if @user != current_user and @profile.about_me.blank? %>
+		<span>这家伙很懒，什么都没说...</span>
+	<% else %>
+		<%= in_place_text_field :span, @profile, :about_me, @user == current_user, profile_url(@profile), {}, {:empty_text => '介绍下自己?', :rows => 2, :cols => 71}, {} %>
+	<% end %>
+	</div>
 
-<% unless @albums.blank? %>
 <div class="multibox">
-	<div class="title"><b>最近照片</b></div>
+	<div class="title"><%=link_to '全部相册', personal_albums_url(:id => @user.id) %><b>最近照片</b></div>
   <div class="piclist s_clear">
+	<% unless @albums.blank? %>
 		<% @albums.each do |album| %>
 				<div class="picitem">
 					<div class="picbox01">
@@ -121,38 +118,56 @@
 					<% end %>
       </div>	
 		<% end %>	
+	<% else %>
+		<% if @user==current_user %>
+			还没更新照片赶紧去<%= link_to '弄一个', personal_albums_url(:id=>@user.id)%>吧
+		<% else %>
+			这家伙没更新照片
+		<% end %>
+	<% end %>
 	</div>
 </div>
-<% end %>
 
-<% unless @blogs.blank? %>
 <div class="multibox">
-	<div class="title"><b>最近日志</b></div>
+	<div class="title"><b>最近日志</b>
+    <%= link_to "全部日志", blogs_url(:id => @user.id) %>
+	</div>
+	<% unless @blogs.blank? %>
 	<% @blogs.each do |blog| %>
 		<div class="diary-box">
 			<div class="diary-header">
-				<p><%= blog_link blog %> <%= ftime blog.created_at %> </p>
+				<%= blog_link blog,:class=>'shine' %> <%= ftime blog.created_at %>
 			</div>
 			<p> <%= blog_content blog, :length => 80, :omission => '...' %> </p>
 		</div>
 	<% end %>
-  <div class="diary-more">
-    <%= link_to "全部日志 >>", blogs_url(:id => @user.id) %>
-  </div>
+	<% end %>
 </div>
-<% end %>
 
-<% unless @feed_deliveries.blank? %>
 <div class='multibox'>
 	<div class='title'><b>新鲜事</b></div>
-  <div class="feed-wrap" id='feed_list'>
-		<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
+	<% unless @feed_deliveries.blank? %>
+	<div class='feed-box'>
+		<div class="feed-wrap" id='feed_list'>
+			<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
+			<div class="s_clear"></div>
+				<div class="round04 round_r_t jl-read-more space s_clear">
+          <div class="round_l_t">
+            <div class="round_r_b">
+              <div class="round_l_b">
+                <div class="round_m">
+                  <div class="round_body" id="more_feed">
+										<%= link_to_function "更多新鲜事", "Iyxzone.Profile.Feeder.moreFeeds(#{@profile.id});", :class => "jl-more"%>
+                  </div>
+								</div>
+              </div>
+            </div>
+          </div>
+        </div>
+		</div>
 	</div>
-	<div id='more_feed'>
-		<span><%= link_to_function "更多新鲜事", "Iyxzone.Profile.Feeder.moreFeeds(#{@profile.id});" %></span>
-	</div>
+	<% end %>
 </div>
-<% end %>
 
 <% if @setting.leave_wall_message_viewable_by? current_user %>
   <%= render :layout => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>

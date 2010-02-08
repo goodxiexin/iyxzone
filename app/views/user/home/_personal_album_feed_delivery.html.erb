@@ -9,6 +9,7 @@
 		<div class="imgbox01"><%= avatar album.poster %></div>
 	</div>
 	<div class="jl-list-con jl-cutline"><%= profile_link user %> <span>更新了<%=photos.count%>张照片至相册</span> <%= album_link album, :class => "shine"%>
+	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %><% end %>
   <ul id="roll-photo" class="s_clear">
       <% if photos.count >= 3 %>
         <%= link_to_function '', "Iyxzone.Photo.SlideManager.get(#{delivery.id}).prev();", :class => "roll-left" %>
@@ -26,10 +27,7 @@
 			</li>
 			</ul>
 		<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('personal_album', #{album.id}, null);", :class => "grap" %></p>
-  <% if with_comments %>
 	  <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => album, :recipient => album.poster} %>
-  <% end %>
-	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :class => "icon-active" %><% end %>
 	</div>
 	</div>
 </div>

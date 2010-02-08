@@ -16,7 +16,7 @@ module ApplicationHelper
     if user.avatar.blank?
       link_to image_tag("default_#{size}.png", img_opts), profile_url(user.profile), a_opts
     else
-      link_to image_tag(user.avatar.public_filename(size), opts), profile_url(user.profile), a_opts
+      link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
     end
   end
 
@@ -141,8 +141,8 @@ module ApplicationHelper
 		image_tag tempimg, :size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"
 	end
 
-  def game_link game
-    link_to game.name, game_url(game)
+  def game_link game, opts={}
+    link_to game.name, game_url(game), opts
   end
 
   def event_link event, opts={}

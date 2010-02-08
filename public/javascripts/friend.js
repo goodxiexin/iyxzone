@@ -3,6 +3,7 @@ Iyxzone.Friend = {
   version: '1.0',
   author: ['高侠鸿'],
   Suggestor: {},
+	NicerSuggestor: {}, //for layout reason
   Tagger: Class.create({}) // only used in Blog or Video
 };
 
@@ -50,6 +51,42 @@ Object.extend(Iyxzone.Friend.Suggestor, {
 
 });
 
+Object.extend(Iyxzone.Friend.NicerSuggestor, {
+
+  newSuggestion: function(suggestionID, token){
+    // consturct except parameters
+    var url = 'friend_suggestions/new';
+    var exceptIDs = [];
+    var suggestions = $('friend_suggestions').childElements();
+    for(var i=0;i<suggestions.length;i++){
+      exceptIDs.push(suggestions[i].readAttribute('suggestion_id'));
+    }
+    var exceptParam = "";
+    for(var i=0;i<exceptIDs.length;i++){
+      exceptParam += "except_ids[]=" + exceptIDs[i] + "&";
+    }
+    
+    // construct url
+    url += "?" + exceptParam;
+    
+    // send ajax request
+    new Ajax.Request(url, {
+      method: 'get',
+      parameters: {authenticity_token: encodeURIComponent(token), nicer: 1}, //encodeURIComponent(token)},
+      onSuccess: function(transport){
+        var card = $('friend_suggestion_' + suggestionID);
+        var temp_parent = new Element('div');
+        temp_parent.innerHTML = transport.responseText;
+        var li = temp_parent.childElements()[0];
+        li.hide();
+        Element.replace(card, li);
+        li.appear({duration: 3.0});
+      }.bind(this)
+    });
+  }
+
+});
+
 Object.extend(Iyxzone.Comrade.Suggestor, {
 
   newSuggestion: function(serverID, suggestionID, token){
@@ -71,7 +108,7 @@ Object.extend(Iyxzone.Comrade.Suggestor, {
     // send ajax request
     new Ajax.Request(url, {
       method: 'get',
-      parameters: {serverID: serverID, authenticity_token: encodeURIComponent(token)}, //encodeURIComponent(token)},
+      parameters: {server_id: serverID, authenticity_token: encodeURIComponent(token)}, //encodeURIComponent(token)},
       onSuccess: function(transport){
         var card = $('comrade_suggestion_' + suggestionID);
         var temp_parent = new Element('div');

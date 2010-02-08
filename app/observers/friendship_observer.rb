@@ -38,7 +38,7 @@ class FriendshipObserver < ActiveRecord::Observer
 
 	def after_destroy friendship
     if friendship.is_request?
-			friendship.user.notifications.create(:data => "#{profile_link friendship.friend}决绝了你的好友请求")
+			friendship.user.notifications.create(:data => "#{profile_link friendship.friend}拒绝了你的好友请求")
       friendship.friend.raw_decrement :friend_requests_count
 		elsif friendship.is_friend?
 			n = friendship.friend.notifications.create(:data => "你和#{profile_link friendship.user}的好友关系解除了")

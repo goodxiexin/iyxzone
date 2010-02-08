@@ -23,12 +23,20 @@ class User::GamesController < UserBaseController
   end
 
   def interested
-    @games = current_user.interested_games.paginate :page => params[:page], :per_page => 1
+    @games = current_user.interested_games.paginate :page => params[:page], :per_page => 10
     render :action => 'interested', :layout => 'app'
   end
 
   def show
     @blogs = @game.blogs.find(:all, :limit => 3)
+		@players = []
+		if current_user.games.include?(@game)
+			current_user.servers.find(:all, :conditions=> { :game_id => @game.id}).each { |server|
+				@players << server.users
+			}
+		else
+			@players = @game.users.find(:all, :limit => 3)	
+		end
     @albums = @game.albums.find(:all, :limit => 3)
     @tagging = @game.taggings.find_by_poster_id(current_user.id)
     @can_tag = @tagging.nil? || (@tagging.created_at < 1.week.ago) || false

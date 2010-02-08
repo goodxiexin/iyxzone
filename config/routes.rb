@@ -191,7 +191,7 @@ ActionController::Routing::Routes.draw do |map|
 
     end
 
-    users.resources :games, :collection => {:sex => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:game_details => :get, :area_details => :get} do |games|
+    users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:game_details => :get, :area_details => :get} do |games|
 
       games.resources :blogs, :controller => 'games/blogs'
 

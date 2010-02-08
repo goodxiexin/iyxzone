@@ -3,6 +3,7 @@ class SharingObserver < ActiveRecord::Observer
   def after_create sharing
     # increment counter
     sharing.shareable.raw_increment :sharings_count
+		sharing.poster.raw_increment :sharings_count
 
     # issue feeds if necessary
     recipients = [].concat sharing.poster.guilds
@@ -12,6 +13,7 @@ class SharingObserver < ActiveRecord::Observer
 
   def after_destroy sharing
     sharing.shareable.raw_decrement :sharings_count
+		sharing.poster.raw_decrement :sharings_count
   end
 
 end

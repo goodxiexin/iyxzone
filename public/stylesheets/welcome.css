@@ -75,11 +75,3 @@
 .get-pws{width:53px;height:13px;background-position:0 0;}
 .box-v2 .m{border-left:1px solid #bdd6ad;border-right:1px solid #bdd6ad;background:#f8fcf6;}
 
-/*±íµ¥v2*/
-.form-con{padding:30px 0;margin:0 auto;width:85%;line-height:22px}
-.m .foot{line-height:22px}
-.form-con .f-id{width:180px;float:left;margin-right:5px;overflow:hidden;text-align:right;white-space:nowrap;word-break:keep-all;}
-.form-con .f-id label{font-size:14px;font-weight:bold;line-height:28px;}
-.form-con .f-value{float:left;margin-right:5px;}
-.form-con input{border:1px solid #BDD6AD;height:24px;line-height:24px;padding:0 5px;width:260px;}
-.form-con .f-stat{float:left;padding-left:16px;margin-right:5px;height:26px;background:url(../images/icons/statusIcons.gif) no-repeat}

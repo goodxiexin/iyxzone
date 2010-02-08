@@ -1,6 +1,16 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
+	<% if @user==current_user %>
     <h1 class="app-log">日志</h1>
+	<% else %>
+    <div class="friend-head space s_clear">
+      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
+      <p class="left">
+        <strong><%= @user.login %>的日志</strong><br />
+        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
+      </p>
+    </div>
+	<% end %>
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right"><%= link_to "写新日志", new_blog_url %></div>
@@ -8,11 +18,9 @@
 					<% subject = get_subject @user %>
 					<li><span><%= link_to "热门日志", hot_blogs_url(:id => @user.id) %></span></li>
 					<li class='hover'><span><%= link_to "#{subject}的日志", blogs_url(:id => @user.id) %></span></li>
-					<% if @user == current_user %>
-						<li><span><%= link_to "好友日志", friends_blogs_url %></span></li>
-					<% end %>
 					<li><span><%= link_to "与#{subject}的相关日志", relative_blogs_url(:id => @user.id) %></span></li>
 					<% if @user == current_user %>
+						<li><span><%= link_to "好友日志", friends_blogs_url %></span></li>
 						<li><span><%= link_to "草稿箱", drafts_url %></span></li>
 					<% end %>
 				</ul>
@@ -57,11 +65,11 @@
           <p class="s_clear red">评论(<%= @blog.comments_count %>)
 					<%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @blog.class.base_class.to_s, "dig[diggable_id]" => @blog), :html => {:id=> "digging_#{@blog.class.to_s.underscore}_#{@blog.id}", :class => "red"}%>(已经被<span id="dig_<%=@blog.class.to_s.underscore%>_<%=@blog.id%>" class='gray'><%= @blog.digs_count %></span>人赞过)
 					</p>
-						<%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @blog, :recipient => @blog.poster} %>
+					<%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @blog, :recipient => @blog.poster} %>
 				</div>
 			</div>
 
-</div></div>
+</div>
 </div></div>
 </div></div></div></div>
 
