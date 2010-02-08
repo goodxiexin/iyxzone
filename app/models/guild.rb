@@ -85,6 +85,21 @@ class Guild < ActiveRecord::Base
 
 	searcher_column :name
 
+  # game_id, president_id, character_id 不能改变
+  attr_readonly :game_id, :game_area_id, :game_server_id, :president_id, :character_id, :name
+
+  validates_presence_of :name, :message => "不能为空"
+
+  validates_size_of :name, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
+
+  validates_presence_of :description, :message => "不能为空"
+
+  validates_size_of :description, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节"
+ 
+  validates_presence_of :character_id, :message => "不能为空", :on => :create
+
+  validate_on_create :character_is_valid
+
 	def people_count
 		veterans_count + members_count + 1
 	end
@@ -95,10 +110,6 @@ class Guild < ActiveRecord::Base
 
   def has_character? character
     !memberships.find(:first, :conditions => {:character_id => character.id, :status => [3,4,5]}).blank?
-  end
-
-  def has_only_one_character_for? user
-    memberships.find(:all, :conditions => {:user_id => user.id, :status => [3,4,5]}).count == 1
   end
 
   def memberships_for user
@@ -235,47 +246,14 @@ class Guild < ActiveRecord::Base
     @del_gears_ids = nil
   end
 
-  # game_id, president_id, character_id 不能改变
-  
-  def validate
-    # check name
-    if name.blank?
-      errors.add_to_base('名字不能为空')
-      return
-    elsif name.length > 100
-      errors.add_to_base('名字最长100个字符')
-      return
-    end
+protected
 
-  end
- 
-  def validate_on_create
-    return unless errors.on_base.blank?
-
-    # game_id, server_id, area_id 被自动赋值
-  
-    # president_id 是由 current_user 赋值的，无须检查  
-  
-    # check character
-    if character_id.blank?
-      errors.add_to_base("没有游戏角色")
-      return
-    elsif GameCharacter.find(:first, :conditions => {:id => character_id, :user_id => president_id}).blank?
-      errors.add_to_base("游戏角色不存在")
-      return
-    end
-  end
-
-  def validate_on_update
-    return unless errors.on_base.blank?
-
-    if game_id_changed?
-      errors.add_to_base("不能修改game_id")
-    elsif character_id_changed?
-      errors.add_to_base("不能修改character_id")
-    elsif president_id_changed?
-      errors.add_to_base("不能修改president_id")
-    end
+  def character_is_valid
+    return if character_id.blank?
+    character = GameCharacter.find(:first, :conditions => {:id => character_id}).blank?
+    errors.add(:character_id, "不存在") if character.blank?
+    return if president_id.blank?
+    errors.add(:character_id, "不是拥有者") if character.user_id != president_id
   end
 
 end

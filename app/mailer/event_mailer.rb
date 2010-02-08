@@ -1,23 +1,11 @@
 class EventMailer < ActionMailer::Base
-=begin
-  def place_change event, participant 
-    setup_email	participant
-		subject			"Dayday3 - 活动#{event.title}的地点改了"
-    body				:user => participant, :url => "#{SITE_URL}/events/#{event.id}"
-  end
-
+  
   def time_change event, participant 
     setup_email	participant
     subject			"Dayday3 - 活动'#{event.title}'的时间改了"
     body				:user => participant, :url => "#{SITE_URL}/events/#{event.id}"
   end
-
-  def time_and_place_change event, participant
-    setup_email participant
-    subject     "Dayday3 - 活动'#{event.title}'的时间和地点改了"
-    body        :user => participant, :url => "#{SITE_URL}/events/#{event.id}"
-  end
-=end
+  
   def event_cancel event, participant 
     setup_email	participant
 		subject			"Dayday3 - 活动'#{event.title}'取消了"

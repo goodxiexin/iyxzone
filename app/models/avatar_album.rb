@@ -10,6 +10,9 @@ class AvatarAlbum < Album
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}, 
                       :create_conditions => lambda {|user, album| (album.poster == user) || (album.poster.has_friend? user)}
 
+  # 这些属性都是系统创建的，不需要检查
+  attr_readonly :owner_id, :poster_id, :privilege, :game_id
+
   def set_cover photo
     Avatar.transaction do
       user.update_attribute('avatar_id', photo.id)
@@ -17,11 +20,6 @@ class AvatarAlbum < Album
     end
   rescue
     return false
-  end
-
-  def validate
-    errors.add_to_base('没有拥有者') if owner_id.blank?
-    # poster_id, privilege, game_id在before_create里被赋值，这里不检查
   end
 
 end

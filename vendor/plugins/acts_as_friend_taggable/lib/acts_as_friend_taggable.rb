@@ -46,6 +46,11 @@ module FriendTaggable
       @tagged_user_ids
     end
 
+    def has_tag? user
+      user_id = (user.is_a? Integer)? user : user.id
+      tags.find_by_tagged_user_id(user_id)
+    end
+
     def is_taggable_by? user
       proc = self.class.friend_taggable_opts[:create_conditions] || lambda { true }
       proc.call user, self  

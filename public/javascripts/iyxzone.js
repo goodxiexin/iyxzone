@@ -24,7 +24,30 @@ Object.extend(Iyxzone, {
       opacity: 1
     });
     button.value = text;
+  },
+
+  countLength: function(str){
+    var escapedStr = encodeURIComponent(str);
+    if(escapedStr.indexOf("%") != -1) {
+      var count = escapedStr.split("%").length - 1;
+      if(count == 0)
+        count++  //perverse case; can't happen with real UTF-8
+      var tmp = escapedStr.length - (count * 3);
+      count = count + tmp;
+    }else {
+      count = escapedStr.length;
+    }
+  },
+
+  limitText: function(el, max, count_div){
+    var count = this.countLength(el.value);
+    if(count > max){
+      el.value = el.value.substring(0, max);
+      return false;
+    }
+    $(count_div).innerHTML = el.value.length + "/" + max;
   }
+
 
 });
 

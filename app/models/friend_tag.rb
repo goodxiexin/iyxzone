@@ -16,39 +16,39 @@ class FriendTag < ActiveRecord::Base
 
 	has_many :notices, :as => 'producer', :dependent => :destroy 
 
+  attr_readonly :poster_id, :tagged_user_id, :taggable_id, :taggable_type
+
+  validates_presence_of :poster_id, :message => "不能为空"
+
+  validates_presence_of :taggable_id, :taggable_type, :message => "不能为空" 
+
+  validate_on_create :taggable_is_valid
+
+  validates_presence_of :tagged_user_id, :message => "不能为空"
+
+  validate_on_create :tagged_user_is_valid
+
   def is_deleteable_by? user
     taggable.is_tag_deleteable_by? user, self
   end
 
-  def validate_on_create
-    if poster_id.blank?
-      errors.add_to_base("没有发布者")
-      return
-    end
+protected
 
-    if tagged_user_id.blank?
-      errors.add_to_base("没有被标记的人")
-      return
-    elsif !poster.has_friend?(tagged_user_id) and tagged_user_id != poster_id
-      errors.add_to_base("被标记的不是好友或本人")
-      return
-    end
+  def tagged_user_is_valid
+    return if tagged_user_id.blank? or poster_id.blank?
+    errors.add(:tagged_user_id, "不是好友") if !poster.has_friend?(tagged_user_id) and tagged_user_id != poster_id
+  end
 
-    if taggable_id.blank? or taggable_type.blank?
-      errors.add_to_base("没有被标记的资源")
-      return
-    else 
-      taggable = taggable_type.constantize.find(:first, :conditions => {:id => taggable_id})
-      if taggable.blank?
-        errors.add_to_base("被标记的资源不存在")
-        return
-      elsif taggable.tags.find_by_tagged_user_id(tagged_user_id)
-        errors.add_to_base('已经标记过了')
-        return
-      elsif !taggable.is_taggable_by? poster
-        errors.add_to_base('没有权限标记')
-        return
-      end
+  def taggable_is_valid
+    return if taggable_id.blank? or taggable_type.blank?
+
+    taggable = taggable_type.constantize.find(:first, :conditions => {:id => taggable_id})
+    if taggable.blank?
+      errors.add(:taggable_id, "不存在")
+    elsif !taggable.is_taggable_by? poster
+      errors.add(:taggable_id, "没有权限标记")
+    elsif taggable.has_tag tagged_user_id
+      errors.add(:tagged_user_id, '已经标记过了')
     end
   end
 

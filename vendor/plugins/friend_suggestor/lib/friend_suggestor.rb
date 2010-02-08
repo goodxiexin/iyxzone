@@ -62,7 +62,6 @@ module FriendSuggestor
 	end
 
 	def find_or_create_friend_suggestions
-		
 		return friend_suggestions if (friend_suggestions.count >= FRIEND_SUGGESTION_MINIMUM) 
 
 		# now destroy all existing friend suggestions
@@ -77,8 +76,8 @@ module FriendSuggestor
 		sql = "insert into friend_suggestions values #{values.join(',')}"
 		ActiveRecord::Base.connection.execute(sql)
 
+    self.reload
 		friend_suggestions
-
 	end 
 		
 	def collect_comrades server
@@ -104,12 +103,13 @@ module FriendSuggestor
 	end
 
 	def find_or_create_comrade_suggestions server
-
 		suggestions = comrade_suggestions.find(:all, :conditions => {:game_id => server.game_id, :server_id => server.id})
 
 		# return if there are enough comrade suggestions in database
 		return suggestions if suggestions.count >= COMRADE_SUGGESTION_MINIMUM
 
+    ComradeSuggestion.destroy_all(:user_id => id, :game_id => server.game_id, :server_id => server.id)
+    
 		# construct new suggestions and insert into database
 		values = []
 		collect_comrades(server).each_key do |friend_id|
@@ -120,12 +120,13 @@ module FriendSuggestor
 			end
 		end
 
-		return comrade_suggestions if values.blank?
+		return suggestions if values.blank?
 
 		sql = "insert into comrade_suggestions values #{values.join(',')}"
 		ActiveRecord::Base.connection.execute(sql)
 
-    comrade_suggestions		
+    self.reload
+    comrade_suggestions.find(:all, :conditions => {:game_id => server.game_id, :server_id => server.id})	
 	end
 
 end

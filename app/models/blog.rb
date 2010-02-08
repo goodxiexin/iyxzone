@@ -27,31 +27,32 @@ class Blog < ActiveRecord::Base
                       :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster}, 
                       :create_conditions => lambda {|user, blog| (user == blog.poster) || (blog.privilege == 1) || (blog.privilege == 2 and (blog.poster.has_friend? user or blog.poster.has_same_game_with? user)) || (blog.privilege == 3 and blog.poster.has_friend? user) || false}
 
-  def validate
-    # check title
-    if title.blank?
-      errors.add_to_base('标题不能为空')
-    elsif title.length > 100
-      errors.add_to_base('标题最长100个字符')
-    end
+  # poster_id 和 game_id 一经创建无法修改
+  attr_readonly :poster_id, :game_id
 
-    # check poster
-    errors.add_to_base('没有作者') if poster_id.blank?
-   
-    # check content
-    if content.blank?   
-      errors.add_to_base('内容不能为空')
-    elsif content.length >= 10000
-      errors.add_to_base('内容最长10000个字符')
-    end
+  validates_presence_of :title, :message => "不能为空"
 
-    # check game
-    if game_id.blank?
-      errors.add_to_base('请选择游戏类别')
-    elsif Game.find(:first, :conditions => {:id => game_id}).nil?
-      errors.add_to_base('游戏不存在')
-    end
+  validates_size_of :title, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
 
+  validates_presence_of :poster_id, :message => "不能为空", :on => :create
+
+  validates_presence_of :content, :message => "不能为空" 
+
+  validates_size_of :content, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1个字节"
+
+  validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个"  
+
+  validates_presence_of :game_id, :message => "不能为空", :on => :create
+
+  validate_on_create :game_is_valid
+
+protected
+
+  def game_is_valid
+    return if game_id.blank?
+    errors.add('game_id', "不存在") unless Game.exists?(game_id)
+    return if poster_id.blank?
+    errors.add('game_id', "该用户没有这个游戏") unless poster.characters.map(&:game_id).include?(game_id)
   end
 
 end

@@ -14,23 +14,26 @@ class Sharing < ActiveRecord::Base
 
   acts_as_diggable
 
-  def validate_on_create
-    if poster_id.blank?
-      errors.add_to_base('没有发布者')
-      return
-    end
+  attr_readonly :poster_id, :shareable_id, :shareable_type
 
-    if shareable_id.blank? or shareable_type.blank?
-      errors.add_to_base('没有被分享的资源')
-      return
-    else
-      shareable = shareable_type.constantize.find(:first, :conditions => {:id => shareable_id})
-      if shareable.blank?
-        errors.add_to_base('被分享的资源不存在')
-        return
-      elsif shareable.shared_by? poster
-        errors.add_to_base('已经分享过了')
-      end
+  validates_presence_of :user_id, :message => "不能为空", :on => :create
+
+  validates_presence_of :shareable_id, :shareable_type, :message => "不能为空", :on => :create
+
+  validate_on_create :shareable_is_valid
+
+protected
+
+  def shareable_is_valid
+    return if shareable_id.blank? or shareable_type.blank? or user_id.blank?
+    
+    shareable = shareable_type.camelize.constantize.find(shareable_id)
+    if shareable.blank?
+      errors.add(:shareable, '不存在')
+    elsif shareable.shared_by? user
+      errors.add(:shareable, '已经分享过了')
+    elsif !shareable.is_shareable_by? user
+      errors.add(:shareable, '没有分享的权力')
     end
   end
 

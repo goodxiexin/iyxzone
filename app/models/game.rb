@@ -28,9 +28,9 @@ class Game < ActiveRecord::Base
 
 	named_scope :beta, :conditions => ["sale_date > ?", Time.now.to_s(:db)], :order => 'sale_date DESC'
 
-	acts_as_taggable :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 1.week.ago }
+	acts_as_taggable :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 10.days.ago }
   
-	acts_as_rateable :create_conditions => lambda {|game, user| user.games.include?(game)}
+	acts_as_rateable :create_conditions => lambda {|rating, game, user| (rating.nil? || rating.created_at < 10.days.ago) and user.games.include?(game) }
 
   acts_as_shareable
 
@@ -38,8 +38,7 @@ class Game < ActiveRecord::Base
 
   acts_as_pinyin :name => "pinyin" 
 
-  acts_as_resource_feeds
-
+  acts_as_feed_recipient
 
 	def new_game?
 		sale_date.nil? or sale_date > Date.today
@@ -48,10 +47,5 @@ class Game < ActiveRecord::Base
   def relative_new?
 		sale_date.nil? or sale_date > Date.today<<(6)
 	end  
-
-  def validate
-    errors.add_to_base('没有公司') if company.blank?
-    errors.add_to_base('没有名字') if name.blank?
-  end
 
 end

@@ -7,7 +7,9 @@ Iyxzone.Game = {
 
   Selector: Class.create({}),
 
-  PinyinSelector: Class.create({})
+  PinyinSelector: Class.create({}),
+
+  Feeder: {}
 };
 
 Iyxzone.Game.Selector = Class.create({
@@ -453,3 +455,19 @@ Object.extend(Iyxzone.Game.Suggestor, {
 
 }); 
 
+Object.extend(Iyxzone.Game.Feeder, {
+
+  idx: 0,
+
+  moreFeeds: function(gameID){
+    $('more_feed').innerHTML = '<img src="/images/loading.gif" />';
+
+    new Ajax.Request('/games/' + gameID + '/more_feeds?idx=' + this.idx, {
+      method: 'get',
+      onSuccess: function(transport){
+        this.idx++;
+      }.bind(this)
+    });
+  }
+
+});

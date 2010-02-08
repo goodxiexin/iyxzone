@@ -108,7 +108,7 @@
             </div>
           </div>
         </div>
-				<% @comrade_suggestions.each do |server_id,suggestions| %>
+				<% @comrade_suggestions.each do |server_id, suggestions| %>
 					<% unless suggestions.count == 0 %>
 						<% server = GameServer.find(server_id) %>
 						<div class="box02 appcontent01">

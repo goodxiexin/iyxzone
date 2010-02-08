@@ -60,7 +60,7 @@ protected
 			@user = @profile.user
 			@setting = @user.privacy_setting
 			@privilege = @setting.personal
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ["update"].include? params[:action]
       @profile = Profile.find(params[:id])
 		  @profile.user == current_user || (logger.error "not_found")

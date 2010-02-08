@@ -11,6 +11,7 @@
       </div>
       <div class="sperator"></div>
       <% form_for :user, :html => {:id => 'register_form'} do |f| -%>
+        <%= hidden_field_tag 'token', params[:token] %>
         <div class="formcontent">
           <div class="rows s_clear">
             <div class="fldid"><label for="mail">邮箱：</label></div>
@@ -132,7 +133,7 @@
           <div class="rows">
             <table class="center">
               <tr><td>
-                <div class="fldcb"><input id="allow" type="checkbox" value="ok" /></div>
+                <div class="fldcb"><%= check_box_tag 'agree_contact', 1, false %></div>
                 <div class="fldvalue"><label for="allow" class="simple gray">同意ady3用户发布<a href="#">信息协议</a></label></div>
               </td></tr>
             </table>

@@ -11,14 +11,10 @@ class Avatar < Photo
                       :delete_conditions => lambda {|user, photo, comment| photo.poster == user || comment.poster == user}, 
                       :create_conditions => lambda {|user, photo| (photo.poster == user) || (photo.poster.has_friend? user)} 
 
-  def validate
-    return unless thumbnail.blank?
-    errors.add_to_base('没有相册') if album_id.blank?
-    # 关于poster_id, game_id, privilege都在before_create里被赋值，这里无须检查
-  end
+  attr_readonly :poster_id, :album_id, :game_id, :privilege
 
-  def create_conditions user
-    (poster == user) || (poster.has_friend? user)
-  end
-  
+  validates_size_of :notation, :within => 0..1000, :too_long => "最多1000个字节", :allow_nil => true
+
+  # album_id, game_id, poster_id 和 privilege 都由系统赋值，且不能改变，因此不需要校验
+
 end

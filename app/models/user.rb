@@ -277,6 +277,9 @@ class User < ActiveRecord::Base
     role_users.create(:role_id => role.id) unless role.nil?
   end
 
+  # invitation
+  has_many :signup_invitations, :class_name => 'SignupInvitation', :foreign_key => 'sender_id'
+
   include UserAuthentication 
 
   include FriendSuggestor

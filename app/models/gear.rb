@@ -4,55 +4,25 @@ class Gear < ActiveRecord::Base
 
   belongs_to :boss
 
-  def validate
-    if name.blank?
-      errors.add_to_base("没有名字")
-      return
-    end
+  attr_readonly :game_id, :guild_id, :boss_id
 
-    if cost.blank?
-      errors.add_to_base("没有成本")
-      return
-    elsif cost <= 0
-      errors.add_to_base("成本必须是正数")
-      return
-    end
+  validates_presence_of :name, :message => "不能为空"
 
-  end
+  validates_size_of :name, :within => 1..100, :too_short => "不能小于1个字节", :too_long => "不能大于100个字节"
 
-  def validate_on_create
-    return unless errors.on_base.blank?
+  validates_presence_of :cost, :message => "不能为空"
 
-=begin
-    if boss_id.blank?
-      errors.add_to_base("没有boss")
-      return
-    elsif Boss.find(:first, :conditions => {:id => boss_id}).blank?
-      errors.add_to_base("boss不存在")
-      return
-    end
-=end
+  validates_numericality_of :cost, :message => "非法，必须是正整数", :greater_than => 0, :only_integer => true
 
-    # guild_id 不用检查，被自动赋值
-    if guild_id.blank?
-      errors.add_to_base("没有工会")
-      return
-    elsif Guild.find(:first, :conditions => {:id => guild_id}).blank?
-      errors.add_to_base("工会不存在")
-      return
-    end
-  end
+  validates_presence_of :guild_id, :message => "不能为空"
 
-  def validate_on_update
-    return unless errors.on_base.blank?
-  
-    if boss_id_changed?
-      errors.add_to_base("不能修改boss_id")
-      return
-    elsif guild_id_changed?
-      errors.add_to_base("不能修改guild_id")
-      return
-    end
+  validate_on_create :guild_is_valid
+
+protected
+
+  def guild_is_valid
+    return if guild_id.blank?
+    errors.add(:guild_id, "不存在") if Guild.exists?(guild_id)
   end
   
 end

@@ -63,7 +63,8 @@ Rails::Initializer.run do |config|
     :boss_observer,
     :gear_observer,
     :guild_rule_observer,
-    :rating_observer
+    :rating_observer,
+    :signup_invitation_observer
 
 	# reset mailer path to app/mailers
 	config.load_paths += %W(#{RAILS_ROOT}/app/mailers)

@@ -4,10 +4,10 @@ ResizableTextBox = Class.create({
     this.options = Object.extend({
       min: 20,
       max: 500,
-      step: 7
+      step: 7,
     }, options || {});
     this.element = element;
-    this.element.setStyle({width: '500px'});
+    this.element.setStyle({width: this.options.min});
 
     Event.observe(this.element, 'keyup', function(){
       var newSize = this.options.step * this.element.value.length;
@@ -102,20 +102,29 @@ TextBoxList = Class.create({
      * root element which contains all related elements
      */
     this.holder = new Element('ul', {class: this.options.holderClassName});
-
-    /*
-     * make main input resizable
-     */
-    this.resizableMainInput = new ResizableTextBox(this.inputTextField);
-
+    
     this.el.hide();
     this.holder.appendChild(this.mainInput);
     Element.insert(this.el, {before: this.holder});
 
     /*
+     * make main input resizable
+     */
+    this.resizableMainInput = new ResizableTextBox(this.inputTextField, {max: this.holder.getWidth()});
+
+    /*
      * observe click event of main input field
      */
     Event.observe(this.mainInput, 'click', function(e){
+      this.mainInputFocus();
+      Event.stop(e);
+    }.bind(this));
+
+    /*
+     * observe click event of holder
+     */
+    Event.observe(this.holder, 'click', function(e){
+      this.inputTextField.focus();
       this.mainInputFocus();
       Event.stop(e);
     }.bind(this));

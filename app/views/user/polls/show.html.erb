@@ -55,7 +55,7 @@
               <td class="title"><%= answer.description %>：</td>
               <%= generate_percentage_bar answer, @poll %>
               <td class="cb">
-                <% if !@poll.past and !@vote and @poll.votable_by current_user %>
+                <% if !@poll.past and !@vote and @poll.is_votable_by? current_user %>
                   <%= check_box_tag "votes[]", answer.id, false, :onclick => "Iyxzone.Poll.checkMultipleSelection(#{@poll.max_multiple}, this);"%>
                 <% elsif @vote %>
                   <%= check_box_tag "votes[]", answer.id, @vote.answer_ids.include?(answer.id), :disabled => true %>
@@ -65,7 +65,7 @@
               <% if i == 0 and !@poll.past %>
                 <% if @vote %>
                   你已经投过票了
-                <% elsif @poll.votable_by current_user %>
+                <% elsif @poll.is_votable_by? current_user %>
                   <span class="button"><span><button type="submit">投票</button></span></span>
                 <% else %>
                   只有<%= get_subject @user %>才能投票
@@ -100,8 +100,8 @@
             <h5>随便看看</h5>
             <div class="list-box box04">
               <ul class="lister02">
-                <% 5.times do %>
-                <li><%= poll_link Poll.random %></li>
+                <% Poll.random(:limit => 5, :except => [@poll]).each do |p|%>
+                <li><%= poll_link p %></li>
                 <% end %>
               </ul>
             </div>

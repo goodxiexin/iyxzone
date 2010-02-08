@@ -2,6 +2,10 @@ class User::GamesController < UserBaseController
 
   layout 'app2'
 
+  FirstFetchSize = 2
+  
+  FetchSize = 2
+
   def index
     @games = @user.games.paginate :page => params[:page], :per_page => 10
     render :action => "index", :layout => "app"      
@@ -30,8 +34,7 @@ class User::GamesController < UserBaseController
   def show
     @blogs = @game.blogs.find(:all, :limit => 3)
     @albums = @game.albums.find(:all, :limit => 3)
-    @tagging = @game.taggings.find_by_poster_id(current_user.id)
-    @can_tag = @tagging.nil? || (@tagging.created_at < 1.week.ago) || false
+    @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize)
   end
 
   def hot
@@ -46,12 +49,16 @@ class User::GamesController < UserBaseController
     render :action => 'beta', :layout => 'app'
   end
 
+  def more_feeds
+    @feed_deliveries = @game.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize)
+  end
+
 protected
 
   def setup
     if ["index", "interested"].include? params[:action]
       @user = User.find(params[:id]) 
-    elsif ["show"].include? params[:action]
+    elsif ["more_feeds", "show"].include? params[:action]
       @game = Game.find(params[:id])
     elsif ["sexy", "hot", "beta"].include? params[:action]
       @user = current_user

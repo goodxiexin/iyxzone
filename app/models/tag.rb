@@ -10,17 +10,14 @@ class Tag < ActiveRecord::Base
 
   searcher_column :pinyin, :name
 
-	def validate_on_create
-		if name.nil?
-			errors.add_to_base('没有名字')
-      return
-    end
+  attr_readonly :name, :taggable_type
 
-    if taggable_type.blank?
-      errors.add_to_base('没有类型')
-		elsif !Tag.find_by_name_and_taggable_type(name, taggable_type).blank?
-			errors.add_to_base('名字已经有了')
-		end
-	end
+  validates_presence_of :name, :message => "不能为空"
+
+  validates_size_of :name, :within => 1..100, :too_short => "最短1个字节", :too_long => "最长100个字节"
+
+  validates_presence_of :taggable_type, :message => "不能为空"
+
+  validates_uniqueness_of :name, :scope => :taggable_type, :message => "已经有了", :if => "!name.blank? and !taggable_type.blank?"
 
 end

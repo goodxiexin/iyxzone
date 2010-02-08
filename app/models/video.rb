@@ -26,35 +26,29 @@ class Video < ActiveRecord::Base
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, video, comment| user == video.poster || user == comment.poster},  
                       :create_conditions => lambda {|user, video| (user == video.poster) || (video.privilege == 1) || (video.privilege == 2 and (video.poster.has_friend? user or video.poster.has_same_game_with? user)) || (video.privilege == 3 and video.poster.has_friend? user) || false} 
- 
-  def validate
-    # check title
-    if title.blank?
-      errors.add_to_base('标题不能为空')
-      return false
-    elsif title.length > 100
-      errors.add_to_base('标题最长100个字符')
-      return false
-    end
 
-    # check description
-    if !description.blank? and description.length > 10000
-      errors.add_to_base('介绍不能超过10000个字符')
-      return false
-    end
+  # video url 和 game_id 还有 poster_id 一经创建无法修改
+  attr_readonly :video_url, :game_id, :poster_id
 
-    # check url
-    if video_url.blank?
-      errors.add_to_base('url不能为空')
-      return false
-    end
+  validates_presence_of :title, :message => "不能为空"
 
-    # check game
-    if game_id.blank? 
-      errors.add_to_base('游戏类别不能为空')
-    elsif Game.find(:first, :conditions => {:id => game_id}).nil?
-      errors.add_to_base('游戏不存在')
-    end
+  validates_size_of :title, :within => 1..100, :too_long => "标题最长100个字节", :too_short => "标题最短100个字节"
+
+  validates_size_of :description, :maximum => 10000, :too_long => "介绍最长10000个字节", :allow_nil => true
+
+  validates_presence_of :poster_id, :message => "不能为空"
+
+  validates_presence_of :video_url, :message => "不能为空"
+
+  validate_on_create :game_is_valid
+
+protected
+
+  def game_is_valid
+    return if game_id.blank?
+    errors.add('game_id', "不存在") unless Game.exists?(game_id)
+    return if poster_id.blank?
+    errors.add('game_id', "该用户没有这个游戏") unless poster.characters.map(&:game_id).include?(game_id)
   end
 
 end

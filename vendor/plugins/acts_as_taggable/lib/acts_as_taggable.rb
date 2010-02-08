@@ -73,21 +73,20 @@ module Taggable
 			return unless @tag_list
 			new_tag_names = @tag_list - tags.map(&:name)
 			new_tag_names.each do |tag_name|
-				tag = Tag.find_or_create(:name => tag_name, :taggable_type => self.class.to_s)
-				tagging = tag.taggings.build(:taggable_type => self.class.to_s, :taggable_id => id)
+				#tag = Tag.find_or_create(:name => tag_name, :taggable_type => self.class.to_s)
+				tagging = Tagging.new(:taggable_type => self.class.to_s, :taggable_id => id, :tag_name => tag_name) #tag.taggings.build(:taggable_type => self.class.to_s, :taggable_id => id)
 				tagging.save_with_validation(false)
 			end
 		end
-    # END
 
 		def reload_with_tag_list(*args)
 			@tag_list = nil
 			reload_without_tag_list(*args)
 		end
+    # END
 
     def add_tag user, name
-			tag = Tag.find_or_create(:name => name, :taggable_type => self.class.to_s)
-      tag.taggings.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id)
+      Tagging.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id, :tag_name => name)
     end
 
 		def tagged_by? user

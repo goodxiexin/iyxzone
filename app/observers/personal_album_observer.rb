@@ -3,8 +3,7 @@
 #
 class PersonalAlbumObserver < ActiveRecord::Observer
 
-  # works for both save and update
-  def before_save album
+  def before_create album
     album.poster_id = album.owner_id
   end
 

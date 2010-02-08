@@ -14,7 +14,8 @@ module UserAuthentication
       # callbacks
       before_save :encrypt_password
       before_create :make_activation_code
-
+      before_create :make_invite_code
+    
       named_scope :activated, :conditions => {:activation_code => nil}
       
       named_scope :pending, :conditions => "activation_code IS NOT NULL"
@@ -143,6 +144,10 @@ protected
 
     def set_invitation_limit
       self.invitation_limit = 5
+    end
+
+    def make_invite_code
+      self.invite_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
     end   
 
   end

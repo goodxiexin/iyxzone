@@ -9,10 +9,7 @@ class GuildAlbum < Album
   acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}
 
-  def validate
-    errors.add_to_base('没有工会') if owner_id.blank?
-    # poster_id, game_id, privilege这里不检查，都在before_save里赋值
-  end
+  attr_readonly :owner_id, :poster_id, :game_id, :privilege
 
 	def record_upload user, photos
 	  if user.application_setting.emit_photo_feed

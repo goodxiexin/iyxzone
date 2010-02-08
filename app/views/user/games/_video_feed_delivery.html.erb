@@ -1,0 +1,14 @@
+<% delivery = video_feed_delivery %>
+<% video = delivery.feed_item.originator %>
+<div class="feed-list" id='delivery_<%= delivery.id %>'>
+	<div class="feed-icon icon-share"></div>
+  <p><%= profile_link video.poster %> <span>分享视频</span> <%= video_link video %></p>
+	<div class="feed-pic s_clear">
+		<div class="img">
+			<%= avatar video.poster %> 
+    </div>
+    <div class="pics" id='video_<%= video.id %>'> <%= image_tag video.thumbnail_url, :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');" %> </div>
+		<p><%= ftime video.created_at %> <%= link_to_function "评论", "show_comment_form('video', #{video.id}, null)" %></p>
+  </div>
+	<div><% if delivery.is_deleteable_by? current_user %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div> 
+</div>

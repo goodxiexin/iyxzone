@@ -214,6 +214,7 @@ Object.extend(Iyxzone.Register, {
   },
 
   isGameValid: function(id){
+    var valid = true;
     var gameID = $('profile_new_characters_' + id + '_game_id').value;
     var gameDiv = 'character_' + id + '_game_id_error';
     var areaID = $('profile_new_characters_' + id + '_area_id').value;
@@ -300,6 +301,16 @@ Object.extend(Iyxzone.Register, {
     
     if(!valid)
       return;
+
+    if(!$('agree_contact').checked){
+      tip("请查看协议");
+      return;
+    }
+
+    if(this.gameSelectors.keys().count == 0){
+      tip("至少要有1个游戏角色");
+      return;
+    }
 
     new Ajax.Request('/users/', {
       method: 'post',

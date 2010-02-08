@@ -12,4 +12,19 @@ class RegisterController < ApplicationController
     end
   end
 
+  def invite
+    @invitation = SignupInvitation.find_by_token(params[:token])
+    if @invitation.blank?
+      @sender = User.find_by_invite_code(params[:token])
+    else
+      @sender = @invitation.sender
+    end
+    if @sender.blank?
+      render :text => "非法的连接"
+    else
+      @friends = @sender.friends[0..11]
+      render :action => 'invite'  
+    end
+  end
+
 end

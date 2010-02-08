@@ -4,27 +4,26 @@ class Dig < ActiveRecord::Base
 
   belongs_to :diggable, :polymorphic => true
 
-  def validate_on_create
-    if poster_id.blank?
-      errors.add_to_base("没有发布者")
-      return
-    end
+  attr_readonly :poster_id, :diggable_id, :diggable_type
 
-    if diggable_id.blank? or diggable_type.blank?
-      errors.add_to_base("没有被挖的资源")
-      return
-    else
-      diggable = diggable_type.constantize.find(:first, :conditions => {:id => diggable_id})
-      if diggable.blank?
-        errors.add_to_base("被挖的资源不存在")
-        return
-      elsif diggable.digged_by? poster
-        errors.add_to_base('已经挖过了')
-        return
-      elsif !diggable.is_diggable_by? poster
-        errors.add_to_base('没有权限挖')
-        return
-      end
+  validates_presence_of :poster_id, :message => "不能为空"
+
+  validates_presence_of :diggable_id, :diggable_type, :message => "不能为空"
+
+  validate_on_create :diggable_is_valid
+
+protected
+  
+  def diggable_is_valid
+    return if diggable_id.blank? or diggable_type.blank?
+
+    diggable = diggable_type.constantize.find(:first, :conditions => {:id => diggable_id})
+    if diggable.blank?
+      errors.add(:diggable_id, "不存在")
+    elsif diggable.digged_by? poster
+      errors.add(:diggable_id, '已经挖过了')
+    elsif !diggable.is_diggable_by? poster
+      errors.add(:diggable_id, '没有权限挖')
     end
   end
 

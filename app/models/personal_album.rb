@@ -14,32 +14,21 @@ class PersonalAlbum < Album
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}, 
                       :create_conditions => lambda {|user, album| (album.poster == user) || (album.privilege == 1) || (album.privilege == 2 and (album.poster.has_friend? user or album.poster.has_same_game_with? user)) || (album.privilege == 3 and album.poster.has_friend? user) || false} 
 
-  def validate
-    # check owner
-    errors.add_to_base('没有拥有者') if owner_id.blank?
-  
-    # check privilege
-    errors.add_to_base('没有权限') if privilege.blank?
+  attr_readonly :owner_id, :poster_id, :poster_id, :game_id
 
-    # check title
-    if title.blank?
-      errors.add_to_base('标题不能为空')
-    elsif title.length >= 100 
-      errors.add_to_base('标题最长100个字符')
-    end
+  validates_presence_of :owner_id, :message => "不能为空"
 
-    # check description
-    errors.add_to_base('描述最长500个字符') if description and description.length >= 500
-    
-    # check game_id
-    if game_id.blank?
-      errors.add_to_base('请选择游戏类别')
-    elsif Game.find(:first, :conditions => {:id => game_id}).nil?
-      errors.add_to_base('游戏不存在')
-    end
-    
-    # poster_id在before_create里被赋值，这里不检查
-  end
+  validates_presence_of :title, :message => "不能为空"
+
+  validates_size_of :title, :within => 1..100, :too_long => "最长100字节", :too_short => "最短1字节"
+
+  validates_size_of :description, :within => 0..500, :too_long => "最长500字节", :allow_nil => true 
+
+  validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个"
+
+  validates_presence_of :game_id, :message => "不能为空"   
+
+  validate_on_create :game_is_valid
 
 	def record_upload user, photos
 	  if user.application_setting.emit_photo_feed and privilege != 4
@@ -49,6 +38,14 @@ class PersonalAlbum < Album
       update_attribute('uploaded_at', Time.now)
     end
 	end	
+
+protected
+
+  def game_is_valid
+    return if game_id.blank?
+    errors.add('game_id', "不存在") unless Game.exists?(game_id)
+    errors.add('game_id', "该用户没有这个游戏") unless user.characters.map(&:game_id).include?(game_id)
+  end
 
 end
 

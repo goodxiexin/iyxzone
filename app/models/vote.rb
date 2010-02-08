@@ -12,43 +12,41 @@ class Vote < ActiveRecord::Base
 		PollAnswer.find(answer_ids)
 	end
 
-  def validate_on_create
-    # check vote id
-    if voter_id.blank?
-      errors.add_to_base("没有投票者")
-      return
+  attr_readonly :voter_id, :poll_id, :answer_ids
+
+  validates_presence_of :voter_id, :message => "不能为空"
+
+  validates_presence_of :poll_id, :message => "不能为空"
+
+  validate_on_create :poll_is_valid
+
+  validates_presence_of :answer_ids, :message => "不能为空"
+
+  validate_on_create :answers_are_valid
+
+protected
+
+  def poll_is_valid
+    return if poll_id.blank?
+    poll = Poll.find(:first, :conditions => {:poll_id => poll_id})
+    if poll.blank?
+      errors.add(:poll_id, "不存在")
+    elsif poll.past
+      errors.add(:poll_id, "已经过期")
+    elsif voter and poll.is_votable_by? voter
+      errors.add(:poll_id, "没有权限")
+    elsif poll.voters.include? voter
+      errors.add(:poll_id, "已经投过了")
     end
+  end
 
-    # check poll id
-    if poll_id.blank?
-      errors.add_to_base("没有投票")
-      return
+  def answers_are_valid
+    return if answer_ids.blank? or poll.blank?
+    if poll.max_multiple < answer_ids.count
+      errors.add(:answer_ids, "选太多了")
+    else
+      poll.answers.find(answer_ids)
     end
-
-    # check selected options
-    if answer_ids.blank?
-      errors.add_to_base("没有选项")
-      return
-    elsif poll.max_multiple < answer_ids.count
-      errors.add_to_base("选太多了")
-      return
-    end
-
-    poll.answers.find(answer_ids)
-
-    # check if voter has the required privilege
-    unless poll.votable_by voter
-      errors.add_to_base('权限不够')
-      return false
-    end
-
-    # check if poll expires or voter has alread voted
-    if poll.past
-      errors.add_to_base('投票已经过期')
-    elsif poll.voters.include? voter 
-      errors.add_to_base("已经投过票了")
-    end
-
   rescue
     errors.add_to_base("选项不存在")
   end

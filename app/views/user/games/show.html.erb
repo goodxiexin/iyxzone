@@ -1,3 +1,6 @@
+<%= javascript_include_tag "game" %>
+<%= javascript_include_tag "rating" %>
+
 <% content_for :left do %>
 <div class="mcAvatar">
   <a href="#"></a>
@@ -76,6 +79,16 @@
   <% end %>
 </div>
 
+<div class='multibox'>
+  <div class='title'><b>新鲜事</b></div>
+  <div class="feed-wrap" id='feed_list'>
+    <%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
+  </div>
+  <div id='more_feed'>
+    <span><%= link_to_function "更多新鲜事", "Iyxzone.Game.Feeder.moreFeeds(#{@game.id});" %></span>
+  </div>
+</div>
+
 <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @game, :recipient => nil, :with_comments => false} %>
 
 <div class="feed-box" id='comments'>
@@ -83,3 +96,7 @@
 </div>
 
 </div>
+
+<% unless @reply_to.blank? %>
+<%= javascript_tag "Iyxzone.Wall.set('#{@reply_to.login}', #{@reply_to.id});" %>
+<% end %>

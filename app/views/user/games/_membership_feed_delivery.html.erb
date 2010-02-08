@@ -1,0 +1,7 @@
+<% delivery = membership_feed_delivery %>
+<% membership = membership_feed_delivery.feed_item.originator %>
+<div class='feed-list' id='feed_delivery_<%= delivery.id %>'>
+  <div class="feed-icon icon-friend"></div>
+  <p><%= profile_link membership.user %> 加入了工会 <%= guild_link membership.guild %> </p>
+  <div><% if delivery.is_deleteable_by? current_user %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div>
+</div>

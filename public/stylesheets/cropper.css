@@ -3,6 +3,7 @@
 	/* height: 375px;  @done_in_js */
 	position: relative;
 	cursor: crosshair;
+  margin: 0 auto;
 }
 
 /* an extra classname is applied for Opera < 9.0 to fix it's lack of opacity support */

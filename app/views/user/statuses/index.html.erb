@@ -33,11 +33,11 @@
                         <%= hidden_field_tag 'home', 0 %>
                         <div class="fldvalue">
                           <div id="mcStatus" class="textfield02" style="width:500px;">
-                            <%= f.text_area 'content', :value => "你正在干嘛呢?", :onkeyup => "limit_words_of_textarea(this, 140, 'words_count');", :onclick => "this.clear();" %>
+                            <%= f.text_area 'content', :value => "你正在干嘛呢?", :onkeyup => "Iyxzone.limitText(this, 140, 'words_count');", :onpaste => "Iyxzone.limitText(this, 140, 'words_count');", :onclick => "this.clear();" %>
                           </div>
                         </div>
                         <div class="fldbtn jl-fldbtn"> <span class="button03"><span>
-                          <button type='button' onclick="Iyxzone.Status.Builder.save(this)" class='confirm-button' >发布</button>
+                          <button type='button' onclick="Iyxzone.Status.Builder.save(this, event)" class='confirm-button' >发布</button>
                         </span></span> </div>
                       <% end %>
                       <div class="buttons home-dialog"> 

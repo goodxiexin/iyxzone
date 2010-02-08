@@ -11,9 +11,10 @@ class CreateUsers < ActiveRecord::Migration
       t.string	:activation_code
       t.datetime	:activated_at
       t.string	:password_reset_code
+      t.string :invite_code # 用于万能邀请
       t.boolean	:enabled,	:default => true
 			t.integer :avatar_id
-      t.string :pinyin # a duplicate which boosts search
+      t.string :pinyin
 
 			# settings
 			t.integer :privacy_setting, :limit => 8, :default => PrivacySetting.default
@@ -41,6 +42,7 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :drafts_count, :default => 0 # done
       t.integer :videos_count, :default => 0 # done
       t.integer :statuses_count, :default => 0 # done
+      t.integer :sharings_count, :default => 0
       t.integer :friend_requests_count, :default => 0
       t.integer :guild_requests_count, :default => 0
       t.integer :event_requests_count, :default => 0

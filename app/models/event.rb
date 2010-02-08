@@ -67,6 +67,30 @@ class Event < ActiveRecord::Base
 
 	searcher_column :title
 
+  # poster_id, game_server_id, game_area_id, game_id 不能改
+  # guild_id 不能改，如果存在的话
+  attr_readonly :poster_id, :character_id, :game_server_id, :game_area_id, :game_id, :guild_id
+
+  validates_presence_of :poster_id, :message => "不能为空", :on => :create
+
+  validates_presence_of :title, :message => "不能为空"
+
+  validates_size_of :title, :within => 1..100, :too_long => "最长100字节", :too_short => "最短1字节"
+
+  validates_presence_of :description, :message => "不能为空"
+
+  validates_size_of :description, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1字节"
+
+  validates_presence_of :start_time, :end_time, :message => "不能为空"
+
+  validate :time_is_valid
+
+  validate_on_create :guild_is_valid
+
+  validates_presence_of :character_id, :message => "不能为空", :on => :create
+
+  validate_on_create :character_is_valid
+
   def participants_count
     confirmed_count + maybe_count
   end
@@ -77,10 +101,6 @@ class Event < ActiveRecord::Base
 
   def has_character? character
     !participations.find(:first, :conditions => {:status => [Participation::Confirmed, Participation::Maybe], :character_id => character.id}).blank?
-  end
-
-  def has_only_one_character_for? user
-    participations.find(:all, :conditions => {:status => [Participation::Confirmed, Participation::Maybe], :participant_id => user.id}).count == 1
   end
 
   def participations_for user
@@ -97,6 +117,10 @@ class Event < ActiveRecord::Base
 
   def was_guild_event?
     !guild_id_was.nil?
+  end
+
+  def time_changed?
+    start_time.changed? || end_time.changed?
   end
 
   def is_requestable_by? user
@@ -119,88 +143,31 @@ class Event < ActiveRecord::Base
     end
   end
 
-  # poster_id, game_server_id, game_area_id, game_id 不能改
-  # guild_id 不能改，如果存在的话
+protected
 
-  def validate
-    # check title
-    if title.blank?
-      errors.add_to_base("标题不能为空")
-      return
-    elsif title.length > 100
-      errors.add_to_base("标题太长，最长100个字符")
-      return
-    end
-
-    # check description
-    if description.blank? 
-      errors.add_to_base("描述不能为空")
-      return
-    elsif description.length > 10000
-      errors.add_to_base("描述最长10000个字符")
-      return
-    end
-
-    # check start time
-    if start_time.blank?
-      errors.add_to_base("开始时间不能为空")
-      return
-    elsif start_time <= Time.now 
-      errors.add_to_base("开始时间不能比现在早")
-      return
-    end
-
-    # check end time
-    if end_time.blank?
-      errors.add_to_base("结束时间不能为空")
-      return
-    elsif start_time and end_time <= start_time
-      errors.add_to_base("结束时间不能比开始时间早")
-      return
-    end
-
+  def time_is_valid
+    return if start_time.blank? or end_time.blank?
+    errors.add(:start_time, "不能比现在早") if start_time <= Time.now
+    errors.add(:end_time, "不能比开始时间早") if end_time <= start_time
   end
 
-  def validate_on_create
-    # poster_id = current_user.id, 不能改变
-
-    if is_guild_event?
-      if Guild.find(:first, :conditions => {:id => guild_id}).blank?
-        errors.add_to_base("工会不存在")
-        return
-      end
-      # game_id, game_area_id和game_server_id都是被自动赋值，不需要检查
-    else
-      if character_id.blank?
-        errors.add_to_base("没有游戏角色")
-        return
-      elsif GameCharacter.find(:first, :conditions => {:user_id => poster_id, :id => character_id}).blank? 
-        errors.add_to_base("游戏角色不存在")
-        return
-      end
+  def guild_is_valid
+    return if guild_id.blank?
+    guild = Guild.find(:first, :conditions => {:id => guild_id})
+    if guild.blank?
+      errors.add(:guild_id, "不存在")
+    elsif poster_id
+      role = guild.role_for(poster)
+      errors.add(:guild_id, "没有权限") if role == Membership::President or role == Membership::Veteran
     end
   end
 
-  attr_readonly :poster_id, :character_id, :game_id, :game_area_id, :game_server_id, :guild_id
-
-  attr_protected :expired
-
-=begin
-  def validate_on_update
-    if poster_id_changed?
-      errors.add_to_base("不能修改poster_id")
-    elsif character_id_changed?
-      errors.add_to_base("不能修改character_id")
-    elsif game_id_changed?
-      errors.add_to_base("不能修改game_id")
-    elsif game_area_id_changed?
-      errors.add_to_base("不能修改game_area_id")
-    elsif game_server_id_changed?
-      errors.add_to_base("不能修改game_server_id")
-    elsif was_guild_event? and guild_id_changed?
-      errors.add_to_base("不能修改guild_id")
-    end
+  def character_is_valid
+    return if character_id.blank?
+    character = GameCharacter.find(:first, :conditions => {:id => character_id})
+    errors.add(:character_id, "不存在") if character.blank?
+    return if poster_id.blank?
+    errors.add(:character_id, "不是拥有者") if character.user_id != poster_id
   end
-=end
 
 end

@@ -31,7 +31,7 @@ class GuildObserver < ActiveRecord::Observer
 
     # issue feeds if necessary
     return unless guild.president.application_setting.emit_guild_feed
-    recipients = [guild.president.profile]
+    recipients = [guild.president.profile, guild.game]
     recipients.concat guild.president.friends.find_all{|f| f.application_setting.recv_guild_feed}
     guild.deliver_feeds :recipients => recipients
   end

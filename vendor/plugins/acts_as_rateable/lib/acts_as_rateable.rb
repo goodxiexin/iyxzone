@@ -29,26 +29,18 @@ module Rateable
 
 	module InstanceMethods
 
-		def create_rating attrs
-			rating = ratings.find_by_user_id(attrs[:user_id])
-			if rating
-				rating.update_attribute('rating', attrs[:rating])
-			else
-				ratings.create(:user_id => attrs[:user_id], :rating => attrs[:rating])
-			end
-		end
-
 		def find_rating_by_user user
 			ratings.find_by_user_id(user.id)
 		end
  
-		def rated_by_user? user
+		def rated_by? user
 			!ratings.find_by_user_id(user.id).nil?
 		end 
 
     def is_rateable_by? user
+      rating = ratings.find_by_user_id(user.id)
       proc = self.class.rating_opts[:create_conditions] || lambda { true }
-      proc.call self, user
+      proc.call rating, self, user
     end
 
 	end

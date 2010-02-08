@@ -71,7 +71,7 @@ Object.extend(Iyxzone.Comrade.Suggestor, {
     // send ajax request
     new Ajax.Request(url, {
       method: 'get',
-      parameters: {serverID: serverID, authenticity_token: encodeURIComponent(token)}, //encodeURIComponent(token)},
+      parameters: {server_id: serverID, authenticity_token: encodeURIComponent(token)}, //encodeURIComponent(token)},
       onSuccess: function(transport){
         var card = $('comrade_suggestion_' + suggestionID);
         var temp_parent = new Element('div');
@@ -225,8 +225,25 @@ Iyxzone.Friend.Tagger = Class.create({
       emptyText: '没有匹配的好友...',
       afterUpdateElement: this.afterSelectFriend.bind(this),
       onInputFocus: this.showTips.bind(this),
-      comp: this.taggedUserList.holder
+      comp: this.taggedUserList.holder,
+      onLoading: this.searching.bind(this),
     });
+  },
+
+  searching: function(){
+    this.friendList.innerHTML = '正在搜索你的好友...';
+    this.friendList.setStyle({
+      position: 'absolute',
+      left: this.taggedUserList.holder.positionedOffset().left + 'px',
+      top: (this.taggedUserList.holder.positionedOffset().top + this.taggedUserList.holder.getHeight()) + 'px',
+      width: (this.taggedUserList.holder.getWidth() - 10) + 'px',
+      maxHeight: '200px',
+      overflow: 'auto',
+      padding: '5px',
+      background: 'white',
+      border: '1px solid #E7F0E0'
+    });
+    this.friendList.show();
   },
 
   showTips: function(){

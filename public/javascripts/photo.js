@@ -133,7 +133,7 @@ Iyxzone.Photo.FriendSelector = Class.create({
  */
 Iyxzone.Photo.Tagger = Class.create({
 
- initialize: function(type, photoID, controlPanel, confirmButton, cancelButton, tagInfos, tagsHolder, isCurrentUser, contentInput, toggleButton, friendInput, friendList, friendTable, friendItems, gameSelector, token, options){
+  initialize: function(type, photoID, controlPanel, confirmButton, cancelButton, tagInfos, tagsHolder, isCurrentUser, contentInput, toggleButton, friendInput, friendList, friendTable, friendItems, gameSelector, token, options){
     this.options = Object.extend({
         ratio: 0.2
       }, options || {}
@@ -202,19 +202,16 @@ Iyxzone.Photo.Tagger = Class.create({
     });
 
     /*
-    <li>
-                      <div class="rect-box">
-                        <div class="rect-wrap"><div class="rect">
-                          <a class="icon-active" href="#"></a>
-                          <a href="#">张一</a> 标记了 <a href="#">吕诃</a> ：11 
-                        </div></div>
-                      </div>
-                    </li>
+      <li>
+        <div class="rect-box">
+          <div class="rect-wrap"><div class="rect">
+            <a class="icon-active" href="#"></a>
+            <a href="#">张一</a> 标记了 <a href="#">吕诃</a> ：11 
+          </div></div>
+        </div>
+      </li>
     */
     var li = new Element('li', {id: 'tag_' + tagInfo.photo_tag.id});
-   /* var rectBox = new Element('div', {class: 'rect-box'});
-    var rectWrap = new Element('div', {class: 'rect-wrap'});
-    var rect = new Element('div', {class: 'rect'}); */
 		var rectTag = new Element('strong');
     var posterLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.poster.id}).update(tagInfo.photo_tag.poster.login);
     var taggedUserLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.tagged_user.id}).update(tagInfo.photo_tag.tagged_user.login);
@@ -223,13 +220,6 @@ Iyxzone.Photo.Tagger = Class.create({
 		rectTag.appendChild(taggedUserLink);
 		rectTag.innerHTML += (' : ' + tagInfo.photo_tag.content);
 		li.appendChild(rectTag);
-  /*  rect.appendChild(posterLink);
-    rect.innerHTML += ('标记了');
-    rect.appendChild(taggedUserLink);
-    rect.innerHTML += (' : ' + tagInfo.photo_tag.content);
-    rectWrap.appendChild(rect);
-    rectBox.appendChild(rectWrap);
-    li.appendChild(rectBox); */
 
     if(this.isLoading){
       this.tagsHolder.innerHTML = '';
@@ -270,9 +260,18 @@ Iyxzone.Photo.Tagger = Class.create({
       //onEndCrop: this.onEndCrop.bind(this), //this.onEndCrop.bindAsEventListener(this),
       onDragging: this.onDragging.bind(this),
       minWidth: min,
-      minHeight: min
+      minHeight: min,
+      displayOnInit: true,
+      onloadCoords: {
+        x1: this.photo.getWidth() - min,
+        y1: 0,
+        x2: this.photo.getWidth(),
+        y2: min
+      }
     });
-
+    this.onDragging({x1: this.photo.getWidth() - min, y1: 0}, {width: min, height: min});
+      
+    // 开始圈人的时候就不能自动看到框框了
     Event.stopObserving(this.photo, 'mousemove', this.mousemoveBind);
   },
 

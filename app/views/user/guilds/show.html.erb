@@ -87,8 +87,8 @@
 
 </div>
 
-<% if @role and (@role.is_president? or @role.is_authorized?) and params[:reply_to] %>
+<% unless @reply_to.blank? %>
 <%= javascript_tag "
-  set_wall_box('#{@reply_to.login}', #{@reply_to.id})
+  Iyxzone.Wall.set('#{@reply_to.login}', #{@reply_to.id})
 " %>
 <% end %>

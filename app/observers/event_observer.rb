@@ -31,10 +31,19 @@ class EventObserver < ActiveRecord::Observer
  
     # issue feeds
     return unless event.poster.application_setting.emit_event_feed
-    recipients = [event.poster.profile]
+    recipients = [event.poster.profile, event.game]
     recipients.concat event.poster.guilds
     recipients.concat event.poster.friends.find_all{|f| f.application_setting.recv_event_feed}
     event.deliver_feeds :recipients => recipients
+  end
+
+  def after_update event
+    if event.time_changed?
+      event.participants.each do |participant|
+        participant.notifications.create(:category => Notification::EventChange, :data => "活动 #{event_link event} 时间改变了")
+        EventMailer.deliver_time_change event, participant if participant.mail_setting.change_event
+      end
+    end
   end
 
   def before_destroy event
@@ -45,10 +54,10 @@ class EventObserver < ActiveRecord::Observer
       if m.is_invitation?
         m.participant.raw_decrement :event_invitations_count
       elsif m.is_request?
-        m.participant.notifications.create(:data => "活动 #{event_link event} 被取消了，你的请求作废了")
+        m.participant.notifications.create(:data => "活动 #{event_link event} 被取消了，你的请求作废了", :category => Notification::EventCancel)
       elsif m.is_authorized? and m != event.poster
         m.participant.raw_decrement :upcoming_events_count
-        m.participant.notifications.create(:data => "活动 #{event_link event} 被取消了")
+        m.participant.notifications.create(:data => "活动 #{event_link event} 被取消了", :category => Notification::EventCancel)
       end
     end
   end

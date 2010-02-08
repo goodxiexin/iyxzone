@@ -10,15 +10,12 @@ class Status < ActiveRecord::Base
 
 	acts_as_resource_feeds
 
-  def validate
-    errors.add_to_base('没有作者') if poster_id.blank?
+  attr_readonly :poster_id, :content
 
-    # check content
-    if content.blank?
-      errors.add_to_base('内容为空')
-    elsif content.length > 255
-      errors.add_to_base('内容太长')
-    end
-  end  
+  validates_presence_of :poster_id, :message => "不能为空"
+
+  validates_presence_of :content, :message => "不能为空"
+
+  validates_size_of :content, :within => 1..200, :too_long => '最长140个字节', :too_short => '最短1个字节'
 
 end

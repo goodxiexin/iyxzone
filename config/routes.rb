@@ -36,6 +36,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.area_details '/area_details', :controller => 'games', :action => 'area_details'
 
+  map.invite '/invite', :controller => 'register', :action => 'invite'
+
   map.namespace :admin do |admin|
   
     admin.resources :users, :member => {:enable => :put, :disable => :put, :activate => :put}, :collection => {:search => :get}
@@ -195,7 +197,7 @@ ActionController::Routing::Routes.draw do |map|
 
     end
 
-    users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:game_details => :get, :area_details => :get} do |games|
+    users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:more_feeds => :get} do |games|
 
       games.resources :blogs, :controller => 'games/blogs'
 
@@ -220,6 +222,10 @@ ActionController::Routing::Routes.draw do |map|
       end
   
     end
+
+    users.resources :ratings
+
+    users.resources :signup_invitations
 
     users.auto_complete_for_game_tags '/auto_complete_for_game_tags', :controller => 'tags', :action => 'auto_complete_for_game_tags' 
 

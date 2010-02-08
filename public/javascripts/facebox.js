@@ -5,7 +5,7 @@ var Facebox = Class.create({
 			loading_image	: '/images/loading.gif',
 			image_types		: new RegExp('\.' + ['png', 'jpg', 'jpeg', 'gif'].join('|') + '$', 'i'),
 			inited				: true,	
-			facebox_html	: '<div id="facebox" class="box05" style="display:none;"></div>'
+			facebox_html	: '<div class="z-box" id="facebox" style="width:350px;overflow:hidden;display:none"><div class="z-t"><span class="l"><strong></strong></span><span class="r"></span></div><div class="z-m rows s_clear"><div class="box01 s_clear" id="facebox-content"></div><div class="bg"></div></div><div class="z-b"><span class="l"><strong></strong></span><span class="r"></span></div>'
 		};
 		if (extra_set) Object.extend(this.settings, extra_set);
 		$(document.body).insert({bottom: this.settings.facebox_html});
@@ -15,6 +15,7 @@ var Facebox = Class.create({
 		this.loading_image.src = this.settings.loading_image;	
 		
 		this.facebox = $('facebox');
+    this.content = $('facebox-content');
     this.keyPressListener = this.watchKeyPress.bindAsEventListener(this);
 		
 		this.watchClickEvents();
@@ -47,7 +48,7 @@ var Facebox = Class.create({
 	loading: function() {
 		if ($$('#facebox .loading').length == 1) return true;
 		
-		this.facebox.innerHTML = '<div class="loading"><img src="'+this.loading_image.src+'"/></div>';
+		this.content.innerHTML = '<div class="loading"><img src="'+this.loading_image.src+'"/></div>';
 		
 		var pageScroll = document.viewport.getScrollOffsets();
 		this.facebox.setStyle({
@@ -80,9 +81,8 @@ var Facebox = Class.create({
 	},
 
 	set_content: function(data, klass){
-		bodyWrapper = $('facebox'); 
-		if(klass) bodyWrapper.addClassName(klass);
-		bodyWrapper.innerHTML = data;
+		if(klass) this.content.addClassName(klass);
+		this.content.innerHTML = data;
     		
 		if(!this.facebox.visible()) 
 			new Effect.Appear(this.facebox, {duration: 0.3});
@@ -98,16 +98,14 @@ var Facebox = Class.create({
 	},
 
 	show_tip: function(info){
-		var html = "<div class='title01'><a class='icon-active icon-active-close' href='#' onclick='facebox.close();'></a><h1>提示</h1></div>";
-    html += "<div class='formcontent'>" + info + "</div>";
+		var html = "<p class='z-h'>提示</p><div class='z-con'>" + info + "</div><div class='rows'></div><div class='z-submit s_clear space'><div class='buttons'><span class='button'><span><button>确定</button></span></span></div></div>";
     this.remove_loading();
     this.set_content(html);
     this.locate();
 	},
 
   show_notice: function(info){
-		var html = "<div class='title01'><a class='icon-active icon-active-close' href='#' onclick='facebox.close();'></a><h1>提示</h1></div>";
-    html += "<div class='formcontent'>" + info + "</div>";
+		var html = "<p class='z-h'>提示</p><div class='z-con'>" + info + "</div>";
  		this.remove_loading();
 		this.set_content(html);
 		this.locate();
@@ -115,8 +113,7 @@ var Facebox = Class.create({
   },
 
   show_error: function(info){
-    var html = "<div class='title01'><a class='icon-active icon-active-close' href='#' onclick='facebox.close();'></a><h1>错误提示</h1></div>";
-    html += "<div class='formcontent'>" + info + "</div>";
+    var html = "<p class='z-h'>提示</p><div class='z-con'>" + info + "</div>";
 		this.remove_loading();
 		this.set_content(html);
 		this.locate();

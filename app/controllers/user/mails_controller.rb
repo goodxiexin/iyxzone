@@ -90,8 +90,8 @@ class User::MailsController < UserBaseController
   end
 
   def auto_complete_for_recipients
-    @friends = current_user.friends.find_all {|f| f.pinyin.starts_with?(params[:mail][:recipient])}
-    render :partial => 'friends', :object => @friends #json => @friends.map {|f| {:id => f.id, :login => f.login}} 
+    @friends = current_user.friends.search(params[:friend][:login])
+    render :partial => 'friends', :object => @friends
   end
 
 protected

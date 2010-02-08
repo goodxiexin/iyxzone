@@ -16,6 +16,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     @user.email = params[:user][:email]
     if @user.save
+      # create characters
       @user.profile.update_attributes(params[:profile]) # TODO
       render :update do |page|
         page.redirect_to "/activation_mail_sent?email=#{@user.email}&show=0"
@@ -34,6 +35,20 @@ class UsersController < ApplicationController
     self.current_user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
     if logged_in? && !current_user.active?
       current_user.activate
+      # create friend
+      unless params[:token].blank?
+        @invitation = SignupInvitation.find_by_token(params[:token])
+        if @invitation.blank?
+          @sender = User.find_by_invite_code(params[:token])
+          logger.error "sender: #{@sender}"
+        else
+          @sender = @invitation.sender
+        end
+        unless @sender.blank?
+          current_user.friendships.create(:friend_id => @sender.id)
+          @sender.friendships.create(:friend_id => current_user.id)
+        end
+      end
       flash[:notice] = "Signup complete!"
     end
     redirect_back_or_default('/')

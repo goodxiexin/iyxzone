@@ -154,9 +154,9 @@
 
 </div>
 
-<% if @event.has_participant? current_user and params[:reply_to] %>
+<% unless @reply_to.blank? %>
 <%= javascript_tag "
-  set_wall_box('#{@reply_to.login}', #{@reply_to.id})
+  Iyxzone.Wall.set('#{@reply_to.login}', #{@reply_to.id})
 " %> 
 <% end %>
 

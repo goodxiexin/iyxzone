@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100201033652) do
+ActiveRecord::Schema.define(:version => 20100204133656) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -356,10 +356,9 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
 
   create_table "notifications", :force => true do |t|
     t.text     "data"
+    t.integer  "category"
     t.integer  "user_id"
-    t.string   "notifier_type"
-    t.integer  "notifier_id"
-    t.boolean  "read",          :default => false
+    t.boolean  "read",       :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -522,6 +521,14 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
     t.datetime "created_at"
   end
 
+  create_table "signup_invitations", :force => true do |t|
+    t.integer  "sender_id"
+    t.string   "recipient_email"
+    t.string   "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "statuses", :force => true do |t|
     t.integer  "poster_id"
     t.text     "content"
@@ -562,7 +569,7 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
   create_table "users", :force => true do |t|
     t.string   "login"
     t.string   "email"
-    t.string   "gender"
+    t.string   "gender",                                   :default => "male"
     t.string   "crypted_password",           :limit => 40
     t.string   "salt",                       :limit => 40
     t.string   "remember_token"
@@ -570,6 +577,7 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
     t.string   "activation_code"
     t.datetime "activated_at"
     t.string   "password_reset_code"
+    t.string   "invite_code"
     t.boolean  "enabled",                                  :default => true
     t.integer  "avatar_id"
     t.string   "pinyin"
@@ -596,6 +604,7 @@ ActiveRecord::Schema.define(:version => 20100201033652) do
     t.integer  "drafts_count",                             :default => 0
     t.integer  "videos_count",                             :default => 0
     t.integer  "statuses_count",                           :default => 0
+    t.integer  "sharings_count",                           :default => 0
     t.integer  "friend_requests_count",                    :default => 0
     t.integer  "guild_requests_count",                     :default => 0
     t.integer  "event_requests_count",                     :default => 0

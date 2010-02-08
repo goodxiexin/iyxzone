@@ -26,19 +26,4 @@ class Notice < ActiveRecord::Base
     user.raw_decrement :unread_notices_count, notices.count
   end
   
-  def validate
-    if user_id.blank?
-      errors.add_to_base("没有接受者")
-      return
-    end
-
-    if producer_id.blank? or producer_type.blank?
-      errors.add_to_base("没有产生通知的资源")
-      return
-    elsif producer_type.constantize.find(:first, :conditions => {:id => producer_id}).blank?
-      errors.add_to_base("产生通知的资源不存在")
-      return
-    end
-  end
-
 end

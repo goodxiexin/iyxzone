@@ -143,8 +143,9 @@ Object.extend(Iyxzone.WallMessage, {
     });
   },
 
-  set: function(login){
-    $('comment_content').value = '回复' + login + '：';
+  set: function(login, id){
+    $('comment_recipient_id').value = id;
+    $('comment_content').value = '回复' + login + ':';
     $('comment_content').focus();
   },
 

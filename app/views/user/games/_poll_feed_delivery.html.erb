@@ -1,0 +1,8 @@
+<% delivery = poll_feed_delivery %>
+<% poll = delivery.feed_item.originator %>
+<div id='feed_delivery_<%= delivery.id %>'>
+	<div><%= avatar poll.poster %></div>
+	<div><%= profile_link poll.poster %>发布了投票<%= poll_link poll %></div>
+	<div><% if delivery.is_deleteable_by? current_user %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div> 
+	<div><%= ftime delivery.created_at %></div>
+</div>

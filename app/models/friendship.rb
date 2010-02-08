@@ -4,12 +4,20 @@ class Friendship < ActiveRecord::Base
 
   belongs_to :friend, :class_name => 'User'
 
-  has_many :notifications, :as => 'notifier'
-
 	acts_as_resource_feeds
 
 	Request	= 0
 	Friend	= 1
+
+  attr_readonly :user_id, :friend_id
+
+  validates_presence_of :user_id, :friend_id, :message => "不能为空", :on => :create
+
+  validate_on_create :friend_is_valid
+
+  validates_inclusion_of :status, :in => [Request, Friend], :message => "只能是1,2"  
+
+  validate_on_update :status_is_valid
 
   def is_request?
     status == Friendship::Request
@@ -45,44 +53,22 @@ class Friendship < ActiveRecord::Base
     return false
   end
 
-  def validate
-    if user_id.blank?
-      errors.add_to_base('user_id不能为空')
-      return
-    end
+protected
 
-    if friend_id.blank?
-      errors.add_to_base('friend_id不能为空')
-      return
-    end
-
-    if status.blank? 
-      errors.add_to_base('状态不能为空')
-    elsif !is_friend? and !is_request?
-      errors.add_to_base('状态不对')
+  def friend_is_valid
+    return if user_id.blank? or friend_id.blank?
+    friendship = user.all_friendships.find_by_friend_id(friend_id)
+    return if friendship.blank?
+    if friendship.is_request?
+      errors.add(:friend_id, "已经发送请求了")
+    else
+      errors.add(:friend_id, "已经是好友了")
     end
   end
 
-	def validate_on_create
-    return unless errors.on_base.blank?
-
-    friendship = user.all_friendships.find_by_friend_id(friend_id)
-    if friendship.nil?
-      #if is_friend?
-      #  errors.add_to_base('不能直接加为好友')
-      #end
-    else
-		  if friendship.is_request? 
-			  errors.add_to_base('你已经申请加他为好友了')
-		  elsif friendship.is_friend?
-			  errors.add_to_base('你们已经是好友了')
-		  end
-    end
-	end
-
-  def validate_on_update
-    return unless errors.on_base.blank?
-    errors.add_to_base("不能更新为请求") if is_request?
+  def status_is_valid
+    return if status.blank?
+    errors.add(:status, "不能更新为请求") if is_request?
   end
 
 end

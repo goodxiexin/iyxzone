@@ -1,5 +1,26 @@
 module User::NotificationsHelper
 
+  def notification_icon notification
+    case notification.category
+    when Notification::Friend
+      'msg-friend'
+    when Notification::FriendTag
+      'msg-impress'
+    when Notification::EventCancel
+      'msg-cancel'
+    when Notification::EventChange
+      'msg-warn'
+    when Notification::EventStatus
+      'msg-state'
+    when Notification::Participation
+      'msg-invite'
+    when Notification::Membership
+      'msg-work'
+    when Notification::Promotion
+      'msg-upgrade'
+    end
+  end
+
   def group_notifications notifications
     beginning_of_today = Time.now.beginning_of_day
     beginning_of_yesterday = 1.day.ago.beginning_of_day

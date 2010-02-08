@@ -8,7 +8,7 @@ class User::NotificationsController < UserBaseController
   end
 
 	def first_five
-		@notifications = current_user.notifications.find(:all, :limit => 5)
+		@notifications = current_user.notifications.unread.find(:all, :limit => 5)
 		Notification.read @notifications, current_user
     render :action => 'first_five', :layout => false
 	end
