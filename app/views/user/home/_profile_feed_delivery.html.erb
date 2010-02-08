@@ -3,7 +3,7 @@
 <% modified = delivery.feed_item.data[:modified].map { |m| link_to m, edit_profile_url(profile), :class => "shine" }.join(',')%>
 <div class="feed-list-box">
 <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
-	<div class="img left">
+	<div class="s-img left">
 		<div class="imgbox01"><%= avatar profile.user %></div>
 	</div>
 	<div class="jl-list-con jl-cutline"><%= profile_link profile.user %>更改了<%= modified %>

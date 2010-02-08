@@ -89,7 +89,7 @@ protected
       @blog = Blog.find(params[:id])
       @user = @blog.poster
 			@privilege = @blog.privilege
-			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
     elsif ['edit', 'destroy'].include? params[:action]
       @blog = current_user.blogs.find(params[:id])
     elsif ['update'].include? params[:action]

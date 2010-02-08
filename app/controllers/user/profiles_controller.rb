@@ -6,14 +6,14 @@ class User::ProfilesController < UserBaseController
 
   increment_viewing 'profile', :only => [:show]
 
-	FirstFetchSize = 2
+	FirstFetchSize = 5
 
-	FetchSize = 2
+	FetchSize = 5
 
   def show
 		@blogs = @user.blogs[0..2]
 		@albums = @user.active_albums[0..2]
-		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize)
+		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 	end
 
   def edit
@@ -49,7 +49,7 @@ class User::ProfilesController < UserBaseController
   end
 
 	def more_feeds
-		@feed_deliveries = @profile.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize)
+		@feed_deliveries = @profile.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize, :order => 'created_at DESC')
 	end
 
 protected

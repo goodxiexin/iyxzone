@@ -7,11 +7,12 @@ class GameCharacterObserver < ActiveRecord::Observer
     # increment counter
     character.user.raw_increment :games_count unless character.user.games.include?(character.game)
   end
-
-	def after_create character
+	
+  def after_create character
     # increment counter
     character.game.raw_increment :characters_count
     character.user.raw_increment :characters_count
+
 
     # issue feeds
 		character.deliver_feeds :recipients => character.user.friends, :data => {:type => 0}
@@ -29,6 +30,8 @@ class GameCharacterObserver < ActiveRecord::Observer
     # increment counter
     character.game.raw_decrement :characters_count
     character.user.raw_decrement :characters_count
+
+		character.user.raw_decrement :games_count unless character.user.games.include?(character.game) 
   end
 
 end

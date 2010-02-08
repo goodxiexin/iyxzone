@@ -11,6 +11,19 @@ class Profile < ActiveRecord::Base
   acts_as_viewable :create_conditions => lambda {|user, profile| profile.user != user}
 
   acts_as_shareable
+  
+  acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
+                         :categories => {
+														:status => 'Status',
+                            :video => 'Video',
+                            :poll => 'Poll',
+                            :vote => 'Vote',
+                            :event => 'Event',
+                            :participation => 'Participation',
+                            :guild => 'Guild',
+                            :membership => 'Membership',
+														:friendship => 'Friendship'
+													}
 
 	acts_as_resource_feeds
 

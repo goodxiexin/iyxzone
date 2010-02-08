@@ -1,5 +1,7 @@
+<div class='impress-add s_clear space' id='tag_cloud'> 
 <ul class='holder' style="border: 0px">
 <% Tag.profile_tags.map(&:name).each do |name| %>
-	<li class='bit-box'><%= link_to_remote name, :url => profile_tags_url(profile, :tag_name => name) %></li>
+	<li class='bit-box'><%= link_to_remote name, :url => profile_tags_url(profile, :tag_name => name),:html=>{:class=> "impress-#{rand(4)}"} %></li>
 <% end %>
 </ul>
+</div>

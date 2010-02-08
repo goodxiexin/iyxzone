@@ -23,7 +23,9 @@ class CreateUsers < ActiveRecord::Migration
 
       # counters
       t.integer :characters_count, :default => 0 
-      t.integer :games_count, :default => 0
+      t.integer :games_count, :default => 0 
+      t.integer :game_attentions_count, :default => 0 
+      t.integer :sharings_count, :default => 0 
       t.integer :notices_count, :default => 0
       t.integer :unread_notices_count, :default => 0
       t.integer :notifications_count, :default => 0
@@ -42,7 +44,6 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :drafts_count, :default => 0 # done
       t.integer :videos_count, :default => 0 # done
       t.integer :statuses_count, :default => 0 # done
-      t.integer :sharings_count, :default => 0
       t.integer :friend_requests_count, :default => 0
       t.integer :guild_requests_count, :default => 0
       t.integer :event_requests_count, :default => 0

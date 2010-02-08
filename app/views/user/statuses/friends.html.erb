@@ -2,7 +2,7 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="app-status">状态</h1>
+		<h1 class="app-status">状态</h1>
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <ul>
@@ -11,7 +11,7 @@
         </ul>
       </div>
       <% if @statuses.blank? %>
-        <div class='gray'>你的好友最近都死光了</div>
+        <div class='gray'>你的好友最近都中了沉默</div>
       <% else %>
       <div class="piclist-rows">
         <%= render :partial => 'status', :collection => @statuses %>

@@ -7,7 +7,17 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
+	<% if @user==current_user %>
     <h1 class="app-photo">照片</h1>
+	<% else %>
+    <div class="friend-head space s_clear">
+      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
+      <p class="left">
+        <strong><%= @user.login %>的照片</strong><br />
+        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
+      </p>
+    </div>
+	<% end %>
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right">
@@ -18,10 +28,10 @@
           <% subject = get_subject @user %>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:id => @user.id) %></span></li>
           <li class='hover'><span><%= link_to "#{subject}的相册", personal_albums_url(:id => @user.id) %></span></li>
+          <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
           <% if @user == current_user %>
             <li><span><%= link_to '好友相册', friends_personal_albums_url(:id => @user.id) %></span></li>
           <% end %>
-          <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:id => @user.id) %></span></li>
         </ul>       
       </div>
       <div class="pic-box">
@@ -116,3 +126,8 @@
   slide = new Iyxzone.Photo.Slide('personal_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames').childElements(), #{@photo.id});
   tagger = new Iyxzone.Photo.Tagger('personal_photo', #{@photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{@tags}, 'photo_tags', #{@user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend_table', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
 "%>
+<% unless @reply_to.blank? %>
+<%= javascript_tag "
+	Iyxzone.Comment.set('personal_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});
+" %>
+<% end %>

@@ -586,6 +586,8 @@ ActiveRecord::Schema.define(:version => 20100204133656) do
     t.integer  "application_setting",        :limit => 8,  :default => 262143
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
+    t.integer  "game_attentions_count",                    :default => 0
+    t.integer  "sharings_count",                           :default => 0
     t.integer  "notices_count",                            :default => 0
     t.integer  "unread_notices_count",                     :default => 0
     t.integer  "notifications_count",                      :default => 0
@@ -604,7 +606,6 @@ ActiveRecord::Schema.define(:version => 20100204133656) do
     t.integer  "drafts_count",                             :default => 0
     t.integer  "videos_count",                             :default => 0
     t.integer  "statuses_count",                           :default => 0
-    t.integer  "sharings_count",                           :default => 0
     t.integer  "friend_requests_count",                    :default => 0
     t.integer  "guild_requests_count",                     :default => 0
     t.integer  "event_requests_count",                     :default => 0

@@ -15,11 +15,6 @@
 <% end %>
 
 <% content_for :right do %>
-	<%= render :partial => 'game_events' %>
-	<%= render :partial => 'game_guilds' %>
-<% end %>
-
-<div class='box02 canvas_con'>
 
 <div class="multibox">
 	<div class="title"><b id='tag_cloud_head'>
@@ -31,20 +26,29 @@
 	</b></div>
 	<div id='tag_cloud'>
   <% if @can_tag %>
+		<div class='rows s_clear'>
     <%= render :partial => 'user/games/tags/game_tag', :locals => {:game => @game} %>
     <% form_remote_for :tag, :url => game_tags_url(@game) do |f| %>
-      都不贴切？自己想个<br/>
-      <%= text_field_tag 'tag_name', '' %>
-      <%= f.submit '提交' %>
+			<p class='space'>都不贴切？自己想个</p>
+      <div class='textfield04 left space'><%= text_field_tag 'tag_name', '' %></div>
+      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
     <% end %>
+		</div>
   <% else %>
     <%= render :partial => 'user/games/tags/tag_cloud', :locals => {:game => @game} %>
   <% end %>
   </div>
 </div>
 
+	<%= render :partial => 'game_events' %>
+	<%= render :partial => 'game_guilds' %>
+<% end %>
+
+<div class='box02 canvas_con'>
+
+
 <div class="multibox">
-	<div class="title"><%= link_to '更多', game_albums_url(@game) %><b>相册</b></div>
+	<div class="title"><%= link_to '更多', game_albums_url(@game) %><b>相关相册</b></div>
 	<div class="piclist s_clear">
     <% @albums.each do |album| %>
         <div class="picitem">
@@ -68,7 +72,7 @@
 </div>
 
 <div class="multibox">
-	<div class="title"><%= link_to '更多', game_blogs_url(@game) %><b>博客</b></div>
+	<div class="title"><%= link_to '更多', game_blogs_url(@game) %><b>相关博客</b></div>
 	<% @blogs.each do |blog| %>
     <div class="diary-box">
       <div class="diary-header">

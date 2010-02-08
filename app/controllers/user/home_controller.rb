@@ -6,7 +6,7 @@ class User::HomeController < UserBaseController
 
   FetchSize = 5
 
-  FeedCategory = ['status', 'blog', 'video', 'all_album_related', 'all_event_related', 'all_poll_related', 'all_guild_related','sharing']
+  FeedCategory = ['status', 'blog', 'all_album_related', 'video', 'sharing']
 
   def show
     @feed_deliveries = current_user.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => "created_at DESC")

@@ -1,3 +1,5 @@
+<div class='impress-add s_clear space'>
 <% game.tags.map(&:name).each do |name| %>
-	<%= link_to_remote name, :url => game_tags_url(game, "tag_name" => name) %>
+	<%= link_to_remote name, :url => game_tags_url(game, "tag_name" => name), :html=>{ :class=>"impress-#{rand(4)}"}%>
 <% end %>
+</div>
