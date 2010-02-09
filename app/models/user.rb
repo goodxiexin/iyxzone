@@ -277,6 +277,8 @@ class User < ActiveRecord::Base
     role_users.create(:role_id => role.id) unless role.nil?
   end
 
+  # news
+  has_many :news
   include UserAuthentication 
 
   include FriendSuggestor

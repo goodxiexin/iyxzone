@@ -1,0 +1,6 @@
+<ul>
+<li <% if session[:news_type] == nil || session[:news_type]=="index" %> class="hover" <% end %>><span><%= link_to "每日十闻", news_index_url %></a></span></li>
+<li <% if session[:news_type] =='text' %> class='hover' <% end %>><span><%= link_to "文字新闻", text_news_url%></span></li>
+<li <% if session[:news_type] == 'video' %> class='hover' <% end %>><span><%= link_to "视频新闻", video_news_url %></span></li>
+<li <% if session[:news_type] == 'pic' %> class='hover' <% end %>><span><%= link_to "图片新闻", pic_news_url %></span></li>
+</ul>

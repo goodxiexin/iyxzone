@@ -1,14 +1,17 @@
 class Admin::NewsController < AdminBaseController
-  increment_viewing 'news', :only => [:show]
   def new
     @news = News.new
   end
 
+  def index
+    @news_list = News.find(:all, :order => "created_at DESC").paginate :page => params[:page], :per_page => 10
+  end
+
   def create
-    @news = News.create(params[:news]).merge({:poster_id => current_user.id})
+    @news = News.create((params[:news] || {}).merge({:poster_id => current_user.id}))
     if @news.save
       render :update do |page|
-        page.redirect_to user_news_url 
+        page.redirect_to :action => :index
       end
     else
       render :update do |page|
@@ -18,19 +21,12 @@ class Admin::NewsController < AdminBaseController
   end
 
   def edit
-    @news = News.find(params[:id])
-    if @news.nil?
-      render :update do |page|
-        page << "error('找不到该新闻')"
-      end
-    end
-
   end
 
   def update
-    if @blog.update_attributes(params[:news] || {})
+    if @news.update_attributes((params[:news] || {}).merge({:poster_id => current_user.id}))
       render :update do |page|
-        page.redirect_to user_news_url
+        page.redirect_to :action => :index
       end
     else
       page << "error(@news.errors.on_base)"
@@ -38,12 +34,19 @@ class Admin::NewsController < AdminBaseController
   end
 
   def destroy
-    @news = News.find(params[:id])
-    if @news.nil?
-      page << "error('找不到该新闻')"
+    if @news.destroy
+      redirect_to :action => :index
     else
-      @news.destroy
+      page << "error('删除新闻出错')"
     end
   end
 
+  protected
+  def setup
+    if ['edit','update', 'destroy'].include? params[:action]
+      @news = News.find(params[:id])
+    end
+  rescue
+    not_found
+  end
 end

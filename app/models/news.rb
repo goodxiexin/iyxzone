@@ -1,14 +1,20 @@
 class News < ActiveRecord::Base
   belongs_to :game
- # belongs_to :poster, :class_name => 'User'
+  belongs_to :poster, :class_name => 'User'
 
   attr_readonly :poster_id
   acts_as_commentable :order => 'created_at ASC',
-    :delete_conditions => lambda { |user, news, comment| news.poster == user || comment.poster == user }
+    :delete_conditions => lambda { |user, news, comment| user.has_role?('admin') || comment.poster == user }
+  acts_as_diggable  
   acts_as_shareable
   acts_as_viewable
 
   def validate
+    #check title
+    if title.blank?
+      errors.add_to_base('没有标题')
+    end
+
     #check game
     if game_id.blank?
       errors.add_to_base('没有游戏')
