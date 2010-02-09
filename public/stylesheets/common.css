@@ -197,8 +197,7 @@ table.center td{vertical-align:top}
 .gobtn{display:block;width:22px;height:19px;background:url(../images/skin/gobtn.png) no-repeat;cursor:pointer}
 .loginbtn{display:block;background:url(../images/skin/login01.png) no-repeat;width:164px;height:36px;cursor:pointer}
 .registbtn{display:block;background:url(../images/skin/regist01.png) no-repeat;width:164px;height:36px;cursor:pointer}
-.active-main-btn{display:block;background:url(../images/skin/active-mail-btn01.png) no-repeat;width:164px;height:36px;cursor:pointer}
-.active-btn{display:block;background:url(../images/skin/activebtn01.png) no-repeat;width:164px;height:36px;cursor:pointer}
+.active-main-btn,.active-main-btn:hover,.active-btn,.active-btn:hover{display:block;background:url(../images/skin/active-mail-btn01.png) no-repeat;width:164px;height:36px;line-height:36px;font-size:14px;color:#fff;text-align:center;font-weight:700;cursor:pointer}
 .vote-icon{display:block;padding-left:41px;height:31px;line-height:normal;background:url(../images/icons/icons-30.gif) no-repeat;overflow:hidden}
 .vote-icon h5{font-size:14px;color:#055A83}
 

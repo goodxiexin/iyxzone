@@ -16,13 +16,13 @@
       <div class="sperator-main s_clear">
         <div class="regist-half">
           <div class="regist-prompt">
-            <p class="btn"><%= link_to '', email_login_url(@user.email), :popup => true, :class => "active-main-btn png" %></p>
+            <p class="btn"><%= link_to "用#{email_box @user.email}邮箱激活", email_login_url(@user.email), :popup => true, :class => "active-main-btn png" %></p>
             <p>激活邮件已发送至<br /><b><%= @user.email %></b>，请点击里面的激活链接激活帐户</p>
           </div>
         </div>
         <div class="regist-half">
           <div class="regist-prompt">
-            <p class="btn"><%= link_to '', email_login_url(@user.email), :popup => true, :class => "active-btn png" %></p>
+            <p class="btn"><%= link_to '我要自己手动激活', email_login_url(@user.email), :popup => true, :class => "active-btn png" %></p>
             <p>用<%= @user.email %> 向<b><%= "iyxzonehelp@ixyzone.com" %></b>发送一封标题为“我要激活”的邮件，过几分钟即可直接从<%= link_to '首页', login_url, :class => 'red' %>登陆。</p>
           </div>
         </div>
@@ -37,4 +37,5 @@
       </ul>
     </div>
   </div>
+  <div class='b'></div>
 </div>

@@ -181,7 +181,8 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Base, {
 
 Iyxzone.Friend.Tagger = Class.create({
  
-  initialize: function(friendIDs, tagIDs, friendNames, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton, token){
+  initialize: function(max, friendIDs, tagIDs, friendNames, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton, token){
+    this.max = max;
     this.token = token;
     this.tags = new Hash(); // friendID => [tagIDs, div]
     this.newTags = new Hash(); // friendID => div
@@ -356,6 +357,14 @@ Iyxzone.Friend.Tagger = Class.create({
       method: 'get',
       onSuccess: function(transport){
         this.friendItems.innerHTML = transport.responseText;
+
+        var inputs = $$('input');
+        for(var i = 0; i < inputs.length; i++){
+          if(inputs[i].type == 'checkbox'){
+            if(this.newTags.keys().include(inputs[i].value) || this.tags.keys().include(inputs[i].value))
+              inputs[i].checked = true;
+          }
+        }
       }.bind(this)
     });
   },
@@ -384,11 +393,43 @@ Iyxzone.Friend.Tagger = Class.create({
   },
 
   afterSelectFriend: function(input, selectedLI){
+    if(this.tags.keys().length + this.newTags.keys().length >= this.max){
+      error('最多选' + this.max + '个!');
+      return;
+    }
     var id = selectedLI.readAttribute('id');
     var profileID = selectedLI.readAttribute('profileID');
     var login = selectedLI.childElements()[0].innerHTML;
     this.addTags([{id: id, profileID: profileID, login: login}]);
     input.clear();
+  },
+
+  onSelectFriend: function(checkbox){
+    if(!checkbox.checked)
+      return;
+  
+    var delTags = new Array();
+    var newTags = new Array();
+
+    var inputs = $$('input');
+    for(var i = 0; i < inputs.length; i++){
+      if(inputs[i].type == 'checkbox'){
+        if(inputs[i].checked){
+          if(!this.tags.keys().include(inputs[i].value) && !this.newTags.keys().include(inputs[i].value))
+            newTags.push(inputs[i]);
+        }else{
+          if(this.newTags.keys().include(inputs[i].value) || this.tags.keys().include(inputs[i].value))
+            delTags.push(inputs[i].value);
+        }
+      }
+    }
+
+    if(this.tags.keys().length + this.newTags.keys().length - delTags.length + newTags.length >= this.max){
+      checkbox.checked = false;
+      error('最多选' + this.max + '个!');
+    }
+  
+    return;
   },
 
   reset: function(tagInfos){

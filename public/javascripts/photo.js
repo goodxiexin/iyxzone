@@ -442,6 +442,7 @@ Iyxzone.Photo.Slide = Class.create({
       for(var i=0;i<this.photoIDs.length;i++){
         this.loadImage(pos + i, i);
       }
+      this.frames[pos].className = 'img now';
     }else{
       for(var i=0;i<this.photoIDs.length;i++){
         if(this.photoIDs[i] == currentPhotoID){
@@ -455,6 +456,7 @@ Iyxzone.Photo.Slide = Class.create({
       for(var i=0;i<this.windowSize;i++){
         this.loadImage(i, (this.pos + i) % (this.photoIDs.length));
       }
+      this.frames[Math.floor(windowSize/2)].className = 'img now';
     }
   },
 
@@ -469,17 +471,19 @@ Iyxzone.Photo.Slide = Class.create({
       img.src = this.photoURLs[photoIdx];
       this.mappings.set(this.photoIDs[photoIdx], img);
     }
-    this.frames[idx].innerHTML = "<a href='http://localhost:3000/" + this.photoType + "/" + this.photoIDs[photoIdx] +"'><img src='" +  img.src +"' class='imgbox01' width=50 height=50/></a>";
+    this.frames[idx].innerHTML = "<a href='http://localhost:3000/" + this.photoType + "/" + this.photoIDs[photoIdx] +"'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
   },
 
   next: function(){
-    for(var i = 0; i < this.windowSize; i++){
+    for(var i = 0; i < this.frames.length; i++)
+      new Effect.Move(this.frames[i], {x: 0, y: this.frames[i].getHeight() + 7});
+    /*for(var i = 0; i < this.windowSize; i++){
       this.loading(i);
     }
     this.pos = (this.pos + 1) % (this.photoIDs.length);
     for(var i = 0; i < this.windowSize; i++){
       this.loadImage(i, (this.pos + i) % (this.photoIDs.length) );
-    }
+    }*/
   },
 
   prev: function(){

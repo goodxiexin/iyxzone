@@ -801,9 +801,9 @@ a.i-s-8:hover span{background-position:right -160px;}
 .friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;}
 .friend-invite-list li strong span{display:block;margin:5px 0 0 0;}
 /**/
-.relation-member{border:0}
+/*.relation-member{border:0}
 .relation-member ul{height:auto;overflow:visible}
-
+*/
 /*好友的好友*/
 .d6-head{font-size:14px;border-bottom:1px solid #bdd6ad;padding:0 10px 10px 10px}
 .d6-list li{height:80px;width:205px;float:left;margin:10px 12px;line-height:20px;background:url(../images/skin/dotline.gif) repeat-x bottom;}
@@ -995,9 +995,11 @@ ul.private-set li p.left{margin-left:10px}
 .z-box .z-m .bg{background:#a3a4a3;filter:alpha(opacity=90);opacity:0.9;width:100%;height:1000px;position:absolute;top:0;z-index:1}
 
 .z-box .z-h{background:#7fb73d;border:1px solid #a7cd65;padding:5px 10px;font-size:14px;font-weight:700;color:#fff}
-.z-box .z-w{background:#feffe6;border-top:1px solid #73a637;padding:5px 10px;color:#666;margin-bottom:10px;text-align:center}
+.z-box .z-w{background:#feffe6;padding:5px 10px;color:#666;margin-bottom:10px;text-align:center}
+.z-box .z-con{border-top:1px solid #73a637;}
 .z-box .z-con .left{margin-left:15px}
 .z-box .z-con textarea{width:200px;height:50px}
+.z-box .z-con p{padding:10px;min-height:50px}
 .z-box .z-submit{background:#f0f5ec;border-top:1px solid #d4e3c9;padding:15px 0;}
 .z-box .z-submit .buttons{margin-left:85px}
 .z-box .z-submit .button{margin:0 5px;}
@@ -1049,4 +1051,8 @@ width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
 .warning-msg{background:#fcb08b}
 .error-msg{background:#f9ec93}
 
-
+/*照片圈人标记box*/
+.flag-photo{background:#F2FAE2;width:100%;padding:5px;border:1px solid #BBD2AA}
+.flag-photo .con{background:#fff;padding:5px;color:#666;line-height:20px;text-align:left}
+.flag-photo .foot{background:none;border:0;padding:5px 20px;_padding:5px 10px}
+.flag-photo textarea,.flag-photo .selector03{width:100%}

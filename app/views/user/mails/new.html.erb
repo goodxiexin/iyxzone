@@ -59,7 +59,7 @@
 </div></div></div></div>
 
 <%= javascript_tag "
-  Iyxzone.Mail.Builder.recipientBuilder = new Iyxzone.Friend.Tagger([],[],[],'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', null);
+  Iyxzone.Mail.Builder.recipientBuilder = new Iyxzone.Friend.Tagger(10, [],[],[],'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', null);
 " %>
 
 <% unless @recipient.blank? %>

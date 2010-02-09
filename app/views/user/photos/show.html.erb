@@ -66,7 +66,7 @@
 										<span class="photo-op-praise" ></span>
 										<%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @photo.class.base_class.to_s, "dig[diggable_id]" => @photo), :html => {:id=> "digging_#{@photo.class.to_s.underscore}_#{@photo.id}", :class => "red"}%>(已经被<span id="dig_<%=@photo.class.to_s.underscore%>_<%=@photo.id%>" class='gray'><%= @photo.digs_count %></span>人赞过)
 									</div>
-                  <p><%= image_tag @photo.public_filename, :id => "photo_#{@photo.id}" %></p>
+                  <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
 									<div class="pic-desc s_clear">
 										<h4 class="box06">
 										<% if @user == current_user %>

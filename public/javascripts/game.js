@@ -113,7 +113,6 @@ Iyxzone.Game.Selector = Class.create({
     new Ajax.Request('/game_details?game_id=' + $(this.gameSelectorID).value, {
       method: 'get',
       onSuccess: function(transport){
-        alert(transport.responseText);
         this.details = transport.responseText.evalJSON().game;
         // reset all details if exists
         if(this.areaSelectorID)

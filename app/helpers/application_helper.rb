@@ -250,4 +250,23 @@ module ApplicationHelper
     end    
   end
 
+  def resize_image photo, opts={}
+    if photo.width < 500
+      image_tag photo.public_filename, opts
+    else
+      width = 500
+      height = photo.height * 500 / photo.width
+      image_tag photo.public_filename, opts.merge({:width => width, :height => height})
+    end
+  end
+
+  def crop_image photo, opts={}
+    size = opts.delete(:size) || ''
+    width = photo.width
+    height = photo.height
+    left = (opts[:width] - width)/2
+    top  = (opts[:height] - height)/2
+    image_tag photo.public_filename(size), opts.merge({:left => "#{left}px", :top => "#{top}px"})
+  end
+
 end

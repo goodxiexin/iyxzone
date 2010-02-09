@@ -62,7 +62,7 @@
 <% tag_ids = '[' + @video.tags.map(&:id).join(',') + ']' %>
 <% user_ids = '[' + @video.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
 <%= javascript_tag "
-  Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(
+  Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10,
     #{tagged_user_ids},
     #{tag_ids}, 
     #{user_ids},
