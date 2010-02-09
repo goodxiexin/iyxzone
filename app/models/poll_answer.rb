@@ -16,7 +16,7 @@ protected
 
   def poll_is_valid
     return if poll_id.blank?
-    errors.add(:poll_id, "不存在") if Poll.exists? poll_id
+    errors.add(:poll_id, "不存在") unless Poll.exists? poll_id
   end
 
 end

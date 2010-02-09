@@ -56,7 +56,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :sharings, :collection => {:hot => :get, :recent => :get, :friends => :get}
 
-    users.resources :notices, :collection => {:first_ten => :get}
+    users.resources :notices, :collection => {:first_ten => :get}, :member => {:read => :put}
 
     users.resources :pokes, :collection => {:destroy_all => :delete}
 

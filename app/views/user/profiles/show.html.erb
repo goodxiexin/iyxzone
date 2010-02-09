@@ -53,6 +53,7 @@
 		<b>好友印象</b>
 	<% end %>
 	</div>
+  <div id='tag_cloud'>
   <% if @user == current_user %>
     <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>
   <% elsif @profile.is_taggable_by? current_user %>
@@ -65,6 +66,7 @@
   <% else %>
     <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>
   <% end %>
+  </div>
 </div>
 
 <div class="multibox rows">

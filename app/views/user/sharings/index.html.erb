@@ -18,7 +18,7 @@
         </ul>
       </div>
       <% end %>
-      <div class="share-box">
+      <div class="feed-box01">
         <div class="nav-link">
           <ul class="s_clear">
             <% if params[:type].to_i == 0 %>
@@ -68,18 +68,20 @@
             <% end %>
           </ul>
         </div>
+        <div class="feed-img-list rows">
         <% if @sharings.total_entries != 0 %>
-        <% @sharings.each do |sharing| %>
-          <%= render :partial => "#{sharing.shareable_type.underscore}_sharing", :object => sharing %>
-        <% end %>
-        <%= will_paginate @sharings %>
+          <% @sharings.each do |sharing| %>
+            <%= render :partial => "#{sharing.shareable_type.underscore}_sharing", :object => sharing %>
+          <% end %>
+          <%= will_paginate @sharings %>
         <% else %>
           <% if @user == current_user %>
-          <div class='gray'>你啥都没分享，我日你!</div>
+            <div class='gray'>你啥都没分享，我日你!</div>
           <% else %>
             <div class='gray'><%= get_subject @user %>都没分享，一个2比 </div>
           <% end %>
         <% end %>
+        </div>
       </div>
     </div>
   </div></div>

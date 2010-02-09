@@ -47,7 +47,7 @@ protected
       errors.add(:taggable_id, "不存在")
     elsif !taggable.is_taggable_by? poster
       errors.add(:taggable_id, "没有权限标记")
-    elsif taggable.has_tag tagged_user_id
+    elsif taggable.has_tag? tagged_user_id
       errors.add(:tagged_user_id, '已经标记过了')
     end
   end

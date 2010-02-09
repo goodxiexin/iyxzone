@@ -582,7 +582,7 @@ ActiveRecord::Schema.define(:version => 20100204133656) do
     t.integer  "avatar_id"
     t.string   "pinyin"
     t.integer  "privacy_setting",            :limit => 8,  :default => 106299306
-    t.integer  "mail_setting",               :limit => 8,  :default => 4398046511103
+    t.integer  "mail_setting",               :limit => 8,  :default => 8796093022207
     t.integer  "application_setting",        :limit => 8,  :default => 262143
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0

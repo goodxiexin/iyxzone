@@ -20,6 +20,8 @@ class AvatarObserver < ActiveRecord::Observer
 
 		# set cover
 		avatar.album.update_attributes(:cover_id => avatar.id)
+    avatar.album.update_attributes(:uploaded_at => Time.now)
+    avatar.poster.update_attributes(:avatar_id => avatar.id) 
 
     # increment counter
     avatar.poster.raw_increment :photos_count

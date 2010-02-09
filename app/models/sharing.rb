@@ -16,7 +16,7 @@ class Sharing < ActiveRecord::Base
 
   attr_readonly :poster_id, :shareable_id, :shareable_type
 
-  validates_presence_of :user_id, :message => "不能为空", :on => :create
+  validates_presence_of :poster_id, :message => "不能为空", :on => :create
 
   validates_presence_of :shareable_id, :shareable_type, :message => "不能为空", :on => :create
 
@@ -25,15 +25,13 @@ class Sharing < ActiveRecord::Base
 protected
 
   def shareable_is_valid
-    return if shareable_id.blank? or shareable_type.blank? or user_id.blank?
+    return if shareable_id.blank? or shareable_type.blank? or poster_id.blank?
     
     shareable = shareable_type.camelize.constantize.find(shareable_id)
     if shareable.blank?
       errors.add(:shareable, '不存在')
-    elsif shareable.shared_by? user
+    elsif shareable.shared_by? poster
       errors.add(:shareable, '已经分享过了')
-    elsif !shareable.is_shareable_by? user
-      errors.add(:shareable, '没有分享的权力')
     end
   end
 
