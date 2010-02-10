@@ -8,7 +8,7 @@ class Admin::NewsController < AdminBaseController
   end
 
   def create
-    @news = News.create((params[:news] || {}).merge({:poster_id => current_user.id}))
+    @news = News.new((params[:news] || {}).merge({:poster_id => current_user.id}))
     if @news.save
       render :update do |page|
         page.redirect_to :action => :index

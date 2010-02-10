@@ -9,23 +9,18 @@
       <% if @news_list.length != 0 %>
         <% @news_list.each do |n| %>
           <div class="news10-list jl-cutline">
-           <!-- <script type="text/javascript">
-              s=<%=n.data%>;
-              s1=<%=n.data.to(1)%>;
-            </script> -->
-            <h2><strong><%= link_to n.title, {:action => :show, :id => n.id}, :class => "shine"%></strong></h2>
+            <h2><strong><%= link_to n.title, news_url(n, :type => params[:type]), :class => "shine"%></strong></h2>
             <%=profile_link n.poster%> 发表在 <a href="#" class="w-xl">17gaming</a><span class="gray"><%=ftime n.created_at%></span>
-          <!--    <a id="news-expand" href="javascript:Iyxzone.News.Builder.expand s;">展开</a>
-          <a id="news-hide" href="javascript:Iyxzone.News.Builder.hide s1;" visable="true">隐藏</a> -->
               <div class="con">
                 <div id="news-data">
-                  <%=n.data.to(100)%>......
+                  <%=truncate (n.data, :ommision => "......", :length => 70) %>
                 </div>
                 <%= link_to "查看全文 >>", {:action => :show, :id => n.id} %>
               </div>
               <strong class="gray"><span class="w-l">评论:<%=n.comments_count%></span><span class="w-l">|</span><span class="w-l">浏览:<%=n.viewings_count%></span><span class="w-l">|</span><span class="w-l">分享:<%=n.sharings_count%></span></strong>
             </div>
           <% end %>
+          <%= will_paginate @news_list %>
         <% else %>
           <div class="gray">
             <strong><span class="w-l">今天没有什么新闻，看看其他的吧</span></strong>
