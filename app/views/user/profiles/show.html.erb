@@ -2,6 +2,7 @@
 <%= stylesheet_link_tag 'test' %>
 <%= javascript_include_tag 'chinese_region' %>
 <%= javascript_include_tag 'profile' %>
+<%= javascript_include_tag 'video' %>
 
 <% content_for :left do %>
 	<div class="mcAvatar">
@@ -90,12 +91,14 @@
 <% end %>
 
 <div class="box02 canvas_con">
+	<div class='multibox'>
 	<div class='tipbar space'>
 	<% if @user != current_user and @profile.about_me.blank? %>
 		<span>这家伙很懒，什么都没说...</span>
 	<% else %>
 		<%= in_place_text_field :span, @profile, :about_me, @user == current_user, profile_url(@profile), {}, {:empty_text => '介绍下自己?', :rows => 2, :cols => 71}, {} %>
 	<% end %>
+	</div>
 	</div>
 
 <div class="multibox">
@@ -150,8 +153,10 @@
 	<div class='title'><b>新鲜事</b></div>
 	<% unless @feed_deliveries.blank? %>
 	<div class='feed-box'>
-		<div class="feed-wrap" id='feed_list'>
+		<div class="home-wrap">
+			<div id ='feed_list'>
 			<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
+			</div>
 			<div class="s_clear"></div>
 				<div class="round04 round_r_t jl-read-more space s_clear">
           <div class="round_l_t">

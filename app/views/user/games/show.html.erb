@@ -1,5 +1,6 @@
 <%= javascript_include_tag "game" %>
 <%= javascript_include_tag "rating" %>
+<%= javascript_include_tag 'video' %>
 
 <% content_for :left do %>
 <div class="mcAvatar">
@@ -76,7 +77,7 @@
 	<% @blogs.each do |blog| %>
     <div class="diary-box">
       <div class="diary-header">
-        <p><%= blog_link blog %> <%= ftime blog.created_at %> <%= blog.digs_count %>人挖了</p>
+        <p><%= blog_link blog %> <%= ftime blog.created_at %> <%= blog.digs_count %>人顶了</p>
       </div>
       <p> <%= truncate blog.content, :length => 80, :omission => '...' %> </p>
     </div>
@@ -88,9 +89,20 @@
   <div class="feed-wrap" id='feed_list'>
     <%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
   </div>
-  <div id='more_feed'>
-    <span><%= link_to_function "更多新鲜事", "Iyxzone.Game.Feeder.moreFeeds(#{@game.id});" %></span>
-  </div>
+	<div class="s_clear"></div>
+		<div class="round04 round_r_t jl-read-more space s_clear">
+			<div class="round_l_t">
+        <div class="round_r_b">
+          <div class="round_l_b">
+            <div class="round_m">
+              <div class="round_body" id="more_feed">
+								<%= link_to_function "更多新鲜事", "Iyxzone.Game.Feeder.moreFeeds(#{@game.id});", :class => "jl-more"%>
+              </div>
+						</div>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 
 <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @game, :recipient => nil, :with_comments => false} %>

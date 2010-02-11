@@ -50,6 +50,7 @@ class User::ProfilesController < UserBaseController
 
 	def more_feeds
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize, :order => 'created_at DESC')
+		@fetch_size = FetchSize
 	end
 
 protected

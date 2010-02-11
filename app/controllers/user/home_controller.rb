@@ -24,8 +24,10 @@ class User::HomeController < UserBaseController
   def more_feeds
     if params[:type].blank?
       @feed_deliveries = current_user.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize*params[:idx].to_i, :limit => FetchSize,  :order => "created_at DESC")
+			@fetch_size = FetchSize
     else
       @feed_deliveries = eval("current_user.#{FeedCategory[params[:type].to_i]}_feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize*params[:idx].to_i, :limit => FirstFetchSize, :order => 'created_at DESC')")
+			@fetch_size = FetchSize
     end
   end
 

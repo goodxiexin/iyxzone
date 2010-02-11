@@ -17,7 +17,9 @@ class ProfileObserver < ActiveRecord::Observer
     modified << "基本信息" if profile.basic_info_changed?
 		modified << "联系信息" if profile.contact_info_changed? 
 		return if modified.count == 0
-		profile.deliver_feeds :recipients => profile.user.friends, :data => {:modified => modified}
+		recipients = [profile.user.profile]
+		recipients.concat profile.user.friends
+		profile.deliver_feeds :recipients => recipients, :data => {:modified => modified}
 	end
 
 end
