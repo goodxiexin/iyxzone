@@ -12,18 +12,22 @@
 
 <body class="body_bg01">
 	<div class="welcome-box">
-		<div class="top_link">
-	    <%= link_to '注册', signup_url %> |
-	    <%= link_to '登录', login_url %> | 
- 	    <%= link_to_function "加入收藏", "bookmark()" %> |
- 	    <%= link_to_function "设为主页", "homepage()" %> |
- 	    <%= link_to '关于我们'%>
+		<div id="navbar">
+			<div id='navwrap'>
+				<div id='navmid'>
+					<a href="#" class="logo-top logo-v2 png" title="一起游戏"></a>
+					<p class="top_link right">
+					<%= link_to_function "设为主页", "homepage()" %> |
+					<%= link_to_function "加入收藏", "bookmark()" %> |
+					<%= link_to '反映建议' %> | 
+					<%= link_to '关于我们'%>
+					</p>
+				</div>
+			</div>
     </div>
     <div class="welcome">
 			<div class="login-box">
-				<div class="logo png">
-					欢迎您！这里是您的互动家园！
-        </div>
+        <div class="r-m">
           <% unless flash[:error].nil? %>
             <div><%= flash[:error] %></div>
           <% end %>
@@ -53,27 +57,45 @@
         <div class="sperator"></div>
         <div class="rows">
 					<div class="fldid">&nbsp;</div>
-          <div class="fldvalue"><span class="red">网络游戏玩家的集中营，就差你了！</span></div>
+          <div class="fldvalue"><span class="red">网络游戏玩家的聚集地，就差你了！</span></div>
         </div>
         <div class="btn-rows">
 					<div class="fldid">&nbsp;</div>
           <div class="fldvalue"><%= link_to '', signup_url, :class => 'registbtn png' %></div>
         </div>
+        <div class="sperator"></div>
+        <div class="rows">
+          <div class="fldid">&nbsp;</div>
+					<% form_tag search_users_url do %>
+						<div class="fldvalue">
+						<div class="textfield"><%= text_field_tag 'key', "搜搜您的好友吧", :onfocus => "this.clear()" %></div>
+						</div>
+						<input type="submit" class="gobtn" value="" />
+					<% end %>
+        </div>
       </div>
-      <div class="right">
-				<p><a href="#"><img class="png" src="/images/banner/img01.png" alt="" /></a></p>
-        <p class="later">
-<%= swf_tag 'hero' %>
+      <span class="r-b"></span>
+    </div>
+
+            <div class="right">
+            	<div class="slogon-box">
+                    <p><img src="images/welcome/logo-index.png" alt="一起游戏" /></p>
+										<p><%= link_to '<img src="images/welcome/reg-btn.png" alt="马上加入一起游戏"/>', signup_url, :title=>'注册一起游戏网帐号', :alt=>"马上加入一起游戏"%></p>
+                    <div class="slogon">
+                    <p>一起游戏网(17gaming)是让网络游戏玩家分享游戏心情，共享心得体验,重拾昔日情意的社交平台。</p>
+                    <p>我们期待您的加入，与我们共建网络游戏玩家的精神家园。</p>
+                    </div>
+                </div>
+                <p class="later">
 					<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="618" height="252" id="~hero" align="middle">
 						<param name="allowScriptAccess" value="sameDomain" />
 						<param name="movie" value="swf/~hero.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#ffffff" /><embed src="swf/~hero.swf" quality="high" bgcolor="#ffffff" width="618" height="252" name="~hero" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+
 					</object>
 				</p>
-      </div>
-    </div>
-  </div>
-</div>
-    
+            </div>
+        </div>
+
 <div id="footer">
 	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
     <p><a href="#">网游公司 版权所有</a></p>

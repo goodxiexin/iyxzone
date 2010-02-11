@@ -51,7 +51,7 @@
 				</div>
 				<div id="navsearch">
 					<% form_tag search_users_url do %>
-						<div class="textfield"><%= text_field_tag 'key', "搜索游戏或游戏达人", :onfocus => "this.clear()" %></div>
+						<div class="textfield"><%= text_field_tag 'key', "搜索您的好友吧", :onfocus => "this.clear()" %></div>
 						<input type="submit" class="gobtn" value="" />
           <% end %>
         </div>
@@ -88,7 +88,7 @@
 						<li><%= link_to "活动", events_url(:id => current_user.id), :class => 'app-ploy' %></li>
 						<li><%= link_to "投票", polls_url(:id => current_user.id), :class => 'app-vote' %></li>
 						<li><%= link_to "工会", guilds_url(:id => current_user.id), :class => 'app-cons' %></li>
-            <li><%= link_to "分享", sharings_url(:id => current_user.id), :class => 'app-cons' %></li>
+            <li><%= link_to "分享", sharings_url(:id => current_user.id), :class => 'app-share' %></li>
             <li><%= link_to "游戏", games_url(:id => current_user.id), :class => "app-game" %></li>
             <li><%= link_to "推荐游戏", game_suggestions_url, :class => 'app-vgame' %></li>
           </ul>

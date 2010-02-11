@@ -1,9 +1,0 @@
-<% delivery = profile_feed_delivery %>
-<% profile = delivery.feed_item.originator %>
-<% modified = delivery.feed_item.data[:modified].map { |m| link_to m, edit_profile_url(profile) }.join(',') %>
-<div id='feed_delivery_<%= delivery.id %>'>
-	<div><%= avatar profile.user %></div>
-	<div><%= profile_link profile.user %>更改了<%= modified %></div>
-	<div><% if delivery.is_deleteable_by? current_user %><%= link_to_remote "x", :url => feed_delivery_url(delivery), :method => :delete %><% end %></div> 
-	<div><%= ftime delivery.created_at %></div>
-</div>

@@ -42,7 +42,7 @@ class User::GamesController < UserBaseController
 			@players = @game.users.find(:all, :limit => 3)	
 		end
     @albums = @game.albums.find(:all, :limit => 3)
-    @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize)
+    @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
   end
 
   def hot
@@ -58,7 +58,8 @@ class User::GamesController < UserBaseController
   end
 
   def more_feeds
-    @feed_deliveries = @game.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize)
+    @feed_deliveries = @game.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize, :order => "created_at DESC")
+		@fetch_size = FetchSize
   end
 
 protected

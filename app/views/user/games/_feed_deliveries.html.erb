@@ -1,8 +1,5 @@
 <% group_deliveries(feed_deliveries).each do |time, deliveries| %> 
-<div class='feed-list-box'>
-	<h4><%= time %></h4>
 	<% deliveries.each do |f| %>
-    <%= render :layout => "#{f.feed_item.originator.class.to_s.underscore}_feed_delivery", :object => f %>
+    <%= render :layout => "#{f.feed_item.originator.class.to_s.underscore}_feed_delivery", :object => f, :locals => {:with_comments => false}%>
 	<% end %>
-</div>
 <% end %>

@@ -104,7 +104,7 @@
       <% if current_user.profile.viewings_count != 0 %> 
       <div class="multibox">
 				<div class="title">
-          <%= facebox_link "更多", profile_viewings_url %>
+          <%= facebox_link "更多", profile_viewings_url(@profile) %>
 					<b>最近来访</b>
         </div>
         <div class="photolist-box">
