@@ -1,8 +1,6 @@
 class User::FriendTagsController < UserBaseController
 
-  before_filter :deleteable_required, :only => [:destroy]
-
-  def friend_table 
+  def new
     if params[:game_id] == 'all'
       @friends = current_user.friends
     else
@@ -16,11 +14,6 @@ class User::FriendTagsController < UserBaseController
     @friends = current_user.friends.search(params[:friend][:login])
     render :partial => 'friends' 
   end
-
-	def destroy
-		@tag.destroy
-		render :nothing => true
-	end
 
 protected
 

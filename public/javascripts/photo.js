@@ -7,7 +7,9 @@ Iyxzone.Photo = {
 
   SlideManager: {},
 
-  Slide: Class.create({})  
+  Slide: Class.create({}), // slide in app/views/user/photos/show.html.erb 
+
+  Slide2: Class.create({}) // slide in home page
 };
 
 Iyxzone.Photo.FriendSelector = Class.create({
@@ -32,15 +34,29 @@ Iyxzone.Photo.FriendSelector = Class.create({
     }.bind(this));
 
     // set text box list
-    this.textboxList = new TextBoxList(input, {});
-    
+    this.textboxList = new TextBoxList(input, {
+      onBoxDispose: this.removeBox.bind(this),
+      holderClassName: 'friend-select-list s_clear',
+      bitClassName: ''
+    });
+   
+    // set event
+    var inputs = $$('input');
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox'){
+        inputs[i].checked = false;
+        inputs[i].observe('click', this.afterCheckFriend.bindAsEventListener(this));
+      }
+    }
+ 
     // custom auto completer
     new Iyxzone.Friend.Autocompleter(this.textboxList.getMainInput(), this.friendList, '/auto_complete_for_photo_tags', {
       method: 'get',
       emptyText: '没有匹配的好友...',
       afterUpdateElement: this.afterSelectFriend.bind(this),
       onInputFocus: this.showTips.bind(this),
-      comp: this.textboxList.holder
+      comp: this.textboxList.holder,
+      onLoading: this.searching.bind(this)
     });
 
   },
@@ -61,6 +77,36 @@ Iyxzone.Photo.FriendSelector = Class.create({
     this.friendList.show();
   },
 
+  searching: function(){
+    this.friendList.innerHTML = '正在搜索你的好友...';
+    this.friendList.setStyle({
+      position: 'absolute',
+      left: this.textboxList.holder.positionedOffset().left + 'px',
+      top: (this.textboxList.holder.positionedOffset().top + this.textboxList.holder.getHeight()) + 'px',
+      width: (this.textboxList.holder.getWidth() - 10) + 'px',
+      maxHeight: '200px',
+      overflow: 'auto',
+      padding: '5px',
+      background: 'white',
+      border: '1px solid #E7F0E0'
+    });
+    this.friendList.show();
+  },
+
+  removeBox: function(el, input){
+    var friendID = input.value;
+
+    this.friendID = 0;
+
+    var inputs = $$('input');
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox'){
+        inputs[i].checked = false;
+      }
+    }
+
+  },
+
   add: function(info){
     if(this.textboxList.bits.size() != 0){
       this.textboxList.disposeAll();
@@ -72,10 +118,19 @@ Iyxzone.Photo.FriendSelector = Class.create({
   getFriends: function(){
     var gameID = this.gameSelector.value;
     this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-    new Ajax.Request('/friend_table_for_photo_tags?game_id=' + gameID, {
+    new Ajax.Request('/user/photo_tags/new?game_id=' + gameID, {
       method: 'get',
       onSuccess: function(transport){
         this.friendItems.innerHTML = transport.responseText;
+        var inputs = $$('input');
+        for(var i=0;i<inputs.length;i++){
+          if(inputs[i].type == 'checkbox'){
+            inputs[i].checked = false;
+            inputs[i].observe('click', this.afterCheckFriend.bindAsEventListener(this));
+            if(inputs[i].value == this.friendID)
+              inputs[i].checked = true;
+          }
+        } 
       }.bind(this)
     });
   },
@@ -89,17 +144,6 @@ Iyxzone.Photo.FriendSelector = Class.create({
         top: (pos.top + this.toggleButton.getHeight()) + 'px'
       });
       this.friendTable.show();
-      if(this.friendItems.innerHTML == ''){
-        this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-        new Ajax.Request('/friend_table_for_photo_tags?game_id=all', {
-          method: 'get',
-          onSuccess: function(transport){
-            this.friendItems.innerHTML = transport.responseText;
-            // add events to all checkbox
-            
-          }.bind(this)
-        });
-      }
     }else{
       this.friendTable.hide();
     }
@@ -108,20 +152,46 @@ Iyxzone.Photo.FriendSelector = Class.create({
   afterSelectFriend: function(input, selectedLI){
     var id = selectedLI.readAttribute('id');
     var profileID = selectedLI.readAttribute('profileID');
-    var login = selectedLI.innerHTML;
+    var login = selectedLI.childElements()[0].innerHTML;
+
+    var inputs = $$('input');
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox'){
+        inputs[i].checked = false;
+        if(inputs[i].value == id)
+          inputs[i].checked = true;
+      }
+    }
+
     this.add({id: id, profileID: profileID, login: login});
     input.clear();
   },
 
-  afterClickFriend: function(friendID, profileID, login){
+  afterCheckFriend: function(mouseEvent){
+    var checkbox = mouseEvent.target;
+    
+    var inputs = $$('input');
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox' && inputs[i] != checkbox){
+        inputs[i].checked = false;
+      }
+    }
+
     this.toggleFriends();
-    this.add({id: friendID, profileID: profileID, login: login});
+    this.add({id: checkbox.value, profileID: checkbox.readAttribute('profile_id'), login: checkbox.readAttribute('login')});
   },
 
   reset: function(){
     this.textboxList.getMainInput().clear();
     this.textboxList.disposeAll();
     this.friendID = 0;
+
+    var inputs = $$('input');
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox'){
+        inputs[i].checked = false;
+      }
+    }
   }
 
 });
@@ -321,6 +391,7 @@ Iyxzone.Photo.Tagger = Class.create({
       params += "&tag[height]=" + this.cropImg.calcH();
       params += "&tag[photo_id]=" + this.photoID;
       params += "&tag[photo_type]=" + this.type;
+      alert(params);
       new Ajax.Request('/photo_tags', {
         method: 'post', 
         parameters: params,
@@ -422,92 +493,180 @@ Iyxzone.Photo.Tagger = Class.create({
 
 Iyxzone.Photo.Slide = Class.create({
   
-  initialize: function(photoType, ids, urls, windowSize, frames, currentPhotoID){
-    this.windowSize = windowSize; 
-    this.photoType = photoType + 's'; 
+  initialize: function(photoType, currentID, ids, urls, frames, downBtn, upBtn){
+    this.photoType = photoType + 's';
+    this.downBtn = downBtn;
+    this.upBtn = upBtn;
     this.loadingImage = new Image();
     this.loadingImage.src = '/images/loading.gif';
+    this.blankImage = new Image();
+    this.blankImage.src = '/images/photo/nopic50x50.png';
 
-    this.photoURLs = urls;
-    this.photoIDs = ids;
-    this.frames = frames;
-
+    // 只保存图片的url，到了需要的时候再去加载图片
+    this.urls = urls;
+    this.ids = ids;
+    this.currentID = currentID; // 当前照片的id
+    this.idPos = 0; // 正中间那张照片对应的id在ids中的位置
     this.mappings = new Hash(); // photo id => image object
+    this.frames = frames; 
+    
+    for(var i=0;i<this.ids.length;i++){
+      if(this.ids[i] == this.currentID){
+        this.idPos = i;
+        break;
+      }
+    }
 
-    if(this.photoIDs.length <= this.windowSize){
-      var pos = Math.floor((this.windowSize - this.photoIDs.length)/2);
-      for(var i=0;i<this.photoIDs.length;i++){
-        this.loading(pos + i);
+    var pos = Math.floor(frames.length/2);     
+    
+    for(var i=0;i<this.frames.length;i++){
+      var p = (this.idPos + i - pos);
+      if(p >= 0 && p < this.ids.length){
+        this.loadImage(i, p);
+      }else{
+        this.setBlank(i);
       }
-      for(var i=0;i<this.photoIDs.length;i++){
-        this.loadImage(pos + i, i);
-      }
-      this.frames[pos].className = 'img now';
+    }
+
+    this.setBtnEvents();
+    this.changeBtn();
+  },
+
+  setBtnEvents: function(){
+    this.downBtn.observe('click', this.scrollDown.bindAsEventListener(this));
+    this.upBtn.observe('click', this.scrollUp.bindAsEventListener(this));
+  },
+
+  changeBtn: function(){
+    if(this.idPos == 0){
+      this.downBtn.className = 'btn downbtn-gray';
     }else{
-      for(var i=0;i<this.photoIDs.length;i++){
-        if(this.photoIDs[i] == currentPhotoID){
-          this.pos = (i - Math.floor(windowSize/2) + this.photoIDs.length) % (this.photoIDs.length);
-          break;
-        }
-      }
-      for(var i=0;i<this.windowSize;i++){
-        this.loading(i);
-      }
-      for(var i=0;i<this.windowSize;i++){
-        this.loadImage(i, (this.pos + i) % (this.photoIDs.length));
-      }
-      this.frames[Math.floor(windowSize/2)].className = 'img now';
+      this.downBtn.className = 'btn downbtn';
+    }
+    
+    if(this.idPos == this.ids.length - 1){
+      this.upBtn.className = 'btn upbtn-gray';
+    }else{
+      this.upBtn.className = 'btn upbtn';
     }
   },
 
-  loading: function(idx){
-    this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
+  setBlank: function(idx){
+    this.frames[idx].innerHTML = "<a href='#'><img src='" + this.blankImage.src + "' class='imgbox01'/></a>";
   },
 
   loadImage: function(idx, photoIdx){
-    var img = this.mappings.get(this.photoIDs[photoIdx]);
+    this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
+    var img = this.mappings.get(this.ids[photoIdx]);
     if(!img){
       img = new Image();
-      img.src = this.photoURLs[photoIdx];
-      this.mappings.set(this.photoIDs[photoIdx], img);
+      img.src = this.urls[photoIdx];
+      this.mappings.set(this.ids[photoIdx], img);
     }
-    this.frames[idx].innerHTML = "<a href='http://localhost:3000/" + this.photoType + "/" + this.photoIDs[photoIdx] +"'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
+    if(this.currentID == this.ids[photoIdx]){
+      this.frames[idx].addClassName('now');
+    }
+    this.frames[idx].innerHTML = "<a href='http://localhost:3000/" + this.photoType + "/" + this.ids[photoIdx] +"'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
   },
 
-  next: function(){
-    for(var i = 0; i < this.frames.length; i++)
-      new Effect.Move(this.frames[i], {x: 0, y: this.frames[i].getHeight() + 7});
-    /*for(var i = 0; i < this.windowSize; i++){
-      this.loading(i);
+  scrollDown: function(){
+    if(this.idPos == 0){
+      return;
     }
-    this.pos = (this.pos + 1) % (this.photoIDs.length);
-    for(var i = 0; i < this.windowSize; i++){
-      this.loadImage(i, (this.pos + i) % (this.photoIDs.length) );
-    }*/
+
+    // remove last frame
+    var len = this.frames.length;
+    this.frames[len - 1].remove();
+    this.frames.splice(len - 1, 1);
+
+    // add frame
+    var frame = new Element('div', {class: 'img'});
+    Element.insert(this.frames[0], {before: frame});
+    frame.hide();
+    this.frames = frame.up().childElements();
+    var p = this.idPos - (Math.floor(this.frames.length/2) + 1);
+    if(p >= 0){
+      this.loadImage(0, p);
+    }else{
+      this.setBlank(0);
+    }
+    this.idPos--;
+    this.changeBtn();
+
+    // blind down frame
+    new Effect.BlindDown(this.frames[0], {duration: 1.0});
   },
 
-  prev: function(){
-    for(var i = 0; i < this.windowSize; i++){
-      this.loading(i);
+  scrollUp: function(){
+    if(this.idPos == this.ids.length - 1)
+      return;
+
+    // blind up frame
+    new Effect.BlindUp(this.frames[0], {duration: 1.0});
+  
+    // add frame
+    var frame = new Element('div', {class: 'img'});
+    Element.insert(this.frames[this.frames.length - 1], {after: frame});
+    this.frames = frame.up().childElements();
+    var p = this.idPos + (this.frames.length - (Math.floor((this.frames.length - 1)/2) + 1));
+    if(p < this.ids.length){
+      this.loadImage(this.frames.length - 1, p);
+    }else{
+      this.setBlank(this.frames.length - 1);
     }
-    this.pos = (this.pos - 1 + this.photoIDs.length) % (this.photoIDs.length);
-    for(var i = 0; i < this.windowSize; i++){
-      this.loadImage(i, (this.pos + i) % (this.photoIDs.length) );
-    }
-  } 
+    this.idPos++;
+    this.changeBtn();
+
+    setTimeout(this.removeFirstFrame.bind(this), 1100);
+  },
+
+  removeFirstFrame: function(){
+    this.frames[0].remove();
+    this.frames.splice(0, 1);
+  }
+
 });
 
-// simply wrap a hash
-Object.extend(Iyxzone.Photo.SlideManager, {
-  
-  mappings: new Hash(),
+Iyxzone.Photo.Slide2 = Class.create({
 
-  set: function(key, slide){
-    return this.mappings.set(key, slide);
+  initialize: function(photoType, ids, urls, frames, leftBtn, rightBtn){
+    this.loadingImage = new Image();
+    this.loadingImage.src = '/images/loading.gif';
+    this.photoType = photoType + 's';
+    this.ids = ids;
+    this.urls = urls;
+    this.frames = frames;
+    this.leftBtn = leftBtn;
+    this.rightBtn = rightBtn;
+    this.pos = Math.floor(ids.length/2);
+    
+    var pos = Math.floor(frames.length/2);
+    for(var i=0;i<frames.length;i++){
+      var p = this.pos + i - pos;
+      if(p >= 0 && p < ids.length)
+        this.load(i, p);
+    }
+
+    this.rightBtn.observe('click', this.scrollRight.bindAsEventListener(this));
+    this.leftBtn.observe('click', this.scrollLeft.bindAsEventListener(this));
+    
+    this.changeBtn();
   },
 
-  get: function(key){
-    return this.mappings.get(key);
-  }
+  load: function(idx, photoIdx){
+    this.frames[idx].innerHTML = '<img src="' + this.loadingImage.src + '" />';
+    this.frames[idx].innerHTML = '<img src="' + this.urls[photoIdx] + '" />';
+  },
+
+  changeBtn: function(){
+  
+  },
+
+  scrollRight: function(){
+  },
+
+  scrollLeft: function(){
+  
+  } 
 
 });

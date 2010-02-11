@@ -86,7 +86,7 @@ protected
 
   def character_is_valid
     return if character_id.blank?
-    c = GameCharacter.find(:first, :conditions => {:id => character_id, :user_id => user_id})
+    c = GameCharacter.find(:first, :conditions => {:id => character_id, :user_id => participant_id})
     if c.blank?
       errors.add(:character_id, "不存在")
     elsif event and (c.game_id != event.game_id or c.area_id != event.game_area_id or c.server_id != event.game_server_id)

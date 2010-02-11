@@ -46,7 +46,23 @@ Object.extend(Iyxzone, {
       return false;
     }
     $(count_div).innerHTML = el.value.length + "/" + max;
-  }
+  },
+
+  validationCode: function(digits){
+    var codes = new Array(digits);       //用于存储随机验证码
+    var colors = new Array("Red","Green","Gray","Blue","Maroon","Aqua","Fuchsia","Lime","Olive","Silver");
+    for(var i=0;i < codes.length;i++){//获取随机验证码
+      codes[i] = Math.floor(Math.random()*10);
+    }
+    var div = new Element('div');
+    for(var i = 0;i < codes.length;i++){
+      var span = new Element('span');
+      span.innerHTML = codes[i];
+      span.setStyle({color: colors[Math.floor(Math.random()*10)]});
+      div.appendChild(span);
+    }
+    return {codes: codes, div: div};
+  },
 
 
 });

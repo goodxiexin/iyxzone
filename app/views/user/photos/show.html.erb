@@ -85,24 +85,15 @@
 					</div>
           <div class="album">
 						<span class="num">一共<%= @album.photos_count %>张</span>
-            <% if @album.photos_count > 5 %>
-							<div class="btn upbtn" onclick="slide.prev();"></div>
-						<% else %>
-              <div class="btn upbtn-gray"></div>
-            <% end %>
+						<div class="btn upbtn" id="up_btn"></div>
             <div class="small-imgs">
               <div class="imgList" id='frames'>
-                <% window_size = (@album.photos_count > 5)? 5 : @album.photos_count %>
-                <% window_size.times do |i| %>
+                <% 7.times do |i| %>
                   <div class="img"></div>
                 <% end %>
               </div>
             </div>
-            <% if @album.photos_count > 5 %>
-							<div class="btn downbtn" onclick="slide.next()"></div>
-						<% else %>
-							<div class="btn downbtn-gray"></div>
-            <% end %>
+						<div class="btn downbtn" id="down_btn"></div>
           </div>
         </div>
       </div>
@@ -123,8 +114,8 @@
 <% photo_ids = array_or_string_for_javascript @album.photos.map(&:id) %>
 <% urls = array_or_string_for_javascript @album.photos.map {|p| p.public_filename(:medium)} %>
 <%= javascript_tag "
-  slide = new Iyxzone.Photo.Slide('personal_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames').childElements(), #{@photo.id});
-  tagger = new Iyxzone.Photo.Tagger('personal_photo', #{@photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{@tags}, 'photo_tags', #{@user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend_table', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
+  slide = new Iyxzone.Photo.Slide('personal_photo', #{@photo.id}, #{photo_ids}, #{urls}, $('frames').childElements(), $('down_btn'), $('up_btn'));
+  tagger = new Iyxzone.Photo.Tagger('personal_photo', #{@photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{@tags}, 'photo_tags', #{@user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
 "%>
 <% unless @reply_to.blank? %>
 <%= javascript_tag "

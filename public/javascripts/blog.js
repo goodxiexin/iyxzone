@@ -39,8 +39,12 @@ Object.extend(Iyxzone.Blog.Builder, {
     
     this.parameters = $('blog_form').serialize();
     var newTags = this.tagBuilder.getNewTags();
+    var delTags = this.tagBuilder.getDelTags();
     for(var i=0;i<newTags.length;i++){
-      this.parameters += "&blog[friend_tags][]=" + newTags[i];
+      this.parameters += "&blog[new_friend_tags][]=" + newTags[i];
+    }
+    for(var i=0;i<delTags.length;i++){
+      this.parameters += "&blog[del_friend_tags][]=" + delTags[i];
     }
   },
 

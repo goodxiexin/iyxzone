@@ -24,7 +24,7 @@
 				<% form_for :blog, :html => {:method => 'put', :id => 'blog_form'} do |f| %>
 			    <div class='rows s_clear'>
 				    <div class='fldid'><%= f.label "日志标题：" %></div>
-				    <div class='fldvalue'><%= f.text_field 'title' %></div>
+				    <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
 			    </div>
 			    <div class='rows s_clear'>
 				    <%= f.text_area 'content', :style =>"width: 100%; height: 300px;" %>
@@ -60,6 +60,6 @@
 <% user_ids = '[' + @blog.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
 <%= javascript_tag "
   Iyxzone.Blog.Builder.editor = new nicEditor({iconsPath: '/images/nicEditorIcons.gif'}).panelInstance('blog_content'); 
-  Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(#{tagged_user_ids}, #{tag_ids}, #{user_ids}, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', '#{form_authenticity_token}');
+  Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(5, #{tagged_user_ids}, #{tag_ids}, #{user_ids}, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', '#{form_authenticity_token}');
 " %>
 

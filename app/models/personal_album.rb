@@ -31,7 +31,7 @@ class PersonalAlbum < Album
   validate_on_create :game_is_valid
 
 	def record_upload user, photos
-	  if user.application_setting.emit_photo_feed and privilege != 4
+	  if !photos.blank? and user.application_setting.emit_photo_feed and privilege != 4
 			recipients = [].concat user.guilds
 			recipients.concat user.friends.find_all{|f| f.application_setting.recv_photo_feed}
 			deliver_feeds :recipients => recipients, :data => {:ids => photos.map(&:id)}

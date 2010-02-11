@@ -181,11 +181,12 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Base, {
 
 Iyxzone.Friend.Tagger = Class.create({
  
-  initialize: function(max, friendIDs, tagIDs, friendNames, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton, token){
+  initialize: function(max, friendIDs, tagIDs, friendNames, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
     this.max = max;
-    this.token = token;
     this.tags = new Hash(); // friendID => [tagIDs, div]
     this.newTags = new Hash(); // friendID => div
+    this.delTags = new Array();
+    this.checkedFriends = new Hash(); // friendID 
     this.toggleButton = $(toggleButton);
     this.friendList = $(friendList);
     this.friendTable = $(friendTable);
@@ -210,8 +211,11 @@ Iyxzone.Friend.Tagger = Class.create({
     for(var i=0;i<inputs.length;i++){
       if(inputs[i].type == 'checkbox'){
         inputs[i].checked = false;
-        if(this.tags.keys().include(inputs[i].value))
+        inputs[i].observe('click', this.onSelectFriend.bindAsEventListener(this));
+        if(this.tags.keys().include(inputs[i].value)){
           inputs[i].checked = true;
+          this.checkedFriends.set(inputs[i].value, {id: inputs[i].value, login: inputs[i].readAttribute('login'), profileID: inputs[i].readAttribute('profile_id')});
+        }
       }
     }
 
@@ -223,26 +227,36 @@ Iyxzone.Friend.Tagger = Class.create({
     // confirm button event
     Event.observe(this.confirmButton, 'click', function(event){
       Event.stop(event);
-
-      var friendInfos = [];
+      
+      var checked = this.checkedFriends.keys();
       var delTags = new Array();
       var newTags = new Array();
-
-      var inputs = $$('input');
-      for(var i = 0; i < inputs.length; i++){
-        if(inputs[i].type == 'checkbox'){
-          if(inputs[i].checked){
-            if(!this.tags.keys().include(inputs[i].value) && !this.newTags.keys().include(inputs[i].value))
-              newTags.push({id: inputs[i].value, profileID: inputs[i].readAttribute('profileID'), login: inputs[i].readAttribute('login')});
-          }else{
-            if(this.newTags.keys().include(inputs[i].value) || this.tags.keys().include(inputs[i].value))
-              delTags.push(inputs[i].value);
-          } 
+      this.tags.keys().each(function(key){
+        if(!checked.include(key)){
+          delTags.push(key);
         }
-      }
+      }.bind(this));
+      
+      this.newTags.keys().each(function(key){
+        if(!checked.include(key)){
+          delTags.push(key);
+        }
+      }.bind(this));
 
-      this.addTags(newTags);
       this.removeTags(delTags);
+
+      var tagIDs = this.tags.keys();
+      var newTagIDs = this.newTags.keys();
+      this.checkedFriends.each(function(pair){
+        var input = pair.value;
+        var key = pair.key;
+        if(!tagIDs.include(key) && !newTagIDs.include(key)){
+          newTags.push(input);
+        }
+      }.bind(this));
+      
+      this.addTags(newTags);
+
       this.toggleFriends();
     }.bind(this));
     
@@ -304,15 +318,17 @@ Iyxzone.Friend.Tagger = Class.create({
     var friendID = input.value;
   
     var tagInfo = this.tags.unset(friendID);
+    
     if(tagInfo){
       // remove exsiting tag
-      new Ajax.Request('/friend_tags/' + tagInfo[0], {method: 'delete', parameters: 'authenticity_token=' + encodeURIComponent(this.token)});
+      this.delTags.push(tagInfo[0]);
     }else{
       // remove new tag
       this.newTags.unset(friendID);
     }
 
     // uncheck boxes
+    this.checkedFriends.unset(friendID);
     var inputs = $$('input');
     for(var i=0;i<inputs.length;i++){
       if(inputs[i].type == 'checkbox' && inputs[i].value == friendID){
@@ -327,7 +343,7 @@ Iyxzone.Friend.Tagger = Class.create({
       var tagInfo = this.tags.unset(friendID);
       if(tagInfo){
         // remove exsiting tag
-        new Ajax.Request('/friend_tags/' + tagInfo[0], {method: 'delete', parameters: 'authenticity_token=' + encodeURIComponent(this.token)});
+        this.delTags.push(tagInfo[0]);
         tagInfo[1].remove();
       }else{
         // remove new tag
@@ -351,18 +367,23 @@ Iyxzone.Friend.Tagger = Class.create({
     return this.newTags.keys();
   },
 
+  getDelTags: function(){
+    return this.delTags;
+  },
+
   getFriends: function(game_id){
     this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-    new Ajax.Request('/friend_table_for_friend_tags?game_id=' + game_id, {
+    new Ajax.Request('/user/friend_tags/new?game_id=' + game_id, {
       method: 'get',
       onSuccess: function(transport){
         this.friendItems.innerHTML = transport.responseText;
-
         var inputs = $$('input');
         for(var i = 0; i < inputs.length; i++){
           if(inputs[i].type == 'checkbox'){
-            if(this.newTags.keys().include(inputs[i].value) || this.tags.keys().include(inputs[i].value))
+            inputs[i].observe('click', this.onSelectFriend.bindAsEventListener(this));
+            if(this.checkedFriends.keys().include(inputs[i].value)){
               inputs[i].checked = true;
+            }
           }
         }
       }.bind(this)
@@ -378,71 +399,70 @@ Iyxzone.Friend.Tagger = Class.create({
         top: (pos.top + this.toggleButton.getHeight()) + 'px'
       });
       this.friendTable.show();
-      if(this.friendItems.innerHTML == ''){
-        this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-        new Ajax.Request('/friend_table_for_friend_tags?game_id=all', {
-          method: 'get',
-          onSuccess: function(transport){
-            this.friendItems.innerHTML = transport.responseText;
-          }.bind(this)
-        });
-      }
     }else{
       this.friendTable.hide();
     }
   },
 
   afterSelectFriend: function(input, selectedLI){
-    if(this.tags.keys().length + this.newTags.keys().length >= this.max){
-      error('最多选' + this.max + '个!');
-      return;
-    }
     var id = selectedLI.readAttribute('id');
     var profileID = selectedLI.readAttribute('profileID');
     var login = selectedLI.childElements()[0].innerHTML;
-    this.addTags([{id: id, profileID: profileID, login: login}]);
     input.clear();
-  },
 
-  onSelectFriend: function(checkbox){
-    if(!checkbox.checked)
+    if(this.tags.keys().include(id) || this.newTags.keys().include(id)){
       return;
-  
-    var delTags = new Array();
-    var newTags = new Array();
+    }else{
+      if(this.tags.keys().length + this.newTags.keys().length >= this.max){
+        error('最多选' + this.max + '个!');
+        return;
+      }
 
-    var inputs = $$('input');
-    for(var i = 0; i < inputs.length; i++){
-      if(inputs[i].type == 'checkbox'){
-        if(inputs[i].checked){
-          if(!this.tags.keys().include(inputs[i].value) && !this.newTags.keys().include(inputs[i].value))
-            newTags.push(inputs[i]);
-        }else{
-          if(this.newTags.keys().include(inputs[i].value) || this.tags.keys().include(inputs[i].value))
-            delTags.push(inputs[i].value);
+      this.addTags([{id: id, profileID: profileID, login: login}]);
+      this.checkedFriends.set(id, {id: id, profileID: profileID, login: login});
+      input.clear();
+      
+      var inputs = $$('input');
+      for(var i = 0; i < inputs.length; i++){
+        if(inputs[i].type == 'checkbox' && inputs[i].value == id){
+          inputs[i].checked = true;
         }
       }
     }
+  },
 
-    if(this.tags.keys().length + this.newTags.keys().length - delTags.length + newTags.length >= this.max){
-      checkbox.checked = false;
-      error('最多选' + this.max + '个!');
+  onSelectFriend: function(mouseEvent){
+    var checkbox = mouseEvent.target;
+    
+    if(!checkbox.checked){
+      this.checkedFriends.unset(checkbox.value);
+      return;
     }
-  
-    return;
+ 
+    if(this.checkedFriends.keys().length >= this.max){
+      error('最多选' + this.max + '个!');
+      checkbox.checked = false;
+      return;
+    }
+
+    this.checkedFriends.set(checkbox.value, {id: checkbox.value, login: checkbox.readAttribute('login'), profileID: checkbox.readAttribute('profile_id')}); 
   },
 
   reset: function(tagInfos){
-    // clear current data
-    this.newTags = new Hash();
-    this.tags = new Hash();
-    this.taggedUserList.disposeAll();
+    // move new tags to tags
+    this.newTags.each(function(pair){
+      var friendID = pair.key;
+      var div = pair.value;
+      for(var i = 0; i < tagInfos.length; i++){
+        if(tagInfos[i].friend_id == friendID){
+          this.tags.set(friendID, [tagInfos[i].id, div])
+        }
+      }
+    }.bind(this));
 
-    // save new data
-    for(var i=0;i<tagInfos.length;i++){
-      var el = this.taggedUserList.add(tagInfos[i].friend_id, tagInfos[i].friend_login);
-      this.tags.set(tagInfos[i].friend_id, [tagInfos[i].id, el]);
-    }
+    // reset del tags
+    this.delTags = new Array();
+    this.newTags = new Hash();
   }
 
 });

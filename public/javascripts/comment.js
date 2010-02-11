@@ -31,11 +31,13 @@ Object.extend(Iyxzone.Comment, {
     return true;
   },
 
-  showForm: function(commentableType, commentableID, login){
+  showForm: function(commentableType, commentableID, recipientID, login){
     $('add_' + commentableType + '_comment_' + commentableID).hide();
     $(commentableType + '_comment_' + commentableID).show();
-    if(login != null)
+    if(recipientID != null && login != null){
+      $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
       $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + ":";
+    }
     $(commentableType + '_comment_content_' + commentableID).focus();
   },
 

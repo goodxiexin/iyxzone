@@ -98,14 +98,14 @@ var Facebox = Class.create({
 	},
 
 	show_tip: function(info){
-		var html = "<p class='z-h'>提示</p><div class='z-con'>" + info + "</div><div class='rows'></div><div class='z-submit s_clear space'><div class='buttons'><span class='button'><span><button>确定</button></span></span></div></div>";
+		var html = '<p class="z-h s_clear"><strong class="left">提示</strong><a onclick="facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + info + '</p><div class="z-submit s_clear space"><div class="buttons"><span class="button"><span><button onclick="facebox.close();">确定</button></span></span></div></div></div>';
     this.remove_loading();
     this.set_content(html);
     this.locate();
 	},
 
   show_notice: function(info){
-		var html = "<p class='z-h'>提示</p><div class='z-con'>" + info + "</div>";
+		var html = '<p class="z-h s_clear"><strong class="left">提示</strong><a onclick="facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + info + '</p></div>';
  		this.remove_loading();
 		this.set_content(html);
 		this.locate();
@@ -113,7 +113,7 @@ var Facebox = Class.create({
   },
 
   show_error: function(info){
-    var html = "<p class='z-h'>提示</p><div class='z-con'>" + info + "</div>";
+    var html = '<p class="z-h s_clear"><strong class="left">提示</strong><a onclick="facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + info + '</p></div>';
 		this.remove_loading();
 		this.set_content(html);
 		this.locate();
@@ -121,18 +121,19 @@ var Facebox = Class.create({
   },
 
 	show_confirm: function(confirm_message, url, token, method){
-    var html = "<div class='title01'><a class='icon-active icon-active-close' href='#' onclick='facebox.close();'></a><h1>请确认</h1></div>";
-    html += "<div class='formcontent'>" + confirm_message + "</div>";
-    html += "<div class='buttons s_clear'><table class='center' cellpadding='0'><tr><td><span class='button'><span><button type='submit' onclick=\"new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onComplete: function(transport){facebox.close();}});\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></td></tr></table></div>";
+    var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="facebox.close();" class="icon2-close right"></a></p>';
+    html += '<div class="z-con"><p>' + confirm_message + "</p>";
+    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button'><span><button type='submit' onclick=\"new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onComplete: function(transport){facebox.close();}});\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
 		this.remove_loading();
 		this.set_content(html);
 		this.locate();
 	},
 
+  // TODO: 怎么传多个参数?
   show_confirm_with_callbacks: function(confirm_message, callbacks, args){
-    var html = "<div class='title01'><a class='icon-active icon-active-close' href='#' onclick='facebox.close();'></a><h1>请确认</h1></div>";
-    html += "<div class='formcontent'>" + confirm_message + "</div>";
-    html += "<div class='buttons s_clear'><table class='center' cellpadding='0'><tr><td><span class='button'><span><button type='submit' id='facebox_confirm'>确定</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></td></tr></table></div>";
+    var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="facebox.close();" class="icon2-close right"></a></p>';
+    html += '<div class="z-con"><p>' + confirm_message + "</p>";
+    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button'><span><button type='submit' id='facebox_confirm'>确定</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
     this.remove_loading();
     this.set_content(html);
     this.locate();
@@ -142,22 +143,6 @@ var Facebox = Class.create({
     }.bind(this));
   },
 
-	generate_validate_code: function(digits){
-    this.codes = new Array(digits);       //用于存储随机验证码
-    var colors = new Array("Red","Green","Gray","Blue","Maroon","Aqua","Fuchsia","Lime","Olive","Silver");
-    for(var i=0;i < this.codes.length;i++){//获取随机验证码
-      this.codes[i] = Math.floor(Math.random()*10);
-    }
-		var div = new Element('div');
-    for(var i = 0;i < this.codes.length;i++){
-			var span = new Element('span');
-			span.innerHTML = this.codes[i];
-			span.setStyle({color: colors[Math.floor(Math.random()*10)]});
-			div.appendChild(span);
-    }
-		$('validation').innerHTML = div.innerHTML;
-	},
-	
 	validate: function(){
 		var str='';
 		var len = this.codes.length;
@@ -168,17 +153,21 @@ var Facebox = Class.create({
 	},
 
 	show_confirm_with_validation: function(confirm_message, url, token, method){
-    var html = "<div class='title01'><a class='icon-active icon-active-close' href='#' onclick='facebox.close();'></a><h1>请确认</h1></div>";
-    html += "<div id='error'></div><div class='formcontent'>" + confirm_message + "<br/>";
+    var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="facebox.close();" class="icon2-close right"></a></p>';
+    html += '<div class="z-con"><p>' + confirm_message + "<br/>";
     html += "输入验证码<input id='validation_code' type='text' size=4 />";
-    html += "<span id='validation'>正在生成验证码</span></div>";
-    html += "<div class='buttons s_clear'><table class='center' cellpadding='0'><tr><td><span class='button'><span><button type='submit' onclick=\"if(facebox.validate()){new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "'});}else{$('error').innerHTML = '验证码错误';}\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></td></tr></table></div>";
+    html += "<span id='validation'>正在生成验证码</span></p></div>";
+    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button'><span><button type='submit' onclick=\"if(facebox.validate()){new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "'});}else{$('error').innerHTML = '验证码错误';}\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
     this.remove_loading();
     this.set_content(html);
     this.locate();
-		this.generate_validate_code(4);
+    var validation = Iyxzone.validationCode(4);
+    $('validation').innerHTML = validation.div.innerHTML;
+    this.codes = validation.codes;
     $('validation').observe('click', function(){
-      this.generate_validate_code(4);
+      var validation = Iyxzone.validationCode(4);
+      $('validation').innerHTML = validation.div.innerHTML;
+      this.codes = validation.codes;
     }.bind(this));	
 	},
 
@@ -250,9 +239,9 @@ document.observe('dom:loaded', function(){
 	};
 	
  	// override default alert
-	//window.alert = function(mess){
-	//	return facebox.show_notice(mess);
-	//};
+/*	window.alert = function(mess){
+		return facebox.show_notice(mess);
+	};*/
 
   window.tip = function(mess){
 		return facebox.show_tip(mess);

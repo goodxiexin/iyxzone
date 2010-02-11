@@ -3,6 +3,16 @@ class User::PhotoTagsController < UserBaseController
   # 怎么优雅的把delete的权限判断放到model里呢
   before_filter :deleteable_required, :only => [:destroy]
 
+  def new
+    case params[:type].to_i
+    when 0
+      @friends = current_user.friends
+    when 1
+      @friends = current_user.friends.find_all {|f| f.characters.map(&:game_id).include?(params[:game_id].to_i) }
+    end
+    render :partial => 'friend_table', :locals => {:friends => @friends}
+  end
+
   def create
     @tag = PhotoTag.new((params[:tag] || {}).merge({:poster_id => current_user.id}))
     if @tag.save
@@ -27,16 +37,6 @@ class User::PhotoTagsController < UserBaseController
   def auto_complete_for_friends
     @friends = current_user.friends.find_all {|f| f.pinyin.starts_with? params[:friend][:login]}
     render :partial => 'auto_complete_friends', :object => @friends
-  end
-
-  def friends
-    case params[:type].to_i
-    when 0
-      @friends = current_user.friends
-    when 1
-      @friends = current_user.friends.find_all {|f| f.characters.map(&:game_id).include?(params[:game_id].to_i) }
-    end
-    render :partial => 'friends', :object => @friends
   end
 
 protected

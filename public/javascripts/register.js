@@ -150,7 +150,7 @@ Object.extend(Iyxzone.Register, {
       return false;
     }
 
-    if(password.value == passwordConfirmation.value){
+    if(password == passwordConfirmation){
       this.pass('password_confirmation_info');
       return true;
     }else{

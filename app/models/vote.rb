@@ -28,12 +28,12 @@ protected
 
   def poll_is_valid
     return if poll_id.blank?
-    poll = Poll.find(:first, :conditions => {:poll_id => poll_id})
+    poll = Poll.find(:first, :conditions => {:id => poll_id})
     if poll.blank?
       errors.add(:poll_id, "不存在")
     elsif poll.past
       errors.add(:poll_id, "已经过期")
-    elsif voter and poll.is_votable_by? voter
+    elsif !poll.is_votable_by? voter
       errors.add(:poll_id, "没有权限")
     elsif poll.voters.include? voter
       errors.add(:poll_id, "已经投过了")

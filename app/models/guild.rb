@@ -250,7 +250,7 @@ protected
 
   def character_is_valid
     return if character_id.blank?
-    character = GameCharacter.find(:first, :conditions => {:id => character_id}).blank?
+    character = GameCharacter.find(:first, :conditions => {:id => character_id})
     errors.add(:character_id, "不存在") if character.blank?
     return if president_id.blank?
     errors.add(:character_id, "不是拥有者") if character.user_id != president_id

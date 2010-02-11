@@ -18,12 +18,14 @@ parameters:
 		<%= render :partial => "user/comments/comment", :collection => commentable.comments %>
 	<% end %>
 </div>
+
 <div class="box04 comment-box" id= "add_<%=type%>_comment_<%=commentable.id%>">
   <%= text_area_tag 'add-comment', '添加评论...', :id => "add_#{type}_comment_#{commentable.id}", :class => "textarea txt-add-comment", :onclick => "Iyxzone.Comment.showForm('#{type}', #{commentable.id}, null)" %>
 </div>
-  <div class="box04 cmt-box s_clear" id='<%= type %>_comment_<%= commentable.id %>' style="display:none">
-		<div class="img"><%= avatar current_user, :size => :small %></div>
-		<div class="con">
+
+<div class="box04 cmt-box s_clear" id='<%= type %>_comment_<%= commentable.id %>' style="display:none">
+	<div class="img"><%= avatar current_user, :size => :small %></div>
+	<div class="con">
     <% form_remote_for :comment, :html => {:id => "#{type}_comment_form_#{commentable.id}"} do |f| %>
 			<%= hidden_field_tag 'comment[commentable_id]', commentable.id %>
 			<%= hidden_field_tag 'comment[commentable_type]', commentable.class.base_class.to_s %>

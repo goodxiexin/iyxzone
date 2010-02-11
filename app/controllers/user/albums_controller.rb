@@ -94,6 +94,7 @@ protected
       @album = PersonalAlbum.find(params[:id])
       @user = @album.user
 			@privilege = @album.privilege
+      @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ["edit", "update", "confirm_destroy", "destroy"].include? params[:action]
       @album = current_user.albums.find(params[:id])
     end
