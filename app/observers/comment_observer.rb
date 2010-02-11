@@ -233,6 +233,10 @@ class CommentObserver < ActiveRecord::Observer
   def after_application_comment_create comment
     # nothing to do right now
   end
+
+  def after_news_comment_create comment
+
+  end
   
   def after_destroy comment
     comment.commentable.raw_decrement :comments_count

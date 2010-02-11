@@ -234,7 +234,7 @@ ActionController::Routing::Routes.draw do |map|
     users.search_characters '/search_characters', :controller => 'search', :action => 'character'
 
     users.search_users '/search_users', :controller => 'search', :action => 'user'
-
+    users.resources :news, :collection => {:text => :get, :video => :get, :pic => :get}
   end
  
 	map.connect ':controller/:action/:id'
