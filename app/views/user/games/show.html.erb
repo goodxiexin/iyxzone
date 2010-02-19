@@ -96,7 +96,11 @@
           <div class="round_l_b">
             <div class="round_m">
               <div class="round_body" id="more_feed">
-								<%= link_to_function "更多新鲜事", "Iyxzone.Game.Feeder.moreFeeds(#{@game.id});", :class => "jl-more"%>
+								<% if @feed_deliveries.size < @first_fetch_size %>
+									<div class='jl-more'>没有更多了...</div>
+								<% else %>
+									<%= link_to_function "更多新鲜事", "Iyxzone.Game.Feeder.moreFeeds(#{@game.id});", :class => "jl-more"%>
+								<% end %>
               </div>
 						</div>
           </div>

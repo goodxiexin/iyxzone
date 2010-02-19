@@ -11,6 +11,7 @@ class User::HomeController < UserBaseController
   def show
     @feed_deliveries = current_user.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => "created_at DESC")
     @friend_suggestions = current_user.find_or_create_friend_suggestions.sort_by{rand}[0..2]
+		@first_fetch_size = FirstFetchSize
   end
 
   def feeds

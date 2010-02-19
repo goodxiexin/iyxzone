@@ -37,6 +37,7 @@ class User::GuildsController < UserBaseController
     @role = @guild.role_for current_user
     @album = @guild.album
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize)
+		@first_fetch_size = FirstFetchSize
 		render :action => 'show', :layout => 'app2'
 	end
 
@@ -69,6 +70,7 @@ class User::GuildsController < UserBaseController
 
 	def more_feeds
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize)
+		@fetch_size = FetchSize
   end
 
   def search

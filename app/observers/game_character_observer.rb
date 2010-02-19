@@ -20,7 +20,7 @@ class GameCharacterObserver < ActiveRecord::Observer
 	end
 
   def after_update character
-		recipients = [character.user.profile, character.game]
+		recipients = [character.user.profile, character.game, character.guild]
 		recipients.concat character.user.friends
     if character.playing and !character.playing_was
       character.deliver_feeds :recipients => recipients, :data => {:type => 1}
