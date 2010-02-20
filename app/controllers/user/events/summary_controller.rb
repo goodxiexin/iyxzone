@@ -68,8 +68,6 @@ class User::Events::SummaryController < UserBaseController
   end
 
   def save
-    eval("save_step#{params[:step].to_i}")
-    render :nothing => true
   end
 
   def next
@@ -126,11 +124,6 @@ protected
   end
 
   def save_step1
-    attendances = {}
-    params[:characters].each do |id, values|
-      attendances["#{id}"] = {:late => values[:late], :completeness => values[:completeness]}
-    end
-    session[:event_summary][:attendances] = attendances
   end
 
   def step2
@@ -146,11 +139,6 @@ protected
   end
 
   def save_step2
-    bosses = {}
-    params[:bosses].each do |boss_id, values|
-      bosses["#{id}"] = {:count => values[:count]}
-    end
-    session[:event_summary][:bosses] = bosses
   end
 
   def step3
@@ -170,11 +158,6 @@ protected
   end
 
   def save_step3
-    gears = []
-    params[:gears].each do |v|
-      gears.push {:gear_id => v[:gear_id], :count => v[:count], :character_id => v[:character_id]}
-    end
-    session[:event_summary][:gears] = gears
   end
 
   def step4
@@ -194,11 +177,6 @@ protected
   end
 
   def save_step4
-    rewards = []
-    params[:rewards].each do |v|
-      rewards.push {:rule_id => v[:rule_id], :count => v[:count], :character_id => v[:character_id]} 
-    end
-    session[:event_summary][:rewards] = rewards
   end
 
 end

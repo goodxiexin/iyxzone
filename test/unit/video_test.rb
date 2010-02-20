@@ -24,12 +24,12 @@ class VideoTest < ActiveSupport::TestCase
   # 测试validate
   test "没有标题" do
     @video = Video.create(@params.merge({:title => nil}))
-    assert_equal @video.errors.on_base, "标题不能为空"
+    assert_equal @video.errors.on(:title), "不能为空"
   end
 
   test "没有url" do
     @video = Video.create(@params.merge({:video_url => nil}))
-    assert_equal @video.errors.on_base, "url不能为空"
+    assert_equal @video.errors.on(:video_url), "不能为空"
   end
 
   test "无法识别的url" do
@@ -42,38 +42,35 @@ class VideoTest < ActiveSupport::TestCase
 
   test "没有游戏类别" do
     @video = Video.create(@params.merge({:game_id => nil}))
-    assert_equal @video.errors.on_base, "游戏类别不能为空"
+    assert_equal @video.errors.on(:game_id), "不能为空"
   end
 
   test "游戏不存在" do
+    @video = Video.create(@params.merge({:game_id => 111}))
+    assert_equal @video.errors.on(:game_id), "不存在"
+  end
+
+  test "该用户没有这个游戏" do
     @video = Video.create(@params.merge({:game_id => 4}))
-    assert_equal @video.errors.on_base, "游戏不存在"
+    assert_equal @video.errors.on(:game_id), "该用户没有这个游戏"
   end
 
   test "没有作者" do
     @video = Video.create(@params.merge({:poster_id => nil}))
-    assert_equal @video.errors.on_base, "没有作者"
+    assert_equal @video.errors.on(:poster_id), "不能为空"
   end
 
   # 创建带有tag的video
   test "创建带有tag的视频" do
-    @params.merge!({:friend_tags => [@user2.id, @user3.id]})
+    @params.merge!({:new_friend_tags => [@user2.id, @user3.id]})
     @video = Video.create(@params)
     @video.reload
     assert_equal @video.tags_count, 2 
   end
 
   test "创建带有tag的视频，但是tag的不是好友" do
-    @params.merge!({:friend_tags => [@user2.id, @user4.id]})
+    @params.merge!({:new_friend_tags => [@user2.id, @user4.id]})
     @video = Video.create(@params)
-    @video.reload
-    assert_equal @video.tags_count, 1
-  end
-
-  test "创建带有tag的视频，然后删除一个tag" do
-    @params.merge!({:friend_tags => [@user2.id, @user3.id]})
-    @video = Video.create(@params)
-    @video.tags.find_by_tagged_user_id(@user3.id).destroy
     @video.reload
     assert_equal @video.tags_count, 1
   end

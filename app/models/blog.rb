@@ -32,7 +32,7 @@ class Blog < ActiveRecord::Base
 
   validates_presence_of :title, :message => "不能为空"
 
-  validates_size_of :title, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
+  validates_size_of :title, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节", :if => 'title'
 
   validates_presence_of :poster_id, :message => "不能为空", :on => :create
 
