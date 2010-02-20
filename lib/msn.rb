@@ -26,6 +26,7 @@ class Msn
 		output "USR #{@trID} TWN I gaoxh04@mails.tsinghua.edu.cn\r\n"
 		str = input
 		notification_server = str.split(" ")[3]
+    puts notification_server
 		ip = notification_server.split(":").first
 		port = notification_server.split(":").last
 		@sock.close
