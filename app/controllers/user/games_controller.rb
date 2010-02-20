@@ -43,6 +43,7 @@ class User::GamesController < UserBaseController
 		end
     @albums = @game.albums.find(:all, :limit => 3)
     @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
+		@first_fetch_size = FirstFetchSize
   end
 
   def hot

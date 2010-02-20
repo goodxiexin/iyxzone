@@ -14,6 +14,7 @@ class User::ProfilesController < UserBaseController
 		@blogs = @user.blogs[0..2]
 		@albums = @user.active_albums[0..2]
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
+		@first_fetch_size = FirstFetchSize
 	end
 
   def edit

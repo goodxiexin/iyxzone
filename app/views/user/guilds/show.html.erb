@@ -29,7 +29,7 @@
   <div class="big-head space">
     <span class="left"><img src="images/photo/photo04.png" /></span>
     <p class="left">
-      <strong><%= @guild.name %></strong>
+      <strong><%= @guild.name %>公会</strong>
     </p>
   </div>
   <div class="rows"></div>
@@ -67,15 +67,30 @@
     </div>
   </div>
 
-  <div class='multibox'>
-    <div class='title'><b>新鲜事</b></div>
-	  <div class="feed-wrap" id='feed_list'>
-		  <%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
-    </div>
-    <div id='more_feed'>
-		  <span><%= link_to_function "更多新鲜事", "Iyxzone.Guild.Feeder.moreFeeds(#{@guild.id});" %></span>
-    </div>
-  </div>
+	<div class='multibox'>
+		<div class='title'><b>新鲜事</b></div>
+		<div class="feed-wrap" id='feed_list'>
+			<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
+		</div>
+		<div class="s_clear"></div>
+			<div class="round04 round_r_t jl-read-more space s_clear">
+				<div class="round_l_t">
+					<div class="round_r_b">
+						<div class="round_l_b">
+							<div class="round_m">
+								<div class="round_body" id="more_feed">
+								<% if @feed_deliveries.size < @first_fetch_size %>
+									<div class='jl-more'>没有更多了...</div>
+								<% else %>
+									<%= link_to_function "更多新鲜事", "Iyxzone.Guild.Feeder.moreFeeds(#{@guild.id});", :class => "jl-more"%>
+								<% end %>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
 
   <% if @role and (@role.is_president? or @role.is_authorized?) %>
     <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @guild, :recipient => @guild.president, :with_comments => false} %>

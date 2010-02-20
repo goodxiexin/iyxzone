@@ -1,11 +1,11 @@
 <div class="multibox">
   <div class="title">
-    <b>状态</b>
+    <b>我在工会中的游戏角色</b>
   </div>
   <table class="data-table jl-data-table" cellpadding="0">
     <tr>
       <th class="name name02">游戏角色名称</th>
-      <th class="level level02">公会状态</th>
+      <th class="level level02">角色情况</th>
     </tr>
       <% @memberships.group_by(&:status).each do |status, memberships| %>
         <% memberships.each do |m| %>
