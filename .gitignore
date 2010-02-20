@@ -1,4 +1,3 @@
 log/*.log
 config/database.yml
 public/photos/*
-config/database.yml
