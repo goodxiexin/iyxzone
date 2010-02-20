@@ -21,13 +21,8 @@ development:
   database: dayday3_development
   pool: 5
   username: root
-<<<<<<< HEAD:config/database.yml
   password: 20041065
   socket: /var/run/mysqld/mysqld.sock 
-=======
-  password: 123456
-  socket: /var/run/mysqld/mysqld.sock
->>>>>>> 88e15f6fe7278b2eeabb50fb50b15f9a3c661476:config/database.yml
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -39,13 +34,8 @@ test:
   database: dayday3_test
   pool: 5
   username: root
-<<<<<<< HEAD:config/database.yml
   password: 20041065 
   socket: /var/run/mysqld/mysqld.sock 
-=======
-  password: 123456
-  socket: /tmp/mysql.sock
->>>>>>> 88e15f6fe7278b2eeabb50fb50b15f9a3c661476:config/database.yml
 
 production:
   adapter: mysql
