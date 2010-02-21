@@ -20,11 +20,11 @@
             </div>
             <ul class="checkboxes rows s_clear">
               <% @event.guild.bosses.each do |b| %>
-                <li><span><%= check_box_tag '', 1, false, :boss_id => b.id %><%= "#{b.name}-#{b.reward}" %></span></li>
+                <li><span><%= check_box_tag '', 1, false, :boss_id => b.id, :name => b.name, :reward => b.reward %><%= "#{b.name}-#{b.reward}" %></span></li>
               <% end %>
             </ul>
             <div class="foot rows">
-              <span class="button"><span><%= button_to_function "确定", "Iyxzone.Event.Summary.Boss.resetBosses()" %></span></span>
+              <span class="button"><span><%= button_to_function "确定", "Iyxzone.Event.Summary.Boss.addBosses()" %></span></span>
             </div>
           </div>
         </div>
@@ -34,25 +34,27 @@
   <table class="act-member-list space" cellpadding="0" cellspacing="0" width="100%">
     <thead>
       <tr>
-        <td class="tl" style="border-right:0; width: 400px;">BOSS列表</td>
-        <td style="border-left:0;border-right:0;">分值</td>
+        <td class="tl" style="border-right:0;">BOSS列表</td>
+        <td style="border-left:0;width:100px">数量</td>
+        <td style="border-left:0;width:100px">分值</td>
         <td style="border-left:0;width:100px"></td>
       </tr>
     </thead>
     <tbody id='bosses'>
-      <%= render :partial => 'boss_info', :locals => {:bosses => session[:event_summary][:bosses]} %>
     </tbody>
     <tbody>
       <tr>
         <td>
           <div class="textfield" id='new_boss'><input value="点击添加新的BOSS名字" onclick="Iyxzone.Event.Summary.Boss.newBoss()" /></div>
-          <div id='new_boss_name' style="display:none">
-            <div class='textfield'><%= text_field_tag 'boss[name]', '', :onclick => "this.clear()" %></div>
-          </div> 
+          <div id='new_boss_name' style="display:none" class='textfield'>
+            <%= text_field_tag 'boss[name]', '', :onclick => "this.clear()" %>
+          </div>
         </td>
         <td>
-          <div id='new_boss_reward' style='display:none'>
-            <div class='textfield' style="width: 80px; margin: 0 auto;"><%= text_field_tag 'boss[reward]', '', :onclick => "this.clear()" %></div>
+        </td>
+        <td>
+          <div class='textfield' id='new_boss_reward' style="width: 80px; margin: 0 auto; display:none">
+            <%= text_field_tag 'boss[reward]', '', :onclick => "this.clear()" %>
           </div>
         </td>
         <td>
@@ -72,14 +74,14 @@
   </table>
 </div>
 
-<% if @boss_ids.blank? %>
+<% if @ids.blank? %>
 <%= javascript_tag "
-  Iyxzone.Event.Summary.Boss.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', [], []);
+  Iyxzone.Event.Summary.Boss.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', [], [], [], []);
   Iyxzone.Event.Summary.Boss.reset(); 
 " %>
 <% else %>
 <%= javascript_tag "
-  Iyxzone.Event.Summary.Boss.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', #{array_or_string_for_javascript @boss_ids}, #{array_or_string_for_javascript @boss_rewards});
+  Iyxzone.Event.Summary.Boss.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', #{array_or_string_for_javascript @ids}, #{array_or_string_for_javascript @counts}, #{array_or_string_for_javascript @names}, #{array_or_string_for_javascript @rewards});
   Iyxzone.Event.Summary.Boss.reset(); 
 " %>
 <% end %>

@@ -149,17 +149,17 @@ Object.extend(Iyxzone.Event.Summary, {
 
 Object.extend(Iyxzone.Event.Summary.Attendance, {
 
-  summary: new Hash(), // character_id => { late => boolean, completeness => percentage}
+  summary: new Hash(), // character_id => { late => boolean, completes => percentage}
 
   eventID: null,
 
   token: null,
 
-  load: function(eventID, token, characterIDs, lates, completeness){
+  load: function(eventID, token, characterIDs, lates, completes){
     this.eventID = eventID;
     this.token = token;
     for(var i=0;i<characterIDs.length;i++)
-      this.summary.set(characterIDs[i], {late: lates[i], completeness: completeness[i]});
+      this.summary.set(characterIDs[i], {late: lates[i], complete: completes[i]});
   },
 
   reset: function(){
@@ -179,39 +179,39 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
     setTimeout(this.save.bind(this), 20000);
   },
 
-  incCompleteness: function(characterID){
-    var el = $('completeness_' + characterID + '_bar');
+  incComplete: function(characterID){
+    var el = $('complete_' + characterID + '_bar');
     if(el == null)
       return;
  
-    var num = parseInt(el.style.width);
+    var num = this.summary.get(characterID).complete;
     if(num < 100){
       num += 10;
     }
     
-    $('completeness_' + characterID + '_bar').setStyle({width: num + '%'});
-    $('completeness_' + characterID + '_number').update(num + '%');
+    $('complete_' + characterID + '_bar').setStyle({width: num + '%'});
+    $('complete_' + characterID + '_number').update(num + '%');
     
     var info = this.summary.get(characterID);
-    info.completeness = num;
+    info.complete = num;
     this.summary.set(characterID, info);
   },
 
-  decCompleteness: function(characterID){
-    var el = $('completeness_' + characterID + '_bar');
+  decComplete: function(characterID){
+    var el = $('complete_' + characterID + '_bar');
     if(el == null)
       return;
 
-    var num = parseInt(el.style.width);
+    var num = this.summary.get(characterID).complete;
     if(num > 0){
       num -= 10;
     }
 
-    $('completeness_' + characterID + '_bar').setStyle({width: num + '%'});
-    $('completeness_' + characterID + '_number').update(num + '%');
+    $('complete_' + characterID + '_bar').setStyle({width: num + '%'});
+    $('complete_' + characterID + '_number').update(num + '%');
   
     var info = this.summary.get(characterID);
-    info.completeness = num;
+    info.complete = num;
     this.summary.set(characterID, info);
   },
 
@@ -245,51 +245,41 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
         newCharacterIds.push(k)
     }.bind(this));
 
-    params = "";
     delCharacterIds.each(function(id){
-      params += "character_ids[]=" + id + "&";
-    });
-
-    if(params != ""){
-    new Ajax.Request('/user/events/summary/remove_attendants?step=1&event_id=' + this.eventID, {
-      method: 'get',
-      parameters: params,
-      onSuccess: function(){
-        delCharacterIds.each(function(id){
-          this.summary.unset(id);
-          $('character_' + id).remove();
-          $('friend-wrap').hide();
-        }.bind(this));
-      }.bind(this)
-    });
-    }
+      this.summary.unset(id);
+      $('character_' + id).remove();
+      $('friend-wrap').hide();
+    }.bind(this));
 
     params = "";
+
     newCharacterIds.each(function(id){
-      params += "character_ids[]=" + id + "&";
+      params += "ids[]=" + id + "&";
     });
 
     if(params != ""){
-    new Ajax.Updater('attendants', '/user/events/summary/add_attendants?step=1&event_id=' + this.eventID, { 
-      method: 'get',
-      parameters: params,
-      insertion: 'bottom',
-      onSuccess: function(){
-        newCharacterIds.each(function(id){
-          this.summary.set(id, {late: false, completeness: 50});
-        }.bind(this));
-        $('friend-wrap').hide();
-      }.bind(this)
-    });
+      new Ajax.Updater('attendants', '/user/events/summary/new_attendant?step=1&event_id=' + this.eventID, {
+        method: 'get',
+        insertion: 'bottom',
+        parameters: params,
+        onSuccess: function(transport){
+          newCharacterIds.each(function(id){
+            this.summary.set(id, {late: false, complete: 100});
+          }.bind(this));
+          $('friend-wrap').hide();
+        }.bind(this)
+      });
     }
   },
 
   save: function(){
     var params = '';
+
     this.summary.each(function(pair){
-      params += 'characters[' + pair.key + '][late]=' + pair.value.late + '&characters[' + pair.key + '][completeness]=' + pair.value.completeness + '&';
+      params += 'characters[' + pair.key + '][late]=' + pair.value.late + '&characters[' + pair.key + '][complete]=' + pair.value.complete + '&';
     });
-    new Ajax.Request('/user/events/summary/save?step=1&event_id=' + this.eventID + '&authenticity_token=' + encodeURIComponent(this.token), {
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/save?step=1&authenticity_token=' + encodeURIComponent(this.token), {
       method: 'post',
       parameters: params,
       onSuccess: function(){
@@ -299,28 +289,22 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
   },
 
   remove: function(characterID){
-    new Ajax.Request('/user/events/summary/remove_attendants?step=1&event_id=' + this.eventID, {
-      method: 'get',
-      parameters: "character_ids[]=" + characterID,
-      onSuccess: function(){
-        this.summary.unset(characterID);
-        new Effect.BlindUp($('character_' + characterID));
-        $$('input').each(function(input){
-          if(input.type == 'checkbox' && input.readAttribute('character_id') != null){
-            input.checked = false;
-            if(this.summary.keys().include(input.readAttribute('character_id'))){
-              input.checked = true;
-            }
-          }
-        }.bind(this));
-      }.bind(this)
-    });
+    this.summary.unset(characterID);
+    $('character_' + characterID).remove();
+    $$('input').each(function(input){
+      if(input.type == 'checkbox' && input.readAttribute('character_id') != null){
+        input.checked = false;
+        if(this.summary.keys().include(input.readAttribute('character_id'))){
+          input.checked = true;
+        }
+      }
+    }.bind(this));
   },
 
   next: function(){
     var params = '';
     this.summary.each(function(pair){
-      params += 'characters[' + pair.key + '][late]=' + pair.value.late + '&characters[' + pair.key + '][completeness]=' + pair.value.completeness + '&';
+      params += 'characters[' + pair.key + '][late]=' + pair.value.late + '&characters[' + pair.key + '][complete]=' + pair.value.complete + '&';
     });
     new Ajax.Request('/events/' + this.eventID + '/summary/next?step=1&authenticity_token=' + encodeURIComponent(this.token), {
       method: 'post',
@@ -332,7 +316,7 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
 
 Object.extend(Iyxzone.Event.Summary.Boss, {
 
-  summary: new Array(),
+  summary: new Hash(), // boss id to count
 
   eventID: null,
 
@@ -340,25 +324,23 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
 
   token: null,
 
-  id: null,
-
-  load: function(eventID, guildID, token, ids, bossIDs, counts){
+  load: function(eventID, guildID, token, ids, counts, names, rewards){
     this.eventID = eventID;
     this.guildID = guildID;
     this.token = token;
-    this.id = ids[ids.length - 1] + 1;
 
     for(var i=0;i<ids.length;i++){
-      this.summary.push({id: ids[i], bossID: bossIDs[i], count: counts[i]});
+      this.summary.set(ids[i], {name: names[i], count: counts[i], reward: rewards[i]});
+      Element.insert('bosses', {bottom: this.getBossHTML(ids[i], counts[i], names[i], rewards[i])});
     }
+
+    setTimeout(this.save.bind(this), 20000);
   },
 
   reset: function(){
     $$('input').each(function(input){
       if(input.type == 'checkbox' && input.readAttribute('boss_id')){
         input.checked = false;
-        if(this.summary.keys().include(input.readAttribute('boss_id')))
-          input.checked = true;
       }
     }.bind(this));
   },
@@ -370,62 +352,115 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
   addBosses: function(){
     var params = "";
     var bosses = new Array();    
-
+    
     $$('input').each(function(e){
-      if(e.type == 'checkbox' && e.readAttribute('boss_id') && e.checked){
-        bosses.push({id: this.id, bossID: e.readAttribute('boss_id'), count: 1});
-        this.id++;
+      if(e.type == 'checkbox' && e.checked){
+        var id = e.readAttribute('boss_id');
+        var name = e.readAttribute('name');
+        var reward = e.readAttribute('reward');
+  
+        if(this.summary.keys().include(id)){
+          var info = this.summary.get(id);
+          info.count++;
+          this.summary.set(id, info);
+          var td = $('boss_' + id).childElements()[1];
+          var a = td.childElements()[0];
+          a.innerHTML = info.count;
+        }else{
+          Element.insert('bosses', {bottom: this.getBossHTML(id, 1, name, reward)});
+          this.summary.set(id, {count: 1, name: name, reward: reward});
+        }
       }
-    });
-   
-    bosses.each(function(v){
-      params += "bosses[" + v.id + "][boss_id]=" + v.bossID + "&";
-    });
+    }.bind(this));
 
-    if(params != ""){
-      new Ajax.Request('/user/events/summary/add_bosses?step=2&event_id=' + this.eventID, {
-        method: 'get',
-        parameters: params,
-        onSuccess: function(transport){
-          $('friend-wrap').hide();
-          Element.insert($('bosses'), {bottom: transport.responseText});
-          bosses.each(function(v){
-            this.summary.push(v);
-          }.bind(this));
-          this.resetBosses();
-        }.bind(this)
-      });
-    }
-
+    $('friend-wrap').hide();
+    this.reset();
   },
 
-  remove: function(id){
-    new Ajax.Request('/user/events/summary/remove_bosses?step=2&event_id=' + this.eventID, {
-      method: 'get',
-      parameters: "ids[]=" + id,
-      onSuccess: function(){
-        for(var i=0;i<this.summary.length;i++){
-          if(this.summary[i].id == id){
-            this.summary.splice(i,1);
-          }
-        }
-        new Effect.BlindUp($('boss_' + id));
+  getBossHTML: function(id, count, name, reward){
+    var html = '';
+    html += '<tr class="jl-cutline" id="boss_' + id + '">';
+    html += '<td class="tl">' + name + '</td>';
+    html += '<td>';
+    html += '<a onclick="Iyxzone.Event.Summary.Boss.editCount(this)">' + count + '</a>';
+    html += '<div class="textfield" style="width: 80px; margin: 0 auto;display:none"><input type="text" value=' + count + ' onblur="Iyxzone.Event.Summary.Boss.updateCount(this, ' + id + ')"></div>';
+    html += '</td>';
+    html += '<td>' + reward + '</td>';
+    html += '<td><a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Boss.remove(' + id + ')" class="icon-active"></a></td>';
+    html += '</tr>';
+    return html;
+  },
+
+  remove: function(bossID){
+    this.summary.unset(bossID);
+    $('boss_' + bossID).remove();
+  },
+
+  save: function(){
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var id = pair.key;
+      var count = pair.value.count;
+      params += "bosses[" + id + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/save?step=2&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params,
+      onSuccess: function(transport){
+        setTimeout(this.save.bind(this), 20000);
       }.bind(this)
     });
   },
 
   next: function(){
-    new Ajax.Request('/user/events/summary/next?step=2&event_id=' + this.eventID, {
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var id = pair.key;
+      var count = pair.value.count;
+      params += "bosses[" + id + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/next?step=2&authenticity_token=' + encodeURIComponent(this.token), {
       method: 'post',
-      parameters: 'authenticity_token=' + encodeURIComponent(this.token)
+      parameters: params
     });
   },
 
   prev: function(){
-    new Ajax.Request('/user/events/summary/prev?step=2&event_id=' + this.eventID, {
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var id = pair.key;
+      var count = pair.value.count;
+      params += "bosses[" + id + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/prev?step=2&authenticity_token=' + encodeURIComponent(this.token), {
       method: 'post',
-      parameters: 'authenticity_token=' + encodeURIComponent(this.token)
+      parameters: params
     });
+  },
+
+  editCount: function(div){
+    div.hide();
+    div.next().show();
+  },
+
+  updateCount: function(field, bossID){
+    var div = field.up();
+    var row = div.up().up();
+    div.previous().innerHTML = field.value;
+    div.hide();
+    div.previous().show();
+    var info = this.summary.get(bossID);
+    info.count = field.value;
+    this.summary.set(bossID, info);
   },
 
   newBoss: function(){
@@ -474,10 +509,11 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
         onSuccess: function(transport){
           this.cancelBoss();
           var boss = transport.responseText.evalJSON().boss;
-          var bossList = $$('ul.checkboxes')[0];
-          var html = "<li><span><input type='checkbox' checked=1 value=1 boss_id='" + boss.id + "'/>" + boss.name + "-" + boss.reward + "</span></li>";
-          Element.insert(bossList, {bottom: html});
-          this.resetBosses();
+          var html = '<li><span><input type="checkbox" value=1 boss_id=' + boss.id + ' name="' + boss.name + '" reward=' + boss.reward + ' />' + boss.name + '-' + boss.reward + '</span></li>';
+          Element.insert($$('ul.checkboxes')[0], {bottom: html});
+          this.reset();
+          Element.insert('bosses', {bottom: this.getBossHTML(boss.id, 1, boss.name, boss.reward)});
+          this.summary.set(boss.id, {count: 1, name: boss.name, reward: boss.reward});
         }.bind(this)
       });
     }
@@ -486,6 +522,142 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
 });
 
 Object.extend(Iyxzone.Event.Summary.Gear, {
+
+  summary: new Hash(), // gear id and recipient id to count
+
+  eventID: null,
+
+  guildID: null,
+
+  token: null,
+
+  load: function(eventID, guildID, token, ids, characterIDs, counts, names, costs){
+    this.eventID = eventID;
+    this.guildID = guildID;
+    this.token = token;
+
+    for(var i=0;i<ids.length;i++){
+      this.summary.set(ids[i] + "_" + characterIDs[i], {name: names[i], count: counts[i], cost: costs[i]});
+      Element.insert('gears', {bottom: this.getGearHTML(ids[i], characterIDs[i], counts[i], names[i], costs[i])});
+    }
+
+    //setTimeout(this.save.bind(this), 20000);
+  },
+
+  reset: function(){
+    $$('input').each(function(input){
+      if(input.type == 'checkbox' && input.readAttribute('gear_id')){
+        input.checked = false;
+      }
+    }.bind(this));
+  },
+
+  selectGears: function(){
+    $('friend-wrap').toggle();
+  },  
+
+  addGears: function(){
+    var params = "";
+    var gears = new Array();
+
+    $$('input').each(function(e){
+      if(e.type == 'checkbox' && e.checked){
+        var id = e.readAttribute('gear_id');
+        var name = e.readAttribute('name');
+        var cost = e.readAttribute('cost');
+    
+        Element.insert('gears', {bottom: this.getGearHTML(id, 1, name, cost)});
+      }
+    }.bind(this));
+
+    $('friend-wrap').hide();
+    this.reset();
+  },
+
+  getGearHTML: function(id, count, name, cost){
+    var html = '';
+    html += '<tr class="jl-cutline" id="gear_' + id + '">';
+    html += '<td class="tl">' + name + '</td>';
+    html += '<td>';
+    html += '<a onclick="Iyxzone.Event.Summary.Gear.editCount(this)">' + count + '</a>';
+    html += '<div class="textfield" style="width: 80px; margin: 0 auto;display:none"><input type="text" value=' + count + ' onblur="Iyxzone.Event.Summary.Gear.updateCount(this, ' + id + ', null)"></div>';
+    html += '</td>';
+    html += '<td>' + cost + '</td>';
+    html += '<td><a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Gear.showCharacterList(' + id + ', this)">点击选择获得者</a></td>';
+    html += '<td><a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Gear.remove(' + id + ', null, this)" class="icon-active"></a></td>';
+    html += '</tr>';
+    return html;
+  },
+
+  editCount: function(div){
+    div.hide();
+    div.next().show();
+  },
+
+  updateCount: function(field, id, characterID){
+    var div = field.up();
+    var row = div.up().up();
+    div.previous().innerHTML = field.value;
+    div.hide();
+    div.previous().show();
+    if(characterID != null){
+      var info = this.summary.get(id + '_' + characterID);
+      info.count = field.value;
+      this.summary.set(id + '_' + characterID, info);
+    }
+  },
+
+  remove: function(id, characterID, div){
+    this.summary.unset(id + '_' + characterID);
+    if(characterID == null)
+      div.up().up().remove();
+    else
+      $('gear_' + id + '_' + characterID).remove();
+  },
+
+  showCharacterList: function(id, div){
+    var characterIDs = new Array();
+
+    this.summary.keys().each(function(key){
+      var gearID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      if(gearID == id){
+        characterIDs.push(characterID);
+      }
+    }.bind(this));
+
+    var list = $('gear_recipients').clonechildElements();
+    list.each(function(a){
+      var characterID = a.readAttribute('character_id');
+      if(characterIDs.include(characterID)){
+        a.hide();
+      }else{
+        a.writeAttribute({gear_id: id});
+        a.observe('click', this.selectCharacter.bindAsEventListener(this));
+        a.show();
+      }
+    }.bind(this));
+
+    $('gear_recipients').show();
+  },
+
+  selectCharacter: function(mouseEvent){
+    var a = mouseEvent.target;
+    var characterID = a.readAttribute('character_id');
+    var gearID = a.readAttribute('gear_id');
+    var key = gearID + '_' + characterID;
+    var info = this.summery.get(key);
+
+    if(info){
+      this.summary.set(key, {count: info.count});
+    }else{
+      var count = a.up().up().previous().previous().childElements()[0].innerHTML;
+      alert(count);
+      this.summary.set(key, {count: count});
+    }
+
+    $('gear_recipients').hide();
+  },
 
 });
 

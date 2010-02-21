@@ -119,7 +119,7 @@ protected
   end
 
   def status_is_valid
-    return if status_id.blank?  
+    return if status.blank?  
  
     if is_invitation?
       errors.add(:status, '不能从请求变成邀请') if was_request?

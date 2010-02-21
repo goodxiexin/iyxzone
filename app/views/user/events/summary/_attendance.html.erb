@@ -19,8 +19,8 @@
               <h4 class="left"><span>选择参加这次活动的游戏角色</span></h4>
             </div>
             <ul class="checkboxes rows s_clear">
-              <% @event.characters.each do |c| %>
-                <li><span><%= check_box_tag '', 1, @characters.include?(c), :character_id => c.id %><%= "#{c.user.login}-#{c.name}" %></span></li>
+              <% @characters.each do |c| %>
+                <li><span><%= check_box_tag '', 1, @ids.include?(c.id), :character_id => c.id %><%= "#{c.user.login}-#{c.name}" %></span></li>
               <% end %>
             </ul>
             <div class="foot rows">
@@ -41,7 +41,7 @@
       </tr>
     </thead>
     <tbody id='attendants'>
-      <%= render :partial => 'attendance_info', :locals => {:attendances => session[:event_summary][:attendances]} %>
+      <%= render :partial => 'attendance_info', :locals => {:attendances => @attendances} %>
     </tbody>
     <tfoot>
       <td colspan="3">
@@ -51,7 +51,8 @@
     </tfoot>
   </table>
 </div>
+
 <%= javascript_tag "
-  Iyxzone.Event.Summary.Attendance.load(#{@event.id}, '#{form_authenticity_token}', #{array_or_string_for_javascript @ids}, [#{@lates.join(',')}], [#{@completeness.join(',')}]);
+  Iyxzone.Event.Summary.Attendance.load(#{@event.id}, '#{form_authenticity_token}', #{array_or_string_for_javascript @ids}, [#{@lates.join(',')}], [#{@completes.join(',')}]);
   Iyxzone.Event.Summary.Attendance.reset(); 
 " %>

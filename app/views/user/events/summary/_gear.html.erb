@@ -20,11 +20,11 @@
             </div>
             <ul class="checkboxes rows s_clear">
               <% @event.guild.gears.each do |g| %>
-                <li><span><%= check_box_tag '', 1, false, :gear_id => g.id %><%= "#{g.name}-#{g.cost}" %></span></li>
+                <li><span><%= check_box_tag '', 1, false, :gear_id => g.id, :name => g.name, :cost => g.cost %><%= "#{g.name}-#{g.cost}" %></span></li>
               <% end %>
             </ul>
             <div class="foot rows">
-              <span class="button"><span><%= button_to_function "确定", "Iyxzone.Event.Summary.Gear.resetGears()" %></span></span>
+              <span class="button"><span><%= button_to_function "确定", "Iyxzone.Event.Summary.Gear.addGears()" %></span></span>
             </div>
           </div>
         </div>
@@ -34,14 +34,14 @@
   <table class="act-member-list space" cellpadding="0" cellspacing="0" width="100%">
     <thead>
       <tr>
-        <td class="tl" style="border-right:0;width: 300px;">获得的装备</td>
-        <td style="border-left:0;border-right:0;">分值</td>
+        <td class="tl" style="border-right:0;">获得的装备</td>
+        <td style="border-left:0;width:100px">数量</td>
+        <td style="border-left:0;width: 100px">分值</td>
         <td class="tl" style="border-left:0;width:120px">获得人</td>
         <td style="border-left:0;width:80px"></td>
       </tr>
     </thead>
     <tbody id='gears'>
-      <%= render :partial => 'gear_info', :locals => {:gears => session[:event_summary][:gears]} %>
     </tbody>
     <tbody>
       <tr>
@@ -51,6 +51,7 @@
             <div class='textfield'><%= text_field_tag 'gear[name]', '', :onclick => "this.clear()" %></div>
           </div>
         </td>
+        <td></td>
         <td>
           <div id='new_gear_cost' style='display:none'>
             <div class='textfield' style="width: 60px; margin: 0 auto;"><%= text_field_tag 'gear[cost]', '', :onclick => "this.clear()" %></div>
@@ -72,6 +73,12 @@
       </td>
     </tfoot>
   </table>
+</div>
+
+<div class='drop-box' id='gear_recipients' style='display:none'>
+  <% @characters.each do |c| %>
+    <a class='member-toggle' character_id='<%= c.id %>'><%= avatar_image c.user, :class => "w-l", :algin => "absmiddle", :size => :small %></span><strong><%= c.name %></strong></span></a>
+  <% end %>
 </div>
 
 <% if @gear_ids.blank? %>

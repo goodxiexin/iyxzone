@@ -10,7 +10,7 @@
       </p>
     </div>
     <div class="box02 canvas_int space">
-      <% if params[:step].to_i == 1 %>
+      <% if @step == 1 %>
         <%= render :partial => 'attendance' %>
       <% elsif params[:step].to_i == 2 %>
         <%= render :partial => 'boss' %>

@@ -156,7 +156,7 @@ ActionController::Routing::Routes.draw do |map|
   
       events.resources :requests, :controller => 'events/requests', :member => {:accept => :put, :decline => :put}
 
-      events.resource :summary, :controller => 'events/summary', :member => {:next => :post}
+      events.resource :summary, :controller => 'events/summary', :member => {:next => :post, :prev => :post, :save => :post}
 
     end
 
