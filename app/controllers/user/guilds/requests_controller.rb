@@ -20,7 +20,7 @@ class User::Guilds::RequestsController < UserBaseController
   def accept
     if @request.update_attributes(:status => Membership::Member)
       render :update do |page|
-        page << "alert('成功'); $('guild_request_option_#{@request.id}').innerHTML = '已接受';"
+        page << "$('guild_request_option_#{@request.id}').innerHTML = '已接受';"
       end
     else
       render :update do |page|

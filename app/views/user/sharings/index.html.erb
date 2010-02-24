@@ -76,9 +76,9 @@
           <%= will_paginate @sharings %>
         <% else %>
           <% if @user == current_user %>
-            <div class='gray'>你啥都没分享，我日你!</div>
+            <div class='gray'>你啥都没分享，怎么能这样呢？！</div>
           <% else %>
-            <div class='gray'><%= get_subject @user %>都没分享，一个2比 </div>
+            <div class='gray'><%= get_subject @user %>都没分享，真是一个没情趣的人 </div>
           <% end %>
         <% end %>
         </div>

@@ -4,12 +4,15 @@
       <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01" %></span>
       <p class="left">
         <strong>会员管理</strong><br/>
-        <%= guild_link @guild, :class => 'red' %>
+        <%= guild_link @guild, :class => 'red' %>的主页
       </p>
     </div>
     <div class="box02 canvas_int space">
       <div class="rows s_clear"></div>
       <div class="tab tab01">
+        <div class="icon">
+          <%= link_to "邀请新会员", new_guild_invitation_url(@guild), :class => "icon-add-table" %>
+        </div>
         <ul>
         <% if params[:type].to_i == 0 %>
           <li class='hover'><span><%= link_to "所有会员", guild_memberships_url(@guild, :type => 0) %></span></li>
@@ -42,7 +45,13 @@
           </div>
           <div class="friend-list">
             <div class="friend-list-body s_clear">
+            <% if params[:type].to_i == 0 %>
               <%= render :partial => 'members', :locals => {:memberships => @memberships} %>
+            <% elsif params[:type].to_i == 1 %>
+              <%= render :partial => 'invitees', :locals => {:memberships => @memberships} %>
+            <% elsif params[:type].to_i == 2 %>
+              <%= render :partial => 'requestors', :locals => {:memberships => @memberships} %>
+						<% end %>
             </div>
           </div>
         </div>

@@ -15,7 +15,6 @@
       <div class="piclist-rows" id='events'>
         <% if @events.total_entries != 0 %>
 	        <%= render :partial => 'event_items', :object => @events %>
-          <%= will_paginate @events %>
         <% else %>
           <div class='gray'>你的好友最近都死光了，没人创建活动</div>
         <% end %>

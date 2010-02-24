@@ -120,7 +120,7 @@ class Event < ActiveRecord::Base
   end
 
   def time_changed?
-    start_time.changed? || end_time.changed?
+    start_time_changed? || end_time_changed?
   end
 
   def is_requestable_by? user

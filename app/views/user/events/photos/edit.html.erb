@@ -1,8 +1,9 @@
-<div class='title01'>
-  <%= link_to_function '', "facebox.close();", :class => "icon-active icon-active-close" %>
-  <h3>编辑照片</h3>
-</div>
+<p class='z-h s_clear'>
+  <strong class='left'>编辑照片</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
 
+<div class='z-con'>
 <% form_remote_for :photo, :url => event_photo_url(@photo), :method => :put do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
@@ -31,3 +32,4 @@
   </td></tr></table>
 </div>
 <% end %>
+</div>

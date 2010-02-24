@@ -152,7 +152,7 @@ ActionController::Routing::Routes.draw do |map|
 
       events.resources :participations, :controller => 'events/participations'
 
-      events.resources :invitations, :controller => 'events/invitations', :collection => {:search => :get}, :member => {:accept => :put, :decline => :delete}
+      events.resources :invitations, :controller => 'events/invitations', :collection => {:search => :get}, :member => {:accept => :put, :maybe => :put, :decline => :delete}
   
       events.resources :requests, :controller => 'events/requests', :member => {:accept => :put, :decline => :put}
 

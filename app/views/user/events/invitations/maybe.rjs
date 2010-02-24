@@ -6,4 +6,3 @@ elsif params[:show].to_i == 1
 elsif params[:show].to_i == 2
   page << "$('event_invitation_option_#{@invitation.id}').innerHTML = '#{@invitation.to_s}';"
 end
-

@@ -1,26 +1,13 @@
+<dl class='menu-op space20'>
 <% if @user == current_user %>
-<div class="formcontent">
-  <table class="title"><tr><td><h3 class="icon-sinker">操作</h3></td></tr></table>
-  <div class="rows s_clear">
-    <div class="fldid"><%= facebox_link '编辑活动', edit_event_url(@event) %></div>
-  </div>
-  <div class="rows s_clear">
-    <div class="fldid"><%= link_to '邀请更多人', new_event_invitation_url(@event) %></div>
-  </div>
-  <div class="rows s_clear">
-    <div class="fldid"><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></div>
-  </div>
-  <div class="rows s_clear">
-    <div class="fldid"><%= facebox_confirm '放所有人鸽子', event_url(@event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></div>
-  </div>
-</div>
+  <dt>操作</dt>
+  <dd><%= facebox_link '编辑活动', edit_event_url(@event) %></dd>
+  <dd><%= link_to '邀请更多人', new_event_invitation_url(@event) %></dd>
+  <dd><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></dd>
+  <dd><%= facebox_confirm '放所有人鸽子', event_url(@event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></dd>
 <% elsif @event.has_participant? current_user %>
-  <div class="rows s_clear">
-    <div class="fldid"><%= link_to '给组织者发信', new_mail_url(:recipient_id => @event.poster_id) %></div>
-  </div>
-  <div class="rows s_clear">
-    <div class="fldid"><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></div>
-  </div>
+  <dd><%= link_to '给组织者发信', new_mail_url(:recipient_id => @event.poster_id) %></dd>
+  <dd><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></dd>
 <% else %>
   <% code = @event.is_requestable_by?(current_user).to_i %>
   <% if code > 0 %>
@@ -33,3 +20,4 @@
     只有该工会的会员才能参加, 去工会 <%= guild_link @event.guild %> 看看
   <% end %>
 <% end %>
+</dl>

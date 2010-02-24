@@ -26,7 +26,7 @@ protected
     album = EventAlbum.find_by_id(album_id)
     if album.blank?
       errors.add(:album_id, "不存在")
-    elsif !album.event.has_participant? poster_id
+    elsif !album.event.has_participant? poster
       errors.add(:album_id, "没有参加该活动") 
     end 
   end

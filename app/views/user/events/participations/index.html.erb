@@ -1,10 +1,16 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="app-ploy">活动</h1>
+    <div class="friend-head space s_clear">
+      <span class="left"><%= album_cover_image @event.album :class=>"imgbox01"%></span>
+      <p class="left">
+        <strong><%= @event.title %>活动</strong><br />
+        <%= link_to '活动主页', event_url(@event), :class=>'red'%>
+      </p>
+    </div>
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="icon">
-          <%= link_to "返回活动", event_url(@event) %>
+          <%= link_to "邀请更多人", new_event_invitation_url(@event), :class => 'icon-add-table' %>
         </div>
         <ul>
         <% if params[:type].to_i == 0 %>
@@ -39,13 +45,21 @@
                 <div class='gray'>还没有人被邀请参加这个活动</div>
                 <% end %>
               <% else %>
+								<div class='d6-list s_clear'>
+								<ul>
 		            <%= render :partial => 'invitations', :object => @participations %>
+								</ul>
+								</div>
               <% end %>
 	          <% elsif params[:type].to_i == 4 %>
               <% if @event.requests_count == 0 %>
                 <div class='gray'>还没有人请求参加这个活动</div>
               <% else %>
+								<div class='d6-list s_clear'>
+								<ul>
 		            <%= render :partial => 'requests', :object => @participations %>
+								</ul>
+								</div>
               <% end %>
 	          <% else %>
               <% if @participations.count == 0 %>
@@ -55,7 +69,11 @@
                 <div class='gray'>还没有成员...囧</div>
                 <% end %>
               <% else %>
+								<div class='d6-list s_clear'>
+								<ul>
 		            <%= render :partial => 'participations', :object => @participations %>
+								</ul>
+								</div>
               <% end %>
 	          <% end %>
           </div>

@@ -6,9 +6,9 @@
     <div class="info">
       <p> <%= profile_link invitation.event.poster %> 邀请你加入他的活动 <%= event_link invitation.event %>, 是否同意？</p>
       <div class="buttons" id='event_invitation_option_<%= invitation.id %>'>
-        <%= link_to_remote '<span>肯定去</span>', :url => event_invitation_url(invitation.event, invitation, :status => 3, :show => 2), :method => :put, :html => {:class => "button"} %>
-        <%= link_to_remote '<span>可能去</span>', :url => event_invitation_url(invitation.event, invitation, :status => 4, :show => 2), :method => :put, :html => {:class => "button"} %>
-        <%= link_to_remote '<span>不去</span>', :url => event_invitation_url(invitation.event, invitation, :status => 5, :show => 2), :method => :put, :html => {:class => "button button-gray"} %>
+        <%= link_to_remote '<span>肯定去</span>', :url => accept_event_invitation_url(invitation.event, invitation, :show => 2), :method => :put, :html => {:class => "button"} %>
+        <%= link_to_remote '<span>可能去</span>', :url => maybe_event_invitation_url(invitation.event, invitation, :show => 2), :method => :put, :html => {:class => "button"} %>
+        <%= link_to_remote '<span>不去</span>', :url => decline_event_invitation_url(invitation.event, invitation, :show => 2), :method => :delete, :html => {:class => "button button-gray"} %>
       </div>
     </div>
   </div>

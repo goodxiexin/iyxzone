@@ -1,9 +1,9 @@
 <ul id='members'>
-  <% membership = memberships.first %>
+  <% memberships.each do |membership| %>
 	<% user = membership.user %>
   <li class='bg' id='<%= "membership_#{membership.id}" %>' >
     <div class='card'>
-      <%= link_to_function '', "", :class => "icon-active right" %>
+      <%= facebox_confirm "", guild_membership_url(membership.guild, membership), {:msg => '你确定要让这个用户退出公会吗', :method => :delete}, :class=>"icon-active right" %>
       <div class='img'>
         <div class='middle'><div class='middle-center'><div class='center'>
           <%= avatar user, :class => 'imgbox01' %>
@@ -11,24 +11,13 @@
       </div>
       <div class='info member s_clear'>
         <h4><%= profile_link user, :class => 'blk' %></h4>
-        <span class='red nowrap'><%= membership.character.name %></span>
-        <div class='selector01'>
-          <span>
-          <% if membership.is_veteran? %>
-            <a class='level-toggle blk'>长老</a>
-          <% else %>
-            <a class='level-toggle blk'>会员</a>
-          <% end %>
-          </span>
-          <div class='drop-wrap'>
-            <div class='wrap-bg'></div>
-            <dl>
-              <dd class='jl-cutline'></dd>
-            </dl>
-          </div>
-        </div>
+        <span class='red nowrap'><%= membership.character.name %></span><br/>
+				<span id="member_status_<%=membership.id%>"><%= membership.to_s %></span>
+				<% if current_user == @guild.president %>
+				<span><%= facebox_link "", edit_guild_membership_url(@guild, membership), :class => "icon-active icon-active-edit"%></span>
+				<% end %>
       </div>
     </div> 
   </li>
+	<% end %>
 </ul>
-

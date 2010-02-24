@@ -26,6 +26,14 @@ class User::Events::InvitationsController < UserBaseController
     end
   end
 
+  def maybe
+    unless @invitation.update_attributes(:status => Participation::Maybe)
+      render :update do |page|
+        page << "error('发生错误')"
+      end
+    end
+  end
+
   def decline
     unless @invitation.destroy
       render :update do |page|
@@ -45,7 +53,7 @@ protected
   def setup
     if ['new', 'create', 'search'].include? params[:action]
       @event = current_user.events.find(params[:event_id])
-    elsif ['edit', 'accept', 'decline'].include? params[:action]
+    elsif ['edit', 'accept', 'maybe', 'decline'].include? params[:action]
       @invitation = current_user.event_invitations.find(params[:id])
       @event = @invitation.event
     end

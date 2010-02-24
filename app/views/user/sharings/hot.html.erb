@@ -67,6 +67,7 @@
             <% end %>
           </ul>
         </div>
+				<div class='feed-img-list rows'>
         <% if @sharings.total_entries != 0 %>
         <% @sharings.each do |sharing| %>
           <%= render :partial => "#{sharing.shareable_type.underscore}_sharing", :object => sharing %>
@@ -75,6 +76,7 @@
         <% else %>
           <div class='gray'>最近大家都死了，没人分享</div>
         <% end %>
+				</div>
       </div>
     </div>
   </div></div>

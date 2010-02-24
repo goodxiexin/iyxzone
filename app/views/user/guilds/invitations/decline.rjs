@@ -5,4 +5,3 @@ elsif params[:show].to_i == 1
 elsif params[:show].to_i == 2
   page << "$('guild_invitation_option_#{@invitation.id}').innerHTML = '已拒绝';"
 end
-

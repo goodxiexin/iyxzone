@@ -5,6 +5,7 @@
     <div class="right">
       <%= ftime blog_sharing.created_at %><br/>
       首次分享人：<%= avatar blog.first_sharer, :with => '27px', :height => '27px' %>
+			<%= profile_link link.first_sharer%>
     </div>
     <h3><%= blog_link blog, :popup => true %></h3>
     <p class="con"><%= truncate blog_sharing.reason, :length => 100, :omission => '...' %></p>

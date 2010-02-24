@@ -102,7 +102,7 @@ protected
     else
       @mail = current_user.in_mails.find(params[:id])
     end
-    @root_mail = @mail.parent    
+    @root_mail = @mail.parent || @mail
   end
 
   def catch_mails
