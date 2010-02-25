@@ -41,6 +41,10 @@ class User::EventsController < UserBaseController
 
   def new
     @event = Event.new
+		unless params[:guild_id].blank?
+			@guild = Guild.find(params[:guild_id])
+			@characters = @guild.memberships_for(current_user).select {|m| m.status == Membership::Veteran || m.status == Membership::President}.map(&:character)	
+		end
   end
 
   def create

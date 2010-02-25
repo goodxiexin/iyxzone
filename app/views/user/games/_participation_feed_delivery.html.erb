@@ -6,6 +6,7 @@
 		<div class="imgbox01"><%= avatar participation.participant, :size => "small" %></div>
 	</div>
   <div class='jl-list-con jl-cotline'><%= profile_link participation.participant %> 参加了活动 <%= event_link participation.event, :class=>'shine'%>
+	<span class="gray"><%= ftime delivery.created_at %></span>
 	</div>
 </div>
 </div>

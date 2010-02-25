@@ -102,7 +102,11 @@ protected
     else
       @mail = current_user.in_mails.find(params[:id])
     end
+<<<<<<< HEAD:app/controllers/user/mails_controller.rb
     @root_mail = @mail.parent || @mail   
+=======
+    @root_mail = @mail.parent || @mail
+>>>>>>> 31d12080121f31deee0d3f67542d21fb276af9ba:app/controllers/user/mails_controller.rb
   end
 
   def catch_mails

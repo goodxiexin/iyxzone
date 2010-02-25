@@ -36,7 +36,7 @@ class User::GuildsController < UserBaseController
     @memberships = @guild.memberships_for current_user
     @role = @guild.role_for current_user
     @album = @guild.album
-		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize)
+		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize, :order => "created_at DESC")
 		@first_fetch_size = FirstFetchSize
 		render :action => 'show', :layout => 'app2'
 	end

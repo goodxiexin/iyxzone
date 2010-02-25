@@ -1,11 +1,17 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="app-photo">照片</h1>
+    <div class="friend-head space s_clear">
+      <span class="left"><%= album_cover @event.album, :class => "imgbox01" %></span>
+      <p class="left">
+        <strong><%= @event.title%>活动照片</strong><br/>
+        <%= link_to '活动主页', event_url(@event), :class => 'red' %>
+      </p>
+    </div>
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right">
           <% if @participation and !@participation.is_authorized? %>
-          <%= link_to "上传照片", select_personal_albums_url %>
+            <%= link_to "上传照片", new_event_photo_url(:album_id => @album.id) %>
           <% end %>
         </div>            
         <ul>                  

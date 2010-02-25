@@ -6,6 +6,10 @@ class Guild < ActiveRecord::Base
 
   belongs_to :president_character, :class_name => 'GameCharacter', :foreign_key => 'character_id'
 
+	belongs_to :game
+
+	belongs_to :game_server
+
   named_scope :hot, :order => '(members_count + veterans_count + 1) DESC'
 
   named_scope :recent, :order => 'created_at DESC'

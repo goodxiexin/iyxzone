@@ -1,6 +1,12 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
         <div class="round_m"><div class="round_body">
-<h1 class="big-ploy">活动</h1>
+    <div class="friend-head space s_clear">
+      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01" %></span>
+      <p class="left">
+        <strong>公会活动</strong><br/>
+        <%= guild_link @guild, :class => 'red' %>的主页
+      </p>
+    </div>
 <div class="box02 canvas_int">
 	<div class="tab tab01">
     <div class="right">
@@ -11,7 +17,7 @@
 			<li><span><%= link_to "最近活动", recent_events_url(:id => current_user.id) %></span></li>
 			<li><span><%= link_to "#{get_subject current_user}的活动", events_url(:id => current_user.id) %></span></li>
 			<li><span><%= link_to "朋友的活动", friends_events_url(:id => current_user.id) %></span></li>
-			<li class='hover'><span><%= link_to "工会#{truncate @guild.name, :length => 8, :omission => '..'}的活动", guild_events_url(@guild) %></span></li>
+			<li class='hover'><span><%= link_to "公会#{truncate @guild.name, :length => 8, :omission => '..'}的活动", guild_events_url(@guild) %></span></li>
 		</ul>
   </div>
   <div class="piclist-rows" id='events'>
@@ -21,7 +27,6 @@
     </div>
     <% if @events.total_entries != 0 %>
 		  <%= render :partial => 'user/events/event_items', :object => @events %>
-      <%= will_paginate @events %>
     <% else %>
       <div class='gray'>该工会还没有相关活动</div>
     <% end %>

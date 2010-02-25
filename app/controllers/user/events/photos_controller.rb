@@ -2,9 +2,7 @@ class User::Events::PhotosController < UserBaseController
 
   layout 'app'
 
-  before_filter :participant_required, :only => [:new, :create, :record_upload]
-
-  before_filter :owner_required, :only => [:edit, :update, :edit_multiple, :update_multiple, :destroy]
+  before_filter :owner_required, :only => [:new, :create, :record_upload, :edit, :update, :edit_multiple, :update_multiple, :destroy]
 
   def new
   end

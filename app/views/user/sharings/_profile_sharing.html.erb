@@ -5,6 +5,7 @@
     <div class="right">
       <%= ftime profile_sharing.created_at %><br/>
       首次分享人：<%= avatar profile.first_sharer, :with => '27px', :height => '27px' %>
+			<%= profile_link profile.first_sharer%>
     </div>
     <h3><a class='left' href='#'><%= avatar profile.user, :class => 'imgbox01' %></a><span><%= profile_link profile.user %></span></h3>
     <p class="con rows"><span class="quote">“</span><%= profile_sharing.reason %><span class="quote">”</span></p>

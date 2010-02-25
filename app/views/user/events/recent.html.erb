@@ -16,12 +16,11 @@
         <div class="nav-link">
           <ul class="s_clear">
             <li><%= link_to "<span>人气最高</span>", hot_events_url %></li>
-            <li class='hover'><%= link_to "<span>最新创建</span>", recent_events_url %></li>
+            <li class='hover'><%= link_to "<span>最近活动</span>", recent_events_url %></li>
           </ul>
         </div>
       <% if @events.total_entries != 0 %>
 	      <%= render :partial => 'event_items', :object => @events %>
-        <%= will_paginate @events %>
       <% else %>
         <div class='gray'>最近大家都很懒，你赶紧<%= link_to '创建一个', new_event_url %>吧</div>
       <% end %>
