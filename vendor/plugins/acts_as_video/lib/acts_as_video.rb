@@ -18,7 +18,7 @@ module ActsAsVideo
 
 			include ActsAsVideo::InstanceMethods
 
-			before_save :setup_video_info
+			before_create :setup_video_info
 
 		end
 

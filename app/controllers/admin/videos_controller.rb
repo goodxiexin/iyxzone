@@ -20,8 +20,7 @@ class Admin::VideosController < AdminBaseController
 
   # accept
   def verify
-    @video.verified = 1
-    if @video.save
+    if @video.verify
       succ
     else
       err
@@ -30,8 +29,7 @@ class Admin::VideosController < AdminBaseController
   
   # reject
   def unverify
-    @video.verified = 2
-    if @video.save
+    if @video.unverify
       succ
     else
       err

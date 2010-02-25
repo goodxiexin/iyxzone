@@ -50,7 +50,6 @@ class ParticipationObserver < ActiveRecord::Observer
 			event.raw_decrement :invitations_count
       event.raw_increment field(participation.status)
       participant.raw_decrement :event_invitations_count
-      #participant.raw_increment :upcoming_events_count if event.has_only_one_character_for? participant
 			event.poster.notifications.create(
         :category => Notification::Participation,
         :data => "#{profile_link participant}接受了你的邀请: 同意让游戏角色 #{character.name} 加入活动#{event_link event}")
@@ -58,7 +57,6 @@ class ParticipationObserver < ActiveRecord::Observer
 			event.raw_decrement :requests_count
       event.raw_increment field(participation.status)
       event.poster.raw_decrement :event_requests_count
-      #participant.raw_increment :upcoming_events_count if event.has_only_one_character_for? participant
 			participant.notifications.create(
         :category => Notification::Participation, 
         :data => "#{profile_link event.poster} 同意了你让游戏角色 #{character.name} 加入活动 #{event_link event} 的请求")
@@ -85,24 +83,24 @@ class ParticipationObserver < ActiveRecord::Observer
 		participant = participation.participant
     
     if participation.is_invitation?
-			  # invitation is declined
-			  participant.raw_decrement :event_invitations_count
-			  event.raw_decrement :invitations_count
-        event.poster.notifications.create(
+			# invitation is declined
+			participant.raw_decrement :event_invitations_count
+			event.raw_decrement :invitations_count
+      event.poster.notifications.create(
           :category => Notification::Participation,
           :data => "#{profile_link participant} 拒绝让游戏角色 #{participation.character.name} 加入你的活动 #{event_link event}")
 		elsif participation.is_request?
-			  # request is declined
-			  event.poster.raw_decrement :event_requests_count
-			  event.raw_decrement :requests_count
-			  participant.notifications.create(
+			# request is declined
+			event.poster.raw_decrement :event_requests_count
+			event.raw_decrement :requests_count
+			participant.notifications.create(
           :category => Notification::Participation,
           :data => "#{profile_link event.poster}拒绝了让你的游戏角色 #{participation.character.name} 加入活动#{event_link event}的请求")
     elsif participation.is_authorized?
-        # paricipant is evicted
-        participant.raw_decrement :upcoming_events_count unless event.has_participant? user
-        event.raw_decrement field(participation.status)
-        participant.notifications.create(
+      # paricipant is evicted
+      participant.raw_decrement :upcoming_events_count unless event.has_participant? participant 
+      event.raw_decrement field(participation.status)
+      participant.notifications.create(
           :category => Notification::Participation,
           :data => "你的游戏角色 #{participation.character.name} 被剔除出了活动 #{event_link event}")
     end

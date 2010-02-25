@@ -41,8 +41,7 @@ class User::EventsController < UserBaseController
 
   def new
     @event = Event.new
-		unless params[:guild_id].blank?
-			@guild = Guild.find(params[:guild_id])
+    if @guild
 			@characters = @guild.memberships_for(current_user).select {|m| m.status == Membership::Veteran || m.status == Membership::President}.map(&:character)	
 		end
   end
@@ -107,6 +106,8 @@ protected
       @event = Event.find(params[:id])
 			@user = @event.poster
 			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+    elsif ['new'].include? params[:action]
+      @guild = Guild.find(params[:guild_id]) unless params[:guild_id].blank?
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @event = current_user.events.find(params[:id])
     elsif ['index', 'upcoming', 'participated'].include? params[:action]

@@ -8,7 +8,7 @@ class NotificationObserver < ActiveRecord::Observer
 
     # send data to push server
     # 实际上这段代码我感觉很不好，不应该放这，毕竟这是和view有关的
-    Juggernaut.send_to_client "$('navnotice').innerHTML = '通知(#{user.unread_notifications_count})'; $('notifications_dropdown_list').innerHTML = ''; $('notifications_dropdown').hide()", user.id
+    #Juggernaut.send_to_client "$('navnotice').innerHTML = '通知(#{user.unread_notifications_count})'; $('notifications_dropdown_list').innerHTML = ''; $('notifications_dropdown').hide()", user.id
   end
  
   def after_update notification

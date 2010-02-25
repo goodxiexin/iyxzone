@@ -26,7 +26,7 @@ class Event < ActiveRecord::Base
 
   attr_protected :verified
   
-  has_many :participations, :dependent => :delete_all # we dont want to trigger participation destroy callback here, it's slow.
+  has_many :participations#, :dependent => :destroy
 
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
 

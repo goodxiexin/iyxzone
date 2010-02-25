@@ -12,7 +12,6 @@ class Participation < ActiveRecord::Base
   Request         = 1 # 请求 
 	Confirmed				= 3 # 一定去
 	Maybe						= 4 # 可能去
-  Expired         = 5 # 过期的请求或者邀请
 
   # participant_id, character_id, event_id 都是不能修改的
   attr_readonly :participant_id, :character_id, :event_id
@@ -71,10 +70,6 @@ class Participation < ActiveRecord::Base
 
   def was_authorized?
     status_was == Participation::Confirmed or status_was == Participation::Maybe
-  end
-
-  def is_expired?
-    status == Participation::Expired
   end
 
 protected

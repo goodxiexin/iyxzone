@@ -53,19 +53,26 @@ class EventObserver < ActiveRecord::Observer
   end
 
   def before_destroy event
-    event.poster.raw_decrement :events_count
+    # modify request count
     event.poster.raw_decrement :event_requests_count, event.requests_count
-
-    event.participations.each do |m|
-      if m.is_invitation?
-        m.participant.raw_decrement :event_invitations_count
-      elsif m.is_request?
-        m.participant.notifications.create(:data => "活动 #{event_link event} 被取消了，你的请求作废了", :category => Notification::EventCancel)
-      elsif m.is_authorized? and m != event.poster
-        m.participant.raw_decrement :upcoming_events_count
-        m.participant.notifications.create(:data => "活动 #{event_link event} 被取消了", :category => Notification::EventCancel)
-      end
+  
+    # modify invitation count
+    event.invitations.each do |i|
+      i.participant.raw_decrement :event_invitations_count
     end
+
+    # modify event counter
+    event.poster.raw_decrement :events_count
+    event.participants.each do |p|
+      p.raw_decrement :upcoming_events_count
+    end
+
+    # send notification
+    event.participants.each do |p|
+      p.notifications.create(:category => Notification::EventChange, :data => "活动 #{event.title} 取消了")
+    end
+
+    # TODO: delete all participations without trigger callbacks
   end
 
 end
