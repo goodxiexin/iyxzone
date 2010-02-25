@@ -105,6 +105,8 @@ protected
       @user = @event.poster
       @photos = params[:photos].blank? ? [] : @album.photos.find(params[:photos].map {|id, attribute| id})
     end
+  rescue
+    not_found
   end
 
   def participant_required

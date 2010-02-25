@@ -78,5 +78,3 @@ protected
   end
   
 end
-
-

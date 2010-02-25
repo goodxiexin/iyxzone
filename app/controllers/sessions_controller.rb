@@ -24,7 +24,6 @@ class SessionsController < ApplicationController
       flash[:notice] = "成功登录"
       current_user.update_attribute(:online, true)
       redirect_back_or_default(profile_url(current_user.profile))
-      flash[:notice] = "成功登录"
     end
   end
 

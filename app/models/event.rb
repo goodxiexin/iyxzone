@@ -18,6 +18,14 @@ class Event < ActiveRecord::Base
 	
 	named_scope :recent, :conditions => {:expired => 0}, :order => 'start_time DESC'
 
+  named_scope :unverified, :conditions => {:verified => 0}, :order => "created_at DESC"
+  
+  named_scope :accept, :conditions => {:verified => 1}, :order => "created_at DESC"
+  
+  named_scope :reject, :conditions => {:verified => 2}, :order => "created_at DESC"
+
+  attr_protected :verified
+  
   has_many :participations, :dependent => :delete_all # we dont want to trigger participation destroy callback here, it's slow.
 
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
