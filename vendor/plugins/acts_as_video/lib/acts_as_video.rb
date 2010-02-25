@@ -22,6 +22,7 @@ module ActsAsVideo
 
 		end
 
+
 	end
 
 	module SingletonMethods
@@ -30,9 +31,9 @@ module ActsAsVideo
 	module InstanceMethods
 
 		def type
-			return Youku if YOUKU_RE =~ video_url
-			return Tudou if TUDOU_RE =~ video_url
-			return Ku6	 if KU6_RE	 =~ video_url
+			return Youku if Youku.identify_url(video_url)
+			return Tudou if Tudou.identify_url(video_url)
+			return Ku6	 if Ku6.identify_url(video_url)
 		end
 
 		def setup_video_info
