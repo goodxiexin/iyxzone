@@ -42,8 +42,8 @@ Object.extend(Iyxzone.Event.Builder, {
     }
 
     var currentTimeJS = new Date().getTime();
-    var startTimeJS = new Date(startTime.value).getTime();
-    var endTimeJS = new Date(endTime.value).getTime();
+    var startTimeJS = Date.parseFormattedString(startTime.value);
+    var endTimeJS = Date.parseFormattedString(endTime.value);
     if(startTimeJS < currentTimeJS){
       error('开始时间不能比现在早');
       return false;

@@ -10,9 +10,13 @@ Date.prototype.toFormattedString = function(include_time) {
 
 Date.parseFormattedString = function (string) {
 
-    var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" + 
+		   var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" + 
+			        "( ([0-9]{1,2}):([0-9]{2})?" +
+							       ")?)?)?";
+
+   /* var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" + 
         "( ([0-9]{1,2}):([0-9]{2})?" +
-        "?)?)?)?"; 
+        "?)?)?)?"; */
 
     var d = string.match(new RegExp(regexp, "i"));
     if (d === null) {
@@ -32,15 +36,15 @@ Date.parseFormattedString = function (string) {
     if (d[8]) {
         date.setMinutes(d[8]);
     } 
-    if (d[0]) {
-        date.setSeconds(d[0]);
+    if (d[10]) {
+        date.setSeconds(d[10]);
     } 
-    if (d[2]) {
-        date.setMilliseconds(Number("0." + d[2]));
+    if (d[12]) {
+        date.setMilliseconds(Number("0." + d[12]));
     } 
-    if (d[4]) {
-        offset = (Number(d[6])) + Number(d[8]);
-        offset = ((d[5] == '-') ? 1 : -1); 
+    if (d[14]) {
+        offset = (Number(d[16])) + Number(d[18]);
+        offset = ((d[15] == '-') ? 1 : -1); 
     } 
     return date; 
 };
