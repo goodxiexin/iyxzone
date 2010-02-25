@@ -1,5 +1,6 @@
 class AddVerifiedColumnToModels < ActiveRecord::Migration
   def self.up
+    add_column :blogs, :verified, :integer, :default => 0
     add_column :videos, :verified, :integer, :default => 0
     add_column :statuses, :verified, :integer, :default => 0
     add_column :comments, :verified, :integer, :default => 0
@@ -13,6 +14,7 @@ class AddVerifiedColumnToModels < ActiveRecord::Migration
   end
 
   def self.down
+    remove_column :blogs, :verified
     remove_column :videos, :verified
     remove_column :statuses, :verified
     remove_column :comments, :verified
