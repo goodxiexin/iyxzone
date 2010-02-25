@@ -5,11 +5,11 @@ class Admin::BlogsController < AdminBaseController
   end
   
   def accept
-    @blogs = Blog.accept.paginate :page => params[:page], :per_page => 20
+    @blogs = Blog.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @blogs = Blog.reject.paginate :page => params[:page], :per_page => 20
+    @blogs = Blog.rejected.paginate :page => params[:page], :per_page => 20
   end
 
   def show
@@ -20,8 +20,8 @@ class Admin::BlogsController < AdminBaseController
 
   # accept | succ and err are defined in admin_base_controller.rb
   def verify
-    @blog.verified = 1
-    if @blog.save
+    #@blog.verified = 1
+    if @blog.verify
       succ
     else
       err
@@ -30,8 +30,8 @@ class Admin::BlogsController < AdminBaseController
   
   # reject
   def unverify
-    @blog.verified = 2
-    if @blog.save
+    #@blog.verified = 2
+    if @blog.unverify #save
       succ
     else
       err

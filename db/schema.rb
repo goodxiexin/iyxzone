@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100222142036) do
+ActiveRecord::Schema.define(:version => 20100224085559) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.text     "content"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",         :default => 0
   end
 
   create_table "comrade_suggestions", :force => true do |t|
@@ -136,6 +137,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.integer  "maybe_count",       :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",          :default => 0
   end
 
   create_table "feed_deliveries", :force => true do |t|
@@ -309,6 +311,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.integer  "comments_count",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",          :default => 0
   end
 
   create_table "links", :force => true do |t|
@@ -408,6 +411,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.string   "content"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",       :default => 0
   end
 
   create_table "photos", :force => true do |t|
@@ -430,6 +434,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.integer  "height"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",       :default => 0
   end
 
   create_table "poke_deliveries", :force => true do |t|
@@ -480,6 +485,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.integer  "answers_count",  :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",       :default => 0
   end
 
   create_table "posts", :force => true do |t|
@@ -543,6 +549,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
+    t.integer  "verified",       :default => 0
   end
 
   create_table "signup_invitations", :force => true do |t|
@@ -559,6 +566,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",       :default => 0
   end
 
   create_table "taggings", :force => true do |t|
@@ -577,6 +585,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.integer  "taggings_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",       :default => 0
   end
 
   create_table "topics", :force => true do |t|
@@ -658,6 +667,7 @@ ActiveRecord::Schema.define(:version => 20100222142036) do
     t.integer  "privilege",      :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",       :default => 0
   end
 
   create_table "viewings", :force => true do |t|
