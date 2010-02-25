@@ -36,7 +36,8 @@ class User::Guilds::InvitationsController < UserBaseController
 
   def search
     @characters = current_user.friend_characters(:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id) - @guild.all_characters
-    @characters = @characters.find_all {|f| f.name.include?(params[:key])}
+    @reg = /#{params[:key]}/
+    @characters = @characters.find_all {|f| @reg =~ f.name || @reg =~ f.pinyin }
     render :partial => 'characters'
   end
 

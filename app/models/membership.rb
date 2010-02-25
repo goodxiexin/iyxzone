@@ -87,7 +87,7 @@ protected
 
   def guild_is_valid
     return if guild_id.blank?
-    errors.add(:guild_id, "工会不存在") if Guild.exists? guild_id
+    errors.add(:guild_id, "工会不存在") unless Guild.exists? guild_id
   end
 
   def character_is_valid

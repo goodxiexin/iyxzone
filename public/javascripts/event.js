@@ -143,7 +143,7 @@ Object.extend(Iyxzone.Event.Summary, {
 
   Gear : {},
 
-  Reward : {}
+  Rule : {}
 
 });
 
@@ -158,8 +158,11 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
   load: function(eventID, token, characterIDs, lates, completes){
     this.eventID = eventID;
     this.token = token;
+
     for(var i=0;i<characterIDs.length;i++)
       this.summary.set(characterIDs[i], {late: lates[i], complete: completes[i]});
+  
+    setTimeout(this.save.bind(this), 20000);
   },
 
   reset: function(){
@@ -175,8 +178,6 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
     this.summary.keys().each(function(id){
       $('late_' + id).checked = this.summary.get(id).late;
     }.bind(this));
-
-    setTimeout(this.save.bind(this), 20000);
   },
 
   incComplete: function(characterID){
@@ -215,9 +216,13 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
     this.summary.set(characterID, info);
   },
 
-  lateOnchange: function(characterID){
+  lateOnchange: function(characterID, checkbox){
     var info = this.summary.get(characterID);
-    info.late = !info.late;
+    if(checkbox.checked){
+      info.late = 1;
+    }else{
+      info.late = 0;
+    }
     this.summary.set(characterID, info); 
   },
 
@@ -225,11 +230,12 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
     $('friend-wrap').toggle();
   },
 
-  resetCharacters: function(){
+  addCharacters: function(){
     var newCharacterIds = [];
     var delCharacterIds = [];
     var characterIds = [];
     var params;
+    
     $$('input').each(function(e){
       if(e.type == 'checkbox' && e.readAttribute('character_id') && e.checked)
         characterIds.push(e.readAttribute('character_id'));
@@ -264,7 +270,7 @@ Object.extend(Iyxzone.Event.Summary.Attendance, {
         parameters: params,
         onSuccess: function(transport){
           newCharacterIds.each(function(id){
-            this.summary.set(id, {late: false, complete: 100});
+            this.summary.set(id, {late: 0, complete: 100});
           }.bind(this));
           $('friend-wrap').hide();
         }.bind(this)
@@ -538,10 +544,9 @@ Object.extend(Iyxzone.Event.Summary.Gear, {
 
     for(var i=0;i<ids.length;i++){
       this.summary.set(ids[i] + "_" + characterIDs[i], {name: names[i], count: counts[i], cost: costs[i]});
-      Element.insert('gears', {bottom: this.getGearHTML(ids[i], characterIDs[i], counts[i], names[i], costs[i])});
     }
 
-    //setTimeout(this.save.bind(this), 20000);
+    setTimeout(this.save.bind(this), 20000);
   },
 
   reset: function(){
@@ -583,7 +588,10 @@ Object.extend(Iyxzone.Event.Summary.Gear, {
     html += '<div class="textfield" style="width: 80px; margin: 0 auto;display:none"><input type="text" value=' + count + ' onblur="Iyxzone.Event.Summary.Gear.updateCount(this, ' + id + ', null)"></div>';
     html += '</td>';
     html += '<td>' + cost + '</td>';
-    html += '<td><a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Gear.showCharacterList(' + id + ', this)">点击选择获得者</a></td>';
+    html += '<td><div style="position:relative;text-align:left;">';
+    html += '<a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Gear.toggleCharacterList(' + id + ', this)">点击选择获得者</a>';
+    html += '<div class="drop-box" style="position: absolute; left: 0pt; top: 40px; display: none;"></div>';
+    html += '</div></td>';
     html += '<td><a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Gear.remove(' + id + ', null, this)" class="icon-active"></a></td>';
     html += '</tr>';
     return html;
@@ -615,7 +623,12 @@ Object.extend(Iyxzone.Event.Summary.Gear, {
       $('gear_' + id + '_' + characterID).remove();
   },
 
-  showCharacterList: function(id, div){
+  toggleCharacterList: function(id, div){
+    var list = div.next();
+    if(list.visible()){
+      list.hide();
+      return;
+    }
     var characterIDs = new Array();
 
     this.summary.keys().each(function(key){
@@ -625,43 +638,409 @@ Object.extend(Iyxzone.Event.Summary.Gear, {
         characterIDs.push(characterID);
       }
     }.bind(this));
-
-    var list = $('gear_recipients').clonechildElements();
-    list.each(function(a){
-      var characterID = a.readAttribute('character_id');
+    
+    var list = div.next();
+    if(list.innerHTML == ''){
+      list.innerHTML = $('gear_recipients').innerHTML;
+    }
+    var items = list.childElements();
+    items.each(function(i){
+      var characterID = i.readAttribute('character_id');
       if(characterIDs.include(characterID)){
-        a.hide();
+        i.hide();
       }else{
-        a.writeAttribute({gear_id: id});
-        a.observe('click', this.selectCharacter.bindAsEventListener(this));
-        a.show();
+        i.writeAttribute({gear_id: id});
+        i.observe('click', this.selectCharacter.bindAsEventListener(this));
+        i.show();
       }
     }.bind(this));
 
-    $('gear_recipients').show();
+    list.show();
   },
 
   selectCharacter: function(mouseEvent){
-    var a = mouseEvent.target;
+    var a = Event.findElement(mouseEvent, 'a');
     var characterID = a.readAttribute('character_id');
     var gearID = a.readAttribute('gear_id');
     var key = gearID + '_' + characterID;
-    var info = this.summery.get(key);
+    var info = this.summary.get(key);
+    var list = a.up('div');
+    var characterTd = list.up('td');
+    var countTd = characterTd.previous().previous();
+    var delTd = characterTd.next();
+    var tr = characterTd.up('tr');
+    var oldA = list.previous().childElements()[0];
+    
+    if(oldA){
+      this.summary.unset(gearID + '_' + oldA.readAttribute('character_id'));
+    }
 
     if(info){
       this.summary.set(key, {count: info.count});
     }else{
-      var count = a.up().up().previous().previous().childElements()[0].innerHTML;
-      alert(count);
+      var count = countTd.childElements()[0].innerHTML;
       this.summary.set(key, {count: count});
     }
+    
+    Element.replace(list.previous(), "<a class='member-toggle' onclick='Iyxzone.Event.Summary.Gear.toggleCharacterList(" + gearID + ", this)' >" + a.innerHTML + "</a>");
+    tr.writeAttribute('id', 'gear_' + key); 
+    delTd.childElements()[0].writeAttribute('onclick', "Iyxzone.Event.Summary.Gear.remove(" + gearID + "," + characterID + ", this)");
+    countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Gear.updateCount(this, " + gearID + "," + characterID + ")");    
 
-    $('gear_recipients').hide();
+    list.hide();
   },
+
+  save: function(){
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var key = pair.key;
+      var gearID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      var count = pair.value.count;
+      params += "info[" + gearID + "_" + characterID + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/save?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params,
+      onSuccess: function(transport){
+        setTimeout(this.save.bind(this), 20000);
+      }.bind(this)
+    });
+  },
+
+  next: function(){
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var key = pair.key;
+      var gearID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      var count = pair.value.count;
+      params += "info[" + gearID + "_" + characterID + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/next?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params
+    });
+  },
+
+  prev: function(){
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var key = pair.key;
+      var gearID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      var count = pair.value.count;
+      params += "info[" + gearID + "_" + characterID + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/prev?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params
+    });
+  },
+
+  newGear: function(){
+    $('new_gear').hide();
+    $('new_gear_name').show();
+    $('gear_name').value = '输入装备名字';
+    $('new_gear_cost').show();
+    $('gear_cost').value = '输入装备所需积分';
+    $('new_gear_submit').show();
+  },
+
+  cancelGear: function(){
+    $('new_gear_name').hide();
+    $('new_gear_cost').hide();
+    $('new_gear_submit').hide();
+    $('new_gear').show();
+  },
+
+  validateGear: function(){
+    return true;
+  },
+
+  createGear: function(){
+    if(this.validateGear()){
+      new Ajax.Request('/guilds/' + this.guildID + '/gears?authenticity_token=' + encodeURIComponent(this.token), {
+        method: 'post',
+        parameters: 'gear[name]=' + $('gear_name').value + '&gear[cost]=' + $('gear_cost').value,
+        onSuccess: function(transport){
+          this.cancelGear();
+          var gear = transport.responseText.evalJSON().gear;
+          var html = '<li><span><input type="checkbox" value=1 gear_id=' + gear.id + ' name="' + gear.name + '" cost=' + gear.cost + ' />' + gear.name + '-' + gear.cost + '</span></li>';
+          Element.insert($$('ul.checkboxes')[0], {bottom: html});
+          this.reset();
+          Element.insert('gears', {bottom: this.getGearHTML(gear.id, 1, gear.name, gear.cost)});
+        }.bind(this)
+      });
+    }
+
+  }  
 
 });
 
-Object.extend(Iyxzone.Event.Summary.Reward, {
+Object.extend(Iyxzone.Event.Summary.Rule, {
+
+  summary: new Hash(), // Rule id and recipient id to count
+
+  eventID: null,
+
+  guildID: null,
+
+  token: null,
+
+  load: function(eventID, guildID, token, ids, characterIDs, counts, reasons, outcomes){
+    this.eventID = eventID;
+    this.guildID = guildID;
+    this.token = token;
+
+    for(var i=0;i<ids.length;i++){
+      this.summary.set(ids[i] + "_" + characterIDs[i], {reason: reasons[i], count: counts[i], outcome: outcomes[i]});
+    }
+
+    //setTimeout(this.save.bind(this), 20000);
+  },
+
+  reset: function(){
+    $$('input').each(function(input){
+      if(input.type == 'checkbox' && input.readAttribute('rule_id')){
+        input.checked = false;
+      }
+    }.bind(this));
+  },
+
+  selectCharacters: function(){
+    $('friend-wrap').toggle();
+  },  
+
+  addCharacters: function(){
+    var params = "";
+    var characters = new Array();
+
+    $$('input').each(function(e){
+      if(e.type == 'checkbox' && e.checked){
+        var id = e.readAttribute('character_id');
+        Element.insert('Rules', {bottom: this.getRuleHTML(id, 1, name, cost)});
+      }
+    }.bind(this));
+
+    $('friend-wrap').hide();
+    this.reset();
+  },
+
+  getRuleHTML: function(id, count, name, cost){
+    var html = '';
+    html += '<tr class="jl-cutline" id="Rule_' + id + '">';
+    html += '<td class="tl">' + name + '</td>';
+    html += '<td>';
+    html += '<a onclick="Iyxzone.Event.Summary.Rule.editCount(this)">' + count + '</a>';
+    html += '<div class="textfield" style="width: 80px; margin: 0 auto;display:none"><input type="text" value=' + count + ' onblur="Iyxzone.Event.Summary.Rule.updateCount(this, ' + id + ', null)"></div>';
+    html += '</td>';
+    html += '<td>' + cost + '</td>';
+    html += '<td><div style="position:relative;text-align:left;">';
+    html += '<a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Rule.toggleCharacterList(' + id + ', this)">点击选择获得者</a>';
+    html += '<div class="drop-box" style="position: absolute; left: 0pt; top: 40px; display: none;"></div>';
+    html += '</div></td>';
+    html += '<td><a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Rule.remove(' + id + ', null, this)" class="icon-active"></a></td>';
+    html += '</tr>';
+    return html;
+  },
+
+  editCount: function(div){
+    div.hide();
+    div.next().show();
+  },
+
+  updateCount: function(field, id, characterID){
+    var div = field.up();
+    var row = div.up().up();
+    div.previous().innerHTML = field.value;
+    div.hide();
+    div.previous().show();
+    if(characterID != null){
+      var info = this.summary.get(id + '_' + characterID);
+      info.count = field.value;
+      this.summary.set(id + '_' + characterID, info);
+    }
+  },
+
+  remove: function(id, characterID, div){
+    this.summary.unset(id + '_' + characterID);
+    if(characterID == null)
+      div.up().up().remove();
+    else
+      $('Rule_' + id + '_' + characterID).remove();
+  },
+
+  toggleCharacterList: function(id, div){
+    var list = div.next();
+    if(list.visible()){
+      list.hide();
+      return;
+    }
+    var characterIDs = new Array();
+
+    this.summary.keys().each(function(key){
+      var RuleID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      if(RuleID == id){
+        characterIDs.push(characterID);
+      }
+    }.bind(this));
+    
+    var list = div.next();
+    if(list.innerHTML == ''){
+      list.innerHTML = $('Rule_recipients').innerHTML;
+    }
+    var items = list.childElements();
+    items.each(function(i){
+      var characterID = i.readAttribute('character_id');
+      if(characterIDs.include(characterID)){
+        i.hide();
+      }else{
+        i.writeAttribute({Rule_id: id});
+        i.observe('click', this.selectCharacter.bindAsEventListener(this));
+        i.show();
+      }
+    }.bind(this));
+
+    list.show();
+  },
+
+  selectCharacter: function(mouseEvent){
+    var a = Event.findElement(mouseEvent, 'a');
+    var characterID = a.readAttribute('character_id');
+    var RuleID = a.readAttribute('Rule_id');
+    var key = RuleID + '_' + characterID;
+    var info = this.summary.get(key);
+    var list = a.up('div');
+    var characterTd = list.up('td');
+    var countTd = characterTd.previous().previous();
+    var delTd = characterTd.next();
+    var tr = characterTd.up('tr');
+    var oldA = list.previous().childElements()[0];
+    
+    if(oldA){
+      this.summary.unset(RuleID + '_' + oldA.readAttribute('character_id'));
+    }
+
+    if(info){
+      this.summary.set(key, {count: info.count});
+    }else{
+      var count = countTd.childElements()[0].innerHTML;
+      this.summary.set(key, {count: count});
+    }
+    
+    Element.replace(list.previous(), "<a class='member-toggle' onclick='Iyxzone.Event.Summary.Rule.toggleCharacterList(" + RuleID + ", this)' >" + a.innerHTML + "</a>");
+    tr.writeAttribute('id', 'Rule_' + key); 
+    delTd.childElements()[0].writeAttribute('onclick', "Iyxzone.Event.Summary.Rule.remove(" + RuleID + "," + characterID + ", this)");
+    countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Rule.updateCount(this, " + RuleID + "," + characterID + ")");    
+
+    list.hide();
+  },
+
+  save: function(){
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var key = pair.key;
+      var RuleID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      var count = pair.value.count;
+      params += "info[" + RuleID + "_" + characterID + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/save?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params,
+      onSuccess: function(transport){
+        setTimeout(this.save.bind(this), 20000);
+      }.bind(this)
+    });
+  },
+
+  next: function(){
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var key = pair.key;
+      var RuleID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      var count = pair.value.count;
+      params += "info[" + RuleID + "_" + characterID + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/next?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params
+    });
+  },
+
+  prev: function(){
+    var params = '';
+    var values = this.summary.values();
+
+    this.summary.each(function(pair){
+      var key = pair.key;
+      var RuleID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      var count = pair.value.count;
+      params += "info[" + RuleID + "_" + characterID + "][count]=" + count + "&";
+    }.bind(this));
+
+    new Ajax.Request('/events/' + this.eventID + '/summary/prev?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'post',
+      parameters: params
+    });
+  },
+
+  newRule: function(){
+    $('new_Rule').hide();
+    $('new_Rule_name').show();
+    $('Rule_name').value = '输入装备名字';
+    $('new_Rule_cost').show();
+    $('Rule_cost').value = '输入装备所需积分';
+    $('new_Rule_submit').show();
+  },
+
+  cancelRule: function(){
+    $('new_Rule_name').hide();
+    $('new_Rule_cost').hide();
+    $('new_Rule_submit').hide();
+    $('new_Rule').show();
+  },
+
+  validateRule: function(){
+    return true;
+  },
+
+  createRule: function(){
+    if(this.validateRule()){
+      new Ajax.Request('/guilds/' + this.guildID + '/Rules?authenticity_token=' + encodeURIComponent(this.token), {
+        method: 'post',
+        parameters: 'Rule[name]=' + $('Rule_name').value + '&Rule[cost]=' + $('Rule_cost').value,
+        onSuccess: function(transport){
+          this.cancelRule();
+          var Rule = transport.responseText.evalJSON().Rule;
+          var html = '<li><span><input type="checkbox" value=1 Rule_id=' + Rule.id + ' name="' + Rule.name + '" cost=' + Rule.cost + ' />' + Rule.name + '-' + Rule.cost + '</span></li>';
+          Element.insert($$('ul.checkboxes')[0], {bottom: html});
+          this.reset();
+          Element.insert('Rules', {bottom: this.getRuleHTML(Rule.id, 1, Rule.name, Rule.cost)});
+        }.bind(this)
+      });
+    }
+
+  }
 
 });
 

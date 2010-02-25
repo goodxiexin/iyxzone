@@ -69,6 +69,10 @@ class User < ActiveRecord::Base
 
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
+  def online_friends
+    friends.find_all {|f| f.online and f.last_seen_at and f.last_seen_at > 10.minutes.ago}
+  end
+
   def has_friend? user
     user_id = (user.is_a? Integer)? user : user.id
 		!friendships.find_by_friend_id(user_id).blank? 
@@ -275,6 +279,13 @@ class User < ActiveRecord::Base
   def add_role name
     role = Role.find_by_name(name)
     role_users.create(:role_id => role.id) unless role.nil?
+  end
+
+  # messages
+  has_many :messages, :foreign_key => 'recipient_id'
+
+  def messages_with user
+    Message.find(:all, :conditions => "(poster_id = #{user.id} AND recipient_id = #{id}) OR (poster_id = #{id} AND recipient_id = #{user.id})", :order => 'created_at ASC')
   end
 
   # invitation

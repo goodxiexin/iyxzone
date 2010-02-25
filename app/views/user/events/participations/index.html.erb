@@ -5,6 +5,23 @@
       <div class="tab tab01">
         <div class="icon">
           <%= link_to "返回活动", event_url(@event) %>
+          <%= link_to "分享到17gaming", "
+javascript: void((
+  function(s,d,e){
+    if(/localhost\:3000/.test(d.location))
+      return;
+    var f='http://localhost:3000/user/sharings/new_link?link=',u=d.location,l=d.title,p=[e(u),'&title=',e(l)].join('');
+    function a(){
+      if(!window.open([f,p].join(''),'17gaming',['width=626,height=436,left=',(s.width-626)/2,',top=',(s.height-436)/2].join('')))
+        u.href=[f,p].join('');
+    };
+    if(/Firefox/.test(navigator.userAgent))
+      setTimeout(a,0);
+    else 
+      a();
+  })
+(screen,document,encodeURIComponent));
+" %>
         </div>
         <ul>
         <% if params[:type].to_i == 0 %>
@@ -30,6 +47,7 @@
         </ul>
       </div>
       <div class="piclist-rows" id='events'>
+          <strong class="green">搜索会员：</strong> <%= render :partial => 'search' %>
           <div id='participations'>
 	          <% if params[:type].to_i == 2 %>
               <% if @event.invitations_count == 0 %>

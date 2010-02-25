@@ -52,8 +52,8 @@ class User::Guilds::MembershipsController < UserBaseController
     elsif params[:type].to_i == 2
       @memberships = @guild.requests
     end
-    @memberships = @memberships.find_all {|m| m.character.name.starts_with?(params[:key]) }
-    logger.error "共有: #{@memberships.count}"
+    @reg = /#{params[:key]}/
+    @memberships = @memberships.find_all {|m| @reg =~ m.character.name || @reg =~ m.character.login }
     if params[:type].to_i == 1
 			render :partial => 'invitees', :locals => {:memberships => @memberships}
     elsif params[:type].to_i == 2

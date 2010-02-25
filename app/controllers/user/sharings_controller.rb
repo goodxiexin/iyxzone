@@ -101,12 +101,21 @@ class User::SharingsController < UserBaseController
     render :action => 'new', :layout => false
   end
 
+  def new_link
+    @sharing = Sharing.new(:title => params[:t])
+    render :action => 'new_link', :layout => false
+  end
+
   def create
     @sharing = @shareable.sharings.build(params[:sharing].merge({:poster_id => current_user.id}))
     if @sharing.save
       render :update do |page|
         if @sharing.shareable_type == 'Link'
-          page.redirect_to sharings_url(:id => current_user.id)
+          if params[:outside]
+            page << "window.close();"
+          else
+            page.redirect_to sharings_url(:id => current_user.id)
+          end
         else
           page << "notice('分享成功');"
         end
@@ -139,7 +148,7 @@ protected
       end
     elsif ["create"].include? params[:action]
       if params[:shareable_type] == 'Link'
-        @shareable = Link.create(params[:link])
+        @shareable = Link.create(:url => params[:link])
       else
         @shareable = params[:shareable_type].camelize.constantize.find(params[:shareable_id])
       end

@@ -9,7 +9,7 @@
   <%= stylesheet_link_tag 'rating' %>
   <%= stylesheet_link_tag 'autocomplete' %>
   <%= stylesheet_link_tag 'pagination' %>
-  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag :defaults, :juggernaut %>
   <%= javascript_include_tag 'iyxzone' %>
   <%= javascript_include_tag 'comment' %>
   <%= javascript_include_tag 'in_place_editor_extension' %>
@@ -17,7 +17,9 @@
   <%= javascript_include_tag 'emotion' %>
   <%= javascript_include_tag 'util' %>
   <%= javascript_include_tag 'menu' %>
+  <%= javascript_include_tag 'chat' %>
   <%= calendar_date_select_includes "silver" %>
+  <%= juggernaut :client_id => current_user.id %>
 </head>
 <body>
 
@@ -110,6 +112,22 @@
 		</div>
 	</div>
 
+</div>
+
+<div id='chat-list'>
+  <%= avatar current_user, :class => 'imgbox01' %>
+  <%= text_field_tag '', '' %>
+  <ul>
+  <% @online_friends.each do |f| %>
+    <li ondblclick="Iyxzone.Chat.showForm(<%= f.id %>, '<%= form_authenticity_token %>')"><%= avatar f, :class => 'imgbox01' %><%= f.login %></li>
+  <% end %>
+  </ul>
+</div>
+
+<div id='chat-form' style="display:none">
+  <div id='chat-history'></div>
+  <%= text_area_tag 'message[content]', '', :rows => 4, :cols => 50 %>
+  <%= button_to_function '提交', "Iyxzone.Chat.sendMessage(this, event, '#{form_authenticity_token}');" %>
 </div>
 
 <%= javascript_tag "

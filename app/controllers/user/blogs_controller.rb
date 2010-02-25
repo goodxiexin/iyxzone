@@ -44,7 +44,7 @@ class User::BlogsController < UserBaseController
     @blog = Blog.new((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => false}))
     if @blog.save
       render :update do |page|
-        page.redirect_to blog_url(@blog)
+        #page.redirect_to blog_url(@blog)
       end
     else
       render :update do |page|

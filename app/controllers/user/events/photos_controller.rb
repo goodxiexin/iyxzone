@@ -16,7 +16,8 @@ class User::Events::PhotosController < UserBaseController
   end
 
 	def create
-		if @photo = @album.photos.create(:poster_id => current_user.id, :game_id => @album.game_id, :privilege => @album.privilege, :swf_uploaded_data => params[:Filedata])
+		@photo = @album.photos.build(:poster_id => current_user.id, :game_id => @album.game_id, :privilege => @album.privilege, :swf_uploaded_data => params[:Filedata])
+    if @photo.save
 			render :text => @photo.id
 		else
       # TODO
@@ -104,8 +105,6 @@ protected
       @user = @event.poster
       @photos = params[:photos].blank? ? [] : @album.photos.find(params[:photos].map {|id, attribute| id})
     end
-  rescue
-    not_found
   end
 
   def participant_required

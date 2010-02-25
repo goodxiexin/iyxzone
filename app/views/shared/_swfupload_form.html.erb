@@ -1,10 +1,11 @@
 <% if @album.class.name == 'PersonalAlbum' %>
-<% photo_controller = "user/photos" %>
+  <% photo_controller = "user/photos" %>
 <% elsif @album.class.name == 'GuildAlbum' %>
-<% photo_controller = 'user/guilds/photos' %>
+  <% photo_controller = 'user/guilds/photos' %>
 <% elsif @album.class.name == 'EventAlbum' %>
-<% photo_controller = 'user/events/photos' %>
+  <% photo_controller = 'user/events/photos' %>
 <% end %>
+
 <script type="text/javascript" charset="utf-8">
 var swfu;
 TDK4zjRa3N4LOYPj4BDnNEBBah6rUnuQnbktLWGF1to=

@@ -66,6 +66,8 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :forums
 
+    users.resources :messages
+
     users.resources :requests, :collection => {:destroy_all => :delete}
 
     users.resources :invitations, :collection => {:destroy_all => :delete}
@@ -150,7 +152,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :events, :collection => [:hot, :recent, :participated, :upcoming, :friends] do |events|
 
-      events.resources :participations, :controller => 'events/participations'
+      events.resources :participations, :controller => 'events/participations', :collection => {:search => :get}
 
       events.resources :invitations, :controller => 'events/invitations', :collection => {:search => :get}, :member => {:accept => :put, :decline => :delete}
   

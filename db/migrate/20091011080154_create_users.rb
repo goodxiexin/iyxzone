@@ -15,8 +15,9 @@ class CreateUsers < ActiveRecord::Migration
       t.boolean	:enabled,	:default => true
 			t.integer :avatar_id
       t.string :pinyin
-
-			# settings
+      t.boolean :online, :default => false
+			
+      # settings
 			t.integer :privacy_setting, :limit => 8, :default => PrivacySetting.default
 			t.integer :mail_setting, :limit => 8, :default => MailSetting.default  
 			t.integer :application_setting, :limit => 8, :default => ApplicationSetting.default

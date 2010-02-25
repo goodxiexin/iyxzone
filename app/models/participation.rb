@@ -101,7 +101,11 @@ protected
 
     if participation.blank?
       if is_invitation?
-        errors.add(:participant_id, '不能邀请非好友') if !event.poster.has_friend?(participant_id)
+        if event.guild.nil?
+          errors.add(:participant_id, '不能邀请非好友') if !event.poster.has_friend?(participant_id)
+        else
+          errors.add(:participant_id, '不能邀请不是这个工会的人') if !event.guild.has_member?(participant)
+        end
       elsif is_request?
         errors.add(:participant_id, '权限不够') unless event.is_requestable_by? participant
       elsif is_authorized?

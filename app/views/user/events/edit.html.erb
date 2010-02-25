@@ -4,7 +4,7 @@
 </div>
     
 <div id='errors'></div>
-<% form_for :event, :html => {:id => "event_form"} do |f| %>  
+<% form_for :event, :url => event_url(@event), :html => {:method => :put, :id => "event_form"} do |f| %>  
   <div class="rows s_clear">
     <div class="fldid"><label for="name">活动标题：</label></div>
     <div class="fldvalue">

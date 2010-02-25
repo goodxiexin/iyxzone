@@ -1,23 +1,23 @@
-<% gears.each do |gear_id, info| %>
+<% gears.each do |id, count| %>
+<% gear_id = id.split('_').first %>
+<% character_id = id.split('_').last %>
 <% gear = @event.guild.gears.find(gear_id) %>
-<tr class="jl-cutline" id='gear_<%= gear_id %>'>
+<% character = GameCharacter.find(character_id) %>
+<tr class="jl-cutline" id='gear_<%= gear_id %>_<%= character_id %>'>
   <td class="tl"><%= gear.name %></td>
+  <td>
+    <%= link_to_function count, "Iyxzone.Event.Summary.Gear.editCount(this)" %>
+    <div class="textfield" style="width: 80px; margin: 0 auto;display:none">
+      <%= text_field_tag '', count, :onblur => "Iyxzone.Event.Summary.Gear.updateCount(this, #{gear_id}, #{character_id})" %>
+    </div>
+  </td>
   <td><%= gear.cost %></td>
   <td>
     <div style="position:relative;text-align:left">
-      <% if !info[:recipient_id].blank? %>
-        <% recipient = User.find(info[:recipient_id]) %>
-        <a class='member-toggle' id='gear_recipient_<%= gear_id %>' onclick='Iyxzone.Event.Summary.Gear.showRecipients(<%= gear_id %>)'><%= avatar_image recipient, :class => 'w-l', :align => 'absmiddle', :size => :small %><span><strong><%= recipient.login %></strong></span></a>
-      <% else %>
-        <a class='member-toggle' id='gear_recipient_<%= gear_id %>' onclick='Iyxzone.Event.Summary.Gear.showRecipients(<%= gear_id %>)'><span><strong>点击选择获得者</strong></span></a>
-      <% end %>
-      <div style="position:absolute;left:0;top:40px;display:none" class="drop-box" id='gear_recipients_<%= gear.id %>'>
-      <% @participants.each do |r| %>
-        <a class='member-toggle' onclick='Iyxzone.Event.Summary.Gear.selectRecipient(<%= gear.id %>, <%= r.id %>, this)'><%= avatar_image r, :class => "w-l" , :align => "absmiddle", :size => :small %><span><strong><%= r.login %></strong></span></a>
-      <% end %>
-      </div>
+      <%= link_to_function "#{avatar_image character.user, :class => "w-l", :algin => "absmiddle", :size => :small}<span><strong>#{character.name}</strong></span>", "Iyxzone.Event.Summary.Gear.toggleCharacterList(#{gear_id}, this)", :class => 'member-toggle' %>
+      <div class="drop-box" style="position: absolute; left: 0pt; top: 40px; display: none;"></div>
     </div>
   </td>
-  <td><%= link_to_function '', "Iyxzone.Event.Summary.Gear.remove(#{gear_id})", :class => "icon-active" %></td> 
+  <td><%= link_to_function '', "Iyxzone.Event.Summary.Gear.remove(#{gear_id}, #{character_id}, this)", :class => "icon-active" %></td> 
 </tr>
 <% end %>

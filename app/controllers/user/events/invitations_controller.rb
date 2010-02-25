@@ -3,7 +3,11 @@ class User::Events::InvitationsController < UserBaseController
   layout 'app'
 
   def new
-    @characters = current_user.friend_characters(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id) - @event.all_characters
+    if @guild
+      @characters = @guild.characters - @event.all_characters
+    else
+      @characters = current_user.friend_characters(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id) - @event.all_characters
+    end
   end
 
   def create
@@ -35,8 +39,13 @@ class User::Events::InvitationsController < UserBaseController
   end
 
   def search
-    @characters = current_user.friend_characters(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id) - @event.all_characters
-    @characters = @characters.find_all {|f| f.name.include?(params[:key])}
+    if @guild.nil?
+      @characters = current_user.friend_characters(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id) - @event.all_characters
+    else
+      @characters = @guild.characters - @event.all_characters
+    end
+    @reg = /#{params[:key]}/
+    @characters = @characters.find_all {|f| @reg =~ f.name || @reg =~ f.pinyin }
     render :partial => 'characters'
   end
 
@@ -45,6 +54,7 @@ protected
   def setup
     if ['new', 'create', 'search'].include? params[:action]
       @event = current_user.events.find(params[:event_id])
+      @guild = @event.guild
     elsif ['edit', 'accept', 'decline'].include? params[:action]
       @invitation = current_user.event_invitations.find(params[:id])
       @event = @invitation.event

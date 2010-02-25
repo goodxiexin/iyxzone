@@ -35,7 +35,7 @@ class User::PhotoTagsController < UserBaseController
   end
 
   def auto_complete_for_friends
-    @friends = current_user.friends.find_all {|f| f.pinyin.starts_with? params[:friend][:login]}
+    @friends = current_user.friends.search(params[:friend][:login]) #find_all {|f| f.pinyin.starts_with? params[:friend][:login]}
     render :partial => 'auto_complete_friends', :object => @friends
   end
 

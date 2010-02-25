@@ -26,25 +26,11 @@ class User::Events::SummaryController < UserBaseController
   end
 
   def new_attendant
-    @attendances = []
+    @attendances = {}
     params[:ids].each do |id|
-      @attendances << {:character_id => id, :late => false, :complete => 100}
+      @attendances["#{id}"] = {:late => 0, :complete => 100}
     end
     render :partial => 'attendance_info', :locals => {:attendances => @attendances}
-  end
-
-  def new_boss
-    @boss_infos = []
-    Boss.find(params[:ids]).each do |boss|
-      @boss_infos << {:boss_id => boss.id, :count => 1, :reward => boss.reward}
-    end
-    render :partial => 'boss_info', :locals => {:bosses => @boss_infos}
-  end
-
-  def new_gear
-  end
-
-  def new_rule
   end
 
 protected
@@ -74,22 +60,22 @@ protected
 
   def setup_step_1
     if @summary[:attendances].nil?
-      @summary[:attendances] = []
+      @summary[:attendances] = {}
       @event.confirmed_participations.each do |p|
-        @summary[:attendances] << {:character_id => p.character_id, :late => 0, :complete => 100}
+        @summary[:attendances]["#{p.character_id}"] = {:late => 0, :complete => 100}
       end
     end
     @attendances = @summary[:attendances]
     @characters = @event.characters
-    @ids = @attendances.map {|v| v[:character_id]}
-    @lates = @attendances.map {|v| v[:late]}
-    @completes = @attendances.map {|v| v[:complete]}
+    @ids = @attendances.keys
+    @lates = @attendances.values.map {|v| v[:late]}
+    @completes = @attendances.values.map {|v| v[:complete]}
   end
 
   def save_step_1
-    @attendances = []
+    @attendances = {}
     params[:characters].each do |id, info|
-      @attendances << {:character_id => id, :late => info[:late], :complete => info[:complete]}
+      @attendances["#{id}"] = {:late => info[:late].to_i, :complete => info[:complete].to_i}
     end
     @summary[:attendances] = @attendances
   end
@@ -100,7 +86,7 @@ protected
     end
     @boss_infos = @summary[:bosses]
     @ids = @boss_infos.keys
-    @counts = @boss_infos.values.map {|v| v[:count]}
+    @counts = @boss_infos.values
     @bosses = Boss.find(@ids)
     @rewards = @bosses.map(&:reward)
     @names = @bosses.map(&:name)
@@ -108,8 +94,8 @@ protected
 
   def save_step_2
     @boss_infos = {}
-    params[:bosses].each do |id, count|
-      @boss_infos["#{id}"] = count
+    params[:bosses].each do |id, v|
+      @boss_infos["#{id}"] = v[:count]
     end unless params[:bosses].blank?
     @summary[:bosses] = @boss_infos
   end
@@ -125,9 +111,8 @@ protected
       @character_ids << key.split('_').last
       @gear_ids << key.split('_').first
     end
-    @character_ids = @summary[:attendances].map {|v| v[:character_id]}
-    @characters = GameCharacter.find(@character_ids)
-    @counts = @gear_infos.values.map {|v| v[:count]}
+    @characters = GameCharacter.find(@summary[:attendances].keys)
+    @counts = @gear_infos.values
     @gears = Gear.find(@gear_ids)
     @costs = @gears.map(&:cost)
     @names = @gears.map(&:name)
@@ -135,10 +120,37 @@ protected
 
   def save_step_3
     @gear_infos = {}
-    params[:gears].each do |id, count, character_id|
-      @gear_infos["#{id}_#{character_id}"] = count
-    end unless params[:gears].blank?
+    params[:info].each do |id, v|
+      @gear_infos["#{id}"] = v[:count]
+    end unless params[:info].blank?
     @summary[:gears] = @gear_infos
+  end
+
+  def setup_step_4
+    if @summary[:rules].nil?
+      @summary[:rules] = {}
+    end
+    @rule_infos = @summary[:rules]
+    @rule_ids = []
+    @character_ids = []
+    @rule_infos.keys.each do |key|
+      @rule_ids << key.split('_').first
+      @character_ids << key.split('_').last
+    end
+    @attendants = GameCharacter.find(@summary[:attendances].keys)
+    @counts = @rule_infos.values
+    @rules = @guild.rules.find(@rule_ids)
+    @characters = GameCharacter.find(@character_ids)
+    @reasons = @rules.map(&:reason)
+    @outcomes = @rules.map(&:outcome)
+  end
+
+  def save_step_4
+    @rule_infos = {}
+    params[:info].each do |id, v|
+      @rule_infos["#{id}"] = v[:count]
+    end unless params[:info].blank?
+    @summary[:rules] = @rule_infos
   end
 
 end

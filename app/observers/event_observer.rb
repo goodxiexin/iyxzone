@@ -50,7 +50,7 @@ class EventObserver < ActiveRecord::Observer
     event.poster.raw_decrement :events_count
     event.poster.raw_decrement :event_requests_count, event.requests_count
 
-    event.memberships.each do |m|
+    event.participations.each do |m|
       if m.is_invitation?
         m.participant.raw_decrement :event_invitations_count
       elsif m.is_request?

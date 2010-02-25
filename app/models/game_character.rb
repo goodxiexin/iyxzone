@@ -1,5 +1,7 @@
 class GameCharacter < ActiveRecord::Base
 
+  acts_as_pinyin :name => 'pinyin'
+
   searcher_column :name
 
   belongs_to :user

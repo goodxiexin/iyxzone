@@ -269,4 +269,12 @@ module ApplicationHelper
     image_tag photo.public_filename(size), opts.merge({:left => "#{left}px", :top => "#{top}px"})
   end
 
+  def integer_array_for_javascript array
+    if array.nil?
+      "[]"
+    else
+      "[" + array.join(',') + "]"
+    end
+  end
+
 end

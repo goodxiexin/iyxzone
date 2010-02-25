@@ -1,14 +1,18 @@
 require 'socket'
 require 'rubygems'
 require 'curb'
+require 'uri'
 require 'cgi'
+require 'net/http'
+require 'net/https'
+
 
 class Msn
 
 	SERVER = 'messenger.hotmail.com'
   PORT = 1863
 
-  NEXUS  = 'https://nexus.passport.com/rdr/pprdr.asp'
+  NEXUS  = 'nexus.passport.com'
   SSH_LOGIN  = 'login.live.com/login2.srf'
 
 	CURL = '/usr/bin/curl'
@@ -19,34 +23,57 @@ class Msn
 
 	def connect
 		@sock = TCPSocket::new(SERVER, PORT)
-		output "VER #{@trID} MSNP9 CVR0\r\n"
-		str = input
-		output "CVR #{@trID} 0x0409 win 4.10 i386 MSNMSGR 7.0.0816 MSMSGS gaoxh04@mails.tsinghua.edu.cn\r\n"
-		str = input 
-		output "USR #{@trID} TWN I gaoxh04@mails.tsinghua.edu.cn\r\n"
-		str = input
-		notification_server = str.split(" ")[3]
-    puts notification_server
-		ip = notification_server.split(":").first
-		port = notification_server.split(":").last
-		@sock.close
-		@sock = TCPSocket::new(ip, port)
-		@trID = 1
-		output "VER #{@trID} MSNP9 CVR0\r\n"
+      
+    output "VER 1 MSNP8 CVR0\r\n"
     input
-    output "CVR #{@trID} 0x0409 win 4.10 i386 MSNMSGR 7.0.0816 MSMSGS gaoxh04@mails.tsinghua.edu.cn\r\n" 
-    input 
-    output "USR #{@trID} TWN I gaoxh04@mails.tsinghua.edu.cn\r\n"
-		auth_token = input.split(" ").last
-		c = Curl::Easy.new(NEXUS)
-		c.perform
-		c.header_str.match(/DALogin=(.*?),/)
-		c = Curl::Easy.new($1)
-		c.headers = "Authorization: Passport1.4 OrgVerb=GET,OrgURL=http%3A%2F%2Fmessenger%2Emsn%2Ecom,sign-in=#{CGI::escape "gaoxh04@mails.tsinghua.edu.cn"},pwd=#{CGI::escape "20041065"},#{auth_token}"
-		c.perform
-		puts c.header_str
-		c.header_str.match(/from-PP='(.*?)'/)
-	end
+
+    output "CVR 2 0x0409 winnt 5.1 i386 MSNMSGR 14.0.8089.0726 msmsgs gaoxh04@mails.tsinghua.edu.cn\r\n"
+    input
+
+    output "USR 3 TWN I gaoxh04@mails.tsinghua.edu.cn\r\n"
+    s = input
+
+    ns = s.split(' ')[3]
+    ip = ns.split(':').first
+    port = ns.split(':').last
+    
+    @sock.close
+    @sock = TCPSocket::new(ip, port)
+    
+    output "VER 1 MSNP8 CVR0\r\n"
+    input
+
+    output "CVR 2 0x0409 winnt 5.1 i386 MSNMSGR 14.0.8089.0726 msmsgs gaoxh04@mails.tsinghua.edu.cn\r\n"
+    input
+
+    output "USR 3 TWN I gaoxh04@mails.tsinghua.edu.cn\r\n"
+    s = input
+    challenge = s[(s.index('COMPACT') + 8)..(s.length - 1)]
+    puts challenge
+
+    http = Net::HTTP.new(NEXUS, 443)
+    http.use_ssl = true
+   
+    s = http.get('/rdr/pprdr.asp', nil)
+    puts s['PassportURLs']
+    m = /DALogin=(.*),DAReg=/.match(s['PassportURLs'])
+    login = m.captures.first 
+    base = login.split('/').first
+    path = "/#{login.split('/').last}"
+
+    http = Net::HTTP.new(base, 443)
+    http.use_ssl = true
+    s = http.get(path, {"Authorization" => "Passport1.4 OrgVerb=GET,OrgURL=http%3A%2F%2Fmessenger%2Emsn%2Ecom,sign-in=#{URI.escape 'gaoxh04@mails.tsinghua.edu.cn'},pwd=#{URI.escape '20041065'},#{challenge}\r\n"})
+    m = /from-PP='(.*)',ru=/.match(s['Authentication-Info'])
+    token = m.captures.first
+
+    output "USR 4 TWN S #{token}\r\n"
+    input
+
+    output "SYN 0 0\r\n"
+    input
+    parse_contacts
+  end
 
 	def rx_data
 	end
@@ -62,14 +89,26 @@ protected
 		puts ">>> #{data}"
 	end
 
+  def parse_contacts
+    @contacts = {}
+    puts "eof: #{@sock.eof?}"
+    while true #!@sock.eof?
+      s = @sock.gets
+      if /LST/.match(s)
+        @contacts["#{s.split(' ')[2]}"] = s.split(' ')[1]
+        puts "nickname: #{s.split(' ')[2]} email: #{s.split(' ')[1]}"
+      end
+    end
+    puts "get contacts:"
+    puts @contacts.values.join('/r/n')
+    @sock.close
+  end
+
 	def input
 		str = @sock.recv(1000)
 		puts "<<< #{str}"
 		str
 	end
-
-	def ssh_auth
-	end		
 
 	def error_code
 		case @code

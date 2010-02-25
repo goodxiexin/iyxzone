@@ -19,7 +19,7 @@
               <h4 class="left"><span>选择接受赏罚的角色</span></h4>
             </div>
             <ul class="checkboxes rows s_clear">
-              <% @participants.each do |p| %>
+              <% @attendants.each do |p| %>
                 <li><span><%= check_box_tag '', 1, false, :character_id => p.id %><%= "#{p.user.login}-#{p.name}" %></span></li>
               <% end %>
             </ul>
@@ -36,6 +36,7 @@
       <tr>
         <td class="tl" style="border-right:0;">会员列表</td>
         <td style="border-left:0;border-right:0;width:300px;text-align:center;">规定</td>
+        <td style="border-left:0;border-right:0;">次数</td>
         <td style="border-left:0;width:100px">分值</td>
         <td style="border-left:0;width:100px"></td>
       </tr>

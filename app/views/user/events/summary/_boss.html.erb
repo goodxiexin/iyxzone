@@ -74,14 +74,7 @@
   </table>
 </div>
 
-<% if @ids.blank? %>
 <%= javascript_tag "
-  Iyxzone.Event.Summary.Boss.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', [], [], [], []);
+  Iyxzone.Event.Summary.Boss.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', #{integer_array_for_javascript @ids}, #{integer_array_for_javascript @counts}, #{array_or_string_for_javascript @names}, #{integer_array_for_javascript @rewards});
   Iyxzone.Event.Summary.Boss.reset(); 
 " %>
-<% else %>
-<%= javascript_tag "
-  Iyxzone.Event.Summary.Boss.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', #{array_or_string_for_javascript @ids}, #{array_or_string_for_javascript @counts}, #{array_or_string_for_javascript @names}, #{array_or_string_for_javascript @rewards});
-  Iyxzone.Event.Summary.Boss.reset(); 
-" %>
-<% end %>

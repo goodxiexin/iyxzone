@@ -42,6 +42,7 @@
       </tr>
     </thead>
     <tbody id='gears'>
+      <%= render :partial => 'gear_info', :locals => {:gears => @gear_infos} %>
     </tbody>
     <tbody>
       <tr>
@@ -77,18 +78,11 @@
 
 <div class='drop-box' id='gear_recipients' style='display:none'>
   <% @characters.each do |c| %>
-    <a class='member-toggle' character_id='<%= c.id %>'><%= avatar_image c.user, :class => "w-l", :algin => "absmiddle", :size => :small %></span><strong><%= c.name %></strong></span></a>
+    <a class='member-toggle' character_id='<%= c.id %>'><%= avatar_image c.user, :class => "w-l", :algin => "absmiddle", :size => :small %><span><strong><%= c.name %></strong></span></a>
   <% end %>
 </div>
 
-<% if @gear_ids.blank? %>
 <%= javascript_tag "
-  Iyxzone.Event.Summary.Gear.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', [], [], []);
+  Iyxzone.Event.Summary.Gear.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', #{integer_array_for_javascript @gear_ids}, #{integer_array_for_javascript @character_ids}, #{integer_array_for_javascript @counts}, #{array_or_string_for_javascript @names}, #{integer_array_for_javascript @costs});
   Iyxzone.Event.Summary.Gear.reset(); 
 " %>
-<% else %>
-<%= javascript_tag "
-  Iyxzone.Event.Summary.Gear.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', #{array_or_string_for_javascript @gear_ids}, #{array_or_string_for_javascript @gear_costs}, #{array_or_string_for_javascript @recipient_ids});
-  Iyxzone.Event.Summary.Gear.reset(); 
-" %>
-<% end %>

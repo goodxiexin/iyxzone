@@ -20,11 +20,11 @@
             </div>
             <ul class="checkboxes rows s_clear">
               <% @characters.each do |c| %>
-                <li><span><%= check_box_tag '', 1, @ids.include?(c.id), :character_id => c.id %><%= "#{c.user.login}-#{c.name}" %></span></li>
+                <li><span><%= check_box_tag '', 1, @ids.include?(c.id), :character_id => c.id, :login => c.user.login, :name => c.name %><%= "#{c.user.login}-#{c.name}" %></span></li>
               <% end %>
             </ul>
             <div class="foot rows">
-              <span class="button"><span><%= button_to_function "确定", "Iyxzone.Event.Summary.Attendance.resetCharacters()" %></span></span>
+              <span class="button"><span><%= button_to_function "确定", "Iyxzone.Event.Summary.Attendance.addCharacters()" %></span></span>
             </div>
           </div>
         </div>
@@ -53,6 +53,6 @@
 </div>
 
 <%= javascript_tag "
-  Iyxzone.Event.Summary.Attendance.load(#{@event.id}, '#{form_authenticity_token}', #{array_or_string_for_javascript @ids}, [#{@lates.join(',')}], [#{@completes.join(',')}]);
+  Iyxzone.Event.Summary.Attendance.load(#{@event.id}, '#{form_authenticity_token}', #{integer_array_for_javascript @ids}, #{integer_array_for_javascript @lates}, #{integer_array_for_javascript @completes});
   Iyxzone.Event.Summary.Attendance.reset(); 
 " %>

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100205101954) do
+ActiveRecord::Schema.define(:version => 20100222142036) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -208,6 +208,7 @@ ActiveRecord::Schema.define(:version => 20100205101954) do
     t.integer  "race_id"
     t.integer  "guild_id"
     t.string   "name"
+    t.string   "pinyin"
     t.integer  "level"
     t.integer  "dkp"
     t.boolean  "playing",       :default => true
@@ -333,6 +334,14 @@ ActiveRecord::Schema.define(:version => 20100205101954) do
     t.integer  "guild_id"
     t.integer  "character_id"
     t.integer  "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "messages", :force => true do |t|
+    t.integer  "poster_id"
+    t.integer  "recipient_id"
+    t.string   "content"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -596,6 +605,7 @@ ActiveRecord::Schema.define(:version => 20100205101954) do
     t.boolean  "enabled",                                  :default => true
     t.integer  "avatar_id"
     t.string   "pinyin"
+    t.boolean  "online",                                   :default => false
     t.integer  "privacy_setting",            :limit => 8,  :default => 106299306
     t.integer  "mail_setting",               :limit => 8,  :default => 8796093022207
     t.integer  "application_setting",        :limit => 8,  :default => 262143
@@ -630,6 +640,7 @@ ActiveRecord::Schema.define(:version => 20100205101954) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_seen_at"
   end
 
   create_table "videos", :force => true do |t|
