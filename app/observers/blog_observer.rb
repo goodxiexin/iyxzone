@@ -24,7 +24,6 @@ class BlogObserver < ActiveRecord::Observer
     end
   end
   
->>>>>>> 978c15d3c6db7dc3b7dc6c02d3b36e8fc09916c3:app/observers/blog_observer.rb
   def after_update blog
     # update counter if necessary
 		if blog.draft_was and !blog.draft
