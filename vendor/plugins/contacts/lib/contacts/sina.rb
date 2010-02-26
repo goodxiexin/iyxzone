@@ -52,6 +52,6 @@ class Contacts
   
   end  
   
-  TYPES[:yahoo] = Yahoo
+  TYPES[:sina] = Sina
 
 end 

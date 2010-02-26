@@ -1,6 +1,5 @@
 require 'socket'
 require 'rubygems'
-require 'curb'
 require 'cgi'
 
 class Contacts
