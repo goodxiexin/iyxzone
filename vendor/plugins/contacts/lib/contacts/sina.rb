@@ -3,7 +3,7 @@ require 'json'
 class Contacts
 
   class Sina < Base
-
+		attr_accessor :mycontacts
     URL         = "http://mail.sina.com.cn/"
     LOGIN_URL   = "http://mail.sina.com.cn/cgi-bin/login.cgi"
     
@@ -33,7 +33,7 @@ class Contacts
       p2 = resp.body.index('groups:', p1)
       contacts_str = resp.body[(p1+9)..(p2-5)]
       contacts_str.gsub!("&quot;", '"')
-      JSON.parse(contacts_str)
+      @mycontacts = JSON.parse(contacts_str)
       puts resp.body
       puts "contacts: #{contacts_str}"
       
@@ -46,6 +46,12 @@ class Contacts
     end
 
     def contacts
+			rlist = []
+			contact_list = 	mycontacts["contact"]
+			contact_list.each do |h|
+				rlist << [h["name"], h["email"]]
+			end
+			rlist
     end
 
   private
