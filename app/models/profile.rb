@@ -180,7 +180,7 @@ class Profile < ActiveRecord::Base
     # check website
     unless website.blank?
       # TODO: 这个regular expression貌似不够强大，不能把adsfadsf视为非法的url
-      unless website =~ /^((https?:\/\/)?)(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/
+      unless website =~ /^((https?:\/\/)?)([a-zA-Z0-9_-])((\.)([a-zA-Z0-9_-])+)+(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/
         errors.add_to_base("非法的url")
         return
       end 
