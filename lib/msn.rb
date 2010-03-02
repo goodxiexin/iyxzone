@@ -10,7 +10,7 @@ class Msn
   attr_reader :contacts
   SERVER = 'messenger.hotmail.com'
   PORT = 1863
-
+  
   NEXUS  = 'nexus.passport.com'
   SSH_LOGIN  = 'login.live.com/login2.srf'
 
@@ -94,7 +94,7 @@ class Msn
     @contacts = []
     while true 
       s = @sock.gets
-      puts s
+      #puts s
       if m = /SYN[\s]+[\d]*[\s]+[\d]*[\s]+([\d]*)[\s]+[\d]/.match(s)
         @contact_length = m[1].to_i
         puts "--------------total length: #{@contact_length}--------------"
@@ -115,36 +115,39 @@ class Msn
   end
 
   def input
-    str = @sock.recv(1000)
-    puts "<<<  #{str}"
-    str
+    str = @sock.gets
+    if if_error = /^([\d]{3})/.match(str)
+      @code = if_error[1].to_i
+      error_code
+    end
+    @sock.close
   end
 
   def error_code
     case @code
     when 201:
-        return 'Error: 201 Invalid parameter';
+        raise ConnectionError, 'Error: 201 Invalid parameter' + PROTOCOL_ERROR;
     when 217:
-        return 'Error: 217 Principal not on-line';
+        raise ConnectionError, 'Error: 217 Principal not on-line';
     when 500:
-        return 'Error: 500 Internal server error';
+        raise ConnectionError, 'Error: 500 Internal server error';
     when 540:
-        return 'Error: 540 Challenge response failed';
+        raise ConnectionError,'Error: 540 Challenge response failed';
     when 601:
-        return 'Error: 601 Server is unavailable';
+        raise ConnectionError,'Error: 601 Server is unavailable';
     when 710:
-        return 'Error: 710 Bad CVR parameters sent';
+        raise ConnectionError,'Error: 710 Bad CVR parameters sent';
     when 713:
-        return 'Error: 713 Calling too rapidly';
+        raise ConnectionError,'Error: 713 Calling too rapidly';
     when 731:
-        return 'Error: 731 Not expected';
+        raise ConnectionError, 'Error: 731 Not expected';
     when 800:
-        return 'Error: 800 Changing too rapidly';
+        raise ConnectionError,'Error: 800 Changing too rapidly';
     when 910:
     when 921:
-        return 'Error: 910/921 Server too busy';
+        raise ConnectionError,'Error: 910/921 Server too busy' + PROTOCOL_ERROR;
     when 911:
-        return 'Error: 911 Authentication failed';
+        raise AuththenticationError, 'Error: 911 Authentication failed';
     end
   end
 
