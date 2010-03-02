@@ -6,9 +6,9 @@ class UserMailer < ActionMailer::Base
     body				:user => user, :url => "http://#{SITE_URL}/activate/#{user.activation_code}"
   end
 
-  def signup_invitaton invitation
+  def signup_invitation invitation
     recipients  invitation.recipient_email
-    from        SITE_EMAIL
+    from        SITE_MAIL
     sent_on     Time.now
     subject     "Dayday3 - #{invitation.sender.login} 邀请你加入"
     body        :user => invitation.sender, :url => "http://#{SITE_URL}/invite?token=#{invitation.token}"
