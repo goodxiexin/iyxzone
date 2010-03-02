@@ -150,7 +150,7 @@ class Msn < Base
     when 921:
         raise ConnectionError,'Error: 910/921 Server too busy' + PROTOCOL_ERROR;
     when 911:
-        raise AuththenticationError, 'Error: 911 Authentication failed';
+        raise AuthenticationError, 'Error: 911 Authentication failed';
     end
   end
 
