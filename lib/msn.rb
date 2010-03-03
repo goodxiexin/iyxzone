@@ -49,7 +49,8 @@ class Msn
 
     output "USR 3 TWN I #{@username}\r\n"
     s = input
-    challenge = s[(s.index('COMPACT') + 8)..(s.length - 1)]
+		m =/(lc=.*)$/.match(s)
+    challenge = m[0]
     puts challenge
 
     http = Net::HTTP.new(NEXUS, 443)
@@ -59,12 +60,18 @@ class Msn
     puts s['PassportURLs']
     m = /DALogin=(.*),DAReg=/.match(s['PassportURLs'])
     login = m.captures.first 
-    base = login.split('/').first
-    path = "/#{login.split('/').last}"
+		m = /([^\\]*)(\/.*)/.match(login)
+    base = m[1]
+    path = m[2]
 
     http = Net::HTTP.new(base, 443)
     http.use_ssl = true
     s = http.get(path, {"Authorization" => "Passport1.4 OrgVerb=GET,OrgURL=http%3A%2F%2Fmessenger%2Emsn%2Ecom,sign-in=#{URI.escape @username},pwd=#{URI.escape @password},#{challenge}\r\n"})
+		if (s.code == "401") 
+			@code = 911
+			error_code
+		end
+		puts s.message
     m = /from-PP='(.*)',ru=/.match(s['Authentication-Info'])
     token = m.captures.first
 
@@ -110,7 +117,7 @@ class Msn
         read_length += 1
       end        
     end
-    @sock.close
+    #@sock.close
     #puts @contacts
   end
 
@@ -119,8 +126,10 @@ class Msn
     if if_error = /^([\d]{3})/.match(str)
       @code = if_error[1].to_i
       error_code
+    	@sock.close
     end
-    @sock.close
+		puts str
+		str
   end
 
   def error_code
@@ -153,6 +162,6 @@ class Msn
 
 end
 
-#msn = Msn.new('gaoxh04@mails.tsinghua.edu.cn', '20041065')
-#msn.connect
+msn = Msn.new('gaoxh044@mails.tsinghua.edu.cn', '20041065')
+msn.connect
 #puts msn.contacts.to_s
