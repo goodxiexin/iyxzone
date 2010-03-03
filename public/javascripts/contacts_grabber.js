@@ -44,16 +44,16 @@ Object.extend(Iyxzone.ContactsGrabber, {
     });
 
     // construct parameters
-    invitees.each(function(id){
+    ids.each(function(id){
       params += "ids[]=" + id + "&";
     });
 
     // send request
-    new Ajax.Request('/friend_requests/create_multiple?authenticity_token=' + encodeURIComponent(token), {
+    new Ajax.Request('/user/friends/requests/create_multiple?authenticity_token=' + encodeURIComponent(token), {
       method: 'post',
       parameters: params,
       onSuccess: function(){
-        window.href = '/user/signup_invitations/invite_contact';
+        document.location.href = '/user/signup_invitations/invite_contact';
       }
     });
   },

@@ -16,13 +16,6 @@ class Msn < Base
 
   CURL = '/usr/bin/curl'
 
-  def initialize(u, p)
-    @trID = 1
-    @username = u
-    @password = p
-    connect
-  end
-
   def connect
     @sock = TCPSocket::new(SERVER, PORT)
     
@@ -76,19 +69,11 @@ class Msn < Base
     parse_contacts
   end
 
-
-  def rx_data
-  end
-
-  def grab
-  end
-
   #protected
 
   def output data
     @sock.write data
-    @trID = @trID + 1
-    puts ">>> #{@trID} #{data}"
+    puts "<<<< #{data}"
   end
 
   def parse_contacts
@@ -155,6 +140,8 @@ class Msn < Base
   end
 
 end
+
+TYPES[:msn] = Msn
 end
 #msn = Msn.new('gaoxh04@mails.tsinghua.edu.cn', '20041065')
 #msn.connect

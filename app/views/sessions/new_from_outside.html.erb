@@ -1,25 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录17gaming</title>
+<%= stylesheet_link_tag 'common' %>
+<%= stylesheet_link_tag 'home' %>
+<style type="text/css">
+.z-box{width:380px}
+.z-con{background:#f8fcf6;color:#666}
+.z-box .z-con p{min-height:10px;padding-bottom:10px}
+.login-box{border:1px solid #c5d9b7;background:#fff;margin:10px;padding:10px}
+.login-box .item input{width:170px;padding:5px;border:1px solid #999;color:#666}
+.login-box .item a{color:#ba3b18}
+.login-box .fldvalue{width:180px;}
+.sign-cookie{float:left}
+.login-box span.button{float:right;margin:0}
+</style>
+</head>
+<body>
+<div class="z-box">
+  <div class="z-m rows s_clear">
+    <div class="box01 s_clear">
+      <p class="z-h"><img src="images/skin/logo.png" /></p>
+      <div class="z-con">
+        <p>请先登录17gaming完成当前操作</p>
         <% form_tag sessions_url do %>
-					<div class="rows">
-						<div class="fldid"><%= label_tag 'email', '电子邮箱：' %></div>
-            <div class="fldvalue">
-						  <div class="textfield"><%= text_field_tag 'email', nil %></div>
-            </div>
+        <div class="login-box formcontent s_clear">
+          <div class="item rows">
+            <div class="fldid"><label for="name">邮箱</label></div>
+            <div class="fldvalue"><%= text_field_tag 'email', '' %></div>
+          </div>
+          <div class="item rows">
+            <div class="fldid"><label for="name">密码</label></div>
+            <div class="fldvalue"><%= password_field_tag 'password', '' %></div>
           </div>
           <div class="rows">
-						<div class="fldid"><%= label_tag 'password', '密码：' %></div>
+            <div class="fldid">&nbsp;</div>
             <div class="fldvalue">
-							<div class="textfield"><%= password_field_tag 'password', nil %></div>
+              <span class="sign-cookie"><%= check_box_tag 'remember_me', 1, true %>记住登录状态</span>
+              <span class="button"><span><button type="submit">登录</button></span></span>
             </div>
-            <%= link_to '忘记密码？', forgot_password_url %>
           </div>
-          <div class="rows">
-						<div class="fldid">&nbsp;</div>
-            <div class="fldis"><%= check_box_tag 'remember_me', 1, true %><%= label_tag 'auto', '下次自动登录', :class => "blue" %></div>
+          <div class="item rows">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              <%= link_to "注册新用户", signup_url, :class => 'w-l', :href => "javascript: void(0)" %><%= link_to "忘记密码", forgot_password_url, :class => 'w-l', :href => "javascript: void(0)" %><a href="#" class="w-l">帮助中心</a>
+            </div>
           </div>
-          <div class="btn-rows">
-						<div class="fldid">&nbsp;</div>
-            <div class="fldvalue"><%= submit_tag '', :class => "loginbtn png" %></div>
-          </div>
-				<% end %>
-
-
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

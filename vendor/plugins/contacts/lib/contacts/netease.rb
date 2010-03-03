@@ -1,10 +1,11 @@
 require 'json'
 require 'rexml/document'
-include REXML
 
 class Contacts
 
   class Netease < Base
+
+    include REXML
 
     URL         = "http://mail.163.com/"
     LOGIN_URL   = "http://reg.163.com/login.jsp?type=1&url=http://entry.mail.163.com/coremail/fcg/ntesdoor2?" + CGI.escape("lightweight%3D1%26verifycookie%3D1%26language%3D-1%26style%3D-1")
@@ -96,6 +97,7 @@ class Contacts
       else
         raise ConnectionError, "UnkownError"
       end
+    end
   end  
 
     

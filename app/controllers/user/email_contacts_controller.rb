@@ -32,14 +32,17 @@ class User::EmailContactsController < UserBaseController
 protected
 
   def render_not_supported e
+    logger.error 'not supported'
     render :json => {:errors => e.message} #"不支持的邮件类型"}
   end
 
   def render_authentication_error e
+    logger.error 'authen error'
     render :json => {:errors => e.message} #"用户名或者密码错误"}
   end
 
   def render_connection_error e
+    logger.error 'connection error'
     render :json => {:errors => e.message} #"无法连接邮件服务器,稍后再试"}
   end
 
