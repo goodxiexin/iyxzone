@@ -97,7 +97,7 @@ class Contacts
       else
         raise ConnectionError, "UnkownError"
       end
-    end
+		end
   end  
 
     
