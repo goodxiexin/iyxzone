@@ -12,11 +12,13 @@ class GuildRule < ActiveRecord::Base
 
   validates_size_of :reason, :within => 1..200, :too_short => "不能小于1个字节", :too_long => "不能大于100个字节"
 
+  validates_uniqueness_of :reason, :scope => :guild_id, :message => "不能重复"
+
   validate_on_update :reason_is_readonly_for_attendance_rules
 
   validates_presence_of :rule_type, :message => "不能为空"
 
-  validates_inclusion_of :rule_type, :in => [ABSENCE, PRESENCE, NORMAL]
+  validates_inclusion_of :rule_type, :in => [ABSENCE, PRESENCE, NORMAL], :if => 'rule_type'
 
   validate_on_create :attendance_rules_cant_be_created
 

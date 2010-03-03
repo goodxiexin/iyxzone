@@ -9,8 +9,6 @@ module NeedsVerify
   
     def needs_verification opts={}
 
-      default_scope :conditions => {:verified => [0,1]}
-  
       named_scope :unverified, :conditions => {:verified => 0}, :order => "created_at DESC"
 
       named_scope :accepted, :conditions => {:verified => 1}, :order => "created_at DESC"

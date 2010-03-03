@@ -11,14 +11,14 @@
     </div>
     <div class="jl-list-con jl-cutline">
       <%= profile_link poster %> 上传了 <%= photos.count %>张照片 到相册 <%= album_link album, :class => "shine" %>
-      <ul class="s_clear" id="roll-photo">
-        <li><a class="roll-left" id='slide_left_btn_<%= delivery.id %>'></a></li>
-        <div id='slide_<%= delivery.id %>'>
-        <% 5.times do |i| %>
-          <li></li>
+      <ul class="s_clear" id="roll-photo" style='position:relative; width: 400px;overflow:hidden;'>
+        <a class="roll-left" id='left_btn_<%= delivery.id %>'></a></li>
+        <div style='position:relative; overflow: hidden; left: -55px;' id='frames_<%= delivery.id %>'>
+        <% 5.times do |p| %>
+        <li></li>
         <% end %>
         </div>
-        <li><a class="roll-right" id='slide_right_btn_<%= delivery.id %>'></a></li>
+        <li><a class="roll-right" id='right_btn_<%= delivery.id %>'></a></li>
       </ul>
       <span class="gray">
         <%= ftime delivery.created_at %> - <%= link_to_function "评论", "Iyxzone.Comment.showForm('album', #{album.id}, null)" %>
@@ -29,8 +29,7 @@
 </div>
 
 <% photo_ids = array_or_string_for_javascript photos.map(&:id) %>
-<% urls = array_or_string_for_javascript photos.map {|p| p.public_filename(:medium)} %>
-<%= urls %>
+<% urls = array_or_string_for_javascript photos.map {|p| p.public_filename(:large)} %>
 <%= javascript_tag "
-  new Iyxzone.Photo.Slide2('#{type}', #{photo_ids}, #{urls}, $('slide_#{delivery.id}').childElements(), $('slide_left_btn_#{delivery.id}'), $('slide_right_btn_#{delivery.id}'));
+  slide = new Iyxzone.Photo.Slide2('#{photos.first.class.name.underscore}', #{photo_ids}, #{urls}, $('frames_#{delivery.id}').childElements(), $('left_btn_#{delivery.id}'), $('right_btn_#{delivery.id}'));
 " %>

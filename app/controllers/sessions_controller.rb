@@ -1,6 +1,11 @@
 class SessionsController < ApplicationController
 
   def new
+    if params[:outside].blank?
+      render :action => 'new'
+    else
+      render :action => 'new_from_outside'
+    end
   end
 
   def create

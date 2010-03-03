@@ -1,6 +1,14 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  def avatar_path user, size="medium"
+    if user.avatar.blank?
+      "default_#{size}.png"
+    else
+      user.avatar.public_filename(size)
+    end
+  end
+
   def avatar_image(user, opts={})
     size = opts.delete(:size) || "medium"
     if user.avatar.blank?
@@ -275,6 +283,14 @@ module ApplicationHelper
     else
       "[" + array.join(',') + "]"
     end
+  end
+
+  def limited_text_field name, value, opts
+    max = opts.delete(:max) || 100
+    div = opts.delete(:div) || 'words_count'
+    id = opts.delete(:id) || name
+    text_field_tag name, value, opts
+    javascript_tag "new Iyxzone.limitedTextField($('#{id}'), #{max}, $('#{div}'))"
   end
 
 end

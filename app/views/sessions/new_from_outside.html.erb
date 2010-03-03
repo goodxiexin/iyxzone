@@ -1,0 +1,25 @@
+        <% form_tag sessions_url do %>
+					<div class="rows">
+						<div class="fldid"><%= label_tag 'email', '电子邮箱：' %></div>
+            <div class="fldvalue">
+						  <div class="textfield"><%= text_field_tag 'email', nil %></div>
+            </div>
+          </div>
+          <div class="rows">
+						<div class="fldid"><%= label_tag 'password', '密码：' %></div>
+            <div class="fldvalue">
+							<div class="textfield"><%= password_field_tag 'password', nil %></div>
+            </div>
+            <%= link_to '忘记密码？', forgot_password_url %>
+          </div>
+          <div class="rows">
+						<div class="fldid">&nbsp;</div>
+            <div class="fldis"><%= check_box_tag 'remember_me', 1, true %><%= label_tag 'auto', '下次自动登录', :class => "blue" %></div>
+          </div>
+          <div class="btn-rows">
+						<div class="fldid">&nbsp;</div>
+            <div class="fldvalue"><%= submit_tag '', :class => "loginbtn png" %></div>
+          </div>
+				<% end %>
+
+

@@ -15,6 +15,8 @@ module UserAuthentication
       before_save :encrypt_password
       before_create :make_activation_code
       before_create :make_invite_code
+      before_create :make_qq_invite_code
+      before_create :make_msn_invite_code
     
       named_scope :activated, :conditions => {:activation_code => nil}
       
@@ -149,6 +151,14 @@ protected
     def make_invite_code
       self.invite_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
     end   
+
+    def make_qq_invite_code
+      self.qq_invite_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+    end
+
+    def make_msn_invite_code
+      self.msn_invite_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+    end
 
   end
 

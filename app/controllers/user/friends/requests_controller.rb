@@ -16,6 +16,14 @@ class User::Friends::RequestsController < UserBaseController
     end  
   end
 
+  # TODO: 怎么返回错误
+  def create_multiple
+    params[:ids].each do |id|
+      Friendship.create(:status => 0, :friend_id => id, :user_id => current_user.id)
+    end
+    render :nothing => true
+  end
+
 	def accept
 		if @request.accept
 			render :update do |page|

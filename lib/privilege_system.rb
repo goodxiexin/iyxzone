@@ -7,6 +7,7 @@
 #
 module PrivilegeSystem
 
+
 protected
 
   def is_owner?
@@ -70,7 +71,7 @@ protected
     when 3 # friends
       friend_required
     else
-      not_found
+      #not_found
     end
   end
 

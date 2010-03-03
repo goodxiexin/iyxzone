@@ -31,7 +31,7 @@ Object.extend(Iyxzone.Comment, {
     return true;
   },
 
-  showForm: function(commentableType, commentableID, recipientID, login){
+  showForm: function(commentableType, commentableID, login, recipientID){
     $('add_' + commentableType + '_comment_' + commentableID).hide();
     $(commentableType + '_comment_' + commentableID).show();
     if(recipientID != null && login != null){
@@ -66,10 +66,7 @@ Object.extend(Iyxzone.Comment, {
   },
 
   set: function(commentableType, commentableID, login, commentorID){
-    $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + ":";
-    $(commentableType + '_comment_recipient_' + commentableID).value = commentorID;
-    $('add_' + commentableType + '_comment_' + commentableID).hide();
-    $(commentableType + '_comment_' + commentableID).show();
+    this.showForm(commentableType, commentableID, login, commentorID);
     $(commentableType + '_comment_content_' + commentableID).focus();
     window.scrollTo(0, $(commentableType + '_comment_content_' + commentableID).cumulativeOffset().top);
   },
@@ -84,19 +81,18 @@ Object.extend(Iyxzone.Comment, {
     });
   },
 
-  toggleBox: function(commentableType, commentableID, link, commentsCount){
+  toggleBox: function(commentableType, commentableID, commentsCount){
     var box = $(commentableType + '_comment_box_' + commentableID);
+    var link = $(commentableType + '_comment_link_' + commentableID);
     if(!box.visible()){
       Effect.BlindDown(box);
       $(commentableType + '_comment_content_' + commentableID).focus();
-      if(link){
+      if(link)
         link.update('收起回复');
-      }
     }else{
       Effect.BlindUp(box);
-      if(link){
+      if(link)
         link.update(commentsCount + '条回复')
-      }
     }
   }
 

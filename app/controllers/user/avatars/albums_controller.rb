@@ -14,7 +14,7 @@ protected
   def setup
     @album = AvatarAlbum.find(params[:id])
     @user = @album.user
-		@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   rescue
     not_found
   end

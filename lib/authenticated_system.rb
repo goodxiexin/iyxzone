@@ -99,7 +99,11 @@ protected
       respond_to do |format|
         format.html do
           store_location
-          redirect_to new_session_path
+          if params[:outside].blank?
+            redirect_to login_path
+          else
+            redirect_to login_path(:outside => 1)
+          end
         end
         format.any do
           request_http_basic_authentication 'Web Password'

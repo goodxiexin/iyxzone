@@ -4,9 +4,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :sessions
 
-  map.root :controller => 'sessions', :action => 'new' 
+  map.test '/test', :controller => 'test', :action => 'show'
 
-  map.test '/test', :controller => 'user/test', :action => 'index'
+  map.root :controller => 'sessions', :action => 'new' 
 
   map.signup '/signup', :controller => 'users', :action => 'new'
 
@@ -113,7 +113,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :friends, :collection => {:search => :get, :other => :get, :common => :get} do |friends|
 
-      friends.resources :requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :put}
+      friends.resources :requests, :controller => 'friends/requests', :collection => {:create_multiple => :post}, :member => {:accept => :put, :decline => :put}
 
     end
 
@@ -247,7 +247,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :ratings
 
-    users.resources :signup_invitations
+    users.resources :signup_invitations, :collection => {:create_multiple => :post}
 
     users.auto_complete_for_game_tags '/auto_complete_for_game_tags', :controller => 'tags', :action => 'auto_complete_for_game_tags' 
 
@@ -256,10 +256,12 @@ ActionController::Routing::Routes.draw do |map|
     users.search_characters '/search_characters', :controller => 'search', :action => 'character'
 
     users.search_users '/search_users', :controller => 'search', :action => 'user'
-    users.resources :news, :collection => {:text => :get, :video => :get, :pic => :get}
-  end
- 
-	map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
 
+    users.resources :news, :collection => {:text => :get, :video => :get, :pic => :get}
+
+    users.resources :contacts, :controller => 'email_contacts', :collection => {:sina => :get, :netease => :get, :hotmail => :get, :yahoo => :get, :gmail => :get, :msn => :get}
+  end
+
+  map.connect ':controller/:action'
+ 
 end

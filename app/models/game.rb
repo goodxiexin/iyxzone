@@ -34,7 +34,7 @@ class Game < ActiveRecord::Base
   
 	acts_as_rateable :create_conditions => lambda {|rating, game, user| (rating.nil? || rating.created_at < 10.days.ago) and user.games.include?(game) }
 
-  acts_as_shareable
+  acts_as_shareable :default_title => lambda {|game| game.name }
 
 	acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, game, comment| false }, :recipient_required => false
 

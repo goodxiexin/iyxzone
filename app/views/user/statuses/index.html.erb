@@ -41,7 +41,8 @@
                         <%= hidden_field_tag 'home', 0 %>
                         <div class="fldvalue">
                           <div id="mcStatus" class="textfield02" style="width:500px;">
-                            <%= f.text_area 'content', :value => "你正在干嘛呢?", :onkeyup => "Iyxzone.limitText(this, 140, 'words_count');", :onpaste => "Iyxzone.limitText(this, 140, 'words_count');", :onclick => "this.clear();" %>
+                            <%= f.text_area 'content', :value => "你正在干嘛呢?" %>
+                            <%= javascript_tag "new Iyxzone.limitedTextField($('status_content'), 140, $('words_count'));" %>
                           </div>
                         </div>
                         <div class="fldbtn jl-fldbtn"> <span class="button03"><span>
@@ -49,7 +50,8 @@
                         </span></span> </div>
                       <% end %>
                       <div class="buttons home-dialog"> 
-												<span class="left" id='words_count'>0/160</span><span class='right'><%= emotion_link 'status_content', :class => 'icon-face' %></span>
+												<span class="left" id='words_count'>0/140</span>
+                        <span class='right'><%= emotion_link 'status_content', :class => 'icon-face' %></span>
                       </div>
                     </div>
                   </div>
@@ -60,6 +62,7 @@
         </div>
       </div>
       <% end %>
+      <div id='info'></div>
       <div class="feed-box01 list-v2">
         <% if current_user == @user %>
         <div class="list-v2-head">以下是您所发布过的所有状态</div>
@@ -69,16 +72,16 @@
         <div id='statuses'>
         <%= render :partial => 'status', :collection => @statuses %>
         </div>
+        <%= will_paginate @statuses %>
       </div>
     </div>
   </div></div>
 </div></div></div></div>
 
-<% @reply_to = User.find(params[:reply_to]) unless params[:reply_to].nil?%>
-<% @status = Status.find(params[:status_id]) unless params[:status_id].nil?%>
-<% if @reply_to and @status %>
-<script type="text/javascript">
-  Iyxzone.Comment.set('status', <%= @status.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
-</script>
+<% if !@reply_to.blank? and !@status.blank? %>
+  <%= javascript_tag "
+    Iyxzone.Comment.toggleBox('status', #{@status.id}, #{@status.comments_count});
+    Iyxzone.Comment.set('status', #{@status.id}, '#{@reply_to.login}', #{@reply_to.id});" 
+  %>
 <% end %>
 

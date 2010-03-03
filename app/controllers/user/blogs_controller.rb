@@ -10,7 +10,7 @@ class User::BlogsController < UserBaseController
 
   def index
 		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @blogs = @user.blogs.viewable(relationship, :conditions => cond).paginate :page => params[:page], :per_page => 10 
+    @blogs = @user.blogs.viewable(relationship, :conditions => cond).paginate :page => params[:page], :per_page => 1
   end
 
 	def hot 
@@ -89,14 +89,12 @@ protected
       @blog = Blog.find(params[:id])
       @user = @blog.poster
 			@privilege = @blog.privilege
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ['edit', 'destroy'].include? params[:action]
       @blog = current_user.blogs.find(params[:id])
     elsif ['update'].include? params[:action]
       @blog = current_user.blogs_and_drafts.find(params[:id])
     end
-  rescue
-    not_found
   end
 
 end

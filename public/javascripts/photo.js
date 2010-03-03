@@ -638,11 +638,10 @@ Iyxzone.Photo.Slide2 = Class.create({
     this.frames = frames;
     this.leftBtn = leftBtn;
     this.rightBtn = rightBtn;
-    this.pos = Math.floor(ids.length/2);
+    this.idPos = 0;
     
-    var pos = Math.floor(frames.length/2);
     for(var i=0;i<frames.length;i++){
-      var p = this.pos + i - pos;
+      var p = this.idPos + i;
       if(p >= 0 && p < ids.length)
         this.load(i, p);
     }
@@ -663,10 +662,50 @@ Iyxzone.Photo.Slide2 = Class.create({
   },
 
   scrollRight: function(){
+    if(this.idPos == 0){
+      return;
+    }
+
+    // remove last frame
+    var len = this.frames.length;
+    this.frames[len - 1].remove();
+    this.frames.splice(len - 1, 1);
+
+    // add frame
+    var frame = new Element('li');
+    Element.insert(this.frames[0], {before: frame});
+    frame.hide();
+    this.frames = frame.up().childElements();
+    this.load(0, this.idPos - 1);
+    this.idPos--;
+    this.changeBtn();
+
+    // show frame
+    new Effect.Morph(frame, {style: 'width: 100px'});
   },
 
   scrollLeft: function(){
-  
+    if(this.idPos == this.ids.length - 1){
+      return;
+    } 
+
+    // blind up frame
+    new Effect.Morph(this.frames[0], {style: 'width: 0px'})
+
+    // add frame
+    var frame = new Element('li');
+    Element.insert(this.frames[this.frames.length - 1], {after: frame});
+    this.frames = frame.up().childElements();
+    this.load(this.frames.length - 1, this.idPos);
+    this.idPos++;
+    this.changeBtn();
+
+    setTimeout(this.removeFirstFrame.bind(this), 1100);
+  },
+
+  removeFirstFrame: function(){
+    this.frames[0].remove();
+    this.frames.splice(0, 1);    
   } 
 
 });

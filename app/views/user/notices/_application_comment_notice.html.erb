@@ -1,0 +1,18 @@
+<% application = comment.commentable %>
+<% title = "应用#{application.name}的主页" %>
+<% if home_page %>
+<% link = link_to_function title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/applications/#{application.id}?reply_to=#{comment.poster_id}');" %>
+<% else %>
+<% link = link_to_function title, "window.open('/applications/#{application.id}?reply_to=#{comment.poster_id}');" %>
+<% end %>
+<li>
+  <div class="feed-message">
+    <% if home_page %>
+    <%= link_to_function '', "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}')", :class => 'icon-active' %>
+    <% end %>
+    <% if notice.data == 'reply' %>
+      <%= profile_link comment.poster %> 在 <%= link %> 回复了你
+    <% end %>     
+  </div>
+</li>
+

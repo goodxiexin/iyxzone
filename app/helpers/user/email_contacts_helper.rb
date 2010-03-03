@@ -1,0 +1,5 @@
+module User::EmailContactsHelper
+
+  
+
+end

@@ -55,24 +55,8 @@ class EventObserver < ActiveRecord::Observer
   def before_destroy event
     # modify request count
     event.poster.raw_decrement :event_requests_count, event.requests_count
-  
-    # modify invitation count
-    event.invitations.each do |i|
-      i.participant.raw_decrement :event_invitations_count
-    end
-
-    # modify event counter
     event.poster.raw_decrement :events_count
-    event.participants.each do |p|
-      p.raw_decrement :upcoming_events_count
-    end
-
-    # send notification
-    event.participants.each do |p|
-      p.notifications.create(:category => Notification::EventChange, :data => "活动 #{event.title} 取消了")
-    end
-
-    # TODO: delete all participations without trigger callbacks
+    event.recently_deleted = true
   end
 
 end

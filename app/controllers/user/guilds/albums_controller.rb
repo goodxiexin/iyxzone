@@ -24,7 +24,7 @@ protected
     @album = GuildAlbum.find(params[:id])
     @guild = @album.guild
     @user = @guild.president
-		#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   rescue
     not_found
   end

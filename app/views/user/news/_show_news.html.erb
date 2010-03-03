@@ -18,7 +18,7 @@
     <div class="foot cmt-space feed-list">
       <p class="jl-cutline"></p>
       <p class="red"><span class="red w-l">评论(<%=@news.comments_count%>)</span><span class="w-l">|</span><span class="red w-l">浏览(<%=@news.viewings_count%>)</span><span class="w-l">|</span><span class="photo-op-praise"><%=link_to_remote '赞一下', :url =>digs_url("dig[diggable_type]" => @news.class.base_class.to_s, "dig[diggable_id]" => @news), :html => {:id=>"digging_#{@news.class.to_s.underscore}_#{@news.id}", :class => "red"}%></span><span class="w-l">(<span id="dig_<%=@news.class.to_s.underscore%>_<<%=@news.id%>"><%=@news.digs_count%></span>)</span><span class="icon-heart"></span><%= facebox_link "分享到我的主页", new_sharing_url(:shareable_type => 'News', :shareable_id => @news.id) %><span class="w-l">(<%=@news.sharings_count%>)</span></p>
-      <%= render :partial => 'user/comments/comment_box', :locals => { :commentable => @news, :recipient => @news.poster} %>
+      <%= render :partial => 'user/comments/comment_box', :locals => { :commentable => @news, :recipient => nil} %>
     </div>
     <div class="prompt-list-box">
       <h5>随便看看</h5>

@@ -28,6 +28,7 @@ protected
 		@album = EventAlbum.find(params[:id])
     @event = @album.event
 		@user = @event.poster
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   rescue
     not_found
   end

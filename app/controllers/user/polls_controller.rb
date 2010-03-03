@@ -88,7 +88,7 @@ protected
     elsif ['show'].include? params[:action]
       @poll = Poll.find(params[:id])
       @user = @poll.poster
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @poll = current_user.polls.find(params[:id])
     end

@@ -27,8 +27,12 @@
                   <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @sharing, :recipient => nil} %>
                 </div>
               </li>
-              <li>
-                <%= link_to_remote "<strong><span id='dig_sharing_#{@sharing.id}'>#{@sharing.digs_count}</span></strong>", :url => digs_url("dig[diggable_type]" => 'Sharing', "dig[diggable_id]" => @sharing.id, :at => 1), :html => {:class => 'praise'} %> 
+              <li id='dig_sharing_<%= @sharing.id %>'>
+              <% if @sharing.digged_by? current_user %>
+                <a class='praise' href='javascript:void(0)'><strong><span><%= @sharing.digs_count %></span></strong></a>
+              <% else %>
+                <%= link_to_remote "<strong><span id='dig_sharing_#{@sharing.id}'>#{@sharing.digs_count}</span></strong>", :url => digs_url("dig[diggable_type]" => 'Sharing', "dig[diggable_id]" => @sharing.id, :at => 'sharing'), :html => {:class => 'praise'} %>
+              <% end %> 
               </li>
               <li>
                 <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => @shareable.id) %>(<%= @shareable.sharings_count %>)
@@ -39,7 +43,7 @@
             </ul>
           </div>
           <div id="navextra">
-            <%= link_to_function "<span class='close w-l'></span>关闭顶栏", "window.location.href = '#{@shareable.url}'" %>
+            <%= link_to_function "<span class='close w-l'></span>关闭顶栏", "window.location.href = '#{@shareable.url}';" %>
           </div>
         </div>
       </div>
@@ -51,6 +55,7 @@
 
 <%= javascript_tag "
   $('ifr').setStyle({height: '768px'});
+  document.body.setStyle({overflow: 'hidden'});
 " %>
 <div id="footer">
   <p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>

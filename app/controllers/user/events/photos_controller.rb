@@ -87,7 +87,7 @@ protected
       @album = @photo.album
       @event = @album.event
       @user = @event.poster
-			@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ['new', 'create'].include? params[:action]
       @album = EventAlbum.find(params[:album_id])
       @event = @album.event

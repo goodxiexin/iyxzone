@@ -17,17 +17,17 @@ class Blog < ActiveRecord::Base
 
 	acts_as_diggable :create_conditions => lambda {|user, blog| blog.privilege != 4 or blog.poster == user}
 
-	acts_as_privileged_resources
-
   acts_as_resource_feeds
 
-  acts_as_shareable
+  acts_as_shareable :default_title => lambda {|blog| blog.title}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 
+  acts_as_privileged_resources :owner_field => :poster # 指明资源的拥有者的域是poster
+
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster}, 
-                      :create_conditions => lambda {|user, blog| (user == blog.poster) || (blog.privilege == 1) || (blog.privilege == 2 and (blog.poster.has_friend? user or blog.poster.has_same_game_with? user)) || (blog.privilege == 3 and blog.poster.has_friend? user) || false}
+                      :create_conditions => lambda {|user, blog| blog.available_for? user}
 
   # poster_id 和 game_id 一经创建无法修改
   attr_readonly :poster_id, :game_id

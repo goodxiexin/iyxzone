@@ -105,7 +105,7 @@ protected
     if ['show'].include? params[:action]
       @event = Event.find(params[:id])
 			@user = @event.poster
-			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ['new'].include? params[:action]
       @guild = Guild.find(params[:guild_id]) unless params[:guild_id].blank?
     elsif ['edit', 'update', 'destroy'].include? params[:action]

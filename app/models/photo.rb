@@ -18,11 +18,11 @@ class Photo < ActiveRecord::Base
 
   attr_protected :verified
   
-	acts_as_privileged_resources
+	acts_as_privileged_resources :owner_field => :poster
 
 	acts_as_resource_feeds
 
-  acts_as_shareable
+  acts_as_shareable :default_title => lambda {|photo| "相册#{photo.album.title}的照片"}
 
   acts_as_diggable :create_conditions => lambda {|user, photo| (photo.type != 'PersonalPhoto' and photo.type != 'Avatar') or photo.privilege != 4}
 

@@ -10,7 +10,7 @@
     <h3><a href="#" class="left"><img class="imgbox01" src="images/photo/photo11.png" alt="" /></a></h3>
     <p class="con rows"><span>游戏：<%= game_link game %></span><span class="quote">“</span><%= game_sharing.reason %><span class="quote">”</span></p>
     <div class="feeds">
-      <%= link_to_function "评论", "Iyxzone.Comment.toggleBox('sharing', #{game_sharing.id})" %>(<%= game_sharing.comments_count %>) | 
+      <%= link_to_function "评论(#{game_sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{game_sharing.id}, #{game_sharing.comments_count})" %> | 
       <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Game', :shareable_id => game.id) %><span>(<%= game.sharings_count %>)</span> | 
       <%= link_to "更多分享", sharings_url(:id => game.first_sharer.id) %>
     </div>

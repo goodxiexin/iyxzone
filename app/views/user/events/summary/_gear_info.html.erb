@@ -15,7 +15,7 @@
   <td>
     <div style="position:relative;text-align:left">
       <%= link_to_function "#{avatar_image character.user, :class => "w-l", :algin => "absmiddle", :size => :small}<span><strong>#{character.name}</strong></span>", "Iyxzone.Event.Summary.Gear.toggleCharacterList(#{gear_id}, this)", :class => 'member-toggle' %>
-      <div class="drop-box" style="position: absolute; left: 0pt; top: 40px; display: none;"></div>
+      <div class="drop-box" style="position: absolute; left: 0pt; top: 0px; display: none;" character_id=<%= character.id %>></div>
     </div>
   </td>
   <td><%= link_to_function '', "Iyxzone.Event.Summary.Gear.remove(#{gear_id}, #{character_id}, this)", :class => "icon-active" %></td> 

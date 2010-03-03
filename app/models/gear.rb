@@ -10,6 +10,8 @@ class Gear < ActiveRecord::Base
 
   validates_size_of :name, :within => 1..100, :too_short => "不能小于1个字节", :too_long => "不能大于100个字节"
 
+  validates_uniqueness_of :name, :scope => :guild_id, :message => "不能重复"
+
   validates_presence_of :cost, :message => "不能为空"
 
   validates_numericality_of :cost, :message => "非法，必须是正整数", :greater_than => 0, :only_integer => true

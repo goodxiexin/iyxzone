@@ -95,7 +95,7 @@ protected
       @album = @photo.album
       @guild = @album.guild
       @user = @guild.president
-			#@reply_to = User.find(params[:reply_to]) if params[:reply_to]
+			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ['edit', 'update', 'update_notation', 'destroy'].include? params[:action]
       @photo = GuildPhoto.find(params[:id])
       @album = @photo.album

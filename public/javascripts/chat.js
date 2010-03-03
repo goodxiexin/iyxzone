@@ -7,6 +7,16 @@ Object.extend(Iyxzone.Chat, {
 
   friendID: null,
 
+  search: function(key){
+    $('chat-list').down('ul').childElements().each(function(li){
+      if(key == '' || li.readAttribute('pinyin').indexOf(key) >= 0 || li.readAttribute('login').indexOf(key) >= 0){
+        li.show();
+      }else{
+        li.hide();
+      }
+    }.bind(this));
+  },
+
   buildForm: function(friendID, token){
     var div = new Element('div', {id: 'chat-form-' + friendID, style: 'border: 1px solid black; padding: 10px; display:none'});
 

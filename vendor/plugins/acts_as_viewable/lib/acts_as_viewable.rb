@@ -48,15 +48,17 @@ module Controller
 
   def self.included(base)
     base.extend(ClassMethods)
+    base.class_eval do
+      include Viewable::Controller::InstanceMethods
+    end
   end
  
   module ClassMethods
-    
+
     def increment_viewing(model_name, opts)
       cattr_accessor :viewing_opts
       self.viewing_opts = {:model_name => model_name, :filter_opts => opts}
       after_filter :create_or_update_viewing, opts
-      include Viewable::Controller::InstanceMethods
     end
 
   end

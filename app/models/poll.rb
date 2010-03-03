@@ -26,7 +26,7 @@ class Poll < ActiveRecord::Base
   
   acts_as_diggable
 
-  acts_as_shareable
+  acts_as_shareable :default_title => lambda {|poll| poll.name}
   
 	acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, poll, comment| poll.poster == user || comment.poster == user}

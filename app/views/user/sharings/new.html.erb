@@ -5,12 +5,15 @@
 
 <div id='errors'></div>
 <div class='z-con'>
-<% form_remote_for :sharing, :url => sharings_url(:shareable_type => params[:shareable_type], :link => params[:link], :shareable_id => params[:shareable_id]) do |f| %>
+<% form_remote_for :sharing, :url => sharings_url(:shareable_type => params[:shareable_type], :shareable_id => params[:shareable_id]) do |f| %>
+<% if params[:link] %>
+  <%= hidden_field_tag 'sharing[link]', params[:link] %>
+<% end %>
 <div class='formcontent'>
   <div class="rows s_clear">
     <div class="fldid"><label for="name">分享标题：</label></div>
     <div class="fldvalue">
-      <div class="textfield"><%= f.text_field 'title' %></div>
+      <div class="textfield"><%= text_field_tag 'sharing[title]', @title %></div>
     </div>
   </div>
   <div class="rows s_clear">

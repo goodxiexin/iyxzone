@@ -3,13 +3,28 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="app-share">分享</h1>
-      <label>输入url来分享连接</label>
-      <%= text_field_tag 'link[url]' %>
-      <%= button_to_function '分享', 'Iyxzone.Share.shareLink()' %>
+    <%= render :partial => 'new_link_sharing' %>
     <div class="box02 canvas_int">
       <% if @user == current_user %>
       <div class="tab tab01">
         <div class="right gray"><a href="#">如何分享视频？</a> <a href="#">如何分享更方便？</a></div>
+        <%= link_to "分享到17gaming", "
+javascript: void((
+  function(s,d,e){
+    if(/localhost\:3000/.test(d.location))
+      return;
+    var f='http://localhost:3000/sharings/new?outside=1&link=',u=d.location,l=d.title,p=[e(u),'&title=',e(l)].join('');
+    function a(){
+      if(!window.open([f,p].join(''),'17gaming',['width=400,height=400,left=',(s.width-400)/2,',top=',(s.height-400)/2].join('')))
+        u.href=[f,p].join('');
+    };
+    if(/Firefox/.test(navigator.userAgent))
+      setTimeout(a,0);
+    else 
+      a();
+  })
+(screen,document,encodeURIComponent));
+        " %>
         <ul>
           <li><span><%= link_to "热门分享", hot_sharings_url(:type => 0) %></span></li>
           <li><span><%= link_to "最新创建", recent_sharings_url(:type => 0) %></span></li>
@@ -86,4 +101,10 @@
     </div>
   </div></div>
 </div></div></div></div>
-        
+
+<% if !@reply_to.blank? and !@sharing.blank? %>
+  <%= javascript_tag "
+    Iyxzone.Comment.toggleBox('sharing', #{@sharing.id}, #{@sharing.comments_count});
+    Iyxzone.Comment.set('sharing', #{@sharing.id}, '#{@reply_to.login}', #{@reply_to.id});" 
+  %>
+<% end %>

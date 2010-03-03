@@ -1,5 +1,7 @@
 class News < ActiveRecord::Base
+
   belongs_to :game
+
   belongs_to :poster, :class_name => 'User'
 
   named_scope :text, :conditions => ["news_type = '文字'"], :order => "created_at DESC"
@@ -9,10 +11,14 @@ class News < ActiveRecord::Base
   named_scope :video, :conditions => ["news_type = '视频'"], :order => "created_at DESC"
 
   attr_readonly :poster_id
+  
   acts_as_commentable :order => 'created_at ASC',
     :delete_conditions => lambda { |user, news, comment| user.has_role?('admin') || comment.poster == user }, :recipient_required => false
+  
   acts_as_diggable  
-  acts_as_shareable
+  
+  acts_as_shareable :default_title => lambda {|news| news.title}
+  
   acts_as_viewable
 
   def validate

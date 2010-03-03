@@ -19,7 +19,7 @@
   <%= javascript_include_tag 'menu' %>
   <%= javascript_include_tag 'chat' %>
   <%= calendar_date_select_includes "silver" %>
-  <%= juggernaut :client_id => current_user.id %>
+  <!-- <%= juggernaut :client_id => current_user.id %> -->
 </head>
 <body>
 
@@ -116,10 +116,10 @@
 
 <div id='chat-list'>
   <%= avatar current_user, :class => 'imgbox01' %>
-  <%= text_field_tag '', '' %>
+  <%= text_field_tag '', '', :onkeyup => "Iyxzone.Chat.search(this.value)" %>
   <ul>
   <% @online_friends.each do |f| %>
-    <li ondblclick="Iyxzone.Chat.showForm(<%= f.id %>, '<%= form_authenticity_token %>')"><%= avatar f, :class => 'imgbox01' %><%= f.login %></li>
+    <li pinyin='<%= f.pinyin %>' login='<%= f.login %>' ondblclick="Iyxzone.Chat.showForm(<%= f.id %>, '<%= form_authenticity_token %>')"><%= avatar f, :class => 'imgbox01' %><%= f.login %></li>
   <% end %>
   </ul>
 </div>

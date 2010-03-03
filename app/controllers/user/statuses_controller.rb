@@ -38,6 +38,13 @@ protected
   def setup
     if ["index"].include? params[:action]
       @user = User.find(params[:id])
+      if !params[:status_id].blank? and !params[:status_id].blank?
+        @reply_to = User.find(params[:reply_to])
+        @status = Status.find(params[:status_id])
+        params[:page] = current_user.statuses.index(@status) / 5 + 1
+        params.delete :status_id
+        params.delete :reply_to
+      end
     elsif ["destroy"].include? params[:action]
       @status = current_user.statuses.find(params[:id])
     end

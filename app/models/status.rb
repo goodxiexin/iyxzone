@@ -24,6 +24,6 @@ class Status < ActiveRecord::Base
 
   validates_presence_of :content, :message => "不能为空"
 
-  validates_size_of :content, :within => 1..200, :too_long => '最长140个字节', :too_short => '最短1个字节'
+  validates_size_of :content, :within => 1..420, :too_long => '最长420个字节', :too_short => '最短1个字节'
 
 end

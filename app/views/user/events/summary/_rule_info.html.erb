@@ -1,0 +1,27 @@
+<% rules.each do |id, count| %>
+<% rule_id = id.split('_').first %>
+<% character_id = id.split('_').last %>
+<% rule = @event.guild.rules.find(rule_id) %>
+<% character = GameCharacter.find(character_id) %>
+<tr class="jl-cutline" id='rule_<%= rule_id %>_<%= character_id %>'>
+  <td class="tl">
+    <div style="position:relative;text-align:left">
+      <%= avatar_image character.user, :class => 'w-l', :align => 'absmiddle', :size => :small %><span><strong><%= character.name %></strong></span>
+    </div>
+  </td>
+  <td>
+    <div style="position:relative;text-align:left">
+      <%= link_to_function "<span><strong>#{rule.reason}</strong></span>", "Iyxzone.Event.Summary.Rule.toggleRuleList(#{character_id}, this)", :class => 'member-toggle' %>
+      <div class='drop-box' style='position: absolute; left: 0pt; top: 0px; display: none;' rule_id=<%= rule_id %>></div>
+    </div>
+  </td>
+  <td>
+    <%= link_to_function count, "Iyxzone.Event.Summary.Rule.editCount(this)" %>
+    <div class="textfield" style="width: 40px; margin: 0 auto; display:none">
+      <%= text_field_tag '', count, :onblur => "Iyxzone.Event.Summary.Rule.updateCount(this, #{rule_id}, #{character_id})" %>
+    </div>
+  </td>
+  <td><%= rule.outcome %></td>
+  <td><%= link_to_function '', "Iyxzone.Event.Summary.Rule.remove(#{rule_id}, #{character_id}, this)", :href => 'javascript: void(0)', :class => "icon-active" %></td>
+</tr>
+<% end %>

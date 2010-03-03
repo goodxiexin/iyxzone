@@ -5,15 +5,15 @@ class PersonalPhoto < Photo
   validates_as_attachment
 
   acts_as_photo_taggable :delete_conditions => lambda {|user, photo, album| album.poster == user },
-                         :create_conditions => lambda {|user, photo, album| user == photo.poster || (photo.privilege != 4 and album.poster.has_friend?(user)) || false}
+                         :create_conditions => lambda {|user, photo, album| user == photo.poster || (!photo.is_owner_privilege? and album.poster.has_friend?(user)) || false}
 
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, photo, comment| photo.poster == user || comment.poster == user}, 
-                      :create_conditions => lambda {|user, photo| (photo.poster == user) || (photo.privilege == 1) || (photo.privilege == 2 and (photo.poster.has_friend? user or photo.poster.has_same_game_with? user)) || (photo.privilege == 3 and photo.poster.has_friend? user) || false}
+                      :create_conditions => lambda {|user, photo| photo.available_for? user }
 
   attr_readonly :poster_id, :game_id
 
-  validates_presence_of :album_id, :if => Proc.new {|avatar| avatar.thumbnail.blank?}
+  validates_presence_of :album_id, :if => "thumbnail.blank?"
 
   validate_on_update :album_is_valid
 

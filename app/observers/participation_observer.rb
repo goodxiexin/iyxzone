@@ -77,32 +77,47 @@ class ParticipationObserver < ActiveRecord::Observer
     recipients.concat participant.friends.find_all{|f| f.application_setting.recv_event_feed}
     participation.deliver_feeds :recipients => recipients
 	end
-
-	def after_destroy participation
+	
+  def after_destroy participation
 		event = participation.event
 		participant = participation.participant
-    
+   
+    if event.recently_deleted?
+      event.participants.each do |p|
+        p.notifications.create(
+          :category => Notification::EventChange,
+          :data => "活动 #{event.title} 取消了"
+        )
+      end
+    end
+ 
     if participation.is_invitation?
 			# invitation is declined
 			participant.raw_decrement :event_invitations_count
-			event.raw_decrement :invitations_count
-      event.poster.notifications.create(
+      unless event.recently_deleted?
+        event.raw_decrement :invitations_count
+        event.poster.notifications.create(
           :category => Notification::Participation,
           :data => "#{profile_link participant} 拒绝让游戏角色 #{participation.character.name} 加入你的活动 #{event_link event}")
+      end
 		elsif participation.is_request?
 			# request is declined
-			event.poster.raw_decrement :event_requests_count
-			event.raw_decrement :requests_count
-			participant.notifications.create(
+      unless event.recently_deleted?
+        event.poster.raw_decrement :event_requests_count
+        event.raw_decrement :requests_count
+			  participant.notifications.create(
           :category => Notification::Participation,
           :data => "#{profile_link event.poster}拒绝了让你的游戏角色 #{participation.character.name} 加入活动#{event_link event}的请求")
+      end
     elsif participation.is_authorized?
       # paricipant is evicted
       participant.raw_decrement :upcoming_events_count unless event.has_participant? participant 
-      event.raw_decrement field(participation.status)
-      participant.notifications.create(
+      unless event.recently_deleted?
+        event.raw_decrement field(participation.status)
+        participant.notifications.create(
           :category => Notification::Participation,
           :data => "你的游戏角色 #{participation.character.name} 被剔除出了活动 #{event_link event}")
+      end
     end
 	end
 

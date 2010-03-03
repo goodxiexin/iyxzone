@@ -513,13 +513,18 @@ Object.extend(Iyxzone.Event.Summary.Boss, {
         method: 'post',
         parameters: 'boss[name]=' + $('boss_name').value + '&boss[reward]=' + $('boss_reward').value,
         onSuccess: function(transport){
-          this.cancelBoss();
-          var boss = transport.responseText.evalJSON().boss;
-          var html = '<li><span><input type="checkbox" value=1 boss_id=' + boss.id + ' name="' + boss.name + '" reward=' + boss.reward + ' />' + boss.name + '-' + boss.reward + '</span></li>';
-          Element.insert($$('ul.checkboxes')[0], {bottom: html});
-          this.reset();
-          Element.insert('bosses', {bottom: this.getBossHTML(boss.id, 1, boss.name, boss.reward)});
-          this.summary.set(boss.id, {count: 1, name: boss.name, reward: boss.reward});
+          var json = transport.responseText.evalJSON();
+          if(json.errors){
+            alert(json.errors);
+          }else{
+            var boss = json.boss;
+            this.cancelBoss();
+            var html = '<li><span><input type="checkbox" value=1 boss_id=' + boss.id + ' name="' + boss.name + '" reward=' + boss.reward + ' />' + boss.name + '-' + boss.reward + '</span></li>';
+            Element.insert($$('ul.checkboxes')[0], {bottom: html});
+            this.reset();
+            Element.insert('bosses', {bottom: this.getBossHTML(boss.id, 1, boss.name, boss.reward)});
+            this.summary.set(boss.id, {count: 1, name: boss.name, reward: boss.reward});
+          }
         }.bind(this)
       });
     }
@@ -590,7 +595,7 @@ Object.extend(Iyxzone.Event.Summary.Gear, {
     html += '<td>' + cost + '</td>';
     html += '<td><div style="position:relative;text-align:left;">';
     html += '<a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Gear.toggleCharacterList(' + id + ', this)">点击选择获得者</a>';
-    html += '<div class="drop-box" style="position: absolute; left: 0pt; top: 40px; display: none;"></div>';
+    html += '<div class="drop-box" style="position: absolute; left: 0pt; top: 40px; display: none;" character_id=""></div>';
     html += '</div></td>';
     html += '<td><a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Gear.remove(' + id + ', null, this)" class="icon-active"></a></td>';
     html += '</tr>';
@@ -660,33 +665,40 @@ Object.extend(Iyxzone.Event.Summary.Gear, {
 
   selectCharacter: function(mouseEvent){
     var a = Event.findElement(mouseEvent, 'a');
+    
     var characterID = a.readAttribute('character_id');
     var gearID = a.readAttribute('gear_id');
-    var key = gearID + '_' + characterID;
-    var info = this.summary.get(key);
+    
+    // some elements
     var list = a.up('div');
+    var currentCharacter = list.previous();
     var characterTd = list.up('td');
     var countTd = characterTd.previous().previous();
     var delTd = characterTd.next();
     var tr = characterTd.up('tr');
-    var oldA = list.previous().childElements()[0];
-    
-    if(oldA){
-      this.summary.unset(gearID + '_' + oldA.readAttribute('character_id'));
+    var oldCharacterID = list.readAttribute('character_id');
+ 
+    if(oldCharacterID != ''){
+      this.summary.unset(gearID + '_' + oldCharacterID);
     }
 
-    if(info){
-      this.summary.set(key, {count: info.count});
-    }else{
+    if(characterID != ''){
       var count = countTd.childElements()[0].innerHTML;
-      this.summary.set(key, {count: count});
+      this.summary.set(gearID + '_' + characterID, {count: count});
     }
-    
-    Element.replace(list.previous(), "<a class='member-toggle' onclick='Iyxzone.Event.Summary.Gear.toggleCharacterList(" + gearID + ", this)' >" + a.innerHTML + "</a>");
-    tr.writeAttribute('id', 'gear_' + key); 
-    delTd.childElements()[0].writeAttribute('onclick', "Iyxzone.Event.Summary.Gear.remove(" + gearID + "," + characterID + ", this)");
-    countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Gear.updateCount(this, " + gearID + "," + characterID + ")");    
 
+    if(characterID == ''){
+      Element.replace(currentCharacter, "<a class='member-toggle' onclick='Iyxzone.Event.Summary.Gear.toggleCharacterList(" + gearID + ", this)' >" + "点击选择接收者" + "</a>");
+      delTd.childElements()[0].writeAttribute('onclick', "Iyxzone.Event.Summary.Gear.remove(" + gearID + ", null, this)");
+      countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Gear.updateCount(this, " + gearID + ", null)");
+    }else{
+      Element.replace(list.previous(), "<a class='member-toggle' onclick='Iyxzone.Event.Summary.Gear.toggleCharacterList(" + gearID + ", this)' >" + a.innerHTML + "</a>");
+      delTd.childElements()[0].writeAttribute('onclick', "Iyxzone.Event.Summary.Gear.remove(" + gearID + "," + characterID + ", this)");
+      countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Gear.updateCount(this, " + gearID + "," + characterID + ")");    
+    }
+  
+    list.writeAttribute('character_id', characterID);
+    tr.writeAttribute('id', 'gear_' + gearID + '_' + characterID);
     list.hide();
   },
 
@@ -773,12 +785,17 @@ Object.extend(Iyxzone.Event.Summary.Gear, {
         method: 'post',
         parameters: 'gear[name]=' + $('gear_name').value + '&gear[cost]=' + $('gear_cost').value,
         onSuccess: function(transport){
-          this.cancelGear();
-          var gear = transport.responseText.evalJSON().gear;
-          var html = '<li><span><input type="checkbox" value=1 gear_id=' + gear.id + ' name="' + gear.name + '" cost=' + gear.cost + ' />' + gear.name + '-' + gear.cost + '</span></li>';
-          Element.insert($$('ul.checkboxes')[0], {bottom: html});
-          this.reset();
-          Element.insert('gears', {bottom: this.getGearHTML(gear.id, 1, gear.name, gear.cost)});
+          var json = transport.responseText.evalJSON();
+          if(json.errors){
+            alert(json.errors);
+          }else{
+            this.cancelGear();
+            var gear = json.gear;
+            var html = '<li><span><input type="checkbox" value=1 gear_id=' + gear.id + ' name="' + gear.name + '" cost=' + gear.cost + ' />' + gear.name + '-' + gear.cost + '</span></li>';
+            Element.insert($$('ul.checkboxes')[0], {bottom: html});
+            this.reset();
+            Element.insert('gears', {bottom: this.getGearHTML(gear.id, 1, gear.name, gear.cost)});
+          }
         }.bind(this)
       });
     }
@@ -803,23 +820,19 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
     this.token = token;
 
     for(var i=0;i<ids.length;i++){
-      this.summary.set(ids[i] + "_" + characterIDs[i], {reason: reasons[i], count: counts[i], outcome: outcomes[i]});
+      this.summary.set(ids[i] + '_' + characterIDs[i], {reason: reasons[i], count: counts[i], outcome: outcomes[i]});
     }
 
-    //setTimeout(this.save.bind(this), 20000);
+    setTimeout(this.save.bind(this), 5000);
   },
 
   reset: function(){
     $$('input').each(function(input){
-      if(input.type == 'checkbox' && input.readAttribute('rule_id')){
+      if(input.type == 'checkbox' && input.readAttribute('character_id')){
         input.checked = false;
       }
     }.bind(this));
   },
-
-  selectCharacters: function(){
-    $('friend-wrap').toggle();
-  },  
 
   addCharacters: function(){
     var params = "";
@@ -828,7 +841,9 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
     $$('input').each(function(e){
       if(e.type == 'checkbox' && e.checked){
         var id = e.readAttribute('character_id');
-        Element.insert('Rules', {bottom: this.getRuleHTML(id, 1, name, cost)});
+        var avatar = e.readAttribute('avatar');
+        var name = e.readAttribute('name');
+        Element.insert('rewards', {bottom: this.getRewardHTML(id, 1, name, avatar)});
       }
     }.bind(this));
 
@@ -836,22 +851,112 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
     this.reset();
   },
 
-  getRuleHTML: function(id, count, name, cost){
-    var html = '';
-    html += '<tr class="jl-cutline" id="Rule_' + id + '">';
-    html += '<td class="tl">' + name + '</td>';
+  getRewardHTML: function(characterID, count, name, avatar){
+    var html = '<tr class="jl-cutline" id="rule_' + '_' + characterID + '">';
+    html += '<td class="tl"><div style="position:relative;text-align:left">';
+    html += '<img src="/images/' + avatar + '" class="w-l" align="absmiddle"><span><strong>' + name + '</strong></span>';
+    html += '</div></td>';
+    html += '<td><div style="position:relative;text-align:left">';
+    html += '<a onclick="Iyxzone.Event.Summary.Rule.toggleRuleList(' + characterID + ', this)" class="member-toggle">点击选择规定</a>';
+    html += '<div class="drop-box" style="position: absolute; left: 0px; top: 0px; display:none" rule_id=""></div>';
+    html += '</div></td>';
     html += '<td>';
     html += '<a onclick="Iyxzone.Event.Summary.Rule.editCount(this)">' + count + '</a>';
-    html += '<div class="textfield" style="width: 80px; margin: 0 auto;display:none"><input type="text" value=' + count + ' onblur="Iyxzone.Event.Summary.Rule.updateCount(this, ' + id + ', null)"></div>';
+    html += '<div class="textfield" style="width: 40px; margin: 0 auto;display:none"><input type="text" value=' + count + ' onblur="Iyxzone.Event.Summary.Rule.updateCount(this, null, ' + characterID + ')"></div>';
     html += '</td>';
-    html += '<td>' + cost + '</td>';
-    html += '<td><div style="position:relative;text-align:left;">';
-    html += '<a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Rule.toggleCharacterList(' + id + ', this)">点击选择获得者</a>';
-    html += '<div class="drop-box" style="position: absolute; left: 0pt; top: 40px; display: none;"></div>';
-    html += '</div></td>';
-    html += '<td><a href="javascript:void(0)" onclick="Iyxzone.Event.Summary.Rule.remove(' + id + ', null, this)" class="icon-active"></a></td>';
+    html += '<td></td>';
+    html += '<td><a href="javascript: void(0)" onclick="Iyxzone.Event.Summary.Rule.remove(null, ' + characterID + ', this)" class="icon-active" /></a></td>';
     html += '</tr>';
     return html;
+  },
+
+  toggleRuleList: function(id, div){
+    var list = div.next();
+    if(list.visible()){
+      list.hide();
+      return;
+    }
+
+    var ruleIDs = new Array();
+
+    this.summary.keys().each(function(key){
+      var ruleID = key.substr(0, key.indexOf('_'));
+      var characterID = key.substr(key.indexOf('_') + 1);
+      if(characterID == id){
+        ruleIDs.push(ruleID);
+      }
+    }.bind(this));
+
+    list.innerHTML = $('rule_selector').innerHTML;
+    var items = list.childElements();
+    items.each(function(i){
+      var ruleID = i.readAttribute('rule_id');
+      if(ruleIDs.include(ruleID)){
+        i.hide();
+      }else{
+        i.writeAttribute({character_id: id});
+        i.observe('click', this.selectRule.bindAsEventListener(this));
+        i.show();
+      }
+    }.bind(this));
+
+    list.show();    
+  },
+
+  selectRule: function(mouseEvent){
+    var a = Event.findElement(mouseEvent, 'a');
+
+    var characterID = a.readAttribute('character_id');
+    var ruleID = a.readAttribute('rule_id');
+    var outcome = a.readAttribute('outcome');
+
+    // some elements
+    var list = a.up('div');
+    var currentRule = list.previous();
+    var ruleTd = list.up('td');
+    var countTd = ruleTd.next();
+    var outcomeTd = ruleTd.next().next();
+    var delTd = ruleTd.next().next().next();
+    var tr = ruleTd.up('tr');
+    var oldRuleID = list.readAttribute('rule_id');
+
+    if(oldRuleID != ''){
+      this.summary.unset(oldRuleID + '_' + characterID);
+    }
+
+    if(ruleID != ''){
+      var count = countTd.childElements()[0].innerHTML;
+      this.summary.set(ruleID + '_' + characterID, {count: count});
+      alert(this.summary.keys());
+    }
+
+    if(ruleID == ''){
+      Element.replace(currentRule, "<a class='member-toggle' onclick='Iyxzone.Event.Summary.Rule.toggleRuleList(" + characterID + ", this)' >" + "点击选择规则" + "</a>");
+      delTd.childElements()[0].writeAttribute('onclick', "Iyxzone.Event.Summary.Rule.remove(null, " + characterID + ", this)");
+      countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Rule.updateCount(this, null, " + characterID + ")");
+    }else{
+      Element.replace(currentRule, "<a class='member-toggle' onclick='Iyxzone.Event.Summary.Rule.toggleRuleList(" + characterID + ", this)' >" + a.innerHTML + "</a>");
+      delTd.childElements()[0].writeAttribute('onclick', "Iyxzone.Event.Summary.Rule.remove(" + ruleID + "," + characterID + ", this)");
+      countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Rule.updateCount(this, " + ruleID + "," + characterID + ")");
+    }
+
+    outcomeTd.innerHTML = outcome;
+    list.writeAttribute('rule_id', ruleID);
+    tr.writeAttribute('id', 'rule_' + ruleID + '_' + characterID);
+    list.hide();
+  },
+
+  selectCharacters: function(){
+    $('friend-wrap').toggle();
+  },
+
+  remove: function(ruleID, characterID, div){
+    if(ruleID == null){
+      div.up().up().remove();
+    }else{
+      this.summary.unset(ruleID + '_' + characterID);
+      $('rule_' + ruleID + '_' + characterID).remove();
+    }
   },
 
   editCount: function(div){
@@ -859,92 +964,17 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
     div.next().show();
   },
 
-  updateCount: function(field, id, characterID){
+  updateCount: function(field, ruleID, characterID){
     var div = field.up();
     var row = div.up().up();
     div.previous().innerHTML = field.value;
     div.hide();
     div.previous().show();
-    if(characterID != null){
-      var info = this.summary.get(id + '_' + characterID);
+    if(ruleID != null){
+      var info = this.summary.get(ruleID + '_' + characterID);
       info.count = field.value;
-      this.summary.set(id + '_' + characterID, info);
+      this.summary.set(ruleID + '_' + characterID, info);
     }
-  },
-
-  remove: function(id, characterID, div){
-    this.summary.unset(id + '_' + characterID);
-    if(characterID == null)
-      div.up().up().remove();
-    else
-      $('Rule_' + id + '_' + characterID).remove();
-  },
-
-  toggleCharacterList: function(id, div){
-    var list = div.next();
-    if(list.visible()){
-      list.hide();
-      return;
-    }
-    var characterIDs = new Array();
-
-    this.summary.keys().each(function(key){
-      var RuleID = key.substr(0, key.indexOf('_'));
-      var characterID = key.substr(key.indexOf('_') + 1);
-      if(RuleID == id){
-        characterIDs.push(characterID);
-      }
-    }.bind(this));
-    
-    var list = div.next();
-    if(list.innerHTML == ''){
-      list.innerHTML = $('Rule_recipients').innerHTML;
-    }
-    var items = list.childElements();
-    items.each(function(i){
-      var characterID = i.readAttribute('character_id');
-      if(characterIDs.include(characterID)){
-        i.hide();
-      }else{
-        i.writeAttribute({Rule_id: id});
-        i.observe('click', this.selectCharacter.bindAsEventListener(this));
-        i.show();
-      }
-    }.bind(this));
-
-    list.show();
-  },
-
-  selectCharacter: function(mouseEvent){
-    var a = Event.findElement(mouseEvent, 'a');
-    var characterID = a.readAttribute('character_id');
-    var RuleID = a.readAttribute('Rule_id');
-    var key = RuleID + '_' + characterID;
-    var info = this.summary.get(key);
-    var list = a.up('div');
-    var characterTd = list.up('td');
-    var countTd = characterTd.previous().previous();
-    var delTd = characterTd.next();
-    var tr = characterTd.up('tr');
-    var oldA = list.previous().childElements()[0];
-    
-    if(oldA){
-      this.summary.unset(RuleID + '_' + oldA.readAttribute('character_id'));
-    }
-
-    if(info){
-      this.summary.set(key, {count: info.count});
-    }else{
-      var count = countTd.childElements()[0].innerHTML;
-      this.summary.set(key, {count: count});
-    }
-    
-    Element.replace(list.previous(), "<a class='member-toggle' onclick='Iyxzone.Event.Summary.Rule.toggleCharacterList(" + RuleID + ", this)' >" + a.innerHTML + "</a>");
-    tr.writeAttribute('id', 'Rule_' + key); 
-    delTd.childElements()[0].writeAttribute('onclick', "Iyxzone.Event.Summary.Rule.remove(" + RuleID + "," + characterID + ", this)");
-    countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Rule.updateCount(this, " + RuleID + "," + characterID + ")");    
-
-    list.hide();
   },
 
   save: function(){
@@ -953,13 +983,13 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
 
     this.summary.each(function(pair){
       var key = pair.key;
-      var RuleID = key.substr(0, key.indexOf('_'));
+      var ruleID = key.substr(0, key.indexOf('_'));
       var characterID = key.substr(key.indexOf('_') + 1);
       var count = pair.value.count;
-      params += "info[" + RuleID + "_" + characterID + "][count]=" + count + "&";
+      params += "info[" + ruleID + "_" + characterID + "][count]=" + count + "&";
     }.bind(this));
 
-    new Ajax.Request('/events/' + this.eventID + '/summary/save?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+    new Ajax.Request('/events/' + this.eventID + '/summary/save?step=4&authenticity_token=' + encodeURIComponent(this.token), {
       method: 'post',
       parameters: params,
       onSuccess: function(transport){
@@ -980,7 +1010,7 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
       params += "info[" + RuleID + "_" + characterID + "][count]=" + count + "&";
     }.bind(this));
 
-    new Ajax.Request('/events/' + this.eventID + '/summary/next?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+    new Ajax.Request('/events/' + this.eventID + '/summary/next?step=4&authenticity_token=' + encodeURIComponent(this.token), {
       method: 'post',
       parameters: params
     });
@@ -998,26 +1028,26 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
       params += "info[" + RuleID + "_" + characterID + "][count]=" + count + "&";
     }.bind(this));
 
-    new Ajax.Request('/events/' + this.eventID + '/summary/prev?step=3&authenticity_token=' + encodeURIComponent(this.token), {
+    new Ajax.Request('/events/' + this.eventID + '/summary/prev?step=4&authenticity_token=' + encodeURIComponent(this.token), {
       method: 'post',
       parameters: params
     });
   },
 
   newRule: function(){
-    $('new_Rule').hide();
-    $('new_Rule_name').show();
-    $('Rule_name').value = '输入装备名字';
-    $('new_Rule_cost').show();
-    $('Rule_cost').value = '输入装备所需积分';
-    $('new_Rule_submit').show();
+    $('new_rule').hide();
+    $('new_rule_reason').show();
+    $('rule_reason').value = '输入原因';
+    $('new_rule_outcome').show();
+    $('rule_outcome').value = '输入赏罚';
+    $('new_rule_submit').show();
   },
 
   cancelRule: function(){
-    $('new_Rule_name').hide();
-    $('new_Rule_cost').hide();
-    $('new_Rule_submit').hide();
-    $('new_Rule').show();
+    $('new_rule_reason').hide();
+    $('new_rule_outcome').hide();
+    $('new_rule_submit').hide();
+    $('new_rule').show();
   },
 
   validateRule: function(){
@@ -1026,16 +1056,18 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
 
   createRule: function(){
     if(this.validateRule()){
-      new Ajax.Request('/guilds/' + this.guildID + '/Rules?authenticity_token=' + encodeURIComponent(this.token), {
+      new Ajax.Request('/guilds/' + this.guildID + '/rules?authenticity_token=' + encodeURIComponent(this.token), {
         method: 'post',
-        parameters: 'Rule[name]=' + $('Rule_name').value + '&Rule[cost]=' + $('Rule_cost').value,
+        parameters: 'rule[reason]=' + $('rule_reason').value + '&rule[outcome]=' + $('rule_outcome').value,
         onSuccess: function(transport){
-          this.cancelRule();
-          var Rule = transport.responseText.evalJSON().Rule;
-          var html = '<li><span><input type="checkbox" value=1 Rule_id=' + Rule.id + ' name="' + Rule.name + '" cost=' + Rule.cost + ' />' + Rule.name + '-' + Rule.cost + '</span></li>';
-          Element.insert($$('ul.checkboxes')[0], {bottom: html});
-          this.reset();
-          Element.insert('Rules', {bottom: this.getRuleHTML(Rule.id, 1, Rule.name, Rule.cost)});
+          var json = transport.responseText.evalJSON();
+          if(json.errors){
+            alert(json.errors);
+          }else{
+            var rule = json.guild_rule;
+            this.cancelRule();
+            Element.insert('rule_selector', {bottom: "<a class='member-toggle' rule_id='" + rule.id + "' outcome=" + rule.outcome + "><span><strong>" + rule.reason + "</strong></span></a>"}); 
+          }
         }.bind(this)
       });
     }

@@ -117,8 +117,7 @@
   slide = new Iyxzone.Photo.Slide('personal_photo', #{@photo.id}, #{photo_ids}, #{urls}, $('frames').childElements(), $('down_btn'), $('up_btn'));
   tagger = new Iyxzone.Photo.Tagger('personal_photo', #{@photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{@tags}, 'photo_tags', #{@user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
 "%>
+
 <% unless @reply_to.blank? %>
-<%= javascript_tag "
-	Iyxzone.Comment.set('personal_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});
-" %>
+<%= javascript_tag "Iyxzone.Comment.set('personal_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
 <% end %>

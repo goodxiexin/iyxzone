@@ -1,0 +1,17 @@
+你有<%= @contacts.size %>个联系人，其中：
+<%= @registered_contacts.size %>个联系人注册了这个网站，
+<%= @unregistered_contacts.size %>没有注册，你可以邀请他们
+
+<%= check_box_tag "", 1, false, :onclick => "Iyxzone.ContactsGrabber.toggleAll('unregister_table', this);" %> 全选
+<table id='unregister_table'>
+<% @unregistered_contacts.each do |c| %>
+  <tr>
+    <td><%= check_box_tag '', 1, false %></td>
+    <td><%= c[:nickname] %></td>
+    <td><%= c[:email] %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= button_to_function "发送邀请", "Iyxzone.ContactsGrabber.inviteContactsToSignup('#{form_authenticity_token}');" %>
+

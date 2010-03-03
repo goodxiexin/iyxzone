@@ -12,6 +12,9 @@ class CreateUsers < ActiveRecord::Migration
       t.datetime	:activated_at
       t.string	:password_reset_code
       t.string :invite_code # 用于万能邀请
+      t.string :qq_invite_code # qq邀请
+      t.string :msn_invite_code # msn邀请
+      t.string :invite_method # qq, msn, email
       t.boolean	:enabled,	:default => true
 			t.integer :avatar_id
       t.string :pinyin

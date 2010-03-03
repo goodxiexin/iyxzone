@@ -11,7 +11,7 @@ Iyxzone.Share = {
   },
 
   validateURL: function(url){
-    if(!url.match(/^((https?:\/\/)?)(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/)){
+    if(!url.match(/(http:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-%=&]+)?/)){
       error('非法的url地址');
       return false;
     }
@@ -19,11 +19,11 @@ Iyxzone.Share = {
   },
 
   shareLink: function(){
-    var url = $('link_url').value;
+    var url = $('link').value;
     if(this.validateURL(url)){
       new Ajax.Request('/sharings/new', {
         method: 'get',
-        parameters: 'shareable_type=Link&link[url]=' + url,
+        parameters: 'shareable_type=Link&link=' + url,
         onSuccess: function(transport){
           facebox.reveal(transport.responseText);
         }

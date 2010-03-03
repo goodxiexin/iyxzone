@@ -5,8 +5,10 @@ class User::DigsController < UserBaseController
     if @dig.save
       render :update do |page|
         page << "tip('成功')"
-				page << "$('dig_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = #{@dig.diggable.digs_count}"
-        if params[:at].to_i != 1
+        if params[:at] == 'sharing'
+          page << "$('dig_sharing_#{@dig.diggable.id}').innerHTML = \"<a class='praise' href='javascript:void(0)'><strong><span>#{@dig.diggable.digs_count}</span></strong></a>\";"
+        else
+				  page << "$('dig_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = #{@dig.diggable.digs_count}"
 				  page << "$('digging_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = '<a href=\"#\">已赞</a>'"
         end 
       end

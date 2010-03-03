@@ -227,15 +227,42 @@ class CommentObserver < ActiveRecord::Observer
 	end
 
   def after_sharing_comment_create comment
-    # nothing to do right now
+    sharing = comment.commentable
+    poster = sharing.poster
+    commentor = comment.poster
+    recipient = comment.recipient
+
+    if poster != commentor
+      comment.notices.create(:user_id => poster.id, :data => 'comment')
+      CommentMailer.deliver_sharing_comment comment, poster if poster.mail_setting.comment_my_sharing
+    end
+
+    if recipient != poster and recipient != commentor
+      comment.notices.create(:user_id => recipient.id, :data => 'reply')
+      CommentMailer.deliver_sharing_comment comment, recipient if recipient.mail_setting.comment_same_sharing_after_me
+    end
   end
 
   def after_application_comment_create comment
-    # nothing to do right now
+    application = comment.commentable
+    commentor = comment.poster
+    recipient = comment.recipient
+
+    if commentor != recipient and !recipient.blank?
+      comment.notices.create(:user_id => recipient.id, :data => 'reply')
+      CommentMailer.deliver_application_comment comment, recipient if recipient.mail_setting.comment_same_application_after_me
+    end
   end
 
   def after_news_comment_create comment
+    news = comment.commentable
+    commentor = comment.poster
+    recipient = comment.recipient
 
+    if commentor != recipient and !recipient.blank?
+      comment.notices.create(:user_id => recipient.id, :data => 'reply')
+      CommentMailer.deliver_news_comment comment, recipient if recipient.mail_setting.comment_same_news_after_me
+    end
   end
   
   def after_destroy comment

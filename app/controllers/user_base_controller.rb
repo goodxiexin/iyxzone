@@ -4,10 +4,6 @@ class UserBaseController < ApplicationController
 
   include RoleRequirementSystem
 
-  def user_game_conds
-    {:game_id => current_user.characters.map(&:game_id).uniq}
-  end
-
   before_filter :login_required
 
   before_filter :get_online_friends
@@ -16,6 +12,12 @@ class UserBaseController < ApplicationController
 
   before_filter :setup
 
+protected
+
+  def user_game_conds
+    {:game_id => current_user.characters.map(&:game_id).uniq}
+  end
+  
   def get_online_friends
     @online_friends = current_user.online_friends
   end
@@ -27,5 +29,11 @@ class UserBaseController < ApplicationController
   def setup
     # override this method in child controller
   end
+
+  def record_not_found
+    render :template => 'record_not_found'
+  end
+
+
 
 end

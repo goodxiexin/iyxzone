@@ -10,7 +10,7 @@
         <p>地点：<%= server_location event.game_server %></p>
         <p>时间：<%= ftime event.start_time %> 到 <%= ftime event.end_time %></p>
         <p>组织者: <%= profile_link event.poster %></p>
-				<% if current_user == event.poster and !event.expired%>
+				<% if current_user == event.poster and !event.expired? %>
         <p><span>
           <%= link_to "邀请更多人", new_event_invitation_url(event) %> | <%= facebox_confirm "放所有人鸽子", event_url(event), {:msg => '你确定要放所有人鸽子?', :method => :delete } %>
         </span></p>

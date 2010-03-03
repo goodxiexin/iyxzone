@@ -14,9 +14,9 @@ class Event < ActiveRecord::Base
 
   belongs_to :guild
 
-	named_scope :hot, :conditions => {:expired => 0}, :order => 'confirmed_count DESC'
+	named_scope :hot, :conditions => ["end_time < ?", Time.now], :order => 'confirmed_count DESC'
 	
-	named_scope :recent, :conditions => {:expired => 0}, :order => 'start_time DESC'
+	named_scope :recent, :conditions => ["end_time < ?", Time.now], :order => 'start_time DESC'
 
   named_scope :unverified, :conditions => {:verified => 0}, :order => "created_at DESC"
   
@@ -26,7 +26,7 @@ class Event < ActiveRecord::Base
 
   attr_protected :verified
   
-  has_many :participations#, :dependent => :destroy
+  has_many :participations, :dependent => :destroy
 
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
 
@@ -99,6 +99,10 @@ class Event < ActiveRecord::Base
 
   validate_on_create :character_is_valid
 
+  def expired?
+    end_time < Time.now
+  end
+
   def participants_count
     confirmed_count + maybe_count
   end
@@ -132,7 +136,7 @@ class Event < ActiveRecord::Base
   end
 
   def is_requestable_by? user
-    return -3 if expired 
+    return -3 if expired? 
     return -1 if user.characters.find(:first, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}).blank?
 
     if is_guild_event?
@@ -151,6 +155,14 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def recently_deleted?
+    @recently_deleted
+  end
+
+  def recently_deleted= val
+    @recently_deleted = val
+  end
+ 
 protected
 
   def time_is_valid

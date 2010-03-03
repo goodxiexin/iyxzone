@@ -70,6 +70,7 @@ protected
       @user = User.find(params[:id]) 
     elsif ["more_feeds", "show"].include? params[:action]
       @game = Game.find(params[:id])
+      @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ["sexy", "hot", "beta"].include? params[:action]
       @user = current_user
     elsif ["game_details"].include? params[:action]

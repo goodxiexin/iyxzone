@@ -14,10 +14,12 @@ class User::Guilds::RulesController < UserBaseController
   end
 
   def create
-    rule_params = (params[:rule] || {}).merge({:type => 2, :guild_id => @guild.id})
-    @rule = Guild.new(rule_params)
+    rule_params = (params[:rule] || {}).merge({:rule_type => 2, :guild_id => @guild.id})
+    @rule = GuildRule.new(rule_params)
     if @rule.save
       render :json => @rule
+    else
+      render :json => {:errors => @rule.errors}
     end
   end
 
@@ -49,7 +51,7 @@ class User::Guilds::RulesController < UserBaseController
 protected
 
   def setup
-    if ["index", "new", "create_or_update"].include? params[:action]
+    if ["index", "new", "create", "create_or_update"].include? params[:action]
       @guild = current_user.guilds.find(params[:guild_id])
     elsif ["destroy"].include? params[:action]
       @guild = current_user.guilds.find(params[:guild_id])

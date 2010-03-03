@@ -1,0 +1,33 @@
+你有<%= @contacts.size %>个好友，其中：
+<%= @registered_contacts.size %>个好友注册了这个网站，
+<%= @unregistered_contacts.size %>没有注册，你可以邀请他们
+
+<%= check_box_tag "", 1, false, :onclick => "Iyxzone.ContactsGrabber.toggleAll('unregister_table');" %> 全选
+<table id='unregister_table'>
+<% @unregistered_contacts.each do |c| %>
+  <tr>
+    <td><%= check_box_tag '', 1, false %></td>
+    <td><%= c[:nickname] %></td>
+    <td><%= c[:email] %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= button_to_function "发送邀请", "Iyxzone.ContactsGrabber.inviteContactsToSignup();" %>
+
+你有<%= @contacts.size %>个联系人，其中：
+<%= @friend_contacts.size %>个联系人已经是你在17gaming上的好友了
+<%= @not_friend_contacts.size %>不是你的好友，你可以加他们为好友
+
+<%= check_box_tag "", 1, false, :onclick => "Iyxzone.ContactsGrabber.toggleAll('not_friend_table');" %> 全选
+<table id='not_friend_table'>
+<% @not_friend_contacts.each do |c| %>
+  <tr>
+    <td><%= check_box_tag '', 1, false %></td>
+    <td><%= c[:nickname] %></td>
+    <td><%= c[:email] %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= button_to_function "加为好友", "Iyxzone.SignupInviter.addContactsAsFriends();" %>

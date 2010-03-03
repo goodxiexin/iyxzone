@@ -4,7 +4,9 @@ class Album < ActiveRecord::Base
 
   belongs_to :game
 
-  acts_as_shareable
+  acts_as_privileged_resources :owner_field => :poster
+
+  acts_as_shareable :default_title => lambda { |album| album.title }
 
   acts_as_resource_feeds
 

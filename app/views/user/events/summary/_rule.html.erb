@@ -9,7 +9,7 @@
     <div class="fldid">选择接受额外赏罚的角色</div>
     <div class="fldvalue">
       <div class="selector" style="width:200px">
-        <%= link_to_function '', :onclick => "Iyxzone.Event.Summary.Reward.selectCharacters();" %>
+        <%= link_to_function '', :onclick => "Iyxzone.Event.Summary.Rule.selectCharacters();" %>
         <input />
         <div id="friend-wrap" class="drop-wrap" style="display:none"> 
           <iframe src="" frameborder="0"></iframe>
@@ -20,11 +20,11 @@
             </div>
             <ul class="checkboxes rows s_clear">
               <% @attendants.each do |p| %>
-                <li><span><%= check_box_tag '', 1, false, :character_id => p.id %><%= "#{p.user.login}-#{p.name}" %></span></li>
+                <li><span><%= check_box_tag '', 1, false, :character_id => p.id, :avatar => avatar_path(p.user, 'small'), :name => p.name %><%= "#{p.user.login}-#{p.name}" %></span></li>
               <% end %>
             </ul>
             <div class="foot rows">
-              <span class="button"><span><%= button_to_function "确定", "Iyxzone.Event.Summary.Reward.addCharacters()" %></span></span>
+              <span class="button"><span><%= button_to_function "确定", "Iyxzone.Event.Summary.Rule.addCharacters()" %></span></span>
             </div>
           </div>
         </div>
@@ -42,18 +42,18 @@
       </tr>
     </thead>
     <tbody id='rewards'>
-      <%= render :partial => 'reward_info', :locals => {:rewards => session[:event_summary][:rewards]} %>
+      <%= render :partial => 'rule_info', :locals => {:rules => @rule_infos} %>
     </tbody>
     <tbody>
       <tr>
+        <td></td>
         <td>
-          <div class="textfield" id='new_rule'><input value="点击添加新的规则" onclick="Iyxzone.Event.Summary.Reward.newRule()" /></div>
-        </td>
-        <td>
+          <div class="textfield" id='new_rule'><input value="点击添加新的规则" onclick="Iyxzone.Event.Summary.Rule.newRule()" /></div>
           <div id='new_rule_reason' style="display:none">
             <div class='textfield'><%= text_field_tag 'rule[reason]', '', :onclick => "this.clear()" %></div>
           </div>
         </td>
+        <td></td>
         <td>
           <div id='new_rule_outcome' style='display:none'>
             <div class='textfield' style="width: 80px; margin: 0 auto;"><%= text_field_tag 'rule[outcome]', '', :onclick => "this.clear()" %></div>
@@ -61,29 +61,29 @@
         </td>
         <td>
           <div id='new_rule_submit' style='display:none'>
-            <%= button_to_function '创建', "Iyxzone.Event.Summary.Reward.createRule(this)" %>
-            <%= link_to_function '取消', "Iyxzone.Event.Summary.Reward.cancelRule(this)" %>
+            <%= button_to_function '创建', "Iyxzone.Event.Summary.Rule.createRule(this)" %>
+            <%= link_to_function '取消', "Iyxzone.Event.Summary.Rule.cancelRule(this)" %>
           </div>
         </td>
       </tr>
     </tbody>
     <tfoot>
       <td colspan="3">
-        <span class="button w-l"><span><button type="submit" onclick="Iyxzone.Event.Summary.Reward.prev()">上一步</button></span></span>
-        <span class="button w-l"><span><button type="submit" onclick="Iyxzone.Event.Summary.Reward.next()">下一步</button></span></span>
+        <span class="button w-l"><span><button type="submit" onclick="Iyxzone.Event.Summary.Rule.prev()">上一步</button></span></span>
+        <span class="button w-l"><span><button type="submit" onclick="Iyxzone.Event.Summary.Rule.next()">下一步</button></span></span>
       </td>
     </tfoot>
   </table>
 </div>
 
-<% if @character_ids.blank? %>
+<div class='drop-box' id='rule_selector' style='display:none'>
+  <a class='member-toggle' rule_id=''><span><strong>----</strong></span></a>
+  <% @guild.basic_rules.each do |r| %>
+    <a class='member-toggle' rule_id=<%= r.id %> outcome=<%= r.outcome %>><span><strong><%= truncate r.reason, :length => 20, :omission => '...' %>(<%= r.outcome %>)</strong></span></a>
+  <% end %>
+</div>
+
 <%= javascript_tag "
-  Iyxzone.Event.Summary.Reward.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', [], []);
-  Iyxzone.Event.Summary.Reward.reset(); 
+  Iyxzone.Event.Summary.Rule.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', #{integer_array_for_javascript @rule_ids}, #{integer_array_for_javascript @character_ids}, #{integer_array_for_javascript @counts}, #{array_or_string_for_javascript @reasons}, #{integer_array_for_javascript @outcomes});
+  Iyxzone.Event.Summary.Rule.reset();
 " %>
-<% else %>
-<%= javascript_tag "
-  Iyxzone.Event.Summary.Reward.load(#{@event.id}, #{@event.guild_id}, '#{form_authenticity_token}', #{array_or_string_for_javascript @character_ids}, #{array_or_string_for_javascript @rule_ids});
-  Iyxzone.Event.Summary.Reward.reset(); 
-" %>
-<% end %>

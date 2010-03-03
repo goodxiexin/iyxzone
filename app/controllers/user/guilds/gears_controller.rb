@@ -13,6 +13,8 @@ class User::Guilds::GearsController < UserBaseController
     @gear = Gear.new(gear_params)
     if @gear.save
       render :json => @gear
+    else
+      render :json => {:errors => @gear.errors}
     end
   end
 

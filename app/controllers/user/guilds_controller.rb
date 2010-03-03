@@ -91,6 +91,7 @@ protected
       @user = User.find(params[:id])
     elsif ['show', 'more_feeds'].include? params[:action]
       @guild = Guild.find(params[:id])
+      @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ['edit', 'edit_rules', 'update'].include? params[:action]
       @guild = current_user.guilds.find(params[:id])
     end

@@ -13,13 +13,13 @@ class Video < ActiveRecord::Base
   acts_as_friend_taggable :delete_conditions => lambda {|user, video| video.poster == user },
                           :create_conditions => lambda {|user, video| video.poster == user }
 
-  acts_as_shareable
+  acts_as_shareable :default_title => lambda {|video| video.title}
 
 	acts_as_diggable :create_conditions => lambda {|user, video| video.privilege != 4 or video.poster == user}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id'
  
-  acts_as_privileged_resources
+  acts_as_privileged_resources :owner_field => :poster
 
 	acts_as_video
 
@@ -27,7 +27,7 @@ class Video < ActiveRecord::Base
 
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, video, comment| user == video.poster || user == comment.poster},  
-                      :create_conditions => lambda {|user, video| (user == video.poster) || (video.privilege == 1) || (video.privilege == 2 and (video.poster.has_friend? user or video.poster.has_same_game_with? user)) || (video.privilege == 3 and video.poster.has_friend? user) || false} 
+                      :create_conditions => lambda {|user, video| video.available_for? user }
 
   # video url 和 game_id 还有 poster_id 一经创建无法修改
   attr_readonly :video_url, :game_id, :poster_id

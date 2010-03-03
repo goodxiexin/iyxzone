@@ -28,6 +28,7 @@ class User::NewsController < UserBaseController
   def setup
     if['show'].include? params[:action]
       @news = News.find(params[:id])
+      @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     end
   rescue
     not_found

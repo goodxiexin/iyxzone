@@ -15,7 +15,7 @@
       <%= truncate poll_sharing.reason, :length => 100, :omission => '...' %>
     </p>
     <div class="feeds">
-      <%= link_to_function "评论", "Iyxzone.Comment.toggleBox('sharing', #{poll_sharing.id})" %>(<%= poll_sharing.comments_count %>) | 
+      <%= link_to_function "评论(#{poll_sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{poll_sharing.id}, #{poll_sharing.comments_count})" %> | 
       <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Poll', :shareable_id => poll.id) %><span>(<%= poll.sharings_count %>)</span> | 
       <%= link_to "更多分享", sharings_url(:id => poll.first_sharer.id) %>
     </div>

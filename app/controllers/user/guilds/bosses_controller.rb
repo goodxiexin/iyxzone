@@ -13,6 +13,8 @@ class User::Guilds::BossesController < UserBaseController
     @boss = Boss.new(boss_params)
     if @boss.save
       render :json => @boss
+    else
+      render :json => {:errors => @boss.errors}
     end
   end
 

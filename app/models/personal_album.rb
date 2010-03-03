@@ -8,11 +8,9 @@ class PersonalAlbum < Album
 
 	named_scope :recent, :conditions => "privilege != 4", :order => 'uploaded_at DESC'
 
-	acts_as_privileged_resources
-
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}, 
-                      :create_conditions => lambda {|user, album| (album.poster == user) || (album.privilege == 1) || (album.privilege == 2 and (album.poster.has_friend? user or album.poster.has_same_game_with? user)) || (album.privilege == 3 and album.poster.has_friend? user) || false} 
+                      :create_conditions => lambda {|user, album| album.available_for? user }
 
   attr_readonly :owner_id, :poster_id, :poster_id, :game_id
 
