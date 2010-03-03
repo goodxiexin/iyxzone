@@ -18,7 +18,12 @@ class Msn
 
   def initialize(u, p)
     @trID = 1
-    @username = u
+		if m = /[\s]*([a-zA-Z0-9_\.-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+)[\s]*/.match(u)
+			@username = m[1]
+		else
+			@code = 911
+			error_code
+		end
     @password = p
   end
 
@@ -33,7 +38,7 @@ class Msn
 
     output "USR 3 TWN I #{@username}\r\n"
     s = input
-
+		puts s
     ns = s.split(' ')[3]
     ip = ns.split(':').first
     port = ns.split(':').last
@@ -122,16 +127,22 @@ class Msn
   end
 
   def input
-    str = @sock.gets
+    str = @sock.recv(1000)
+		if !str || str.length < 3
+			@code = 211
+			error_code
+		end
+
     if if_error = /^([\d]{3})/.match(str)
       @code = if_error[1].to_i
       error_code
     	@sock.close
     end
-		puts str
+		puts "s: #{str}"
 		str
   end
-
+class AuthenticationError < StandardError
+end
   def error_code
     case @code
     when 201:
@@ -156,12 +167,12 @@ class Msn
     when 921:
         raise ConnectionError,'Error: 910/921 Server too busy' + PROTOCOL_ERROR;
     when 911:
-        raise AuththenticationError, 'Error: 911 Authentication failed';
+        raise AuthenticationError, 'Error: 911 Authentication failed';
     end
   end
 
 end
 
-msn = Msn.new('gaoxh044@mails.tsinghua.edu.cn', '20041065')
+msn = Msn.new('gaoxh044u.cn', '20041065')
 msn.connect
 #puts msn.contacts.to_s

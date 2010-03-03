@@ -15,13 +15,17 @@ class Contacts
     SSH_LOGIN  = 'login.live.com/login2.srf'
 
     CURL = '/usr/bin/curl'
-
-    def initialize u, p, o={}
-      @trID = 1
-      @username = u
-      @password = p
-      connect
-    end
+		def initialize u,p,o={}
+			@trID = 1
+			if m = /[\s]*([a-zA-Z0-9_\.-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+)[\s]*/.match(u)
+				@username = m[1]
+			else
+			  @code = 911
+				error_code
+			end
+			@password = p
+			connect
+		end
 
     def connect
       @sock = TCPSocket::new(SERVER, PORT)
@@ -34,7 +38,7 @@ class Contacts
 
       output "USR 3 TWN I #{@username}\r\n"
       s = input
-
+			puts s
       ns = s.split(' ')[3]
       ip = ns.split(':').first
       port = ns.split(':').last
@@ -128,7 +132,7 @@ class Contacts
 
     def input
       str = @sock.recv(1000)
-      puts str
+      puts "s: #{str}"
       if if_error = /^([\d]{3})/.match(str)
         @code = if_error[1].to_i
         error_code
