@@ -54,9 +54,9 @@ module Controller
 
   module ClassMethods
 
-    def require_verified opts
+    def require_verified model_name, opts={}
       before_filter opts do |controller| 
-        ActiveRecord::Base.class_eval do
+        model_name.camelize.constantize.class_eval do
           default_scope :conditions => {:verified => [0,1]}
         end
       end

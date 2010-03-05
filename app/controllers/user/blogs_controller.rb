@@ -2,7 +2,7 @@ class User::BlogsController < UserBaseController
 
   layout 'app'
 
-  require_verified
+  require_verified 'blog' # 在这个controller里所有的action里的所有Blog得到的结果，都必须是审核通过的
 
   require_owner :only => [:edit, :update, :destroy]
 
