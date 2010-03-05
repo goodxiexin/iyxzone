@@ -1,38 +1,139 @@
 <%= javascript_include_tag "contacts_grabber" %>
 
-万能邀请连接: <%= text_field_tag 'invite_code', invite_url(:token => current_user.invite_code), :enabled => false %>
-QQ邀请连接: <%= text_field_tag 'invite_code', invite_url(:token => current_user.qq_invite_code), :enabled => false %>
-MSN邀请连接: <%= text_field_tag 'invite_code', invite_url(:token => current_user.msn_invite_code), :enabled => false %>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-friend">好友</h1>
+    <div class="box02 canvas_int">
+      <div class="multibox">
+        <h3 class="title">请选择邀请方式</h3>
+      </div>
+      <div class="formcontent invite-friend">
+        <h4><%= link_to_function "通过快捷方式邀请", "this.up().next().toggle();this.up().next().next().toggle();" %></h4>
+        <div class="invite-tip jl-cutline">复制邀请链接发给朋友，就可以邀请对方加入了，对方会直接加入你的好友。</div>
+        <div class="invite-link jl-cutline" style="display:none">
+          <div class="s_clear">
+            <div class="fldid"><label><span class="icon-link"></span>万能邀请链接</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.invite_code), :enabled => false %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              请使用Ctrl+C或右键复制链接地址
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid"><label><span class="icon-qq"></span>复制链接发给 QQ 好友</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.qq_invite_code), :enabled => false %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              请使用Ctrl+C或右键复制链接地址
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid"><label><span class="icon-msn"></span>复制链接发给 MSN 好友</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.msn_invite_code), :enabled => false %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              请使用Ctrl+C或右键复制链接地址
+            </div>
+          </div>
+        </div>
 
-<div id='email_invite'></div>
-<% form_remote_for :invite, :url => signup_invitations_url do |f| %>
-好友邮件: <%= text_field_tag 'email[]', '输入你好友的邮件', :onfocus => "this.clear();" %>
-<%= f.submit '提交' %>
-<% end %>
+        <h4><%= link_to_function "直接发送Email邀请", "this.up().next().toggle();this.up().next().next().toggle();" %></h4>
+        <div class="invite-tip jl-cutline">填写朋友的Email地址，就可以邀请对方加入了，对方会直接加入你的好友。</div>
+        <div class="invite-email jl-cutline" style="display:none">
+          <div id='email_invite'></div>
+          <% form_remote_for :invite, :url => signup_invitations_url do |f| %>
+          <div class="s_clear space">
+            <div class="fldid"><label>好友邮箱 </label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= text_field_tag 'email', "例如： abc@abc.com", :onclick => "this.clear();" %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              <span class="button"><span><button type='submit'>发送邀请</button></span></span>
+            </div>
+          </div>
+          <% end %>
+        </div>
+        
+        <h4><%= link_to_function "向MSN联系人发送邀请", "this.up().next().toggle();this.up().next().next().toggle();" %></h4>
+        <div class="invite-tip jl-cutline">导入MSN联系人名单并邀请其加入，对方会直接加入你的好友。</div>
+        <div class="invite-msn jl-cutline" style="display:none">
+          <div id='msn_invite'></div>
+          <% form_tag :controller => 'user/signup_invitations', :action => 'add_friend' do %>
+          <%= hidden_field_tag 'type', 'msn'%>
+          <div class="s_clear space">
+            <div class="fldid"><label>你的MSN账号</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= text_field_tag 'user_name' %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid"><label>你的MSN密码</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= password_field_tag 'password' %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              <span class="red">提示：17Gaming不会记录您的MSN信息，请放心使用。</span><br />
+              <span class="button"><span><button type="submit">导入联系人</button></span></span>
+            </div>
+          </div>
+          <% end %>
+        </div>
 
-<div id='msn_invite'></div>
-MSN联系人
-<% form_tag :controller => 'user/signup_invitations', :action => 'add_friend' do %>
-<%= hidden_field_tag 'type', 'msn' %>
-<%= text_field_tag 'user_name', '' %>
-<%= password_field_tag 'password', '' %>
-<%= submit_tag '提交' %>
-<% end %>
-
-<div id='email_contacts'></div>
-邮件联系人
-<% form_tag :controller => 'user/signup_invitations', :action => 'add_friend' do %>
-<%= text_field_tag 'user_name', '' %>
-@
-<select id='email_selector' name='type'>
-<option value=''>---</option>
-<option value='gmail'>gmail.com</option>
-<option value='sina'>sina.com.cn</option>
-<option value='yahoo'>yahoo.com</option>
-<option value='yahoo'>yahoo.com.cn</option>
-<option value='netease'>netease.com</option>
-<option value='hotmail'>hotmail.com</option>
-</select>
-<%= password_field_tag 'password', '' %>
-<%= submit_tag '提交' %>
-<% end %>
+        <h4><%= link_to_function "向邮箱联系人发送邀请", "this.up().next().toggle();this.up().next().next().toggle();" %></h4>
+        <div class="invite-tip jl-cutline">导入邮箱联系人名单并邀请其加入，对方会直接加入你的好友。</div>
+        <div class="invite-email jl-cutline" style="display:none">
+          <div id='email_contacts'></div>
+          <% form_tag :controller => 'user/signup_invitations', :action => 'add_friend' do %>
+          <div class="s_clear space">
+            <div class="fldid"><label>你的邮箱</label></div>
+            <div class="fldvalue">
+              <div class="textfield left w-l" style="width:200px"><%= text_field_tag 'user_name' %></div>
+              <span class="left w-l">@</span>
+              <select class="selector selector02 left" id='email_selector' style="width:100px;" name="type">
+                <option value=''>---</option>
+                <option value='gmail'>gmail.com</option>
+                <option value='sina'>sina.com.cn</option>
+                <option value='yahoo'>yahoo.com</option>
+                <option value='yahoo'>yahoo.com.cn</option>
+                <option value='netease'>netease.com</option>
+                <option value='hotmail'>hotmail.com</option>
+              </select>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid"><label>你的密码</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= password_field_tag 'password' %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid"></div>
+            <div class="fldvalue">
+              <span class="red">提示：17Gaming不会记录您的MSN信息，请放心使用。</span><br />
+              <span class="button"><span><button type="submit">导入联系人</button></span></span>
+            </div>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>

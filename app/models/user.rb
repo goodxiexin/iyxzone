@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
   def online_friends
-    friends.find_all {|f| f.online and f.last_seen_at and f.last_seen_at > 10.minutes.ago}
+    User.find(friendships.map(&:friend_id) & (Juggernaut.show_clients.map {|c| c['client_id']}))
   end
 
   def has_friend? user
@@ -281,12 +281,22 @@ class User < ActiveRecord::Base
     role_users.create(:role_id => role.id) unless role.nil?
   end
 
+  def relationship_with user
+    if self == user
+      'owner'
+    elsif has_friend?(user) or wait_for?(user)
+      'friend'
+    elsif has_same_game_with? user
+      'same_game'
+    else
+      'stranger'
+    end
+  end
+
   # messages
   has_many :messages, :foreign_key => 'recipient_id'
 
-  def messages_with user
-    Message.find(:all, :conditions => "(poster_id = #{user.id} AND recipient_id = #{id}) OR (poster_id = #{id} AND recipient_id = #{user.id})", :order => 'created_at ASC')
-  end
+  has_many :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => {:read => false}
 
   # invitation
   has_many :signup_invitations, :class_name => 'SignupInvitation', :foreign_key => 'sender_id'

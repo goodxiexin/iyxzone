@@ -15,7 +15,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_viewable :create_conditions => lambda {|user, blog| blog.poster != user}
 
-	acts_as_diggable :create_conditions => lambda {|user, blog| blog.privilege != 4 or blog.poster == user}
+	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.is_owner_privilege? or blog.poster == user}
 
   acts_as_resource_feeds
 
@@ -34,13 +34,13 @@ class Blog < ActiveRecord::Base
 
   validates_presence_of :title, :message => "不能为空"
 
-  validates_size_of :title, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节", :if => 'title'
+  validates_size_of :title, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节", :allow_nil => true
 
   validates_presence_of :poster_id, :message => "不能为空", :on => :create
 
   validates_presence_of :content, :message => "不能为空" 
 
-  validates_size_of :content, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1个字节"
+  validates_size_of :content, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1个字节", :allow_nil => true
 
   validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个"  
 

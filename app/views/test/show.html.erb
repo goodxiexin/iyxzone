@@ -1,12 +1,14 @@
 <html>
+<head>
+  <%= javascript_include_tag :defaults %>
+</head>
 <body>
 
-<script type="text/javascript">
-alert("真汉子nb".length)
-alert(unescape("%3D"))
-alert(encodeURIComponent("真汉子nb"))
-alert(encodeURIComponent("真汉子nb").length)
-</script>
+<a id="morph_demo" style="background:#cccccc; width:100px; height:100px;display:block"></a>
+<ul>
+  <li><a href="#" onclick="$('morph_demo').morph('background:#00ff00; width:300px;'); return false;">Click me for a demo!</a></li>
+  <li><a href="#" onclick="$('morph_demo').morph('background:#cccccc; width:100px;'); return false;" >Reset the demo!</a></li>
+</ul
 
 </body>
 </html>

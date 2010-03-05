@@ -6,9 +6,7 @@ class UserBaseController < ApplicationController
 
   before_filter :login_required
 
-  before_filter :get_online_friends
-
-  before_filter :set_last_seen_at
+  before_filter :setup_instant_messenger
 
   before_filter :setup
 
@@ -18,22 +16,64 @@ protected
     {:game_id => current_user.characters.map(&:game_id).uniq}
   end
   
-  def get_online_friends
+  def setup_instant_messenger
     @online_friends = current_user.online_friends
-  end
-
-  def set_last_seen_at
-    current_user.update_attribute(:last_seen_at, Time.now.to_s(:db)) 
+    @im_info = {}
+    current_user.unread_messages.group_by(&:poster).each do |poster, messages|
+      @im_info["#{poster.id}"] = {
+        :login => poster.login, 
+        :messages => messages.map{|m| {:content => m.content, :created_at => m.created_at, :id => m.id}}
+      }
+    end
   end
 
   def setup
     # override this method in child controller
   end
 
-  def record_not_found
-    render :template => 'record_not_found'
+  def require_owner opts
+    before_filter opts do |controller|
+      @user == current_user || render_not_found
+    end
   end
 
+  def require_none_owner opts
+    before_filter opts do |controller|
+      @user != current_user || render_not_found
+    end  
+  end
 
+  def require_friend opts
+    before_filter opts do |controller|
+      @user.relationship_with(current_user) == 'friend' || render_not_found
+    end
+  end
+
+  def require_none_friend opts
+    before_filter opts do |controller|
+      @user.relationship_with(current_user) != 'friend' || render_not_found
+    end
+  end
+
+  def require_friend_or_owner opts
+    before_filter opts do |controller|
+      relationship = @user.relationship_with current_user
+      relationship == 'friend' || relationship == 'owner' || render_not_found
+    end
+  end
+
+  def require_adequate_privilege resource, opts
+    before_filter opts do |controller|
+      eval("@#{resource}").available_for? current_user || render_not_found
+    end
+  end
+
+  def render_privilege_denied
+    render :template => 'not_found'
+  end
+
+  def render_not_found
+    render :template => 'not_found'
+  end
 
 end

@@ -86,7 +86,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :forums
 
-    users.resources :messages
+    users.resources :messages, :collection => {:read => :put}
 
     users.resources :requests, :collection => {:destroy_all => :delete}
 

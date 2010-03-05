@@ -2,30 +2,30 @@ class User::BlogsController < UserBaseController
 
   layout 'app'
 
-  increment_viewing 'blog', :only => [:show]
+  require_verified
 
-  before_filter :friend_or_owner_required, :only => [:index, :relative]
+  require_owner :only => [:edit, :update, :destroy]
 
-  before_filter :privilege_required, :only => [:show]
+  require_friend_or_owner :only => [:index, :relative]
+
+  require_adequate_privilege :blog, :only => [:show]
+
+  increment_viewing :blog, :only => [:show]
 
   def index
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @blogs = @user.blogs.viewable(relationship, :conditions => cond).paginate :page => params[:page], :per_page => 1
+    @blogs = @user.blogs.viewable(@user.relationship_with current_user).paginate :page => params[:page], :per_page => 1
   end
 
 	def hot 
-    cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @blogs = Blog.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @blogs = Blog.hot.paginate :page => params[:page], :per_page => 10
   end
 
   def recent
-    cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @blogs = Blog.recent.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @blogs = Blog.recent.paginate :page => params[:page], :per_page => 10
   end
 
   def relative
-    cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @blogs = @user.relative_blogs.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @blogs = @user.relative_blogs.paginate :page => params[:page], :per_page => 10
   end
 
   def friends
@@ -34,6 +34,7 @@ class User::BlogsController < UserBaseController
 
   def show
     @comments = @blog.comments
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 
   def new
@@ -42,6 +43,7 @@ class User::BlogsController < UserBaseController
 
   def create
     @blog = Blog.new((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => false}))
+    
     if @blog.save
       render :update do |page|
         page.redirect_to blog_url(@blog)
@@ -85,15 +87,9 @@ protected
   def setup
     if ['index', 'hot', 'recent', 'relative'].include? params[:action]
       @user = User.find(params[:id])
-    elsif ['show'].include? params[:action]
+    elsif ['show', 'edit', 'destroy', 'update'].include? params[:action]
       @blog = Blog.find(params[:id])
       @user = @blog.poster
-			@privilege = @blog.privilege
-			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    elsif ['edit', 'destroy'].include? params[:action]
-      @blog = current_user.blogs.find(params[:id])
-    elsif ['update'].include? params[:action]
-      @blog = current_user.blogs_and_drafts.find(params[:id])
     end
   end
 

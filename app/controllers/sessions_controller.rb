@@ -27,13 +27,11 @@ class SessionsController < ApplicationController
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
       flash[:notice] = "成功登录"
-      current_user.update_attribute(:online, true)
       redirect_back_or_default(profile_url(current_user.profile))
     end
   end
 
   def destroy
-    current_user.update_attribute(:online, false)
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session

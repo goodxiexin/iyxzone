@@ -1,21 +1,35 @@
 class User::MessagesController < UserBaseController
 
   def index
-    @messages = current_user.messages_with @friend
-    @info = []
-    @messages.each do |m|
-      @info << {:content => m.content, :created_at  => m.created_at, :poster_login => m.poster.login}
-    end
+    @messages = current_user.messages_with(@friends).paginate :page => params[:page], :per_page => 20
+    @info = [].concat @messages.each {|m| {:content => m.content, :created_at => m.created_at, :poster_login => m.poster.login} } 
     render :json => @info
+  end
+
+  def unread
+    @messages = {}
+    current_user.unread_messages.group_by(&:poster_id).each do |poster_id, messages|
+      @messages["#{poster_id}"] = [].concat messages.each {|m| {:content => m.content, :created_at => m.created_at, :poster_login => m.poster.login}}
+    end
+    render :json => @messages
+  end
+
+  def read
+    if Message.update_all("read = 1", {:id => params[:ids]})
+      render :nothing => true
+    end
   end
 
   def create
     message_params = (params[:message] || {}).merge({:poster_id => current_user.id, :recipient_id => @friend.id})
     @message = Message.new(message_params)
     if @message.save
-      @info = {:content => @message.content, :created_at => @message.created_at, :poster_login => @message.poster.login}
-      render :juggernaut => {:type => :send_to_client, :client_id => @friend.id} do |page|
-        page << "Iyxzone.Chat.insertMessage(#{@info.to_json}, #{current_user.id}, '#{form_authenticity_token}')" 
+      @info = {:content => @message.content, :created_at => @message.created_at}
+      unless Juggernaut.show_client(@friend.id).nil?
+        @message.update_attributes(:read => true)
+        render :juggernaut => {:type => :send_to_client, :client_id => @friend.id} do |page|
+          page << "Iyxzone.Chat.recvMessage(#{@info.to_json}, #{current_user.id}, '#{form_authenticity_token}')" 
+        end
       end
       render :json => @info 
     else

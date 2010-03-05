@@ -1,16 +1,23 @@
-你有<%= @registered_contacts.size %>个联系人注册了，其中：
-<%= @friend_contacts.size %>个联系人已经是你在17gaming上的好友了
-<%= @not_friend_contacts.size %>不是你的好友，你可以加他们为好友
-
-<%= check_box_tag "", 1, false, :onclick => "Iyxzone.ContactsGrabber.toggleAll('not_friend_table', this);" %> 全选
-<table id='not_friend_table'>
-<% @not_friend_contacts.each do |c| %>
-  <tr>
-    <td><%= check_box_tag '', 1, false, :user_id => c[:user_id] %></td>
-    <td><%= c[:nickname] %></td>
-    <td><%= c[:email] %></td>
-  </tr>
-<% end %>
-</table>
-
-<%= button_to_function "加为好友", "Iyxzone.ContactsGrabber.addContactsAsFriends('#{form_authenticity_token}');" %>
+        <h2>向联系人发送邀请</h2>
+        <p class="tip">你的联系人中有<%= @registered_contacts.size %>位已经在一起游戏网注册，其中<%= @friend_contacts.size %>位已经是你的好友。以下<%= @not_friend_contacts.size %>位你可以加为好友，你也可以<br /><%= link_to "输入其他帐号信息", signup_invitations_url %> 找到更多朋友。</p>
+        <div class="box02">
+          <div class="func"><%= check_box_tag "", 1, false, :onclick => "Iyxzone.ContactsGrabber.toggleAll('not_friend_table', this);" %> <strong>全部选中</strong></div>
+          <div class="list" id='contacts'>
+            <table cellpadding="0" id='not_friend_table'>
+              <% @not_friend_contacts.each do |c| %>
+              <tr class="jl-cutline">
+                <td width="30" align="center"><%= check_box_tag '', 1, false, :user_id => c[:user_id] %></td>
+                <td width="80"><%= avatar User.find(c[:user_id]), :class => 'imgbox01' %></td>
+                <td>
+                  <strong><%= c[:nickname] %></strong><br/>
+                  <span><%= c[:email] %></span>
+                </td>
+              </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+        <div class="space">
+          <span class="button"><span><%= button_to_function "加为好友", "Iyxzone.ContactsGrabber.addContactsAsFriends('#{form_authenticity_token}');" %></span></span>
+          <span class="button button-gray"><span><%= button_to_function "跳过", "document.location.href = '/user/signup_invitations/invite_contact';"%></span></span>
+        </div>

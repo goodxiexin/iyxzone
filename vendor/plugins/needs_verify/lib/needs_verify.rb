@@ -1,6 +1,8 @@
 # NeedsVerify
 module NeedsVerify
 
+module Model
+
   def self.included base
     base.extend(ClassMethods)
   end
@@ -44,4 +46,27 @@ module NeedsVerify
 
 end
 
-ActiveRecord::Base.send(:include, NeedsVerify)
+module Controller
+
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
+  module ClassMethods
+
+    def require_verified opts
+      before_filter opts do |controller| 
+        ActiveRecord::Base.class_eval do
+          default_scope :conditions => {:verified => [0,1]}
+        end
+      end
+    end
+
+  end
+
+end
+
+end
+
+ActiveRecord::Base.send(:include, NeedsVerify::Model)
+ActionController::Base.send(:include, NeedsVerify::Controller)

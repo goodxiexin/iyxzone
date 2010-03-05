@@ -2,9 +2,11 @@ class User::VideosController < UserBaseController
 
   layout 'app'
 
-  before_filter :friend_or_owner_required, :only => [:index, :relative]
+  require_owner :only => [:create, :edit, :update, :destroy]
 
-  before_filter :privilege_required, :only => [:show]
+  require_friend_or_owner :only => [:index, :relative]
+
+  require_adequate_privilege :only => [:show]
 
   def index
 		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}

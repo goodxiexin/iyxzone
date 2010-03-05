@@ -1,6 +1,6 @@
 <% delivery = album_feed_delivery %>
 <% album = delivery.feed_item.originator %>
-<% photos = album.photos.find(delivery.feed_item.data[:ids]) %>
+<% photos = album.photos.find(:all, :conditions => {:id => delivery.feed_item.data[:ids]}) %>
 <% poster = photos.first.poster %>
 <% type = photos.first.class.name.underscore %>
 
@@ -11,15 +11,27 @@
     </div>
     <div class="jl-list-con jl-cutline">
       <%= profile_link poster %> 上传了 <%= photos.count %>张照片 到相册 <%= album_link album, :class => "shine" %>
-      <ul class="s_clear" id="roll-photo" style='position:relative; width: 400px;overflow:hidden;'>
-        <a class="roll-left" id='left_btn_<%= delivery.id %>'></a></li>
-        <div style='position:relative; overflow: hidden; left: -55px;' id='frames_<%= delivery.id %>'>
-        <% 5.times do |p| %>
-        <li></li>
+      <div class="s_clear" id="roll-photo">
+        <% if photos.count > 3 %>
+        <a class="roll-left" id='left_btn_<%= delivery.id %>'></a>
         <% end %>
+        <div class='roll-photo-list'>
+          <% if photos.count > 3 %>
+          <span style='left: -135px' id='frames_<%= delivery.id %>'>
+          <% 5.times do |p| %>
+            <a></a>
+          <% end %>
+          </span>
+          <% else %>
+            <% photos.each do |p| %>
+              <a><%= photo_link p, :class => 'imgbox01', :size => 'large' %></a>
+            <% end %>
+          <% end %>
         </div>
-        <li><a class="roll-right" id='right_btn_<%= delivery.id %>'></a></li>
-      </ul>
+        <% if photos.count > 3 %>
+        <a class="roll-right" id='right_btn_<%= delivery.id %>'></a>
+        <% end %>
+      </div>
       <span class="gray">
         <%= ftime delivery.created_at %> - <%= link_to_function "评论", "Iyxzone.Comment.showForm('album', #{album.id}, null)" %>
       </span> 
@@ -28,8 +40,10 @@
   </div>
 </div>
 
+<% if photos.count > 3 %>
 <% photo_ids = array_or_string_for_javascript photos.map(&:id) %>
-<% urls = array_or_string_for_javascript photos.map {|p| p.public_filename(:large)} %>
+<% urls = array_or_string_for_javascript photos.map {|p| p.public_filename} %>
 <%= javascript_tag "
   slide = new Iyxzone.Photo.Slide2('#{photos.first.class.name.underscore}', #{photo_ids}, #{urls}, $('frames_#{delivery.id}').childElements(), $('left_btn_#{delivery.id}'), $('right_btn_#{delivery.id}'));
 " %>
+<% end %>

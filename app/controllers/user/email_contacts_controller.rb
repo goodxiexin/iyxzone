@@ -18,6 +18,7 @@ class User::EmailContactsController < UserBaseController
   def not_friend
     @contacts = Contacts.new(params[:type], params[:user_name], session[:email_authentication][:password]).contacts
     parse_contacts
+    session[:contacts] = @contacts
     if @not_friend_contacts.size != 0
       render :update do |page|
         page.replace_html 'contacts', :partial => 'not_friend'
@@ -32,18 +33,24 @@ class User::EmailContactsController < UserBaseController
 protected
 
   def render_not_supported e
-    logger.error 'not supported'
-    render :json => {:errors => e.message} #"不支持的邮件类型"}
+    render :update do |page|
+      flash[:notice] = "不支持的邮件类型"
+      page.redirect_to signup_invitations_url
+    end
   end
 
   def render_authentication_error e
-    logger.error 'authen error'
-    render :json => {:errors => e.message} #"用户名或者密码错误"}
+    render :update do |page|
+      flash[:notice] = "用户名或者密码错误"
+      page.redirect_to signup_invitations_url
+    end
   end
 
   def render_connection_error e
-    logger.error 'connection error'
-    render :json => {:errors => e.message} #"无法连接邮件服务器,稍后再试"}
+    render :update do |page|
+      flash[:notice] = "连接错误,无法获得联系人"
+      page.redirect_to signup_invitations_url
+    end
   end
 
   def parse_contacts

@@ -100,27 +100,6 @@ module Model
 
 end
 
-module Controller
-
-  def self.included(base)
-    base.extend(ClassMethods)
-    base.class_eval do
-      include PrivilegeResource::Controller::InstanceMethods
-    end
-  end  
-
-  module ClassMethods
-  end
-
-  module InstanceMethods
-
-  end
-
-  module SingletonMethods
-  end 
-
-end
-
 end
 
 ActiveRecord::Base.send(:include, PrivilegedResource::Model)

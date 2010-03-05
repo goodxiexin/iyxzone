@@ -19,7 +19,7 @@
   <%= javascript_include_tag 'menu' %>
   <%= javascript_include_tag 'chat' %>
   <%= calendar_date_select_includes "silver" %>
-  <!-- <%= juggernaut :client_id => current_user.id %> -->
+  <%= juggernaut :client_id => current_user.id %>
 </head>
 <body>
 
@@ -114,14 +114,45 @@
 
 </div>
 
-<div id='chat-list'>
-  <%= avatar current_user, :class => 'imgbox01' %>
-  <%= text_field_tag '', '', :onkeyup => "Iyxzone.Chat.search(this.value)" %>
-  <ul>
-  <% @online_friends.each do |f| %>
-    <li pinyin='<%= f.pinyin %>' login='<%= f.login %>' ondblclick="Iyxzone.Chat.showForm(<%= f.id %>, '<%= form_authenticity_token %>')"><%= avatar f, :class => 'imgbox01' %><%= f.login %></li>
-  <% end %>
-  </ul>
+<div style="right: 5px; top: 100px;" class="im-bar" id='chat-bar'>
+  <div class="r-m">
+    <div class="con">
+      <div class="im-title s_clear">
+        <span id='im-icon'><%= avatar_image current_user, :class => 'left w-l', :height => 20, :width => 20 %></span><strong class="left w-l"><%= current_user.login %></strong>
+        <div class="im-state left">
+          <a href="#"><span class="im-online"/></a>
+          <div class="selector01" style="display:none">
+            <div class="drop-wrap">
+              <div class="wrap-bg"/>
+                <dl>
+                  <dd class="jl-cutline"><a href="#"><span class="im-online"/>在线</a></dd>
+                  <dd class="jl-cutline"><a href="#"><span class="im-busy"/>忙碌</a></dd>
+                  <dd class="jl-cutline"><a href="#"><span class="im-leave"/>离开</a></dd>
+                  <dd><a href="#"><span class="im-hide"/>隐身</a></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="im-search rows">
+          <%= text_field_tag '', '搜索好友', :onclick => "this.clear();" %>
+          <%= button_to_function '', 'Iyxzone.Chat.search(this.previous().value)', :class => 'go' %> 
+      </div>
+      <div class="im-group s_clear">
+          <dl class="im-expand">
+            <dt><a href="#">在线好友<span>[<%= @online_friends.count %>]</span></a></dt>
+            <div id='chat-list'>
+            <% @online_friends.each do |f| %>
+              <dd pinyin='<%= f.pinyin %>' login='<%= f.login %>'><a href='javascript: void(0)' ondblclick='Iyxzone.Chat.showForm(<%= f.id %>, "<%= f.login %>", "<%= form_authenticity_token %>")'><%= avatar_image f, :class => 'left w-l', :width => 20, :height => 20  %><span class="left"><%= f.login %></span></a></dd>
+            <% end %>
+            </div>
+          </dl>
+      </div>
+    </div>
+    <div class="foot"><%= link_to "好友管理", friends_url, :class => 'im-manage' %></div>
+  </div>
+  <span class="r-b rows"/>
 </div>
 
 <div id='chat-form' style="display:none">
@@ -133,6 +164,7 @@
 <%= javascript_tag "
   new Iyxzone.Menu.AjaxDropdown('notifications_link', 'notifications_dropdown', 'notifications_dropdown_list', '#{first_five_notifications_url}');
   new Iyxzone.Menu.Dropdown('settings_link', 'settings_dropdown');
+  Iyxzone.Chat.set(#{integer_array_for_javascript @im_info.keys}, #{@im_info.values.to_json}, '#{form_authenticity_token}');
 " %>
 
 <div id="footer">

@@ -107,9 +107,4 @@ protected
     not_found
   end
 
-  def participant_required
-    @participation = @event.participations.find_by_participant_id(current_user.id)
-    (@participation and @participation.is_authorized?) || not_found
-  end
-
 end

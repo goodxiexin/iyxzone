@@ -18,9 +18,10 @@ class UsersController < ApplicationController
     if @user.save
       # create characters
       @user.profile.update_attributes(params[:profile]) # TODO
-      render :update do |page|
-        page.redirect_to "/activation_mail_sent?email=#{@user.email}&show=0"
-      end
+      if params[:token]
+        render :update do |page|
+          page.redirect_to "/activation_mail_sent?email=#{@user.email}&show=0&token=#{params[:token]}"
+        end
     else
       render :update do |page|
         page << "error('#{@user.errors.on_base}');"
@@ -39,14 +40,24 @@ class UsersController < ApplicationController
       unless params[:token].blank?
         @invitation = SignupInvitation.find_by_token(params[:token])
         if @invitation.blank?
-          @sender = User.find_by_invite_code(params[:token])
-          logger.error "sender: #{@sender}"
+          @sender = User.find_by_invite_code(params[:token]) || User.find_by_qq_invite_code(params[:token]) || User.find_by_msn_invite_code(params[:code])
         else
           @sender = @invitation.sender
         end
         unless @sender.blank?
           current_user.friendships.create(:friend_id => @sender.id)
           @sender.friendships.create(:friend_id => current_user.id)
+          # 记录用户是通过怎样的邀请加入的
+          if @sender.invite_code == params[:token]
+            current_user.invite_method = 'magic'
+          elsif @sender.qq_invite_code == params[:token]
+            current_user.invite_method = 'qq'
+          elsif @sender.msn_invite.code == params[:token]
+            current_user.invite_method = 'msn'
+          else
+            current_user.invite_method = 'email'
+          end
+          current_user.save
         end
       end
       flash[:notice] = "Signup complete!"

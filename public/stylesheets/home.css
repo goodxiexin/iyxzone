@@ -423,6 +423,25 @@ a:hover{color:#D63200;}
 .friend-box .friend-one-search .link{float:left;word-spacing:10px;color:#CCC}
 .friend-box .friend-one-search .link a{color:#D63200}
 
+/*邀请*/
+.invite-friend,.invite-select{color:#666;margin:10px;padding:0 0 30px 0;line-height:24px}
+.invite-friend h3.title{border-bottom:1px solid #bdd6ad;padding:5px}
+.invite-friend h4{margin:10px 0}
+.invite-friend h4 a,.invite-select h2{color:#d63200;font-weight:700;font-size:14px;}
+.invite-tip,.invite-link,.invite-email,.invite-msn{padding:10px 0}
+.invite-friend .fldid{font-size:14px;line-height:30px}
+.invite-friend .textfield,.invite-friend .selector{padding:3px;background:#f5f5f5;font-size:14px}
+.invite-friend .fldid{width:200px;}
+.invite-link .fldid{text-align:left}
+.invite-link .textfield{width:300px;}
+.invite-email .textfield,.invite-msn .textfield{width:200px;}
+.invite-select h2{border-bottom:1px solid #bdd6ad;padding-bottom:10px}
+.invite-select p.tip{font-size:14px;margin:10px 0;line-height:22px}
+.invite-select .func{background:#f2fee5;border-bottom:1px solid #e7f0e1;padding:5px}
+.invite-select .list{height:300px;overflow-y:auto;overflow-x:hidden;}
+.invite-select .list table{width:95%;margin:0 auto}
+.invite-select .list table td{padding:10px 3px}
+
 .friend-box .friend-wrap .friend-menu{float:left;width:150px;}
 .friend-box .friend-wrap .friend-list{float:left;margin-left:-150px;width:100%;}
 .friend-box .friend-wrap .friend-list .friend-content{margin-left:150px;padding-left:10px;width:auto;}
@@ -618,7 +637,7 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
-#roll-photo .roll-photo-list{float:left;width:400px;margin:0 5px;white-space:nowrap;overflow-x:hidden;position:relative;}
+#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative;}
 #roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
 #roll-photo .roll-photo-list a{margin:0 9px;}
 #roll-photo a img{width:100px;}
@@ -837,9 +856,6 @@ button.add-friend{background:url(../images/skin/add-friend.png) no-repeat;width:
 .friend-search-t{padding:10px 0;margin:0 10px}
 .contact-box span.t{font-size:14px;font-weight:700;background:url(../images/icons/icon-t01.png) no-repeat;padding:10px 30px;}
 .contact-box a{margin-left:10px}
-.icon-msn,.icon-mail{background:url(../images/icons/msn-email.png) no-repeat;width:20px;height:20px;display:inline-block}
-.icon-msn{background-position:0 0;}
-.icon-mail{background-position:0 -20px;}
 
 /*会员管理*/
 .member{line-height:20px;z-index:1/*在icon-active之下*/}
@@ -956,13 +972,14 @@ a.share-btn{background:url(../images/skin/share-btn.png) no-repeat;display:inlin
 ul.private-set{padding:20px 0}
 ul.private-set li{margin:10px;line-height:22px}
 ul.private-set li p.left{margin-left:10px}
-.icon-private01,.icon-private02,.icon-private03{display:inline-block;background:url(../images/icons/private.gif) no-repeat;margin:0 5px;width:41px;height:41px; vertical-align:baseline;}
+.icon-private01,.icon-private02,.icon-private03,.icon-private04{display:inline-block;background:url(../images/icons/private.gif) no-repeat;margin:0 5px;width:41px;height:41px; vertical-align:baseline;}
 .icon-private01{background-position:0 0}
 .icon-private02{background-position:0 -41px}
 .icon-private03{background-position:0 -82px}
+.icon-private04{background-position:0 -123px}
 
 /*分享*/
-a.btn-17gaming,.tab01 .right a.btn-17gaming,.tab01 .right a.btn-17gaming:hover{background:url(../images/skin/btn-17gaming.png) no-repeat;width:130px;height:25px;line-height:25px;padding-left:10px;display:inline-block;color:#fff;font-weight:700;text-decoration:none;position:relative}
+a.btn-17gaming,.tab01 .right a.btn-17gaming,.tab01 .right a.btn-17gaming:hover{background:url(../images/skin/btn-17gaming.png) no-repeat;width:130px;height:25px;line-height:25px;display:inline-block;color:#fff;font-weight:700;text-decoration:none;text-align:center;position:relative}
 
 h1.app-share{float:left}
 .share-url{float:right;margin-top:5px;padding:5px 10px;background:url(../images/skin/title-bg02.gif) repeat-x;color:#666}

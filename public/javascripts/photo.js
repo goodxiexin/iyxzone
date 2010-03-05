@@ -509,7 +509,10 @@ Iyxzone.Photo.Slide = Class.create({
     this.idPos = 0; // 正中间那张照片对应的id在ids中的位置
     this.mappings = new Hash(); // photo id => image object
     this.frames = frames; 
-    
+   
+    this.upTimer = null;
+    this.downTimer = null;
+ 
     for(var i=0;i<this.ids.length;i++){
       if(this.ids[i] == this.currentID){
         this.idPos = i;
@@ -570,59 +573,71 @@ Iyxzone.Photo.Slide = Class.create({
   },
 
   scrollDown: function(){
-    if(this.idPos == 0){
+    if(this.idPos == 0 || this.downTimer != null){
       return;
     }
+
+    var div = this.frames[0].up();
+    new Effect.Morph(div, {style: 'top: 0px', duration: 0.5});
+    this.downTimer = setTimeout(this.afterScrollDown.bind(this), 550);
+    
+    this.idPos--;
+    this.changeBtn();
+  },
+
+  afterScrollDown: function(){
+    // insert frame to the top and reset div position
+    var frame = new Element('div', {class: 'img'});
+    Element.insert(this.frames[0], {before: frame});
+    this.frames = frame.up().childElements();
+    var p = this.idPos - Math.floor((this.frames.length-1)/2);
+    if(p >= 0){
+      this.loadImage(0, p);
+    }else{
+      this.setBlank(0);
+    }
+    frame.up().setStyle({top: '-67px'});
 
     // remove last frame
     var len = this.frames.length;
     this.frames[len - 1].remove();
     this.frames.splice(len - 1, 1);
 
-    // add frame
-    var frame = new Element('div', {class: 'img'});
-    Element.insert(this.frames[0], {before: frame});
-    frame.hide();
-    this.frames = frame.up().childElements();
-    var p = this.idPos - (Math.floor(this.frames.length/2) + 1);
-    if(p >= 0){
-      this.loadImage(0, p);
-    }else{
-      this.setBlank(0);
-    }
-    this.idPos--;
-    this.changeBtn();
-
-    // blind down frame
-    new Effect.BlindDown(this.frames[0], {duration: 1.0});
+    // reset timer
+    this.downTimer = null;
   },
 
   scrollUp: function(){
-    if(this.idPos == this.ids.length - 1)
+    if(this.idPos == this.ids.length - 1 || this.upTimer != null)
       return;
 
-    // blind up frame
-    new Effect.BlindUp(this.frames[0], {duration: 1.0});
-  
-    // add frame
+    var div = this.frames[0].up();
+    new Effect.Morph(div, {style: 'top: -134px', duration: 0.5});
+    this.upTimer = setTimeout(this.afterScrollUp.bind(this), 550);
+
+    this.idPos++;
+    this.changeBtn();
+  },
+
+  afterScrollUp: function(){
+    // remove first frame
+    this.frames[0].remove();
+    this.frames.splice(0, 1);
+    this.frames[0].up().setStyle({top: '-67px'});
+
+    // add last frame
     var frame = new Element('div', {class: 'img'});
     Element.insert(this.frames[this.frames.length - 1], {after: frame});
     this.frames = frame.up().childElements();
-    var p = this.idPos + (this.frames.length - (Math.floor((this.frames.length - 1)/2) + 1));
+    var p = this.idPos + this.frames.length - 2 - Math.floor((this.frames.length - 3)/2);
     if(p < this.ids.length){
       this.loadImage(this.frames.length - 1, p);
     }else{
       this.setBlank(this.frames.length - 1);
     }
-    this.idPos++;
-    this.changeBtn();
-
-    setTimeout(this.removeFirstFrame.bind(this), 1100);
-  },
-
-  removeFirstFrame: function(){
-    this.frames[0].remove();
-    this.frames.splice(0, 1);
+  
+    // reset timer
+    this.upTimer = null;
   }
 
 });
@@ -638,74 +653,78 @@ Iyxzone.Photo.Slide2 = Class.create({
     this.frames = frames;
     this.leftBtn = leftBtn;
     this.rightBtn = rightBtn;
-    this.idPos = 0;
+    this.idPos = 1;
     
     for(var i=0;i<frames.length;i++){
-      var p = this.idPos + i;
-      if(p >= 0 && p < ids.length)
-        this.load(i, p);
+      if(i >= 0 && i < ids.length)
+        this.load(i, i);
     }
 
     this.rightBtn.observe('click', this.scrollRight.bindAsEventListener(this));
     this.leftBtn.observe('click', this.scrollLeft.bindAsEventListener(this));
-    
-    this.changeBtn();
   },
 
   load: function(idx, photoIdx){
-    this.frames[idx].innerHTML = '<img src="' + this.loadingImage.src + '" />';
-    this.frames[idx].innerHTML = '<img src="' + this.urls[photoIdx] + '" />';
-  },
+    if(photoIdx < 0){
+      photoIdx = (photoIdx + this.ids.length) % this.ids.length;
+    }else if(photoIdx >= this.ids.length){
+      photoIdx = (photoIdx) % this.ids.length;
+    }
 
-  changeBtn: function(){
-  
+    this.frames[idx].innerHTML = '<img src="' + this.loadingImage.src + '" class="imgbox01"/>';
+    this.frames[idx].innerHTML = '<img src="' + this.urls[photoIdx] + '" class="imgbox01"/>';
+    this.frames[idx].writeAttribute('href', '/' + this.photoType + '/' + this.ids[photoIdx]);
   },
 
   scrollRight: function(){
-    if(this.idPos == 0){
+    if(this.rightTimer != null)
       return;
-    }
 
-    // remove last frame
+    var div = this.frames[0].up();
+    new Effect.Morph(div, {style: 'left: 0px', duration: 0.5});
+    this.rightTimer = setTimeout(this.afterScrollRight.bind(this), 550);
+
+    this.idPos = (this.idPos - 1 + this.ids.length) % this.ids.length;
+  },
+
+  afterScrollRight: function(){
     var len = this.frames.length;
     this.frames[len - 1].remove();
     this.frames.splice(len - 1, 1);
-
-    // add frame
-    var frame = new Element('li');
+    
+    var frame = new Element('a');
     Element.insert(this.frames[0], {before: frame});
-    frame.hide();
     this.frames = frame.up().childElements();
     this.load(0, this.idPos - 1);
-    this.idPos--;
-    this.changeBtn();
-
-    // show frame
-    new Effect.Morph(frame, {style: 'width: 100px'});
+    frame.up().setStyle({left: '-136px'});
+   
+    this.rightTimer = null;
   },
 
   scrollLeft: function(){
-    if(this.idPos == this.ids.length - 1){
+    if(this.leftTimer != null)
       return;
-    } 
 
-    // blind up frame
-    new Effect.Morph(this.frames[0], {style: 'width: 0px'})
+    var div = this.frames[0].up();
+    new Effect.Morph(div, {style: 'left: -272px', duration: 0.5});
+    this.leftTimer = setTimeout(this.afterScrollLeft.bind(this), 550);    
 
-    // add frame
-    var frame = new Element('li');
-    Element.insert(this.frames[this.frames.length - 1], {after: frame});
-    this.frames = frame.up().childElements();
-    this.load(this.frames.length - 1, this.idPos);
-    this.idPos++;
-    this.changeBtn();
-
-    setTimeout(this.removeFirstFrame.bind(this), 1100);
+    this.idPos = (this.idPos + 1) % this.ids.length;
   },
 
-  removeFirstFrame: function(){
+  afterScrollLeft: function(){
+    // remove first
     this.frames[0].remove();
-    this.frames.splice(0, 1);    
-  } 
+    this.frames.splice(0,1);
+    this.frames[0].up().setStyle({left: '-136px'});
+    
+    // add last frame 
+    var frame = new Element('a');
+    Element.insert(this.frames[this.frames.length - 1], {after: frame});
+    this.frames = frame.up().childElements();
+    this.load(this.frames.length - 1, this.idPos + this.frames.length);
+
+    this.leftTimer = null;
+  },
 
 });
