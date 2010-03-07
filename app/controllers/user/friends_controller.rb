@@ -55,11 +55,11 @@ protected
       @friendship = Friendship.find_by_friend_id(params[:friend_id])
       require_owner @friendship.user
     elsif ["new"].include? params[:action]
-      @user = User.find(params[:id])
+      @user = User.find(params[:uid])
       @profile = @user.profile
       require_none_friend @user
     elsif ["other", "common"].include? params[:action]
-      @user = User.find(params[:id])
+      @user = User.find(params[:uid])
       require_none_owner @user
     end
   end

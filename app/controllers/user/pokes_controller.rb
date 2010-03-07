@@ -8,7 +8,7 @@ class User::PokesController < UserBaseController
 
   def new
 		@pokes = Poke.all
-    @recipient = User.find(params[:id])
+    @recipient = User.find(params[:uid])
     render :action => 'new', :layout => false
   end
 

@@ -2,11 +2,17 @@ class User::SharingsController < UserBaseController
 
   layout 'app'
 
-  before_filter :link_required, :only => [:show]
-
   PER_PAGE = 5 
 
   def index
+    @user = User.find(params[:uid])
+
+    if params[:type].to_i == 0 and !params[:sharing_id].blank? and !params[:sharing_id].blank?
+      @reply_to = User.find(params[:reply_to])
+      @sharing = Sharing.find(params[:sharing_id])
+      params[:page] = current_user.sharings.index(@sharing) / PER_PAGE + 1
+    end
+
     case params[:type].to_i
     when 0
       @sharings = @user.sharings.paginate :page => params[:page], :per_page => PER_PAGE
@@ -99,8 +105,11 @@ class User::SharingsController < UserBaseController
   end
 
   def new
-    @title = params[:link].nil? ? @shareable.default_share_title : params[:link]
-    
+    if params[:link].blank?
+      @shareable = params[:shareable_type].camelize.constantize.find(params[:shareable_id])
+      @title = @shareable.default_share_title
+    end
+
     if params[:outside].nil?
       render :action => 'new', :layout => false
     else
@@ -140,28 +149,15 @@ class User::SharingsController < UserBaseController
 protected
 
   def setup
-    if ["new"].include? params[:action]
-      @shareable = params[:shareable_type].camelize.constantize.find(params[:shareable_id]) if params[:link].blank?
-    elsif ["index"].include? params[:action]
-      @user = User.find(params[:id])
-      if params[:type].to_i == 0 and !params[:sharing_id].blank? and !params[:sharing_id].blank?
-        @reply_to = User.find(params[:reply_to])
-        @sharing = Sharing.find(params[:sharing_id])
-        params[:page] = current_user.sharings.index(@sharing) / PER_PAGE + 1
-        params.delete :sharing_id
-        params.delete :reply_to
-      end
-    elsif ["show"].include? params[:action]
+    if ["show"].include? params[:action]
       @sharing = Sharing.find(params[:id])
+      require_link_sharing @sharing
       @shareable = @sharing.shareable
-      # this must be a link
     end
-  rescue
-    not_found
   end
 
-  def link_required
-    @sharing.shareable_type == 'Link' || not_found
+  def require_link_sharing sharing
+    sharing.shareable_type == 'Link' || render_not_found
   end
 
 end

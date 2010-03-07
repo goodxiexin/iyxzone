@@ -87,7 +87,7 @@ protected
 
   def setup
     if ['index', 'participated'].include? params[:action]
-      @user = User.find(params[:id])
+      @user = User.find(params[:uid])
       require_friend_or_owner @user
     elsif ['show', 'more_feeds'].include? params[:action]
       @guild = Guild.find(params[:id])

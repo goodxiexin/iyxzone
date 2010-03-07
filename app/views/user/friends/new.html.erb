@@ -9,7 +9,7 @@
   </div>
   <div class="avatarbox">
 		<%= link_to "发站内信", new_mail_url(:recipient_id => @user.id) %>
-		<%= link_to "打招呼", new_poke_url(:id => @user.id), :rel => 'facebox' %>	
+		<%= link_to "打招呼", new_poke_url(:uid => @user.id), :rel => 'facebox' %>	
 	</div>
   <div class="profile-list menu-icon-list">
 		<% subject = get_subject(@user) %>
@@ -70,6 +70,6 @@
     </ul>
   </div>
 	<div class="diary-more">
-    <%= link_to '全部好友', other_friends_url(:id => @user.id) %>
+    <%= link_to '全部好友', other_friends_url(:uid => @user.id) %>
   </div>
 </div>

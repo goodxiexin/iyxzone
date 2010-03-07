@@ -6,7 +6,7 @@
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <ul>
-          <li><span><%= link_to "我的状态", statuses_url(:id => current_user.id) %></span></li>
+          <li><span><%= link_to "我的状态", statuses_url(:uid => current_user.id) %></span></li>
           <li class='hover'><span><%= link_to "好友的状态", friends_statuses_url %></span></li>
         </ul>
       </div>

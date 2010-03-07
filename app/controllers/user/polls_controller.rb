@@ -80,7 +80,7 @@ protected
 
   def setup
     if ['index', 'participated'].include? params[:action]
-      @user = User.find(params[:id])
+      @user = User.find(params[:uid])
       require_friend_or_owner @user
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @poll = Poll.find(params[:id])

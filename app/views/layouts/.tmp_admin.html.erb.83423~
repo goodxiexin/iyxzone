@@ -49,8 +49,8 @@
 			<div class="round_m"><div class="round_body">
         <div class="applist">
           <ul>
-            <li><%= link_to "用户", admin_users_url(:id => current_user.id), :class => 'app-photo' %></li>
-						<li><%= link_to "日志", admin_blogs_url(:id => current_user.id), :class => 'app-log' %></li>
+            <li><%= link_to "用户", admin_users_url(:uid => current_user.id), :class => 'app-photo' %></li>
+						<li><%= link_to "日志", admin_blogs_url(:uid => current_user.id), :class => 'app-log' %></li>
           </ul>
         </div>
 			</div></div>
