@@ -15,19 +15,5 @@ class User::FriendTagsController < UserBaseController
     render :partial => 'friends' 
   end
 
-protected
-
-	def setup
-    if ['destroy'].include? params[:action]
-		  @tag = FriendTag.find(params[:id])
-    end
-	rescue
-    not_found
-  end
-
-  def deleteable_required
-    @tag.is_deleteable_by?(current_user) || not_found
-  end
-
 end
 

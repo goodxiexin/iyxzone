@@ -1,9 +1,5 @@
 class User::WallMessagesController < UserBaseController
 
-  before_filter :deleteable_required, :only => [:destroy]
-
-  before_filter :privilege_required, :only => [:index]
-
   def create
     @message = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
     unless @message.save
@@ -36,19 +32,19 @@ protected
   def setup
     if ['index'].include? params[:action]
       @wall = params[:wall_type].camelize.constantize.find(params[:wall_id])
+      require_view_privilege @wall
     elsif ['destroy'].include? params[:action]
       @message = Comment.find(params[:id])
+      require_delete_privilege @message
     end
-  rescue
-    not_found
   end
 
-  def deleteable_required
-    @message.is_deleteable_by?(current_user) || not_found
+  def require_delete_privilege message
+    message.is_deleteable_by? current_user || render_not_found
   end
 
-  def privilege_required
-    @wall.is_comment_viewable_by?(current_user) || not_found
+  def require_view_privilege wall
+    wall.is_comment_viewable_by? current_user || not_found
   end
 
 end

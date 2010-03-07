@@ -8,10 +8,14 @@ class User::PokesController < UserBaseController
 
   def new
 		@pokes = Poke.all
+    @recipient = User.find(params[:id])
     render :action => 'new', :layout => false
   end
 
   def create
+    @recipient = User.find(params[:delivery][:recipient_id])
+    @poke = Poke.find(params[:delivery][:poke_id])
+
     if @recipient.poke_deliveries.create(params[:delivery].merge({:sender_id => current_user.id}))
       render :update do |page|
         page << "facebox.close();"
@@ -44,17 +48,10 @@ class User::PokesController < UserBaseController
 protected
 
 	def setup
-		if ["index", "destroy_all"].include? params[:action]
-		elsif ["new"].include? params[:action]
-			@recipient = User.find(params[:id])
-		elsif ["create"].include? params[:action]
-			@recipient = User.find(params[:delivery][:recipient_id])
-			@poke = Poke.find(params[:delivery][:poke_id])
-		elsif ["destroy"].include? params[:action]
-			@delivery = current_user.poke_deliveries.find(params[:id])
+		if ["destroy"].include? params[:action]
+			@delivery = PokeDelivery.find(params[:id])
+      require_owner @delivery.recipient
 		end
-	rescue
-		not_found 
 	end
 
 end

@@ -2,11 +2,9 @@ class User::Events::AlbumsController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:update]
-
   def show
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @participation = @event.participations.find_by_participant_id(current_user.id)
-    @comments = @album.comments
     @photos = @album.photos.paginate :page => params[:page], :per_page => 12
   end
 
@@ -28,9 +26,7 @@ protected
 		@album = EventAlbum.find(params[:id])
     @event = @album.event
 		@user = @event.poster
-    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-  rescue
-    not_found
+    require_owner @user if params[:action] == 'update'
   end
 
 end

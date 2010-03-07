@@ -54,7 +54,7 @@
 
 <div class="multibox">
   <div class="title"><b></b></div>
-  <%= link_to (image_tag 'add_friend.gif', :style => "border:0px;"), new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %> 或者 <strong><%= link_to "发站内信" %></strong>
+  <%= facebox_link (image_tag 'add_friend.gif', :style => "border:0px;"), new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %> 或者 <strong><%= link_to "发站内信" %></strong>
 </div>
 
 <div class="multibox">

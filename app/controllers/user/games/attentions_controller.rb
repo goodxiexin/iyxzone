@@ -1,6 +1,7 @@
 class User::Games::AttentionsController < UserBaseController
 
   def create
+    @game = Game.find(params[:game_id])
     @attention = @game.attentions.build(:user_id => current_user.id)
     unless @attention.save
       render :update do |page|
@@ -20,14 +21,11 @@ class User::Games::AttentionsController < UserBaseController
 protected
 
   def setup
-    if ["create"].include? params[:action]
-      @game = Game.find(params[:game_id])
-    elsif ["destroy"].include? params[:action]
-      @attention = current_user.game_attentions.find(params[:id])
+    if ["destroy"].include? params[:action]
+      @attention = GameAttention.find(params[:id])
       @game = @attention.game
+      require_owner @attention.user
     end
-  rescue
-    not_found
   end
 
 end

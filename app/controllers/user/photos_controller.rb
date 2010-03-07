@@ -2,36 +2,37 @@ class User::PhotosController < UserBaseController
 
   layout 'app'
 
-  before_filter :privilege_required, :only => [:show]
-
-	before_filter :friend_or_owner_required, :only => [:relative]
-
+  require_verified 'photo'
+  
 	def hot
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @photos = Photo.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @photos = Photo.hot.paginate :page => params[:page], :per_page => 10
   end
 
   def relative
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @photos = @user.relative_photos.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @photos = @user.relative_photos.paginate :page => params[:page], :per_page => 10
   end
 
   def new
   end
 
   def show
-    @comments = @photo.comments
+    @user = @photo.poster
+    @relationship = @user.relationship_with current_user
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
   end
 
 	def create
     @photo = @album.photos.build(:swf_uploaded_data => params[:Filedata])
+    
     if @photo.save
 			render :text => @photo.id	
 		end
 	end
 
   def record_upload
+    @photos = @album.photos.find(params[:ids] || [])
+
 		if @album.record_upload current_user, @photos
       render :update do |page|
         page.redirect_to edit_multiple_personal_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
@@ -69,11 +70,15 @@ class User::PhotosController < UserBaseController
   end
 
   def edit_multiple
+    @photos = @album.photos.find(params[:ids] || [])
   end
 
   def update_multiple
     @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
-    @photos.each {|photo| photo.update_attributes(params[:photos]["#{photo.id}"]) }
+    params[:photos].each do |id, attributes|
+      photo = @album.photos.find(id)
+      photo.update_attributes(attributes)
+    end
     redirect_to personal_album_url(@album) 
   end
 
@@ -95,25 +100,20 @@ protected
     if ['show'].include? params[:action]
       @photo = PersonalPhoto.find(params[:id])
       @album = @photo.album
-      @user = @album.user
-			@privilege = @album.privilege
-			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    elsif ['new', 'create'].include? params[:action]
-      @album = current_user.albums.find(params[:album_id])
-    elsif ['record_upload', 'edit_multiple'].include? params[:action]
-      @album = current_user.albums.find(params[:album_id])
-      @photos = params[:ids].blank? ? [] : @album.photos.find(params[:ids])
-    elsif ['update_multiple'].include? params[:action]
-      @album = current_user.albums.find(params[:album_id])
-      @photos = params[:photos].blank? ? [] : @album.photos.find(params[:photos].map {|id, attribute| id})
-		elsif ['hot', 'relative'].include? params[:action]
+      require_adequate_privilege @album
+    elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
+      @album = PersonalAlbum.find(params[:album_id])
+      require_owner @album.poster
+		elsif ['hot'].include? params[:action]
+      @user = User.find(params[:id])
+    elsif ['relative'].include? params[:action]
 			@user = User.find(params[:id])
+      require_friend_or_owner @user
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @photo = PersonalPhoto.find(params[:id])
-      @album = current_user.albums.find(@photo.album_id) 
+      @album = @photo.album
+      require_owner @album.poster
     end
-  rescue
-    not_found
   end
 
 end

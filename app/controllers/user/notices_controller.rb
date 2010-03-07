@@ -20,10 +20,9 @@ protected
 
 	def setup
 		if ["read"].include? params[:action] 
-			@notice = current_user.notices.find(params[:id])
+			@notice = Notice.find(params[:id])
+      require_owner @notice.user
 		end
-	rescue
-		not_found
 	end
 
 end

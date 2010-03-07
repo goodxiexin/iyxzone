@@ -42,7 +42,6 @@
                         <div class="fldvalue">
                           <div id="mcStatus" class="textfield02" style="width:500px;">
                             <%= f.text_area 'content', :value => "你正在干嘛呢?" %>
-                            <%= javascript_tag "new Iyxzone.limitedTextField($('status_content'), 140, $('words_count'));" %>
                           </div>
                         </div>
                         <div class="fldbtn jl-fldbtn"> <span class="button03"><span>
@@ -53,6 +52,7 @@
 												<span class="left" id='words_count'>0/140</span>
                         <span class='right'><%= emotion_link 'status_content', :class => 'icon-face' %></span>
                       </div>
+                            <%= javascript_tag "new Iyxzone.limitedTextField($('status_content'), 140, $('words_count'));" %>
                     </div>
                   </div>
                 </div>

@@ -27,6 +27,7 @@ module InPlaceEditorMacroHelpers
       function(transport, element) {
         if (transport && transport.status == 200) {
           new Effect.Highlight(element.id, {startcolor: \"#00ffff\"});
+          alert(transport.responseText);
           var value = transport.responseText;
           if(value.length != 0){
             element.innerHTML = value.escapeHTML().replace(/\\n/g, '<br/>');

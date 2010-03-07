@@ -1,7 +1,5 @@
 class UserBaseController < ApplicationController
 
-  include PrivilegeSystem
-
   before_filter :login_required
 
   before_filter :setup_instant_messenger
@@ -29,53 +27,29 @@ protected
     # override this method in child controller
   end
 
-  def self.require_owner opts
-    before_filter opts do |controller|
-      user = controller.instance_variable_get("@user")
-      current_user = controller.send(:current_user)
-      user == current_user || controller.render_not_found
-    end
+  def require_owner owner
+    owner == current_user || render_privilege_denied
   end
 
-  def self.require_none_owner opts
-    before_filter opts do |controller|
-      user = controller.instance_variable_get("@user")
-      current_user = controller.send(:current_user)
-      user != current_user || controller.render_not_found
-    end  
+  def require_none_owner owner
+    owner != current_user || render_privilege_denied
   end
 
-  def self.require_friend opts
-    before_filter opts do |controller|
-      user = controller.instance_variable_get("@user")
-      current_user = controller.send(:current_user)
-      user.relationship_with(current_user) == 'friend' || controller.render_not_found
-    end
+  def require_friend owner
+    owner.relationship_with(current_user) == 'friend' || render_privilege_denied
   end
 
-  def self.require_none_friend opts
-    before_filter opts do |controller|
-      user = controller.instance_variable_get("@user")
-      current_user = controller.send(:current_user)
-      user.relationship_with(current_user) != 'friend' || controller.render_not_found
-    end
+  def require_none_friend owner
+    owner.relationship_with(current_user) != 'friend' || render_privilege_denied
   end
 
-  def self.require_friend_or_owner opts
-    before_filter opts do |controller|
-      user = controller.instance_variable_get("@user")
-      current_user = controller.send(:current_user)
-      relationship = user.relationship_with current_user
-      relationship == 'friend' || relationship == 'owner' || controller.render_not_found
-    end
+  def require_friend_or_owner owner
+    relationship = owner.relationship_with current_user
+    relationship == 'friend' || relationship == 'owner' || render_add_friend(owner)
   end
 
-  def self.require_adequate_privilege resource, opts
-    before_filter opts do |controller|
-      current_user = controller.send(:current_user)
-      resource = controller.instance_variable_get("@#{resource}")
-      resource.available_for? current_user || controller.render_not_found
-    end
+  def require_adequate_privilege resource
+    resource.available_for? current_user || render_privilege_denied
   end
 
   def render_privilege_denied
@@ -84,6 +58,10 @@ protected
 
   def render_not_found
     render :template => 'not_found'
+  end
+
+  def render_add_friend friend
+    redirect_to new_friend_url(:id => friend.id) 
   end
 
 end

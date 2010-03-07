@@ -2,18 +2,13 @@ class User::BlogsController < UserBaseController
 
   layout 'app'
 
-  require_verified 'blog' # 在这个controller里所有的action里的所有Blog得到的结果，都必须是审核通过的
+  require_verified 'blog'
 
-  require_owner :only => [:edit, :update, :destroy]
-
-  require_friend_or_owner :only => [:index, :relative]
-
-  require_adequate_privilege :blog, :only => [:show]
-
-  increment_viewing :blog, :only => [:show]
+  increment_viewing 'blog', :only => [:show]
 
   def index
-    @blogs = @user.blogs.viewable(@user.relationship_with current_user).paginate :page => params[:page], :per_page => 1
+    @relationship = @user.relationship_with current_user
+    @blogs = @user.blogs.viewable(@relationship).paginate :page => params[:page], :per_page => 1
   end
 
 	def hot 
@@ -33,7 +28,7 @@ class User::BlogsController < UserBaseController
   end
 
   def show
-    @comments = @blog.comments
+    @user = @blog.poster
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 
@@ -85,11 +80,17 @@ class User::BlogsController < UserBaseController
 protected
 
   def setup
-    if ['index', 'hot', 'recent', 'relative'].include? params[:action]
+    if ['index', 'relative'].include? params[:action]
       @user = User.find(params[:id])
-    elsif ['show', 'edit', 'destroy', 'update'].include? params[:action]
+      require_friend_or_owner @user
+    elsif ['recent', 'hot'].include? params[:action]
+      @user = User.find(params[:id])
+    elsif ['show'].include? params[:action]
       @blog = Blog.find(params[:id])
-      @user = @blog.poster
+      require_adequate_privilege @blog
+    elsif ['edit', 'destroy', 'update'].include? params[:action]
+      @blog = Blog.find(params[:id])
+      require_owner @blog.poster
     end
   end
 

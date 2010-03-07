@@ -11,7 +11,7 @@
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right">
-          <% if @participation and @participation.is_authorized? %>
+          <% if @event.poster == current_user %>
           <%= link_to "上传照片", new_event_photo_url(:album_id => @album.id) %>
           <% end %>
         </div>
@@ -66,20 +66,7 @@
             </div>
           </div>
           <div class="album">
-            <% if @album.photos_count > 5 %>
-            <div class="btn upbtn" onclick="slide.prev();"></div>
-            <% end %>
-            <div class="small-imgs">
-              <div class="imgList" id='frames'>
-                <% window_size = (@album.photos_count > 5)? 5 : @album.photos_count %>
-                <% window_size.times do |i| %>
-                  <div class="img"></div>
-                <% end %>
-              </div>
-            </div>
-            <% if @album.photos_count > 5 %>
-            <div class="btn downbtn" onclick="slide.next()"></div>
-            <% end %>
+            <%= render :partial => 'shared/photo_slide', :locals => {:album => @album, :photo => @photo} %>
           </div>
         </div>
       </div>
@@ -95,14 +82,7 @@
 </div></div>
 </div></div></div></div>
 
-<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo} %>
-
-<% photo_ids = array_or_string_for_javascript @album.photos.map(&:id) %>
-<% urls = array_or_string_for_javascript @album.photos.map {|p| p.public_filename(:medium)} %>
-<%= javascript_tag "
-  slide = new Iyxzone.Photo.Slide('event_photo', #{photo_ids}, #{urls}, #{window_size}, $('frames').childElements(), #{@photo.id});
-  tagger = new Iyxzone.Photo.Tagger('event_photo', #{@photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{@tags}, 'photo_tags', #{@user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend_table', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
-"%>
+<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user} %>
 
 <% unless @reply_to.blank? %>
 <%= javascript_tag "Iyxzone.Comment.set('event_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>

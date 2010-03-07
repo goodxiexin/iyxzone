@@ -52,7 +52,6 @@ class User::Events::ParticipationsController < UserBaseController
     end
     @reg = /#{params[:key]}/
     @participations = @participations.find_all {|p| @reg =~ p.character.name || @reg =~ p.character.pinyin }
-    logger.error @participations.count
     case params[:type].to_i
     when 0
       render :partial => 'participations', :object => @participations
@@ -72,14 +71,10 @@ protected
       @event = Event.find(params[:event_id])
       @user = @event.poster
     elsif ["edit", "update"].include? params[:action]
-      @participation = current_user.participations.find(params[:id])
+      @participation = Participation.find(params[:id])
       @event = @participation.event
-      #@event = Event.find(params[:event_id])
-      #@user = @event.poster
-      #@participation = @event.participations.find(params[:id], :conditions => {:status => [3,4,5]})
+      require_owner @event.poster
     end
-  rescue
-    not_found
   end
 
 end

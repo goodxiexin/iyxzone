@@ -1,8 +1,5 @@
 class User::PhotoTagsController < UserBaseController
 
-  # 怎么优雅的把delete的权限判断放到model里呢
-  before_filter :deleteable_required, :only => [:destroy]
-
   def new
     case params[:type].to_i
     when 0
@@ -35,7 +32,7 @@ class User::PhotoTagsController < UserBaseController
   end
 
   def auto_complete_for_friends
-    @friends = current_user.friends.search(params[:friend][:login]) #find_all {|f| f.pinyin.starts_with? params[:friend][:login]}
+    @friends = current_user.friends.search(params[:friend][:login])
     render :partial => 'auto_complete_friends', :object => @friends
   end
 
@@ -44,13 +41,12 @@ protected
   def setup
     if ["destroy"].include? params[:action]
       @tag = PhotoTag.find(params[:id])
+      require_delete_privilege @tag
     end
-  rescue
-    not_found
   end
 
-  def deleteable_required
-    @tag.is_deleteable_by?(current_user) || not_found 
+  def require_delete_privilege tag
+    tag.is_deleteable_by? current_user || render_not_found 
   end
 
 end

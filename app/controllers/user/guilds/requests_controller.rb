@@ -48,11 +48,10 @@ protected
       @guild = Guild.find(params[:guild_id])
       @user = @guild.president
     elsif ['accept', 'decline'].include? params[:action]
-      @guild = current_user.guilds.find(params[:guild_id])
+      @guild = Guild.find(params[:guild_id])
+      require_owner @guild.president
       @request = @guild.requests.find(params[:id])
     end
-  rescue
-    not_found
   end
 
 end

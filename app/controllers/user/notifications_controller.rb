@@ -34,10 +34,9 @@ protected
         
   def setup
     if ["destroy"].include? params[:action]
-      @notification = current_user.notifications.find(params[:id])
+      @notification = Notification.find(params[:id])
+      require_owner @notification.user
     end
-  rescue
-    not_found
   end
 
 end

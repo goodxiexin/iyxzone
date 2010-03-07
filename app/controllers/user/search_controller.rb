@@ -10,10 +10,15 @@ class User::SearchController < UserBaseController
   end
 
   def character
+    @game = Game.find(params[:game][:id]) unless params[:game][:id].blank?
+    @area = @game.areas.find(params[:area][:id]) unless params[:area][:id].blank?
+    @server = @game.servers.find(params[:server][:id]) unless params[:server][:id].blank?
+
     cond = {}
     cond.merge!({:game_id => @game.id}) unless @game.nil? 
     cond.merge!({:area_id => @area.id}) unless @area.nil? 
     cond.merge!({:server_id => @server.id}) unless @server.nil?
+    
     @areas = @game.areas if !@game.nil? and !@game.no_areas
     if @game.nil?
       @areas = []
@@ -29,18 +34,6 @@ class User::SearchController < UserBaseController
 		@total_users = GameCharacter.search(params[:key], :conditions => cond).group_by(&:user_id).to_a
 		@key = params[:key]
     @users = @total_users.paginate :page => params[:page], :per_page => 1
-  end
-
-protected
-
-  def setup
-    if ["character"].include? params[:action]
-      @game = Game.find(params[:game][:id]) unless params[:game][:id].blank?
-      @area = @game.areas.find(params[:area][:id]) unless params[:area][:id].blank?
-      @server = @game.servers.find(params[:server][:id]) unless params[:server][:id].blank?
-    end
-  rescue
-    not_found
   end
 
 end

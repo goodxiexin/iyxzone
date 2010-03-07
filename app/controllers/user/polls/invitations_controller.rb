@@ -4,7 +4,6 @@ class User::Polls::InvitationsController < UserBaseController
 
   def new
     @friends = current_user.friends
-		@user = current_user
   end
 
   def create_multiple
@@ -15,7 +14,7 @@ class User::Polls::InvitationsController < UserBaseController
 	def destroy
 		if @invitation.destroy
 		  render :update do |page|
-			  page.redirect_to poll_url(@poll)
+			  page.redirect_to poll_url @invitation.poll
 		  end
     else
       render :update do |page|
@@ -33,16 +32,12 @@ protected
 
 	def setup
 		if ['new', 'create_multiple'].include? params[:action]
-			@poll = current_user.polls.find(params[:poll_id])
+			@poll = Poll.find(params[:poll_id])
+      require_owner @poll.poster
 		elsif ['destroy'].include? params[:action]
-      @invitation = current_user.poll_invitations.find(params[:id])
-			@poll = @invitation.poll
-      #@poll = Poll.find(params[:poll_id])
-      #@user = @poll.poster
-			#@invitation = @poll.invitations.find(params[:id])
+      @invitation = PollInvitation.find(params[:id])
+      require_owner @invitation.user
 		end
-	rescue
-		not_found
 	end
 
 end

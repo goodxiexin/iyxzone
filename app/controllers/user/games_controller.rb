@@ -33,14 +33,15 @@ class User::GamesController < UserBaseController
 
   def show
     @blogs = @game.blogs.find(:all, :limit => 3)
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+
 		@players = []
 		if current_user.games.include?(@game)
-			current_user.servers.find(:all, :conditions=> { :game_id => @game.id}).each { |server|
-				@players << server.users
-			}
+			current_user.servers.find(:all, :conditions=> {:game_id => @game.id}).each {|server| @players << server.users }
 		else
 			@players = @game.users.find(:all, :limit => 3)	
 		end
+
     @albums = @game.albums.find(:all, :limit => 3)
     @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
@@ -70,16 +71,6 @@ protected
       @user = User.find(params[:id]) 
     elsif ["more_feeds", "show"].include? params[:action]
       @game = Game.find(params[:id])
-      @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    elsif ["sexy", "hot", "beta"].include? params[:action]
-      @user = current_user
-    elsif ["game_details"].include? params[:action]
-      @game = Game.find(params[:id])
-      @user = current_user
-    elsif ["area_details"].include? params[:action]
-      @game = Game.find(params[:id])
-      @area = @game.areas.find(params[:area_id])
-      @user = current_user
     end
   end
 

@@ -1,10 +1,5 @@
 class User::CommentsController < UserBaseController
 
-  # 我想不出怎么在before_destroy里优雅的做到这一点，那只能这样了
-  before_filter :deleteable_required, :only => [:destroy]
-
-  before_filter :privilege_required, :only => [:index]
-
   def create
     @comment = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
     unless @comment.save
@@ -36,19 +31,19 @@ protected
   def setup
     if ['index'].include? params[:action]
       @commentable = params[:commentable_type].camelize.constantize.find(params[:commentable_id])
+      require_view_privilege @commentable
     elsif ['destroy'].include? params[:action]
       @comment = Comment.find(params[:id])
+      require_delete_privilege @comment
     end
-  rescue
-    not_found
   end
 
-  def deleteable_required
-    @comment.is_deleteable_by?(current_user) || not_found
+  def require_delete_privilege comment
+    comment.is_deleteable_by? current_user || render_not_found
   end
 
-  def privilege_required
-    @commentable.is_comment_viewable_by?(current_user) || not_found
+  def require_view_privilege commentable
+    commentable.is_comment_viewable_by? current_user || render_not_found
   end
 
 end

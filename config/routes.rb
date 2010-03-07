@@ -262,6 +262,6 @@ ActionController::Routing::Routes.draw do |map|
     users.resources :contacts, :controller => 'email_contacts', :collection => {:sina => :get, :netease => :get, :hotmail => :get, :yahoo => :get, :gmail => :get, :msn => :get}
   end
 
-  map.connect ':controller/:action'
- 
+  map.connect ':controller/:action/:id'
+
 end

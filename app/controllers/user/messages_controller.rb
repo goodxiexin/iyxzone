@@ -6,16 +6,8 @@ class User::MessagesController < UserBaseController
     render :json => @info
   end
 
-  def unread
-    @messages = {}
-    current_user.unread_messages.group_by(&:poster_id).each do |poster_id, messages|
-      @messages["#{poster_id}"] = [].concat messages.each {|m| {:content => m.content, :created_at => m.created_at, :poster_login => m.poster.login}}
-    end
-    render :json => @messages
-  end
-
   def read
-    if Message.update_all("read = 1", {:id => params[:ids]})
+    if Message.update_all("read = 1", {:id => params[:ids], :recipient_id => current_user.id})
       render :nothing => true
     end
   end
@@ -45,8 +37,6 @@ protected
     if ["index", "create"].include? params[:action]
       @friend =  current_user.friends.find(params[:friend_id])
     end
-  rescue
-    not_found
   end
 
 end

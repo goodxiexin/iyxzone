@@ -51,7 +51,7 @@
               <div class="img-main">
                 <div class="imgwrap box05">
                   <div class="photo-op">
-										<% if relationship == 'owner' or relationship == 'friend' %>
+										<% if @relationship == 'owner' or @relationship == 'friend' %>
 										<span class="photo-op-mark"></span>
 										<%= link_to_function "圈人", "tagger.start()" %> | 
 										<% end %>
@@ -84,16 +84,7 @@
 						</div>
 					</div>
           <div class="album">
-						<span class="num">一共<%= @album.photos_count %>张</span>
-						<div class="btn upbtn" id="up_btn"></div>
-            <div class="small-imgs">
-              <div class="imgList" id='frames'>
-                <% 7.times do |i| %>
-                  <div class="img"></div>
-                <% end %>
-              </div>
-            </div>
-						<div class="btn downbtn" id="down_btn"></div>
+            <%= render :partial => 'shared/photo_slide', :locals => {:album => @album, :photo => @photo} %>
           </div>
         </div>
       </div>
@@ -109,14 +100,7 @@
 </div></div>
 </div></div></div></div>
 
-<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo} %>
-
-<% photo_ids = array_or_string_for_javascript @album.photos.map(&:id) %>
-<% urls = array_or_string_for_javascript @album.photos.map {|p| p.public_filename(:medium)} %>
-<%= javascript_tag "
-  slide = new Iyxzone.Photo.Slide('personal_photo', #{@photo.id}, #{photo_ids}, #{urls}, $('frames').childElements(), $('down_btn'), $('up_btn'));
-  tagger = new Iyxzone.Photo.Tagger('personal_photo', #{@photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{@tags}, 'photo_tags', #{@user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
-"%>
+<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user} %>
 
 <% unless @reply_to.blank? %>
 <%= javascript_tag "Iyxzone.Comment.set('personal_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>

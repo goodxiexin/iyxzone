@@ -2,8 +2,6 @@ class User::ProfilesController < UserBaseController
 
   layout 'app2'
 
-  before_filter :privilege_required, :only => [:show, :more_feeds, :edit]
-
   increment_viewing 'profile', :only => [:show]
 
 	FirstFetchSize = 5
@@ -13,6 +11,8 @@ class User::ProfilesController < UserBaseController
   def show
 		@blogs = @user.blogs[0..2]
 		@albums = @user.active_albums[0..2]
+    @setting = @user.privacy_setting
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
 	end
@@ -60,12 +60,10 @@ protected
 		if ["more_feeds", "show", "edit"].include? params[:action]
 			@profile = Profile.find(params[:id])
 			@user = @profile.user
-			@setting = @user.privacy_setting
-			@privilege = @setting.personal
-			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+      require_friend_or_owner @user
     elsif ["update"].include? params[:action]
       @profile = Profile.find(params[:id])
-		  @profile.user == current_user || (logger.error "not_found")
+      require_owner @profile.user
     end
   end
 

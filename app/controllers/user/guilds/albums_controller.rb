@@ -2,11 +2,9 @@ class User::Guilds::AlbumsController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => ["update"]
-
   def show
     @membership = @guild.memberships.find_by_user_id(current_user.id)
-    @comments = @album.comments
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @photos = @album.photos.paginate :page => params[:page], :per_page => 12
   end
 
@@ -24,9 +22,7 @@ protected
     @album = GuildAlbum.find(params[:id])
     @guild = @album.guild
     @user = @guild.president
-		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-  rescue
-    not_found
+    require_owner @user if params[:action] == 'update'
   end
 
 end

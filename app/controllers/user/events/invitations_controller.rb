@@ -53,14 +53,14 @@ protected
 
   def setup
     if ['new', 'create', 'search'].include? params[:action]
-      @event = current_user.events.find(params[:event_id])
+      @event = Event.find(params[:event_id])
       @guild = @event.guild
+      require_owner @event.poster
     elsif ['edit', 'accept', 'decline'].include? params[:action]
-      @invitation = current_user.event_invitations.find(params[:id])
+      @invitation = Participation.find(params[:id])
       @event = @invitation.event
+      require_owner @event.poster
     end
-  rescue
-    not_found
   end
 
 end

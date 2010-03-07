@@ -2,10 +2,11 @@ class User::Avatars::PhotosController < UserBaseController
 
   layout 'app'
 
-  before_filter :friend_or_owner_required, :only => [:show]
+  require_verified 'photo'
 
   def show
-    @comments = @photo.comments
+    @relationship = @user.relationship_with current_user
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
   end
 
@@ -83,16 +84,15 @@ protected
     if ['show'].include? params[:action]
       @photo = Avatar.find(params[:id])
       @album = @photo.album
-      @user = @album.user
-			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+      @user = @album.poster
+      require_friend_or_owner @user
     elsif ['edit', 'set', 'update', 'destroy', 'update_notation'].include? params[:action]
       @album = current_user.avatar_album
       @photo = @album.photos.find(params[:id])
+      require_owner @photo.poster
     elsif ['new', 'create'].include? params[:action]
       @album = current_user.avatar_album
     end
-  rescue
-    not_found 
   end
 	
 end

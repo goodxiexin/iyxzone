@@ -70,11 +70,10 @@ protected
       @guild = Guild.find(params[:guild_id])
       @user = @guild.president
     elsif ['edit', 'update', 'destroy'].include? params[:action]
-      @guild = current_user.guilds.find(params[:guild_id])
+      @guild = Guild.find(params[:guild_id])
+      require_owner @guild.president
       @membership = @guild.memberships.find(params[:id])
     end
-  rescue
-    not_found
   end
 
 end

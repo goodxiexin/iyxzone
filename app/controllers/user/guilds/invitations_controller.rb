@@ -45,13 +45,13 @@ protected
 
   def setup
     if ['new', 'create', 'search'].include? params[:action]
-      @guild = current_user.guilds.find(params[:guild_id])
+      @guild = Guild.find(params[:guild_id])
+      require_owner @guild.president
     elsif ['edit', 'accept', 'decline'].include? params[:action]
-      @invitation = current_user.guild_invitations.find(params[:id])
+      @invitation = Membership.find(params[:id])
       @guild = @invitation.guild
+      require_owner @invitation.user
     end
-  rescue
-    not_found
   end
 
 end

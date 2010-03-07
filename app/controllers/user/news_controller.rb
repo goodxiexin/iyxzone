@@ -1,6 +1,9 @@
 class User::NewsController < UserBaseController
+
   layout 'app'
+
   increment_viewing 'news', :only => [:show]
+
   def index
     @news_list = News.find(:all, :order => 'created_at DESC').paginate :page => params[:page], :per_page => 10
   end
@@ -21,16 +24,8 @@ class User::NewsController < UserBaseController
   end
 
   def show
-    @comments = @news.comments
+    @news = News.find(params[:id])
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 
-  protected
-  def setup
-    if['show'].include? params[:action]
-      @news = News.find(params[:id])
-      @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    end
-  rescue
-    not_found
-  end
 end

@@ -19,9 +19,8 @@ class User::Polls::AnswersController < UserBaseController
 protected
 
   def setup
-    @poll = current_user.polls.find(params[:poll_id])
-  rescue
-    not_found
+    @poll = Poll.find(params[:poll_id])
+    require_owner @poll.poster
   end
 
 end

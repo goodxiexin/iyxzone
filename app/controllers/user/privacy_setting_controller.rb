@@ -2,8 +2,6 @@ class User::PrivacySettingController < UserBaseController
 
   layout 'app'
 
-  before_filter :catch_setting
-
   def show
   end
 
@@ -49,7 +47,7 @@ class User::PrivacySettingController < UserBaseController
 
 protected
 
-  def catch_setting
+  def setup
     @setting = current_user.privacy_setting
   end
 

@@ -1,7 +1,5 @@
 class User::TagsController < UserBaseController
 
-  before_filter :deleteable_required, :only => [:destroy]
-
 	def create
     unless @taggable.add_tag current_user, params[:tag_name]
       render :update do |page|
@@ -34,14 +32,13 @@ protected
       @taggable = get_taggable
 		elsif ["destroy"].include? params[:action]
       @taggable = get_taggable
+      require_delete_privilege @taggable
 			@tag = Tag.find(params[:id])
 		end
-	rescue
-		not_found
 	end
 
-  def deleteable_required
-    @taggable.is_tag_deleteable_by?(current_user) || not_found
+  def require_delete_privilege taggable
+    taggable.is_tag_deleteable_by? current_user || not_found
   end
 
 end

@@ -6,16 +6,14 @@ class User::GuildsController < UserBaseController
 	
 	FetchSize = 5
 
-  before_filter :friend_or_owner_required, :only => [:index, :participated]
+  require_verified 'guild'
 
   def index
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @guilds = @user.guilds.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @guilds = @user.guilds.paginate :page => params[:page], :per_page => 10
   end
 
 	def participated
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @guilds = @user.participated_guilds.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @guilds = @user.participated_guilds.paginate :page => params[:page], :per_page => 10
 	end
 
 	def hot
@@ -36,6 +34,7 @@ class User::GuildsController < UserBaseController
     @memberships = @guild.memberships_for current_user
     @role = @guild.role_for current_user
     @album = @guild.album
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize, :order => "created_at DESC")
 		@first_fetch_size = FirstFetchSize
 		render :action => 'show', :layout => 'app2'
@@ -89,14 +88,13 @@ protected
   def setup
     if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:id])
+      require_friend_or_owner @user
     elsif ['show', 'more_feeds'].include? params[:action]
       @guild = Guild.find(params[:id])
-      @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     elsif ['edit', 'edit_rules', 'update'].include? params[:action]
-      @guild = current_user.guilds.find(params[:id])
+      @guild = Guild.find(params[:id])
+      require_owner @guild.president
     end
-  rescue
-    not_found
   end
 
 end

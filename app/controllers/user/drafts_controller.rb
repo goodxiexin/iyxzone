@@ -2,12 +2,15 @@ class User::DraftsController < UserBaseController
 
   layout 'app'
 
+  require_verified 'blog'
+
   def index
     @blogs = current_user.drafts.paginate :page => params[:page], :per_page => 15
   end
 
   def create
     @blog = Blog.new((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => true}))
+    
     if @blog.save
       render :update do |page|
         page.redirect_to edit_draft_url(@blog)
@@ -48,10 +51,14 @@ protected
   
   def setup
     if ['edit', 'update', 'destroy'].include? params[:action]
-      @blog = current_user.drafts.find(params[:id])
+      @blog = Blog.find(params[:id])
+      require_draft @blog
+      require_owner @blog.poster
     end
-  rescue
-    not_found
+  end
+
+  def require_draft blog
+    blog.draft || render_not_found
   end
 
 end

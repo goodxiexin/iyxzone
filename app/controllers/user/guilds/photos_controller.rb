@@ -2,16 +2,20 @@ class User::Guilds::PhotosController < UserBaseController
 
   layout 'app'
 
-  before_filter :president_or_veteran_required, :only => [:new, :create, :record_upload]
+  require_verified 'photo'
 
-  before_filter :owner_required, :only => [:edit, :update, :edit_multiple, :update_multiple, :update_notation, :destroy]
+  # TODO: veteran能够编辑吗?
 
   def new
   end
 
   def show
+    @photo = GuildPhoto.find(params[:id])
+    @album = @photo.album
+    @guild = @album.guild
+    @user = @guild.president
     @membership = @guild.memberships.find_by_user_id(current_user.id)
-    @comments = @photo.comments
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
   end
 
@@ -23,7 +27,9 @@ class User::Guilds::PhotosController < UserBaseController
 		end
 	end
 
-  def record_upload 
+  def record_upload
+    @photos = @album.photos.find(params[:ids])
+ 
 		if @album.record_upload current_user, @photos
 			render :update do |page|
         if current_user == @guild.president 
@@ -61,11 +67,15 @@ class User::Guilds::PhotosController < UserBaseController
   end
 
   def edit_multiple
+    @photos = @album.photos.find(params[:ids])
   end
 
   def update_multiple
     @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
-    @photos.each {|photo| photo.update_attributes(params[:photos]["#{photo.id}"]) }
+    params[:photos].each do |id, attributes|
+      photo = @album.photos.find(id)
+      photo.update_attributes(attributes)
+    end
     redirect_to guild_album_url(@album)
   end
 
@@ -90,39 +100,23 @@ class User::Guilds::PhotosController < UserBaseController
 protected
 
   def setup
-    if ['show'].include? params[:action]
+    if ['edit', 'update', 'update_notation', 'destroy'].include? params[:action]
       @photo = GuildPhoto.find(params[:id])
       @album = @photo.album
       @guild = @album.guild
       @user = @guild.president
-			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    elsif ['edit', 'update', 'update_notation', 'destroy'].include? params[:action]
-      @photo = GuildPhoto.find(params[:id])
-      @album = @photo.album
-      @guild = @album.guild
-      @user = @guild.president
-    elsif ['new', 'create'].include? params[:action]
+      require_owner @user
+    elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = GuildAlbum.find(params[:album_id])
       @guild = @album.guild
       @user = @guild.president
-    elsif ['record_upload', 'edit_multiple'].include? params[:action]
-      @album = GuildAlbum.find(params[:album_id])
-      @guild = @album.guild
-      @user = @guild.president
-      @photos = params[:ids].blank? ? [] : @album.photos.find(params[:ids])
-    elsif ['update_multiple'].include? params[:action]
-      @album = GuildAlbum.find(params[:album_id])
-      @guild = @album.guild
-      @user = @guild.president
-      @photos = params[:photos].blank? ? [] : @album.photos.find(params[:photos].map {|id, attribute| id})
+      require_president_or_veteran
     end
-  rescue
-    not_found
   end
 
-  def president_or_veteran_required
+  def require_president_or_veteran
     @membership = @guild.memberships.find_by_user_id(current_user.id)
-    (@membership and (@membership.is_president? or @membership.is_veteran?)) || not_found
+    (@membership and (@membership.is_president? or @membership.is_veteran?)) || render_not_found
   end 
 
 end

@@ -2,30 +2,23 @@ class User::VideosController < UserBaseController
 
   layout 'app'
 
-  require_owner :only => [:create, :edit, :update, :destroy]
-
-  require_friend_or_owner :only => [:index, :relative]
-
-  require_adequate_privilege :only => [:show]
+  require_verified 'video'
 
   def index
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @videos = @user.videos.viewable(relationship, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @relationship = @user.relationship_with current_user
+    @videos = @user.videos.viewable(@relationship).paginate :page => params[:page], :per_page => 10
   end
 
 	def hot
-    cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @videos = Video.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 5
+    @videos = Video.hot.paginate :page => params[:page], :per_page => 5
   end
 
   def recent
-    cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @videos = Video.recent.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @videos = Video.recent.paginate :page => params[:page], :per_page => 10
   end
 
   def relative
-    cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @videos = @user.relative_videos.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @videos = @user.relative_videos.paginate :page => params[:page], :per_page => 10
   end
 
   def friends
@@ -38,6 +31,7 @@ class User::VideosController < UserBaseController
 
   def create
 		@video = Video.new((params[:video] || {}).merge({:poster_id => current_user.id}))
+    
     if @video.save
       redirect_to video_url(@video)
     else
@@ -46,6 +40,8 @@ class User::VideosController < UserBaseController
   end
 
   def show
+    @user = @video.poster
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 
   def edit
@@ -74,18 +70,18 @@ class User::VideosController < UserBaseController
 protected
 
   def setup
-    if ['index', 'hot', 'recent', 'relative'].include? params[:action]
+    if ['index', 'relative'].include? params[:action]
+      @user = User.find(params[:id])
+      require_friend_or_owner @user
+    elsif ['hot', 'recent'].include? params[:action]
       @user = User.find(params[:id])
     elsif ['show'].include? params[:action]
       @video = Video.find(params[:id])
-      @user = @video.poster
-			@privilege = @video.privilege
-			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+      require_adequate_privilege @video
     elsif ['edit', 'update', 'destroy'].include? params[:action]
-      @video = current_user.videos.find(params[:id])
+      @video = Video.find(params[:id])
+      require_owner @video.poster
     end  
-  rescue
-    not_found
   end
 
 end

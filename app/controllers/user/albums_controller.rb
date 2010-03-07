@@ -2,19 +2,13 @@ class User::AlbumsController < UserBaseController
 
   layout 'app'
 
-  before_filter :friend_or_owner_required, :only => [:index]
-
-  before_filter :privilege_required, :only => [:show]
-
   def index
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @albums = @user.albums.viewable(relationship, :conditions => cond).push @user.avatar_album
-		@albums = @albums.paginate :page => params[:page], :per_page => 10
+    @relationship = @user.relationship_with current_user
+    @albums = @user.albums.viewable(@relationship).push(@user.avatar_album).paginate :page => params[:page], :per_page => 10
   end
 
 	def recent
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @albums = PersonalAlbum.recent.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 5
+    @albums = PersonalAlbum.recent.paginate :page => params[:page], :per_page => 5
   end
 
   def friends
@@ -26,8 +20,9 @@ class User::AlbumsController < UserBaseController
   end
 
   def show
-		@comments = @album.comments
+    @user = @album.poster
     @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 
   def new
@@ -37,6 +32,7 @@ class User::AlbumsController < UserBaseController
 
   def create
     @album = current_user.albums.build(params[:album] || {})
+    
     unless @album.save
       render :update do |page|
         page.replace_html 'errors', :partial => 'validation_errors'
@@ -74,6 +70,7 @@ class User::AlbumsController < UserBaseController
       Photo.update_all("album_id = #{params[:album][:id]}", "album_id = #{@album.id}")
       Album.update_all("photos_count = photos_count + #{@album.photos_count}", "id = #{params[:album][:id]}")
     end
+
     if @album.destroy
 		  render :update do |page|
 			  page.redirect_to personal_albums_url(:id => current_user.id)  
@@ -88,18 +85,18 @@ class User::AlbumsController < UserBaseController
 protected
 
   def setup
-    if ["index", "recent"].include? params[:action]
+    if ["index"].include? params[:action]
+      @user = User.find(params[:id])
+      require_friend_or_owner @user
+    elsif ["recent"].include? params[:action]
       @user = User.find(params[:id])
     elsif ["show"].include? params[:action]
       @album = PersonalAlbum.find(params[:id])
-      @user = @album.user
-			@privilege = @album.privilege
-      @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+      require_adequate_privilege @album
     elsif ["edit", "update", "confirm_destroy", "destroy"].include? params[:action]
-      @album = current_user.albums.find(params[:id])
+      @album = PersonalAlbum.find(params[:id])
+      require_owner @album.poster
     end
-  rescue
-    not_found
   end
 
 end

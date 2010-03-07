@@ -2,14 +2,14 @@ class User::Events::PhotosController < UserBaseController
 
   layout 'app'
 
-  before_filter :owner_required, :only => [:new, :create, :record_upload, :edit, :update, :edit_multiple, :update_multiple, :destroy]
+  require_verified 'photo'
 
   def new
   end
 
   def show
     @participation = @event.participations.find_by_participant_id(current_user.id)
-    @comments = @photo.comments
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
   end
 
@@ -23,6 +23,8 @@ class User::Events::PhotosController < UserBaseController
 	end
 
 	def record_upload
+    @photos = @album.photos.find(params[:ids])
+
 		if @album.record_upload current_user, @photos
 			render :update do |page|
         if @user == current_user
@@ -59,11 +61,15 @@ class User::Events::PhotosController < UserBaseController
   end
 
   def edit_multiple
+    @photos = @album.photos.find(params[:ids] || [])
   end
 
   def update_multiple
     @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
-    @photos.each {|photo| photo.update_attributes(params[:photos]["#{photo.id}"]) }
+    params[:photos].each do |id, attributes|
+      photo = @album.photos.find(id)
+      photo.update_attributes(attributes)
+    end
     redirect_to event_album_url(@album)
   end
 
@@ -87,24 +93,13 @@ protected
       @album = @photo.album
       @event = @album.event
       @user = @event.poster
-			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    elsif ['new', 'create'].include? params[:action]
+      require_owner @user if params[:action] != 'show'
+    elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = EventAlbum.find(params[:album_id])
       @event = @album.event
       @user = @event.poster
-    elsif ['record_upload', 'edit_multiple'].include? params[:action]
-      @album = EventAlbum.find(params[:album_id])
-      @event = @album.event
-      @user = @event.poster
-      @photos = params[:ids].blank? ? [] : @album.photos.find(params[:ids])
-    elsif ['update_multiple'].include? params[:action]
-      @album = EventAlbum.find(params[:album_id])
-      @event = @album.event
-      @user = @event.poster
-      @photos = params[:photos].blank? ? [] : @album.photos.find(params[:photos].map {|id, attribute| id})
+      require_owner @user
     end
-  rescue
-    not_found
   end
 
 end

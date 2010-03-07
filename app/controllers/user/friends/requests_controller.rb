@@ -1,7 +1,8 @@
 class User::Friends::RequestsController < UserBaseController
 
 	def new
-	end
+	  @recipient = User.find(params[:friend_id])
+  end
 
   def create
     @request = Friendship.new((params[:request] || {}).merge({:user_id => current_user.id, :status => 0}))
@@ -51,13 +52,10 @@ class User::Friends::RequestsController < UserBaseController
 protected
 
 	def setup
-		if ["new"].include? params[:action]
-			@recipient = User.find(params[:friend_id])
-		elsif ["accept", "decline"].include? params[:action]
-			@request = current_user.friend_requests.find(params[:id])
-		end
-	rescue
-		not_found
+		if ["accept", "decline"].include? params[:action]
+			@request = Friendship.find(params[:id])
+		  require_owner @request.friend
+    end
 	end
 
 end

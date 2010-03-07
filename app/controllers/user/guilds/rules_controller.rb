@@ -9,10 +9,6 @@ class User::Guilds::RulesController < UserBaseController
     end   
   end
 
-  def new
-    @rule = GuildRule.new
-  end
-
   def create
     rule_params = (params[:rule] || {}).merge({:rule_type => 2, :guild_id => @guild.id})
     @rule = GuildRule.new(rule_params)
@@ -38,27 +34,13 @@ class User::Guilds::RulesController < UserBaseController
     end
   end
 
-  def destroy
-    if @rule.destroy
-      render :partial => 'basic_rules', :locals => {:guild => @guild}
-    else
-      render :update do |page|
-        page << "error('发生错误，无法删除')"
-      end
-    end
-  end
-
 protected
 
   def setup
-    if ["index", "new", "create", "create_or_update"].include? params[:action]
-      @guild = current_user.guilds.find(params[:guild_id])
-    elsif ["destroy"].include? params[:action]
-      @guild = current_user.guilds.find(params[:guild_id])
-      @rule = @guild.basic_rules.find(params[:id])
+    if ["index", "create", "create_or_update"].include? params[:action]
+      @guild = Guild.find(params[:guild_id])
+      require_owner @guild.president
     end
-  rescue
-    not_found
   end
 
 end

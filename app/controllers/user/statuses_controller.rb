@@ -2,7 +2,7 @@ class User::StatusesController < UserBaseController
 
   layout 'app'
 
-  before_filter :friend_or_owner_required, :only => [:index]
+  require_verified 'status'
 
   def index
     @statuses = @user.statuses.paginate :page => params[:page], :per_page => 5
@@ -38,18 +38,11 @@ protected
   def setup
     if ["index"].include? params[:action]
       @user = User.find(params[:id])
-      if !params[:status_id].blank? and !params[:status_id].blank?
-        @reply_to = User.find(params[:reply_to])
-        @status = Status.find(params[:status_id])
-        params[:page] = current_user.statuses.index(@status) / 5 + 1
-        params.delete :status_id
-        params.delete :reply_to
-      end
+      require_friend_or_owner @user      
     elsif ["destroy"].include? params[:action]
-      @status = current_user.statuses.find(params[:id])
+      @status = Status.find(params[:id])
+      require_owner @status.poster
     end
-  rescue
-    not_found
   end
 
 end

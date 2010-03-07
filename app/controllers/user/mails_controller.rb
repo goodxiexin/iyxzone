@@ -102,11 +102,7 @@ protected
     else
       @mail = current_user.in_mails.find(params[:id])
     end
-<<<<<<< HEAD:app/controllers/user/mails_controller.rb
     @root_mail = @mail.parent || @mail   
-=======
-    @root_mail = @mail.parent || @mail
->>>>>>> 31d12080121f31deee0d3f67542d21fb276af9ba:app/controllers/user/mails_controller.rb
   end
 
   def catch_mails
@@ -115,20 +111,14 @@ protected
     else
       @mails = current_user.in_mails.find(params[:ids])
     end
-  rescue
-    not_found
   end
 
   def catch_recipient
     @recipient = User.find(params[:recipient_id]) unless params[:recipient_id].blank?
-  rescue
-    not_found
   end
 
   def catch_recipients
     @recipients = current_user.friends.find(params[:recipient_ids].split(%r{,\s*}))
-  rescue
-    not_found
   end
 
 end

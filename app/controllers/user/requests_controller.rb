@@ -18,10 +18,4 @@ class User::RequestsController < UserBaseController
     end
 	end
 
-protected
-
-	def setup
-		@user = current_user
-	end
-
 end

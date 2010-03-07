@@ -16,8 +16,6 @@ protected
 
   def setup
     @guild = Guild.find(params[:guild_id])
-  rescue
-    not_found
   end
 
 end

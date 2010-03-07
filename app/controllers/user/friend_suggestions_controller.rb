@@ -18,10 +18,18 @@ class User::FriendSuggestionsController < UserBaseController
 
 	def comrade
     @games = Game.find(:all, :order => 'pinyin ASC')
+    @server = GameServer.find(params[:server_id])
 		@comrade_suggestions = current_user.find_or_create_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 10
 	end
 
 	def new
+    unless params[:server_id].nil?
+      @except = ComradeSuggestion.find(params[:except_ids])
+      @server = GameServer.find(params[:server_id])
+    else
+      @except = FriendSuggestion.find(params[:except_ids])
+    end
+
 		if !params[:server_id].nil?
 			@suggestion = current_user.find_or_create_comrade_suggestions(@server).reject{|s| @except.include?(s)}.sort_by{rand}.first
 			render :partial => 'comrade_suggestion', :object => @suggestion
@@ -32,23 +40,6 @@ class User::FriendSuggestionsController < UserBaseController
 			@suggestion = current_user.find_or_create_friend_suggestions.reject{|s| @except.include?(s)}.sort_by{rand}.first
 			render :partial => 'friend_suggestion', :object => @suggestion
 		end
-	end
-
-protected
-
-	def setup
-		if ["comrade"].include? params[:action]
-			@server = GameServer.find(params[:server_id]) 
-		elsif ["new"].include? params[:action]
-			unless params[:server_id].nil?
-				@except = ComradeSuggestion.find(params[:except_ids])
-				@server = GameServer.find(params[:server_id])
-			else
-				@except = FriendSuggestion.find(params[:except_ids])
-			end
-		end
-	rescue
-		not_found
 	end
 
 end

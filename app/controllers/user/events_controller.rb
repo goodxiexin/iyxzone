@@ -2,11 +2,10 @@ class User::EventsController < UserBaseController
 
   layout 'app'
 
-  before_filter :friend_or_owner_required, :only => [:index, :upcoming, :participated]
+  require_verified 'event'
 
   def index
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @events = @user.events.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 5
+    @events = @user.events.paginate :page => params[:page], :per_page => 5
   end
 
 	def hot
@@ -20,13 +19,11 @@ class User::EventsController < UserBaseController
 	end
 
   def upcoming
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @events = @user.upcoming_events.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 5
+    @events = @user.upcoming_events.paginate :page => params[:page], :per_page => 5
   end
 
   def participated
-		cond = params[:game_id].nil? ? {} : {:game_id => params[:game_id]}
-    @events = @user.participated_events.find(:all, :conditions => {:game_id => params[:game_id]}).paginate :page => params[:page], :per_page => 5
+    @events = @user.participated_events.paginate :page => params[:page], :per_page => 5
   end
 
   def friends
@@ -34,15 +31,21 @@ class User::EventsController < UserBaseController
   end
 
   def show
-    @participations = @event.participations_for current_user
+    @event = Event.find(params[:id])
+		@user = @event.poster
     @album = @event.album
+		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+    @participations = @event.participations_for current_user
 		render :action => 'show', :layout => 'app2'
   end
 
   def new
     @event = Event.new
-    if @guild
-			@characters = @guild.memberships_for(current_user).select {|m| m.status == Membership::Veteran || m.status == Membership::President}.map(&:character)	
+    unless params[:guild_id].blank?
+      @guild = Guild.find(params[:guild_id])
+			@characters = @guild.memberships_for(current_user).select do |m| 
+        m.status == Membership::Veteran || m.status == Membership::President
+      end.map(&:character)	
 		end
   end
 
@@ -102,19 +105,13 @@ class User::EventsController < UserBaseController
 protected
 
   def setup
-    if ['show'].include? params[:action]
+    if ['edit', 'update', 'destroy'].include? params[:action]
       @event = Event.find(params[:id])
-			@user = @event.poster
-			@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    elsif ['new'].include? params[:action]
-      @guild = Guild.find(params[:guild_id]) unless params[:guild_id].blank?
-    elsif ['edit', 'update', 'destroy'].include? params[:action]
-      @event = current_user.events.find(params[:id])
+      require_owner @event.poster
     elsif ['index', 'upcoming', 'participated'].include? params[:action]
       @user = User.find(params[:id])
+      require_friend_or_owner @user
     end
-  rescue
-    not_found
   end
 
 end

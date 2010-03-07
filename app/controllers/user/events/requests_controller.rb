@@ -48,11 +48,10 @@ protected
       @event = Event.find(params[:event_id])
       @user = @event.poster
     elsif ['accept', 'decline'].include? params[:action]
-      @event = current_user.events.find(params[:event_id])
+      @event = Event.find(params[:event_id])
+      require_owner @event.poster
       @request = @event.requests.find(params[:id])
     end
-  rescue
-    not_found
   end
 
 end
