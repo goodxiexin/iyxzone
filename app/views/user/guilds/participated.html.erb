@@ -1,3 +1,7 @@
+<% content_for :html_title, "#{current_user.login} - 参加的公会 - 17Gaming.com" %>
+<% content_for :html_description, "#{current_user.login} - 参加的公会 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="big-cons">公会</h1>
@@ -6,11 +10,7 @@
 		    <% subject = get_subject @user %>
 		    <ul>
 			    <li><span><%= link_to "热门工会", hot_guilds_url %></span></li>
-			    <% if @user == current_user %>
-          <li class='hover'><span><%= link_to "我的工会", guilds_url(:id => @user.id) %></span></li>
-          <% else %>
-          <li><span><%= link_to "我的工会", guilds_url(:id => @user.id) %></span></li>
-          <% end %>
+          <li class='hover'><span><%= link_to "#{subject}的工会", guilds_url(:id => @user.id) %></span></li>
           <li><span><%= link_to "好友工会", friends_guilds_url %></span></li>
 		    </ul>
 		    <div class='right'>

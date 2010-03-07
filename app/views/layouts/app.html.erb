@@ -2,8 +2,10 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<title><%= (html_title = yield :html_title) ? html_title : '欢迎您' %> - 17Gaming.com</title>
+<meta name="description" content="<%= (html_description = yield :html_description) ? html_description : '17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。在这里，您能找到曾经一起战斗的游戏网友，结交到新的游戏战友，并一起分享，一起成长，一起快乐。' %>">
+<meta name="keywords" content="<%= (html_keywords = yield :html_keywords) ? html_keywords : '17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区' %>">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ady照片-我的照片</title>
   <%= stylesheet_link_tag 'common' %>
 	<%= stylesheet_link_tag 'home' %>
   <%= stylesheet_link_tag 'rating' %>
@@ -59,7 +61,7 @@
         </div>
 				<div id="navextra">
 					<ul>
-						<li><%= link_to "激请" %></li>
+						<li><%= link_to "邀请" %></li>
             <li><%= link_to_function "设置", "", :id => "settings_link" %>
 						<div class='box01 set-box' id='settings_dropdown' style="display:none">
 							<%= link_to "隐私设置", privacy_setting_url, :class => "blk" %>
@@ -103,7 +105,10 @@
 	<div class="main">
 		<div class="content">
 		<% flash.each do |key, msg| %>
-		  <%= content_tag :div, msg, :class => [key, "-msg"], :id => "notice_#{key}" %>
+			<div class="<%=key%>-msg" id="notice_<%=key%>">
+				<span class="icon-<%= key %>"></span>
+				<%= msg %>
+			</div>
 			<script type="text/javascript">
 				setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
 			</script>
@@ -113,27 +118,6 @@
 	</div>
 
 </div>
-
-<div id='chat-list'>
-  <%= avatar current_user, :class => 'imgbox01' %>
-  <%= text_field_tag '', '' %>
-  <ul>
-  <% @online_friends.each do |f| %>
-    <li ondblclick="Iyxzone.Chat.showForm(<%= f.id %>, '<%= form_authenticity_token %>')"><%= avatar f, :class => 'imgbox01' %><%= f.login %></li>
-  <% end %>
-  </ul>
-</div>
-
-<div id='chat-form' style="display:none">
-  <div id='chat-history'></div>
-  <%= text_area_tag 'message[content]', '', :rows => 4, :cols => 50 %>
-  <%= button_to_function '提交', "Iyxzone.Chat.sendMessage(this, event, '#{form_authenticity_token}');" %>
-</div>
-
-<%= javascript_tag "
-  new Iyxzone.Menu.AjaxDropdown('notifications_link', 'notifications_dropdown', 'notifications_dropdown_list', '#{first_five_notifications_url}');
-  new Iyxzone.Menu.Dropdown('settings_link', 'settings_dropdown');
-" %>
 
 <div id="footer">
 	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>

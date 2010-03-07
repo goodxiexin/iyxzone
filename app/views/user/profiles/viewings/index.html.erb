@@ -1,9 +1,10 @@
 <div id='visitor_records'>
-<div class='title01'>
-  <%= link_to_function '', "facebox.close();", :class => "icon-active icon-active-close" %>
-  <h1>最近访问的人</h1>
-</div>
+<p class="z-h s_clear">
+  <strong class="left">最近访问的人</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
 
+<div class='z-con'>
 <div class='formcontent'>
   <% unless @viewings.blank? %>
   <ul class="collection s_clear">
@@ -19,9 +20,11 @@
     还没有人访问你的个人主页
   <% end %>
 </div>
+</div>
 
 <div class="buttons s_clear">
   <table class="center" cellpadding="0"><tr><td>
     <%= will_paginate @viewings, :renderer => 'RemoteLinkRenderer', :remote => @remote %>
   </td></tr></table>
+</div>
 </div>

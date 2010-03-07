@@ -1,9 +1,10 @@
-<div class='title01'>
-  <%= link_to_function '', "facebox.close();", :class => "icon-active icon-active-close" %>
-  <h1>新建专辑</h1>
-</div>
+<p class="z-h s_clear">
+  <strong class="left">新建专辑</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
 
 <div id='errors'></div>
+<div class='z-con'>
 <% form_remote_for :album, :url => personal_albums_url(:show => params[:show]) do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
@@ -38,4 +39,4 @@
   </td></tr></table>
 </div>
 <% end %>
-
+</div>

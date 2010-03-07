@@ -1,8 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<title><%= (html_title = yield :html_title) ? html_title : '页面' %> - 17Gaming.com</title>
+<meta name="description" content="<%= (html_description = yield :html_description) ? html_description : '17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。在这里，您能找到曾经一起战斗的游戏网友，结交到新的游戏战友，并一起分享，一起成长，一起快乐。' %>">
+<meta name="keywords" content="<%= (html_keywords = yield :html_keywords) ? html_keywords : '17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区' %>">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ady照片-我的照片</title>
   <%= stylesheet_link_tag 'common' %>
 	<%= stylesheet_link_tag 'home' %>
   <%= stylesheet_link_tag 'facebox' %>
@@ -82,10 +84,16 @@
       <div class="canvas_main"><div class="canvas_main_c s_clear">
 				<div class="canvas_m">
 					<div class="canvas_c">
-            <% if flash[:notice] %>
-              <%= flash[:notice] %>
-            <% end %>
-						<%= yield %>
+					<% flash.each do |key, msg| %>
+						<div class="<%=key%>-msg" id="notice_<%=key%>">
+							<span class="icon-<%= key %>"></span>
+							<%= msg %>
+						</div>
+						<script type="text/javascript">
+							setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
+						</script>
+					<% end %>
+					<%= yield %>
           </div>
         </div>
         <div id="rightsidebar" class="canvas_r">

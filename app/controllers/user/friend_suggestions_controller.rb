@@ -21,6 +21,38 @@ class User::FriendSuggestionsController < UserBaseController
 		@comrade_suggestions = current_user.find_or_create_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 10
 	end
 
+	def user_search
+		unless params[:server_id].nil?
+			@server = GameServer.find(params[:server_id]) 
+			@users = User.search(params[:key])
+			@comrade_suggestions = current_user.find_or_create_comrade_suggestions(@server)
+			@comrade_suggestions.collect!{|suggestion| suggestion.comrade}
+			@suggestions = @comrade_suggestions & @users
+		else
+			@users = User.search(params[:key])
+			@friend_suggestions = current_user.find_or_create_friend_suggestions
+			@friend_suggestions.collect!{|suggestion| suggestion.suggested_friend}
+			@suggestions = @friend_suggestions & @users
+		end
+		@suggestions = @suggestions.paginate :page => params[:page], :per_page => 10
+	end
+
+	def character_search
+		unless params[:server_id].nil?
+			@server = GameServer.find(params[:server_id]) 
+			@characters = GameCharacter.search(params[:key])
+			@comrade_suggestions = current_user.find_or_create_comrade_suggestions(@server)
+			@comrade_suggestions.collect!{|suggestion| suggestion.comrade.characters}.flatten!
+			@suggestions = @comrade_suggestions & @characters
+		else
+			@characters = GameCharacter.search(params[:key])
+			@friend_suggestions = current_user.find_or_create_friend_suggestions
+			@friend_suggestions.collect!{|suggestion| suggestion.suggested_friend.characters}.flatten!
+			@suggestions = @friend_suggestions & @characters
+		end
+		@suggestions = @suggestions.paginate :page => params[:page], :per_page => 10
+	end
+
 	def new
 		if !params[:server_id].nil?
 			@suggestion = current_user.find_or_create_comrade_suggestions(@server).reject{|s| @except.include?(s)}.sort_by{rand}.first

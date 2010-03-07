@@ -53,6 +53,14 @@ Object.extend(Iyxzone.Password, {
     $(div).update(content);
   },
 
+  showPasswordConfirmRequirement: function(){
+    this.tip('password_confirmation_info', '确认你的密码');
+  },
+
+  showPasswordRequirement: function(){
+    this.tip('password_info', '密码6－20个字符');
+  },
+
   validatePassword: function(){
     var password = $('password').value;
     var strongReg = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");

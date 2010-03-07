@@ -1,3 +1,7 @@
+<% content_for :html_title, "与#{current_user.login}的好友 - 17Gaming.com" %>
+<% content_for :html_description, "与#{current_user.login}的好友 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="app-friend">好友</h1>
@@ -30,7 +34,7 @@
 							  <%= link_to g.name, friends_url(:term => 1, :game_id => g.id) %></li>
 						  <% end %>
               <% unless current_user.participated_guilds_count == 0 and current_user.guilds_count == 0%>
-						    <li><h3>工会</h3></li>
+						    <li><h3>公会</h3></li>
 						    <% current_user.all_guilds.each do |g| %>
 						      <% if g.id == params[:guild_id].to_i %>
                     <li class='current'>
@@ -47,7 +51,7 @@
               <div class="friend-list-header">
 							  <div class="right">
 								  <div class="textfield">
-									  <%= text_field_tag 'search', params[:key] %>
+									  <%= text_field_tag 'search', "搜索您的好友", :onfocus => "this.clear()" %>
 									  <%= observe_field :search,
 										  							  :complete  => "facebox.watchClickEvents();",
 											  						  :update    => "friends",

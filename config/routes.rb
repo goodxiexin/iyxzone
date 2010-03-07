@@ -107,7 +107,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :mails, :collection => {:read_multiple => :put, :unread_multiple => :put, :destroy_multiple => :delete}, :member => {:reply => :post}
 
-    users.resources :friend_suggestions
+    users.resources :friend_suggestions, :collection => { :user_search => :any, :character_search => :any}
 
     users.resources :friend_impressions, :controller => 'friends/impressions'
 
@@ -222,6 +222,10 @@ ActionController::Routing::Routes.draw do |map|
     users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:more_feeds => :get} do |games|
 
       games.resources :blogs, :controller => 'games/blogs'
+      
+			games.resources :comrades, :controller => 'games/comrades', :collection => {:search => :any, :character_search => :any}
+
+			games.resources :players, :controller => 'games/players', :collection => {:search => :any, :character_search => :any}
 
       games.resources :guilds, :controller => 'games/guilds'
 

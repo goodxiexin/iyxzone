@@ -2,9 +2,9 @@ class User::GamesController < UserBaseController
 
   layout 'app2'
 
-  FirstFetchSize = 2
+  FirstFetchSize = 5
   
-  FetchSize = 2
+  FetchSize = 5
 
   def index
     @games = @user.games.paginate :page => params[:page], :per_page => 10
@@ -33,14 +33,15 @@ class User::GamesController < UserBaseController
 
   def show
     @blogs = @game.blogs.find(:all, :limit => 3)
-		@players = []
+		@comrades = []
 		if current_user.games.include?(@game)
 			current_user.servers.find(:all, :conditions=> { :game_id => @game.id}).each { |server|
-				@players << server.users
+				@comrades = @comrades | server.characters
 			}
-		else
-			@players = @game.users.find(:all, :limit => 3)	
 		end
+		@comrades = @comrades.sort_by{rand}[0..5]
+		@players = @game.characters.find(:all)
+		@players = @players.sort_by{rand}[0..5]
     @albums = @game.albums.find(:all, :limit => 3)
     @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize

@@ -7,26 +7,21 @@ class User::PasswordSettingController < UserBaseController
 
   def update
     @old_password = params[:old_password]
-    @new_password = params[:new_password]
-    @confirmation = params[:confirmation]
+    @new_password = params[:password]
+    @confirmation = params[:password_confirmation]
     # check old password
     if User.authenticate(current_user.email, @old_password)
       if @new_password != @confirmation
         flash.now[:error] = "2次输入的密码不一致"
         render :action => 'edit'
       else
-        if session[:validation_text] != params[:validation_text]
-          flash.now[:error] = "验证码错误"
+        current_user.password = @new_password
+        if current_user.save
+          flash.now[:notice] = '成功修改密码'
           render :action => 'edit'
         else
-          current_user.password = @new_password
-          if current_user.save
-            flash.now[:notice] = '成功修改密码'
-            render :action => 'edit'
-          else
-            flash.now[:error] = '保存密码时发生错误，请稍后再试'
-            render :action => 'edit'
-          end
+          flash.now[:error] = '保存密码时发生错误，请稍后再试'
+          render :action => 'edit'
         end
       end
     else
