@@ -4,8 +4,6 @@ module InPlaceEditorMacroHelpers
 		:ok_control => false, 
 		:cancel_control => false, 
 		:submit_on_blur => true, 
-		:rows => 2, 
-		:cols => 70, 
 		:click_to_edit_text => "点击更新", 
 		:saving_text => "正在更新..."}
 
@@ -27,7 +25,6 @@ module InPlaceEditorMacroHelpers
       function(transport, element) {
         if (transport && transport.status == 200) {
           new Effect.Highlight(element.id, {startcolor: \"#00ffff\"});
-          alert(transport.responseText);
           var value = transport.responseText;
           if(value.length != 0){
             element.innerHTML = value.escapeHTML().replace(/\\n/g, '<br/>');

@@ -96,7 +96,7 @@
 	<% if @user != current_user and @profile.about_me.blank? %>
 		<span>这家伙很懒，什么都没说...</span>
 	<% else %>
-		<%= in_place_text_field :span, @profile, :about_me, @user == current_user, profile_url(@profile), {}, {:empty_text => '介绍下自己?', :rows => 2, :cols => 71}, {} %>
+		<%= in_place_text_field :span, @profile, :about_me, @user == current_user, profile_url(@profile), {}, {:empty_text => '介绍下自己?', :rows => 3, :cols => 70}, {} %>
 	<% end %>
 	</div>
 	</div>
