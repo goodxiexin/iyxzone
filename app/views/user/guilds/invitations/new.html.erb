@@ -24,14 +24,7 @@
         <div class="appcontent01">
           <div class="friend-invite-head">
             <strong class="green">搜索好友的游戏角色：</strong> 
-            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear();" %>
-            <%= observe_field :search,
-                    :complete  => "Iyxzone.Invitation.Builder.reset();",
-                    :update    => "invitations",
-                    :frequency => 1,
-                    :url       => search_guild_invitations_url(@guild),
-                    :with      => "'key='+$('search').value",
-                    :method    => :get  %>
+            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear();", :onfocus => "Iyxzone.Invitation.Builder.startObserving(this);", :onblur => "Iyxzone.Invitation.Builder.stopObserving(this);"  %>
           </div>
           <div class="friend-invite-list">
           <% if @characters.blank? %>

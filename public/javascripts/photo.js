@@ -50,47 +50,26 @@ Iyxzone.Photo.FriendSelector = Class.create({
     }
  
     // custom auto completer
-    new Iyxzone.Friend.Autocompleter(this.textboxList.getMainInput(), this.friendList, '/auto_complete_for_photo_tags', {
-      method: 'get',
+    var pinyins = [];
+    var names = [];
+    var ids = [];
+
+    this.friendItems.childElements().each(function(li){
+      pinyins.push(li.down('input').readAttribute('pinyin'));
+      names.push(li.down('input').readAttribute('login'));
+      ids.push(li.down('input').value);
+    }.bind(this));
+
+    new Iyxzone.Friend.Autocompleter(this.textboxList.getMainInput(), this.friendList, {
+      ids: ids,
+      names: names,
+      pinyins: pinyins,
       emptyText: '没有匹配的好友...',
+      tipText: '输入你好友的姓名或者拼音',
       afterUpdateElement: this.afterSelectFriend.bind(this),
-      onInputFocus: this.showTips.bind(this),
       comp: this.textboxList.holder,
-      onLoading: this.searching.bind(this)
     });
 
-  },
-
-  showTips: function(){
-    this.friendList.innerHTML = '输入你好友的拼音';
-    this.friendList.setStyle({
-      position: 'absolute',
-      left: this.textboxList.holder.positionedOffset().left + 'px',
-      top: (this.textboxList.holder.positionedOffset().top + this.textboxList.holder.getHeight()) + 'px',
-      width: (this.textboxList.holder.getWidth() - 10) + 'px',
-      maxHeight: '200px',
-      overflow: 'auto',
-      padding: '5px',
-      background: 'white',
-      border: '1px solid #E7F0E0'
-    });
-    this.friendList.show();
-  },
-
-  searching: function(){
-    this.friendList.innerHTML = '正在搜索你的好友...';
-    this.friendList.setStyle({
-      position: 'absolute',
-      left: this.textboxList.holder.positionedOffset().left + 'px',
-      top: (this.textboxList.holder.positionedOffset().top + this.textboxList.holder.getHeight()) + 'px',
-      width: (this.textboxList.holder.getWidth() - 10) + 'px',
-      maxHeight: '200px',
-      overflow: 'auto',
-      padding: '5px',
-      background: 'white',
-      border: '1px solid #E7F0E0'
-    });
-    this.friendList.show();
   },
 
   removeBox: function(el, input){
@@ -117,22 +96,16 @@ Iyxzone.Photo.FriendSelector = Class.create({
 
   getFriends: function(){
     var gameID = this.gameSelector.value;
-    this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-    new Ajax.Request('/user/photo_tags/new?game_id=' + gameID, {
-      method: 'get',
-      onSuccess: function(transport){
-        this.friendItems.innerHTML = transport.responseText;
-        var inputs = $$('input');
-        for(var i=0;i<inputs.length;i++){
-          if(inputs[i].type == 'checkbox'){
-            inputs[i].checked = false;
-            inputs[i].observe('click', this.afterCheckFriend.bindAsEventListener(this));
-            if(inputs[i].value == this.friendID)
-              inputs[i].checked = true;
-          }
-        } 
-      }.bind(this)
-    });
+    var friends = this.friendItems.childElements();
+    friends.each(function(f){
+      var info = f.readAttribute('info').evalJSON();
+      var games = info.games;
+      if(gameID == 'all' || games.include(gameID)){
+        f.show();
+      }else{
+        f.hide();
+      }
+    }.bind(this)); 
   },
 
   toggleFriends: function(){
@@ -151,7 +124,6 @@ Iyxzone.Photo.FriendSelector = Class.create({
 
   afterSelectFriend: function(input, selectedLI){
     var id = selectedLI.readAttribute('id');
-    var profileID = selectedLI.readAttribute('profileID');
     var login = selectedLI.childElements()[0].innerHTML;
 
     var inputs = $$('input');
@@ -163,7 +135,7 @@ Iyxzone.Photo.FriendSelector = Class.create({
       }
     }
 
-    this.add({id: id, profileID: profileID, login: login});
+    this.add({id: id, login: login});
     input.clear();
   },
 
@@ -178,7 +150,7 @@ Iyxzone.Photo.FriendSelector = Class.create({
     }
 
     this.toggleFriends();
-    this.add({id: checkbox.value, profileID: checkbox.readAttribute('profile_id'), login: checkbox.readAttribute('login')});
+    this.add({id: checkbox.value, login: checkbox.readAttribute('login')});
   },
 
   reset: function(){
@@ -340,7 +312,7 @@ Iyxzone.Photo.Tagger = Class.create({
       }
     });
     this.onDragging({x1: this.photo.getWidth() - min, y1: 0}, {width: min, height: min});
-      
+    
     // 开始圈人的时候就不能自动看到框框了
     Event.stopObserving(this.photo, 'mousemove', this.mousemoveBind);
   },

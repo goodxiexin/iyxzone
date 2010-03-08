@@ -22,6 +22,7 @@ class UsersController < ApplicationController
         render :update do |page|
           page.redirect_to "/activation_mail_sent?email=#{@user.email}&show=0&token=#{params[:token]}"
         end
+      end
     else
       render :update do |page|
         page << "error('#{@user.errors.on_base}');"

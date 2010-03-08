@@ -6,7 +6,7 @@ Iyxzone.Invitation = {
 
   author: ['高侠鸿'],
 
-  Builder: {}  
+  Builder: {}
 
 };
 
@@ -14,26 +14,14 @@ Object.extend(Iyxzone.Invitation.Builder, {
 
   selected: new Hash(),
 
-  onClick: function(td, characterID, userID){
-    if(this.selected.get(characterID)){
+  onClick: function(td, val){
+    if(this.selected.get(val)){
       td.setStyle({background: 'white'});
-      this.selected.unset(characterID);
+      this.selected.unset(val);
     }else{
-      this.selected.set(characterID, userID)
-      td.setStyle({background: '#526ea6'});
+      this.selected.set(val, td)
+      td.setStyle({background: '#DEFEBB'});
     } 
-  },
-  
-  onMouseOver: function(td, characterID){
-    if(!this.selected.get(characterID)){
-      td.setStyle({background: '#e7ebf5'});
-    }
-  },
-
-  onMouseOut: function(td, characterID){
-    if(!this.selected.get(characterID)){
-      td.setStyle({background: 'white'});
-    }
   },
 
   submit: function(form){
@@ -41,10 +29,8 @@ Object.extend(Iyxzone.Invitation.Builder, {
     if(this.selected.size() == 0){
       error('你必须至少邀请一个游戏角色');
     }else{
-      this.selected.each( function(pair){
-        var el = new Element("input", {type: 'hidden', value: pair.key, id: 'invitations[][character_id]', name: 'invitations[][character_id]'})
-        form.appendChild(el);
-        el = new Element("input", {type: 'hidden', value: pair.value, id: 'invitations[][user_id]', name: 'invitations[][user_id]'})
+      this.selected.each(function(pair){
+        var el = new Element("input", {type: 'hidden', value: pair.key, id: 'values[]', name: 'values[]'});
         form.appendChild(el);
       });
       form.submit();
@@ -53,6 +39,34 @@ Object.extend(Iyxzone.Invitation.Builder, {
 
   reset: function(){
     this.selected = new Hash();
+  },
+
+  search: function(){
+    var val = this.field.value;
+    var ul = $('invitee_list');
+    var els = ul.childElements();
+
+    els.each(function(li){
+      var pinyin = li.readAttribute('pinyin');
+      var name = li.readAttribute('name');
+      if(name.include(val) || pinyin.include(val)){
+        li.show();
+      }else{
+        li.hide();
+      }
+    }.bind(this));
+
+    this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  startObserving: function(field){
+    this.field = field;
+    this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  stopObserving: function(){
+    clearTimeout(this.timer);
   }
 
 });
+

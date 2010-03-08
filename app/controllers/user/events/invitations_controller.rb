@@ -11,7 +11,7 @@ class User::Events::InvitationsController < UserBaseController
   end
 
   def create
-    if @event.update_attributes(:invitations => params[:invitations])
+    if @event.update_attributes(:invitees => params[:values])
       redirect_to event_url(@event)
     else
       render :action => 'new'
@@ -38,21 +38,10 @@ class User::Events::InvitationsController < UserBaseController
     end  
   end
 
-  def search
-    if @guild.nil?
-      @characters = current_user.friend_characters(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id) - @event.all_characters
-    else
-      @characters = @guild.characters - @event.all_characters
-    end
-    @reg = /#{params[:key]}/
-    @characters = @characters.find_all {|f| @reg =~ f.name || @reg =~ f.pinyin }
-    render :partial => 'characters'
-  end
-
 protected
 
   def setup
-    if ['new', 'create', 'search'].include? params[:action]
+    if ['new', 'create'].include? params[:action]
       @event = Event.find(params[:event_id])
       @guild = @event.guild
       require_owner @event.poster

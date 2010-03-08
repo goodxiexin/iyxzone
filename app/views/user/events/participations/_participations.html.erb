@@ -1,6 +1,7 @@
 <% participations.each do |participation| %>
   <% participant = participation.participant %>
-  <li id='<%= "participation_#{participation.id}" %>'>
+  <% character = participation.character %>
+  <li id='<%= "participation_#{participation.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
     <%= avatar participant, :size => :medium, :class=>'imgbox01'%>
     <%= facebox_confirm '', event_participation_url(@event, participation), {:method => :delete, :msg => '你确定要删除吗?'}, :class=>'right icon-active icon-active-del' %>
     <p><%= profile_link participant, :class=>'blk' %>

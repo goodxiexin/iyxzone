@@ -43,30 +43,10 @@ class User::Guilds::MembershipsController < UserBaseController
       end
     end
   end
-
-  def search
-		if params[:type].to_i == 0
-      @memberships = @guild.memberships.find(:all, :conditions => {:status => [Membership::Veteran, Membership::Member]})
-    elsif params[:type].to_i == 1
-      @memberships = @guild.invitations
-    elsif params[:type].to_i == 2
-      @memberships = @guild.requests
-    end
-    @reg = /#{params[:key]}/
-    @memberships = @memberships.find_all {|m| @reg =~ m.character.name || @reg =~ m.character.login }
-    if params[:type].to_i == 1
-			render :partial => 'invitees', :locals => {:memberships => @memberships}
-    elsif params[:type].to_i == 2
-			render :partial => 'requestors', :locals => {:memberships => @memberships}
-    else
-			render :partial => 'members', :locals => {:memberships => @memberships}
-    end
-	end
- 
 protected
 
   def setup
-    if ['index', 'search'].include? params[:action]
+    if ['index'].include? params[:action]
       @guild = Guild.find(params[:guild_id])
       @user = @guild.president
     elsif ['edit', 'update', 'destroy'].include? params[:action]

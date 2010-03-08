@@ -1,3 +1,5 @@
+<%= javascript_include_tag "event" %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
@@ -36,8 +38,9 @@
         </ul>
       </div>
       <div class="piclist-rows" id='events'>
-          <strong class="green">搜索会员：</strong> <%= render :partial => 'search' %>
-          <div id='participations'>
+          <strong class="green">搜索会员：</strong>
+          <%= text_field_tag 'search', '输入游戏角色的名字', :onclick => "this.clear();", :class => 'ipt', :onfocus => "Iyxzone.Event.ParticipantManager.startObserving(this)", :onblur => "Iyxzone.Event.ParticipantManager.stopObserving();" %>
+          <div>
 	          <% if params[:type].to_i == 2 %>
               <% if @event.invitations_count == 0 %>
                 <% if @user == current_user %>
@@ -47,7 +50,7 @@
                 <% end %>
               <% else %>
 								<div class='d6-list s_clear'>
-								<ul>
+								<ul id='participations'>
 		            <%= render :partial => 'invitations', :object => @participations %>
 								</ul>
 								</div>
@@ -57,7 +60,7 @@
                 <div class='gray'>还没有人请求参加这个活动</div>
               <% else %>
 								<div class='d6-list s_clear'>
-								<ul>
+								<ul id='participations'>
 		            <%= render :partial => 'requests', :object => @participations %>
 								</ul>
 								</div>
@@ -71,7 +74,7 @@
                 <% end %>
               <% else %>
 								<div class='d6-list s_clear'>
-								<ul>
+								<ul id='participations'>
 		            <%= render :partial => 'participations', :object => @participations %>
 								</ul>
 								</div>

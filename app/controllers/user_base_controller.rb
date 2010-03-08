@@ -61,7 +61,7 @@ protected
   end
 
   def render_add_friend friend
-    redirect_to new_friend_url(:id => friend.id) 
+    redirect_to new_friend_url(:uid => friend.id) 
   end
 
 end

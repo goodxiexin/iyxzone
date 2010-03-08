@@ -110,7 +110,7 @@ TextBoxList = Class.create({
     /*
      * make main input resizable
      */
-    this.resizableMainInput = new ResizableTextBox(this.inputTextField, {max: this.holder.getWidth()});
+    this.resizableMainInput = new ResizableTextBox(this.inputTextField, {max: (this.holder.getWidth() || 100)});
 
     /*
      * observe click event of main input field

@@ -7,7 +7,7 @@ class User::Guilds::InvitationsController < UserBaseController
   end
 
   def create
-    if @guild.update_attributes(:invitations => params[:invitations])
+    if @guild.update_attributes(:invitees => params[:values])
       redirect_to guild_url(@guild)
     else
       render :action => 'new'
@@ -34,17 +34,10 @@ class User::Guilds::InvitationsController < UserBaseController
     end
   end
 
-  def search
-    @characters = current_user.friend_characters(:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id) - @guild.all_characters
-    @reg = /#{params[:key]}/
-    @characters = @characters.find_all {|f| @reg =~ f.name || @reg =~ f.pinyin }
-    render :partial => 'characters'
-  end
-
 protected
 
   def setup
-    if ['new', 'create', 'search'].include? params[:action]
+    if ['new', 'create'].include? params[:action]
       @guild = Guild.find(params[:guild_id])
       require_owner @guild.president
     elsif ['edit', 'accept', 'decline'].include? params[:action]

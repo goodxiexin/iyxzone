@@ -12,7 +12,7 @@ class User::Friends::RequestsController < UserBaseController
       end
     else
       render :update do |page|
-        page << "error('发生错误');"
+        page << "error('#{@request.errors.on(:friend_id)}');"
       end
     end  
   end
@@ -52,7 +52,9 @@ class User::Friends::RequestsController < UserBaseController
 protected
 
 	def setup
-		if ["accept", "decline"].include? params[:action]
+		if ["new"].include? params[:action]
+      
+    elsif ["accept", "decline"].include? params[:action]
 			@request = Friendship.find(params[:id])
 		  require_owner @request.friend
     end

@@ -1,5 +1,7 @@
 <% invitations.each do |invitation| %>
-<li id='invitation_<%= invitation.id %>'>
+<% character = invitation.character %>
+<% participant = invitation.participant %>
+<li id='invitation_<%= invitation.id %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
   <%= avatar invitation.participant, :class => 'imgbox01' %>
   <p><%= profile_link invitation.participant, :class=>'blk' %>
   <span class='red blk'><%= invitation.character.name %></span>
