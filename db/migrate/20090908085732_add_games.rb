@@ -1,7 +1,7 @@
 class AddGames < ActiveRecord::Migration
   def self.up
     wow = Game.create(
-        :name => "M-魔兽世界",
+        :name => "魔兽世界",
         :official_web => "http://www.warcraftchina.com/index.html",
         :sale_date => "2005-4-26",
         :company => "暴雪",
@@ -10,7 +10,7 @@ class AddGames < ActiveRecord::Migration
     wow.tag_list = "史诗, 奇幻, 时间收费, 即时战斗, 3D"
     wow.save
     yonghengzhita = Game.create(
-        :name => "Y-永恒之塔",
+        :name => "永恒之塔",
         :official_web => "http://aion.sdo.com/web3/home/index.html",
         :sale_date => "2009-4-16",
         :company => "NCSOFT",
