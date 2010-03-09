@@ -2,8 +2,6 @@ class User::VideosController < UserBaseController
 
   layout 'app'
 
-  require_verified 'video'
-
   def index
     @relationship = @user.relationship_with current_user
     @videos = @user.videos.viewable(@relationship).paginate :page => params[:page], :per_page => 10

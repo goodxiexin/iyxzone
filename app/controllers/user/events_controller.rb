@@ -2,8 +2,6 @@ class User::EventsController < UserBaseController
 
   layout 'app'
 
-  require_verified 'event'
-
   def index
     @events = @user.events.paginate :page => params[:page], :per_page => 5
   end

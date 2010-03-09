@@ -5,11 +5,11 @@ class Admin::PhotosController < AdminBaseController
   end
 
   def accept
-    @photos = Photo.accept.paginate :page => params[:page], :per_page => 20
+    @photos = Photo.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @photos = Photo.reject.paginate :page => params[:page], :per_page => 20
+    @photos = Photo.rejected.paginate :page => params[:page], :per_page => 20
   end
 
   def show
@@ -20,8 +20,7 @@ class Admin::PhotosController < AdminBaseController
 
   # accept
   def verify
-    @photo.verified = 1
-    if @photo.save
+    if @photo.verify
       succ
     else
       err
@@ -30,8 +29,7 @@ class Admin::PhotosController < AdminBaseController
   
   # reject
   def unverify
-    @photo.verified = 2
-    if @photo.save
+    if @photo.unveirfy
       succ
     else
       err
@@ -45,8 +43,6 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @photo = Photo.find(params[:id])
     end
-  rescue
-    not_found
   end
   
 end

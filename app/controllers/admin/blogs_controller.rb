@@ -18,9 +18,7 @@ class Admin::BlogsController < AdminBaseController
   def destroy
   end
 
-  # accept | succ and err are defined in admin_base_controller.rb
   def verify
-    #@blog.verified = 1
     if @blog.verify
       succ
     else
@@ -30,8 +28,7 @@ class Admin::BlogsController < AdminBaseController
   
   # reject
   def unverify
-    #@blog.verified = 2
-    if @blog.unverify #save
+    if @blog.unverify
       succ
     else
       err
@@ -45,8 +42,6 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @blog = Blog.find(params[:id])
     end
-  rescue
-    not_found
   end
   
 end

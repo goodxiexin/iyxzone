@@ -2,8 +2,6 @@ class User::DraftsController < UserBaseController
 
   layout 'app'
 
-  require_verified 'blog'
-
   def index
     @blogs = current_user.drafts.paginate :page => params[:page], :per_page => 15
   end

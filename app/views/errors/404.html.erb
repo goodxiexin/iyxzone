@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag 'home' %>
+<%= stylesheet_link_tag 'common' %>
 <style type="text/css">
 .z-box{width:480px;margin:100px auto}
 .z-box .con{background:#fff;color:#666;padding:20px 30px}
@@ -26,7 +28,7 @@
                     </div>
             		</div>
                     <div class="foot rows">
-                    <%=link_to '17gaming首页', home_url %><span>|</span><%= link_to '个人主页', profile_url(current_user.profile) %><span>|</span><a href="#">联系我们</a>
+                    <%= link_to '上一页', :back %> <span> | </span> <%=link_to '17gaming首页', home_url %>
                     </div>
             </div>
         </div>

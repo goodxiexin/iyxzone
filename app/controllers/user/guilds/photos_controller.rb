@@ -2,8 +2,6 @@ class User::Guilds::PhotosController < UserBaseController
 
   layout 'app'
 
-  require_verified 'photo'
-
   # TODO: veteran能够编辑吗?
 
   def new

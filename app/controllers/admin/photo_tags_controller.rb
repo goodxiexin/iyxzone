@@ -5,11 +5,11 @@ class Admin::PhotoTagsController < AdminBaseController
   end
   
   def accept
-    @photo_tags = Photo_tag.accept.paginate :page => params[:page], :per_page => 20
+    @photo_tags = Photo_tag.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @photo_tags = Photo_tag.reject.paginate :page => params[:page], :per_page => 20
+    @photo_tags = Photo_tag.rejected.paginate :page => params[:page], :per_page => 20
   end
 
   def show
@@ -20,8 +20,7 @@ class Admin::PhotoTagsController < AdminBaseController
 
   # accept
   def verify
-    @photo_tag.verified = 1
-    if @photo_tag.save
+    if @photo_tag.verify
       succ
     else
       err
@@ -30,8 +29,7 @@ class Admin::PhotoTagsController < AdminBaseController
   
   # reject
   def unverify
-    @photo_tag.verified = 2
-    if @photo_tag.save
+    if @photo_tag.unveirfy
       succ
     else
       err
@@ -45,8 +43,6 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @photo_tag = Photo_tag.find(params[:id])
     end
-  rescue
-    not_found
   end
   
 end

@@ -5,11 +5,11 @@ class Admin::EventsController < AdminBaseController
   end
 
   def accept
-    @events = Event.accept.paginate :page => params[:page], :per_page => 20
+    @events = Event.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @events = Event.reject.paginate :page => params[:page], :per_page => 20
+    @events = Event.rejected.paginate :page => params[:page], :per_page => 20
   end
   
   def show
@@ -21,8 +21,7 @@ class Admin::EventsController < AdminBaseController
   
   # accept
   def verify
-    @event.verified = 1
-    if @event.save
+    if @event.verify
       succ
     else
       err
@@ -31,8 +30,7 @@ class Admin::EventsController < AdminBaseController
   
   # reject
   def unverify
-    @event.verified = 2
-    if @event.save
+    if @event.unverify
       succ
     else
       err
@@ -46,7 +44,5 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @event = Event.find(params[:id])
     end
-  rescue
-    not_found
   end
 end

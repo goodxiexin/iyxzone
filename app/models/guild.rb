@@ -14,14 +14,6 @@ class Guild < ActiveRecord::Base
 
   named_scope :recent, :order => 'created_at DESC'
 
-  named_scope :unverified, :conditions => {:verified => 0}, :order => "created_at DESC"
-  
-  named_scope :accept, :conditions => {:verified => 1}, :order => "created_at DESC"
-  
-  named_scope :reject, :conditions => {:verified => 2}, :order => "created_at DESC"
-
-  attr_protected :verified
-  
   has_one :forum
 
   has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
@@ -76,6 +68,8 @@ class Guild < ActiveRecord::Base
 
     guild.has_many :all_characters
   end
+
+  needs_verification
 
   acts_as_feed_recipient :delete_conditions => lambda {|user, guild| guild.president == user },
                          :categories => {

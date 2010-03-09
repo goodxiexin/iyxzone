@@ -2,6 +2,8 @@ class UserBaseController < ApplicationController
 
   before_filter :login_required
 
+  before_filter :setup_verify_scope
+
   before_filter :setup_instant_messenger
 
   before_filter :setup
@@ -12,6 +14,13 @@ protected
     {:game_id => current_user.characters.map(&:game_id).uniq}
   end
   
+  def setup_verify_scope
+    # 下面这些资源，在user里都只能看到审核通过的
+    [Comment, Event, Guild, Photo, PhotoTag, Sharing, Status, Video].each do |klass|
+      klass.enable_verify_scope
+    end
+  end
+
   def setup_instant_messenger
     @online_friends = current_user.online_friends
     @im_info = {}
@@ -53,11 +62,7 @@ protected
   end
 
   def render_privilege_denied
-    render :template => 'not_found'
-  end
-
-  def render_not_found
-    render :template => 'not_found'
+    render_not_found
   end
 
   def render_add_friend friend

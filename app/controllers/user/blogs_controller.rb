@@ -2,8 +2,6 @@ class User::BlogsController < UserBaseController
 
   layout 'app'
 
-  require_verified 'blog'
-
   increment_viewing 'blog', :only => [:show]
 
   def index

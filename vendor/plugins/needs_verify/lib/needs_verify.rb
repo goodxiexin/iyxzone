@@ -1,8 +1,6 @@
 # NeedsVerify
 module NeedsVerify
 
-module Model
-
   def self.included base
     base.extend(ClassMethods)
   end
@@ -19,15 +17,20 @@ module Model
 
       attr_protected :verified    
 
-      include Commentable::InstanceMethods
+      include InstanceMethods
 
-      extend Commentable::SingletonMethods
+      extend SingletonMethods
 
     end
 
   end 
 
   module SingletonMethods
+
+    def enable_verify_scope
+      default_scope :conditions => {:verified => [0,1]}
+    end
+
   end
 
   module InstanceMethods
@@ -46,27 +49,4 @@ module Model
 
 end
 
-module Controller
-
-  def self.included(base)
-    base.extend(ClassMethods)
-  end
-
-  module ClassMethods
-
-    def require_verified model_name, opts={}
-      before_filter opts do |controller| 
-        model_name.camelize.constantize.class_eval do
-          default_scope :conditions => {:verified => [0,1]}
-        end
-      end
-    end
-
-  end
-
-end
-
-end
-
-ActiveRecord::Base.send(:include, NeedsVerify::Model)
-ActionController::Base.send(:include, NeedsVerify::Controller)
+ActiveRecord::Base.send(:include, NeedsVerify)

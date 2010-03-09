@@ -2,8 +2,6 @@ class User::PhotosController < UserBaseController
 
   layout 'app'
 
-  require_verified 'photo'
-  
 	def hot
     @photos = Photo.hot.paginate :page => params[:page], :per_page => 10
   end

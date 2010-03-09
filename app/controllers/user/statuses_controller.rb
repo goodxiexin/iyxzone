@@ -2,8 +2,6 @@ class User::StatusesController < UserBaseController
 
   layout 'app'
 
-  require_verified 'status'
-
   def index
     @statuses = @user.statuses.paginate :page => params[:page], :per_page => 5
   end

@@ -2,8 +2,6 @@ class User::Avatars::PhotosController < UserBaseController
 
   layout 'app'
 
-  require_verified 'photo'
-
   def show
     @relationship = @user.relationship_with current_user
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?

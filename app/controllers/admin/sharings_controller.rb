@@ -5,11 +5,11 @@ class Admin::SharingsController < AdminBaseController
   end
 
   def accept
-    @sharings = Sharing.accept.paginate :page => params[:page], :per_page => 20
+    @sharings = Sharing.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @sharings = Sharing.reject.paginate :page => params[:page], :per_page => 20
+    @sharings = Sharing.rejected.paginate :page => params[:page], :per_page => 20
   end
   
   def show
@@ -20,8 +20,7 @@ class Admin::SharingsController < AdminBaseController
 
   # accept
   def verify
-    @sharing.verified = 1
-    if @sharing.save
+    if @sharing.verify
       succ
     else
       err
@@ -30,8 +29,7 @@ class Admin::SharingsController < AdminBaseController
   
   # reject
   def unverify
-    @sharing.verified = 2
-    if @sharing.save
+    if @sharing.unverify
       succ
     else
       err
@@ -45,8 +43,6 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @sharing = Sharing.find(params[:id])
     end
-  rescue
-    not_found
   end
   
 end

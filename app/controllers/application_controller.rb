@@ -10,21 +10,18 @@ class ApplicationController < ActionController::Base
 
   include RoleRequirementSystem
 
-	unless ActionController::Base.consider_all_requests_local
-		rescue_from ActiveRecord::RecordNotFound, ActionController::RoutingError, ActionController::UnknownController, ActionController::UnknownAction, :with => :render_not_found
-		rescue_from RuntimeError, :with => :render_error
-	end
+  rescue_from ActiveRecord::RecordNotFound, ActionController::RoutingError, :with => :render_not_found
+
+  rescue_from RuntimeError, :with => :render_error
 
 protected
 
-  def render_not_found(exception)
-	  log_error(exception)
-		render :template => "/errors/404.html.erb", :status => 404, :layout => "app"
-	end
+  def render_not_found exception=nil
+    render :template => "/errors/404", :status => 404, :layout => false
+  end
 
-	def render_error(exception)
-		log_error(exception)
-		render :template => "/errors/500.html.erb", :status => 500, :layout => 'app'
-	end
+  def render_error exception=nil
+    render :template => "/errors/500", :status => 500, :layout => false
+  end
 
 end

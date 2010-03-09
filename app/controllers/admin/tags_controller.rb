@@ -5,11 +5,11 @@ class Admin::TagsController < AdminBaseController
   end
 
   def accept
-    @tags = Tag.accept.paginate :page => params[:page], :per_page => 20
+    @tags = Tag.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @tags = Tag.reject.paginate :page => params[:page], :per_page => 20
+    @tags = Tag.rejected.paginate :page => params[:page], :per_page => 20
   end
 
   def show
@@ -20,8 +20,7 @@ class Admin::TagsController < AdminBaseController
 
   # accept
   def verify
-    @tag.verified = 1
-    if @tag.save
+    if @tag.verify
       succ
     else
       err
@@ -30,8 +29,7 @@ class Admin::TagsController < AdminBaseController
   
   # reject
   def unverify
-    @tag.verified = 2
-    if @tag.save
+    if @tag.unverify
       succ
     else
       err
@@ -45,8 +43,6 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @tag = Tag.find(params[:id])
     end
-  rescue
-    not_found
   end
   
 end

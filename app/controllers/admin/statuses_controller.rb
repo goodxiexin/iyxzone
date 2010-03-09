@@ -5,11 +5,11 @@ class Admin::StatusesController < AdminBaseController
   end
 
   def accept
-    @statuses = Status.accept.paginate :page => params[:page], :per_page => 20
+    @statuses = Status.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @statuses = Status.reject.paginate :page => params[:page], :per_page => 20
+    @statuses = Status.rejected.paginate :page => params[:page], :per_page => 20
   end
 
   def show
@@ -20,8 +20,7 @@ class Admin::StatusesController < AdminBaseController
 
   # accept
   def verify
-    @status.verified = 1
-    if @status.save
+    if @status.verify
       succ
     else
       err
@@ -30,8 +29,7 @@ class Admin::StatusesController < AdminBaseController
   
   # reject
   def unverify
-    @status.verified = 2
-    if @status.save
+    if @status.unverify
       succ
     else
       err
@@ -45,8 +43,6 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @status = Status.find(params[:id])
     end
-  rescue
-    not_found
   end
   
 end

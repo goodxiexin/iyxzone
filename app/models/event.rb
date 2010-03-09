@@ -18,14 +18,6 @@ class Event < ActiveRecord::Base
 	
 	named_scope :recent, :conditions => ["end_time < ?", Time.now], :order => 'start_time DESC'
 
-  named_scope :unverified, :conditions => {:verified => 0}, :order => "created_at DESC"
-  
-  named_scope :accept, :conditions => {:verified => 1}, :order => "created_at DESC"
-  
-  named_scope :reject, :conditions => {:verified => 2}, :order => "created_at DESC"
-
-  attr_protected :verified
-  
   has_many :participations, :dependent => :destroy
 
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
@@ -65,6 +57,8 @@ class Event < ActiveRecord::Base
     event.has_many :all_characters, :through => :participations
 
   end
+
+  needs_verification
 
   acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, event, comment| event.poster == user}, 

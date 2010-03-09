@@ -2,8 +2,6 @@ class User::Events::PhotosController < UserBaseController
 
   layout 'app'
 
-  require_verified 'photo'
-
   def new
   end
 

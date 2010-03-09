@@ -6,8 +6,6 @@ class User::GuildsController < UserBaseController
 	
 	FetchSize = 5
 
-  require_verified 'guild'
-
   def index
     @guilds = @user.guilds.paginate :page => params[:page], :per_page => 10
   end

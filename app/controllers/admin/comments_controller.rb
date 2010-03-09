@@ -5,11 +5,11 @@ class Admin::CommentsController < AdminBaseController
   end
 
   def accept
-    @comments = Comment.accept.paginate :page => params[:page], :per_page => 20
+    @comments = Comment.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @comments = Comment.reject.paginate :page => params[:page], :per_page => 20
+    @comments = Comment.rejected.paginate :page => params[:page], :per_page => 20
   end
   
   def show
@@ -20,8 +20,7 @@ class Admin::CommentsController < AdminBaseController
 
   # accept
   def verify
-    @comment.verified = 1
-    if @comment.save
+    if @comment.verify
       succ
     else
       err
@@ -30,8 +29,7 @@ class Admin::CommentsController < AdminBaseController
   
   # reject
   def unverify
-    @comment.verified = 2
-    if @comment.save
+    if @comment.unverify
       succ
     else
       err
@@ -45,8 +43,6 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @comment = Comment.find(params[:id])
     end
-  rescue
-    not_found
   end
   
 end

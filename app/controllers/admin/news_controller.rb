@@ -1,4 +1,5 @@
 class Admin::NewsController < AdminBaseController
+
   def new
     @news = News.new
   end
@@ -41,12 +42,12 @@ class Admin::NewsController < AdminBaseController
     end
   end
 
-  protected
+protected
+
   def setup
     if ['edit','update', 'destroy'].include? params[:action]
       @news = News.find(params[:id])
     end
-  rescue
-    not_found
   end
+
 end

@@ -5,11 +5,11 @@ class Admin::PollsController < AdminBaseController
   end
 
   def accept
-    @polls = Poll.accept.paginate :page => params[:page], :per_page => 20
+    @polls = Poll.accepted.paginate :page => params[:page], :per_page => 20
   end
   
   def reject
-    @polls = Poll.reject.paginate :page => params[:page], :per_page => 20
+    @polls = Poll.rejected.paginate :page => params[:page], :per_page => 20
   end
 
   def show
@@ -20,8 +20,7 @@ class Admin::PollsController < AdminBaseController
 
   # accept
   def verify
-    @poll.verified = 1
-    if @poll.save
+    if @poll.verify
       succ
     else
       err
@@ -30,8 +29,7 @@ class Admin::PollsController < AdminBaseController
   
   # reject
   def unverify
-    @poll.verified = 2
-    if @poll.save
+    if @poll.unverify
       succ
     else
       err
@@ -45,8 +43,6 @@ protected
     if ["show", "destroy", "verify", "unverify"].include? params[:action]
       @poll = Poll.find(params[:id])
     end
-  rescue
-    not_found
   end
   
 end

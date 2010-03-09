@@ -51,8 +51,6 @@ protected
     if ["destroy", "enable", "disable", "activate"].include? params[:action]
       @user = User.find(params[:uid])
     end
-  rescue
-    not_found
   end
 
 end

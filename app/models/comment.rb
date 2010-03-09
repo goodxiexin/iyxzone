@@ -8,13 +8,7 @@ class Comment < ActiveRecord::Base
 
 	has_many :notices, :as => 'producer', :dependent => :destroy
 
-  named_scope :unverified, :conditions => {:verified => 0}, :order => "created_at DESC"
-  
-  named_scope :accept, :conditions => {:verified => 1}, :order => "created_at DESC"
-  
-  named_scope :reject, :conditions => {:verified => 2}, :order => "created_at DESC"
-
-  attr_protected :verified
+  needs_verification
   
   acts_as_emotion_text :columns => [:content]
 
