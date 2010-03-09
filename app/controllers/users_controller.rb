@@ -22,22 +22,16 @@ class UsersController < ApplicationController
         render :update do |page|
           page.redirect_to "/activation_mail_sent?email=#{@user.email}&show=0&token=#{params[:token]}"
         end
-<<<<<<< HEAD:app/controllers/users_controller.rb
-      else
-        render :update do |page|
-          page << "error('#{@user.errors.on_base}');"
-        end
-=======
       end
     else
       render :update do |page|
         page << "error('#{@user.errors.on_base}');"
->>>>>>> fee8fbf62e1b0a9d5f0892f9a500e287e0e96892:app/controllers/users_controller.rb
       end
       #render :update do |page|
       #  page.redirect_to '/login'
       #end
     end
+	end
 
     def activate
       self.current_user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
