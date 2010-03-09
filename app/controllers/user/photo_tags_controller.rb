@@ -31,11 +31,6 @@ class User::PhotoTagsController < UserBaseController
     end
   end
 
-  def auto_complete_for_friends
-    @friends = current_user.friends.search(params[:friend][:login])
-    render :partial => 'auto_complete_friends', :object => @friends
-  end
-
 protected
 
   def setup

@@ -3,8 +3,37 @@ Iyxzone.Guild = {
   author: ['高侠鸿'],
   Builder: {},
   Feeder: {},
-  Editor: {}
+  Editor: {},
+  MemberManager: {}
 };
+
+Object.extend(Iyxzone.Guild.MemberManager, {
+
+  startObserving: function(field){
+    this.field = field;
+    this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  stopObserving: function(field){
+    clearTimeout(this.timer);
+  },
+
+  search: function(){
+    var val = this.field.value;
+    var ul = $('members');
+    ul.childElements().each(function(li){
+      var pinyin = li.readAttribute('pinyin');
+      var name = li.readAttribute('name');
+      if(pinyin.include(val) || name.include(val)){
+        li.show();
+      }else{
+        li.hide();
+      }
+    }.bind(this));
+    this.timer = setTimeout(this.search.bind(this), 300);
+  }
+
+});
 
 Object.extend(Iyxzone.Guild.Builder, {
 

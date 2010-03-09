@@ -52,17 +52,17 @@
 			<div class="round_m"><div class="round_body">
         <div class="applist">
           <ul>
-            <li><%= link_to "用户", admin_users_url(:id => current_user.id), :class => 'app-photo' %></li>
-						<li><%= link_to "日志", admin_blogs_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "照片", admin_photos_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "视频", admin_videos_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "状态", admin_statuses_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "活动", admin_events_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "工会", admin_guilds_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "投票", admin_polls_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "分享", admin_sharings_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "评论|留言", admin_comments_url(:id => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "标签|印象", admin_tags_url(:id => current_user.id), :class => 'app-log' %></li>
+            <li><%= link_to "用户", admin_users_url(:uid => current_user.id), :class => 'app-photo' %></li>
+						<li><%= link_to "日志", admin_blogs_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "照片", admin_photos_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "视频", admin_videos_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "状态", admin_statuses_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "活动", admin_events_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "工会", admin_guilds_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "投票", admin_polls_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "分享", admin_sharings_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "评论|留言", admin_comments_url(:uid => current_user.id), :class => 'app-log' %></li>
+						<li><%= link_to "标签|印象", admin_tags_url(:uid => current_user.id), :class => 'app-log' %></li>
           </ul>
         </div>
 			</div></div>

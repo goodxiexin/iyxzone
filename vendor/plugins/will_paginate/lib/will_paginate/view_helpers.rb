@@ -116,7 +116,13 @@ module WillPaginate
       renderer.prepare collection, options, self
       renderer.to_html
     end
-    
+   
+    # added by gaoxh
+    def remote_will_paginate(collection=nil, options={})
+      options = {:renderer => 'WillPaginate::RemoteLinkRenderer'}.merge(options)
+      will_paginate collection, options
+    end
+ 
     # Wrapper for rendering pagination links at both top and bottom of a block
     # of content.
     # 
@@ -405,11 +411,6 @@ module WillPaginate
   # added by gaoxh04
   # ajax link renderer
   class RemoteLinkRenderer < WillPaginate::LinkRenderer
-
-    # now in view template, you must write in the following way:
-    # <%= will_paginate @collection, :remote => {:url => {:action => ''}, ... , :update => ''} %>
-    # remote option is mandatory
-    # url option is mandatory
 
     def prepare(collection, options, template)
       @remote = options.delete(:remote) || {}

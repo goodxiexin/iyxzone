@@ -1,7 +1,8 @@
 <ul id='members'>
   <% memberships.each do |membership| %>
 	<% user = membership.user %>
-  <li class='bg' id='<%= "membership_#{membership.id}" %>' >
+  <% character = membership.character %>
+  <li class='bg' id='<%= "membership_#{membership.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
     <div class='card'>
       <%= facebox_confirm "", guild_membership_url(membership.guild, membership), {:msg => '你确定要让这个用户退出公会吗', :method => :delete}, :class=>"icon-active right" %>
       <div class='img'>
@@ -11,7 +12,7 @@
       </div>
       <div class='info member s_clear'>
         <h4><%= profile_link user, :class => 'blk' %></h4>
-        <span class='red nowrap'><%= membership.character.name %></span><br/>
+        <span class='red nowrap'><%= character.name %></span><br/>
 				<span id="member_status_<%=membership.id%>"><%= membership.to_s %></span>
 				<% if current_user == @guild.president %>
 				<span><%= facebox_link "", edit_guild_membership_url(@guild, membership), :class => "icon-active icon-active-edit"%></span>

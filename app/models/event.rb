@@ -148,10 +148,11 @@ class Event < ActiveRecord::Base
     end
   end
 
-  def invitations= invitation_attrs
-    return if invitation_attrs.blank?
-    invitation_attrs.each do |attrs|
-      invitations.build(:participant_id => attrs[:user_id], :character_id => attrs[:character_id])
+  def invitees= character_ids
+    return if character_ids.blank?
+    character_ids.each do |character_id|
+      character = GameCharacter.find(character_id)
+      invitations.build(:character_id => character.id, :participant_id => character.user_id)
     end
   end
 

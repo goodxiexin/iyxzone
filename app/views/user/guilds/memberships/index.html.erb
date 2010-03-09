@@ -1,3 +1,5 @@
+<%= javascript_include_tag "guild" %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
@@ -41,7 +43,8 @@
             <% elsif params[:type].to_i == 2 %>
             <strong class="gray w-xl">共有<%= @guild.requests_count %>个请求</strong>
             <% end %>
-            <strong class="green">搜索会员：</strong> <%= render :partial => 'search' %>
+            <strong class="green">搜索会员：</strong>
+            <%= text_field_tag 'search', '输入游戏角色的名字', :onclick => "this.clear();", :class => 'ipt', :onfocus => "Iyxzone.Guild.MemberManager.startObserving(this)", :onblur => "Iyxzone.Guild.MemberManager.stopObserving();" %>
           </div>
           <div class="friend-list">
             <div class="friend-list-body s_clear">

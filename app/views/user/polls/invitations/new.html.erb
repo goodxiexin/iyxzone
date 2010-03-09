@@ -2,40 +2,35 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="app-vote">投票</h1>
+	  <div class="friend-head space s_clear">
+      <span class="left"><%= avatar @poll.poster, :class => "imgbox01" %></span>
+      <p class="left">
+        <strong><%= @poll.name %>投票邀请</strong><br/>
+        <%= link_to '投票主页', poll_url(@poll), :class => 'red' %>
+      </p>
+    </div>
     <div class="box02 canvas_int">
-      <div class="tab tab01">
-        <div class="right"><%= link_to "新投票", new_poll_url %></a></div>
-        <ul>
-          <li><span><%= link_to "热门投票", hot_polls_url(:id => current_user.id) %></span></li>
-          <li class='hover'><span><%= link_to "#{get_subject current_user}的投票", polls_url(:id => current_user.id) %></span></li>
-          <li><span><%= link_to "朋友的投票", friends_polls_url(:id => current_user.id) %></span></li>
-        </ul>
+      <div class="friend-box">
+        <div class="appcontent01">
+          <div class="friend-invite-head">
+            <strong class="green">搜索好友</strong> 
+            <%= text_field_tag 'search', '输入好友的名字', :class => 'ipt', :onclick => "this.clear();", :onfocus => "Iyxzone.Invitation.Builder.startObserving(this);", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
+          </div>
+          <div class="friend-invite-list">
+          <% if @friends.blank? %>
+            没有还没被邀请的好友
+          <% else %>
+            <div id='invitations'><%= render :partial => 'friends' %></div>
+            <div class="rows s_clear">
+              <%= button_to_function '', "Iyxzone.Invitation.Builder.submit($('invitation_form'))", :class => "button05 png" %>
+            </div>
+          <% end %>  
+          </div>
+        </div>
       </div>
-			<div class="friend-box">
-			<div class='appcontent01'>
-				<div class="friend-invite-head"><strong class='green'>搜索好友:</strong>
-			<%= text_field_tag 'search' %>
-			<%= observe_field :search,
-                    :complete  => "Iyxzone.Invitation.Builder.reset();",
-                    :update    => "invitations",
-                    :frequency => 1,
-                    :url       => search_poll_invitations_url(@poll),
-                    :with      => "'key='+$('search').value",
-                    :method    => :get  %>
-			</div> 
-
-		<div class='friend-invite-list' id='invitations'>
-			<%= render :partial => 'friends' %>
-		</div>
-
-<% form_tag create_multiple_poll_invitations_url(@poll), :id => 'invitation_form' do %>
-<% end %>
-<div class='rows s_clear'>
-<%= button_to_function '提交邀请', "Iyxzone.Invitation.Builder.submit($('invitation_form'))", :class => 'button05png' %>
-<%= link_to '取消', :back %>
-</div>
-		</div>
-	</div></div>
+    </div>
+  </div></div>
 </div></div></div><div>
 
+<% form_tag poll_invitations_url(@poll), :id => 'invitation_form' do %>
+<% end %>

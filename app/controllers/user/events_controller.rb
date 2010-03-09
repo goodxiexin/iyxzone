@@ -109,7 +109,7 @@ protected
       @event = Event.find(params[:id])
       require_owner @event.poster
     elsif ['index', 'upcoming', 'participated'].include? params[:action]
-      @user = User.find(params[:id])
+      @user = User.find(params[:uid])
       require_friend_or_owner @user
     end
   end

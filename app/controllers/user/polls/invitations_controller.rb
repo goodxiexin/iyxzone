@@ -3,11 +3,13 @@ class User::Polls::InvitationsController < UserBaseController
   layout 'app'
 
   def new
-    @friends = current_user.friends
+    @friends = current_user.friends - @poll.invitations.map(&:user)
   end
 
-  def create_multiple
-    params[:users].each { |user_id| @poll.invitations.create(:user_id => user_id) }
+  def create
+    params[:values].each do |user_id| 
+      @poll.invitations.create(:user_id => user_id)
+    end
     redirect_to poll_url(@poll)
   end
 
@@ -23,15 +25,10 @@ class User::Polls::InvitationsController < UserBaseController
     end
 	end
 
-	def search
-		@friends = current_user.friends.search(params[:key])
-		render :partial => 'friends'
-	end
-
 protected
 
 	def setup
-		if ['new', 'create_multiple'].include? params[:action]
+		if ['new', 'create'].include? params[:action]
 			@poll = Poll.find(params[:poll_id])
       require_owner @poll.poster
 		elsif ['destroy'].include? params[:action]

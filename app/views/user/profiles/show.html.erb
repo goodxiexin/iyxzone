@@ -96,13 +96,13 @@
 	<% if @user != current_user and @profile.about_me.blank? %>
 		<span>这家伙很懒，什么都没说...</span>
 	<% else %>
-		<%= in_place_text_field :span, @profile, :about_me, @user == current_user, profile_url(@profile), {}, {:empty_text => '介绍下自己?', :rows => 2, :cols => 71}, {} %>
+		<%= in_place_text_field :span, @profile, :about_me, @user == current_user, profile_url(@profile), {}, {:empty_text => '介绍下自己?', :rows => 3, :cols => 70}, {} %>
 	<% end %>
 	</div>
 	</div>
 
 <div class="multibox">
-	<div class="title"><%=link_to '全部相册', personal_albums_url(:id => @user.id) %><b>最近照片</b></div>
+	<div class="title"><%=link_to '全部相册', personal_albums_url(:uid => @user.id) %><b>最近照片</b></div>
   <div class="piclist s_clear">
 	<% unless @albums.blank? %>
 		<% @albums.each do |album| %>
@@ -135,7 +135,7 @@
 
 <div class="multibox">
 	<div class="title"><b>最近日志</b>
-    <%= link_to "全部日志", blogs_url(:id => @user.id) %>
+    <%= link_to "全部日志", blogs_url(:uid => @user.id) %>
 	</div>
 	<% unless @blogs.blank? %>
 	<% @blogs.each do |blog| %>

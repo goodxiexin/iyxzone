@@ -2,6 +2,8 @@ class Profile < ActiveRecord::Base
 
   belongs_to :user
 
+	belongs_to :skin
+
 	belongs_to :region
 
 	belongs_to :city

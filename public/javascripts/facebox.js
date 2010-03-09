@@ -233,8 +233,8 @@ var facebox;
 
 document.observe('dom:loaded', function(){
 	facebox = new Facebox();
-
-	window.notice = function(mess){
+	
+  window.notice = function(mess){
 		return facebox.show_notice(mess);
 	};
 	

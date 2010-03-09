@@ -124,57 +124,79 @@ Object.extend(Iyxzone.Comrade.Suggestor, {
 
 });
 
-Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Base, {
+Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
 
-  initialize: function(element, update, url, options) {
-    this.baseInitialize(element, update, options);
-    this.options.asynchronous  = true;
-    this.options.onComplete    = this.onComplete.bind(this);
-    this.options.defaultParams = this.options.parameters || null;
-    this.url                   = url;
-    this.comp = this.options.comp; //位置的参照物，默认是以this.element为参照物
-    this.emptyText = this.options.emptyText || "没有匹配的..."
-    Event.observe(element, 'focus', this.onInputFocus.bindAsEventListener(this));
+  initialize: function($super, element, update, options){
+    options = Object.extend({
+      selector: function(instance){
+        var options = instance.options;
+        var pinyins = options.pinyins;
+        var names = options.names;
+        var ids = options.ids;
+        var token = instance.getToken();
+        var ret = [];
+
+        for(var i=0;i < pinyins.length;i++){
+          var pinyinPos = options.ignoreCase ? pinyins[i].toLowerCase().indexOf(token.toLowerCase()) : pinyins[i].indexOf(token);
+          var namePos = options.ignoreCase ? names[i].toLowerCase().indexOf(token.toLowerCase()) : names[i].indexOf(token);
+          if(pinyinPos >= 0 || namePos >= 0){
+            ret.push('<li style="list-style-type:none;" id=' + ids[i] + ' ><a href="javascript:void(0)">' + names[i] + '</a></li>');
+          }
+        }
+
+        if(ret.length == 0){
+          return options.emptyText;
+        }else{     
+          return "<ul>" + ret.join('') + "</ul>";
+        }
+      }
+    }, options || {});
+
+    Event.observe(element, 'focus', this.showTip.bindAsEventListener(this));
+
+    $super(element, update, null, options);
   },
 
-  onInputFocus: function(e){
-    this.options.onInputFocus(this.element);
-  },
-
-  getUpdatedChoices: function() {
-    this.startIndicator();
-
-    var entry = encodeURIComponent(this.options.paramName) + '=' + encodeURIComponent(this.getToken());
-
-    this.options.parameters = this.options.callback ? this.options.callback(this.element, entry) : entry;
-
-    if(this.options.defaultParams)
-      this.options.parameters += '&' + this.options.defaultParams;
-
-    this.options.parameters += '&friend[login]=' + this.element.value;
-
-    new Ajax.Request(this.url, this.options);
-  },
-
-  onComplete: function(request) {
-    if(request.responseText.indexOf('li') < 0){
-      this.update.innerHTML = this.options.emptyText;
-    }else{
-      this.updateChoices(request.responseText);
-    }
-    if(this.comp){
-      this.update.setStyle({
+  showTip: function(){
+    this.update.innerHTML = this.options.tipText;
+    var comp = this.options.comp;
+    
+    this.update.setStyle({
         position: 'absolute',
-        left: this.comp.positionedOffset().left + 'px',
-        top: (this.comp.positionedOffset().top + this.comp.getHeight()) + 'px',
-        width: (this.comp.getWidth() - 10) + 'px',
+        left: comp.positionedOffset().left + 'px',
+        top: (comp.positionedOffset().top + comp.getHeight()) + 'px',
+        width: (comp.getWidth() - 10) + 'px',
         maxHeight: '200px',
         overflow: 'auto',
         padding: '5px',
         background: 'white',
         border: '1px solid #E7F0E0'
-      });
+    });
+
+    this.update.show();
+  },
+
+  updateChoices: function($super, data){
+    if(data.indexOf('ul') < 0){
+      this.update.innerHTML = data;
+      this.update.show();
+    }else{
+      $super(data);
     }
+
+    var comp = this.options.comp;
+    
+    this.update.setStyle({
+        position: 'absolute',
+        left: comp.positionedOffset().left + 'px',
+        top: (comp.positionedOffset().top + comp.getHeight()) + 'px',
+        width: (comp.getWidth() - 10) + 'px',
+        maxHeight: '200px',
+        overflow: 'auto',
+        padding: '5px',
+        background: 'white',
+        border: '1px solid #E7F0E0'
+    });
   }
 
 });
@@ -186,7 +208,6 @@ Iyxzone.Friend.Tagger = Class.create({
     this.tags = new Hash(); // friendID => [tagIDs, div]
     this.newTags = new Hash(); // friendID => div
     this.delTags = new Array();
-    this.checkedFriends = new Hash(); // friendID 
     this.toggleButton = $(toggleButton);
     this.friendList = $(friendList);
     this.friendTable = $(friendTable);
@@ -211,10 +232,9 @@ Iyxzone.Friend.Tagger = Class.create({
     for(var i=0;i<inputs.length;i++){
       if(inputs[i].type == 'checkbox'){
         inputs[i].checked = false;
-        inputs[i].observe('click', this.onSelectFriend.bindAsEventListener(this));
+        inputs[i].observe('click', this.afterCheckFriend.bindAsEventListener(this));
         if(this.tags.keys().include(inputs[i].value)){
           inputs[i].checked = true;
-          this.checkedFriends.set(inputs[i].value, {id: inputs[i].value, login: inputs[i].readAttribute('login'), profileID: inputs[i].readAttribute('profile_id')});
         }
       }
     }
@@ -228,17 +248,25 @@ Iyxzone.Friend.Tagger = Class.create({
     Event.observe(this.confirmButton, 'click', function(event){
       Event.stop(event);
       
-      var checked = this.checkedFriends.keys();
+      var checked = new Hash();
       var delTags = new Array();
       var newTags = new Array();
+      var inputs = $$('input');
+
+      for(var i=0;i<inputs.length;i++){
+        if(inputs[i].type == 'checkbox' && inputs[i].checked){
+          checked.set(inputs[i].value, {id: inputs[i].value, login: inputs[i].readAttribute('login')});//, profileID: inputs[i].readAttribute('profile_id')});
+        }
+      }
+
       this.tags.keys().each(function(key){
-        if(!checked.include(key)){
+        if(!checked.keys().include(key)){
           delTags.push(key);
         }
       }.bind(this));
       
       this.newTags.keys().each(function(key){
-        if(!checked.include(key)){
+        if(!checked.keys().include(key)){
           delTags.push(key);
         }
       }.bind(this));
@@ -247,7 +275,7 @@ Iyxzone.Friend.Tagger = Class.create({
 
       var tagIDs = this.tags.keys();
       var newTagIDs = this.newTags.keys();
-      this.checkedFriends.each(function(pair){
+      checked.each(function(pair){
         var input = pair.value;
         var key = pair.key;
         if(!tagIDs.include(key) && !newTagIDs.include(key)){
@@ -272,47 +300,26 @@ Iyxzone.Friend.Tagger = Class.create({
     }.bind(this)); 
 
     // custom auto completer
-    new Iyxzone.Friend.Autocompleter(this.taggedUserList.getMainInput(), this.friendList, '/auto_complete_for_friend_tags', {
-      method: 'get',
-      emptyText: '没有匹配的好友...',
+    var pinyins = [];
+    var names = [];
+    var ids = [];
+
+    this.friendItems.childElements().each(function(li){
+      pinyins.push(li.down('input').readAttribute('pinyin'));
+      names.push(li.down('input').readAttribute('login'));
+      ids.push(li.down('input').value);
+    }.bind(this));
+
+    new Iyxzone.Friend.Autocompleter(this.taggedUserList.getMainInput(), this.friendList, {
+      ids: ids, 
+      names: names, 
+      pinyins: pinyins, 
       afterUpdateElement: this.afterSelectFriend.bind(this),
-      onInputFocus: this.showTips.bind(this),
+      tipText: '输入你好友的名字或者拼音',
+      emptyText: '没有匹配的好友...',
       comp: this.taggedUserList.holder,
-      onLoading: this.searching.bind(this),
-    });
+    }); 
   },
-
-  searching: function(){
-    this.friendList.innerHTML = '正在搜索你的好友...';
-    this.friendList.setStyle({
-      position: 'absolute',
-      left: this.taggedUserList.holder.positionedOffset().left + 'px',
-      top: (this.taggedUserList.holder.positionedOffset().top + this.taggedUserList.holder.getHeight()) + 'px',
-      width: (this.taggedUserList.holder.getWidth() - 10) + 'px',
-      maxHeight: '200px',
-      overflow: 'auto',
-      padding: '5px',
-      background: 'white',
-      border: '1px solid #E7F0E0'
-    });
-    this.friendList.show();
-  },
-
-  showTips: function(){
-    this.friendList.innerHTML = '输入你好友的拼音';
-    this.friendList.setStyle({
-      position: 'absolute',
-      left: this.taggedUserList.holder.positionedOffset().left + 'px',
-      top: (this.taggedUserList.holder.positionedOffset().top + this.taggedUserList.holder.getHeight()) + 'px',
-      width: (this.taggedUserList.holder.getWidth() - 10) + 'px',
-      maxHeight: '200px',
-      overflow: 'auto',
-      padding: '5px',
-      background: 'white',
-      border: '1px solid #E7F0E0'
-    });
-    this.friendList.show();
-  }, 
 
   removeBox: function(el, input){
     var friendID = input.value;
@@ -328,7 +335,6 @@ Iyxzone.Friend.Tagger = Class.create({
     }
 
     // uncheck boxes
-    this.checkedFriends.unset(friendID);
     var inputs = $$('input');
     for(var i=0;i<inputs.length;i++){
       if(inputs[i].type == 'checkbox' && inputs[i].value == friendID){
@@ -354,9 +360,6 @@ Iyxzone.Friend.Tagger = Class.create({
   },
 
   addTags: function(friends){
-    if(friends.length == 0)
-      return;
-    
     for(var i=0;i<friends.length;i++){
       var el = this.taggedUserList.add(friends[i].id, friends[i].login);
       this.newTags.set(friends[i].id, el);
@@ -372,22 +375,16 @@ Iyxzone.Friend.Tagger = Class.create({
   },
 
   getFriends: function(game_id){
-    this.friendItems.innerHTML = '<img src="/images/loading.gif" style="text-align:center"/>';
-    new Ajax.Request('/user/friend_tags/new?game_id=' + game_id, {
-      method: 'get',
-      onSuccess: function(transport){
-        this.friendItems.innerHTML = transport.responseText;
-        var inputs = $$('input');
-        for(var i = 0; i < inputs.length; i++){
-          if(inputs[i].type == 'checkbox'){
-            inputs[i].observe('click', this.onSelectFriend.bindAsEventListener(this));
-            if(this.checkedFriends.keys().include(inputs[i].value)){
-              inputs[i].checked = true;
-            }
-          }
-        }
-      }.bind(this)
-    });
+    var friends = this.friendItems.childElements();
+    friends.each(function(f){
+      var info = f.readAttribute('info').evalJSON();
+      var games = info.games;
+      if(game_id == 'all' || games.include(game_id)){
+        f.show();
+      }else{
+        f.hide();
+      }
+    }.bind(this));
   },
 
   toggleFriends: function(){
@@ -406,7 +403,7 @@ Iyxzone.Friend.Tagger = Class.create({
 
   afterSelectFriend: function(input, selectedLI){
     var id = selectedLI.readAttribute('id');
-    var profileID = selectedLI.readAttribute('profileID');
+    //var profileID = selectedLI.readAttribute('profileID');
     var login = selectedLI.childElements()[0].innerHTML;
     input.clear();
 
@@ -418,8 +415,7 @@ Iyxzone.Friend.Tagger = Class.create({
         return;
       }
 
-      this.addTags([{id: id, profileID: profileID, login: login}]);
-      this.checkedFriends.set(id, {id: id, profileID: profileID, login: login});
+      this.addTags([{id: id, login: login}]);//profileID: profileID, login: login}]);
       input.clear();
       
       var inputs = $$('input');
@@ -431,21 +427,26 @@ Iyxzone.Friend.Tagger = Class.create({
     }
   },
 
-  onSelectFriend: function(mouseEvent){
+  afterCheckFriend: function(mouseEvent){
     var checkbox = mouseEvent.target;
     
     if(!checkbox.checked){
-      this.checkedFriends.unset(checkbox.value);
       return;
     }
+
+    var inputs = $$('input');
+    var checked = 0;
+
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox' && inputs[i].checked)
+        checked++;
+    }
  
-    if(this.checkedFriends.keys().length >= this.max){
+    if(checked > this.max){
       error('最多选' + this.max + '个!');
       checkbox.checked = false;
       return;
     }
-
-    this.checkedFriends.set(checkbox.value, {id: checkbox.value, login: checkbox.readAttribute('login'), profileID: checkbox.readAttribute('profile_id')}); 
   },
 
   reset: function(tagInfos){

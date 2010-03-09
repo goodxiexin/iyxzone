@@ -60,7 +60,7 @@ protected
     friendship = user.all_friendships.find_by_friend_id(friend_id)
     return if friendship.blank?
     if friendship.is_request?
-      errors.add(:friend_id, "已经发送请求了")
+      errors.add(:friend_id, "不能重复向同一个人发送请求")
     else
       errors.add(:friend_id, "已经是好友了")
     end

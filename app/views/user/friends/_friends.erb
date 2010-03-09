@@ -12,9 +12,9 @@
 			</div>
 			<div class="info member s_clear">
 				<h4><%= profile_link f %></h4>
-          <% unless current_user.has_friend? f %>
-					  <span class="red nowrapspace20"><%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %></span>
-          <% end %>
+        <% unless current_user.has_friend? f %>
+					<span class="red nowrapspace20"><%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %></span>
+        <% end %>
 			</div>
     </div>
   </li>
@@ -22,7 +22,7 @@
 </ul>
 
 <% if @remote %>
-  <%= will_paginate friends, :renderer => 'RemoteLinkRenderer', :remote => @remote %>
+  <%= remote_will_paginate friends, :remote => @remote %>
 <% else %>
   <%= will_paginate friends %>
 <% end %>

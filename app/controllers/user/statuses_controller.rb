@@ -37,7 +37,7 @@ protected
 
   def setup
     if ["index"].include? params[:action]
-      @user = User.find(params[:id])
+      @user = User.find(params[:uid])
       require_friend_or_owner @user      
     elsif ["destroy"].include? params[:action]
       @status = Status.find(params[:id])

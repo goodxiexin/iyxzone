@@ -140,10 +140,11 @@ class Guild < ActiveRecord::Base
     !user.characters.find(:first, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}).blank?
   end
 
-  def invitations= invitation_attrs
-    return if invitation_attrs.blank?
-    invitation_attrs.each do |attrs|
-      invitations.build(attrs)
+  def invitees= character_ids
+    return if character_ids.blank?
+    character_ids.each do |character_id|
+      character = GameCharacter.find(character_id)
+      invitations.build(:character_id => character.id, :user_id => character.user_id)
     end 
   end
 

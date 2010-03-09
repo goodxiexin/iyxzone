@@ -71,10 +71,10 @@ protected
 
   def setup
     if ['index', 'relative'].include? params[:action]
-      @user = User.find(params[:id])
+      @user = User.find(params[:uid])
       require_friend_or_owner @user
     elsif ['hot', 'recent'].include? params[:action]
-      @user = User.find(params[:id])
+      @user = User.find(params[:uid])
     elsif ['show'].include? params[:action]
       @video = Video.find(params[:id])
       require_adequate_privilege @video

@@ -22,7 +22,13 @@
               </div>
             </div>
             <ul class="checkboxes rows s_clear" id='friend_items'>
-              <%= render :partial => 'user/photo_tags/friend_table', :locals => {:friends => current_user.friends} %>
+            <% if current_user.friends.blank? %>
+              没有匹配的好友
+            <% else %>
+              <% current_user.friends.each do |f| %>
+                <li info='<%= {:games => f.games.map(&:id)}.to_json %>'><span><%= check_box_tag '', f.id, false, :pinyin => f.pinyin, :login => f.login %><%= f.login %></span></li>
+              <% end %>
+            <% end %>
             </ul>
           </div>
         </div>
@@ -44,3 +50,4 @@
 <%= javascript_tag "
   tagger = new Iyxzone.Photo.Tagger('#{photo.class.name.underscore}', #{photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{tags}, 'photo_tags', #{user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
 "%>
+

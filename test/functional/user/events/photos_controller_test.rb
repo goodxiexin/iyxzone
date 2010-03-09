@@ -351,7 +351,7 @@ protected
   end
     
   def redirect_to_new_friend
-    assert_redirected_to new_friend_url(:id => @user.id)
+    assert_redirected_to new_friend_url(:uid => @user.id)
   end
 
   def dig_link_exist_for photo

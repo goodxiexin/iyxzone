@@ -12,6 +12,7 @@
   <%= javascript_include_tag :defaults, :juggernaut %> 
   <%= javascript_include_tag 'iyxzone' %>
   <%= javascript_include_tag 'comment' %>
+  <%= javascript_include_tag 'facebox' %>
   <%= javascript_include_tag 'in_place_editor_extension' %>
   <%= javascript_include_tag 'emotion' %>
   <%= javascript_include_tag 'util' %>
@@ -57,7 +58,7 @@
         </div>
 				<div id="navextra">
 					<ul>
-						<li><%= link_to "激请" %></li>
+						<li><%= link_to "邀请" %></li>
             <li><%= link_to_function "设置", "", :id => "settings_link" %>
 						<div class='box01 set-box' id='settings_dropdown' style="display:none">
 							<%= link_to "隐私设置", privacy_setting_url, :class => "blk" %>

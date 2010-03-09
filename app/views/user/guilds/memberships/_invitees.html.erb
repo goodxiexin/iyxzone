@@ -3,7 +3,7 @@
 <% memberships.each do |membership| %>
   <% character = membership.character %>
   <% user = membership.user %>
-  <li id='<%= "guild_invitation_#{membership.id}" %>' >
+  <li id='<%= "guild_invitation_#{membership.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
     <%= avatar user, :class => 'imgbox01' %>
     <p>
       <%= profile_link user, :class => 'blk' %>
