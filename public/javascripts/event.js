@@ -118,8 +118,6 @@ Object.extend(Iyxzone.Event.Builder, {
     Event.stop(event);
     if(this.validate(false)){
       var form = $('event_form');
-      form.action = '/events/' + eventID;
-      form.method = 'put';
       form.submit();
     }
   },
@@ -160,8 +158,10 @@ Object.extend(Iyxzone.Event.Builder, {
   },
 
   reset: function(){
-    $('event_character_id').value = '';
-    $('is_guild_event').checked = false;
+    if($('event_character_id'))
+      $('event_character_id').value = '';
+    if($('is_guild_event'))
+      $('is_guild_event').checked = false;
   }
 
 });

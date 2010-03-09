@@ -58,7 +58,7 @@ class User::EventsController < UserBaseController
   end
 
   def edit
-    render :action => 'edit', :layout => false
+    render :action => 'edit'
   end
 
   def update

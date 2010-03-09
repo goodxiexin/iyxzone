@@ -1,7 +1,7 @@
 <dl class='menu-op space20'>
 <% if @user == current_user %>
   <dt>操作</dt>
-  <dd><%= facebox_link '编辑活动', edit_event_url(@event) %></dd>
+  <dd><%= link_to '编辑活动', edit_event_url(@event) %></dd>
   <dd><%= link_to '邀请更多人', new_event_invitation_url(@event) %></dd>
   <dd><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></dd>
   <dd><%= facebox_confirm '放所有人鸽子', event_url(@event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></dd>
