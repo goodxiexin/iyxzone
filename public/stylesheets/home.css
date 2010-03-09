@@ -1087,10 +1087,10 @@ width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
 .app-set .enter{position: absolute;right:20px;top:20px;border-top:1px solid #bdd6ad;padding:20px;width:100px}
 
 /*提示信息*/
-.notice-msg,.warning-msg,.error-msg{padding:3px 5px;color:#333}
+.notice-msg,.warning-msg,.error-msg{padding:20px;color:#333;font-size:14px;}
 .notice-msg{background:#b7e1bd}
-.warning-msg{background:#fcb08b}
-.error-msg{background:#f9ec93}
+.error-msg{background:#fcb08b}
+.warning-msg{background:#f9ec93}
 
 /*照片圈人标记box*/
 .flag-photo{background:#F2FAE2;width:100%;padding:5px;border:1px solid #BBD2AA}

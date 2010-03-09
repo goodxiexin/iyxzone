@@ -1,3 +1,4 @@
+<% content_for :html_title, '寻找密码 - 17Gaming.com' %>
 <%= javascript_include_tag "password" %>
 
     <div class="welcome-box02">
@@ -16,14 +17,14 @@
                     <div class="rows s_clear space">
                         <div class="f-id"><label for="mail">密码：</label></div>
                         <div class="f-value">
-                            <%= password_field_tag 'password', '', :onblur => "Iyxzone.Password.validatePassword()" %>
+                            <%= password_field_tag 'password', '', :onblur => "Iyxzone.Password.validatePassword()", :onfocus => "Iyxzone.Password.showPasswordRequirement();" %>
                         </div>
                         <span class='' id='password_info'></span>
                     </div>
                     <div class="rows s_clear space">
                         <div class="f-id"><label for="code">再次确认：</label></div>
                         <div class="f-value">
-                           <%= password_field_tag 'password_confirmation', '', :onblur => "Iyxzone.Password.validatePasswordConfirmation()" %>
+                           <%= password_field_tag 'password_confirmation', '', :onblur => "Iyxzone.Password.validatePasswordConfirmation()", :onfocus => "Iyxzone.Password.showPasswordConfirmRequirement();" %>
                         </div>
                         <span class='' id='password_confirmation_info'></span>
                     </div>

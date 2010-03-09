@@ -83,6 +83,10 @@
 
 <% end %>
 
+<% content_for :html_title, "活动：#{@event.title} - 17Gaming.com" %>
+<% content_for :html_description, "活动：#{@event.title} - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{@event.title}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
 <div class='box02 canvas_con'>
   <div class="formComposer">
 	  <h3 class="png">
@@ -135,9 +139,9 @@
 
 	<div class="multibox">
 		<div class="title"><%= link_to "更多", event_participations_url(@event, :type => 0) %><b>参加的人</b></div>
-    <div class="photolist-box">
+    <div class="photolist-box gamer-list">
 			<ul class="collection s_clear">
-				<% @event.confirmed_characters[0..6].each do |c| %>
+				<% @event.confirmed_characters[0..5].each do |c| %>
 					<li>
 						<div class="middle"><div class="middle-center"><div class="center"><%= avatar c.user, :class => 'imgbox01' %></div></div></div>
             <p><%= profile_link c.user %></p>

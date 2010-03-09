@@ -1,8 +1,9 @@
-<div class="title01">
-  <%= link_to_function '', "facebox.close();", :class => "icon-active icon-active-close" %>
-  <h1>请求加入</h1>
-</div>
+<p class="z-h s_clear">
+  <strong class="left">请求加入</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
 
+<div class="z-con">
 <% form_remote_for :request, :url => event_requests_url(@event, :show => params[:show]), :html => {:method => :post} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
@@ -22,3 +23,4 @@
   </td></tr></table>
 </div>
 <% end %>
+</div>

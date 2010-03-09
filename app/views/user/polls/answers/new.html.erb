@@ -1,9 +1,10 @@
-<div class='title01'>
-  <%= link_to_function '', "facebox.close();", :class => "icon-active icon-active-close" %>
-  <h3>增加选项</h3>
-</div>
+<p class="z-h s_clear">
+  <strong class="left">增加选项</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
 
 <div id='error'></div>
+<div class='z-con'>
 <% form_remote_tag :url => poll_answers_url(@poll) do %>
 <div class='formcontent'>
 <div class='content'>
@@ -22,3 +23,4 @@
   </td></tr></table>
 </div>
 <% end %>
+</div>

@@ -152,7 +152,7 @@ table.center td{vertical-align:top}
 /*homeIcons*/
 /*.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,{display:inline-block;background:url(../images/icons/homeIcons.png) no-repeat;margin:0 5px;width:16px;height:16px; vertical-align:middle;}
 */
-.feed-icon,dl.menu-op dt,.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,.icon-trash,.icon-read,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-success,.icon-heart,.icon-warn,.icon-camera,.i-avatar,.i-mail,.i-hello,.i-msg,.i-friend,.icon-fail,.icon-warning{background:url(../images/icons/homeIcons.png) no-repeat;display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle;}
+.feed-icon,dl.menu-op dt,.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,.icon-trash,.icon-read,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-notice,.icon-success,.icon-heart,.icon-warn,.icon-camera,.i-avatar,.i-mail,.i-hello,.i-msg,.i-friend,.icon-error,.icon-warning,.icon-msn,.icon-qq,.icon-link,.icon-mail{background:url(../images/icons/homeIcons.png) no-repeat;display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle;}
 .icon-data{background-position:0 0}
 .icon-state{background-position:0 -16px}
 .icon-game{background-position:0 -32px}
@@ -170,12 +170,17 @@ table.center td{vertical-align:top}
 .icon-gift{background-position:0 -384px;}
 .icon-minus{background-position:0 -400px;}
 .icon-plus{background-position:0 -304px;}
-.icon-success{background-position:0 -416px;}
-.icon-fail{background-position:0 -560px;}
+.icon-notice,.icon-success{background-position:0 -416px;}
+.icon-error{background-position:0 -560px;}
 .icon-warning{background-position:0 -576px;}
 .icon-heart{background-position:0 -432px;}
 .icon-warn{background-position:0 -448px;}
 .icon-camera{background-position:0 -464px;}
+.icon-msn{background-position:0 -624px;}
+.icon-qq{background-position:0 -608px;}
+.icon-link{background-position:0 -592px;}
+.icon-mail{background-position:0 -640px;}
+
 .i-avatar{background-position:0 -480px;}
 .i-mail{background-position:0 -496px;}
 .i-hello{background-position:0 -512px;}
@@ -578,15 +583,16 @@ a.msg-btn{background:url(../images/skin/msg-btn.gif) no-repeat;width:82px;height
 .im-bar .foot{border-top:1px solid #d5e8c8;padding:10px;}
 .im-manage,.im-manage:hover{width:56px;padding-left:23px;height:18px;line-height:18px;display:inline-block;background-position:-25px 0;color:#25700d}
 	
-.im-dialog{border:1px solid #91ca4f;background:#fff;position:absolute;z-index:9999;width:300px}
+.im-dialog{border:1px solid #91ca4f;background:#fff;position:absolute;z-index:9999;width:350px}
 .im-dialog .head{border:1px solid #a7cd65;background:#7fb73d;padding:5px;color:#fff;font-weight:700}
 .im-dialog .con{border-top:1px solid #73a637;padding:10px;}
 	.im-dlg-show h4{color:#25700d;font-size:12px}
 	.im-dlg-show h4.own{color:#ec7a0b}
 	.im-dlg-show p{color:#666;margin:5px 0}
 .im-dialog .foot{border-top:1px solid #d4e3c9;background:#f0f5ec;padding:5px;margin-right:1px}
-	.im-dlg-send{border:1px solid #c4d8b5;background:#fff;padding:5px}
-	.im-dlg-send textarea{border:0;width:200px;height:5em}
+	.im-dlg-send{border:1px solid #c4d8b5;background:#fff;padding:5px;}
+	.im-dlg-send textarea{border:0;width:230px;height:5em}
+	.im-dlg-send p{padding:8px 0;color:#999;text-align:center}
 	.im-dlg-log h2{margin:5px 0;font-weight:700;font-size:12px;text-align:right;}
 	.im-dlg-log h2 span{width:16px;height:16px;display:inline-block;background-position:-150px -16px}
 	.im-dlg-log h2 a,.im-dlg-log h2 a:hover{color:#25700d}

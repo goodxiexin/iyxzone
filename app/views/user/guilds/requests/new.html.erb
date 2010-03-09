@@ -1,9 +1,10 @@
-<div class="title01">
-  <%= link_to_function '', "facebox.close();", :class => "icon-active icon-active-close" %>
-  <h1>请求加入</h1>
-</div>
+<p class="z-h s_clear">
+  <strong class="left">请求加入</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
 
 <div id='error'></div>
+<div class='z-con'>
 <% form_remote_for :request, :url => guild_requests_url(@guild, :show => params[:show]), :html => {:method => :post} do |f| %>
 <div class='content'>
   <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %>
@@ -15,3 +16,4 @@
   </td></tr></table>
 </div>
 <% end %>
+</div>

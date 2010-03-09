@@ -40,7 +40,7 @@ class Ku6
 	end
 
 	def embed_html
-		"<embed src=\"#{@embed_url}\" quality=\"high\" width=\"480\" height=\"400\" align=\"middle\" allowScriptAccess=\"always\" allowfullscreen=\"true\" type=\"application/x-shockwave-flash\"></embed>"
+		"<embed src=\"#{@embed_url}\" quality=\"high\" width=\"470\" height=\"392\" align=\"middle\" allowScriptAccess=\"always\" allowfullscreen=\"true\" type=\"application/x-shockwave-flash\"></embed>"
 	end
 
 end

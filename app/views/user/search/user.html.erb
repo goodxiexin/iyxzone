@@ -3,18 +3,43 @@
 <%= javascript_include_tag "friend.js" %>
 <%= javascript_include_tag "event.simulate" %>
 
+<% content_for :html_title, "#{current_user.login} - 用户名搜索 - 17Gaming.com" %>
+<% content_for :html_description, "#{current_user.login} - 用户名搜索 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
-		<h1 class="app-friend">寻找好友</h1>
+		<h1 class="app-friend">好友</h1>
     <div class="box02 canvas_int">
-			<div class="nav-link jl-cutline friend-search-t">
-				<ul class="s_clear">
-					<!--<li><a href="#"><span>所有人</span></a></li>-->
-          <li class='hover'><%= link_to "<span>按昵称(#{@users.size})</span>", search_users_url(:key => @key)%></li>
-          <li><%= link_to "<span>按游戏角色(#{@total_users.size})</span>", search_characters_url(:key => @key)%></li>
+			<div class="tab tab01">
+				<div class="right"><%= link_to "激请好友加入" %></div>
+				<ul>
+					<li><span><%= link_to '好友管理', friends_url %></span></li>
+					<li class='hover'><span><%= link_to '寻找好友', friend_suggestions_url %></span></li>
+					<li><span><%= link_to '好友印象', friend_impressions_url %></span></li>
 				</ul>
-			</div>
+      </div>
 			<div class='friend-box'>
+				<div class="box04 friend-one-search">
+					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form' do %>
+            <div class="rows s_clear">
+              <div class="fldvalue">
+                <div class="textfield"><%= text_field_tag 'key','用户名', :onclick => "this.clear();" %></div>
+              </div>
+              <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
+              <div class="link"><%= link_to_function "按游戏角色查找", "Iyxzone.Search.showCharacterForm();" %></div>
+            </div>
+          <% end %>
+          <% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :style => "display:none" do %>
+            <div class="rows s_clear">
+              <div class="fldvalue">
+                <div class="textfield"><%= text_field_tag 'key','游戏角色名称', :onclick => "this.clear();" %></div>
+              </div>
+							<div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
+							<div class='link'><%= link_to_function '按用户名查找', "Iyxzone.Search.showUserForm()" %></div>
+            </div>
+          <% end %>
+        </div>
         <div class="box02 appcontent01">
 					<div class='piclist-rows cmt-space'>
             <table cellspacing='0' cellpadding='0'>
@@ -22,20 +47,29 @@
               <tr>
                 <td>
 									<div class='imgwrap'>
-										<%= avatar f, :size => :mediumi, :class=>'imgbox01' %>
+										<%= avatar f, :size => :medium, :class=>'imgbox01' %>
 									</div>
 									<div class='data jl-data'>
 										<p><%= profile_link f %></p>
+										<% f.characters[0..2].each{ |character| %>
+											<p><%= character.game.name %>,
+											<%= character.server.name unless character.server.nil? %>的
+											<%= character.name %></p>
+											<% } %>
 										<p class="space">
+											<%unless current_user == f %>
+											<% unless current_user.has_friend? f %>
 											<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
+											<% end %>
 											<%= link_to '', new_mail_url(:recipient_id => f.id), :class => "msg-btn" %>
+											<% end %>
 										</p>
 									</div>
 								</td>
               </tr>
               <% end %>
             </table>
-            <div class="pages">
+            <div class="space s_clear">
               <%= will_paginate @users %>
             </div>
           </div>

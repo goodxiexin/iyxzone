@@ -3,6 +3,6 @@
   <td class="time"><%= ftime draft_item.created_at %></td>
   <% if @user == current_user %>
   <td class="icon"><%= link_to '', edit_draft_url(draft_item), :class => "icon-active icon-active-edit" %></td>
-  <td class="icon"><%= link_to_remote '', draft_url(draft_item), :class => "icon-active", :method => :delete %></td>
+  <td class="icon"><%= facebox_confirm '', draft_url(draft_item), :class => "icon-active", :method => :delete %></td>
   <% end %>
 </tr>

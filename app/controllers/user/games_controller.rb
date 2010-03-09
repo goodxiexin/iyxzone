@@ -2,9 +2,9 @@ class User::GamesController < UserBaseController
 
   layout 'app2'
 
-  FirstFetchSize = 2
+  FirstFetchSize = 5
   
-  FetchSize = 2
+  FetchSize = 5
 
   def index
     @games = @user.games.paginate :page => params[:page], :per_page => 10

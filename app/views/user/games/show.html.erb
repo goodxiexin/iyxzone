@@ -2,6 +2,10 @@
 <%= javascript_include_tag "rating" %>
 <%= javascript_include_tag 'video' %>
 
+<% content_for :html_title, "#{@game.name} - 主页 - 17Gaming.com" %>
+<% content_for :html_description, "#{@game.name} - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{@game.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
 <% content_for :left do %>
 <div class="mcAvatar">
   <a href="#"></a>
@@ -47,10 +51,46 @@
 
 <div class='box02 canvas_con'>
 
+<% unless @comrades.empty? %>
+<div class='multibox'>
+	<div class='title'><%= link_to '更多', game_comrades_url(@game) %><b>同服玩家</b></div>
+	<div class='photolist-box gamer-list'>
+			<ul class='collection s_clear'>
+			<% @comrades.each do |character| %>
+				<li>
+					<div class="middle"><div class="middle-center"><div class="center"><%= avatar character.user, :class => "imgbox01" %></div></div></div>
+					<p><strong><%= profile_link character.user %></strong></p>
+					<p><%= character.name %></p>
+				</li>
+			<% end %>
+			</ul>
+	</div>
+</div>
+<% end %>
+
+<div class='multibox'>
+	<div class='title'><%= link_to '更多', game_players_url(@game) %><b>游戏玩家</b></div>
+	<div class='photolist-box gamer-list'>
+		<% unless @players.blank? %>
+			<ul class='collection s_clear'>
+			<% @players.each do |character| %>
+				<li>
+					<div class="middle"><div class="middle-center"><div class="center"><%= avatar character.user, :class => "imgbox01" %></div></div></div>
+					<p><strong><%= profile_link character.user %></strong></p>
+					<p><%= character.name %></p>
+				</li>
+			<% end %>
+			</ul>
+		<% else %>
+			这个游戏竟然没有玩家
+		<% end %>
+	</div>
+</div>
 
 <div class="multibox">
 	<div class="title"><%= link_to '更多', game_albums_url(@game) %><b>相关相册</b></div>
 	<div class="piclist s_clear">
+	<% unless @albums.blank? %> 
     <% @albums.each do |album| %>
         <div class="picitem">
           <div class="picbox01">
@@ -69,11 +109,15 @@
           <% end %>
       </div>  
     <% end %> 
+	<% else %>
+		还没照片赶紧去<%= link_to '弄一个', personal_albums_url(:id=>current_user.id)%>，马上就能上游戏主页
+	<% end %>
   </div>
 </div>
 
 <div class="multibox">
 	<div class="title"><%= link_to '更多', game_blogs_url(@game) %><b>相关博客</b></div>
+	<% unless @blogs.blank? %>
 	<% @blogs.each do |blog| %>
     <div class="diary-box">
       <div class="diary-header">
@@ -82,6 +126,9 @@
       <p> <%= truncate blog.content, :length => 80, :omission => '...' %> </p>
     </div>
   <% end %>
+	<% else %>
+		还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>,马上就能上游戏主页
+	<% end %>	
 </div>
 
 <div class='multibox'>

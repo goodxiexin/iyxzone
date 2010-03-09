@@ -1,3 +1,8 @@
+<%= javascript_include_tag "password" %>
+
+<% content_for :html_title, "#{current_user.login}的密码修改 - 17Gaming.com" %>
+<% content_for :html_description, "#{current_user.login}的密码修改 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
     <div class="round_m"><div class="round_body">
@@ -11,7 +16,7 @@
 				<h4>建议每隔一段时间更新一次帐号的密码。</h4>
 				</div>
 
-<% form_tag password_setting_url, :method => 'put' do %>
+<% form_tag password_setting_url, :method => 'put', :id => 'password_form' do %>
 <div class='form-con' style='height:350px'>
 <div class='rows s_clear space'>
   <div class='f-id'><%= label_tag '', '原来的密码：'%></div>
@@ -19,25 +24,34 @@
 </div>
 <div class='rows s_clear space'>
   <div class='f-id'><%= label_tag '', '新的密码: '%></div>
-  <div class='f-value'><%= password_field_tag 'new_password', @new_password %></div>
+  <div class='f-value'><%= password_field_tag 'password', '', :onblur => "Iyxzone.Password.validatePassword()", :onfocus => "Iyxzone.Password.showPasswordRequirement();" %></div>
+  <span class='' id='password_info'></span>
 </div>
 <div class='rows s_clear space'>
   <div class='f-id'><%= label_tag '', '重复新的密码: '%></div>
-  <div class='f-value'><%= password_field_tag 'confirmation', @confirmation%></div>
+  <div class='f-value'>
+		<%= password_field_tag 'password_confirmation', '', :onblur => "Iyxzone.Password.validatePasswordConfirmation()", :onfocus => "Iyxzone.Password.showPasswordConfirmRequirement();" %>
+	</div>
+  <span class='' id='password_confirmation_info'></span>
 </div>
-<div class='rows s_clear space'>
-	<div class='f-id'><%= label_tag '', '验证码：' %></div>
-  <div class='f-value'><%= text_field_tag 'validation_text', params[:validation_text], :size => 4 %></div>
+<div class="rows s_clear space">
+  <div class="f-id"><label for="code">验证码：</label></div>
+  <div class="f-value">
+    <%= text_field_tag 'validation_code', '', :size => 4 %>
+  </div>
 </div>
 <div class='rows s_clear space'>
 	<div class='f-id'>&nbsp;</div>
-	<div class='f-value'><%= validation_image %></div>
+  <div class='f-value'>
+    请输入下图中字符，不区分大小写<br />
+    <span id='validation'></span><%= link_to_function "看不清楚，换一张", "Iyxzone.Password.resetValidation()"%>
+	</div>
 </div>
 <div class='rows s_clear space20'>
 	<div class='f-id'>&nbsp;</div>
 	<div class='f-value'>
 		<span class='button rows'><span>
-		<button type="submit">确定</button>
+    <%= button_to_function '确定', "Iyxzone.Password.send(this, event)" %>
 		</span></span>
 	</div>
 </div>
@@ -47,3 +61,4 @@
 </div>
 </div></div>
 </div></div></div></div>
+<%= javascript_tag "Iyxzone.Password.resetValidation();" %>

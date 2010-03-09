@@ -5,7 +5,7 @@ Iyxzone.Search = {
   author: ['高侠鸿'],
   
   showUserForm: function(){
-    $('user_form').getInputs('text')[0].value = '好友名字';
+    $('user_form').getInputs('text')[0].value = '用户昵称';
     $('user_form').show();
     $('character_form').hide();
   },
@@ -34,13 +34,13 @@ Iyxzone.Search = {
   gameSelector: null, // initialize this in your page
 
   showCharacterForm: function(){
-    $('character_form').getInputs('text')[0].value = '角色名字';
+    $('character_form').getInputs('text')[0].value = '游戏角色名字';
     $('character_form').show();
     $('user_form').hide();
   },
 
 	toggleCharacterForm: function(){
-    $('character_form').getInputs('text')[0].value = '角色名字';
+    $('character_form').getInputs('text')[0].value = '游戏角色名字';
     $('character_form').toggle();
 		//$('character_options').toggle();
 	},
