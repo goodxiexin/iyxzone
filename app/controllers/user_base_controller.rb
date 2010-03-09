@@ -2,7 +2,7 @@ class UserBaseController < ApplicationController
 
   before_filter :login_required
 
-  before_filter :setup_instant_messenger
+#  before_filter :setup_instant_messenger
 
   before_filter :setup
 

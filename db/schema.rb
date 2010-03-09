@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(:version => 20100224085559) do
     t.integer  "privilege",                          :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "verified",                           :default => 0
   end
 
   create_table "bosses", :force => true do |t|
@@ -346,7 +345,6 @@ ActiveRecord::Schema.define(:version => 20100224085559) do
     t.integer  "poster_id"
     t.integer  "recipient_id"
     t.string   "content"
-    t.boolean  "read",         :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -613,14 +611,12 @@ ActiveRecord::Schema.define(:version => 20100224085559) do
     t.datetime "activated_at"
     t.string   "password_reset_code"
     t.string   "invite_code"
-    t.string   "qq_invite_code"
-    t.string   "msn_invite_code"
-    t.string   "invite_method"
     t.boolean  "enabled",                                  :default => true
     t.integer  "avatar_id"
     t.string   "pinyin"
+    t.boolean  "online",                                   :default => false
     t.integer  "privacy_setting",            :limit => 8,  :default => 106299306
-    t.integer  "mail_setting",               :limit => 8,  :default => 140737488355327
+    t.integer  "mail_setting",               :limit => 8,  :default => 8796093022207
     t.integer  "application_setting",        :limit => 8,  :default => 262143
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
@@ -653,6 +649,7 @@ ActiveRecord::Schema.define(:version => 20100224085559) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_seen_at"
   end
 
   create_table "videos", :force => true do |t|
