@@ -24,7 +24,7 @@
 					<div class='bd-bt'>
 						<h3><%= link_to_function '按昵称查找', "Iyxzone.Search.toggleUserForm()" %></h3>
 					<div id='search_panel'>
-					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :onsumbit => "return user_searcher.validate_user();", :style => "display:none" do %>
+					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :style => "display:none" do %>
 						<div class="rows s_clear">
               <div class="fldvalue">
 								<div class="textfield"><%= text_field_tag 'key', '好友名字', :onclick => "this.clear();" %></div>

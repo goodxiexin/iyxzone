@@ -26,18 +26,40 @@
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key','用户名', :onclick => "this.clear();" %></div>
               </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
+              <div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.Search.searchUsers(this)">查找</button></span></span></div>
               <div class="link"><%= link_to_function "按游戏角色查找", "Iyxzone.Search.showCharacterForm();" %></div>
             </div>
           <% end %>
-          <% form_tag search_characters_url, :class => "formcontent", :id => 'character_form' do %>
+					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form' do %>
             <div class="rows s_clear">
-              <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'key','游戏角色名称', :onclick => "this.clear();" %></div>
-              </div>
-							<div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
-							<div class='link'><%= link_to_function '按用户名查找', "Iyxzone.Search.showUserForm()" %></div>
+              <div class="fldid"><label for="username">游戏角色名称：</label></div>
+                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', params[:key], :onclick => "this.clear();" %></div></div>
             </div>
+            <div id='character_options'>
+            <div class="rows s_clear">
+              <div class="fldid"><%= label_tag '游戏: ' %></div>
+              <div class='fldvalue'>
+              <%= collection_select :game, :id, @games, :id, :name, {:prompt => '---'} %>
+              </div>
+            </div>
+            <div class="rows s_clear">
+              <div class="fldid"><%= label_tag '服务区: ' %></div>
+              <div class='fldvalue'>
+              <%= collection_select :area, :id, [], :id, :name, {:prompt => '---'} %>
+              </div>
+            </div>
+            <div class="rows s_clear">
+              <div class="fldid"><%= label_tag '服务器: ' %></div>
+              <div class='fldvalue'>
+              <%= collection_select :server, :id, [], :id, :name, {:prompt => '---'} %>
+              </div>
+            </div>
+            </div>
+						<div class="rows s_clear">
+						<div class='fldid'>&nbsp;</div>
+						<div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.Search.searchCharacters(this)">查找</button></span></span></div>
+						<div class='link'><%= link_to_function '按用户名查找', "Iyxzone.Search.showUserForm()" %></div>
+						</div>
           <% end %>
         </div>
         <div class="box02 appcontent01">
@@ -79,3 +101,7 @@
     </div>
 	</div></div>
 </div></div></div></div>
+<%= javascript_tag "
+  Iyxzone.Search.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')}, 'game_id', 'area_id', 'server_id', null, null, {});
+  Iyxzone.Search.gameSelector.setEvents(); 
+" %>
