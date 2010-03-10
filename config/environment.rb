@@ -12,6 +12,8 @@ Rails::Initializer.run do |config|
 
   config.gem "calendar_date_select"
 
+	config.gem 'will_paginate', :version => '~> 2.3.11', :source => 'http://gemcutter.org'
+
 	# reset sweeper path to app/sweepers
 	config.load_paths += %W(#{RAILS_ROOT}/app/sweepers)
 

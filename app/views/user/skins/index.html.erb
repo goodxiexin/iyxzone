@@ -1,0 +1,13 @@
+<ol>
+<% @skins.each do |skin| %>
+<li> <%=h skin.name %> <br/>
+<%=h skin.css_file_name %>
+</li>
+<% end %>
+</ol>
+
+<%= will_paginate @skins, :prev_label => "上一页",
+:next_label => "下一页" %>
+
+
+
