@@ -89,6 +89,7 @@ class ParticipationObserver < ActiveRecord::Observer
           :data => "活动 #{event.title} 取消了"
         )
       end
+      EventMailer.deliver_event_cancel event, participant if participant.mail_setting.cancel_event
     end
  
     if participation.is_invitation?

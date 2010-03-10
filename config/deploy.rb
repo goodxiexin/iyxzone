@@ -1,26 +1,13 @@
-default_run_options[:pty] = true
-set :application, 'dayday3'
-set :user, 'goodxiexin'
-set :domain, 'www.zaituu.com'
-set :git_account, 'gaoxh04@gmail.com'
-set :scm_passphrase, Proc.new { Capistrano::CLI.password_prompt('Git Password: ')}
+set :application, "set your application name here"
+set :repository,  "set your repository location here"
 
-role :app, "www.zaituu.com" 
-role :web,  "www.zaituu.com" 
-role :db,  "www.zaituu.com"
+set :scm, :subversion
+# Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
-default_run_options[:pty] = true
-set :repository,  "git@github.com:gaoxh04/dayday3.git"
-set :scm, "git"
-set :user, user
-
-ssh_options[:forward_agent] = true
-set :branch, "master"
-set :deploy_via, :remote_cache
-set :git_shallow_clone, 1
-set :git_enable_submodules, 1
-set :use_sudo, false
-set :deploy_to, "/home/goodxiexin/dayday3" 
+role :web, "your web-server here"                          # Your HTTP server, Apache/etc
+role :app, "your app-server here"                          # This may be the same as your `Web` server
+role :db,  "your primary db-server here", :primary => true # This is where Rails migrations will run
+role :db,  "your slave db-server here"
 
 # If you are using Passenger mod_rails uncomment this:
 # if you're still using the script/reapear helper you will need
