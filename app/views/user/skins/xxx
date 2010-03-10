@@ -1,4 +1,3 @@
-<%= stylesheet_link_tag @skin.css_file_name %>
 <%= stylesheet_link_tag 'tag_cloud' %>
 <%= stylesheet_link_tag 'test' %>
 <%= javascript_include_tag 'chinese_region' %>
@@ -14,10 +13,10 @@
 	  </div>
 	</div>
 	<div class="avatarbox">
-		<%= render :partial => 'user/profiles/operations' %>
+		<%= render :partial => 'operations' %>
 	</div>
 	<div class="profile-list menu-icon-list">
-		<%= render :partial => 'user/profiles/menu' %>
+		<%= render :partial => 'menu' %>
 	</div>
 <% end %>
 
@@ -156,7 +155,7 @@
 	<div class='feed-box'>
 		<div class="home-wrap">
 			<div id ='feed_list'>
-			<%= render :partial => 'user/profiles/feed_deliveries', :object => @feed_deliveries %>
+			<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
 			</div>
 			<div class="s_clear"></div>
 				<div class="round04 round_r_t jl-read-more space s_clear">

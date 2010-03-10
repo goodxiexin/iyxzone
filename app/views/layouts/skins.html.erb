@@ -1,0 +1,35 @@
+<% content_for :skintop do %>
+<%= stylesheet_link_tag @skin.css_file_name %>
+<div class="skin_head"> 
+<div class="title_bar"> 
+<a href="#" onclick="window.close()" class="close_window">关闭</a> 
+</div> 
+<!-- preview --> 
+<div class="skin_thumbnail"> 
+<ul>							
+<li class="skin_box"> 
+<!--  skin_info --> 
+<div class="skin_info"> 
+<div class="skin_desc"> 
+<h4>名称</h4> 
+<h3>
+<%= @skin.name %>
+</h3> 
+</div> 
+</div>		
+<!--  / skin_info --> 
+<div class="skin_apply"> 
+<% form_for(@skin) do |f| %>
+<%= f.submit "应用" %>
+<% end %>
+</div> 
+</li> 
+</ul>									
+</div> 
+<!-- /  skin_preview --> 
+</div> 
+<!-- / skin_head--> 
+</div>			
+<% end -%>
+
+<%= render :file => 'layouts/app2' %>

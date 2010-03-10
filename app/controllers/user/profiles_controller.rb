@@ -15,6 +15,7 @@ class User::ProfilesController < UserBaseController
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
+		@skin = @profile.skin
 		
 	end
 
