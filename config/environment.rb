@@ -73,3 +73,7 @@ Rails::Initializer.run do |config|
   config.time_zone = 'UTC'
 
 end
+
+require 'memcache'
+
+CACHE = MemCache.new('127.0.0.1')

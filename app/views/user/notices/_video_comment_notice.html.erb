@@ -1,9 +1,10 @@
 <% video = comment.commentable %>
 <% if home_page %>
-<% link = "#{link_to_function video.title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/videos/#{video.id}?reply_to=#{comment.poster_id}');"}" %>
+  <% link = link_to_function video.title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/videos/#{video.id}?reply_to=#{comment.poster_id}');" %>
 <% else %>
-<% link = "#{link_to_function video.title, "window.open('/videos/#{video.id}?reply_to=#{comment.poster_id}');"}" %>
+  <% link = link_to_function video.title, "window.open('/videos/#{video.id}?reply_to=#{comment.poster_id}');" %>
 <% end %>
+
 <li>
 	<div class="feed-message">
     <% if home_page %>

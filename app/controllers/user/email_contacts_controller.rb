@@ -8,7 +8,7 @@ class User::EmailContactsController < UserBaseController
 
   def unregistered
     # read it from session??
-    @contacts = Contacts.new(params[:type], params[:user_name], session[:email_authentication][:password]).contacts
+    @contacts = get_contacts 
     parse_contacts
     render :update do |page|
       page.replace_html 'contacts', :partial => 'unregistered'
@@ -16,9 +16,9 @@ class User::EmailContactsController < UserBaseController
   end
 
   def not_friend
-    @contacts = Contacts.new(params[:type], params[:user_name], session[:email_authentication][:password]).contacts
+    @contacts = get_contacts
     parse_contacts
-    session[:contacts] = @contacts
+    CACHE.set("contacts_#{current_user.id}", @contacts)
     if @not_friend_contacts.size != 0
       render :update do |page|
         page.replace_html 'contacts', :partial => 'not_friend'
@@ -31,6 +31,10 @@ class User::EmailContactsController < UserBaseController
   end
 
 protected
+
+  def get_contacts
+    @contacts = CACHE.get("contacts_#{current_user.id}") || Contacts.new(params[:type], params[:user_name], session[:email_authentication][:password]).contacts
+  end
 
   def render_not_supported e
     render :update do |page|

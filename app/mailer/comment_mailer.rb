@@ -45,7 +45,7 @@ class CommentMailer < ActionMailer::Base
   def status_comment comment, user
     setup_email user
 		subject     "Dayday3 - #{comment.poster.login}在你的状态里留言了"
-    body        :user => user, :url => "#{SITE_URL}/statuses"
+    body        :user => user, :url => "#{SITE_URL}/statuses?uid=#{user.id}&reply_to=#{comment.poster_id}&status_id=#{comment.commentable_id}"
 	end
 
   def poll_comment comment, user
@@ -79,6 +79,9 @@ class CommentMailer < ActionMailer::Base
   end
 
   def sharing_comment comment, user
+    setup_email user
+    subject     "Dayday3 - #{comment.poster.login}在你的分享里留言了"
+    body        :user => user, :url => "#{SITE_URL}/sharings?uid=#{user.id}&reply_to=#{comment.poster_id}&status_id=#{comment.commentable_id}"
   end
 
   def application_comment comment, user 

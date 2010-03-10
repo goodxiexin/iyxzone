@@ -1,9 +1,11 @@
 <% blog = tag.blog %>
+
 <% if home_page %>
-<% link = "#{link_to_function blog.title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}');window.open('/blogs/#{blog.id}');"}" %>
+  <% link = link_to_function blog.title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}');window.open('/blogs/#{blog.id}');" %>
 <% else %>
-<% link = "#{link_to_function blog.title, "window.open('/blogs/#{blog.id}');"}" %>
+  <% link = link_to_function blog.title, "window.open('/blogs/#{blog.id}');" %>
 <% end %>
+
 <li>
   <div class="feed-message">
     <% if home_page %>

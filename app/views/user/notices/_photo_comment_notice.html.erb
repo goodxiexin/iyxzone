@@ -1,9 +1,11 @@
 <% photo = comment.commentable %>
+
 <% if home_page %>
-<% link = "#{link_to_function "照片", "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/#{photo.class.to_s.underscore}s/#{photo.id}?reply_to=#{comment.poster_id}');"}" %>
+  <% link = link_to_function "照片", "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/#{photo.class.to_s.underscore}s/#{photo.id}?reply_to=#{comment.poster_id}');" %>
 <% else %>
-<% link = "#{link_to_function "照片", "window.open('/#{photo.class.to_s.underscore}s/#{photo.id}?reply_to=#{comment.poster_id}');"}" %>
+  <% link = link_to_function "照片", "window.open('/#{photo.class.to_s.underscore}s/#{photo.id}?reply_to=#{comment.poster_id}');" %>
 <% end %>
+
 <li>
 	<div class="feed-message">
     <% if home_page %>

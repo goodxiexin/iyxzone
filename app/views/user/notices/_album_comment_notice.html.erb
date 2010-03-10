@@ -1,9 +1,11 @@
 <% album = comment.commentable %>
+
 <% if home_page %>
-<% link = "#{link_to_function album.title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/#{album.class.to_s.underscore}s/#{album.id}?reply_to=#{comment.poster_id}');"}" %>
+  <% link = link_to_function album.title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/#{album.class.to_s.underscore}s/#{album.id}?reply_to=#{comment.poster_id}');" %>
 <% else %>
-<% link = "#{link_to_function album.title, "window.open('/#{album.class.to_s.underscore}s/#{album.id}?reply_to=#{comment.poster_id}');"}" %>
+  <% link = link_to_function album.title, "window.open('/#{album.class.to_s.underscore}s/#{album.id}?reply_to=#{comment.poster_id}');" %>
 <% end %>
+
 <li>
 	<div class="feed-message">
     <% if home_page %>

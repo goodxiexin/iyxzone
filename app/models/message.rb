@@ -4,6 +4,8 @@ class Message < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User'
 
+  acts_as_emotion_text :columns => [:content]
+
   validates_presence_of :recipient_id, :message => "不能为空"
 
   validates_presence_of :poster_id, :message => "不能为空"
