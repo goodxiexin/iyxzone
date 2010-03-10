@@ -11,7 +11,7 @@ class BlogObserver < ActiveRecord::Observer
     # issue feeds
     return if blog.draft
     return unless blog.poster.application_setting.emit_blog_feed
-    return if blog.privilege == 4 # only for myself
+    return if blog.is_owner_privilege? # only for myself
 
     recipients = [].concat blog.poster.guilds
     recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed}
@@ -40,7 +40,7 @@ class BlogObserver < ActiveRecord::Observer
       recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed}
       blog.deliver_feeds :recipients => recipients
     else
-      blog.destroy_feeds if blog.privilege == 4 and blog.privilege_was != 4
+      blog.destroy_feeds if blog.is_owner_privilege? and blog.privilege_was != 4
     end 
   end
 

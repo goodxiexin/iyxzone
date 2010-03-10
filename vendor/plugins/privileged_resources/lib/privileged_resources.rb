@@ -74,19 +74,19 @@ module Model
       end
 
       def is_owner_privilege?
-        privilege == OWNER_PRIVILEGE
+        privilege == 4
       end
 
       def is_public_privilege?
-        privilege == PUBLIC_PRIVILEGE
+        privilege == 1
       end        
         
       def is_friend_privilege?
-        privilege == FRIEND_PRIVILEGE
+        privilege == 3
       end
 
       def is_friend_or_same_game_privilege?
-        privilege == FRIEND_OR_SAME_GAME_PRIVILEGE
+        privilege == 2
       end
 
       def available_for? user

@@ -12,7 +12,7 @@ class FriendTagObserver < ActiveRecord::Observer
     blog = tag.taggable
 
     return if blog.draft
-    return if blog.privilege == 4 # return if this blog is only open for owner
+    return if blog.is_owner_privilege? # return if this blog is only open for owner
     
     if blog.poster != tag.tagged_user
       tag.notices.create(:user_id => tag.tagged_user_id)
@@ -23,7 +23,7 @@ class FriendTagObserver < ActiveRecord::Observer
   def after_video_tag_save tag
     video = tag.taggable
 
-    return if video.privilege == 4 # return if this video is only open for owner
+    return if video.is_owner_privilege? # return if this video is only open for owner
     
     if video.poster != tag.tagged_user
       tag.notices.create(:user_id => tag.tagged_user_id) 

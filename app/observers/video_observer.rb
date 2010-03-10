@@ -6,7 +6,7 @@ class VideoObserver < ActiveRecord::Observer
     
     # emit feed if necessary
 		return unless video.poster.application_setting.emit_video_feed
-		return if video.privilege == 4
+		return if video.is_owner_privilege?
 		recipients = [video.poster.profile, video.game]
 		recipients.concat video.poster.guilds
 		recipients.concat video.poster.friends.find_all{|f| f.application_setting.recv_video_feed}
@@ -20,7 +20,7 @@ class VideoObserver < ActiveRecord::Observer
   end
   
   def after_update video
-    if video.privilege == 4 and video.privilege_was != 4
+    if video.is_owner_privilege? and video.privilege_was != 4
       video.destroy_feeds
     else
       if video.privilege != 4 and video.privilege_was == 4 and video.poster.application_setting.emit_video_feed

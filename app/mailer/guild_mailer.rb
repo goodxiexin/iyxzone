@@ -1,9 +1,9 @@
 class GuildMailer < ActionMailer::Base
 
-  def name_change	guild, member
-    setup_email	member
-    subject			"Dayday3 - 工会#{guild.name_was}改名字了"
-		body				:user => member, :url => "#{SITE_URL}/guilds/#{guild.id}"
+  def name_change guild, member
+    setup_email member
+    subject "Dayday3 - 工会#{guild.name_was}改名字了"
+    body :user => member, :url => "#{SITE_URL}/guilds/#{guild.id}"
   end
 
 	def invitation guild, invitation
@@ -18,8 +18,9 @@ class GuildMailer < ActionMailer::Base
 		body			 :user => request.user, :url => "#{SITE_URL}/requests?type=2"
 	end
 
-	def promotion guild, member, new_role, old_role
+	def promotion membership, old_role
 		setup_email membership.user
+    # TODO: your code here
 	end
 
 protected

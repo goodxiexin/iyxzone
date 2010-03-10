@@ -67,12 +67,13 @@ class MembershipObserver < ActiveRecord::Observer
         :category => Notification::Membership,
         :data => "#{profile_link guild.president}同意了你的请求: 让游戏角色 #{membership.character.name} 加入工会 #{guild_link guild} ")
 		elsif membership.was_authorized? and membership.is_authorized?
-			# nomination
+			# promotion
 			guild.raw_decrement field(membership.status_was)
       guild.raw_increment field(membership.status)
 			user.notifications.create(
         :category => Notification::Promotion,
         :data => "你的游戏角色 #{membership.character.name} 在工会#{guild_link guild}里的职务更改为#{membership.to_s}")
+      GuildMailer.deliver_promotion membership, membership.status_was if user.mail_setting.promotion_in_guild
 		end
 
     # issue feeds if necessary

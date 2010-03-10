@@ -3,8 +3,6 @@ require 'app/mailer/comment_mailer'
 class CommentObserver < ActiveRecord::Observer
 
   def after_create comment
-    puts "commentable_type = #{comment.commentable_type}"
-
     # increment counter
     comment.commentable.raw_increment :comments_count
     
@@ -14,7 +12,7 @@ class CommentObserver < ActiveRecord::Observer
 
   def after_blog_comment_create comment
     blog = comment.commentable
-    return if blog.privilege == 4
+    return if blog.is_owner_privilege?
 		poster = blog.poster
 		commentor = comment.poster
 		recipient = comment.recipient
@@ -38,7 +36,7 @@ class CommentObserver < ActiveRecord::Observer
 
   def after_video_comment_create(comment)
 		video = comment.commentable
-    return if video.privilege == 4
+    return if video.is_owner_privilege?
     poster = video.poster
     commentor = comment.poster
     recipient = comment.recipient
@@ -78,7 +76,7 @@ class CommentObserver < ActiveRecord::Observer
 
   def after_photo_comment_create(comment)
 		photo = comment.commentable
-    return if photo.privilege == 4
+    return if photo.is_owner_privilege?
 		album = photo.album
 		poster = photo.poster # usually, photo poster is equal to album poster except the cases: event album, guild album
     commentor = comment.poster
@@ -119,7 +117,7 @@ class CommentObserver < ActiveRecord::Observer
 
 	def after_album_comment_create(comment)
 	  album = comment.commentable
-    return if album.privilege == 4
+    return if album.is_owner_privilege?
     poster = album.poster
     commentor = comment.poster
     recipient = comment.recipient

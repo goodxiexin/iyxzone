@@ -1,22 +1,25 @@
-set :application, "set your application name here"
-set :repository,  "set your repository location here"
+set :application, "17gaming"
+set :domain,      "deployer@17gaming.com"
+set :repository,  "http://github.com/gaoxh04/iyxzone.git"
+set :use_sudo,    false
+set :deploy_to,   "/home/deployer/#{application}"
+set :scm,         "git"
 
-set :scm, :subversion
-# Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
+role :app, domain
+role :web, domain
+role :db,  domain, :primary => true
 
-role :web, "your web-server here"                          # Your HTTP server, Apache/etc
-role :app, "your app-server here"                          # This may be the same as your `Web` server
-role :db,  "your primary db-server here", :primary => true # This is where Rails migrations will run
-role :db,  "your slave db-server here"
+namespace :deploy do
+  task :start, :roles => :app do
+    run "touch #{current_release}/tmp/restart.txt"
+  end
 
-# If you are using Passenger mod_rails uncomment this:
-# if you're still using the script/reapear helper you will need
-# these http://github.com/rails/irs_process_scripts
+  task :stop, :roles => :app do
+    # Do nothing.
+  end
 
-# namespace :deploy do
-#   task :start {}
-#   task :stop {}
-#   task :restart, :roles => :app, :except => { :no_release => true } do
-#     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-#   end
-# end
+  desc "Restart Application"
+  task :restart, :roles => :app do
+    run "touch #{current_release}/tmp/restart.txt"
+  end
+end
