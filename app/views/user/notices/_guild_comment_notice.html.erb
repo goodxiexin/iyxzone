@@ -1,9 +1,11 @@
 <% guild = comment.commentable %>
+
 <% if home_page %>
-<% link = "#{link_to_function guild.name, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/guilds/#{guild.id}?reply_to=#{comment.poster_id}');"}" %>
+  <% link = link_to_function guild.name, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/guilds/#{guild.id}?reply_to=#{comment.poster_id}');" %>
 <% else %>
-<% link = "#{link_to_function guild.name, "window.open('/guilds/#{guild.id}?reply_to=#{comment.poster_id}');"}" %>
+  <% link = link_to_function guild.name, "window.open('/guilds/#{guild.id}?reply_to=#{comment.poster_id}');" %>
 <% end %>
+
 <li>
 	<div class="feed-message">
     <% if home_page %>

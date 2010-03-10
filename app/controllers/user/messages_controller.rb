@@ -1,13 +1,13 @@
 class User::MessagesController < UserBaseController
 
   def index
-    @messages = current_user.messages_with(@friends).paginate :page => params[:page], :per_page => 20
-    @info = [].concat @messages.each {|m| {:content => m.content, :created_at => m.created_at, :poster_login => m.poster.login} } 
-    render :json => @info
+    @messages = current_user.messages_with(@friend).paginate :page => params[:page], :per_page => 20
+    @remote = {:update => "chat-history-#{@friend.id}", :url => {:action => 'index', :friend_id => @friend.id}}
+    render :partial => 'history' # 由于不会javascript下的分页，所以只能这样了
   end
 
   def read
-    if Message.update_all("read = 1", {:id => params[:ids], :recipient_id => current_user.id})
+    if Message.update_all("messages.read = 1", {:id => params[:ids], :recipient_id => current_user.id})
       render :nothing => true
     end
   end
@@ -16,11 +16,10 @@ class User::MessagesController < UserBaseController
     message_params = (params[:message] || {}).merge({:poster_id => current_user.id, :recipient_id => @friend.id})
     @message = Message.new(message_params)
     if @message.save
-      @info = {:content => @message.content, :created_at => @message.created_at}
+      @info = {:content => @message.content, :created_at => @message.created_at, :id => @message.id}
       unless Juggernaut.show_client(@friend.id).nil?
-        @message.update_attributes(:read => true)
         render :juggernaut => {:type => :send_to_client, :client_id => @friend.id} do |page|
-          page << "Iyxzone.Chat.recvMessage(#{@info.to_json}, #{current_user.id}, '#{form_authenticity_token}')" 
+          page << "Iyxzone.Chat.recvMessage(#{@info.to_json}, '#{current_user.login}', #{current_user.id})" 
         end
       end
       render :json => @info 

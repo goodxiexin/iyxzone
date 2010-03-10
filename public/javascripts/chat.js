@@ -36,11 +36,11 @@ Object.extend(Iyxzone.Chat, {
     html += '<div class="foot">';
     html += '<div class="im-dlg-send s_clear">';
     html += '<textarea class="left" id="message-content-' + friendID + '" name=""></textarea>';
-    html += '<div class="left"><a class="icon-face left w-l" href="#"/>';
-    html += '<button class="left btn-v2" type="submit" onclick=\'Iyxzone.Chat.sendMessage(' + friendID + ', "' + friendLogin + '", this, event);\'>确定</button></div>';
+    html += '<div class="left">';
+    html += '<span><a href="javascript:void(0)" onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $(\'message-content-' + friendID + '\'));" class="icon-face" /></span></div><button class="left btn-v2" type="submit" onclick=\'Iyxzone.Chat.sendMessage(' + friendID + ', "' + friendLogin + '", this, event);\'>确定</button></div>';
     html += '</div>';
     html += '<div class="im-dlg-log">';
-    html += '<h2><a class="show" href="#">聊天记录<span/></a></h2>';
+    html += '<h2><a class="show" href="javascript:void(0)" id="chat-history-' + friendID + '" onclick="Iyxzone.Chat.showHistory(' + friendID + ');">聊天记录<span/></a></h2>';
     html += '<div style="display: none;" class="im-dlg-show rows">';
     html += '</div></div></div></div>';
     
@@ -57,6 +57,17 @@ Object.extend(Iyxzone.Chat, {
     return html;
   },
 
+  markRead: function(messages){
+    var params = '';
+    for(var i = 0;i < messages.length; i++)
+      params += 'ids[]=' + messages[i].id + '&';
+
+    new Ajax.Request('/messages/read?authenticity_token=' + encodeURIComponent(this.token), {
+      method: 'put',
+      parameters: params
+    });
+  },
+
   set: function(friendIDs, infos, token){
     this.token = token;
     for(var i=0;i<infos.length;i++){
@@ -65,11 +76,9 @@ Object.extend(Iyxzone.Chat, {
     if(this.unreadMessages.keys().length != 0){
       this.blinkFriendID = this.unreadMessages.keys()[0];
       var info = this.unreadMessages.get(this.blinkFriendID);
-      this.myIcon = $('im-icon').innerHTML;
-      $('im-icon').innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
       this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
-      $('im-icon').observe('click', this.showUnreadMessages.bindAsEventListener(this));
     }
+    $('im-icon').observe('click', this.showUnreadMessages.bindAsEventListener(this));
   },
 
   showForm: function(friendID, friendLogin){
@@ -81,19 +90,32 @@ Object.extend(Iyxzone.Chat, {
       form.setStyle({left: '500px', top: '100px'});
       form.show();
       new Draggable('chat-form-' + friendID);
-      if(info){
-        info.messages.each(function(m){
-          Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, m)});
-        }.bind(this));
-      }
     }else{
       form.show();
     }
 
+    if(info){
+      info.messages.each(function(m){
+        Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, m)});
+      }.bind(this));
+    }
+
     if(this.blinkFriendID == friendID){
       clearTimeout(this.blinkTimer);
-      //$('im-icon').innerHTML = this.myIcon;
+      $('im-icon').innerHTML = this.myIcon;
+
+      this.blinkFriendID = null;
+      if(this.unreadMessages.keys().length != 0){
+        this.blinkFriendID = this.unreadMessages.keys()[0];
+        this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
+      }
     }
+
+    // send ajax request 
+    if(info){
+      this.markRead(info.messages);
+    }
+
   },
 
   hideForm: function(friendID){
@@ -112,13 +134,12 @@ Object.extend(Iyxzone.Chat, {
 
   recvMessage: function(message, friendLogin, friendID){
     var form = $('chat-form-' + friendID);
-  
+    
     // set data
-    if(form == null){
+    if(form == null || (form && !form.visible())){
       if(this.blinkFriendID == null){
+        alert('set blink');
         this.blinkFriendID = friendID;
-        //this.myIcon = $('im-icon').innerHTML;
-        //$('im-icon').innerHTML = '<img src="' + icon + '" class="left w-l" width=20 height=20 />';
         this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
       }
 
@@ -129,63 +150,34 @@ Object.extend(Iyxzone.Chat, {
       }else{
         this.unreadMessages.set(friendID, {messages: [message], login: friendLogin});
       }
-    
-      $('im-icon').observe('click', this.showUnreadMessages.bindAsEventListener(this));
+      alert(this.unreadMessages.get(friendID).messages);
     }else{
       Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, message)});
+      
+      // send ajax request
+      this.markRead(message);
     }
   },
 
   showUnreadMessages: function(){
-    // show form
-    var friendID = this.blinkFriendID;
-    var form = $('chat-form-' + friendID);
-    var info = this.unreadMessages.unset(friendID);
-
-    if(form == null){
-      form = this.buildForm(friendID, info.login);
-      form.setStyle({left: '500px', top: '100px'});
-      form.show();
-      new Draggable('chat-form-' + friendID);
-      info.messages.each(function(m){
-        Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(info.login, m)});
-      }.bind(this));
-    }else{
-      form.show();
+    if(this.blinkFriendID == null){
+      return;
     }
-
-    clearTimeout(this.blinkTimer);
-    //$('im-icon').innerHTML = this.myIcon;
-
-    // send ajax request
-    var params = '';
-    for(var i=0;i<info.messages.length;i++)
-      params += 'ids[]=' + info.messages[i].id + '&';
-
-    new Ajax.Request('/messages/read?authenticity_token=' + encodeURIComponent(this.token), {
-      method: 'put',
-      parameters: params
-    });
     
-    // reset lightening icon
-    if(this.unreadMessages.keys().length != 0){
-      var friendID = this.unreadMessages.keys()[0];
-      this.blinkFriendID = friendID;
-      var info = this.unreadMessages.get(friendID);
-      //$('im-icon').innerHTML = '<img src="' + info.icon + '" class="left w-l" width=20 height=20 />';
-      this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
-    }else{
-      $('im-icon').stopObserving('click');
-    }
+    this.showForm(this.blinkFriendID, this.unreadMessages.get(this.blinkFriendID).login); 
   },
 
-  showHistory: function(friendID, page){
+  showHistory: function(friendID){
     // loading
 
     // send ajax
-    new Ajax.Request('/messages?friend_id=' + friendID + '&page=' + page, {
+    new Ajax.Request('/messages?friend_id=' + friendID, {
       method: 'get',
+      onLoading: function(){
+        $('chat-history-' + friendID).innerHTML = '<image src="/images/loading.gif" />';
+      },
       onSuccess: function(transport){
+        $('chat-history-' + friendID).innerHTML = transport.responseText;
       }.bind(this)
     });
   },
@@ -194,6 +186,9 @@ Object.extend(Iyxzone.Chat, {
     Event.stop(event);
     new Ajax.Request('/messages?friend_id=' + friendID + "&authenticity_token=" + encodeURIComponent(this.token) + "&message[content]=" + $('message-content-' + friendID).value, {
       method: 'post',
+      onLoading: function(){
+        $('message-content-' + friendID).clear();        
+      },
       onSuccess: function(transport){
         var message = transport.responseText.evalJSON();
         Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, message)});

@@ -60,7 +60,8 @@ protected
 		if ["more_feeds", "show", "edit"].include? params[:action]
 			@profile = Profile.find(params[:id])
 			@user = @profile.user
-      require_friend_or_owner @user
+      #require_adequate_privilege @user
+      # TODO: 根据setting来判断
     elsif ["update"].include? params[:action]
       @profile = Profile.find(params[:id])
       require_owner @profile.user

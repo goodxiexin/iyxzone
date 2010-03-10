@@ -3,7 +3,13 @@ class User::StatusesController < UserBaseController
   layout 'app'
 
   def index
-    @statuses = @user.statuses.paginate :page => params[:page], :per_page => 5
+    if !params[:status_id].blank? and !params[:sharing_id].blank?
+      @reply_to = User.find(params[:reply_to])
+      @status = Status.find(params[:status_id])
+      params[:page] = current_user.sharings.index(@status) / 10 + 1
+    end
+
+    @statuses = @user.statuses.paginate :page => params[:page], :per_page => 10
   end
 
   def friends

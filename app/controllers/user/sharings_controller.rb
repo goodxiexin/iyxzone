@@ -5,8 +5,6 @@ class User::SharingsController < UserBaseController
   PER_PAGE = 5 
 
   def index
-    @user = User.find(params[:uid])
-
     if params[:type].to_i == 0 and !params[:sharing_id].blank? and !params[:sharing_id].blank?
       @reply_to = User.find(params[:reply_to])
       @sharing = Sharing.find(params[:sharing_id])
@@ -149,7 +147,10 @@ class User::SharingsController < UserBaseController
 protected
 
   def setup
-    if ["show"].include? params[:action]
+    if ["index"].include? params[:action]
+      @user = User.find(params[:uid])
+      require_friend_or_owner @user
+    elsif["show"].include? params[:action]
       @sharing = Sharing.find(params[:id])
       require_link_sharing @sharing
       @shareable = @sharing.shareable

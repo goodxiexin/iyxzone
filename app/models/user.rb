@@ -298,6 +298,10 @@ class User < ActiveRecord::Base
 
   has_many :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => {:read => false}
 
+  def messages_with friend
+    Message.all(:conditions => "(recipient_id = #{id} AND poster_id = #{friend.id}) OR (recipient_id = #{friend.id} AND poster_id = #{id})", :order => 'created_at DESC')
+  end
+  
   # invitation
   has_many :signup_invitations, :class_name => 'SignupInvitation', :foreign_key => 'sender_id'
 
