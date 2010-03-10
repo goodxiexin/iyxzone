@@ -1,5 +1,11 @@
 class UserMailer < ActionMailer::Base
 
+  def long_time_no_seen user
+    setup_email user
+    subject     "Dayday3 - 你已经一周以上没有上线了"
+    body        :user => user, :url => "http://#{SITE_URL}/home"
+  end
+
   def signup_notification user
     setup_email	user
     subject			"Dayday3 - 激活你的帐号"

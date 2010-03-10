@@ -6,6 +6,8 @@ class UserBaseController < ApplicationController
 
   before_filter :setup_instant_messenger
 
+  before_filter :set_last_seen_at
+
   before_filter :setup
 
 protected
@@ -30,6 +32,10 @@ protected
         :messages => messages.map{|m| {:content => m.content, :created_at => m.created_at, :id => m.id}}
       }
     end
+  end
+
+  def setup_last_seen_at
+    current_user.update_attributes(:last_seen_at => Time.now)
   end
 
   def setup
