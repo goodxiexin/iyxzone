@@ -20,7 +20,8 @@ class GuildMailer < ActionMailer::Base
 
 	def promotion membership, old_role
 		setup_email membership.user
-    # TODO: your code here
+		subject		 "17Gaming.com(一起游戏网) - 您在公会中的职位变为#{membership.to_s}"
+		body			 :membership => membership, :old_role => old_role, :url => "#{SITE_URL}/guilds/#{guild.id}"
 	end
 
 protected
