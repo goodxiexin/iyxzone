@@ -1,2 +1,22 @@
 <%= @user.login %>
-点击<%= @url %>查看详细情况
+
+您好！
+
+<%= @guild.president.login %>邀请您加入公会<%= @guild.name %>
+
+公会主席：<%= @guild.president_character.name %>
+公会游戏详情：
+游戏名称:    <%= @guild.game.name %>
+		<% unless @guild.area.nil? %>
+区域：		<%= @guild.area.name %>
+		<% end %>
+服务器：		<%= @guild.server.name %>
+公会描述描述：“<%= @guild.description %>”
+
+请点击<%= @url %>查看更多活动详情
+
+祝您开心每一天
+17gaming.com
+
+－－
+此邮件由系统发出，请勿回复这封邮件。如果想联系我们，请登录17gaming.com。

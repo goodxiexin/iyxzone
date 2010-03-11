@@ -2,20 +2,20 @@ class TagMailer < ActionMailer::Base
 
   def blog_tag tag
     setup_email	tag
-		subject			"Dayday3 - #{tag.poster.login}在博客里标记了你"
-		body				:user => tag.tagged_user, :url => "#{SITE_URL}/blogs/#{tag.taggable_id}"
+		subject			"17Gaming.com(一起游戏网) - #{tag.poster.login}在博客里标记了你"
+		body				:tag => tag, :url => "#{SITE_URL}/blogs/#{tag.taggable_id}"
   end
 
   def video_tag tag
 		setup_email tag
-    subject     "Dayday3 - #{tag.poster.login}在视频里标记了你"
-    body        :user => tag.tagged_user, :url => "#{SITE_URL}/videos/#{tag.taggable_id}"
+    subject     "17Gaming.com(一起游戏网) - #{tag.poster.login}在视频里标记了你"
+    body        :tag => tag, :url => "#{SITE_URL}/videos/#{tag.taggable_id}"
 	end
 
   def photo_tag tag
 		setup_email tag
-    subject     "Dayday3 - #{tag.poster.login}在相册里标记了你"
-    body        :user => tag.tagged_user, :url => "#{SITE_URL}/#{tag.photo.class.to_s.underscore.pluralize}/#{tag.photo_id}"
+    subject     "17Gaming.com(一起游戏网) - #{tag.poster.login}在相册里圈了你"
+    body        :tag => tag, :url => "#{SITE_URL}/#{tag.photo.class.to_s.underscore.pluralize}/#{tag.photo_id}"
   end
 
   def photo_tag_to_owner tag

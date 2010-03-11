@@ -34,13 +34,13 @@ class User::GamesController < UserBaseController
   def show
     @blogs = @game.blogs.find(:all, :limit => 3)
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-
-		@players = []
+		@comrades = []
 		if current_user.games.include?(@game)
-			current_user.servers.find(:all, :conditions=> {:game_id => @game.id}).each {|server| @players << server.users }
-		else
-			@players = @game.users.find(:all, :limit => 3)	
+			current_user.servers.find(:all, :conditions=> {:game_id => @game.id}).each {|server| 
+				@comrades = @comrades | server.characters
+			}
 		end
+		@players = @game.characters.find(:all)	
 
     @albums = @game.albums.find(:all, :limit => 3)
     @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')

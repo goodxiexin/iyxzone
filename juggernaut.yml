@@ -32,7 +32,11 @@
      #
      :allowed_ips: 
                   - 127.0.0.1
+<<<<<<< HEAD:juggernaut.yml
                   - 192.168.0.101 #217.83 
+=======
+                  - 192.168.217.3 
+>>>>>>> d4059632b7264a39d383360ed264a5627ac40d88:juggernaut.yml
 
      # 2) Via HTTP request
      # 
