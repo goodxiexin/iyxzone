@@ -5,6 +5,7 @@ class BlogObserver < ActiveRecord::Observer
   end
 
   def after_create blog
+    puts "after crewate"
     # update counter
     blog.poster.raw_increment field(blog)
 	

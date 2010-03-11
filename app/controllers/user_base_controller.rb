@@ -34,7 +34,7 @@ protected
     end
   end
 
-  def setup_last_seen_at
+  def set_last_seen_at
     current_user.update_attributes(:last_seen_at => Time.now)
   end
 

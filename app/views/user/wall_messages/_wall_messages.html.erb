@@ -19,5 +19,5 @@
   </div>
 <% end %>
 
-<%= will_paginate messages, :renderer => 'RemoteLinkRenderer', :remote => @remote %>
+<%= remote_will_paginate messages, @remote %>
 

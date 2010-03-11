@@ -1,0 +1,10 @@
+rake aborted!
+Don't know how to build task 'user:send_long_time_no_seen'
+
+(See full trace by running task with --trace)
+(in /home/gaoxh04/iyxzone)
+rake aborted!
+Unknown database 'dayday3_production'
+
+(See full trace by running task with --trace)
+(in /home/gaoxh04/iyxzone)

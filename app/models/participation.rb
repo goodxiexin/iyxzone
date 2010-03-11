@@ -74,9 +74,14 @@ class Participation < ActiveRecord::Base
 
 protected
 
+  # 活动如果过期了，那不能创建邀请，请求啥的，但是那些已经创建的邀请，请求，还是能够接受，或者拒绝的
   def event_is_valid
     return if event_id.blank?
-    errors.add(:event_id, "不存在") unless Event.exists? event_id
+    if Event.exists? event_id
+      errors.add(:event_id, "过期了") if event.expired?
+    else
+      errors.add(:event_id, "不存在")
+    end
   end  
 
   def character_is_valid
