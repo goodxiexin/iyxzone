@@ -21,8 +21,9 @@
   <%= javascript_include_tag 'menu' %>
   <%= javascript_include_tag 'chat' %>
   <%= calendar_date_select_includes "silver" %>
+  <%= juggernaut :client_id => current_user.id %>
 </head>
-<body>
+<body class='cut-side'>
 
 <div id="header">
 	<div id="navbar">
@@ -145,7 +146,7 @@
       </div>
       <div class="im-group s_clear">
           <dl class="im-expand">
-            <dt><a href="#">在线好友<span>[<%= @online_friends.count %>]</span></a></dt>
+            <dt><a href="javascript:void(0)" onclick="Iyxzone.Chat.toggleOnline(this);">在线好友<span>[<%= @online_friends.count %>]</span></a></dt>
             <div id='chat-list'>
             <% @online_friends.each do |f| %>
               <dd pinyin='<%= f.pinyin %>' login='<%= f.login %>'><a href='javascript: void(0)' ondblclick='Iyxzone.Chat.showForm(<%= f.id %>, "<%= f.login %>", "<%= form_authenticity_token %>")'><%= avatar_image f, :class => 'left w-l', :width => 20, :height => 20  %><span class="left"><%= f.login %></span></a></dd>

@@ -1,6 +1,10 @@
+<% if @messages.blank? %>
+  没有消息
+<% else %>
 <% @messages.each do |m| %>
   <h4><%= m.poster.login %>(<%= ftime m.created_at %>)</h4>
   <p><%= m.content %></p>
 <% end %>
 
-<%= remote_will_paginate @messages, :remote => @remote %> 
+<%= remote_will_paginate @messages, :remote => @remote %>
+<% end %>

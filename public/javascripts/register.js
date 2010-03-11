@@ -161,13 +161,13 @@ Object.extend(Iyxzone.Register, {
 
   gameSelectors: new Hash(), // characterID => gameSelector
 
-  charactersCount: 1,
+  characterID: 1, // start from 1
 
-  addGameSelector: function(pinyins, id, details){
+  addGameSelector: function(id, details){
     var prefix = 'profile_new_characters_' + id + '_';
 
     var selector = new Iyxzone.Game.PinyinSelector(
-      pinyins,
+      this.pinyins,
       prefix + 'game_id',
       prefix + 'area_id',
       prefix + 'server_id',
@@ -272,16 +272,33 @@ Object.extend(Iyxzone.Register, {
     return valid;
   },
 
-  newCharacter: function(event){
-    Event.stop(event);
-    new Ajax.Updater('characters', '/register/new_character?id=' + this.charactersCount, {
-      method: 'get',
-      insertion: 'bottom',
-      evalScripts: true,
-      onSuccess: function(){
-      }.bind(this)
-    });
-    this.charactersCount++;
+  newCharacter: function(){
+    var id = this.characterID;
+    var div = new Element('div', {id: 'character_' + id});
+
+    var html = '<div class="rows s_clear"><div class="fldid"><label>人物昵称：</label></div><div class="fldvalue"><div class="textfield" style="width: 100px;"><input id="profile_new_characters_' + id + '_name" name="profile[new_characters][' + id + '][name]" onblur="Iyxzone.Register.isCharacterNameValid(' + id + ')" size="30" type="text"></div></div><span class="red" id="character_' + id + '_name_error"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>级别：</label></div><div class="fldvalue"><div style="width: 100px;" class="textfield"><input id="profile_new_characters_' + id + '_level" name="profile[new_characters][' + id + '][level]" onblur="Iyxzone.Register.isCharacterLevelValid(' + id + ')" size="30" type="text"></div></div><span class="red" id="character_' + id + '_level_error"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">游戏：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_game_id" name="profile[new_characters][' + id + '][game_id]"><option value="">---</option></select></div><span class="red" id="character_' + id + '_game_id_error"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">区域：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_area_id" name="profile[new_characters][' + id + '][area_id]"><option value="">---</option></select></div><span class="red" id="character_' + id + '_area_id_error"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">服务器：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_server_id" name="profile[new_characters][' + id + '][server_id]"><option value="">---</option></select></div><span class="red" id="character_' + id + '_server_id_error"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">种族：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_race_id" name="profile[new_characters][' + id + '][race_id]"><option value="">---</option></select></div><span class="red" id="character_' + id + '_race_id_error"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">职业：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_profession_id" name="profile[new_characters][' + id + '][profession_id]"><option value="">---</option></select></div><span class="red" id="character_' + id + '_profession_id_error"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>正在玩：</label></div><div class="fldvalue"><input name="profile[new_characters][' + id + '][playing]" value="0" type="hidden"><input checked="checked" id="profile_new_characters_' + id + '_playing" name="profile[new_characters][' + id + '][playing]" value="1" type="checkbox"></div></div>';
+    html += '<p class="foot s_clear"><a class="right red" href="javascript:void(0)" onclick="Iyxzone.Register.removeCharacter(' + id + '); return false;">删除本游戏角色</a></p>';
+
+    div.innerHTML = html;
+    $('characters').appendChild(div);
+    
+    this.characterID++;
+    
+    // set game info
+    this.games.each(function(game){
+      var game = game.game;
+      Element.insert($('profile_new_characters_' + id + '_game_id'), {bottom: '<option value=' + game.id + '>' + game.name + '</option>'});
+    }.bind(this));
+    $('profile_new_characters_' + id + '_game_id').value = '';
+  
+    this.addGameSelector(id, null);
   },
 
   removeCharacter: function(id){
