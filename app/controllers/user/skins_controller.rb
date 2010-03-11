@@ -22,7 +22,7 @@ class User::SkinsController < UserBaseController
 	end
 
 	def index
-		@skins = Skin.paginate :page => params[:page] || 1, :per_page => 10
+		@skins = Skin.paginate :page => params[:page] || 1, :per_page => 3
 		respond_to do |format|
 			format.html
 		end

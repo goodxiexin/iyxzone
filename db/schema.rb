@@ -562,8 +562,9 @@ ActiveRecord::Schema.define(:version => 20100309074752) do
   end
 
   create_table "skins", :force => true do |t|
-    t.string   "name"
-    t.string   "css_file_name"
+    t.string   "name",                                       :null => false
+    t.string   "css_file_name",                              :null => false
+    t.string   "thumbnail_file_name", :default => "missing"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
