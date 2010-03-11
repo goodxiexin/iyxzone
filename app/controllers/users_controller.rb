@@ -27,13 +27,10 @@ class UsersController < ApplicationController
       render :update do |page|
         page << "error('#{@user.errors.on_base}');"
       end
-      #render :update do |page|
-      #  page.redirect_to '/login'
-      #end
     end
 	end
 
-    def activate
+  def activate
       self.current_user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
       if logged_in? && !current_user.active?
         current_user.activate
@@ -90,4 +87,3 @@ class UsersController < ApplicationController
     end
     
   end
-end

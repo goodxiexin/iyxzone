@@ -71,7 +71,6 @@ class User < ActiveRecord::Base
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
   def online_friends
-		#return []
     User.find(friendships.map(&:friend_id) & (Juggernaut.show_clients.map {|c| c['client_id']}))
   end
 

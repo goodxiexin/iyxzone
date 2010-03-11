@@ -16,7 +16,6 @@ class User::ProfilesController < UserBaseController
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
 		@skin = @profile.skin
-		
 	end
 
   def edit

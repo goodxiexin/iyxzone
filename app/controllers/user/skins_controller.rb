@@ -1,7 +1,6 @@
 class User::SkinsController < UserBaseController
+  
   layout 'app2'
-
-  #increment_viewing 'profile', :only => [:show]
 
 	FirstFetchSize = 5
 
@@ -22,10 +21,7 @@ class User::SkinsController < UserBaseController
 	end
 
 	def index
-		@skins = Skin.paginate :page => params[:page] || 1, :per_page => 3
-		respond_to do |format|
-			format.html
-		end
+		@skins = Skin.paginate :page => params[:page], :per_page => 3
 	end
 
 	def update
@@ -34,18 +30,12 @@ class User::SkinsController < UserBaseController
 		respond_to do |format|
 			if @user.profile.update_attributes(:skin_id => @skin.id)
 				flash[:notice] = "皮肤更新完成！"
-				format.html { redirect_to profile_url(current_user.id) }
+				format.html { redirect_to profile_url(@user.profile) }
 			else
 				flash[:notice] = "该皮肤不能使用"
-				format.html { redirect_to profile_url(current_user.id) }
+				format.html { redirect_to profile_url(@user.profile) }
 			end
 		end
 	end
-
-protected
-
-  def setup
-  end
-
 
 end
