@@ -11,7 +11,7 @@
   <%= stylesheet_link_tag 'rating' %>
 	<%= stylesheet_link_tag 'autocomplete' %>
   <%= stylesheet_link_tag 'pagination' %>
-  <%= javascript_include_tag :defaults, :juggernaut %>
+  <%= javascript_include_tag :defaults, :juggernaut %> 
   <%= javascript_include_tag 'iyxzone' %>
   <%= javascript_include_tag 'comment' %>
   <%= javascript_include_tag 'facebox' %>
@@ -22,6 +22,7 @@
   <%= calendar_date_select_includes "silver" %>
 </head>
 <body>
+<%= yield :skintop%> 
 <div id="header">
 	<div id="navbar">
 		<div id="navwrap">
@@ -31,6 +32,7 @@
 					<ul id="navmain-title">
 						<li><%= link_to '<span id="navhome">首页</span>', home_url %></li>
 						<li><%= link_to '<span id="navprofile">个人主页</span>', profile_url(current_user.profile)  %></li>
+						<li><%= link_to '<span id="decoration">主页装扮</span>', skins_url %></li>
 						<li><%= link_to '<span id="navfriend">好友</span', friends_url  %></li>
 						<li><%= link_to '<span id="navinbox">站内信</span>', mails_url(:type => 1) %></li>
           <% notifications_count = current_user.notifications.unread.count %>	
@@ -58,7 +60,7 @@
         </div>
 				<div id="navextra">
 					<ul>
-						<li><%= link_to "激请" %></li>
+						<li><%= link_to "邀请" %></li>
             <li><%= link_to_function "设置", "", :id => "settings_link" %>
 						<div class='box01 set-box' id='settings_dropdown' style="display:none">
 							<%= link_to "隐私设置", privacy_setting_url, :class => "blk" %>
@@ -113,5 +115,6 @@
 	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
     <p><a href="#">网游公司 版权所有</a></p>
 </div>
+
 </body>
 </html>

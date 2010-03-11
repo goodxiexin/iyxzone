@@ -1,0 +1,141 @@
+require 'json'
+require 'rexml/document'
+include REXML
+
+class Contacts
+
+  class Netease < Base
+
+    URL         = "http://mail.163.com/"
+    LOGIN_URL   = "http://reg.163.com/login.jsp?type=1&url=http://entry.mail.163.com/coremail/fcg/ntesdoor2?" + CGI.escape("lightweight%3D1%26verifycookie%3D1%26language%3D-1%26style%3D-1")
+    ENTRY_URL   = "http://entry.mail.163.com/coremail/fcg/ntesdoor2?lightweight=1&verifycookie=1&language=-1&style=1&username="
+    REQUEST_PARAM = "&func=global:sequential"
+    DEBUG = true
+
+    def real_connect
+      postdata = "type=1&url=#{CGI.escape("http://entry.mail.163.com/coremail/fcg/ntesdoor2?lightweight%3D1%26verifycookie%3D1%26language%3D-1%26style%3D-1")}" + "verifycookie=1&style=1&product=mail163&savelogin=&url2=#{CGI.escape("http%3A%2F%2Fmail.163.com%2Ferrorpage%2Ferr_163.htm")}&username=smdaiych&password=dyctest&selType=js35"
+      puts "-------------------------------------------"
+      puts LOGIN_URL
+      puts "dycpostdata:\t" + postdata
+      #initcookie = ""
+      data, resp, cookies, forward = post(LOGIN_URL, postdata, "", "mail.163.com")
+      #puts "forward:\t#{forward}" 
+      #puts "code: #{resp.code}"
+      #puts ""
+      puts "cookie: #{cookies}"
+      puts "response: #{resp}"
+      puts "forward: #{forward}"
+      forward = ENTRY_URL + login.split('@').first
+      
+      data, resp, cookies, forward = get(forward, cookies, LOGIN_URL) 
+      puts "------------------------------------------"
+      #puts "code: #{resp.code}"
+      #puts "" 
+      #puts "cookie:  #{cookies}"
+      #puts ""
+      puts "forward: #{forward}"
+   
+      data, resp, cookies = get(forward, cookies, forward)
+      #puts "Now, in main ---------------------------------------------"
+      #puts "code: #{resp.code}"
+      #puts "data: #{data}"
+      #puts "cookie: #{cookies}"
+      #puts "forward: #{forward}"
+      index = forward.gsub(/\/main\.jsp/, '/index.jsp')
+      #puts index
+      data, resp, cookies  = get(index, cookies, forward)
+      puts "Now, in index ---------------------------------------------"
+#      puts "code: #{resp.code}"
+ #     puts "data: #{data}"
+  #    puts "cookie: #{cookies}"
+   #   puts "SUCCESS!"
+      contacturl = index.gsub(/\/index\.jsp/, '/s') + REQUEST_PARAM
+      postdata = '<?xml version="1.0"?><object><array name="items"><object><string name="func">pab:searchContacts</string><object name="var"><array name="order"><object><string name="field">FN</string><boolean name="ignoreCase">true</boolean></object></array></object></object><object><string name="func">user:getSignatures</string></object><object><string name="func">pab:getAllGroups</string></object></array></object>'
+			#postdata = '<?xml version="1.0"?><object><array name="items"><object><string name="func">pab:searchContacts</string><object name="var"><array name="order"><object><string name="field">FN</string><boolean name="ignoreCase">true</boolean></object></array></object></object><object><string name="func">user:getSignatures</string></object><object><string name="func">pab:getAllGroups</string></object></array></object>'
+      @data, resp , cookies, forward = my_Post(contacturl, postdata, cookies, forward)
+      puts "response: #{resp}"
+      puts "SHOULD print contact list below!---------------------------"
+      puts "Data:\n #{data}"
+      
+=begin
+      if DEBUG 
+        file = File.new("/home/dyc/xml.xml", 'a')
+        file.write data
+      end
+=end      
+=begin
+      p1 = resp.body.index('contacts:')
+      p2 = resp.body.index('groups:', p1)
+      contacts_str = resp.body[(p1+9)..(p2-5)]
+      contacts_str.gsub!("&quot;", '"')
+      JSON.parse(contacts_str)
+      puts resp.body
+      puts "contacts: #{contacts_str}"
+=end     
+=begin 
+      http = open_http(URI.parse(forward))
+      resp, data = http.post("/classic/addr_member.php", "sort_item=letter&sort_type=desc&act=list&gid=6", {"Cookie" => cookies})
+      puts "code: #{resp.code}"
+      puts "body: #{resp.body}"
+=end
+    end
+
+    def contacts
+      @contact = []
+      doc = Document.new @data
+      root = doc.root.elements["array/object/array"]
+      root.elements.each("object") do |person|
+	pnick = nil
+	pemail = nil
+	person.elements.each('string') do |el|
+		if el.attributes['name'] == 'EMAIL;PREF'
+			pemail = el.text	
+		end
+		if el.attributes['name'] == 'FN'
+			pnick = el.text
+		end
+	end
+	if pemail && !pnick
+		pnick = pemail
+	end
+	@contact << [pnick, pemail] if pemail
+      end
+      @contact
+=begin
+      @contact.each do |x|
+        puts x[0]
+        puts x[1]
+      end
+=end
+    end
+
+  private
+
+    def my_Post(url, postdata, cookies="", referer="")
+      url = URI.parse(url)
+      http = open_http(url)
+      puts "--------------------In my_Post----------------"
+      puts "#{url.path}?#{url.query}"
+      resp, data = http.post("#{url.path}?#{url.query}", postdata,
+        "User-Agent" => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1) Gecko/20061010 Firefox/2.0",
+        "Accept-Encoding" => "gzip",
+        "Cookie" => cookies,
+        "Referer" => referer,
+        #"Content-Type" => 'application/x-www-form-urlencoded',
+        "Content-Type" => 'application/xml; charset=UTF-8'
+      )
+      data = uncompress(resp, data)
+      cookies = parse_cookies(resp.response['set-cookie'], cookies)
+      forward = resp.response['Location']
+      forward ||= (data =~ /<meta.*?url='([^']+)'/ ? CGI.unescapeHTML($1) : nil)
+	if (not forward.nil?) && URI.parse(forward).host.nil?
+		forward = url.scheme.to_s + "://" + url.host.to_s + forward
+	end
+      return data, resp, cookies, forward
+    end
+  
+  end  
+  
+  TYPES[:yahoo] = Yahoo
+
+end 

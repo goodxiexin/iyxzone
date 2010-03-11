@@ -27,66 +27,67 @@ class UsersController < ApplicationController
       render :update do |page|
         page << "error('#{@user.errors.on_base}');"
       end
+      #render :update do |page|
+      #  page.redirect_to '/login'
+      #end
     end
-    #render :update do |page|
-    #  page.redirect_to '/login'
-    #end
-  end
+	end
 
-  def activate
-    self.current_user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
-    if logged_in? && !current_user.active?
-      current_user.activate
-      # create friend
-      unless params[:token].blank?
-        @invitation = SignupInvitation.find_by_token(params[:token])
-        if @invitation.blank?
-          @sender = User.find_by_invite_code(params[:token]) || User.find_by_qq_invite_code(params[:token]) || User.find_by_msn_invite_code(params[:code])
-        else
-          @sender = @invitation.sender
-        end
-        unless @sender.blank?
-          current_user.friendships.create(:friend_id => @sender.id)
-          @sender.friendships.create(:friend_id => current_user.id)
-          # 记录用户是通过怎样的邀请加入的
-          if @sender.invite_code == params[:token]
-            current_user.invite_method = 'magic'
-          elsif @sender.qq_invite_code == params[:token]
-            current_user.invite_method = 'qq'
-          elsif @sender.msn_invite.code == params[:token]
-            current_user.invite_method = 'msn'
+    def activate
+      self.current_user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
+      if logged_in? && !current_user.active?
+        current_user.activate
+        # create friend
+        unless params[:token].blank?
+          @invitation = SignupInvitation.find_by_token(params[:token])
+          if @invitation.blank?
+            @sender = User.find_by_invite_code(params[:token]) || User.find_by_qq_invite_code(params[:token]) || User.find_by_msn_invite_code(params[:code])
           else
-            current_user.invite_method = 'email'
+            @sender = @invitation.sender
           end
-          current_user.save
+          unless @sender.blank?
+            current_user.friendships.create(:friend_id => @sender.id)
+            @sender.friendships.create(:friend_id => current_user.id)
+            # 记录用户是通过怎样的邀请加入的
+            if @sender.invite_code == params[:token]
+              current_user.invite_method = 'magic'
+            elsif @sender.qq_invite_code == params[:token]
+              current_user.invite_method = 'qq'
+            elsif @sender.msn_invite.code == params[:token]
+              current_user.invite_method = 'msn'
+            else
+              current_user.invite_method = 'email'
+            end
+            current_user.save
+          end
+        end
+        flash[:notice] = "Signup complete!"
+      end
+      redirect_back_or_default('/')
+    end
+
+    def activation_mail_sent
+      @user = User.find_by_email(params[:email])
+      if @user.nil? or @user.active?
+        render :text => 'error'
+      else
+        render :action => 'success', :layout => 'root'
+      end
+    end
+
+    def resend_activation_mail
+      @user = User.find_by_email(params[:email])
+      if !@user.active? and UserMailer.deliver_signup_notification @user
+        render :update do |page|
+          page.visual_effect 'highlight', 'account_status'
+          page << "$('account_status').innerHTML = '激活邮件已经重新发送到了#{@user.email}';"
+        end
+      else
+        render :update do |page|
+          page << "error('错误');"
         end
       end
-      flash[:notice] = "Signup complete!"
     end
-    redirect_back_or_default('/')
+    
   end
-
-  def activation_mail_sent
-    @user = User.find_by_email(params[:email])
-    if @user.nil? or @user.active?
-      render :text => 'error'
-    else
-      render :action => 'success', :layout => 'root'
-    end
-  end
-
-  def resend_activation_mail
-    @user = User.find_by_email(params[:email])
-    if !@user.active? and UserMailer.deliver_signup_notification @user
-      render :update do |page|
-        page.visual_effect 'highlight', 'account_status'
-        page << "$('account_status').innerHTML = '激活邮件已经重新发送到了#{@user.email}';"
-      end
-    else
-      render :update do |page|
-        page << "error('错误');"
-      end
-    end
-  end
-  
 end

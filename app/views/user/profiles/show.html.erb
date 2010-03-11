@@ -2,6 +2,7 @@
 <% content_for :html_description, "#{@user.login}的个人主页 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<%= stylesheet_link_tag @skin.css_file_name %>
 <%= stylesheet_link_tag 'tag_cloud' %>
 <%= stylesheet_link_tag 'test' %>
 <%= javascript_include_tag 'chinese_region' %>
@@ -17,10 +18,10 @@
 	  </div>
 	</div>
 	<div class="avatarbox">
-		<%= render :partial => 'operations' %>
+		<%= render :partial => 'user/profiles/operations' %>
 	</div>
 	<div class="profile-list menu-icon-list">
-		<%= render :partial => 'menu' %>
+		<%= render :partial => 'user/profiles/menu' %>
 	</div>
 <% end %>
 
@@ -165,7 +166,7 @@
 	<div class='feed-box'>
 		<div class="home-wrap">
 			<div id ='feed_list'>
-			<%= render :partial => 'feed_deliveries', :object => @feed_deliveries %>
+			<%= render :partial => 'user/profiles/feed_deliveries', :object => @feed_deliveries %>
 			</div>
 			<div class="s_clear"></div>
 				<div class="round04 round_r_t jl-read-more space s_clear">

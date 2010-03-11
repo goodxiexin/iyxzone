@@ -1,0 +1,17 @@
+<ul>
+<% @skins.each do |skin| %>
+<li class="per_skin">
+<ul>
+<li class="skin_name"><%=h skin.name %> </li>
+<li class="skin_img"><%= image_tag skin.thumbnail_file_name+'.png', :alt => skin.name, :size => "200×100" %></li>
+<li class="skin_apply"><%= link_to "预览", skin %> </li>
+</ul>
+</li>
+<% end %>
+</ul>
+
+<%= will_paginate @skins, :prev_label => "上一页",
+:next_label => "下一页" %>
+
+
+
