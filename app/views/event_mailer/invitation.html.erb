@@ -1,2 +1,17 @@
 <%= @user.login %>
-访问<%= @url %>去看看活动的详情
+
+您好！
+
+<%= @event.poster.login %>邀请您加入活动<%= @event.title%>
+
+开始时间：<%= @event.start_time %>
+结束时间：<%= @event.end_time %>
+活动描述：“<%= @event.description %>”
+
+请点击<%= @url %>查看更多活动详情
+
+祝您开心每一天
+17gaming.com
+
+－－
+此邮件由系统发出，请勿回复这封邮件。如果想联系我们，请登录17gaming.com。
