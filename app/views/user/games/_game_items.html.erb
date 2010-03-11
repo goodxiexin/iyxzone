@@ -20,7 +20,7 @@
 </table>
 
 <% if @remote %>
-  <%= will_paginate game_items, :renderer => :RemoteLinkRenderer, :remote => @remote %>
+  <%= remote_will_paginate game_items, :remote => @remote %>
 <% else %>
   <%= will_paginate game_items %>
 <% end %>

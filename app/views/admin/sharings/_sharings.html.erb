@@ -18,4 +18,4 @@
  
   <% end %>
 </table>
-<%= will_paginate @sharings, :renderer => "RemoteLinkRenderer", :remote => @remote %>
+<%= remote_will_paginate @sharings, :remote => @remote %>

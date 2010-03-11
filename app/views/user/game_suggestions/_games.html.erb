@@ -45,4 +45,4 @@
   </tr>
   <% end %>
 </table>
-<%= will_paginate games, :renderer => "RemoteLinkRenderer", :remote => @remote %>
+<%= remote_will_paginate games, :remote => @remote %>

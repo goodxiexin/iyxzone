@@ -87,6 +87,14 @@ Object.extend(Iyxzone.Emotion.Manager, {
       faces.hide();
     }else if(faces && !faces.visible()){
       faces.show();
+      // locate faces
+      faces.setStyle({
+        position: 'absolute',
+        left: (link.cumulativeOffset().left - 200) + 'px',
+        top: (link.cumulativeOffset().top) + 'px',
+        width: '200px',
+        height: '40px'
+      });
     }else{
       var faces = this.constructFacesTable(link, textField);
       this.linkToFieldsMappings.set(link, textField);
