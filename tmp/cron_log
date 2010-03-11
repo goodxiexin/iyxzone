@@ -8,3 +8,8 @@ Unknown database 'dayday3_production'
 
 (See full trace by running task with --trace)
 (in /home/gaoxh04/iyxzone)
+rake aborted!
+Unknown database 'dayday3_production'
+
+(See full trace by running task with --trace)
+(in /home/gaoxh04/iyxzone)
