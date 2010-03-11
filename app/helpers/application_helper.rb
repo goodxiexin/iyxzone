@@ -12,9 +12,9 @@ module ApplicationHelper
   def avatar_image(user, opts={})
     size = opts.delete(:size) || "medium"
     if user.avatar.blank?
-      image_tag "#{SITE_URL}/images/default_#{size}.png", opts
+      image_tag "default_#{size}.png", opts
     else
-      image_tag SITE_URL+"/images/"+user.avatar.public_filename(size), opts
+      image_tag user.avatar.public_filename(size), opts
     end
   end
 
