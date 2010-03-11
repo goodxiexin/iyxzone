@@ -163,23 +163,6 @@ Object.extend(Iyxzone.Register, {
 
   characterID: 1, // start from 1
 
-  addGameSelector: function(id, details){
-    var prefix = 'profile_new_characters_' + id + '_';
-
-    var selector = new Iyxzone.Game.PinyinSelector(
-      this.pinyins,
-      prefix + 'game_id',
-      prefix + 'area_id',
-      prefix + 'server_id',
-      prefix + 'race_id',
-      prefix + 'profession_id',
-      details,
-      {}
-    );
-
-    this.gameSelectors.set(id, selector);
-  },
-
   isCharacterNameValid: function(id){
     var name = $('profile_new_characters_' + id + '_name').value;
     var div = 'character_' + id + '_name_error';
@@ -292,13 +275,17 @@ Object.extend(Iyxzone.Register, {
     this.characterID++;
     
     // set game info
-    this.games.each(function(game){
-      var game = game.game;
-      Element.insert($('profile_new_characters_' + id + '_game_id'), {bottom: '<option value=' + game.id + '>' + game.name + '</option>'});
-    }.bind(this));
-    $('profile_new_characters_' + id + '_game_id').value = '';
-  
-    this.addGameSelector(id, null);
+    var prefix = 'profile_new_characters_' + id + '_';
+    var selector = Iyxzone.Game.initPinyinSelector(
+      prefix + 'game_id',
+      prefix + 'area_id',
+      prefix + 'server_id',
+      prefix + 'race_id',
+      prefix + 'profession_id',
+      true, //start with -- 
+      null,
+      {});
+    this.gameSelectors.set(id, selector);
   },
 
   removeCharacter: function(id){
