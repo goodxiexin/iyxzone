@@ -6,12 +6,6 @@ class PollMailer < ActionMailer::Base
 		body				:poll => poll, :user => user, :url => "#{SITE_URL}/polls/#{poll.id}"
   end
 
-  def summary_change poll, user
-    setup_email  user
-		subject			"17Gaming.com(一起游戏网) - 投票#{poll.name}的小结更新了, 快去看看"
-		body				:poll => poll, :user => user, :url => "#{SITE_URL}/polls/#{poll.id}"
-  end
-
 	def invitation poll, user
 		setup_email	user
 		subject		 "17Gaming.com(一起游戏网) - #{poll.poster.login}邀请你参加投票#{poll.name}"
