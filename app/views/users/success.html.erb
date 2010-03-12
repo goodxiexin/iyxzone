@@ -32,7 +32,7 @@
     <div class="answer-box">
       <h3>未收到激活邮件？</h3>
       <ul class="lister01">
-        <li>在垃圾邮件目录里找找，或<%= link_to_remote "重发激活邮件", :url => "/resend_activation_mail?email=#{@user.email}", :html => {:class => 'red'} %></li>
+        <li>在垃圾邮件目录里找找，或<%= link_to_remote "重发激活邮件", :url => "/resend_activation_mail?email=#{@user.email}&invite_token=#{params[:invite_token]}", :html => {:class => 'red'} %></li>
         <li>联系客服 15021113626 (大爷我的手机)</li>
       </ul>
     </div>

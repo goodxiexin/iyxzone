@@ -6,7 +6,7 @@
         </div>
         <div class="sperator"></div>
         <% form_for :user, :html => {:id => 'register_form'} do |f| -%>
-          <%= hidden_field_tag 'token', params[:token] %>
+          <%= hidden_field_tag 'invite_token', params[:invite_token] %>
           <div class="formcontent">
             <div class="rows s_clear">
               <div class="fldid"><label for="mail">邮箱：</label></div>

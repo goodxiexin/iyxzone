@@ -14,7 +14,7 @@
           <div class="s_clear">
             <div class="fldid"><label><span class="icon-link"></span>万能邀请链接</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -26,7 +26,7 @@
           <div class="s_clear space">
             <div class="fldid"><label><span class="icon-qq"></span>复制链接发给 QQ 好友</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.qq_invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.qq_invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -38,7 +38,7 @@
           <div class="s_clear space">
             <div class="fldid"><label><span class="icon-msn"></span>复制链接发给 MSN 好友</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.msn_invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.msn_invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">

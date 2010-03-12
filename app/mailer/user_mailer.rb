@@ -6,10 +6,14 @@ class UserMailer < ActionMailer::Base
     body        :user => user, :url => "http://#{SITE_URL}/home"
   end
 
-  def signup_notification user
+  def signup_notification user, token
     setup_email	user
     subject			"17Gaming(一起游戏网) - 激活您的帐号"
-    body				:user => user, :url => "http://#{SITE_URL}/activate/#{user.activation_code}"
+    if token.blank?
+      body			:user => user, :url => "http://#{SITE_URL}/activate/#{user.activation_code}"
+    else
+      body      :user => user, :url => "http://#{SITE_URL}/activate/#{user.activation_code}?invite_token=#{token}"
+    end
   end
 
   def signup_invitation invitation
@@ -23,7 +27,7 @@ class UserMailer < ActionMailer::Base
   def activation user
     setup_email	user
     subject			"17Gaming(一起游戏网) - 您的帐号已经激活"
-    body				:user => user, :url => "http://#{SITE_URL}/personal"
+    body				:user => user, :url => "http://#{SITE_URL}/profiles/#{user.profile.id}"
   end
 
   def forgot_password user
