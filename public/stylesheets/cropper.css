@@ -2,8 +2,8 @@
 	/* width: 500px;   @done_in_js */
 	/* height: 375px;  @done_in_js */
 	position: relative;
+	margin:0 auto;
 	cursor: crosshair;
-  margin: auto;
 }
 
 /* an extra classname is applied for Opera < 9.0 to fix it's lack of opacity support */

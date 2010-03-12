@@ -1,35 +1,54 @@
 <% content_for :skintop do %>
 <%= stylesheet_link_tag @skin.css_file_name %>
-<div class="skin_head"> 
-<div class="title_bar"> 
-<a href="#" onclick="window.close()" class="close_window">关闭</a> 
-</div> 
-<!-- preview --> 
-<div class="skin_thumbnail"> 
-<ul>							
-<li class="skin_box"> 
-<!--  skin_info --> 
-<div class="skin_info"> 
-<div class="skin_desc"> 
-<h4>名称</h4> 
-<h3>
-<%= @skin.name %>
-</h3> 
-</div> 
-</div>		
-<!--  / skin_info --> 
-<div class="skin_apply"> 
-<% form_for(@skin) do |f| %>
-<%= f.submit "应用" %>
-<% end %>
-</div> 
-</li> 
-</ul>									
-</div> 
-<!-- /  skin_preview --> 
-</div> 
-<!-- / skin_head--> 
-</div>			
+
+
+
+
+<div class="theme-head">
+    <div class="wrap">
+		<%= link_to "装扮中心", skins_url, :class => "theme-center" %>
+    <div class="theme-preview s_clear">
+						<% if @skin_prev -%>
+						<%= link_to "", skin_url(@skin_prev.id), :class => "btn roll-l" -%>
+						<% else -%>
+						<%= link_to "", "#", :class => "btn roll-l-gray" -%>
+						<% end -%>
+    	<ul>
+            <li>
+						<% if @skin_prev -%>
+            <%= link_to (image_tag stylesheet_path("themes/#{@skin_prev.name}/images/#{@skin_prev.thumbnail_file_name}"), :alt=>@skin_prev.name, :size=>"190x96") , skin_url(@skin_prev.id) -%>
+						<% end -%>
+						</li>
+            <li class="focus">
+            <%= image_tag (stylesheet_path "themes/#{@skin.name}/images/#{@skin.thumbnail_file_name}"), :alt=>@skin.name, :size=>"190x96", :class=>"left w-l" -%>
+            <div class="op">
+              <strong>当前预览</strong><br /><span>装扮名称：<%= @skin.name -%></span>
+              <p class="space">
+								<% form_for(@skin) do |f| %>
+									<span class="button w-l"><span><%= f.submit "应用" -%> </span></span><span class="button button-gray"><span><%= f.submit "取消" -%> </span></span>
+								<% end %>
+              </p>
+            </div>
+            </li>
+            <li>
+						<% if @skin_next -%>
+            <%= link_to (image_tag stylesheet_path("themes/#{@skin_next.name}/images/#{@skin_next.thumbnail_file_name}"), :alt=>@skin_next.name, :size=>"190x96") ,  skin_url(@skin_next.id)-%>
+						<% end -%>
+						</li>
+        </ul>
+						<% if @skin_next -%>
+						<%= link_to "", skin_url(@skin_next.id), :class => "btn roll-r" -%>
+						<% else -%>
+						<%= link_to "#", :class => "btn roll-r-gray" -%>
+						<% end -%>
+    </div>
+    
+    </div>
+</div>
+
+
+
+
 <% end -%>
 
 <%= render :file => 'layouts/app2' %>

@@ -204,7 +204,7 @@ a:hover{color:#D63200;}
 #leftsidebar .avatarbox h4{color:#CCC;word-spacing:2px}
 #leftsidebar .avatarbox h4 a{color:#25700D}
 #leftsidebar .avatarbox h5 span{color:#D63200;font-weight:normal}
-#leftsidebar .avatarbox ul.op li{float:left;width:75px;overflow:hidden;white-space:nowrap;margin:5px 3px;}
+#leftsidebar .avatarbox ul.op li{float:left;width:75px;overflow:hidden;white-space:nowrap;margin:5px 2px;}
 
 #leftsidebar .profile-list{margin:5px 0 5px 30px;}
 #leftsidebar .info-list{margin-bottom:10px;padding:7px 13px;line-height:25px;}
@@ -729,7 +729,7 @@ a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:c
 .img-container-main .album .downbtn{margin-top:9px;background:url(../images/skin/album-btn.gif) no-repeat 0 -20px;}
 .img-container-main .album .downbtn-gray{margin-top:9px;background:url(../images/skin/album-btn-gray.gif) no-repeat 0 -20px;}
 .img-container-main .album .small-imgs{width:100%;height:335px;overflow:hidden;position:relative;}
-.img-container-main .album .small-imgs .imgList{position: relative;top: -67px;width:100%;overflow:hidden;text-align:center}
+.img-container-main .album .small-imgs .imgList{position:relative;top:-67px;width:100%;overflow:hidden;text-align:center}
 .img-container-main .album .small-imgs .imgList .img{width:100%;margin-bottom:7px;overflow:hidden}
 .img-container-main .album .num{display:block;text-align:center;margin-bottom:10px}
 .img-container-main .album .small-imgs .imgList .now a{background:url(../images/skin/s-photo-arr.png) no-repeat 0 center;display:block;width:68px;height:64px;margin-left:4px !important;*margin-left:-4px !important;_margin-left:-4px;}
@@ -1074,8 +1074,7 @@ h1.app-share{float:left}
 .selector03 ul.friend-select-list li{padding:0 4px 0 0;margin:2px 0;position:relative;float:left;}
 .selector03 ul.friend-select-list li a {border-color:#d1e2c5;border-style:solid;border-width:1px 0;color:#333;display:block;float:left;text-decoration:none;background:#f4fdef;width:auto;height:auto;overflow:visible;position:relative;}
 .selector03 ul.friend-select-list li a span {position:relative;border-color:#d1e2c5;border-style:solid;border-width:0 1px;cursor:pointer;display:block;float:left;height:16px;line-height:16px;margin:0 -1px;padding:0 5px 0;white-space:nowrap;}
-.selector03 ul.friend-select-list li a .x {background:url(../images/icons/activeIcon.gif) no-repeat;cursor:pointer;display:inline-block;height:9px;
-width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
+.selector03 ul.friend-select-list li a .x {background:url(../images/icons/activeIcon.gif) no-repeat;cursor:pointer;display:inline-block;height:9px;width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
 .selector03 ul.friend-select-list li a:hover,.selector03 ul.friend-select-list li a:hover span{background:#DBEFC2;border-color:#d1e2c5;}
 .selector03 ul.friend-select-list li.focus a,.selector03 ul.friend-select-list li.focus a:hover,.selector03 ul.friend-select-list li.focus a:hover span,.selector03 ul.friend-select-list li.focus a span{background:#73bd21;border-color:#73bd21;color:#fff}
 .selector03 ul.friend-select-list li.focus a .x {background:url(../images/icons/activeIcon.gif) no-repeat 0 -128px;}
@@ -1083,7 +1082,7 @@ width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
 
 /*应用设置*/
 .app-set{position:relative}
-.app-set .con{padding:20px 10px;border-bottom:1px solid #bdd6ad }
+.app-set .con{padding:20px 10px;border-bottom:1px solid #bdd6ad}
 .app-set .enter{position: absolute;right:20px;top:20px;border-top:1px solid #bdd6ad;padding:20px;width:100px}
 
 /*提示信息*/
@@ -1097,3 +1096,31 @@ width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
 .flag-photo .con{background:#fff;padding:5px;color:#666;line-height:20px;text-align:left}
 .flag-photo .foot{background:none;border:0;padding:5px 20px;_padding:5px 10px}
 .flag-photo textarea,.flag-photo .selector03{width:100%}
+.flag-photo .drop-wrap{width:280px}
+
+/*装扮个人主页*/
+.theme-list h2{color:#d63200;font-weight:700;font-size:14px;border-bottom:1px solid #abd0a9;padding-bottom:10px}
+.theme-list ul{margin:10px 0}
+.theme-list ul li{float:left;margin:10px 35px 10px 25px;text-align:center;}
+.theme-list ul li strong{color:#d63200;line-height:22px}
+.theme-list ul li img,.theme-preview li img{background:url(../images/skin/theme-list-bg.png) no-repeat right bottom;padding:5px}
+
+.theme-head{width:100%;background:#fff;padding-bottom:10px;border-top:5px solid #75bc20;border-bottom:1px solid #ccc;position:absolute;top:0}
+.theme-head .wrap{width:950px;margin:0 auto;position:relative;}
+.theme-center,.theme-center:hover{width:97px;height:19px;line-height:19px;display:block;text-align:center;color:#fff;position:absolute;right:20px;top:0;background:url(../images/skin/theme-center-bg.png) no-repeat}
+
+.theme-preview {padding:30px 0 10px 0;width:900px;margin:0 auto;}
+.theme-preview .btn{width:19px;height:53px;display:block;float:left;background:url(../images/skin/album-btn02.png) no-repeat;margin-top:30px}
+.theme-preview .roll-r{background-position:-20px 0}
+.theme-preview .roll-l-gray{background-position:0 -53px}
+.theme-preview .roll-r-gray{background-position:-20px -53px}
+.theme-preview ul{float:left;margin:0 10px;overflow:hidden;}
+.theme-preview li{float:left;margin:0 13px;color:#666;line-height:20px;display:inline}
+.theme-preview li strong{font-size:14px;line-height:35px}
+.theme-preview li.focus{width:350px;}
+.theme-preview li.focus img{border:2px solid #c5de83;background:#ecfce3}
+
+
+
+
+
