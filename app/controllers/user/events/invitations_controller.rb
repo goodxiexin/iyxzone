@@ -48,7 +48,7 @@ protected
     elsif ['edit', 'accept', 'decline'].include? params[:action]
       @invitation = Participation.find(params[:id])
       @event = @invitation.event
-      require_owner @event.poster
+      require_owner @invitation.participant
     end
   end
 

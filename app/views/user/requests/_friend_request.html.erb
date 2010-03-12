@@ -6,8 +6,8 @@
     <div class="info">
       <p> <%= profile_link request.user %> 请求加你为好友。是否同意？</p>
       <div class="buttons" id='friend_request_option_<%= request.id %>'>
-        <%= link_to_remote '<span>同意</span>', :url => accept_friend_request_url(request), :method => :put, :html => {:class => "button"} %>
-        <%= facebox_confirm '<span>拒绝</span>', decline_friend_request_url(request), {:msg => '你确定要拒绝吗?', :method => :delete}, {:class => "button button-gray"} %>
+        <span class="button"><span><%= button_to_remote '同意', :url => accept_friend_request_url(request), :method => :put, :loading=>"Iyxzone.disableButton($('end_request_#{request.id}').down('button',0),'请等待..')" %></span></span>
+        <span class="button"><span><%= facebox_confirm '拒绝', decline_friend_request_url(request), {:msg => '你确定要拒绝吗?', :method => :delete} %></span></span>
       </div>
     </div>
   </div>

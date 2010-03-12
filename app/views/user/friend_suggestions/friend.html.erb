@@ -38,7 +38,9 @@
 											<%= character.name %></p>
 											<% } %>
 										<p class="space">
+											<% unless current_user.relationship_with(f)=='friend' %>
 											<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
+											<% end %>
 											<%= link_to '', new_mail_url(:recipient_id => f.id), :class => "msg-btn" %>
 										</p>
 									</div>
