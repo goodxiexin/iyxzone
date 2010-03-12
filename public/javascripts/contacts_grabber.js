@@ -81,6 +81,51 @@ Object.extend(Iyxzone.ContactsGrabber, {
       method: 'post',
       parameters: params,
     });
-  }
+  },
+
+  checkMsnInput: function(form){
+    var id = form.getInputs('text')[0];
+    var pwd = form.getInputs('password')[0];
+    if(id.value == ''){
+      error('请输入msn用户名');
+      return false;
+    }
+    if(pwd.value == ''){
+      error('请输入msn密码');
+      return false;
+    }
+    return true;
+  },
+
+  checkEmailInvitation: function(){
+    var value = $('invite_email').value;
+    if(value == ''){
+      error('请输入邮箱');
+      return false;
+    }else if(value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
+      error('非法的邮箱地址');
+      return false;
+    }
+    return true;
+  },
+
+  checkEmailContactsInput: function(form){
+    var id = form.getInputs('text')[0];
+    var pwd = form.getInputs('password')[0];
+    var type = $('email_selector').value;
+    if(type == ''){
+      error('请选择邮箱种类');
+      return false;
+    }
+    if(id.value == ''){
+      error('请输入用户名');
+      return false;
+    }
+    if(pwd.value == ''){
+      error('请输入密码');
+      return false;
+    }   
+    return true;
+  },
 
 });
