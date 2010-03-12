@@ -31,7 +31,7 @@
       <div class="piclist-rows" id='events'>
 	      <div class="nav-link">
           <ul class="s_clear">
-            <li><%= link_to "<span>#{get_subject @user}发起的(#{@user.events_count})</span>", events_url(:uid => @user.id) %></li>
+            <li><%= link_to "<span>#{get_subject @user}发起的(#{@user.events.count})</span>", events_url(:uid => @user.id) %></li>
             <li class='hover'><%= link_to "<span>#{get_subject @user}要参加的(#{@user.upcoming_events.count})</span>", upcoming_events_url(:uid => @user.id) %></li>
             <li><%= link_to "<span>#{get_subject @user}参加过的(#{@user.participated_events.count})</span>", participated_events_url(:uid => @user.id) %></li>
           </ul>

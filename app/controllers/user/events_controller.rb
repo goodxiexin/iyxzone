@@ -106,10 +106,20 @@ protected
     if ['edit', 'update', 'destroy'].include? params[:action]
       @event = Event.find(params[:id])
       require_owner @event.poster
+      require_event_not_expired @event if params[:action] == 'destroy'
     elsif ['index', 'upcoming', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
     end
   end
 
+  def require_event_not_expired event
+    if event.expired?
+      render :update do |page|
+        page << "alert('expired');tip('该活动已经过期了，无法删除');"
+      end 
+    end
+  end
+  
 end
+

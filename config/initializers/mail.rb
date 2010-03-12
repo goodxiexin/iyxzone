@@ -1,3 +1,4 @@
+ActionMailer::Base.default_content_type = 'text/html'
 ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.raise_delivery_errors = true

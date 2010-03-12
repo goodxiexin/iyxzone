@@ -144,7 +144,7 @@ class User < ActiveRecord::Base
   # events
   has_many :participations, :foreign_key => 'participant_id', :conditions => {:status => [3,4,5]} 
 
-  has_many :events, :foreign_key => 'poster_id', :order => 'created_at DESC', :conditions => ["events.start_time >= ?", Time.now.to_s(:db)]
+  has_many :events, :foreign_key => 'poster_id', :order => 'created_at DESC', :conditions => ["end_time >= ?", Time.now.to_s(:db)]
 
 	with_options :order =>  'created_at DESC', :through => :participations, :source => :event do |user|
 

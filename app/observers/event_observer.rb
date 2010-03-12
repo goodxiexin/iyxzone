@@ -53,14 +53,9 @@ class EventObserver < ActiveRecord::Observer
   end
 
   def before_destroy event
-    if event.expired?
-      errors.add(:event_id, "已经过期了")
-      return false
-    end
-
     # modify request count
     event.poster.raw_decrement :event_requests_count, event.requests_count
-    event.poster.raw_decrement :events_count
+    #event.poster.raw_decrement :events_count
     event.recently_deleted = true
  
     event.participants.each do |p|

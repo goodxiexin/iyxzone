@@ -157,6 +157,9 @@ class Event < ActiveRecord::Base
   def recently_deleted= val
     @recently_deleted = val
   end
+
+  class CantDeleteExpired < StandardError
+  end 
  
 protected
 
