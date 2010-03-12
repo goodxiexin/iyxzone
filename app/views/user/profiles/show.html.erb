@@ -67,7 +67,7 @@
     <% form_remote_for :tag, :url => profile_tags_url(@profile) do |f| %>
       <p class='space'>都不贴切？自己想个</p>
       <div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
-      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
+      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">评价</button></span></span></div>
     <% end %>
   <% else %>
     <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>

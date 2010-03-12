@@ -8,20 +8,17 @@ Object.extend(Iyxzone, {
 
   // some utilities
   disableButton: function(button, text){
-    button.writeAttribute({value: text});
+    button.innerHTML = text;
     button.writeAttribute({disabled: 'disabled'});
     var span = button.up('span').up('span');
-    this.background = span.className;
     span.writeAttribute({class: 'button button-gray'});
   },
 
   enableButton: function(button, text){
+    button.innerHTML = text;
     button.disabled = '';
-    button.setStyle({
-      background: this.background,
-      opacity: 1
-    });
-    button.value = text;
+    var span = button.up('span').up('span');
+    span.writeAttribute({class: 'button'});
   },
 
   validationCode: function(digits){

@@ -34,7 +34,7 @@
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key','用户名查找', :onclick => "this.clear();" %></div>
               </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
+              <div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">查找</button></span></span></div>
 							<div class='link'><%= link_to_function '按游戏角色查找', "Iyxzone.Search.showCharacterForm()" %></div>
             </div>
           <% end %>
@@ -43,7 +43,7 @@
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key','游戏角色查找', :onclick => "this.clear();" %></div>
               </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
+              <div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">查找</button></span></span></div>
 							<div class='link'><%= link_to_function '按用户名查找', "Iyxzone.Search.showUserForm()" %></div>
             </div>
           <% end %>

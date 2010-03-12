@@ -22,7 +22,7 @@ class TaggingObserver < ActiveRecord::Observer
       profile.user.notifications.create(
         :category => Notification::FriendTag,
         :data => "#{profile_link tagging.poster} 对你的印象是: #{tagging.tag.name}")
-      TagMailer.deliver_profile_tag tagging if profile.user.tag_my_profile
+      TagMailer.deliver_profile_tag tagging if profile.user.mail_setting.tag_my_profile
     end
   end
 

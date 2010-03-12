@@ -107,7 +107,7 @@ Object.extend(Iyxzone.Profile.Editor, {
         method: 'put',
         parameters: $('basic_info_form').serialize(),
         onLoading: function(){
-          Iyxzone.disableButton(button, '等待...');
+          Iyxzone.disableButton(button, '请等待..');
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '保存');
@@ -227,7 +227,7 @@ Object.extend(Iyxzone.Profile.Editor, {
         method: 'put',
         parameters: $('contact_info_form').serialize(),
         onLoading: function(){
-          Iyxzone.disableButton(button, '等待...');
+          Iyxzone.disableButton(button, '请等待..');
         }.bind(this),
         onComplete: function(){
           Iyxzone.enableButton(button, '保存');
@@ -472,6 +472,9 @@ Object.extend(Iyxzone.Profile.Editor, {
       new Ajax.Request('/profiles/' + profileID + '?type=3', {
         method: 'put',
         parameters: delCharacterParams + $('characters_form').serialize(),
+        onLoading: function(){
+          Iyxzone.disableButton(button, '请等待..');
+        },
         onSuccess: function(transport){
           $('character_frame').innerHTML = transport.responseText;
           this.editCharactersHTML = null;

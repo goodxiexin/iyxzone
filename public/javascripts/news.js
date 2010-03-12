@@ -38,6 +38,12 @@ Object.extend(Iyxzone.News.Builder, {
       new Ajax.Request('/admin/news/create', {
         method: 'post',
         parameters: this.parameters,
+        onLoading: function(){
+          Iyxzone.disableButton(button, '请等待..');
+        },
+        onComplete: function(){
+          Iyxzone.enableButton(button, '发布');
+        },
       });
     }
   },
@@ -49,6 +55,12 @@ Object.extend(Iyxzone.News.Builder, {
       new Ajax.Request('/admin/news/update/' + blogID, {
         method: 'put',
         parameters: this.parameters,
+        onLoading: function(){
+          Iyxzone.disableButton(button, '请等待..');
+        },
+        onComplete: function(){
+          Iyxzone.enableButton(button, '发布');
+        },
       });
     }
   },

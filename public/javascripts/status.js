@@ -25,7 +25,7 @@ Object.extend(Iyxzone.Status.Builder, {
         method: 'post', 
         parameters: form.serialize(),
         onLoading: function(){
-          Iyxzone.disableButton(button, '等待');
+          Iyxzone.disableButton(button, '请等待..');
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
