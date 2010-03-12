@@ -64,6 +64,8 @@ ActionController::Routing::Routes.draw do |map|
 
     admin.resources :applications
 
+    admin.resources :signup_invitations
+  
   end
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
@@ -111,11 +113,9 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :friend_impressions, :controller => 'friends/impressions'
 
-    users.resources :friends, :collection => {:search => :get, :other => :get, :common => :get} do |friends|
+    users.resources :friends, :collection => {:search => :get, :other => :get, :common => :get} 
 
-      friends.resources :requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :put}
-
-    end
+    users.resources :friend_requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :put}
 
     users.resources :feed_deliveries
 
@@ -251,7 +251,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :ratings
 
-    users.resources :signup_invitations, :collection => {:create_multiple => :post}, :controller => 'temp_signup_invitations'
+    users.resources :signup_invitations, :collection => {:create_multiple => :post}#, :controller => 'temp_signup_invitations'
 
     users.auto_complete_for_game_tags '/auto_complete_for_game_tags', :controller => 'tags', :action => 'auto_complete_for_game_tags' 
 

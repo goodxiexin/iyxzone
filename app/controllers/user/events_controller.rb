@@ -77,7 +77,7 @@ class User::EventsController < UserBaseController
       end
     else
       render :update do |page|
-        page << "error('发生错误');"
+        page << "error('发生错误, 可能该活动已经过期了');"
       end
     end
   end  
