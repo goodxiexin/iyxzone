@@ -115,7 +115,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :friends, :collection => {:search => :get, :other => :get, :common => :get} 
 
-    users.resources :friend_requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :put}
+    users.resources :friend_requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :delete}
 
     users.resources :feed_deliveries
 
