@@ -53,7 +53,7 @@
         <div class="invite-tip jl-cutline">填写朋友的Email地址，就可以邀请对方加入了，对方会直接加入你的好友。</div>
         <div class="invite-email jl-cutline" style="display:none">
           <div id='email_invite'></div>
-          <% form_remote_for :invite, :url => signup_invitations_url, :condition => "Iyxzone.ContactsGrabber.checkEmailInvitation()" do |f| %>
+          <% form_remote_for :invite, :url => signup_invitations_url, :condition => "Iyxzone.ContactsGrabber.checkEmailInvitation(this)" do |f| %>
           <div class="s_clear space">
             <div class="fldid"><label>好友邮箱 </label></div>
             <div class="fldvalue">

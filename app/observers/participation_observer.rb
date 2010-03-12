@@ -24,21 +24,9 @@ class ParticipationObserver < ActiveRecord::Observer
 			EventMailer.deliver_request event, participation if event.poster.mail_setting.request_to_attend_my_event
     elsif participation.is_confirmed?
       event.raw_increment :confirmed_count
-      #if event.poster != participation.participant
-      #  participation.participant.raw_increment :upcoming_events_count
-      #end
 		end	
 	end
 
-  def before_update participation
-    event = participation.event
-    participant = participation.participant
-    character = participation.character
-
-    if (participation.was_invitation? and participation.is_authorized?) or (participation.was_request? and participation.is_authorized?)
-      participant.raw_increment :upcoming_events_count unless event.has_participant?(participant)
-    end
-  end
 
 	def after_update participation
     # update user's counter and event's counter
@@ -82,16 +70,6 @@ class ParticipationObserver < ActiveRecord::Observer
 		event = participation.event
 		participant = participation.participant
    
-    if event.recently_deleted?
-      event.participants.each do |p|
-        p.notifications.create(
-          :category => Notification::EventChange,
-          :data => "活动 #{event.title} 取消了"
-        )
-      end
-      EventMailer.deliver_event_cancel event, participant if participant.mail_setting.cancel_event
-    end
- 
     if participation.is_invitation?
 			# invitation is declined
 			participant.raw_decrement :event_invitations_count
@@ -112,7 +90,6 @@ class ParticipationObserver < ActiveRecord::Observer
       end
     elsif participation.is_authorized?
       # paricipant is evicted
-      participant.raw_decrement :upcoming_events_count unless event.has_participant? participant 
       unless event.recently_deleted?
         event.raw_decrement field(participation.status)
         participant.notifications.create(

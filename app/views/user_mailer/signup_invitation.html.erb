@@ -15,7 +15,7 @@
         
         	<ul style="padding:0;margin:0;text-align:center">
 					<% @user.friends[0..5].each { |friend| %>
-                <li style="float:left;width:65px;list-style:none;padding:0;margin:0"><%= avatar_image @user :style=>"padding:3px;border:1px solid #e7f7e7"%><br /><%=friend.login%></li>
+                <li style="float:left;width:65px;list-style:none;padding:0;margin:0"><%= avatar_image @user, :style => "padding:3px;border:1px solid #e7f7e7"%><br /><%=friend.login%></li>
 					<% } %>
           </ul>
         </div>

@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
     # 不包括我发起的，这样的都在events里
 		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ?', Time.now.to_s(:db)]
 
-		user.has_many :participated_events, :conditions => ["events.start_time < ?", Time.now.to_s(:db)]
+		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
 
 	end
 
