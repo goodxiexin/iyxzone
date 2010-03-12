@@ -75,3 +75,4 @@ Iyxzone.Menu.AjaxDropdown = Class.create({
   }
 
 });
+

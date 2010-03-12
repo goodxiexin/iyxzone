@@ -61,12 +61,15 @@ protected
 		if ["more_feeds", "show", "edit"].include? params[:action]
 			@profile = Profile.find(params[:id])
 			@user = @profile.user
-      #require_adequate_privilege @user
-      # TODO: 根据setting来判断
+      require_adequate_privilege @profile
     elsif ["update"].include? params[:action]
       @profile = Profile.find(params[:id])
       require_owner @profile.user
     end
   end
 
+  def require_adequate_privilege profile
+    profile.is_viewable_by?(current_user) || render_add_friend(profile.user)
+  end
+  
 end

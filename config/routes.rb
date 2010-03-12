@@ -4,8 +4,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :sessions
 
-  map.test '/test', :controller => 'test', :action => 'show'
-
   map.root :controller => 'sessions', :action => 'new' 
 
   map.signup '/signup', :controller => 'users', :action => 'new'
@@ -253,7 +251,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :ratings
 
-    users.resources :signup_invitations, :collection => {:create_multiple => :post}
+    users.resources :signup_invitations, :collection => {:create_multiple => :post}, :controller => 'temp_signup_invitations'
 
     users.auto_complete_for_game_tags '/auto_complete_for_game_tags', :controller => 'tags', :action => 'auto_complete_for_game_tags' 
 

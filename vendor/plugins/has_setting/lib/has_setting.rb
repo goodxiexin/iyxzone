@@ -81,7 +81,7 @@ module ActsAsSetting
     end
 
     def save
-      @instance.update_attribute(@name, @value)
+      @instance.update_attributes("#{@name}" => @value)
     end
 
   end

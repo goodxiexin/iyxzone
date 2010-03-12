@@ -24,7 +24,7 @@ protected
   end
 
   def setup_instant_messenger
-    @online_friends = []#current_user.online_friends
+    @online_friends = [] #current_user.online_friends
     @im_info = {}
     current_user.unread_messages.group_by(&:poster).each do |poster, messages|
       @im_info["#{poster.id}"] = {
@@ -35,7 +35,8 @@ protected
   end
 
   def set_last_seen_at
-    current_user.update_attributes(:last_seen_at => Time.now)
+    current_user.last_seen_at = Time.now
+    current_user.save
   end
 
   def setup

@@ -152,7 +152,7 @@ table.center td{vertical-align:top}
 /*homeIcons*/
 /*.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,{display:inline-block;background:url(../images/icons/homeIcons.png) no-repeat;margin:0 5px;width:16px;height:16px; vertical-align:middle;}
 */
-.feed-icon,dl.menu-op dt,.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,.icon-trash,.icon-read,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-notice,.icon-success,.icon-heart,.icon-warn,.icon-camera,.i-avatar,.i-mail,.i-hello,.i-msg,.i-friend,.icon-error,.icon-warning,.icon-msn,.icon-qq,.icon-link,.icon-mail{background:url(../images/icons/homeIcons.png) no-repeat;display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle;}
+.feed-icon,dl.menu-op dt,.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,.icon-trash,.icon-read,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-notice,.icon-success,.icon-heart,.icon-warn,.icon-camera,.i-avatar,.i-mail,.i-hello,.i-msg,.i-friend,.i-theme,.icon-error,.icon-warning,.icon-msn,.icon-qq,.icon-link,.icon-mail{background:url(../images/icons/homeIcons.png) no-repeat;display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle;}
 .icon-data{background-position:0 0}
 .icon-state{background-position:0 -16px}
 .icon-game{background-position:0 -32px}
@@ -186,6 +186,7 @@ table.center td{vertical-align:top}
 .i-hello{background-position:0 -512px;}
 .i-msg{background-position:0 -528px;}
 .i-friend{background-position:0 -544px;}
+.i-theme{background-position:0 -656px;}
 /*end*/
 
 .menu-icon-list01 li{padding:3px 0 3px 25px;background:url(../images/icons/homeIcons.gif) no-repeat left -2000px;height:16px;line-height:16px;overflow:hidden}
@@ -520,7 +521,8 @@ a.msg-btn{background:url(../images/skin/msg-btn.gif) no-repeat;width:82px;height
 .drop-wrap .head{padding:5px;background:#73bd21;border-bottom:1px solid #65a41c;margin:1px;color:#fff}
 .drop-wrap .foot{text-align:center;background:#f4fdef;border-top:1px solid #bdd6ad;padding:10px 0}
 .drop-wrap .foot .button{float:none;display:inline-block}
-.drop-wrap .checkboxes li{float:left;margin:5px;white-space:nowrap;width:80px;_width:78px;overflow:hidden}
+.drop-wrap .checkboxes,.drop-box .checkboxes{height:160px;overflow-y:auto;overflow-x:hidden}
+.drop-wrap .checkboxes li{float:left;margin:3px;white-space:nowrap;width:80px;_width:78px;overflow:hidden}
 
 /*下拉框 如：好友标记*/
 .selector01 span a{padding-right:13px;color:#333;background:url(../images/skin/dropArrow01.gif) no-repeat right center;display:inline-block;width:50px;overflow:hidden;height:15px;line-height:15px;}
@@ -586,6 +588,7 @@ a.msg-btn{background:url(../images/skin/msg-btn.gif) no-repeat;width:82px;height
 .im-dialog{border:1px solid #91ca4f;background:#fff;position:absolute;z-index:9999;width:350px}
 .im-dialog .head{border:1px solid #a7cd65;background:#7fb73d;padding:5px;color:#fff;font-weight:700}
 .im-dialog .con{border-top:1px solid #73a637;padding:10px;}
+	.im-dlg-show{overflow-x:hidden;overflow-y:auto;height:180px}
 	.im-dlg-show h4{color:#25700d;font-size:12px}
 	.im-dlg-show h4.own{color:#ec7a0b}
 	.im-dlg-show p{color:#666;margin:5px 0}

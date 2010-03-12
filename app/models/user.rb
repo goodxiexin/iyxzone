@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
   def online_friends
-    [] #User.find(friendships.map(&:friend_id) & (Juggernaut.show_clients.map {|c| c['client_id']}))
+    User.find(friendships.map(&:friend_id) & (Juggernaut.show_clients.map {|c| c['client_id']}))
   end
 
   def has_friend? user
@@ -297,7 +297,7 @@ class User < ActiveRecord::Base
   # messages
   has_many :messages, :foreign_key => 'recipient_id'
 
-  has_many :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => {:read => false}
+  has_many :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => {:read => 0}
 
   def messages_with friend
     Message.all(:conditions => "(recipient_id = #{id} AND poster_id = #{friend.id}) OR (recipient_id = #{friend.id} AND poster_id = #{id})", :order => 'created_at DESC')

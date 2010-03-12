@@ -27,7 +27,7 @@
 </table>
 
 <% if @remote %>
-  <%= will_paginate guild_items, :renderer => :RemoteLinkRenderer, :remote => @remote %>
+  <%= remote_will_paginate guild_items, :remote => @remote %>
 <% else %>
   <%= will_paginate guild_items %>
 <% end %>

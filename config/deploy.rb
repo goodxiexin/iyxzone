@@ -9,7 +9,11 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
+
+after "deploy:symlink", "deploy:update_crontab"
+
 namespace :deploy do
+
   task :start, :roles => :app do
     run "touch #{current_release}/tmp/restart.txt"
   end
@@ -22,4 +26,9 @@ namespace :deploy do
   task :restart, :roles => :app do
     run "touch #{current_release}/tmp/restart.txt"
   end
+
+  task :update_crontab, :roles => :db do
+    run "cd #{release_path} && whenever --update-crontab"
+  end
+  
 end
