@@ -34,6 +34,8 @@ class User::EventsController < UserBaseController
     @album = @event.album
 		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @participations = @event.participations_for current_user
+    @messages = @event.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @event.id, :wall_type => 'event'}}
 		render :action => 'show', :layout => 'app2'
   end
 

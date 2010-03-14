@@ -154,7 +154,7 @@
   <% end %>
 
   <div class='feed-box' id='comments'>
-    <%= javascript_tag "Iyxzone.WallMessage.fetch('Event', #{@event.id})" %>
+    <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>
   </div>
 
 </div>

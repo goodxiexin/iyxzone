@@ -35,7 +35,9 @@ class User::GuildsController < UserBaseController
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize, :order => "created_at DESC")
 		@first_fetch_size = FirstFetchSize
-		render :action => 'show', :layout => 'app2'
+		@messages = @guild.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @guild.id, :wall_type => 'guild'}}
+    render :action => 'show', :layout => 'app2'
 	end
 
   def new

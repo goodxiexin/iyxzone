@@ -16,6 +16,8 @@ class User::ProfilesController < UserBaseController
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
 		@skin = @profile.skin
+    @messages = @profile.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
 	end
 
   def edit
