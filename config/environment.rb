@@ -70,7 +70,7 @@ Rails::Initializer.run do |config|
 	# reset mailer path to app/mailers
 	config.load_paths += %W(#{RAILS_ROOT}/app/mailers)
 
-  config.time_zone = 'UTC'
+  #config.time_zone = 'UTC'
 
 end
 

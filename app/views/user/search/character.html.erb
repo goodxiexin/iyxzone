@@ -1,7 +1,6 @@
-<%= javascript_include_tag "game.js" %>
-<%= javascript_include_tag "search.js" %>
-<%= javascript_include_tag "friend.js" %>
-<%= javascript_include_tag "event.simulate" %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :search %>
+<% end %>
 
 <% content_for :html_title, "#{current_user.login} - 角色名搜索 - 17Gaming.com" %>
 <% content_for :html_description, "#{current_user.login} - 角色名搜索 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>

@@ -1,6 +1,6 @@
-<%= javascript_include_tag "game" %>
-<%= javascript_include_tag "rating" %>
-<%= javascript_include_tag 'video' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :game %>
+<% end %>
 
 <% content_for :html_title, "#{@game.name} - 主页 - 17Gaming.com" %>
 <% content_for :html_description, "#{@game.name} - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>

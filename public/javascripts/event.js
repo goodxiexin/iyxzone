@@ -143,7 +143,7 @@ Object.extend(Iyxzone.Event.Builder, {
       return;
     }
 
-    new Ajax.Request('/guilds/' + guildID + '/characters', {
+    new Ajax.Request('/characters?guild_id=' + guildID, {
       method: 'get',
       onSuccess: function(transport){
         var characters = transport.responseText.evalJSON();

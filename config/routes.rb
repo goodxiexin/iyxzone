@@ -205,8 +205,6 @@ ActionController::Routing::Routes.draw do |map|
 
       guilds.resources :gears, :controller => 'guilds/gears', :collection => {:create_or_update => :post}
 
-      guilds.resources :characters, :controller => 'guilds/characters'
-
     end
 
     users.resources :polls, :collection => [:hot, :recent, :participated, :friends] do |polls|

@@ -1,5 +1,6 @@
-<%= javascript_include_tag 'photo_slide' %>
-<%= javascript_include_tag 'guild' %>
+<% content_for :javascript_include do %>
+<%= javascript_include_merged :guild %>
+<% end %>
 
 <% content_for :html_title, "#{@guild.name}的首页 - 17Gaming.com" %>
 <% content_for :html_description, "#{@guild.name}的首页 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
@@ -17,6 +18,9 @@
 <div class="info-list">
 	<%= render :partial => 'guild_info' %>
   <%= render :partial => 'guild_menu' %>
+<% if @guild.is_requestable_by? current_user %>
+  <%= render :partial => 'guild_request' %>
+<% end %>
 </div>
 <% end %>
 

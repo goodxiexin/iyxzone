@@ -1,0 +1,73 @@
+javascripts: 
+- base: 
+  - prototype
+  - effects
+  - dragdrop
+  - controls
+  - juggernaut/swfobject
+  - juggernaut/juggernaut
+  - iyxzone
+  - comment
+  - facebox
+  - in_place_editor_extension
+  - emotion
+  - menu
+  - chat
+- home:
+  - home
+  - photo
+  - video
+  - friend
+- profile: 
+  - profile
+  - chinese_region
+  - video
+  - game
+  - event.simulate
+- photo:
+  - photo
+  - friend
+  - textboxlist
+  - cropper
+- blog:
+  - blog
+  - nicEdit
+  - friend
+  - textboxlist
+- event:
+  - game
+  - event
+- search:
+  - game
+  - search
+  - friend
+  - event.simulate
+- game:
+  - game
+  - rating
+  - video
+- guild:
+  - photo
+  - guild
+- mail:
+  - mail
+  - friend
+  - emotion
+  - textboxlist
+- share:
+  - share
+  - video
+- video:
+  - video
+  - friend
+  - textboxlist
+stylesheets: 
+- base: 
+  - common
+  - home
+  - pagination
+- photo:
+  - swfupload
+  - cropper
+
+

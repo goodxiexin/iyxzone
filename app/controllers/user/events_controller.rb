@@ -116,7 +116,7 @@ protected
   def require_event_not_expired event
     if event.expired?
       render :update do |page|
-        page << "alert('expired');tip('该活动已经过期了，无法删除');"
+        page << "tip('该活动已经过期了，无法删除');"
       end 
     end
   end

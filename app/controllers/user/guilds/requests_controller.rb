@@ -3,7 +3,7 @@ class User::Guilds::RequestsController < UserBaseController
   layout 'app'
 
   def new
-    @characters = current_user.characters.find(:all, :conditions => {:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id})
+    @characters = @guild.requestable_characters_for current_user 
     render :action => 'new', :layout => false
   end
 

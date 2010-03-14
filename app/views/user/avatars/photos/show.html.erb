@@ -2,12 +2,13 @@
 <% content_for :html_description, "#{@user.login}的头像照片 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<%= stylesheet_link_tag 'test' %>
-<%= stylesheet_link_tag 'cropper' %>
-<%= javascript_include_tag 'textboxlist' %>
-<%= javascript_include_tag 'friend' %>
-<%= javascript_include_tag 'cropper' %>
-<%= javascript_include_tag 'photo' %>
+<% content_for :stylesheet_link do %>
+  <%= stylesheet_link_tag 'cropper' %>
+<% end %>
+
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :photo %>
+<% end %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">

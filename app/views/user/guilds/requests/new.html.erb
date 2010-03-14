@@ -5,6 +5,9 @@
 
 <div id='error'></div>
 <div class='z-con'>
+<% if @characters.blank? %>
+  你没有游戏角色可以加入这个工会
+<% else %>
 <% form_remote_for :request, :url => guild_requests_url(@guild, :show => params[:show]), :html => {:method => :post} do |f| %>
 <div class='content'>
   <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %>
@@ -15,5 +18,6 @@
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>
+<% end %>
 <% end %>
 </div>

@@ -1,5 +1,7 @@
-<%= javascript_include_tag 'video' %>
-<%= javascript_include_tag 'share' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :share %>
+<% end %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="app-share">分享</h1>

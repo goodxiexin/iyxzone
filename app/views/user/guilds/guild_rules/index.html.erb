@@ -1,4 +1,6 @@
-<%= javascript_include_tag 'guild_rule' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'guild_rule' %>
+<% end %>
 
 <% content_for :html_title, "#{@guild.name}的规则管理 - 17Gaming.com" %>
 <% content_for :html_description, "#{@guild.name}的规则管理 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>

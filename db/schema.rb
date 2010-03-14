@@ -629,7 +629,7 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "avatar_id"
     t.string   "pinyin"
     t.integer  "privacy_setting",            :limit => 8,  :default => 106299306
-    t.integer  "mail_setting",               :limit => 8,  :default => 140737488355327
+    t.integer  "mail_setting",               :limit => 8,  :default => 281474976710655
     t.integer  "application_setting",        :limit => 8,  :default => 262143
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
@@ -642,9 +642,6 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "friends_count",                            :default => 0
     t.integer  "albums_count",                             :default => 0
     t.integer  "photos_count",                             :default => 0
-    t.integer  "events_count",                             :default => 0
-    t.integer  "upcoming_events_count",                    :default => 0
-    t.integer  "past_events_count",                        :default => 0
     t.integer  "guilds_count",                             :default => 0
     t.integer  "participated_guilds_count",                :default => 0
     t.integer  "polls_count",                              :default => 0
