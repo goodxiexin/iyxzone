@@ -76,7 +76,7 @@ swfu = new SWFUpload(settings);
     </div>
   </div>
   <div class="buttons">
-    <button class="button" id='btnSubmit' onclick="Event.stop(event);swfu.startUpload();" href="#" disabled=true><span>上传照片</span></button>
-    <button class="button button-gray" id='btnCancel' href="#" onclick="Event.stop(event);swfu.cancelQueue();" disabled=true><span>取消上传</span></button>
+    <span class="button"><span><button id='btnSubmit' onclick="Event.stop(event);Iyxzone.disableButton(this,'请等待..');swfu.startUpload();" disabled=true>上传照片</button></span></span>
+    <span class="button button-gray"><span><button id='btnCancel' onclick="Event.stop(event);swfu.cancelQueue();" disabled=true>取消上传</button></span></span>
   </div>
 </form>

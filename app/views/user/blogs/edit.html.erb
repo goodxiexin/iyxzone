@@ -45,7 +45,7 @@
           </div>
           <div class='rows s_clear'>
 		        <div class='fldid'>&nbsp;</div>
-		        <div class='fldvalue'><span class="button03 w-l"><span><%= button_to_function("修改", "Iyxzone.Blog.Builder.updateBlog(#{@blog.id}, event)") %></span></span>
+		        <div class='fldvalue'><span class="button03"><span><%= button_to_function("修改", "Iyxzone.Blog.Builder.updateBlog(this, #{@blog.id}, event)") %></span></span>
 		      </div>
         <% end %>
         </div>

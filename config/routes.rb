@@ -176,7 +176,7 @@ ActionController::Routing::Routes.draw do |map|
 
       events.resources :invitations, :controller => 'events/invitations', :collection => {:search => :get}, :member => {:accept => :put, :decline => :delete}
   
-      events.resources :requests, :controller => 'events/requests', :member => {:accept => :put, :decline => :put}
+      events.resources :requests, :controller => 'events/requests', :member => {:accept => :put, :decline => :delete}
 
       events.resource :summary, :controller => 'events/summary', :member => {:next => :post, :prev => :post, :save => :post}
 

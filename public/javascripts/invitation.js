@@ -24,11 +24,12 @@ Object.extend(Iyxzone.Invitation.Builder, {
     } 
   },
 
-  submit: function(form){
+  submit: function(button, form){
     form.action += '?';
     if(this.selected.size() == 0){
       error('你必须至少邀请一个游戏角色');
     }else{
+			Iyxzone.disableButton(button,'请等待..');
       this.selected.each(function(pair){
         var el = new Element("input", {type: 'hidden', value: pair.key, id: 'values[]', name: 'values[]'});
         form.appendChild(el);

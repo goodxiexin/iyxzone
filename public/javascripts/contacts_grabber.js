@@ -58,7 +58,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
     });
   },
 
-  inviteContactsToSignup: function(token){
+  inviteContactsToSignup: function(token, button){
     var invitees = new Array();
     var table = $('unregister_table');
     var params = '';
@@ -80,6 +80,12 @@ Object.extend(Iyxzone.ContactsGrabber, {
     new Ajax.Request('/signup_invitations/create_multiple?authenticity_token=' + encodeURIComponent(token), {
       method: 'post',
       parameters: params,
+      onLoading: function(){
+        Iyxzone.disableButton(button, '请等待..');
+      },
+      onComplete: function(){
+        Iyxzone.enableButton(button, '发送邀请');
+      },
     });
   },
 

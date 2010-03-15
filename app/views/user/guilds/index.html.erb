@@ -4,7 +4,17 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
+	<% if @user==current_user %>
     <h1 class="app-cons">公会</h1>
+	<% else %>
+    <div class="friend-head space s_clear">
+      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
+      <p class="left">
+        <strong><%= @user.login %>的公会</strong><br />
+        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
+      </p>
+    </div>
+	<% end %>
     <div class="box02 canvas_int">
 	    <div class="tab tab01">
         <div class="icon">

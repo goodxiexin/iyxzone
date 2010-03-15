@@ -28,7 +28,7 @@
           <% else %>
             <div id='invitations'><%= render :partial => 'friends' %></div>
             <div class="rows s_clear">
-              <%= button_to_function '', "Iyxzone.Invitation.Builder.submit($('invitation_form'))", :class => "button05 png" %>
+              <span class="button"><span><%= button_to_function '', "Iyxzone.Invitation.Builder.submit(this, $('invitation_form'))" %></button></span></span>
             </div>
           <% end %>  
           </div>

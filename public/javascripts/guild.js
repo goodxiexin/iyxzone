@@ -57,9 +57,10 @@ Object.extend(Iyxzone.Guild.Builder, {
     return true;
   },
 
-  save: function(event){
+  save: function(event,button){
     Event.stop(event);
     if(this.validate()){
+			Iyxzone.disableButton(button,'请等待..');
       var form = $('guild_form');
       form.action = '/guilds';
       form.method = 'post';
@@ -178,12 +179,15 @@ Object.extend(Iyxzone.Guild.Editor, {
     return v1 && v2;
   },
 
-  updateAttendanceRules: function(guildID, event){
+  updateAttendanceRules: function(guildID, event, button){
     Event.stop(event);
     if(this.validateAttendanceRules()){
       new Ajax.Request('/guilds/' + guildID + '/rules/create_or_update?type=0', {
         method: 'post',
         parameters: $('attendance_rules_form').serialize(),
+        onLoading: function(){
+          Iyxzone.disableButton(button, '请等待..');
+        },
         onSuccess: function(transport){
           $('attendance_rule_frame').innerHTML = transport.responseText;
           this.editAttendanceRulesHTML = null;
@@ -299,7 +303,7 @@ Object.extend(Iyxzone.Guild.Editor, {
     return valid;
   },
 
-  updateBasicRules: function(guildID, event){
+  updateBasicRules: function(guildID, event, button){
     Event.stop(event);
     if(this.validateBasicRules()){
       var delParams = '';
@@ -310,6 +314,9 @@ Object.extend(Iyxzone.Guild.Editor, {
       new Ajax.Request('/guilds/' + guildID + '/rules/create_or_update?type=1', {
         method: 'post',
         parameters: delParams + $('basic_rules_form').serialize(),
+        onLoading: function(){
+          Iyxzone.disableButton(button, '请等待..');
+        },
         onSuccess: function(transport){
           $('basic_rule_frame').innerHTML = transport.responseText;
           this.editBasicRulesHTML = null;
@@ -443,7 +450,7 @@ Object.extend(Iyxzone.Guild.Editor, {
     return valid; 
   },
   
-  updateBosses: function(guildID, event){
+  updateBosses: function(guildID, event, button){
     Event.stop(event);
     if(this.validateBosses()){
       var delParams = '';
@@ -453,6 +460,9 @@ Object.extend(Iyxzone.Guild.Editor, {
       new Ajax.Updater('boss_frame', '/guilds/' + guildID + '/bosses/create_or_update', {
         method: 'post',
         parameters: delParams + $('bosses_form').serialize(),
+        onLoading: function(){
+          Iyxzone.disableButton(button, '请等待..');
+        },
         onSuccess: function(transport){
           this.editBossesHTML = null;
           this.delBossIDs = new Array();
@@ -595,6 +605,9 @@ Object.extend(Iyxzone.Guild.Editor, {
       new Ajax.Request('/guilds/' + guildID + '/gears/create_or_update', {
         method: 'post',
         parameters: delParams + $('gears_form').serialize(),
+        onLoading: function(){
+          Iyxzone.disableButton(button, '请等待..');
+        },
         onSuccess: function(transport){
           $('gear_frame').innerHTML = transport.responseText;
           this.editGearsHTML = null;

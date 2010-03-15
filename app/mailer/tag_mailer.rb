@@ -23,8 +23,8 @@ class TagMailer < ActionMailer::Base
     recipients  poster.email
     from        SITE_MAIL
     sent_on     Time.now
-    subject     "Dayday3 - #{tag.poster.login}标记了你的相册"
-    body        :user => poster, :url => "#{SITE_URL}/#{tag.photo.class.to_s.underscore.pluralize}/#{tag.photo_id}"
+    subject     "17Gaming.com(一起游戏网) - #{tag.poster.login}标记了你的相册"
+    body        :tag => tag, :user => poster, :url => "#{SITE_URL}/#{tag.photo.class.to_s.underscore.pluralize}/#{tag.photo_id}"
 	end
 
   def profile_tag tagging
@@ -35,9 +35,8 @@ class TagMailer < ActionMailer::Base
     recipients  profile.user.email
     from        SITE_MAIL
     sent_on     Time.now
-    subject     "Dayday3 - #{poster.login} 对你的印象是: #{tag.name}"
-    # TODO : your code here!!!
-    body        :user => profile.user, :url => "#{SITE_URL}/profiles/#{profile.id}"
+    subject     "17Gaming.com(一起游戏网) - #{poster.login} 对你的印象是: #{tag.name}"
+    body        :tagging => tagging, :user => profile.user, :url => "#{SITE_URL}/profiles/#{profile.id}"
   end
 
 protected

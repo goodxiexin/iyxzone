@@ -54,7 +54,7 @@ Object.extend(Iyxzone.Comment, {
         method: 'post',
         parameters: $(commentableType+'_comment_form_' + commentableID).serialize(),
         onLoading: function(){
-          Iyxzone.disableButton(button, '等待');
+          Iyxzone.disableButton(button, '请等待..');
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');

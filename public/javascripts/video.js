@@ -48,7 +48,7 @@ Object.extend(Iyxzone.Video.Builder, {
     Event.stop(event);
     if(this.validate()){
       this.prepare();
-      Iyxzone.disableButton(button, '等待...');
+      Iyxzone.disableButtonThree(button, '发布中..');
       $('video_form').submit();
     }
   },
@@ -57,7 +57,7 @@ Object.extend(Iyxzone.Video.Builder, {
     Event.stop(event);
     if(this.validate()){
       this.prepare();
-      Iyxzone.disableButton(button, '等待...');
+      Iyxzone.disableButtonThree(button, '更新中..');
       $('video_form').submit();
     }
   }
