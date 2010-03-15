@@ -9,16 +9,6 @@ class Friendship < ActiveRecord::Base
 	Request	= 0
 	Friend	= 1
 
-  attr_readonly :user_id, :friend_id
-
-  validates_presence_of :user_id, :friend_id, :message => "不能为空", :on => :create
-
-  validate_on_create :friend_is_valid
-
-  validates_inclusion_of :status, :in => [Request, Friend], :message => "只能是1,2"  
-
-  validate_on_update :status_is_valid
-
   def is_request?
     status == Friendship::Request
   end
@@ -52,6 +42,16 @@ class Friendship < ActiveRecord::Base
   rescue
     return false
   end
+
+  attr_readonly :user_id, :friend_id
+
+  validates_presence_of :user_id, :friend_id, :message => "不能为空", :on => :create
+
+  validate_on_create :friend_is_valid
+
+  validates_inclusion_of :status, :in => [Request, Friend], :message => "只能是1,2"
+
+  validate_on_update :status_is_valid
 
 protected
 

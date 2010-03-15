@@ -106,6 +106,8 @@ class User::SharingsController < UserBaseController
     if params[:link].blank?
       @shareable = params[:shareable_type].camelize.constantize.find(params[:shareable_id])
       @title = @shareable.default_share_title
+    else
+      @title = params[:link]
     end
 
     if params[:outside].nil?
@@ -125,7 +127,7 @@ class User::SharingsController < UserBaseController
           if params[:outside]
             page << "window.close();"
           else
-            page.redirect_to sharings_url(:id => current_user.id)
+            page.redirect_to sharings_url(:uid => current_user.id)
           end
         else
           page << "notice('分享成功');"

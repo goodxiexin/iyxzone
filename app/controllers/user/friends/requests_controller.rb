@@ -52,9 +52,7 @@ class User::Friends::RequestsController < UserBaseController
 protected
 
 	def setup
-		if ["new"].include? params[:action]
-      
-    elsif ["accept", "decline"].include? params[:action]
+    if ["accept", "decline"].include? params[:action]
 			@request = Friendship.find(params[:id])
 		  require_owner @request.friend
     end

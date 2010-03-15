@@ -75,7 +75,7 @@ class User::EventsController < UserBaseController
   def destroy
     if @event.destroy
       render :update do |page|
-        page.redirect_to events_url(:id => current_user.id)
+        page.redirect_to events_url(:uid => current_user.id)
       end
     else
       render :update do |page|

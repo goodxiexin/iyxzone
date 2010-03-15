@@ -66,7 +66,7 @@ class User::BlogsController < UserBaseController
   def destroy
     if @blog.destroy
 			render :update do |page|
-				page.redirect_to blogs_url(:id => current_user.id)
+				page.redirect_to blogs_url(:uid => current_user.id)
 			end
 		else
 			render :update do |page|

@@ -5,10 +5,9 @@ class BlogObserver < ActiveRecord::Observer
   end
 
   def after_create blog
-    puts "after crewate"
     # update counter
     blog.poster.raw_increment field(blog)
-	
+    
     # issue feeds
     return if blog.draft
     return unless blog.poster.application_setting.emit_blog_feed
