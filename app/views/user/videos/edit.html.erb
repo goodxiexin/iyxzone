@@ -64,12 +64,8 @@
 
 <% tagged_user_ids = '[' + @video.tags.map(&:tagged_user_id).join(',') + ']' %>
 <% tag_ids = '[' + @video.tags.map(&:id).join(',') + ']' %>
-<% user_ids = '[' + @video.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
+<% user_names = '[' + @video.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
 <%= javascript_tag "
-  Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10,
-    #{tagged_user_ids},
-    #{tag_ids}, 
-    #{user_ids},
-    'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn'
+  Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, #{tagged_user_ids}, #{tag_ids}, #{user_names}, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
 " %>
 

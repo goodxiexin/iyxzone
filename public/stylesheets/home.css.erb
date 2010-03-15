@@ -50,7 +50,7 @@ a:hover{color:#D63200;}
 #homeComposer .mcPanel button{width:55px}
 #homeComposer .mcPanel #mcStatus{width:307px;}
 #homeComposer .mcPanel .buttons{margin:11px 0 5px;padding-left:30px;height:18px;line-height:18px;overflow:hidden}
-#homeComposer .mcPanel .buttons a{float:left;display:block;_display:inline-block;margin-left:22px;padding-left:22px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -2000px;}
+#homeComposer .mcPanel .buttons a{float:left;display:block;_display:inline-block;margin-left:22px;padding-left:22px;background:url(<%= image_tag "icons/homeIcons.gif" %>) no-repeat 0 -2000px;}
 
 #homeComposer .mcPanel .buttons a.icon-news{background-position:0 -268px;}
 #homeComposer .mcPanel .buttons a.icon-photo{background-position:0 -317px;}
@@ -824,7 +824,6 @@ a.i-s-8:hover span{background-position:right -160px;}
 /*邀请好友*/
 .friend-invite-head{border:1px solid #bdd6ad;background:#defebb;padding:3px 10px}
 .friend-invite-list{text-align:center;padding:10px 0;border:1px solid #bdd6ad;border-top:0}
-.friend-invite-list .button{float:none;display:inline-block;margin:0 auto}
 .friend-invite-list ul{height:260px;overflow-y:auto;overflow-x:hidden;margin-bottom:20px}
 .friend-invite-list li{float:left;margin:10px 0 10px 10px;width:160px;}
 .friend-invite-list li a{height:60px;display:block;padding:5px;cursor:pointer}
@@ -1038,8 +1037,8 @@ h1.app-share{float:left}
 .z-box .z-con textarea{width:200px;height:50px}
 .z-box .z-con p{padding:20px;min-height:50px}
 .z-box .z-submit{background:#f0f5ec;border-top:1px solid #d4e3c9;padding:15px 0;}
-.z-box .z-submit .buttons{text-align:center}
-.z-box .z-submit .button{margin:0 5px;float:none;display:inline-block}
+.z-box .z-submit .buttons{margin-left:85px}
+.z-box .z-submit .button{margin:0 5px;}
 
 .z-box .z-error .box01{border:1px solid #cf6079}
 .z-box .z-error .z-h{background:#fd3361;border:1px solid #fd8b6c}
@@ -1098,63 +1097,3 @@ h1.app-share{float:left}
 .flag-photo .foot{background:none;border:0;padding:5px 20px;_padding:5px 10px}
 .flag-photo textarea,.flag-photo .selector03{width:100%}
 .flag-photo .drop-wrap{width:280px}
-
-
-/*装扮个人主页*/
-.theme-list h2{color:#d63200;font-weight:700;font-size:14px;border-bottom:1px solid #abd0a9;padding-bottom:10px}
-.theme-list ul{margin:10px 0}
-.theme-list ul li{float:left;margin:10px 35px 10px 25px;text-align:center;}
-.theme-list ul li strong{color:#d63200;line-height:22px}
-.theme-list ul li img,.theme-preview li img{background:url(../images/skin/theme-list-bg.png) no-repeat right bottom;padding:5px}
-
-.theme-head{z-index:2;width:100%;background:#fff;padding-bottom:10px;border-top:5px solid #75bc20;border-bottom:1px solid #ccc;position:absolute;top:0}
-.theme-head .wrap{width:950px;margin:0 auto;position:relative;}
-.theme-center,.theme-center:hover{width:97px;height:19px;line-height:19px;display:block;text-align:center;color:#fff;position:absolute;right:20px;top:0;background:url(../images/skin/theme-center-bg.png) no-repeat}
-
-.theme-preview {padding:30px 0 10px 0;width:900px;margin:0 auto;}
-.theme-preview .btn{width:19px;height:53px;display:block;float:left;background:url(../images/skin/album-btn02.png) no-repeat;margin-top:30px}
-.theme-preview .roll-r{background-position:-20px 0}
-.theme-preview .roll-l-gray{background-position:0 -53px}
-.theme-preview .roll-r-gray{background-position:-20px -53px}
-.theme-preview ul{float:left;margin:0 10px;overflow:hidden;}
-.theme-preview li{float:left;margin:0 13px;color:#666;line-height:20px;display:inline}
-.theme-preview li strong{font-size:14px;line-height:35px}
-.theme-preview li.focus{width:350px;}
-.theme-preview li.focus img{border:2px solid #c5de83;background:#ecfce3}
-
-.theme-body{z-index:-1;position:absolute}
-.theme-head .button,.theme-head .button span{background-image:url(../images/skin/btns01.gif);}
-.theme-head .button span button{color:#fff}
-.theme-head .button-gray span button{color:#666}
-
-/*打招呼*/
-.face-hello{margin:10px;padding-left:80px}
-.face-hello .avatar{float:left;margin-left:-80px;display:inline}
-.face-hello .content{float:left;color:#666;width:100%;}
-.face-hello h2{border-bottom:1px solid #bbd2aa;padding-bottom:5px;font-weight:700}
-.face-hello ul li{float:left;margin:8px 5px;color:#333;width:90px}
-.hello-history{border:0}
-.hello-history .feed-list{margin-bottom:10px}
-.hello-history .feed-list .feed-header{border:0;background:#fff;padding:0}
-.hello-history .feed-list .feed-header .head{background:#f7f6f2;padding:3px 5px;}
-.hello-history .icon2-close{position:absolute;right:0;top:3px}
-.hello-history .feed-list .feed-header .con,.hello-history .feed-list .feed-header .foot{padding:3px 5px}
-
-/*表情图标*/
-.i-f{background:url(../images/icons/face-hello.png) no-repeat;width:24px;height:24px;display:inline-block;vertical-align:middle;margin:0 2px}
-.i-f-hello{background-position:0 0}
-.i-f-tread{background-position:-24px 0}
-.i-f-beat{background-position:-48px 0}
-.i-f-victory{background-position:0 -24px}
-.i-f-give{background-position:-24px -24px}
-.i-f-kiss{background-position:-48px -24px}
-.i-f-flower{background-position:0 -48px}
-.i-f-hug{background-position:-24px -48px}
-.i-f-bow{background-position:-48px -48px}
-.i-f-award{background-position:0 -72px}
-.i-f-cake{background-position:-24px -72px}
-.i-f-anger{background-position:-48px -72px}
-
-
-
-

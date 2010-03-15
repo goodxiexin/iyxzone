@@ -449,7 +449,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
 
   create_table "pokes", :force => true do |t|
     t.string "name"
-    t.string "path"
+    t.string "span_class"
+    t.string "content_html"
   end
 
   create_table "poll_answers", :force => true do |t|

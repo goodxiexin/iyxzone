@@ -7,18 +7,16 @@ class User::PokesController < UserBaseController
   end
 
   def new
-		@pokes = Poke.all
-    @recipient = User.find(params[:uid])
+    @recipient = User.find(params[:recipient_id])
     render :action => 'new', :layout => false
   end
 
   def create
-    @recipient = User.find(params[:delivery][:recipient_id])
-    @poke = Poke.find(params[:delivery][:poke_id])
+    @delivery = PokeDelivery.new((params[:delivery] || {}).merge({:sender_id => current_user.id}))
 
-    if @recipient.poke_deliveries.create(params[:delivery].merge({:sender_id => current_user.id}))
+    if @delivery.save 
       render :update do |page|
-        page << "facebox.close();"
+        page << "tip('发送成功');"
       end
     else
       render :update do |page|

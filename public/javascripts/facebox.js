@@ -202,6 +202,7 @@ var Facebox = Class.create({
 		}else{
 			var fb  = this;
 			var type = elem.readAttribute('facebox_type');
+      var style = elem.readAttribute('facebox_style');
 		
 			if(type == 'confirm'){
 				var confirm_message = elem.readAttribute('facebox_confirm');

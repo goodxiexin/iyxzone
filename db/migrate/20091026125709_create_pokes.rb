@@ -2,7 +2,8 @@ class CreatePokes < ActiveRecord::Migration
   def self.up
     create_table :pokes do |t|
 			t.string :name
-			t.string :path
+      t.string :span_class
+      t.string :content_html
     end
 	end
 

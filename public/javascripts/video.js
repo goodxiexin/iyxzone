@@ -33,8 +33,13 @@ Object.extend(Iyxzone.Video.Builder, {
 
   prepare: function(){
     var newTags = this.tagBuilder.getNewTags();
+    var delTags = this.tagBuilder.getDelTags();
     for(var i=0;i<newTags.length;i++){
-      var el = new Element("input", {type: 'hidden', value: newTags[i], id: 'video[friend_tags][]', name: 'video[friend_tags][]' });
+      var el = new Element("input", {type: 'hidden', value: newTags[i], id: 'video[new_friend_tags][]', name: 'video[new_friend_tags][]' });
+      $('video_form').appendChild(el);
+    }
+    for(var i=0;i<delTags.length;i++){
+      var el = new Element("input", {type: 'hidden', value: delTags[i], id: 'video[del_friend_tags][]', name: 'video[del_friend_tags][]' });
       $('video_form').appendChild(el);
     }
   },
