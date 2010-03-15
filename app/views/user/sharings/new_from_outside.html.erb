@@ -6,6 +6,7 @@
 <%= stylesheet_link_tag 'home' %>
 <%= stylesheet_link_tag 'common' %>
 <%= javascript_include_tag :defaults %>
+<%= javascript_include_tag 'iyxzone' %>
 <style type="text/css">
 .z-box{width:420px}
 .z-con{background:#f8fcf6;color:#666;width:100%}
@@ -44,7 +45,7 @@
         </div>
         <div class="z-submit s_clear space">
           <div class="buttons">
-            <span class="button"><span><button type="submit">立即分享</button></span></span>
+            <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">立即分享</button></span></span>
             <span class="button button-gray"><span><button onclick="window.close();">取消</button></span></span>
           </div>
         </div>

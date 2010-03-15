@@ -1,11 +1,12 @@
 <%= javascript_include_tag :defaults %>
 
-<div class="title01">
-  <%= link_to_function '', "facebox.close();", :class => "icon-active icon-active-close" %>
-  <h1>分享</h1>
-</div>
+<p class="z-h s_clear">
+  <strong class="left">分享</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
 
 <div id='errors'></div>
+<div class="z-con">
 <% form_remote_for :sharing, :url => sharings_url(:shareable_type => 'Link', :link => params[:link], :outside => 1) do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
@@ -21,10 +22,11 @@
     </div>
   </div>
 </div>
-<div class="buttons s_clear">
+<div class="z-submit s_clear space">
   <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit">完成</button></span></span>
+    <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')">完成</button></span></span>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>
 <% end %>
+</div>

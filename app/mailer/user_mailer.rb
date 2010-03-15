@@ -2,7 +2,7 @@ class UserMailer < ActionMailer::Base
 
   def long_time_no_seen user
     setup_email user
-    subject     "Dayday3 - 你已经一周以上没有上线了"
+    subject     "17Gaming(一起游戏网) - 你已经一周以上没有上线了"
     body        :user => user, :url => "http://#{SITE_URL}/home"
   end
 
@@ -20,6 +20,7 @@ class UserMailer < ActionMailer::Base
     recipients  invitation.recipient_email
     from        SITE_MAIL
     sent_on     Time.now
+		content_type "text/html" 
     subject     "17Gaming(一起游戏网) - #{invitation.sender.login} 邀请您加入"
     body        :user => invitation.sender, :url => "http://#{SITE_URL}/invite?token=#{invitation.token}"
   end

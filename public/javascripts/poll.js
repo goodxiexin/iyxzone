@@ -77,8 +77,9 @@ Iyxzone.Poll.Builder = {
     return true;
   },
 
-  save: function(){
+  save: function(button){
     if(this.validate()){
+			Iyxzone.disableButton(button,'请等待..');
       var form = $('poll_form');
       form.action = '/polls';
       form.submit();

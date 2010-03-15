@@ -28,7 +28,7 @@
         <h3><%= label_tag '回复:' %></h3>
         <div class='rows'><div class='textarea-wrap'><%= text_area_tag 'mail[content]', '', :class=>'textarea'%></div></div>
         <div class="buttons">
-           <span class="button"><span><button type="submit">发布</button></span></span>
+           <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">发布</button></span></span>
            <%= emotion_link 'mail_content', :class => 'icon-face', :align=>"absmiddle"%>
         </div>
       <% end %>
