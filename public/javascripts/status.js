@@ -24,6 +24,12 @@ Object.extend(Iyxzone.Status.Builder, {
       new Ajax.Request('/statuses', {
         method: 'post', 
         parameters: form.serialize(),
+				onLoading: function(){
+					Iyxzone.disableButtonThree(button, '发布中..')
+				},
+				onComplete: function(){
+					Iyxzone.enableButtonThree(button, '发布')
+				}
       });
     }
   }

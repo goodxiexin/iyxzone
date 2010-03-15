@@ -329,8 +329,8 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;backg
 .tab01 .right a,.tab01 .gray a:hover{color:#D63200}
 .tab01 .gray a{color:#7E7F80}
 .tab01 .right a:hover{text-decoration:underline}
-.tab01 .icon{position:absolute;right:14px;top:0;}
-.tab01 .icon a{display:block;float:right;height:30px;line-height:30px;margin-left:15px;padding-left:22px;color:#D63200}
+.tab01 .icon{/*position:absolute;right:14px;top:0;*/float:right}
+.tab01 .icon a{display:block;float:left;height:30px;line-height:30px;margin-left:15px;padding-left:22px;color:#D63200}
 .tab01 .icon a:hover{ text-decoration:underline}
 .tab01 .icon a.inbox-read{background:url(../images/icons/inboxIcon.gif) no-repeat left 7px;}
 .tab01 .icon a.inbox-clear{background:url(../images/icons/inboxIcon.gif) no-repeat left -18px;}
@@ -360,7 +360,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;backg
 
 .round_m{margin-right:-6px;padding:0 6px;border-left:1px #BBD2AA solid;border-right:1px #BBD2AA solid;background:#F8FCF6;word-wrap:break-word;word-break:normal;}
 .round_m .round_body{width:100%;/*overflow:hidden好友管理弹出框显示*/}
-.app-log,.app-video,.app-photo,.app-status,.app-ploy,.app-vote,.app-cons,.app-game,.app-vgame,.app-friend,.app-lock,.app-setting,.app-gift,.app-archives,.app-news,.app-share{background:url(../images/icons/app-icons.png) no-repeat}
+.app-log,.app-video,.app-photo,.app-status,.app-ploy,.app-vote,.app-cons,.app-game,.app-vgame,.app-friend,.app-lock,.app-setting,.app-gift,.app-archives,.app-news,.app-share,.app-notice{background:url(../images/icons/app-icons.png) no-repeat}
 .app-log{background-position:0 0;}
 .app-video{background-position:0 -50px;}
 .app-photo{background-position:0 -100px;}
@@ -377,6 +377,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;backg
 .app-archives{background-position:0 -495px;}
 .app-news{background-position:0 -677px;}
 .app-share{background-position:0 -729px;}
+.app-notice{background-position:0 -780px;}
 
 .round02,.round02 .round_l_t,.round02 .round_l_b,.round02 .round_r_b{background-image:url(../images/skin/roundBoxbg02.gif);}
 .round02 .round_m{border-left:1px #E7F0E0 solid;border-right:1px #E7F0E0 solid;background:#F8FCF6;}
@@ -442,6 +443,10 @@ div.table01 td,div.table01 th{border-bottom:1px #E7F0E0 solid;}
 .button03{float:left;cursor:pointer;display:block;background:url(../images/skin/btns03.gif) no-repeat right 0;padding:0 10px 0 0;}
 .button03 span{display:block;padding:0 0 0 10px;background:url(../images/skin/btns03.gif) no-repeat;}
 .button03 span button{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:30px;line-height:30px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
+
+.button03-gray{background-position:right -32px;}
+.button03-gray span{background-position:0 -32px;}
+.button03-gray span button{color:#999}
 
 .button04{float:left;cursor:pointer;display:block;background:url(../images/skin/btns04.png) no-repeat right 0;padding:0 10px 0 0;}
 .button04 span{display:block;padding:0 0 0 10px;background:url(../images/skin/btns04.png) no-repeat;}

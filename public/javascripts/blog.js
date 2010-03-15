@@ -56,49 +56,62 @@ Object.extend(Iyxzone.Blog.Builder, {
     $('errors').innerHTML = '';
   },
 
-  saveBlog: function(event){
+  saveBlog: function(button, event){
     Event.stop(event);
     if(this.validate()){
       this.prepare();
       new Ajax.Request('/blogs', {
         method: 'post',
         parameters: this.parameters,
+				onLoading: function(){
+					Iyxzone.disableButtonThree(button, '发布中..');
+				},
       });
     }
   },
   
-  saveDraft: function(event){
+  saveDraft: function(button, event){
     Event.stop(event);
     if(this.validate()){
       this.prepare();
       new Ajax.Request('/drafts', {
         method: 'post',
-        parameters: this.parameters
+        parameters: this.parameters,
+				onLoading: function(){
+					Iyxzone.disableButtonThree(button, '保存中..');
+				},
       });
     }
   },
 
-  updateBlog: function(blogID, event){
+  updateBlog: function(button, blogID, event){
     Event.stop(event);
     if(this.validate()){
       this.prepare();
       new Ajax.Request('/blogs/' + blogID, {
         method: 'put',
         parameters: this.parameters,
+				onLoading: function(){
+					Iyxzone.disableButtonThree(button, '修改中..');
+				},
       });
     }
   },
 
-  updateDraft: function(draftID, event){
+  updateDraft: function(button, draftID, event){
     Event.stop(event);
     if(this.validate()){
       this.prepare();
       new Ajax.Request('/drafts/' + draftID, {
         method: 'put',
         parameters: this.parameters,
+				onLoading: function(){
+					Iyxzone.disableButtonThree(button, '保存中..');
+				},
         onSuccess: function(transport){
           var ret = transport.responseText.evalJSON();
           this.tagBuilder.reset(ret.tags);
+					Iyxzone.enableButtonThree(button, '保存为草稿');
           tip('保存成功，可以继续写了');
           $('errors').innerHTML = '';
         }.bind(this)

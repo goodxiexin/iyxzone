@@ -21,6 +21,20 @@ Object.extend(Iyxzone, {
     span.writeAttribute({class: 'button'});
   },
 
+  disableButtonThree: function(button, text){
+    button.innerHTML = text;
+    button.writeAttribute({disabled: 'disabled'});
+    var span = button.up('span').up('span');
+    span.writeAttribute({class: 'button03 button03-gray'});
+  },
+
+  enableButtonThree: function(button, text){
+    button.innerHTML = text;
+    button.disabled = '';
+    var span = button.up('span').up('span');
+    span.writeAttribute({class: 'button03'});
+  },
+
   validationCode: function(digits){
     var codes = new Array(digits);       //用于存储随机验证码
     var colors = new Array("Red","Green","Gray","Blue","Maroon","Aqua","Fuchsia","Lime","Olive","Silver");

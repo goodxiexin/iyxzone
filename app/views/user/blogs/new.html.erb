@@ -57,8 +57,8 @@
           </div>
           <div class='rows s_clear'>
 	  	      <div class='fldid'>&nbsp;</div>
-        		<div class='fldvalue'><span class="button03 w-l"><span><%= button_to_function("发布", "Iyxzone.Blog.Builder.saveBlog(event)") %></span></span>
-            <%= link_to_function "保存为草稿", "Iyxzone.Blog.Builder.saveDraft(event)", :class => "red w-l" %>
+        		<div class='fldvalue'><span class="button03"><span><%= button_to_function("发布", "Iyxzone.Blog.Builder.saveBlog(this, event)") %></span></span>
+							<span class="button03"><span><%= button_to_function "保存为草稿", "Iyxzone.Blog.Builder.saveDraft(this, event)", :class => "confirm-button" %></span></span>
       		  </div>
           </div>
           <div id='friend_tags'>
