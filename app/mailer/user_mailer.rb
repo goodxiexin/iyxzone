@@ -20,7 +20,6 @@ class UserMailer < ActionMailer::Base
     recipients  invitation.recipient_email
     from        SITE_MAIL
     sent_on     Time.now
-		content_type "text/html" 
     subject     "17Gaming(一起游戏网) - #{invitation.sender.login} 邀请您加入"
     body        :user => invitation.sender, :url => "http://#{SITE_URL}/invite?token=#{invitation.token}"
   end
