@@ -113,15 +113,15 @@
       <div class="im-title s_clear">
         <span id='im-icon'><%= avatar_image current_user, :class => 'left w-l', :height => 20, :width => 20 %></span><strong class="left w-l"><%= current_user.login %></strong>
         <div class="im-state left">
-          <a href="#"><span class="im-online"/></a>
+          <a href="#"><span class="im-online"></span></a>
           <div class="selector01" style="display:none">
             <div class="drop-wrap">
-              <div class="wrap-bg"/>
+              <div class="wrap-bg">
                 <dl>
-                  <dd class="jl-cutline"><a href="#"><span class="im-online"/>在线</a></dd>
-                  <dd class="jl-cutline"><a href="#"><span class="im-busy"/>忙碌</a></dd>
-                  <dd class="jl-cutline"><a href="#"><span class="im-leave"/>离开</a></dd>
-                  <dd><a href="#"><span class="im-hide"/>隐身</a></dd>
+                  <dd class="jl-cutline"><a href="#"><span class="im-online"></span>在线</a></dd>
+                  <dd class="jl-cutline"><a href="#"><span class="im-busy"></span>忙碌</a></dd>
+                  <dd class="jl-cutline"><a href="#"><span class="im-leave"></span>离开</a></dd>
+                  <dd><a href="#"><span class="im-hide"></span>隐身</a></dd>
                 </dl>
               </div>
             </div>
@@ -145,7 +145,7 @@
     </div>
     <div class="foot"><%= link_to "好友管理", friends_url, :class => 'im-manage' %></div>
   </div>
-  <span class="r-b rows"/>
+  <span class="r-b rows"></span>
 </div>
 
 <div id='chat-form' style="display:none">
