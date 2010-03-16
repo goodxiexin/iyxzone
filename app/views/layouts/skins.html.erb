@@ -1,6 +1,7 @@
 <% content_for :skintop do %>
+<% if @skin.name == "default" -%>
 <%= stylesheet_link_tag @skin.css_file_name %>
-
+<% end %>
 
 
 
@@ -51,4 +52,11 @@
 
 <% end -%>
 
+
+<% content_for :themebodyup do %>
+<div class="theme-body">  
+<% end%>
+<% content_for :themebodydown do %>
+</div> <!-- end of theme-body -->
+<% end%>
 <%= render :file => 'layouts/app2' %>

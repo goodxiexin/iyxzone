@@ -329,8 +329,8 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;backg
 .tab01 .right a,.tab01 .gray a:hover{color:#D63200}
 .tab01 .gray a{color:#7E7F80}
 .tab01 .right a:hover{text-decoration:underline}
-.tab01 .icon{position:absolute;right:14px;top:0;}
-.tab01 .icon a{display:block;float:right;height:30px;line-height:30px;margin-left:15px;padding-left:22px;color:#D63200}
+.tab01 .icon{/*position:absolute;right:14px;top:0;*/float:right}
+.tab01 .icon a{display:block;float:left;height:30px;line-height:30px;margin-left:15px;padding-left:22px;color:#D63200}
 .tab01 .icon a:hover{ text-decoration:underline}
 .tab01 .icon a.inbox-read{background:url(../images/icons/inboxIcon.gif) no-repeat left 7px;}
 .tab01 .icon a.inbox-clear{background:url(../images/icons/inboxIcon.gif) no-repeat left -18px;}
