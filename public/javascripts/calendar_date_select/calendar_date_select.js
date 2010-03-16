@@ -19,7 +19,7 @@ Element.buildAndAppend = function(type, options, style)
   if (style) e.setStyle(style);
   return e;
 };
-nil = null;
+null = null;
 
 Date.one_day = 24*60*60*1000;
 Date.weekdays = $w("日 一 二 三 四 五 六");
@@ -130,17 +130,17 @@ CalendarDateSelect.prototype = {
     // initialize the date control
     this.options = $H({
       embedded: false,
-      popup: nil,
+      popup: null,
       time: false,
       buttons: true,
       clear_button: true,
       year_range: 10,
-      close_on_click: nil,
+      close_on_click: null,
       minute_interval: 5,
       popup_by: this.target_element,
       month_year: "dropdowns",
       onchange: this.target_element.onchange,
-      valid_date_check: nil
+      valid_date_check: null
     }).merge(options || {});
     this.use_time = this.options.get("time");
     this.parseDate();
@@ -434,7 +434,7 @@ CalendarDateSelect.prototype = {
   },
   closeOnClick: function() {
     if (this.options.get("embedded")) return false;
-    if (this.options.get("close_on_click")===nil )
+    if (this.options.get("close_on_click")===null )
       return (this.options.get("time")) ? false : true
     else
       return (this.options.get("close_on_click"))
@@ -476,7 +476,7 @@ CalendarDateSelect.prototype = {
   close: function() {
     if (this.closed) return false;
     this.callback("before_close");
-    this.target_element.calendar_date_select = nil;
+    this.target_element.calendar_date_select = null;
     Event.stopObserving(document, "mousedown", this.closeIfClickedOut_handler);
     Event.stopObserving(document, "keypress", this.keyPress_handler);
     this.calendar_div.remove(); this.closed = true;

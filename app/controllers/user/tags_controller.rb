@@ -10,14 +10,11 @@ class User::TagsController < UserBaseController
 
 	def destroy
 		if @taggable.destroy_tag @tag.name 
-		  render :update do |page|
-			  page << "$('tag_#{@tag.id}').remove();"
-		  end
-    else
-      render :update do |page|
-        page << "error('发生错误')"
-      end
-    end
+			render :update do |page|
+        page << "$('tag_#{@tag.id}').remove();"
+        page << "tip('成功删除');"
+			end
+		end
 	end
 
   def auto_complete_for_game_tags
