@@ -23,13 +23,17 @@ after "deploy:symlink", "assets:symlink"
 
 namespace :deploy do
 
+  desc "start application"
   task :start, :roles => :app do
+    run "touch #{current_release}/tmp/restart.txt"
   end
 
+  desc "stop application"
   task :stop, :roles => :app do
+    # NOTHING TO DO
   end
 
-  desc "Restart Application"
+  desc "restart application"
   task :restart, :roles => :app do
     run "touch #{current_release}/tmp/restart.txt"
   end
@@ -47,15 +51,15 @@ namespace :deploy do
   desc "update database configuration"
   task :update_database_config, :roles => :app do
     database_config = <<-CMD
-      production:
-        adapter: mysql
-        encoding: utf8
-        reconnect: false
-        database: one_seven_gaming_production
-        pool: 5
-        username: root
-        password: 20041065
-        socket: /var/lib/mysql/mysql.sock
+production:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: one_seven_gaming_production
+  pool: 5
+  username: root
+  password: 20041065
+  socket: /var/lib/mysql/mysql.sock
     CMD
     put database_config, "#{release_path}/config/database.yml"
   end
@@ -71,6 +75,7 @@ namespace :assets do
     ASSETS.each do |name|
       run "mkdir -p #{shared_path}/#{name} && rm -rf #{release_path}/public/#{name} && ln -nfs #{shared_path}/#{name} #{release_path}/public/#{name}"
     end
+    deploy.chown_deployer
   end
 
 end
