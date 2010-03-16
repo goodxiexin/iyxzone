@@ -14,9 +14,12 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
+
 after "deploy:update_code", "deploy:chown_deployer"
 after "deploy:update_code", "deploy:update_crontab"
-after "deploy:symlink", "deploy:symlink_photos"
+after "deploy:update_code", "deploy:update_database_config"
+
+after "deploy:symlink", "assets:symlink"
 
 namespace :deploy do
 
@@ -31,23 +34,50 @@ namespace :deploy do
     run "touch #{current_release}/tmp/restart.txt"
   end
 
+  desc "regenerate periodical tasks configuration"
   task :update_crontab, :roles => :app do
     run "cd #{release_path} && whenever --update-crontab"
   end
 
+  desc "change owner to deployer"
   task :chown_deployer, :roles => :app do
     run "cd /home/deployer && chown -R deployer:deployer 17gaming"
   end
-
-  task :symlink_photos, :roles => :app do
-    run "rm -rf #{release_path}/public/photos"
-    run "ln -nfs #{shared_path}/index #{release_path}/public/photos"
+ 
+  desc "update database configuration"
+  task :update_database_config, :roles => :app do
+    database_config = <<-CMD
+      production:
+        adapter: mysql
+        encoding: utf8
+        reconnect: false
+        database: one_seven_gaming_production
+        pool: 5
+        username: root
+        password: 20041065
+        socket: /var/lib/mysql/mysql.sock
+    CMD
+    put database_config, "#{release_path}/config/database.yml"
   end
-  
+ 
+end
+
+namespace :assets do
+
+  ASSETS = %w(photos)
+
+  desc "preserve resources across deployment"
+  task :symlink, :roles => :app do
+    ASSETS.each do |name|
+      run "mkdir -p #{shared_path}/#{name} && rm -rf #{release_path}/public/#{name} && ln -nfs #{shared_path}/#{name} #{release_path}/public/#{name}"
+    end
+  end
+
 end
 
 namespace :web do
 
+  desc "temporarily shutdown our website"
   task :disable, :roles => :web do
     require 'erb'
     on_rollback { run "rm #{shared_path}/system/maintenance.html" }
@@ -59,6 +89,7 @@ namespace :web do
     run "chown deployer:deployer #{shared_path}/system/maintenance.html"
   end
 
+  desc "enable our website"
   task :enable, :roles => :web do
     run "rm #{shared_path}/system/maintenance.html"
   end
