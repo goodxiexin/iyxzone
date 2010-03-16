@@ -32,13 +32,17 @@ class User::SkinsController < UserBaseController
 	def update
 		@skin = Skin.find(params[:id])
 		@profile = current_user.profile
-			
-    if @profile.update_attributes(:skin_id => @skin.id)
-			flash[:notice] = "皮肤更新完成！"
+		#debugger
+		if params[:act] == "cancel"
 			redirect_to profile_url(@profile)
 		else
-			flash[:notice] = "该皮肤不能使用"
-			redirect_to profile_url(@profile)
+			if @profile.update_attributes(:skin_id => @skin.id)
+				flash[:notice] = "皮肤更新完成！"
+				redirect_to profile_url(@profile)
+			else
+				flash[:notice] = "该皮肤不能使用"
+				redirect_to profile_url(@profile)
+			end
 		end
 	end
 

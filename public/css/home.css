@@ -69,8 +69,11 @@ a:hover{color:#D63200;}
 .multibox{margin-bottom:20px;}
 .multibox .title{height:26px;line-height:26px;border-bottom:1px #E7F0E0 solid}
 .multibox .title a{float:right;text-decoration:underline}
-.multibox .photolist-box{margin:6px -4px 15px;}
+/*.multibox .photolist-box{margin:6px -4px 15px;}
 .multibox .photolist-box li{padding:5px 4px;}
+*/
+.multibox .photolist-box li{margin:5px 2px;}
+.multibox .gamer-list li{margin:5px 12px;_margin:5px 10px;}
 .multibox .photolist-big-box{margin:6px -8px 15px}
 .multibox .photolist-big-box li{padding:5px -8px;}
 
@@ -132,7 +135,7 @@ a:hover{color:#D63200;}
 .feed-message-box .feed-message a.icon-active{float:right;_display:inline-block;margin:10px 8px 0 0;}
 
 .feed-box{line-height:24px;word-spacing:5px}
-.feed-box .tab{margin-bottom:20px;padding:0 16px;}
+.feed-box .tab{margin-bottom:20px;padding:0 16px;position:relative}
 /*.feed-box .feed-wrap{padding:0 10px;}
 */
 .feed-box .feed-list-box,.feed-box .feed-img-list{margin-bottom:20px;}
@@ -201,7 +204,7 @@ a:hover{color:#D63200;}
 #leftsidebar .avatarbox h4{color:#CCC;word-spacing:2px}
 #leftsidebar .avatarbox h4 a{color:#25700D}
 #leftsidebar .avatarbox h5 span{color:#D63200;font-weight:normal}
-#leftsidebar .avatarbox ul.op li{float:left;width:75px;overflow:hidden;white-space:nowrap;margin:5px 3px;}
+#leftsidebar .avatarbox ul.op li{float:left;width:75px;overflow:hidden;white-space:nowrap;margin:5px 2px;}
 
 #leftsidebar .profile-list{margin:5px 0 5px 30px;}
 #leftsidebar .info-list{margin-bottom:10px;padding:7px 13px;line-height:25px;}
@@ -398,7 +401,7 @@ a:hover{color:#D63200;}
 .inbox-box .index-list td.end{width:20px;text-align:right}
 .inbox-box .index-list td.end a{float:right;}
 
-.photolist-box li{float:left;padding:5px 16px;width:60px;height:92px;color:#25700D;overflow:hidden}
+.photolist-box li{float:left;margin:5px 7px;width:60px;/*height:92px;*/color:#25700D;overflow:hidden}
 .photolist-box li p{white-space:nowrap;}
 .photolist-box li .btns{width:30px;margin:0 auto;}
 .photolist-box li .btns a{_display:inline;float:left;margin:0 4px 0 3px}
@@ -419,6 +422,25 @@ a:hover{color:#D63200;}
 .friend-box .friend-one-search .textfield{width:265px;}
 .friend-box .friend-one-search .link{float:left;word-spacing:10px;color:#CCC}
 .friend-box .friend-one-search .link a{color:#D63200}
+
+/*邀请*/
+.invite-friend,.invite-select{color:#666;margin:10px;padding:0 0 30px 0;line-height:24px}
+.invite-friend h3.title{border-bottom:1px solid #bdd6ad;padding:5px}
+.invite-friend h4{margin:10px 0}
+.invite-friend h4 a,.invite-select h2{color:#d63200;font-weight:700;font-size:14px;}
+.invite-tip,.invite-link,.invite-email,.invite-msn{padding:10px 0}
+.invite-friend .fldid{font-size:14px;line-height:30px}
+.invite-friend .textfield,.invite-friend .selector{padding:3px;background:#f5f5f5;font-size:14px}
+.invite-friend .fldid{width:200px;}
+.invite-link .fldid{text-align:left}
+.invite-link .textfield{width:300px;}
+.invite-email .textfield,.invite-msn .textfield{width:200px;}
+.invite-select h2{border-bottom:1px solid #bdd6ad;padding-bottom:10px}
+.invite-select p.tip{font-size:14px;margin:10px 0;line-height:22px}
+.invite-select .func{background:#f2fee5;border-bottom:1px solid #e7f0e1;padding:5px}
+.invite-select .list{height:300px;overflow-y:auto;overflow-x:hidden;}
+.invite-select .list table{width:95%;margin:0 auto}
+.invite-select .list table td{padding:10px 3px}
 
 .friend-box .friend-wrap .friend-menu{float:left;width:150px;}
 .friend-box .friend-wrap .friend-list{float:left;margin-left:-150px;width:100%;}
@@ -611,12 +633,15 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .jl-list-con{margin-left:75px;padding-bottom:10px;line-height:28px}
 .feed-list .jl-list-con .word-box textarea{width:390px}
 .feed-box .feed-list-box{margin-bottom:10px;}
-.feed-list-box h4{background:url(../images/skin/date-cutline.gif) repeat-x;}
+.feed-list-box h4{background:url(../images/skin/skin2010.png) repeat-x 0 -47px;}
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
-ul#roll-photo li{float:left;margin:0 5px;_margin:0 3px;}
-.roll-left,.roll-right{background:url(../images/skin/roll-arrow.gif) no-repeat;width:22px;height:22px;display:block;margin-top:55px}
+#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative;}
+#roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
+#roll-photo .roll-photo-list a{margin:0 9px;}
+#roll-photo a img{width:100px;}
+.roll-left,.roll-right{float:left;background:url(../images/skin/roll-arrow.gif) no-repeat;width:22px;height:22px;display:block;margin-top:55px}
 .roll-right{background-position:0 -22px}
 
 .jl-read-more{text-align:center;margin:0 20px;font-weight:700}
@@ -704,7 +729,7 @@ a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:c
 .img-container-main .album .downbtn{margin-top:9px;background:url(../images/skin/album-btn.gif) no-repeat 0 -20px;}
 .img-container-main .album .downbtn-gray{margin-top:9px;background:url(../images/skin/album-btn-gray.gif) no-repeat 0 -20px;}
 .img-container-main .album .small-imgs{width:100%;height:335px;overflow:hidden;position:relative;}
-.img-container-main .album .small-imgs .imgList{position:absolute;top:0px;width:100%;overflow:hidden;text-align:center}
+.img-container-main .album .small-imgs .imgList{position:relative;top:-67px;width:100%;overflow:hidden;text-align:center}
 .img-container-main .album .small-imgs .imgList .img{width:100%;margin-bottom:7px;overflow:hidden}
 .img-container-main .album .num{display:block;text-align:center;margin-bottom:10px}
 .img-container-main .album .small-imgs .imgList .now a{background:url(../images/skin/s-photo-arr.png) no-repeat 0 center;display:block;width:68px;height:64px;margin-left:4px !important;*margin-left:-4px !important;_margin-left:-4px;}
@@ -767,7 +792,7 @@ a.impress-btn-8,a.impress-8:hover{background-position:0 -240px;color:#fff;}
 .impress-add a,.impress-show a{margin:0 1px 1px 0;}
 .impress-add a:hover{color:#fff;}
 .impress-show a,.impress-show a:hover{font-weight:700;height:28px;line-height:27px;float:left;display:block;padding:0 5px;overflow:hidden;text-align:center;word-break:keep-all;white-space:nowrap}
-.impress-show a b.icon2-close{background-position:0 -16px;visibility:hidden;display:inline-block;margin:-1px 0 0 0;}
+.impress-show a b.icon2-close{background-position:0 -16px;visibility:hidden;display:inline-block;margin:-1px 0 0 0;_margin:5px 0 0 0}
 .impress-show a:hover b.icon2-close{ visibility:visible;background-color:transparent}
 
 .i-show02 a{display:block;float:left;}
@@ -799,6 +824,7 @@ a.i-s-8:hover span{background-position:right -160px;}
 /*邀请好友*/
 .friend-invite-head{border:1px solid #bdd6ad;background:#defebb;padding:3px 10px}
 .friend-invite-list{text-align:center;padding:10px 0;border:1px solid #bdd6ad;border-top:0}
+.friend-invite-list .button{float:none;display:inline-block;margin:0 auto}
 .friend-invite-list ul{height:260px;overflow-y:auto;overflow-x:hidden;margin-bottom:20px}
 .friend-invite-list li{float:left;margin:10px 0 10px 10px;width:160px;}
 .friend-invite-list li a{height:60px;display:block;padding:5px;cursor:pointer}
@@ -831,9 +857,6 @@ button.add-friend{background:url(../images/skin/add-friend.png) no-repeat;width:
 .friend-search-t{padding:10px 0;margin:0 10px}
 .contact-box span.t{font-size:14px;font-weight:700;background:url(../images/icons/icon-t01.png) no-repeat;padding:10px 30px;}
 .contact-box a{margin-left:10px}
-.icon-msn,.icon-mail{background:url(../images/icons/msn-email.png) no-repeat;width:20px;height:20px;display:inline-block}
-.icon-msn{background-position:0 0;}
-.icon-mail{background-position:0 -20px;}
 
 /*会员管理*/
 .member{line-height:20px;z-index:1/*在icon-active之下*/}
@@ -944,18 +967,24 @@ a.share-btn{background:url(../images/skin/share-btn.png) no-repeat;display:inlin
 .list-msg table tr.first td{border-top:1px solid #c2e299;border-bottom:1px solid #c2e299;}
 .list-msg table tr.me td{background:#eff8ea}
 .list-msg .bookbox{width:350px}
-.sponsor{background:url(../images/skin/sponsor.gif) no-repeat;display:inline-block;width:41px;height:14px}
+.sponsor{background:url(../images/skin/skin2010.png) no-repeat -46px 0;display:inline-block;width:41px;height:14px}
 
 /*隐私*/
 ul.private-set{padding:20px 0}
 ul.private-set li{margin:10px;line-height:22px}
 ul.private-set li p.left{margin-left:10px}
-.icon-private01,.icon-private02,.icon-private03{display:inline-block;background:url(../images/icons/private.gif) no-repeat;margin:0 5px;width:41px;height:41px; vertical-align:baseline;}
+.icon-private01,.icon-private02,.icon-private03,.icon-private04{display:inline-block;background:url(../images/icons/private.gif) no-repeat;margin:0 5px;width:41px;height:41px; vertical-align:baseline;}
 .icon-private01{background-position:0 0}
 .icon-private02{background-position:0 -41px}
 .icon-private03{background-position:0 -82px}
+.icon-private04{background-position:0 -123px}
 
 /*分享*/
+a.btn-17gaming,.tab01 .right a.btn-17gaming,.tab01 .right a.btn-17gaming:hover{background:url(../images/skin/btn-17gaming.png) no-repeat;width:130px;height:25px;line-height:25px;display:inline-block;color:#fff;font-weight:700;text-decoration:none;text-align:center;position:relative}
+
+h1.app-share{float:left}
+.share-url{float:right;margin-top:5px;padding:5px 10px;background:url(../images/skin/title-bg02.gif) repeat-x;color:#666}
+.share-url input{width:150px;height:16px;border:1px solid #bbb;color:#bbb}
 .feed-img-list .feed-share{margin-bottom:10px}
 .feed-img-list .feed-share .feed-header h3,.feed-img-list .feed-share .feed-header .con{padding-right:170px;}
 .feed-img-list .feed-share .feed-header{border:1px solid #dbeec7;}
@@ -1009,8 +1038,8 @@ ul.private-set li p.left{margin-left:10px}
 .z-box .z-con textarea{width:200px;height:50px}
 .z-box .z-con p{padding:20px;min-height:50px}
 .z-box .z-submit{background:#f0f5ec;border-top:1px solid #d4e3c9;padding:15px 0;}
-.z-box .z-submit .buttons{margin-left:85px}
-.z-box .z-submit .button{margin:0 5px;}
+.z-box .z-submit .buttons{text-align:center}
+.z-box .z-submit .button{margin:0 5px;float:none;display:inline-block}
 
 .z-box .z-error .box01{border:1px solid #cf6079}
 .z-box .z-error .z-h{background:#fd3361;border:1px solid #fd8b6c}
@@ -1025,6 +1054,7 @@ ul.private-set li p.left{margin-left:10px}
 .edit-toggle .tip-dialog{position:absolute;right:40px;top:0;width:160px;line-height:18px;color:#666}
 .edit-toggle .tip-dialog .round_m{background:#fff;border-color:#d2e3c7;position:relative}
 .arrow-tip{background:url(../images/skin/roundBoxbg05_02.gif) no-repeat;position:absolute;top:2px;right:-6px;_right:-5px;width:6px;height:11px}
+.arrow-tip02{background:url(../images/skin/arrow-tip02.gif) no-repeat;position:absolute;top:-6px;width:11px;height:6px}
 
 .archives-box h3 a{font-weight:400}
 .archives-box h3 .icon-active{margin-top:5px;}
@@ -1045,8 +1075,7 @@ ul.private-set li p.left{margin-left:10px}
 .selector03 ul.friend-select-list li{padding:0 4px 0 0;margin:2px 0;position:relative;float:left;}
 .selector03 ul.friend-select-list li a {border-color:#d1e2c5;border-style:solid;border-width:1px 0;color:#333;display:block;float:left;text-decoration:none;background:#f4fdef;width:auto;height:auto;overflow:visible;position:relative;}
 .selector03 ul.friend-select-list li a span {position:relative;border-color:#d1e2c5;border-style:solid;border-width:0 1px;cursor:pointer;display:block;float:left;height:16px;line-height:16px;margin:0 -1px;padding:0 5px 0;white-space:nowrap;}
-.selector03 ul.friend-select-list li a .x {background:url(../images/icons/activeIcon.gif) no-repeat;cursor:pointer;display:inline-block;height:9px;
-width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
+.selector03 ul.friend-select-list li a .x {background:url(../images/icons/activeIcon.gif) no-repeat;cursor:pointer;display:inline-block;height:9px;width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
 .selector03 ul.friend-select-list li a:hover,.selector03 ul.friend-select-list li a:hover span{background:#DBEFC2;border-color:#d1e2c5;}
 .selector03 ul.friend-select-list li.focus a,.selector03 ul.friend-select-list li.focus a:hover,.selector03 ul.friend-select-list li.focus a:hover span,.selector03 ul.friend-select-list li.focus a span{background:#73bd21;border-color:#73bd21;color:#fff}
 .selector03 ul.friend-select-list li.focus a .x {background:url(../images/icons/activeIcon.gif) no-repeat 0 -128px;}
@@ -1054,17 +1083,89 @@ width:9px;line-height:0;margin:0 0 0 3px;vertical-align:middle;}
 
 /*应用设置*/
 .app-set{position:relative}
-.app-set .con{padding:20px 10px;border-bottom:1px solid #bdd6ad }
+.app-set .con{padding:20px 10px;border-bottom:1px solid #bdd6ad}
 .app-set .enter{position: absolute;right:20px;top:20px;border-top:1px solid #bdd6ad;padding:20px;width:100px}
 
 /*提示信息*/
-.notice-msg,.warning-msg,.error-msg{padding:3px 5px;color:#333}
+.notice-msg,.warning-msg,.error-msg{padding:20px;color:#333;font-size:14px;}
 .notice-msg{background:#b7e1bd}
-.warning-msg{background:#fcb08b}
-.error-msg{background:#f9ec93}
+.error-msg{background:#fcb08b}
+.warning-msg{background:#f9ec93}
 
 /*照片圈人标记box*/
 .flag-photo{background:#F2FAE2;width:100%;padding:5px;border:1px solid #BBD2AA}
 .flag-photo .con{background:#fff;padding:5px;color:#666;line-height:20px;text-align:left}
 .flag-photo .foot{background:none;border:0;padding:5px 20px;_padding:5px 10px}
 .flag-photo textarea,.flag-photo .selector03{width:100%}
+.flag-photo .drop-wrap{width:280px}
+
+
+/*装扮个人主页*/
+.theme-list h2{color:#d63200;font-weight:700;font-size:14px;border-bottom:1px solid #abd0a9;padding-bottom:10px}
+.theme-list ul{margin:10px 0}
+.theme-list ul li{float:left;margin:10px 35px 10px 25px;text-align:center;}
+.theme-list ul li strong{color:#d63200;line-height:22px}
+.theme-list ul li img,.theme-preview li img{background:url(../images/skin/theme-list-bg.png) no-repeat right bottom;padding:5px}
+
+.theme-head{width:100%;background:#fff;padding-bottom:10px;border-top:5px solid #75bc20;border-bottom:1px solid #ccc;}
+.theme-head .wrap{width:950px;margin:0 auto;position:relative;}
+.theme-center,.theme-center:hover{width:97px;height:19px;line-height:19px;display:block;text-align:center;color:#fff;position:absolute;right:20px;top:0;background:url(../images/skin/theme-center-bg.png) no-repeat}
+
+.theme-preview {padding:30px 0 10px 0;width:900px;margin:0 auto;}
+.theme-preview .btn{width:19px;height:53px;display:block;float:left;background:url(../images/skin/album-btn02.png) no-repeat;margin-top:30px}
+.theme-preview .roll-r{background-position:-20px 0}
+.theme-preview .roll-l-gray{background-position:0 -53px}
+.theme-preview .roll-r-gray{background-position:-20px -53px}
+.theme-preview ul{float:left;margin:0 10px;overflow:hidden;}
+.theme-preview li{float:left;margin:0 13px;color:#666;line-height:20px;display:inline}
+.theme-preview li strong{font-size:14px;line-height:35px}
+.theme-preview li.focus{width:350px;}
+.theme-preview li.focus img{border:2px solid #c5de83;background:#ecfce3}
+
+.theme-head .button,.theme-head .button span{background-image:url(../images/skin/btns01.gif);}
+.theme-head .button span button{color:#fff}
+.theme-head .button-gray span button{color:#666}
+
+/*打招呼*/
+.face-hello{margin:10px;padding-left:80px}
+.face-hello .avatar{float:left;margin-left:-80px;display:inline}
+.face-hello .content{float:left;color:#666;width:100%;}
+.face-hello h2{border-bottom:1px solid #bbd2aa;padding-bottom:5px;font-weight:700}
+.face-hello ul li{float:left;margin:8px 5px;color:#333;width:90px}
+.hello-history{border:0}
+.hello-history .feed-list{margin-bottom:10px}
+.hello-history .feed-list .feed-header{border:0;background:#fff;padding:0}
+.hello-history .feed-list .feed-header .head{background:#f7f6f2;padding:3px 5px;}
+.hello-history .icon2-close{position:absolute;right:0;top:3px}
+.hello-history .feed-list .feed-header .con,.hello-history .feed-list .feed-header .foot{padding:3px 5px}
+
+/*打招呼表情图标*/
+.i-f{background:url(../images/icons/face-hello.png) no-repeat;width:24px;height:24px;display:inline-block;vertical-align:middle;margin:0 2px}
+.i-f-hello{background-position:0 0}
+.i-f-tread{background-position:-24px 0}
+.i-f-beat{background-position:-48px 0}
+.i-f-victory{background-position:0 -24px}
+.i-f-give{background-position:-24px -24px}
+.i-f-kiss{background-position:-48px -24px}
+.i-f-flower{background-position:0 -48px}
+.i-f-hug{background-position:-24px -48px}
+.i-f-bow{background-position:-48px -48px}
+.i-f-award{background-position:0 -72px}
+.i-f-cake{background-position:-24px -72px}
+.i-f-anger{background-position:-48px -72px}
+
+/*表情列表*/
+.emot-box{width:315px;}
+.emot-box .con{padding:3px}
+.emot-box .con a{margin:2px}
+.emot-box .foot{background:#eee;text-align:right;padding:5px;border:0}
+
+/*简单翻页*/
+.pager-simple a{width:16px;height:15px;display:inline-block;font-size:0;line-height:0;overflow:hidden;background:url(../images/skin/skin2010.png) no-repeat;vertical-align:middle;}
+.pager-simple span{margin:0 5px;color:#999}
+.pager-simple .prev{background-position:0 -90px;}
+.pager-simple .prev:hover{background-position:0 -110px;}
+.pager-simple .next{background-position:-17px -90px;}
+.pager-simple .next:hover{background-position:-17px -110px;}
+.pager-simple .first{background-position:0 -130px;cursor:default}
+.pager-simple .last{background-position:-17px -130px;cursor:default}

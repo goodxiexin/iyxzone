@@ -73,7 +73,7 @@
 .box-v2 .b{background-position:0 bottom;height:30px}
 .box-v2 .b span{background-position:right bottom;bottom:0;height:30px;}
 
-.box-v2 .t strong{position:absolute;left:15px;top:6px;display:block;background:url(../images/skin/boxv2-title.png) no-repeat}
-.get-pws{width:53px;height:13px;background-position:0 0;}
+.box-v2 .t strong{position:absolute;left:15px;top:6px;display:block;background:url(../images/skin/skin2010.png) no-repeat}
+.box-v2 .t strong.get-pws{width:53px;height:13px;background-position:0 -69px;}
 .box-v2 .m{border-left:1px solid #bdd6ad;border-right:1px solid #bdd6ad;background:#f8fcf6;}
 
