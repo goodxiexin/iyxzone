@@ -112,9 +112,8 @@
   <div class="piclist s_clear">
 	<% unless @albums.blank? %>
 		<% @albums.each do |album| %>
-				<div class="picitem">
+				<div class="picitem jl-picitem">
 					<div class="picbox01">
-						<a class="btn" href="#"></a>
 						<div class="picwrap">
 							<table cellpadding="0">
 								<tr><td><%= album_cover album, :class => 'imgbox01' %></td></tr>
