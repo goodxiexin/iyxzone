@@ -6,7 +6,7 @@ class User::BlogsController < UserBaseController
 
   def index
     @relationship = @user.relationship_with current_user
-    @blogs = @user.blogs.viewable(@relationship).paginate :page => params[:page], :per_page => 1
+    @blogs = @user.blogs.viewable(@relationship).paginate :page => params[:page], :per_page => 10
   end
 
 	def hot 

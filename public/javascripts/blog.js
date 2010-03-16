@@ -49,7 +49,7 @@ Object.extend(Iyxzone.Blog.Builder, {
   },
 
   process: function(transport){
-    var ret = transport.responseText.evalJSON();alert(transport.responseText);
+    var ret = transport.responseText.evalJSON();
     this.draftID = ret.draft_id;
     this.tagBuilder.reset(ret.tags);
     tip('保存成功，可以继续写了');
@@ -65,7 +65,7 @@ Object.extend(Iyxzone.Blog.Builder, {
         parameters: this.parameters,
 				onLoading: function(){
 					Iyxzone.disableButtonThree(button, '发布中..');
-				},
+				}
       });
     }
   },

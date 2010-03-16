@@ -5,172 +5,189 @@ class User::BlogsControllerTest < ActionController::TestCase
 
   include AuthenticatedTestHelper
 
-  fixtures :all
-
   def setup
-    @user1 = User.find(1)
-    @user2 = User.find(2)
-    @user3 = User.find(3)
-    @user4 = User.find(4)
-    @blog1 = Blog.create({:digs_count => 1, :created_at => 1.days.ago, :game_id => 1, :poster_id => 2, :draft => false, :title => 'title', :content => 'content', :privilege => 1})
-    @blog2 = Blog.create({:digs_count => 2, :created_at => 2.days.ago, :game_id => 1, :poster_id => 2, :draft => false, :title => 'title', :content => 'content', :privilege => 2})
-    @blog3 = Blog.create({:digs_count => 3, :created_at => 3.days.ago, :game_id => 1, :poster_id => 2, :draft => false, :title => 'title', :content => 'content', :privilege => 3})
-    @blog4 = Blog.create({:digs_count => 4, :created_at => 4.days.ago, :game_id => 1, :poster_id => 2, :draft => false, :title => 'title', :content => 'content', :privilege => 4})
-    @draft = Blog.create({:created_at => 4.days.ago, :game_id => 1, :poster_id => 2, :draft => true, :title => 'title', :content => 'content', :privilege => 1})
-    @params = {:game_id => 1, :draft => false, :title => 'title', :content => 'content', :privilege => 1}
-    @user2.reload
-  end
+    @u1 = UserFactory.create
+    @g = @u1.games.first
 
-  # 测试index页面
-  test "自己观看" do
-    get 'index', {:id => 2}, {:user_id => 2}
+    # create blogs
+    @b1 = BlogFactory.create :privilege => 1, :poster_id => @u1.id, :game_id => @g.id, :created_at => 1.minutes.ago
+    @b2 = BlogFactory.create :privilege => 2, :poster_id => @u1.id, :game_id => @g.id, :created_at => 2.minutes.ago
+    @b3 = BlogFactory.create :privilege => 3, :poster_id => @u1.id, :game_id => @g.id, :created_at => 3.minutes.ago 
+    @b4 = BlogFactory.create :privilege => 4, :poster_id => @u1.id, :game_id => @g.id, :created_at => 4.minutes.ago
     
-    # 返回的是index页面
-    assert_template 'user/blogs/index'
+    # friend
+    @u2 = UserFactory.create
+    FriendshipFactory.create_friend @u1, @u2
 
-    # 显示4个日志，并且按照创建时间排列
+    # same game
+    @u3 = UserFactory.create
+    @c = @u1.characters.first
+    GameCharacterFactory.create :game_id => @c.game_id, :area_id => @c.area_id, :server_id => @c.server_id, :race_id => @c.race_id, :profession_id => @c.profession_id, :user_id => @u3.id
+
+    # stranger
+    @u4 = UserFactory.create
+  end
+  
+  test "自己观看" do
+    get 'index', {:uid => @u1.id}, {:user_id => @u1.id}
+    
     blogs = assigns(:blogs)
-    assert_equal blogs.count, 4
-    assert_equal blogs[0], @blog1
-    assert_equal blogs[1], @blog2
-    assert_equal blogs[2], @blog3
-    assert_equal blogs[3], @blog4
+ 
+    assert_template 'user/blogs/index'
+    assert_equal blogs, [@b1, @b2, @b3, @b4]
+   
+    blogs.each do |b|
+      assert_tag :tag => 'a', :attributes => {:href => edit_blog_url(b)}
+    end
 
-    # 可以对这4个日志编辑或者删除
-    edit_link_exist_for [@blog1, @blog2, @blog3, @blog4]
-    delete_link_exist_for [@blog1, @blog2, @blog3, @blog4]
+    blogs.each do |b|
+      assert_tag :tag => 'a', :attributes => {:href => blog_url(b), :rel => 'facebox'}
+    end
   end
 
   test "好友观看" do
-    get 'index', {:id => 2}, {:user_id => 1}
+    get 'index', {:uid => @u1.id}, {:user_id => @u2.id}
 
-    # 返回的是index页面
-    assert_template 'user/blogs/index'
-
-    # 显示3个日志，按照创建时间排列
     blogs = assigns(:blogs)
-    assert_equal blogs.count, 3
-    assert_equal blogs[0], @blog1
-    assert_equal blogs[1], @blog2
-    assert_equal blogs[2], @blog3
 
-    # 不能编辑或者删除
-    edit_link_not_exist_for [@blog1, @blog2, @blog3]   
-    delete_link_not_exist_for [@blog1, @blog2, @blog3]
+    assert_template 'user/blogs/index'
+    assert_equal blogs, [@b1, @b2, @b3]
+    blogs.each do |b|
+      assert_no_tag :tag => 'a', :attributes => {:href => edit_blog_url(b)}
+    end
+    blogs.each do |b|
+      assert_no_tag :tag => 'a', :attributes => {:href => blog_url(b), :rel => 'facebox'}
+    end
   end
-
+  
   test "非好友，但是有相同游戏的人观看" do
-    get 'index', {:id => 2}, {:user_id => 3}
+    get 'index', {:uid => @u1.id}, {:user_id => @u3.id}
 
     # 不能看到，必须先成为好友
-    assert_redirected_to new_friend_url(:id => @user2.id)
+    assert_redirected_to new_friend_url(:uid => @u1.id)
   end
 
   test "完全陌生人观看" do
-    get 'index', {:id => 2}, {:user_id => 4}
+    get 'index', {:uid => @u1.id}, {:user_id => @u4.id}
 
     # 不能看到，必须先成为好友
-    assert_redirected_to new_friend_url(:id => @user2.id)
+    assert_redirected_to new_friend_url(:uid => @u1.id)
   end
 
-  # 测试show页面
-  test "user1观看user2的所有博客" do
-    # 只能看，不能编辑和删除
-    get 'show', {:id => @blog1.id}, {:user_id => 1}
+  test "@u1 观看 @b1" do
+    get 'show', {:id => @b1.id}, {:user_id => @u1.id}
+
     assert_template 'user/blogs/show'
-    assert_equal assigns(:blog), @blog1
-    edit_link_not_exist_for [@blog1]
-    delete_link_not_exist_for [@blog1]
-
-    # 只能看，不能编辑和删除
-    get 'show', {:id => @blog2.id}
-    assert_template 'user/blogs/show' 
-    assert_equal assigns(:blog), @blog2
-    edit_link_not_exist_for [@blog2]
-    delete_link_not_exist_for [@blog2]
-
-    # 只能看，不能编辑和删除
-    get 'show', {:id => @blog3.id}
-    assert_template 'user/blogs/show' 
-    assert_equal assigns(:blog), @blog3
-    edit_link_not_exist_for [@blog3]
-    delete_link_not_exist_for [@blog3]
-
-    # 没有权限看
-    get 'show', {:id => @blog4.id}
-    assert_not_found
+    assert_tag 'a', :attributes => {:href => edit_blog_url(@b1)}
+    assert_tag 'a', :attributes => {:href => blog_url(@b1), :rel => 'facebox_confirm'}
   end
 
-  test "user2观看user2的所有博客" do
-    # 本人有权限看自己的所有日志，并能编辑和删除
-    get 'show', {:id => @blog1.id}, {:user_id => 2}
+  test "@u2 观看 @b1" do
+    get 'show', {:id => @b1.id}, {:user_id => @u2.id}
+
     assert_template 'user/blogs/show'
-    assert_equal assigns(:blog), @blog1
-    edit_link_exist_for [@blog1]
-    delete_link_exist_for [@blog1]
-
-    get 'show', {:id => @blog2.id}
-    assert_template 'user/blogs/show' 
-    assert_equal assigns(:blog), @blog2
-    edit_link_exist_for [@blog2]
-    delete_link_exist_for [@blog2]
-
-    get 'show', {:id => @blog3.id}
-    assert_template 'user/blogs/show' 
-    assert_equal assigns(:blog), @blog3
-    edit_link_exist_for [@blog3]
-    delete_link_exist_for [@blog3]
-
-    get 'show', {:id => @blog4.id}
-    assert_template 'user/blogs/show'
-    assert_equal assigns(:blog), @blog4
-    edit_link_exist_for [@blog4]
-    delete_link_exist_for [@blog4]
+    assert_no_tag 'a', :attributes => {:href => edit_blog_url(@b1)}
+    assert_no_tag 'a', :attributes => {:href => blog_url(@b1), :rel => 'facebox_confirm'}
   end
 
-  test "user3观看user2的所有博客" do
-    # 可以看，但是不能编辑和删除
-    get 'show', {:id => @blog1.id}, {:user_id => 3}
+  test "@u3 观看 @b1" do
+    get 'show', {:id => @b1.id}, {:user_id => @u3.id}
+
     assert_template 'user/blogs/show'
-    assert_equal assigns(:blog), @blog1
-    edit_link_not_exist_for [@blog1]
-    delete_link_not_exist_for [@blog1]
-
-    # 可以看，但是不能编辑和删除
-    get 'show', {:id => @blog2.id}
-    assert_template 'user/blogs/show' 
-    assert_equal assigns(:blog), @blog2
-    edit_link_not_exist_for [@blog2]
-    delete_link_not_exist_for [@blog2]
-
-    # 只有好友能看，必须先加为好友
-    get 'show', {:id => @blog3.id}
-    redirect_to_new_friend
-
-    # 没有权限看
-    get 'show', {:id => @blog4.id}
-    assert_not_found
+    assert_no_tag 'a', :attributes => {:href => edit_blog_url(@b1)}
+    assert_no_tag 'a', :attributes => {:href => blog_url(@b1), :rel => 'facebox_confirm'}
   end
 
-  test "user4观看user2的所有博客" do
-    # 可以看，不能编辑和删除
-    get 'show', {:id => @blog1.id}, {:user_id => 4}
+  test "@u4 观看 @b1" do
+    get 'show', {:id => @b1.id}, {:user_id => @u1.id}
+
     assert_template 'user/blogs/show'
-    assert_equal assigns(:blog), @blog1
-    edit_link_not_exist_for [@blog1]
-    delete_link_not_exist_for [@blog1]
-
-    # 必须先加为好友才能看
-    get 'show', {:id => @blog2.id}
-    redirect_to_new_friend
-    get 'show', {:id => @blog3.id}
-    redirect_to_new_friend
-
-    # 没有权限看
-    get 'show', {:id => @blog4.id}
-    assert_not_found
+    assert_no_tag 'a', :attributes => {:href => edit_blog_url(@b1)}
+    assert_no_tag 'a', :attributes => {:href => blog_url(@b1), :rel => 'facebox_confirm'}
   end
 
+  test "@u1 观看 @b2" do
+    get 'show', {:id => @b2.id}, {:user_id => @u1.id}
+
+    assert_template 'user/blogs/show'
+    assert_tag 'a', :attributes => {:href => edit_blog_url(@b2)}
+    assert_tag 'a', :attributes => {:href => blog_url(@b2), :rel => 'facebox_confirm'}
+  end
+
+  test "@u2 观看 @b2" do
+    get 'show', {:id => @b2.id}, {:user_id => @u2.id}
+
+    assert_template 'user/blogs/show'
+    assert_no_tag 'a', :attributes => {:href => edit_blog_url(@b2)}
+    assert_no_tag 'a', :attributes => {:href => blog_url(@b2), :rel => 'facebox_confirm'}
+  end
+
+  test "@u3 观看 @b2" do
+    get 'show', {:id => @b2.id}, {:user_id => @u3.id}
+
+    assert_template 'user/blogs/show'
+    assert_no_tag 'a', :attributes => {:href => edit_blog_url(@b2)}
+    assert_no_tag 'a', :attributes => {:href => blog_url(@b2), :rel => 'facebox_confirm'}
+  end
+
+  test "@u4 观看 @b2" do
+    get 'show', {:id => @b2.id}, {:user_id => @u1.id}
+
+    assert_redirected_to new_friend_url(:uid => @u1.id)
+  end
+
+  test "@u1 观看 @b3" do
+    get 'show', {:id => @b3.id}, {:user_id => @u1.id}
+
+    assert_template 'user/blogs/show'
+    assert_tag 'a', :attributes => {:href => edit_blog_url(@b3)}
+    assert_tag 'a', :attributes => {:href => blog_url(@b3), :rel => 'facebox_confirm'}
+  end
+
+  test "@u2 观看 @b3" do
+    get 'show', {:id => @b3.id}, {:user_id => @u2.id}
+
+    assert_template 'user/blogs/show'
+    assert_no_tag 'a', :attributes => {:href => edit_blog_url(@b3)}
+    assert_no_tag 'a', :attributes => {:href => blog_url(@b3), :rel => 'facebox_confirm'}
+  end
+
+  test "@u3 观看 @b3" do
+    get 'show', {:id => @b3.id}, {:user_id => @u3.id}
+
+    assert_redirected_to new_friend_url(:uid => @u3.id)
+  end
+
+  test "@u4 观看 @b3" do
+    get 'show', {:id => @b3.id}, {:user_id => @u4.id}
+
+    assert_redirected_to new_friend_url(:uid => @u1.id)
+  end
+
+  test "@u1 观看 @b4" do
+    get 'show', {:id => @b3.id}, {:user_id => @u1.id}
+
+    assert_template 'user/blogs/show'
+    assert_tag 'a', :attributes => {:href => edit_blog_url(@b3)}
+    assert_tag 'a', :attributes => {:href => blog_url(@b3), :rel => 'facebox_confirm'}
+  end
+
+  test "@u2 观看 @b4" do
+    get 'show', {:id => @b3.id}, {:user_id => @u2.id}
+    assert_template 'errors/404'
+  end
+
+  test "@u3 观看 @b4" do
+    get 'show', {:id => @b3.id}, {:user_id => @u3.id}
+    assert_template 'errors/404'  
+  end
+
+  test "@u4 观看 @b4" do
+    get 'show', {:id => @b3.id}, {:user_id => @u4.id}
+    assert_template 'errors/404'
+  end
+
+=begin
   # 测试create
   test "创建博客" do
     # 正确的params
@@ -283,38 +300,5 @@ class User::BlogsControllerTest < ActionController::TestCase
     assert_equal blogs[2], @blog3
   end
   
-protected
-
-  def redirect_to_new_friend
-    assert_redirected_to new_friend_url(:id => @user2.id)
-  end
-
-  def assert_not_found
-    assert_template 'not_found'
-  end
-
-  def edit_link_exist_for blogs
-    blogs.each do |blog|
-      assert_tag :tag => 'a', :attributes => {:href => edit_blog_url(blog)}
-    end
-  end
-
-  def edit_link_not_exist_for blogs
-    blogs.each do |blog|
-      assert_no_tag :tag => 'a', :attributes => {:href => edit_blog_url(blog)}
-    end
-  end
-
-  def delete_link_exist_for blogs
-    blogs.each do |blog|
-      assert_tag :tag => 'a', :attributes => {:href => blog_url(blog), :rel => 'facebox', :facebox_method => 'delete', :facebox_type => 'confirm'}
-    end
-  end
-
-  def delete_link_not_exist_for blogs
-    blogs.each do |blog|
-      assert_no_tag :tag => 'a', :attributes => {:href => blog_url(blog), :rel => 'facebox', :facebox_method => 'delete', :facebox_type => 'confirm'}
-    end
-  end
-
+=end
 end
