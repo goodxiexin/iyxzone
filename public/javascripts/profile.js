@@ -2,7 +2,8 @@ Iyxzone.Profile = {
   version: '1.0',
   author: ['高侠鸿'],
   Editor: {},
-  Feeder: {}
+  Feeder: {},
+	Tag: {}
 };
 
 Object.extend(Iyxzone.Profile.Editor, {
@@ -534,3 +535,20 @@ Object.extend(Iyxzone.Profile.Feeder, {
   }
 
 });
+
+Object.extend(Iyxzone.Profile.Tag, {
+
+  loading: function(div){
+    div.innerHTML = "<div style='textAligin: center'><img src='/images/loading.gif'/></div>";
+  },
+
+	deleteTag: function(profileID, tagID, token){
+    new Ajax.Request('/profiles/' + profileID + '/tags/' + tagID, {
+      method: 'delete',
+			parameters: 'authenticity_token=' + encodeURIComponent(token),
+			onLoading: function(){
+				this.loading($('tag_'+tagID));
+			}.bind(this),
+    });  
+	}
+}); 

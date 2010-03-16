@@ -59,7 +59,7 @@ Object.extend(Iyxzone.Home.Feeder, {
     $('feed_list').innerHTML = '';
     this.loading($('more_feed'));
     
-    if(type != nil){
+    if(type != null){
       new Ajax.Request('/home/feeds?type=' + type, {method: 'get'});
     }else{
       new Ajax.Request('/home/feeds', {method: 'get'});
@@ -67,7 +67,7 @@ Object.extend(Iyxzone.Home.Feeder, {
   },
 
   moreFeeds: function(){
-    if(this.type != nil){
+    if(this.type != null){
       new Ajax.Request('/home/more_feeds?type=' + this.type + '&idx=' + this.idx, {
         method: 'get',
         onLoading: function(){

@@ -22,7 +22,7 @@
 					<ul id="navmain-title">
 						<li><%= link_to '<span id="navhome">首页</span>', home_url %></li>
 						<li><%= link_to '<span id="navprofile">个人主页</span>', profile_url(current_user.profile)  %></li>
-						<li><%= link_to '<span id="navfriend">好友</span', friends_url  %></li>
+						<li><%= link_to '<span id="navfriend">好友</span>', friends_url  %></li>
 						<li><%= link_to '<span id="navinbox">站内信</span>', mails_url(:type => 1) %></li>
           <% notifications_count = current_user.notifications.unread.count %>	
           <% if notifications_count == 0 %>
