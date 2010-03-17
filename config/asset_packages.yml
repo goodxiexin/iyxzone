@@ -18,6 +18,7 @@ javascripts:
   - photo
   - video
   - friend
+  - status
 - profile: 
   - profile
   - chinese_region

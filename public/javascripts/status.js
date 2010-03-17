@@ -20,7 +20,7 @@ Object.extend(Iyxzone.Status.Builder, {
   save: function(button, event){
     Event.stop(event);
     if(this.validate()){
-      var form = $('status_form');
+      var form = $('status_form');alert(form.serialize());
       new Ajax.Request('/statuses', {
         method: 'post', 
         parameters: form.serialize(),
