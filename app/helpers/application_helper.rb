@@ -286,7 +286,7 @@ module ApplicationHelper
   end
 
   def skin_image_tag skin, img_opts={}
-    link_to (image_tag "themes/#{skin.name}/images/#{skin.thumbnail_file_name}", {:alt => skin.name}.merge(img_opts)), skin_url(skin)
+    link_to (image_tag "themes/#{skin.name}/#{skin.thumbnail}", {:alt => skin.name}.merge(img_opts)), skin_url(skin)
   end
 
 end

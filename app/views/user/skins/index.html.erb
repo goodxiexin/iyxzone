@@ -1,33 +1,25 @@
-
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
- <!-- TODO: need home-decoration here -->
- <h1 class="home-decoration">主页装扮</h1>
- <div class="box02 canvas_int space">
-                    	<div class="theme-list">
-                        <h2>装扮我的个人主页</h2>
-                        <ul class="s_clear">
-<% @skins.each do |skin| %>
-                            <li>
-														<%= image_tag skin.thumbnail_file_name.rindex(/\.((gif$)|(png)|(jpg)|(bmp))$/) ? skin.thumbnail_file_name : skin.thumbnail_file_name + ".png" , :alt => skin.name, :size => "110x120" %>
-														<br />
-														<strong> <%= skin.name %> </strong>
-														<br />
-														<%= link_to "预览" , skin%>
-														|
-														<%= link_to "启用" , skin, :method => :put%>
-														</li>
-<% end %>
-</ul>
-<div class="round-pagination">
-<%= will_paginate @skins, :prev_label => "上一页", :next_label => "下一页" %>
-</div> <!-- end of round-pagination -->
-                        </div> <!-- end of them-list -->
-
-</div> <!-- end of box02.... -->
-
-</div></div> <!-- end of round_m -->
-</div></div></div></div> <!-- end of canvas  -->
+    <h1 class="home-decoration">主页装扮</h1>
+    <div class="box02 canvas_int space">
+      <div class="theme-list">
+        <h2>装扮我的个人主页</h2>
+        <ul class="s_clear">
+        <% @skins.each do |skin| %>
+            <li>
+							<%= skin_image_tag skin, :size => "110x120" %><br/>
+							<strong> <%= skin.name %> </strong><br />
+							<%= link_to "预览" , skin_url(skin)%>|<%= link_to "启用" , skin_url(skin), :method => :put%>
+						</li>
+        <% end %>
+        </ul>
+        <div class="round-pagination">
+          <%= will_paginate @skins %>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>
 
 
 

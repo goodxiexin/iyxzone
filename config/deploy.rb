@@ -51,11 +51,29 @@ namespace :deploy do
   desc "update database configuration"
   task :update_database_config, :roles => :app do
     database_config = <<-CMD
+development:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: one_seven_gaming_development
+  pool: 5
+  username: root
+  password: 20041065
+  socket: /var/lib/mysql/mysql.sock
 production:
   adapter: mysql
   encoding: utf8
   reconnect: false
   database: one_seven_gaming_production
+  pool: 5
+  username: root
+  password: 20041065
+  socket: /var/lib/mysql/mysql.sock
+test:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: one_seven_gaming_test
   pool: 5
   username: root
   password: 20041065

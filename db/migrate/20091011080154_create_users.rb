@@ -18,6 +18,7 @@ class CreateUsers < ActiveRecord::Migration
       t.boolean	:enabled,	:default => true
 			t.integer :avatar_id
       t.string :pinyin
+      t.datetime :last_seen_at
 			
 			# settings
 			t.integer :privacy_setting, :limit => 8, :default => PrivacySetting.default

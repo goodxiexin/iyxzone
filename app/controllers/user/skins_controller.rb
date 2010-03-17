@@ -15,8 +15,10 @@ class User::SkinsController < UserBaseController
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
-		@skin = Skin.find(params[:id])
-		
+		@messages = @profile.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
+    @skin = Skin.find(params[:id])
+    		
 		render :template => 'user/profiles/show', :layout =>'skins'
 	end
 

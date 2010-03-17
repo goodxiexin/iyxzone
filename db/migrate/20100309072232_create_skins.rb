@@ -2,19 +2,19 @@ class CreateSkins < ActiveRecord::Migration
   def self.up
     create_table :skins do |t|
 			t.string :name, :null => false
-			t.string :css_file_name, :null => false
-			t.string :thumbnail_file_name, :default => "missing"
+			t.string :css, :null => false
+			t.string :thumbnail, :default => "missing"
       t.timestamps
     end
-		Skin.create(:name => "default", :css_file_name => "home", :thumbnail_file_name => "default")
-		Skin.create(:name => "wow", :css_file_name => "wow", :thumbnail_file_name => "default")
-		Skin.create(:name => "3", :css_file_name => "3", :thumbnail_file_name => "default")
-		Skin.create(:name => "4", :css_file_name => "4", :thumbnail_file_name => "default")
-		Skin.create(:name => "5", :css_file_name => "5", :thumbnail_file_name => "default")
-		Skin.create(:name => "6", :css_file_name => "6", :thumbnail_file_name => "default")
-		Skin.create(:name => "7", :css_file_name => "7", :thumbnail_file_name => "default")
-		Skin.create(:name => "8", :css_file_name => "8", :thumbnail_file_name => "default")
-		Skin.create(:name => "9", :css_file_name => "9", :thumbnail_file_name => "default")
+		Skin.create(:name => "default", :css => "home", :thumbnail => "default.png")
+		Skin.create(:name => "wow", :css => "wow", :thumbnail => "default.png")
+		Skin.create(:name => "3", :css => "3", :thumbnail => "default.png")
+		Skin.create(:name => "4", :css => "4", :thumbnail => "default.png")
+		Skin.create(:name => "5", :css => "5", :thumbnail => "default.png")
+		Skin.create(:name => "6", :css => "6", :thumbnail => "default.png")
+		Skin.create(:name => "7", :css => "7", :thumbnail => "default.png")
+		Skin.create(:name => "8", :css => "8", :thumbnail => "default.png")
+		Skin.create(:name => "9", :css => "9", :thumbnail => "default.png")
 		
   end
 
