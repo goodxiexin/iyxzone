@@ -17,11 +17,11 @@
     	<ul>
             <li>
 						<% if @skin_prev -%>
-            <%= link_to (image_tag stylesheet_path("themes/#{@skin_prev.name}/images/#{@skin_prev.thumbnail_file_name}"), :alt=>@skin_prev.name, :size=>"190x96") , skin_url(@skin_prev.id) -%>
+            <%= link_to (image_tag stylesheet_path("/images/themes/#{@skin_prev.name}/images/#{@skin_prev.thumbnail_file_name}"), :alt=>@skin_prev.name, :size=>"190x96") , skin_url(@skin_prev.id) -%>
 						<% end -%>
 						</li>
             <li class="focus">
-            <%= image_tag (stylesheet_path "themes/#{@skin.name}/images/#{@skin.thumbnail_file_name}"), :alt=>@skin.name, :size=>"190x96", :class=>"left w-l" -%>
+            <%= image_tag (stylesheet_path "/images/themes/#{@skin.name}/images/#{@skin.thumbnail_file_name}"), :alt=>@skin.name, :size=>"190x96", :class=>"left w-l" -%>
             <div class="op">
               <strong>当前预览</strong><br /><span>装扮名称：<%= @skin.name -%></span>
               <p class="space">
@@ -34,7 +34,7 @@
             </li>
             <li>
 						<% if @skin_next -%>
-            <%= link_to (image_tag stylesheet_path("themes/#{@skin_next.name}/images/#{@skin_next.thumbnail_file_name}"), :alt=>@skin_next.name, :size=>"190x96") ,  skin_url(@skin_next.id)-%>
+            <%= link_to (image_tag stylesheet_path("/images/themes/#{@skin_next.name}/images/#{@skin_next.thumbnail_file_name}"), :alt=>@skin_next.name, :size=>"190x96") ,  skin_url(@skin_next.id)-%>
 						<% end -%>
 						</li>
         </ul>
