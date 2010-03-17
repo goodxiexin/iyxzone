@@ -12,9 +12,9 @@
     <div style="float:left;width:210px">
     	<div style="padding:10px 0 0 15px">
 			<% if @user.avatar.blank? %>
-				<%= image_tag "#{SITE_URL}/images/default_large.png", :width => '100px', :height =>'112px' %>
+				<img src=<%= "#{SITE_URL}/images/default_large.png" %> width='100px' height='112px' />
 			<% else %>
-				<%= image_tag SITE_URL+@user.avatar.public_filename("large"), :width => '100px', :height => '112px' %>
+        <img src=<%= "#{SITE_URL}/#{@user.avatar.public_filename("large")}" %> width='100px' height='112px' />
 			<% end %>
 			</div>
         <div style="padding:10px 0;">
@@ -22,9 +22,9 @@
 					<% @user.friends[0..5].each { |friend| %>
                 <li style="float:left;width:65px;list-style:none;padding:0;margin:0">
 								<% if friend.avatar.blank? %>
-									<%= image_tag "#{SITE_URL}/images/default_medium.png", :style => "padding:3px;border:1px solid #e7f7e7" %>
+									<img src=<%= "#{SITE_URL}/images/default_medium.png" %> style="padding:3px;border:1px solid #e7f7e7" />
 								<% else %>
-									<% image_tag SITE_URL+friend.avatar.public_filename("medium"), :style => "padding:3px;border:1px solid #e7f7e7"%>
+									<img src=<%= "#{SITE_URL}/#{friend.avatar.public_filename("medium")}" %> style="padding:3px;border:1px solid #e7f7e7" />
 								<% end %>
 								<br /><%=friend.login%>
 								</li>
@@ -34,7 +34,7 @@
     </div>
     <div style="float:right;width:390px;">
     <div style="line-height:22px;padding:10px 0">
-        <div style="font-size:18px;font-weight:700;line-height:35px">Hi 我是李大海，邀请你来17gaming.com</div>
+        <div style="font-size:18px;font-weight:700;line-height:35px">Hi 我是<%= @user.login %>，邀请你来17gaming.com</div>
         <div style="line-height:22px;">一起游戏网(17gaming)是让网络游戏玩家分享游戏心情，共享心得体验,重拾昔日情意的社交平台。</div>
     </div>
     <div style="border-bottom:1px solid #e7f0e0;padding:5px 0;font-weight:700">我的游戏资料</div>

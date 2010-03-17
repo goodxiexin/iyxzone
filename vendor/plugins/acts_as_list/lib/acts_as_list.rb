@@ -56,19 +56,19 @@ module ActsAsList
     end
 
 		def first
-			self.class.find(:first, :conditions => ["#{scope_name} = ? #{cond}", scope], :order => "#{order_name} ASC")
+			@first_in_list ||= self.class.find(:first, :conditions => ["#{scope_name} = ? #{cond}", scope], :order => "#{order_name} ASC")
 		end
 
 		def last
-			self.class.find(:first, :conditions => ["#{scope_name} = ? #{cond}", scope], :order => "#{order_name} DESC")
+			@last_in_list ||= self.class.find(:first, :conditions => ["#{scope_name} = ? #{cond}", scope], :order => "#{order_name} DESC")
 		end
 
 		def next
-			self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} > ? #{cond}", scope, order], :order => "#{order_name} ASC") ||first 
+			@next_in_list ||= (self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} > ? #{cond}", scope, order], :order => "#{order_name} ASC") || first)
 		end
 
 		def prev
-			self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} < ? #{cond}", scope, order], :order => "#{order_name} DESC") ||last 
+			@prev_in_list ||= (self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} < ? #{cond}", scope, order], :order => "#{order_name} DESC") || last) 
 		end
 	
 	end
