@@ -12,6 +12,7 @@
 </head>
 <body class='cut-side'>
 <%= yield :skintop%> 
+<%= yield :themebodyup%> 
 <div id="header">
 	<div id="navbar">
 		<div id="navwrap">
@@ -21,8 +22,7 @@
 					<ul id="navmain-title">
 						<li><%= link_to '<span id="navhome">首页</span>', home_url %></li>
 						<li><%= link_to '<span id="navprofile">个人主页</span>', profile_url(current_user.profile)  %></li>
-						<li><%= link_to '<span id="decoration">主页装扮</span>', skins_url %></li>
-						<li><%= link_to '<span id="navfriend">好友</span>', friends_url  %></li>
+						<li><%= link_to '<span id="navfriend">好友</span', friends_url  %></li>
 						<li><%= link_to '<span id="navinbox">站内信</span>', mails_url(:type => 1) %></li>
           <% notifications_count = current_user.notifications.unread.count %>	
           <% if notifications_count == 0 %>
@@ -66,6 +66,10 @@
 </div>
 
 <div id="page">
+	<div class="banner"> 
+		<div class="con"></div> 
+		<div class="foot"></div> 
+	</div> 
 	<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 		<div class="round_m"><div class="round_body canvas_wrap s_clear">
 			<div id="leftsidebar" class="canvas_l">
@@ -104,6 +108,7 @@
 	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
     <p><a href="#">网游公司 版权所有</a></p>
 </div>
+<%= yield :themebodydown%> 
 
 </body>
 </html>

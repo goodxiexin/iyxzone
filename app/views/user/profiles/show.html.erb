@@ -2,6 +2,7 @@
 <% content_for :html_description, "#{@user.login}的个人主页 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<<<<<<< HEAD:app/views/user/profiles/show.html.erb
 <% content_for :stylesheet_link do %>
   <%= stylesheet_link_tag @skin.css_file_name %>
 <% end %>
@@ -9,6 +10,14 @@
 <% content_for :javascript_include do %>
   <%= javascript_include_merged :profile %>
 <% end %>
+=======
+<%= stylesheet_link_tag "themes/#{@skin.name}/#{@skin.css_file_name}" %>
+<%= stylesheet_link_tag 'tag_cloud' %>
+<%= stylesheet_link_tag 'test' %>
+<%= javascript_include_tag 'chinese_region' %>
+<%= javascript_include_tag 'profile' %>
+<%= javascript_include_tag 'video' %>
+>>>>>>> 486722ea42caef5b43e3a85e1fd338930219340a:app/views/user/profiles/show.html.erb
 
 <% content_for :left do %>
 	<div class="mcAvatar">

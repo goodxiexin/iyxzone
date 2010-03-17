@@ -1,20 +1,26 @@
 /**
  * TODO:
  * 点击document.body，隐藏表情 
+ * Change Log
+ * 1.1 add to 50 emotions, Mar.16,2010
  */
 
 Iyxzone.Emotion = {
-  version: '1.0',
+  version: '1.1',
 
-  author: ['高侠鸿'],
+  author: ['高侠鸿','戴雨宸'],
 
-  faces: ['[-_-]', '[@o@]', '[-|-]', '[o_o]', '[ToT]', '[*_*]'],
+  //faces: ['[-_-]', '[@o@]', '[-|-]', '[o_o]', '[ToT]', '[*_*]'],
+	faces: [ '[惊吓]', '[晕]', '[流鼻涕]', '[挖鼻子]', '[鼓掌]', '[骷髅]', '[坏笑]', '[傲慢]', '[大哭]', '[砸头]', '[衰]', '[哭]', '[可爱]', '[冷汗]', '[抽烟]', '[擦汗]', '[亲亲]', '[糗]', '[吃惊]', '[左哼哼]', '[疑问]', '[惊恐]', '[睡觉]', '[皱眉头]', '[可怜]', '[打呵欠]', '[害羞]', '[花痴]', '[右哼哼]', '[囧]', '[大便]', '[咒骂]', '[贼笑]', '[嘘]', '[吐]', '[苦恼]', '[白眼]', '[流汗]', '[大笑]', '[羞]', '[撇嘴]', '[偷笑]', '[BS]', '[困]', '[火]', '[闭嘴]', '[抓狂]', '[强]', '[不行]', '[装酷]' ]
 
-  facesCount: 6,
 
-  facesPerRow: 10,
+  facesCount: 50,
 
-  rows: 1,
+	facesPerPage: 30 ,
+
+  facesPerRow: 10 ,
+
+  rows: 4,
 
   specials: ['/', '.', '*', '+', '?', '|','(', ')', '[', ']', '{', '}', '\\'],
 
@@ -38,21 +44,18 @@ Object.extend(Iyxzone.Emotion.Manager, {
     var rows = Iyxzone.Emotion.rows;
     var facesPerRow = Iyxzone.Emotion.facesPerRow;
     var facesCount = Iyxzone.Emotion.facesCount;
-    var faces = new Element('table', {class:'face-table'});
+    var faces = new Element('div', {class:'con' );
+		//TODO
 
     document.body.appendChild(faces);
 
-    // construct faces
-    for(var i=0;i<rows;i++){
-      var row = new Element('tr');
-      for(var j=0;j<facesPerRow && i*facesPerRow + j < facesCount;j++){
-        var column = new Element('td');
-        var face = new Element('img', {src: "/faces/"+(i*facesPerRow + j)+".gif", width: '20px', height: '20px', class: 'emotion-icon', index: (i*facesPerRow + j)});
-        column.appendChild(face);
+				var a = new Element('a', {title:'傲慢', href:'#'})
+        var img = new Element('img', {src: "/faces/"+ i +".gif",  index:i});
+				a.appendChild(img)
         row.appendChild(column);
-      }
+      
       faces.appendChild(row);
-    }
+    
 
     // locate faces
     faces.setStyle({

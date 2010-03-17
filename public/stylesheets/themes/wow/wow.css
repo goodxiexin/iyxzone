@@ -4,22 +4,22 @@ a,.menu-icon-list li a span{color:#656565}
 .piclist .jl-picitem a{color:#a05c00}
 .textarea,textarea{background:#3b3b3b;border:0}
 
-#header{width:100%;background:url(images/top_bg.png) repeat-x;height:40px;}
-.logo-top{background-image:url(images/logo.png);top:0}
+#header{width:100%;background:url(/images/themes/wow/top_bg.png) repeat-x;height:40px;}
+.logo-top{background-image:url(/images/themes/wow/logo.png);top:0}
 #navbar{width:950px;margin:0 auto;background:none}
 #navbar #navwrap {background:none}
 #navbar #navwrap #navmid{background:none}
 #navbar #navsearch .textfield{border-color:#1d1d1b;background:#474741}
-#navbar #navsearch .gobtn {background-image:url(images/go.png);}
+#navbar #navsearch .gobtn {background-image:url(/images/themes/wow/go.png);}
 #navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
 
 #leftsidebar .avatarbox {border-bottom:1px solid #1c1c1a;}
 .s-dialog a{color:#a05c00}
-.banner{width:100%;background:url(images/banner_bg.png) repeat-x;}
-.banner .con{width:1024px;height:273px;margin:0 auto;background:url(images/banner.jpg) no-repeat 0 -23px;}
-.banner .foot{background:url(images/top_bd.png) repeat-x;height:20px}
-#page{background:url(images/page_bd.png) repeat-y;width:990px;margin:0 auto}
-.canvas_wrap{background:url(images/page_bg.jpg) no-repeat bottom}
+.banner{width:100%;background:url(/images/themes/wow/banner_bg.png) repeat-x;}
+.banner .con{width:1024px;height:273px;margin:0 auto;background:url(/images/themes/wow/banner.jpg) no-repeat 0 -23px;}
+.banner .foot{background:url(/images/themes/wow/top_bd.png) repeat-x;height:20px}
+#page{background:url(/images/themes/wow/page_bd.png) repeat-y;width:990px;margin:0 auto}
+.canvas_wrap{background:url(/images/themes/wow/page_bg.jpg) no-repeat bottom}
 .round_l_t, .round_r_t, .round_l_b, .round_r_b, .round_title_l_t, .round_title_r_t {background-image:none;}
 .round_m{background:#000;border:0;margin:20px 20px 0 20px}
 .round_l_b{padding:0}
@@ -31,19 +31,19 @@ a,.menu-icon-list li a span{color:#656565}
 .multibox .title a{color:#a05c00}
 .bookbox h3{color:#8c8c8c}
 
-.arrow-dialog {background-image:url(images/roundBoxbg03.gif);}
-.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(images/roundBoxbg02.gif);}
-.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(images/roundBoxbg04.gif);}
+.arrow-dialog {background-image:url(/images/themes/wow/roundBoxbg03.gif);}
+.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/wow/roundBoxbg02.gif);}
+.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/wow/roundBoxbg04.gif);}
 .round02 .round_m {background:#3b3b3b;border-left:1px solid #282828;border-right:1px solid #282828;margin:0 -6px 0 0;color:#a05c00}
 .round04 .round_m {background:#131313;border-left:1px solid #161615;border-right:1px solid #161615;margin:0 -6px 0 0}
-.feed-list-box h4 {background:url(images/date-cutline.gif) repeat-x;}
+.feed-list-box h4 {background:url(/images/themes/wow/date-cutline.gif) repeat-x;}
 .feed-list-box h4 span{background:#000}
-a.jl-more {background:url(images/arr-more.gif) no-repeat;}
+a.jl-more {background:url(/images/themes/wow/arr-more.gif) no-repeat;}
 .jl-my-gold .green {color:#df6505;}
-.button,.button span {background-image:url(images/btns01.gif);}
+.button,.button span {background-image:url(/images/themes/wow/btns01.gif);}
 .button span button{color:#9b9b9a}
-.bookbox .textarea-wrap .textarea-wide textarea {background:url(images/textarea_bg.jpg) no-repeat right -70px;border:0}
+.bookbox .textarea-wrap .textarea-wide textarea {background:url(/images/themes/wow/textarea_bg.jpg) no-repeat right -70px;border:0}
 .multibox .diary-box {border-bottom:1px dashed #4d4d4d;}
 .feed-img-list {border-top:1px dashed #4d4d4d;}
-.button03,.button03 span {background:url(images/btns03.gif) no-repeat}
-#footer{background:url(images/bottom_bd.png) repeat-x;width:100%;padding:30px 0;line-height:22px}
+.button03,.button03 span {background:url(/images/themes/wow/btns03.gif) no-repeat}
+#footer{background:url(/images/themes/wow/bottom_bd.png) repeat-x;width:100%;padding:30px 0;line-height:22px}
