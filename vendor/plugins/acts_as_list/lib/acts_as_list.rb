@@ -10,21 +10,11 @@ module ActsAsList
 
 			cattr_accessor :list_opts
 	
-			self.list_opts = opts
-
-      cattr_accessor :list_conds
-
-      if opts[:conditions]
-        self.list_conds = sanitize_sql_for_conditions opts[:conditions]
-      else
-        self.list_conds = ""
-      end
+			self.list_opts = {:circular => true}.merge(opts)
 
 			extend ActsAsList::SingletonMethods
 
 			include ActsAsList::InstanceMethods
-
-      
 
 		end
 
@@ -35,40 +25,93 @@ module ActsAsList
 
 	module InstanceMethods
 
-		def scope_name
-			self.class.list_opts[:scope]
-		end
-
-		def order_name
-			self.class.list_opts[:order]
-		end
-		
-		def scope
-			send(scope_name)
-		end
-
-		def order
-			send(order_name)
-		end
-
-    def cond
-      self.class.list_conds == "" ?  "" : "AND (" + self.class.list_conds + ")"
+    def list_cond
+      opts = self.class.list_opts
+      scope = opts[:scope]
+      cond = opts[:conditions]
+      
+      if scope
+        scope_value = send(scope)
+        if cond
+          "(#{scope} = #{scope_value}) AND (#{self.class.send(:sanitize_sql_for_conditions, cond)})"
+        else
+          "(#{scope} = #{scope_value})"
+        end
+      else
+        if cond
+          "(#{self.class.send(:sanitize_sql_for_conditions, cond)})"
+        else
+          ""
+        end
+      end
     end
 
 		def first
-			@first_in_list ||= self.class.find(:first, :conditions => ["#{scope_name} = ? #{cond}", scope], :order => "#{order_name} ASC")
-		end
+      if @first_in_list
+        return @first_in_list
+      end
+
+      order_name = self.class.list_opts[:order]
+ 
+      @first_in_list ||= self.class.first(:conditions => list_cond, :order => "#{order_name} ASC")
+    end
 
 		def last
-			@last_in_list ||= self.class.find(:first, :conditions => ["#{scope_name} = ? #{cond}", scope], :order => "#{order_name} DESC")
+      if @last_in_list
+        return @last_in_list
+      end
+
+      order_name = self.class.list_opts[:order]
+ 
+			@last_in_list ||= self.class.find(:first, :conditions => list_cond, :order => "#{order_name} DESC")
 		end
 
 		def next
-			@next_in_list ||= (self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} > ? #{cond}", scope, order], :order => "#{order_name} ASC") || first)
+      if @next_in_list
+        return @next_in_list
+      end
+
+      order_name = self.class.list_opts[:order]
+      order = send(order_name)
+
+      cond_sql = list_cond
+      if cond_sql.blank?
+        cond_sql = ["#{order_name} > ?", order]
+      else
+        cond_sql = ["(#{cond_sql}) AND #{order_name} > ?", order]
+      end
+      
+      @next_in_list = self.class.first(:conditions => cond_sql, :order => "#{order_name} ASC")
+      
+      if @next_in_list.blank? and self.class.list_opts[:circular]
+        @next_in_list = first
+      end
+
+      @next_in_list
 		end
 
 		def prev
-			@prev_in_list ||= (self.class.find(:first, :conditions => ["#{scope_name} = ? AND #{order_name} < ? #{cond}", scope, order], :order => "#{order_name} DESC") || last) 
+      if @prev_in_list
+        return @prev_in_list
+      end
+
+      order_name = self.class.list_opts[:order]
+      order = send(order_name)
+
+      cond_sql = list_cond
+      if cond_sql.blank?
+        cond_sql = ["#{order_name} < ?", order]
+      else
+        cond_sql = ["(#{cond_sql}) AND #{order_name} < ?", order]
+      end
+
+      @prev_in_list = self.class.first(:conditions => cond_sql, :order => "#{order_name} DESC")
+      
+      if @prev_in_list.blank? and self.class.list_opts[:circular]
+        @prev_in_list = last
+      end
+
+      @prev_in_list
 		end
 	
 	end

@@ -9,19 +9,19 @@
     <div class="wrap">
 		<%= link_to "装扮中心", skins_url, :class => "theme-center" %>
     <div class="theme-preview s_clear">
-						<% if @skin_prev -%>
-						<%= link_to "", skin_url(@skin_prev.id), :class => "btn roll-l" -%>
+						<% if @skin.prev -%>
+						<%= link_to "", skin_url(@skin.prev), :class => "btn roll-l" -%>
 						<% else -%>
 						<%= link_to "", "#", :class => "btn roll-l-gray" -%>
 						<% end -%>
     	<ul>
             <li>
-						<% if @skin_prev -%>
-            <%= link_to (image_tag stylesheet_path("/images/themes/#{@skin_prev.name}/images/#{@skin_prev.thumbnail_file_name}"), :alt=>@skin_prev.name, :size=>"190x96") , skin_url(@skin_prev.id) -%>
+						<% if @skin.prev -%>
+            <%= skin_image_tag @skin.prev, :size=>"190x96" -%>
 						<% end -%>
 						</li>
             <li class="focus">
-            <%= image_tag (stylesheet_path "/images/themes/#{@skin.name}/images/#{@skin.thumbnail_file_name}"), :alt=>@skin.name, :size=>"190x96", :class=>"left w-l" -%>
+            <%= skin_image_tag @skin, :size=>"190x96", :class=>"left w-l" -%>
             <div class="op">
               <strong>当前预览</strong><br /><span>装扮名称：<%= @skin.name -%></span>
               <p class="space">
@@ -33,13 +33,13 @@
             </div>
             </li>
             <li>
-						<% if @skin_next -%>
-            <%= link_to (image_tag stylesheet_path("/images/themes/#{@skin_next.name}/images/#{@skin_next.thumbnail_file_name}"), :alt=>@skin_next.name, :size=>"190x96") ,  skin_url(@skin_next.id)-%>
+						<% if @skin.next -%>
+            <%= skin_image_tag @skin.next, :size=>"190x96" %>
 						<% end -%>
 						</li>
         </ul>
-						<% if @skin_next -%>
-						<%= link_to "", skin_url(@skin_next.id), :class => "btn roll-r" -%>
+						<% if @skin.next -%>
+						<%= link_to "", skin_url(@skin.next), :class => "btn roll-r" -%>
 						<% else -%>
 						<%= link_to "#", :class => "btn roll-r-gray" -%>
 						<% end -%>
