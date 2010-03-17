@@ -48,14 +48,6 @@ Object.extend(Iyxzone.Blog.Builder, {
     }
   },
 
-  process: function(transport){
-    var ret = transport.responseText.evalJSON();
-    this.draftID = ret.draft_id;
-    this.tagBuilder.reset(ret.tags);
-    tip('保存成功，可以继续写了');
-    $('errors').innerHTML = '';
-  },
-
   saveBlog: function(button, event){
     Event.stop(event);
     if(this.validate()){
@@ -68,37 +60,37 @@ Object.extend(Iyxzone.Blog.Builder, {
 				}
       });
     }
-  },
-  
-  saveDraft: function(button, event){
-    Event.stop(event);
-    if(this.validate()){
-      this.prepare();
-      new Ajax.Request('/drafts', {
-        method: 'post',
-        parameters: this.parameters,
-				onLoading: function(){
-					Iyxzone.disableButtonThree(button, '保存中..');
-				},
-      });
-    }
-  },
+    },
+    
+    saveDraft: function(button, event){
+      Event.stop(event);
+      if(this.validate()){
+        this.prepare();
+        new Ajax.Request('/drafts', {
+          method: 'post',
+          parameters: this.parameters,
+          onLoading: function(){
+            Iyxzone.disableButtonThree(button, '保存中..');
+          },
+        });
+      }
+    },
 
-  updateBlog: function(button, blogID, event){
-    Event.stop(event);
-    if(this.validate()){
-      this.prepare();
-      new Ajax.Request('/blogs/' + blogID, {
-        method: 'put',
-        parameters: this.parameters,
-				onLoading: function(){
-					Iyxzone.disableButtonThree(button, '修改中..');
-				},
-      });
-    }
-  },
+    updateBlog: function(button, blogID, event){
+      Event.stop(event);
+      if(this.validate()){
+        this.prepare();
+        new Ajax.Request('/blogs/' + blogID, {
+          method: 'put',
+          parameters: this.parameters,
+          onLoading: function(){
+            Iyxzone.disableButtonThree(button, '修改中..');
+          },
+        });
+      }
+    },
 
-  updateDraft: function(button, draftID, event){
+    updateDraft: function(button, draftID, event){
     Event.stop(event);
     if(this.validate()){
       this.prepare();

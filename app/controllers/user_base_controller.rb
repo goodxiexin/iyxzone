@@ -65,11 +65,15 @@ protected
   end
 
   def require_adequate_privilege resource
-    resource.available_for? current_user || render_privilege_denied
+    resource.available_for?(current_user) || render_privilege_denied(resource)
   end
 
-  def render_privilege_denied
-    render_not_found
+  def render_privilege_denied resource
+    if resource.is_owner_privilege?
+      render_not_found
+    else
+      render_add_friend resource.resource_owner
+    end
   end
 
   def render_add_friend friend
