@@ -13,6 +13,10 @@ javascripts:
   - emotion
   - menu
   - chat
+- register:
+  - game
+  - register
+  - event.simulate
 - home:
   - home
   - photo

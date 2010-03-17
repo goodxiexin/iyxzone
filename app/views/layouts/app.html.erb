@@ -1,171 +1,47 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title><%= (html_title = yield :html_title) ? html_title : '欢迎您' %> - 17Gaming.com</title>
-<meta name="description" content="<%= (html_description = yield :html_description) ? html_description : '17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。在这里，您能找到曾经一起战斗的游戏网友，结交到新的游戏战友，并一起分享，一起成长，一起快乐。' %>">
-<meta name="keywords" content="<%= (html_keywords = yield :html_keywords) ? html_keywords : '17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区' %>">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <%= stylesheet_link_merged :base %>
-  <%= yield :stylesheet_link %>
-  <%= javascript_include_merged :base %>
-  <%= yield :javascript_include %>
-</head>
-<body class='cut-side'>
-
-<div id="header">
-	<div id="navbar">
-		<div id="navwrap">
-			<div id="navmid">
-				<%= link_to '', home_url(), :class => "logo-top png", :title => "17gaming" %>
-				<div id="navmain">
-					<ul id="navmain-title">
-						<li><%= link_to '<span id="navhome">首页</span>', home_url %></li>
-						<li><%= link_to '<span id="navprofile">个人主页</span>', profile_url(current_user.profile)  %></li>
-						<li><%= link_to '<span id="navfriend">好友</span>', friends_url  %></li>
-						<li><%= link_to '<span id="navinbox">站内信</span>', mails_url(:type => 1) %></li>
-          <% notifications_count = current_user.notifications.unread.count %>	
-          <% if notifications_count == 0 %>
-					  <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知</span>", "", :id => "notifications_link" %>
-          <% else %>
-            <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知(#{notifications_count})</span>", "", :id => "notifications_link" %>
-          <% end %>
-					<div class="drop-box" id='notifications_dropdown' style="display:none">
-					<div id="notice-wrap">
-						<dl class="con s_clear" id='notifications_dropdown_list'></dl>
-						<div class="foot">
-							<%= link_to "查看全部", notifications_url %>
-						</div>
-					</div>
-					</div>
-					</li>
-				</ul>
-				</div>
-				<div id="navsearch">
-					<% form_tag search_users_url do %>
-						<div class="textfield"><%= text_field_tag 'key', "搜索您的好友吧", :onfocus => "this.clear()" %></div>
-						<input type="submit" class="gobtn" value="" />
-          <% end %>
-        </div>
-				<div id="navextra">
-					<ul>
-						<li><%= link_to "邀请", signup_invitations_url %></li>
-            <li><%= link_to_function "设置", "", :id => "settings_link" %>
-						<div class='box01 set-box' id='settings_dropdown' style="display:none">
-							<%= link_to "隐私设置", privacy_setting_url, :class => "blk" %>
-							<%= link_to "密码设置", edit_password_setting_url, :class => "blk" %>
-							<%= link_to "应用设置", application_setting_url, :class => "blk nobd"%>
-						</div>
-						</li>		
-            <li><%= link_to "退出", logout_url %></li>
-          </ul>
-				</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="page" class="page_side_wrap s_clear">
-	<!--sidebar-->
-	<div class="sidebar">
-		<div id="appbar" class="round_title_r_t"><div class="round_title_l_t"><div class="round_r_b"><div class="round_l_b">
-			<h1 class="round_title">我的应用</h1>
-			<div class="round_m"><div class="round_body">
-        <div class="applist">
-          <ul>
-						<li><%= link_to "日志", blogs_url(:uid => current_user.id), :class => 'app-log' %></li>
-						<li><%= link_to "视频", videos_url(:uid => current_user.id), :class => 'app-video' %></li>
-						<li><%= link_to "照片", personal_albums_url(:uid => current_user.id), :class => 'app-photo' %></li>
-						<li><%= link_to "状态", statuses_url(:uid => current_user.id), :class => 'app-status' %></li>
-						<li><%= link_to "活动", events_url(:uid => current_user.id), :class => 'app-ploy' %></li>
-						<li><%= link_to "投票", polls_url(:uid => current_user.id), :class => 'app-vote' %></li>
-						<li><%= link_to "公会", guilds_url(:uid => current_user.id), :class => 'app-cons' %></li>
-            <li><%= link_to "分享", sharings_url(:uid => current_user.id), :class => 'app-share' %></li>
-            <li><%= link_to "游戏", games_url(:uid => current_user.id), :class => "app-game" %></li>
-            <li><%= link_to "推荐游戏", game_suggestions_url, :class => 'app-vgame' %></li>
-            <li><%= link_to "每日十闻", news_index_url, :class => "app-news" %></li>
-          </ul>
-        </div>
-			</div></div>
-    </div></div></div></div>
-  </div>
-    
-	<div class="main">
-		<div class="content">
-		<% flash.each do |key, msg| %>
-			<div class="<%=key%>-msg" id="notice_<%=key%>">
-				<span class="icon-<%= key %>"></span>
-				<%= msg %>
-			</div>
-			<script type="text/javascript">
-				setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
-			</script>
-		<% end %>
-		<%= yield %>
-		</div>
-	</div>
-
-</div>
-
-<div style="right: 5px; top: 100px;" class="im-bar" id='chat-bar'>
-  <div class="r-m">
-    <div class="con">
-      <div class="im-title s_clear">
-        <span id='im-icon'><%= avatar_image current_user, :class => 'left w-l', :height => 20, :width => 20 %></span><strong class="left w-l"><%= current_user.login %></strong>
-        <div class="im-state left">
-          <a href="#"><span class="im-online"></span></a>
-          <div class="selector01" style="display:none">
-            <div class="drop-wrap">
-              <div class="wrap-bg">
-                <dl>
-                  <dd class="jl-cutline"><a href="#"><span class="im-online"></span>在线</a></dd>
-                  <dd class="jl-cutline"><a href="#"><span class="im-busy"></span>忙碌</a></dd>
-                  <dd class="jl-cutline"><a href="#"><span class="im-leave"></span>离开</a></dd>
-                  <dd><a href="#"><span class="im-hide"></span>隐身</a></dd>
-                </dl>
-              </div>
-            </div>
+<% content_for :body do %>
+<body class='cut-line'>
+  <%= render :partial => 'layouts/navbar' %>
+  <div id="page" class="page_side_wrap s_clear">
+	  <div class="sidebar">
+		  <div id="appbar" class="round_title_r_t"><div class="round_title_l_t"><div class="round_r_b"><div class="round_l_b">
+			  <h1 class="round_title">我的应用</h1>
+			  <div class="round_m"><div class="round_body">
+          <div class="applist">
+            <ul>
+  						<li><%= link_to "日志", blogs_url(:uid => current_user.id), :class => 'app-log' %></li>
+	  					<li><%= link_to "视频", videos_url(:uid => current_user.id), :class => 'app-video' %></li>
+		  				<li><%= link_to "照片", personal_albums_url(:uid => current_user.id), :class => 'app-photo' %></li>
+			  			<li><%= link_to "状态", statuses_url(:uid => current_user.id), :class => 'app-status' %></li>
+				  		<li><%= link_to "活动", events_url(:uid => current_user.id), :class => 'app-ploy' %></li>
+					  	<li><%= link_to "投票", polls_url(:uid => current_user.id), :class => 'app-vote' %></li>
+						  <li><%= link_to "公会", guilds_url(:uid => current_user.id), :class => 'app-cons' %></li>
+              <li><%= link_to "分享", sharings_url(:uid => current_user.id), :class => 'app-share' %></li>
+              <li><%= link_to "游戏", games_url(:uid => current_user.id), :class => "app-game" %></li>
+              <li><%= link_to "推荐游戏", game_suggestions_url, :class => 'app-vgame' %></li>
+              <li><%= link_to "每日十闻", news_index_url, :class => "app-news" %></li>
+            </ul>
           </div>
-        </div>
-      </div>
-      <div class="im-search rows">
-          <%= text_field_tag '', '搜索好友', :onclick => "this.clear();" %>
-          <%= button_to_function '', 'Iyxzone.Chat.search(this.previous().value)', :class => 'go' %> 
-      </div>
-      <div class="im-group s_clear">
-          <dl class="im-expand">
-            <dt><a href="javascript:void(0)" onclick="Iyxzone.Chat.toggleOnline(this);">在线好友<span>[<%= @online_friends.count %>]</span></a></dt>
-            <div id='chat-list'>
-            <% @online_friends.each do |f| %>
-              <dd pinyin='<%= f.pinyin %>' login='<%= f.login %>'><a href='javascript: void(0)' ondblclick='Iyxzone.Chat.showForm(<%= f.id %>, "<%= f.login %>", "<%= form_authenticity_token %>")'><%= avatar_image f, :class => 'left w-l', :width => 20, :height => 20  %><span class="left"><%= f.login %></span></a></dd>
-            <% end %>
-            </div>
-          </dl>
-      </div>
+			  </div></div>
+      </div></div></div></div>
     </div>
-    <div class="foot"><%= link_to "好友管理", friends_url, :class => 'im-manage' %></div>
+	  <div class="main">
+  		<div class="content">
+	  	<% flash.each do |key, msg| %>
+		  	<div class="<%=key%>-msg" id="notice_<%=key%>">
+			  	<span class="icon-<%= key %>"></span>
+				  <%= msg %>
+  			</div>
+	  		<script type="text/javascript">
+		  		setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
+			  </script>
+		  <% end %>
+		  <%= yield %>
+		  </div>
+	  </div>
   </div>
-  <span class="r-b rows"></span>
+  <%= render :partial => 'layouts/imbar' %>
+  <%= render :partial => 'layouts/footer' %>
 </div>
+<% end %>
 
-<div id='chat-form' style="display:none">
-  <div id='chat-history'></div>
-  <%= text_area_tag 'message[content]', '', :rows => 4, :cols => 50 %>
-  <%= button_to_function '提交', "Iyxzone.Chat.sendMessage(this, event, '#{form_authenticity_token}');" %>
-</div>
-
-<%= javascript_tag "
-  new Iyxzone.Menu.AjaxDropdown('notifications_link', 'notifications_dropdown', 'notifications_dropdown_list', '#{first_five_notifications_url}');
-  new Iyxzone.Menu.Dropdown('settings_link', 'settings_dropdown');
-  Iyxzone.Chat.set(#{integer_array_for_javascript @im_info.keys}, #{@im_info.values.to_json}, '#{form_authenticity_token}');
-" %>
-
-<div id="footer">
-	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
-	<p><a href="#">网游公司 版权所有</a></p>
-</div>
-
-</body>
-
-</html>
-
+<%= render :file => 'layouts/base' %>

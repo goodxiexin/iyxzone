@@ -1,53 +1,67 @@
-<% content_for :skintop do %>
-<div class="theme-head">
-  <div class="wrap">
-		<%= link_to "装扮中心", skins_url, :class => "theme-center" %>
-    <div class="theme-preview s_clear">
-			<% if @skin.prev -%>
+<% content_for :body do %>
+<body>
+  <div class='theme-head'>
+    <div class="wrap">
+  		<%= link_to "装扮中心", skins_url, :class => "theme-center" %>
+      <div class="theme-preview s_clear">
 				<%= link_to "", skin_url(@skin.prev), :class => "btn roll-l" -%>
-			<% else -%>
-				<%= link_to "", "#", :class => "btn roll-l-gray" -%>
-			<% end -%>
-    	<ul>
-        <li>
-					<% if @skin.prev -%>
-            <%= skin_image_tag @skin.prev, :size=>"190x96" -%>
-					<% end -%>
-				</li>
-        <li class="focus">
-          <%= skin_image_tag @skin, :size=>"190x96", :class=>"left w-l" -%>
-          <div class="op">
-            <strong>当前预览</strong><br /><span>装扮名称：<%= @skin.name -%></span>
-            <p class="space">
-							<% form_for(@skin) do |f| %>
-								<span class="button w-l"><span><button name="act" type="submit" value ="apply">应用</button> </span></span>
-								<span class="button button-gray"><span><button onclick= <%= "'location.href=#{profile_url(current_user.profile)}'"-%> type="submit">取消</button> </span></span>
-						  <% end %>
-            </p>
-          </div>
-        </li>
-        <li>
-					<% if @skin.next -%>
-            <%= skin_image_tag @skin.next, :size=>"190x96" %>
-					<% end -%>
-				</li>
-      </ul>
-			<% if @skin.next -%>
+      	<ul>
+          <li><%= skin_image_tag @skin.prev, :size=>"190x96" -%></li>
+          <li class="focus">
+            <%= skin_image_tag @skin, :size=>"190x96", :class=>"left w-l" -%>
+            <div class="op">
+              <strong>当前预览</strong><br /><span>装扮名称：<%= @skin.name -%></span>
+              <p class="space">
+	  						<% form_for(@skin) do |f| %>
+		  						<span class="button w-l"><span><button name="act" type="submit" value ="apply">应用</button> </span></span>
+			  					<span class="button button-gray"><span><button onclick= <%= "'location.href=#{profile_url(current_user.profile)}'"-%> type="submit">取消</button> </span></span>
+				  		  <% end %>
+              </p>
+            </div>
+          </li>
+          <li><%= skin_image_tag @skin.next, :size=>"190x96" %></li>
+        </ul>
 				<%= link_to "", skin_url(@skin.next), :class => "btn roll-r" -%>
-			<% else -%>
-				<%= link_to "#", :class => "btn roll-r-gray" -%>
-			<% end -%>
+      </div>
     </div>
   </div>
-</div>
+  <div class='theme-body'>
+    <%= render :partial => 'layouts/navbar' %>
+    <div class='banner'>
+      <div class='con'></div>
+      <div class='foot'></div>
+    </div>
+    <div id="page">
+      <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+        <div class="round_m"><div class="round_body canvas_wrap s_clear">
+          <div id="leftsidebar" class="canvas_l">
+            <%= yield :left %>
+          </div>
+          <div class="canvas_main"><div class="canvas_main_c s_clear">
+            <div class="canvas_m">
+              <div class="canvas_c">
+              <% flash.each do |key, msg| %>
+                <div class="<%=key%>-msg" id="notice_<%=key%>">
+                  <span class="icon-<%= key %>"></span>
+                  <%= msg %>
+                </div>
+                <script type="text/javascript">
+                  setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
+                </script>
+              <% end %>
+              <%= yield %>
+              </div>
+            </div>
+            <div id="rightsidebar" class="canvas_r">
+              <%= yield :right %>
+            </div>
+          </div></div>
+        </div></div>
+      </div></div></div></div>
+    </div>
+    <%= render :partial => 'layouts/footer' %>
+  </div>
+</body>
 <% end -%>
 
-<% content_for :themebodyup do %>
-<div class="theme-body">  
-<% end%>
-
-<% content_for :themebodydown do %>
-</div> <!-- end of theme-body -->
-<% end%>
-
-<%= render :file => 'layouts/app2' %>
+<%= render :file => 'layouts/base' %>

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100310151655) do
+ActiveRecord::Schema.define(:version => 20100309072232) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -513,12 +513,12 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.string   "website"
     t.datetime "birthday"
     t.text     "about_me"
+    t.integer  "skin_id",        :default => 1
     t.integer  "sharings_count", :default => 0
     t.integer  "viewings_count", :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "skin_id",        :default => 1
   end
 
   create_table "ratings", :force => true do |t|
@@ -629,6 +629,7 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.boolean  "enabled",                                  :default => true
     t.integer  "avatar_id"
     t.string   "pinyin"
+    t.datetime "last_seen_at"
     t.integer  "privacy_setting",            :limit => 8,  :default => 106299306
     t.integer  "mail_setting",               :limit => 8,  :default => 281474976710655
     t.integer  "application_setting",        :limit => 8,  :default => 262143
@@ -660,7 +661,6 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "last_seen_at"
   end
 
   create_table "videos", :force => true do |t|

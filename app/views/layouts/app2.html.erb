@@ -1,115 +1,40 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title><%= (html_title = yield :html_title) ? html_title : '页面' %> - 17Gaming.com</title>
-<meta name="description" content="<%= (html_description = yield :html_description) ? html_description : '17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。在这里，您能找到曾经一起战斗的游戏网友，结交到新的游戏战友，并一起分享，一起成长，一起快乐。' %>">
-<meta name="keywords" content="<%= (html_keywords = yield :html_keywords) ? html_keywords : '17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区' %>">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <%= stylesheet_link_merged :base %>
-  <%= yield :stylesheet_link %>
-  <%= javascript_include_merged :base %>
-  <%= yield :javascript_include %>
-</head>
+<% content_for :body do %>
 <body>
-<%= yield :skintop%> 
-<%= yield :themebodyup%> 
-<div id="header">
-	<div id="navbar">
-		<div id="navwrap">
-			<div id="navmid">
-				<%= link_to '', home_url(), :class => "logo-top png", :title => "17gaming" %>
-				<div id="navmain">
-					<ul id="navmain-title">
-						<li><%= link_to '<span id="navhome">首页</span>', home_url %></li>
-						<li><%= link_to '<span id="navprofile">个人主页</span>', profile_url(current_user.profile)  %></li>
-						<li><%= link_to '<span id="navfriend">好友</span', friends_url  %></li>
-						<li><%= link_to '<span id="navinbox">站内信</span>', mails_url(:type => 1) %></li>
-            <% notifications_count = current_user.notifications.unread.count %>	
-            <% if notifications_count == 0 %>
-					  <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知</span>", "", :id => "notifications_link" %>
-            <% else %>
-            <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知(#{notifications_count})</span>", "", :id => "notifications_link" %>
-            <% end %>
-					    <div class="drop-box" id='notifications_dropdown' style="display:none">
-					      <div id="notice-wrap">
-						      <dl class="con s_clear" id='notifications_dropdown_list'></dl>
-						      <div class="foot">
-							      <%= link_to "查看全部", notifications_url %>
-						      </div>
-					      </div>
-					    </div>
-					  </li>
-				  </ul>
-				</div>
-				<div id="navsearch">
-					<% form_tag search_users_url do %>
-						<div class="textfield"><%= text_field_tag 'key', "搜索游戏或游戏达人", :onfocus => "this.clear()" %></div>
-						<input type="submit" class="gobtn" value="" />
-          <% end %>
-        </div>
-				<div id="navextra">
-					<ul>
-						<li><%= link_to "邀请" %></li>
-            <li><%= link_to_function "设置", "", :id => "settings_link" %>
-						<div class='box01 set-box' id='settings_dropdown' style="display:none">
-							<%= link_to "隐私设置", privacy_setting_url, :class => "blk" %>
-							<%= link_to "密码设置", edit_password_setting_url, :class => "blk" %>
-							<%= link_to "应用设置", application_setting_url, :class => "blk nobd"%>
-						</div>
-						</li>		
-            <li><%= link_to "退出", logout_url %></li>
-          </ul>
-				</div>
-      </div>
-    </div>
+  <%= render :partial => 'layouts/navbar' %>
+  <div class='banner'>
+    <div class='con'></div>
+    <div class='foot'></div>
   </div>
-</div>
-
-<div class="banner"> 
-  <div class="con"></div> 
-  <div class="foot"></div> 
-</div> 
-
-<div id="page">
-	<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-		<div class="round_m"><div class="round_body canvas_wrap s_clear">
-			<div id="leftsidebar" class="canvas_l">
-				<%= yield :left %>
-      </div>
-      <div class="canvas_main"><div class="canvas_main_c s_clear">
-				<div class="canvas_m">
-					<div class="canvas_c">
-					<% flash.each do |key, msg| %>
-						<div class="<%=key%>-msg" id="notice_<%=key%>">
-							<span class="icon-<%= key %>"></span>
-							<%= msg %>
-						</div>
-						<script type="text/javascript">
-							setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
-						</script>
-					<% end %>
-					<%= yield %>
+  <div id="page">
+  	<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+	  	<div class="round_m"><div class="round_body canvas_wrap s_clear">
+		  	<div id="leftsidebar" class="canvas_l">
+			  	<%= yield :left %>
+        </div>
+        <div class="canvas_main"><div class="canvas_main_c s_clear">
+		  		<div class="canvas_m">
+			  		<div class="canvas_c">
+				  	<% flash.each do |key, msg| %>
+  						<div class="<%=key%>-msg" id="notice_<%=key%>">
+	  						<span class="icon-<%= key %>"></span>
+		  					<%= msg %>
+			  			</div>
+				  		<script type="text/javascript">
+  							setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
+	  					</script>
+		  			<% end %>
+			  		<%= yield %>
+            </div>
           </div>
-        </div>
-        <div id="rightsidebar" class="canvas_r">
-					<%= yield :right %> 
-        </div>
+          <div id="rightsidebar" class="canvas_r">
+			  		<%= yield :right %> 
+          </div>
+        </div></div>
       </div></div>
-    </div></div>
-  </div></div></div></div>
-</div>
-
-<%= javascript_tag "
-  new Iyxzone.Menu.AjaxDropdown('notifications_link', 'notifications_dropdown', 'notifications_dropdown_list', '#{first_five_notifications_url}');
-  new Iyxzone.Menu.Dropdown('settings_link', 'settings_dropdown');
-" %>
-
-
-<div id="footer">
-	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
-    <p><a href="#">网游公司 版权所有</a></p>
-</div>
-<%= yield :themebodydown%> 
-
+    </div></div></div></div>
+  </div>
+  <%= render :partial => 'layouts/footer' %>
 </body>
-</html>
+<% end %>
+
+<%= render :file => 'layouts/base' %>
