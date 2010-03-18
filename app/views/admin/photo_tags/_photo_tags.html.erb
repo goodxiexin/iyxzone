@@ -16,4 +16,4 @@
  
   <% end %>
 </table>
-<%= will_paginate @photo_tags, :renderer => "RemoteLinkRenderer", :remote => @remote %>
+<%= remote_will_paginate @photo_tags, :remote => @remote %>

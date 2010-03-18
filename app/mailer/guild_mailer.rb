@@ -15,12 +15,13 @@ class GuildMailer < ActionMailer::Base
 	def request guild, request
 		setup_email guild.president
 		subject		 "17Gaming.com(一起游戏网) - #{request.user.login}请求让游戏角色#{request.character.name}加入工会#{guild.name}"
-		body			 :guild => guild, :user => request.user, :url => "#{SITE_URL}/requests?type=2"
+		body			 :request => request, :guild => guild, :user => request.user, :url => "#{SITE_URL}/requests?type=2"
 	end
 
 	def promotion membership, old_role
 		setup_email membership.user
-    # TODO: your code here
+		subject		 "17Gaming.com(一起游戏网) - 您在公会中的职位变为#{membership.to_s}"
+		body			 :membership => membership, :old_role => old_role, :url => "#{SITE_URL}/guilds/#{guild.id}"
 	end
 
 protected

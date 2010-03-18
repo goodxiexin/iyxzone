@@ -73,26 +73,6 @@ class Event < ActiveRecord::Base
   # guild_id 不能改，如果存在的话
   attr_readonly :poster_id, :character_id, :game_server_id, :game_area_id, :game_id, :guild_id
 
-  validates_presence_of :poster_id, :message => "不能为空", :on => :create
-
-  validates_presence_of :title, :message => "不能为空"
-
-  validates_size_of :title, :within => 1..100, :too_long => "最长100字节", :too_short => "最短1字节"
-
-  validates_presence_of :description, :message => "不能为空"
-
-  validates_size_of :description, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1字节"
-
-  validates_presence_of :start_time, :end_time, :message => "不能为空"
-
-  validate :time_is_valid
-
-  validate_on_create :guild_is_valid
-
-  validates_presence_of :character_id, :message => "不能为空", :on => :create
-
-  validate_on_create :character_is_valid
-
   def expired?
     end_time < Time.now
   end
@@ -157,6 +137,31 @@ class Event < ActiveRecord::Base
   def recently_deleted= val
     @recently_deleted = val
   end
+
+  class CantDeleteExpired < StandardError
+  end 
+
+  validates_presence_of :poster_id, :message => "不能为空", :on => :create
+
+  validates_presence_of :title, :message => "不能为空"
+
+  validates_size_of :title, :within => 1..100, :too_long => "最长100字节", :too_short => "最短1字节"
+
+  validates_presence_of :description, :message => "不能为空"
+
+  validates_size_of :description, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1字节"
+
+  validates_presence_of :start_time, :end_time, :message => "不能为空"
+
+  validate :time_is_valid
+
+  validate_on_create :guild_is_valid
+
+  validates_presence_of :character_id, :message => "不能为空", :on => :create
+
+  validate_on_create :character_is_valid
+
+  validate_on_update :event_is_not_expired
  
 protected
 
@@ -183,6 +188,10 @@ protected
     errors.add(:character_id, "不存在") if character.blank?
     return if poster_id.blank?
     errors.add(:character_id, "不是拥有者") if character.user_id != poster_id
+  end
+
+  def event_is_not_expired
+    errors.add(:event_id, "已经过期") if expired?
   end
 
 end

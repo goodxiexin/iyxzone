@@ -22,7 +22,7 @@
         </div>
 		    <ul>
 			    <li><span><%= link_to "热门活动", hot_events_url %></span></li>
-			    <li class='hover'><span><%= link_to "#{get_subject @user}的活动", events_url(:id => @user.id) %></span></li>
+			    <li class='hover'><span><%= link_to "#{get_subject @user}的活动", events_url(:uid => @user.id) %></span></li>
 			    <% if @user == current_user %>
 			    <li><span><%= link_to "朋友的活动", friends_events_url %></span></li>
 			    <% end %>
@@ -30,13 +30,13 @@
       </div>
 	    <div class="nav-link">
         <ul class="s_clear">
-          <li class='hover'><%= link_to "<span>#{get_subject @user}发起的(#{@user.events_count})</span>", events_url(:uid => @user.id) %></li>
-          <li><%= link_to "<span>#{get_subject @user}要参加的(#{@user.upcoming_events_count})</span>", upcoming_events_url(:uid => @user.id) %></li>
-          <li><%= link_to "<span>#{get_subject @user}参加过的(#{@user.past_events_count})</span>", participated_events_url(:uid => @user.id) %></li>
+          <li class='hover'><%= link_to "<span>#{get_subject @user}发起的(#{@user.events.count})</span>", events_url(:uid => @user.id) %></li>
+          <li><%= link_to "<span>#{get_subject @user}要参加的(#{@user.upcoming_events.count})</span>", upcoming_events_url(:uid => @user.id) %></li>
+          <li><%= link_to "<span>#{get_subject @user}参加过的(#{@user.participated_events.count})</span>", participated_events_url(:uid => @user.id) %></li>
         </ul>
       </div>
       <div class="piclist-rows">
-        <% if @user.events_count != 0 %>
+        <% if @user.events.count != 0 %>
 				<%= render :partial => 'event_items', :object => @events %>
         <% else %>
           <% if @user == current_user %>

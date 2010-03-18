@@ -1,4 +1,6 @@
-<%= javascript_include_tag "contacts_grabber" %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag "contacts_grabber" %>
+<% end %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
@@ -14,7 +16,7 @@
           <div class="s_clear">
             <div class="fldid"><label><span class="icon-link"></span>万能邀请链接</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -26,7 +28,7 @@
           <div class="s_clear space">
             <div class="fldid"><label><span class="icon-qq"></span>复制链接发给 QQ 好友</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.qq_invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.qq_invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -38,7 +40,7 @@
           <div class="s_clear space">
             <div class="fldid"><label><span class="icon-msn"></span>复制链接发给 MSN 好友</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.msn_invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.msn_invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -53,7 +55,7 @@
         <div class="invite-tip jl-cutline">填写朋友的Email地址，就可以邀请对方加入了，对方会直接加入你的好友。</div>
         <div class="invite-email jl-cutline" style="display:none">
           <div id='email_invite'></div>
-          <% form_remote_for :invite, :url => signup_invitations_url do |f| %>
+          <% form_remote_for :invite, :url => signup_invitations_url, :condition => "Iyxzone.ContactsGrabber.checkEmailInvitation(this)" do |f| %>
           <div class="s_clear space">
             <div class="fldid"><label>好友邮箱 </label></div>
             <div class="fldvalue">
@@ -63,7 +65,7 @@
           <div class="s_clear space">
             <div class="fldid">&nbsp;</div>
             <div class="fldvalue">
-              <span class="button"><span><button type='submit'>发送邀请</button></span></span>
+              <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')">发送邀请</button></span></span>
             </div>
           </div>
           <% end %>
@@ -73,7 +75,7 @@
         <div class="invite-tip jl-cutline">导入MSN联系人名单并邀请其加入，对方会直接加入你的好友。</div>
         <div class="invite-msn jl-cutline" style="display:none">
           <div id='msn_invite'></div>
-          <% form_tag :controller => 'user/signup_invitations', :action => 'add_friend' do %>
+          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'),  {:onsubmit => "return Iyxzone.ContactsGrabber.checkMsnInput();"} do %>
           <%= hidden_field_tag 'type', 'msn'%>
           <div class="s_clear space">
             <div class="fldid"><label>你的MSN账号</label></div>
@@ -91,7 +93,7 @@
             <div class="fldid">&nbsp;</div>
             <div class="fldvalue">
               <span class="red">提示：17Gaming不会记录您的MSN信息，请放心使用。</span><br />
-              <span class="button"><span><button type="submit">导入联系人</button></span></span>
+              <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')">导入联系人</button></span></span>
             </div>
           </div>
           <% end %>
@@ -101,7 +103,7 @@
         <div class="invite-tip jl-cutline">导入邮箱联系人名单并邀请其加入，对方会直接加入你的好友。</div>
         <div class="invite-email jl-cutline" style="display:none">
           <div id='email_contacts'></div>
-          <% form_tag :controller => 'user/signup_invitations', :action => 'add_friend' do %>
+          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'), {:onsubmit => "return Iyxzone.ContactsGrabber.checkEmailContactsInput(this);"} do %>
           <div class="s_clear space">
             <div class="fldid"><label>你的邮箱</label></div>
             <div class="fldvalue">
@@ -128,7 +130,7 @@
             <div class="fldid"></div>
             <div class="fldvalue">
               <span class="red">提示：17Gaming不会记录您的MSN信息，请放心使用。</span><br />
-              <span class="button"><span><button type="submit">导入联系人</button></span></span>
+              <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')">导入联系人</button></span></span>
             </div>
           </div>
           <% end %>

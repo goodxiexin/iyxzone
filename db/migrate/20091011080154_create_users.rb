@@ -18,6 +18,7 @@ class CreateUsers < ActiveRecord::Migration
       t.boolean	:enabled,	:default => true
 			t.integer :avatar_id
       t.string :pinyin
+      t.datetime :last_seen_at
 			
 			# settings
 			t.integer :privacy_setting, :limit => 8, :default => PrivacySetting.default
@@ -36,9 +37,9 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :friends_count, :default => 0 # done
 			t.integer :albums_count, :default => 0 # done
       t.integer :photos_count, :default => 0
-			t.integer :events_count, :default => 0
-			t.integer :upcoming_events_count, :default => 0
-			t.integer :past_events_count, :default => 0
+			#t.integer :events_count, :default => 0
+			#t.integer :upcoming_events_count, :default => 0
+			#t.integer :past_events_count, :default => 0
 			t.integer :guilds_count, :default => 0 # done
 			t.integer :participated_guilds_count, :default => 0 # done
 			t.integer :polls_count, :default => 0 

@@ -104,9 +104,10 @@ Object.extend(Iyxzone.Event.Builder, {
     return true;
   },
 
-  save: function(event){
+  save: function(event, button){
     Event.stop(event);
     if(this.validate(true)){
+			Iyxzone.disableButton(button, '请等待..');
       var form = $('event_form');
       form.action = '/events';
       form.method = 'post';
@@ -114,9 +115,10 @@ Object.extend(Iyxzone.Event.Builder, {
     }
   },
 
-  update: function(eventID, event){
+  update: function(eventID, event, button){
     Event.stop(event);
     if(this.validate(false)){
+			Iyxzone.disableButton(button, '请等待..');
       var form = $('event_form');
       form.submit();
     }
@@ -143,7 +145,7 @@ Object.extend(Iyxzone.Event.Builder, {
       return;
     }
 
-    new Ajax.Request('/guilds/' + guildID + '/characters', {
+    new Ajax.Request('/characters?guild_id=' + guildID, {
       method: 'get',
       onSuccess: function(transport){
         var characters = transport.responseText.evalJSON();

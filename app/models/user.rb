@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
   def online_friends
-    [] #User.find(friendships.map(&:friend_id) & (Juggernaut.show_clients.map {|c| c['client_id']}))
+    User.find(friendships.map(&:friend_id) & (Juggernaut.show_clients.map {|c| c['client_id']}))
   end
 
   def has_friend? user
@@ -144,7 +144,7 @@ class User < ActiveRecord::Base
   # events
   has_many :participations, :foreign_key => 'participant_id', :conditions => {:status => [3,4,5]} 
 
-  has_many :events, :foreign_key => 'poster_id', :order => 'created_at DESC', :conditions => ["events.start_time >= ?", Time.now.to_s(:db)]
+  has_many :events, :foreign_key => 'poster_id', :order => 'created_at DESC', :conditions => ["end_time >= ?", Time.now.to_s(:db)]
 
 	with_options :order =>  'created_at DESC', :through => :participations, :source => :event do |user|
 
@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
     # 不包括我发起的，这样的都在events里
 		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ?', Time.now.to_s(:db)]
 
-		user.has_many :participated_events, :conditions => ["events.start_time < ?", Time.now.to_s(:db)]
+		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
 
 	end
 
@@ -297,7 +297,7 @@ class User < ActiveRecord::Base
   # messages
   has_many :messages, :foreign_key => 'recipient_id'
 
-  has_many :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => {:read => false}
+  has_many :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => {:read => 0}
 
   def messages_with friend
     Message.all(:conditions => "(recipient_id = #{id} AND poster_id = #{friend.id}) OR (recipient_id = #{friend.id} AND poster_id = #{id})", :order => 'created_at DESC')

@@ -1,7 +1,5 @@
 class Guild < ActiveRecord::Base
   
-  belongs_to :game
-
   belongs_to :president, :class_name => 'User'
 
   belongs_to :president_character, :class_name => 'GameCharacter', :foreign_key => 'character_id'
@@ -9,6 +7,8 @@ class Guild < ActiveRecord::Base
 	belongs_to :game
 
 	belongs_to :game_server
+
+  belongs_to :game_area
 
   named_scope :hot, :order => '(members_count + veterans_count + 1) DESC'
 
@@ -67,6 +67,7 @@ class Guild < ActiveRecord::Base
     guild.has_many :characters, :conditions => "memberships.status = 3 or memberships.status = 4 or memberships.status = 5" 
 
     guild.has_many :all_characters
+
   end
 
   needs_verification
@@ -130,8 +131,13 @@ class Guild < ActiveRecord::Base
     memberships.find(:first, :conditions => {:user_id => user.id, :status => [3,4,5]}, :order => 'status ASC') 
   end
 
+  def requestable_characters_for user
+    user.characters.find(:all, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) - 
+    all_characters.find(:all, :conditions => "memberships.user_id = #{user.id}")
+  end
+
   def is_requestable_by? user
-    !user.characters.find(:first, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}).blank?
+    !requestable_characters_for(user).blank?
   end
 
   def invitees= character_ids

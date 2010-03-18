@@ -4,8 +4,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :sessions
 
-  map.test '/test', :controller => 'test', :action => 'show'
-
   map.root :controller => 'sessions', :action => 'new' 
 
   map.signup '/signup', :controller => 'users', :action => 'new'
@@ -66,6 +64,8 @@ ActionController::Routing::Routes.draw do |map|
 
     admin.resources :applications
 
+    admin.resources :signup_invitations
+  
   end
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
@@ -113,11 +113,9 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :friend_impressions, :controller => 'friends/impressions'
 
-    users.resources :friends, :collection => {:search => :get, :other => :get, :common => :get} do |friends|
+    users.resources :friends, :collection => {:search => :get, :other => :get, :common => :get} 
 
-      friends.resources :requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :put}
-
-    end
+    users.resources :friend_requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :delete}
 
     users.resources :feed_deliveries
 
@@ -178,7 +176,7 @@ ActionController::Routing::Routes.draw do |map|
 
       events.resources :invitations, :controller => 'events/invitations', :collection => {:search => :get}, :member => {:accept => :put, :decline => :delete}
   
-      events.resources :requests, :controller => 'events/requests', :member => {:accept => :put, :decline => :put}
+      events.resources :requests, :controller => 'events/requests', :member => {:accept => :put, :decline => :delete}
 
       events.resource :summary, :controller => 'events/summary', :member => {:next => :post, :prev => :post, :save => :post}
 
@@ -206,8 +204,6 @@ ActionController::Routing::Routes.draw do |map|
       guilds.resources :rules, :controller => 'guilds/rules', :collection => {:create_or_update => :post}
 
       guilds.resources :gears, :controller => 'guilds/gears', :collection => {:create_or_update => :post}
-
-      guilds.resources :characters, :controller => 'guilds/characters'
 
     end
 
@@ -253,7 +249,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :ratings
 
-    users.resources :signup_invitations, :collection => {:create_multiple => :post}
+    users.resources :signup_invitations, :collection => {:create_multiple => :post}#, :controller => 'temp_signup_invitations'
 
     users.auto_complete_for_game_tags '/auto_complete_for_game_tags', :controller => 'tags', :action => 'auto_complete_for_game_tags' 
 

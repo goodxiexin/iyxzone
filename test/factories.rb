@@ -1,4 +1,7 @@
-Factory.define :user do |u|
-  u.gender 'male'
-  u.password '111111'
-end
+require 'factory_girl'
+require 'factories/base'
+require 'factories/user_factory'
+require 'factories/game_factory'
+require 'factories/game_character_factory'
+require 'factories/blog_factory'
+require 'factories/friendship_factory'

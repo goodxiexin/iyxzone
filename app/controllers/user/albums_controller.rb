@@ -73,7 +73,7 @@ class User::AlbumsController < UserBaseController
 
     if @album.destroy
 		  render :update do |page|
-			  page.redirect_to personal_albums_url(:id => current_user.id)  
+			  page.redirect_to personal_albums_url(:uid => current_user.id)  
 		  end
     else
       render :update do |page|

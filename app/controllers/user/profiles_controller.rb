@@ -9,13 +9,16 @@ class User::ProfilesController < UserBaseController
 	FetchSize = 5
 
   def show
-		@blogs = @user.blogs[0..2]
-		@albums = @user.active_albums[0..2]
+    @relationship = @user.relationship_with current_user
+		@blogs = @user.blogs.viewable(@relationship)[0..2]
+		@albums = @user.active_albums.viewable(@relationship)[0..2]
     @setting = @user.privacy_setting
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
 		@skin = @profile.skin
+    @messages = @profile.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
 	end
 
   def edit
@@ -61,12 +64,15 @@ protected
 		if ["more_feeds", "show", "edit"].include? params[:action]
 			@profile = Profile.find(params[:id])
 			@user = @profile.user
-      #require_adequate_privilege @user
-      # TODO: 根据setting来判断
+      require_adequate_privilege @profile
     elsif ["update"].include? params[:action]
       @profile = Profile.find(params[:id])
       require_owner @profile.user
     end
   end
 
+  def require_adequate_privilege profile
+    profile.is_viewable_by?(current_user) || render_add_friend(profile.user)
+  end
+  
 end

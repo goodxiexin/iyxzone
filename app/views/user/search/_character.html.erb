@@ -1,7 +1,6 @@
-<%= javascript_include_tag "game.js" %>
-<%= javascript_include_tag "search.js" %>
-<%= javascript_include_tag "friend.js" %>
-<%= javascript_include_tag "event.simulate" %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :search %>
+<% end %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">

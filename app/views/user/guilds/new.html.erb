@@ -1,4 +1,6 @@
-<%= javascript_include_tag 'guild' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'guild' %>
+<% end %>
 
 <% content_for :html_title, "#{current_user.login} - 新建公会 - 17Gaming.com" %>
 <% content_for :html_description, "#{current_user.login} - 新建公会 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
@@ -13,13 +15,13 @@
           <%= link_to "新建工会", new_guild_url, :class => "icon-add-table" %>
         </div>
         <ul>
-          <li><span><%= link_to "热门工会", hot_guilds_url(:id => current_user.id) %></span></li>
-          <li><span><%= link_to "我的工会", guilds_url(:id => current_user.id) %></span></li>
+          <li><span><%= link_to "热门工会", hot_guilds_url(:uid => current_user.id) %></span></li>
+          <li><span><%= link_to "我的工会", guilds_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "好友工会", friends_guilds_url %></span></li>
         </ul>
       </div>
       <div class="appcontent01">
-        <h3>新建活动</h3>
+        <h3>新建公会</h3>
         <div class="cons-form formcontent">
           <% form_for :guild, :html => {:id => "guild_form", :multipart => true} do |f| %>  
             <div class="rows s_clear">
@@ -35,7 +37,7 @@
               </div>
             </div>
             <div class="rows s_clear">
-              <div class="fldid"><label for="name">工会描述：</label></div>
+              <div class="fldid"><label for="name">公会描述：</label></div>
               <div class="fldvalue">
                 <%= f.text_area :description %>
               </div>
@@ -51,7 +53,7 @@
             <div class="rows s_clear">
               <div class="fldid">&nbsp;</div>
               <div class="fldvalue">
-                <span class="button"><span><button onclick="Iyxzone.Guild.Builder.save(event);">提交</button></span></span>
+                <span class="button"><span><button onclick="Iyxzone.Guild.Builder.save(event,this);">提交</button></span></span>
               </div>
             </div>
           <% end %>

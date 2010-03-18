@@ -1,7 +1,7 @@
 # Be sure to restart your server when you modify this file
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -65,12 +65,13 @@ Rails::Initializer.run do |config|
     :gear_observer,
     :guild_rule_observer,
     :rating_observer,
-    :signup_invitation_observer
+    :signup_invitation_observer,
+    :poke_delivery_observer
 
 	# reset mailer path to app/mailers
 	config.load_paths += %W(#{RAILS_ROOT}/app/mailers)
 
-  config.time_zone = 'UTC'
+  #config.time_zone = 'UTC'
 
 end
 

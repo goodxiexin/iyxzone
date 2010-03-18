@@ -1,4 +1,6 @@
-<%= javascript_include_tag 'mail' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'mail' %>
+<% end %>
 
 <% content_for :html_title, "#{current_user.login}的发件箱 - 17Gaming.com" %>
 <% content_for :html_description, "#{current_user.login}的发件箱 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>

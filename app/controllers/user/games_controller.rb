@@ -42,6 +42,9 @@ class User::GamesController < UserBaseController
 		end
 		@players = @game.characters.find(:all)	
 
+    @messages = @game.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @game.id, :wall_type => 'game'}}
+
     @albums = @game.albums.find(:all, :limit => 3)
     @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize

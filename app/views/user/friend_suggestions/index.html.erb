@@ -1,7 +1,6 @@
-<%= javascript_include_tag "game.js" %>
-<%= javascript_include_tag "search.js" %>
-<%= javascript_include_tag "friend.js" %>
-<%= javascript_include_tag "event.simulate" %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :search %>
+<% end %>
 
 <% content_for :html_title, "#{current_user.login} - 寻找好友 - 17Gaming.com" %>
 <% content_for :html_description, "#{current_user.login}寻找好友 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
@@ -96,7 +95,7 @@
 							<span class="remind">本站不会存储您的密码，请放心使用</span>
               <div class="rows s_clear">
 								<div class="fldid">&nbsp;</div>
-								<div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
+								<div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">查找</button></span></span></div>
               </div>
             </form>
           </div>

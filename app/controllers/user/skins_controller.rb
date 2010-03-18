@@ -15,12 +15,10 @@ class User::SkinsController < UserBaseController
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
-		@skin = Skin.find(params[:id])
-		puts @skin.id
-		puts "--------------------------------------------------------------"
-		@skin_prev = Skin.find(:last, :order => :id, :conditions => "id < #{@skin.id}")
-		@skin_next = Skin.find(:first, :order => :id, :conditions => "id > #{@skin.id}")
-		
+		@messages = @profile.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
+    @skin = Skin.find(params[:id])
+    		
 		render :template => 'user/profiles/show', :layout =>'skins'
 	end
 
@@ -32,8 +30,8 @@ class User::SkinsController < UserBaseController
 	def update
 		@skin = Skin.find(params[:id])
 		@profile = current_user.profile
-		#debugger
-		if @profile.update_attributes(:skin_id => @skin.id)
+		
+    if @profile.update_attributes(:skin_id => @skin.id)
 			flash[:notice] = "皮肤更新完成！"
 			redirect_to profile_url(@profile)
 		else

@@ -24,7 +24,7 @@ protected
   end
 
   def setup_instant_messenger
-    @online_friends = []#current_user.online_friends
+    @online_friends = [] #current_user.online_friends
     @im_info = {}
     current_user.unread_messages.group_by(&:poster).each do |poster, messages|
       @im_info["#{poster.id}"] = {
@@ -35,7 +35,8 @@ protected
   end
 
   def set_last_seen_at
-    current_user.update_attributes(:last_seen_at => Time.now)
+    current_user.last_seen_at = Time.now
+    current_user.save
   end
 
   def setup
@@ -64,11 +65,15 @@ protected
   end
 
   def require_adequate_privilege resource
-    resource.available_for? current_user || render_privilege_denied
+    resource.available_for?(current_user) || render_privilege_denied(resource)
   end
 
-  def render_privilege_denied
-    render_not_found
+  def render_privilege_denied resource
+    if resource.is_owner_privilege?
+      render_not_found
+    else
+      render_add_friend resource.resource_owner
+    end
   end
 
   def render_add_friend friend

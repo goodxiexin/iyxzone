@@ -2,8 +2,6 @@ class PasswordsController < ApplicationController
 
   layout 'root'
 
-  before_filter :logout_required
-
   def new
   end
 

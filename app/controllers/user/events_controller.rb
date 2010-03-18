@@ -34,6 +34,8 @@ class User::EventsController < UserBaseController
     @album = @event.album
 		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @participations = @event.participations_for current_user
+    @messages = @event.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @event.id, :wall_type => 'event'}}
 		render :action => 'show', :layout => 'app2'
   end
 
@@ -73,11 +75,11 @@ class User::EventsController < UserBaseController
   def destroy
     if @event.destroy
       render :update do |page|
-        page.redirect_to events_url(:id => current_user.id)
+        page.redirect_to events_url(:uid => current_user.id)
       end
     else
       render :update do |page|
-        page << "error('发生错误');"
+        page << "error('发生错误, 可能该活动已经过期了');"
       end
     end
   end  
@@ -106,10 +108,20 @@ protected
     if ['edit', 'update', 'destroy'].include? params[:action]
       @event = Event.find(params[:id])
       require_owner @event.poster
+      require_event_not_expired @event if params[:action] == 'destroy'
     elsif ['index', 'upcoming', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
     end
   end
 
+  def require_event_not_expired event
+    if event.expired?
+      render :update do |page|
+        page << "tip('该活动已经过期了，无法删除');"
+      end 
+    end
+  end
+  
 end
+

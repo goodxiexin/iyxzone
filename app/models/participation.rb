@@ -13,25 +13,6 @@ class Participation < ActiveRecord::Base
 	Confirmed				= 3 # 一定去
 	Maybe						= 4 # 可能去
 
-  # participant_id, character_id, event_id 都是不能修改的
-  attr_readonly :participant_id, :character_id, :event_id
-
-  validates_presence_of :participant_id, :message => "不能为空", :on => :create
-
-  validates_presence_of :character_id, :message => "不能为空", :on => :create
-
-  validates_presence_of :event_id, :message => "不能为空", :on => :create
-
-  validates_inclusion_of :status, :message => "只能是0,1,3,4", :in => [Invitation, Request, Confirmed, Maybe]
-
-  validate_on_create :event_is_valid
-
-  validate_on_create :character_is_valid
-
-  validate_on_create :participant_is_valid
-
-  validate_on_update :status_is_valid
-
   def to_s
     if is_invitation?
       "受邀请"
@@ -72,9 +53,27 @@ class Participation < ActiveRecord::Base
     status_was == Participation::Confirmed or status_was == Participation::Maybe
   end
 
+  # participant_id, character_id, event_id 都是不能修改的
+  attr_readonly :participant_id, :character_id, :event_id
+
+  validates_presence_of :participant_id, :message => "不能为空", :on => :create
+
+  validates_presence_of :character_id, :message => "不能为空", :on => :create
+
+  validates_presence_of :event_id, :message => "不能为空", :on => :create
+
+  validates_inclusion_of :status, :message => "只能是0,1,3,4", :in => [Invitation, Request, Confirmed, Maybe]
+
+  validate_on_create :event_is_valid
+
+  validate_on_create :character_is_valid
+
+  validate_on_create :participant_is_valid
+
+  validate_on_update :status_is_valid
+
 protected
 
-  # 活动如果过期了，那不能创建邀请，请求啥的，但是那些已经创建的邀请，请求，还是能够接受，或者拒绝的
   def event_is_valid
     return if event_id.blank?
     if Event.exists? event_id

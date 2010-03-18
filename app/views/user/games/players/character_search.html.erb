@@ -1,7 +1,6 @@
-<%= javascript_include_tag "game.js" %>
-<%= javascript_include_tag "search.js" %>
-<%= javascript_include_tag "friend.js" %>
-<%= javascript_include_tag "event.simulate" %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :search %>
+<% end %>
 
 <% content_for :html_title, "#{@game.name} - 游戏玩家 - 17Gaming.com" %>
 <% content_for :html_description, "#{@game.name}游戏玩家 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
@@ -34,7 +33,7 @@
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key','用户名查找', :onclick => "this.clear();" %></div>
               </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
+              <div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">查找</button></span></span></div>
 							<div class='link'><%= link_to_function '按游戏角色查找', "Iyxzone.Search.showCharacterForm()" %></div>
             </div>
           <% end %>
@@ -43,7 +42,7 @@
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key','游戏角色查找', :onclick => "this.clear();" %></div>
               </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
+              <div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">查找</button></span></span></div>
 							<div class='link'><%= link_to_function '按用户名查找', "Iyxzone.Search.showUserForm()" %></div>
             </div>
           <% end %>
@@ -66,7 +65,7 @@
 										</p>
 										<p class="space">
 											<%unless current_user == f %>
-											<% unless current_user.has_friend? f %>
+											<% unless current_user.relationship_with(f)=='friend' %>
 											<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
 											<% end %>
 											<%= link_to '', new_mail_url(:recipient_id => f.id), :class => "msg-btn" %>

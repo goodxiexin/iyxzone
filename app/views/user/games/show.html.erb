@@ -1,6 +1,6 @@
-<%= javascript_include_tag "game" %>
-<%= javascript_include_tag "rating" %>
-<%= javascript_include_tag 'video' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :game %>
+<% end %>
 
 <% content_for :html_title, "#{@game.name} - 主页 - 17Gaming.com" %>
 <% content_for :html_description, "#{@game.name} - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
@@ -23,20 +23,20 @@
 
 <div class="multibox">
 	<div class="title"><b id='tag_cloud_head'>
-		<% if @can_tag %>
+		<% if @game.is_taggable_by? current_user %>
 			你对这个游戏的印象是
 		<% else %>
 			玩家印象
 		<% end %>
 	</b></div>
 	<div id='tag_cloud'>
-  <% if @can_tag %>
+  <% if @game.is_taggable_by? current_user %>
 		<div class='rows s_clear'>
     <%= render :partial => 'user/games/tags/game_tag', :locals => {:game => @game} %>
     <% form_remote_for :tag, :url => game_tags_url(@game) do |f| %>
 			<p class='space'>都不贴切？自己想个</p>
       <div class='textfield04 left space'><%= text_field_tag 'tag_name', '' %></div>
-      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
+      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">评价</button></span></span></div>
     <% end %>
 		</div>
   <% else %>
@@ -159,7 +159,7 @@
 <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @game, :recipient => nil, :with_comments => false} %>
 
 <div class="feed-box" id='comments'>
-  <%= javascript_tag "Iyxzone.WallMessage.fetch('Game', #{@game.id});" %>
+  <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>
 </div>
 
 </div>

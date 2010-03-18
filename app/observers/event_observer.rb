@@ -55,8 +55,17 @@ class EventObserver < ActiveRecord::Observer
   def before_destroy event
     # modify request count
     event.poster.raw_decrement :event_requests_count, event.requests_count
-    event.poster.raw_decrement :events_count
+    #event.poster.raw_decrement :events_count
     event.recently_deleted = true
+ 
+    event.participants.each do |p|
+      p.notifications.create(
+        :category => Notification::EventChange,
+        :data => "活动 #{event.title} 取消了"
+      )
+      EventMailer.deliver_event_cancel event, p if p.mail_setting.cancel_event
+    end
+
   end
 
 end

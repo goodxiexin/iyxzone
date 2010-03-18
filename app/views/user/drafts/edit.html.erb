@@ -1,8 +1,10 @@
-<%= stylesheet_link_tag 'test' %>
-<%= javascript_include_tag 'textboxlist' %>
-<%= javascript_include_tag 'nicEdit' %>
-<%= javascript_include_tag 'friend' %>
-<%= javascript_include_tag 'blog' %>
+<% content_for :html_title, "#{current_user.login} - 编辑草稿 - 17Gaming.com" %>
+<% content_for :html_description, "#{current_user.login}的编辑草稿 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :blog %> 
+<% end %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
@@ -44,8 +46,8 @@
           <div class='rows s_clear'>
 		        <div class='fldid'>&nbsp;</div>
 		        <div class='fldvalue'>
-              <span class="button03 w-l"><span><%= button_to_function "保存", "Iyxzone.Blog.Builder.updateBlog(#{@blog.id}, event);", :class => "confirm-button" %></span></span>
-              <span class="button03 w-l"><span><%= button_to_function "保存为草稿", "Iyxzone.Blog.Builder.updateDraft(#{@blog.id}, event);", :class => "confirm-button" %></span></span>
+              <span class="button03"><span><%= button_to_function "发布", "Iyxzone.Blog.Builder.updateBlog(this, #{@blog.id}, event);", :class => "confirm-button" %></span></span>
+              <span class="button03"><span><%= button_to_function "保存为草稿", "Iyxzone.Blog.Builder.updateDraft(this, #{@blog.id}, event);", :class => "confirm-button" %></span></span>
             </div>
 		      </div>
         <% end %>

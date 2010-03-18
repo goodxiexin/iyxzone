@@ -3,13 +3,38 @@ Iyxzone.Game = {
 
   author: ['高侠鸿'],
 
+  pinyins: null,
+
+  infos: null, // name and id 
+
   Suggestor: {},
 
   Selector: Class.create({}),
 
   PinyinSelector: Class.create({}),
 
-  Feeder: {}
+  Feeder: {},
+
+  // 相当于一个factory方法，返回一个 pinyin selector， 这样避免在每个pinyin selector里保存游戏信息，浪费
+  initPinyinSelector: function(game, area, server, race, profession, prompt, initValue, options){
+    if(Iyxzone.Game.infos == null || Iyxzone.Game.pinyins == null){
+      alert('错误');
+      return;
+    }
+
+    $(game).innerHTML = '';
+
+    if(prompt)
+      $(game).innerHTML = '<option value="">---</option>';
+
+    Iyxzone.Game.infos.each(function(info){
+      Element.insert(game, {bottom: '<option value=' + info.game.id + '>' + info.game.name + '</option>'});
+    }.bind(this));
+    
+    $(game).value = '';
+ 
+    return new Iyxzone.Game.PinyinSelector(game, area, server, race, profession, initValue, options);
+  }
 };
 
 Iyxzone.Game.Selector = Class.create({
@@ -201,8 +226,11 @@ Iyxzone.Game.Selector = Class.create({
 
 Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
 
-  initialize: function($super, pinyins, gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, options){
-    this.pinyins = pinyins;
+  initialize: function($super, gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, options){
+    if(Iyxzone.Game.pinyins == null){
+      alert("error");
+      return;
+    }
     this.mappings = new Hash();
     this.keyPressed = '';
     this.lastPressedAt = null;
@@ -237,30 +265,32 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
   },
 
   binarySearch: function(keyCode){
-    var size = this.pinyins.length;
+    var pinyins = Iyxzone.Game.pinyins;
+    var size = pinyins.length;
     var i = 0;
     var j = size - 1;
-    var c1 = this.pinyins[i].toLowerCase().charCodeAt(0);
-    var c2 = this.pinyins[j].toLowerCase().charCodeAt(0);
+    var c1 = pinyins[i].toLowerCase().charCodeAt(0);
+    var c2 = pinyins[j].toLowerCase().charCodeAt(0);
     if(c1 > keyCode) return -1;
     if(c2 < keyCode) return -1;
     while(i != j-1){
       var m = Math.ceil((i+j)/2);
-      var c = this.pinyins[m].toLowerCase().charCodeAt(0);
+      var c = pinyins[m].toLowerCase().charCodeAt(0);
       if(c < keyCode){
         i = m;
       }else{
         j = m;
       }
     }
-    c1 = this.pinyins[i].toLowerCase().charCodeAt(0);
-    c2 = this.pinyins[j].toLowerCase().charCodeAt(0);
+    c1 = pinyins[i].toLowerCase().charCodeAt(0);
+    c2 = pinyins[j].toLowerCase().charCodeAt(0);
     if(c1 != keyCode && c2 != keyCode) return -1;
     if(c1 == keyCode) return i;
     if(c2 == keyCode) return j;
   },
   
   onKeyUp: function(e){
+    var pinyins = Iyxzone.Game.pinyins;
     var code = e.keyCode;
     var now = new Date().getTime();
     if(this.lastPressedAt == null || (now - this.lastPressedAt) < 1000){
@@ -273,8 +303,8 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
     var len = this.keyPressed.length;
     var startPos = this.mappings.get(this.keyPressed.charCodeAt(0));
     if(startPos == null) return;
-    for(var i = startPos;i < this.pinyins.length; i++){
-      if(this.pinyins[i].substr(0, len) == this.keyPressed.toLowerCase()){ // start with this.keyPressed?
+    for(var i = startPos;i < pinyins.length; i++){
+      if(pinyins[i].substr(0, len) == this.keyPressed.toLowerCase()){ // start with this.keyPressed?
         if($(this.gameSelectorID).selectedIndex != i){
           $(this.gameSelectorID).value = $(this.gameSelectorID).options[i].value;
           this.currentGameID = $(this.gameSelectorID).value;
@@ -432,7 +462,7 @@ Object.extend(Iyxzone.Game.Suggestor, {
         method: 'get',
         parameters: {selected_tags: this.tagNames.join(','), new_game: newGame.checked},
         onLoading: function(){
-          Iyxzone.disableButton(button, '等待...');
+          Iyxzone.disableButton(button, '请等待..');
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '推荐');

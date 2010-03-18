@@ -1,8 +1,11 @@
-<div class='header'>
-	<h3>回复这个邀请</h3>
-</div>
+<p class="z-h s_clear">
+  <strong class="left">回复邀请</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
 
-<div class='content'>
-  <%= radio_button :invitation, :status, 1, :onclick => "new Ajax.Request('#{accept_guild_invitation_url(@guild, @invitation, :show => 1, :authenticity_token => form_authenticity_token )}', {method: 'put'});" %><%= label_tag '', '接受' %><br/>
-  <%= radio_button :invitation, :status, 2, :onclick => "new Ajax.Request('#{decline_guild_invitation_url(@guild, @invitation, :show => 1, :authenticity_token => form_authenticity_token)}', {method: 'delete'});" %><%= label_tag '', '拒绝' %><br/>
+<div id='error'></div>
+<div class='z-con'>
+  <%= radio_button :invitation, :status, 1, :onclick => "facebox.close();new Ajax.Request('#{accept_guild_invitation_url(@guild, @invitation, :show => 1, :authenticity_token => form_authenticity_token )}', {method: 'put'});" %><%= label_tag '', '接受' %><br/>
+  <%= radio_button :invitation, :status, 2, :onclick => "facebox.close();new Ajax.Request('#{decline_guild_invitation_url(@guild, @invitation, :show => 1, :authenticity_token => form_authenticity_token)}', {method: 'delete'});" %><%= label_tag '', '拒绝' %><br/>
+</div>
 </div>

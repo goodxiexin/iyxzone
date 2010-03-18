@@ -6,7 +6,7 @@ class User::BlogsController < UserBaseController
 
   def index
     @relationship = @user.relationship_with current_user
-    @blogs = @user.blogs.viewable(@relationship).paginate :page => params[:page], :per_page => 1
+    @blogs = @user.blogs.viewable(@relationship).paginate :page => params[:page], :per_page => 10
   end
 
 	def hot 
@@ -66,7 +66,7 @@ class User::BlogsController < UserBaseController
   def destroy
     if @blog.destroy
 			render :update do |page|
-				page.redirect_to blogs_url(:id => current_user.id)
+				page.redirect_to blogs_url(:uid => current_user.id)
 			end
 		else
 			render :update do |page|

@@ -58,7 +58,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
     });
   },
 
-  inviteContactsToSignup: function(token){
+  inviteContactsToSignup: function(token, button){
     var invitees = new Array();
     var table = $('unregister_table');
     var params = '';
@@ -80,7 +80,58 @@ Object.extend(Iyxzone.ContactsGrabber, {
     new Ajax.Request('/signup_invitations/create_multiple?authenticity_token=' + encodeURIComponent(token), {
       method: 'post',
       parameters: params,
+      onLoading: function(){
+        Iyxzone.disableButton(button, '请等待..');
+      },
+      onComplete: function(){
+        Iyxzone.enableButton(button, '发送邀请');
+      },
     });
-  }
+  },
+
+  checkMsnInput: function(form){
+    var id = form.getInputs('text')[0];
+    var pwd = form.getInputs('password')[0];
+    if(id.value == ''){
+      error('请输入msn用户名');
+      return false;
+    }
+    if(pwd.value == ''){
+      error('请输入msn密码');
+      return false;
+    }
+    return true;
+  },
+
+  checkEmailInvitation: function(form){
+    var value = form.getInputs('text')[0].value;
+    if(value == ''){
+      error('请输入邮箱');
+      return false;
+    }else if(!value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
+      error('非法的邮箱地址');
+      return false;
+    }
+    return true;
+  },
+
+  checkEmailContactsInput: function(form){
+    var id = form.getInputs('text')[0];
+    var pwd = form.getInputs('password')[0];
+    var type = $('email_selector').value;
+    if(type == ''){
+      error('请选择邮箱种类');
+      return false;
+    }
+    if(id.value == ''){
+      error('请输入用户名');
+      return false;
+    }
+    if(pwd.value == ''){
+      error('请输入密码');
+      return false;
+    }   
+    return true;
+  },
 
 });

@@ -1,9 +1,6 @@
-<%= stylesheet_link_tag 'test' %>
-<%= stylesheet_link_tag 'cropper' %>
-<%= javascript_include_tag 'textboxlist' %>
-<%= javascript_include_tag 'friend' %>
-<%= javascript_include_tag 'cropper' %>
-<%= javascript_include_tag 'photo' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :photo %>
+<% end %>
 
 <% content_for :html_title, "#{@user.login}的照片 - 17Gaming.com" %>
 <% content_for :html_description, "#{@user.login}的照片 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>

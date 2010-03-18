@@ -56,7 +56,7 @@ class User::VideosController < UserBaseController
   def destroy
 		if @video.destroy
 			render :update do |page|
-				page.redirect_to videos_url(:id => current_user.id)
+				page.redirect_to videos_url(:uid => current_user.id)
 			end
 		else
 			render :update do |page|

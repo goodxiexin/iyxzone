@@ -1,4 +1,6 @@
+<% content_for :javascript_include do %>
 <%= javascript_include_tag 'poll' %>
+<% end %>
 
 <% content_for :html_title, "#{current_user.login} - 新建投票 - 17Gaming.com" %>
 <% content_for :html_description, "#{current_user.login} - 新建投票 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
@@ -93,7 +95,7 @@
               </div>
               <div class="rows s_clear">
                 <div class="fldid">&nbsp;</div>
-                <div class="fldbtn"><span class="button"><span><%= button_to_function "发起投票", "Iyxzone.Poll.Builder.save()" %></span></span></div>
+                <div class="fldbtn"><span class="button"><span><%= button_to_function "发起投票", "Iyxzone.Poll.Builder.save(this)" %></span></span></div>
               </div>
             </div>
           <% end %>

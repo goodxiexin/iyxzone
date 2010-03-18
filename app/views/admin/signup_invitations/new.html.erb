@@ -1,0 +1,19 @@
+<h3>直接发送Email邀请</h3>
+        <div class="invite-tip jl-cutline">填写朋友的Email地址，就可以邀请对方加入了。</div>
+        <div class="invite-email jl-cutline">
+          <div id='email_invite'></div>
+          <% form_remote_for :invite, :url => admin_signup_invitations_url, :condition => "$('email').value != ''" do |f| %>
+          <div class="s_clear space">
+            <div class="fldid"><label>好友邮箱 </label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= text_field_tag 'email', "例如： abc@abc.com", :onclick => "this.clear();" %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              <span class="button"><span><button type='submit'>发送邀请</button></span></span>
+            </div>
+          </div>
+          <% end %>
+        </div>

@@ -1162,8 +1162,8 @@ h1.app-share{float:left}
 .emot-box .foot{background:#eee;text-align:right;padding:5px;border:0}
 
 /*简单翻页*/
-.pager-simple a{width:16px;height:15px;display:inline-block;font-size:0;line-height:0;overflow:hidden;background:url(../images/skin/skin2010.png) no-repeat;vertical-align:middle;}
-.pager-simple span{margin:0 5px;color:#999}
+.pager-simple a{width:14px;height:14px;display:inline-block;font-size:0;line-height:0;overflow:hidden;background:url(../images/skin/skin2010.png) no-repeat;vertical-align:middle;}
+.pager-simple span{margin:0 5px;color:#999;zoom:1}
 .pager-simple .prev{background-position:0 -90px;}
 .pager-simple .prev:hover{background-position:0 -110px;}
 .pager-simple .next{background-position:-17px -90px;}

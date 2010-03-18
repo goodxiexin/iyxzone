@@ -67,7 +67,7 @@ class User::PollsController < UserBaseController
     if @poll.destroy
       render :update do |page|
         page << "facebox.close();"
-        page.redirect_to polls_url(:id => current_user.id)
+        page.redirect_to polls_url(:uid => current_user.id)
       end
     else
       render :update do |page|
