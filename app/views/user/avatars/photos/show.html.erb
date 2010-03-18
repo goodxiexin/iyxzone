@@ -65,7 +65,7 @@
 									<div class="pic-desc s_clear">
 										<h4 class="box06">
 										<% if @user == current_user %>
-											<%= in_place_text_field :span, @photo, :notation, true, avatar_url(@photo), {}, {:empty_text => '点击增加照片描述', :parameter_name => 'photo[notation]', :rows => 2} %>
+											<%= in_place_text_area @photo, :notation, '点击增加照片描述', :param_name => 'photo[notation]' %>
 										<% else %>
 											<%= @photo.notation %>
 										<% end %>

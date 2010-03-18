@@ -24,11 +24,13 @@ protected
   end
 
   def setup_instant_messenger
-    @online_friends = [] #current_user.online_friends
+    @online_friends = current_user.online_friends
     @im_info = {}
+    @my_info = {:avatar => avatar_path(current_user), :login => current_user.login}
     current_user.unread_messages.group_by(&:poster).each do |poster, messages|
       @im_info["#{poster.id}"] = {
-        :login => poster.login, 
+        :login => poster.login,
+        :avatar => avatar_path(poster),
         :messages => messages.map{|m| {:content => m.content, :created_at => m.created_at, :id => m.id}}
       }
     end
@@ -78,6 +80,14 @@ protected
 
   def render_add_friend friend
     redirect_to new_friend_url(:uid => friend.id) 
+  end
+
+  def avatar_path user
+    if user.avatar.blank?
+      "/images/default_medium.png"
+    else
+      user.avatar.public_filename(:medium)
+    end
   end
 
 end

@@ -2,10 +2,6 @@
 
 module ActsAsVideo
 
-	YOUKU_RE = /http:\/\/v\.youku\.com\/v_show\/id_[\w]*\=?\.html/
-	TUDOU_RE = /http:\/\/www\.tudou\.com\/programs\/view\/[\w]*\/?/
-	KU6_RE	 = /http:\/\/v\.ku6\.com\/show\/[\w]*\.html/
-
 	def self.included(base)
 		base.extend ClassMethods
 	end
@@ -33,6 +29,7 @@ module ActsAsVideo
 		def type
 			return Youku if Youku.identify_url(video_url)
 			return Tudou if Tudou.identify_url(video_url)
+      return FiveSix if FiveSix.identify_url(video_url)
 			return Ku6	 if Ku6.identify_url(video_url)
 		end
 

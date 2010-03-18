@@ -75,7 +75,7 @@
 				</table>
       <div class="pic-desc">
         <% if @membership and @membership.is_president? %>
-          <h4 class='box06'><%= in_place_text_field :span, @album, :description, true, guild_album_url(@album), {}, {:empty_text => '点击添加相册描述', :parameter_name => 'album[description]', :rows => 2, :cols => 90}, {} %></h4>
+          <h4 class='box06'><%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]' %></h4>
         <% else %>
           <h4 class="box06"><%= @album.description %></h4>
         <% end %>

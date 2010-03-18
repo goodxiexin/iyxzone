@@ -1,10 +1,16 @@
+﻿.sperator{clear:both;margin:12px 0; background:url(../images/welcome/sperator01.gif) repeat-x;height:1px;font-size:1px;}
+.sperator-wrap{margin:12px 0;background:url(../images/welcome/sperator01.gif) repeat-x;}
+.sperator-wrap .sperator{margin:0;}
+.sperator-wrap .sperator-main{background:url(../images/welcome/sperator01.gif) repeat-y center top}
+
+
 .body_bg01{background:url(../images/skin/bg01.png) no-repeat center top}
 .top_link{line-height:39px;text-align:right;color:#fff;overflow:hidden;}
 .welcome-box #navbar #navwrap #navmid{background:#73bd21 url(../images/welcome/top-bg.png) no-repeat 400px 0;}
 
 .logo-v2{background:url(../images/skin/logo-v2.png) no-repeat;top:0}
-.login-box .logo,.regist-box .logo{padding:39px 0 0 101px;height:66px;background:url(../images/welcome/logo.png) no-repeat left top;color:#BF3A00}
-.login-box .logo-mail,.regist-box .logo-mail{background:url(../images/welcome/logo-mail.png) no-repeat}
+.login-box .logo,.regist-box .logo{padding:0 0 0 101px;height:66px;line-height:66px;background:url(../images/welcome/welcome_title.png) no-repeat 0 0;color:#BF3A00}
+.login-box .logo-mail,.regist-box .logo-mail{background:url(../images/welcome/welcome_title.png) no-repeat 0 -80px}
 
 .login-box .rows,.regist-box .rows{height:26px;line-height:26px;overflow:hidden}
 .login-box .btn-rows,.regist-box .btn-rows{height:36px;overflow:hidden}
@@ -40,8 +46,8 @@
 .regist-box{width:672px;margin:13px auto 0;color:#7E7F80;background:url(../images/welcome/regist02.png) repeat-y}
 .regist-box .b{background:url(../images/welcome/regist03.png) no-repeat 0 bottom;}
 .regist-box .regist-content{padding:20px;background:url(../images/welcome/registBg01.png) no-repeat;}
-.regist-box .logo .status{padding-left:24px;line-height:29px; background:url(../images/icons/statusIcons.gif) no-repeat left 3px;}
-.regist-box .help{padding-left:101px;_height:1px;line-height:22px;position:relative;}
+.regist-box .logo .status{padding-left:24px;margin-top:20px;line-height:29px; background:url(../images/icons/homeIcons.gif) no-repeat 0 -1295px;}
+.regist-box .help{padding-left:101px;_height:1px;line-height:22px;position:relative;margin-top:20px}
 .regist-box .help .prompt{width:75px;position:absolute;left:19px;top:0;height:22px;line-height:normal;font-weight:bold;font-size:16px;overflow:hidden;color:#BF3A00}
 .regist-box .help h1{color:#BF3A00}
 .regist-box label{color:#0A3100}
@@ -58,7 +64,7 @@
 .regist-box .regist-prompt p.btn{margin-bottom:15px;}
 .regist-box .answer-box{padding:22px 43px;line-height:21px;}
 .regist-box .answer-box ul{padding-left:32px;}
-.regist-box .answer-box h3{padding-left:21px;background:url(../images/icons/statusIcons.gif) no-repeat left -60px;color:#25700D}
+.regist-box .answer-box h3{padding-left:21px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -1358px;color:#25700D}
 
 .regist-box .edit .con p.foot {border-bottom:1px solid #9ACE5F;line-height:30px;margin:0 20px;}
 

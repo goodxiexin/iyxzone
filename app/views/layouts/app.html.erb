@@ -1,5 +1,9 @@
+<% content_for :javascript_include do %>
+  <%= juggernaut :client_id => current_user.id %>
+<% end %>
+
 <% content_for :body do %>
-<body class='cut-line'>
+<body class='cut-side'>
   <%= render :partial => 'layouts/navbar' %>
   <div id="page" class="page_side_wrap s_clear">
 	  <div class="sidebar">
@@ -41,7 +45,7 @@
   </div>
   <%= render :partial => 'layouts/imbar' %>
   <%= render :partial => 'layouts/footer' %>
-</div>
+</body>
 <% end %>
 
 <%= render :file => 'layouts/base' %>
