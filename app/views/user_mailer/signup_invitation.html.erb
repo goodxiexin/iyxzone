@@ -8,7 +8,7 @@
 <body>
 
 <div style="width:600px;font-size:12px;font:Tahoma, Geneva, sans-serif">
-	<div><img src="<%=SITE_URL%>/images/17gaming_banner.png" alt="17gaming" /></div>
+	<div><img src="<%=SITE_URL%>/images/head.png" alt="17gaming" /></div>
     <div style="float:left;width:210px">
     	<div style="padding:10px 0 0 15px">
 			<% if @user.avatar.blank? %>
@@ -51,7 +51,7 @@
 	<% } %>
   <tr>
 </table>
-	<div style="padding-top:10px"><a href="<%= @url %>" title="立即注册并加为好友 "><img src="<%=SITE_URL%>/images/signup_invitation.png" alt="立即注册并加为好友" border="0" /></a></div>
+	<div style="padding-top:10px"><a href="<%= @url %>" title="立即注册并加为好友 "><img src="<%=SITE_URL%>/images/register.png" alt="立即注册并加为好友" border="0" /></a></div>
     <br />
     <div style="line-height:22px">你也可以通过下面的连接找到我：<br />
     <%=link_to "#{@url}", @url, :style => "color:#25700d"%>
