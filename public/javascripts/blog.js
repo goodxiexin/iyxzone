@@ -65,7 +65,7 @@ Object.extend(Iyxzone.Blog.Builder, {
         parameters: this.parameters,
 				onLoading: function(){
 					Iyxzone.disableButtonThree(button, '发布中..');
-				},
+				}
       });
     }
   },
@@ -79,7 +79,7 @@ Object.extend(Iyxzone.Blog.Builder, {
         parameters: this.parameters,
 				onLoading: function(){
 					Iyxzone.disableButtonThree(button, '保存中..');
-				},
+				}
       });
     }
   },
@@ -93,7 +93,7 @@ Object.extend(Iyxzone.Blog.Builder, {
         parameters: this.parameters,
 				onLoading: function(){
 					Iyxzone.disableButtonThree(button, '修改中..');
-				},
+				}
       });
     }
   },

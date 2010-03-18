@@ -4,7 +4,7 @@ ResizableTextBox = Class.create({
     this.options = Object.extend({
       min: 20,
       max: 500,
-      step: 7,
+      step: 7
     }, options || {});
     this.element = element;
     this.element.setStyle({width: this.options.min});
@@ -101,7 +101,7 @@ TextBoxList = Class.create({
     /*
      * root element which contains all related elements
      */
-    this.holder = new Element('ul', {class: this.options.holderClassName});
+    this.holder = new Element('ul', {"class": this.options.holderClassName});
     
     this.el.hide();
     this.holder.appendChild(this.mainInput);
@@ -214,10 +214,10 @@ TextBoxList = Class.create({
     /*
      * create li element and delete button
      */
-    var li = new Element('li', Object.extend({class: this.options.bitClassName}, options || {}));
+    var li = new Element('li', Object.extend({"class": this.options.bitClassName}, options || {}));
     var a = new Element('a');
     var span = new Element('span').update(text);
-    var em = new Element('em', {class: 'x'});
+    var em = new Element('em', {"class": 'x'});
     span.appendChild(em);
     a.appendChild(span);
     li.appendChild(a);
@@ -242,7 +242,7 @@ TextBoxList = Class.create({
   },
 
   createInput: function(options){
-    var li = new Element('li', {class: this.options.bitClassName});
+    var li = new Element('li', {"class": this.options.bitClassName});
     var el = new Element('input', Object.extend({type: 'text', name: this.options.paramName}, options || {}));
     li.appendChild(el);
     return li;

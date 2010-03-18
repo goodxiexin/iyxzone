@@ -1373,7 +1373,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
 		var len = this.symbols.length;
 		var faces_per_row = 6;
 		var rows = len/faces_per_row + 1;
-		var table = new Element('table', {class:'face-table'});
+		var table = new Element('table', {"class":'face-table'});
 		for(var i=0;i<rows;i++){
       			var row = new Element('tr');
       			for(var j=0;j < faces_per_row && i*faces_per_row + j < len;j++){
@@ -1392,7 +1392,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
 	     		table.appendChild(row);
 	    	}
 		this.pane.pane.appendChild(table);
-	},
+	}
 });
 
 nicEditors.registerPlugin(nicPlugin,nicEmotionOptions);

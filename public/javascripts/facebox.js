@@ -51,11 +51,9 @@ var Facebox = Class.create({
 		this.content.innerHTML = '<div class="loading"><img src="'+this.loading_image.src+'"/></div>';
 		
 		var pageScroll = document.viewport.getScrollOffsets();
-		this.facebox.setStyle({
-      position: 'absolute',
-			top: pageScroll.top + (document.viewport.getHeight()/4) + 'px',
-			left: document.viewport.getWidth() / 2 - (this.facebox.getWidth() / 2) + 'px',
-		});
+		this.facebox.setStyle({"position": 'absolute'});
+		this.facebox.setStyle({"top": pageScroll.top + (document.viewport.getHeight()/4) + 'px'});
+		this.facebox.setStyle({"left": document.viewport.getWidth() / 2 - (this.facebox.getWidth() / 2) + 'px'});
     	
     if(!this.facebox.visible())
       new Effect.Appear(this.facebox, {duration: 0.3});

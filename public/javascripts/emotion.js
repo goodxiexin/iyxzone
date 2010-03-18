@@ -38,7 +38,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
     var rows = Iyxzone.Emotion.rows;
     var facesPerRow = Iyxzone.Emotion.facesPerRow;
     var facesCount = Iyxzone.Emotion.facesCount;
-    var faces = new Element('table', {class:'face-table'});
+    var faces = new Element('table', {'class':'face-table'});
 
     document.body.appendChild(faces);
 
@@ -47,7 +47,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
       var row = new Element('tr');
       for(var j=0;j<facesPerRow && i*facesPerRow + j < facesCount;j++){
         var column = new Element('td');
-        var face = new Element('img', {src: "/faces/"+(i*facesPerRow + j)+".gif", width: '20px', height: '20px', class: 'emotion-icon', index: (i*facesPerRow + j)});
+        var face = new Element('img', {"src": "/faces/"+(i*facesPerRow + j)+".gif", "width": '20px', "height": '20px', "class": 'emotion-icon', "index": i*facesPerRow + j });
         column.appendChild(face);
         row.appendChild(column);
       }
