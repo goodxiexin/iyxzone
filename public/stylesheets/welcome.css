@@ -2,7 +2,7 @@
 .top_link{line-height:39px;text-align:right;color:#fff;overflow:hidden;}
 .welcome-box #navbar #navwrap #navmid{background:#73bd21 url(../images/welcome/top-bg.png) no-repeat 400px 0;}
 
-.logo-v2{background:url(../images/skin/logo-v2.png) no-repeat}
+.logo-v2{background:url(../images/skin/logo-v2.png) no-repeat;top:0}
 .login-box .logo,.regist-box .logo{padding:39px 0 0 101px;height:66px;background:url(../images/welcome/logo.png) no-repeat left top;color:#BF3A00}
 .login-box .logo-mail,.regist-box .logo-mail{background:url(../images/welcome/logo-mail.png) no-repeat}
 

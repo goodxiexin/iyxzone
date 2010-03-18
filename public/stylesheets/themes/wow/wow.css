@@ -3,7 +3,7 @@ a.gray:link,a.gray:visited,a.gray:active,.multibox .data-table a{color:#656565}
 a,.menu-icon-list li a span{color:#656565}
 .piclist .jl-picitem a{color:#a05c00}
 .textarea,textarea{background:#3b3b3b;border:0}
-
+ 
 #header{width:100%;background:url(/images/themes/wow/top_bg.png) repeat-x;height:40px;}
 .logo-top{background-image:url(/images/themes/wow/logo.png);top:0}
 #navbar{width:950px;margin:0 auto;background:none}
@@ -12,7 +12,7 @@ a,.menu-icon-list li a span{color:#656565}
 #navbar #navsearch .textfield{border-color:#1d1d1b;background:#474741}
 #navbar #navsearch .gobtn {background-image:url(/images/themes/wow/go.png);}
 #navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
-
+ 
 #leftsidebar .avatarbox {border-bottom:1px solid #1c1c1a;}
 .s-dialog a{color:#a05c00}
 .banner{width:100%;background:url(/images/themes/wow/banner_bg.png) repeat-x;}
@@ -30,7 +30,8 @@ a,.menu-icon-list li a span{color:#656565}
 #canvas .canvas_con .multibox .title,.multibox .title{border-bottom:1px solid #1c1c1a;color:#8c8c8c}
 .multibox .title a{color:#a05c00}
 .bookbox h3{color:#8c8c8c}
-
+ 
+#leftsidebar .avatarbox a {color:#666;}
 .arrow-dialog {background-image:url(/images/themes/wow/roundBoxbg03.gif);}
 .round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/wow/roundBoxbg02.gif);}
 .round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/wow/roundBoxbg04.gif);}

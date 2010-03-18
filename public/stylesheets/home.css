@@ -646,7 +646,7 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 
 .jl-read-more{text-align:center;margin:0 20px;font-weight:700}
 span.jl-my-gold{background:url(../images/icons/gold-coin.gif) no-repeat;padding-left:20px;margin-right:20px}
-a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:center;width:85px;height:18px;line-height:18px;background:url(../images/skin/get-salary.gif) no-repeat;display:inline-block;color:#fff}
+a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:center;width:85px;height:18px;line-height:18px;background:url(../images/skin/skin2010.png) no-repeat -115px -372px;display:inline-block;color:#fff}
 
 /*个人/好友主页*/
 /*.home-wrap .icon-active{margin-left:30px;margin-left:10px !important;}
@@ -688,12 +688,12 @@ a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:c
 .msg-impress{background-position:0 -133px;}
 
 /*星级*/
-.star-1,.star-2,.star-3,.star-4,.star-5{background:url(../images/skin/star.png) no-repeat;width:54px;height:11px;display:inline-block;font-size:0}
-.star-5{background-position:0 0;}
-.star-4{background-position:0 -11px;}
-.star-3{background-position:0 -22px;}
-.star-2{background-position:0 -33px;}
-.star-1{background-position:0 -44px;}
+.star-1,.star-2,.star-3,.star-4,.star-5{background:url(../images/skin/skin2010.png) no-repeat;width:54px;height:11px;display:inline-block;font-size:0}
+.star-5{background-position:0 -220px;}
+.star-4{background-position:0 -231px;}
+.star-3{background-position:0 -242px;}
+.star-2{background-position:0 -253px;}
+.star-1{background-position:0 -264px;}
 
 /*个人主页相册*/
 .piclist .jl-picitem{width:135px;}
@@ -851,7 +851,7 @@ a.i-s-8:hover span{background-position:right -160px;}
 .d6-result ul li{float:left;margin:5px 12px;*margin:5px 8px;text-align:center}
 .d6-result ul li span{color:#333;display:block;margin:5px 0}
 
-button.add-friend{background:url(../images/skin/add-friend.png) no-repeat;width:85px;height:27px;cursor:pointer}
+button.add-friend{background:url(../images/skin/skin2010.png) no-repeat -115px -208px;width:85px;height:27px;cursor:pointer}
 
 /*好友查找*/
 .friend-search-t{padding:10px 0;margin:0 10px}
@@ -909,18 +909,19 @@ dl.menu-op dd a{color:#333}
 
 
 /*评价按钮*/
-.evaluate span,.evaluate a{width:54px;display:block;text-align:center}
-.evaluate span{height:53px;background:url(../images/skin/praise-bg.png) no-repeat;color:#fff;line-height:40px;font-weight:700;font-size:14px}
-.evaluate a{height:25px;background:url(../images/skin/praise-btn.png) no-repeat;margin-top:3px;color:#217308;text-indent:10px;line-height:25px}
+.evaluate span,.evaluate a{width:54px;display:block;text-align:center;background:url(../images/skin/skin2010.png) no-repeat}
+.evaluate span{height:53px;background-position:0 -164px;color:#fff;line-height:40px;font-weight:700;font-size:14px}
+.evaluate a{height:25px;background-position:-60px -238px;margin-top:3px;color:#217308;text-indent:10px;line-height:25px}
 
 .feed-list .evaluate{position:absolute;top:0;left:0}
 .feed-img-list .eval-list .feeds{background:url(../images/skin/dotline.gif) repeat-x top;border-top:none}
 
 /*星级评分*/
 .star-ratings-block{margin-top:3px}
-.star-ratings-block a{background:url(../images/skin/star02.png) no-repeat;width:16px;height:16px;margin-right:3px;display:inline-block;}
-.star-ratings-block a:hover{background-position:0 -16px}
-.star-ratings-block a.lit{background-position:0 -32px}
+.star-ratings-block a{background:url(../images/skin/skin2010.png) no-repeat;width:16px;height:16px;margin-right:3px;display:inline-block;}
+.star-ratings-block a{background-position:-89px 0}
+.star-ratings-block a:hover{background-position:-107px 0}
+.star-ratings-block a.lit{background-position:-124px 0}
 
 /*投票*/
 .vote-op{padding:0 0 0 10px;text-align:left;}
@@ -952,7 +953,7 @@ dl.menu-op dd a{color:#333}
 .list-v2 .feed-list .feed-header .icon-active{margin-left:20px}
 
 /*视频 日志详细页面*/
-a.share-btn{background:url(../images/skin/share-btn.png) no-repeat;display:inline-block;width:55px;height:27px;line-height:27px;text-indent:23px;color:#508119}
+a.share-btn{background:url(../images/skin/skin2010.png) no-repeat -59px -208px;display:inline-block;width:55px;height:27px;line-height:27px;text-indent:23px;color:#508119}
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 20px}
 .detail-video-head p.left,.detail-blog-head p.left{margin-top:6px}
 .detail-video-head strong,.detail-blog-head strong{color:#cc3300;font-size:14px;font-weight:400}
@@ -980,7 +981,7 @@ ul.private-set li p.left{margin-left:10px}
 .icon-private04{background-position:0 -123px}
 
 /*分享*/
-a.btn-17gaming,.tab01 .right a.btn-17gaming,.tab01 .right a.btn-17gaming:hover{background:url(../images/skin/btn-17gaming.png) no-repeat;width:130px;height:25px;line-height:25px;display:inline-block;color:#fff;font-weight:700;text-decoration:none;text-align:center;position:relative}
+a.btn-17gaming,.tab01 .right a.btn-17gaming,.tab01 .right a.btn-17gaming:hover{background:url(../images/skin/skin2010.png) no-repeat -70px -346px;width:130px;height:25px;line-height:25px;display:inline-block;color:#fff;font-weight:700;text-decoration:none;text-align:center;position:relative}
 
 h1.app-share{float:left}
 .share-url{float:right;margin-top:5px;padding:5px 10px;background:url(../images/skin/title-bg02.gif) repeat-x;color:#666}
@@ -1011,7 +1012,7 @@ h1.app-share{float:left}
 #w-nav .feed-list .word{color:#333}
 #w-nav .feed-list img{border:0;padding:0;margin:0}
 
-#w-nav .praise{background:url(../images/skin/praise-btn02.png) no-repeat;width:83px;height:30px;line-height:30px;display:inline-block;text-align:right;_margin-top:5px}
+#w-nav .praise{background:url(../images/skin/skin2010.png) no-repeat -117px -236px;width:83px;height:30px;line-height:30px;display:inline-block;text-align:right;_margin-top:5px}
 #w-nav .praise strong{color:#66a421;margin-right:15px;}
 #w-nav img{vertical-align:middle;border:1px solid #63a21d;background:#fff;padding:1px;margin:0 2px}
 #navextra .close{background:url(../images/icons/close.gif) no-repeat;width:19px;height:19px;display:inline-block;vertical-align:middle}
@@ -1155,9 +1156,9 @@ h1.app-share{float:left}
 .i-f-anger{background-position:-48px -72px}
 
 /*表情列表*/
-.emot-box{width:315px;}
-.emot-box .con{padding:3px}
-.emot-box .con a{margin:2px}
+.emot-box{width:300px;}
+.emot-box .con{padding:1px}
+.emot-box .con a{margin:3px}
 .emot-box .foot{background:#eee;text-align:right;padding:5px;border:0}
 
 /*简单翻页*/
