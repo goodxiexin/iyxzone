@@ -10,8 +10,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
       htmlResponse: false,
     }, options || {});
 
-    var wrap = $(element).up();
-    options.textAreaStyle = {width: (wrap.getWidth() - 0) + 'px', height: wrap.getHeight + 'px'};
+    options.textAreaStyle = {width: '90%'};
 
     options.callback = this.callbackHandler.bind(this);
     options.onComplete = this.onCompleteHandler.bind(this);
