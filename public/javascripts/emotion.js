@@ -40,6 +40,8 @@ Object.extend(Iyxzone.Emotion.Manager, {
 
 	facesSingle : null,
 
+	facePages: [],
+
   constructFacesTable: function(link, textField){
     if(textField == null) return;
 
@@ -144,6 +146,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
 		facesSingle.appendChild(facepage[0]);
 		document.body.appendChild(facesSingle);
 		Iyxzone.Emotion.Manager.facesSingle = facesSingle;
+		Iyxzone.Emotion.Manager.facePages = facepage;
     
 
 		Iyxzone.Emotion.Manager.setFaceStyle(link,textField);
@@ -157,11 +160,11 @@ Object.extend(Iyxzone.Emotion.Manager, {
     setFaceStyle: function(link, textField){
 			Iyxzone.Emotion.Manager.linkToLink = link;
 			Iyxzone.Emotion.Manager.facesSingle.setStyle({
-				position: 'absolute',
-				left: (link.cumulativeOffset().left - 200) + 'px',
-				top: (link.cumulativeOffset().top) + 'px',
-				width: '200px',
-				height: '400px'
+				"position": 'absolute',
+				"left": (link.cumulativeOffset().left - 200) + 'px',
+				"top": (link.cumulativeOffset().top) + 'px',
+				"width": '200px',
+				"height": '400px'
 				});
 			Iyxzone.Emotion.Manager.linkToField= textField;
 			Iyxzone.Emotion.Manager.linkToLink = link;
@@ -183,7 +186,10 @@ Object.extend(Iyxzone.Emotion.Manager, {
 			}
 			else{
 				Iyxzone.Emotion.Manager.setFaceStyle(link, textField);
+				Iyxzone.Emotion.Manager.facesSingle.removeChild(Iyxzone.Emotion.Manager.facesSingle.firstChild);
+				Iyxzone.Emotion.Manager.facesSingle.appendChild(Iyxzone.Emotion.Manager.facePages[0]);
 				Iyxzone.Emotion.Manager.facesSingle.show();
+
 			}
 		}
   }
