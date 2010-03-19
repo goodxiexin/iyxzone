@@ -10,6 +10,7 @@
   <%= yield :stylesheet_link %>
   <%= javascript_include_merged :base %>
   <%= yield :javascript_include %>
+	<%= calendar_date_select_includes :style=>"default", :locale=>"cn" %>
 </head>
 <body class='cut-side'>
 
