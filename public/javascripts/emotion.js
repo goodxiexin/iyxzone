@@ -32,12 +32,13 @@ Iyxzone.Emotion = {
 
 };
 
-
 Object.extend(Iyxzone.Emotion.Manager, {
 
-  linkToFieldsMappings: new Hash(),
+  linkToField: null,
 
-  linkToFacesMappings: new Hash(),
+  linkToLink: null,
+
+	facesSingle : null,
 
   constructFacesTable: function(link, textField){
     if(textField == null) return;
@@ -51,21 +52,22 @@ Object.extend(Iyxzone.Emotion.Manager, {
 		var pageindex = -1;
 		var a, img;
 
-		var faces = new Element('div', {class:'a', standwith:''});
+		var facesSingle = new Element('div', {class:"emot-box drop-wrap"});
 
 		for (var i =0; i<facesCount; i++){
 			if (i % facesPerPage == 0){
 				pageindex++;
-				facepage[pageindex] = new Element('div', {class:'b'});
+				facepage[pageindex] = new Element('div', {class:"con"});
 			}	
-			a = new Element('a', {title:myfaces[i], href:'#'});
+			a = new Element('a', {title:myfaces[i]});
 			var thisattr = a.readAttribute('title');
 			img = new Element('img', {src: "/images/faces/"+ thisattr.slice(1,thisattr.length-1) +".gif",  index:i});
 			a.appendChild(img);
 			a.observe('click', function(e){
 					var idx = parseInt(e.element().readAttribute('index'));
-					textField.value += Iyxzone.Emotion.faces[idx];
-					this.toggleFaces(link, textField);
+					Iyxzone.Emotion.Manager.linkToField.value += Iyxzone.Emotion.faces[idx];
+					Iyxzone.Emotion.Manager.toggleFaces(Iyxzone.Emotion.Manager.linkToLink, Iyxzone.Emotion.Manager.linkToField);
+					//alert(this.valueOf());
 					}.bind(this));
 			facepage[pageindex].appendChild(a);
 		}
@@ -100,7 +102,6 @@ Object.extend(Iyxzone.Emotion.Manager, {
 				next.observe('click',function(e){var f = e.element().parentNode.parentNode.parentNode;
 						var thispage = e.element().parentNode.parentNode;	
 						var page_to = parseInt(e.element().readAttribute("page_nr")) +1;
-						alert(page_to)
 						f.appendChild(facepage[page_to]);
 						f.removeChild(thispage)}.bind(this));
 			}
@@ -111,10 +112,10 @@ Object.extend(Iyxzone.Emotion.Manager, {
 					foot.appendChild(first);
 					foot.appendChild(prev);
 				}
-				for (var j=0; j< facepage.length; j++){
+			/*	
+			for (var j=0; j< facepage.length; j++){
 					var pagenum = new Element('span',{ page_nr: j});
 					pagenum.appendChild(document.createTextNode((j+1).toString()));
-					//pagenum = document.createTextNode((j+1).toString());
 					foot.appendChild(pagenum);
 
 					pagenum.observe('click',function(e){
@@ -124,8 +125,11 @@ Object.extend(Iyxzone.Emotion.Manager, {
 							f.removeChild(thispage);
 							f.appendChild(facepage[page_to]);
 							});
-
-				}
+					}
+			*/
+					var pagenum = new Element('span');
+					pagenum.appendChild(document.createTextNode((i+1).toString()));
+					foot.appendChild(pagenum);
 				if (i < facepage.length-1){
 					foot.appendChild(next);
 					foot.appendChild(last);
@@ -137,66 +141,49 @@ Object.extend(Iyxzone.Emotion.Manager, {
 		//<div class="pager-simple foot"><a href="#" class="prev">上一页</a><span>1</span><a href="#" class="next">下一页</a></div> 
 		// <div class="pager-simple foot"><a href="#" class="first">上一页</a><span>1</span><a href="#" class="last">下一页</a></div> 
 
-		faces.appendChild(facepage[0]);
-		document.body.appendChild(faces);
+		facesSingle.appendChild(facepage[0]);
+		document.body.appendChild(facesSingle);
+		Iyxzone.Emotion.Manager.facesSingle = facesSingle;
     
 
-    // locate faces
-    /*faces.setStyle({
-      position: 'absolute',
-      left: (link.cumulativeOffset().left - 200) + 'px',
-      top: (link.cumulativeOffset().top) + 'px',
-      width: '200px',
-      height: '40px'
-    });*/
-		this.setFaceStyle(link,textField, faces);
+		Iyxzone.Emotion.Manager.setFaceStyle(link,textField);
 
-    // set click events
-    // this must be done after faces are appended in document.body
-    var icons = faces.getElementsByClassName('emotion-icon');
-    for(var i=0;i<icons.length;i++){
-      icons[i].observe('click', function(e){
-        var idx = parseInt(e.element().readAttribute('index'));
-        textField.value += Iyxzone.Emotion.faces[idx];
-        this.toggleFaces(link, textField);
-      }.bind(this));
-    }
 
-    return faces;
+    return facesSingle;
   },
 
 
     // locate faces
-    setFaceStyle: function(link, textField, facesSingle){
-			facesSingle.setStyle({
-      position: 'absolute',
-      left: (link.cumulativeOffset().left - 200) + 'px',
-      top: (link.cumulativeOffset().top) + 'px',
-      width: '200px',
-      height: '40px'
-    });
-			facesSingle.setAttribute('standwith', textField.toString() );
+    setFaceStyle: function(link, textField){
+			Iyxzone.Emotion.Manager.linkToLink = link;
+			Iyxzone.Emotion.Manager.facesSingle.setStyle({
+				position: 'absolute',
+				left: (link.cumulativeOffset().left - 200) + 'px',
+				top: (link.cumulativeOffset().top) + 'px',
+				width: '200px',
+				height: '400px'
+				});
+			Iyxzone.Emotion.Manager.linkToField= textField;
+			Iyxzone.Emotion.Manager.linkToLink = link;
 		},
 
   toggleFaces: function(link, textField){
-    // get corresponding faces
-    var faces = this.linkToFacesMappings.get(link);
 
     // if faces table exists, show/hide it
     // otherwise create a new table and bind it to textField
-		if (!faces){
-      var faces = this.constructFacesTable(link, textField);
-      this.linkToFieldsMappings.set(link, textField);
-      this.linkToFacesMappings.set(link, faces);
-      faces.show();
+		if (!Iyxzone.Emotion.Manager.facesSingle){
+      Iyxzone.Emotion.Manager.constructFacesTable(link, textField);
+      Iyxzone.Emotion.Manager.linkToField =  textField;
+      Iyxzone.Emotion.Manager.linkToLink = link;
+      Iyxzone.Emotion.Manager.facesSingle.show();
 		}
 		else{
-			if (faces.readAttribute('standwith') == textField.toString() && faces.visible()){
-				faces.hide();
+			if (Iyxzone.Emotion.Manager.linkToLink == link && Iyxzone.Emotion.Manager.facesSingle.visible()){
+				Iyxzone.Emotion.Manager.facesSingle.hide();
 			}
 			else{
-				this.setFaceStyle(link, textField, faces);
-				faces.show();
+				Iyxzone.Emotion.Manager.setFaceStyle(link, textField);
+				Iyxzone.Emotion.Manager.facesSingle.show();
 			}
 		}
   }
