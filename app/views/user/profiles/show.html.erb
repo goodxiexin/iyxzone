@@ -122,9 +122,9 @@
 					</div>
 					<p><b><%= album_link album %></b></p>
 					<% if album.uploaded_at.blank? %>
-						<p>于 <span><%= ftime album.created_at %></span> 创建</p>
+						<p><span><%= ftime album.created_at %></span> 创建</p>
 					<% else %>
-						<p>于 <span><%= ftime album.uploaded_at %></span> 更新</p>
+						<p><span><%= ftime album.uploaded_at %></span> 更新</p>
 					<% end %>
       </div>	
 		<% end %>	
