@@ -38,19 +38,19 @@
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '游戏: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :game, :id, @games, :id, :name, {:prompt => '---'} %>
+              <%= collection_select :game, :id, @games, :id, :name, {:prompt => '---'}, {:name => :game_id} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务区: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :area, :id, [], :id, :name, {:prompt => '---'} %>
+              <%= collection_select :area, :id, @areas, :id, :name, {:prompt => '---'}, {:name => :area_id} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务器: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :server, :id, [], :id, :name, {:prompt => '---'} %>
+              <%= collection_select :server, :id, @servers, :id, :name, {:prompt => '---'}, {:name => :server_id} %>
               </div>
             </div>
             </div>
@@ -100,7 +100,16 @@
     </div>
 	</div></div>
 </div></div></div></div>
+
 <%= javascript_tag "
-  Iyxzone.Search.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')}, 'game_id', 'area_id', 'server_id', null, null, {});
-  Iyxzone.Search.gameSelector.setEvents(); 
+  Iyxzone.Game.pinyins = #{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')};
+  Iyxzone.Game.infos = #{@games.to_json :only => [:id, :name]}
+  Iyxzone.Game.initPinyinSelector('game_id', 'area_id', 'server_id', null, null, true, null, null);
 " %>
+
+<% unless @game.blank? %>
+<%= javascript_tag "
+  $('game_id').value = #{@game.id};
+" %>
+<% end %>
+

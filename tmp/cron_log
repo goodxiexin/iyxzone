@@ -18,3 +18,8 @@ Unknown database 'dayday3_production'
 (in /home/gaoxh04/iyxzone)
 (in /home/gaoxh04/iyxzone)
 (in /home/gaoxh04/iyxzone)
+rake aborted!
+Mysql::Error: Table 'dayday3_production.events' doesn't exist: SELECT * FROM `events` WHERE (start_time <= '2010-03-23 00:00:00') 
+
+(See full trace by running task with --trace)
+(in /home/gaoxh04/iyxzone)

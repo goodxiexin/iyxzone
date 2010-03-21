@@ -15,9 +15,6 @@ Rails::Initializer.run do |config|
 	# reset sweeper path to app/sweepers
 	config.load_paths += %W(#{RAILS_ROOT}/app/sweepers)
 
-	# save cached objects to /public/cache
-	config.action_controller.page_cache_directory = RAILS_ROOT + "/cache/pages"
-
 	config.cache_store = :mem_cache_store	
 
 	# reset observer path to app/observers 

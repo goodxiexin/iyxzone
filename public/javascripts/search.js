@@ -31,8 +31,6 @@ Iyxzone.Search = {
     }
   },
 
-  gameSelector: null, // initialize this in your page
-
   showCharacterForm: function(){
     $('character_form').getInputs('text')[0].value = '游戏角色名字';
     $('character_form').show();

@@ -135,7 +135,7 @@ Iyxzone.Game.Selector = Class.create({
       this.reset();
       return;
     }
-    new Ajax.Request('/game_details?game_id=' + $(this.gameSelectorID).value, {
+    new Ajax.Request('/games/' + $(this.gameSelectorID).value + '.json', {
       method: 'get',
       onSuccess: function(transport){
         this.details = transport.responseText.evalJSON().game;
@@ -171,7 +171,7 @@ Iyxzone.Game.Selector = Class.create({
         this.resetServerInfo();
       return;
     }
-    new Ajax.Request('/area_details?game_id=' + $(this.gameSelectorID).value + '&area_id=' + $(this.areaSelectorID).value, {
+    new Ajax.Request('/game_areas/' + $(this.areaSelectorID).value + '.json', {
       method: 'get',
       onSuccess: function(transport){
         var areaInfo = transport.responseText.evalJSON().game_area;
@@ -226,7 +226,7 @@ Iyxzone.Game.Selector = Class.create({
 
 Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
 
-  initialize: function($super, gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, options){
+  initialize: function($super, gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, gameDetails, options){
     if(Iyxzone.Game.pinyins == null){
       alert("error");
       return;
@@ -247,7 +247,7 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
       }
     }
 
-    $super(gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, options);
+    $super(gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, gameDetails, options);
   },
 
   setEvents: function($super){

@@ -4,26 +4,11 @@
 #
 class GamesController < ApplicationController
 
-  before_filter :setup
+  caches_page :show
 
-  def game_details
+  def show
+    @game = Game.find(params[:id])
     render :json => @game.to_json(:include => [:servers, :areas, :races, :professions])
   end
-
-  def area_details
-    render :json => @area.to_json(:include => :servers)
-  end
-
-protected
-
-  def setup
-    if ["game_details"].include? params[:action]
-      @game = Game.find(params[:game_id])
-    elsif ["area_details"].include? params[:action]
-      @game = Game.find(params[:game_id])
-      @area = @game.areas.find(params[:area_id])
-    end
-  end
-
 
 end

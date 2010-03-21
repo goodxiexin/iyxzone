@@ -38,19 +38,19 @@
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '游戏: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :game, :id, @games, :id, :name, {:prompt => '---'} %>
+              <%= collection_select :game, :id, @games, :id, :name, {:prompt => '---'}, {:name => :game_id} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务区: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :area, :id, [], :id, :name, {:prompt => '---'} %>
+              <%= collection_select :area, :id, [], :id, :name, {:prompt => '---'}, {:name => :area_id} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务器: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :server, :id, [], :id, :name, {:prompt => '---'} %>
+              <%= collection_select :server, :id, [], :id, :name, {:prompt => '---'}, {:name => :server_id} %>
               </div>
             </div>
             </div>
