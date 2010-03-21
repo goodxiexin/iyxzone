@@ -18,7 +18,7 @@ Rails::Initializer.run do |config|
 	# save cached objects to /public/cache
 	config.action_controller.page_cache_directory = RAILS_ROOT + "/cache/pages"
 
-	#config.cache_store = :mem_cache_store	
+	config.cache_store = :mem_cache_store	
 
 	# reset observer path to app/observers 
 	config.load_paths += %W(#{RAILS_ROOT}/app/observers)
@@ -74,7 +74,3 @@ Rails::Initializer.run do |config|
   #config.time_zone = 'UTC'
 
 end
-
-require 'memcache'
-
-CACHE = MemCache.new('127.0.0.1')

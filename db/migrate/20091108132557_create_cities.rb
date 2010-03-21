@@ -4,8 +4,6 @@ class CreateCities < ActiveRecord::Migration
       t.string :name
       t.integer :region_id
     end
-    add_index :cities, :region_id
-
     City.create(:name => '北京市', :region_id => 1)
     City.create(:name => '天津市', :region_id => 2)
     City.create(:name => '石家庄市', :region_id => 3)

@@ -4,7 +4,6 @@ class CreateDistricts < ActiveRecord::Migration
       t.string :name
       t.integer :city_id
     end
-    add_index :districts, :city_id
     District.create(:name => '东城区', :city_id => 1)
     District.create(:name => '西城区', :city_id => 1)
     District.create(:name => '崇文区', :city_id => 1)
