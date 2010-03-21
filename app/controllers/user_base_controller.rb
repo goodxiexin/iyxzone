@@ -4,7 +4,7 @@ class UserBaseController < ApplicationController
 
   before_filter :setup_verify_scope
 
-  before_filter :setup_instant_messenger
+  #before_filter :setup_instant_messenger
 
   before_filter :set_last_seen_at
 
