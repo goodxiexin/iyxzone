@@ -124,7 +124,7 @@ Object.extend(Iyxzone.WallMessage, {
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-        },
+        }
       });
     } 
   },

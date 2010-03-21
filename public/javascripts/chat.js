@@ -1,7 +1,7 @@
-Iyxzone.Chat = {
+Iyxzone.Chat = Class.create({
   version: '1.0',
   author: ['高侠鸿']
-};
+});
 
 Object.extend(Iyxzone.Chat, {
 
@@ -116,9 +116,8 @@ Object.extend(Iyxzone.Chat, {
     }.bind(this));
   },
 
-  // 构造聊天窗口的html
-  buildChatForm: function(friendID, friendLogin){
-    var div = new Element('div', {id: 'chat-form-' + friendID, class: 'im-dialog', left: '500px', top: '100px'});
+  buildForm: function(friendID, friendLogin){
+    var div = new Element('div', {"id": 'chat-form-' + friendID, "class": 'im-dialog', "left": '500px', "top": '100px'});
     div.hide();
     
     var html = '';
@@ -217,10 +216,10 @@ Object.extend(Iyxzone.Chat, {
 
     if(cont.visible()){
       cont.hide();
-      link.writeAttribute({class: ''});
+      link.writeAttribute("class", '');
     }else{
       cont.show();
-      link.writeAttribute({class: 'show'});
+      link.writeAttribute("class", 'show');
       if(cont.innerHTML != '')
         return;
 

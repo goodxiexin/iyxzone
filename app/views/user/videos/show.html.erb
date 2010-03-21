@@ -67,7 +67,8 @@
 </div>
       <div class="foot cmt-space">
         <div class="feed-list">
-          <p class="s_clear red">评论(<%= @video.comments_count %>)
+          <p class="s_clear red">评论(<%= @video.comments_count %>) | 
+					<%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @video.class.base_class.to_s, "dig[diggable_id]" => @video), :html => {:id=> "digging_#{@video.class.to_s.underscore}_#{@video.id}", :class => "red"}%>(<span id="dig_<%=@video.class.to_s.underscore%>_<%=@video.id%>" class='gray'><%= @video.digs_count %></span>人赞过)
 					</p>
           <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @video, :recipient => @video.poster} %>
         </div>
