@@ -24,11 +24,11 @@ protected
   end
 
   def setup_instant_messenger
-    @online_friends = current_user.online_friends
-    @im_info = {}
     @my_info = {:avatar => avatar_path(current_user), :login => current_user.login}
+    @online_friends = current_user.online_friends.map {|f| {:login => f.login, :id => f.id, :avatar => avatar_path(f), :pinyin => f.pinyin}}
+    @unread_messages = {}
     current_user.unread_messages.group_by(&:poster).each do |poster, messages|
-      @im_info["#{poster.id}"] = {
+      @unread_messages["#{poster.id}"] = {
         :login => poster.login,
         :avatar => avatar_path(poster),
         :messages => messages.map{|m| {:content => m.content, :created_at => m.created_at, :id => m.id}}

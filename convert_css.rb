@@ -52,4 +52,4 @@ end
 
 correct_path "public/stylesheets"
 
-add_timestamps "public/stylesheets/themes/wow"
+add_timestamps "public/stylesheets"

@@ -13,7 +13,7 @@ Object.extend(Iyxzone.Chat, {
   
   friendID: null, // 当前和谁在聊
 
-  onlineFriendIDs: null, // 当前在线好友, 这个玩意目前没法自动更新，TODO
+  onlineFriendIDs: new Hash(), // 当前在线好友, friendID => div 
 
   unreadMessages: new Hash(), // friendID => messages, unreadMessages.keys()是 onlineFriendIDs 的一个子集
 
@@ -90,14 +90,16 @@ Object.extend(Iyxzone.Chat, {
   },
 
   // 在 view 里初始化的函数
-  set: function(friendIDs, infos, token, myInfo){
+  set: function(onlineFriends, friendIDs, infos, token, myInfo){
     this.token = token;
     this.myIcon = '<img src="' + myInfo.avatar + '" class="left w-l" width=20 height=20/>';
     this.myLogin = myInfo.login;
     for(var i=0;i<infos.length;i++){
       this.unreadMessages.set(friendIDs[i], infos[i]);
     }
-    this.onlineFriendIDs = this.unreadMessages.keys();
+    for(var i=0;i<onlineFriends.length;i++){
+      this.newOnlineFriend(onlineFriends[i]);
+    }
     this.blankIcon = new Image();
     this.blankIcon.src = '/images/blank.gif';
     this.setBlink();
@@ -275,5 +277,24 @@ Object.extend(Iyxzone.Chat, {
     }
   },
 
+
+  // 新的好友上线
+  newOnlineFriend: function(info){
+    var friendID = info.id;
+    if(this.onlineFriendIDs.keys().include(friendID)){
+      return;
+    }else{
+      var dd = new Element('dd', {pinyin: info.pinyin, login: info.login});
+      dd.innerHTML = '<a href="javascript: void(0)" ondblclick="Iyxzone.Chat.showChatForm(' + info.id + ', "' + info.login + '")"><img src="' + info.avatar + '" class="left w-l" width=20 height=20 /><span class="left">' + info.login  + '</span></a>';
+      $('chat-list').appendChild(dd);
+      this.onlineFriendIDs.set(friendID, dd);
+    }
+  },
+
+  // 好友下线
+  delOnlineFriend: function(friendID){
+    var dd = this.onlineFriendIDs.unset(friendID);
+    dd.remove();
+  },
 
 });

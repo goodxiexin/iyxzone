@@ -11,7 +11,7 @@ class User::Events::AlbumsController < UserBaseController
 	def update
 		if @album.update_attributes((params[:album] || {}).merge({:owner_id => @event.id}))
 			respond_to do |format|
-				format.json { render :text => @album.description }
+				format.json { render :json => @album }
 			end
 		else
       render :update do |page|

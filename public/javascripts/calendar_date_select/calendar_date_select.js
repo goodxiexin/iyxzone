@@ -19,7 +19,7 @@ Element.buildAndAppend = function(type, options, style)
   if (style) e.setStyle(style);
   return e;
 };
-null = null;
+nil = null;
 
 Date.one_day = 24*60*60*1000;
 Date.weekdays = $w("日 一 二 三 四 五 六");

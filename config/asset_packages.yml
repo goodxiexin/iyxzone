@@ -13,6 +13,7 @@ javascripts:
   - emotion
   - menu
   - chat
+  - calendar_date_select/calendar_date_select
 - register:
   - game
   - register
@@ -71,6 +72,7 @@ stylesheets:
   - common
   - home
   - pagination
+  - calendar_date_select/silver
 - photo:
   - swfupload
   - cropper

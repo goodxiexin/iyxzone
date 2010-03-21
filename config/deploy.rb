@@ -18,6 +18,7 @@ role :db,  domain, :primary => true
 after "deploy:update_code", "deploy:chown_deployer"
 after "deploy:update_code", "deploy:update_crontab"
 after "deploy:update_code", "deploy:update_database_config"
+after "deploy:update_code", "deploy:update_mail_config"
 
 after "deploy:symlink", "assets:symlink"
 
@@ -81,7 +82,29 @@ test:
     CMD
     put database_config, "#{release_path}/config/database.yml"
   end
- 
+
+  desc "update mail configuration"
+  task :update_mail_config, :roles => :app do
+    mail_config = <<-CMD
+ActionMailer::Base.default_content_type = 'text/html'
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.perform_deliveries = true
+ActionMailer::Base.raise_delivery_errors = true
+ActionMailer::Base.default_charset = "utf-8"
+ActionMailer::Base.smtp_settings = {
+  :address => "localhost", 
+  :port => 25, 
+  :enable_starttls_auto => true,
+  :domain => "17gaming.com", 
+  :authentication => :plain,
+  :user_name => "deployer", 
+  :password => "20041065"
+}
+ActionMailer::Base.delivery_method = :activerecord
+    CMD
+    put mail_config, "#{release_path}/config/initializers/mail.rb"
+  end
+   
 end
 
 namespace :assets do

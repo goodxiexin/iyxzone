@@ -6,6 +6,8 @@ Object.extend(Iyxzone, {
 
   author: ['高侠鸿'],
 
+  SiteURL: "http://localhost:3000",
+
   // some utilities
   disableButton: function(button, text){
     button.innerHTML = text;

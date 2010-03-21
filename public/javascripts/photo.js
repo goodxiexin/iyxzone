@@ -541,7 +541,7 @@ Iyxzone.Photo.Slide = Class.create({
     if(this.currentID == this.ids[photoIdx]){
       this.frames[idx].addClassName('now');
     }
-    this.frames[idx].innerHTML = "<a href='http://localhost:3000/" + this.photoType + "/" + this.ids[photoIdx] +"'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
+    this.frames[idx].innerHTML = "<a href='" + Iyxzone.SiteURL + "/" + this.photoType + "/" + this.ids[photoIdx] +"'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
   },
 
   scrollDown: function(){

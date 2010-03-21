@@ -31,11 +31,7 @@
               <dt>
                 <a href="javascript:void(0)" onclick="Iyxzone.Chat.toggleOnline(this);">在线好友<span>[<%= @online_friends.count %>]</span></a>
               </dt>
-              <div id='chat-list'>
-              <% @online_friends.each do |f| %>
-                <dd pinyin='<%= f.pinyin %>' login='<%= f.login %>'><a href='javascript: void(0)' ondblclick='Iyxzone.Chat.showChatForm(<%= f.id %>, "<%= f.login %>")'><%= avatar_image f, :class => 'left w-l', :width => 20, :height => 20  %><span class="left"><%= f.login %></span></a></dd>
-              <% end %>
-              </div>
+              <div id='chat-list'></div>
             </dl>
           </div>
         </div>
@@ -45,5 +41,5 @@
     </div>
 
 <%= javascript_tag "
-    Iyxzone.Chat.set(#{integer_array_for_javascript @im_info.keys}, #{@im_info.values.to_json}, '#{form_authenticity_token}', #{@my_info.to_json});
+    Iyxzone.Chat.set(#{@online_friends.to_json}, #{integer_array_for_javascript @unread_messages.keys}, #{@unread_messages.values.to_json}, '#{form_authenticity_token}', #{@my_info.to_json});
 " %>

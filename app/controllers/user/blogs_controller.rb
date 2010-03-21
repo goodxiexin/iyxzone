@@ -43,7 +43,7 @@ class User::BlogsController < UserBaseController
       end
     else
       render :update do |page|
-        page.replace_html 'errors', :partial => 'user/blogs/validation_errors'
+        page.replace_html 'errors', :inline => "<%= error_messages_for :blog, :header_message => '遇到以下问题无法保存', :message => nil %>"
       end
     end
   end
@@ -58,7 +58,7 @@ class User::BlogsController < UserBaseController
       end
     else
       render :update do |page|
-        page.replace_html 'errors', :partial => 'user/blogs/validation_errors'
+        page.replace_html 'errors', :inline => "<%= error_messages_for :blog, :header_message => '遇到以下问题无法保存', :message => nil %>"
       end
     end
   end

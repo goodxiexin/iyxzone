@@ -18,7 +18,7 @@ class PersonalAlbum < Album
 
   validates_presence_of :title, :message => "不能为空"
 
-  validates_size_of :title, :within => 1..100, :too_long => "最长100字节", :too_short => "最短1字节"
+  validates_size_of :title, :within => 1..100, :too_long => "最长100字节", :too_short => "最短1字节", :allow_nil => true
 
   validates_size_of :description, :within => 0..500, :too_long => "最长500字节", :allow_nil => true 
 

@@ -16,7 +16,11 @@ protected
 
 	def setup
 		@feed_delivery = FeedDelivery.find(params[:id])
-	  require_owner @feed_delivery.recipient
+    unless @feed_delivery.is_deleteable_by?(current_user)
+      render :update do |page|
+        page << "error('没有删除的权限')"
+      end
+    end
   end
 
 end
