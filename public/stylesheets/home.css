@@ -1158,9 +1158,9 @@ h1.app-share{float:left}
 
 /*表情列表*/
 .emot-box{width:300px;}
-.emot-box .con{padding:5px 1px 1px 1px}
+.emot-box .con{padding:1px}
 .emot-box .con a{margin:3px}
-.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;padding:5px;}
+.emot-box .foot{background:#eee;text-align:right;padding:5px;border:0}
 
 /*简单翻页*/
 .pager-simple a{width:14px;height:14px;display:inline-block;font-size:0;line-height:0;overflow:hidden;background:url(/images/skin/skin2010.png) no-repeat;vertical-align:middle;}

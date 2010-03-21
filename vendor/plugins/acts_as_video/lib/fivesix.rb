@@ -20,7 +20,7 @@ class FiveSix
 		if FIVESIX_SINGLE.match(videourl)
 			return true
 		elsif FIVESIX_ALBUM.match(videourl) 
-			return false
+			return true 
 		elsif FIVESIX_PHOTO.match(videour)
 			return false
 		end

@@ -2,7 +2,10 @@
  * TODO:
  * 点击document.body，隐藏表情 
  * Change Log
- * 1.1 add to 50 emotions, Mar.16,2010
+ * 1.1
+ * add to 50 emotions, Mar.16,2010
+ * discard parameter :facesPerRow, rows
+ * add parameter facesPerPage
  */
 
 Iyxzone.Emotion = {
@@ -15,7 +18,7 @@ Iyxzone.Emotion = {
 
   facesCount: 50,
 
-	facesPerPage: 30 ,
+	facesPerPage: 20 ,
 
   facesPerRow: 10 ,
 
@@ -29,82 +32,166 @@ Iyxzone.Emotion = {
 
 };
 
-
 Object.extend(Iyxzone.Emotion.Manager, {
 
-  linkToFieldsMappings: new Hash(),
+  linkToField: null,
 
-  linkToFacesMappings: new Hash(),
+  linkToLink: null,
+
+	facesSingle : null,
+
+	facePages: [],
 
   constructFacesTable: function(link, textField){
     if(textField == null) return;
 
     // I am a lazy boy... save constants to local variant
-    var rows = Iyxzone.Emotion.rows;
-    var facesPerRow = Iyxzone.Emotion.facesPerRow;
-    var facesCount = Iyxzone.Emotion.facesCount;
-    var faces = new Element('div', {class:'con'});
-		//TODO
+		var rows = Iyxzone.Emotion.rows;
+		var myfaces = Iyxzone.Emotion.faces;
+		var facesPerPage = Iyxzone.Emotion.facesPerPage;
+		var facesCount = Iyxzone.Emotion.facesCount;
+		var facepage = [];
+		var pageindex = -1;
+		var a, img;
 
-    document.body.appendChild(faces);
+		var facesSingle = new Element('div', {class:"emot-box drop-wrap"});
 
-				var a = new Element('a', {title:'傲慢', href:'#'})
-        var img = new Element('img', {src: "/faces/"+ i +".gif",  index:i});
-				a.appendChild(img)
-        row.appendChild(column);
-      
-      faces.appendChild(row);
+		for (var i =0; i<facesCount; i++){
+			if (i % facesPerPage == 0){
+				pageindex++;
+				facepage[pageindex] = new Element('div', {class:"con"});
+			}	
+			a = new Element('a', {title:myfaces[i]});
+			var thisattr = a.readAttribute('title');
+			img = new Element('img', {src: "/images/faces/"+ thisattr.slice(1,thisattr.length-1) +".gif",  index:i});
+			a.appendChild(img);
+			a.observe('click', function(e){
+					var idx = parseInt(e.element().readAttribute('index'));
+					Iyxzone.Emotion.Manager.linkToField.value += Iyxzone.Emotion.faces[idx];
+					Iyxzone.Emotion.Manager.toggleFaces(Iyxzone.Emotion.Manager.linkToLink, Iyxzone.Emotion.Manager.linkToField);
+					//alert(this.valueOf());
+					}.bind(this));
+			facepage[pageindex].appendChild(a);
+		}
+
+		for(var i = 0; i<facepage.length; i++){
+			var first = new Element('a', {class:'first'} );
+			first.observe('click',function(e){var f = e.element().parentNode.parentNode.parentNode;
+					var thispage = e.element().parentNode.parentNode;	
+					f.appendChild(facepage[0]);
+					f.removeChild(thispage)}.bind(this));
+			first.appendChild(document.createTextNode("第一页"));
+			var last = new Element('a', {class:'last'});
+			last.appendChild(document.createTextNode("最后页"));
+			last.observe('click',function(e){var f = e.element().parentNode.parentNode.parentNode;
+					var thispage = e.element().parentNode.parentNode;	
+					f.appendChild(facepage[facepage.length-1]);
+					f.removeChild(thispage)}.bind(this));
+
+			var prev = new Element('a',{class:'prev',page_nr: i});
+			//prev.appendChild(document.createTextNode("上一页"));
+			if (i!=0){
+				prev.observe('click',function(e){var f = e.element().parentNode.parentNode.parentNode;
+						var thispage = e.element().parentNode.parentNode;	
+						var page_to = parseInt(e.element().readAttribute('page_nr')) -1;
+						f.appendChild(facepage[page_to]);
+						f.removeChild(thispage)});
+			}
+
+			var next = new Element('a',{class:'next',page_nr: i});
+			//next.appendChild(document.createTextNode("下一页"));
+			if (i!=facepage.length-1){
+				next.observe('click',function(e){var f = e.element().parentNode.parentNode.parentNode;
+						var thispage = e.element().parentNode.parentNode;	
+						var page_to = parseInt(e.element().readAttribute("page_nr")) +1;
+						f.appendChild(facepage[page_to]);
+						f.removeChild(thispage)}.bind(this));
+			}
+			var foot = new Element('div', {class:'pager-simple foot'});
+			//add foot ---first,pre,1,2,3...,next, last
+			if (facepage.length != 1){
+				if (i > 0){
+					foot.appendChild(first);
+					foot.appendChild(prev);
+				}
+			/*	
+			for (var j=0; j< facepage.length; j++){
+					var pagenum = new Element('span',{ page_nr: j});
+					pagenum.appendChild(document.createTextNode((j+1).toString()));
+					foot.appendChild(pagenum);
+
+					pagenum.observe('click',function(e){
+							var page_to = parseInt(e.target.readAttribute('page_nr'));
+							var f = e.element().parentNode.parentNode.parentNode;
+							var thispage = e.element().parentNode.parentNode;	
+							f.removeChild(thispage);
+							f.appendChild(facepage[page_to]);
+							});
+					}
+			*/
+					var pagenum = new Element('span');
+					pagenum.appendChild(document.createTextNode((i+1).toString()));
+					foot.appendChild(pagenum);
+				if (i < facepage.length-1){
+					foot.appendChild(next);
+					foot.appendChild(last);
+				}
+				facepage[i].appendChild(foot);
+			}//end of length !=1
+		} //end of for i
+		//link.setAttribute ('href', 'javascript:alert("LinkButton1");');
+		//<div class="pager-simple foot"><a href="#" class="prev">上一页</a><span>1</span><a href="#" class="next">下一页</a></div> 
+		// <div class="pager-simple foot"><a href="#" class="first">上一页</a><span>1</span><a href="#" class="last">下一页</a></div> 
+
+		facesSingle.appendChild(facepage[0]);
+		document.body.appendChild(facesSingle);
+		Iyxzone.Emotion.Manager.facesSingle = facesSingle;
+		Iyxzone.Emotion.Manager.facePages = facepage;
     
 
-    // locate faces
-    faces.setStyle({
-      position: 'absolute',
-      zIndex: '20000',
-      left: (link.cumulativeOffset().left - 200) + 'px',
-      top: (link.cumulativeOffset().top) + 'px',
-      width: '200px',
-      height: '40px'
-    });
+		Iyxzone.Emotion.Manager.setFaceStyle(link,textField);
 
-    // set click events
-    // this must be done after faces are appended in document.body
-    var icons = faces.getElementsByClassName('emotion-icon');
-    for(var i=0;i<icons.length;i++){
-      icons[i].observe('click', function(e){
-        var idx = parseInt(e.element().readAttribute('index'));
-        textField.value += Iyxzone.Emotion.faces[idx];
-        this.toggleFaces(link, textField);
-      }.bind(this));
-    }
 
-    return faces;
+    return facesSingle;
   },
 
+
+    // locate faces
+    setFaceStyle: function(link, textField){
+			Iyxzone.Emotion.Manager.linkToLink = link;
+			Iyxzone.Emotion.Manager.facesSingle.setStyle({
+				"position": 'absolute',
+				"left": (link.cumulativeOffset().left - 200) + 'px',
+				"top": (link.cumulativeOffset().top) + 'px',
+				"width": '200px',
+				"height": '400px'
+				});
+			Iyxzone.Emotion.Manager.linkToField= textField;
+			Iyxzone.Emotion.Manager.linkToLink = link;
+		},
+
   toggleFaces: function(link, textField){
-    // get corresponding faces
-    var faces = this.linkToFacesMappings.get(link);
 
     // if faces table exists, show/hide it
     // otherwise create a new table and bind it to textField
-    if(faces && faces.visible()){
-      faces.hide();
-    }else if(faces && !faces.visible()){
-      faces.show();
-      // locate faces
-      faces.setStyle({
-        position: 'absolute',
-        zIndex: '20000',
-        left: (link.cumulativeOffset().left - 200) + 'px',
-        top: (link.cumulativeOffset().top) + 'px',
-        width: '200px',
-        height: '40px'
-      });
-    }else{
-      var faces = this.constructFacesTable(link, textField);
-      this.linkToFieldsMappings.set(link, textField);
-      this.linkToFacesMappings.set(link, faces);
-      faces.show();
-    }
+		if (!Iyxzone.Emotion.Manager.facesSingle){
+      Iyxzone.Emotion.Manager.constructFacesTable(link, textField);
+      Iyxzone.Emotion.Manager.linkToField =  textField;
+      Iyxzone.Emotion.Manager.linkToLink = link;
+      Iyxzone.Emotion.Manager.facesSingle.show();
+		}
+		else{
+			if (Iyxzone.Emotion.Manager.linkToLink == link && Iyxzone.Emotion.Manager.facesSingle.visible()){
+				Iyxzone.Emotion.Manager.facesSingle.hide();
+			}
+			else{
+				Iyxzone.Emotion.Manager.setFaceStyle(link, textField);
+				Iyxzone.Emotion.Manager.facesSingle.removeChild(Iyxzone.Emotion.Manager.facesSingle.firstChild);
+				Iyxzone.Emotion.Manager.facesSingle.appendChild(Iyxzone.Emotion.Manager.facePages[0]);
+				Iyxzone.Emotion.Manager.facesSingle.show();
+
+			}
+		}
   }
 
 });
