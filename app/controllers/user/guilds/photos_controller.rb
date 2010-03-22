@@ -27,20 +27,10 @@ class User::Guilds::PhotosController < UserBaseController
 
   def record_upload
     @photos = @album.photos.find(params[:ids])
- 
-		if @album.record_upload current_user, @photos
-			render :update do |page|
-        if current_user == @guild.president 
-				  page.redirect_to edit_multiple_guild_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
-        else
-          page.redirect_to guild_album_url(@album)
-        end
-			end
-	  else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
-    end
+		@album.record_upload current_user, @photos
+		render :update do |page|
+			page.redirect_to edit_multiple_guild_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+		end
   end 
 
   def edit

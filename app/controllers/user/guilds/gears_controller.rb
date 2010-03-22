@@ -17,7 +17,7 @@ class User::Guilds::GearsController < UserBaseController
   def create_or_update
     if @guild.update_attributes(params[:guild])
       @guild.reload
-      render :partial => 'bosses', :locals => {:guild => @guild}
+      render :partial => 'gears', :locals => {:guild => @guild}
     else
       flash[:error] = "发生错误"
       redirect_to edit_guild_rules(@guild)

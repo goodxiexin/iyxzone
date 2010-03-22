@@ -44,11 +44,23 @@ protected
   def setup
     if ["index"].include? params[:action]
       @event = Event.find(params[:event_id])
-      @user = @event.poster
     elsif ["edit", "update"].include? params[:action]
       @participation = Participation.find(params[:id])
       @event = @participation.event
       require_owner @participation.participant
+    elsif ["destroy"].include? params[:action]
+      @participation = Participation.find(params[:id])
+      @event = @participation.event
+      require_owner @event.poster
+      require_not_event_poster @participation
+    end
+  end
+
+  def require_not_event_poster participation
+    if participation.participant == participation.event.poster
+      render :update do |page|
+        page << "error('不能删除自己');"
+      end
     end
   end
 

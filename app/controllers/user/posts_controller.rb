@@ -1,7 +1,5 @@
 class User::PostsController < UserBaseController
 
-  layout 'forum'
-
   before_filter :moderator_required, :only => [:destroy]
 
   def index

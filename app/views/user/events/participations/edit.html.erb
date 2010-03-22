@@ -4,7 +4,7 @@
 </p>
 
 <div class='z-con'>
-<% form_remote_for :participation, :url => event_participation_url(@event, @participation, :show => 0), :html => {:method => :put} do |f| %>
+<% form_remote_for :participation, :url => event_participation_url(@event, @participation, :show => 1), :html => {:method => :put} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
     <%= radio_button_tag 'status', 3 %><%= label_tag '', '肯定去' %><br/>

@@ -14,9 +14,9 @@ class Event < ActiveRecord::Base
 
   belongs_to :guild
 
-	named_scope :hot, :conditions => ["end_time < ?", Time.now], :order => 'confirmed_count DESC'
+	named_scope :hot, :conditions => ["end_time > ?", Time.now], :order => 'confirmed_count DESC'
 	
-	named_scope :recent, :conditions => ["end_time < ?", Time.now], :order => 'start_time DESC'
+	named_scope :recent, :conditions => ["end_time > ?", Time.now], :order => 'start_time DESC'
 
   has_many :participations, :dependent => :destroy
 
@@ -162,6 +162,8 @@ class Event < ActiveRecord::Base
   validate_on_create :character_is_valid
 
   validate_on_update :event_is_not_expired
+
+  validates_inclusion_of :privilege, :message => "只能是1,2", :in => [1, 2]
  
 protected
 

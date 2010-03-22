@@ -6,6 +6,7 @@
   <%= javascript_include_merged :event %>
 <% end %>
 
+<%= error_messages_for :event, :header_message => '以下原因导致没法保存', :message => nil %>
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
 		<% if params[:guild_id].blank? %>
@@ -90,7 +91,11 @@
             </div>
             <div class="rows s_clear">
               <div class="fldid"><label for="name">谁可以加入：</label></div>
-              <div class="fldvalue"><%= privilege_select_tag :event %></div>
+              <% if params[:guild_id].blank? %>
+              <div class="fldvalue"><%= event_privilege_select_tag :event %></div>
+              <% else %>
+              <div class="fldvalue">工会的人才能加入</div>
+              <% end %>
             </div>
             <div class="rows s_clear">
               <div class="fldid">&nbsp;</div>
