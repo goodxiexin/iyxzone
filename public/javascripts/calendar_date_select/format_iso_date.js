@@ -10,10 +10,9 @@ Date.prototype.toFormattedString = function(include_time) {
 
 Date.parseFormattedString = function (string) {
 
-		   var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" + 
-			        "( ([0-9]{1,2}):([0-9]{2})?" +
-							       ")?)?)?";
-
+   var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" + 
+	        "( ([0-9]{1,2}):([0-9]{2})?" +
+					       ")?)?)?";
    /* var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" + 
         "( ([0-9]{1,2}):([0-9]{2})?" +
         "?)?)?)?"; */

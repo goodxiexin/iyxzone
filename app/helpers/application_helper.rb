@@ -117,7 +117,7 @@ module ApplicationHelper
 		if diggable.digged_by? current_user
 		  dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'<a href='#'>已赞</a>"
 		else
-			dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'"
+			dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'>"
 		  dig_html+= link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable)
 		end
 		dig_html+="</div></div>"

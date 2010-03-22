@@ -71,3 +71,5 @@ Rails::Initializer.run do |config|
   #config.time_zone = 'UTC'
 
 end
+
+CalendarDateSelect.format = :iso_date 

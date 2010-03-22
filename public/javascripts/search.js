@@ -75,7 +75,7 @@ Iyxzone.Search = {
       Iyxzone.disableButton(button, '请等待..');
       $('character_form').submit();
     }
-  },
+  }
 
 };
 

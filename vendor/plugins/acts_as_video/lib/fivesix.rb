@@ -45,7 +45,7 @@ class FiveSix
 	end
 
 	def embed_html
-		'<embed src="' +  @embed_url +  '" type="application/x-shockwave-flash" width="480" height="395"></embed>'
+		'<embed src="' +  @embed_url +  '" type="application/x-shockwave-flash" width="470" height="390"></embed>'
 	end
 
 end

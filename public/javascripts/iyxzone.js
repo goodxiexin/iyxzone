@@ -1,4 +1,4 @@
-Iyxzone = {};
+Iyxzone = Class.create({});
 
 Object.extend(Iyxzone, {
 
@@ -11,30 +11,30 @@ Object.extend(Iyxzone, {
   // some utilities
   disableButton: function(button, text){
     button.innerHTML = text;
-    button.writeAttribute({disabled: 'disabled'});
-    var span = button.up('span').up('span');
-    span.writeAttribute({class: 'button button-gray'});
+    $(button).writeAttribute('disabled', 'disabled');
+    var span = $(button.up('span')).up('span');
+    $(span).writeAttribute('class', 'button button-gray');
   },
 
   enableButton: function(button, text){
     button.innerHTML = text;
     button.disabled = '';
-    var span = button.up('span').up('span');
-    span.writeAttribute({class: 'button'});
+    var span = $(button.up('span')).up('span');
+    $(span).writeAttribute('class', 'button');
   },
 
   disableButtonThree: function(button, text){
     button.innerHTML = text;
-    button.writeAttribute({disabled: 'disabled'});
-    var span = button.up('span').up('span');
-    span.writeAttribute({class: 'button03 button03-gray'});
+    button.writeAttribute('disabled', 'disabled');
+    var span = $(button.up('span')).up('span');
+    $(span).writeAttribute('class', 'button03 button03-gray');
   },
 
   enableButtonThree: function(button, text){
     button.innerHTML = text;
     button.disabled = '';
-    var span = button.up('span').up('span');
-    span.writeAttribute({class: 'button03'});
+    var span = $(button.up('span')).up('span');
+    $(span).writeAttribute('class', 'button03');
   },
 
   validationCode: function(digits){
@@ -47,12 +47,11 @@ Object.extend(Iyxzone, {
     for(var i = 0;i < codes.length;i++){
       var span = new Element('span');
       span.innerHTML = codes[i];
-      span.setStyle({color: colors[Math.floor(Math.random()*10)]});
+      span.setStyle({'color': colors[Math.floor(Math.random()*10)]});
       div.appendChild(span);
     }
-    return {codes: codes, div: div};
-  },
-
+    return {'codes': codes, 'div': div};
+  }
 
 });
 

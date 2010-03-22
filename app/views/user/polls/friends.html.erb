@@ -19,7 +19,7 @@
           <%= render :partial => 'poll_items', :object => @polls %>
           <%= will_paginate @polls %>
         <% else %>
-          <div class='gray'>你的好友都有问题，没发起过任何投票</div>
+          <div class='tip'>你的好友都有问题，没发起过任何投票</div>
         <% end %>
       </div>
     </div>

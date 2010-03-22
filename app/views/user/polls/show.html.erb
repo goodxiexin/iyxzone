@@ -33,9 +33,9 @@
           <div class="vote-op left">
             <span class="vote-op-add"></span><%= link_to '增加侯选项', new_poll_answer_url(@poll), :rel => 'facebox' %>
             <% unless @poll.no_deadline %>
-            <span class=vote-op-time></span><%= link_to '修改截至时间', edit_poll_url(@poll, :type => 0), :rel => 'facebox' %>
+            <span class='vote-op-time'></span><%= link_to '修改截至时间', edit_poll_url(@poll, :type => 0), :rel => 'facebox' %>
             <% end %>
-						<span></span><%= link_to '修改选项说明', edit_poll_url(@poll, :type => 1), :rel => 'facebox' %>
+						<span class='vote-op-edit'></span><%= link_to '修改选项说明', edit_poll_url(@poll, :type => 1), :rel => 'facebox' %>
             <span class="vote-op-invite"></span><%= link_to '邀请更多人', new_poll_invitation_url(@poll) %>
             <span class="vote-op-del"></span><%= facebox_confirm '删除本投票', poll_url(@poll), {:msg => '你确定要删除该投票吗?', :method => :delete} %></li>
           </div>

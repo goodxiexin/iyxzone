@@ -156,6 +156,6 @@ Object.extend(Iyxzone.Mail.Builder, {
       Iyxzone.disableButton(button, '等待...'); 
       $('mail_form').submit();
     }  
-  },
+  }
 
 });

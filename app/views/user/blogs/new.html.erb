@@ -3,7 +3,7 @@
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% content_for :javascript_include do %>
-  <%= javascript_include_merged :blog %> 
+<%= javascript_include_merged :blog%> 
 <% end %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
@@ -13,7 +13,7 @@
       <div class="tab tab01">
         <div class="right"><%= link_to "写新日志", new_blog_url %></div>
         <ul>
-          <li><span><%= link_to "热门日志", hot_blogs_url(:uid => current_user.id) %></a></span></li>
+          <li><span><%= link_to "热门日志", hot_blogs_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "我的日志", blogs_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "好友日志", friends_blogs_url %></span></li>
           <li><span><%= link_to "与我相关的日志", relative_blogs_url(:uid => current_user.id) %></span></li>
@@ -72,4 +72,4 @@
 <%= javascript_tag "
   Iyxzone.Blog.Builder.editor = new nicEditor({iconsPath: '/images/nicEditorIcons.gif'}).panelInstance('blog_content', {token: '#{form_authenticity_token}'});
   Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, [], [], [], 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');  
-" %>
+", :defer => 'defer'%>
