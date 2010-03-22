@@ -235,7 +235,7 @@ class CommentObserver < ActiveRecord::Observer
       CommentMailer.deliver_sharing_comment comment, poster if poster.mail_setting.comment_my_sharing
     end
 
-    if recipient != poster and recipient != commentor
+    if recipient != poster and recipient != commentor and !recipient.blank?
       comment.notices.create(:user_id => recipient.id, :data => 'reply')
       CommentMailer.deliver_sharing_comment comment, recipient if recipient.mail_setting.comment_same_sharing_after_me
     end

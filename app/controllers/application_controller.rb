@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, ActionController::RoutingError, :with => :render_not_found
 
-  rescue_from RuntimeError, :with => :render_error
+  #rescue_from RuntimeError, :with => :render_error
 
 protected
 

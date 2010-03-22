@@ -63,7 +63,7 @@ class User::GuildsController < UserBaseController
 
   def update
     if @guild.update_attributes(params[:guild])
-      render :text => @guild.description
+      render :json => @guild
     end
   end
 

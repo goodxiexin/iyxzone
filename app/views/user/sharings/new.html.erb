@@ -5,7 +5,9 @@
 
 <div id='errors'></div>
 <div class='z-con'>
-<% form_remote_for :sharing, :url => sharings_url(:shareable_type => params[:shareable_type], :shareable_id => params[:shareable_id]) do |f| %>
+<% form_remote_for :sharing, :url => sharings_url do |f| %>
+<%= hidden_field_tag 'sharing[shareable_type]', params[:shareable_type] %>
+<%= hidden_field_tag 'sharing[shareable_id]', params[:shareable_id] %>
 <% if params[:link] %>
   <%= hidden_field_tag 'sharing[link]', params[:link] %>
 <% end %>

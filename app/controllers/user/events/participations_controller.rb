@@ -48,7 +48,7 @@ protected
     elsif ["edit", "update"].include? params[:action]
       @participation = Participation.find(params[:id])
       @event = @participation.event
-      require_owner @event.poster
+      require_owner @participation.participant
     end
   end
 
