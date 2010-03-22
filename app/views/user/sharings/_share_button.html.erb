@@ -4,7 +4,7 @@ javascript: void((
   function(s,d,e){
     if(/localhost\:3000/.test(d.location))
       return;
-    var f='http://#{SITE_URL}/sharings/new?outside=1&link=',u=d.location,l=d.title,p=[e(u),'&title=',e(l)].join('');
+    var f='#{SITE_URL}/sharings/new?outside=1&link=',u=d.location,l=d.title,p=[e(u),'&title=',e(l)].join('');
     function a(){
       if(!window.open([f,p].join(''),'17gaming',['width=420,height=300,left=',(s.width-420)/2,',top=',(s.height-300)/2].join('')))
         u.href=[f,p].join('');
