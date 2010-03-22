@@ -17,9 +17,10 @@ class User::MessagesController < UserBaseController
     @message = Message.new(message_params)
     if @message.save
       @info = {:content => @message.content, :created_at => @message.created_at, :id => @message.id}
+      @sender = {:id => current_user.id, :login => current_user.login, :avatar => avatar_path(current_user)}
       unless Juggernaut.show_client(@friend.id).nil?
         render :juggernaut => {:type => :send_to_client, :client_id => @friend.id} do |page|
-          page << "Iyxzone.Chat.recvMessage(#{@info.to_json}, '#{current_user.login}', #{current_user.id})" 
+          page << "Iyxzone.Chat.recvMessage(#{@info.to_json}, #{@sender.to_json})"
         end
       end
       render :json => @info 

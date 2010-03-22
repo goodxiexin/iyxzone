@@ -2,6 +2,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :collection => {:search => :get}
 
+  map.resources :games
+
+  map.resources :game_areas
+
   map.resources :sessions
 
   map.root :controller => 'sessions', :action => 'new' 
@@ -29,10 +33,6 @@ ActionController::Routing::Routes.draw do |map|
   map.cities '/cities', :controller => 'chinese_region', :action => 'cities'
 
   map.districts '/districts', :controller => 'chinese_region', :action => 'districts'
-
-  map.game_details '/game_details', :controller => 'games', :action => 'game_details'
-
-  map.area_details '/area_details', :controller => 'games', :action => 'area_details'
 
   map.invite '/invite', :controller => 'register', :action => 'invite'
 

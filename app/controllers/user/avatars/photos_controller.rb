@@ -50,17 +50,19 @@ class User::Avatars::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.json { render :text => @photo.notation }
-				format.html {
-					render :update do |page|
-						page << "facebox.close();"
-						page << "if($('avatar_notation_#{@photo.id}'))$('avatar_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
-					end
-				}
+				format.json { render :json => @photo }
+				format.html { render :update do |page|
+					page << "facebox.close();"
+					page << "if($('avatar_notation_#{@photo.id}'))$('avatar_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
+				end }
 			end
     else
-      flash.now[:error] = "There was an error updating this icon"
-      render :action => 'edit'
+      respond_to do |format|
+        format.html { render :update do |page|
+          page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
+          page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题没法保存', :message => nil %>"
+        end }
+      end
     end
   end
 

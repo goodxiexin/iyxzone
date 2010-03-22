@@ -3,6 +3,7 @@
   <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
 </p>
                 
+<div id='errors'></div>
 <div class="z-con">
   <% form_remote_for :album, :url => personal_albums_url(:show => params[:show]) do |f| %>
   <div class='formcontent'>
@@ -33,7 +34,7 @@
   </div>
   <div class="z-submit s_clear space">
     <table class="center" cellpadding="0"><tr><td>
-      <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')">完成</button></span></span>
+      <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')" id='new_album_submit'>完成</button></span></span>
       <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
     </td></tr></table>
   </div>

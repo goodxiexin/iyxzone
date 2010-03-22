@@ -1,6 +1,11 @@
+#
+# 说明：
+# 网站代码所在的目录是/home/deployer，deployer用户不是root权限，这是出于安全考虑
+# 但是配置很多地方需要root权限，因此，配置的时候我们用root权限，配置好了后，我们改回deployer权限
+#
 set :application, "17gaming"
-set :domain,      "deployer@17gaming.com"
-set :repository,  "http://github.com/gaoxh04/iyxzone.git"
+set :domain,      "root@17gaming.com"
+set :repository,  "git://github.com/gaoxh04/iyxzone.git"
 set :use_sudo,    false
 set :deploy_to,   "/home/deployer/#{application}"
 set :scm,         "git"
@@ -10,25 +15,129 @@ role :web, domain
 role :db,  domain, :primary => true
 
 
-after "deploy:symlink", "deploy:update_crontab"
+after "deploy:update_code", "deploy:chown_deployer"
+after "deploy:update_code", "deploy:update_crontab"
+after "deploy:update_code", "deploy:update_database_config"
+after "deploy:update_code", "deploy:update_mail_config"
+
+after "deploy:symlink", "assets:symlink"
 
 namespace :deploy do
 
+  desc "start application"
   task :start, :roles => :app do
     run "touch #{current_release}/tmp/restart.txt"
   end
 
+  desc "stop application"
   task :stop, :roles => :app do
-    # Do nothing.
+    # NOTHING TO DO
   end
 
-  desc "Restart Application"
+  desc "restart application"
   task :restart, :roles => :app do
     run "touch #{current_release}/tmp/restart.txt"
   end
 
-  task :update_crontab, :roles => :db do
+  desc "regenerate periodical tasks configuration"
+  task :update_crontab, :roles => :app do
     run "cd #{release_path} && whenever --update-crontab"
   end
-  
+
+  desc "change owner to deployer"
+  task :chown_deployer, :roles => :app do
+    run "cd /home/deployer && chown -R deployer:deployer 17gaming"
+  end
+ 
+  desc "update database configuration"
+  task :update_database_config, :roles => :app do
+    database_config = <<-CMD
+development:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: one_seven_gaming_development
+  pool: 5
+  username: root
+  password: 20041065
+  socket: /var/lib/mysql/mysql.sock
+production:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: one_seven_gaming_production
+  pool: 5
+  username: root
+  password: 20041065
+  socket: /var/lib/mysql/mysql.sock
+test:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: one_seven_gaming_test
+  pool: 5
+  username: root
+  password: 20041065
+  socket: /var/lib/mysql/mysql.sock
+    CMD
+    put database_config, "#{release_path}/config/database.yml"
+  end
+
+  desc "update mail configuration"
+  task :update_mail_config, :roles => :app do
+    mail_config = <<-CMD
+ActionMailer::Base.default_content_type = 'text/html'
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.perform_deliveries = true
+ActionMailer::Base.raise_delivery_errors = true
+ActionMailer::Base.default_charset = "utf-8"
+ActionMailer::Base.smtp_settings = {
+  :address => "localhost", 
+  :port => 25, 
+  :enable_starttls_auto => true,
+  :domain => "17gaming.com", 
+  :authentication => :plain,
+  :user_name => "deployer", 
+  :password => "20041065"
+}
+ActionMailer::Base.delivery_method = :activerecord
+    CMD
+    put mail_config, "#{release_path}/config/initializers/mail.rb"
+  end
+   
+end
+
+namespace :assets do
+
+  ASSETS = %w(photos games game_areas)
+
+  desc "preserve resources across deployment"
+  task :symlink, :roles => :app do
+    ASSETS.each do |name|
+      run "mkdir -p #{shared_path}/#{name} && rm -rf #{release_path}/public/#{name} && ln -nfs #{shared_path}/#{name} #{release_path}/public/#{name}"
+    end
+    deploy.chown_deployer
+  end
+
+end
+
+namespace :web do
+
+  desc "temporarily shutdown our website"
+  task :disable, :roles => :web do
+    require 'erb'
+    on_rollback { run "rm #{shared_path}/system/maintenance.html" }
+    reson = ENV['REASON']
+    deadline = ENV['UNTIL']
+    template = File.read("app/views/maintenance.html.erb" )
+    page = ERB.new(template).result(binding)
+    put page, "#{shared_path}/system/maintenance.html", :mode => 0644
+    run "chown deployer:deployer #{shared_path}/system/maintenance.html"
+  end
+
+  desc "enable our website"
+  task :enable, :roles => :web do
+    run "rm #{shared_path}/system/maintenance.html"
+  end
+
 end

@@ -7,8 +7,6 @@ class AddRatings < ActiveRecord::Migration
       t.column :user_id, :integer, :default => 0, :null => false
       t.column :created_at, :datetime
     end
-
-    add_index :ratings, [:rateable_id, :rating]
   end
 
   def self.down

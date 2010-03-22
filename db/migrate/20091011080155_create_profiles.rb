@@ -12,6 +12,7 @@ class CreateProfiles < ActiveRecord::Migration
       t.string :website
       t.datetime :birthday
       t.text :about_me
+      t.integer :skin_id, :default => 1
       t.integer :sharings_count, :default => 0
       t.integer :viewings_count, :default => 0
       t.integer :comments_count, :default => 0

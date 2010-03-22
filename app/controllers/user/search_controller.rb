@@ -9,9 +9,9 @@ class User::SearchController < UserBaseController
   end
 
   def character
-    @game = Game.find(params[:game][:id]) unless params[:game][:id].blank?
-    @area = @game.areas.find(params[:area][:id]) unless params[:area][:id].blank?
-    @server = @game.servers.find(params[:server][:id]) unless params[:server][:id].blank?
+    @game = Game.find(params[:game_id]) unless params[:game_id].blank?
+    @area = @game.areas.find(params[:area_id]) unless params[:area_id].blank?
+    @server = @game.servers.find(params[:server_id]) unless params[:server_id].blank?
 
     cond = {}
     cond.merge!({:game_id => @game.id}) unless @game.nil? 
@@ -29,6 +29,7 @@ class User::SearchController < UserBaseController
       @areas = []
       @servers = @game.servers
     end
+
     @games = Game.find(:all, :order => 'pinyin ASC')
 		@total_users = GameCharacter.search(params[:key], :conditions => cond).group_by(&:user_id).to_a
 		@key = params[:key]

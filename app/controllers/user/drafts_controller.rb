@@ -11,6 +11,7 @@ class User::DraftsController < UserBaseController
     
     if @blog.save
       render :update do |page|
+        page << "tip('保存草稿，你可以继续写了')"
         page.redirect_to edit_draft_url(@blog)
       end
     else

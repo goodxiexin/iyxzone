@@ -1,38 +1,27 @@
 module InPlaceEditorMacroHelpers
  
-  DEFAULT_TEXT_FIELD_OPTIONS = {
-		:ok_control => false, 
-		:cancel_control => false, 
-		:submit_on_blur => true, 
-		:click_to_edit_text => "点击更新", 
-		:saving_text => "正在更新..."}
+  DEFAULT_TEXT_AREA_OPTIONS = {
+		:okControl => false, 
+		:cancelControl => false, 
+		:submitOnBlur => true, 
+		:clickToEditText => "'点击更新'", 
+		:savingText => "'正在更新...'"
+  }
 
+	def text_area_js field, url, empty_text, object_name, property, options
+    function = "new Ajax.InPlaceTextArea("
+    function << "'#{field}', "
+    function << "'#{url}', "
 
-	def in_place_editor(field_id, url, parameter_name, options = {}, ajax_options = {})
-    function = "new Ajax.InPlaceEditorWithEmptyText("
-    function << "'#{field_id}', "
-    function << "'#{url}'"
+    ajax_options = {:method => "'put'"}.merge(options[:ajax_options] || {})
  
-    js_options = {}
+    js_options = DEFAULT_TEXT_AREA_OPTIONS
 
-		js_options['callback'] = "
-			function(form, value) {
-				return '#{parameter_name}=' + value + '&authenticity_token=' + encodeURIComponent('#{form_authenticity_token}');
-			}
-		"
-
-    js_options['onComplete'] = "
-      function(transport, element) {
-        if (transport && transport.status == 200) {
-          new Effect.Highlight(element.id, {startcolor: \"#00ffff\"});
-          var value = transport.responseText;
-          if(value.length != 0){
-            element.innerHTML = value.escapeHTML().replace(/\\n/g, '<br/>');
-          }
-        }
-      }
-    "
-
+    js_options['updateClass'] = %('#{object_name}')
+    js_options['updateAttr'] = %('#{property}')
+    js_options['emptyText'] = %('#{empty_text}')
+    js_options['token'] = %('#{form_authenticity_token}')
+    js_options['paramName'] = %('#{options[:param_name]}') if options[:param_name]
     js_options['cancelText'] = %('#{options[:cancel_text]}') if options[:cancel_text]
 		js_options['cancelControl'] = options[:cancel_control] unless options[:cancel_control].nil?
     js_options['okText'] = %('#{options[:save_text]}') if options[:save_text]
@@ -52,28 +41,19 @@ module InPlaceEditorMacroHelpers
 		js_options['emptyText'] = "'#{options[:empty_text]}'" if options[:empty_text]
 		js_options['emptyClassName'] = "'#{options[:empty_class_name]}'" if options[:empty_class_name]
 
-    function << (', ' + options_for_javascript(js_options)) unless js_options.empty?
+    function << options_for_javascript(js_options) unless js_options.empty?
     
     function << ')'
  
-    javascript_tag(function)
+    javascript_tag function
   end
   
-  def in_place_text_field(tag_type, object, property, editable = false, url = nil, tag_options = {}, edit_options = {}, ajax_options = {})
+  def in_place_text_area object, property, empty_text="", options={}
     object_name = object.class.to_s.underscore
-		tag_options[:id] = "#{object_name}_#{property}_#{object.to_param}" if tag_options[:id].blank?
-		
-		url ||= "/#{object_name.pluralize}/#{object.to_param}"
-		url += ".json"
-
-		options_for_edit = DEFAULT_TEXT_FIELD_OPTIONS.merge(edit_options)
-		options_for_ajax = ajax_options.merge({:method => "'put'"})
-	
-		parameter_name = edit_options.delete(:parameter_name) || "#{object_name}[#{property}]"	
+		span_id = "#{object_name}_#{property}_#{object.to_param}"
+		url = "/#{object_name.pluralize}/#{object.id}.json"
  
-		tag = content_tag(tag_type, h(object.send(property)).gsub(/\n/, '<br/>'), tag_options)
-		
-		return tag + in_place_editor(tag_options[:id], url, parameter_name, options_for_edit, options_for_ajax)
+		return content_tag(:span, h(object.send(property)), {:id => span_id}) + text_area_js(span_id, url, empty_text, object_name, property, options)
   end
 
 end

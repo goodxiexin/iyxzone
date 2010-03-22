@@ -35,7 +35,8 @@ class User::AlbumsController < UserBaseController
     
     unless @album.save
       render :update do |page|
-        page.replace_html 'errors', :partial => 'validation_errors'
+        page << "Iyxzone.enableButton($('new_album_submit'),'完成');"
+        page.replace_html 'errors', :inline =>"<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
       end
     end
   end
@@ -45,18 +46,21 @@ class User::AlbumsController < UserBaseController
   end
 
   def update
-    if @album.update_attributes((params[:album] || {}).merge({:owner_id => current_user.id}))
+    if @album.update_attributes(params[:album] || {})
 			respond_to do |format|
-        format.json { render :text => @album.description }
+        format.json { render :json => @album }
         format.html {    
 					render :update do |page|
-						page.alert '成功'
+						page << "tip('成功');"
 					end
 				}
 			end
     else
-      render :update do |page|
-        page.replace_html 'errors', :partial => 'validation_errors'
+      respond_to do |format|
+        format.html { render :update do |page|
+          page << "Iyxzone.enableButton($('edit_album_submit'), '完成');"
+          page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
+        end }
       end
     end
   end 

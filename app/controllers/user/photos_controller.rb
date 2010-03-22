@@ -50,20 +50,23 @@ class User::PhotosController < UserBaseController
     @album.update_attribute('cover_id', @photo.id) if params[:cover]
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.json { render :text => @photo.notation }
-				format.html {
-					render :update do |page|
-						if @photo.album_id_changed?
-						  page.redirect_to personal_photo_url(@photo)
-						else
-						  page << "facebox.close();"
-							page << "if($('personal_photo_notation_#{@photo.id}'))$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
-						end
+				format.json { render :json => @photo }
+				format.html { render :update do |page|
+					if @photo.album_id_changed?
+						page.redirect_to personal_photo_url(@photo)
+					else
+						page << "facebox.close();"
+						page << "if($('personal_photo_notation_#{@photo.id}'))$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
 					end
-				}
+				end }
 			end 
     else
-      # TODO
+      respond_to do |format|
+        format.html { render :update do |page|
+          page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
+          page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题无法保存', :message => nil %>"
+        end }
+      end
     end
   end
 

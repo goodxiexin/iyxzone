@@ -1,5 +1,5 @@
 # Settings specified here will take precedence over those in config/environment.rb
-SITE_URL = "localhost:3000"
+SITE_URL = "http://localhost:3000"
 SITE_MAIL = "gaoxh04@gmail.com"
 
 # In the development environment your application's code is reloaded on
@@ -13,10 +13,7 @@ config.whiny_nils = true
 # Show full error reports and disable caching
 config.action_controller.consider_all_requests_local = true
 config.action_view.debug_rjs                         = true
-config.action_controller.perform_caching             = false
+config.action_controller.perform_caching             = true
 
 # Don't care if the mailer can't send
 config.action_mailer.raise_delivery_errors = false
-
-# enable cache 
-config.action_controller.perform_caching = true

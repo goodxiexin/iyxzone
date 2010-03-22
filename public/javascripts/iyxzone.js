@@ -1,10 +1,12 @@
-Iyxzone = Class.create({});
+Iyxzone = {};
 
 Object.extend(Iyxzone, {
 
   version: 1.0,
 
   author: ['高侠鸿'],
+
+  SiteURL: "http://localhost:3000",
 
   // some utilities
   disableButton: function(button, text){

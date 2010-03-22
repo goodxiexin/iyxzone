@@ -4,7 +4,7 @@ class UserBaseController < ApplicationController
 
   before_filter :setup_verify_scope
 
-  before_filter :setup_instant_messenger
+  #before_filter :setup_instant_messenger
 
   before_filter :set_last_seen_at
 
@@ -24,11 +24,13 @@ protected
   end
 
   def setup_instant_messenger
-    @online_friends = [] #current_user.online_friends
-    @im_info = {}
+    @my_info = {:avatar => avatar_path(current_user), :login => current_user.login}
+    @online_friends = current_user.online_friends.map {|f| {:login => f.login, :id => f.id, :avatar => avatar_path(f), :pinyin => f.pinyin}}
+    @unread_messages = {}
     current_user.unread_messages.group_by(&:poster).each do |poster, messages|
-      @im_info["#{poster.id}"] = {
-        :login => poster.login, 
+      @unread_messages["#{poster.id}"] = {
+        :login => poster.login,
+        :avatar => avatar_path(poster),
         :messages => messages.map{|m| {:content => m.content, :created_at => m.created_at, :id => m.id}}
       }
     end
@@ -65,15 +67,27 @@ protected
   end
 
   def require_adequate_privilege resource
-    resource.available_for? current_user || render_privilege_denied
+    resource.available_for?(current_user) || render_privilege_denied(resource)
   end
 
-  def render_privilege_denied
-    render_not_found
+  def render_privilege_denied resource
+    if resource.is_owner_privilege?
+      render_not_found
+    else
+      render_add_friend resource.resource_owner
+    end
   end
 
   def render_add_friend friend
     redirect_to new_friend_url(:uid => friend.id) 
+  end
+
+  def avatar_path user
+    if user.avatar.blank?
+      "/images/default_medium.png"
+    else
+      user.avatar.public_filename(:medium)
+    end
   end
 
 end

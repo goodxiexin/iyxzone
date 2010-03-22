@@ -7,7 +7,7 @@ class Blog < ActiveRecord::Base
   named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
 
   named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
-
+  
   needs_verification
   
   acts_as_friend_taggable :delete_conditions => lambda {|user, blog| blog.poster == user},

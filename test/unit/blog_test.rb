@@ -5,7 +5,7 @@ class BlogTest < ActiveSupport::TestCase
   test "保存日志，日志计数器加1" do
     b = BlogFactory.build
     
-    assert_difference "b.poster.blogs_count" do
+    assert_difference "b.poster(true).blogs_count" do
       b.save
     end
   end
@@ -13,7 +13,7 @@ class BlogTest < ActiveSupport::TestCase
   test "保存草稿，草稿计数器加1" do
     d = DraftFactory.build
 
-    assert_difference "d.poster.drafts_count" do
+    assert_difference "d.poster(true).drafts_count" do
       d.save
     end
   end
@@ -21,13 +21,13 @@ class BlogTest < ActiveSupport::TestCase
   test "把草稿变成日志, 草稿计数器减一，日志计数器加一" do
     d = DraftFactory.create
 
-    assert_difference "d.poster.drafts_count", -1 do
+    assert_difference "d.poster(true).drafts_count", -1 do
       d.update_attributes(:draft => false)
     end
 
     d = DraftFactory.create
 
-    assert_difference "d.poster.blogs_count" do
+    assert_difference "d.poster(true).blogs_count" do
       d.update_attributes(:draft => false)
     end
   end
@@ -35,7 +35,7 @@ class BlogTest < ActiveSupport::TestCase
   test "删除日志，日志计数器减一" do
     b = BlogFactory.create
 
-    assert_difference "b.poster.blogs_count", -1 do
+    assert_difference "b.poster(true).blogs_count", -1 do
       b.destroy
     end
   end
@@ -43,7 +43,7 @@ class BlogTest < ActiveSupport::TestCase
   test "删除草稿，草稿计数器减一" do
     d = DraftFactory.create
 
-    assert_difference "d.poster.drafts_count", -1 do
+    assert_difference "d.poster(true).drafts_count", -1 do
       d.destroy
     end
   end

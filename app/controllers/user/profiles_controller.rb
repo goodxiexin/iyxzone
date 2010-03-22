@@ -9,8 +9,9 @@ class User::ProfilesController < UserBaseController
 	FetchSize = 5
 
   def show
-		@blogs = @user.blogs[0..2]
-		@albums = @user.active_albums[0..2]
+    @relationship = @user.relationship_with current_user
+		@blogs = @user.blogs.viewable(@relationship)[0..2]
+		@albums = @user.active_albums.viewable(@relationship)[0..2]
     @setting = @user.privacy_setting
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
@@ -37,7 +38,7 @@ class User::ProfilesController < UserBaseController
   def update
     if @profile.update_attributes(params[:profile])
 			respond_to do |format|
-				format.json { render :text => @profile.about_me }
+				format.json { render :json => @profile.to_json }
 				format.html {
 					case params[:type].to_i
 					when 1

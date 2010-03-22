@@ -2,8 +2,10 @@
 <% content_for :html_description, "#{@user.login}的个人主页 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% if !@skin.default? %>
 <% content_for :stylesheet_link do %>
-  <%= stylesheet_link_tag @skin.css_file_name %>
+  <%= stylesheet_link_tag "themes/#{@skin.name}/#{@skin.css}" %>
+<% end %>
 <% end %>
 
 <% content_for :javascript_include do %>
@@ -99,10 +101,14 @@
 <div class="box02 canvas_con">
 	<div class='multibox'>
 	<div class='tipbar space'>
-	<% if @user != current_user and @profile.about_me.blank? %>
-		<span>这家伙很懒，什么都没说...</span>
+	<% if @user != current_user %>
+    <% if @profile.about_me.blank? %>
+		  <span>这家伙很懒，什么都没说...</span>
+    <% else %>
+      <span><%= @profile.about_me %></span>
+    <% end %>
 	<% else %>
-		<%= in_place_text_field :span, @profile, :about_me, @user == current_user, profile_url(@profile), {}, {:empty_text => '介绍下自己?', :rows => 3, :cols => 70}, {} %>
+    <%= in_place_text_area @profile, :about_me, '介绍下自己?' %>
 	<% end %>
 	</div>
 	</div>
@@ -192,7 +198,7 @@
 </div>
 
 <% if @setting.leave_wall_message_viewable_by? current_user %>
-  <%= render :layout => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>
+  <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>
 <% end %>
 <% if @setting.wall_viewable_by? current_user %>
   <div class='feed-box' id='comments'>

@@ -27,7 +27,7 @@ class EventObserver < ActiveRecord::Observer
     event.participations.create(:participant_id => event.poster_id, :character_id => event.character_id, :status => Participation::Confirmed)
 
     # increment user's counter
-    event.poster.raw_increment :events_count
+    # event.poster.raw_increment :events_count
  
     # issue feeds
     return unless event.poster.application_setting.emit_event_feed

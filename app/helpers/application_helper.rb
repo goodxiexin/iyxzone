@@ -285,12 +285,8 @@ module ApplicationHelper
     end
   end
 
-  def limited_text_field name, value, opts
-    max = opts.delete(:max) || 100
-    div = opts.delete(:div) || 'words_count'
-    id = opts.delete(:id) || name
-    text_field_tag name, value, opts
-    javascript_tag "new Iyxzone.limitedTextField($('#{id}'), #{max}, $('#{div}'))"
+  def skin_image_tag skin, img_opts={}
+    link_to (image_tag "themes/#{skin.name}/#{skin.thumbnail}", {:alt => skin.name}.merge(img_opts)), skin_url(skin)
   end
 
 end

@@ -14,7 +14,7 @@ class User::DigsController < UserBaseController
       end
     else
       render :update do |page|
-        page << "tip('#{@dig.errors.on_base}');"
+        page << "tip('已经赞过了！');"
       end
     end
   end

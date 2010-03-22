@@ -46,15 +46,18 @@ class User::Events::PhotosController < UserBaseController
     @album.update_attribute('cover_id', @photo.id) if params[:cover]
     if @photo.update_attributes((params[:photo] || {}).merge({:poster_id => @photo.poster_id}))
 			respond_to do |format|
-				format.json { render :text => @photo.notation }
-				format.html {  
-					render :update do |page|
-						page << "facebox.close();"
-					end
-				}
+				format.json { render :json => @photo }
+				format.html { render :update do |page|
+					page << "facebox.close();"
+				end }
 			end
     else
-      # TODO
+      respond_to do |format|
+        format.html { render :update do |page|
+          page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
+          page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
+        end }
+      end
     end
   end
 

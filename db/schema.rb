@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100310151655) do
+ActiveRecord::Schema.define(:version => 20100321120645) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "uploaded_at"
     t.datetime "created_at"
   end
+
+  add_index "albums", ["owner_id"], :name => "index_albums_on_owner_id"
 
   create_table "applications", :force => true do |t|
     t.string   "name"
@@ -53,6 +55,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",                           :default => 0
   end
 
+  add_index "blogs", ["poster_id"], :name => "index_blogs_on_poster_id"
+
   create_table "bosses", :force => true do |t|
     t.string   "name"
     t.integer  "game_id"
@@ -61,6 +65,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "bosses", ["guild_id"], :name => "index_bosses_on_guild_id"
 
   create_table "chinese_characters", :force => true do |t|
     t.string "utf8_code"
@@ -85,6 +91,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",         :default => 0
   end
 
+  add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_on_commentable_id_and_commentable_type"
+
   create_table "comrade_suggestions", :force => true do |t|
     t.integer "user_id"
     t.integer "comrade_id"
@@ -93,6 +101,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer "server_id"
   end
 
+  add_index "comrade_suggestions", ["user_id"], :name => "index_comrade_suggestions_on_user_id"
+
   create_table "digs", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "diggable_id"
@@ -100,6 +110,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "digs", ["diggable_id", "diggable_type"], :name => "index_digs_on_diggable_id_and_diggable_type"
 
   create_table "districts", :force => true do |t|
     t.string  "name"
@@ -141,6 +153,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",          :default => 0
   end
 
+  add_index "events", ["poster_id"], :name => "index_events_on_poster_id"
+
   create_table "feed_deliveries", :force => true do |t|
     t.integer  "recipient_id"
     t.string   "recipient_type"
@@ -148,6 +162,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.string   "item_type"
     t.datetime "created_at"
   end
+
+  add_index "feed_deliveries", ["recipient_id", "recipient_type"], :name => "index_feed_deliveries_on_recipient_id_and_recipient_type"
 
   create_table "feed_items", :force => true do |t|
     t.text     "data"
@@ -171,6 +187,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer "suggested_friend_id"
   end
 
+  add_index "friend_suggestions", ["user_id"], :name => "index_friend_suggestions_on_user_id"
+
   create_table "friend_tags", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "tagged_user_id"
@@ -179,6 +197,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "friend_tags", ["taggable_id", "taggable_type"], :name => "index_friend_tags_on_taggable_id_and_taggable_type"
 
   create_table "friendships", :force => true do |t|
     t.integer  "friend_id"
@@ -189,6 +209,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "friendships", ["user_id", "friend_id"], :name => "index_friendships_on_user_id_and_friend_id"
+
   create_table "game_areas", :force => true do |t|
     t.string   "name"
     t.integer  "game_id"
@@ -197,10 +219,14 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "game_areas", ["game_id"], :name => "index_game_areas_on_game_id"
+
   create_table "game_attentions", :force => true do |t|
     t.integer "user_id"
     t.integer "game_id"
   end
+
+  add_index "game_attentions", ["user_id"], :name => "index_game_attentions_on_user_id"
 
   create_table "game_characters", :force => true do |t|
     t.integer  "user_id"
@@ -219,6 +245,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "game_characters", ["user_id"], :name => "index_game_characters_on_user_id"
+
   create_table "game_professions", :force => true do |t|
     t.string   "name"
     t.integer  "game_id"
@@ -226,12 +254,16 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "game_professions", ["game_id"], :name => "index_game_professions_on_game_id"
+
   create_table "game_races", :force => true do |t|
     t.string   "name"
     t.integer  "game_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "game_races", ["game_id"], :name => "index_game_races_on_game_id"
 
   create_table "game_servers", :force => true do |t|
     t.string   "name"
@@ -241,6 +273,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "game_servers", ["game_id", "area_id"], :name => "index_game_servers_on_game_id_and_area_id"
 
   create_table "games", :force => true do |t|
     t.string   "name"
@@ -281,6 +315,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "gears", ["guild_id"], :name => "index_gears_on_guild_id"
+
   create_table "guild_friendships", :force => true do |t|
     t.integer  "guild_id"
     t.integer  "friend_id"
@@ -296,6 +332,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "guild_rules", ["guild_id"], :name => "index_guild_rules_on_guild_id"
 
   create_table "guilds", :force => true do |t|
     t.string   "name"
@@ -315,6 +353,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",          :default => 0
   end
 
+  add_index "guilds", ["president_id"], :name => "index_guilds_on_president_id"
+
   create_table "links", :force => true do |t|
     t.string  "url"
     t.integer "sharings_count", :default => 0
@@ -333,6 +373,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "mails", ["sender_id", "recipient_id"], :name => "index_mails_on_sender_id_and_recipient_id"
+
   create_table "memberships", :force => true do |t|
     t.integer  "user_id"
     t.integer  "guild_id"
@@ -342,6 +384,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "memberships", ["user_id", "guild_id"], :name => "index_memberships_on_user_id_and_guild_id"
+
   create_table "messages", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "recipient_id"
@@ -350,6 +394,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
 
   create_table "moderator_forums", :force => true do |t|
     t.integer  "forum_id"
@@ -383,6 +429,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "notices", ["user_id"], :name => "index_notices_on_user_id"
+
   create_table "notifications", :force => true do |t|
     t.text     "data"
     t.integer  "category"
@@ -392,6 +440,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "notifications", ["user_id"], :name => "index_notifications_on_user_id"
+
   create_table "participations", :force => true do |t|
     t.integer  "participant_id"
     t.integer  "character_id"
@@ -400,6 +450,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "participations", ["participant_id", "event_id"], :name => "index_participations_on_participant_id_and_event_id"
 
   create_table "photo_tags", :force => true do |t|
     t.integer  "poster_id"
@@ -415,6 +467,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
     t.integer  "verified",       :default => 0
   end
+
+  add_index "photo_tags", ["photo_id"], :name => "index_photo_tags_on_photo_id"
 
   create_table "photos", :force => true do |t|
     t.string   "type"
@@ -439,6 +493,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",       :default => 0
   end
 
+  add_index "photos", ["album_id"], :name => "index_photos_on_album_id"
+
   create_table "poke_deliveries", :force => true do |t|
     t.integer  "sender_id"
     t.integer  "recipient_id"
@@ -446,6 +502,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "poke_deliveries", ["recipient_id"], :name => "index_poke_deliveries_on_recipient_id"
 
   create_table "pokes", :force => true do |t|
     t.string "name"
@@ -461,12 +519,16 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "updated_at"
   end
 
+  add_index "poll_answers", ["poll_id"], :name => "index_poll_answers_on_poll_id"
+
   create_table "poll_invitations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "poll_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "poll_invitations", ["user_id"], :name => "index_poll_invitations_on_user_id"
 
   create_table "polls", :force => true do |t|
     t.string   "name"
@@ -491,6 +553,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",       :default => 0
   end
 
+  add_index "polls", ["poster_id"], :name => "index_polls_on_poster_id"
+
   create_table "posts", :force => true do |t|
     t.integer  "topic_id"
     t.integer  "forum_id"
@@ -513,13 +577,15 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.string   "website"
     t.datetime "birthday"
     t.text     "about_me"
+    t.integer  "skin_id",        :default => 1
     t.integer  "sharings_count", :default => 0
     t.integer  "viewings_count", :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "skin_id",        :default => 1
   end
+
+  add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
 
   create_table "ratings", :force => true do |t|
     t.integer  "rating",        :default => 3
@@ -529,7 +595,7 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
   end
 
-  add_index "ratings", ["rateable_id", "rating"], :name => "index_ratings_on_rateable_id_and_rating"
+  add_index "ratings", ["rateable_id", "rateable_type"], :name => "index_ratings_on_rateable_id_and_rateable_type"
 
   create_table "regions", :force => true do |t|
     t.string "name"
@@ -539,6 +605,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer "role_id"
     t.integer "user_id"
   end
+
+  add_index "role_users", ["role_id", "user_id"], :name => "index_role_users_on_role_id_and_user_id"
 
   create_table "roles", :force => true do |t|
     t.string "name"
@@ -556,6 +624,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",       :default => 0
   end
 
+  add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"
+
   create_table "signup_invitations", :force => true do |t|
     t.integer  "sender_id"
     t.string   "recipient_email"
@@ -565,9 +635,9 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
   end
 
   create_table "skins", :force => true do |t|
-    t.string   "name",                                       :null => false
-    t.string   "css_file_name",                              :null => false
-    t.string   "thumbnail_file_name", :default => "missing"
+    t.string   "name",                              :null => false
+    t.string   "css",                               :null => false
+    t.string   "thumbnail",  :default => "missing"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -581,6 +651,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",       :default => 0
   end
 
+  add_index "statuses", ["poster_id"], :name => "index_statuses_on_poster_id"
+
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
@@ -589,6 +661,8 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "taggings", ["taggable_id", "taggable_type"], :name => "index_taggings_on_taggable_id_and_taggable_type"
 
   create_table "tags", :force => true do |t|
     t.string   "name"
@@ -629,6 +703,7 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.boolean  "enabled",                                  :default => true
     t.integer  "avatar_id"
     t.string   "pinyin"
+    t.datetime "last_seen_at"
     t.integer  "privacy_setting",            :limit => 8,  :default => 106299306
     t.integer  "mail_setting",               :limit => 8,  :default => 281474976710655
     t.integer  "application_setting",        :limit => 8,  :default => 262143
@@ -660,7 +735,6 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "last_seen_at"
   end
 
   create_table "videos", :force => true do |t|
@@ -681,12 +755,16 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.integer  "verified",       :default => 0
   end
 
+  add_index "videos", ["poster_id"], :name => "index_videos_on_poster_id"
+
   create_table "viewings", :force => true do |t|
     t.integer  "user_id"
     t.integer  "viewable_id"
     t.string   "viewable_type"
     t.datetime "viewed_at"
   end
+
+  add_index "viewings", ["viewable_id", "viewable_type"], :name => "index_viewings_on_viewable_id_and_viewable_type"
 
   create_table "votes", :force => true do |t|
     t.text     "answer_ids"
@@ -695,5 +773,7 @@ ActiveRecord::Schema.define(:version => 20100310151655) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "votes", ["poll_id"], :name => "index_votes_on_poll_id"
 
 end

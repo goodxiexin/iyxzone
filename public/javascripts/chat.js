@@ -5,16 +5,107 @@ Iyxzone.Chat = Class.create({
 
 Object.extend(Iyxzone.Chat, {
 
+  userID: null, // 当前用户
+
+  myLogin: null,
+
+  myIcon: null,
+  
   friendID: null, // 当前和谁在聊
 
-  unreadMessages: new Hash(), // friendID => messages
+  onlineFriendIDs: new Hash(), // 当前在线好友, friendID => div 
+
+  unreadMessages: new Hash(), // friendID => messages, unreadMessages.keys()是 onlineFriendIDs 的一个子集
 
   blinkFriendID: null, // 当前在闪烁的是哪个好友的消息 
 
+  blinkFriendIcon: null, // 当前在闪烁的好友的头像
+
+  blankIcon: null,
+
   blinkTimer: null,
 
-  myIcon: null,
+  // toggle 在线好友  
+  toggleOnline: function(link){
+    if($('chat-list').visible()){
+      link.up().up().writeAttribute({class: ''});
+    }else{
+      link.up().up().writeAttribute({class: 'im-expand'});
+    }
 
+    $('chat-list').toggle();
+  },
+
+  // 显示聊天栏
+  toggleBar: function(event){
+    Event.stop(event);
+    $('tiny-chat-bar').hide();
+    $('chat-bar').show();
+  },
+
+  // 闪烁头像
+  toggleIcon: function(){
+    var target = $('tiny-im-icon');
+
+    if(target.innerHTML == '' || target.down('img').src.include('/images/blank.gif')){
+      target.innerHTML = this.blinkFriendIcon;
+    }else{
+      target.innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
+    }
+
+    target = $('im-icon');
+
+    if(target.down('img').src.include('/images/blank.gif')){
+      target.innerHTML = this.blinkFriendIcon;
+    }else{
+      target.innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
+    }
+
+    this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
+  },
+
+  // 根据未读的信息，设置当前闪烁的头像
+  setBlink: function(){
+    if(this.blinkFriendID == null && this.unreadMessages.keys().length != 0){
+      this.blinkFriendID = this.unreadMessages.keys()[0];
+      this.blinkFriendIcon = '<img src="' + this.unreadMessages.get(this.blinkFriendID).avatar + '" class="left w-l" width=20 height=20/>';
+      this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
+
+      $('tiny-im-icon').observe('click', this.showUnreadMessages.bindAsEventListener(this));
+      $('im-icon').observe('click', this.showUnreadMessages.bindAsEventListener(this));
+    }
+  },
+
+  // 先取消当前闪烁的头像，再根据未读的信息，设置新的闪烁头像
+  resetBlink: function(){
+    clearTimeout(this.blinkTimer);
+    
+    $('tiny-im-icon').stopObserving('click');
+    $('im-icon').stopObserving('click');
+    $('tiny-im-icon').innerHTML = '';
+    $('im-icon').innerHTML = this.myIcon;
+
+    this.blinkFriendID = null;
+    this.setBlink();
+  },
+
+  // 在 view 里初始化的函数
+  set: function(onlineFriends, friendIDs, infos, token, myInfo){
+    this.token = token;
+    this.myIcon = '<img src="' + myInfo.avatar + '" class="left w-l" width=20 height=20/>';
+    this.myLogin = myInfo.login;
+    for(var i=0;i<infos.length;i++){
+      this.unreadMessages.set(friendIDs[i], infos[i]);
+    }
+    for(var i=0;i<onlineFriends.length;i++){
+      this.newOnlineFriend(onlineFriends[i]);
+    }
+    this.blankIcon = new Image();
+    this.blankIcon.src = '/images/blank.gif';
+    this.setBlink();
+  },
+
+  // 搜索
   search: function(key){
     $('chat-list').childElements().each(function(li){
       if(key == '' || li.readAttribute('pinyin').indexOf(key) >= 0 || li.readAttribute('login').indexOf(key) >= 0){
@@ -51,13 +142,25 @@ Object.extend(Iyxzone.Chat, {
     return div;
   },
 
-  buildMessageHTML: function(friendLogin, message){
+  // 关闭聊天窗口
+  hideForm: function(friendID){
+    $('chat-form-' + friendID).hide();
+  },
+
+  // 构造消息的html
+  buildMessageHTML: function(login, message){
     var html = '';
-    html += '<h4>' + friendLogin + "(" + message.created_at + ")</h4>";
+
+    if(login == this.myLogin)
+      html += '<h4 class="own">' + login + "(" + message.created_at + ")</h4>";
+    else
+      html += '<h4>' + login + "(" + message.created_at + ")</h4>";
+
     html += '<p>' + message.content + "</p>";
     return html;
   },
 
+  // 告诉服务器这条消息读过了
   markRead: function(messages){
     var params = '';
     for(var i = 0;i < messages.length; i++)
@@ -69,25 +172,12 @@ Object.extend(Iyxzone.Chat, {
     });
   },
 
-  set: function(friendIDs, infos, token){
-    this.token = token;
-    for(var i=0;i<infos.length;i++){
-      this.unreadMessages.set(friendIDs[i], infos[i]);
-    }
-    if(this.unreadMessages.keys().length != 0){
-      this.blinkFriendID = this.unreadMessages.keys()[0];
-      var info = this.unreadMessages.get(this.blinkFriendID);
-      this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
-    }
-    $('im-icon').observe('click', this.showUnreadMessages.bindAsEventListener(this));
-  },
-
-  showForm: function(friendID, friendLogin){
+  showChatForm: function(friendID, friendLogin){
     var form = $('chat-form-' + friendID);
     var info = this.unreadMessages.unset(friendID);
     
     if(form == null){
-      form = this.buildForm(friendID, friendLogin);
+      form = this.buildChatForm(friendID, friendLogin);
       form.setStyle({left: '500px', top: '100px'});
       form.show();
       new Draggable('chat-form-' + friendID);
@@ -97,19 +187,12 @@ Object.extend(Iyxzone.Chat, {
 
     if(info){
       info.messages.each(function(m){
-        Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, m)});
+        Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, m, false)});
       }.bind(this));
     }
 
     if(this.blinkFriendID == friendID){
-      clearTimeout(this.blinkTimer);
-      $('im-icon').innerHTML = this.myIcon;
-
-      this.blinkFriendID = null;
-      if(this.unreadMessages.keys().length != 0){
-        this.blinkFriendID = this.unreadMessages.keys()[0];
-        this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
-      }
+      this.resetBlink();
     }
 
     // send ajax request 
@@ -119,53 +202,15 @@ Object.extend(Iyxzone.Chat, {
 
   },
 
-  hideForm: function(friendID){
-    $('chat-form-' + friendID).hide();
-  },
-
-  toggleIcon: function(){
-    if($('im-icon').down('img').src.include('/images/blank.gif')){
-      $('im-icon').innerHTML = this.myIcon;
-    }else{
-      this.myIcon = $('im-icon').innerHTML;
-      $('im-icon').innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
-    }
-    this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
-  },
-
-  recvMessage: function(message, friendLogin, friendID){
-    var form = $('chat-form-' + friendID);
-    
-    // set data
-    if(form == null || (form && !form.visible())){
-      if(this.blinkFriendID == null){
-        this.blinkFriendID = friendID;
-        this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
-      }
-
-      var info = this.unreadMessages.get(friendID);
-      if(info){
-        info.messages.push(message);
-        this.unreadMessages.set(friendID, info);
-      }else{
-        this.unreadMessages.set(friendID, {messages: [message], login: friendLogin});
-      }
-    }else{
-      Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, message)});
-      
-      // send ajax request
-      this.markRead([message]);
-    }
-  },
-
   showUnreadMessages: function(){
     if(this.blinkFriendID == null){
       return;
     }
-    
-    this.showForm(this.blinkFriendID, this.unreadMessages.get(this.blinkFriendID).login); 
+
+    this.showChatForm(this.blinkFriendID, this.unreadMessages.get(this.blinkFriendID).login); 
   },
 
+  // 显示 聊天历史
   toggleHistory: function(friendID, link){
     var cont = $('chat-history-' + friendID);
 
@@ -191,6 +236,7 @@ Object.extend(Iyxzone.Chat, {
     }
   },
 
+  // 发送消息
   sendMessage: function(friendID, friendLogin, button, event){
     Event.stop(event);
     new Ajax.Request('/messages?friend_id=' + friendID + "&authenticity_token=" + encodeURIComponent(this.token) + "&message[content]=" + $('message-content-' + friendID).value, {
@@ -200,19 +246,54 @@ Object.extend(Iyxzone.Chat, {
       },
       onSuccess: function(transport){
         var message = transport.responseText.evalJSON();
-        Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, message)});
+        Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(this.myLogin, message)});
       }.bind(this)
     });
   },
 
-  toggleOnline: function(link){
-    if($('chat-list').visible()){
-      $(link.up()).up().writeAttribute("class", '');
+  // 接收 消息
+  recvMessage: function(message, senderInfo){
+    var friendID = senderInfo.id;
+    var avatar = senderInfo.avatar;
+    var login = senderInfo.login;
+    var form = $('chat-form-' + friendID);
+   
+    // set data
+    if(form == null || (form && !form.visible())){
+      var info = this.unreadMessages.get(friendID);
+      if(info){
+        info.messages.push(message);
+        this.unreadMessages.set(friendID, info);
+      }else{
+        this.unreadMessages.set(friendID, {messages: [message], login: login, avatar: avatar});
+      }
+      this.setBlink();
     }else{
-      $(link.up()).up().writeAttribute("class", 'im-expand');
+      Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(login, message)});
+      
+      // send ajax request
+      this.markRead([message]);
     }
+  },
 
-    $('chat-list').toggle();
+
+  // 新的好友上线
+  newOnlineFriend: function(info){
+    var friendID = info.id;
+    if(this.onlineFriendIDs.keys().include(friendID)){
+      return;
+    }else{
+      var dd = new Element('dd', {pinyin: info.pinyin, login: info.login});
+      dd.innerHTML = '<a href="javascript: void(0)" ondblclick="Iyxzone.Chat.showChatForm(' + info.id + ', "' + info.login + '")"><img src="' + info.avatar + '" class="left w-l" width=20 height=20 /><span class="left">' + info.login  + '</span></a>';
+      $('chat-list').appendChild(dd);
+      this.onlineFriendIDs.set(friendID, dd);
+    }
+  },
+
+  // 好友下线
+  delOnlineFriend: function(friendID){
+    var dd = this.onlineFriendIDs.unset(friendID);
+    dd.remove();
   }
 
 });

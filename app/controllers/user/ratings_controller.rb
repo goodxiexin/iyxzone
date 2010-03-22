@@ -1,8 +1,7 @@
 class User::RatingsController < UserBaseController
 
   def create
-    rating_params = (params[:rating] || {}).merge(:user_id => current_user.id)
-    @rating = Rating.new(rating_params)
+    @rating = Rating.new((params[:rating] || {}).merge(:user_id => current_user.id))
 
     if @rating.save
       @rateable = @rating.rateable

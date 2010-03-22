@@ -3,6 +3,7 @@ require 'will_paginate/collection'
 # http://www.desimcadam.com/archives/8
 Array.class_eval do
   def paginate(options = {})
+    puts "in array"
     raise ArgumentError, "parameter hash expected (got #{options.inspect})" unless Hash === options
     
     WillPaginate::Collection.create(

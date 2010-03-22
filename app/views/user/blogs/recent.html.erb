@@ -32,7 +32,7 @@
         <div class="right"><%= link_to "写新日志", new_blog_url %></div>
         <ul>
           <% subject = get_subject @user %>
-          <li class='hover'><span><%= link_to "热门日志", hot_blogs_url(:uid => @user.id) %></a></span></li>
+          <li class='hover'><span><%= link_to "热门日志", hot_blogs_url(:uid => @user.id) %></span></li>
           <li><span><%= link_to "#{subject}的日志", blogs_url(:uid => @user.id) %></span></li>
           <li><span><%= link_to "与#{subject}相关的日志", relative_blogs_url(:uid => @user.id) %></span></li>
         <% if @user == current_user %>
