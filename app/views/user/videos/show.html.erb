@@ -42,7 +42,7 @@
       </div>
 
   <div class='detail-video-head jl-cutline s_clear'>
-    <p class="left" style="width: 75%;"><%= @video.title %> <span class='gray'><%= ftime @video.created_at %></span></p>
+    <p class="left"><%= @video.title %> <span class='gray'><%= ftime @video.created_at %></span></p>
 		<p class="right">
       <% if @user == current_user %>
       <%= link_to "<span class='icon2-edit'></span>编辑", edit_video_url(@video), :class => 'red' %>
