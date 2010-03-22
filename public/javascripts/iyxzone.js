@@ -1,4 +1,4 @@
-Iyxzone = Class.create({});
+Iyxzone = {};
 
 Object.extend(Iyxzone, {
 

@@ -1,12 +1,11 @@
 /**
- * TODO:
- * hover effect !! 
  * Change Log
  * 1.2
  * change view generation and simplify code
  */
 
 Iyxzone.Emotion = {
+
   version: '1.2',
 
   author: ['高侠鸿','戴雨宸'],
