@@ -44,7 +44,7 @@
 				</div>
 				<div id="navsearch">
 					<% form_tag search_users_url do %>
-						<div class="textfield"><%= text_field_tag 'key', "搜索游戏或游戏达人", :onfocus => "this.clear()" %></div>
+						<div class="textfield"><%= text_field_tag 'key', "搜索游戏或游戏达人", :onfocus => "$(key).clear()" %></div>
 						<input type="submit" class="gobtn" value="" />
           <% end %>
         </div>

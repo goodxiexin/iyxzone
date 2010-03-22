@@ -228,7 +228,7 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
 
   initialize: function($super, gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, options){
     if(Iyxzone.Game.pinyins == null){
-      alert("error");
+      alert("shit");
       return;
     }
     this.mappings = new Hash();

@@ -9,7 +9,7 @@ Object.extend(Iyxzone, {
   // some utilities
   disableButton: function(button, text){
     button.innerHTML = text;
-    button.writeAttribute({disabled: 'disabled'});
+    $(button).writeAttribute('disabled', 'disabled');
     var span = $(button.up('span')).up('span');
     $(span).writeAttribute('class', 'button button-gray');
   },
@@ -23,7 +23,7 @@ Object.extend(Iyxzone, {
 
   disableButtonThree: function(button, text){
     button.innerHTML = text;
-    button.writeAttribute({disabled: 'disabled'});
+    button.writeAttribute('disabled', 'disabled');
     var span = $(button.up('span')).up('span');
     $(span).writeAttribute('class', 'button03 button03-gray');
   },
@@ -45,10 +45,10 @@ Object.extend(Iyxzone, {
     for(var i = 0;i < codes.length;i++){
       var span = new Element('span');
       span.innerHTML = codes[i];
-      span.setStyle({color: colors[Math.floor(Math.random()*10)]});
+      span.setStyle({'color': colors[Math.floor(Math.random()*10)]});
       div.appendChild(span);
     }
-    return {codes: codes, div: div};
+    return {'codes': codes, 'div': div};
   }
 
 });

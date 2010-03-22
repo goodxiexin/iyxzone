@@ -213,6 +213,6 @@ Object.extend(Iyxzone.Chat, {
     }
 
     $('chat-list').toggle();
-  },
+  }
 
 });

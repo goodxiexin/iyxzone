@@ -67,9 +67,8 @@ Iyxzone.Photo.FriendSelector = Class.create({
       emptyText: '没有匹配的好友...',
       tipText: '输入你好友的姓名或者拼音',
       afterUpdateElement: this.afterSelectFriend.bind(this),
-      comp: this.textboxList.holder,
+      comp: this.textboxList.holder
     });
-
   },
 
   removeBox: function(el, input){
@@ -279,7 +278,7 @@ Iyxzone.Photo.Tagger = Class.create({
       this.hideTagWithContent(tagInfo.photo_tag.id);
     }.bind(this));
     if(this.isCurrentUser){
-      var deleteLink = new Element('a', {href:'#', class: 'icon-active'});
+      var deleteLink = new Element('a', {href:'#', 'class': 'icon-active'});
 			var spaceBar = new Element('span');
       li.appendChild(deleteLink);
 			li.appendChild(spaceBar);
@@ -432,27 +431,27 @@ Iyxzone.Photo.Tagger = Class.create({
       document.body.appendChild(square);
     }
     square.setStyle({
-      position: 'absolute',
-      width: width + 'px',
-      height: height + 'px',
-      left: (x + pos.left) + 'px',
-      top: (y + pos.top) + 'px',
-      border: '2px solid #eeeeee',
-      display: 'block',
-      zIndex: 4});
+      'position': 'absolute',
+      'width': width + 'px',
+      'height': height + 'px',
+      'left': (x + pos.left) + 'px',
+      'top': (y + pos.top) + 'px',
+      'border': '2px solid #eeeeee',
+      'display': 'block',
+      'zIndex': 4});
     var info = $('content_' + tagID);
     if(!info){
       info = new Element('div', {id: 'content_' + tagID}).update(tag.content);
       document.body.appendChild(info);
     }
     info.setStyle({
-      position: 'absolute',
-      color: 'white',
-      background: 'black',
-      left: (x + width + pos.left) + 'px',
-      top: (y + pos.top) + 'px',
-      display: 'block',
-      zIndex: 4});
+      'position': 'absolute',
+      'color': 'white',
+      'background': 'black',
+      'left': (x + width + pos.left) + 'px',
+      'top': (y + pos.top) + 'px',
+      'display': 'block',
+      'zIndex': 4});
   },
 
   reset: function(){
@@ -559,7 +558,7 @@ Iyxzone.Photo.Slide = Class.create({
 
   afterScrollDown: function(){
     // insert frame to the top and reset div position
-    var frame = new Element('div', {class: 'img'});
+    var frame = new Element('div', {'class': 'img'});
     Element.insert(this.frames[0], {before: frame});
     this.frames = frame.up().childElements();
     var p = this.idPos - Math.floor((this.frames.length-1)/2);
@@ -568,7 +567,7 @@ Iyxzone.Photo.Slide = Class.create({
     }else{
       this.setBlank(0);
     }
-    frame.up().setStyle({top: '-67px'});
+    frame.up().setStyle({'top': '-67px'});
 
     // remove last frame
     var len = this.frames.length;
@@ -595,10 +594,10 @@ Iyxzone.Photo.Slide = Class.create({
     // remove first frame
     this.frames[0].remove();
     this.frames.splice(0, 1);
-    this.frames[0].up().setStyle({top: '-67px'});
+    this.frames[0].up().setStyle({'top': '-67px'});
 
     // add last frame
-    var frame = new Element('div', {class: 'img'});
+    var frame = new Element('div', {'class': 'img'});
     Element.insert(this.frames[this.frames.length - 1], {after: frame});
     this.frames = frame.up().childElements();
     var p = this.idPos + this.frames.length - 2 - Math.floor((this.frames.length - 3)/2);
@@ -697,6 +696,6 @@ Iyxzone.Photo.Slide2 = Class.create({
     this.load(this.frames.length - 1, this.idPos + this.frames.length);
 
     this.leftTimer = null;
-  },
+  }
 
 });

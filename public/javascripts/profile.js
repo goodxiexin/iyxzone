@@ -13,9 +13,9 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   showError: function(div, content){
-    var span = new Element('span', {class: 'icon-warn'});
+    var span = new Element('span', {"class": 'icon-warn'});
     $(div).update(content);
-    Element.insert($(div), {top: span});
+    Element.insert($(div), {"top": span});
   },
 
   clearError: function(div){
@@ -277,7 +277,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     if(this.isEditingCharacters)
       return
     else
-      this.isEditingCharacters = true;
+      this.isEditingCharacters = true
 
     var frame = $('character_frame');
     this.charactersHTML = frame.innerHTML;
@@ -514,7 +514,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.editBasicInfo(profileID);
     this.editContactInfo(profileID);
     this.editCharacters(profileID);    
-  },
+  }
 
 });
 
@@ -548,7 +548,7 @@ Object.extend(Iyxzone.Profile.Tag, {
 			parameters: 'authenticity_token=' + encodeURIComponent(token),
 			onLoading: function(){
 				this.loading($('tag_'+tagID));
-			}.bind(this),
+			}.bind(this)
     });  
 	}
 }); 
