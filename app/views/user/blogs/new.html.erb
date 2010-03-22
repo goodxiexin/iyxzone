@@ -36,7 +36,7 @@
               <%= f.label "日志类别: " %>
             </div>
             <div class='fldvalue'>
-              <%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class => "selector selector02"%>
+              <%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}%>
             </div>
 	        </div>
         	<div class='rows s_clear'>
@@ -44,7 +44,7 @@
               <%= f.label "浏览权限: "%>
             </div>
             <div class='fldvalue'>
-              <%= privilege_select_tag(:blog, :class => "selector selector02") %>
+              <%= privilege_select_tag(:blog) %>
             </div>
           </div>
           <div class='rows s_clear'>

@@ -28,9 +28,9 @@ Object.extend(Iyxzone.Chat, {
   // toggle 在线好友  
   toggleOnline: function(link){
     if($('chat-list').visible()){
-      link.up().up().writeAttribute({class: ''});
+      link.up().up().writeAttribute('class', '')
     }else{
-      link.up().up().writeAttribute({class: 'im-expand'});
+      link.up().up().writeAttribute('class', 'im-expand')
     }
 
     $('chat-list').toggle();
@@ -178,7 +178,7 @@ Object.extend(Iyxzone.Chat, {
     
     if(form == null){
       form = this.buildChatForm(friendID, friendLogin);
-      form.setStyle({left: '500px', top: '100px'});
+      form.setStyle({'left': '500px', 'top': '100px'});
       form.show();
       new Draggable('chat-form-' + friendID);
     }else{

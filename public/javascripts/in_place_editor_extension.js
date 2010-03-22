@@ -7,7 +7,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     options = Object.extend({
       emptyText: "点击编辑...",
       emptyClassName: "inplaceeditor-empty",
-      htmlResponse: false,
+      htmlResponse: false
     }, options || {});
 
     options.textAreaStyle = {width: '90%'};
