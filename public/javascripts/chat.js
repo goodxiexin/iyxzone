@@ -294,6 +294,6 @@ Object.extend(Iyxzone.Chat, {
   delOnlineFriend: function(friendID){
     var dd = this.onlineFriendIDs.unset(friendID);
     dd.remove();
-  },
+  }
 
 });

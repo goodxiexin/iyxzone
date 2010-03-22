@@ -78,3 +78,5 @@ end
 require 'memcache'
 
 CACHE = MemCache.new('127.0.0.1')
+
+CalendarDateSelect.format = :iso_date 

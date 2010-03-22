@@ -15,6 +15,6 @@ Object.extend(Iyxzone.Rating, {
         stars[i].className = '';
     }
     $(rateableType + '_' + rateableID + '_rating').value = rating;
-  },
+  }
 
 });

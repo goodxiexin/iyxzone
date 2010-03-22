@@ -88,7 +88,7 @@ Object.extend(Iyxzone.Comment, {
       Effect.BlindDown(box);
       $(commentableType + '_comment_content_' + commentableID).focus();
       if(link)
-        link.update('收起回复');
+        link.update('收起回复')
     }else{
       Effect.BlindUp(box);
       if(link)
@@ -145,6 +145,6 @@ Object.extend(Iyxzone.WallMessage, {
     $('comment_recipient_id').value = id;
     $('comment_content').value = '回复' + login + ':';
     $('comment_content').focus();
-  },
+  }
 
 });

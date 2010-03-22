@@ -8,14 +8,14 @@ Object.extend(Iyxzone.ContactsGrabber, {
   grabUnregisteredContacts: function(type, user, token){
     new Ajax.Request('/user/email_contacts/unregistered', {
       method: 'post',
-      parameters: 'authenticity_token=' + token + '&type=' + type + '&user_name=' + user,
+      parameters: 'authenticity_token=' + token + '&type=' + type + '&user_name=' + user
     });
   },
 
   grabNotFriendContacts: function(type, user, token){
     new Ajax.Request('/user/email_contacts/not_friend', {
       method: 'post',
-      parameters: 'authenticity_token=' + token + '&type=' + type + '&user_name=' + user,
+      parameters: 'authenticity_token=' + token + '&type=' + type + '&user_name=' + user
     });
   },
 
@@ -85,7 +85,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
       },
       onComplete: function(){
         Iyxzone.enableButton(button, '发送邀请');
-      },
+      }
     });
   },
 
@@ -132,6 +132,6 @@ Object.extend(Iyxzone.ContactsGrabber, {
       return false;
     }   
     return true;
-  },
+  }
 
 });

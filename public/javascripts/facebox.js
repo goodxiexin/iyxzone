@@ -8,7 +8,7 @@ var Facebox = Class.create({
 			facebox_html	: '<div class="z-box" id="facebox" style="width:350px;overflow:hidden;display:none"><div class="z-t"><span class="l"><strong></strong></span><span class="r"></span></div><div class="z-m rows s_clear"><div class="box01 s_clear" id="facebox-content"></div><div class="bg"></div></div><div class="z-b"><span class="l"><strong></strong></span><span class="r"></span></div>'
 		};
 		if (extra_set) Object.extend(this.settings, extra_set);
-		$(document.body).insert({bottom: this.settings.facebox_html});
+		$(document.body).insert({'bottom': this.settings.facebox_html});
 	
 		this.preload = [];
 		this.loading_image = new Image();
@@ -56,7 +56,7 @@ var Facebox = Class.create({
 		this.facebox.setStyle({"left": document.viewport.getWidth() / 2 - (this.facebox.getWidth() / 2) + 'px'});
     	
     if(!this.facebox.visible())
-      new Effect.Appear(this.facebox, {duration: 0.3});
+      new Effect.Appear(this.facebox, {'duration': 0.3});
 	
 		//Event.observe(document, 'keypress', this.keyPressListener);
     //Event.observe(document, 'click', this.keyPressListener);
@@ -83,7 +83,7 @@ var Facebox = Class.create({
 		this.content.innerHTML = data;
     		
 		if(!this.facebox.visible()) 
-			new Effect.Appear(this.facebox, {duration: 0.3});
+			new Effect.Appear(this.facebox, {'duration': 0.3});
 	},
 
 	reveal: function(data, klass){
@@ -170,7 +170,7 @@ var Facebox = Class.create({
 	},
 
 	close: function(){
-		 new Effect.Fade('facebox', {duration: .3});
+		 new Effect.Fade('facebox', {'duration': .3});
 	},
 
 	click_handler	: function(elem, e){
@@ -181,7 +181,7 @@ var Facebox = Class.create({
 		var klass = elem.rel.match(/facebox\[\.(\w+)\]/);
 		if (klass) klass = klass[1];
 		
-		new Effect.Appear(this.facebox, {duration: .3});
+		new Effect.Appear(this.facebox, {'duration': .3});
 	
 		if(elem.href.match(/#/)){
 			var url = window.location.href.split('#')[0];

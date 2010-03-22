@@ -140,7 +140,7 @@ Iyxzone.Poll.Builder = {
       error('至少要有2个选项，不能再删除了');
       return;
     }
-    link.up().remove();
+    $(link.up()).remove();
     var maxSelector = $('max_multiple_select').childElements()[0];
     var originValue = maxSelector.value;
     maxSelector.innerHTML = '';
@@ -172,6 +172,6 @@ Iyxzone.Poll.Builder = {
       html += '>最多选' + (i+2) + '项</option>';
       maxSelector.innerHTML += html;
     }
-  },
+  }
 
 };
