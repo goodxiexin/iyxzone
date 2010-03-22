@@ -71,7 +71,7 @@ Object.extend(Iyxzone.Blog.Builder, {
           parameters: this.parameters,
           onLoading: function(){
             Iyxzone.disableButtonThree(button, '保存中..');
-          },
+          }
         });
       }
     },

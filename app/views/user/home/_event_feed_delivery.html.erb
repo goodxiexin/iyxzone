@@ -5,8 +5,9 @@
 	<div class="img left">
 		<div class="imgbox01"><%= avatar event.poster %></div>
 	</div>
-  <div class="jl-list-con jl-cutline"><%= profile_link event.poster %>组织了活动<%= event_link event, :class => "shine" %>
+  <div class="jl-list-con jl-cutline">
 	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %><% end %> 
+	<%= profile_link event.poster %>组织了活动<%= event_link event, :class => "shine" %>
 	<p class='gray jl-con'><strong>游戏分类：<%= event.game.name %></strong></p>
 	<p class="gray"><%= ftime delivery.created_at %></p>
 	</div>

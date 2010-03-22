@@ -25,7 +25,7 @@ Object.extend(Iyxzone, {
 
   disableButtonThree: function(button, text){
     button.innerHTML = text;
-    button.writeAttribute('disabled', 'disabled');
+    $(button).writeAttribute('disabled', 'disabled');
     var span = $(button.up('span')).up('span');
     $(span).writeAttribute('class', 'button03 button03-gray');
   },
