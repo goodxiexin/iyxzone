@@ -14,6 +14,7 @@ javascripts:
   - menu
   - chat
   - calendar_date_select/calendar_date_select
+  - calendar_date_select/locale/cn
 - register:
   - game
   - register
