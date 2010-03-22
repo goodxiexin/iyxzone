@@ -11,7 +11,7 @@ $(this.areaSelectorID).innerHTML=html;},resetServerInfo:function(){$(this.server
 $(this.serverSelectID).innerHTML=html;},resetProfessionInfo:function(){$(this.professionSelectorID).innerHTML='<option value="">---</option>';},setupProfessionInfo:function(professions){var html='<option value="">---</option>';for(var i=0;i<professions.length;i++){html+="<option value='"+professions[i].id+"'>"+professions[i].name+"</option>";}
 $(this.professionSelectorID).innerHTML=html;},resetRaceInfo:function(){$(this.raceSelectorID).innerHTML='<option value="">---</option>';},setupRaceInfo:function(races){var html='<option value="">---</option>';for(var i=0;i<races.length;i++){html+="<option value='"+races[i].id+"'>"+races[i].name+"</option>";}
 $(this.raceSelectorID).innerHTML=html;},gameChange:function(){if(this.gameSelectorID&&$(this.gameSelectorID).value==''){this.reset();return;}
-new Ajax.Request('/games/'+$(this.gameSelectorID).value+'.json',{method:'get',onSuccess:function(transport){this.details=transport.responseText.evalJSON().game;if(this.areaSelectorID)
+new Ajax.Request('/game_details/'+$(this.gameSelectorID).value+'.json',{method:'get',onSuccess:function(transport){this.details=transport.responseText.evalJSON().game;if(this.areaSelectorID)
 this.resetAreaInfo();if(this.serverSelectID)
 this.resetServerInfo();if(this.raceSelectorID)
 this.resetRaceInfo();if(this.professionSelectorID)
@@ -20,7 +20,7 @@ if(!this.details.no_professions&&this.professionSelectorID)
 this.setupProfessionInfo(this.details.professions);if(!this.details.no_races&&this.raceSelectorID)
 this.setupRaceInfo(this.details.races);this.options.onGameChange($(this.gameSelectorID).value);}.bind(this)});},areaChange:function(){if(this.areaSelectorID&&$(this.areaSelectorID).value==''){if(this.serverSelectID)
 this.resetServerInfo();return;}
-new Ajax.Request('/game_areas/'+$(this.areaSelectorID).value+'.json',{method:'get',onSuccess:function(transport){var areaInfo=transport.responseText.evalJSON().game_area;if(this.serverSelectID)
+new Ajax.Request('/area_details/'+$(this.areaSelectorID).value+'.json',{method:'get',onSuccess:function(transport){var areaInfo=transport.responseText.evalJSON().game_area;if(this.serverSelectID)
 this.setupServerInfo(areaInfo.servers);this.options.onAreaChange($(this.areaSelectorID).value);}.bind(this)});},serverChange:function(){if(this.serverSelectID&&$(this.serverSelectID).value==''){return;}
 this.options.onServerChange($(this.serverSelectID).value);},raceChange:function(){if(this.raceSelectorID&&$(this.raceSelectorID).value==''){return;}
 this.options.onRaceChange($(this.raceSelectorID).value);},professionChange:function(){if(this.professionSelectorID&&$(this.professionSelectorID).value==''){return;}
@@ -28,7 +28,7 @@ this.options.onProfessionChange($(this.professionSelectorID).value);},reset:func
 this.resetAreaInfo();if(this.serverSelectID)
 this.resetServerInfo();if(this.professionSelectorID)
 this.resetProfessionInfo();if(this.raceSelectorID)
-this.resetRaceInfo();this.details=null;},getDetails:function(){return this.details;}});Iyxzone.Game.PinyinSelector=Class.create(Iyxzone.Game.Selector,{initialize:function($super,gameSelectorID,areaSelectorID,serverSelectID,raceSelectorID,professionSelectorID,gameDetails,options){if(Iyxzone.Game.pinyins==null){alert("error");return;}
+this.resetRaceInfo();this.details=null;},getDetails:function(){return this.details;}});Iyxzone.Game.PinyinSelector=Class.create(Iyxzone.Game.Selector,{initialize:function($super,gameSelectorID,areaSelectorID,serverSelectID,raceSelectorID,professionSelectorID,gameDetails,options){if(Iyxzone.Game.pinyins==null){alert("shit");return;}
 this.mappings=new Hash();this.keyPressed='';this.lastPressedAt=null;this.currentGameID=null;var i=0;for(var i=0;i<26;i++){var code=97+i;var j=this.binarySearch(code);if(j!=-1){this.mappings.set(code,j);this.mappings.set(code-32,j);}}
 $super(gameSelectorID,areaSelectorID,serverSelectID,raceSelectorID,professionSelectorID,gameDetails,options);},setEvents:function($super){$super();Event.observe($(this.gameSelectorID),'keyup',function(e){Event.stop(e);this.onKeyUp(e);}.bind(this));Event.observe($(this.gameSelectorID),'blur',function(e){this.lastPressedAt=null;this.keyPressed='';}.bind(this));},binarySearch:function(keyCode){var pinyins=Iyxzone.Game.pinyins;var size=pinyins.length;var i=0;var j=size-1;var c1=pinyins[i].toLowerCase().charCodeAt(0);var c2=pinyins[j].toLowerCase().charCodeAt(0);if(c1>keyCode)return-1;if(c2<keyCode)return-1;while(i!=j-1){var m=Math.ceil((i+j)/2);var c=pinyins[m].toLowerCase().charCodeAt(0);if(c<keyCode){i=m;}else{j=m;}}
 c1=pinyins[i].toLowerCase().charCodeAt(0);c2=pinyins[j].toLowerCase().charCodeAt(0);if(c1!=keyCode&&c2!=keyCode)return-1;if(c1==keyCode)return i;if(c2==keyCode)return j;},onKeyUp:function(e){var pinyins=Iyxzone.Game.pinyins;var code=e.keyCode;var now=new Date().getTime();if(this.lastPressedAt==null||(now-this.lastPressedAt)<1000){this.lastPressedAt=now;this.keyPressed+=String.fromCharCode(e.keyCode);}else{this.lastPressedAt=now;this.keyPressed=String.fromCharCode(e.keyCode);}

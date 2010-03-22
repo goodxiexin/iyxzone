@@ -2,9 +2,12 @@ class AddTestUsers < ActiveRecord::Migration
 
   def self.up
     wow = Game.find_by_name("魔兽世界")
-    
+    tow = Game.find_by_name("永恒之塔")    
+
     # xiexin
-    3.times do |i|
+    xiexin = User.find_by_email("xiexinwang@gmail.com")
+    xiexin.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "xiexin的角色", :level => 100)
+    20.times do |i|
       user = User.new
       user.login = "谢心#{i + 1}"
       user.password = '111111'
@@ -13,13 +16,17 @@ class AddTestUsers < ActiveRecord::Migration
       user.save(false)
       user.activate
     end
-    u1 = User.find_by_email("xiexinwang@gmail.com")
-    u2 = User.find_by_email("xiexin1@gmail.com")
-    u3 = User.find_by_email("xiexin2@gmail.com")
-    u4 = User.find_by_email("xiexin3@gmail.com")
-    u1.friendships.create(:friend_id => u2.id)
-    u2.friendships.create(:friend_id => u1.id)
-    u1.characters.create(:game_id => wow
+    18.times do |i|
+      user = User.find_by_email("xiexin#{i+1}@gmail.com")
+      xiexin.friendships.create(:friend_id => user.id)
+      user.friendships.create(:friend_id => xiexin.id)
+      user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "xiexin#{i+1}的角色", :level => 100)
+    end
+    user = User.find_by_email("xiexin19@gmail.com")
+    user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "xiexin19的角色", :level => 100)
+    user = User.find_by_email("xiexin20@gmail.com")
+    user.characters.create(:game_id => tow.id, :area_id => tow.areas.first.id, :server_id => tow.areas.first.servers.first.id, :race_id => tow.races.first.id, :profession_id => tow.professions.first.id, :name => "xiexin20的角色", :level => 100)
+
     # dyc
     user = User.new
     user.login = "小样"
@@ -28,7 +35,9 @@ class AddTestUsers < ActiveRecord::Migration
     user.email = "silentdai@gmail.com"
     user.save(false)
     user.activate    
-    3.times do |i|
+    dyc = User.find_by_email("silentdai@gmail.com")
+    dyc.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "小样的角色", :level => 100)
+    20.times do |i|
       user = User.new
       user.login = "小样#{i + 1}"
       user.password = '111111'
@@ -37,12 +46,16 @@ class AddTestUsers < ActiveRecord::Migration
       user.save(false)
       user.activate
     end
-    u1 = User.find_by_email("silentdai@gmail.com")
-    u2 = User.find_by_email("dyc1@gmail.com")
-    u3 = User.find_by_email("dyc2@gmail.com")
-    u4 = User.find_by_email("dyc3@gmail.com")
-    u1.friendships.create(:friend_id => u2.id)
-    u2.friendships.create(:friend_id => u1.id)
+    18.times do |i|
+      user = User.find_by_email("dyc#{i+1}@gmail.com")
+      dyc.friendships.create(:friend_id => user.id)
+      user.friendships.create(:friend_id => dyc.id)
+      user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "小样#{i+1}的角色", :level => 100)
+    end
+    user = User.find_by_email("dyc19@gmail.com")
+    user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "小样19的角色", :level => 100)
+    user = User.find_by_email("dyc20@gmail.com")
+    user.characters.create(:game_id => tow.id, :area_id => tow.areas.first.id, :server_id => tow.areas.first.servers.first.id, :race_id => tow.races.first.id, :profession_id => tow.professions.first.id, :name => "小样20的角色", :level => 100)
 
 
     # gaoxh04, user0, user4, miliniu
@@ -56,7 +69,9 @@ class AddTestUsers < ActiveRecord::Migration
     user.email = "tlrn@live.com"
     user.save(false)
     user.activate
-    3.times do |i|
+    tlrn = User.find_by_email("tlrn@live.com")
+    tlrn.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "tlrn的角色", :level => 100)
+    20.times do |i|
       user = User.new
       user.login = "冥浩#{i + 1}"
       user.password = '111111'
@@ -65,12 +80,16 @@ class AddTestUsers < ActiveRecord::Migration
       user.save(false)
       user.activate
     end
-    u1 = User.find_by_email("tlrn@live.com")
-    u2 = User.find_by_email("tlrn1@gmail.com")
-    u3 = User.find_by_email("tlrn2@gmail.com")
-    u4 = User.find_by_email("tlrn3@gmail.com")
-    u1.friendships.create(:friend_id => u2.id)
-    u2.friendships.create(:friend_id => u1.id)
+    18.times do |i|
+      user = User.find_by_email("tlrn#{i+1}@gmail.com")
+      user.friendships.create(:friend_id => tlrn.id)
+      tlrn.friendships.create(:friend_id => user.id)
+      user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "tlrn#{i}的角色", :level => 100)
+    end
+    user = User.find_by_email("tlrn19@gmail.com")
+    user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "tlrn19的角色", :level => 100)
+    user = User.find_by_email("tlrn20@gmail.com")
+    user.characters.create(:game_id => tow.id, :area_id => tow.areas.first.id, :server_id => tow.areas.first.servers.first.id, :race_id => tow.races.first.id, :profession_id => tow.professions.first.id, :name => "tlrn20的角色", :level => 100)
 
 
     # jiangli
@@ -81,7 +100,9 @@ class AddTestUsers < ActiveRecord::Migration
     user.email = "sodnetnin@gmail.com"
     user.save(false)
     user.activate
-    3.times do |i|
+    jiangli = User.find_by_email("sodnetnin@gmail.com")
+    jiangli.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "江力的角色", :level => 100)
+    20.times do |i|
       user = User.new
       user.login = "江力#{i + 1}"
       user.password = '111111'
@@ -89,13 +110,17 @@ class AddTestUsers < ActiveRecord::Migration
       user.email = "jiangli#{i + 1}@gmail.com"
       user.save(false)
       user.activate
-    end 
-    u1 = User.find_by_email("sodnetnin@gmail.com")
-    u2 = User.find_by_email("jiangli1@gmail.com")
-    u3 = User.find_by_email("jiangli2@gmail.com")
-    u4 = User.find_by_email("jiangli3@gmail.com")
-    u1.friendships.create(:friend_id => u2.id)
-    u2.friendships.create(:friend_id => u1.id)
+    end
+    18.times do |i|
+      user = User.find_by_email("jiangli#{i+1}@gmail.com")
+      user.friendships.create(:friend_id => jiangli.id)
+      jiangli.friendships.create(:friend_id => user.id)
+      user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "江力#{i+1}的角色", :level => 100)
+    end
+    user = User.find_by_email("jiangli19@gmail.com")
+    user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "江力19的角色", :level => 100)
+    user = User.find_by_email("jiangli20@gmail.com")
+    user.characters.create(:game_id => tow.id, :area_id => tow.areas.first.id, :server_id => tow.areas.first.servers.first.id, :race_id => tow.races.first.id, :profession_id => tow.professions.first.id, :name => "江力20的角色", :level => 100)
 
     # gaoxh
     user = User.new
@@ -105,22 +130,27 @@ class AddTestUsers < ActiveRecord::Migration
     user.email = "gaoxh05@sina.com.cn"
     user.save(false)
     user.activate
-    3.times do |i|
+    gaoxh = User.find_by_email("gaoxh05@sina.com.cn")
+    user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "色魔的角色", :level => 100)
+    20.times do |i|
       user = User.new
       user.login = "高侠鸿#{i+1}"
       user.password = '111111'
       user.password_confirmation = '111111'
-      user.email = "gaoxh#{i}@gmail.com"
+      user.email = "gaoxh#{i + 1}@gmail.com"
       user.save(false)
       user.activate
     end
-    u1 = User.find_by_email("gaoxh05@sina.com.cn")
-    u2 = User.find_by_email("gaoxh1@gmail.com")
-    u3 = User.find_by_email("gaoxh2@gmail.com")
-    u4 = User.find_by_email("gaoxh3@gmail.com")
-    u1.friendships.create(:friend_id => u2.id)
-    u2.friendships.create(:friend_id => u1.id)
-
+    18.times do |i|
+      user = User.find_by_email("gaoxh#{i+1}@gmail.com")
+      user.friendships.create(:friend_id => gaoxh.id)
+      gaoxh.friendships.create(:friend_id => user.id)
+      user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "色魔#{i}的角色", :level => 100)
+    end
+    user = User.find_by_email("gaoxh19@gmail.com")
+    user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "色魔19的角色", :level => 100)
+    user = User.find_by_email("gaoxh20@gmail.com")
+    user.characters.create(:game_id => tow.id, :area_id => tow.areas.first.id, :server_id => tow.areas.first.servers.first.id, :race_id => tow.races.first.id, :profession_id => tow.professions.first.id, :name => "色魔20的角色", :level => 100)
   end
 
   def self.down

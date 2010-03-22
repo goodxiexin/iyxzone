@@ -38,7 +38,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
   },
 
   callbackHandler: function(form, value){
-    var param = this.options.paramName || (this.options.updateClass + "[" + this.options.updateAttr + "]");
+    var param = (this.options.updateClass + "[" + this.options.updateAttr + "]");
     return param + "=" + value + "&authenticity_token=" + encodeURIComponent(this.options.token);
   },
 

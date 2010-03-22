@@ -2,9 +2,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :collection => {:search => :get}
 
-  map.resources :games
+  map.resources :game_details, :controller => 'games'
 
-  map.resources :game_areas
+  map.resources :area_details, :controller => 'game_areas'
 
   map.resources :sessions
 
