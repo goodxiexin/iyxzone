@@ -53,6 +53,10 @@ class Participation < ActiveRecord::Base
     status_was == Participation::Confirmed or status_was == Participation::Maybe
   end
 
+  def accept status=Participation::Confirmed
+    update_attributes(:status => status)
+  end
+
   # participant_id, character_id, event_id 都是不能修改的
   attr_readonly :participant_id, :character_id, :event_id
 

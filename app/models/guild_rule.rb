@@ -48,7 +48,7 @@ class GuildRule < ActiveRecord::Base
 
 protected
 
-  def reason_is_read_only_for_attendance_rules
+  def reason_is_readonly_for_attendance_rules
     return if rule_type.blank?
     errors.add(:reason, "对于出勤规则无法改变描述") if is_attendance_rule? and reason_changed?     
   end

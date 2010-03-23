@@ -45,7 +45,7 @@
           <div>
 	          <% if params[:type].to_i == 2 %>
               <% if @event.invitations_count == 0 %>
-                <% if @user == current_user %>
+                <% if @event.poster == current_user %>
                 <div class='gray'>还没有人被邀请，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
                 <% else %>
                 <div class='gray'>还没有人被邀请参加这个活动</div>
@@ -57,7 +57,7 @@
 								</ul>
 								</div>
               <% end %>
-	          <% elsif params[:type].to_i == 4 %>
+	          <% elsif params[:type].to_i == 3 %>
               <% if @event.requests_count == 0 %>
                 <div class='gray'>还没有人请求参加这个活动</div>
               <% else %>
@@ -69,7 +69,7 @@
               <% end %>
 	          <% else %>
               <% if @participations.count == 0 %>
-                <% if @user == current_user %>
+                <% if @event.poster == current_user %>
                 <div class='gray'>还没有成员...囧，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
                 <% else %>
                 <div class='gray'>还没有成员...囧</div>

@@ -20,7 +20,7 @@ class User::Events::RequestsController < UserBaseController
   def accept
     if @request.accept
       render :update do |page|
-        page << "$('event_request_operation_#{@request.id}').innerHTML = '已成功接受';"
+        page << "$('event_request_option_#{@request.id}').innerHTML = '已成功接受';"
       end
     else
       render :update do |page|

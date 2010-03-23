@@ -19,7 +19,9 @@
       <div class="rows s_clear"></div>
       <div class="tab tab01">
         <div class="icon">
+        <% if @user == current_user %>
           <%= link_to "邀请新会员", new_guild_invitation_url(@guild), :class => "icon-add-table" %>
+        <% end %>
         </div>
         <ul>
           <li><span><%= link_to "所有会员", guild_memberships_url(@guild, :type => 0) %></span></li>
@@ -39,7 +41,7 @@
           <% else %>
             <div id='invitations'><%= render :partial => 'characters' %></div>
             <div class="rows s_clear">
-              <span class="button"><span><%= button_to_function '', "Iyxzone.Invitation.Builder.submit(this, $('invitation_form'))" %></span></span>
+              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Invitation.Builder.submit(this, $('invitation_form'))" %></span></span>
             </div>
           <% end %>  
           </div>

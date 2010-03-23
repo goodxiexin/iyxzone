@@ -12,29 +12,20 @@ class User::Events::PhotosController < UserBaseController
   end
 
 	def create
-		@photo = @album.photos.build(:poster_id => current_user.id, :game_id => @album.game_id, :privilege => @album.privilege, :swf_uploaded_data => params[:Filedata])
+		@photo = @album.photos.build(:swf_uploaded_data => params[:Filedata])
     if @photo.save
 			render :text => @photo.id
 		else
       # TODO
+      logger.error "erorrrrrrrrrrrrrs: #{@photo.errors}"
     end
 	end
 
 	def record_upload
     @photos = @album.photos.find(params[:ids])
-
-		if @album.record_upload current_user, @photos
-			render :update do |page|
-        if @user == current_user
-				  page.redirect_to edit_multiple_event_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
-			  else
-          page.redirect_to event_album_url(@album)
-        end
-      end
-		else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+		@album.record_upload current_user, @photos
+		render :update do |page|
+			page.redirect_to edit_multiple_event_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
     end
 	end
 

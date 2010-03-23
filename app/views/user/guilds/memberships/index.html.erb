@@ -19,7 +19,9 @@
       <div class="rows s_clear"></div>
       <div class="tab tab01">
         <div class="icon">
+        <% if @guild.president == current_user %>
           <%= link_to "邀请新会员", new_guild_invitation_url(@guild), :class => "icon-add-table" %>
+        <% end %>
         </div>
         <ul>
         <% if params[:type].to_i == 0 %>

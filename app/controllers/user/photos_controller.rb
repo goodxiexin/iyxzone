@@ -30,15 +30,9 @@ class User::PhotosController < UserBaseController
 
   def record_upload
     @photos = @album.photos.find(params[:ids] || [])
-
-		if @album.record_upload current_user, @photos
-      render :update do |page|
-        page.redirect_to edit_multiple_personal_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
-      end
-    else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+		@album.record_upload current_user, @photos
+    render :update do |page|
+      page.redirect_to edit_multiple_personal_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
     end
   end 
 

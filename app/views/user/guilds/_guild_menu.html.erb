@@ -1,6 +1,8 @@
 <dl class='menu-op space20'>
   <dt>操作</dt>
   <% if @role.blank? %>
+    <dd><%= link_to '逛逛论坛', forum_url(@guild.forum) %></dd>
+    <dd><%= link_to '发信给会长', new_mail_url(:recipient_id => @guild.president_id) %></dd>
   <% elsif @role.is_president? %>
     <dd><%= link_to '邀请更多人', new_guild_invitation_url(@guild) %></dd>
     <dd><%= link_to '创建活动', new_event_url(:guild_id => @guild.id) %></dd>

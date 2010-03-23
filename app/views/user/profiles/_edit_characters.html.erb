@@ -32,7 +32,7 @@
               <div class="rows s_clear">
                 <div class="fldid"><label>游戏：</label></div>
                 <div class="fldvalue">
-                  <div><%= c.collection_select :game_id, @games, :id, :name, {:prompt => '---'} %></div>
+                  <div><%= c.collection_select :game_id, @games.insert(0, Game.new(:id => '', :name => '---')), :id, :name, {:prompt => '---'} %></div>
                 </div>
                 <span class='red' id='existing_character_<%= character.id %>_game_id_error'></span>
               </div>

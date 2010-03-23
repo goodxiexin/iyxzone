@@ -8,8 +8,10 @@ class EventPhotoObserver < ActiveRecord::Observer
   def before_save photo
     return unless photo.thumbnail.blank?
 
-    # inherit some attributes from album
     album = photo.album
+    
+    # inherit some attributes from album
+    photo.poster_id = album.poster_id
     photo.privilege = album.privilege
     photo.game_id = album.game_id
   end

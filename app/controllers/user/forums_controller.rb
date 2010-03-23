@@ -1,7 +1,5 @@
 class User::ForumsController < UserBaseController
 
-  layout 'forum'
-
   def index
     @forums = Forum.all
   end

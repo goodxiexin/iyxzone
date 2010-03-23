@@ -23,7 +23,7 @@ class User::Events::InvitationsController < UserBaseController
   end
 
   def accept
-    unless @invitation.update_attributes(:status => params[:status])
+    unless @invitation.accept params[:status]
       render :update do |page|
         page << "error('发生错误')"
       end

@@ -595,7 +595,7 @@ Object.extend(Iyxzone.Guild.Editor, {
     return valid;
   },
 
-  updateGears: function(guildID, event){
+  updateGears: function(guildID, event, button){
     Event.stop(event);
     if(this.validateGears()){
       var delParams = '';
