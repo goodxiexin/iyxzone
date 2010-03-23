@@ -55,7 +55,7 @@
         <div class="invite-tip jl-cutline">填写朋友的Email地址，就可以邀请对方加入了，对方会直接加入你的好友。</div>
         <div class="invite-email jl-cutline" style="display:none">
           <div id='email_invite'></div>
-          <% form_remote_for :invite, :url => signup_invitations_url, :condition => "Iyxzone.ContactsGrabber.checkEmailInvitation(this)", :html => {:onsubmit=> "Iyxzone.disableButton($(email_invitation_btn),'请等待..');"} do |f| %>
+          <% form_remote_for :invite, :url => signup_invitations_url, :condition => "Iyxzone.ContactsGrabber.checkEmailInvitation(this)" do |f| %>
           <div class="s_clear space">
             <div class="fldid"><label>好友邮箱 </label></div>
             <div class="fldvalue">
@@ -75,7 +75,7 @@
         <div class="invite-tip jl-cutline">导入MSN联系人名单并邀请其加入，对方会直接加入你的好友。</div>
         <div class="invite-msn jl-cutline" style="display:none">
           <div id='msn_invite'></div>
-          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'),  {:onsubmit => "Iyxzone.disableButton($(msn_contact_grabber_btn),'请等待..');return Iyxzone.ContactsGrabber.checkMsnInput();"} do %>
+          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'),  {:onsubmit => "return Iyxzone.ContactsGrabber.checkMsnInput(this);"} do %>
           <%= hidden_field_tag 'type', 'msn'%>
           <div class="s_clear space">
             <div class="fldid"><label>你的MSN账号</label></div>
@@ -103,7 +103,7 @@
         <div class="invite-tip jl-cutline">导入邮箱联系人名单并邀请其加入，对方会直接加入你的好友。</div>
         <div class="invite-email jl-cutline" style="display:none">
           <div id='email_contacts'></div>
-          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'), {:onsubmit => "Iyxzone.disableButton($(other_mail_contact_grabber_btn),'请等待..');return Iyxzone.ContactsGrabber.checkEmailContactsInput(this);"} do %>
+          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'), {:onsubmit => "return Iyxzone.ContactsGrabber.checkEmailContactsInput(this);"} do %>
           <div class="s_clear space">
             <div class="fldid"><label>你的邮箱</label></div>
             <div class="fldvalue">

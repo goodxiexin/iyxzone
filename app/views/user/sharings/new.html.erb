@@ -5,13 +5,9 @@
 
 <div id='errors'></div>
 <div class='z-con'>
-<<<<<<< HEAD:app/views/user/sharings/new.html.erb
-<% form_remote_for :sharing, :url => sharings_url(:shareable_type => params[:shareable_type], :shareable_id => params[:shareable_id]), :html => {:onsubmit=> "Iyxzone.disableButton($(new_sharing_btn),'请等待..');"} do |f| %>
-=======
-<% form_remote_for :sharing, :url => sharings_url do |f| %>
+<% form_remote_for :sharing, :url => sharings_url, :html => {:onsubmit => "Iyxzone.disableButton($('new_sharing_btn'), '请等待..');"} do |f| %>
 <%= hidden_field_tag 'sharing[shareable_type]', params[:shareable_type] %>
 <%= hidden_field_tag 'sharing[shareable_id]', params[:shareable_id] %>
->>>>>>> f6d4eda280e03195112457489669a62f7246abdc:app/views/user/sharings/new.html.erb
 <% if params[:link] %>
   <%= hidden_field_tag 'sharing[link]', params[:link] %>
 <% end %>

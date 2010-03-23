@@ -9,6 +9,7 @@
   <%= javascript_include_merged :event %>
 <% end %>
 
+<%= error_messages_for :event, :header_message => "遇到以下问题无法保存", :message => nil %>
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
 		<% if params[:guild_id].blank? %>
