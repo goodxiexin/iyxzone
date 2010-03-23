@@ -187,7 +187,7 @@ a:hover{color:#D63200;}
 .feed-img-list .feed-list .feed-header{padding:8px 13px;border-top:1px #BBD2AA solid;background:#F8FCF6}
 .feed-img-list .feed-list .feed-header p{word-spacing:5px;}
 .feed-img-list .feed-list .feeds{padding:8px 10px;border-top:1px #E7F0E0 solid;word-spacing:5px;}
-.feed-img-list .cmt-box{margin-bottom:10px;width:385px;}
+.feed-list-box .cmt-box,.feed-img-list .cmt-box{margin-bottom:10px;width:385px;}
 
 .feed-box01{padding-left:27px;line-height:21px;}
 .feed-box01 .page{margin-bottom:15px;line-height:18px;color:#7E7F80}
@@ -256,9 +256,9 @@ a:hover{color:#D63200;}
 .piclist-rows table.big .imgwrap img{width:200px;height:150px;}
 .piclist-rows table.big .data{margin-left:236px;_margin-left:233px;}
 */
-.piclist-rows table.big .imgwrap{width:150px;}
+.piclist-rows table.big .imgwrap{width:110px;}
 .piclist-rows table.big .imgwrap img{width:100px;height:100px;}
-.piclist-rows table.big .data{margin-left:155px;_margin-left:152px;}
+.piclist-rows table.big .data{margin-left:120px;_margin-left:117px;}
 .piclist-rows table.big .evaluate{margin:10px 20px 0 0;}
 
 .piclist-rows table.small td{padding:8px 0;}
@@ -633,7 +633,8 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .jl-fldbtn{margin-top:10px}
 
 .feed-wrap .feed-list{padding-left:0}
-.jl-list-con{margin-left:75px;padding-bottom:10px;line-height:28px}
+.feed-wrap .feed-list-box{margin:10px 0}
+.jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px}
 .feed-list .jl-list-con .word-box textarea{width:390px}
 .feed-box .feed-list-box{margin-bottom:10px;}
 .feed-list-box h4{background:url(../images/skin/skin2010.png) repeat-x 0 -47px;}
@@ -647,7 +648,7 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .roll-left,.roll-right{float:left;background:url(../images/skin/skin2010.png) no-repeat -102px -446px;width:22px;height:22px;display:block;margin-top:55px}
 .roll-right{background-position:-124px -446px}
 
-.jl-read-more{text-align:center;margin:0 20px;font-weight:700}
+.jl-read-more{text-align:center;margin:10px 20px;font-weight:700}
 span.jl-my-gold{background:url(../images/icons/homeIcons.png) no-repeat 0 -704px;padding-left:20px;margin-right:20px}
 a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:center;width:85px;height:18px;line-height:18px;background:url(../images/skin/skin2010.png) no-repeat -115px -372px;display:inline-block;color:#fff}
 
@@ -728,8 +729,8 @@ a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:c
 .img-container-main .album{float:left;width:85px;overflow:hidden;margin-top:35px}
 .img-container-main .album .btn{width:53px;height:19px;line-height:19px;background:url(../images/skin/skin2010.png) no-repeat;text-align:center;margin:0 auto;overflow:hidden; cursor:pointer}
 .img-container-main .album .upbtn{margin-bottom:9px;background-position:-147px -391px}
-.img-container-main .album .upbtn-gray{margin-bottom:9px;background-position:-147px -411px}
-.img-container-main .album .downbtn{margin-top:9px;background-position:-147px -431px}
+.img-container-main .album .upbtn-gray{margin-bottom:9px;background-position:-147px -431px}
+.img-container-main .album .downbtn{margin-top:9px;background-position:-147px -411px}
 .img-container-main .album .downbtn-gray{margin-top:9px;background-position:-147px -451px}
 .img-container-main .album .small-imgs{width:100%;height:335px;overflow:hidden;position:relative;}
 .img-container-main .album .small-imgs .imgList{position:relative;top:-67px;width:100%;overflow:hidden;text-align:center}
@@ -960,7 +961,7 @@ a.share-btn{background:url(../images/skin/skin2010.png) no-repeat -130px -288px;
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 15px}
 .detail-video-head p.left,.detail-blog-head p.left{margin-top:6px}
 .detail-video-head strong,.detail-blog-head strong{color:#cc3300;font-size:14px;font-weight:400}
-.detail-video .con,.detail-blog .con{text-align:center;margin:20px 0}
+.detail-video .con,.detail-blog .con{text-align:center;margin:10px 0}
 .detail-blog .con{text-align:left;padding:0 15px}
 .detail-video-foot p,.detail-blog-foot p{padding:10px 15px}
 .detail-blog-foot h2{margin:0 20px}
