@@ -35,7 +35,7 @@ var settings = {
 	// Button settings
 	button_image_url: "/images/FullyTransparent_65x29.png",
 	button_width: "120",
-	button_height: "29",
+	button_height: "30",
 	button_placeholder_id: "spanButtonPlaceHolder",
   button_cursor: SWFUpload.CURSOR.HAND,
 	button_text: '点击选择照片',
@@ -60,7 +60,7 @@ swfu = new SWFUpload(settings);
 </script>    
 
 <form action="<%=upload_url-%>" enctype="multipart/form-data">
-  <h4><a id='spanButtonPlaceHolder'>继续添加照片&gt;&gt;</a></h4>
+  <h4><a id='spanButtonPlaceHolder'></a></h4>
   <div class="photo-upload-form box05">
     <div class="title title01">
       <div class="right"><span>大小</span><span>状态</span></div>
@@ -76,7 +76,7 @@ swfu = new SWFUpload(settings);
     </div>
   </div>
   <div class="buttons">
-    <span class="button"><span><button id='btnSubmit' onclick="Event.stop(event);Iyxzone.disableButton(this,'正在上传..');swfu.startUpload();" disabled=true>开始上传</button></span></span>
+    <span class="button"><span><button id='btnSubmit' onclick="Event.stop(event);Iyxzone.disableButton($('btnSubmit'),'正在上传..');swfu.startUpload();" disabled=true>开始上传</button></span></span>
     <span class="button button-gray"><span><button id='btnCancel' onclick="Event.stop(event);Iyxzone.enableButton($('btnSubmit'), '开始上传');swfu.cancelQueue();">取消上传</button></span></span>
   </div>
 </form>

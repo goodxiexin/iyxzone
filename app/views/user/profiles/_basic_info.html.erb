@@ -6,6 +6,8 @@
     <% end %>
   </h3>
   <div class="formcontent con con2">
+  <% p = @setting.basic_info %>
+  <% if profile.user == current_user || p == 1 || @relationship == 'friend' || (p == 2 and @relationship == 'same_game') %>
     <div class="item space">
       <div class="rows s_clear">
         <div class="fldid"><label>昵称：</label></div>
@@ -24,5 +26,6 @@
         <div class="fldvalue"><%= profile.region.name unless profile.region.nil?%> <%= profile.city.name unless profile.city.nil?%> <%= profile.district.name unless profile.district.nil? %></div>
       </div>
     </div>
+  <% end %>
   </div>
 </div>

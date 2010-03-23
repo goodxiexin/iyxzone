@@ -146,7 +146,8 @@ Object.extend(Iyxzone.Mail.Builder, {
 
   },
 
-  deliver: function(button){
+  deliver: function(button, event){
+    Event.stop(event);
     if(this.validate()){
       var newTags = this.recipientBuilder.getNewTags();
       for(var i=0;i<newTags.length;i++){

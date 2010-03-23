@@ -16,7 +16,7 @@
           <div class="s_clear">
             <div class="fldid"><label><span class="icon-link"></span>万能邀请链接</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -28,7 +28,7 @@
           <div class="s_clear space">
             <div class="fldid"><label><span class="icon-qq"></span>复制链接发给 QQ 好友</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.qq_invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.qq_invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -40,7 +40,7 @@
           <div class="s_clear space">
             <div class="fldid"><label><span class="icon-msn"></span>复制链接发给 MSN 好友</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.msn_invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.msn_invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -127,9 +127,9 @@
             </div>
           </div>
           <div class="s_clear space">
-            <div class="fldid"></div>
+            <div class="fldid">&nbsp;</div>
             <div class="fldvalue">
-              <span class="red">提示：17Gaming不会记录您的MSN信息，请放心使用。</span><br />
+              <span class="red">提示：17Gaming不会记录您的邮箱信息，请放心使用。</span><br />
               <span class="button"><span><button type="submit" id='other_mail_contact_grabber_btn'>导入联系人</button></span></span>
             </div>
           </div>

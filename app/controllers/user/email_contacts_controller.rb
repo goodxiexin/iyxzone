@@ -32,9 +32,9 @@ class User::EmailContactsController < UserBaseController
 protected
 
   def get_contacts
-    #Rails.cache.fetch ("#{params[:type]}_#{params[:user_name]}_contacts") do
+    Rails.cache.fetch "#{params[:type]}_#{params[:user_name]}_contacts" do
       Contacts.new(params[:type], params[:user_name], session[:email_authentication][:password]).contacts
-    #end
+    end
   end
 
   def render_not_supported e
@@ -74,7 +74,7 @@ protected
         @registered_contacts << h
         if current_user.has_friend? user
           @friend_contacts << h
-        else
+        elsif current_user != user
           @not_friend_contacts << h
         end
       end

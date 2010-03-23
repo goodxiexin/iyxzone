@@ -18,7 +18,7 @@
 				<h4>建议每隔一段时间更新一次帐号的密码。</h4>
 				</div>
 
-<% form_tag password_setting_url, :method => 'put', :id => 'password_form' do %>
+<% form_tag password_setting_url, :method => 'put', :onsubmit => "Iyxzone.Password.send($('submit_btn'), this); return false;" do %>
 <div class='form-con' style='height:350px'>
 <div class='rows s_clear space'>
   <div class='f-id'><%= label_tag '', '原来的密码：'%></div>
@@ -52,9 +52,7 @@
 <div class='rows s_clear space20'>
 	<div class='f-id'>&nbsp;</div>
 	<div class='f-value'>
-		<span class='button rows'><span>
-    <%= button_to_function '确定', "Iyxzone.Password.send(this, event)" %>
-		</span></span>
+		<span class='button rows'><span><button type='submit' id='submit_btn'>确定</button></span></span>
 	</div>
 </div>
 </div>

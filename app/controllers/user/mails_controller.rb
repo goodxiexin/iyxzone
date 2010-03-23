@@ -34,6 +34,10 @@ class User::MailsController < UserBaseController
         mail.update_attribute('parent_id', mail.id)
       end
     end
+    render :juggernaut => {:type => :send_to_clients, :client_ids => @recipients.map(&:id)} do |page|
+      page << "Iyxzone.startBlinkTitle('你有新邮件了');"
+      page << "var num = parseInt($('navinbox-num').innerHTML); $('navinbox-num').innerHTML = (num + 1);"
+    end
     redirect_to mails_url(:type => 0)
   end
 
@@ -46,7 +50,7 @@ class User::MailsController < UserBaseController
     if @new_mail.save
       render :update do |page|
         page.insert_html :bottom, 'mails', :partial => 'mail', :object => @new_mail
-        page << "$('mail[content]').value = '';"
+        page << "$('mail_content').value = '';"
       end
     else
       render :update do |page|
@@ -68,12 +72,24 @@ class User::MailsController < UserBaseController
   end
 
   def read_multiple
-    @mails.each { |mail| Mail.update_all("read_by_recipient = 1", {:parent_id => mail.parent_id, :recipient_id => current_user.id}) }
+    @mails.each do |mail|
+      if mail.parent_id == 0
+        mail.update_attribute('read_by_recipient', 1)
+      else 
+        Mail.update_all("read_by_recipient = 1", {:parent_id => mail.parent_id, :recipient_id => current_user.id})
+      end
+    end
     render :nothing => true
   end
 
   def unread_multiple
-    @mails.each { |mail| Mail.update_all("read_by_recipient = 0", {:parent_id => mail.parent_id, :recipient_id => current_user.id}) }
+    @mails.each do |mail|
+      if mail.parent_id == 0
+        mail.update_attribute('read_by_recipient', 0)
+      else 
+        Mail.update_all("read_by_recipient = 0", {:parent_id => mail.parent_id, :recipient_id => current_user.id})
+      end
+    end
     render :nothing => true
   end
 
@@ -118,7 +134,7 @@ protected
   end
 
   def catch_recipients
-    @recipients = current_user.friends.find(params[:recipient_ids].split(%r{,\s*}))
+    @recipients = User.find(params[:recipient_ids])
   end
 
 end

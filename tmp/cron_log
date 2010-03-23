@@ -24,3 +24,4 @@ Mysql::Error: Table 'dayday3_production.events' doesn't exist: SELECT * FROM `ev
 (See full trace by running task with --trace)
 (in /home/gaoxh04/iyxzone)
 (in /home/gaoxh04/iyxzone)
+(in /home/gaoxh04/iyxzone)

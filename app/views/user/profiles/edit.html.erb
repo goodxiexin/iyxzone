@@ -31,7 +31,6 @@
             <ul><li><%= link_to_function "编辑个人档案", "Iyxzone.Profile.Editor.edit(#{@profile.id})" %></li></ul>
           </div>
         </div>
-        <!--联系信息展示-->
         <div id='basic_info_frame'>
         <%= render :partial => 'basic_info', :locals => {:profile => @profile} %>
         </div>

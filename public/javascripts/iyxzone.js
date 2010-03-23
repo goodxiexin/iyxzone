@@ -51,6 +51,30 @@ Object.extend(Iyxzone, {
       div.appendChild(span);
     }
     return {'codes': codes, 'div': div};
+  },
+
+  blinkTitle: function(){
+    if(!document.title.match(/^【　　　】/)){
+      document.title='【　　　】' + this.documentTitle;
+    }else{
+      document.title='【' + this.blinkText + '】' + this.documentTitle;
+    }
+    setTimeout(this.blinkTitle.bind(this), 500);
+  },
+
+  startBlinkTitle: function(text){
+    if(this.documentTitleTimer != null){
+      this.recoverTitle();
+    }
+    this.documentTitle = document.title;
+    alert(this.documentTitle);
+    this.blinkText = text;
+    setTimeout(this.blinkTitle.bind(this), 500);
+  },
+
+  recoverTitle: function(){
+    document.title = this.documentTitle;
+    cancelTimeout(this.documentTitleTimer);
   }
 
 });

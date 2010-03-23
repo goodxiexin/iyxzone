@@ -43,13 +43,18 @@ Object.extend(Iyxzone.ContactsGrabber, {
       }
     });
 
+    if(ids.length == 0){
+      error('至少选择一个');
+      return;
+    }
+
     // construct parameters
     ids.each(function(id){
       params += "ids[]=" + id + "&";
     });
 
     // send request
-    new Ajax.Request('/user/friends/requests/create_multiple?authenticity_token=' + encodeURIComponent(token), {
+    new Ajax.Request('/friend_requests/create_multiple?authenticity_token=' + encodeURIComponent(token), {
       method: 'post',
       parameters: params,
       onSuccess: function(){
@@ -70,6 +75,11 @@ Object.extend(Iyxzone.ContactsGrabber, {
         invitees.push(tr.childElements()[2].innerHTML);
       }
     });
+
+    if(invitees.length == 0){
+      error('至少选择一个');
+      return;
+    }
 
     // construct parameters
     invitees.each(function(email){

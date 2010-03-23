@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_filter :allow_only_admin_invitation
+  #before_filter :allow_only_admin_invitation
 
   def new
     @user = User.new

@@ -74,8 +74,8 @@ Object.extend(Iyxzone.Profile.Editor, {
       return false;
     }
 
-    if(login.value.length < 6){
-      this.showError('login_error', '昵称至少要4个字符');
+    if(login.value.length < 2){
+      this.showError('login_error', '昵称至少要2个字符');
       return false;
     }
     if(login.value.length > 16){
@@ -84,13 +84,8 @@ Object.extend(Iyxzone.Profile.Editor, {
     }
 
     first = login.value[0];
-    if((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')){
-      if(!login.value.match(/[A-Za-z0-9\_]+/)){
-        this.showError('login_error', '昵称只允许字母和数字');
-        return false;
-      }
-    }else{
-      this.showError('login_error', '昵称必须以字母开头');
+    if((first >= '0' && first <= '9')){
+      this.showError('login_error', '昵称不能以数字开头');
       return false;
     }
 
@@ -109,9 +104,6 @@ Object.extend(Iyxzone.Profile.Editor, {
         parameters: $('basic_info_form').serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
-        },
-        onComplete: function(){
-          Iyxzone.enableButton(button, '保存');
         },
         onSuccess: function(transport){
           $('basic_info_frame').innerHTML = transport.responseText;
@@ -230,9 +222,6 @@ Object.extend(Iyxzone.Profile.Editor, {
         parameters: $('contact_info_form').serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
-        }.bind(this),
-        onComplete: function(){
-          Iyxzone.enableButton(button, '保存');
         }.bind(this),
         onSuccess: function(transport){
           this.editContactInfoHTML = null;

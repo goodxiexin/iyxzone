@@ -9,6 +9,7 @@ class User::TagsController < UserBaseController
 	end
 
 	def destroy
+    @tag = Tag.find(params[:id])
 		if @taggable.destroy_tag @tag.name 
 			render :update do |page|
         page << "$('tag_#{@tag.id}').remove();"
@@ -27,15 +28,19 @@ protected
 	def setup
     if ["create"].include? params[:action]
       @taggable = get_taggable
+      require_create_privilege @taggable
 		elsif ["destroy"].include? params[:action]
       @taggable = get_taggable
       require_delete_privilege @taggable
-			@tag = Tag.find(params[:id])
 		end
 	end
 
+  def require_create_privilege taggable
+    taggable.is_taggable_by?(current_user) || render_not_found
+  end
+
   def require_delete_privilege taggable
-    taggable.is_tag_deleteable_by? current_user || not_found
+    taggable.is_tag_deleteable_by?(current_user) || render_not_found
   end
 
 end

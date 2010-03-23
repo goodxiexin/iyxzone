@@ -17,9 +17,6 @@ class Contacts
 
     def real_connect
       postdata = "type=1&url=#{CGI.escape("http://entry.mail.163.com/coremail/fcg/ntesdoor2?lightweight%3D1%26verifycookie%3D1%26language%3D-1%26style%3D-1")}" + "verifycookie=1&style=1&product=mail163&savelogin=&url2=#{CGI.escape("http%3A%2F%2Fmail.163.com%2Ferrorpage%2Ferr_163.htm")}&username=#{@login}&password=#{@password}&selType=js35"
-      puts "-------------------------------------------"
-      puts LOGIN_URL
-      puts "dycpostdata:\t" + postdata
       data, resp, cookies, forward = post(LOGIN_URL, postdata, "", "mail.163.com")
       if m  = /errorType=([\d]{3})/.match(CGI.unescape(data))
         error_code(m[1].to_i)
@@ -30,10 +27,6 @@ class Contacts
       contacturl = forward.gsub(/\/main\.jsp/, '/s') + REQUEST_PARAM
       postdata = XML_CONTACT_REQUEST
       @data, resp , cookies, forward = my_Post(contacturl, postdata, cookies, forward)
-      puts "response: #{resp}"
-      puts "SHOULD print contact list below!---------------------------"
-      puts "Data:\n #{data}"
-      
     end
 
     def contacts
@@ -65,8 +58,6 @@ class Contacts
     def my_Post(url, postdata, cookies="", referer="",contenttype='xml',charset='UTF-8')
       url = URI.parse(url)
       http = open_http(url)
-      puts "--------------------In my_Post----------------"
-      puts "#{url.path}?#{url.query}"
       resp, data = http.post("#{url.path}?#{url.query}", postdata,
                              "User-Agent" => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1) Gecko/20061010 Firefox/2.0",
                              "Accept-Encoding" => "gzip",

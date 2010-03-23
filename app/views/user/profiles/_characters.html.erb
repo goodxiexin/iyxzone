@@ -6,6 +6,8 @@
     <% end %>
   </h3>
   <div class="formcontent con con2">
+    <% p = @setting.character_info %>
+    <% if profile.user == current_user || p == 1 || @relationship == 'friend' || (p == 2 and @relationship == 'same_game') %>
     <div class="item space">
     <% profile.user.characters.each do |c| %>
       <div class="rows s_clear">
@@ -28,5 +30,6 @@
       </div>
     <% end %>
     </div>
+    <% end %>
   </div>
 </div>

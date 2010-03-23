@@ -182,7 +182,7 @@ module ApplicationHelper
 			if mail.read_by_recipient
 				link_to mail.title, mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title"
 			else
-				link_to "<h3>#{mail.title}</h3>", mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title"
+				link_to "#{mail.title}", mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title", :style => "font-weight: bold"
 			end
 		else # in sent box
 			link_to mail.title, mail_url(mail, :type => 0), :id => "mail_#{mail.id}_title"

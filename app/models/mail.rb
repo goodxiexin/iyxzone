@@ -14,7 +14,9 @@ class Mail < ActiveRecord::Base
 
   named_scope :unread, :conditions => {:read_by_recipient => 0}
 
-  attr_readonly :sender_id, :recipient_id, :parent_id, :content
+  attr_readonly :sender_id, :recipient_id, :content
+
+  attr_protected :parent_id
 
   validates_presence_of :sender_id, :message => "不能为空"
 
@@ -47,8 +49,9 @@ private
   end
 
   def recipient_is_valid
-    return if recipient_id.blank?
-    errors.add(:recipient_id, "不存在") unless User.exists?(recipient_id)
+    if recipient.blank?
+      errors.add(:recipient_id, "不存在")
+    end
   end
 
 end
