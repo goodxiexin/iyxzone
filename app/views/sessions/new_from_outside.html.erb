@@ -26,7 +26,7 @@
       <p class="z-h"><img src="images/skin/logo.png" /></p>
       <div class="z-con">
         <p>请先登录17gaming完成当前操作</p>
-        <% form_tag sessions_url do %>
+        <% form_tag sessions_url, :html => {:onsubmit=> "Iyxzone.disableButton($(new_from_outside_login_btn),'请等待..');"} do %>
         <div class="login-box formcontent s_clear">
           <div class="item rows">
             <div class="fldid"><label for="name">邮箱</label></div>
@@ -40,7 +40,7 @@
             <div class="fldid">&nbsp;</div>
             <div class="fldvalue">
               <span class="sign-cookie"><%= check_box_tag 'remember_me', 1, true %>记住登录状态</span>
-              <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'登录中')">登录</button></span></span>
+              <span class="button"><span><button type="submit" id='new_from_outside_login_btn'>登录</button></span></span>
             </div>
           </div>
           <div class="item rows">

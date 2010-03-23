@@ -86,7 +86,6 @@ Object.extend(Iyxzone.Comment, {
     var link = $(commentableType + '_comment_link_' + commentableID);
     if(!box.visible()){
       Effect.BlindDown(box);
-      $(commentableType + '_comment_content_' + commentableID).focus();
       if(link)
         link.update('收起回复')
     }else{

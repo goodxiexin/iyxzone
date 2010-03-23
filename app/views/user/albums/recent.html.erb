@@ -29,7 +29,7 @@
 					<% end %>
         </ul>				
 	    </div>
-      <div class="box02 appcontent01">
+      <div class="piclist-rows">
         <div class="nav-link">
           <ul class="s_clear">
             <li><%= link_to "<span>人气最高</span>", hot_personal_photos_url(:uid => @user.id) %></li>
@@ -38,7 +38,6 @@
         </div>
         <% if @albums.total_entries != 0 %>
         <h3>最近共更新 <span><%= @albums.total_entries %></span> 个专辑</h3>
-        <div class="piclist-rows">
           <table class='big' cellpadding="0" cellspacing="1">
             <% @albums.each do |album| %>
             <tr>
@@ -56,9 +55,8 @@
             <% end %>
 					</table>
           <%= will_paginate @albums %>
-        </div>
         <% else %>
-          <div class='gray'>最近大家都没有更新什么相册，你赶紧上传些图片吧</div>
+          <div class='tip'>最近大家都没有更新什么相册，你赶紧上传些图片吧</div>
         <% end %>
       </div>
     </div>

@@ -4,7 +4,7 @@
 </p>
 
 <div class="z-con">
-<% form_remote_for :request, :url => event_requests_url(@event, :show => params[:show]), :html => {:method => :post} do |f| %>
+<% form_remote_for :request, :url => event_requests_url(@event, :show => params[:show]), :html => {:method => :post, :onsubmit=> "Iyxzone.disableButton($(new_event_request_btn),'请等待..');"} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
     <% if @characters.blank? %>
@@ -17,7 +17,7 @@
 <div class="z-submit s_clear space">
   <table class="center" cellpadding="0"><tr><td>
     <% unless @characters.blank? %>
-    <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">完成</button></span></span>
+    <span class="button"><span><button type="submit" id='new_event_request_btn'>完成</button></span></span>
     <% end %>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>

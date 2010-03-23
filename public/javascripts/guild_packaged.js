@@ -69,7 +69,7 @@ return;var inputID=input.id;var newGear=null;if(inputID.match(/new/))
 newGear=true;else
 newGear=false;var id=inputID.match(/\d+/)[0];if(inputID.match(/name/))
 valid&=this.isGearNameValid(id,newGear);else
-valid&=this.isGearCostValid(id,newGear);}.bind(this));return valid;},updateGears:function(guildID,event){Event.stop(event);if(this.validateGears()){var delParams='';for(var i=0;i<this.delGearIDs.length;i++){delParams+="guild[del_gears][]="+this.delGearIDs[i]+"&";}
+valid&=this.isGearCostValid(id,newGear);}.bind(this));return valid;},updateGears:function(guildID,event,button){Event.stop(event);if(this.validateGears()){var delParams='';for(var i=0;i<this.delGearIDs.length;i++){delParams+="guild[del_gears][]="+this.delGearIDs[i]+"&";}
 new Ajax.Request('/guilds/'+guildID+'/gears/create_or_update',{method:'post',parameters:delParams+$('gears_form').serialize(),onLoading:function(){Iyxzone.disableButton(button,'请等待..');},onSuccess:function(transport){$('gear_frame').innerHTML=transport.responseText;this.editGearsHTML=null;this.delGearIDs=new Array();}.bind(this)});}},cancelEditGears:function(guildID){$('gear_frame').innerHTML=this.gearsHTML;this.delGearIDs=new Array();},removeGear:function(gearID,newGear){if(newGear)
 prefix='new';else
 prefix='existing';if(!newGear)

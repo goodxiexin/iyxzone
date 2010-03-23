@@ -4,7 +4,7 @@
 </p>
 
 <div class='z-con'>
-<% form_for :photo, :url => avatars_url(:album => params[:album]), :html => {:multipart => true, :target => 'upload_frame'} do |f| %>
+<% form_for :photo, :url => avatars_url(:album => params[:album]), :html => {:multipart => true, :target => 'upload_frame', :onsubmit=> "Iyxzone.disableButton($(new_photo_submit_btn),'请等待..');"} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
     支持png, gif, jpg, 最大4MB
@@ -17,7 +17,7 @@
 </div>
 <div class="z-submit s_clear space">
   <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">上传</button></span></span>
+    <span class="button"><span><button type="submit" id='new_photo_submit_btn'>上传</button></span></span>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>

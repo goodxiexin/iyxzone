@@ -8,13 +8,13 @@
 <% if @characters.blank? %>
   你没有游戏角色可以加入这个工会
 <% else %>
-<% form_remote_for :request, :url => guild_requests_url(@guild, :show => params[:show]), :html => {:method => :post} do |f| %>
+<% form_remote_for :request, :url => guild_requests_url(@guild, :show => params[:show]), :html => {:method => :post, :onsubmit=> "Iyxzone.disableButton($(new_request_guild_btn),'请等待..');"} do |f| %>
 <div class='content'>
   <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %>
 </div>
 <div class="z-submit s_clear space">
   <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">完成</button></span></span>
+    <span class="button"><span><button type="submit" id="new_request_guild_btn">完成</button></span></span>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>
