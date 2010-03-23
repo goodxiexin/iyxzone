@@ -5,7 +5,7 @@
 
 <div id='errors'></div>
 <div class="z-con">
-  <% form_remote_for :album, :url => personal_album_url(@album), :method => :put do |f| %>
+  <% form_remote_for :album, :url => personal_album_url(@album), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_album_submit),'请等待..');"} do |f| %>
   <div class='formcontent'>
     <div class="rows s_clear">
       <div class="fldid"><label for="name">相册名称：</label></div>
@@ -34,7 +34,7 @@
   </div>
   <div class="z-submit s_clear space">
     <table class="center" cellpadding="0"><tr><td>
-      <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')" id='edit_album_submit'>完成</button></span></span>
+      <span class="button"><span><button type="submit" id='edit_album_submit'>完成</button></span></span>
       <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
     </td></tr></table>
   </div>

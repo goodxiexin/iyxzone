@@ -4,7 +4,7 @@
 </p>
 
 <div class='z-con'>
-<% form_remote_for :participation, :url => event_participation_url(@event, @participation, :show => 0), :html => {:method => :put} do |f| %>
+<% form_remote_for :participation, :url => event_participation_url(@event, @participation, :show => 0), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_participation_btn),'请等待..');"} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
     <%= radio_button_tag 'status', 3 %><%= label_tag '', '肯定去' %><br/>
@@ -14,7 +14,7 @@
 </div>
 <div class="z-submit s_clear space">
   <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">完成</button></span></span>
+    <span class="button"><span><button type="submit" id='edit_participation_btn'>完成</button></span></span>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>
