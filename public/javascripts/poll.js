@@ -77,13 +77,12 @@ Iyxzone.Poll.Builder = {
     return true;
   },
 
-  save: function(button, event){
-    Event.stop(event);
+  save: function(button, form){
+    Iyxzone.disableButton(button, '请等待..');
     if(this.validate()){
-			Iyxzone.disableButton(button,'请等待..');
-      var form = $('poll_form');
-      form.action = '/polls';
       form.submit();
+    }else{
+      Iyxzone.enableButton(button, '发布投票');
     }
   },
 
