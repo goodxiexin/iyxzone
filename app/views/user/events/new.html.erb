@@ -111,9 +111,7 @@
 </div></div></div></div>
 
 <% if params[:guild_id].blank? %>
-<%= javascript_tag "
-  document.observe('dom:loaded', function(){
+  <% onload_javascript_tag do %>
     Iyxzone.Event.Builder.reset();
-  });
-" %>
+  <% end %>
 <% end %>

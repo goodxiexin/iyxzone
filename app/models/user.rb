@@ -157,6 +157,13 @@ class User < ActiveRecord::Base
   
   end
 
+  def blogs_count relationship='owner'
+    case relationship
+    when 'owner'
+      blogs_count1
+    end
+  end
+
   # videos
   has_many :videos, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
 

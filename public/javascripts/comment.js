@@ -113,11 +113,11 @@ Object.extend(Iyxzone.WallMessage, {
     return true;  
   },
 
-  save: function(wallType, wallID, button){
+  save: function(wallType, wallID, button, form){
     if(Iyxzone.WallMessage.validate($('comment_content'))){
       new Ajax.Request('/wall_messages', {
         method: 'post',
-        parameters: $('wall_message_form').serialize(),
+        parameters: form.serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         },

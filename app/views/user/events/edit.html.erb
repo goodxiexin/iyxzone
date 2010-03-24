@@ -38,7 +38,7 @@
       <div class="appcontent01">
         <h3>新建活动</h3>
         <div class="cons-form formcontent">
-          <% form_for :event, :html => {:onsubmit => "Iyxzone.Event.Builder.update(#{@event.id}, this, $('submit_btn')); return false;"} do |f| %>
+          <% form_for @event, :html => {:onsubmit => "Iyxzone.Event.Builder.update(#{@event.id}, this, $('submit_btn')); return false;"} do |f| %>
             <div class="rows s_clear">
               <div class="fldid"><label for="name">活动标题：</label></div>
               <div class="fldvalue">
@@ -98,9 +98,7 @@
 </div></div></div></div>
 
 <% if params[:guild_id].blank? %>
-<%= javascript_tag "
-  document.observe('dom:loaded', function(){
+  <% onload_javascript_tag do %>
     Iyxzone.Event.Builder.reset();
-  });
-" %>
+  <% end %>
 <% end %>
