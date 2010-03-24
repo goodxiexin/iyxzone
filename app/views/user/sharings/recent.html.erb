@@ -12,8 +12,8 @@
         <%= render :partial => 'share_button' %>
         <ul>
           <li><span><%= link_to "热门分享", hot_sharings_url(:type => 0) %></span></li>
-          <li><span><%= link_to "最新创建", recent_sharings_url(:type => 0) %></span></li>
-          <li class='hover'><span><%= link_to "我的分享", recent_sharings_url(:uid => current_user.id, :type => 0) %></span></li>
+          <li class='hover'><span><%= link_to "最新创建", recent_sharings_url(:type => 0) %></span></li>
+          <li><span><%= link_to "我的分享", sharings_url(:uid => current_user.id, :type => 0) %></span></li>
           <li><span><%= link_to "好友的分享", friends_sharings_url(:type => 0) %></span></li>
         </ul>
       </div>

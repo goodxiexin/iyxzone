@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>分享web连接页面</title>
   <%= javascript_include_merged :base %>
-  <%= stylesheet_link_tag "common" %>
+  <%= stylesheet_link_merged :base %>
 </head>
 
 <body>
@@ -14,21 +14,19 @@
     <div id="navbar">
       <div id="navwrap">
         <div id="navmid">
-          <a href="#" class="logo-top png" title="17gaming"></a>
+          <a href= "" class="logo-top png" title="17gaming"></a>
           <div id="navmain">
             <ul id="w-nav">
               <li style="position:relative;">
                 <%= link_to_function "<span>评论</span>", "$('comments_form').toggle();", :id => 'cmt' %>
                 <div class="drop-box" style="display:none" id='comments_form'>
+									<div class='feed-list'>
                   <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @sharing, :recipient => nil} %>
+									</div>
                 </div>
               </li>
               <li id='dig_sharing_<%= @sharing.id %>'>
-              <% if @sharing.digged_by? current_user %>
-                <a class='praise' href='javascript:void(0)'><strong><span><%= @sharing.digs_count %></span></strong></a>
-              <% else %>
                 <%= link_to_remote "<strong><span id='dig_sharing_#{@sharing.id}'>#{@sharing.digs_count}</span></strong>", :url => digs_url("dig[diggable_type]" => 'Sharing', "dig[diggable_id]" => @sharing.id, :at => 'sharing'), :html => {:class => 'praise'} %>
-              <% end %> 
               </li>
               <li>
                 <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => @shareable.id) %>(<%= @shareable.sharings_count %>)

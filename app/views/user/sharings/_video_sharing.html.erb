@@ -12,7 +12,7 @@
       <div id='video_<%= video.id %>'><%= video_thumbnail video %></div>
       <%= truncate video_sharing.reason, :length => 100, :omission => '...' %>
     </p>
-    <div class="feeds"><%= link_to_function "评论(#{video_sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{video_sharing.id}, #{video_sharing.comments_count})" %> | <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Video', :shareable_id => video.id) %><span>(<%= video.sharings_count %>)</span></a> | <%= link_to "更多分享", sharings_url(:id => video.first_sharer.id) %></div>
+    <div class="feeds"><%= link_to_function "评论(#{video_sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{video_sharing.id}, #{video_sharing.comments_count})" %> | <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Video', :shareable_id => video.id) %><span>(<%= video.sharings_count %>)</span></a> | <%= link_to "更多分享", sharings_url(:uid => video.first_sharer.id, :type => 0) %></div>
   </div>
   <div id="sharing_comment_box_<%= video_sharing.id %>" style="display:none">
     <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => video_sharing, :recipient => nil} %>

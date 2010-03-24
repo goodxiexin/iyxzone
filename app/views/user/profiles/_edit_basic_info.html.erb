@@ -15,7 +15,7 @@
         <div class="rows s_clear">
           <div class="fldid"><label>生日：</label></div>
           <div class="fldvalue">
-            <div class="textfield left"><%= calendar_date_select :profile, :birthday, :popup => 'force', :time => false, :year_range => 40.years.ago..10.years.ago %></div>
+            <div class="calendar-field"><%= calendar_date_select :profile, :birthday, :popup => 'force', :time => false, :year_range => 40.years.ago..10.years.ago %></div>
           </div>
           <span class='red' id='birthday_error'></span>
         </div>
