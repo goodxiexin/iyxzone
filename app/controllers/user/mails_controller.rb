@@ -28,14 +28,18 @@ class User::MailsController < UserBaseController
   end
 
   def create
+    @notify = []
     Mail.transaction do
       @recipients.each do |recipient|
-        mail = Mail.create(params[:mail].merge({:sender_id => current_user.id, :recipient_id => recipient.id}))
-        mail.update_attribute('parent_id', mail.id)
+        mail = Mail.new(params[:mail].merge({:sender_id => current_user.id, :recipient_id => recipient.id}))
+        if mail.save
+          mail.update_attribute('parent_id', mail.id)
+          @notify << recipient
+        end
       end
     end
-    render :juggernaut => {:type => :send_to_clients, :client_ids => @recipients.map(&:id)} do |page|
-      page << "Iyxzone.startBlinkTitle('你有新邮件了');"
+    render :juggernaut => {:type => :send_to_clients, :client_ids => @notify.map(&:id)} do |page|
+      page << "Iyxzone.startBlinkTitle('新邮件');"
       page << "var num = parseInt($('navinbox-num').innerHTML); $('navinbox-num').innerHTML = (num + 1);"
     end
     redirect_to mails_url(:type => 0)
@@ -48,6 +52,10 @@ class User::MailsController < UserBaseController
     @new_mail.recipient_id = (@root_mail.sender == current_user)? @root_mail.recipient_id : @root_mail.sender_id
     @new_mail.parent_id = @root_mail.id
     if @new_mail.save
+      render :juggernaut => {:type => :send_to_client, :client_id => @new_mail.recipient_id} do |page|
+        page << "Iyxzone.startBlinkTitle('新邮件');"
+        page << "var num = parseInt($('navinbox-num').innerHTML); $('navinbox-num').innerHTML = (num + 1);"
+      end
       render :update do |page|
         page.insert_html :bottom, 'mails', :partial => 'mail', :object => @new_mail
         page << "$('mail_content').value = '';"

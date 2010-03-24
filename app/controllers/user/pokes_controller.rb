@@ -20,7 +20,7 @@ class User::PokesController < UserBaseController
       end
     else
       render :update do |page|
-        page << "error('发生错误，稍后再试');" 
+        page << "error('你不能给他打招呼');" 
       end
     end
   end

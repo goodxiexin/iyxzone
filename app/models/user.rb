@@ -42,6 +42,11 @@ class User < ActiveRecord::Base
     mails.find_all {|m| !m.read_by_recipient}
   end
 
+  def is_mailable_by? user
+    p = privacy_setting.mail
+    p == 1 || has_friend?(user) || (p == 2 and has_same_game_with?(user))
+  end
+
   def interested_in_game? game
 		!game_attentions.find_by_game_id(game.id).nil?
   end
@@ -57,6 +62,11 @@ class User < ActiveRecord::Base
 
 	# pokes
 	has_many :poke_deliveries, :foreign_key => 'recipient_id', :order => 'created_at DESC'
+
+  def is_pokeable_by? user
+    p = privacy_setting.poke
+    p == 1 || has_friend?(user) || (p == 3 and has_same_game_with?(user))
+  end
 
 	# status
   has_many :statuses, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
@@ -86,6 +96,11 @@ class User < ActiveRecord::Base
 	def common_friends_with user
 		friends & user.friends
 	end
+
+  def is_friendable_by? user
+    p = privacy_setting.add_me_as_friend
+    p == 1 || (p == 2 and has_same_game_with?(user))
+  end
 
   # settings
   attr_protected :application_setting, :privacy_setting, :mail_setting

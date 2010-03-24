@@ -1,4 +1,8 @@
 # ActsAsVideo
+require 'fivesix'
+require 'youku'
+require 'tudou'
+require 'ku6'
 
 module ActsAsVideo
 

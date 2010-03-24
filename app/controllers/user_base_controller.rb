@@ -46,19 +46,19 @@ protected
   end
 
   def require_owner owner
-    owner == current_user || render_privilege_denied
+    owner == current_user || render_not_found
   end
 
   def require_none_owner owner
-    owner != current_user || render_privilege_denied
+    owner != current_user || render_not_found
   end
 
   def require_friend owner
-    owner.relationship_with(current_user) == 'friend' || render_privilege_denied
+    owner.relationship_with(current_user) == 'friend' || render_add_friend(owner)
   end
 
   def require_none_friend owner
-    owner.relationship_with(current_user) != 'friend' || render_privilege_denied
+    owner.relationship_with(current_user) != 'friend' || render_not_found
   end
 
   def require_friend_or_owner owner

@@ -602,7 +602,7 @@ Object.extend(Iyxzone.Guild.Editor, {
       for(var i=0; i < this.delGearIDs.length; i++){
         delParams += "guild[del_gears][]=" + this.delGearIDs[i] + "&";
       }
-      new Ajax.Request('/guilds/' + guildID + '/gears/create_or_update', {
+      this.updateGearRequest = new Ajax.Request('/guilds/' + guildID + '/gears/create_or_update', {
         method: 'post',
         parameters: delParams + $('gears_form').serialize(),
         onLoading: function(){
