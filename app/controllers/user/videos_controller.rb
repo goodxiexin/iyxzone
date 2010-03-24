@@ -22,7 +22,8 @@ class User::VideosController < UserBaseController
   end
 
   def friends
-    @videos = current_user.video_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10 
+    @videos = current_user.friend_videos.paginate :page => params[:page], :per_page => 10
+    #video_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10 
   end
 
   def new

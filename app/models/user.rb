@@ -73,6 +73,10 @@ class User < ActiveRecord::Base
 
 	has_one :latest_status, :foreign_key => 'poster_id', :class_name => 'Status', :order => 'created_at DESC'
 
+  def friend_statuses
+    Status.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = statuses.poster_id", :order => 'created_at desc')
+  end
+
   # friend
 	has_many :all_friendships, :class_name => 'Friendship'
 
@@ -166,6 +170,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def friend_blogs
+    Blog.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = blogs.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
+  end
+
   # videos
   has_many :videos, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
 
@@ -180,6 +188,10 @@ class User < ActiveRecord::Base
     when 'stranger'
       videos_count1    
     end  
+  end
+
+  def friend_videos
+    Video.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = videos.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
   end
 
   # events

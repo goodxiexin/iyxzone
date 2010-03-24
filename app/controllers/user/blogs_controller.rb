@@ -32,7 +32,8 @@ class User::BlogsController < UserBaseController
 
   def friends
     # 如果cahce，代价有点大
-    @blogs = current_user.blog_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
+    @blogs = current_user.friend_blogs.paginate :page => params[:page], :per_page => 10
+    #current_user.blog_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def show
