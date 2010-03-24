@@ -4,7 +4,7 @@
 <div class='feed-list' id='feed_delivery_<%= delivery.id %>'>
   <div class="feed-icon icon-act"></div>
   <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class=> 'icon-active'} %><% end %>
-  <p><%= profile_link event.poster %>组织了活动<%= event_link event %></p>
+  <p><%= profile_link event.poster %> 组织了活动 <%= event_link event %></p>
 	<p class='gray'> <%= ftime delivery.created_at %> </p>
 </div>
 </div>
