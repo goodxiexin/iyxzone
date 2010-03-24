@@ -42,12 +42,16 @@ Object.extend(Iyxzone.Guild.Builder, {
       error('名字不能为空');
       return false;
     }
-    if($('guild_game_id') && $('guild_game_id').value == ''){
-      error('游戏类别不能为空');
+    if($('guild_character_id') && $('guild_character_id').value == ''){
+      error('你必须选择作为会长的游戏角色');
       return false;
     }
     if($('guild_name').value.length >= 100){
       error('名字最长100个字符');
+      return false;
+    }
+    if($('guild_description').value == ''){
+      error('描述不能为空');
       return false;
     }
     if($('guild_description').value.length >= 1000){
@@ -57,14 +61,12 @@ Object.extend(Iyxzone.Guild.Builder, {
     return true;
   },
 
-  save: function(event,button){
-    Event.stop(event);
+  save: function(form, button){
+    Iyxzone.disableButton(button, '请等待..');
     if(this.validate()){
-			Iyxzone.disableButton(button,'请等待..');
-      var form = $('guild_form');
-      form.action = '/guilds';
-      form.method = 'post';
       form.submit();
+    }else{
+      Iyxzone.enableButton(button, '提交');
     }
   }
 

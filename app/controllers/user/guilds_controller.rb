@@ -41,6 +41,7 @@ class User::GuildsController < UserBaseController
 	end
 
   def new
+    @guild = Guild.new
   end
 
   def create
