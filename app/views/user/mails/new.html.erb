@@ -20,7 +20,7 @@
 		<div class="appcontent01">
 			<h3>写站内信</h3>
       <div class="inbox-form formcontent">
-			<% form_for :mail, :url => mails_url, :html => {:id => 'mail_form'}  do |f| %>
+			<% form_for :mail, :url => mails_url, :html => {:onsubmit => "Iyxzone.Mail.Builder.deliver(this, $('submit_btn')); return false;"}  do |f| %>
 				<div class="rows s_clear">
 					<div class="fldid"><%= f.label '收件人：' %></div>
           <div class="fldvalue">
@@ -47,7 +47,7 @@
 							<%= f.text_area 'content' %>
 						</div>
 						<div class='buttons'>
-							<span class="button"><span><button onclick="Iyxzone.Mail.Builder.deliver(this, event);">发送</button></span></span>
+							<span class="button"><span><button type='submit' id='submit_btn'>发送</button></span></span>
 							<span class="button button-gray"><span><button type="reset">取消</button></span></span>
 						<%= emotion_link 'mail_content', :class => 'icon-face right', :align=>"absmiddle" %>
 						</div>
@@ -60,12 +60,12 @@
 </div></div>
 </div></div></div></div>
 
-<%= javascript_tag "
+<% javascript_tag :defer => 'defer' do %>
   Iyxzone.Mail.Builder.recipientBuilder = new Iyxzone.Friend.Tagger(10, [],[],[],'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', null);
-" %>
+<% end %>
 
 <% unless @recipient.blank? %>
-<%= javascript_tag "
+<% javascript_tag :defer => 'defer' do %>
   Iyxzone.Mail.Builder.recipientBuilder.addTags([{id: #{@recipient.id}, profileID: #{@recipient.profile.id}, login: '#{@recipient.login}'}]);
-" %>
+<% end %>
 <% end %>

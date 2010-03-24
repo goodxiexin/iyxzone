@@ -146,17 +146,18 @@ Object.extend(Iyxzone.Mail.Builder, {
 
   },
 
-  deliver: function(button, event){
-    Event.stop(event);
+  deliver: function(form, button){
+    Iyxzone.disableButton(button, '等待...');
     if(this.validate()){
       var newTags = this.recipientBuilder.getNewTags();
       for(var i=0;i<newTags.length;i++){
         var el = new Element("input", {type: 'hidden', value: newTags[i], id: 'recipient_ids[]', name: 'recipient_ids[]' });
-        $('mail_form').appendChild(el);
+        form.appendChild(el);
       }
-      Iyxzone.disableButton(button, '等待...'); 
-      $('mail_form').submit();
-    }  
+      form.submit();
+    }else{
+      Iyxzone.enableButton(button, '发送');
+    } 
   }
 
 });
