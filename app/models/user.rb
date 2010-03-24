@@ -156,12 +156,31 @@ class User < ActiveRecord::Base
   def blogs_count relationship='owner'
     case relationship
     when 'owner'
-      blogs_count1
+      blogs_count1 + blogs_count2 + blogs_count3 + blogs_count4
+    when 'friend'
+      blogs_count1 + blogs_count2 + blogs_count3
+    when 'same_game'
+      blogs_count1 + blogs_count2
+    when 'stranger'
+      blogs_count1    
     end
   end
 
   # videos
   has_many :videos, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
+
+  def videos_count relationship='owner'
+    case relationship
+    when 'owner'
+      videos_count1 + videos_count2 + videos_count3 + videos_count4
+    when 'friend'
+      videos_count1 + videos_count2 + videos_count3
+    when 'same_game'
+      videos_count1 + videos_count2
+    when 'stranger'
+      videos_count1    
+    end  
+  end
 
   # events
   has_many :participations, :foreign_key => 'participant_id', :conditions => {:status => [3,4,5]} 

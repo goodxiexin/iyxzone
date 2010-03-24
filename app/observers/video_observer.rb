@@ -2,7 +2,7 @@ class VideoObserver < ActiveRecord::Observer
 
 	def after_create video
     # first increment user's count
-    video.poster.raw_increment :videos_count
+    video.poster.raw_increment "videos_count#{video.privilege}"
     
     # emit feed if necessary
 		return unless video.poster.application_setting.emit_video_feed
@@ -20,6 +20,12 @@ class VideoObserver < ActiveRecord::Observer
   end
   
   def after_update video
+    # change counter if necessary
+    if video.privilege_changed?
+      video.poster.raw_increment "videos_count#{video.privilege}"
+      video.poster.raw_decrement "videos_count#{video.privilege_was}"
+    end
+
     if video.is_owner_privilege? and video.privilege_was != 4
       video.destroy_feeds
     else
@@ -33,7 +39,7 @@ class VideoObserver < ActiveRecord::Observer
   end
 
   def after_destroy video
-    video.poster.raw_decrement :videos_count
+    video.poster.raw_decrement "videos_count#{video.privilege}"
   end
 
 end

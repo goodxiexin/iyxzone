@@ -47,14 +47,14 @@
       </div>
       <div class="appcontent05">
 				<div class="myblog">
-        <% if @user.videos_count == 0 %>
+        <% if @count == 0 %>
 					<% if @user == current_user %>
 						<div class='tip'>还没有视频，赶紧<%= link_to '弄一个', new_video_url %>? </div>
 					<% else %>
 						<div class='tip'><%= subject %>还没分享视频呢。</div>
 					<% end %>
         <% else %>
-        <div class='tip'><%= "共#{@user.videos_count}个视频" %></div>
+        <div class='tip'><%= "共#{@count}个视频" %></div>
         <div class="myblog-table">
 					<table cellpadding='0'>
           <%= render :partial => 'video_item', :collection => @videos %>

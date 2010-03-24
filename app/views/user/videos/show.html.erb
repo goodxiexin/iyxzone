@@ -35,9 +35,9 @@
 <div class='detail-video'>
       <div class="path-box">
 				<div class="left">
-				<%= "共#{@user.videos.count}篇视频" %>
-				<%= link_to '前一个', video_url(@video.prev) %> |
-				<%= link_to '后一个', video_url(@video.next) %>
+				<%= "共#{@count}篇视频" %>
+				<%= link_to '前一个', video_url(@prev) %> |
+				<%= link_to '后一个', video_url(@next) %>
 				</div>
       </div>
 

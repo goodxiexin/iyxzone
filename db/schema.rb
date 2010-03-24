@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100322031518) do
+ActiveRecord::Schema.define(:version => 20100324175232) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -735,6 +735,14 @@ ActiveRecord::Schema.define(:version => 20100322031518) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "blogs_count1",                             :default => 0
+    t.integer  "blogs_count2",                             :default => 0
+    t.integer  "blogs_count3",                             :default => 0
+    t.integer  "blogs_count4",                             :default => 0
+    t.integer  "videos_count1",                            :default => 0
+    t.integer  "videos_count2",                            :default => 0
+    t.integer  "videos_count3",                            :default => 0
+    t.integer  "videos_count4",                            :default => 0
   end
 
   create_table "videos", :force => true do |t|
