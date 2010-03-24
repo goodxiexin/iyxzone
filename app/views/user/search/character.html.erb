@@ -20,16 +20,16 @@
       </div>
 			<div class='friend-box'>
 				<div class="box04 friend-one-search">
-					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :style => "display:none" do %>
+					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :style => "display:none", :onsubmit => "Iyxzone.Search.searchUsers($('user_search_submit_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key','用户名', :onclick => "this.clear();" %></div>
               </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.Search.searchUsers(this)">查找</button></span></span></div>
+              <div class="fldbtn"><span class="button"><span><button type="submit" id='user_search_submit_btn'>查找</button></span></span></div>
               <div class="link"><%= link_to_function "按游戏角色查找", "Iyxzone.Search.showCharacterForm();" %></div>
             </div>
           <% end %>
-					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form' do %>
+					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :onsubmit => "Iyxzone.Search.searchCharacters($('character_search_submit_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldid"><label for="username">游戏角色名称：</label></div>
                 <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', params[:key], :onclick => "this.clear();" %></div></div>
@@ -56,7 +56,7 @@
             </div>
 						<div class="rows s_clear">
 						<div class='fldid'>&nbsp;</div>
-						<div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.Search.searchCharacters(this)">查找</button></span></span></div>
+						<div class="fldbtn"><span class="button"><span><button type="submit" id='character_search_submit_btn'>查找</button></span></span></div>
 						<div class='link'><%= link_to_function '按用户名查找', "Iyxzone.Search.showUserForm()" %></div>
 						</div>
           <% end %>
