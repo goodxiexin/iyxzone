@@ -23,7 +23,7 @@
       <div class='appcontent01'>
         <div id='errors'></div>
         <div class="cons-form formcontent">
-        <% form_for :blog, :html => {:id => 'blog_form', :method => :post} do |f| %>
+        <% form_for :blog, :html => {:onsubmit => 'return false', :id => 'blog_form'} do |f| %>
           <div class='rows s_clear'>
             <div class='fldid'><%= f.label "日志标题：" %></div>
             <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
@@ -55,8 +55,8 @@
           </div>
           <div class='rows s_clear'>
 	  	      <div class='fldid'>&nbsp;</div>
-        		<div class='fldvalue'><span class="button03"><span><%= button_to_function("发布", "Iyxzone.Blog.Builder.saveBlog(this, event)") %></span></span>
-							<span class="button03"><span><%= button_to_function "保存为草稿", "Iyxzone.Blog.Builder.saveDraft(this, event)", :class => "confirm-button" %></span></span>
+        		<div class='fldvalue'><span class="button03"><span><%= button_to_function("发布", "Iyxzone.Blog.Builder.saveBlog(this, $('blog_form'))") %></span></span>
+							<span class="button03"><span><%= button_to_function "保存为草稿", "Iyxzone.Blog.Builder.saveDraft(this, $('blog_form'))", :class => "confirm-button" %></span></span>
       		  </div>
           </div>
           <div id='friend_tags'>
@@ -69,7 +69,7 @@
   </div></div>
 </div></div></div></div>
 
-<%= javascript_tag "
-  Iyxzone.Blog.Builder.editor = new nicEditor().panelInstance('blog_content', {token: '#{form_authenticity_token}'});
+<% onload_javascript_tag do %>
+  Iyxzone.Blog.Builder.editor = new nicEditor().panelInstance('blog_content', {token: '<%= form_authenticity_token %>'});
   Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, [], [], [], 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');  
-"%>
+<% end %>

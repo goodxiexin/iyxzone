@@ -23,7 +23,7 @@
       <div class='appcontent01'>
         <div id='errors'></div>
         <div class="cons-form formcontent">
-				<% form_for :blog, :html => {:method => 'put', :id => 'blog_form'} do |f| %>
+				<% form_for @blog, :html => {:onsubmit => "Iyxzone.Blog.Builder.updateBlog($('submit_btn'), #{@blog.id}, this); return false;"} do |f| %>
 			    <div class='rows s_clear'>
 				    <div class='fldid'><%= f.label "日志标题：" %></div>
 				    <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
@@ -45,7 +45,7 @@
           </div>
           <div class='rows s_clear'>
 		        <div class='fldid'>&nbsp;</div>
-		        <div class='fldvalue'><span class="button03"><span><%= button_to_function("修改", "Iyxzone.Blog.Builder.updateBlog(this, #{@blog.id}, event)") %></span></span>
+		        <div class='fldvalue'><span class="button03"><span><button type='submit' id='submit_btn'>修改</button></span></span>
 		      </div>
         <% end %>
         </div>
@@ -57,8 +57,8 @@
 <% tagged_user_ids = '[' + @blog.tags.map(&:tagged_user_id).join(',') + ']' %>
 <% tag_ids = '[' + @blog.tags.map(&:id).join(',') + ']' %>
 <% user_names = '[' + @blog.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
-<%= javascript_tag "
+<% onload_javascript_tag do %>
   Iyxzone.Blog.Builder.editor = new nicEditor().panelInstance('blog_content'); 
-  Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, #{tagged_user_ids}, #{tag_ids}, #{user_names}, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
-" %>
+  Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, <%= tagged_user_ids %>, <%= tag_ids %>, <%= user_names %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
+<% end %>
 
