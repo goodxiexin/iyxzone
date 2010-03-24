@@ -58,8 +58,38 @@ class Profile < ActiveRecord::Base
     login_changed? || gender_changed? || region_id_changed? || city_id_changed? || district_id_changed? || birthday_changed?
   end
 
+  def basic_info_viewable_by? viewer
+    privilege = user.privacy_setting.basic_info
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
   def contact_info_changed?
     qq_changed? || phone_changed? || website_changed?
+  end
+
+  def email_viewable_by? viewer
+    privilege = user.privacy_setting.email
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
+  def qq_viewable_by? viewer
+    privilege = user.privacy_setting.qq
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
+  def phone_viewable_by? viewer
+    privilege = user.privacy_setting.phone
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
+  def website_viewable_by? viewer
+    privilege = user.privacy_setting.website
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
+  def character_info_viewable_by? viewer
+    privilege = user.privacy_setting.character_info
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
   end
 
   after_save :save_characters

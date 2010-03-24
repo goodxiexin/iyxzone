@@ -1,7 +1,7 @@
 <div class="edit-toggle space edit">
   <h3 class="s_clear"><strong class="left">联系信息</strong><%= link_to_function '取消', "Iyxzone.Profile.Editor.cancelEditContactInfo();", :class => "right" %></h3>
   <div class="formcontent con con2">
-    <% form_for :profile, :html => {:id => 'contact_info_form'} do |f| %>
+    <% form_for :profile, :html => {:onsubmit => "Iyxzone.Profile.Editor.updateContactInfo(#{@profile.id}, $('contact_info_submit_btn'), this); return false;"} do |f| %>
       <div class="item space">
         <div class="rows s_clear">
           <div class="fldid"><label>QQ号码：</label></div>
@@ -44,7 +44,7 @@
         <div class="rows s_clear space">
         <div class="fldid">&nbsp;</div>
         <div class="fldvalue">
-          <span class="button"><span><%= button_to_function '保存', "Iyxzone.Profile.Editor.updateContactInfo(#{@profile.id}, this, event);" %></span></span>
+          <span class="button"><span><button type='submit' id='contact_info_submit_btn'>保存</button></span></span>
           <span class="button button-gray"><span><%= button_to_function "取消", "Iyxzone.Profile.Editor.cancelEditContactInfo();" %></span></span>
         </div>
       </div>
