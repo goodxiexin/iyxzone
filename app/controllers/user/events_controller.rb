@@ -25,7 +25,8 @@ class User::EventsController < UserBaseController
   end
 
   def friends
-    @events = current_user.event_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
+    @events = current_user.friend_events.paginate :page => params[:page], :per_page => 10
+    #event_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def show

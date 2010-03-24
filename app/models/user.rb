@@ -128,6 +128,11 @@ class User < ActiveRecord::Base
     GameCharacter.find(:all, :joins => "INNER JOIN friendships where friendships.user_id = #{id} AND friendships.friend_id = game_characters.id #{game_cond}")
   end
 
+  def friend_games
+    game_ids = GameCharacter.find(:all, :select => :game_id, :joins => "inner join friendships where friendships.user_id = #{id} and friendships.friend_id = game_characters.user_id").uniq
+    Game.find(game_ids, :order => 'pinyin ASC')
+  end
+
 	def interested_in_game? game
     !game_attentions.find_by_game_id(game.id).nil?
   end
@@ -210,6 +215,15 @@ class User < ActiveRecord::Base
 
 	end
 
+  def friend_participations
+    Participation.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1")
+  end
+
+  def friend_events
+    event_ids = Participation.find(:all, :select => :event_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1").map(&:event_id).uniq
+    Event.find(event_ids)
+  end
+
 	def common_events_with user
 		events & user.events
 	end
@@ -237,12 +251,26 @@ class User < ActiveRecord::Base
 
   end
 
+  def friend_sharings type=nil
+    cond = type.nil? ? {} : {:shareable_type => type}
+    Sharing.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = sharings.poster_id", :conditions => cond, :order => 'created_at desc')
+  end
+
   # polls
   has_many :votes, :foreign_key => 'voter_id'
 
   has_many :polls, :foreign_key => 'poster_id', :order => 'created_at DESC'
 
   has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
+
+  def friend_votes
+    Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id")
+  end
+
+  def friend_polls
+    poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id").map(&:poll_id).uniq
+    Poll.find(poll_ids, :order => 'created_at DESC')
+  end
 
 	# guilds
 	has_many :memberships
@@ -258,6 +286,15 @@ class User < ActiveRecord::Base
 		user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"
 
 	end
+
+  def friend_memberships
+    Membership.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = memberships.user_id", :conditions => "memberships.status != 0 AND memberships.status != 1") 
+  end
+
+  def friend_guilds
+    guild_ids = Membership.find(:all, :select => :guild_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = memberships.user_id", :conditions => "memberships.status != 0 AND memberships.status != 1").map(&:guild_id).uniq
+    Guild.find(guild_ids, :order => 'created_at desc')
+  end
 
 	def common_guilds_with user
     all_guilds & user.all_guilds
