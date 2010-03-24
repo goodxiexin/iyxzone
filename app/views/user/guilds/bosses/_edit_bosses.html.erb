@@ -1,7 +1,7 @@
 <div class="edit-toggle space edit">
   <h3 class="s_clear"><strong class="left">BOSS</strong><%= link_to_function "取消", "Iyxzone.Guild.Editor.cancelEditBosses(#{@guild.id})", :class => 'right' %></h3>
   <div class="formcontent con con2">
-    <% form_for :guild, :html => {:id => 'bosses_form'} do |f| %>
+    <% form_for :guild, :html => {:onsubmit => "Iyxzone.Guild.Editor.updateBosses(#{@guild.id}, this, $('bosses_submit_btn')); return false;"} do |f| %>
       <div class="item space" id='guild_bosses'>
         <% @guild.bosses.each do |boss| %>
           <div id='existing_boss_<%= boss.id %>'>
@@ -32,7 +32,7 @@
         <div class="fldid">&nbsp;</div>
         <div class="fldvalue">
           <span class="button"><span>
-            <%= button_to_function '完成', "Iyxzone.Guild.Editor.updateBosses(#{@guild.id}, event, this)" %>
+            <button type='submit' id='bosses_submit_btn'>完成</button>
           </span></span>
           <span class="button button-gray"><span>
             <%= button_to_function '取消', "Iyxzone.Guild.Editor.cancelEditBosses()" %>

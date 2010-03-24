@@ -181,20 +181,19 @@ Object.extend(Iyxzone.Guild.Editor, {
     return v1 && v2;
   },
 
-  updateAttendanceRules: function(guildID, event, button){
-    Event.stop(event);
+  updateAttendanceRules: function(guildID, form, button){
+    Iyxzone.disableButton(button, '请等待..');
     if(this.validateAttendanceRules()){
       new Ajax.Request('/guilds/' + guildID + '/rules/create_or_update?type=0', {
         method: 'post',
-        parameters: $('attendance_rules_form').serialize(),
-        onLoading: function(){
-          Iyxzone.disableButton(button, '请等待..');
-        },
+        parameters: form.serialize(),
         onSuccess: function(transport){
           $('attendance_rule_frame').innerHTML = transport.responseText;
           this.editAttendanceRulesHTML = null;
         }.bind(this)
       });
+    }else{
+      Iyxzone.enableButton(button, '完成');
     }
   },
 
@@ -280,10 +279,10 @@ Object.extend(Iyxzone.Guild.Editor, {
     return true;
   },
 
-  validateBasicRules: function(){
+  validateBasicRules: function(form){
     var valid = true;
 
-    var inputs = $('basic_rules_form').getInputs();
+    var inputs = form.getInputs();
 
     inputs.each(function(input){
       if(input.type != 'text')
@@ -305,9 +304,9 @@ Object.extend(Iyxzone.Guild.Editor, {
     return valid;
   },
 
-  updateBasicRules: function(guildID, event, button){
-    Event.stop(event);
-    if(this.validateBasicRules()){
+  updateBasicRules: function(guildID, form, button){
+    Iyxzone.disableButton(button, '请等待..');
+    if(this.validateBasicRules(form)){
       var delParams = '';
       for(var i=0;i < this.delRuleIDs.length;i++){
         delParams += "guild[del_rules][]=" + this.delRuleIDs[i] + "&";
@@ -315,10 +314,7 @@ Object.extend(Iyxzone.Guild.Editor, {
 
       new Ajax.Request('/guilds/' + guildID + '/rules/create_or_update?type=1', {
         method: 'post',
-        parameters: delParams + $('basic_rules_form').serialize(),
-        onLoading: function(){
-          Iyxzone.disableButton(button, '请等待..');
-        },
+        parameters: delParams + form.serialize(),
         onSuccess: function(transport){
           $('basic_rule_frame').innerHTML = transport.responseText;
           this.editBasicRulesHTML = null;
@@ -326,6 +322,8 @@ Object.extend(Iyxzone.Guild.Editor, {
           this.basicRules = new Hash();
         }.bind(this)
       });
+    }else{
+      Iyxzone.enableButton(button, '完成');
     }
   },
 
@@ -429,9 +427,9 @@ Object.extend(Iyxzone.Guild.Editor, {
     return true;
   },
 
-  validateBosses: function(){
+  validateBosses: function(form){
     var valid = true;
-    var inputs = $('bosses_form').getInputs();
+    var inputs = form.getInputs();
 
     inputs.each(function(input){
       if(input.type != 'text')
@@ -452,24 +450,23 @@ Object.extend(Iyxzone.Guild.Editor, {
     return valid; 
   },
   
-  updateBosses: function(guildID, event, button){
-    Event.stop(event);
-    if(this.validateBosses()){
+  updateBosses: function(guildID, form, button){
+    Iyxzone.disableButton(button, '请等待..');
+    if(this.validateBosses(form)){
       var delParams = '';
       for(var i=0; i < this.delBossIDs.length; i++){
         delParams += "guild[del_bosses][]=" + this.delBossIDs[i] + "&";
       }
       new Ajax.Updater('boss_frame', '/guilds/' + guildID + '/bosses/create_or_update', {
         method: 'post',
-        parameters: delParams + $('bosses_form').serialize(),
-        onLoading: function(){
-          Iyxzone.disableButton(button, '请等待..');
-        },
+        parameters: delParams + form.serialize(),
         onSuccess: function(transport){
           this.editBossesHTML = null;
           this.delBossIDs = new Array();
         }.bind(this)
       });
+    }else{
+      Iyxzone.enableButton(button, '完成');
     }
   },
 
@@ -574,9 +571,9 @@ Object.extend(Iyxzone.Guild.Editor, {
     return true;
   },
 
-  validateGears: function(){
+  validateGears: function(form){
     var valid = true;
-    var inputs = $('gears_form').getInputs();
+    var inputs = form.getInputs();
 
     inputs.each(function(input){
       if(input.type != 'text')
@@ -597,25 +594,24 @@ Object.extend(Iyxzone.Guild.Editor, {
     return valid;
   },
 
-  updateGears: function(guildID, event, button){
-    Event.stop(event);
-    if(this.validateGears()){
+  updateGears: function(guildID, form, button){
+    Iyxzone.disableButton(button, '请等待..');
+    if(this.validateGears(form)){
       var delParams = '';
       for(var i=0; i < this.delGearIDs.length; i++){
         delParams += "guild[del_gears][]=" + this.delGearIDs[i] + "&";
       }
       this.updateGearRequest = new Ajax.Request('/guilds/' + guildID + '/gears/create_or_update', {
         method: 'post',
-        parameters: delParams + $('gears_form').serialize(),
-        onLoading: function(){
-          Iyxzone.disableButton(button, '请等待..');
-        },
+        parameters: delParams + form.serialize(),
         onSuccess: function(transport){
           $('gear_frame').innerHTML = transport.responseText;
           this.editGearsHTML = null;
           this.delGearIDs = new Array();
         }.bind(this)
       });
+    }else{
+      Iyxzone.enableButton(button, '完成');
     }
   },
 
