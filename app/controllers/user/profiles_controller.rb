@@ -9,6 +9,9 @@ class User::ProfilesController < UserBaseController
 	FetchSize = 5
 
   def show
+		unless (@user == current_user)
+			@common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2]
+		end
     @relationship = @user.relationship_with current_user
 		@blogs = @user.blogs.viewable(@relationship)[0..2]
 		@albums = @user.active_albums.viewable(@relationship)[0..2]
