@@ -19,7 +19,7 @@
         </ul>
       </div>
       <div class="photo-box">
-        <% form_tag update_multiple_personal_photos_url(:album_id => @album.id), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_multiple_photo_btn),'请等待..');"} do %>
+        <% form_tag update_multiple_personal_photos_url(:album_id => @album.id), :html => {:method => :put} do %>
         <% @photos.each do |p| %>
         <% fields_for 'photos[]', p do |f| %>        
         <div class="photo-list box04 s_clear">

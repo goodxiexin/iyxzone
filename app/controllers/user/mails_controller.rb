@@ -6,9 +6,7 @@ class User::MailsController < UserBaseController
 
   before_filter :catch_mails, :only => [:read_multiple, :unread_multiple, :destroy_multiple]
 
-  before_filter :catch_recipient, :only => [:new]
-
-  before_filter :catch_recipients, :only => [:create]
+  before_filter :catch_recipients, :only => [:new, :create]
 
   def index
     if params[:type].to_i == 0
@@ -137,12 +135,8 @@ protected
     end
   end
 
-  def catch_recipient
-    @recipient = User.find(params[:recipient_id]) unless params[:recipient_id].blank?
-  end
-
   def catch_recipients
-    @recipients = User.find(params[:recipient_ids])
+    @recipients = User.find(params[:recipient_ids]) unless params[:recipient_ids].blank?
   end
 
 end

@@ -15,7 +15,7 @@
       <%= profile_link @topic.poster %><br/>
       <span class='forum-tiny'>
         <%= ftime @topic.created_at %><br/>
-        <%= link_to '发站内信', new_mail_url(:recipient_id => @topic.poster_id) %><br/>
+        <%= link_to '发站内信', new_mail_url(:recipient_ids => [@topic.poster_id]) %><br/>
         <%= link_to_function '回复', "Iyxzone.Forum.setPost();" %>
       </span>
     </td>
@@ -28,7 +28,7 @@
         <%= profile_link post.poster %><br/>
         <span class='forum-tiny'>
           <%= ftime post.created_at %><br/>
-          <%= link_to '发站内信', new_mail_url(:recipient_id => post.poster_id) %><br/>
+          <%= link_to '发站内信', new_mail_url(:recipient_ids => [post.poster_id]) %><br/>
           <%= link_to_function '回复', "Iyxzone.Forum.setPost(#{post.floor}, '#{post.poster.login}');" %>
         </span>
       </td>

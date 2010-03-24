@@ -6,7 +6,7 @@
     <% if current_user == poster %>
       <%= facebox_confirm '', status_url(status), {:method => :delete, :msg => '你确定要删除这条状态吗?'}, {:class => 'icon2-close right', :id => "delete_status_#{status.id}"} %>
     <% end %>
-      <p><%= profile_link poster %>：<%= status.content %><% if poster != current_user%>(<%= link_to "更多", statuses_url(:id => poster.id) %>)<% end %></p>
+      <p><%= profile_link poster %>：<%= status.content %><% if poster != current_user%>(<%= link_to "更多", statuses_url(:uid => poster.id) %>)<% end %></p>
     </div>
 		<% unless status.comments_count > 0 %>
     <div class="feeds"><%= ftime status.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.toggleBox('status', #{status.id}, #{status.comments_count})", :id => "status_comment_link_#{status.id}" %></div>

@@ -179,7 +179,7 @@
 		<% end %>	
 	<% else %>
 		<% if @user==current_user %>
-			<div class='space'>还没更新照片赶紧去<%= link_to '弄一个', personal_albums_url(:id=>@user.id)%>吧</div>
+			<div class='space'>还没更新照片赶紧去<%= link_to '弄一个', personal_albums_url(:uid => @user.id)%>吧</div>
 		<% else %>
 			<div class='space'>这家伙没更新照片</div>
 		<% end %>

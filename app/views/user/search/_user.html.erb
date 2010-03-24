@@ -33,7 +33,7 @@
 										</p>
 										<p class="space">
 											<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
-											<%= link_to '', new_mail_url(:recipient_id => f.id), :class => "msg-btn" %>
+											<%= link_to '', new_mail_url(:recipient_ids => [f.id]), :class => "msg-btn" %>
 										</p>
 									</div>
 								</td>

@@ -8,7 +8,7 @@
     <p>
       <%= profile_link user, :class => 'blk' %>
       <span class='red blk'> <%= membership.character.name %></span>
-      <%= link_to '<span>发站内信</span>', new_mail_url(:recipient_id => user.id), :class => "blk gray02" %>
+      <%= link_to '<span>发站内信</span>', new_mail_url(:recipient_ids => [user.id]), :class => "blk gray02" %>
     </p>
   </li>
 <% end %>
