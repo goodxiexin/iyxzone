@@ -10,7 +10,7 @@
       <% @participations.group_by(&:status).each do |status, participations| %>
         <% participations.each do |p| %>
           <% if status == Participation::Confirmed %>
-            <tr><td><%= p.character.name %></td><td>一定去<%= facebox_link "[修改]", edit_event_participation_url(@event, p) %></td></tr>
+            <tr><td><%= p.character.name %></td><td>一定去<% unless p.character == @event.poster_character %><%= facebox_link "[修改]", edit_event_participation_url(@event, p) %><% end %></td></tr>
           <% elsif status == Participation::Maybe %>
             <tr><td><%= p.character.name %></td><td>可能去<%= facebox_link "[修改]", edit_event_participation_url(@event, p) %></td></tr>
           <% elsif status == Participation::Invitation %>

@@ -7,5 +7,8 @@
 		<p><%= profile_link video.poster%> 分享视频 <%= video_link video %></p>
 		<p class='space' id="video_<%=video.id%>"><%= video_thumbnail video, :class=>'imgbox01' %></p>
 	</div>
-  <div class='feeds'><%= link_to "评论(#{video.comments_count})", video_url(video) %> | <%= facebox_link "分享(#{video.sharings_count})", new_sharing_url(:shareable_type => 'Video', :shareable_id => video.id)%> | <%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => video.class.base_class.to_s, "dig[diggable_id]" => video), :html => {:id=> "digging_#{video.class.to_s.underscore}_#{video.id}", :class => "red"}%>(已经被<span id="dig_<%=video.class.to_s.underscore%>_<%=video.id%>" class='gray'><%= video.digs_count %></span>人赞过)</div>
+  <div class='feeds'><%= link_to_function "评论(#{video.comments_count})", "Iyxzone.Comment.toggleBox('video', #{video.id}, #{video.comments_count})" %> | <%= facebox_link "分享(#{video.sharings_count})", new_sharing_url(:shareable_type => 'Video', :shareable_id => video.id)%> | <%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => video.class.base_class.to_s, "dig[diggable_id]" => video), :html => {:id=> "digging_#{video.class.to_s.underscore}_#{video.id}", :class => "red"}%>(<span id="dig_<%=video.class.to_s.underscore%>_<%=video.id%>" class='gray'><%= video.digs_count %></span>人赞过)</div>
+	<div id="video_comment_box_<%= video.id %>" style="display:none">
+		<%= render :partial => 'user/comments/comment_box', :locals => {:commentable => video, :recipient => video.poster} %>
+	</div>
 </div>

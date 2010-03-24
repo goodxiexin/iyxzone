@@ -47,7 +47,7 @@
       </div>
       <div>
         <% if @videos.blank? %>
-          <div class='gray'>没有和你有关是视频</div>
+          <div class='tip'>没有和你有关是视频</div>
         <% else %>
           <div class='feed-img-list' id='videos'>
             <%= render :partial => 'video_item2', :collection => @videos %>
