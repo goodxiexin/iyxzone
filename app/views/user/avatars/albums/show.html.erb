@@ -32,7 +32,7 @@
           </label>
           <span><%= album_link @album %></span><span>照片</span></p>
           <% if @user == current_user %>
-            <%= facebox_link '替换头像', new_avatar_url(:album_id => @album.id, :album => 1) %>
+            <%= facebox_link '替换头像', new_avatar_url(:album_id => @album.id, :in_album => 1) %>
 					<% else %>
 					  <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Album', :shareable_id => @album.id), :class => 'right love-btn' %>
           <% end %>

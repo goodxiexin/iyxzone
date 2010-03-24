@@ -103,8 +103,6 @@ class User < ActiveRecord::Base
   end
 
   # settings
-  attr_protected :application_setting, :privacy_setting, :mail_setting
-
 	has_setting :application_setting
 
 	has_setting :privacy_setting
@@ -138,8 +136,6 @@ class User < ActiveRecord::Base
   belongs_to :avatar
 
   has_one :avatar_album, :foreign_key => 'owner_id'
-
-  attr_accessible :avatar_id
 
   # 为了保证avatar album一定在最后一个，我们不在这里加上avatar album
   has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'uploaded_at DESC'
