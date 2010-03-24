@@ -2,7 +2,12 @@
 <body>
   <div class='theme-head'>
     <div class="wrap">
-  		<%= link_to "装扮中心", skins_url, :class => "theme-center" %>
+		  <div class="theme-center">
+			  <div>
+					<%= link_to "装扮中心", skins_url, :class => "w-xl"%>
+					<%= link_to "关闭", profile_url(@user.id)%>
+			  </div>
+			</div>
       <div class="theme-preview s_clear">
 				<%= link_to "", skin_url(@skin.prev), :class => "btn roll-l" -%>
       	<ul>
