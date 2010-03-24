@@ -35,7 +35,7 @@
       <div class="appcontent01">
         <h3>新建活动</h3>
         <div class="cons-form formcontent">
-          <% form_for :event, :html => {:id => 'event_form'} do |f| %>
+          <% form_for @event, :html => {:onsubmit => "Iyxzone.Event.Builder.save(this, $('submit_btn')); return false;"} do |f| %>
             <div class="rows s_clear">
               <div class="fldid"><label for="name">活动标题：</label></div>
               <div class="fldvalue">
@@ -100,7 +100,7 @@
             <div class="rows s_clear">
               <div class="fldid">&nbsp;</div>
               <div class="fldvalue">
-                <span class="button"><span><button onclick="Iyxzone.Event.Builder.save(event, this);">提交</button></span></span>
+                <span class="button"><span><button type='submit' id='submit_btn'>提交</button></span></span>
               </div>
             </div>
           <% end %>

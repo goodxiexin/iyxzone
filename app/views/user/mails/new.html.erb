@@ -60,12 +60,12 @@
 </div></div>
 </div></div></div></div>
 
-<% javascript_tag :defer => 'defer' do %>
+<% onload_javascript_tag do %>
   Iyxzone.Mail.Builder.recipientBuilder = new Iyxzone.Friend.Tagger(10, [],[],[],'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', null);
 <% end %>
 
 <% unless @recipient.blank? %>
-<% javascript_tag :defer => 'defer' do %>
+<% onload_javascript_tag do %>
   Iyxzone.Mail.Builder.recipientBuilder.addTags([{id: #{@recipient.id}, profileID: #{@recipient.profile.id}, login: '#{@recipient.login}'}]);
 <% end %>
 <% end %>
