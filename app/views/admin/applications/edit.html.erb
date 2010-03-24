@@ -20,5 +20,5 @@
 </div></div></div></div>
 
 <%= javascript_tag "
-  new nicEditor({iconsPath: '/images/nicEditorIcons.gif'}).panelInstance('application_about', {token: '#{form_authenticity_token}'});   
+  new nicEditor().panelInstance('application_about', {token: '#{form_authenticity_token}'});   
 " %>

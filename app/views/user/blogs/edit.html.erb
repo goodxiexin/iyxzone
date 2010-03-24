@@ -58,7 +58,7 @@
 <% tag_ids = '[' + @blog.tags.map(&:id).join(',') + ']' %>
 <% user_names = '[' + @blog.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
 <%= javascript_tag "
-  Iyxzone.Blog.Builder.editor = new nicEditor({iconsPath: '/images/nicEditorIcons.gif'}).panelInstance('blog_content'); 
+  Iyxzone.Blog.Builder.editor = new nicEditor().panelInstance('blog_content'); 
   Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, #{tagged_user_ids}, #{tag_ids}, #{user_names}, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
 " %>
 
