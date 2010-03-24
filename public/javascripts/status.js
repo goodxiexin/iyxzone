@@ -18,13 +18,11 @@ Object.extend(Iyxzone.Status.Builder, {
   },
 
   save: function(button, form){
+    Iyxzone.disableButtonThree(button, '发布中..');
     if(this.validate()){
       new Ajax.Request('/statuses', {
         method: 'post', 
         parameters: form.serialize(),
-				onLoading: function(){
-					Iyxzone.disableButtonThree(button, '发布中..');
-				},
 				onComplete: function(){
 					Iyxzone.enableButtonThree(button, '发布');
           if($('words_count')){
@@ -32,6 +30,8 @@ Object.extend(Iyxzone.Status.Builder, {
           } 
 				}
       });
+    }else{
+      Iyxzone.enableButtonThree(button, '发布');
     }
   }
 
