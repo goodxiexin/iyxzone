@@ -9,6 +9,7 @@
   <%= javascript_include_merged :event %>
 <% end %>
 
+<%= error_messages_for :event, :header_message => "遇到以下问题无法保存", :message => nil %>
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
 		<% if params[:guild_id].blank? %>
@@ -48,10 +49,9 @@
             <div class="rows s_clear">
               <div class="fldid"><label for="name">公会活动：</label></div>
               <div class="fldvalue">
-                <%= check_box_tag 'is_guild_event', 1, true, :disabled => true %>
                 <span id='event_guild_selector'>
-                  所属公会: <%= @guild.name%>
-                  <%= hidden_field_tag 'event[guild_id]', @guild.id %>
+                  所属公会: <%= guild_link @event.guild %>
+                  <%= hidden_field_tag 'event[guild_id]', @event.guild_id %>
                 </span>
               </div>
             </div>
@@ -76,7 +76,13 @@
             </div>
             <div class="rows s_clear">
               <div class="fldid"><label for="name">谁可以加入：</label></div>
-              <div class="fldvalue"><%= privilege_select_tag :event %></div>
+              <div class="fldvalue">
+                <% if !@event.is_guild_event? %>
+                  <%= event_privilege_select_tag :event %>
+                <% else %>
+                  工会成员才能加入
+                <% end %>
+              </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid">&nbsp;</div>

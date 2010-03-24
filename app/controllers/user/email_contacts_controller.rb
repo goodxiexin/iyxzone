@@ -18,7 +18,6 @@ class User::EmailContactsController < UserBaseController
   def not_friend
     @contacts = get_contacts
     parse_contacts
-    CACHE.set("contacts_#{current_user.id}", @contacts)
     if @not_friend_contacts.size != 0
       render :update do |page|
         page.replace_html 'contacts', :partial => 'not_friend'
@@ -33,7 +32,9 @@ class User::EmailContactsController < UserBaseController
 protected
 
   def get_contacts
-    @contacts = CACHE.get("contacts_#{current_user.id}") || Contacts.new(params[:type], params[:user_name], session[:email_authentication][:password]).contacts
+    Rails.cache.fetch "#{params[:type]}_#{params[:user_name]}_contacts" do
+      Contacts.new(params[:type], params[:user_name], session[:email_authentication][:password]).contacts
+    end
   end
 
   def render_not_supported e
@@ -73,7 +74,7 @@ protected
         @registered_contacts << h
         if current_user.has_friend? user
           @friend_contacts << h
-        else
+        elsif current_user != user
           @not_friend_contacts << h
         end
       end

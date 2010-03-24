@@ -101,17 +101,17 @@
 							<span class="remind">本站不会存储您的密码，请放心使用</span>
               <div class="rows s_clear">
 								<div class="fldid">&nbsp;</div>
-								<div class="fldbtn"><span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">查找</button></span></span></div>
+								<div class="fldbtn"><span class="button"><span><button type="submit" id='msn_friend_finder_btn'>查找</button></span></span></div>
               </div>
             </form>
           </div>
 				</div>
 				<div class="box02 appcontent01">
-					<div class='d6-head'>
-					<strong class='gray'>你可能认识的人</strong>
+					<div class='d6-head s_clear'>
+					<strong class='gray left'>你可能认识的人</strong>
 					<span><%= link_to '更多', {:controller => 'user/friend_suggestions', :action => 'friend'}, :class => 'right' %></span>
 					</div>
-          <div class="d6-list s_clear">
+          <div class="d6-list s_clear rows">
 						<ul id='friend_suggestions'>
 							<%= render :partial => 'nicer_friend_suggestion', :collection => @friend_suggestions %>
 						</ul>
@@ -121,11 +121,11 @@
 					<% unless suggestions.count == 0 %>
 						<% server = GameServer.find(server_id) %>
 						<div class="box02 appcontent01">
-							<div class='d6-head'>
-								<strong>你在<%= server_location server %>可能认识: </strong>
+							<div class='d6-head s_clear rows'>
+								<strong class='gray left'>你在<%= server_location server %>可能认识: </strong>
 								<span><%= link_to '更多', {:controller => 'user/friend_suggestions', :action => 'comrade', :server_id => server_id}, :class => 'right' %></span>
 							</div>
-						  <div class="d6-list s_clear">
+						  <div class="d6-list s_clear rows">
 						    <ul id='server_<%= server_id %>_suggestions'>
 									<%= render :partial => 'comrade_suggestion', :collection => suggestions %>
 						    </ul>
@@ -142,4 +142,4 @@
   Iyxzone.Game.pinyins = #{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')};
   Iyxzone.Game.infos = #{@games.to_json :only => [:id, :name]}
   Iyxzone.Game.initPinyinSelector('game_id', 'area_id', 'server_id', null, null, true, null, null);
-" %>
+", :defer => 'defer' %>

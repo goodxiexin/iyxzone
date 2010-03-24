@@ -16,7 +16,7 @@
           <div class="s_clear">
             <div class="fldid"><label><span class="icon-link"></span>万能邀请链接</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -28,7 +28,7 @@
           <div class="s_clear space">
             <div class="fldid"><label><span class="icon-qq"></span>复制链接发给 QQ 好友</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.qq_invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.qq_invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -40,7 +40,7 @@
           <div class="s_clear space">
             <div class="fldid"><label><span class="icon-msn"></span>复制链接发给 MSN 好友</label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:invite_token => current_user.msn_invite_code), :enabled => false %></div>
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.msn_invite_code), :enabled => false %></div>
             </div>
           </div>
           <div class="s_clear space">
@@ -59,13 +59,13 @@
           <div class="s_clear space">
             <div class="fldid"><label>好友邮箱 </label></div>
             <div class="fldvalue">
-              <div class="textfield"><%= text_field_tag 'email', "例如： abc@abc.com", :onclick => "this.clear();" %></div>
+              <div class="textfield"><%= text_field_tag 'email', "例如： abc@abc.com", :onclick => "$(email).clear();" %></div>
             </div>
           </div>
           <div class="s_clear space">
             <div class="fldid">&nbsp;</div>
             <div class="fldvalue">
-              <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')">发送邀请</button></span></span>
+              <span class="button"><span><button type="submit" id='email_invitation_btn'>发送邀请</button></span></span>
             </div>
           </div>
           <% end %>
@@ -75,7 +75,7 @@
         <div class="invite-tip jl-cutline">导入MSN联系人名单并邀请其加入，对方会直接加入你的好友。</div>
         <div class="invite-msn jl-cutline" style="display:none">
           <div id='msn_invite'></div>
-          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'),  {:onsubmit => "return Iyxzone.ContactsGrabber.checkMsnInput();"} do %>
+          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'),  {:onsubmit => "return Iyxzone.ContactsGrabber.checkMsnInput(this);"} do %>
           <%= hidden_field_tag 'type', 'msn'%>
           <div class="s_clear space">
             <div class="fldid"><label>你的MSN账号</label></div>
@@ -93,7 +93,7 @@
             <div class="fldid">&nbsp;</div>
             <div class="fldvalue">
               <span class="red">提示：17Gaming不会记录您的MSN信息，请放心使用。</span><br />
-              <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')">导入联系人</button></span></span>
+              <span class="button"><span><button type="submit" id='msn_contact_grabber_btn'>导入联系人</button></span></span>
             </div>
           </div>
           <% end %>
@@ -127,10 +127,10 @@
             </div>
           </div>
           <div class="s_clear space">
-            <div class="fldid"></div>
+            <div class="fldid">&nbsp;</div>
             <div class="fldvalue">
-              <span class="red">提示：17Gaming不会记录您的MSN信息，请放心使用。</span><br />
-              <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this, '请等待..')">导入联系人</button></span></span>
+              <span class="red">提示：17Gaming不会记录您的邮箱信息，请放心使用。</span><br />
+              <span class="button"><span><button type="submit" id='other_mail_contact_grabber_btn'>导入联系人</button></span></span>
             </div>
           </div>
           <% end %>

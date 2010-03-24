@@ -8,7 +8,11 @@
     <% end %>
       <p><%= profile_link poster %>：<%= status.content %><% if poster != current_user%>(<%= link_to "更多", statuses_url(:id => poster.id) %>)<% end %></p>
     </div>
+		<% unless status.comments_count > 0 %>
+    <div class="feeds"><%= ftime status.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.toggleBox('status', #{status.id}, #{status.comments_count})", :id => "status_comment_link_#{status.id}" %></div>
+		<% else %>
     <div class="feeds"><%= ftime status.created_at %> <%= link_to_function "#{status.comments_count}条回复", "Iyxzone.Comment.toggleBox('status', #{status.id}, #{status.comments_count})", :id => "status_comment_link_#{status.id}" %></div>
+		<% end %>
     <div id='status_comment_box_<%= status.id %>' style="display:none">
       <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => status, :recipient => poster} %>
     </div>

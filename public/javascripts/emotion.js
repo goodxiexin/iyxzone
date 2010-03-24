@@ -1,12 +1,11 @@
 /**
- * TODO:
- * hover effect !! 
  * Change Log
  * 1.2
  * change view generation and simplify code
  */
 
 Iyxzone.Emotion = {
+
   version: '1.2',
 
   author: ['高侠鸿','戴雨宸'],
@@ -41,12 +40,12 @@ Object.extend(Iyxzone.Emotion.Manager, {
 		var facesCount = Iyxzone.Emotion.facesCount;
 		var a, img, pageIndex = -1;
 
-		this.facesSingle = new Element('div', {class:"emot-box drop-wrap"});
+		this.facesSingle = new Element('div', {'class':"emot-box drop-wrap"});
 
 		for (var i =0; i < facesCount; i++){
 			if (i % facesPerPage == 0){
 				pageIndex++;
-				this.facePages[pageIndex] = new Element('div', {class:"con"});
+				this.facePages[pageIndex] = new Element('div', {'class':"con"});
 			}	
 			a = new Element('a', {title: myFaces[i], href: 'javascript: void(0)'});
 			img = new Element('img', {src: "/images/faces/"+ myFaces[i].slice(1,myFaces[i].length-1) +".gif",  alt: myFaces[i], index: i});
@@ -60,7 +59,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
 		}
 
 		for(var i = 0; i < this.facePages.length; i++){
-			var prev = new Element('a',{class:'prev', pageNum: i});
+			var prev = new Element('a',{'class':'prev', pageNum: i});
 			if (i != 0){
 				prev.observe('click',function(e){
           Event.stop(e);
@@ -70,13 +69,13 @@ Object.extend(Iyxzone.Emotion.Manager, {
 					this.facesSingle.removeChild(el.up().up());
         }.bind(this));
 			}else{
-        prev.writeAttribute({class: 'first'});
+        prev.writeAttribute('class', 'first');
         prev.observe('click', function(e){
           Event.stop(e);
         }.bind(this));
       }
 
-			var next = new Element('a',{class:'next',pageNum: i});
+			var next = new Element('a',{'class':'next',pageNum: i});
 			if (i != this.facePages.length - 1){
 				next.observe('click',function(e){
           Event.stop(e);
@@ -86,13 +85,13 @@ Object.extend(Iyxzone.Emotion.Manager, {
 					this.facesSingle.removeChild(el.up().up());
         }.bind(this));
 			}else{
-        next.writeAttribute({class: 'last'});
+        next.writeAttribute('class', 'last');
         next.observe('click', function(e){
           Event.stop(e);
         }.bind(this));
       }
 
-			var foot = new Element('div', {class:'pager-simple foot'});
+			var foot = new Element('div', {'class':'pager-simple foot'});
 			var pagenum = new Element('span').update(i+1);
       foot.appendChild(prev);
       foot.appendChild(pagenum);
@@ -112,7 +111,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
 				"position": 'absolute',
 				"left": (link.cumulativeOffset().left) + 'px',
 				"top": (link.cumulativeOffset().top) + 'px',
-				"width": '244px',
+				"width": '244px'
 		});
 		this.currentField = textField;
 		this.currentLink = link;

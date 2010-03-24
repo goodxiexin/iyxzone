@@ -1,16 +1,16 @@
-﻿.sperator{clear:both;margin:12px 0; background:url(/images/welcome/sperator01.gif) repeat-x;height:1px;font-size:1px;}
-.sperator-wrap{margin:12px 0;background:url(/images/welcome/sperator01.gif) repeat-x;}
+﻿.sperator{clear:both;margin:12px 0; background:url(../images/welcome/sperator01.gif) repeat-x;height:1px;font-size:1px;}
+.sperator-wrap{margin:12px 0;background:url(../images/welcome/sperator01.gif) repeat-x;}
 .sperator-wrap .sperator{margin:0;}
-.sperator-wrap .sperator-main{background:url(/images/welcome/sperator01.gif) repeat-y center top}
+.sperator-wrap .sperator-main{background:url(../images/welcome/sperator01.gif) repeat-y center top}
 
 
-.body_bg01{background:url(/images/skin/bg01.png) no-repeat center top}
+.body_bg01{background:url(../images/skin/bg01.png) no-repeat center top}
 .top_link{line-height:39px;text-align:right;color:#fff;overflow:hidden;}
-.welcome-box #navbar #navwrap #navmid{background:#73bd21 url(/images/welcome/top-bg.png) no-repeat 400px 0;}
+.welcome-box #navbar #navwrap #navmid{background:#73bd21 url(../images/welcome/top-bg.png) no-repeat 400px 0;}
 
-.logo-v2{background:url(/images/skin/logo-v2.png) no-repeat;top:0}
-.login-box .logo,.regist-box .logo{padding:0 0 0 101px;height:66px;line-height:66px;background:url(/images/welcome/welcome_title.png) no-repeat 0 0;color:#BF3A00}
-.login-box .logo-mail,.regist-box .logo-mail{background:url(/images/welcome/welcome_title.png) no-repeat 0 -80px}
+.logo-v2{background:url(../images/skin/logo-v2.png) no-repeat;top:0}
+.login-box .logo,.regist-box .logo{padding:0 0 0 101px;height:66px;line-height:66px;background:url(../images/welcome/welcome_title.png) no-repeat 0 0;color:#BF3A00}
+.login-box .logo-mail,.regist-box .logo-mail{background:url(../images/welcome/welcome_title.png) no-repeat 0 -80px}
 
 .login-box .rows,.regist-box .rows{height:26px;line-height:26px;overflow:hidden}
 .login-box .btn-rows,.regist-box .btn-rows{height:36px;overflow:hidden}
@@ -20,14 +20,14 @@
 .welcome-box{width:972px;margin:0 auto;}
 .welcome-box02{width:950px;margin:0 auto;}
 .welcome{margin-top:25px;overflow:hidden}
-.welcome .login-box{float:left;width:336px;background:url(/images/welcome/loginBg01.png) no-repeat 0 0;}
+.welcome .login-box{float:left;width:336px;background:url(../images/welcome/loginBg01.png) no-repeat 0 0;}
 .welcome .login-box .r-m{margin:70px 7px 0 15px}
-.welcome .login-box .r-b{width:336px;height:185px;_height:192px;display:block;background:url(/images/welcome/loginBg01-b.png) no-repeat 0 bottom}
+.welcome .login-box .r-b{width:336px;height:185px;_height:192px;display:block;background:url(../images/welcome/loginBg01-b.png) no-repeat 0 bottom}
 .welcome .right{margin-top:3px;width:618px;}
 .welcome .right p.later{margin-top:17px;border:1px solid #acd296}
 .welcome .slogon-box{text-align:center;border:1px solid #acd296;background:#fff;padding-top:15px;}
-.slogon{background:url(/images/welcome/slogon-bg.png) no-repeat;width:465px;height:120px;padding-top:26px;_padding-top:35px;margin:0 auto}
-.slogon p{margin:10px 30px;font-size:14px;line-height:24px;color:#006d9a;text-align:left}
+.slogon{background:url(../images/welcome/slogon-bg.png) no-repeat;width:465px;height:120px;padding-top:30px;*padding-top:40px;margin:0 auto}
+.slogon p{margin:8px 30px;font-size:14px;line-height:24px;color:#006d9a;text-align:left}
 
 .login-box .logo{margin-left:3px;}
 .login-box .rows,.login-box .btn-rows{padding:8px 0;}
@@ -42,11 +42,11 @@
 .login-box a.pass{margin-left:3px;_margin:0;}
 .login-box .gobtn{margin:3px 0 0 10px;_margin-left:7px;}
 
-.regist-box .t{background:url(/images/welcome/registBg01.png) no-repeat;}
-.regist-box{width:672px;margin:13px auto 0;color:#7E7F80;background:url(/images/welcome/regist02.png) repeat-y}
-.regist-box .b{background:url(/images/welcome/regist03.png) no-repeat 0 bottom;}
-.regist-box .regist-content{padding:20px;background:url(/images/welcome/registBg01.png) no-repeat;}
-.regist-box .logo .status{padding-left:24px;margin-top:20px;line-height:29px; background:url(/images/icons/homeIcons.gif) no-repeat 0 -1295px;}
+.regist-box .t{background:url(../images/welcome/registBg01.png) no-repeat;}
+.regist-box{width:672px;margin:13px auto 0;color:#7E7F80;background:url(../images/welcome/regist02.png) repeat-y}
+.regist-box .b{background:url(../images/welcome/regist03.png) no-repeat 0 bottom;}
+.regist-box .regist-content{padding:20px;background:url(../images/welcome/registBg01.png) no-repeat;}
+.regist-box .logo .status{padding-left:24px;margin-top:20px;line-height:29px; background:url(../images/icons/homeIcons.gif) no-repeat 0 -1295px;}
 .regist-box .help{padding-left:101px;_height:1px;line-height:22px;position:relative;margin-top:20px}
 .regist-box .help .prompt{width:75px;position:absolute;left:19px;top:0;height:22px;line-height:normal;font-weight:bold;font-size:16px;overflow:hidden;color:#BF3A00}
 .regist-box .help h1{color:#BF3A00}
@@ -64,7 +64,7 @@
 .regist-box .regist-prompt p.btn{margin-bottom:15px;}
 .regist-box .answer-box{padding:22px 43px;line-height:21px;}
 .regist-box .answer-box ul{padding-left:32px;}
-.regist-box .answer-box h3{padding-left:21px;background:url(/images/icons/homeIcons.gif) no-repeat 0 -1358px;color:#25700D}
+.regist-box .answer-box h3{padding-left:21px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -1358px;color:#25700D}
 
 .regist-box .edit .con p.foot {border-bottom:1px solid #9ACE5F;line-height:30px;margin:0 20px;}
 
@@ -72,14 +72,14 @@
 
 /*box-v2*/
 .box-v2 .t,.box-v2 .b{position:relative}
-.box-v2 .t,.box-v2 .b,.box-v2 .t span,.box-v2 .b span{background:url(/images/skin/boxv2.png) no-repeat}
+.box-v2 .t,.box-v2 .b,.box-v2 .t span,.box-v2 .b span{background:url(../images/skin/boxv2.png) no-repeat}
 .box-v2 .t span,.box-v2 .b span{position:absolute;right:0;width:20px;display:block}
 .box-v2 .t{background-position:0 0;height:25px}
 .box-v2 .t span{background-position:right 0;height:25px}
 .box-v2 .b{background-position:0 bottom;height:30px}
 .box-v2 .b span{background-position:right bottom;bottom:0;height:30px;}
 
-.box-v2 .t strong{position:absolute;left:15px;top:6px;display:block;background:url(/images/skin/skin2010.png) no-repeat}
+.box-v2 .t strong{position:absolute;left:15px;top:6px;display:block;background:url(../images/skin/skin2010.png) no-repeat}
 .box-v2 .t strong.get-pws{width:53px;height:13px;background-position:0 -69px;}
 .box-v2 .m{border-left:1px solid #bdd6ad;border-right:1px solid #bdd6ad;background:#f8fcf6;}
 

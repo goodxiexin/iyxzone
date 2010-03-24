@@ -20,7 +20,7 @@
         </div>
         <ul>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
-          <li class='hover'><span><%= link_to "#{@guild.name}的相册", guild_albums_url(@guild) %></span></li>
+          <li class='hover'><span><%= link_to "#{@guild.name}的相册", guild_album_url(@album) %></span></li>
         </ul>       
       </div>
       <div class="pic-box">
@@ -73,19 +73,19 @@
 					<% end %>
         <% end %>
 				</table>
-      <div class="pic-desc">
-        <% if @membership and @membership.is_president? %>
-          <h4 class='box06'><%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]' %></h4>
-        <% else %>
-          <h4 class="box06"><%= @album.description %></h4>
-        <% end %>
-        <p class="gray">
-        <% unless @album.uploaded_at.blank? %>
-            <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
+        <div class="pic-desc">
+          <% if @membership and @membership.is_president? %>
+            <h4 class='box06'><%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]' %></h4>
+          <% else %>
+            <h4 class="box06"><%= @album.description %></h4>
           <% end %>
-          <span class="time-create"><%= ftime @album.created_at %>创建</span>
-        </p>
-      </div>
+          <p class="gray">
+            <% unless @album.uploaded_at.blank? %>
+              <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
+            <% end %>
+            <span class="time-create"><%= ftime @album.created_at %>创建</span>
+          </p>
+        </div>
 			</div>
       <div class="foot cmt-space">
         <div class="feed-list">
@@ -94,8 +94,7 @@
         </div>
       </div>
     </div>
-  </div>
-</div></div>
+  </div></div>
 </div></div></div></div>
 
 <% unless @reply_to.blank? %>

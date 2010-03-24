@@ -81,7 +81,7 @@ class CommentMailer < ActionMailer::Base
   def sharing_comment comment, user
     setup_email user
     subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在你的分享里留言了"
-    body        :comment => comment, :user => user, :url => "#{SITE_URL}/sharings?uid=#{user.id}&reply_to=#{comment.poster_id}&status_id=#{comment.commentable_id}"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/sharings?uid=#{user.id}&reply_to=#{comment.poster_id}&sharing_id=#{comment.commentable_id}"
   end
 
   def application_comment comment, user 

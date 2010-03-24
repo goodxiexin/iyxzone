@@ -317,7 +317,7 @@ Iyxzone.Friend.Tagger = Class.create({
       afterUpdateElement: this.afterSelectFriend.bind(this),
       tipText: '输入你好友的名字或者拼音',
       emptyText: '没有匹配的好友...',
-      comp: this.taggedUserList.holder,
+      comp: this.taggedUserList.holder
     }); 
   },
 

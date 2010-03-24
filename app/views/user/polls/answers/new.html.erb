@@ -5,7 +5,7 @@
 
 <div id='error'></div>
 <div class='z-con'>
-<% form_remote_tag :url => poll_answers_url(@poll) do %>
+<% form_remote_tag :url => poll_answers_url(@poll), :html=> {:onsubmit=> "Iyxzone.disableButton($(new_poll_answer_btn),'请等待..');"}do %>
 <div class='formcontent'>
 <div class='content'>
   <div id='poll_answers'>
@@ -18,7 +18,7 @@
 </div>
 <div class="z-submit s_clear space">
 	<table class="center" cellpadding="0"><tr><td>
-		<span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">完成</button></span></span>
+		<span class="button"><span><button type="submit" id="new_poll_answer_btn">完成</button></span></span>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>

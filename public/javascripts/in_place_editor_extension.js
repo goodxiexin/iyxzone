@@ -7,7 +7,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     options = Object.extend({
       emptyText: "点击编辑...",
       emptyClassName: "inplaceeditor-empty",
-      htmlResponse: false,
+      htmlResponse: false
     }, options || {});
 
     options.textAreaStyle = {width: '90%'};
@@ -38,7 +38,10 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
   },
 
   callbackHandler: function(form, value){
-    var param = this.options.paramName || (this.options.updateClass + "[" + this.options.updateAttr + "]");
+    var param = this.options.paramName;
+    if((param == null || param == 'value') && this.options.updateClass && this.options.updateAttr){
+      param = (this.options.updateClass + "[" + this.options.updateAttr + "]");
+    }
     return param + "=" + value + "&authenticity_token=" + encodeURIComponent(this.options.token);
   },
 

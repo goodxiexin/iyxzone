@@ -33,9 +33,9 @@
           <div class="vote-op left">
             <span class="vote-op-add"></span><%= link_to '增加侯选项', new_poll_answer_url(@poll), :rel => 'facebox' %>
             <% unless @poll.no_deadline %>
-            <span class=vote-op-time></span><%= link_to '修改截至时间', edit_poll_url(@poll, :type => 0), :rel => 'facebox' %>
+            <span class='vote-op-time'></span><%= link_to '修改截至时间', edit_poll_url(@poll, :type => 0), :rel => 'facebox' %>
             <% end %>
-						<span></span><%= link_to '修改选项说明', edit_poll_url(@poll, :type => 1), :rel => 'facebox' %>
+						<span class='vote-op-edit'></span><%= link_to '修改选项说明', edit_poll_url(@poll, :type => 1), :rel => 'facebox' %>
             <span class="vote-op-invite"></span><%= link_to '邀请更多人', new_poll_invitation_url(@poll) %>
             <span class="vote-op-del"></span><%= facebox_confirm '删除本投票', poll_url(@poll), {:msg => '你确定要删除该投票吗?', :method => :delete} %></li>
           </div>
@@ -64,7 +64,7 @@
               </td>
             </tr>
           </table>
-          <% form_tag poll_votes_url(@poll) do %>
+          <% form_tag poll_votes_url(@poll), :html=>{:onsubmit=> "Iyxzone.disableButton($(poll_vote_submit_btn),'请等待..');"} do %>
           <table class="vote-status-table" cellpadding="0">
             <% @poll.answers.each_with_index do |answer, i| %>
             <tr>
@@ -82,7 +82,7 @@
                 <% if @vote %>
                   你已经投过票了
                 <% elsif @poll.is_votable_by? current_user %>
-                  <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">投票</button></span></span>
+                  <span class="button"><span><button type="submit" id='poll_vote_submit_btn'>投票</button></span></span>
                 <% else %>
                   只有<%= get_subject @user %>才能投票
                 <% end %> 

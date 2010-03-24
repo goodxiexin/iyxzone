@@ -22,8 +22,7 @@ Object.extend(Iyxzone.Password, {
     this.codes = validation.codes;
   },
 
-  send: function(button, event){
-    Event.stop(event);
+  send: function(button){
     if(this.validate()){
       Iyxzone.disableButton(button, '正在发送');
       $('password_form').submit();

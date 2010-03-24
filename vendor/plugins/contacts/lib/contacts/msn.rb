@@ -38,7 +38,6 @@ class Contacts
 
       output "USR 3 TWN I #{@username}\r\n"
       s = input
-			puts s
       ns = s.split(' ')[3]
       ip = ns.split(':').first
       port = ns.split(':').last
@@ -61,7 +60,6 @@ class Contacts
       http.use_ssl = true
       
       s = http.get('/rdr/pprdr.asp', nil)
-      puts s['PassportURLs']
       m = /DALogin=(.*),DAReg=/.match(s['PassportURLs'])
       login = m.captures.first 
       m = /([^\\]*)(\/.*)/.match(login)
@@ -103,17 +101,14 @@ class Contacts
     def output data
       @sock.write data
       @trID = @trID + 1
-      puts ">>> #{@trID} #{data}"
     end
 
     def parse_contacts
       @contacts = []
       while true 
         s = @sock.gets
-        #puts s
         if m = /SYN[\s]+[\d]*[\s]+[\d]*[\s]+([\d]*)[\s]+[\d]/.match(s)
           @contact_length = m[1].to_i
-          puts "--------------total length: #{@contact_length}--------------"
           break
         end
       end
@@ -122,17 +117,14 @@ class Contacts
         s = @sock.gets
         if contact_item = /LST[\s]+([a-zA-Z0-9_\.-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+)[\s]+([\S]*)(([\s]+[\d]+)+)/.match(s)
           @contacts << [contact_item[1], contact_item[3]]
-          #       puts "nickname: #{@contacts[@contacts.length-1][0]}  email: #{@contacts[@contacts.length-1][1]}"
           read_length += 1
         end        
       end
       @sock.close
-      #puts @contacts
     end
 
     def input
       str = @sock.recv(1000)
-      puts "s: #{str}"
       if if_error = /^([\d]{3})/.match(str)
         @code = if_error[1].to_i
         error_code
@@ -172,6 +164,3 @@ class Contacts
   end
   TYPES[:msn] = Msn
 end
-#msn = Msn.new('gaoxh04@mails.tsinghua.edu.cn', '20041065')
-#msn.connect
-#puts msn.contacts.to_s

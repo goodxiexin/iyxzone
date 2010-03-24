@@ -25,7 +25,7 @@
     <div class="box01 s_clear">
       <p class="z-h"><%= image_tag "skin/logo.png" %></p>
       <div class="z-con">
-      <% form_remote_for :sharing, :url => sharings_url(:outside => 1) do |f| %>
+      <% form_remote_for :sharing, :url => sharings_url(:outside => 1), :html=> {:onsubmit=> "Iyxzone.disableButton($(new_from_outside_btn),'请等待..');"} do |f| %>
         <% if params[:link] %>
           <%= hidden_field_tag 'sharing[link]', params[:link] %>
         <% end %>
@@ -44,7 +44,7 @@
         </div>
         <div class="z-submit s_clear space">
           <div class="buttons">
-            <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">立即分享</button></span></span>
+            <span class="button"><span><button type="submit" id='new_from_outside_btn'>立即分享</button></span></span>
             <span class="button button-gray"><span><button onclick="window.close();">取消</button></span></span>
           </div>
         </div>

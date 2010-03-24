@@ -1,4 +1,4 @@
-// CalendarDateSelect version 1.15 - a prototype based date picker
+// CalendarDateSelect version 1.14 - a prototype based date picker
 // Questions, comments, bugs? - see the project page: http://code.google.com/p/calendardateselect
 if (typeof Prototype == 'undefined') alert("CalendarDateSelect Error: Prototype could not be found. Please make sure that your application's layout includes prototype.js (.g. <%= javascript_include_tag :defaults %>) *before* it includes calendar_date_select.js (.g. <%= calendar_date_select_includes %>).");
 if (Prototype.Version < "1.6") alert("Prototype 1.6.0 is required.  If using earlier version of prototype, please use calendar_date_select version 1.8.3");
@@ -22,83 +22,32 @@ Element.buildAndAppend = function(type, options, style)
 nil = null;
 
 Date.one_day = 24*60*60*1000;
-Date.weekdays = $w("日 一 二 三 四 五 六");
+Date.weekdays = $w("S M T W T F S");
 Date.first_day_of_week = 0;
-Date.months = $w("一月 二月 三月 四月 五月 六月 七月 八月 九月 十月 十一月 十二月" );
+Date.months = $w("January February March April May June July August September October November December" );
 Date.padded2 = function(hour) { var padded2 = parseInt(hour, 10); if (hour < 10) padded2 = "0" + padded2; return padded2; }
 Date.prototype.getPaddedMinutes = function() { return Date.padded2(this.getMinutes()); }
 Date.prototype.getAMPMHour = function() { var hour = this.getHours(); return (hour == 0) ? 12 : (hour > 12 ? hour - 12 : hour ) }
 Date.prototype.getAMPM = function() { return (this.getHours() < 12) ? "AM" : "PM"; }
 Date.prototype.stripTime = function() { return new Date(this.getFullYear(), this.getMonth(), this.getDate());};
 Date.prototype.daysDistance = function(compare_date) { return Math.round((compare_date - this) / Date.one_day); };
-/*
 Date.prototype.toFormattedString = function(include_time){
   var hour, str;
-  str = Date.months[this.getMonth()] + " " + this.getDate() + "号, " + this.getFullYear();
+  str = Date.months[this.getMonth()] + " " + this.getDate() + ", " + this.getFullYear();
   
   if (include_time) { hour = this.getHours(); str += " " + this.getAMPMHour() + ":" + this.getPaddedMinutes() + " " + this.getAMPM() }
   return str;
 }
 Date.parseFormattedString = function(string) { return new Date(string);}
-*/
-Date.prototype.toFormattedString = function(include_time) {
-	var hour;
-    var str = this.getFullYear() + "-" + Date.padded2(this.getMonth() + 1) + "-" +Date.padded2(this.getDate());
-    if (include_time) {
-        hour = this.getHours();
-        str += " " + this.getHours() + ":" + this.getPaddedMinutes();
-    }
-    return str;
-};
-
-Date.parseFormattedString = function (string) {
-
-   var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" + 
-	        "( ([0-9]{1,2}):([0-9]{2})?" +
-					       ")?)?)?";
-   /* var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" + 
-        "( ([0-9]{1,2}):([0-9]{2})?" +
-        "?)?)?)?"; */
-
-    var d = string.match(new RegExp(regexp, "i"));
-    if (d === null) {
-        return Date.parse(string); // at least give javascript a crack at it.
-    }
-    var offset = 0; 
-    var date = new Date(d[1], 0, 1); 
-    if (d[3]) {
-        date.setMonth(d[3] - 1);
-    } 
-    if (d[5]) {
-        date.setDate(d[5]);
-    } 
-    if (d[7]) {
-        date.setHours(d[7]);
-    } 
-    if (d[8]) {
-        date.setMinutes(d[8]);
-    } 
-    if (d[10]) {
-        date.setSeconds(d[10]);
-    } 
-    if (d[12]) {
-        date.setMilliseconds(Number("0." + d[12]));
-    } 
-    if (d[14]) {
-        offset = (Number(d[16])) + Number(d[18]);
-        offset = ((d[15] == '-') ? 1 : -1); 
-    } 
-    return date; 
-};
 Math.floor_to_interval = function(n, i) { return Math.floor(n/i) * i;}
 window.f_height = function() { return( [window.innerHeight ? window.innerHeight : null, document.documentElement ? document.documentElement.clientHeight : null, document.body ? document.body.clientHeight : null].select(function(x){return x>0}).first()||0); }
 window.f_scrollTop = function() { return ([window.pageYOffset ? window.pageYOffset : null, document.documentElement ? document.documentElement.scrollTop : null, document.body ? document.body.scrollTop : null].select(function(x){return x>0}).first()||0 ); }
 
 _translations = {
   "OK": "OK",
-  "Now": "现在",
-  "Today": "今天",
-  "Clear": "清除"
+  "Now": "Now",
+  "Today": "Today",
+  "Clear": "Clear"
 }
 SelectBox = Class.create();
 SelectBox.prototype = {
@@ -130,17 +79,17 @@ CalendarDateSelect.prototype = {
     // initialize the date control
     this.options = $H({
       embedded: false,
-      popup: null,
+      popup: nil,
       time: false,
       buttons: true,
       clear_button: true,
       year_range: 10,
-      close_on_click: null,
+      close_on_click: nil,
       minute_interval: 5,
       popup_by: this.target_element,
       month_year: "dropdowns",
       onchange: this.target_element.onchange,
-      valid_date_check: null
+      valid_date_check: nil
     }).merge(options || {});
     this.use_time = this.options.get("time");
     this.parseDate();
@@ -434,7 +383,7 @@ CalendarDateSelect.prototype = {
   },
   closeOnClick: function() {
     if (this.options.get("embedded")) return false;
-    if (this.options.get("close_on_click")===null )
+    if (this.options.get("close_on_click")===nil )
       return (this.options.get("time")) ? false : true
     else
       return (this.options.get("close_on_click"))
@@ -476,7 +425,7 @@ CalendarDateSelect.prototype = {
   close: function() {
     if (this.closed) return false;
     this.callback("before_close");
-    this.target_element.calendar_date_select = null;
+    this.target_element.calendar_date_select = nil;
     Event.stopObserving(document, "mousedown", this.closeIfClickedOut_handler);
     Event.stopObserving(document, "keypress", this.keyPress_handler);
     this.calendar_div.remove(); this.closed = true;

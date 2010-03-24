@@ -8,14 +8,14 @@ Object.extend(Iyxzone.ContactsGrabber, {
   grabUnregisteredContacts: function(type, user, token){
     new Ajax.Request('/user/email_contacts/unregistered', {
       method: 'post',
-      parameters: 'authenticity_token=' + token + '&type=' + type + '&user_name=' + user,
+      parameters: 'authenticity_token=' + token + '&type=' + type + '&user_name=' + user
     });
   },
 
   grabNotFriendContacts: function(type, user, token){
     new Ajax.Request('/user/email_contacts/not_friend', {
       method: 'post',
-      parameters: 'authenticity_token=' + token + '&type=' + type + '&user_name=' + user,
+      parameters: 'authenticity_token=' + token + '&type=' + type + '&user_name=' + user
     });
   },
 
@@ -43,13 +43,18 @@ Object.extend(Iyxzone.ContactsGrabber, {
       }
     });
 
+    if(ids.length == 0){
+      error('至少选择一个');
+      return;
+    }
+
     // construct parameters
     ids.each(function(id){
       params += "ids[]=" + id + "&";
     });
 
     // send request
-    new Ajax.Request('/user/friends/requests/create_multiple?authenticity_token=' + encodeURIComponent(token), {
+    new Ajax.Request('/friend_requests/create_multiple?authenticity_token=' + encodeURIComponent(token), {
       method: 'post',
       parameters: params,
       onSuccess: function(){
@@ -71,6 +76,11 @@ Object.extend(Iyxzone.ContactsGrabber, {
       }
     });
 
+    if(invitees.length == 0){
+      error('至少选择一个');
+      return;
+    }
+
     // construct parameters
     invitees.each(function(email){
       params += "emails[]=" + email + "&";
@@ -85,53 +95,63 @@ Object.extend(Iyxzone.ContactsGrabber, {
       },
       onComplete: function(){
         Iyxzone.enableButton(button, '发送邀请');
-      },
+      }
     });
   },
 
   checkMsnInput: function(form){
+    Iyxzone.disableButton($('msn_contact_grabber_btn'), '请等待..');
     var id = form.getInputs('text')[0];
     var pwd = form.getInputs('password')[0];
     if(id.value == ''){
       error('请输入msn用户名');
+      Iyxzone.enableButton($('msn_contact_grabber_btn'), '导入联系人');
       return false;
     }
     if(pwd.value == ''){
       error('请输入msn密码');
+      Iyxzone.enableButton($('msn_contact_grabber_btn'), '导入联系人');
       return false;
     }
     return true;
   },
 
   checkEmailInvitation: function(form){
+    Iyxzone.disableButton($('email_invitation_btn'),'请等待..');
     var value = form.getInputs('text')[0].value;
     if(value == ''){
       error('请输入邮箱');
+      Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');
       return false;
     }else if(!value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
       error('非法的邮箱地址');
+      Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');
       return false;
     }
     return true;
   },
 
   checkEmailContactsInput: function(form){
+    Iyxzone.disableButton($('other_mail_contact_grabber_btn'), '请等待..');
     var id = form.getInputs('text')[0];
     var pwd = form.getInputs('password')[0];
     var type = $('email_selector').value;
     if(type == ''){
       error('请选择邮箱种类');
+      Iyxzone.enableButton($('other_mail_contact_grabber_btn'), '导入联系人');
       return false;
     }
     if(id.value == ''){
       error('请输入用户名');
+      Iyxzone.enableButton($('other_mail_contact_grabber_btn'), '导入联系人');
       return false;
     }
     if(pwd.value == ''){
       error('请输入密码');
+      Iyxzone.enableButton($('other_mail_contact_grabber_btn'), '导入联系人');
       return false;
-    }   
+    }
     return true;
-  },
+  }
 
 });

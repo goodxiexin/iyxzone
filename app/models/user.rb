@@ -88,6 +88,8 @@ class User < ActiveRecord::Base
 	end
 
   # settings
+  attr_protected :application_setting, :privacy_setting, :mail_setting
+
 	has_setting :application_setting
 
 	has_setting :privacy_setting
@@ -319,7 +321,7 @@ class User < ActiveRecord::Base
     if login.blank?
       errors.add_to_base("昵称不能为空")
       return
-    elsif login.length < 4 or login.length > 16
+    elsif login.length < 2 or login.length > 16
       errors.add_to_base("昵称长度不对")
       return
     elsif /^\d/.match(login)

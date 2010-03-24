@@ -99,9 +99,7 @@ class Guild < ActiveRecord::Base
 
   validates_size_of :name, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
 
-  validates_presence_of :description, :message => "不能为空"
-
-  validates_size_of :description, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节"
+  validates_size_of :description, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节", :allow_nil => true
  
   validates_presence_of :character_id, :message => "不能为空", :on => :create
 

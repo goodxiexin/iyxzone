@@ -60,7 +60,7 @@ Object.extend(Iyxzone.Blog.Builder, {
 				}
       });
     }
-    },
+  },
     
     saveDraft: function(button, event){
       Event.stop(event);
@@ -71,24 +71,24 @@ Object.extend(Iyxzone.Blog.Builder, {
           parameters: this.parameters,
           onLoading: function(){
             Iyxzone.disableButtonThree(button, '保存中..');
-          },
+          }
         });
       }
     },
 
-    updateBlog: function(button, blogID, event){
-      Event.stop(event);
-      if(this.validate()){
-        this.prepare();
-        new Ajax.Request('/blogs/' + blogID, {
-          method: 'put',
-          parameters: this.parameters,
-          onLoading: function(){
-            Iyxzone.disableButtonThree(button, '修改中..');
-          },
-        });
-      }
-    },
+  updateBlog: function(button, blogID, event){
+    Event.stop(event);
+    if(this.validate()){
+      this.prepare();
+      new Ajax.Request('/blogs/' + blogID, {
+        method: 'put',
+        parameters: this.parameters,
+				onLoading: function(){
+					Iyxzone.disableButtonThree(button, '修改中..');
+				}
+      });
+    }
+  },
 
     updateDraft: function(button, draftID, event){
     Event.stop(event);

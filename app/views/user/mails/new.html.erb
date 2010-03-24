@@ -47,7 +47,7 @@
 							<%= f.text_area 'content' %>
 						</div>
 						<div class='buttons'>
-							<span class="button"><span><button onclick="Iyxzone.Mail.Builder.deliver(this);">发送</button></span></span>
+							<span class="button"><span><button onclick="Iyxzone.Mail.Builder.deliver(this, event);">发送</button></span></span>
 							<span class="button button-gray"><span><button type="reset">取消</button></span></span>
 						<%= emotion_link 'mail_content', :class => 'icon-face right', :align=>"absmiddle" %>
 						</div>

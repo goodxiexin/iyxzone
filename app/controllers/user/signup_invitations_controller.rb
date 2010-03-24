@@ -19,10 +19,12 @@ class User::SignupInvitationsController < UserBaseController
     
     if @invitation.save
       render :update do |page|
+        page << "Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');"
         page << "$('email_invite').innerHTML = '发送成功';"
       end
     else
       render :update do |page|
+        page << "Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');"
         page << "$('email_invite').innerHTML = '发生错误';"
       end
     end

@@ -12,13 +12,13 @@ Rails::Initializer.run do |config|
 
   config.gem "calendar_date_select"
 
-	# reset sweeper path to app/sweepers
-	config.load_paths += %W(#{RAILS_ROOT}/app/sweepers)
-
 	config.cache_store = :mem_cache_store	
 
-	# reset observer path to app/observers 
+  config.load_paths += %W(#{RAILS_ROOT}/app/sweepers)
+
 	config.load_paths += %W(#{RAILS_ROOT}/app/observers)
+
+  config.load_paths += %W(#{RAILS_ROOT}/app/mailers)
 
   config.active_record.observers = 
     :user_observer,
@@ -65,9 +65,8 @@ Rails::Initializer.run do |config|
     :signup_invitation_observer,
     :poke_delivery_observer
 
-	# reset mailer path to app/mailers
-	config.load_paths += %W(#{RAILS_ROOT}/app/mailers)
-
   #config.time_zone = 'UTC'
 
 end
+
+CalendarDateSelect.format = :iso_date 

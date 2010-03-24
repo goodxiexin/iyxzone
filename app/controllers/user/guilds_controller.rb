@@ -63,7 +63,7 @@ class User::GuildsController < UserBaseController
 
   def update
     if @guild.update_attributes(params[:guild])
-      render :text => @guild.description
+      render :json => @guild
     end
   end
 
@@ -93,7 +93,7 @@ protected
       @guild = Guild.find(params[:id])
     elsif ['edit', 'edit_rules', 'update'].include? params[:action]
       @guild = Guild.find(params[:id])
-      require_owner @guild.president
+      require_owner @guild.president unless params[:action] == 'edit_rules'
     end
   end
 

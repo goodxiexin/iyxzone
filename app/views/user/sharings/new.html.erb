@@ -5,7 +5,9 @@
 
 <div id='errors'></div>
 <div class='z-con'>
-<% form_remote_for :sharing, :url => sharings_url(:shareable_type => params[:shareable_type], :shareable_id => params[:shareable_id]) do |f| %>
+<% form_remote_for :sharing, :url => sharings_url, :html => {:onsubmit => "Iyxzone.disableButton($('new_sharing_btn'), '请等待..');"} do |f| %>
+<%= hidden_field_tag 'sharing[shareable_type]', params[:shareable_type] %>
+<%= hidden_field_tag 'sharing[shareable_id]', params[:shareable_id] %>
 <% if params[:link] %>
   <%= hidden_field_tag 'sharing[link]', params[:link] %>
 <% end %>
@@ -25,7 +27,7 @@
 </div>
 <div class="z-submit s_clear space">
   <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">完成</button></span></span>
+    <span class="button"><span><button type="submit" id='new_sharing_btn'>完成</button></span></span>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>

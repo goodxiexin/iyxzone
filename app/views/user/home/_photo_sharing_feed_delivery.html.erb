@@ -1,7 +1,7 @@
 <% delivery = photo_sharing_feed_delivery %>
 <% sharing = delivery.feed_item.originator %>
 <% user = sharing.poster %>
-<% photo = sharing.sharable%>
+<% photo = sharing.shareable%>
 <div class="feed-list-box">
 <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
 	<div class="img left">
@@ -23,8 +23,8 @@
 			</div>
 		</div>
 	</p>
-	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('avatar', #{avatar.id}, null);", :class => "gray"%></p>
-	<%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => avatar , :recipient => avatar.poster} %>
+	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('#{photo.class.name.underscore}', #{photo.id}, null);", :class => "gray"%></p>
+	<%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => photo, :recipient => photo.poster} %>
   </div>
 </div>
 </div>

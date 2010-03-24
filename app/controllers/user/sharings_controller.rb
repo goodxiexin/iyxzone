@@ -135,7 +135,7 @@ class User::SharingsController < UserBaseController
       end
     else
       render :update do |page|
-        page << "alert('发生错误');"
+        page << "tip('你已经分享过这个资源了');"
       end
     end
   end

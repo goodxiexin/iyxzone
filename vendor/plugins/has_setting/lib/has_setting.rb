@@ -76,12 +76,12 @@ module ActsAsSetting
         value.each do |key, value|
           send("#{key}=", value.to_i) if respond_to?("#{key}=")
         end
-        @instance.update_attribute(@name, @value)
+        @instance.update_attribute("#{@name}", @value)
       end
     end
 
     def save
-      @instance.update_attributes("#{@name}" => @value)
+      @instance.update_attribute("#{@name}", @value)
     end
 
   end

@@ -20,6 +20,10 @@ Object.extend(Iyxzone.Video.Builder, {
       error('url不能为空');
       return false;
     }
+    if(!$('video_url').value.include('youku')){
+      error('现在只有youku的视频才能解析。。慢慢都会有的');
+      return false;
+    }
     if($('video_game_id').value == ''){
       error('游戏类别不能为空');
       return false;

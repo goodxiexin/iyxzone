@@ -2,9 +2,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :collection => {:search => :get}
 
-  map.resources :games
+  map.resources :game_details, :controller => 'games'
 
-  map.resources :game_areas
+  map.resources :area_details, :controller => 'game_areas'
 
   map.resources :sessions
 
@@ -115,7 +115,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :friends, :collection => {:search => :get, :other => :get, :common => :get} 
 
-    users.resources :friend_requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :delete}
+    users.resources :friend_requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :delete}, :collection => {:create_multiple => :post}
 
     users.resources :feed_deliveries
 

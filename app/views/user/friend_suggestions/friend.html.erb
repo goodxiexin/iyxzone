@@ -56,8 +56,3 @@
     </div>
 	</div></div>
 </div></div></div></div>
-
-<%= javascript_tag "
-  Iyxzone.Search.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')}, 'character_game_id', 'character_area_id', 'character_server_id', null, null, {});
-  Iyxzone.Search.gameSelector.setEvents();
-" %> 

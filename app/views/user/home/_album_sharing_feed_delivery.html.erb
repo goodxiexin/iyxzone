@@ -7,7 +7,8 @@
 	  <div class="img left">
 		  <div class="imgbox01"><%= avatar sharing.poster %></div>
   	</div>
-	  <div class="jl-list-con jl-cutline"><%= profile_link sharing.poster %> 分享了相册 <%= album_link album %> </div>
+	  <div class="jl-list-con jl-cutline">
+		<%= profile_link sharing.poster %> 分享了相册 <%= album_link album %> </div>
 		<% if delivery.is_deleteable_by? current_user %>
 	  <%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
 		<% end %>

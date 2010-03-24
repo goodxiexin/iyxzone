@@ -320,7 +320,7 @@ var nicEditor = bkClass.extend({
 	
 	panelInstance : function(e,o) {
 		e = this.checkReplace($BK(e));
-		var panelElm = new bkElement('DIV').setStyle({width : (parseInt(e.getStyle('width')) || e.clientWidth)+'px'}).appendBefore(e);
+		var panelElm = new bkElement('DIV').setStyle({width : (e.clientWidth || parseInt(e.getStyle('width')))+'px'}).appendBefore(e);
 		this.setPanel(panelElm);
 		return this.addInstance(e,o);	
 	},
@@ -416,7 +416,7 @@ var nicEditorInstance = bkClass.extend({
 		this.elm = this.e = e;
 		this.options = options || {};
 		
-		newX = parseInt(e.getStyle('width')) || e.clientWidth;
+		newX = e.clientWidth || parseInt(e.getStyle('width'));
 		newY = parseInt(e.getStyle('height')) || e.clientHeight;
 		this.initialHeight = newY-8;
 		
@@ -1373,7 +1373,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
 		var len = this.symbols.length;
 		var faces_per_row = 6;
 		var rows = len/faces_per_row + 1;
-		var table = new Element('table', {class:'face-table'});
+		var table = new Element('table', {"class":'face-table'});
 		for(var i=0;i<rows;i++){
       			var row = new Element('tr');
       			for(var j=0;j < faces_per_row && i*faces_per_row + j < len;j++){
@@ -1392,7 +1392,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
 	     		table.appendChild(row);
 	    	}
 		this.pane.pane.appendChild(table);
-	},
+	}
 });
 
 nicEditors.registerPlugin(nicPlugin,nicEmotionOptions);

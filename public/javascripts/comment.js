@@ -86,9 +86,8 @@ Object.extend(Iyxzone.Comment, {
     var link = $(commentableType + '_comment_link_' + commentableID);
     if(!box.visible()){
       Effect.BlindDown(box);
-      $(commentableType + '_comment_content_' + commentableID).focus();
       if(link)
-        link.update('收起回复');
+        link.update('收起回复')
     }else{
       Effect.BlindUp(box);
       if(link)
@@ -124,7 +123,7 @@ Object.extend(Iyxzone.WallMessage, {
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-        },
+        }
       });
     } 
   },
@@ -145,6 +144,6 @@ Object.extend(Iyxzone.WallMessage, {
     $('comment_recipient_id').value = id;
     $('comment_content').value = '回复' + login + ':';
     $('comment_content').focus();
-  },
+  }
 
 });

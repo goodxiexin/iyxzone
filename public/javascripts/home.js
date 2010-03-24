@@ -88,6 +88,6 @@ Object.extend(Iyxzone.Home.Feeder, {
         }.bind(this)
       });
     }
-  },
+  }
 
 });

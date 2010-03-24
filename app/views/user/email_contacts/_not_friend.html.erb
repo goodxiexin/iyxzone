@@ -18,6 +18,6 @@
           </div>
         </div>
         <div class="space">
-          <span class="button"><span><%= button_to_function "加为好友", "Iyxzone.ContactsGrabber.addContactsAsFriends('#{form_authenticity_token}');" %></span></span>
+          <span class="button"><span><%= button_to_function "加为好友", "Iyxzone.ContactsGrabber.addContactsAsFriends('#{form_authenticity_token}');", :id => 'add_friend_button' %></span></span>
           <span class="button button-gray"><span><%= button_to_function "跳过", "document.location.href = '/user/signup_invitations/invite_contact';"%></span></span>
         </div>

@@ -3,7 +3,7 @@
 <div class="z-con">
   <p class="z-w">此请求需经 <%= @recipient.login %> 验证，你们才能成为好友。</p>
   <%= avatar_image @recipient, :class => "imgbox01 left" %>
-  <% form_remote_for :request, :url => friend_requests_url do |f| %>
+  <% form_remote_for :request, :url => friend_requests_url, :html => {:onsubmit=> "Iyxzone.disableButton($(new_friend_request_btn),'请等待..');"} do |f| %>
   <%= hidden_field_tag 'request[friend_id]', @recipient.id %>
   <div class="left">
     <span class="blk tip01">验证信息</span>
@@ -12,7 +12,7 @@
   <div class="rows"></div>
   <div class="z-submit s_clear space">
     <div class="buttons">
-      <span class="button"><span><button type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">发送</button></span></span>
+      <span class="button"><span><button type="submit" id='new_friend_request_btn'>发送</button></span></span>
       <span class="button button-gray"><span><button type="reset" onclick="facebox.close();">取消</button></span></span>
     </div>
   </div>

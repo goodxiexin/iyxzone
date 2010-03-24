@@ -36,19 +36,19 @@ module ApplicationHelper
     "<img src='/application/new_validation_image' onclick='alert(\"begin\");this.src=\"/application/new_validation_image\";alert(\"done\");' />"
   end
 
-  def ftime(time)
+  def ftime time
     time.strftime("%Y-%m-%d %H:%M") unless time.blank?
   end
 
-  def ftime2(time)
+  def ftime2 time
     time.strftime("%Y-%m-%d") unless time.blank?
   end
 
-  def ftime3(time)
+  def ftime3 time
     time.strftime("%m-%d") unless time.blank?
   end
 
-  def ftime4(time)
+  def ftime4 time
     time.strftime("%H: %M") unless time.blank?
   end
 
@@ -56,20 +56,24 @@ module ApplicationHelper
     select_tag "#{obj.class.to_s.underscore}[gender]", options_for_select([['男', 'male'], ['女', 'female']], obj.gender) 
   end
   
-  def privilege_select_tag(object, opts={})
+  def privilege_select_tag object, opts={}
     select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]], eval("@#{object}.privilege")), opts 
   end
 
-  def privacy_select_tag(obj, field)
+  def privacy_select_tag obj, field
     select_tag "#{obj}[#{field}]", options_for_select([['所有人', 1],  ['好友及玩相同游戏的朋友', 2], ['好友', 3]], eval("@#{obj}.#{field}"))
   end
 
-  def friend_privacy_select_tag(obj, field)
+  def friend_privacy_select_tag obj, field
     select_tag "#{obj}[#{field}]", options_for_select([['所有人', 1],  ['玩相同游戏的朋友', 2]], eval("@#{obj}.#{field}"))
   end
 
-  def poll_privilege_select_tag(object)
+  def poll_privilege_select_tag object
     select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友', 2]], eval("@#{object}.privilege"))
+  end
+
+  def event_privilege_select_tag object
+    poll_privilege_select_tag object
   end
 
   def get_subject(user)
@@ -117,7 +121,7 @@ module ApplicationHelper
 		if diggable.digged_by? current_user
 		  dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'<a href='#'>已赞</a>"
 		else
-			dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'"
+			dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'>"
 		  dig_html+= link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable)
 		end
 		dig_html+="</div></div>"
@@ -178,7 +182,7 @@ module ApplicationHelper
 			if mail.read_by_recipient
 				link_to mail.title, mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title"
 			else
-				link_to "<h3>#{mail.title}</h3>", mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title"
+				link_to "#{mail.title}", mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title", :style => "font-weight: bold"
 			end
 		else # in sent box
 			link_to mail.title, mail_url(mail, :type => 0), :id => "mail_#{mail.id}_title"

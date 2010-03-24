@@ -70,13 +70,12 @@ function fileQueueError(file, errorCode, message) {
 
 function fileDialogComplete(numFilesSelected, numFilesQueued) {
 	try {
-		/*if (numFilesSelected > 0) {
-			document.getElementById(this.customSettings.cancelButtonId).disabled = false;
-		}*/
-		
-		/* 自动开始 */
-    /* 由于我不知道怎么去掉已经加到框里面的图片，所以目前只能自动开始了 */
-		//this.startUpload();
+		if(numFilesSelected > 0) {
+      document.getElementById(this.customSettings.submitButtonId).disabled = false;
+		}else{
+      document.getElementById(this.customSettings.submitButtonId).disabled = true;
+	  }
+    document.getElementById(this.customSettings.cancelButtonId).disabled = false;
 	} catch (ex)  {
         this.debug(ex);
 	}

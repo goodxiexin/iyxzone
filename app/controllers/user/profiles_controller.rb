@@ -22,6 +22,8 @@ class User::ProfilesController < UserBaseController
 	end
 
   def edit
+    @relationship = @user.relationship_with current_user
+    @setting = @user.privacy_setting
     case params[:type].to_i
     when 0
       @games = Game.find(:all, :order => 'pinyin ASC')

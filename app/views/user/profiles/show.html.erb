@@ -67,10 +67,10 @@
     <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>
   <% elsif @profile.is_taggable_by? current_user %>
     <%= render :partial => 'user/profiles/tags/profile_tag', :locals => {:profile => @profile} %>
-    <% form_remote_for :tag, :url => profile_tags_url(@profile) do |f| %>
+    <% form_remote_for :tag, :url => profile_tags_url(@profile), :html => {:onsubmit=> "Iyxzone.disableButton($(tag_submit),'请等待..');"} do |f| %>
       <p class='space'>都不贴切？自己想个</p>
       <div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
-      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit" onclick="Iyxzone.disableButton(this,'请等待..')">评价</button></span></span></div>
+      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
     <% end %>
   <% else %>
     <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => @profile} %>
@@ -128,9 +128,9 @@
 					</div>
 					<p><b><%= album_link album %></b></p>
 					<% if album.uploaded_at.blank? %>
-						<p>于 <span><%= ftime album.created_at %></span> 创建</p>
+						<p><span><%= ftime album.created_at %></span> 创建</p>
 					<% else %>
-						<p>于 <span><%= ftime album.uploaded_at %></span> 更新</p>
+						<p><span><%= ftime album.uploaded_at %></span> 更新</p>
 					<% end %>
       </div>	
 		<% end %>	
@@ -197,10 +197,10 @@
 	<% end %>
 </div>
 
-<% if @setting.leave_wall_message_viewable_by? current_user %>
+<% if @profile.is_commentable_by? current_user %>
   <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>
 <% end %>
-<% if @setting.wall_viewable_by? current_user %>
+<% if @profile.is_comment_viewable_by? current_user %>
   <div class='feed-box' id='comments'>
     <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>
   </div>

@@ -34,7 +34,8 @@ class User::BlogsController < UserBaseController
   end
 
   def show
-    @user = @blog.poster
+    @next = @blog.next
+    @prev = @blog.prev
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 
@@ -93,11 +94,25 @@ protected
       @user = User.find(params[:uid])
     elsif ['show'].include? params[:action]
       @blog = Blog.find(params[:id])
+      @user = @blog.poster
       require_adequate_privilege @blog
     elsif ['edit', 'destroy', 'update'].include? params[:action]
       @blog = Blog.find(params[:id])
       require_owner @blog.poster
     end
+  end
+
+  def setup_blog_scope
+    @relationship = @user.relationship_with current_user
+    if @relationship == 'owner'
+      Blog.send(:default_scope, :conditions => {:privilege => [1,2,3,4]})
+    elsif @relationship == 'friend'
+      Blog.send(:default_scope, :conditions => {:privilege => [1,2,3]})
+    elsif @relationship == 'same_game'
+      Blog.send(:default_scope, :conditions => {:privilege => [1,2]})
+    else
+      Blog.send(:default_scope, :conditions => {:privilege => 1})
+    end    
   end
 
 end

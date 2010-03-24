@@ -43,7 +43,7 @@ Object.extend(Iyxzone.News.Builder, {
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-        },
+        }
       });
     }
   },
@@ -60,7 +60,7 @@ Object.extend(Iyxzone.News.Builder, {
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-        },
+        }
       });
     }
   },

@@ -20,7 +20,7 @@
         </div>
         <ul>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
-          <li class='hover'><span><%= link_to "#{@event.title}的相册", event_albums_url(@event) %></span></li>
+          <li class='hover'><span><%= link_to "#{@event.title}的相册", event_album_url(@album) %></span></li>
         </ul>       
       </div>
       <div class="pic-box">
@@ -75,9 +75,9 @@
 				</table>
       <div class="pic-desc">
 				<% if @user == current_user %>
-          <h4 class='box06'><%= in_place_text_field :span, @album, :description, true, event_album_url(@album), {}, {:empty_text => '点击添加相册描述', :parameter_name => 'album[description]', :rows => 2, :cols => 90}, {} %></h4>
+          <h4 class='box06'><%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]'  %></h4>
         <% else %>
-          <h4 class="box06"><%= @album.description %></h4>
+          <h4 class="box06"><%= h @album.description %></h4>
         <% end %>
         <p class="gray">
         <% unless @album.uploaded_at.blank? %>
