@@ -47,7 +47,7 @@ class Game < ActiveRecord::Base
 	end
 
   def relative_new?
-		sale_date.nil? or sale_date > Date.today<<(6)
+		sale_date.nil? or sale_date > Date.today<<(12)
 	end  
 
 end

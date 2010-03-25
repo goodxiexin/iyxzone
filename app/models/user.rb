@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
   def friend_characters opts={}
     game_cond = ActiveRecord::Base.send(:sanitize_sql_hash_for_conditions, opts, "game_characters")
     game_cond = "AND #{game_cond}" unless game_cond.blank?
-    GameCharacter.find(:all, :joins => "INNER JOIN friendships on friendships.user_id = #{id} AND friendships.friend_id = game_characters.id #{game_cond}")
+    GameCharacter.find(:all, :joins => "INNER JOIN friendships on friendships.user_id = #{id} AND friendships.friend_id = game_characters.user_id #{game_cond}")
   end
 
   def friend_games
