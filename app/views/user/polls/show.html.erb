@@ -57,7 +57,7 @@
             <tr>
               <td class="vote-content" align='center'>
                 <h5><%= @poll.name %> 
-                  <span>（限选<%= @poll.max_multiple %>项）<span><%= distance_of_time_in_words_to_now @poll.created_at %></span></span>
+                  <span>（限选<%= @poll.max_multiple %>项）<span><%= time_ago_in_chinese @poll.created_at %></span></span>
                 </h5>
 								<p>关于<%= @poll.game.name%></p>
                 <p><%= simple_format @poll.description %></p>
