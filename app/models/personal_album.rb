@@ -30,6 +30,7 @@ class PersonalAlbum < Album
 
 	def record_upload user, photos
 	  if !photos.blank? and user.application_setting.emit_photo_feed and privilege != 4
+      recipients = []
 			recipients.concat user.friends.find_all{|f| f.application_setting.recv_photo_feed}
 			deliver_feeds :recipients => recipients, :data => {:ids => photos.map(&:id)}
       update_attribute('uploaded_at', Time.now)
