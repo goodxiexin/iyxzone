@@ -1,5 +1,5 @@
 <% content_for :javascript_include do %>
-<%= javascript_include_tag 'poll' %>
+  <%= javascript_include_tag 'poll' %>
 <% end %>
 
 <% content_for :html_title, "#{current_user.login} - 新建投票 - 17Gaming.com" %>
@@ -62,12 +62,8 @@
             </div>
             <div class="form-rows">
               <div class="rows s_clear">
-                <div class="fldid"><label class="gray" for="one">选项类别</label></div>
-                <div class="fldrd"><%= f.radio_button 'max_multiple', 1, :id => 'max1', :onclick => "Iyxzone.Poll.Builder.hideMaxMultiple();" %></div>
-                <div class='fldrdvalue'>单选</div>
-                <div class="fldrd"><%= f.radio_button 'max_multiple', 2, :id => 'max2', :onclick => "Iyxzone.Poll.Builder.showMaxMultiple();" %></div>
-                <div class='fldrdvalue'>多选</div>
-                <div class='fldrd' style="display:none" id='max_multiple_select'><%= max_multiple_select_tag %></div>
+                <div class="fldid"><label class="gray" for="one">最多选</label></div>
+                <div class="fldvalue" id='max_multiple_select'><%= max_multiple_select_tag %></div>
               </div>
               <div class="rows s_clear">
                 <div class="fldid"><label class="gray" for="one">游戏分类</label></div>

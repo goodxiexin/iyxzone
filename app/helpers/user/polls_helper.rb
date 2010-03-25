@@ -2,10 +2,10 @@ module User::PollsHelper
 
   def max_multiple_select_tag
     options = []
-    9.times do |i|
-      options << ["最多选#{i+2}项", i+2]
+    10.times do |i|
+      options << ["#{i+1}项", i+1]
     end
-    select_tag 'poll[max_multiple]', options_for_select(options, 2), :onchange => "Iyxzone.Poll.Builder.changeMaxMultiple()"
+    select_tag 'poll[max_multiple]', options_for_select(options, 1)
   end
 
   def generate_percentage_bar(answer, poll)
