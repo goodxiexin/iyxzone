@@ -60,7 +60,7 @@ class EventObserver < ActiveRecord::Observer
  
     event.participants.each do |p|
       p.notifications.create(
-        :category => Notification::EventChange,
+        :category => Notification::EventCancel,
         :data => "活动 #{event.title} 取消了"
       )
       EventMailer.deliver_event_cancel event, p if p.mail_setting.cancel_event
