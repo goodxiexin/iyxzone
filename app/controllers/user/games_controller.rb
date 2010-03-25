@@ -12,7 +12,7 @@ class User::GamesController < UserBaseController
   end
 
   def friends
-    @games = current_user.friends.map(&:games).flatten.uniq.paginate :page => params[:page], :per_page => 10
+    @games = current_user.friend_games.paginate :page => params[:page], :per_page => 10
     render :action => "friends", :layout => "app"
   end
 

@@ -5,7 +5,7 @@
       <div class="box-v2 space20">
         <div class="t s_clear"><strong class="get-pws"></strong><span></span></div>
           <div class="m rows">
-            <% form_tag url_for(:controller => 'passwords', :action => 'create'), :id => 'password_form' do %>
+            <% form_tag url_for(:controller => 'passwords', :action => 'create'), :onsubmit => "Iyxzone.Password.send($('submit_btn'), this); return false;" do %>
               <div class="form-con" style="padding-left:40px">
                     <div class="rows s_clear">
                         <div class="f-id">&nbsp;</div>
@@ -35,9 +35,7 @@
                     <div class="rows s_clear space20">
                         <div class="f-id">&nbsp;</div>
                         <div class="f-value">
-                              <span class="button rows"><span>
-                                <%= button_to_function '发送邮件', "Iyxzone.Password.send(this, event)" %>
-                                </span></span>
+                              <span class="button rows"><span><button type='submit' id='submit_btn'>发送邮件</button></span></span>
                         </div>
                     </div>
                   </div>

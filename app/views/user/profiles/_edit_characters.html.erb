@@ -10,7 +10,7 @@
     <%= link_to_function "取消", "Iyxzone.Profile.Editor.cancelEditCharacters(#{@profile.id})", :class => 'right' %>
   </h3>
   <div class="formcontent con con2">
-    <% form_for :profile, :html => {:id => 'characters_form'} do |f| %>
+    <% form_for :profile, :html => {:onsubmit => "Iyxzone.Profile.Editor.updateCharacters(#{@profile.id}, this, $('characters_submit_btn')); return false;"} do |f| %>
       <div class="item space" id='user_characters'>
         <% @profile.user.characters.each do |character| %>
           <% fields_for "profile[existing_characters][]", character do |c| %>
@@ -84,7 +84,7 @@
         <div class="fldid">&nbsp;</div>
         <div class="fldvalue">
           <span class="button"><span>
-            <%= button_to_function '完成', "Iyxzone.Profile.Editor.updateCharacters(#{@profile.id}, '#{form_authenticity_token}', this, event)" %>
+            <button type='submit' id='characters_submit_btn'>完成</button>
           </span></span>
           <span class="button button-gray"><span>
             <%= button_to_function '取消', "Iyxzone.Profile.Editor.cancelEditCharacters(event)" %>

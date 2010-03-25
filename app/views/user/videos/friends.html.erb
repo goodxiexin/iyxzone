@@ -22,7 +22,7 @@
       </div>
       <div class="feed-box01 list-v2">
         <% if @videos.blank? %>
-          <div class='gray'>你的好友都是懒虫，还没任何视频</div>
+          <div class='tip'>你的好友都是懒虫，还没任何视频</div>
         <% else %>
           <div class='feed-img-list'>
 						<%= render :partial => 'video_item2', :collection => @videos %>

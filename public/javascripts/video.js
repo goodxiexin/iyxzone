@@ -48,21 +48,23 @@ Object.extend(Iyxzone.Video.Builder, {
     }
   },
 
-  save: function(button, event){
-    Event.stop(event);
+  save: function(button, form){
+    Iyxzone.disableButtonThree(button, '发布中..');
     if(this.validate()){
-      this.prepare();
-      Iyxzone.disableButtonThree(button, '发布中..');
-      $('video_form').submit();
+      this.prepare(form);
+      form.submit();
+    }else{
+      Iyxzone.enableButtonThree(button, '保存');
     }
   },
 
-  update: function(button, event){
-    Event.stop(event);
+  update: function(button, form){
+    Iyxzone.disableButtonThree(button, '更新中..');
     if(this.validate()){
-      this.prepare();
-      Iyxzone.disableButtonThree(button, '更新中..');
-      $('video_form').submit();
+      this.prepare(form);
+      form.submit();
+    }else{
+      Iyxzone.enableButtonThree(button, '更新');
     }
   }
 

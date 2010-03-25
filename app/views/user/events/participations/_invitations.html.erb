@@ -5,7 +5,7 @@
   <%= avatar invitation.participant, :class => 'imgbox01' %>
   <p><%= profile_link invitation.participant, :class=>'blk' %>
   <span class='red blk'><%= invitation.character.name %></span>
-  <span><%= link_to '发站内信', new_mail_url(:recipient_id => invitation.participant_id), :class=>'blk gray02' %></span>
+  <span><%= link_to '发站内信', new_mail_url(:recipient_ids => [invitation.participant_id]), :class=>'blk gray02' %></span>
 	</p>
 </li>
 <% end %>

@@ -22,7 +22,7 @@
       <div class="appcontent01">
 				<div class="cons-form formcontent">
           <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
-          <% form_for :video, :url => videos_url, :html => {:id => 'video_form'} do |f| %>
+          <% form_for @video, :html => {:onsubmit => "Iyxzone.Video.Builder.save($('submit_btn'), this); return false;"} do |f| %>
             <div class="rows s_clear">
 		    			<div class="fldid"><%= f.label "视频标题：" %></div>
 				    	<div class="fldvalue"><div class='textfield'><%= f.text_field 'title' %></div></div>
@@ -51,7 +51,7 @@
 						</div>
             <div class='rows s_clear'>
 							<div class='fldid'>&nbsp;</div>
-              <div class='fldvalue'><span class='button03 w-l'><span><%= button_to_function "保存", "Iyxzone.Video.Builder.save(this, event)", :class => "confirm-button" %></span></span></div>
+              <div class='fldvalue'><span class='button03 w-l'><span><button type='submit' id='submit_btn' class='confirm-button'>保存</button></span></span></div>
             </div>
           <% end %>
         </div>
@@ -60,6 +60,6 @@
   </div></div>
 </div></div></div></div>
 
-<%= javascript_tag "
+<% onload_javascript_tag do %>
   Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, [], [], [], 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn'); 
-" %>
+<% end %>

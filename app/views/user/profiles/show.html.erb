@@ -96,6 +96,49 @@
   </div>
 </div>
 
+<% unless @user == current_user %>
+<div class="multibox rows">
+  <div class="title">
+    <%= link_to "更多", common_friends_url(:uid => @user.id) %>
+    <b>共同好友</b>
+  </div>
+  <div class="photolist-box">
+    <ul class="collection s_clear">
+      <% @common_friends.each do |cf| %>
+        <li>
+          <div class="middle"><div class="middle-center"><div class="center"><a href="#"><%= avatar cf, :class => 'imgbox01' %></a></div></div></div>
+          <p><%= profile_link cf %></p>
+          <p class="btns"></p>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<% end %>
+
+<div class="multibox rows">
+  <div class="title">
+		<% unless @user == current_user %>
+			<%= link_to "更多", other_friends_url(:uid => @user.id) %>
+			<b>他的好友</b>
+		<% else %>
+			<%= link_to "更多", friends_url() %>
+			<b>我的好友</b>
+		<% end %>
+  </div>
+  <div class="photolist-box">
+    <ul class="collection s_clear">
+      <% @user.friends.sort_by{rand}[0..2].each do |u| %>
+        <li>
+          <div class="middle"><div class="middle-center"><div class="center"><a href="#"><%= avatar u, :class => 'imgbox01' %></a></div></div></div>
+          <p><%= profile_link u %></p>
+          <p class="btns"></p>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
 <% end %>
 
 <div class="box02 canvas_con">
@@ -136,9 +179,9 @@
 		<% end %>	
 	<% else %>
 		<% if @user==current_user %>
-			还没更新照片赶紧去<%= link_to '弄一个', personal_albums_url(:id=>@user.id)%>吧
+			<div class='space'>还没更新照片赶紧去<%= link_to '弄一个', personal_albums_url(:uid => @user.id)%>吧</div>
 		<% else %>
-			这家伙没更新照片
+			<div class='space'>这家伙没更新照片</div>
 		<% end %>
 	<% end %>
 	</div>
@@ -159,9 +202,9 @@
 	<% end %>
 	<% else %>
 		<% if @user==current_user %>
-			还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>吧
+			<div class='space'>还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>吧</div>
 		<% else %>
-			这家伙没更新日志
+			<div class='space'>这家伙没更新日志</div>
 		<% end %>
 	<% end %>
 </div>

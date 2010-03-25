@@ -22,7 +22,7 @@ class User::Avatars::PhotosController < UserBaseController
 			responds_to_parent do
         render :update do |page|
           page << "facebox.close()"
-          if params[:album].to_i == 1
+          if params[:in_album].to_i == 1
             page.redirect_to avatar_album_url(@album)
           else
 						@album.reload

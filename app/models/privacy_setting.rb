@@ -10,6 +10,6 @@ class PrivacySetting
 									:attributes => %w[personal basic_info character_info wall qq phone website email poke friend search send_mail leave_wall_message add_me_as_friend]
 
   # unused: search, friend
-  # TODO: poke, send_mail, add_me_as_friend
+  # TODO: friend, mail, poke
 
 end

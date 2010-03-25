@@ -25,7 +25,8 @@ class User::GuildsController < UserBaseController
 	end
 
   def friends
-    @guilds = current_user.guild_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
+    @guilds = current_user.friend_guilds.paginate :page => params[:page], :per_page => 10
+    #guild_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def show
@@ -41,6 +42,7 @@ class User::GuildsController < UserBaseController
 	end
 
   def new
+    @guild = Guild.new
   end
 
   def create

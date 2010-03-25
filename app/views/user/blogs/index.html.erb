@@ -43,14 +43,14 @@
       </div>
       <div class="appcontent05">
         <div class="myblog">
-        <% if @user.blogs_count == 0 %>
+        <% if @count == 0 %>
           <% if @user == current_user %>
           <div class='tip'>你还没有日志，赶紧<%= link_to '写一篇', new_blog_url %>?</h4>
           <% else %>
           <div class='tip'><%= subject %>还没写日志，是个懒虫</div>
           <% end %>
         <% else %>
-          <div class="tip">共<%= @user.blogs_count %>篇日志</div>
+          <div class="tip">共<%= @count %>篇日志</div>
           <div class="myblog-table">
             <table cellpadding="0">
               <%= render :partial => 'blog_item', :collection => @blogs %>

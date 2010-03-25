@@ -21,7 +21,7 @@
 				<h3>我们将会把在17gaming上和您相关的事件通知您。</h3>
 				<h3>每个应用程序拥有它自己的通知设置。点击复选框来改变相应应用程序的设置。</h3>
 				<h3>发送电子邮件通知到：<%= current_user.email %></h3><br/>
-				<% form_for :setting, :url => mail_setting_url, :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(setting_submit),'请等待..');"} do |f| %>
+				<% form_for :setting, :url => mail_setting_url, :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(setting_submit),'请等待..');"} do |f| %>
 				<h3>基本设定</h3>
 				<div class='rows s_clear'>
 					<div class='fldid'><label for='addfriend'></label></div>

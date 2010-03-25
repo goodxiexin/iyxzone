@@ -293,9 +293,7 @@ Object.extend(Iyxzone.Register, {
     $('character_' + id).remove();
   },
 
-  submit: function(button, event){
-    Event.stop(event);
-
+  submit: function(button, form){
     var valid = true;
     valid &= this.validateCharacters();
     valid &= this.validateLogin();
@@ -318,10 +316,10 @@ Object.extend(Iyxzone.Register, {
 
     new Ajax.Request('/users/', {
       method: 'post',
-      parameters: $('register_form').serialize(),
+      parameters: form.serialize(),
 			onloading: function(){
 				Iyxzone.disableButton(button, '等待中..');
-			},
+			}
     }); 
   },
 

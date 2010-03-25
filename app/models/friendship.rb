@@ -56,13 +56,20 @@ class Friendship < ActiveRecord::Base
 protected
 
   def friend_is_valid
-    return if user_id.blank? or friend_id.blank?
+    return if user.blank? or friend.blank?
     friendship = user.all_friendships.find_by_friend_id(friend_id)
-    return if friendship.blank?
-    if friendship.is_request?
-      errors.add(:friend_id, "不能重复向同一个人发送请求")
+    if friendship.blank?
+=begin
+      unless friend.is_friendable_by? user
+        errors.add(:friend_id, "不能加为好友")
+      end
+=end
     else
-      errors.add(:friend_id, "已经是好友了")
+      if friendship.is_request?
+        errors.add(:friend_id, "不能重复向同一个人发送请求")
+      else
+        errors.add(:friend_id, "已经是好友了")
+      end
     end
   end
 

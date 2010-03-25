@@ -9,7 +9,7 @@
     </div>
     <h3><%= link_to link.url, sharing_url(link_sharing), :popup => true %></h3>
     <p class="con"><%= truncate link_sharing.reason, :length => 100, :omission => '...' %></p>
-    <div class="feeds"><%= link_to_function "评论(#{link_sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{link_sharing.id}, #{link_sharing.comments_count})" %> | <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => link.id) %><span>(<%= link.sharings_count %>)</span></a> | <%= link_to "更多分享", sharings_url(:id => link.first_sharer.id) %></div>
+    <div class="feeds"><%= link_to_function "评论(#{link_sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{link_sharing.id}, #{link_sharing.comments_count})" %> | <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => link.id) %><span>(<%= link.sharings_count %>)</span></a> | <%= link_to "更多分享", sharings_url(:uid => link.first_sharer.id, :type => 0) %></div>
   </div>
   <div id="sharing_comment_box_<%= link_sharing.id %>" style="display:none">
     <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => link_sharing, :recipient => nil} %>

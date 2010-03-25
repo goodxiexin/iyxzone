@@ -22,8 +22,9 @@
       </div>
       <div class="appcontent01">
         <h3>新建公会</h3>
+        <%= error_messages_for :guild, :header_message => '以下原因导致没法保存', :message => nil %>
         <div class="cons-form formcontent">
-          <% form_for :guild, :html => {:id => "guild_form", :multipart => true} do |f| %>  
+          <% form_for @guild, :html => {:onsubmit => "Iyxzone.Guild.Builder.save(this, $('submit_btn')); return false;"} do |f| %>  
             <div class="rows s_clear">
               <div class="fldid"><label for="name">公会名字：</label></div>
               <div class="fldvalue">
@@ -42,18 +43,10 @@
                 <%= f.text_area :description %>
               </div>
             </div>
-<!--
-            <div class="rows s_clear">
-            <% fields_for "photo" do |form| %>
-              <div class="fldid"><label for="fengmian">封面：</label></div>
-              <div class="fldfilevalue"><%= form.file_field :uploaded_data %></div>
-            <% end %>
-            </div>
--->
             <div class="rows s_clear">
               <div class="fldid">&nbsp;</div>
               <div class="fldvalue">
-                <span class="button"><span><button onclick="Iyxzone.Guild.Builder.save(event,this);">提交</button></span></span>
+                <span class="button"><span><button type='submit' id='submit_btn'>提交</button></span></span>
               </div>
             </div>
           <% end %>

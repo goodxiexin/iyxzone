@@ -23,14 +23,14 @@
             <div class="mcContent">
 							<div class="mcPanel round02 round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 								<div class="round_m jl-round_m"><span class="arrow-dialog"></span><div class="round_body s_clear">
-									<% form_remote_for :status, :html => {:id => 'status_form', :class => "formcontent s_clear"} do |f| %>
+									<% form_remote_for :status, :html => {:onsubmit => "Iyxzone.Status.Builder.save($('status_submit_btn'), this); return false;", :class => "formcontent s_clear"} do |f| %>
                   <%= hidden_field_tag 'home', 1 %>
                   <div class="fldvalue">
 										<div id="mcStatus" class="textfield02"><%= f.text_area :content %></div>
                     <%= javascript_tag "new Iyxzone.limitedTextField($('status_content'), 140, null);" %>
                   </div>
                   <div class="fldbtn jl-fldbtn">
-										<span class="button03"><span><button type='submit' onclick="Iyxzone.Status.Builder.save(this, event)">发布</button></span></span>
+										<span class="button03"><span><button type='submit' id='status_submit_btn'>发布</button></span></span>
                   </div>
                   <% end %>
 									<div class='buttons home-dialog'>

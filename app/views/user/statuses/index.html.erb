@@ -44,7 +44,7 @@
                 <div class="round_l_b">
                   <div class="round_m jl-round_m"> <span class="arrow-dialog"></span>
                     <div class="round_body s_clear">
-                      <% form_for :status, :html => {:id => 'status_form', :class => 'formcontent s_clear'} do |f| %>
+                      <% form_for :status, :html => {:onsubmit => "Iyxzone.Status.Builder.save($('submit_btn'), this); return false", :class => 'formcontent s_clear'} do |f| %>
                         <%= hidden_field_tag 'home', 0 %>
                         <div class="fldvalue">
                           <div id="mcStatus" class="textfield02" style="width:500px;">
@@ -52,7 +52,7 @@
                           </div>
                         </div>
                         <div class="fldbtn jl-fldbtn"> <span class="button03"><span>
-                          <button type='button' onclick="Iyxzone.Status.Builder.save(this, event)" class='confirm-button' >发布</button>
+                          <button type='submit' id='submit_btn' class='confirm-button' >发布</button>
                         </span></span> </div>
                       <% end %>
                       <div class="buttons home-dialog"> 

@@ -53,7 +53,7 @@
           </ul>
         </div>
         <% if @videos.blank? %>
-          <div class='gray'>没有视频，你赶紧<%= link_to '弄一个', new_video_url %></div>
+          <div class='tip'>没有视频，你赶紧<%= link_to '弄一个', new_video_url %></div>
         <% else %>
           <div class='feed-img-list' id='videos'>
             <%= render :partial => 'video_item2', :collection => @videos %>

@@ -42,6 +42,11 @@ class User < ActiveRecord::Base
     mails.find_all {|m| !m.read_by_recipient}
   end
 
+  def is_mailable_by? user
+    p = privacy_setting.mail
+    p == 1 || has_friend?(user) || (p == 2 and has_same_game_with?(user))
+  end
+
   def interested_in_game? game
 		!game_attentions.find_by_game_id(game.id).nil?
   end
@@ -58,10 +63,19 @@ class User < ActiveRecord::Base
 	# pokes
 	has_many :poke_deliveries, :foreign_key => 'recipient_id', :order => 'created_at DESC'
 
+  def is_pokeable_by? user
+    p = privacy_setting.poke
+    p == 1 || has_friend?(user) || (p == 3 and has_same_game_with?(user))
+  end
+
 	# status
   has_many :statuses, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
 	has_one :latest_status, :foreign_key => 'poster_id', :class_name => 'Status', :order => 'created_at DESC'
+
+  def friend_statuses
+    Status.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = statuses.poster_id", :order => 'created_at desc')
+  end
 
   # friend
 	has_many :all_friendships, :class_name => 'Friendship'
@@ -87,9 +101,12 @@ class User < ActiveRecord::Base
 		friends & user.friends
 	end
 
-  # settings
-  attr_protected :application_setting, :privacy_setting, :mail_setting
+  def is_friendable_by? user
+    p = privacy_setting.add_me_as_friend
+    p == 1 || (p == 2 and has_same_game_with?(user))
+  end
 
+  # settings
 	has_setting :application_setting
 
 	has_setting :privacy_setting
@@ -109,6 +126,11 @@ class User < ActiveRecord::Base
     game_cond = ActiveRecord::Base.send(:sanitize_sql_hash_for_conditions, opts, "game_characters")
     game_cond = "AND #{game_cond}" unless game_cond.blank?
     GameCharacter.find(:all, :joins => "INNER JOIN friendships where friendships.user_id = #{id} AND friendships.friend_id = game_characters.id #{game_cond}")
+  end
+
+  def friend_games
+    game_ids = GameCharacter.find(:all, :select => :game_id, :joins => "inner join friendships where friendships.user_id = #{id} and friendships.friend_id = game_characters.user_id").uniq
+    Game.find(game_ids, :order => 'pinyin ASC')
   end
 
 	def interested_in_game? game
@@ -140,8 +162,42 @@ class User < ActiveRecord::Base
   
   end
 
+  def blogs_count relationship='owner'
+    case relationship
+    when 'owner'
+      blogs_count1 + blogs_count2 + blogs_count3 + blogs_count4
+    when 'friend'
+      blogs_count1 + blogs_count2 + blogs_count3
+    when 'same_game'
+      blogs_count1 + blogs_count2
+    when 'stranger'
+      blogs_count1    
+    end
+  end
+
+  def friend_blogs
+    Blog.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = blogs.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
+  end
+
   # videos
   has_many :videos, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
+
+  def videos_count relationship='owner'
+    case relationship
+    when 'owner'
+      videos_count1 + videos_count2 + videos_count3 + videos_count4
+    when 'friend'
+      videos_count1 + videos_count2 + videos_count3
+    when 'same_game'
+      videos_count1 + videos_count2
+    when 'stranger'
+      videos_count1    
+    end  
+  end
+
+  def friend_videos
+    Video.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = videos.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
+  end
 
   # events
   has_many :participations, :foreign_key => 'participant_id', :conditions => {:status => [3,4,5]} 
@@ -158,6 +214,15 @@ class User < ActiveRecord::Base
 		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
 
 	end
+
+  def friend_participations
+    Participation.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1")
+  end
+
+  def friend_events
+    event_ids = Participation.find(:all, :select => :event_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1").map(&:event_id).uniq
+    Event.find(event_ids)
+  end
 
 	def common_events_with user
 		events & user.events
@@ -186,12 +251,26 @@ class User < ActiveRecord::Base
 
   end
 
+  def friend_sharings type=nil
+    cond = type.nil? ? {} : {:shareable_type => type}
+    Sharing.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = sharings.poster_id", :conditions => cond, :order => 'created_at desc')
+  end
+
   # polls
   has_many :votes, :foreign_key => 'voter_id'
 
   has_many :polls, :foreign_key => 'poster_id', :order => 'created_at DESC'
 
   has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
+
+  def friend_votes
+    Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id")
+  end
+
+  def friend_polls
+    poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id").map(&:poll_id).uniq
+    Poll.find(poll_ids, :order => 'created_at DESC')
+  end
 
 	# guilds
 	has_many :memberships
@@ -207,6 +286,15 @@ class User < ActiveRecord::Base
 		user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"
 
 	end
+
+  def friend_memberships
+    Membership.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = memberships.user_id", :conditions => "memberships.status != 0 AND memberships.status != 1") 
+  end
+
+  def friend_guilds
+    guild_ids = Membership.find(:all, :select => :guild_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = memberships.user_id", :conditions => "memberships.status != 0 AND memberships.status != 1").map(&:guild_id).uniq
+    Guild.find(guild_ids, :order => 'created_at desc')
+  end
 
 	def common_guilds_with user
     all_guilds & user.all_guilds

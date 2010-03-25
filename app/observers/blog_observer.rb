@@ -1,13 +1,13 @@
 class BlogObserver < ActiveRecord::Observer
 
-  def field blog
-    blog.draft ? 'drafts_count' : 'blogs_count'
-  end
-
   def after_create blog
     # update counter
-    blog.poster.raw_increment field(blog)
-    
+    if blog.draft
+      blog.poster.raw_increment "drafts_count"
+    else
+      blog.poster.raw_increment "blogs_count#{blog.privilege}"
+    end
+
     # issue feeds
     return if blog.draft
     return unless blog.poster.application_setting.emit_blog_feed
@@ -26,11 +26,16 @@ class BlogObserver < ActiveRecord::Observer
   
   def after_update blog
     # update counter if necessary
-		if blog.draft_was and !blog.draft
-			blog.poster.raw_increment :blogs_count
-			blog.poster.raw_decrement :drafts_count
-		end
-
+    if blog.draft_was
+      if !blog.draft
+			  blog.poster.raw_increment "blogs_count#{blog.privilege}"
+			  blog.poster.raw_decrement :drafts_count
+		  end
+    else
+      blog.poster.raw_decrement "blogs_count#{blog.privilege_was}"
+      blog.poster.raw_increment "blogs_count#{blog.privilege}"
+    end
+    
     # issue feeds if necessary
     return if blog.draft
 
@@ -45,7 +50,11 @@ class BlogObserver < ActiveRecord::Observer
   end
 
 	def after_destroy blog
-    blog.poster.raw_decrement field(blog)
+    if blog.draft
+      blog.poster.raw_decrement "drafts_count"
+    else
+      blog.poster.raw_decrement "blogs_count#{blog.privilege}"
+    end
 	end
 	
 end

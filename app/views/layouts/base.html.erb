@@ -12,6 +12,7 @@
     <%= javascript_include_merged :base %>
     <%= javascript_include_tag "#{RAILS_ENV}_config" %>
     <%= yield :javascript_include %>
+    <%= juggernaut :client_id => current_user.id %>
   </head>
 
   <%= yield :body %>

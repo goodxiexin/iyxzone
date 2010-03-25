@@ -82,23 +82,23 @@ class User::SharingsController < UserBaseController
   def friends
     case params[:type].to_i
     when 0
-      @sharings = current_user.sharing_feed_items.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings.paginate :page => params[:page], :per_page => PER_PAGE
     when 1
-      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Blog'}.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings('Blog').paginate :page => params[:page], :per_page => PER_PAGE
     when 2
-      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Video'}.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings('Video').paginate :page => params[:page], :per_page => PER_PAGE
     when 3
-      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Link'}.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings('Link').paginate :page => params[:page], :per_page => PER_PAGE
     when 4
-      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Photo'}.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings('Photo').paginate :page => params[:page], :per_page => PER_PAGE
     when 5
-      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Album'}.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings('Album').paginate :page => params[:page], :per_page => PER_PAGE
     when 6
-      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Poll'}.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings('Poll').paginate :page => params[:page], :per_page => PER_PAGE
     when 7
-      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Game'}.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings('Game').paginate :page => params[:page], :per_page => PER_PAGE
     when 7
-      @sharings = current_user.sharing_feed_items.find_all{|i| i.data[:type] == 'Profile'}.map(&:originator).paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = current_user.friend_sharings('Profile').paginate :page => params[:page], :per_page => PER_PAGE
     end
   end
 

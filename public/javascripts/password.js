@@ -22,12 +22,13 @@ Object.extend(Iyxzone.Password, {
     this.codes = validation.codes;
   },
 
-  send: function(button){
+  send: function(button, form){
+    Iyxzone.disableButton(button, '正在发送');
     if(this.validate()){
-      Iyxzone.disableButton(button, '正在发送');
-      $('password_form').submit();
+      form.submit();
     }else{
       error('验证码不正确');
+      Iyxzone.enableButton(button, '发送');
     }
   },
 
@@ -111,11 +112,12 @@ Object.extend(Iyxzone.Password, {
 
   },
 
-  reset: function(button, event){
-    Event.stop(event);
+  reset: function(button, form){
+    Iyxzone.disableButton(button, '正在发送');
     if(this.validatePassword() && this.validatePasswordConfirmation()){
-      Iyxzone.disableButton(button, '正在发送');
-      $('password_form').submit();
+      form.submit();
+    }else{
+      Iyxzone.enableButton(button, '重置');
     }
   }
 

@@ -27,6 +27,16 @@
       <div class="z-con">
         <p>请先登录17gaming完成当前操作</p>
         <% form_tag sessions_url, :html => {:onsubmit=> "Iyxzone.disableButton($(new_from_outside_login_btn),'请等待..');"} do %>
+        <%= hidden_field_tag 'outside', 1 %>
+          <% flash.each do |key, msg| %>
+            <div class="<%=key%>-msg" id="notice_<%=key%>">
+              <span class="icon-<%= key %>"></span>
+              <%= msg %>
+            </div>
+            <script type="text/javascript">
+              setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
+            </script>
+          <% end %>
         <div class="login-box formcontent s_clear">
           <div class="item rows">
             <div class="fldid"><label for="name">邮箱</label></div>

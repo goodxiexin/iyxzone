@@ -2,7 +2,7 @@
 
 :allowed_ips: 
   - 127.0.0.1
-  - 192.168.0.101
+  #- 192.168.0.101
      
 #:broadcast_query_login_url: http://localhost:3000/juggernaut/broadcast
      

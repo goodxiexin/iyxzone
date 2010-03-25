@@ -24,7 +24,7 @@
       <div class="appcontent01">
 				<div class="cons-form formcontent">
           <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
-          <% form_for :video, :url => video_url(@video), :html => {:method => 'put', :id => 'video_form'} do |f| %>
+          <% form_for @video, :html => {:onsubmit => "Iyxzone.Video.Builder.update($('submit_btn'), this); return false;"} do |f| %>
             <div class="rows s_clear">
 		    			<div class="fldid"><%= f.label "视频标题：" %></div>
 			    		<div class="fldvalue"><div class='textfield'><%= f.text_field 'title' %></div></div>
@@ -53,7 +53,7 @@
 		    		</div>
             <div class='rows s_clear'>
 							<div class='fldid'>&nbsp;</div>
-              <div class='fldvalue'><span class='button03'><span><%= button_to_function "更新", "Iyxzone.Video.Builder.update(this, event)", :class => "confirm-button" %></span></span></div>
+              <div class='fldvalue'><span class='button03'><span><button type='submit' id='submit_btn' class='confirm-button'>更新</button></span></span></div>
             </div>
           <% end %>
         </div>
@@ -65,7 +65,7 @@
 <% tagged_user_ids = '[' + @video.tags.map(&:tagged_user_id).join(',') + ']' %>
 <% tag_ids = '[' + @video.tags.map(&:id).join(',') + ']' %>
 <% user_names = '[' + @video.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
-<%= javascript_tag "
-  Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, #{tagged_user_ids}, #{tag_ids}, #{user_names}, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
-" %>
+<% onload_javascript_tag do %>
+  Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, <%= tagged_user_ids %>, <%= tag_ids %>, <%= user_names %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
+<% end %>
 

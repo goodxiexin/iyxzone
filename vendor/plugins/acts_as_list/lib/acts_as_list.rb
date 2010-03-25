@@ -46,73 +46,85 @@ module ActsAsList
       end
     end
 
-		def first
-      if @first_in_list
-        return @first_in_list
-      end
-
-      order_name = self.class.list_opts[:order]
- 
-      @first_in_list ||= self.class.first(:conditions => list_cond, :order => "#{order_name} ASC")
-    end
-
-		def last
-      if @last_in_list
-        return @last_in_list
-      end
-
-      order_name = self.class.list_opts[:order]
- 
-			@last_in_list ||= self.class.find(:first, :conditions => list_cond, :order => "#{order_name} DESC")
-		end
-
-		def next
-      if @next_in_list
-        return @next_in_list
-      end
-
+		def next my_cond={}
       order_name = self.class.list_opts[:order]
       order = send(order_name)
 
+      my_cond_sql = self.class.send(:sanitize_sql_for_conditions, my_cond)
       cond_sql = list_cond
       if cond_sql.blank?
-        cond_sql = ["#{order_name} > ?", order]
+        if my_cond_sql.blank?
+          cond_sql = ["#{order_name} > ?", order]
+        else
+          cond_sql = ["#{order_name} > ? AND (#{my_cond_sql})", order]
+        end
       else
-        cond_sql = ["(#{cond_sql}) AND #{order_name} > ?", order]
+        if my_cond_sql.blank?
+          cond_sql = ["(#{cond_sql}) AND #{order_name} > ?", order]
+        else
+          cond_sql = ["(#{cond_sql}) AND #{order_name} > ? AND (#{my_cond_sql})", order]
+        end
       end
       
       @next_in_list = self.class.first(:conditions => cond_sql, :order => "#{order_name} ASC")
       
       if @next_in_list.blank? and self.class.list_opts[:circular]
-        @next_in_list = first
+        @next_in_list = first(my_cond)
       end
 
       @next_in_list
 		end
 
-		def prev
-      if @prev_in_list
-        return @prev_in_list
-      end
-
+		def prev my_cond={}
       order_name = self.class.list_opts[:order]
       order = send(order_name)
 
+      my_cond_sql = self.class.send(:sanitize_sql_for_conditions, my_cond)
       cond_sql = list_cond
       if cond_sql.blank?
-        cond_sql = ["#{order_name} < ?", order]
+        if my_cond_sql.blank?
+          cond_sql = ["#{order_name} < ?", order]
+        else
+          cond_sql = ["#{order_name} < ? AND (#{my_cond_sql})", order]
+        end
       else
-        cond_sql = ["(#{cond_sql}) AND #{order_name} < ?", order]
+        if my_cond_sql.blank?
+          cond_sql = ["(#{cond_sql}) AND #{order_name} < ?", order]
+        else
+          cond_sql = ["(#{cond_sql}) AND #{order_name} < ? AND (#{my_cond_sql})", order]
+        end
       end
 
       @prev_in_list = self.class.first(:conditions => cond_sql, :order => "#{order_name} DESC")
       
       if @prev_in_list.blank? and self.class.list_opts[:circular]
-        @prev_in_list = last
+        @prev_in_list = last(my_cond)
       end
 
       @prev_in_list
 		end
+
+  protected
+
+    def first my_cond={}
+      order_name = self.class.list_opts[:order]
+      my_cond_sql = self.class.send(:sanitize_sql_for_conditions, my_cond)
+      cond_sql = list_cond
+      if !my_cond_sql.blank?
+        cond_sql = "#{cond_sql} AND (#{my_cond_sql})"
+      end
+      @first_in_list ||= self.class.first(:conditions => cond_sql, :order => "#{order_name} ASC")
+    end
+
+    def last my_cond={}
+      order_name = self.class.list_opts[:order]
+      my_cond_sql = self.class.send(:sanitize_sql_for_conditions, my_cond)
+      cond_sql = list_cond
+      if !my_cond_sql.blank?
+        cond_sql = "#{cond_sql} AND (#{my_cond_sql})"
+      end
+      @last_in_list ||= self.class.find(:first, :conditions => cond_sql, :order => "#{order_name} DESC")
+    end    
 	
 	end
 

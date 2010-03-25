@@ -13,7 +13,7 @@
 		<% if delivery.is_deleteable_by? current_user %>
 			<%= link_to_remote '', :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => 'icon-active'} %>
 		<% end %>
-      <%= profile_link poster %> 上传了 <%= photos.count %>张照片 到相册 <%= album_link album, :class => "shine" %>
+      <%= profile_link poster %> 上传了 <%= photos.count %> 张照片 到相册 <%= album_link album, :class => "shine" %>
       <div class="s_clear" id="roll-photo">
         <% if photos.count > 3 %>
         <a class="roll-left" id='left_btn_<%= delivery.id %>'></a>

@@ -1,6 +1,5 @@
 <table cellpadding="0" cellspacing="0">
 	<% guild_items.each do |guild| %>
-  <% membership = guild.memberships.find_by_user_id(current_user.id) %>
   <tr>
     <td>
       <div class="imgwrap">
@@ -11,7 +10,7 @@
         <p>地点：<%= server_location guild.game_server %></p>
         <p>会长: <%= profile_link guild.president %></p>
         <p>创建于：<%= ftime guild.created_at %> </p>
-        <p>你的状态：<%= show_membership_info membership, guild %>
+        <p>你的状态：<%= show_membership_info guild %>
 				<% if current_user == guild.president %>
         <span>
           相关操作：<%= link_to "邀请更多人", new_guild_invitation_url(guild) %>

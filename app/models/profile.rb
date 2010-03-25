@@ -34,8 +34,8 @@ class Profile < ActiveRecord::Base
 
   acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, profile, comment| profile.user == user}, 
-                      :create_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.leave_wall_message == 1},
-                      :view_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.wall == 1}  
+                      :create_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.leave_wall_message == 1 || (profile.user.privacy_setting.leave_wall_message == 2 and profile.user.has_same_game_with?(user))},
+                      :view_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.wall == 1 || (profile.user.privacy_setting.wall == 2 and profile.user.has_same_game_with?(user))}  
 
   acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
                          :categories => {
@@ -58,8 +58,38 @@ class Profile < ActiveRecord::Base
     login_changed? || gender_changed? || region_id_changed? || city_id_changed? || district_id_changed? || birthday_changed?
   end
 
+  def basic_info_viewable_by? viewer
+    privilege = user.privacy_setting.basic_info
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
   def contact_info_changed?
     qq_changed? || phone_changed? || website_changed?
+  end
+
+  def email_viewable_by? viewer
+    privilege = user.privacy_setting.email
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
+  def qq_viewable_by? viewer
+    privilege = user.privacy_setting.qq
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
+  def phone_viewable_by? viewer
+    privilege = user.privacy_setting.phone
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
+  def website_viewable_by? viewer
+    privilege = user.privacy_setting.website
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
+  end
+
+  def character_info_viewable_by? viewer
+    privilege = user.privacy_setting.character_info
+    user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
   end
 
   after_save :save_characters

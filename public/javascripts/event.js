@@ -104,23 +104,21 @@ Object.extend(Iyxzone.Event.Builder, {
     return true;
   },
 
-  save: function(event, button){
-    Event.stop(event);
+  save: function(form, button){
+    Iyxzone.disableButton(button, '请等待..');
     if(this.validate(true)){
-			Iyxzone.disableButton(button, '请等待..');
-      var form = $('event_form');
-      form.action = '/events';
-      form.method = 'post';
       form.submit();
-    }
+    }else{
+      Iyxzone.enableButton(button, '提交');
+    } 
   },
 
-  update: function(eventID, event, button){
-    Event.stop(event);
+  update: function(eventID, form, button){
+    Iyxzone.disableButton(button, '请等待..');
     if(this.validate(false)){
-			Iyxzone.disableButton(button, '请等待..');
-      var form = $('event_form');
       form.submit();
+    }else{
+      Iyxzone.enableButton(button, '提交');
     }
   },
 

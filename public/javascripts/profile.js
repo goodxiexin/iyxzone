@@ -96,12 +96,11 @@ Object.extend(Iyxzone.Profile.Editor, {
     return this.isLoginValid();
   },
 
-  updateBasicInfo: function(profileID, button, event){
-    Event.stop(event);
+  updateBasicInfo: function(profileID, button, form){
     if(this.validateBasicInfo()){
       new Ajax.Request('/profiles/' + profileID + '?type=1', {
         method: 'put',
-        parameters: $('basic_info_form').serialize(),
+        parameters: form.serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         },
@@ -214,12 +213,11 @@ Object.extend(Iyxzone.Profile.Editor, {
     return v1 && v2 && v3;
   },
 
-  updateContactInfo: function(profileID, button, event){
-    Event.stop(event);
+  updateContactInfo: function(profileID, button, form){
     if(this.validateContactInfo()){
       new Ajax.Request('/profiles/' + profileID + '?type=2', {
         method: 'put',
-        parameters: $('contact_info_form').serialize(),
+        parameters: form.serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         }.bind(this),
@@ -427,9 +425,9 @@ Object.extend(Iyxzone.Profile.Editor, {
     return valid; 
   },
  
-  validateCharactersInfo: function(){
+  validateCharactersInfo: function(form){
     var valid = true;
-    var inputs = $('characters_form').getInputs();
+    var inputs = form.getInputs();
     var characterIDs = new Array();
 
     this.gameSelectors.keys().each(function(key){
@@ -457,9 +455,8 @@ Object.extend(Iyxzone.Profile.Editor, {
     return valid;
   },
 
-  updateCharacters: function(profileID, token, button, event){
-    Event.stop(event);
-    if(this.validateCharactersInfo()){
+  updateCharacters: function(profileID, form, button){
+    if(this.validateCharactersInfo(form)){
       // construct del character ids
       var delCharacterParams = '';
       for(var i = 0; i < this.delCharacterIDs.length; i++){
@@ -468,7 +465,7 @@ Object.extend(Iyxzone.Profile.Editor, {
 
       new Ajax.Request('/profiles/' + profileID + '?type=3', {
         method: 'put',
-        parameters: delCharacterParams + $('characters_form').serialize(),
+        parameters: delCharacterParams + form.serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         },

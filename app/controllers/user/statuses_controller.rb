@@ -13,7 +13,8 @@ class User::StatusesController < UserBaseController
   end
 
   def friends
-    @statuses = current_user.status_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
+    @statuses = current_user.friend_statuses.paginate :page => params[:page], :per_page => 10
+    #status_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def create

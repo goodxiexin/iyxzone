@@ -22,7 +22,7 @@
         <h3>发起新投票</h3>
         <%= error_messages_for :poll, :header_message => '以下原因导致没法保存', :message => nil %>
         <div class="vote-form formcontent">
-          <% form_for :poll, :html => {:id => 'poll_form'} do |f| %>
+          <% form_for @poll, :html => {:onsubmit => "Iyxzone.Poll.Builder.save($('submit_btn'), this); return false;"} do |f| %>
             <div class="form-rows form-sperator">
               <div class="rows s_clear">
                 <div class="fldid"><label for="subject">投票主题：</label></div>
@@ -95,7 +95,7 @@
               </div>
               <div class="rows s_clear">
                 <div class="fldid">&nbsp;</div>
-                <div class="fldbtn"><span class="button"><span><%= button_to_function "发起投票", "Iyxzone.Poll.Builder.save(this, event)" %></span></span></div>
+                <div class="fldbtn"><span class="button"><span><button type='submit' id='submit_btn'>发起投票</button></span></span></div>
               </div>
             </div>
           <% end %>

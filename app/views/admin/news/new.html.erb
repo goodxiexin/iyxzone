@@ -47,5 +47,5 @@
   </div></div>
 </div></div></div></div>
 <%= javascript_tag "
-Iyxzone.News.Builder.editor = new nicEditor({iconsPath: '/images/nicEditorIcons.gif'}).panelInstance('news_data', {token: '#{form_authenticity_token}'});
+Iyxzone.News.Builder.editor = new nicEditor().panelInstance('news_data', {token: '#{form_authenticity_token}'});
 " %>

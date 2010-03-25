@@ -17,10 +17,18 @@ class SessionsController < ApplicationController
     self.current_user = User.authenticate(params[:email], params[:password])
     if current_user == nil
       flash.now[:error] = "用户名密码不正确"
-      render :action => 'new'
+      if params[:outside].blank?
+        render :action => 'new'
+      else
+        render :action => 'new_from_outside'
+      end
     elsif current_user.enabled == false
       flash.now[:error] = "你的帐号被删除了"
-      render :action => 'new'
+      if params[:outside].blank?
+        render :action => 'new'
+      else
+        render :action => 'new_from_outside'
+      end
     else
       if params[:remember_me] == "1"
         current_user.remember_me

@@ -31,13 +31,13 @@ Object.extend(Iyxzone.Blog.Builder, {
     return true;
   },
 
-  prepare: function(){
+  prepare: function(form){
     // fix nicEdit bug
     for(var i=0;i<this.editor.nicInstances.length;i++){
       this.editor.nicInstances[i].saveContent();
     }
     
-    this.parameters = $('blog_form').serialize();
+    this.parameters = form.serialize();
     var newTags = this.tagBuilder.getNewTags();
     var delTags = this.tagBuilder.getDelTags();
     for(var i=0;i<newTags.length;i++){
@@ -48,58 +48,52 @@ Object.extend(Iyxzone.Blog.Builder, {
     }
   },
 
-  saveBlog: function(button, event){
-    Event.stop(event);
+  saveBlog: function(button, form){
+    Iyxzone.disableButtonThree(button, '发布中..');
     if(this.validate()){
-      this.prepare();
+      this.prepare(form);
       new Ajax.Request('/blogs', {
         method: 'post',
         parameters: this.parameters,
-				onLoading: function(){
-					Iyxzone.disableButtonThree(button, '发布中..');
-				}
       });
+    }else{
+      Iyxzone.enableButtonThree(button, '发布');
     }
   },
     
-    saveDraft: function(button, event){
-      Event.stop(event);
-      if(this.validate()){
-        this.prepare();
-        new Ajax.Request('/drafts', {
-          method: 'post',
-          parameters: this.parameters,
-          onLoading: function(){
-            Iyxzone.disableButtonThree(button, '保存中..');
-          }
-        });
-      }
-    },
-
-  updateBlog: function(button, blogID, event){
-    Event.stop(event);
+  saveDraft: function(button, form){
+    Iyxzone.disableButtonThree(button, '保存中..');
     if(this.validate()){
-      this.prepare();
-      new Ajax.Request('/blogs/' + blogID, {
-        method: 'put',
+      this.prepare(form);
+      new Ajax.Request('/drafts', {
+        method: 'post',
         parameters: this.parameters,
-				onLoading: function(){
-					Iyxzone.disableButtonThree(button, '修改中..');
-				}
       });
+    }else{
+      Iyxzone.enableButtonThree(button, '保存为草稿');
     }
   },
 
-    updateDraft: function(button, draftID, event){
-    Event.stop(event);
+  updateBlog: function(button, blogID, form){
+    Iyxzone.disableButtonThree(button, '修改中..');
     if(this.validate()){
-      this.prepare();
+      this.prepare(form);
+      new Ajax.Request('/blogs/' + blogID, {
+        method: 'put',
+        parameters: this.parameters
+      });
+    }else{
+      Iyxzone.enableButtonThree(button, '修改');
+    }
+  },
+
+  updateDraft: function(button, draftID, form){
+    Iyxzone.disableButtonThree(button, '保存中..');
+    if(this.validate()){
+      this.prepare(form);
       new Ajax.Request('/drafts/' + draftID, {
         method: 'put',
         parameters: this.parameters,
-				onLoading: function(){
-					Iyxzone.disableButtonThree(button, '保存中..');
-				},
         onSuccess: function(transport){
           var ret = transport.responseText.evalJSON();
           this.tagBuilder.reset(ret.tags);
@@ -108,6 +102,8 @@ Object.extend(Iyxzone.Blog.Builder, {
           $('errors').innerHTML = '';
         }.bind(this)
       });
+    }else{
+      Iyxzone.enableButtonThree(button, '保存为草稿');
     }
   }
 

@@ -1,11 +1,14 @@
 <% content_for :html_title, '寻找密码 - 17Gaming.com' %>
+
+<% content_for :javascript_include do %>
 <%= javascript_include_tag "password" %>
+<% end %>
 
     <div class="welcome-box02">
       <div class="box-v2 space20">
         <div class="t s_clear"><strong class="get-pws"></strong><span></span></div>
           <div class="m rows">
-            <% form_tag url_for(:controller => 'passwords', :action => 'update'), :id => 'password_form', :method => :put do |f| -%>
+            <% form_tag url_for(:controller => 'passwords', :action => 'update'), :method => :put, :onsubmit => "Iyxzone.Password.reset($('submit_btn'), this); return false;" do |f| -%>
               <%= hidden_field_tag 'password_reset_code', params[:password_reset_code] %>
               <div class="form-con" style="padding-left:40px">
                     <div class="rows s_clear">
@@ -31,8 +34,7 @@
                     <div class="rows s_clear space20">
                         <div class="f-id">&nbsp;</div>
                         <div class="f-value">
-                              <span class="button rows"><span>
-                                <%= button_to_function '重置', "Iyxzone.Password.reset(this, event)" %>
+                              <span class="button rows"><span><button type='submit' id='submit_btn'>重置</button>
                                 </span></span>
                         </div>
                     </div>

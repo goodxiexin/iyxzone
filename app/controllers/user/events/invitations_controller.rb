@@ -14,7 +14,8 @@ class User::Events::InvitationsController < UserBaseController
     if @event.update_attributes(:invitees => params[:values])
       redirect_to event_url(@event)
     else
-      render :action => 'new'
+			flash[:error] = '邀请出错'
+      redirect_to event_url(@event)
     end
   end
 

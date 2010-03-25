@@ -21,7 +21,7 @@ class FiveSix
 			return true
 		elsif FIVESIX_ALBUM.match(videourl) 
 			return true 
-		elsif FIVESIX_PHOTO.match(videour)
+		elsif FIVESIX_PHOTO.match(videourl)
 			return false
 		end
 	end

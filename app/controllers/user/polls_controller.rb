@@ -19,7 +19,8 @@ class User::PollsController < UserBaseController
   end
 
   def friends
-    @polls = current_user.poll_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
+    @polls = current_user.friend_polls.paginate :page => params[:page], :per_page => 10
+    #poll_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def show

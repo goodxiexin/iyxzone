@@ -17,16 +17,12 @@ Object.extend(Iyxzone.Status.Builder, {
     return true;
   },
 
-  save: function(button, event){
-    Event.stop(event);
+  save: function(button, form){
+    Iyxzone.disableButtonThree(button, '发布中..');
     if(this.validate()){
-      var form = $('status_form');
       new Ajax.Request('/statuses', {
         method: 'post', 
         parameters: form.serialize(),
-				onLoading: function(){
-					Iyxzone.disableButtonThree(button, '发布中..');
-				},
 				onComplete: function(){
 					Iyxzone.enableButtonThree(button, '发布');
           if($('words_count')){
@@ -34,6 +30,8 @@ Object.extend(Iyxzone.Status.Builder, {
           } 
 				}
       });
+    }else{
+      Iyxzone.enableButtonThree(button, '发布');
     }
   }
 

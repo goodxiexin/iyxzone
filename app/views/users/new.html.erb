@@ -5,7 +5,7 @@
           <div class="prompt">快速注册</div>请写您的基本信息，这样能帮助您找到更多身边的战友。
         </div>
         <div class="sperator"></div>
-        <% form_for :user, :html => {:id => 'register_form'} do |f| -%>
+        <% form_for :user, :html => {:onsubmit => "Iyxzone.Register.submit($('register_btn'), this); return false;", :id => 'register_form'} do |f| -%>
           <%= hidden_field_tag 'invite_token', params[:invite_token] %>
           <div class="formcontent">
             <div class="rows s_clear">
@@ -60,7 +60,7 @@
             <div class="sperator"></div>
             <div class="btn-rows">
               <table class="center">
-                <tr><td><%= button_to_function '', "Iyxzone.Register.submit(this, event)", :type => "submit", :class => "registbtn png" %></td></tr>
+                <tr><td><button type='submit' class='registbtn png'></button></td></tr>
               </table>
             </div>
             <div class="rows">

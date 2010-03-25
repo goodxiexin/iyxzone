@@ -3,7 +3,7 @@
 <div class="edit-toggle space edit">
   <h3 class="s_clear"><strong class="left">基本信息</strong><%= link_to_function '取消', "Iyxzone.Profile.Editor.cancelEditBasicInfo();", :class => "right" %></h3>
   <div class="formcontent con con2">
-    <% form_for :profile, :html => {:id => 'basic_info_form'} do |f| %>
+    <% form_for :profile, :html => {:onsubmit => "Iyxzone.Profile.Editor.updateBasicInfo(#{@profile.id}, $('basic_info_submit_btn'), this); return false;"} do |f| %>
       <div class="item space">
         <div class="rows s_clear">
           <div class="fldid"><label>昵称：</label></div>
@@ -15,7 +15,7 @@
         <div class="rows s_clear">
           <div class="fldid"><label>生日：</label></div>
           <div class="fldvalue">
-            <div class="textfield left"><%= calendar_date_select :profile, :birthday, :popup => 'force', :time => false, :year_range => 40.years.ago..10.years.ago %></div>
+            <div class="calendar-field"><%= calendar_date_select :profile, :birthday, :popup => 'force', :time => false, :year_range => 40.years.ago..10.years.ago %></div>
           </div>
           <span class='red' id='birthday_error'></span>
         </div>
@@ -32,7 +32,7 @@
       <div class="rows s_clear space">
         <div class="fldid">&nbsp;</div>
         <div class="fldvalue">
-          <span class="button"><span><%= button_to_function '保存', "Iyxzone.Profile.Editor.updateBasicInfo(#{@profile.id}, this, event);" %></span></span>
+          <span class="button"><span><button type='submit' id='basic_info_submit_btn'>保存</button></span></span>
           <span class="button button-gray"><span><%= button_to_function "取消", "Iyxzone.Profile.Editor.cancelEditBasicInfo();" %></span></span>
         </div>
       </div>

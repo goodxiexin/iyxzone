@@ -3,11 +3,13 @@ class User::BlogsController < UserBaseController
 
   layout 'app'
 
+  before_filter :setup_blog_privilege_cond, :only => [:show, :index]
+
   increment_viewing 'blog', :only => [:show]
 
   def index
-    @relationship = @user.relationship_with current_user
-    @blogs = @user.blogs.viewable(@relationship).paginate :page => params[:page], :per_page => 10
+    @count = @user.blogs_count @relationship
+    @blogs = @user.blogs.paginate :page => params[:page], :per_page => 10, :conditions => @privilege
   end
 
 	def hot
@@ -30,12 +32,14 @@ class User::BlogsController < UserBaseController
 
   def friends
     # 如果cahce，代价有点大
-    @blogs = current_user.blog_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
+    @blogs = current_user.friend_blogs.paginate :page => params[:page], :per_page => 10
+    #current_user.blog_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def show
-    @next = @blog.next
-    @prev = @blog.prev
+    @next = @blog.next @privilege
+    @prev = @blog.prev @privilege
+    @count = @user.blogs_count @relationship
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 
@@ -102,16 +106,16 @@ protected
     end
   end
 
-  def setup_blog_scope
+  def setup_blog_privilege_cond
     @relationship = @user.relationship_with current_user
     if @relationship == 'owner'
-      Blog.send(:default_scope, :conditions => {:privilege => [1,2,3,4]})
+      @privilege = {:privilege => [1,2,3,4]}
     elsif @relationship == 'friend'
-      Blog.send(:default_scope, :conditions => {:privilege => [1,2,3]})
+      @privilege = {:privilege => [1,2,3]}
     elsif @relationship == 'same_game'
-      Blog.send(:default_scope, :conditions => {:privilege => [1,2]})
+      @privilege = {:privilege => [1,2]}
     else
-      Blog.send(:default_scope, :conditions => {:privilege => 1})
+      @privilege = {:privilege => 1}
     end    
   end
 
