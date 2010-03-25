@@ -98,7 +98,11 @@ class User < ActiveRecord::Base
   end
 
 	def common_friends_with user
-		friends & user.friends
+    if self == user
+      friends
+    else
+		  friends & user.friends
+    end
 	end
 
   def is_friendable_by? user
