@@ -1,5 +1,5 @@
 <% content_for :javascript_include do %>
-<%= javascript_include_tag "rating" %>
+  <%= javascript_include_merged :game %>
 <% end %>
 
 <% content_for :html_title, "#{@user.login}的游戏 - 17Gaming.com" %>
