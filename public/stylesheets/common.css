@@ -145,7 +145,7 @@ table.center td{vertical-align:top}
 /*homeIcons*/
 /*.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,{display:inline-block;background:url(../images/icons/homeIcons.png) no-repeat;margin:0 5px;width:16px;height:16px; vertical-align:middle;}
 */
-.feed-icon,dl.menu-op dt,.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,.icon-trash,.icon-read,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-notice,.icon-success,.icon-heart,.icon-warn,.icon-camera,.i-avatar,.i-mail,.i-hello,.i-msg,.i-friend,.i-theme,.icon-error,.icon-warning,.icon-msn,.icon-qq,.icon-link,.icon-mail,.i-share-friend,.icon-home,.icon-invitation{background:url(../images/icons/homeIcons.png) no-repeat;display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle;}
+.feed-icon,dl.menu-op dt,.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,.icon-trash,.icon-read,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-notice,.icon-success,.icon-heart,.icon-warn,.icon-camera,.i-avatar,.i-mail,.i-hello,.i-msg,.i-friend,.i-theme,.icon-error,.icon-warning,.icon-msn,.icon-qq,.icon-link,.icon-mail,.i-share-friend,.icon-home,.icon-invitation,.icon-up,.icon-down{background:url(../images/icons/homeIcons.png) no-repeat;display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle;}
 .icon-data{background-position:0 0}
 .icon-state{background-position:0 -16px}
 .icon-game{background-position:0 -32px}
@@ -175,6 +175,8 @@ table.center td{vertical-align:top}
 .icon-mail{background-position:0 -640px;}
 .icon-home{background-position:0 -816px;}
 .icon-invitation{background-position:0 -288px;}
+.icon-up{background-position:0 -832px;}
+.icon-down{background-position:0 -848px;}
 
 .i-avatar{background-position:0 -480px;}
 .i-mail{background-position:0 -496px;}

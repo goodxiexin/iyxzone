@@ -23,7 +23,7 @@
             <h4>【其他公会论坛热帖集合】</h4>
             <ul>
               <% Topic.hot("forum_id != #{@forum.id}").each do |t| %>
-              <li><%= link_to "【#{t.forum.guild.name}】#{t.subject}", forum_topic_url(t.forum, t) %>><br/><a href="javascript:void(0)"><%= "#{SITE_URL}/#{forum_topic_url(t.forum, t)}" %></a></li>
+              <li><%= link_to "【#{t.forum.guild.name}】#{t.subject}", forum_topic_url(t.forum, t) %>><br/><a href="javascript:void(0)"><%= "#{forum_topic_url(t.forum, t)}" %></a></li>
               <% end %>
             </ul>
           </div>
@@ -36,6 +36,9 @@
                 <th>回复</th>
                 <th class="tl">作者</th>
                 <th class="tr">时间</th>
+                <% if @guild.president == current_user %>
+                <th>操作</th>
+                <% end %>
               </tr>
               <% @top_topics.each do |t| %>
               <tr class="jl-cutline">
@@ -44,6 +47,9 @@
                 <td><%= t.posts_count %></td>
                 <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %></div></td>
                 <td class="tr"><%= ftime t.created_at %></td>
+                <% if @guild.president == current_user %>
+                <td><a class="icon-down" href="#"></a><a href="#" class="icon-active"></a></td>
+                <% end %>
               </tr>
               <% end %>
             </table>
@@ -57,6 +63,9 @@
                 <th>回复</th>
                 <th class="tl">作者</th>
                 <th class="tr">时间</th>
+                <% if @guild.president == current_user %>
+                <th>操作</th>
+                <% end %>
               </tr>
               <% @topics.each do |t| %>
               <tr class="jl-cutline">
@@ -65,6 +74,9 @@
                 <td><%= t.posts_count %></td>
                 <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %></div></td>
                 <td class="tr"><%= ftime t.created_at %></td>
+                <% if @guild.president == current_user %>
+                <th>操作</th>
+                <% end %>
               </tr>
               <% end %>
             </table>

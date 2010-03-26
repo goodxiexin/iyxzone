@@ -1183,14 +1183,21 @@ h1.app-share{float:left}
 .pager-simple .last{background-position:-17px -130px;cursor:default}
 
 /*论坛*/
-.forum .col-left{width:590px;float:left;}
+/*.forum .col-left{width:590px;float:left;}
 .forum .col-right{width:150px;float:right;}
+.forum .col-right .photolist-box li{margin:5px}
+*/
 .forum h2{background:#f8f8f8;border-top:1px solid #c2e29d;padding:5px;font-weight:700;margin-bottom:10px}
 .forum h2 a{font-weight:400;font-size:12px}
+.forum h2 .op{float:right;}
+.forum h2 .op a{margin:0 5px;display:inline-block;color:#666}
+.forum h2 .op a.love-btn{margin-bottom:-3px !important;_margin-bottom:0}
+.forum h2 .op a span{margin:0 2px;}
 .forum .msg{margin:5px}
 .hot-post{border-top:1px solid #333;margin:20px 0;padding-top:20px}
 .hot-post ul{margin:5px}
-.forum .col-right .photolist-box li{margin:5px}
+.hot-post li{margin:5px 0}
+.hot-post li a{color:#333}
 .posts{margin-bottom:10px}
 .posts td,.posts th{text-align:center;padding:3px}
 .posts .tl{text-align:left}
@@ -1198,7 +1205,7 @@ h1.app-share{float:left}
 .posts td.title a{color:#333}
 .digest td.title a{color:#c30}
 .posts td.title a:hover{text-decoration:underline}
-.posts td.title div{width:300px;font-size:14px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.posts td.title div{width:350px;font-size:14px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .posts td.author div{width:100px; white-space:nowrap;overflow:hidden;text-align:left;text-overflow:ellipsis}
 .posts td img{vertical-align:middle;margin-right:3px}
 .forum .feed-img-list .feed-list{padding:0 0 10px 100px;border-bottom:1px solid #bbd2aa;}
@@ -1207,6 +1214,8 @@ h1.app-share{float:left}
 .forum .feed-img-list .feed-list .avatar a{display:block;line-height:16px;margin:3px 8px}
 .forum .feed-img-list .feed-list .bd{padding:10px;_height:80px;min-height:80px}
 .forum .feed-img-list .feed-list .ft{text-align:right}
-.forum-cmt{width:380px;float:left}
-.forum-cmt .fldvalue,.forum-cmt .textfield,.forum-cmt textarea{width:250px;}
-.forum-cmt textarea{height:80px;}
+.forum-cmt .fldvalue{width:640px;}
+.forum-cmt .fldid{width:55px;font-size:14px;font-weight:700}
+.forum .list-box{margin-left:10px}
+.forum-pager{margin-top:10px}
+.forum-pager a{color:#666}
