@@ -46,7 +46,7 @@ class User::TopicsController < UserBaseController
 protected
 
 	def setup
-		if ["index", "new", "create"].include? params[:action]
+		if ["index", "new", "create", "top"].include? params[:action]
 			@forum = Forum.find(params[:forum_id])
       @guild = @forum.guild 
 		elsif ["show", "toggle", "destroy"].include? params[:action]
