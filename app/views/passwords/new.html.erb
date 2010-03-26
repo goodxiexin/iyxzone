@@ -7,6 +7,15 @@
           <div class="m rows">
             <% form_tag url_for(:controller => 'passwords', :action => 'create'), :onsubmit => "Iyxzone.Password.send($('submit_btn'), this); return false;" do %>
               <div class="form-con" style="padding-left:40px">
+                <% flash.each do |key, msg| %>
+                  <div class="<%=key%>-msg" id="notice_<%=key%>">
+                    <span class="icon-<%= key %>"></span>
+                    <%= msg %>
+                  </div>
+                  <script type="text/javascript">
+                    setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
+                  </script>
+                <% end %> 
                     <div class="rows s_clear">
                         <div class="f-id">&nbsp;</div>
                         <div class="f-value">

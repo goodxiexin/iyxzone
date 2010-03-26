@@ -1,7 +1,7 @@
 <table>
   <tr>
     <td class="id">公司：</td>
-    <td class="value"><%= @game.company %></td>
+    <td class="value"><%= link_to @game.company, @game.official_web %></td>
   </tr>
   <tr>
     <td class="id">发行：</td>
@@ -15,6 +15,13 @@
 	</tr>
 </table>
 <div id='game_<%= @game.id %>_rating_form'>
+<span id='game_attention_<%= @game.id %>'>
+<% if @attention %>
+  <%= link_to_remote "取消关注", :url => game_attention_url(@game, @attention, :at => 0), :method => :delete %>
+<% else %>
+  <%= link_to_remote "关注", :url => game_attentions_url(@game, :at => 0) %>
+<% end %>
+</span> 
 <% if !@game.is_rateable_by? current_user %>
   <%= render :partial => 'user/ratings/show', :locals => {:rateable => @game} %>
 <% else %>

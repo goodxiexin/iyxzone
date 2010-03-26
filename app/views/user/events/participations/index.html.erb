@@ -40,15 +40,17 @@
         </ul>
       </div>
       <div class="piclist-rows" id='events'>
+          <% unless @participations.blank? %>
           <strong class="green">搜索会员：</strong>
           <%= text_field_tag 'search', '输入游戏角色的名字', :onclick => "this.clear();", :class => 'ipt', :onfocus => "Iyxzone.Event.ParticipantManager.startObserving(this)", :onblur => "Iyxzone.Event.ParticipantManager.stopObserving();" %>
+          <% end %>
           <div>
 	          <% if params[:type].to_i == 2 %>
               <% if @event.invitations_count == 0 %>
                 <% if @event.poster == current_user %>
-                <div class='gray'>还没有人被邀请，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
+                <div class='tip'>还没有人被邀请，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
                 <% else %>
-                <div class='gray'>还没有人被邀请参加这个活动</div>
+                <div class='tip'>还没有人被邀请参加这个活动</div>
                 <% end %>
               <% else %>
 								<div class='d6-list s_clear'>
@@ -59,7 +61,7 @@
               <% end %>
 	          <% elsif params[:type].to_i == 3 %>
               <% if @event.requests_count == 0 %>
-                <div class='gray'>还没有人请求参加这个活动</div>
+                <div class='tip'>还没有人请求参加这个活动</div>
               <% else %>
 								<div class='d6-list s_clear'>
 								<ul id='participations'>
@@ -70,9 +72,9 @@
 	          <% else %>
               <% if @participations.count == 0 %>
                 <% if @event.poster == current_user %>
-                <div class='gray'>还没有成员...囧，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
+                <div class='tip'>还没有成员...囧，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
                 <% else %>
-                <div class='gray'>还没有成员...囧</div>
+                <div class='tip'>还没有成员...囧</div>
                 <% end %>
               <% else %>
 								<div class='d6-list s_clear'>

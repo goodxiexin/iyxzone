@@ -67,9 +67,9 @@
         <%= will_paginate @photos %>
         <% else %>
 					<% if @membership and @membership.is_president? %>
-					<div class='gray'>公会还没有图片，你赶紧<%= link_to '上传', new_guild_photo_url(:album_id => @album.id) %>吧</div>
+					<div class='tip'>公会还没有图片，你赶紧<%= link_to '上传', new_guild_photo_url(:album_id => @album.id) %>吧</div>
 					<% else %>
-					<div class='gray'>公会还没有图片</div>
+					<div class='tip'>公会还没有图片</div>
 					<% end %>
         <% end %>
 				</table>

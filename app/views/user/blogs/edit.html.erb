@@ -62,3 +62,14 @@
   Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, <%= tagged_user_ids %>, <%= tag_ids %>, <%= user_names %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
 <% end %>
 
+<% onload_javascript_tag do %>
+  window.onbeforeunload = function(){
+    alert(Iyxzone.Blog.Builder.saved);
+    if(Iyxzone.Blog.Builder.saved){
+      return null;
+    }else{
+      return "你还没保存，你确定要离开?";
+    }
+  };
+<% end %>
+

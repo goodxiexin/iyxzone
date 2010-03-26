@@ -7,6 +7,8 @@ Iyxzone.Blog = {
 
 Object.extend(Iyxzone.Blog.Builder, {
 
+  saved: false,
+
   editor: null, // initialize this in your page
 
   tagBuilder: null, // initialize this in your page
@@ -46,6 +48,8 @@ Object.extend(Iyxzone.Blog.Builder, {
     for(var i=0;i<delTags.length;i++){
       this.parameters += "&blog[del_friend_tags][]=" + delTags[i];
     }
+    
+    window.onbeforeunload = null;
   },
 
   saveBlog: function(button, form){
@@ -100,6 +104,7 @@ Object.extend(Iyxzone.Blog.Builder, {
 					Iyxzone.enableButtonThree(button, '保存为草稿');
           tip('保存成功，可以继续写了');
           $('errors').innerHTML = '';
+          this.saved = true;
         }.bind(this)
       });
     }else{

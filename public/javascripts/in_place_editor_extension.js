@@ -5,12 +5,12 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
  
   initialize: function($super, element, url, options){
     options = Object.extend({
-      emptyText: "点击编辑...",
-      emptyClassName: "inplaceeditor-empty",
-      htmlResponse: false
+      "emptyText" : "点击编辑...",
+      "emptyClassName" : "inplaceeditor-empty",
+      "htmlResponse" : false
     }, options || {});
 
-    options.textAreaStyle = {'width': '90%'};
+    options.textAreaStyle = {"width" : '90%'};
 
     options.callback = this.callbackHandler.bind(this);
     options.onComplete = this.onCompleteHandler.bind(this);
@@ -23,7 +23,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
 
   checkElement: function(){
     if(this.element.innerHTML.length == 0){
-      this.element.appendChild(new Element("span", {className : this.options.emptyClassName}).update(this.options.emptyText));
+      this.element.appendChild(new Element("span", {"className" : this.options.emptyClassName}).update(this.options.emptyText));
     }else{
       this.element.innerHTML = this.element.innerHTML.replace(/\n/g, '<br/>');
     }
@@ -47,7 +47,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
 
   onCompleteHandler: function(transport, element){
     if (transport && transport.status == 200) {
-      new Effect.Highlight(element.id, {startcolor: "#00ffff"});
+      new Effect.Highlight(element.id, {"startcolor": "#00ffff"});
       var json = transport.responseText.evalJSON();
       element.innerHTML = eval("json." + this.options.updateClass + "." + this.options.updateAttr);
       this.checkElement();

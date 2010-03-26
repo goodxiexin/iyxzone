@@ -28,7 +28,7 @@ Object.extend(Iyxzone.Password, {
       form.submit();
     }else{
       error('验证码不正确');
-      Iyxzone.enableButton(button, '发送');
+      Iyxzone.enableButton(button, '发送邮件');
     }
   },
 
