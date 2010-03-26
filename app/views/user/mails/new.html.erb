@@ -67,7 +67,7 @@
 <% unless @recipients.blank? %>
   <% onload_javascript_tag do %>
   <% @recipients.each do |r| %>
-    Iyxzone.Mail.Builder.recipientBuilder.addTags([{id: #{r.id}, profileID: #{r.profile.id}, login: '#{r.login}'}]);
+    Iyxzone.Mail.Builder.recipientBuilder.addTags([{id: <%= r.id %>, profileID: <%= r.profile.id %>, login: '<%= r.login %>'}]);
   <% end %>
   <% end %>
 <% end %>
