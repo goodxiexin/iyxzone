@@ -76,7 +76,7 @@
           <div class="fldid">&nbsp;</div>
 					<% form_tag search_users_url do %>
 						<div class="fldvalue">
-						<div class="textfield"><%= text_field_tag 'key', "搜搜您的好友吧", :onfocus => "this.clear()" %></div>
+						<div class="textfield"><%= text_field_tag 'key', "搜搜您的好友吧", :onfocus => "$(key).clear()" %></div>
 						</div>
 						<input type="submit" class="gobtn" value="" />
 					<% end %>

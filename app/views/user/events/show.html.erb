@@ -128,7 +128,7 @@
 			<ul class="collection s_clear">
 				<% @album.photos[0..4].each do |p| %>
 					<li>
-						<div class="middle"><div class="middle-center"><div class="center"><%= photo_link p, :class => 'imgbox02' %></div></div></div>
+						<div class="middle"><div class="middle-center"><div class="center"><%= photo_link p, :size => 'large', :class => 'imgbox02' %></div></div></div>
           </li>
         <% end %>
       </ul>
