@@ -3,9 +3,16 @@ Iyxzone.Forum = {
 
   author: ['高侠鸿'],
 
-  editor: null,
+  Topic: {},
 
-  validateTopic: function(){
+  Post: {}
+};
+
+Object.extend(Iyxzone.Forum.Topic, {
+  
+  editor: null,
+  
+  validate: function(){
     if($('topic_subject').value == ''){
       error('标题不能为空');
       return false;
@@ -26,7 +33,24 @@ Iyxzone.Forum = {
     return true;
   },
 
-  validatePost: function(){
+  save: function(button, form){
+    Iyxzone.disableButtonThree(button, '正在发布..');
+    if(this.validate()){
+      window.onbeforeunload = null;
+      this.editor.instanceById('topic_content').saveContent();
+      form.submit();
+    }else{
+      Iyxzone.enableButtonThree(button, '发布');
+    }   
+  }
+
+});
+
+Object.extend(Iyxzone.Forum.Post, {
+  
+  editor: null,
+
+  validate: function(){
     var content = this.editor.instanceById('post_content').getContent();
     if(content.length < 6){
       error('回复不能少于6个字符');
@@ -39,7 +63,17 @@ Iyxzone.Forum = {
     return true;
   },
 
-  setPost: function(floor, name){
+  save: function(button, form){
+    Iyxzone.disableButtonThree(button, '正在发布..');
+    if(this.validate()){
+      this.editor.instanceById('post_content').saveContent();
+      form.submit();
+    }else{
+      Iyxzone.enableButtonThree(button, '发布');
+    }   
+  },
+
+  reply: function(floor, name){
     if(floor)
       this.editor.instanceById('post_content').setContent("<span style='font-size: 14px;font-weight:bold'>回复" + floor + "楼" + name + ":</span><hr/>");
     else
@@ -47,5 +81,4 @@ Iyxzone.Forum = {
     window.scrollTo(0, $('new_post').positionedOffset().top);
   },
 
-}
-
+});

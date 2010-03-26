@@ -1,95 +1,76 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @guild.album, :class => 'imgbox01' %></span>
+      <span class="left"><%= album_cover_image @guild.album, :class => 'imgbox01', :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @guild.name %></strong><br />
         <%= guild_link @guild, :class => 'red' %>的主页
       </p>
     </div>
     <div class="box02 canvas_int rows s_clear space">
+      <div class="tab tab01">
+        <div class="right"><%= link_to "发布新话题", new_forum_topic_url(@forum) %></div>
+        <ul>
+          <li class='hover'><span><a href="#">话题区</a></span></li>
+        </ul>
+      </div>
       <div class="forum s_clear">
         <div class="col-left">
           <h2>论坛公告</h2>
-            <div class="msg">不要进行人身攻击，不要骚扰他人，并请大家举报此类恶劣行为。违者一律删除并视情况严重性作封ID处理。
+          <div class="msg">不要进行人身攻击，不要骚扰他人，并请大家举报此类恶劣行为。违者一律删除并视情况严重性作封ID处理。
     说明：每个人和每个人的观点不一样，有些人是真心需要帮助的，请大家以诚相待，给需要帮助的人良好的意见和建议，切勿误导他人、嘲笑他人和攻击他人，尤其不要在帖子里面发生口水战，如果有此现象发生，请在此投诉，斑竹会处理此事的 。尤其不要在帖子里面发生口水战，如果有此现象发生，请在此投诉，斑竹会处理此事的 。  </div>
-            <div class="hot-post">
-              <h4>【其他公会论坛热帖集合】</h4>
-              <ul>
-                <li><a href="#">【魔兽公会】新的种族更换？</a><br /><a href="#">http://www.17gaming.com/guilds/2</a></li>
-                <li><a href="#">【魔兽公会】新的种族更换？</a><br /><a href="#">http://www.17gaming.com/guilds/2</a></li>
-                <li><a href="#">【魔兽公会】新的种族更换？</a><br /><a href="#">http://www.17gaming.com/guilds/2</a></li>
-              </ul>
-            </div>
-            <h2 class="s_clear"><span class="left">精华区</span><%= link_to "更多", top_forum_topics_url(@forum), :class => 'right' %></h2>
-            <div class="posts digest">
-              <table cellpadding="0" cellspacing="3" border="0" width="100%">
-                <tr>
-                  <th class="tl">话题</th>
-                  <th>浏览</th>
-                  <th>回复</th>
-                  <th class="tl">作者</th>
-                  <th class="tr">时间</th>
-                </tr>
-                <% @hot_topics.each do |t| %>
-                <tr class="jl-cutline">
-                  <td class="title"><div><%= topic_link t  %></div></td>
-                  <td><%= t.viewings_count %></td>
-                  <td><%= t.posts_count %></td>
-                  <td class="author"><div><%= avatar_image t.poster %></div></td>
-                  <td class="tr">10月22日</td>
-                </tr>
-              </table>
-            </div>
-            <h2>论坛话题区<span>（共2368条）</span></h2>
-            <div class="posts">
-              <table cellpadding="0" cellspacing="3" border="0" width="100%">
-                <tr>
-                  <th class="tl">话题</th>
-                  <th>浏览</th>
-                  <th>回复</th>
-                  <th class="tl">作者</th>
-                  <th class="tr">时间</th>
-                </tr>
-                <tr class="jl-cutline">
-                  <td class="title"><div><a href="#">话题话题话题话题话题话题话题话题话题话题sdgsdgsdgsg</a></div></td>
-                  <td>1000</td>
-                  <td>445</td>
-                  <td class="author"><div><a href="#"><img src="images/photo/photo15.png" alt="" />小甲壳虫小甲壳虫</a></div></td>
-                  <td class="tr">10月22日</td>
-                </tr>
-              </table>
-            </div>
+          <div class="hot-post">
+            <h4>【其他公会论坛热帖集合】</h4>
+            <ul>
+              <% Topic.hot("forum_id != #{@forum.id}").each do |t| %>
+              <li><%= link_to "【#{t.forum.guild.name}】#{t.subject}", forum_topic_url(t.forum, t) %>><br/><a href="javascript:void(0)"><%= "#{SITE_URL}/#{forum_topic_url(t.forum, t)}" %></a></li>
+              <% end %>
+            </ul>
           </div>
-          <div class="col-right">
-            <h2>活跃会员</h2>
-            <div class="photolist-box">
-              <ul class="collection s_clear">
-                <li>
-                  <div class="middle"><div class="middle-center"><div class="center"><a href="#"><img class="imgbox01" src="images/photo/photo11.png" alt="" /></a></div></div></div>
-                  <p>教师</p>
-                  <p class="btns">
-                    <a class="icon-active icon-active-add" href="#"></a>
-                    <a class="icon-active icon-active-del" href="#"></a>                                        
-                  </p>
-                </li>
-              </ul>
-            </div>
-            <h2 class="space">最近访问的会员</h2>
-            <div class="photolist-box">
-              <ul class="collection s_clear">
-                <li>
-                  <div class="middle"><div class="middle-center"><div class="center"><a href="#"><img class="imgbox01" src="images/photo/photo11.png" alt="" /></a></div></div></div>
-                  <p>教师</p>
-                  <p class="btns">
-                    <a class="icon-active icon-active-add" href="#"></a>
-                    <a class="icon-active icon-active-del" href="#"></a>                                        
-                  </p>
-                </li>
-              </ul>
-            </div>
+          <h2 class="s_clear"><span class="left">精华区</span><%= link_to "更多", top_forum_topics_url(@forum), :class => 'right' %></h2>
+          <div class="posts digest">
+            <table cellpadding="0" cellspacing="3" border="0" width="100%">
+              <tr>
+                <th class="tl">话题</th>
+                <th>浏览</th>
+                <th>回复</th>
+                <th class="tl">作者</th>
+                <th class="tr">时间</th>
+              </tr>
+              <% @top_topics.each do |t| %>
+              <tr class="jl-cutline">
+                <td class="title"><div><%= topic_link t  %></div></td>
+                <td><%= t.viewings_count %></td>
+                <td><%= t.posts_count %></td>
+                <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %></div></td>
+                <td class="tr"><%= ftime t.created_at %></td>
+              </tr>
+              <% end %>
+            </table>
+          </div>
+          <h2>论坛话题区<span>（共<%= @forum.topics_count %>条）</span></h2>
+          <div class="posts">
+            <table cellpadding="0" cellspacing="3" border="0" width="100%">
+              <tr>
+                <th class="tl">话题</th>
+                <th>浏览</th>
+                <th>回复</th>
+                <th class="tl">作者</th>
+                <th class="tr">时间</th>
+              </tr>
+              <% @topics.each do |t| %>
+              <tr class="jl-cutline">
+                <td class="title"><div><%= topic_link t %></div></td>
+                <td><%= t.viewings_count %></td>
+                <td><%= t.posts_count %></td>
+                <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %></div></td>
+                <td class="tr"><%= ftime t.created_at %></td>
+              </tr>
+              <% end %>
+            </table>
           </div>
         </div>
       </div>
-    </div></div>
-  </div></div></div></div>
+    </div>
+  </div></div>
+</div></div></div></div>

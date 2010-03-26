@@ -174,7 +174,7 @@ module ApplicationHelper
 	end
 
 	def topic_link topic
-		link_to (truncate topic.subject, :length => 40), forum_topic_url(topic.forum, topic)
+		link_to (truncate topic.subject, :length => 40), forum_topic_posts_url(topic.forum, topic)
 	end
 
 	def mail_link mail

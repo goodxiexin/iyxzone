@@ -2,10 +2,6 @@ class User::TopicsController < UserBaseController
 
   layout 'app'
 
-  increment_viewing 'forum', 'forum_id', :only => [:index]
-
-  before_filter :moderator_required, :only => [:destroy]
-
   def index
     @top_topics = @forum.top_topics.find(:all, :offset => 0, :limit => 5)
     @topics = @forum.normal_topics.paginate :page => params[:page], :per_page => 20
@@ -56,12 +52,11 @@ protected
 		elsif ["show", "toggle", "destroy"].include? params[:action]
 			@forum = Forum.find(params[:forum_id])
 			@topic = @forum.topics.find(params[:id])
+      @guild = @forum.guild
+      if params[:action] != 'show'
+        @guild.president == current_user || render_not_found
+      end
 		end
-		@is_moderator = @forum.moderators.include? current_user
 	end
-
-  def moderator_required
-    @is_moderator || not_found
-  end
 
 end

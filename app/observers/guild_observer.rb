@@ -13,7 +13,6 @@ class GuildObserver < ActiveRecord::Observer
     # create album,forum and moderator_forum
     guild.create_album
     forum = guild.create_forum(:name => "工会#{guild.name}的论坛", :description => "工会#{guild.name}的论坛")
-    ModeratorForum.create(:moderator_id => guild.president_id, :forum_id => forum.id)
    
     # create membership
     guild.memberships.build(

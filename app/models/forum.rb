@@ -12,10 +12,4 @@ class Forum < ActiveRecord::Base
 
   has_many :posts
 
-  has_many :moderator_forums
-
-  has_many :moderators, :class_name => 'User', :through => :moderator_forums
-
-  acts_as_viewable 
-
 end
