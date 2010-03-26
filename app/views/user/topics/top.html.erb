@@ -23,11 +23,11 @@
             <h4>【其他公会论坛热帖集合】</h4>
             <ul>
               <% Topic.hot("forum_id != #{@forum.id}").each do |t| %>
-              <li><%= link_to "【#{t.forum.guild.name}】#{t.subject}", forum_topic_url(t.forum, t) %>><br/><a href="javascript:void(0)"><%= "#{forum_topic_url(t.forum, t)}" %></a></li>
+              <li><%= link_to "【#{t.forum.guild.name}】#{t.subject}", forum_topic_url(t.forum, t) %><br/><a href="javascript:void(0)"><%= "#{forum_topic_url(t.forum, t)}" %></a></li>
               <% end %>
             </ul>
           </div>
-          <h2 class="s_clear"><span class="left">精华区</span><%= link_to "更多", top_forum_topics_url(@forum), :class => 'right' %></h2>
+          <h2 class="s_clear"><span class="left">精华区</span></h2>
           <div class="posts digest">
             <table cellpadding="0" cellspacing="3" border="0" width="100%">
               <tr>
@@ -36,14 +36,20 @@
                 <th>回复</th>
                 <th class="tl">作者</th>
                 <th class="tr">时间</th>
+                <% if @guild.president == current_user %>
+                <th>操作</th>
+                <% end %>
               </tr>
               <% @top_topics.each do |t| %>
-              <tr class="jl-cutline">
+              <tr class="jl-cutline" id='topic_<%= t.id %>'>
                 <td class="title"><div><%= topic_link t  %></div></td>
                 <td><%= t.viewings_count %></td>
                 <td><%= t.posts_count %></td>
                 <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %></div></td>
                 <td class="tr"><%= ftime t.created_at %></td>
+                <% if @guild.president == current_user %>
+                <td><%= link_to '', toggle_forum_topic_url(@forum, t, :top => 0, :at => 'index'), :class => 'icon-down', :method => :put %><%= facebox_confirm '', forum_topic_url(@forum, t, :at => 'index'), {:msg => '你确定要删除这个话题吗？', :method => :delete}, {:class => 'icon-active'} %></td>
+                <% end %>
               </tr>
               <% end %>
             </table>

@@ -169,12 +169,12 @@ module ApplicationHelper
 		link_to (truncate guild.name, :length => 20), guild_url(guild), opts
 	end
 
-	def forum_link forum
-		link_to (truncate forum.name, :length => 20), forum_url(forum)
+	def forum_link forum, opts={}
+		link_to (truncate forum.name, :length => 20), forum_url(forum), opts
 	end
 
-	def topic_link topic
-		link_to (truncate topic.subject, :length => 40), forum_topic_posts_url(topic.forum, topic)
+	def topic_link topic, opts={}
+		link_to (truncate topic.subject, :length => 40), forum_topic_posts_url(topic.forum, topic), opts
 	end
 
 	def mail_link mail

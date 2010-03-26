@@ -6,7 +6,9 @@ class User::PostsController < UserBaseController
 
   def index
     @random_topics = Topic.random :limit => 5, :except => [@topic], :conditions => {:forum_id => @forum.id}
-    @posts = @topic.posts.paginate :page => params[:page], :per_page => 10
+    @posts = @topic.posts.paginate :page => params[:page], :per_page => 2
+    @next = @topic.next :top => @topic.top
+    @prev = @topic.prev :top => @topic.top
   end
 
   def create

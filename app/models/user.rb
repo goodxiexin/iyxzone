@@ -253,6 +253,8 @@ class User < ActiveRecord::Base
   
     user.has_many :profile_sharings, :conditions => {:shareable_type => 'Profile'}
 
+    user.has_many :topic_sharings, :conditions => {:shareable_type => 'Topic'}
+
   end
 
   def friend_sharings type=nil

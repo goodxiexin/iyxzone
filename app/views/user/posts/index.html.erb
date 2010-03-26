@@ -19,7 +19,20 @@
       </div>
       <div class="forum s_clear">
         <div class="feed-box">
-          <h2>标题： <%= @topic.subject %></h2>
+          <h2 class='s_clear'>
+            <span class='left'>标题： <%= @topic.subject %></span>
+            <div class='op'>
+            <% if @guild.president == current_user %>
+              <% if !@topic.top %>
+                <%= link_to "<span class='icon-up'></span>置顶", toggle_forum_topic_url(@forum, @topic, :top => 1, :at => 'show'), :method => :put %>
+              <% else %>
+                <%= link_to "<span class='icon-down'></span>取消置顶", toggle_forum_topic_url(@forum, @topic, :top => 0, :at => 'show'), :method => :put %>
+              <% end %>
+              <%= facebox_confirm "<span class='icon-active'></span>删除", forum_topic_url(@forum, @topic, :at => 'show'), {:msg => "你确定要删除这个话题吗？", :method => :delete} %>
+            <% end %>
+            <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Topic', :shareable_id => @topic.id), :class => 'share-btn' %>
+            </div>
+          </h2>
           <div class="feed-img-list">
             <div class="feed-list s_clear">
               <div class="avatar">
@@ -37,10 +50,10 @@
               <div class="bd jl-cutline">
                 <p><%= @topic.content %></p>
               </div>
-              <div class="ft"><a href="javascript:void(0)">阅读(<%= @topic.viewings_count %>)</a>  | <a href="javascript:void(0)">评论(<%= @topic.posts_count %>)</a></div>
+              <div class="ft"><a href="javascript:void(0)">分享(<%= @topic.sharings_count %>)</a> | <a href="javascript:void(0)">阅读(<%= @topic.viewings_count %>)</a>  | <a href="javascript:void(0)">评论(<%= @topic.posts_count %>)</a></div>
             </div>
             <% @posts.each do |p| %>
-            <div class="feed-list s_clear">
+            <div class="feed-list s_clear" id='post_<%= p.id %>'>
               <div class="avatar">
                 <%= avatar_image p.poster, :class => 'imgbox01', :size => 'large', :width => 76, :heigth => 85 %><br />
                 <%= link_to "<span class='icon-home'></span>个人主页", profile_url(p.poster.profile), :popup => true %>
@@ -56,39 +69,42 @@
               <div class="bd jl-cutline">
                 <p><%= p.content %></p>
               </div>
-              <div class="ft"><%= link_to_function "回复", "Iyxzone.Forum.Post.reply(#{p.floor}, '#{p.poster.login}');" %></div>
+              <div class="ft">
+                <%= link_to_function "回复", "Iyxzone.Forum.Post.reply(#{p.floor}, '#{p.poster.login}');" %>
+                <% if @guild.president == current_user %>
+                  | <%= facebox_confirm '删除', forum_topic_post_url(@forum, @topic, p, :at => 'show'), {:msg => "你确定要删除这个回复吗？", :method => :delete} %>
+                <% end %>
+              </div>
             </div>
             <% end %>
+            <div class="forum-pager">
+              <%= link_to '<< 上一个话题', forum_topic_posts_url(@forum, @prev) %> | <%= link_to "下一个话题 >>", forum_topic_posts_url(@forum, @next) %>
+              <%= link_to_function "返回话题顶部", "window.scrollTo(0,0);" %>
+              <%= link_to "返回话题主页", forum_topics_url(@forum) %>
+              <%= will_paginate @posts %>
+            </div>
             <div class="space20 s_clear">
               <div class="forum-cmt" id='new_post'>
                 <h2>回复话题</h2>
                 <% form_for :post, :url => forum_topic_posts_url(@forum, @topic), :html => {:onsubmit => "Iyxzone.Forum.Post.save($('post_submit_btn'), this); return false;" } do |f| %>
                 <div class="formcontent">
                   <div class="rows s_clear">
-                    <div class="fldid">标题：</div>
-                    <div class="fldvalue">
-                      <div class="textfield">
-                        <input type="text" />
-                      </div>
-                    </div>
+                    <div class="fldvalue"><%= f.text_area 'content', :style =>"width: 100%" %></div>
                   </div>
                   <div class="rows s_clear">
-                    <div class="fldid">内容：</div>
-                    <div class="fldvalue"><%= f.text_area 'content' %></div>
-                  </div>
-                  <div class="fldid">&nbsp;</div>
-                  <div class="fldvalue">
-                    <span class="left"><%= emotion_link 'post_content' %></span>
-                    <div class="right">
-                      <span class="button03"><span><button type="submit" id='post_submit_btn'>发布</button></span></span>
+                    <div class="fldvalue">
+                      <div class="right">
+                        <span class="button03"><span><button type="submit" id='post_submit_btn'>发布</button></span></span>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <% end %>
               </div>
-              <div class="prompt-list-box">
+              <% unless @random_topics.blank? %>
+              <div class="space rows">
                 <h2>随便看看</h2>
-                <div class="list-box box04">
+                <div class="list-box">
                   <ul class="lister02">
                     <% @random_topics.each do |t| %>
                       <li><%= topic_link t %></li>
@@ -96,6 +112,7 @@
                   </ul>
                 </div>
               </div>
+              <% end %>
             </div>   
           </div>
         </div>

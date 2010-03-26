@@ -2,7 +2,7 @@ class User::SharingsController < UserBaseController
 
   layout 'app'
 
-  PER_PAGE = 5 
+  PER_PAGE = 10 
 
   def index
     if params[:type].to_i == 0 and !params[:sharing_id].blank? and !params[:sharing_id].blank?
@@ -30,6 +30,8 @@ class User::SharingsController < UserBaseController
       @sharings = @user.game_sharings.paginate :page => params[:page], :per_page => PER_PAGE
     when 8
       @sharings = @user.profile_sharings.paginate :page => params[:page], :per_page => PER_PAGE
+    when 9
+      @sharings = @user.topic_sharings.paginate :page => params[:page], :per_page => PER_PAGE
     end
   end
 
@@ -53,6 +55,8 @@ class User::SharingsController < UserBaseController
       @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Game'}).paginate :page => params[:page], :per_page => PER_PAGE
     when 8
       @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Profile'}).paginate :page => params[:page], :per_page => PER_PAGE
+    when 9
+      @sharings = Sharing.hot.find(:all, :conditions => {:shareable_type => 'Topic'}).paginate :page => params[:page], :per_page => PER_PAGE      
     end
   end
 
@@ -76,6 +80,8 @@ class User::SharingsController < UserBaseController
       @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Game'}).paginate :page => params[:page], :per_page => PER_PAGE
     when 8
       @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Profile'}).paginate :page => params[:page], :per_page => PER_PAGE
+    when 9
+      @sharings = Sharing.recent.find(:all, :conditions => {:shareable_type => 'Topic'}).paginate :page => params[:page], :per_page => PER_PAGE
     end
   end
 
@@ -97,8 +103,10 @@ class User::SharingsController < UserBaseController
       @sharings = current_user.friend_sharings('Poll').paginate :page => params[:page], :per_page => PER_PAGE
     when 7
       @sharings = current_user.friend_sharings('Game').paginate :page => params[:page], :per_page => PER_PAGE
-    when 7
+    when 8
       @sharings = current_user.friend_sharings('Profile').paginate :page => params[:page], :per_page => PER_PAGE
+    when 9
+      @sharings = current_user.friend_sharings('Topic').paginate :page => params[:page], :per_page => PER_PAGE
     end
   end
 

@@ -10,6 +10,10 @@ class Topic < ActiveRecord::Base
 
   acts_as_random
 
+  acts_as_shareable :default_title => lambda {|topic| topic.subject}
+
+  acts_as_list :order => 'created_at', :scope => 'forum_id'
+
   validates_presence_of :poster_id, :message => "没有发布者"
 
   validates_presence_of :forum_id, :message => "没有论坛"

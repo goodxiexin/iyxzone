@@ -17,7 +17,7 @@ class User::TopicsController < UserBaseController
   def create
     @topic = @forum.topics.build(params[:topic].merge({:poster_id => current_user.id}))
     if @topic.save
-      redirect_to forum_topics_url(@forum)
+      redirect_to forum_topic_posts_url(@forum, @topic)
     else
       render :action => 'new'
     end
@@ -25,21 +25,26 @@ class User::TopicsController < UserBaseController
 
   def toggle
     if @topic.update_attribute('top', params[:top].to_i)
-      render :update do |page|
-        page << "alert('成功');"
-        page.redirect_to forum_topics_url(@forum) 
+      if params[:at] == 'index'
+        redirect_to forum_topics_url(@forum) 
+      elsif params[:at] == 'show'
+        flash[:notice] = '成功'
+        redirect_to forum_topic_posts_url(@forum, @topic)
       end
     else
-      render :update do |page|
-        page << "alert('错误');"
-      end
+      flash[:error] = '发生错误'
+      redirect_to :back
     end
   end
 
   def destroy
     @topic.destroy
     render :update do |page|
-      page << "$('topic_#{@topic.id}').remove();alert('成功')"
+      if params[:at] == 'index'
+        page << "$('topic_#{@topic.id}').remove();alert('成功')"
+      elsif params[:at] == 'show'
+        page.redirect_to forum_topics_url(@forum)
+      end
     end
   end
 
