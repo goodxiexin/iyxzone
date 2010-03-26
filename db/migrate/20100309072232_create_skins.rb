@@ -7,7 +7,7 @@ class CreateSkins < ActiveRecord::Migration
       t.timestamps
     end
 		Skin.create(:name => "default", :css => "home", :thumbnail => "default.png")
-		Skin.create(:name => "wow", :css => "wow", :thumbnail => "default.png")
+		Skin.create(:name => "wow", :css => "wow", :thumbnail => "wow.jpg")
 		Skin.create(:name => "3", :css => "3", :thumbnail => "default.png")
 		Skin.create(:name => "4", :css => "4", :thumbnail => "default.png")
 		Skin.create(:name => "5", :css => "5", :thumbnail => "default.png")
