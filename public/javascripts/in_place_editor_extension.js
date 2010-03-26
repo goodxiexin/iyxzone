@@ -10,7 +10,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
       htmlResponse: false
     }, options || {});
 
-    options.textAreaStyle = {width: '90%'};
+    options.textAreaStyle = {'width': '90%'};
 
     options.callback = this.callbackHandler.bind(this);
     options.onComplete = this.onCompleteHandler.bind(this);
@@ -58,7 +58,9 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     var text = (this.options.loadTextURL ? this.options.loadingText : this.getText());
     var fld;
     fld = document.createElement('textarea');
-    fld.setStyle(this.options.textAreaStyle);
+    //fld.setStyle(this.options.textAreaStyle);
+	  //fld.setStyle({});
+		alert(this);
     fld.name = this.options.paramName;
     fld.value = text; // No HTML breaks conversion anymore
     fld.className = 'editor_field';
