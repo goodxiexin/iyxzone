@@ -18,8 +18,8 @@
 			<li><span class='icon-state'></span><%= "#{subject}的状态" %><span>(<%= @user.statuses_count %>)</span></li>
 			<li><span class='icon-game'></span><%= "#{subject}的游戏" %><span>(<%= @user.games_count %>)</span></li>
 			<li><span class='icon-photo'></span><%= "#{subject}的相册" %><span>(<%= @user.albums_count%>)</span></li>
-			<li><span class='icon-blog'></span><%= "#{subject}的博客" %><span>(<%= @user.blogs_count @relationship %>)</span></li>
-			<li><span class='icon-video'></span><%= "#{subject}的视频" %><span>(<%= @user.videos_count @relationship %>)</span></li>
+			<li><span class='icon-blog'></span><%= "#{subject}的博客" %><span>(<%= @user.blogs_count "friend" %>)</span></li>
+			<li><span class='icon-video'></span><%= "#{subject}的视频" %><span>(<%= @user.videos_count "friend" %>)</span></li>
 			<li><span class='icon-share'></span><%= "#{subject}的分享" %><span>(<%= @user.sharings_count%>)</span></li>
 			<li><span class='icon-vote'></span><%= "#{subject}的投票" %><span>(<%= @user.polls_count%>)</span></li>
 			<li><span class='icon-act'></span><%= "#{subject}的活动" %><span>(<%= @user.events.count%>)</span></li>
@@ -64,11 +64,11 @@
 
 	<div class="multibox">
 		<div class="title"><b></b></div>
-		<%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %> 或者 <strong><%= link_to "发站内信" %></strong>
+		<strong><%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %></strong> 或者 <strong><%= link_to "发站内信" %></strong>
 	</div>
 
 	<div class="multibox">
-		<div class="title"><b>共同好友</b></div>
+		<div class="title"><%= link_to '更多', common_friends_url(:uid => @user.id) %><b>共同好友</b></div>
 		<div class="photolist-box">
 			<ul class="collection s_clear">
 				<% @common_friends.each do |p| %>
@@ -79,13 +79,10 @@
 				<% end %>
 			</ul>
 		</div>
-		<div class="diary-more">
-			<%= link_to '更多', common_friends_url(:uid => @user.id) %>
-		</div>
 	</div>
 
 	<div class="multibox">
-		<div class="title"><b>他的好友</b></div>
+		<div class="title"><%= link_to '全部好友', other_friends_url(:uid => @user.id) %><b>他的好友</b></div>
 		<div class="photolist-box">
 			<ul class="collection s_clear">
 				<% @user.friends.sort_by{rand}[0..7].each do |p| %>
@@ -95,9 +92,6 @@
 					</li>
 				<% end %>
 			</ul>
-		</div>
-		<div class="diary-more">
-			<%= link_to '全部好友', other_friends_url(:uid => @user.id) %>
 		</div>
 	</div>
 </div>
