@@ -2,7 +2,7 @@ class User::ProfilesController < UserBaseController
 
   layout 'app2'
 
-  increment_viewing 'profile', :only => [:show]
+  increment_viewing 'profile', 'id', :only => [:show]
 
 	FirstFetchSize = 5
 

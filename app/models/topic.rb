@@ -14,35 +14,12 @@ class Topic < ActiveRecord::Base
     posts.find(:first, :order => 'created_at DESC')
   end
 
-  def validate
-    if poster_id.blank?
-      errors.add_to_base('没有发布者')
-      return
-    end
+  validates_presence_of :poster_id, :message => "没有发布者"
 
-    if forum_id.blank?
-      errors.add_to_base('没有论坛')
-      return
-    elsif Forum.find(:first, :conditions => {:id => forum_id}).nil?
-      errors.add_to_base('论坛不存在')
-      return
-    end
+  validates_presence_of :forum_id, :message => "没有论坛"
 
-    if subject.blank?
-      errors.add_to_base('没有标题')
-      return
-    elsif subject.length > 100
-      errors.add_to_base('标题太长')
-      return
-    end
+  validates_size_of :subject, :within => 1..800, :too_long => "最长200个字符", :too_short => "最短1个字符"
 
-    if content.blank?
-      errors.add_to_base('没有内容')
-      return
-    elsif content.length > 10000
-      errors.add_to_base('内容太长')
-      return
-    end
-  end
+  validates_size_of :blank, :within => 1..8000, :too_long => "最长2000个字符", :too_short => "最短1个字符"
 
 end

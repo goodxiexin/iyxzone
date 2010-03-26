@@ -64,8 +64,10 @@
   Iyxzone.Mail.Builder.recipientBuilder = new Iyxzone.Friend.Tagger(10, [],[],[],'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', null);
 <% end %>
 
-<% unless @recipient.blank? %>
-<% onload_javascript_tag do %>
-  Iyxzone.Mail.Builder.recipientBuilder.addTags([{id: #{@recipient.id}, profileID: #{@recipient.profile.id}, login: '#{@recipient.login}'}]);
-<% end %>
+<% unless @recipients.blank? %>
+  <% onload_javascript_tag do %>
+  <% @recipients.each do |r| %>
+    Iyxzone.Mail.Builder.recipientBuilder.addTags([{id: #{r.id}, profileID: #{r.profile.id}, login: '#{r.login}'}]);
+  <% end %>
+  <% end %>
 <% end %>

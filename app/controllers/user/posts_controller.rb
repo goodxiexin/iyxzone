@@ -1,5 +1,7 @@
 class User::PostsController < UserBaseController
 
+  increment_viewing 'forum', 'forum_id', :only => [:index]
+
   before_filter :moderator_required, :only => [:destroy]
 
   def index

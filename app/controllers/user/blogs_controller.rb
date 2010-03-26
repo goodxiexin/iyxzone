@@ -5,7 +5,7 @@ class User::BlogsController < UserBaseController
 
   before_filter :setup_blog_privilege_cond, :only => [:show, :index]
 
-  increment_viewing 'blog', :only => [:show]
+  increment_viewing 'blog', 'id', :only => [:show]
 
   def index
     @count = @user.blogs_count @relationship

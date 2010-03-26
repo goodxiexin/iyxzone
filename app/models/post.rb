@@ -6,34 +6,12 @@ class Post < ActiveRecord::Base
 
   belongs_to :topic
 
-  def validate
-    if poster_id.blank?
-      errors.add_to_base("没有发布者")
-      return
-    end
+  validates_presence_of :poster_id, :message => "没有发布者"
 
-    if forum_id.blank?
-      errors.add_to_base("没有论坛")
-      return
-    else
-      forum = Forum.find(:first, :conditions => {:id => forum_id})
-      if forum.blank?
-        errors.add_to_base("论坛不存在")
-        return  
-      elsif topic_id.blank?
-        errors.add_to_base("没有话题")
-        return
-      elsif Topic.find(:first, :conditions => {:forum_id => forum_id, :id => topic_id}).blank?
-        errors.add_to_base("话题不存在")
-        return
-      end
-    end
+  validates_presence_of :forum_id, :message => "没有论坛"
 
-    if content.blank?
-      errors.add_to_base("没有内容")
-    elsif content.length > 10000
-      errors.add_to_base("内容太长")
-    end
-  end
+  validates_presence_of :topic_id, :message => "没有话题"
+  
+  validates_size_of :content, :within => 1..8000, :too_long => "最长2000个字符", :too_shot => "最短1个字符"
 
 end

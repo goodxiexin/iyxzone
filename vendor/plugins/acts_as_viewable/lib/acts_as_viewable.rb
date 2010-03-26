@@ -55,9 +55,9 @@ module Controller
  
   module ClassMethods
 
-    def increment_viewing(model_name, opts)
+    def increment_viewing(model_name, through, opts)
       cattr_accessor :viewing_opts
-      self.viewing_opts = {:model_name => model_name, :filter_opts => opts}
+      self.viewing_opts = {:model_name => model_name, :through => through, :filter_opts => opts}
       after_filter :create_or_update_viewing, opts
     end
 
@@ -66,9 +66,11 @@ module Controller
   module InstanceMethods
    
     def create_or_update_viewing
-      model_name = self.class.viewing_opts[:model_name]
+      opts = self.class.viewing_opts
+      model_name = opts[:model_name]
       klass = model_name.camelize.constantize
-      viewable = klass.find(params[:id])
+      through = opts[:through]
+      viewable = klass.find(params["#{through}"])
       viewing = viewable.viewings.find(:first, :conditions => {:user_id => current_user.id})
       if viewing.nil?
         viewable.viewings.create(:user_id => current_user.id)
