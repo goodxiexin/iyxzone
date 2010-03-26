@@ -1,8 +1,8 @@
 class Topic < ActiveRecord::Base
 
-  named_scope :tops, :conditions => ["top = true"]
+  named_scope :tops, :conditions => {:top => 1}
 
-  named_scope :normals, :conditions => ["top = false"]
+  named_scope :normals, :conditions => {:top => 0}
 
   belongs_to :forum
 
