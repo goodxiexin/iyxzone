@@ -126,7 +126,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
       this.currentField =  textField;
       this.currentLink = link;
       this.facesSingle.show();
-			alert(this);
+			//alert(this);
 		}else{
 			if (this.currentLink == link && this.facesSingle.visible()){
 				this.facesSingle.hide();
