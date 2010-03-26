@@ -41,7 +41,7 @@ class User::GamesController < UserBaseController
 			}
 		end
 		@players = @game.characters.find(:all)	
-
+    @attention = @game.attentions.find_by_user_id(current_user.id)
     @messages = @game.comments.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @game.id, :wall_type => 'game'}}
 

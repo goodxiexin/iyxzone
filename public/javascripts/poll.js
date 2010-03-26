@@ -20,11 +20,13 @@ Iyxzone.Poll = {
       tip('你最多只能选' + max + '项');
       checkbox.checked = false;
     }
-  }
+  },
+
+  Builder: {}
 };
 
 
-Iyxzone.Poll.Builder = {
+Object.extend(Iyxzone.Poll.Builder, {
 
   validate: function(){
     var game_id = $('poll_game_id');
@@ -68,7 +70,7 @@ Iyxzone.Poll.Builder = {
     }
 
     var currentTimeJS = new Date().getTime();
-    var endTimeJS = new Date(endDate.value).getTime();
+    var endTimeJS = Date.parseFormattedString(endDate.value);
     if(endTimeJS <= currentTimeJS){
       error('结束时间不对');
       return false;
@@ -97,15 +99,7 @@ Iyxzone.Poll.Builder = {
   toggleAdvancedOptions: function(){
     $('advanced_options').toggle();
   },
-
-  showMaxMultiple: function(){
-    $('max_multiple_select').show();
-  },
-
-  hideMaxMultiple: function(){
-    $('max_multiple_select').hide();
-  },
-
+  
   showEndDate: function(){
     $('deadline_select').show();
   },
@@ -127,11 +121,6 @@ Iyxzone.Poll.Builder = {
     }
     return cnt;
   },
-
-  changeMaxMultiple: function(){
-    var selector = $('max_multiple_select').childElements()[0];
-    $('max2').value = selector.value;
-  },
   
   removeAnswer: function(link){
     var cnt = this.countAnswers(true);
@@ -146,13 +135,12 @@ Iyxzone.Poll.Builder = {
     if(originValue > cnt - 1){
       originValue = cnt - 1;
     }
-    for(var i=0;i<cnt-2;i++){
-      var html = '<option value=' + (i+2);
-      if(i+2 == originValue){
+    for(var i=0;i<cnt-1;i++){
+      var html = '<option value=' + (i+1);
+      if(i+1 == originValue){
         html += ' selected="selected"';
-        $('max2').value = originValue;
       }
-      html += '>最多选' + (i+2) + '项</option>';
+      html += '>' + (i+1) + '项</option>';
       maxSelector.innerHTML += html;
     }
   },
@@ -162,15 +150,14 @@ Iyxzone.Poll.Builder = {
     var maxSelector = $('max_multiple_select').childElements()[0];
     var originValue = maxSelector.value;
     maxSelector.innerHTML = '';
-    for(var i=0;i<cnt-1;i++){
-      var html = '<option value=' + (i+2);
-      if(i+2 == originValue){
+    for(var i=0;i<cnt;i++){
+      var html = '<option value=' + (i+1);
+      if(i+1 == originValue){
         html += ' selected="selected"';
-        $('max2').value = originValue;
       }
-      html += '>最多选' + (i+2) + '项</option>';
+      html += '>' + (i+1) + '项</option>';
       maxSelector.innerHTML += html;
     }
   }
 
-};
+});

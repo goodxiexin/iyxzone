@@ -17,7 +17,7 @@ module ObserverLinkHelpers
 	end 
 
 	def guild_link guild
-		"<a href='/guilds/#{guild.president.id}'>#{guild.name}</a>"
+		"<a href='/guilds/#{guild.id}'>#{guild.name}</a>"
 	end
 
 	def poll_link poll
