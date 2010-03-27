@@ -191,7 +191,8 @@ Iyxzone.Photo.Tagger = Class.create({
     this.tagsHolder = $(tagsHolder);
     this.isCurrentUser = isCurrentUser;
     this.token = token;
-    
+    this.started = false;
+ 
     /*
      * save and insert all tag
      */
@@ -221,6 +222,7 @@ Iyxzone.Photo.Tagger = Class.create({
     Event.observe(this.cancelButton, 'click', function(e){
       Event.stop(e);
 			this.reset();
+      this.started = false;
     }.bind(this));
 
     this.mousemoveBind = this.showNearestTagWithContent.bindAsEventListener(this);
@@ -289,6 +291,10 @@ Iyxzone.Photo.Tagger = Class.create({
   },
 
   start: function(){
+    if(this.started){
+      return;
+    }
+
     var min = 0;
     if(this.photo.getWidth() < this.photo.getHeight()){
       min = this.photo.getWidth() * this.options.ratio;
@@ -314,6 +320,8 @@ Iyxzone.Photo.Tagger = Class.create({
     
     // 开始圈人的时候就不能自动看到框框了
     Event.stopObserving(this.photo, 'mousemove', this.mousemoveBind);
+
+    this.started = true;
   },
 
   /*
