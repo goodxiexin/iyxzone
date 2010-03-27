@@ -8,11 +8,11 @@ class User::AlbumsController < UserBaseController
   end
 
 	def recent
-    @albums = Album.recent.paginate :page => params[:page], :per_page => 10 #PersonalAlbum.recent.paginate :page => params[:page], :per_page => 5
+    @albums = Album.recent.paginate :page => params[:page], :per_page => 10
   end
 
   def friends
-    @albums = current_user.personal_album_feed_items.map(&:originator).uniq.paginate :page => params[:page], :per_page => 10 
+    @albums = current_user.friend_albums.paginate :page => params[:page], :per_page => 10 
   end
 
   def select

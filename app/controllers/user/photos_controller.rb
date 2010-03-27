@@ -7,7 +7,14 @@ class User::PhotosController < UserBaseController
   end
 
   def relative
-    @photos = @user.relative_photos.paginate :page => params[:page], :per_page => 10
+    @infos = []
+    @user.photo_tags.group_by(&:photo_id).map do |photo_id, tags|
+      photo = Photo.find(photo_id)
+      if !photo.is_owner_privilege?
+        @infos << {:photo => photo, :posters => tags.map(&:poster).uniq}
+      end
+    end
+    @infos = @infos.paginate :page => params[:page], :per_page => 12
   end
 
   def new
@@ -41,7 +48,10 @@ class User::PhotosController < UserBaseController
   end
 
   def update
+    logger.error "params[:photo] = #{params[:photo][:album_id]}"
+    logger.error "old album_id #{@photo.album_id}"
     if @photo.update_attributes(params[:photo])
+      logger.error "current_album_id #{@photo.album_id}"
 			respond_to do |format|
 				format.json { render :json => @photo }
 				format.html { render :update do |page|
