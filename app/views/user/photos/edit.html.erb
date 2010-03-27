@@ -22,7 +22,7 @@
     <div class="rows s_clear">
       <div class="fldid"><label for="name">专辑封面：</label></div>
       <div class="fldvalue"> 
-        <%= check_box_tag 'cover', 1, @photo.is_cover? %>设置为封面
+        <%= check_box_tag 'photo[cover]', 1, @photo.is_cover? %>设置为封面
       </div>
     </div>
   </div>

@@ -41,13 +41,13 @@ class User::PhotosController < UserBaseController
   end
 
   def update
-    @album.update_attribute('cover_id', @photo.id) if params[:cover]
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
 				format.json { render :json => @photo }
 				format.html { render :update do |page|
-					if @photo.album_id_changed?
-						page.redirect_to personal_photo_url(@photo)
+					if @album.id != @photo.album_id
+            # stay in old album
+						page.redirect_to personal_album_url(@album)
 					else
 						page << "facebox.close();"
 						page << "if($('personal_photo_notation_#{@photo.id}'))$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
