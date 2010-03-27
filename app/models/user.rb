@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
 	has_many :comrade_suggestions
 
   has_one :profile, :dependent => :destroy
-	
 
 	# mails
 	has_many :out_mails, :class_name => 'Mail', :foreign_key => 'sender_id', 

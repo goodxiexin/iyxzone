@@ -37,7 +37,7 @@
         <div class="nav-link">
           <ul class="s_clear">
             <li class='hover'><%= link_to "<span>人气最高</span>", hot_personal_photos_url(:uid => @user.id) %></li>
-            <li><%= link_to "<span>最新创建</span>", recent_personal_albums_url(:uid => @user.id) %></li>
+            <li><%= link_to "<span>最新上传</span>", recent_personal_albums_url(:uid => @user.id) %></li>
           </ul>
         </div>
         <% if @photos.blank? %>

@@ -89,7 +89,7 @@ module ApplicationHelper
   end
 
   def album_cover_image album, opts={}
-    size = opts.delete(:size) || 'medium'
+    size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
       image_tag "default_cover_#{size}.png", opts
     else
@@ -98,7 +98,7 @@ module ApplicationHelper
   end
 
   def album_cover(album, opts={})
-		size = opts.delete(:size) || 'medium'
+		size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
       link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album)")
     else
