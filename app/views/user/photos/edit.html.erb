@@ -3,8 +3,8 @@
   <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
 </p>
 
-<div id='errors'></div>
 <div class='z-con'>
+  <div id='errors'></div>
   <% form_remote_for :photo, :url => personal_photo_url(@photo), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');" } do |f| %>
   <div class='formcontent'>
     <div class="rows s_clear">
