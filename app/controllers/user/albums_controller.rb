@@ -70,11 +70,12 @@ class User::AlbumsController < UserBaseController
   end
 
   def destroy
-    if params[:migration] and params[:migration].to_i == 1 and !params[:album][:id].blank?
-      Photo.update_all("album_id = #{params[:album][:id]}", "album_id = #{@album.id}")
-      Album.update_all("photos_count = photos_count + #{@album.photos_count}", "id = #{params[:album][:id]}")
+    if params[:migration] and params[:migration].to_i == 1 and params[:migrate_to]
+      new_album = current_user.albums.find(params[:migrate_to])
+      Photo.update_all("album_id = #{new_album.id}, privilege = #{new_album.privilege}", {:album_id => @album.id})
+      new_album.update_attribute(:photos_count, new_album.photos_count + @album.photos_count)
     end
-
+    
     if @album.destroy
 		  render :update do |page|
 			  page.redirect_to personal_albums_url(:uid => current_user.id)  
