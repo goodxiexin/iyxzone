@@ -7,7 +7,7 @@ Iyxzone.Blog = {
 
 Object.extend(Iyxzone.Blog.Builder, {
 
-  saved: false,
+  saved: false, 
 
   editor: null, // initialize this in your page
 

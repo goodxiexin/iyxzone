@@ -79,6 +79,7 @@ protected
   end
 
   def render_add_friend friend
+    flash[:notice] = '只有TA的好友才有权限查看该资源'
     redirect_to new_friend_url(:uid => friend.id) 
   end
 
