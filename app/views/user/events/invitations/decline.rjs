@@ -1,5 +1,5 @@
-if params[:show].to_i == 1
+if params[:at] == 'event'
   page.redirect_to event_url(@event)
-elsif params[:show].to_i == 2
+elsif params[:at] == 'invitations'
   page << "$('event_invitation_option_#{@invitation.id}').innerHTML = '已拒绝';"
 end

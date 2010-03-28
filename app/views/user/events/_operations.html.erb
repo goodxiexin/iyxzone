@@ -18,7 +18,7 @@
   <% end %>
     <% code = @event.is_requestable_by?(current_user).to_i %>
     <% if code > 0 %>
-      <table class="title"><tr><td><h3 class="icon-sinker">发送 <%= facebox_link '请求', new_event_request_url(@event, :show => 1) %> 加入该活动？</h3></td></tr></table>
+      <table class="title"><tr><td><h3 class="icon-sinker">发送 <%= facebox_link '请求', new_event_request_url(@event) %> 加入该活动？</h3></td></tr></table>
     <% elsif code == 0 %>
       <div>只有他的好友可以参加，<%= facebox_link '加他为好友', new_friend_request_url(:friend_id => @user.id), :class => 'red' %></div> 
     <% elsif code == -1 %>

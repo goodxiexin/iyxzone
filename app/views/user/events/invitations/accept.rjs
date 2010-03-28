@@ -1,7 +1,7 @@
-if params[:show].to_i == 1
+if params[:at] == 'event'
   flash[:notice] = "成功提交"
   page.redirect_to event_url(@event)
-elsif params[:show].to_i == 2
+elsif params[:at] == 'invitations'
   page << "$('event_invitation_option_#{@invitation.id}').innerHTML = '#{@invitation.to_s}';"
 end
 

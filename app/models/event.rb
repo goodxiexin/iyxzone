@@ -141,7 +141,7 @@ class Event < ActiveRecord::Base
       return 1 if guild.has_member?(user)
       return -2
     else
-      return 1 if privilege == 1 || (privilege == 2 and poster.has_friend? user)
+      return 1 if poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
       return 0
     end
   end

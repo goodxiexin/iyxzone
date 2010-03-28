@@ -22,11 +22,7 @@ class User::Events::RequestsController < UserBaseController
   end
 
   def accept
-    if @request.accept
-      render :update do |page|
-        page << "$('event_request_option_#{@request.id}').innerHTML = '已成功接受';"
-      end
-    else
+    unless @request.accept
       render :update do |page|
         page << "error('发生错误');"
       end
@@ -34,11 +30,7 @@ class User::Events::RequestsController < UserBaseController
   end
 
   def decline
-    if @request.destroy
-      render :update do |page|
-        page << "$('event_request_option_#{@request.id}').innerHTML = '已拒绝';"
-      end
-    else
+    unless @request.destroy
       render :update do |page|
         page << "error('发生错误');"
       end
