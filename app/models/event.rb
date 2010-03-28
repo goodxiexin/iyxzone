@@ -93,8 +93,32 @@ class Event < ActiveRecord::Base
     participations.find(:all, :conditions => {:participant_id => user.id})
   end
 
+  def confirmed_and_maybe_participations_for user
+    participation.find(:all, :conditions => {:status => [Participation::Confirmed, Participation::Maybe], :participant_id => user.id})
+  end
+
+  def requests_for user
+    requests.find(:all, :conditions => {:participant_id => user.id})
+  end
+
+  def invitations_for user
+    invitations.find(:all, :conditions => {:participant_id => user.id})
+  end
+
   def characters_for user
     all_characters.find(:all, :conditions => {:user_id => user.id})  
+  end
+
+  def confirmed_and_maybe_characters_for user
+    characters.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def request_characters_for user
+    request_characters.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def invite_characters_for user
+    invite_characters.find(:all, :conditions => {:user_id => user.id})
   end
 
   def is_guild_event?

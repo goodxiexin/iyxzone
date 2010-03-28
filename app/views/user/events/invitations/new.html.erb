@@ -9,7 +9,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @event.album, :class => "imgbox01" %></span>
+      <span class="left"><%= album_cover_image @event.album, :size => 'medium', :class => "imgbox01", :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @event.title %>活动邀请</strong><br/>
         <%= link_to '活动主页', event_url(@event), :class => 'red' %>
@@ -34,8 +34,8 @@
             <span>邀请好友</span>
           </div><br/>
           <div class="friend-invite-head">
-            <strong class="green"><% if @guild %>搜索工会战友的游戏角色：<% else %>搜索好友的游戏角色<% end %></strong> 
-            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear()", :onfocus => "Iyxzone.Invitation.Builder.startObserving($(search));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
+            <strong class="green"><% if @guild %>搜索工会战友的游戏角色：<% else %>搜索好友的游戏角色：<% end %></strong> 
+            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear()", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
           </div>
           <div class="friend-invite-list">
           <% if @characters.blank? %>

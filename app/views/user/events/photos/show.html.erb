@@ -13,7 +13,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover @event.album, :class => "imgbox01" %></span>
+      <span class="left"><%= album_cover @event.album, :class => "imgbox01", :size => "medium", :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @event.title%>活动照片</strong><br/>
         <%= link_to '活动主页', event_url(@event), :class => 'red' %>
@@ -37,8 +37,9 @@
           <div class="img-container-wrap">
             <div class="img-container">
               <div class="path-box">
-								<label><%= @event.title %>的相册</label>
-                <label><%= album_link @album %></label><span>查看照片</span>
+								<label>活动 "<%= event_link @event %>"</label>
+                <label><%= link_to "相册", event_album_url(@event.album) %></label>
+                <span>查看照片</span>
               </div>
               <div class="img-main">
                 <div class="imgwrap">
@@ -64,7 +65,7 @@
 										<% if @event.poster == current_user %>
 											<%= in_place_text_area @photo, :notation, '点击增加照片描述', :param_name => 'photo[notation]' %>
 										<% else %>
-											<%= @photo.notation %>
+											<%= simple_format @photo.notation %>
 										<% end %>
 										</h4>
 										<ul class="mark-list s_clear" id='photo_tags'>

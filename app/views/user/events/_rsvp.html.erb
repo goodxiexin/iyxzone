@@ -10,13 +10,13 @@
       <% @participations.group_by(&:status).each do |status, participations| %>
         <% participations.each do |p| %>
           <% if status == Participation::Confirmed %>
-            <tr><td><%= p.character.name %></td><td>一定去<% unless p.character == @event.poster_character %><%= facebox_link "[修改]", edit_event_participation_url(@event, p) %><% end %></td></tr>
+            <tr><td><%= p.character.name %></td><td>一定去<% if p.character != @event.poster_character and !@event.expired? %><%= facebox_link "[修改]", edit_event_participation_url(@event, p) %><% end %></td></tr>
           <% elsif status == Participation::Maybe %>
-            <tr><td><%= p.character.name %></td><td>可能去<%= facebox_link "[修改]", edit_event_participation_url(@event, p) %></td></tr>
+            <tr><td><%= p.character.name %></td><td>可能去<% if !@event.expired? %><%= facebox_link "[修改]", edit_event_participation_url(@event, p) %><% end %></td></tr>
           <% elsif status == Participation::Invitation %>
-            <tr><td><%= p.character.name %></td><td><%= facebox_link "[回复]", edit_event_invitation_url(@event, p) %></td></tr>
+            <tr><td><%= p.character.name %></td><td>被邀请<%= facebox_link "[回复]", edit_event_invitation_url(@event, p) %></td></tr>
           <% elsif status == Participation::Request %>
-            <tr><td><%= p.character.name %></td><td>[已请求]</td></tr>
+            <tr><td><%= p.character.name %></td><td>已请求[等待]</td></tr>
           <% end %>
         <% end %>
       <% end %>

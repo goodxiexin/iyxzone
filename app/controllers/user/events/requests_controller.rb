@@ -3,7 +3,11 @@ class User::Events::RequestsController < UserBaseController
   layout 'app'
 
   def new
-    @characters = current_user.characters.find(:all, :conditions => {:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id}) - @event.characters_for(current_user)
+    @request_characters = @event.request_characters_for current_user
+    @invite_characters = @event.invite_characters_for current_user
+    @confirmed_and_maybe_characters = @event.confirmed_and_maybe_characters_for current_user
+    @user_characters = current_user.characters.find(:all, :conditions => {:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id})
+    @characters = @user_characters - @request_characters - @invite_characters - @confirmed_and_maybe_characters
     render :action => 'new', :layout => false
   end
 
@@ -12,7 +16,7 @@ class User::Events::RequestsController < UserBaseController
     @request = @event.requests.build request_params
     unless @request.save
       render :update do |page|
-        page << "error('发生错误');"
+        page << "error('发生错误，可能活动已经过期了');"
       end
     end
   end
