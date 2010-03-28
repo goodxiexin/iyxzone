@@ -58,7 +58,7 @@ Object.extend(Iyxzone.Blog.Builder, {
       this.prepare(form);
       new Ajax.Request('/blogs', {
         method: 'post',
-        parameters: this.parameters,
+        parameters: this.parameters
       });
     }else{
       Iyxzone.enableButtonThree(button, '发布');
