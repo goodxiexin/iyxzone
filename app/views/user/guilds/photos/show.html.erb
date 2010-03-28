@@ -63,7 +63,7 @@
 										<% if @membership and @membership.is_president? %>
 											<%= in_place_text_area @photo, :notation, '点击增加照片描述', :param_name => 'photo[notation]' %>
 										<% else %>
-											<%= @photo.notation %>
+											<%= simple_format @photo.notation %>
 										<% end %>
 										</h4>
 										<ul class="mark-list s_clear" id='photo_tags'>

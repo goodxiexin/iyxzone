@@ -46,7 +46,7 @@
       <% if @guild.president == current_user %>
       <%= in_place_text_area @guild, :description, '介绍下工会?' %>
       <% else %>
-      <%= @guild.description %>
+      <%= simple_format @guild.description %>
       <% end %>
     </div>
   </div>
@@ -105,6 +105,10 @@
 
   <% if @role and (@role.is_president? or @role.is_authorized?) %>
     <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @guild, :recipient => @guild.president, :with_comments => false} %>
+  <% else %>
+    <div class="bookbox">
+      <h3><label for="book">留言板</label>(共<%= @guild.comments_count %>条留言)</h3>
+    </div>
   <% end %>
 
   <div class="feed-box" id='comments'>
