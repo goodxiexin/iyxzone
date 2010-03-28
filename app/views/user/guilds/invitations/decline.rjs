@@ -1,7 +1,6 @@
-if params[:show].to_i == 0
-	page.redirect_to guilds_url(:uid => current_user.id)
-elsif params[:show].to_i == 1
+if params[:at] == 'guild'
+  flash[:notice] = '成功提交'
   page.redirect_to guild_url(@guild)
-elsif params[:show].to_i == 2
+elsif params[:at] == 'invitations'
   page << "$('guild_invitation_option_#{@invitation.id}').innerHTML = '已拒绝';"
 end

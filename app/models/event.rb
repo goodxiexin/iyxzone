@@ -133,9 +133,13 @@ class Event < ActiveRecord::Base
     start_time_changed? || end_time_changed?
   end
 
+  def requestable_characters_for user
+    user.characters.find(:first, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) - characters_for(user)
+  end
+
   def is_requestable_by? user
     return -3 if expired? 
-    return -1 if user.characters.find(:first, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}).blank?
+    return -1 if requestable_characters_for(user).blank? 
 
     if is_guild_event?
       return 1 if guild.has_member?(user)

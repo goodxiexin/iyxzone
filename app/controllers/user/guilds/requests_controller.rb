@@ -3,7 +3,11 @@ class User::Guilds::RequestsController < UserBaseController
   layout 'app'
 
   def new
-    @characters = @guild.requestable_characters_for current_user 
+    @request_characters = @guild.request_characters_for current_user
+    @invite_characters = @guild.invite_characters_for current_user
+    @guild_characters = @guild.characters_for current_user
+    @user_characters = current_user.characters.find(:all, :conditions => {:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id})
+    @characters = @user_characters - @request_characters - @invite_characters - @guild_characters
     render :action => 'new', :layout => false
   end
 
@@ -18,11 +22,7 @@ class User::Guilds::RequestsController < UserBaseController
   end
 
   def accept
-    if @request.update_attributes(:status => Membership::Member)
-      render :update do |page|
-        page << "$('guild_request_option_#{@request.id}').innerHTML = '已接受';"
-      end
-    else
+    unless @request.update_attributes(:status => Membership::Member)
       render :update do |page|
         page << "error('发生错误');"
       end
@@ -30,11 +30,7 @@ class User::Guilds::RequestsController < UserBaseController
   end
 
   def decline
-    if @request.destroy
-      render :update do |page|
-        page << "$('guild_request_#{@request.id}').remove();"
-      end
-    else
+    unless @request.destroy
       render :update do |page|
         page << "error('发生错误');"
       end

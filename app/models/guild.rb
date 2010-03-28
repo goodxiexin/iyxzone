@@ -117,12 +117,36 @@ class Guild < ActiveRecord::Base
     !memberships.find(:first, :conditions => {:character_id => character.id, :status => [3,4,5]}).blank?
   end
 
-  def memberships_for user
+  def all_memberships_for user
     memberships.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def memberships_for user
+    memberships.find(:all, :conditions => {:user_id => user.id, :status => [3, 4, 5]})
+  end
+
+  def requests_for user
+    requests.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def invitations_for user
+    invitations.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def all_characters_for user
+    all_characters.find(:all, :conditions => {:user_id => user.id})
   end
 
   def characters_for user
     characters.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def request_characters_for user
+    request_characters.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def invite_characters_for user
+    invite_characters.find(:all, :conditions => {:user_id => user.id})
   end
 
   def role_for user
@@ -130,7 +154,7 @@ class Guild < ActiveRecord::Base
   end
 
   def requestable_characters_for user
-    user.characters.find(:all, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) - 
+    user.characters.find(:all, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) -  
     all_characters.find(:all, :conditions => "memberships.user_id = #{user.id}")
   end
 
