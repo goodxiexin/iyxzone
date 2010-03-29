@@ -27,7 +27,7 @@
 		    <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
         <%= will_paginate @guilds %>
       <% else %>
-        <div class='gray'>没有热门工会，你赶紧<%= link_to '创建一个', new_guild_url %>吧</div>
+        <div class='tip'>没有热门工会，你赶紧<%= link_to '创建一个', new_guild_url %>吧</div>
       <% end %>
       </div>
     </div>
