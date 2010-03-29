@@ -3,27 +3,34 @@
   <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
 </p>
 
-<div id='error'></div>
 <div class='z-con'>
 <% if @characters.blank? %>
   <div class='tip'>你没有游戏角色可以加入这个工会</div>
 <% else %>
 <% form_remote_for :request, :url => guild_requests_url(@guild, :at => 'guild'), :html => {:method => :post, :onsubmit=> "Iyxzone.disableButton($(new_request_guild_btn),'请等待..');"} do |f| %>
-<div class='content'>
-  <% unless @request_characters.blank? %>
-    <div class='tip'>你的 <%= @request_characters.map(&:name).join(', ') %> 已经请求加入工会
-  <% end %>
-  <% unless @invite_characters.blank? %>
-    <div class='tip'>你的 <%= @invite_characters.map(&:name).join(', ') %> 被邀请加入工会
-  <% end %>
-  <% unless @guild_characters.blank? %>
-    <div class='tip'>你的 <%= @invite_characters.map(&:name).join(', ') %> 已经是工会的成员了
-  <% end %>
-  <div class='tip'>你还想让 <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %> 加入工会? </div>
+<div class='formcontent'>
+  <div class='rows s_clear'>
+    <% if @characters.blank? %>
+      <div class='tip'>你没有游戏角色可以加入这个工会</div>
+    <% else %>
+      <% unless @request_characters.blank? %>
+        <div class='tip'>你的 <%= @request_characters.map(&:name).join(', ') %> 已经请求加入工会</div>
+      <% end %>
+      <% unless @invite_characters.blank? %>
+        <div class='tip'>你的 <%= @invite_characters.map(&:name).join(', ') %> 被邀请加入工会</div>
+      <% end %>
+      <% unless @guild_characters.blank? %>
+        <div class='tip'>你的 <%= @guild_characters.map(&:name).join(', ') %> 已经是工会的成员了</div>
+      <% end %>
+      <div class='tip'>你还想让 <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %> 加入工会? </div>
+    <% end %>
+  </div>
 </div>
 <div class="z-submit s_clear space">
   <table class="center" cellpadding="0"><tr><td>
+    <% unless @characters.blank? %>
     <span class="button"><span><button type="submit" id="new_request_guild_btn">完成</button></span></span>
+    <% end %>
     <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
   </td></tr></table>
 </div>

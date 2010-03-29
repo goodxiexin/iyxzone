@@ -1,7 +1,7 @@
 <% delivery = album_feed_delivery %>
 <% album = delivery.feed_item.originator %>
 <% photos = album.photos.find(:all, :conditions => {:id => delivery.feed_item.data[:ids]}) %>
-<% poster = photos.first.poster %>
+<% poster = album.poster %>
 <% type = photos.first.class.name.underscore %>
 
 <div class="feed-list-box">

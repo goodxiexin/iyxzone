@@ -5,7 +5,7 @@
 
 <div class='z-con'>
   <div id='errors'></div>
-  <% form_remote_for :photo, :url => avatar_url(@photo), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');" } do |f| %>
+  <% form_remote_for :photo, :url => avatar_url(@photo, :at => params[:at]), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');" } do |f| %>
   <div class='formcontent'>
     <div class="rows s_clear">
       <div class="fldid"><label for="name">照片描述：</label></div>

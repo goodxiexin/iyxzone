@@ -39,21 +39,17 @@ class User::Avatars::PhotosController < UserBaseController
     end
   end
 
-  def set
-    unless @album.set_cover @photo
-      render :update do |page|
-        page << "error('发生错误');"
-      end
-    end
-  end
-
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
 				format.json { render :json => @photo }
 				format.html { render :update do |page|
 					page << "facebox.close();"
-					page << "if($('avatar_notation_#{@photo.id}'))$('avatar_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
+          if params[:at] == 'set_cover'
+            page.redirect_to avatar_album_url(@album)
+          elsif params[:at] == 'photo'
+					  page << "$('avatar_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
+          end
 				end }
 			end
     else
@@ -86,7 +82,7 @@ protected
       @album = @photo.album
       @user = @album.poster
       require_friend_or_owner @user
-    elsif ['edit', 'set', 'update', 'destroy', 'update_notation'].include? params[:action]
+    elsif ['edit', 'update', 'destroy', 'update_notation'].include? params[:action]
       @album = current_user.avatar_album
       @photo = @album.photos.find(params[:id])
       require_owner @photo.poster

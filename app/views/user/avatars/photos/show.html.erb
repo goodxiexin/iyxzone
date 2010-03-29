@@ -52,7 +52,7 @@
 										<% end %>
 										<% if @user == current_user %>
 										<span class="photo-op-edit"></span>
-                    <%= facebox_link '编辑', edit_avatar_url(@photo) %> | 
+                    <%= facebox_link '编辑', edit_avatar_url(@photo, :at => 'photo') %> | 
 										<span class="photo-op-del"></span>
                     <%= facebox_confirm '删除', avatar_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
 										<% end %>

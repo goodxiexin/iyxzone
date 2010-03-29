@@ -4,7 +4,7 @@
 </p>
 
 <div class="z-con">
-<% form_remote_for :photo, :url => guild_photo_url(@photo), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');"} do |f| %>
+<% form_remote_for :photo, :url => guild_photo_url(@photo, :at => params[:at]), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');"} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
     <div class="fldid"><label for="name">照片描述：</label></div>
@@ -22,7 +22,7 @@
   <div class="rows s_clear">
     <div class="fldid"><label for="des">专辑封面：</label></div>
     <div class="fldvalue">
-      <%= check_box_tag 'cover', 1, @photo.is_cover? %>设置为公会封面
+      <%= check_box_tag 'photo[cover]', 1, @photo.is_cover? %>设置为公会封面
     </div>
   </div>
   <% end %>

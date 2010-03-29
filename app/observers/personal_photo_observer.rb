@@ -45,7 +45,9 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     else
       # if photo is not moved anywhere
       if photo.cover
-        photo.album.update_attribute(:cover_id, photo.id)
+        photo.album.update_attribute(:cover_id, photo.id) if photo.album.cover_id != photo.id
+      else
+        photo.album.update_attribute(:cover_id, nil) if photo.album.cover_id == photo.id
       end
     end
   end

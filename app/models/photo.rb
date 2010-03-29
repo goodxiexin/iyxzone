@@ -29,4 +29,6 @@ class Photo < ActiveRecord::Base
     self.uploaded_data = data
   end
 
+  attr_accessor :cover
+
 end

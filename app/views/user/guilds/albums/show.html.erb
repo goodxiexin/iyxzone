@@ -5,7 +5,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01" %></span>
+      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01", :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @guild.name%>公会相册</strong><br/>
         <%= link_to '公会主页', guild_url(@guild), :class => 'red' %>
@@ -14,7 +14,7 @@
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right">
-          <% if @membership and (@membership.is_president? or @membership.is_veteran?) %>
+          <% if @guild.president == current_user %>
             <%= link_to "上传照片", new_guild_photo_url(:album_id => @album.id) %>
           <% end %>
         </div>
@@ -25,8 +25,8 @@
       </div>
       <div class="pic-box">
         <div class="path-box">
-					<label><%= @guild.name %>的相册</label>
-          <label><%= album_link @album %></label><span>查看照片</span>
+					<label><%= guild_link @guild %></label>
+          <span>相册</span>
 					<%= facebox_link '分享', new_sharing_url(:shareable_type => 'Album', :shareable_id => @album.id), :class => 'right love-btn' %>
         </div>
         <table class="photo-edit-list">
@@ -51,10 +51,10 @@
 					<% } %>
 				<% end %>
 				</tr>
-        <% if @membership and @membership.is_president? %>
+        <% if @guild.president == current_user %>
 					<tr>
 					<% @photos[j..j+n].each do |p| %>                         
-						<td><%= facebox_link "", edit_guild_photo_url(p), :class => "icon-active icon-active-edit" %><%= facebox_confirm '', guild_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %></td>
+						<td><%= facebox_link "", edit_guild_photo_url(p, :at => 'album'), :class => "icon-active icon-active-edit" %><%= facebox_confirm '', guild_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %></td>
 					<% end %>
 					<% if n < 3 %>
 						<% n.upto(2){ %>

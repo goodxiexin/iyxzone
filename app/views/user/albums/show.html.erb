@@ -64,7 +64,7 @@
         <% if @album.poster == current_user %>
 					<tr>
 					<% @photos[j..j+n].each do |p| %>                         
-						<td><%= facebox_link "", edit_personal_photo_url(p), :class => "icon-active icon-active-edit" %><%= facebox_confirm '', personal_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %></td>
+						<td><%= facebox_link "", edit_personal_photo_url(p, :at => 'album'), :class => "icon-active icon-active-edit" %><%= facebox_confirm '', personal_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %></td>
 					<% end %>
 					<% if n < 3 %>
 						<% n.upto(2){ %>

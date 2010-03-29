@@ -33,18 +33,25 @@ class AvatarObserver < ActiveRecord::Observer
 		avatar.deliver_feeds :recipients => recipients
 	end
 
-  def before_update avatar 
+  def before_update avatar
+    return unless avatar.thumbnail.blank? 
     if avatar.notation_changed?
       avatar.verified = 0
     end
   end
-  
-  def before_destroy avatar
-    return false
-    #return unless avatar.thumbnail.blank?
-    #return false if avatar.is_cover?
-  end
-
+ 
+  def after_update avatar
+    return unless avatar.thumbnail.blank?
+    if avatar.cover
+      if avatar.album.cover_id != avatar.id
+        avatar.album.update_attribute('cover_id', avatar.id)
+        avatar.poster.update_attribute('avatar_id', avatar.id)
+      end
+    else
+      # 不存在这种情况, 必须有一个头像
+    end
+  end 
+ 
   def after_destroy avatar
     return unless avatar.thumbnail.blank?
     # decrement counter

@@ -42,11 +42,8 @@ class User::EventsController < UserBaseController
 
   def new
     @event = Event.new
-    unless params[:guild_id].blank?
-      @guild = Guild.find(params[:guild_id])
-			@characters = @guild.memberships_for(current_user).select do |m| 
-        m.status == Membership::Veteran || m.status == Membership::President
-      end.map(&:character)	
+    unless @guild.blank?
+			@characters = @guild.characters.find(:all, :conditions => "game_characters.user_id = #{current_user.id} AND (memberships.status = 3 OR memberships.status = 4)")
 		end
   end
 
@@ -56,7 +53,11 @@ class User::EventsController < UserBaseController
     if @event.save
       redirect_to new_event_invitation_url(@event)
     else
-      render :action => 'new'
+      if @event.is_guild_event?
+        render :action => 'new', :guild_id => @event.guild_id
+      else
+        render :action => 'new'
+      end
     end
   end
 
@@ -106,7 +107,9 @@ class User::EventsController < UserBaseController
 protected
 
   def setup
-    if ['edit', 'update', 'destroy'].include? params[:action]
+    if ['new'].include? params[:action]
+      @guild = current_user.privileged_guilds.find(params[:guild_id]) if !params[:guild_id].blank?
+    elsif ['edit', 'update', 'destroy'].include? params[:action]
       @event = Event.find(params[:id])
       require_owner @event.poster
       require_event_not_expired @event if params[:action] == 'destroy'
