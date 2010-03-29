@@ -123,7 +123,7 @@
       <div class="diary-header">
         <p><%= blog_link blog %> <%= ftime blog.created_at %> <%= blog.digs_count %>人顶了</p>
       </div>
-      <p> <%= truncate blog.content, :length => 80, :omission => '...' %> </p>
+      <p> <%= blog_content blog, :length => 80, :omission => '...' %> </p>
     </div>
   <% end %>
 	<% else %>

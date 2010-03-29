@@ -12,7 +12,7 @@
 	<% end %>
   <div class="jl-list-con"><%= profile_link sharing.poster%> 分享了 <%= profile_link blog.poster %> 的日志 <%= blog_link blog, :class => 'shine'%>
   <p class="gray jl-con">
-		<%= truncate blog.content, :length => 80, :omission => '...' %>
+		<%= blog_content blog, :length => 80, :omission => '...' %>
 	</p>
   <p class="gray"><%= ftime delivery.created_at %><%= link_to_function '评论', "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null)" %></p>
 	  <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => sharing, :recipient => nil} %>
