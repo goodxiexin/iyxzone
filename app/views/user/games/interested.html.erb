@@ -38,7 +38,11 @@
             <li class='hover'><%= link_to "<span>#{subject}关注的游戏</span>", interested_games_url(:uid => @user.id) %></li>
           </ul>
         </div>
+        <% if !@games.blank? %>
 		    <%= render :partial => 'game_items', :object => @games %>
+        <% else %>
+        <div class='tip'>你还没关注任何游戏，是不是有点二？快去<%= link_to "游戏推荐", game_suggestions_url %>看看 </div>
+        <% end %>
       </div>
     </div>
   </div></div>
