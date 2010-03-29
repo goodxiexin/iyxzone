@@ -32,7 +32,7 @@
           </label>
           <span><%= album_link @album %></span><span>照片</span></p>
           <% if @user == current_user %>
-            <%= facebox_link '替换头像', new_avatar_url(:album_id => @album.id, :in_album => 1) %>
+            <%= facebox_link '替换头像', new_avatar_url(:album_id => @album.id, :at => 'album') %>
 					<% else %>
 					  <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Album', :shareable_id => @album.id), :class => 'right love-btn' %>
           <% end %>
@@ -78,7 +78,7 @@
         <%= will_paginate @photos %>
         <% else %>
 					<% if @user == current_user %>
-					<div class='gray'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :album => 1) %>吧</div>
+					<div class='gray'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'albums') %>吧</div>
 					<% else %>
 					<div class='gray'>还没有图片</div>
 					<% end %>
