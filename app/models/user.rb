@@ -338,7 +338,7 @@ class User < ActiveRecord::Base
 	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4"
 
   def friend_albums
-    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
+    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "(privilege != 4) AND (uploaded_at != NULL)", :order => 'uploaded_at desc')
   end
 
 	# feeds

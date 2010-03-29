@@ -397,13 +397,6 @@ ActiveRecord::Schema.define(:version => 20100326140609) do
 
   add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
 
-  create_table "moderator_forums", :force => true do |t|
-    t.integer  "forum_id"
-    t.integer  "moderator_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "news", :force => true do |t|
     t.integer  "game_id"
     t.integer  "poster_id"
