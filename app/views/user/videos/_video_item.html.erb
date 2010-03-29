@@ -1,5 +1,5 @@
 <tr id='video_<%= video_item.id %>'>
-  <td class='title'><%= video_link video_item %></td>
+  <td class='title'><div><%= video_link video_item %></div></td>
   <td class='time'><%= ftime video_item.created_at %></td>
   <% if @user == current_user %>
     <td class="icon"><%= link_to "", edit_video_url(video_item), :class => "icon-active icon-active-edit" %></td>
