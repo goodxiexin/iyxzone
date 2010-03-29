@@ -29,6 +29,8 @@ class Blog < ActiveRecord::Base
                       :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster}, 
                       :create_conditions => lambda {|user, blog| blog.available_for? user}
 
+  acts_as_abstract :columns => [:content]
+
   # poster_id 和 game_id 一经创建无法修改
   attr_readonly :poster_id, :game_id
 

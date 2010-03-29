@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100326140609) do
+ActiveRecord::Schema.define(:version => 20100329082446) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -41,18 +41,19 @@ ActiveRecord::Schema.define(:version => 20100326140609) do
   create_table "blogs", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "game_id"
-    t.string   "title",          :limit => 64
-    t.text     "content",        :limit => 16777215
-    t.integer  "sharings_count",                     :default => 0
-    t.integer  "digs_count",                         :default => 0
-    t.integer  "comments_count",                     :default => 0
-    t.integer  "tags_count",                         :default => 0
-    t.integer  "viewings_count",                     :default => 0
-    t.boolean  "draft",                              :default => true
-    t.integer  "privilege",                          :default => 1
+    t.string   "title",            :limit => 64
+    t.text     "content",          :limit => 16777215
+    t.integer  "sharings_count",                       :default => 0
+    t.integer  "digs_count",                           :default => 0
+    t.integer  "comments_count",                       :default => 0
+    t.integer  "tags_count",                           :default => 0
+    t.integer  "viewings_count",                       :default => 0
+    t.boolean  "draft",                                :default => true
+    t.integer  "privilege",                            :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "verified",                           :default => 0
+    t.integer  "verified",                             :default => 0
+    t.text     "content_abstract"
   end
 
   add_index "blogs", ["poster_id"], :name => "index_blogs_on_poster_id"
@@ -402,14 +403,15 @@ ActiveRecord::Schema.define(:version => 20100326140609) do
     t.integer  "poster_id"
     t.string   "news_type"
     t.text     "data"
-    t.integer  "comments_count",                :default => 0
-    t.integer  "viewings_count",                :default => 0
-    t.integer  "sharings_count",                :default => 0
+    t.integer  "comments_count",                  :default => 0
+    t.integer  "viewings_count",                  :default => 0
+    t.integer  "sharings_count",                  :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",          :limit => 64
-    t.string   "origin_addr",    :limit => 256
-    t.integer  "digs_count",                    :default => 0
+    t.string   "title",            :limit => 64
+    t.string   "origin_addr",      :limit => 256
+    t.integer  "digs_count",                      :default => 0
+    t.text     "content_abstract"
   end
 
   create_table "notices", :force => true do |t|
