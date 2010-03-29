@@ -3,6 +3,7 @@ class User::FriendsController < UserBaseController
   layout 'app'
   
   def index
+		@user = current_user
     @game = Game.find(params[:game_id]) unless params[:game_id].nil?
     @guild = Guild.find(params[:guild_id]) unless params[:guild_id].nil?
     case params[:term].to_i
@@ -53,8 +54,8 @@ protected
 
   def setup
     if ["destroy"].include? params[:action]
-      @friendship = Friendship.find_by_friend_id(params[:friend_id])
-      require_owner @friendship.user
+      @friendship = current_user.friendships.find_by_friend_id(params[:id])#Friendship.find_by_friend_id(params[:friend_id])
+      #require_owner @friendship.user
     elsif ["new"].include? params[:action]
       @user = User.find(params[:uid])
       @profile = @user.profile

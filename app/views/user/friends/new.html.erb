@@ -63,6 +63,7 @@
 		<strong><%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %></strong> 或者 <strong><%= link_to "发站内信", new_mail_url(:recipient_ids => [@user.id]) %></strong>
 	</div>
 
+<% unless @common_friends.blank? %>
 	<div class="multibox">
 		<div class="title"><%= link_to '更多', common_friends_url(:uid => @user.id) %><b>共同好友</b></div>
 		<div class="photolist-box">
@@ -76,6 +77,7 @@
 			</ul>
 		</div>
 	</div>
+<% end %>
 
 	<div class="multibox">
 		<div class="title"><%= link_to '全部好友', other_friends_url(:uid => @user.id) %><b>他的好友</b></div>

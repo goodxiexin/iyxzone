@@ -26,14 +26,16 @@ class VideoObserver < ActiveRecord::Observer
       video.poster.raw_decrement "videos_count#{video.privilege_was}"
     end
 
-    if video.is_owner_privilege? and video.privilege_was != 4
-      video.destroy_feeds
-    else
-      if video.privilege != 4 and video.privilege_was == 4 and video.poster.application_setting.emit_video_feed
+    if video.privilege != 4 and video.privilege_was == 4
+      if video.poster.application_setting.emit_video_feed
         recipients = [video.poster.profile]
         recipients.concat video.poster.guilds
         recipients.concat video.poster.friends.find_all{|f| f.application_setting.recv_video_feed}
         video.deliver_feeds :recipients => recipients
+      end
+      video.tags.each do |tag|
+        tag.notices.create(:user_id => tag.tagged_user_id)
+        TagMailer.deliver_video_tag tag if tag.tagged_user.mail_setting.tag_me_in_video
       end
     end
   end

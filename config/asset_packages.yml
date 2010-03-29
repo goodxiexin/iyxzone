@@ -69,6 +69,9 @@ javascripts:
   - video
   - friend
   - textboxlist
+- forum:
+  - forum
+  - nicEdit
 stylesheets: 
 - base: 
   - common

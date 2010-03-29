@@ -290,7 +290,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 #navbar #navextra{float:right;margin:10px 5px 0;line-height:20px;white-space:nowrap;_display:inline;}
 #navbar #navextra li {position:relative;z-index:99999;background-image:url(../images/skin/navbar01.gif);background-repeat:no-repeat;background-position:right -441px;float:left;margin:0 -1px 0 1px;}
-#navbar #navextra li a{padding:0 10px;}
+#navbar #navextra li a{padding:0 10px;display:block;}
 #navbar #navextra li a:hover{text-decoration:underline}
 
 /*导航栏弹出窗口*/
@@ -312,7 +312,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 /*-------顶部导航条---------*/
 
 /*选项卡*/
-.tab01{height:30px;line-height:30px;background:url(../images/skin/tabs01.gif) repeat-x; background-position:left bottom;/*overflow:hidden;分享页面有弹出窗口*/}
+.tab01{height:30px;line-height:30px;background:url(../images/skin/tabs01.gif) repeat-x; background-position:left bottom;position:relative;/*overflow:hidden;分享页面有弹出窗口*/}
 .tab01 li{margin-right:1px;float:left;height:30px;padding-left:23px;background-image:url(../images/skin/tabs01.gif);background-repeat:no-repeat;}
 .tab01 li span{display:block;padding-right:23px;background-image:url(../images/skin/tabs01.gif);background-repeat:no-repeat;background-position:right -33px;}
 .tab01 li span a{display:block;position:relative;margin:0 -23px;padding:0 23px;color:#25700D; white-space:nowrap}

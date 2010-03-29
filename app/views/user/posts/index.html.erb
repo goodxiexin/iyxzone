@@ -1,56 +1,126 @@
-<%= javascript_include_tag 'forum' %>
-
-<div>
-	<%= forum_link @forum %> -> <%= topic_link @topic %>
-</div>
-
-<div class='subject'>
-  <h3><%= @topic.subject %></h3>
-</div>
-
-<table class='posts' id="posts">
-  <tr class='odd' id='topic_<%= @topic.id %>'>
-    <td class='author'>
-      <%= avatar @topic.poster %><br/>
-      <%= profile_link @topic.poster %><br/>
-      <span class='forum-tiny'>
-        <%= ftime @topic.created_at %><br/>
-        <%= link_to '发站内信', new_mail_url(:recipient_ids => [@topic.poster_id]) %><br/>
-        <%= link_to_function '回复', "Iyxzone.Forum.setPost();" %>
-      </span>
-    </td>
-    <td class='post'><%= @topic.content %></td>
-  </tr>
-  <% @posts.each do |post| %>
-    <tr class="<%= cycle('even','odd') %>" id='post_<%= post.id %>'>
-      <td class="author">
-        <%= avatar post.poster %><br/>
-        <%= profile_link post.poster %><br/>
-        <span class='forum-tiny'>
-          <%= ftime post.created_at %><br/>
-          <%= link_to '发站内信', new_mail_url(:recipient_ids => [post.poster_id]) %><br/>
-          <%= link_to_function '回复', "Iyxzone.Forum.setPost(#{post.floor}, '#{post.poster.login}');" %>
-        </span>
-      </td>
-      <td class="post"><%= post.content %><span class='forum-tiny'><%= post.floor %>楼</span></td>
-      <% if @is_moderator %>
-        <td class='delete'>
-					<%= facebox_confirm 'x', forum_topic_post_url(@forum, @topic, post), {:msg => '你确定吗', :method => :delete} %>
-				</td>
-      <% end %>
-    </tr>
-  <% end %>
-</table>
-
-<%= will_paginate @posts %>
-
-<div id='new_post' class='new-post'>
-<%= error_messages_for :post, :header_message => '以下原因导致保存失败', :message => nil %>
-<% form_for :post, :url => forum_topic_posts_url(@forum, @topic), :html => {:onsubmit => "return Iyxzone.Forum.validatePost()"} do |f| %>
-  <div class='content'><%= f.text_area :content %></div><br/>
-  <%= f.submit '提交', :class => 'confirm-button' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :forum %>
 <% end %>
-</div>
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <div class="friend-head space s_clear">
+      <span class="left"><%= album_cover_image @guild.album, :class => 'imgbox01', :width => 50, :height => 50 %></span>
+      <p class="left">
+        <strong><%= @guild.name %></strong><br />
+        <%= guild_link @guild, :class => 'red' %>主页
+      </p>
+    </div>
+    <div class="box02 canvas_int space">
+      <div class="tab tab01">
+        <div class="right"><%= link_to "发布新话题", new_forum_topic_url(@forum) %></div>
+        <ul>
+          <li class="hover"><span><%= link_to "话题区", forum_topics_url(@forum) %></span></li>
+        </ul>
+      </div>
+      <div class="forum s_clear">
+        <div class="feed-box">
+          <h2 class='s_clear'>
+            <span class='left'>标题： <%= @topic.subject %></span>
+            <div class='op'>
+            <% if @guild.president == current_user %>
+              <% if !@topic.top %>
+                <%= link_to "<span class='icon-up'></span>置顶", toggle_forum_topic_url(@forum, @topic, :top => 1, :at => 'show'), :method => :put %>
+              <% else %>
+                <%= link_to "<span class='icon-down'></span>取消置顶", toggle_forum_topic_url(@forum, @topic, :top => 0, :at => 'show'), :method => :put %>
+              <% end %>
+              <%= facebox_confirm "<span class='icon-active'></span>删除", forum_topic_url(@forum, @topic, :at => 'show'), {:msg => "你确定要删除这个话题吗？", :method => :delete} %>
+            <% end %>
+            <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Topic', :shareable_id => @topic.id), :class => 'share-btn' %>
+            </div>
+          </h2>
+          <div class="feed-img-list">
+            <div class="feed-list s_clear">
+              <div class="avatar">
+                <%= avatar_image @topic.poster, :class => 'imgbox01', :size => 'large', :width => 76, :height => 85 %><br />
+                <%= link_to "<span class='icon-home'></span>个人主页", profile_url(@topic.poster.profile), :popup => true %>
+                <% unless current_user.has_friend? @topic.poster %>
+                <%= facebox_link "<span class='icon-invitation'></span>加为好友", new_friend_request_url(:friend_id => @topic.poster_id) %>
+                <% end %>
+                <%= link_to "<span class='icon-read'></span>发站内信", new_mail_url(:recipient_ids => [@topic.poster_id]) %>
+              </div>
+              <div class="feed-header jl-cutline">
+                <span class="right">楼主</span>
+                <h3><%= link_to "<b class='red'>#{@topic.poster.login}</b>", profile_url(@topic.poster.profile) %> <%= ftime @topic.created_at %></h3>
+              </div>
+              <div class="bd jl-cutline">
+                <p><%= @topic.content %></p>
+              </div>
+              <div class="ft"><a href="javascript:void(0)">分享(<%= @topic.sharings_count %>)</a> | <a href="javascript:void(0)">阅读(<%= @topic.viewings_count %>)</a>  | <a href="javascript:void(0)">评论(<%= @topic.posts_count %>)</a></div>
+            </div>
+            <% @posts.each do |p| %>
+            <div class="feed-list s_clear" id='post_<%= p.id %>'>
+              <div class="avatar">
+                <%= avatar_image p.poster, :class => 'imgbox01', :size => 'large', :width => 76, :heigth => 85 %><br />
+                <%= link_to "<span class='icon-home'></span>个人主页", profile_url(p.poster.profile), :popup => true %>
+                <% unless current_user.has_friend? p.poster %>
+                <%= facebox_link "<span class='icon-invitation'></span>加为好友", new_friend_request_url(:friend_id => p.poster_id) %>
+                <% end %>
+                <%= link_to "<span class='icon-read'></span>发站内信", new_mail_url(:recipient_ids => [p.poster_id]) %>
+              </div>
+              <div class="feed-header jl-cutline">
+                <span class="right"><%= p.floor %>楼</span>
+                <h3><%= link_to "<b class='red'>#{p.poster.login}</b>", profile_url(p.poster.profile) %> <%= ftime p.created_at %></h3>
+              </div>
+              <div class="bd jl-cutline">
+                <p><%= p.content %></p>
+              </div>
+              <div class="ft">
+                <%= link_to_function "回复", "Iyxzone.Forum.Post.reply(#{p.floor}, '#{p.poster.login}');" %>
+                <% if @guild.president == current_user %>
+                  | <%= facebox_confirm '删除', forum_topic_post_url(@forum, @topic, p, :at => 'show'), {:msg => "你确定要删除这个回复吗？", :method => :delete} %>
+                <% end %>
+              </div>
+            </div>
+            <% end %>
+            <div class="forum-pager">
+              <%= link_to '<< 上一个话题', forum_topic_posts_url(@forum, @prev) %> | <%= link_to "下一个话题 >>", forum_topic_posts_url(@forum, @next) %>
+              <%= link_to_function "返回话题顶部", "window.scrollTo(0,0);" %>
+              <%= link_to "返回话题主页", forum_topics_url(@forum) %>
+              <%= will_paginate @posts %>
+            </div>
+            <div class="space20 s_clear">
+              <div class="forum-cmt" id='new_post'>
+                <h2>回复话题</h2>
+                <% form_for :post, :url => forum_topic_posts_url(@forum, @topic), :html => {:onsubmit => "Iyxzone.Forum.Post.save($('post_submit_btn'), this); return false;" } do |f| %>
+                <div class="formcontent">
+                  <div class="rows s_clear">
+                    <div class="fldvalue"><%= f.text_area 'content', :style =>"width: 100%" %></div>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldvalue">
+                      <div class="right">
+                        <span class="button03"><span><button type="submit" id='post_submit_btn'>发布</button></span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% end %>
+              </div>
+              <% unless @random_topics.blank? %>
+              <div class="space rows">
+                <h2>随便看看</h2>
+                <div class="list-box">
+                  <ul class="lister02">
+                    <% @random_topics.each do |t| %>
+                      <li><%= topic_link t %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+              <% end %>
+            </div>   
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>
 
-<%= javascript_tag "Iyxzone.Forum.editor = new nicEditor({iconsPath:'/images/nicEditorIcons.gif'}).panelInstance('post_content');" %>
-
+<% onload_javascript_tag do %>
+  Iyxzone.Forum.Post.editor = new nicEditor().panelInstance('post_content', {token: '<%= form_authenticity_token %>'});
+<% end %>

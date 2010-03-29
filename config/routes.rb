@@ -239,7 +239,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :forums do |forums|
   
-      forums.resources :topics, :member => {:toggle => :put} do |posts|
+      forums.resources :topics, :collection => {:top => :get}, :member => {:toggle => :put} do |posts|
   
         posts.resources :posts
   

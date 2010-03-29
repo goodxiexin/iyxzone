@@ -89,7 +89,7 @@ module ApplicationHelper
   end
 
   def album_cover_image album, opts={}
-    size = opts.delete(:size) || 'medium'
+    size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
       image_tag "default_cover_#{size}.png", opts
     else
@@ -98,7 +98,7 @@ module ApplicationHelper
   end
 
   def album_cover(album, opts={})
-		size = opts.delete(:size) || 'medium'
+		size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
       link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album)")
     else
@@ -119,7 +119,7 @@ module ApplicationHelper
 		dig_html="<div class='evaluate'>
 							<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>"
 		if diggable.digged_by? current_user
-		  dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'<a href='#'>已赞</a>"
+		  dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'><a href='#'>已赞</a>"
 		else
 			dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'>"
 		  dig_html+= link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable)
@@ -169,12 +169,12 @@ module ApplicationHelper
 		link_to (truncate guild.name, :length => 20), guild_url(guild), opts
 	end
 
-	def forum_link forum
-		link_to (truncate forum.name, :length => 20), forum_url(forum)
+	def forum_link forum, opts={}
+		link_to (truncate forum.name, :length => 20), forum_url(forum), opts
 	end
 
-	def topic_link topic
-		link_to (truncate topic.subject, :length => 40), forum_topic_url(topic.forum, topic)
+	def topic_link topic, opts={}
+		link_to (truncate topic.subject, :length => 40), forum_topic_posts_url(topic.forum, topic), opts
 	end
 
 	def mail_link mail

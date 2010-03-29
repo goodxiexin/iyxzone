@@ -82,7 +82,7 @@
 			<% end %>
 			</ul>
 		<% else %>
-			这个游戏竟然没有玩家
+			<div class='space'>这个游戏竟然没有玩家</div>
 		<% end %>
 	</div>
 </div>
@@ -110,7 +110,7 @@
       </div>  
     <% end %> 
 	<% else %>
-		还没照片赶紧去<%= link_to '弄一个', personal_albums_url(:id=>current_user.id)%>，马上就能上游戏主页
+		<div class='space'>还没照片赶紧去<%= link_to '弄一个', personal_albums_url(:id=>current_user.id)%>，马上就能上游戏主页</div>
 	<% end %>
   </div>
 </div>
@@ -127,7 +127,7 @@
     </div>
   <% end %>
 	<% else %>
-		还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>,马上就能上游戏主页
+		<div class='space'>还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>,马上就能上游戏主页</div>
 	<% end %>	
 </div>
 

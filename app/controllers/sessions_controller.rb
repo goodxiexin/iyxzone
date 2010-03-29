@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
         current_user.remember_me
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
-      flash[:notice] = "成功登录"
+      flash[:notice] = "欢迎来到一起游戏网！"
       redirect_back_or_default(profile_url(current_user.profile))
     end
   end

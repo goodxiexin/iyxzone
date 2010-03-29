@@ -7,7 +7,7 @@ Iyxzone.Blog = {
 
 Object.extend(Iyxzone.Blog.Builder, {
 
-  saved: false,
+  saved: false, 
 
   editor: null, // initialize this in your page
 
@@ -71,7 +71,7 @@ Object.extend(Iyxzone.Blog.Builder, {
       this.prepare(form);
       new Ajax.Request('/drafts', {
         method: 'post',
-        parameters: this.parameters,
+        parameters: this.parameters
       });
     }else{
       Iyxzone.enableButtonThree(button, '保存为草稿');

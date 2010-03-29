@@ -1,10 +1,10 @@
-<% content_for :javascript_include do %>
-<%= javascript_include_merged :guild %>
-<% end %>
-
 <% content_for :html_title, "#{@guild.name}的首页 - 17Gaming.com" %>
 <% content_for :html_description, "#{@guild.name}的首页 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@guild.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
+<% content_for :javascript_include do %>
+<%= javascript_include_merged :guild %>
+<% end %>
 
 <% content_for :left do %>
 <div class="mcAvatar">
@@ -44,9 +44,8 @@
     <div class="title"><b>描述</b></div>
     <div class="feed-box">
       <% if @guild.president == current_user %>
-      <%= in_place_text_area @guild, :description, '介绍下工会?' %>
       <% else %>
-      <%= @guild.description %>
+				<%= @guild.description %>
       <% end %>
     </div>
   </div>

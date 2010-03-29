@@ -7,12 +7,17 @@
 <div class='formcontent'>
   <div class="rows s_clear">
     <div class="fldvalue">
-      <%= radio_button :invitation, :status, 1, :onclick => "new Ajax.Request('#{accept_event_invitation_url(@event, @invitation, :show => 1, :status => Participation::Confirmed, :authenticity_token => form_authenticity_token )}', {method: 'put'});" %><%= label_tag '', '接受' %>
+      <%= radio_button :invitation, :status, 1, :onclick => "new Ajax.Request('#{accept_event_invitation_url(@event, @invitation, :show => 1, :status => Participation::Confirmed, :authenticity_token => form_authenticity_token )}', {method: 'put'});" %><%= label_tag '', '一定去' %>
     </div>          
   </div>
   <div class="rows s_clear">
     <div class="fldvalue">
-      <%= radio_button :invitation, :status, 3, :onclick => "if(confirm('你确定吗?')){new Ajax.Request('#{decline_event_invitation_url(@event, @invitation, :show => 1, :authenticity_token => form_authenticity_token)}', {method: 'delete'});}" %><%= label_tag '', '决绝' %>
+      <%= radio_button :invitation, :status, 2, :onclick => "new Ajax.Request('#{accept_event_invitation_url(@event, @invitation, :show => 1, :status => Participation::Maybe, :authenticity_token => form_authenticity_token )}', {method: 'put'});" %><%= label_tag '', '可能去' %>
+    </div>          
+  </div>
+  <div class="rows s_clear">
+    <div class="fldvalue">
+      <%= radio_button :invitation, :status, 3, :onclick => "if(confirm('你确定吗?')){new Ajax.Request('#{decline_event_invitation_url(@event, @invitation, :show => 1, :authenticity_token => form_authenticity_token)}', {method: 'delete'});}" %><%= label_tag '', '拒绝' %>
     </div>
   </div>
 </div>

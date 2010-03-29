@@ -94,9 +94,9 @@ Object.extend(Iyxzone.Guild.Feeder, {
 Object.extend(Iyxzone.Guild.Editor, {
 
   showError: function(div, content){
-    var span = new Element('span', {class: 'icon-warn'});
+    var span = new Element('span', {'class': 'icon-warn'});
     $(div).update(content);
-    Element.insert($(div), {top: span});
+    Element.insert($(div), {'top': span});
   },
 
   clearError: function(div){
@@ -630,6 +630,6 @@ Object.extend(Iyxzone.Guild.Editor, {
       this.delGearIDs.push(gearID);
     
     $(prefix + '_gear_' + gearID).remove();
-  },
+  }
 
 });

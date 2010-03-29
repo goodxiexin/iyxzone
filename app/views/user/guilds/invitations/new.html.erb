@@ -32,8 +32,10 @@
       <div class="friend-box">
         <div class="appcontent01">
           <div class="friend-invite-head">
+          <% unless @characters.blank? %>
             <strong class="green">搜索好友的游戏角色：</strong> 
-            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear();", :onfocus => "Iyxzone.Invitation.Builder.startObserving(this);", :onblur => "Iyxzone.Invitation.Builder.stopObserving(this);"  %>
+            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear();", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving($('search'));"  %>
+						<% end %>
           </div>
           <div class="friend-invite-list">
           <% if @characters.blank? %>

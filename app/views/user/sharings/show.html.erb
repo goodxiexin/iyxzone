@@ -47,7 +47,7 @@
 <iframe frameborder="0" width="100%" height="100%" id="ifr" src="<%= @shareable.url %>">
 </iframe>
 
-<%= javascript_tag "
+<%= onload_javascript_tag "
   $('ifr').setStyle({height: '768px'});
   document.body.setStyle({overflow: 'hidden'});
 " %>

@@ -26,7 +26,7 @@ class User::Avatars::PhotosController < UserBaseController
             page.redirect_to avatar_album_url(@album)
           else
 						@album.reload
-            page.replace_html 'avatar', album_cover(@album, :size => :large)
+            page.replace_html 'avatar', album_cover(@album, :size => :large, :width => 100, :height => 112)
           end
         end
       end

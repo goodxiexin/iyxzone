@@ -8,11 +8,11 @@ class User::AlbumsController < UserBaseController
   end
 
 	def recent
-    @albums = PersonalAlbum.recent.paginate :page => params[:page], :per_page => 5
+    @albums = Album.recent.paginate :page => params[:page], :per_page => 10
   end
 
   def friends
-    @albums = current_user.personal_album_feed_items.map(&:originator).uniq.paginate :page => params[:page], :per_page => 10 
+    @albums = current_user.friend_albums.paginate :page => params[:page], :per_page => 10 
   end
 
   def select
@@ -70,11 +70,12 @@ class User::AlbumsController < UserBaseController
   end
 
   def destroy
-    if params[:migration] and params[:migration].to_i == 1 and !params[:album][:id].blank?
-      Photo.update_all("album_id = #{params[:album][:id]}", "album_id = #{@album.id}")
-      Album.update_all("photos_count = photos_count + #{@album.photos_count}", "id = #{params[:album][:id]}")
+    if params[:migration] and params[:migration].to_i == 1 and params[:migrate_to]
+      new_album = current_user.albums.find(params[:migrate_to])
+      Photo.update_all("album_id = #{new_album.id}, privilege = #{new_album.privilege}", {:album_id => @album.id})
+      new_album.update_attribute(:photos_count, new_album.photos_count + @album.photos_count)
     end
-
+    
     if @album.destroy
 		  render :update do |page|
 			  page.redirect_to personal_albums_url(:uid => current_user.id)  

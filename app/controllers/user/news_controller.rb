@@ -2,7 +2,7 @@ class User::NewsController < UserBaseController
 
   layout 'app'
 
-  increment_viewing 'news', :only => [:show]
+  increment_viewing 'news', 'id', :only => [:show]
 
   def index
     @news_list = News.find(:all, :order => 'created_at DESC').paginate :page => params[:page], :per_page => 10

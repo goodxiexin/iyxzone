@@ -5,10 +5,10 @@ class FriendTagObserver < ActiveRecord::Observer
     tag.taggable.raw_increment :tags_count
   
     # issue notices and emails if necessary
-    eval("after_#{tag.taggable_type.underscore}_tag_save(tag)")
+    eval("after_#{tag.taggable_type.underscore}_tag_create(tag)")
   end
 
-  def after_blog_tag_save tag
+  def after_blog_tag_create tag
     blog = tag.taggable
 
     return if blog.draft
@@ -20,7 +20,7 @@ class FriendTagObserver < ActiveRecord::Observer
     end
   end
 
-  def after_video_tag_save tag
+  def after_video_tag_create tag
     video = tag.taggable
 
     return if video.is_owner_privilege? # return if this video is only open for owner

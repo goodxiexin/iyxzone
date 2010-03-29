@@ -29,9 +29,9 @@
                 <div class="fldvalue">
                   <div class="textfield"><%= f.text_field 'name' %></div>
                 </div>
-                <%= link_to_function "增加投票描述", "Iyxzone.Poll.Builder.toggleDescriptionInput();", :class=>"fldstats fldsatus-add" %>
+                <%= link_to_function '增加投票描述', "Iyxzone.Poll.Builder.toggleDescriptionInput();" %>
               </div>
-              <div class="rows s_clear" id='description' style='display:none'>
+              <div class='rows s_clear' id='descriptions' style='display:none'>
                 <div class="fldid"><label for="subject">投票描述：</label></div>
                 <div class="fldvalue">
                   <%= f.text_area 'description', :rows => 7%>

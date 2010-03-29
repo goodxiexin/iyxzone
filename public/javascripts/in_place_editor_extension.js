@@ -57,17 +57,29 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
   createEditField: function(){
     var text = (this.options.loadTextURL ? this.options.loadingText : this.getText());
     var fld;
+
+		var div_decorator = document.createElement("div");
+//		div_decorator.setStyle(this.options.textAreaStyle);
+
     fld = document.createElement('textarea');
-    fld.setStyle(this.options.textAreaStyle);
     fld.name = this.options.paramName;
+		Element.extend(fld);
+		fld.setStyle(this.options.textAreaStyle);
     fld.value = text; // No HTML breaks conversion anymore
     fld.className = 'editor_field';
     if (this.options.submitOnBlur)
       fld.onblur = this._boundSubmitHandler;
     this._controls.editor = fld;
+
+		div_decorator.appendChild(fld);
+		this._controls.decorator = div_decorator;
+
     if (this.options.loadTextURL)
       this.loadExternalText();
-    this._form.appendChild(this._controls.editor);
+   // this._form.appendChild(this._controls.editor);
+    this._form.appendChild(this._controls.decorator);
+		//$('editor_field').setStyle(this.options.textAreaStyle);
+
   }
 
 });

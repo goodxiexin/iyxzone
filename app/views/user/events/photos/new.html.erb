@@ -10,7 +10,7 @@
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right">
-          <% if @participation and @participation.is_authorized? %>
+          <% if @event.poster == current_user %>
           <%= link_to "上传照片", new_event_photo_url(:album_id => @album.id) %>
           <% end %>
         </div>
