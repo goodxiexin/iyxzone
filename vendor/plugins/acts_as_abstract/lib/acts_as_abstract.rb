@@ -1,6 +1,5 @@
 # ActsAsAbstract
 require 'sanitize'
-require 'rexml'
 
 module ActsAsAbstract
 
