@@ -16,6 +16,7 @@ class User::FriendsController < UserBaseController
   end
 
   def new
+		@common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..7]
     render :action => 'new', :layout => 'app2'
   end
 

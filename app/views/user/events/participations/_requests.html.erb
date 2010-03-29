@@ -7,8 +7,8 @@
   <span class='red blk'><%= character.name %></span>
   <span class='operation' id='event_request_option_<%= request.id %>'>
 	<% if @event.poster == current_user %>
-    <%= link_to_remote '接受', :url => accept_event_request_url(@event, request), :method => :put  %> |
-    <%= facebox_confirm '拒绝', decline_event_request_url(@event, request), {:msg => '你确定要决绝这个人加入的请求吗?', :method => :delete} %>
+    <%= link_to_remote '接受', :url => accept_event_request_url(@event, request, :at => 'event'), :method => :put  %> |
+    <%= facebox_confirm '拒绝', decline_event_request_url(@event, request, :at => 'event'), {:msg => '你确定要决绝这个人加入的请求吗?', :method => :delete} %>
   <% end %>
 	</span>
 	</p>

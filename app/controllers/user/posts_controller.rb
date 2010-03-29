@@ -1,9 +1,14 @@
 class User::PostsController < UserBaseController
 
-  before_filter :moderator_required, :only => [:destroy]
+  layout 'app'
+
+  increment_viewing 'topic', 'topic_id', :only => [:index]
 
   def index
-    @posts = @topic.posts.paginate :page => params[:page], :per_page => 10
+    @random_topics = Topic.random :limit => 5, :except => [@topic], :conditions => {:forum_id => @forum.id}
+    @posts = @topic.posts.paginate :page => params[:page], :per_page => 2
+    @next = @topic.next :top => @topic.top
+    @prev = @topic.prev :top => @topic.top
   end
 
   def create
@@ -29,19 +34,14 @@ protected
 		if ["index", "create"].include? params[:action]
 			@forum = Forum.find(params[:forum_id])
 			@topic = @forum.topics.find(params[:topic_id])
+      @guild = @forum.guild
 		elsif ["destroy"].include? params[:action]
 			@forum = Forum.find(params[:forum_id])
       @topic = @forum.topics.find(params[:topic_id])
 			@post = @topic.posts.find(params[:id])
+      @guild = @forum.guild
+      @guild.president == current_user || render_not_found
 		end
-		@is_moderator = @forum.moderators.include? current_user
-	rescue
-		not_found
 	end
-
-  def moderator_required
-    @is_moderator || not_found
-  end
-
 
 end

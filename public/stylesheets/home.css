@@ -141,7 +141,7 @@ a:hover{color:#D63200;}
 .feed-box .feed-list-box,.feed-box .feed-img-list{margin-bottom:20px;}
 
 .feed-list-box h4{color:#D63200}
-.feed-list-box .feed-list{padding-left:34px;_height:24px;min-height:24px;position:relative;}
+.feed-list-box .feed-list{padding-left:34px;/*_height:24px;*/min-height:24px;position:relative;}
 .feed-list-box .feed-list .feed-icon{position:absolute;left:0;top:0;width:16px;height:16px;overflow:hidden;margin-top:3px}
 /*.feed-list-box .feed-list .icon-friend{background-position:left -2px;}
 .feed-list-box .feed-list .icon-info{background-position:left -38px;}
@@ -1041,6 +1041,7 @@ h1.app-share{float:left}
 .z-box .z-con .left{margin-left:15px}
 .z-box .z-con .textfield{width:200px;}
 .z-box .z-con textarea{width:200px;height:50px}
+.z-box .z-con .content{margin:20px}
 .z-box .z-con .formcontent .fldid{width:85px}
 .z-box .z-con p{padding:20px;/*min-height:50px*/}
 .z-box .z-submit{background:#f0f5ec;border-top:1px solid #d4e3c9;padding:15px 0;}
@@ -1180,3 +1181,41 @@ h1.app-share{float:left}
 .pager-simple .next:hover{background-position:-17px -110px;}
 .pager-simple .first{background-position:0 -130px;cursor:default}
 .pager-simple .last{background-position:-17px -130px;cursor:default}
+
+/*论坛*/
+/*.forum .col-left{width:590px;float:left;}
+.forum .col-right{width:150px;float:right;}
+.forum .col-right .photolist-box li{margin:5px}
+*/
+.forum h2{background:#f8f8f8;border-top:1px solid #c2e29d;padding:5px;font-weight:700;margin-bottom:10px}
+.forum h2 a{font-weight:400;font-size:12px}
+.forum h2 .op{float:right;}
+.forum h2 .op a{margin:0 5px;display:inline-block;color:#666}
+.forum h2 .op a.love-btn{margin-bottom:-3px !important;_margin-bottom:0}
+.forum h2 .op a span{margin:0 2px;}
+.forum .msg{margin:5px}
+.hot-post{border-top:1px solid #333;margin:20px 0;padding-top:20px}
+.hot-post ul{margin:5px}
+.hot-post li{margin:5px 0}
+.hot-post li a{color:#333}
+.posts{margin-bottom:10px}
+.posts td,.posts th{text-align:center;padding:3px}
+.posts .tl{text-align:left}
+.posts .tr{text-align:right}
+.posts td.title a{color:#333}
+.digest td.title a{color:#c30}
+.posts td.title a:hover{text-decoration:underline}
+.posts td.title div{width:350px;font-size:14px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.posts td.author div{width:100px; white-space:nowrap;overflow:hidden;text-align:left;text-overflow:ellipsis}
+.posts td img{vertical-align:middle;margin-right:3px}
+.forum .feed-img-list .feed-list{padding:0 0 10px 100px;border-bottom:1px solid #bbd2aa;}
+.forum .feed-img-list .feed-list .feed-header{border:0;}
+.forum .feed-img-list .feed-list .avatar {left:0;position:absolute;top:0;}
+.forum .feed-img-list .feed-list .avatar a{display:block;line-height:16px;margin:3px 8px}
+.forum .feed-img-list .feed-list .bd{padding:10px;_height:80px;min-height:80px}
+.forum .feed-img-list .feed-list .ft{text-align:right}
+.forum-cmt .fldvalue{width:640px;}
+.forum-cmt .fldid{width:55px;font-size:14px;font-weight:700}
+.forum .list-box{margin-left:10px}
+.forum-pager{margin-top:10px}
+.forum-pager a{color:#666}

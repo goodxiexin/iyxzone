@@ -6,8 +6,6 @@ class PersonalAlbum < Album
 
   has_many :photos, :class_name => 'PersonalPhoto', :foreign_key => 'album_id', :order => 'created_at DESC', :dependent => :destroy
 
-	named_scope :recent, :conditions => "privilege != 4", :order => 'uploaded_at DESC'
-
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}, 
                       :create_conditions => lambda {|user, album| album.available_for? user }

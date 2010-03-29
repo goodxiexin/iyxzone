@@ -4,12 +4,11 @@
 </p>
 
 <div class='z-con'>
-<% form_remote_for :participation, :url => event_participation_url(@event, @participation, :show => 0), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(edit_participation_btn),'请等待..');"} do |f| %>
+<% form_remote_for :participation, :url => event_participation_url(@event, @participation, :at => 'event'), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(edit_participation_btn),'请等待..');"} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
     <%= radio_button_tag 'status', 3 %><%= label_tag '', '肯定去' %><br/>
     <%= radio_button_tag 'status', 4 %><%= label_tag '', '可能去' %><br/>
-    <%= radio_button_tag 'status', 5 %><%= label_tag '', '去他娘的' %><br/>
   </div>
 </div>
 <div class="z-submit s_clear space">

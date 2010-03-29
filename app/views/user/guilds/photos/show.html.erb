@@ -13,7 +13,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01" %></span>
+      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01", :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @guild.name%>公会照片</strong><br/>
         <%= link_to '公会主页', guild_url(@guild), :class => 'red' %>
@@ -22,7 +22,7 @@
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right">
-          <% if @membership and (@membership.is_veteran? or @membership.is_president?) %>
+          <% if @guild.president == current_user %>
           <%= link_to "上传照片", new_guild_photo_url(:album_id => @album.id) %>
           <% end %>
         </div>
@@ -36,8 +36,8 @@
           <div class="img-container-wrap">
             <div class="img-container">
               <div class="path-box">
-								<label><%= @guild.name %>的相册</label>
-                <label><%= album_link @album %></label><span>查看照片</span>
+								<label><%= guild_link @guild %></label>
+                <label><%= link_to "相册", guild_album_url(@album) %></label><span>查看照片</span>
 							</div>
               <div class="img-main">
                 <div class="imgwrap box05">
@@ -46,9 +46,9 @@
 										<span class="photo-op-mark"></span>
 										<%= link_to_function "圈人", "tagger.start()" %> | 
 										<% end %>
-										<% if @membership and @membership.is_president? %>
+										<% if @guild.president == current_user %>
 										<span class="photo-op-edit"></span>
-                    <%= facebox_link '编辑', edit_guild_photo_url(@photo) %> | 
+                    <%= facebox_link '编辑', edit_guild_photo_url(@photo, :at => 'photo') %> | 
 										<span class="photo-op-del"></span>
                     <%= facebox_confirm '删除', guild_photo_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
 										<% end %>
@@ -60,10 +60,10 @@
                   <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
 									<div class="pic-desc s_clear">
 										<h4 class="box06">
-										<% if @membership and @membership.is_president? %>
+										<% if @guild.president == current_user %>
 											<%= in_place_text_area @photo, :notation, '点击增加照片描述', :param_name => 'photo[notation]' %>
 										<% else %>
-											<%= @photo.notation %>
+											<%= simple_format @photo.notation %>
 										<% end %>
 										</h4>
 										<ul class="mark-list s_clear" id='photo_tags'>

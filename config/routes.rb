@@ -164,7 +164,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :avatar_albums, :controller => 'avatars/albums'
 
-    users.resources :avatars, :controller => 'avatars/photos', :member => {:set => :put}
+    users.resources :avatars, :controller => 'avatars/photos'
 
     users.resources :event_albums, :controller => 'events/albums'
 
@@ -239,7 +239,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :forums do |forums|
   
-      forums.resources :topics, :member => {:toggle => :put} do |posts|
+      forums.resources :topics, :collection => {:top => :get}, :member => {:toggle => :put} do |posts|
   
         posts.resources :posts
   

@@ -19,21 +19,36 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     photo.album.raw_increment :photos_count
   end
 
-  def before_update photo 
+  def before_update photo
+    return unless photo.thumbnail.blank?
+ 
     if photo.notation_changed?
       photo.verified = 0
     end
   end
-  
+ 
   def after_update photo
     return unless photo.thumbnail.blank?
     
-    # if photo is moved to another album, change counter
     if photo.album_id_changed?
+      # if photo is moved to another album, change counter and change cover if necessary
       from = PersonalAlbum.find(photo.album_id_was)
-      to = photo.album
+      to = PersonalAlbum.find(photo.album_id)
       from.raw_decrement :photos_count
       to.raw_increment :photos_count
+      if photo.cover
+        to.update_attribute(:cover_id, photo.id)
+        if from.cover_id == photo.id
+          from.update_attribute(:cover_id, nil)
+        end
+      end
+    else
+      # if photo is not moved anywhere
+      if photo.cover
+        photo.album.update_attribute(:cover_id, photo.id) if photo.album.cover_id != photo.id
+      else
+        photo.album.update_attribute(:cover_id, nil) if photo.album.cover_id == photo.id
+      end
     end
   end
 

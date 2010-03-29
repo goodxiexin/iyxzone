@@ -1,48 +1,29 @@
 class Topic < ActiveRecord::Base
 
-  named_scope :tops, :conditions => ["top = true"]
-
-  named_scope :normals, :conditions => ["top = false"]
-
   belongs_to :forum
 
   belongs_to :poster, :class_name => 'User'
 
   has_many :posts, :dependent => :destroy
 
-  def last_post
-    posts.find(:first, :order => 'created_at DESC')
-  end
+  acts_as_viewable
 
-  def validate
-    if poster_id.blank?
-      errors.add_to_base('没有发布者')
-      return
-    end
+  acts_as_random
 
-    if forum_id.blank?
-      errors.add_to_base('没有论坛')
-      return
-    elsif Forum.find(:first, :conditions => {:id => forum_id}).nil?
-      errors.add_to_base('论坛不存在')
-      return
-    end
+  acts_as_shareable :default_title => lambda {|topic| topic.subject}
 
-    if subject.blank?
-      errors.add_to_base('没有标题')
-      return
-    elsif subject.length > 100
-      errors.add_to_base('标题太长')
-      return
-    end
+  acts_as_list :order => 'created_at', :scope => 'forum_id'
 
-    if content.blank?
-      errors.add_to_base('没有内容')
-      return
-    elsif content.length > 10000
-      errors.add_to_base('内容太长')
-      return
-    end
+  validates_presence_of :poster_id, :message => "没有发布者"
+
+  validates_presence_of :forum_id, :message => "没有论坛"
+
+  validates_size_of :subject, :within => 1..800, :too_long => "最长200个字符", :too_short => "最短1个字符"
+
+  validates_size_of :content, :within => 1..8000, :too_long => "最长2000个字符", :too_short => "最短1个字符"
+
+  def self.hot cond={}
+    Topic.find(:all, :offset => 0, :limit => 5, :conditions => cond, :order => "posts_count desc")
   end
 
 end

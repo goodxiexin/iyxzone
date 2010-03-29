@@ -148,7 +148,7 @@
     <% if @profile.about_me.blank? %>
 		  <span>这家伙很懒，什么都没说...</span>
     <% else %>
-      <span><%= @profile.about_me %></span>
+      <span><%= simple_format @profile.about_me %></span>
     <% end %>
 	<% else %>
     <%= in_place_text_area @profile, :about_me, '介绍下自己?' %>
@@ -165,7 +165,7 @@
 					<div class="picbox01">
 						<div class="picwrap">
 							<table cellpadding="0">
-								<tr><td><%= album_cover album, :class => 'imgbox01' %></td></tr>
+								<tr><td><%= album_cover album, :size => :large, :class => 'imgbox01' %></td></tr>
 							</table>          
 						</div>
 					</div>
@@ -242,7 +242,11 @@
 
 <% if @profile.is_commentable_by? current_user %>
   <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>
-<% end %>
+<% else %>
+  <div class="bookbox">
+  <h3><label for="book">留言板</label>(共<%= @profile.comments_count %>条留言)</h3>
+  </div>
+<% end %> 
 <% if @profile.is_comment_viewable_by? current_user %>
   <div class='feed-box' id='comments'>
     <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>

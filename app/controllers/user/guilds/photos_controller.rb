@@ -38,13 +38,16 @@ class User::Guilds::PhotosController < UserBaseController
   end
 
   def update
-    @album.update_attribute('cover_id', @photo.id) if params[:cover]
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.json { render :text => @photo.notation }
+				format.json { render :json => @photo }
 				format.html { render :update do |page|
-					page << "facebox.close();"
-					page << "$('guild_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
+          if params[:at] == 'album'
+					  page << "facebox.close();"
+          elsif params[:at] == 'photo'
+            page << "facebox.close();"
+					  page << "$('guild_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
+          end
 				end }
 			end
     else
@@ -62,11 +65,11 @@ class User::Guilds::PhotosController < UserBaseController
   end
 
   def update_multiple
-    @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     params[:photos].each do |id, attributes|
       photo = @album.photos.find(id)
       photo.update_attributes(attributes)
     end
+    @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     redirect_to guild_album_url(@album)
   end
 
@@ -82,16 +85,10 @@ class User::Guilds::PhotosController < UserBaseController
     end
   end
 
-  def update_notation
-    if @photo.update_attributes(params[:photo])
-      render :text => @photo.notation
-    end 
-  end
-
 protected
 
   def setup
-    if ['edit', 'update', 'update_notation', 'destroy'].include? params[:action]
+    if ['edit', 'update', 'destroy'].include? params[:action]
       @photo = GuildPhoto.find(params[:id])
       @album = @photo.album
       @guild = @album.guild
@@ -101,13 +98,8 @@ protected
       @album = GuildAlbum.find(params[:album_id])
       @guild = @album.guild
       @user = @guild.president
-      require_president_or_veteran
+      require_owner @user
     end
   end
-
-  def require_president_or_veteran
-    @membership = @guild.memberships.find_by_user_id(current_user.id)
-    (@membership and (@membership.is_president? or @membership.is_veteran?)) || render_not_found
-  end 
 
 end

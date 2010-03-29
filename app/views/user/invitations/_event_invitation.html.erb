@@ -6,8 +6,8 @@
     <div class="info">
       <p> <%= profile_link invitation.event.poster %> 邀请你加入他的活动 <%= event_link invitation.event %>, 是否同意？</p>
       <div class="buttons" id='event_invitation_option_<%= invitation.id %>'>
-        <span class="button"><span><%= button_to_remote '肯定去', :url => accept_event_invitation_url(invitation.event, invitation, :show => 2, :status => Participation::Confirmed), :method => :put, :loading=>"Iyxzone.disableButton($('event_invitation_option_#{invitation.id}').down('button',0),'请等待..')" %></span></span>
-        <span class="button"><span><%= button_to_remote '可能去', :url => accept_event_invitation_url(invitation.event, invitation, :show => 2, :status => Participation::Maybe), :method => :put, :loading=>"Iyxzone.disableButton($('event_invitation_option_#{invitation.id}').down('button',1),'请等待..')" %></span></span>
+        <span class="button"><span><%= button_to_remote '肯定去', :url => accept_event_invitation_url(invitation.event, invitation, :at => 'invitations', :status => Participation::Confirmed), :method => :put, :loading=>"Iyxzone.disableButton($('event_invitation_option_#{invitation.id}').down('button',0),'请等待..')" %></span></span>
+        <span class="button"><span><%= button_to_remote '可能去', :url => accept_event_invitation_url(invitation.event, invitation, :at => 'invitations', :status => Participation::Maybe), :method => :put, :loading=>"Iyxzone.disableButton($('event_invitation_option_#{invitation.id}').down('button',1),'请等待..')" %></span></span>
         <span class="button button-gray"><span><%= button_to_remote '不去', :url => decline_event_invitation_url(invitation.event, invitation, :show => 2), :method => :delete, :loading=>"Iyxzone.disableButton($('event_invitation_option_#{invitation.id}').down('button',2),'请等待..')" %></span></span>
       </div>
     </div>

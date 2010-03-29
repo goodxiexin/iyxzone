@@ -72,13 +72,18 @@ protected
 
   def render_privilege_denied resource
     if resource.is_owner_privilege?
-      render_not_found
+      render_not_enough_privilege
     else
       render_add_friend resource.resource_owner
     end
   end
 
+  def render_not_enough_privilege
+    render :template => "/errors/402", :status => 402, :layout => false
+  end
+
   def render_add_friend friend
+    flash[:notice] = '只有TA的好友才有权限查看该资源'
     redirect_to new_friend_url(:uid => friend.id) 
   end
 

@@ -22,8 +22,18 @@ class GuildPhotoObserver < ActiveRecord::Observer
 	end
 
   def before_update photo 
+    return unless photo.thumbnail.blank?
     if photo.notation_changed?
       photo.verified = 0
+    end
+  end
+
+  def after_update photo
+    return unless photo.thumbnail.blank?
+    if photo.cover
+      photo.album.update_attribute(:cover_id, photo.id) if photo.album.cover_id != photo.id
+    else
+      photo.album.update_attribute(:cover_id, nil) if photo.album.cover_id == photo.id
     end
   end
   

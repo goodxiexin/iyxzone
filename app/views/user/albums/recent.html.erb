@@ -21,7 +21,7 @@
 		    <% end %>
         <ul>
 			    <% subject = get_subject current_user %>
-          <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
+          <li class='hover'><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "#{subject}的相册", personal_albums_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:uid => current_user.id) %></span></li>
 					<% if @user==current_user %>
@@ -33,7 +33,7 @@
         <div class="nav-link">
           <ul class="s_clear">
             <li><%= link_to "<span>人气最高</span>", hot_personal_photos_url(:uid => @user.id) %></li>
-            <li class='hover'><%= link_to "<span>最新创建</span>", recent_personal_albums_url(:uid => @user.id) %></li>
+            <li class='hover'><%= link_to "<span>最新上传</span>", recent_personal_albums_url(:uid => @user.id) %></li>
           </ul>
         </div>
         <% if @albums.total_entries != 0 %>

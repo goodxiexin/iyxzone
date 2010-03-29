@@ -1,3 +1,5 @@
+require 'app/mailer/tag_mailer'
+
 class BlogObserver < ActiveRecord::Observer
 
   def after_create blog
@@ -40,12 +42,15 @@ class BlogObserver < ActiveRecord::Observer
     return if blog.draft
 
     if (blog.draft_was and blog.privilege != 4) or (blog.privilege_was == 4 and blog.privilege != 4)
-      return unless blog.poster.application_setting.emit_blog_feed
-      recipients = [].concat blog.poster.guilds
-      recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed}
-      blog.deliver_feeds :recipients => recipients
-    else
-      blog.destroy_feeds if blog.is_owner_privilege? and blog.privilege_was != 4
+      if blog.poster.application_setting.emit_blog_feed
+        recipients = [].concat blog.poster.guilds
+        recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed}
+        blog.deliver_feeds :recipients => recipients
+      end
+      blog.tags.each do |tag|
+        tag.notices.create(:user_id => tag.tagged_user_id)
+        TagMailer.deliver_blog_tag tag if tag.tagged_user.mail_setting.tag_me_in_blog
+      end
     end 
   end
 

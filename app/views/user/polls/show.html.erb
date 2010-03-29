@@ -78,13 +78,15 @@
                 <% end %>
               </td>
               <td class="btn">
-              <% if i == 0 and !@poll.past %>
-                <% if @vote %>
+              <% if i == 0 %>
+                <% if @poll.past %>
+                  已经过期了
+                <% elsif @vote %>
                   你已经投过票了
                 <% elsif @poll.is_votable_by? current_user %>
                   <span class="button"><span><button type="submit" id='poll_vote_submit_btn'>投票</button></span></span>
                 <% else %>
-                  只有<%= get_subject @user %>才能投票
+                  只有<%= get_subject @user %>的好友才能投票
                 <% end %> 
               <% end %>
               </td>

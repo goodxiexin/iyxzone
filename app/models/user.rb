@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
 	has_many :comrade_suggestions
 
   has_one :profile, :dependent => :destroy
-	
 
 	# mails
 	has_many :out_mails, :class_name => 'Mail', :foreign_key => 'sender_id', 
@@ -253,6 +252,8 @@ class User < ActiveRecord::Base
   
     user.has_many :profile_sharings, :conditions => {:shareable_type => 'Profile'}
 
+    user.has_many :topic_sharings, :conditions => {:shareable_type => 'Topic'}
+
   end
 
   def friend_sharings type=nil
@@ -335,6 +336,10 @@ class User < ActiveRecord::Base
 	has_many :photo_tags, :foreign_key => 'tagged_user_id'
 
 	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4"
+
+  def friend_albums
+    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
+  end
 
 	# feeds
 	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'

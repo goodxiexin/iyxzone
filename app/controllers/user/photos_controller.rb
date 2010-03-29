@@ -7,7 +7,14 @@ class User::PhotosController < UserBaseController
   end
 
   def relative
-    @photos = @user.relative_photos.paginate :page => params[:page], :per_page => 10
+    @infos = []
+    @user.photo_tags.group_by(&:photo_id).map do |photo_id, tags|
+      photo = Photo.find(photo_id)
+      if !photo.is_owner_privilege?
+        @infos << {:photo => photo, :posters => tags.map(&:poster).uniq}
+      end
+    end
+    @infos = @infos.paginate :page => params[:page], :per_page => 12
   end
 
   def new
@@ -41,16 +48,19 @@ class User::PhotosController < UserBaseController
   end
 
   def update
-    @album.update_attribute('cover_id', @photo.id) if params[:cover]
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
 				format.json { render :json => @photo }
 				format.html { render :update do |page|
-					if @photo.album_id_changed?
-						page.redirect_to personal_photo_url(@photo)
-					else
-						page << "facebox.close();"
-						page << "if($('personal_photo_notation_#{@photo.id}'))$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
+          if params[:at] == 'album'
+					  if @album.id != @photo.album_id
+						  page.redirect_to personal_album_url(@album)
+					  else
+						  page << "facebox.close();"
+            end
+          elsif params[:at] == 'photo'
+            page << "facebox.close();"
+						page << "$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
 					end
 				end }
 			end 
@@ -69,11 +79,11 @@ class User::PhotosController < UserBaseController
   end
 
   def update_multiple
-    @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     params[:photos].each do |id, attributes|
       photo = @album.photos.find(id)
       photo.update_attributes(attributes)
     end
+    @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     redirect_to personal_album_url(@album) 
   end
 
