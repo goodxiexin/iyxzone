@@ -111,22 +111,22 @@ Object.extend(Iyxzone.WallMessage, {
       error('留言最多140个字节');
       return false;
     }
-    return true;  
+    return true; 
   },
 
   save: function(wallType, wallID, button, form){
-    if(Iyxzone.WallMessage.validate($('comment_content'))){
-      new Ajax.Request('/wall_messages', {
+		if(this.validate($('comment_content'))){
+			new Ajax.Request('/wall_messages', {
         method: 'post',
-        parameters: form.serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-        }
+        },
+				parameters: $(form).serialize()
       });
-    } 
+		} 
   },
 
   fetch: function(wallType, wallID){

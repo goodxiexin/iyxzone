@@ -100,7 +100,7 @@
 	</div></div>
 </div></div></div></div>
 
-<%= javascript_tag "
+<%= onload_javascript_tag "
   Iyxzone.Game.pinyins = #{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')};
   Iyxzone.Game.infos = #{@games.to_json :only => [:id, :name]};
   Iyxzone.Game.initPinyinSelector('game_id', 'area_id', 'server_id', null, null, true, null, null);

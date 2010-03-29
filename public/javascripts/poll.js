@@ -89,7 +89,7 @@ Object.extend(Iyxzone.Poll.Builder, {
   },
 
   toggleDescriptionInput: function(){
-    $('description').toggle();
+    $('descriptions').toggle();
   },
 
   toggleExplanation: function(){
@@ -128,7 +128,7 @@ Object.extend(Iyxzone.Poll.Builder, {
       error('至少要有2个选项，不能再删除了');
       return;
     }
-    $(link.up()).remove();
+    $($(link).up()).remove();
     var maxSelector = $('max_multiple_select').childElements()[0];
     var originValue = maxSelector.value;
     maxSelector.innerHTML = '';

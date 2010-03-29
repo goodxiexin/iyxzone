@@ -51,8 +51,10 @@
             <% elsif params[:type].to_i == 2 %>
             <strong class="gray w-xl">共有<%= @guild.requests_count %>个请求</strong>
             <% end %>
+						<% unless @memberships.blank? %>
             <strong class="green">搜索会员：</strong>
-            <%= text_field_tag 'search', '输入游戏角色的名字', :onclick => "this.clear();", :class => 'ipt', :onfocus => "Iyxzone.Guild.MemberManager.startObserving(this)", :onblur => "Iyxzone.Guild.MemberManager.stopObserving();" %>
+            <%= text_field_tag 'search', '输入游戏角色的名字', :onclick => "this.clear();", :class => 'ipt', :onfocus => "Iyxzone.Guild.MemberManager.startObserving($('search'))", :onblur => "Iyxzone.Guild.MemberManager.stopObserving();" %>
+						<% end %>
           </div>
           <div class="friend-list">
             <div class="friend-list-body s_clear">

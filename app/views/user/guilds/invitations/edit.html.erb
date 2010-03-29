@@ -5,7 +5,16 @@
 
 <div id='error'></div>
 <div class='z-con'>
-  <%= radio_button :invitation, :status, 1, :onclick => "facebox.close();new Ajax.Request('#{accept_guild_invitation_url(@guild, @invitation, :at => 'guild', :authenticity_token => form_authenticity_token )}', {method: 'put'});" %><%= label_tag '', '接受' %><br/>
-  <%= radio_button :invitation, :status, 2, :onclick => "facebox.close();new Ajax.Request('#{decline_guild_invitation_url(@guild, @invitation, :at => 'guild', :authenticity_token => form_authenticity_token)}', {method: 'delete'});" %><%= label_tag '', '拒绝' %><br/>
+<div class='formcontent'>
+  <div class="rows s_clear">
+    <div class="fldvalue">
+			<%= radio_button :invitation, :status, 1, :onclick => "facebox.close();new Ajax.Request('#{accept_guild_invitation_url(@guild, @invitation, :at => 'guild', :authenticity_token => form_authenticity_token )}', {method: 'put'});" %><%= label_tag '', '接受' %>
+		</div>
+	</div>
+  <div class="rows s_clear">
+    <div class="fldvalue">
+			<%= radio_button :invitation, :status, 2, :onclick => "facebox.close();new Ajax.Request('#{decline_guild_invitation_url(@guild, @invitation, :at => 'guild', :authenticity_token => form_authenticity_token)}', {method: 'delete'});" %><%= label_tag '', '拒绝' %>
+		</div>
+	</div>
 </div>
 </div>

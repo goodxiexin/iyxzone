@@ -39,7 +39,7 @@
         <% if @user.participated_events.count != 0 %> 
           <%= render :partial => 'event_items', :object => @events %>
         <% else %>
-          <div class='gray'>
+          <div class='tip'>
             <%= get_subject @user %>的过去一片空白
           </div>
         <% end %>

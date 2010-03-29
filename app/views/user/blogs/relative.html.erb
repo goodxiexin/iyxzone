@@ -43,11 +43,11 @@
       </div>
       <div class="feed-box01">
         <% if @blogs.total_entries != 0 %>
-        <div class="page">共<%= @blogs.total_entries %>篇</div>
+        <div class="tip">共<%= @blogs.total_entries %>篇</div>
         <%= render :partial => 'blog_item2', :collection => @blogs %>
         <%= will_paginate @blogs %>
         <% else %>
-          <div class='page'><%= subject %>朋友都不写和<%= subject %>相关的日志</div>
+          <div class='tip'><%= subject %>朋友都不写和<%= subject %>相关的日志</div>
         <% end %>
       </div>
     </div>

@@ -34,8 +34,15 @@
             <span>邀请好友</span>
           </div><br/>
           <div class="friend-invite-head">
+<<<<<<< HEAD:app/views/user/events/invitations/new.html.erb
             <strong class="green"><% if @guild %>搜索工会战友的游戏角色：<% else %>搜索好友的游戏角色：<% end %></strong> 
             <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear()", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
+=======
+          <% unless @characters.blank? %>
+            <strong class="green"><% if @guild %>搜索工会战友的游戏角色：<% else %>搜索好友的游戏角色<% end %></strong> 
+            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear()", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
+          <% end %>  
+>>>>>>> f9d6278c6255c47cc406d20723456809821e05d2:app/views/user/events/invitations/new.html.erb
           </div>
           <div class="friend-invite-list">
           <% if @characters.blank? %>

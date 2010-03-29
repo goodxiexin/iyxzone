@@ -341,7 +341,7 @@ ActiveRecord::Schema.define(:version => 20100329082446) do
     t.integer  "game_id"
     t.integer  "game_area_id"
     t.integer  "game_server_id"
-    t.string   "description"
+    t.text     "description"
     t.integer  "president_id"
     t.integer  "character_id"
     t.integer  "members_count",     :default => 0
