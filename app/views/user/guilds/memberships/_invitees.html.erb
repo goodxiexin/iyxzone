@@ -1,16 +1,20 @@
-<div class='d6-list s_clear'>
 <ul id='members'>
-<% memberships.each do |membership| %>
+  <% memberships.each do |membership| %>
+	<% user = membership.user %>
   <% character = membership.character %>
-  <% user = membership.user %>
-  <li id='<%= "guild_invitation_#{membership.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
-    <%= avatar user, :class => 'imgbox01' %>
-    <p>
-      <%= profile_link user, :class => 'blk' %>
-      <span class='red blk'> <%= membership.character.name %></span>
-      <%= link_to '<span>发站内信</span>', new_mail_url(:recipient_ids => [user.id]), :class => "blk gray02" %>
-    </p>
+  <li class='bg' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+    <div class='card'>
+      <div class='img'>
+        <div class='middle'><div class='middle-center'><div class='center'>
+          <%= avatar user, :class => 'imgbox01' %>
+        </div></div></div>
+      </div>
+      <div class='info member s_clear'>
+        <h4><%= profile_link user, :class => 'blk' %></h4>
+        <span class='red nowrap'><%= character.name %></span><br/>
+        <span class='blk op'><%= link_to '发站内信', new_mail_url(:recipient_ids => [user.id]) %></span>
+      </div>
+    </div> 
   </li>
-<% end %>
+	<% end %>
 </ul>
-</div>

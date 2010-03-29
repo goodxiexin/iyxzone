@@ -9,6 +9,14 @@ Iyxzone.Guild = {
 
 Object.extend(Iyxzone.Guild.MemberManager, {
 
+  currentID: null,
+
+  currentStatus: null,
+
+  guildID: null,
+
+  roleList: null,
+
   startObserving: function(field){
     this.field = field;
     this.timer = setTimeout(this.search.bind(this), 300);
@@ -31,6 +39,96 @@ Object.extend(Iyxzone.Guild.MemberManager, {
       }
     }.bind(this));
     this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  buildRoleList: function(){
+      this.roleList = new Element('div', {class: 'drop-wrap'});
+      var div = new Element('div', {class: 'wrap-bg'});
+      var dl = new Element('dl');
+      var dd = new Element('dd', {class: 'jt-cutline'});
+      var veteran = new Element('a', {href: 'javascript:void(0)'}).update('工会长老');
+      var member = new Element('a', {href: 'javascript:void(0)'}).update('普通会员');
+      
+      dd.appendChild(veteran);
+      dd.appendChild(member);
+      dl.appendChild(dd);
+      this.roleList.appendChild(div);
+      this.roleList.appendChild(dl);
+
+      document.observe('click', function(){
+        this.roleList.hide();
+      }.bind(this));
+      veteran.observe('click', function(event){
+        Event.stop(event);
+        this.changeRole(4);
+      }.bind(this));
+      member.observe('click', function(event){
+        Event.stop(event);
+        this.changeRole(5);
+      }.bind(this));
+  },
+
+  toggleRoleList: function(membershipID, status, event, span){
+    Event.stop(event);
+
+    if(this.isChanging){
+      return;
+    }
+
+    if(this.roleList){
+      if(this.currentID == membershipID){
+        if(this.roleList.visible()){
+          this.roleList.hide();
+          this.currentID = null;
+          this.currentStatus = null;
+        }else{
+          this.roleList.show();
+          this.currentID = membershipID;
+          this.currentStatus = status;
+        }
+      }else{
+        if(this.roleList.visible()){
+          Element.insert(span, {after: this.roleList});
+          this.currentID = membershipID;
+          this.currentStatus = status;
+        }else{
+          Element.insert(span, {after: this.roleList});
+          this.roleList.show();
+          this.currentID = membershipID;
+          this.currentStatus = status;
+        }
+      }
+    }else{
+      this.buildRoleList();
+      Element.insert(span, {after: this.roleList});
+      this.currentID = membershipID;
+      this.currentStatus = status;
+    }
+  },
+
+  changeRole: function(status){
+    if(this.isChanging){
+      return;
+    }
+
+    if(status == this.currentStatus){
+      this.roleList.hide();
+    }else{
+      new Ajax.Request('/guilds/' + this.guildID + '/memberships/' + this.currentID, {
+        method: 'put',
+        parameters: 'status=' + status,
+        onLoading: function(){
+          this.isChanging = true;
+          Iyxzone.changeCursor('wait');
+          this.roleList.hide();
+        }.bind(this),
+        onComplete: function(transport){
+          this.isChanging = false;
+          Iyxzone.changeCursor('default');
+          $('member_status_' + this.currentID).writeAttribute('onclick', "Iyxzone.Guild.MemberManager.toggleRoleList(" + this.currentID + ", " + status + ", event, $(this).up());");
+        }.bind(this)
+      });
+    }
   }
 
 });

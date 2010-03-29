@@ -121,7 +121,7 @@ var Facebox = Class.create({
 	show_confirm: function(confirm_message, url, token, method){
     var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="facebox.close();" class="icon2-close right"></a></p>';
     html += '<div class="z-con"><p>' + confirm_message + "</p>";
-    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' onclick=\"new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onLoading: function(){Iyxzone.disableButton($('fb-confirm').down('button',0),'请等待..')}, onComplete: function(transport){facebox.close();}});\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
+    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' onclick=\"new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onLoading: function(){Iyxzone.disableButton($('fb-confirm').down('button',0),'请等待..');Iyxzone.changeCursor('wait');}, onComplete: function(transport){facebox.close();Iyxzone.changeCursor('default');}});\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
 		this.remove_loading();
 		this.set_content(html);
 		this.locate();

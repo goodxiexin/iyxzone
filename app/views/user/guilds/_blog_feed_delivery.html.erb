@@ -10,7 +10,7 @@
   <% end %>
   <div class="jl-list-con"><%= profile_link blog.poster%>编写了日志<%= blog_link blog, :class => 'shine'%>
   <p class="gray jl-con">
-		<%= truncate blog.content, :length => 80, :omission => '...' %>
+		<%= blog_content blog, :length => 80, :omission => '...' %>
 	</p>
   <p class="gray"><%= ftime delivery.created_at %></p>
 	</div>

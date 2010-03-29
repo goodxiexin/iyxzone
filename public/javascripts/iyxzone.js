@@ -53,6 +53,10 @@ Object.extend(Iyxzone, {
     return {'codes': codes, 'div': div};
   },
 
+  changeCursor: function(type){
+    document.body.style.cursor = type;
+  },
+
   blinkTitle: function(){
     if(!document.title.match(/^【　　　】/)){
       document.title='【　　　】' + this.documentTitle;
