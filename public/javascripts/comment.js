@@ -34,13 +34,11 @@ Object.extend(Iyxzone.Comment, {
   showForm: function(commentableType, commentableID, login, recipientID){
     $('add_' + commentableType + '_comment_' + commentableID).hide();
     $(commentableType + '_comment_' + commentableID).show();
-    if(recipientID != null && login != null){
-      $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
-      $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + ":";
-    }else{
-      $(commentableType + '_comment_recipient_' + commentableID).value = null;
+    $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
+    if(login == null)
       $(commentableType + '_comment_content_' + commentableID).value = "";
-    }
+    else
+      $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + "：";
     $(commentableType + '_comment_content_' + commentableID).focus();
   },
 

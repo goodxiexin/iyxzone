@@ -29,6 +29,16 @@ Object.extend(Iyxzone.Home.NoticeManager, {
         $('my_notices').innerHTML = transport.responseText;
       }.bind(this)
     });
+  },
+
+  readSingle: function(noticeID, token){
+    new Ajax.Request('/notices/' + noticeID + '/read', {
+      method: 'put',
+      parameters: "single=1&authenticity_token=" + encodeURIComponent(token),
+      onSuccess: function(transport){
+        $('my_notices').innerHTML = transport.responseText;
+      }.bind(this)
+    });    
   }
 
 });

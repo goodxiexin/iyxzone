@@ -12,7 +12,7 @@
   <p class="gray jl-con">
 		<%= blog_content blog, :length => 80, :omission => '...' %>
 	</p>
-  <p class="gray"><%= ftime delivery.created_at %> <%= link_to_function '评论', "Iyxzone.Comment.showForm('blog', #{blog.id}, null, null)" %></p>
+  <p class="gray"><%= ftime delivery.created_at %> <%= link_to_function '评论', "Iyxzone.Comment.showForm('blog', #{blog.id}, null, #{blog.poster_id})" %></p>
 	  <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => blog, :recipient => blog.poster} %>
 	</div>
 </div>

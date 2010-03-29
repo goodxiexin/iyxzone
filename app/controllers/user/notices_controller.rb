@@ -11,7 +11,7 @@ class User::NoticesController < UserBaseController
 	end
 
 	def read
-    @notice.read_by current_user
+    @notice.read_by current_user, params[:single]
 		@notices = current_user.notices.unread.find(:all, :limit => 10)
 		render :partial => 'notices', :object => @notices
 	end
