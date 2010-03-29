@@ -37,6 +37,9 @@ Object.extend(Iyxzone.Comment, {
     if(recipientID != null && login != null){
       $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
       $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + ":";
+    }else{
+      $(commentableType + '_comment_recipient_' + commentableID).value = null;
+      $(commentableType + '_comment_content_' + commentableID).value = "";
     }
     $(commentableType + '_comment_content_' + commentableID).focus();
   },
