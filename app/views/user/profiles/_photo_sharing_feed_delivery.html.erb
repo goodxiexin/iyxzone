@@ -10,7 +10,7 @@
   <p class="gray s_clear">
 		<%= photo_link photo, :size => :medium %>
 	</p>
-	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('#{photo.class.name.underscore}', #{photo.id}, null);", :class => "gray"%></p>
+	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('#{photo.class.name.underscore}', #{photo.id}, null, #{photo.poster_id});", :class => "gray"%></p>
 	<%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => photo, :recipient => photo.poster} %>
 </div>
 </div>

@@ -36,7 +36,7 @@
         <% end %>
       </div>
       <span class="gray">
-        <%= ftime delivery.created_at %> - <%= link_to_function "评论", "Iyxzone.Comment.showForm('album', #{album.id}, null)" %>
+        <%= ftime delivery.created_at %> - <%= link_to_function "评论", "Iyxzone.Comment.showForm('album', #{album.id}, null, #{album.poster_id})" %>
       </span> 
       <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => album, :recipient => album.poster} %>
     </div>

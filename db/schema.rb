@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100329082446) do
+ActiveRecord::Schema.define(:version => 20100330040208) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -674,12 +674,13 @@ ActiveRecord::Schema.define(:version => 20100329082446) do
     t.integer  "poster_id"
     t.string   "subject"
     t.text     "content"
-    t.integer  "posts_count",    :default => 0
-    t.boolean  "top",            :default => false
+    t.integer  "posts_count",      :default => 0
+    t.boolean  "top",              :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "viewings_count", :default => 0
-    t.integer  "sharings_count", :default => 0
+    t.integer  "viewings_count",   :default => 0
+    t.integer  "sharings_count",   :default => 0
+    t.text     "content_abstract"
   end
 
   create_table "users", :force => true do |t|

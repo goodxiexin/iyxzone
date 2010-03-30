@@ -10,7 +10,7 @@
         <li><%= check_box_tag '', '', false, :disabled => true %><%= (truncate a.description, :length => 20, :omission => "...") %></li>
       <% end %>
     </ul>
-		<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('poll', #{poll.id}, null);", :class => "gray"%></p>
+		<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('poll', #{poll.id}, null, #{poll.poster_id});", :class => "gray"%></p>
 		<%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => poll , :recipient => poll.poster} %>
 </div>
 </div>
