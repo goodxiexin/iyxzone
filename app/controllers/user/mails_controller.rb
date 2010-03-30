@@ -36,10 +36,12 @@ class User::MailsController < UserBaseController
         end
       end
     end
+=begin
     render :juggernaut => {:type => :send_to_clients, :client_ids => @notify.map(&:id)} do |page|
       page << "Iyxzone.startBlinkTitle('新邮件');"
       page << "var num = parseInt($('navinbox-num').innerHTML); $('navinbox-num').innerHTML = (num + 1);"
     end
+=end
     redirect_to mails_url(:type => 0)
   end
 
