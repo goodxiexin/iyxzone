@@ -78,9 +78,9 @@
         <%= will_paginate @photos %>
         <% else %>
 					<% if @user == current_user %>
-					<div class='gray'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'albums') %>吧</div>
+					<div class='tip'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'albums') %>吧</div>
 					<% else %>
-					<div class='gray'>还没有图片</div>
+					<div class='tip'>还没有图片</div>
 					<% end %>
         <% end %>
 				</table>
@@ -110,6 +110,6 @@
 </div></div></div></div>
 
 <% unless @reply_to.blank? %>
-<%= javascript_tag "Iyxzone.Comment.set('avatar_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+<%= onload_javascript_tag "Iyxzone.Comment.set('avatar_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
 <% end %>
 

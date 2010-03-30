@@ -38,7 +38,7 @@
           <%= render :partial => 'poll_items', :object => @polls %>
           <%= will_paginate @polls %>
         <% else %>
-          <div class='gray'>
+          <div class='tip'>
           <% if @user == current_user %>
             你还没发起任何投票，赶快<%= link_to '创建一个', new_poll_url %>吧
           <% else %>

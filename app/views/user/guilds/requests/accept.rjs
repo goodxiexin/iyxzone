@@ -1,5 +1,7 @@
 if params[:at] == 'guild'
   page << "$('guild_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>添加会员成功！</strong>';"
+  page << "setTimeout(\"new Effect.Fade('guild_request_#{@request.id}')\", 2000);"
 elsif params[:at] == 'requests'
-  page << "$('guild_request_option_#{@request.id}').innerHTML = '已接受';"
+  page << "$('guild_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>添加会员成功！</strong>';"
+  page << "setTimeout(\"new Effect.Fade('guild_request_#{@request.id}')\", 2000);"
 end

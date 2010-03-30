@@ -35,11 +35,11 @@ Object.extend(Iyxzone.Comment, {
     $('add_' + commentableType + '_comment_' + commentableID).hide();
     $(commentableType + '_comment_' + commentableID).show();
     $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
+    $(commentableType + '_comment_content_' + commentableID).focus();
     if(login == null)
       $(commentableType + '_comment_content_' + commentableID).value = "";
     else
       $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + "：";
-    $(commentableType + '_comment_content_' + commentableID).focus();
   },
 
   hideForm: function(commentableType, commentableID, event){
