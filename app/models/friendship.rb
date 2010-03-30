@@ -25,10 +25,22 @@ class Friendship < ActiveRecord::Base
     status_was == Friendship::Friend
   end
 
+  def reverse
+    Friendship.first(:conditions => {:user_id => friend_id, :friend_id => user_id})
+  end
+
+  attr_accessor :recently_accepted
+
+  attr_accessor :recently_declined
+
   def accept
     Friendship.transaction do
       self.update_attributes(:status => Friendship::Friend)
-      Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friendship::Friend)
+      if reverse.blank?
+        Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friendship::Friend)
+      else
+        reverse.update_attributes(:status => Friendship::Friend)
+      end
     end
   rescue
     return false
