@@ -69,7 +69,7 @@
 										<span class="photo-op-share" ></span>
 										<%= facebox_link "分享", new_sharing_url(:shareable_type => 'Photo', :shareable_id => @photo.id) %> |
 										<span class="photo-op-praise" ></span>
-										<%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @photo.class.base_class.to_s, "dig[diggable_id]" => @photo), :html => {:id=> "digging_#{@photo.class.to_s.underscore}_#{@photo.id}", :class => "red"}%>(已经被<span id="dig_<%=@photo.class.to_s.underscore%>_<%=@photo.id%>" class='gray'><%= @photo.digs_count %></span>人赞过)
+										<%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @photo.class.base_class.to_s, "dig[diggable_id]" => @photo), :html => {:id=> "digging_#{@photo.class.to_s.underscore}_#{@photo.id}"}%>(<span id="dig_<%=@photo.class.to_s.underscore%>_<%=@photo.id%>" class='gray'><%= @photo.digs_count %></span>人赞过)
 									</div>
                   <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
 									<div class="pic-desc s_clear">
@@ -95,8 +95,7 @@
       </div>
       <div class="foot cmt-space">
         <div class="feed-list">
-          <p class="s_clear red">评论(<%= @photo.comments_count %>)
-					</p>
+          <h4>评论(<%= @photo.comments_count %>)</h4>
           <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @photo, :recipient => @user} %>
         </div>
       </div>
