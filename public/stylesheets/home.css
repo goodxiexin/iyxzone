@@ -127,23 +127,23 @@ a:hover{color:#D63200;}
 #canvas .canvas_con .multibox .news-list{padding:11px 9px}
 /*#canvas .canvas_con .multibox .data-table01 th{border-bottom:1px #BBD2AA solid;}
 */
-.feed-message-box{margin-bottom:19px;position:relative;}
+.feed-message-box{margin-bottom:19px;position:relative}
 .feed-message-box h4{height:27px;line-height:27px;color:#000;overflow:hidden}
 .feed-message-box h4 span{color:#D63200}
 .feed-message-box li{padding-left:22px;height:30px;line-height:30px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -73px;color:#000;overflow:hidden}
 .feed-message-box .feed-message{height:29px;line-height:29px;border-bottom:1px #E7F0E0 solid;overflow:hidden}
 .feed-message-box .feed-message a.icon-active{float:right;_display:inline-block;margin:10px 8px 0 0;}
 
-.feed-box{line-height:24px;word-spacing:5px}
+.feed-box{line-height:24px;word-spacing:5px;position:relative}
 .feed-box .tab{margin-bottom:20px;padding:0 16px;position:relative}
 /*.feed-box .feed-wrap{padding:0 10px;}
 */
 .feed-box .feed-list-box{margin-bottom:20px;}
-.feed-box .feed-img-list{margin-bottom:20px;position:relative}
+.feed-box .feed-img-list{margin-bottom:20px;position:relative;}
 
 .feed-list-box h4{color:#D63200}
-.feed-list-box .feed-list{padding-left:34px;_height:24px;min-height:24px;}
-.feed-list-box .feed-list .feed-icon{position:absolute;left:0;top:0;width:16px;height:16px;overflow:hidden;margin-top:3px}
+.feed-list-box .feed-list{padding-left:34px;_height:24px;min-height:24px}
+.feed-list-box .feed-list .feed-icon{/*position:absolute;left:0;top:0;*/float:left;width:16px;height:16px;overflow:hidden;margin-top:3px}
 /*.feed-list-box .feed-list .icon-friend{background-position:left -2px;}
 .feed-list-box .feed-list .icon-info{background-position:left -38px;}
 .feed-list-box .feed-list .icon-blog{background-position:left -116px;}
@@ -171,7 +171,7 @@ a:hover{color:#D63200;}
 .feed-list .comment-box textarea,.feed-list .word-box .textarea{width:270px;}
 .feed-list .comment-box .txt-add-comment,.feed-list .word-box .txt-add-comment{padding:5px;width:260px;height:13px;overflow:hidden}
 
-.feed-list .comment-box{padding:7px 8px;width:383px}
+.feed-list .comment-box{padding:7px 8px;width:383px;}
 .feed-list .comment-box .rows,.feed-list .word-box .rows{padding-bottom:5px;}
 .feed-list .comment-box .buttons .button,.feed-list .word-box .buttons .button{float:right;margin-left:1px;margin-right:4px;}
 .feed-list .comment-box .formcontent,.feed-list .word-box .formcontent{padding:3px 0;line-height:13px;}
@@ -210,12 +210,13 @@ a:hover{color:#D63200;}
 #leftsidebar .avatarbox ul.op li{float:left;width:75px;overflow:hidden;white-space:nowrap;margin:5px 2px;}
 
 #leftsidebar .profile-list{margin:5px 0 5px 30px;}
-#leftsidebar .info-list{margin-bottom:10px;padding:7px 13px;line-height:25px;}
+#leftsidebar .info-list{margin-bottom:10px;padding:7px 5px;line-height:25px;}
 #leftsidebar .info-list table{width:100%;}
 #leftsidebar .info-list td{vertical-align:top;height:25px;}
 #leftsidebar .info-list td.id{text-align:right; white-space:nowrap}
 #leftsidebar .info-list td.value{color:#25700D;word-spacing:5px}
 #leftsidebar .info-list td.value b{color:#D63200}
+
 
 #leftsidebar .formcontent{margin:5px 0;padding:0;}
 #leftsidebar .formcontent table{margin:0 auto;}
@@ -541,13 +542,15 @@ a:hover{color:#D63200;}
 .vote-box .vote-header-table .vote-content h5{font-size:14px;color:#D63200;margin-bottom:9px;}
 .vote-box .vote-header-table .vote-content h5 span{color:#333;font-size:12px;font-weight:normal}
 .vote-box .vote-header-table .vote-content h5 span span{color:#7E7F80}
-.vote-box .vote-header-table .vote-content p{padding-left:23px;color:#7E7F80}
+.vote-box .vote-header-table .vote-content p{color:#7E7F80}
 .vote-box .vote-header-table .status{padding-left:40px;width:96px}
 .vote-box .vote-header-table .btn{padding-right:0;width:70px;}
 
 .vote-box .vote-status-table{margin:10px auto;}
 .vote-box .vote-status-table td{padding:5px;line-height:20px;}
 .vote-box .vote-status-table .title{text-align:right;padding-right:2px;}
+.myblog .myblog-table .title div{padding-left:22px;height:21px;width:320px; white-space:nowrap;background:url(../images/icons/homeIcons.gif) no-repeat 0 -801px;overflow:hidden}
+
 .vote-box .vote-status-table .percent{width:211px;padding-left:2px;}
 .vote-box .vote-status-table .cb{width:22px;}
 .vote-box .vote-status-table .btn{text-align:right;width:56px}
@@ -633,17 +636,23 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .jl-mcAvatar a{width:50px;height:50px;}
 .jl-fldbtn{margin-top:10px}
 
-.feed-box{position:relative}
-.feed-wrap .feed-list{padding-left:0}
+/*首页/个人/好友主页*/
+/*.home-wrap .icon-active{margin-left:30px;margin-left:10px !important;}
+*/
+.home-wrap .s-dialog{margin-right:30px}
+/*.home-wrap .feed-list-box .feed-list{padding-left:32px}
+*/
+.feed-wrap .feed-list,.home-wrap .feed-list{padding-left:0;}
 .feed-wrap .feed-list-box{margin:10px 0}
-.jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;position:relative}
+.jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;}
+.home-wrap .jl-list-con{margin-left:20px;}
 .feed-list .jl-list-con .word-box textarea{width:390px}
 .feed-box .feed-list-box{margin-bottom:10px;}
 .feed-list-box h4{background:url(../images/skin/skin2010.png) repeat-x 0 -47px;}
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
-#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative;}
+#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;}
 #roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
 #roll-photo .roll-photo-list a{margin:0 9px;}
 #roll-photo a img{width:100px;}
@@ -654,11 +663,6 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 span.jl-my-gold{background:url(../images/icons/homeIcons.png) no-repeat 0 -704px;padding-left:20px;margin-right:20px}
 a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:center;width:85px;height:18px;line-height:18px;background:url(../images/skin/skin2010.png) no-repeat -115px -372px;display:inline-block;color:#fff}
 
-/*个人/好友主页*/
-/*.home-wrap .icon-active{margin-left:30px;margin-left:10px !important;}
-*/
-.home-wrap .s-dialog{margin-right:30px}
-.home-wrap .feed-list-box .feed-list{padding-left:32px}
 
 
 /**/
@@ -959,7 +963,9 @@ dl.menu-op dd a{color:#333}
 .list-v2 .feed-list .feed-header .icon-active{margin-left:20px}
 
 /*视频 日志详细页面*/
-a.share-btn{background:url(../images/skin/skin2010.png) no-repeat -130px -288px;display:inline-block;width:70px;height:20px;line-height:20px;text-indent:28px;color:#508119}
+a.share-btn,a.concern-btn{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:70px;height:20px;line-height:20px;text-indent:28px;color:#508119}
+a.share-btn{background-position:-130px -288px}
+a.concern-btn{background-position:0 -411px}
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 15px}
 .detail-video-head p.left,.detail-blog-head p.left{margin-top:6px}
 .detail-video-head strong,.detail-blog-head strong{color:#cc3300;font-size:14px;font-weight:400}
