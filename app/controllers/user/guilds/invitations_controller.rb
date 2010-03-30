@@ -19,7 +19,7 @@ class User::Guilds::InvitationsController < UserBaseController
   end
 
 	def accept
-		unless @invitation.update_attributes(:status => Membership::Member)
+		unless @invitation.accept_invitation
 	    render :update do |page|
         page << "error('发生错误');"
       end
@@ -27,7 +27,7 @@ class User::Guilds::InvitationsController < UserBaseController
   end
 
 	def decline
-    unless @invitation.destroy
+    unless @invitation.decline_invitation
       render :update do |page|
         page << "error('发生错误');"
       end

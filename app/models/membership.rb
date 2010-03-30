@@ -83,6 +83,51 @@ class Membership < ActiveRecord::Base
     status_was == Membership::Member or status_was == Membership::Veteran
   end  
 
+  attr_accessor :recently_change_role
+
+  attr_accessor :recently_accept_invitation
+
+  attr_accessor :recently_decline_invitation
+
+  attr_accessor :recently_accept_request
+
+  attr_accessor :recently_decline_request
+
+  def change_role status
+    if self.status != status
+      self.recently_change_role = true
+      self.update_attributes(:status => status)
+    end
+  end
+
+  def accept_invitation
+    if self.is_invitation?
+      self.recently_accept_invitation = true
+      self.update_attributes(:status => Member)
+    end
+  end
+
+  def decline_invitation
+    if self.is_invitation?
+      self.recently_decline_invitation = true
+      self.destroy
+    end
+  end
+
+  def accept_request
+    if self.is_request?
+      self.recently_accept_request = true
+      self.update_attributes(:status => Member)
+    end
+  end
+
+  def decline_request
+    if self.is_request?
+      self.recently_decline_request = true
+      self.destroy
+    end
+  end
+
 protected
 
   def guild_is_valid
