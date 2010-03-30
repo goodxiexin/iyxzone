@@ -81,8 +81,8 @@ table.center td{vertical-align:top}
 
 #footer{padding:18px 0 9px;text-align:center;line-height:15px;color:#7E7F80}
 
-.box01{border:1px #238204 solid;background:#fff;}
-.box02{border:1px #E7F0E0 solid;background:#fff;}
+.box01{border:1px #238204 solid;}
+.box02{border:1px #E7F0E0 solid;zoom:1}
 .box03{border:1px #EEDEA0 solid;background:#FDFBE2}
 .box04{border:1px #E7F0E0 solid;background:#F8FCF6}
 .box05{border:1px #BBD2AA solid;background:#fff}
@@ -145,7 +145,7 @@ table.center td{vertical-align:top}
 /*homeIcons*/
 /*.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,{display:inline-block;background:url(../images/icons/homeIcons.png) no-repeat;margin:0 5px;width:16px;height:16px; vertical-align:middle;}
 */
-.feed-icon,dl.menu-op dt,.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,.icon-trash,.icon-read,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-notice,.icon-success,.icon-heart,.icon-warn,.icon-camera,.i-avatar,.i-mail,.i-hello,.i-msg,.i-friend,.i-theme,.icon-error,.icon-warning,.icon-msn,.icon-qq,.icon-link,.icon-mail,.i-share-friend,.icon-home,.icon-invitation{background:url(../images/icons/homeIcons.png) no-repeat;display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle;}
+.feed-icon,dl.menu-op dt,.photo-op-mark,.photo-op-edit,.photo-op-praise,.photo-op-share,.photo-op-del,.vote-op-add,.vote-op-edit,.vote-op-time,.vote-op-invite,.vote-op-del,.icon-trash,.icon-read,.icon-data,.icon-state,.icon-game,.icon-blog,.icon-photo,.icon-video,.icon-share,.icon-vote,.icon-act,.icon-cons,.icon-friend,.icon-friend02,.icon-gift,.icon-minus,.icon-plus,.icon-notice,.icon-success,.icon-heart,.icon-warn,.icon-camera,.i-avatar,.i-mail,.i-hello,.i-msg,.i-friend,.i-theme,.icon-error,.icon-warning,.icon-msn,.icon-qq,.icon-link,.icon-mail,.i-share-friend,.icon-home,.icon-invitation,.icon-up,.icon-down{background:url(../images/icons/homeIcons.png) no-repeat;display:inline-block;margin-right:5px;width:16px;height:16px; vertical-align:middle;}
 .icon-data{background-position:0 0}
 .icon-state{background-position:0 -16px}
 .icon-game{background-position:0 -32px}
@@ -175,6 +175,8 @@ table.center td{vertical-align:top}
 .icon-mail{background-position:0 -640px;}
 .icon-home{background-position:0 -816px;}
 .icon-invitation{background-position:0 -288px;}
+.icon-up{background-position:0 -832px;}
+.icon-down{background-position:0 -848px;}
 
 .i-avatar{background-position:0 -480px;}
 .i-mail{background-position:0 -496px;}
@@ -290,7 +292,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 #navbar #navextra{float:right;margin:10px 5px 0;line-height:20px;white-space:nowrap;_display:inline;}
 #navbar #navextra li {position:relative;z-index:99999;background-image:url(../images/skin/navbar01.gif);background-repeat:no-repeat;background-position:right -441px;float:left;margin:0 -1px 0 1px;}
-#navbar #navextra li a{padding:0 10px;display:block;}
+#navbar #navextra li a{padding:0 10px;display:block}
 #navbar #navextra li a:hover{text-decoration:underline}
 
 /*导航栏弹出窗口*/
@@ -312,7 +314,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 /*-------顶部导航条---------*/
 
 /*选项卡*/
-.tab01{height:30px;line-height:30px;background:url(../images/skin/tabs01.gif) repeat-x; background-position:left bottom;position:relative;/*overflow:hidden;分享页面有弹出窗口*/}
+.tab01{height:30px;line-height:30px;background:url(../images/skin/tabs01.gif) repeat-x; background-position:left bottom;/*overflow:hidden;分享页面有弹出窗口*/}
 .tab01 li{margin-right:1px;float:left;height:30px;padding-left:23px;background-image:url(../images/skin/tabs01.gif);background-repeat:no-repeat;}
 .tab01 li span{display:block;padding-right:23px;background-image:url(../images/skin/tabs01.gif);background-repeat:no-repeat;background-position:right -33px;}
 .tab01 li span a{display:block;position:relative;margin:0 -23px;padding:0 23px;color:#25700D; white-space:nowrap}

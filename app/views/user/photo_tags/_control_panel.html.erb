@@ -47,7 +47,7 @@
   </div>
 </div>
 
-<%= javascript_tag "
+<%= onload_javascript_tag "
   tagger = new Iyxzone.Photo.Tagger('#{photo.class.name.underscore}', #{photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{tags}, 'photo_tags', #{user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
 "%>
 
