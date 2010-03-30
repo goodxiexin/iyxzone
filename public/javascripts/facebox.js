@@ -80,7 +80,8 @@ var Facebox = Class.create({
 
 	set_content: function(data, klass){
 		if(klass) this.content.addClassName(klass);
-		this.content.innerHTML = data;
+//		this.content.innerHTML = data;
+		this.content.update( data);
     		
 		if(!this.facebox.visible()) 
 			new Effect.Appear(this.facebox, {'duration': 0.3});
@@ -160,11 +161,13 @@ var Facebox = Class.create({
     this.set_content(html);
     this.locate();
     var validation = Iyxzone.validationCode(4);
-    $('validation').innerHTML = validation.div.innerHTML;
+//    $('validation').innerHTML = validation.div.innerHTML;
+    $('validation').update( validation.div.innerHTML);
     this.codes = validation.codes;
     $('validation').observe('click', function(){
       var validation = Iyxzone.validationCode(4);
-      $('validation').innerHTML = validation.div.innerHTML;
+//      $('validation').innerHTML = validation.div.innerHTML;
+      $('validation').update( validation.div.innerHTML);
       this.codes = validation.codes;
     }.bind(this));	
 	},
@@ -188,7 +191,8 @@ var Facebox = Class.create({
 			var target = elem.href.replace(url+'#','');
 			var d = $(target);
 			var data = new Element(d.tagName);
-			data.innerHTML = d.innerHTML;
+//			data.innerHTML = d.innerHTML;
+			data.update( d.innerHTML);
 			this.reveal(data, klass);
 		 }else if(elem.href.match(this.settings.image_types)) {
 			var image = new Image();

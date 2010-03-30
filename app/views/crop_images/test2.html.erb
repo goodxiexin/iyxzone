@@ -129,7 +129,9 @@ top: '-83px'
         var ratio = 500.0/value;
         var newHeight = Math.ceil(333/ratio);
         var left = Math.ceil((250 - newWidth)/2);
-        $('log3').innerHTML += "( " + value + ',' + newHeight + ') ';
+//        $('log3').innerHTML += "( " + value + ',' + newHeight + ') ';
+				$('log3').update( $('log3').innerHTML + "( " + value + ',' + newHeight + ') ' );
+
         if(newWidth < 250)
           left = Math.ceil((250 - newWidth)/2);
         else
@@ -245,7 +247,8 @@ var cropper = new Cropper.ImgWithPreview(
 )   
 
 Event.observe(imgWrap4, 'mousemove', function(e){
-  $('pos').innerHTML = '(' + e.pointerX + ',' + e.pointerY +')'; 
+//  $('pos').innerHTML = '(' + e.pointerX + ',' + e.pointerY +')'; 
+	$('pos').update('(' + e.pointerX + ',' + e.pointerY +')');
 });
 
 </script>

@@ -43,7 +43,8 @@ Object.extend(Iyxzone.Profile.Editor, {
     var frame = $('basic_info_frame');
     this.basicInfoHTML = frame.innerHTML;
     if(this.editBasicInfoHTML){
-      frame.innerHTML = this.editBasicInfoHTML;
+//      frame.innerHTML = this.editBasicInfoHTML;
+      frame.update( this.editBasicInfoHTML);
       this.regionSelector.setEvents();
     }else{
       new Ajax.Updater('basic_info_frame', '/profiles/' + profileID + '/edit?type=1', {
@@ -60,7 +61,8 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   cancelEditBasicInfo: function(){
-    $('basic_info_frame').innerHTML = this.basicInfoHTML;
+//    $('basic_info_frame').innerHTML = this.basicInfoHTML;
+    $('basic_info_frame').update( this.basicInfoHTML);
     this.isEditingBasicInfo = false;
   },
 
@@ -105,7 +107,8 @@ Object.extend(Iyxzone.Profile.Editor, {
           Iyxzone.disableButton(button, '请等待..');
         },
         onSuccess: function(transport){
-          $('basic_info_frame').innerHTML = transport.responseText;
+//          $('basic_info_frame').innerHTML = transport.responseText;
+          $('basic_info_frame').update( transport.responseText);
           this.isEditingBasicInfo = false;
           this.editBasicInfoHTML = null;
           this.regionSelector = null;
@@ -129,7 +132,8 @@ Object.extend(Iyxzone.Profile.Editor, {
     var frame = $('contact_info_frame');
     this.contactInfoHTML = frame.innerHTML;
     if(this.editContactInfoHTML){
-      frame.innerHTML = this.editContactInfoHTML;
+//      frame.innerHTML = this.editContactInfoHTML;
+      frame.update( this.editContactInfoHTML);
       facebox.watchClickEvents();
     }else{
       new Ajax.Request('/profiles/' + profileID + '/edit?type=2', {
@@ -139,7 +143,8 @@ Object.extend(Iyxzone.Profile.Editor, {
         }.bind(this),
         onSuccess: function(transport){
           this.editContactInfoHTML = transport.responseText;
-          $('contact_info_frame').innerHTML = transport.responseText;
+//          $('contact_info_frame').innerHTML = transport.responseText;
+          $('contact_info_frame').update( transport.responseText);
           facebox.watchClickEvents();
         }.bind(this)
       });
@@ -147,7 +152,8 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   cancelEditContactInfo: function(){
-    $('contact_info_frame').innerHTML = this.contactInfoHTML;
+//    $('contact_info_frame').innerHTML = this.contactInfoHTML;
+    $('contact_info_frame').update( this.contactInfoHTML);
     this.isEditingContactInfo = false;
   },
 
@@ -223,7 +229,8 @@ Object.extend(Iyxzone.Profile.Editor, {
         }.bind(this),
         onSuccess: function(transport){
           this.editContactInfoHTML = null;
-          $('contact_info_frame').innerHTML = transport.responseText;
+//          $('contact_info_frame').innerHTML = transport.responseText;
+          $('contact_info_frame').update( transport.responseText);
           this.isEditingContactInfo = false;
         }.bind(this)
       });
@@ -269,7 +276,8 @@ Object.extend(Iyxzone.Profile.Editor, {
     var frame = $('character_frame');
     this.charactersHTML = frame.innerHTML;
     if(this.editCharactersHTML){
-      frame.innerHTML = this.editCharactersHTML;
+//      frame.innerHTML = this.editCharactersHTML;
+      frame.update( this.editCharactersHTML);
       this.gameSelectors.values().each(function(selector){
         selector.setEvents();
       });
@@ -288,7 +296,8 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   cancelEditCharacters: function(){
-    $('character_frame').innerHTML = this.charactersHTML;
+//    $('character_frame').innerHTML = this.charactersHTML;
+    $('character_frame').update( this.charactersHTML);
     this.isEditingCharacters = false;
     this.delCharacterIDs = new Array();
     this.newGameSelectors = new Hash();
@@ -307,7 +316,8 @@ Object.extend(Iyxzone.Profile.Editor, {
     html += '<div class="rows s_clear"><div class="fldid"><label>职业：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][profession_id]" id="profile_new_characters_' + id + '_profession_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_profession_id_error" class="red"/></div>';
     html += '<p class="foot s_clear"><a onclick="Iyxzone.Profile.Editor.removeCharacter(' + id + ', 1, this);; return false;" href="javascript: void(0)" class="right red">删除角色</a></p>';
 
-    div.innerHTML = html;
+//    div.innerHTML = html;
+    div.update( html);
     $('user_characters').appendChild(div);
     this.newCharacterID++;
     
@@ -470,7 +480,8 @@ Object.extend(Iyxzone.Profile.Editor, {
           Iyxzone.disableButton(button, '请等待..');
         },
         onSuccess: function(transport){
-          $('character_frame').innerHTML = transport.responseText;
+//          $('character_frame').innerHTML = transport.responseText;
+          $('character_frame').update( transport.responseText);
           this.editCharactersHTML = null;
           this.gameSelectors = new Hash();
           this.newGameSelectors = new Hash();

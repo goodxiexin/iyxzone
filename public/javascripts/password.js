@@ -18,7 +18,8 @@ Object.extend(Iyxzone.Password, {
 
   resetValidation: function(){
     var validation = Iyxzone.validationCode(4);
-    $('validation').innerHTML = validation.div.innerHTML;
+//    $('validation').innerHTML = validation.div.innerHTML;
+    $('validation').update( validation.div.innerHTML);
     this.codes = validation.codes;
   },
 

@@ -1,1 +1,3 @@
-page << "$('user_#{@user.id}').innerHTML = '#{link_to_remote 'disable', disable_admin_user_url(@user)}';"
+#page << "$('user_#{@user.id}').innerHTML = '#{link_to_remote 'disable', disable_admin_user_url(@user)}';"
+page << "$('user_#{@user.id}').update( '#{link_to_remote 'disable', disable_admin_user_url(@user)}');"
+

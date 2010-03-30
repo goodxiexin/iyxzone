@@ -6,10 +6,16 @@ class User::DigsController < UserBaseController
       render :update do |page|
         page << "tip('成功')"
         if params[:at] == 'sharing'
-          page << "$('dig_sharing_#{@dig.diggable.id}').innerHTML = \"<a class='praise' href='javascript:void(0)'><strong><span>#{@dig.diggable.digs_count}</span></strong></a>\";"
+#          page << "$('dig_sharing_#{@dig.diggable.id}').innerHTML = \"<a class='praise' href='javascript:void(0)'><strong><span>#{@dig.diggable.digs_count}</span></strong></a>\";"
+          page << "$('dig_sharing_#{@dig.diggable.id}').update( \"<a class='praise' href='javascript:void(0)'><strong><span>#{@dig.diggable.digs_count}</span></strong></a>\");"
+
         else
-				  page << "$('dig_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = #{@dig.diggable.digs_count}"
-				  page << "$('digging_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = '<a href=\"#\">已赞</a>'"
+#				  page << "$('dig_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = #{@dig.diggable.digs_count}"
+				  page << "$('dig_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').update(     #{@dig.diggable.digs_count})"
+
+#				  page << "$('digging_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').innerHTML = '<a href=\"#\">已赞</a>'"
+				  page << "$('digging_#{@dig.diggable.class.name.underscore}_#{@dig.diggable.id}').update(     '<a href=\"#\">已赞</a>')"
+
         end 
       end
     else

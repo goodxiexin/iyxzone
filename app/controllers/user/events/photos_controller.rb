@@ -41,7 +41,9 @@ class User::Events::PhotosController < UserBaseController
 					  page << "facebox.close();"
           elsif params[:at] == 'photo'
             page<< "facebox.close();"
-            page << "$('event_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
+#            page << "$('event_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
+            page << "$('event_photo_notation_#{@photo.id}').update( '#{@photo.notation.gsub(/\n/, '<br/>')}');"
+
           end
 				end }
 			end

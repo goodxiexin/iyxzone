@@ -40,7 +40,8 @@ Object.extend(Iyxzone.Friend.Suggestor, {
       onSuccess: function(transport){
         var card = $('friend_suggestion_' + suggestionID);
         var temp_parent = new Element('div');
-        temp_parent.innerHTML = transport.responseText;
+//        temp_parent.innerHTML = transport.responseText;
+        temp_parent.update( transport.responseText);
         var li = temp_parent.childElements()[0];
         li.hide();
         Element.replace(card, li);
@@ -76,7 +77,8 @@ Object.extend(Iyxzone.Friend.NicerSuggestor, {
       onSuccess: function(transport){
         var card = $('friend_suggestion_' + suggestionID);
         var temp_parent = new Element('div');
-        temp_parent.innerHTML = transport.responseText;
+//        temp_parent.innerHTML = transport.responseText;
+        temp_parent.update( transport.responseText);
         var li = temp_parent.childElements()[0];
         li.hide();
         Element.replace(card, li);
@@ -112,7 +114,8 @@ Object.extend(Iyxzone.Comrade.Suggestor, {
       onSuccess: function(transport){
         var card = $('comrade_suggestion_' + suggestionID);
         var temp_parent = new Element('div');
-        temp_parent.innerHTML = transport.responseText;
+//        temp_parent.innerHTML = transport.responseText;
+        temp_parent.update( transport.responseText);
         var li = temp_parent.childElements()[0];
         li.hide();
         Element.replace(card, li);
@@ -158,7 +161,8 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
   },
 
   showTip: function(){
-    this.update.innerHTML = this.options.tipText;
+//    this.update.innerHTML = this.options.tipText;
+    this.update.update( this.options.tipText);
     var comp = this.options.comp;
     
     this.update.setStyle({
@@ -178,7 +182,8 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
 
   updateChoices: function($super, data){
     if(data.indexOf('ul') < 0){
-      this.update.innerHTML = data;
+//      this.update.innerHTML = data;
+      this.update.update( data);
       this.update.show();
     }else{
       $super(data);

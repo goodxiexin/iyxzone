@@ -1,5 +1,7 @@
 if params[:select].to_i == 1
-  page << "$('album_id').innerHTML += '<option value=#{@album.id}>#{@album.title}</option>';"
+  #page << "$('album_id').innerHTML += '<option value=#{@album.id}>#{@album.title}</option>';"
+	page << "$('album_id').update( $('album_id').innerHTML + '<option value=#{@album.id}>#{@album.title}</option>');"
+
   page << "$('album_id').value = #{@album.id};"
   page << "facebox.close();"
 else

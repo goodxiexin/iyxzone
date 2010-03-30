@@ -16,7 +16,8 @@ Object.extend(Iyxzone.Home.NoticeManager, {
     new Ajax.Request('notices/first_ten', {
       method: 'get',
       onSuccess: function(transport){
-        $('my_notices').innerHTML = transport.responseText;
+//        $('my_notices').innerHTML = transport.responseText;
+        $('my_notices').update( transport.responseText);
       }.bind(this)
     });
   },

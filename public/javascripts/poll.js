@@ -131,7 +131,7 @@ Object.extend(Iyxzone.Poll.Builder, {
     $($(link).up()).remove();
     var maxSelector = $('max_multiple_select').childElements()[0];
     var originValue = maxSelector.value;
-    maxSelector.innerHTML = '';
+    tmpHTML = '';
     if(originValue > cnt - 1){
       originValue = cnt - 1;
     }
@@ -141,23 +141,25 @@ Object.extend(Iyxzone.Poll.Builder, {
         html += ' selected="selected"';
       }
       html += '>' + (i+1) + '项</option>';
-      maxSelector.innerHTML += html;
+      tmpHTML += html;
     }
+		$(maxSelector).update(tmpHTML);
   },
 
   incrementMaxSelector: function(){
     var cnt = this.countAnswers(true);
     var maxSelector = $('max_multiple_select').childElements()[0];
     var originValue = maxSelector.value;
-    maxSelector.innerHTML = '';
+		tmphtml = '';
     for(var i=0;i<cnt;i++){
-      var html = '<option value=' + (i+1);
+      var html = '<option value="' + (i+1) +'"';
       if(i+1 == originValue){
         html += ' selected="selected"';
       }
       html += '>' + (i+1) + '项</option>';
-      maxSelector.innerHTML += html;
+      tmphtml += html;
     }
+		$(maxSelector).update(tmphtml);
   }
 
 });

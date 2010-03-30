@@ -269,7 +269,7 @@ Object.extend(Iyxzone.Register, {
     html += '<div class="rows s_clear"><div class="fldid"><label>正在玩：</label></div><div class="fldvalue"><input name="profile[new_characters][' + id + '][playing]" value="0" type="hidden"><input checked="checked" id="profile_new_characters_' + id + '_playing" name="profile[new_characters][' + id + '][playing]" value="1" type="checkbox"></div></div>';
     html += '<p class="foot s_clear"><a class="right red" href="javascript:void(0)" onclick="Iyxzone.Register.removeCharacter(' + id + '); return false;">删除本游戏角色</a></p>';
 
-    div.innerHTML = html;
+    div.update(html);
     $('characters').appendChild(div);
     
     this.characterID++;

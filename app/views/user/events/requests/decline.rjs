@@ -1,7 +1,17 @@
 if params[:at] == 'event'
+<<<<<<< HEAD:app/views/user/events/requests/decline.rjs
   page << "$('event_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>拒绝请求成功！</strong>';"
   page << "setTimeout(new Effect.Fade('event_request_#{@request.id}'), 2000);" 
 elsif params[:at] == 'requests'
   page << "$('event_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>拒绝请求成功！</strong>';"
   page << "setTimeout(new Effect.Fade('event_request_#{@request.id}'), 2000);"
+=======
+#  page << "$('event_request_option_#{@request.id}').innerHTML = '已拒绝';"
+  page << "$('event_request_option_#{@request.id}').update( '已拒绝');"
+
+elsif params[:at] == 'requests'
+#  page << "$('event_request_option_#{@request.id}').innerHTML = '已拒绝';"
+  page << "$('event_request_option_#{@request.id}').update( '已拒绝');"
+
+>>>>>>> 953c47c1c3f16e109b1e07d55d53dde6027aa23f:app/views/user/events/requests/decline.rjs
 end
