@@ -45,7 +45,8 @@ module InPlaceEditorMacroHelpers
     
     function << ')'
  
-    javascript_tag function
+		# hack the same way as onload_javascript_tag
+    content_tag(:script, "document.observe('dom:loaded', function(){#{javascript_cdata_section(function)}});", :html =>{:type => Mime::JS})
   end
   
   def in_place_text_area object, property, empty_text="", options={}

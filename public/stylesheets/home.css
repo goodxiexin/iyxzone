@@ -134,11 +134,11 @@ a:hover{color:#D63200;}
 .feed-message-box .feed-message{height:29px;line-height:29px;border-bottom:1px #E7F0E0 solid;overflow:hidden}
 .feed-message-box .feed-message a.icon-active{float:right;_display:inline-block;margin:10px 8px 0 0;}
 
-.feed-box{line-height:24px;word-spacing:5px;position:relative}
+.feed-box{line-height:24px;word-spacing:5px;}
 .feed-box .tab{margin-bottom:20px;padding:0 16px;position:relative}
 /*.feed-box .feed-wrap{padding:0 10px;}
 */
-.feed-box .feed-list-box{margin-bottom:20px;}
+.feed-box .feed-list-box{margin-bottom:20px;zoom:1}
 .feed-box .feed-img-list{margin-bottom:20px;position:relative;}
 
 .feed-list-box h4{color:#D63200}
@@ -161,9 +161,9 @@ a:hover{color:#D63200;}
 .feed-list .word-box,.feed-list .comment-box{margin-top:4px;}
 
 .feed-list .info-box{padding:0 8px;}
-.feed-list .word-box{padding:7px;line-height:18px;position:relative;width:385px}
-.feed-list .word-box .icon-active{position:absolute;right:0;top:0}
-.feed-list .word-box .img{float:left;margin:4px 0;width:27px;text-align:center;overflow:hidden;position:relative}
+.feed-list .word-box{padding:7px;line-height:18px;/*position:relative;*/width:385px}
+.feed-list .word-box .icon-active{/*position:absolute;right:0;top:0*/float:right}
+.feed-list .word-box .img{float:left;margin:4px 0;width:27px;text-align:center;overflow:hidden;/*position:relative*/}
 .feed-list .word-box .word{margin-left:48px;_margin-left:45px;}
 .feed-list .word-box .form-wrap{float:left;margin-left:-27px;width:100%;}
 .feed-list .word-box .form-wrap .formcontent{margin-left:27px;padding-left:21px;width:auto;}
@@ -639,9 +639,10 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 /*首页/个人/好友主页*/
 /*.home-wrap .icon-active{margin-left:30px;margin-left:10px !important;}
 */
-.home-wrap .s-dialog{margin-right:30px}
+.home-wrap .s-dialog{margin:0 30px 0 10px;}
 /*.home-wrap .feed-list-box .feed-list{padding-left:32px}
 */
+.feed-wrap,.home-wrap{zoom:1}
 .feed-wrap .feed-list,.home-wrap .feed-list{padding-left:0;}
 .feed-wrap .feed-list-box{margin:10px 0}
 .jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;}
@@ -652,7 +653,7 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
-#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;}
+#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative}
 #roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
 #roll-photo .roll-photo-list a{margin:0 9px;}
 #roll-photo a img{width:100px;}
