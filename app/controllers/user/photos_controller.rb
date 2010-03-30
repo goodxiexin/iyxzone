@@ -60,7 +60,9 @@ class User::PhotosController < UserBaseController
             end
           elsif params[:at] == 'photo'
             page << "facebox.close();"
-						page << "$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
+#						page << "$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
+						page << "$('personal_photo_notation_#{@photo.id}').update(     '#{@photo.notation.gsub(/\n/, '<br/>')}');"
+
 					end
 				end }
 			end 

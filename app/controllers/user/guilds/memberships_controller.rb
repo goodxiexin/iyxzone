@@ -22,7 +22,9 @@ class User::Guilds::MembershipsController < UserBaseController
       render :update do |page|
         page << "facebox.close();"
         if old_status != @membership.status
-          page << "$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
+#          page << "$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
+          page << "$('member_status_#{@membership.id}').update(      '#{@membership.to_s}')"
+
         end
       end
     else

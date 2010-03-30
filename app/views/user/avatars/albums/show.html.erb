@@ -86,7 +86,6 @@
 				</table>
       <div class="pic-desc">
         <% if @user == current_user %>
-          <h4 class="box06"><%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]' %></h4>
         <% else %>
           <h4 class="box06"><%= simple_format @album.description %></h4>
         <% end %>
@@ -110,6 +109,6 @@
 </div></div></div></div>
 
 <% unless @reply_to.blank? %>
-<%= javascript_tag "Iyxzone.Comment.set('avatar_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+<%= onload_javascript_tag "Iyxzone.Comment.set('avatar_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
 <% end %>
 

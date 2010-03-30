@@ -1,5 +1,9 @@
 if params[:at] == 'event'
-  page << "$('event_request_option_#{@request.id}').innerHTML = '已拒绝';"
+#  page << "$('event_request_option_#{@request.id}').innerHTML = '已拒绝';"
+  page << "$('event_request_option_#{@request.id}').update( '已拒绝');"
+
 elsif params[:at] == 'requests'
-  page << "$('event_request_option_#{@request.id}').innerHTML = '已拒绝';"
+#  page << "$('event_request_option_#{@request.id}').innerHTML = '已拒绝';"
+  page << "$('event_request_option_#{@request.id}').update( '已拒绝');"
+
 end
