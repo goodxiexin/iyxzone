@@ -15,7 +15,7 @@ class RegisterController < ApplicationController
   def invite
     @invitation = SignupInvitation.find_by_token(params[:token])
     if @invitation.blank?
-      @sender = User.find_by_invite_code(params[:token])
+      @sender = User.find_by_invite_code(params[:token]) || User.find_by_qq_invite_code(params[:token]) || User.find_by_msn_invite_code(params[:token])
     else
       @sender = @invitation.sender
     end

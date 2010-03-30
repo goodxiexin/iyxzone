@@ -26,9 +26,10 @@ class User::Friends::RequestsController < UserBaseController
   end
 
 	def accept
-		if @request.accept and @request.reverse.update_attribute(:status => 1)
+		if @request.reverse.update_attributes(:status => 1) and @request.accept
 			render :update do |page|
-				page << "$('friend_request_option_#{@request.id}').innerHTML = '已接受';"
+        page << "$('friend_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>添加好友成功！</strong>';"
+        page << "setTimeout(\"new Effect.Fade('friend_request_#{@request.id}')\", 2000);"
 			end
 		else
       render :update do |page|
@@ -40,7 +41,8 @@ class User::Friends::RequestsController < UserBaseController
 	def decline
 		if @request.decline
 		  render :update do |page|
-			  page << "$('friend_request_option_#{@request.id}').innerHTML = '已拒绝';"
+        page << "$('friend_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>拒绝请求成功！</strong>';"
+        page << "setTimeout(\"new Effect.Fade('friend_request_#{@request.id}')\", 2000);"
 		  end
     else
       render :update do |page|
