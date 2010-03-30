@@ -26,7 +26,7 @@ class User::Friends::RequestsController < UserBaseController
   end
 
 	def accept
-		if @request.accept
+		if @request.accept and @request.reverse.update_attribute(:status => 1)
 			render :update do |page|
 				page << "$('friend_request_option_#{@request.id}').innerHTML = '已接受';"
 			end
@@ -38,7 +38,7 @@ class User::Friends::RequestsController < UserBaseController
 	end
 
 	def decline
-		if @request.destroy
+		if @request.decline
 		  render :update do |page|
 			  page << "$('friend_request_option_#{@request.id}').innerHTML = '已拒绝';"
 		  end

@@ -26,7 +26,7 @@ class Friendship < ActiveRecord::Base
   end
 
   def reverse
-    Friendship.first(:conditions => {:user_id => friend_id, :friend_id => user_id})
+    Friendship.find_or_create(:conditions => {:user_id => friend_id, :friend_id => user_id})
   end
 
   attr_accessor :recently_accepted
@@ -34,25 +34,13 @@ class Friendship < ActiveRecord::Base
   attr_accessor :recently_declined
 
   def accept
-    Friendship.transaction do
-      self.update_attributes(:status => Friendship::Friend)
-      if reverse.blank?
-        Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friendship::Friend)
-      else
-        reverse.update_attributes(:status => Friendship::Friend)
-      end
-    end
-  rescue
-    return false
+    recently_accepted = true
+    update_attributes(:status => Friendship::Friend)
   end
-  
-  def cancel
-    Friendship.transaction do
-      Friendship.find(:first, :conditions => {:user_id => friend_id, :friend_id => user_id}).destroy
-      self.destroy
-    end
-  rescue
-    return false
+
+  def decline
+    recently_declined = true
+    destroy
   end
 
   attr_readonly :user_id, :friend_id
