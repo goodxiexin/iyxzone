@@ -68,8 +68,7 @@ Object.extend(Iyxzone.Comment, {
 
   set: function(commentableType, commentableID, login, commentorID){
     this.showForm(commentableType, commentableID, login, commentorID);
-    $(commentableType + '_comment_content_' + commentableID).focus();
-    window.scrollTo(0, $(commentableType + '_comment_content_' + commentableID).cumulativeOffset().top);
+    window.scrollTo(0, $(commentableType + '_comment_form_' + commentableID).cumulativeOffset().top);
   },
 
   more: function(commentableType, commentableID, link){

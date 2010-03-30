@@ -3,10 +3,10 @@ class User::StatusesController < UserBaseController
   layout 'app'
 
   def index
-    if !params[:status_id].blank? and !params[:sharing_id].blank?
+    if !params[:status_id].blank? and !params[:reply_to].blank?
       @reply_to = User.find(params[:reply_to])
       @status = Status.find(params[:status_id])
-      params[:page] = current_user.sharings.index(@status) / 10 + 1
+      params[:page] = @user.statuses.index(@status) / 10 + 1
     end
 
     @statuses = @user.statuses.paginate :page => params[:page], :per_page => 10
