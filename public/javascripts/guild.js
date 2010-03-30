@@ -114,7 +114,8 @@ Object.extend(Iyxzone.Guild.Editor, {
   editAttendanceRules: function(guildID){
     this.attendanceRulesHTML = $('attendance_rule_frame').innerHTML;
     if(this.editAttendanceRulesHTML){
-      $('attendance_rule_frame').innerHTML = this.editAttendanceRulesHTML;
+//      $('attendance_rule_frame').innerHTML = this.editAttendanceRulesHTML;
+      $('attendance_rule_frame').update( this.editAttendanceRulesHTML);
     }else{
       new Ajax.Request('/guilds/' + guildID + '/rules?type=0', {
         method: 'get',
@@ -123,7 +124,8 @@ Object.extend(Iyxzone.Guild.Editor, {
         }.bind(this),
         onSuccess: function(transport){
           this.editAttendanceRulesHTML = transport.responseText;
-          $('attendance_rule_frame').innerHTML = transport.responseText;
+//          $('attendance_rule_frame').innerHTML = transport.responseText;
+          $('attendance_rule_frame').update( transport.responseText);
         }.bind(this)
       });
     }
@@ -188,7 +190,8 @@ Object.extend(Iyxzone.Guild.Editor, {
         method: 'post',
         parameters: form.serialize(),
         onSuccess: function(transport){
-          $('attendance_rule_frame').innerHTML = transport.responseText;
+//          $('attendance_rule_frame').innerHTML = transport.responseText;
+          $('attendance_rule_frame').update( transport.responseText);
           this.editAttendanceRulesHTML = null;
         }.bind(this)
       });
@@ -198,7 +201,8 @@ Object.extend(Iyxzone.Guild.Editor, {
   },
 
   cancelEditAttendanceRules: function(guildID){
-    $('attendance_rule_frame').innerHTML = this.attendanceRulesHTML;
+//    $('attendance_rule_frame').innerHTML = this.attendanceRulesHTML;
+    $('attendance_rule_frame').update( this.attendanceRulesHTML);
   },
   
   basicRulesHTML: null,
@@ -212,7 +216,8 @@ Object.extend(Iyxzone.Guild.Editor, {
   editBasicRules: function(guildID){
     this.basicRulesHTML = $('basic_rule_frame').innerHTML;
     if(this.editBasicRulesHTML){
-      $('basic_rule_frame').innerHTML = this.editBasicRulesHTML;
+//      $('basic_rule_frame').innerHTML = this.editBasicRulesHTML;
+      $('basic_rule_frame').update( this.editBasicRulesHTML);
     }else{
       new Ajax.Updater('basic_rule_frame', '/guilds/' + guildID + '/rules?type=1', {
         method: 'get',
@@ -316,7 +321,8 @@ Object.extend(Iyxzone.Guild.Editor, {
         method: 'post',
         parameters: delParams + form.serialize(),
         onSuccess: function(transport){
-          $('basic_rule_frame').innerHTML = transport.responseText;
+//          $('basic_rule_frame').innerHTML = transport.responseText;
+          $('basic_rule_frame').update( transport.responseText);
           this.editBasicRulesHTML = null;
           this.delRuleIDs = new Array();
           this.basicRules = new Hash();
@@ -328,7 +334,8 @@ Object.extend(Iyxzone.Guild.Editor, {
   },
 
   cancelEditBasicRules: function(guildID){
-    $('basic_rule_frame').innerHTML = this.basicRulesHTML;
+//    $('basic_rule_frame').innerHTML = this.basicRulesHTML;
+    $('basic_rule_frame').update( this.basicRulesHTML);
     this.delRuleIDs = new Array();
   },
 
@@ -357,7 +364,8 @@ Object.extend(Iyxzone.Guild.Editor, {
     this.loading('boss_frame', 'BOSS');
 
     if(this.editBossesHTML){
-      $('boss_frame').innerHTML = this.editBossesHTML;
+//      $('boss_frame').innerHTML = this.editBossesHTML;
+      $('boss_frame').update( this.editBossesHTML);
     }else{
       new Ajax.Updater('boss_frame', '/guilds/' + guildID + '/bosses', {
         method: 'get',
@@ -471,7 +479,8 @@ Object.extend(Iyxzone.Guild.Editor, {
   },
 
   cancelEditBosses: function(guildID){
-    $('boss_frame').innerHTML = this.bossesHTML;
+//    $('boss_frame').innerHTML = this.bossesHTML;
+    $('boss_frame').update( this.bossesHTML);
     this.delBossIDs = new Array();
   },
 
@@ -498,7 +507,8 @@ Object.extend(Iyxzone.Guild.Editor, {
   editGears: function(guildID){
     this.gearsHTML = $('gear_frame').innerHTML;
     if(this.editGearsHTML){
-      $('gear_frame').innerHTML = this.editGearsHTML;
+//      $('gear_frame').innerHTML = this.editGearsHTML;
+      $('gear_frame').update( this.editGearsHTML);
     }else{
       new Ajax.Updater('gear_frame', '/guilds/' + guildID + '/gears', {
         method: 'get',
@@ -605,7 +615,8 @@ Object.extend(Iyxzone.Guild.Editor, {
         method: 'post',
         parameters: delParams + form.serialize(),
         onSuccess: function(transport){
-          $('gear_frame').innerHTML = transport.responseText;
+//          $('gear_frame').innerHTML = transport.responseText;
+          $('gear_frame').update( transport.responseText);
           this.editGearsHTML = null;
           this.delGearIDs = new Array();
         }.bind(this)
@@ -616,7 +627,8 @@ Object.extend(Iyxzone.Guild.Editor, {
   },
 
   cancelEditGears: function(guildID){
-    $('gear_frame').innerHTML = this.gearsHTML;
+//    $('gear_frame').innerHTML = this.gearsHTML;
+    $('gear_frame').update( this.gearsHTML);
     this.delGearIDs = new Array();
   },
 

@@ -76,7 +76,8 @@ Object.extend(Iyxzone.Comment, {
     new Ajax.Request('/comments?commentable_id=' + commentableID + '&commentable_type=' + commentableType, {
       method: 'get',
       onSuccess: function(transport){
-        $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
+//        $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
+        $(commentableType + '_comments_' + commentableID).update( transport.responseText);
       }
     });
   },
@@ -135,7 +136,8 @@ Object.extend(Iyxzone.WallMessage, {
         $('comments').innerHTML = '<img src="images/loading.gif" />';
       },
       onSuccess: function(transport){
-        $('comments').innerHTML = transport.responseText;
+//        $('comments').innerHTML = transport.responseText;
+        $('comments').update( transport.responseText);
       }
     });
   },

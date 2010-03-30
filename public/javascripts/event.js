@@ -129,17 +129,20 @@ Object.extend(Iyxzone.Event.Builder, {
       this.userCharactersHTML = $('event_character_id').innerHTML;
       $('event_guild_selector').show();
       $('event_guild_id').value = '';
-      $('event_character_id').innerHTML = "<option value=''>---</option>";
+//      $('event_character_id').innerHTML = "<option value=''>---</option>";
+      $('event_character_id').update( "<option value=''>---</option>");
     }else{
       $('event_guild_id').value = '';
       $('event_guild_selector').hide();
-      $('event_character_id').innerHTML = this.userCharactersHTML;
+//      $('event_character_id').innerHTML = this.userCharactersHTML;
+      $('event_character_id').update( this.userCharactersHTML);
     }
   },
 
   guildOnChange: function(guildID){
     if(guildID == ''){
-      $('event_character_id').innerHTML = "<option value=''>---</option>";
+//      $('event_character_id').innerHTML = "<option value=''>---</option>";
+      $('event_character_id').update( "<option value=''>---</option>");
       return;
     }
 
@@ -148,7 +151,8 @@ Object.extend(Iyxzone.Event.Builder, {
       onSuccess: function(transport){
         var characters = transport.responseText.evalJSON();
         var selector = new Element('select');
-        $('event_character_id').innerHTML = "<option value=''>---</option>";
+//        $('event_character_id').innerHTML = "<option value=''>---</option>";
+        $('event_character_id').update( "<option value=''>---</option>");
         for(var i=0;i <characters.length;i++){
           var option = new Element('option', {value: characters[i].game_character.id}).update(characters[i].game_character.name);
           Element.insert($('event_character_id'), {bottom: option});
@@ -677,7 +681,8 @@ Object.extend(Iyxzone.Event.Summary.Gear, {
     
     var list = div.next();
     if(list.innerHTML == ''){
-      list.innerHTML = $('gear_recipients').innerHTML;
+//      list.innerHTML = $('gear_recipients').innerHTML;
+      list.update( $('gear_recipients').innerHTML);
     }
     var items = list.childElements();
     items.each(function(i){
@@ -918,7 +923,8 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
       }
     }.bind(this));
 
-    list.innerHTML = $('rule_selector').innerHTML;
+//    list.innerHTML = $('rule_selector').innerHTML;
+    list.update( $('rule_selector').innerHTML);
     var items = list.childElements();
     items.each(function(i){
       var ruleID = i.readAttribute('rule_id');
@@ -971,7 +977,8 @@ Object.extend(Iyxzone.Event.Summary.Rule, {
       countTd.childElements()[1].childElements()[0].writeAttribute('onblur', "Iyxzone.Event.Summary.Rule.updateCount(this, " + ruleID + "," + characterID + ")");
     }
 
-    outcomeTd.innerHTML = outcome;
+//    outcomeTd.innerHTML = outcome;
+    outcomeTd.update( outcome);
     list.writeAttribute('rule_id', ruleID);
     tr.writeAttribute('id', 'rule_' + ruleID + '_' + characterID);
     list.hide();

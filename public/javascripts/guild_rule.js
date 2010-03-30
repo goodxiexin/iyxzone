@@ -23,7 +23,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
       method: 'get',
       onSuccess: function(transport){
         this.basicRuleForm = transport.responseText;
-        basicRule.innerHTML = this.basicRuleForm;
+//        basicRule.innerHTML = this.basicRuleForm;
+        basicRule.update( this.basicRuleForm);
       }.bind(this)
     });
 	},
@@ -36,7 +37,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
       method: 'get',
       onSuccess: function(transport){
         this.basicRuleForm = transport.responseText;
-        basicRule.innerHTML = this.basicRuleForm;
+//        basicRule.innerHTML = this.basicRuleForm;
+        basicRule.update( this.basicRuleForm);
       }.bind(this)
     });
 	},
@@ -49,7 +51,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
       method: 'get',
       onSuccess: function(transport){
         this.bossRuleForm = transport.responseText;
-        bossRule.innerHTML = this.bossRuleForm;
+//        bossRule.innerHTML = this.bossRuleForm;
+        bossRule.update( this.bossRuleForm);
       }.bind(this)
     });
 	},
@@ -62,7 +65,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
       method: 'get',
       onSuccess: function(transport){
         this.bossRuleForm = transport.responseText;
-        bossRule.innerHTML = this.bossRuleForm;
+//        bossRule.innerHTML = this.bossRuleForm;
+        bossRule.update( this.bossRuleForm);
       }.bind(this)
     });
 	},
@@ -75,7 +79,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
       method: 'get',
       onSuccess: function(transport){
         this.gearRuleForm = transport.responseText;
-        gearRule.innerHTML = this.gearRuleForm;
+//        gearRule.innerHTML = this.gearRuleForm;
+        gearRule.update( this.gearRuleForm);
       }.bind(this)
     });
 	},
@@ -88,7 +93,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
       method: 'get',
       onSuccess: function(transport){
         this.gearRuleForm = transport.responseText;
-        gearRule.innerHTML = this.gearRuleForm;
+//        gearRule.innerHTML = this.gearRuleForm;
+        gearRule.update( this.gearRuleForm);
       }.bind(this)
     });
 	},
@@ -101,14 +107,16 @@ Object.extend(Iyxzone.GuildRule.Editor, {
       method: 'get',
       onSuccess: function(transport){
         this.basicAttendanceForm = transport.responseText;
-        attendanceRule.innerHTML = this.basicAttendanceForm;
+//        attendanceRule.innerHTML = this.basicAttendanceForm;
+        attendanceRule.update( this.basicAttendanceForm);
       }.bind(this)
     });
 	},
 
   cancelEditBasicRule: function(){
     var basicRule = $('basic_rule');
-    basicRule.innerHTML = this.oldBasicRule;
+//    basicRule.innerHTML = this.oldBasicRule;
+    basicRule.update( this.oldBasicRule);
   },
 	
 	validateBasicRule: function(size){
@@ -147,7 +155,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
         },
         onSuccess: function(transport){
           var basicInfoBody = $('basic_rule');
-          basicInfoBody.innerHTML = transport.responseText;
+//          basicInfoBody.innerHTML = transport.responseText;
+          basicInfoBody.update( transport.responseText);
         }.bind(this)
       });
     }
@@ -168,7 +177,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
   
 	cancelEditBossRule: function(){
     var bossRule = $('boss_rule');
-    bossRule.innerHTML = this.oldBossRule;
+//    bossRule.innerHTML = this.oldBossRule;
+    bossRule.update( this.oldBossRule);
   },
 
 	updateBossRule: function(guildID, button, size){
@@ -184,7 +194,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
         },
         onSuccess: function(transport){
           var bossInfoBody = $('boss_rule');
-          bossInfoBody.innerHTML = transport.responseText;
+//          bossInfoBody.innerHTML = transport.responseText;
+          bossInfoBody.update( transport.responseText);
         }.bind(this)
       });
     }
@@ -205,7 +216,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
   
 	cancelEditGearRule: function(){
     var gearRule = $('gear_rule');
-    gearRule.innerHTML = this.oldGearRule;
+//    gearRule.innerHTML = this.oldGearRule;
+    gearRule.update( this.oldGearRule);
   },
 
 	updateGearRule: function(guildID, button, size){
@@ -221,7 +233,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
         },
         onSuccess: function(transport){
           var gearInfoBody = $('gear_rule');
-          gearInfoBody.innerHTML = transport.responseText;
+//          gearInfoBody.innerHTML = transport.responseText;
+          gearInfoBody.update( transport.responseText);
         }.bind(this)
       });
     }
@@ -244,7 +257,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
         },
         onSuccess: function(transport){
           var basicInfoBody = $('basic_rule');
-          basicInfoBody.innerHTML = transport.responseText;
+//          basicInfoBody.innerHTML = transport.responseText;
+          basicInfoBody.update( transport.responseText);
         }.bind(this)
       });
     }
@@ -267,7 +281,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
         },
         onSuccess: function(transport){
           var bossInfoBody = $('boss_rule');
-          bossInfoBody.innerHTML = transport.responseText;
+//          bossInfoBody.innerHTML = transport.responseText;
+          bossInfoBody.update( transport.responseText);
         }.bind(this)
       });
     }
@@ -290,7 +305,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
         },
         onSuccess: function(transport){
           var gearInfoBody = $('gear_rule');
-          gearInfoBody.innerHTML = transport.responseText;
+//          gearInfoBody.innerHTML = transport.responseText;
+          gearInfoBody.update( transport.responseText);
         }.bind(this)
       });
     }
@@ -313,7 +329,8 @@ Object.extend(Iyxzone.GuildRule.Editor, {
         },
         onSuccess: function(transport){
           var basicInfoBody = $('attendance_rule');
-          basicInfoBody.innerHTML = transport.responseText;
+//          basicInfoBody.innerHTML = transport.responseText;
+          basicInfoBody.update( transport.responseText);
         }.bind(this)
       });
     }
@@ -321,6 +338,7 @@ Object.extend(Iyxzone.GuildRule.Editor, {
 
   cancelEditAttendanceRule: function(){
     var attendanceRule = $('attendance_rule');
-    attendanceRule.innerHTML = this.oldAttendanceRule;
+//    attendanceRule.innerHTML = this.oldAttendanceRule;
+    attendanceRule.update( this.oldAttendanceRule);
   },
 }); 

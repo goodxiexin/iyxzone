@@ -48,17 +48,21 @@ Object.extend(Iyxzone.Chat, {
     var target = $('tiny-im-icon');
 
     if(target.innerHTML == '' || target.down('img').src.include('/images/blank.gif')){
-      target.innerHTML = this.blinkFriendIcon;
+//      target.innerHTML = this.blinkFriendIcon;
+      target.update( this.blinkFriendIcon);
     }else{
-      target.innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
+//      target.innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
+      target.update( '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
     }
 
     target = $('im-icon');
 
     if(target.down('img').src.include('/images/blank.gif')){
-      target.innerHTML = this.blinkFriendIcon;
+//      target.innerHTML = this.blinkFriendIcon;
+      target.update( this.blinkFriendIcon);
     }else{
-      target.innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
+//      target.innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
+      target.update( '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
     }
 
     this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
@@ -83,7 +87,8 @@ Object.extend(Iyxzone.Chat, {
     $('tiny-im-icon').stopObserving('click');
     $('im-icon').stopObserving('click');
     $('tiny-im-icon').innerHTML = '';
-    $('im-icon').innerHTML = this.myIcon;
+//    $('im-icon').innerHTML = this.myIcon;
+    $('im-icon').update( this.myIcon);
 
     this.blinkFriendID = null;
     this.setBlink();
@@ -134,7 +139,8 @@ Object.extend(Iyxzone.Chat, {
     html += '<div style="display: none;" class="im-dlg-show rows" id="chat-history-' + friendID + '"></div>';
     html += '</div></div></div>';
 
-    div.innerHTML = html;
+//    div.innerHTML = html;
+    $(div).update( html);
     document.body.appendChild(div);
 
     new Iyxzone.limitedTextField($('message-content-' + friendID), 200, $('im_words_count_' + friendID));
@@ -227,10 +233,12 @@ Object.extend(Iyxzone.Chat, {
       new Ajax.Request('/messages?friend_id=' + friendID, {
         method: 'get',
         onLoading: function(){
-          cont.innerHTML = '<image src="/images/loading.gif" />';
+//          cont.innerHTML = '<image src="/images/loading.gif" />';
+          $(cont).update( '<image src="/images/loading.gif" />');
         },
         onSuccess: function(transport){
-          cont.innerHTML = transport.responseText;
+//          cont.innerHTML = transport.responseText;
+          $(cont).update( transport.responseText);
         }.bind(this)
       });
     }
@@ -284,7 +292,8 @@ Object.extend(Iyxzone.Chat, {
       return;
     }else{
       var dd = new Element('dd', {pinyin: info.pinyin, login: info.login});
-      dd.innerHTML = '<a href="javascript: void(0)" ondblclick="Iyxzone.Chat.showChatForm(' + info.id + ', "' + info.login + '")"><img src="' + info.avatar + '" class="left w-l" width=20 height=20 /><span class="left">' + info.login  + '</span></a>';
+//      dd.innerHTML = '<a href="javascript: void(0)" ondblclick="Iyxzone.Chat.showChatForm(' + info.id + ', "' + info.login + '")"><img src="' + info.avatar + '" class="left w-l" width=20 height=20 /><span class="left">' + info.login  + '</span></a>';
+      $(dd).update( '<a href="javascript: void(0)" ondblclick="Iyxzone.Chat.showChatForm(' + info.id + ', "' + info.login + '")"><img src="' + info.avatar + '" class="left w-l" width=20 height=20 /><span class="left">' + info.login  + '</span></a>');
       $('chat-list').appendChild(dd);
       this.onlineFriendIDs.set(friendID, dd);
     }

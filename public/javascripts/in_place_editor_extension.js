@@ -25,7 +25,8 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     if(this.element.innerHTML.length == 0){
       this.element.appendChild(new Element("span", {"className" : this.options.emptyClassName}).update(this.options.emptyText));
     }else{
-      this.element.innerHTML = this.element.innerHTML.replace(/\n/g, '<br/>');
+//      this.element.innerHTML = this.element.innerHTML.replace(/\n/g, '<br/>');
+      this.element.update( this.element.innerHTML.replace(/\n/g, '<br/>'));
     }
   },
  
@@ -33,7 +34,8 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     if (empty_span = this.element.select("." + this.options.emptyClassName).first()) {
       empty_span.remove();
     }
-    this.element.innerHTML = this.element.innerHTML.replace(/<br>/g, '\n'); 
+//    this.element.innerHTML = this.element.innerHTML.replace(/<br>/g, '\n'); 
+    this.element.update( this.element.innerHTML.replace(/<br>/g, '\n')); 
     return $super();
   },
 
@@ -49,7 +51,8 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     if (transport && transport.status == 200) {
       new Effect.Highlight(element.id, {"startcolor": "#00ffff"});
       var json = transport.responseText.evalJSON();
-      element.innerHTML = eval("json." + this.options.updateClass + "." + this.options.updateAttr);
+//      element.innerHTML = eval("json." + this.options.updateClass + "." + this.options.updateAttr);
+      element.update( eval("json." + this.options.updateClass + "." + this.options.updateAttr));
       this.checkElement();
     }
   }, 

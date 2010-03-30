@@ -25,7 +25,8 @@ Iyxzone.Game = {
     $(game).innerHTML = '';
 
     if(prompt)
-      $(game).innerHTML = '<option value="">---</option>';
+//      $(game).innerHTML = '<option value="">---</option>';
+      $(game).update( '<option value="">---</option>');
 
     Iyxzone.Game.infos.each(function(info){
       Element.insert(game, {bottom: '<option value=' + info.game.id + '>' + info.game.name + '</option>'});
@@ -83,7 +84,8 @@ Iyxzone.Game.Selector = Class.create({
 
   resetAreaInfo: function(){
     if($(this.areaSelectorID))
-      $(this.areaSelectorID).innerHTML = '<option value="">---</option>';
+//      $(this.areaSelectorID).innerHTML = '<option value="">---</option>';
+      $(this.areaSelectorID).update( '<option value="">---</option>');
   },
 
   setupAreaInfo: function(areas){
@@ -91,11 +93,13 @@ Iyxzone.Game.Selector = Class.create({
     for(var i=0;i<areas.length;i++){
       html += "<option value='" + areas[i].id + "'>" + areas[i].name + "</option>";
     }
-    $(this.areaSelectorID).innerHTML = html;
+//    $(this.areaSelectorID).innerHTML = html;
+    $(this.areaSelectorID).update( html);
   },
 
   resetServerInfo: function(){
-    $(this.serverSelectID).innerHTML = '<option value="">---</option>';
+//    $(this.serverSelectID).innerHTML = '<option value="">---</option>';
+    $(this.serverSelectID).update( '<option value="">---</option>');
   },
 
   setupServerInfo: function(servers){
@@ -103,11 +107,13 @@ Iyxzone.Game.Selector = Class.create({
     for(var i=0;i<servers.length;i++){
       html += "<option value='" + servers[i].id + "'>" + servers[i].name + "</option>";
     }
-    $(this.serverSelectID).innerHTML = html;
+//    $(this.serverSelectID).innerHTML = html;
+    $(this.serverSelectID).update( html);
   },
 
   resetProfessionInfo: function(){
-      $(this.professionSelectorID).innerHTML = '<option value="">---</option>';
+//      $(this.professionSelectorID).innerHTML = '<option value="">---</option>';
+      $(this.professionSelectorID).update( '<option value="">---</option>');
   },
 
   setupProfessionInfo: function(professions){
@@ -115,11 +121,13 @@ Iyxzone.Game.Selector = Class.create({
     for(var i=0;i<professions.length;i++){
       html += "<option value='" + professions[i].id + "'>" + professions[i].name + "</option>";
     }
-    $(this.professionSelectorID).innerHTML = html;
+//    $(this.professionSelectorID).innerHTML = html;
+    $(this.professionSelectorID).update( html);
   },
 
   resetRaceInfo: function(){
-    $(this.raceSelectorID).innerHTML = '<option value="">---</option>';
+//    $(this.raceSelectorID).innerHTML = '<option value="">---</option>';
+    $(this.raceSelectorID).update( '<option value="">---</option>');
   },
 
   setupRaceInfo: function(races){
@@ -127,7 +135,8 @@ Iyxzone.Game.Selector = Class.create({
     for(var i=0;i<races.length;i++){
       html += "<option value='" + races[i].id + "'>" + races[i].name + "</option>";
     }
-    $(this.raceSelectorID).innerHTML = html;
+//    $(this.raceSelectorID).innerHTML = html;
+    $(this.raceSelectorID).update( html);
   },
 
   gameChange: function(){
@@ -357,7 +366,8 @@ Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Base, {
 
   onComplete: function(request) {
     if(request.responseText.indexOf('li') < 0){
-      this.update.innerHTML = this.options.emptyText;
+//      this.update.innerHTML = this.options.emptyText;
+      this.update.update( this.options.emptyText);
     }else{
       this.updateChoices(request.responseText);
     }
@@ -468,7 +478,8 @@ Object.extend(Iyxzone.Game.Suggestor, {
           Iyxzone.enableButton(button, '推荐');
         },
         onSuccess: function(transport){
-          $('game_suggestion_area').innerHTML = transport.responseText;
+//          $('game_suggestion_area').innerHTML = transport.responseText;
+          $('game_suggestion_area').update( transport.responseText);
         }.bind(this)
       });
     }
