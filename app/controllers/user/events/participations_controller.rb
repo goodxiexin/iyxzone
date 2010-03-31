@@ -20,7 +20,7 @@ class User::Events::ParticipationsController < UserBaseController
   end
 
   def update
-    unless @participation.update_attributes(:status => params[:status])
+    unless @participation.change_status params[:status]
       render :update do |page|
         page << "error('发生错误');"
       end

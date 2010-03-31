@@ -97,23 +97,19 @@ Test.Unit.Logger.prototype = {
     if (!this.log) return;
     this.lastLogLine.className = status;
     this.statusCell.innerHTML = status;
-//    this.messageCell.innerHTML = this._toHTML(summary);
-    this.messageCell.update( this._toHTML(summary));
+    this.messageCell.innerHTML = this._toHTML(summary);
     this.addLinksToResults();
   },
   message: function(message) {
     if (!this.log) return;
-//    this.messageCell.innerHTML = this._toHTML(message);
-    this.messageCell.update( this._toHTML(message));
+    this.messageCell.innerHTML = this._toHTML(message);
   },
   summary: function(summary) {
     if (!this.log) return;
-//    this.logsummary.innerHTML = this._toHTML(summary);
-    this.logsummary.update( this._toHTML(summary));
+    this.logsummary.innerHTML = this._toHTML(summary);
   },
   _createLogTable: function() {
-    //this.log.innerHTML =
-		$($(this).log).update('<div id="logsummary"></div>' +
+    this.log.innerHTML = ('<div id="logsummary"></div>' +
     '<table id="logtable">' +
     '<thead><tr><th>Status</th><th>Test</th><th>Message</th></tr></thead>' +
     '<tbody id="loglines"></tbody>' +

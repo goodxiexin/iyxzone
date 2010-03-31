@@ -24,7 +24,7 @@ class User::Events::InvitationsController < UserBaseController
   end
 
   def accept
-    unless @invitation.accept params[:status]
+    unless @invitation.accept_invitation params[:status]
       render :update do |page|
         page << "error('发生错误')"
       end
@@ -32,7 +32,7 @@ class User::Events::InvitationsController < UserBaseController
   end
 
   def decline
-    unless @invitation.destroy
+    unless @invitation.decline_invitation
       render :update do |page|
         page << "error('发生错误');"
       end

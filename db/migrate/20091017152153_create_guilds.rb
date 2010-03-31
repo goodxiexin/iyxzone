@@ -5,7 +5,7 @@ class CreateGuilds < ActiveRecord::Migration
       t.integer :game_id
       t.integer :game_area_id
       t.integer :game_server_id
-      t.string :description
+      t.text :description
       t.integer :president_id
       t.integer :character_id
 

@@ -351,7 +351,7 @@ Object.extend(Iyxzone.Profile.Editor, {
       return false;
     }
 
-    return true
+    return true;
   },
 
   isCharacterLevelValid: function(characterID, newCharacter){

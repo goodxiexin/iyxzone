@@ -119,7 +119,7 @@ module ApplicationHelper
 		dig_html="<div class='evaluate'>
 							<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>"
 		if diggable.digged_by? current_user
-		  dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'<a href='#'>已赞</a>"
+		  dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'><a href='#'>已赞</a>"
 		else
 			dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'>"
 		  dig_html+= link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable)
@@ -129,10 +129,10 @@ module ApplicationHelper
   end
 
   def blog_content blog, opts={}
-    if blog.content.length > opts[:length]
-      (truncate blog.content, opts) + (link_to '查看全文>>', blog_url(blog))
+    if blog.content_abstract.length > opts[:length]
+      (truncate blog.content_abstract, opts) + (link_to '查看全文>>', blog_url(blog))
     else
-      truncate blog.content, opts
+      truncate blog.content_abstract, opts
     end
   end
 

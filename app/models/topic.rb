@@ -14,6 +14,8 @@ class Topic < ActiveRecord::Base
 
   acts_as_list :order => 'created_at', :scope => 'forum_id'
 
+  acts_as_abstract :columns => [:content]
+
   validates_presence_of :poster_id, :message => "没有发布者"
 
   validates_presence_of :forum_id, :message => "没有论坛"

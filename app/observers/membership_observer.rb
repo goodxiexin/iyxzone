@@ -41,7 +41,7 @@ class MembershipObserver < ActiveRecord::Observer
     user = membership.user
     character = membership.character
 
-    if (membership.was_invitation? and membership.is_authorized?) or (membership.was_request? and membership.is_authorized?)
+    if membership.recently_accept_request or membership.recently_accept_invitation
       user.raw_increment :participated_guilds_count unless guild.has_member? user
     end
   end
@@ -52,21 +52,21 @@ class MembershipObserver < ActiveRecord::Observer
     user = membership.user
     character = membership.character
 
-		if membership.was_invitation? and membership.is_authorized?
+		if membership.recently_accept_invitation
 			guild.raw_decrement :invitations_count
       guild.raw_increment field(membership.status)
       user.raw_decrement :guild_invitations_count
 			guild.president.notifications.create(
         :category => Notification::Membership,
         :data => "#{profile_link user}接受了你的邀请: 让游戏角色 #{membership.character.name} 参加工会 #{guild_link guild}")
-		elsif membership.was_request? and membership.is_authorized?
+		elsif membership.recently_accept_request
 			guild.raw_decrement :requests_count
       guild.raw_increment field(membership.status)
       guild.president.raw_decrement :guild_requests_count
 			user.notifications.create(
         :category => Notification::Membership,
         :data => "#{profile_link guild.president}同意了你的请求: 让游戏角色 #{membership.character.name} 加入工会 #{guild_link guild} ")
-		elsif membership.was_authorized? and membership.is_authorized?
+		elsif membership.recently_change_role
 			# promotion
 			guild.raw_decrement field(membership.status_was)
       guild.raw_increment field(membership.status)
@@ -88,21 +88,22 @@ class MembershipObserver < ActiveRecord::Observer
 	def after_destroy membership
 		guild = membership.guild
     user = membership.user
-		if membership.is_invitation?
+
+		if membership.recently_decline_invitation
 			# invitation declined
 			user.raw_decrement :guild_invitations_count
 			guild.raw_decrement :invitations_count
 			guild.president.notifications.create(
         :category => Notification::Membership,
         :data => "#{profile_link user} 拒绝了你的邀请: 不让你的游戏角色 #{ membership.character.name } 参加工会#{guild_link guild}")
-		elsif membership.is_request?
+		elsif membership.recently_decline_request
 			# request declined
 			guild.president.raw_decrement :guild_requests_count
 			guild.raw_decrement :requests_count
 			user.notifications.create(
         :category => Notification::Membership,
         :data => "#{profile_link guild.president} 拒绝了你的请求: 不让你的游戏角色 #{ membership.character.name } 加入工会#{guild_link guild}")
-		elsif membership.is_authorized?
+		else
 			# user is evicted
 			user.raw_decrement :participated_guilds_count unless guild.has_member? user
 			guild.raw_decrement field(membership.status)

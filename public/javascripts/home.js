@@ -26,11 +26,28 @@ Object.extend(Iyxzone.Home.NoticeManager, {
     new Ajax.Request('/notices/' + noticeID + '/read', {
       method: 'put',
       parameters: "authenticity_token=" + encodeURIComponent(token),
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
       onSuccess: function(transport){
-//        $('my_notices').innerHTML = transport.responseText;
-        $('my_notices').update( transport.responseText);
+        $('my_notices').innerHTML = transport.responseText;
+        Iyxzone.changeCursor('default');
       }.bind(this)
     });
+  },
+
+  readSingle: function(noticeID, token){
+    new Ajax.Request('/notices/' + noticeID + '/read', {
+      method: 'put',
+      parameters: "single=1&authenticity_token=" + encodeURIComponent(token),
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onSuccess: function(transport){
+        Iyxzone.changeCursor('default');
+        $('my_notices').innerHTML = transport.responseText;
+      }.bind(this)
+    });    
   }
 
 });

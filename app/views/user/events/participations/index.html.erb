@@ -39,12 +39,16 @@
         <% end %>
         </ul>
       </div>
-      <div class="piclist-rows" id='events'>
-          <% unless @participations.blank? %>
-          <strong class="green">搜索会员：</strong>
-          <%= text_field_tag 'search', '输入游戏角色的名字', :onclick => "this.clear();", :class => 'ipt', :onfocus => "Iyxzone.Event.ParticipantManager.startObserving(this)", :onblur => "Iyxzone.Event.ParticipantManager.stopObserving();" %>
-          <% end %>
-          <div>
+      <div class='friend-box'>
+        <div class='appcontent01'>
+          <div class='friend-invite-head'>
+            <% unless @participations.blank? %>
+            <strong class="green">搜索会员：</strong>
+            <%= text_field_tag 'search', '输入游戏角色的名字', :onclick => "this.clear();", :class => 'ipt', :onfocus => "Iyxzone.Event.ParticipantManager.startObserving($('search'))", :onblur => "Iyxzone.Event.ParticipantManager.stopObserving();" %>
+            <% end %>
+          </div>
+          <div class='friend-list'>
+            <div class='friend-list-body s_clear'>
 	          <% if params[:type].to_i == 2 %>
               <% if @event.invitations_count == 0 %>
                 <% if @event.poster == current_user %>
@@ -54,20 +58,14 @@
                 <% end %>
               <% else %>
 								<div class='d6-list s_clear'>
-								<ul id='participations'>
 		            <%= render :partial => 'invitations', :object => @participations %>
-								</ul>
 								</div>
               <% end %>
 	          <% elsif params[:type].to_i == 3 %>
               <% if @event.requests_count == 0 %>
                 <div class='tip'>还没有人请求参加这个活动</div>
               <% else %>
-								<div class='d6-list s_clear'>
-								<ul id='participations'>
 		            <%= render :partial => 'requests', :object => @participations %>
-								</ul>
-								</div>
               <% end %>
 	          <% else %>
               <% if @participations.count == 0 %>
@@ -77,13 +75,10 @@
                 <div class='tip'>还没有成员...囧</div>
                 <% end %>
               <% else %>
-								<div class='d6-list s_clear'>
-								<ul id='participations'>
 		            <%= render :partial => 'participations', :object => @participations %>
-								</ul>
-								</div>
               <% end %>
 	          <% end %>
+            </div>
           </div>
       </div>
     </div>

@@ -34,10 +34,10 @@ Object.extend(Iyxzone.Password, {
   },
 
   error: function(div, content){
-    var span = new Element('span', {class: 'icon-warn'});
+    var span = new Element('span', {'class': 'icon-warn'});
     $(div).className = 'red';
     $(div).update(content);
-    Element.insert($(div), {top: span});
+    Element.insert($(div), {'top': span});
   },
 
   clearError: function(div){

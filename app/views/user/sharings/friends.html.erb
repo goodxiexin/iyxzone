@@ -66,6 +66,11 @@
             <% else %>
               <li><%= link_to "<span>玩家</span>", friends_sharings_url(:uid => current_user.id, :type => 8) %></li>
             <% end %>
+            <% if params[:type].to_i == 9 %>
+              <li class="hover"><%= link_to "<span>话题</span>", friends_sharings_url(:uid => current_user.id, :type => 9) %></li>
+            <% else %>
+              <li><%= link_to "<span>话题</span>", friends_sharings_url(:uid => current_user.id, :type => 9) %></li>
+            <% end %>
           </ul>
         </div>
         <div class="feed-img-list rows">
@@ -75,7 +80,7 @@
           <% end %>
           <%= will_paginate @sharings %>
         <% else %>
-          <div class='gray'>你的好友都死光了</div>
+          <div class='tip'>你的好友都死光了</div>
         <% end %>
         </div>
       </div>

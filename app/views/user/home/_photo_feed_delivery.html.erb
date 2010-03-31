@@ -22,7 +22,7 @@
 			</div>
 		</div>
 	</p>
-	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('avatar', #{avatar.id}, null);", :class => "gray"%></p>
+	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('avatar', #{avatar.id}, null, #{avatar.poster_id});", :class => "gray"%></p>
 	  <%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => avatar , :recipient => avatar.poster} %>
   </div>
 </div>

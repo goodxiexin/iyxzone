@@ -66,6 +66,11 @@
             <% else %>
               <li><%= link_to "<span>玩家</span>", recent_sharings_url(:uid => current_user.id, :type => 8) %></li>
             <% end %>
+            <% if params[:type].to_i == 9 %>
+              <li class="hover"><%= link_to "<span>话题</span>", recent_sharings_url(:uid => current_user.id, :type => 9) %></li>
+            <% else %>
+              <li><%= link_to "<span>话题</span>", recent_sharings_url(:uid => current_user.id, :type => 9) %></li>
+            <% end %>
           </ul>
         </div>
         <div class="feed-img-list rows">
@@ -75,7 +80,7 @@
           <% end %>
           <%= will_paginate @sharings %>
         <% else %>
-          <div class='gray'>最近大家都死了，没人分享东西</div>
+          <div class='tip'>最近大家都死了，没人分享东西</div>
         <% end %>
         </div>
       </div>

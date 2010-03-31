@@ -15,11 +15,7 @@ class User::GameSuggestionsController < UserBaseController
     @tagged_games = @tagged_games.select(&:relative_new?) if params[:new_game] == 'true'
     @games = @tagged_games #self.game_suggestion unless @tagged_games.empty?
     @remote = {:update => 'game_suggestion_area', :url => {:action => 'game_tags', :selected_tags => params[:selected_tags]}}
-    if @games.blank?
-      render :text => "没有查找到类似的游戏"
-    else
-      render :partial => "games", :object => @games.paginate(:page => params[:page], :per_page => 20)
-    end
+    render :partial => "games", :object => @games.paginate(:page => params[:page], :per_page => 20)
   end
 
   def game_suggestion

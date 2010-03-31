@@ -53,8 +53,49 @@ class Participation < ActiveRecord::Base
     status_was == Participation::Confirmed or status_was == Participation::Maybe
   end
 
-  def accept status=Participation::Confirmed
-    update_attributes(:status => status)
+  attr_accessor :recently_change_status
+
+  attr_accessor :recently_accept_request
+
+  attr_accessor :recently_decline_request
+
+  attr_accessor :recently_accept_invitation
+
+  attr_accessor :recently_decline_invitation
+
+  def change_status status
+    if self.status != status
+      self.recently_change_status = true
+      self.update_attributes(:status => status)
+    end
+  end
+
+  def accept_request
+    if self.is_request?
+      self.recently_accept_request = true
+      self.update_attributes(:status => Confirmed)
+    end
+  end
+
+  def decline_request
+    if self.is_request?
+      self.recently_decline_request = true
+      self.destroy
+    end
+  end
+
+  def accept_invitation status
+    if self.is_invitation?
+      self.recently_accept_invitation = true
+      self.update_attributes(:status => status)
+    end
+  end
+
+  def decline_invitation
+    if self.is_invitation?
+      self.recently_decline_invitation = true
+      self.destroy
+    end
   end
 
   # participant_id, character_id, event_id 都是不能修改的

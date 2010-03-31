@@ -29,13 +29,13 @@
 				    <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
 			    </div>
 			    <div class='rows s_clear'>
-				    <%= f.text_area 'content', :style =>"width: 100%; height: 300px;" %>
+				    <%= f.text_area 'content', :style =>"width: 98%; height: 300px;" %>
 			    </div>
 			    <div class='rows s_clear'>
-				    <div class='fldid'><%= f.label "日志类别: " %></div><div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class => "selector selector02"%></div>
+				    <div class='fldid'><%= f.label "日志类别: " %></div><div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %></div>
 			    </div>
 			    <div class='rows s_clear'>
-				    <div class='fldid'><%= f.label "浏览权限: "%></div><div class='fldvalue'><%= privilege_select_tag(:blog, :class => "selector selector02") %></div>
+				    <div class='fldid'><%= f.label "浏览权限: "%></div><div class='fldvalue'><%= privilege_select_tag(:blog) %></div>
 			    </div>
           <div class='rows s_clear'>
             <div class='fldid'><%= f.label "点名相关好友" %></div>

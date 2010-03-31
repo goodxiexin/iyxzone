@@ -2,5 +2,6 @@ if params[:at] == 'guild'
 	flash[:notice] = "提交成功"
 	page.redirect_to guild_url(@guild)
 elsif params[:at] == 'invitations'
-	page << "$('guild_invitation_option_#{@invitation.id}').innerHTML = '已接受';"
+	page << "$('guild_invitation_option_#{@invitation.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>接受邀请成功！</strong>';"
+  page << "setTimeout(\"new Effect.Fade('guild_invitation_#{@invitation.id}')\", 2000);"
 end

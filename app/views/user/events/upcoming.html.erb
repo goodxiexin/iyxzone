@@ -41,9 +41,9 @@
         <% else %>
           <div class='gray'>
           <% if @user == current_user %>
-            你还没参加任何别人的活动，你可以从 <%= link_to '好友最近创建的活动', friends_events_url %> 或者 <%= link_to '热门活动', hot_events_url(:uid => current_user.id) %> 或者 <%= link_to '最近别人创建的活动', recent_events_url(:uid => current_user.id) %> 来寻找适合你的活动
+            <div class='tip'> 你还没参加任何别人的活动，你可以从 <%= link_to '好友最近创建的活动', friends_events_url %> 或者 <%= link_to '热门活动', hot_events_url(:uid => current_user.id) %> 或者 <%= link_to '最近别人创建的活动', recent_events_url(:uid => current_user.id) %> 来寻找适合你的活动</div>
           <% else %>
-            <%= get_subject @user %>没有参加别人的活动
+            <div class='tip'><%= get_subject @user %>没有参加别人的活动</div>
           <% end %>
           </div> 
         <% end %>

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100326140609) do
+ActiveRecord::Schema.define(:version => 20100330040208) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -41,18 +41,19 @@ ActiveRecord::Schema.define(:version => 20100326140609) do
   create_table "blogs", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "game_id"
-    t.string   "title",          :limit => 64
-    t.text     "content",        :limit => 16777215
-    t.integer  "sharings_count",                     :default => 0
-    t.integer  "digs_count",                         :default => 0
-    t.integer  "comments_count",                     :default => 0
-    t.integer  "tags_count",                         :default => 0
-    t.integer  "viewings_count",                     :default => 0
-    t.boolean  "draft",                              :default => true
-    t.integer  "privilege",                          :default => 1
+    t.string   "title",            :limit => 64
+    t.text     "content",          :limit => 16777215
+    t.integer  "sharings_count",                       :default => 0
+    t.integer  "digs_count",                           :default => 0
+    t.integer  "comments_count",                       :default => 0
+    t.integer  "tags_count",                           :default => 0
+    t.integer  "viewings_count",                       :default => 0
+    t.boolean  "draft",                                :default => true
+    t.integer  "privilege",                            :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "verified",                           :default => 0
+    t.integer  "verified",                             :default => 0
+    t.text     "content_abstract"
   end
 
   add_index "blogs", ["poster_id"], :name => "index_blogs_on_poster_id"
@@ -340,7 +341,7 @@ ActiveRecord::Schema.define(:version => 20100326140609) do
     t.integer  "game_id"
     t.integer  "game_area_id"
     t.integer  "game_server_id"
-    t.string   "description"
+    t.text     "description"
     t.integer  "president_id"
     t.integer  "character_id"
     t.integer  "members_count",     :default => 0
@@ -397,26 +398,20 @@ ActiveRecord::Schema.define(:version => 20100326140609) do
 
   add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
 
-  create_table "moderator_forums", :force => true do |t|
-    t.integer  "forum_id"
-    t.integer  "moderator_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "news", :force => true do |t|
     t.integer  "game_id"
     t.integer  "poster_id"
     t.string   "news_type"
     t.text     "data"
-    t.integer  "comments_count",                :default => 0
-    t.integer  "viewings_count",                :default => 0
-    t.integer  "sharings_count",                :default => 0
+    t.integer  "comments_count",                  :default => 0
+    t.integer  "viewings_count",                  :default => 0
+    t.integer  "sharings_count",                  :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",          :limit => 64
-    t.string   "origin_addr",    :limit => 256
-    t.integer  "digs_count",                    :default => 0
+    t.string   "title",            :limit => 64
+    t.string   "origin_addr",      :limit => 256
+    t.integer  "digs_count",                      :default => 0
+    t.text     "content_abstract"
   end
 
   create_table "notices", :force => true do |t|
@@ -679,12 +674,13 @@ ActiveRecord::Schema.define(:version => 20100326140609) do
     t.integer  "poster_id"
     t.string   "subject"
     t.text     "content"
-    t.integer  "posts_count",    :default => 0
-    t.boolean  "top",            :default => false
+    t.integer  "posts_count",      :default => 0
+    t.boolean  "top",              :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "viewings_count", :default => 0
-    t.integer  "sharings_count", :default => 0
+    t.integer  "viewings_count",   :default => 0
+    t.integer  "sharings_count",   :default => 0
+    t.text     "content_abstract"
   end
 
   create_table "users", :force => true do |t|

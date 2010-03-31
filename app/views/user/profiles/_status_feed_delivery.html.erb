@@ -3,6 +3,7 @@
 <div class="feed-list-box">
 <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
 	<div class='feed-icon icon-state'></div>
+		<div class='jl-list-con jl-cutline'>
 	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html =>{:class => "icon-active"} %><% end %> 
     <div class="round02 round_r_t s-dialog">
       <div class="round_l_t">
@@ -15,7 +16,8 @@
 				</div>
 			</div>
 		</div>
-		<p class="gray"><%= ftime status.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('status', #{status.id}, null)", :class => "gray" %></p>
+		<p class="gray"><%= ftime status.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('status', #{status.id}, null, #{status.poster_id})", :class => "gray" %></p>
 	<%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => status, :recipient => status.poster} %>
+	</div>
 </div>
 </div>

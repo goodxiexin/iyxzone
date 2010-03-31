@@ -10,10 +10,11 @@
       <%= avatar poster, :class => 'imgbox01' %>
     </div>
     <div class="jl-list-con jl-cutline">
-		<% if delivery.is_deleteable_by? current_user %>
-			<%= link_to_remote '', :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => 'icon-active'} %>
-		<% end %>
+  		<% if delivery.is_deleteable_by? current_user %>
+	  		<%= link_to_remote '', :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => 'icon-active'} %>
+		  <% end %>
       <%= profile_link poster %> 上传了 <%= photos.count %> 张照片 到相册 <%= album_link album, :class => "shine" %>
+      <% if photos.count != 0 %>
       <div class="s_clear" id="roll-photo">
         <% if photos.count > 3 %>
         <a class="roll-left" id='left_btn_<%= delivery.id %>'></a>
@@ -35,8 +36,11 @@
         <a class="roll-right" id='right_btn_<%= delivery.id %>'></a>
         <% end %>
       </div>
+      <% else %>
+        <div class='s_clear'>照片被TA删除光了</div>
+      <% end %>
       <span class="gray">
-        <%= ftime delivery.created_at %> - <%= link_to_function "评论", "Iyxzone.Comment.showForm('album', #{album.id}, null)" %>
+        <%= ftime delivery.created_at %> - <%= link_to_function "评论", "Iyxzone.Comment.showForm('album', #{album.id}, null, #{album.poster_id})" %>
       </span> 
       <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => album, :recipient => album.poster} %>
     </div>

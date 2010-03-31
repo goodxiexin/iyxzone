@@ -22,7 +22,7 @@ class User::Guilds::RequestsController < UserBaseController
   end
 
   def accept
-    unless @request.update_attributes(:status => Membership::Member)
+    unless @request.accept_request
       render :update do |page|
         page << "error('发生错误');"
       end
@@ -30,7 +30,7 @@ class User::Guilds::RequestsController < UserBaseController
   end
 
   def decline
-    unless @request.destroy
+    unless @request.decline_request
       render :update do |page|
         page << "error('发生错误');"
       end

@@ -20,10 +20,15 @@ class Notice < ActiveRecord::Base
 	end
 
   # 把所有same source的通知都标记为以读
-  def read_by user
-    notices = user.notices.unread.find_all {|n| self.has_same_source_with? n}
-    Notice.update_all("notices.read = 1", {:user_id => user.id, :id => notices.map(&:id)})
-    user.raw_decrement :unread_notices_count, notices.count
+  def read_by user, single=false
+    if single
+      update_attribute('read', '1')
+      user.raw_decrement :unread_notices_count, 1
+    else
+      notices = user.notices.unread.find_all {|n| self.has_same_source_with? n}
+      Notice.update_all("notices.read = 1", {:user_id => user.id, :id => notices.map(&:id)})
+      user.raw_decrement :unread_notices_count, notices.count
+    end
   end
   
 end

@@ -4,7 +4,7 @@
 </p>
 
 <div class="z-con">
-  <div id='errors'></div>
+  <div id='error'></div>
   <% form_remote_for :album, :url => personal_album_url(@album), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_album_submit),'请等待..');"} do |f| %>
   <div class='formcontent'>
     <div class="rows s_clear">

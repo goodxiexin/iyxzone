@@ -25,7 +25,9 @@
         <ul>
           <li><span><%= link_to "热门投票", hot_polls_url(:uid => @user.id) %></span></li>
           <li class='hover'><span><%= link_to "#{get_subject @user}的投票", polls_url(:uid => @user.id) %></span></li>
+          <% if @user == current_user %>
           <li><span><%= link_to "朋友的投票", friends_polls_url(:uid => @user.id) %></span></li>
+					<% end %>
         </ul>
       </div>
       <div class="vote-box">
@@ -64,7 +66,7 @@
               </td>
             </tr>
           </table>
-          <% form_tag poll_votes_url(@poll), :html=>{:onsubmit=> "Iyxzone.disableButton($(poll_vote_submit_btn),'请等待..');"} do %>
+          <% form_tag poll_votes_url(@poll), :onsubmit=> "Iyxzone.disableButton($(poll_vote_submit_btn),'请等待..');" do %>
           <table class="vote-status-table" cellpadding="0">
             <% @poll.answers.each_with_index do |answer, i| %>
             <tr>

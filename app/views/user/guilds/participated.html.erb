@@ -27,7 +27,7 @@
         <% if @guilds.total_entries != 0 %>
 		      <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
         <% else %>
-          <div class='gray'>你还没加入过别人的工会，你可以加入<%= link_to '好友的工会', friends_guilds_url %> 或者 <%= link_to '最近别人创建的工会', recent_guilds_url %> 或者 <%= link_to '最近的热门工会', hot_guilds_url %></div>
+          <div class='tip'>你还没加入过别人的工会，你可以加入<%= link_to '好友的工会', friends_guilds_url %> 或者 <%= link_to '最近别人创建的工会', recent_guilds_url %> 或者 <%= link_to '最近的热门工会', hot_guilds_url %></div>
         <% end %>
       </div>
     </div>

@@ -22,9 +22,9 @@ class User::Avatars::PhotosController < UserBaseController
 			responds_to_parent do
         render :update do |page|
           page << "facebox.close()"
-          if params[:in_album].to_i == 1
+          if params[:at] == 'album'
             page.redirect_to avatar_album_url(@album)
-          else
+          elsif params[:at] == 'profile'
 						@album.reload
             page.replace_html 'avatar', album_cover(@album, :size => :large, :width => 100, :height => 112)
           end

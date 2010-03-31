@@ -1,11 +1,20 @@
-<% invitations.each do |invitation| %>
-<% character = invitation.character %>
-<% participant = invitation.participant %>
-<li id='invitation_<%= invitation.id %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
-  <%= avatar invitation.participant, :class => 'imgbox01' %>
-  <p><%= profile_link invitation.participant, :class=>'blk' %>
-  <span class='red blk'><%= invitation.character.name %></span>
-  <span><%= link_to '发站内信', new_mail_url(:recipient_ids => [invitation.participant_id]), :class=>'blk gray02' %></span>
-	</p>
-</li>
-<% end %>
+<ul id='participations'>
+  <% invitations.each do |invitation| %>
+  <% character = invitation.character %>
+  <% participant = invitation.participant %>
+  <li class='bg' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+    <div class='card'>
+      <div class='img'>
+        <div class='middle'><div class='middle-center'><div class='center'>
+          <%= avatar participant, :class => 'imgbox01' %>
+        </div></div></div>
+      </div>
+      <div class='info member s_clear'>
+        <h4><%= profile_link participant, :class => 'blk' %></h4>
+        <span class='red nowrap'><%= character.name %></span>
+        <span class='blk op'><%= link_to '发站内信', new_mail_url(:recipient_ids => [invitation.participant_id]), :class => 'blk gray02' %></span>
+	    </div>
+    </div>
+  </li>
+  <% end %>
+</ul>

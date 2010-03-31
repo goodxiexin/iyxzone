@@ -34,11 +34,12 @@ Object.extend(Iyxzone.Comment, {
   showForm: function(commentableType, commentableID, login, recipientID){
     $('add_' + commentableType + '_comment_' + commentableID).hide();
     $(commentableType + '_comment_' + commentableID).show();
-    if(recipientID != null && login != null){
-      $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
-      $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + ":";
-    }
+    $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
     $(commentableType + '_comment_content_' + commentableID).focus();
+    if(login == null)
+      $(commentableType + '_comment_content_' + commentableID).value = "";
+    else
+      $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + "：";
   },
 
   hideForm: function(commentableType, commentableID, event){
@@ -67,8 +68,7 @@ Object.extend(Iyxzone.Comment, {
 
   set: function(commentableType, commentableID, login, commentorID){
     this.showForm(commentableType, commentableID, login, commentorID);
-    $(commentableType + '_comment_content_' + commentableID).focus();
-    window.scrollTo(0, $(commentableType + '_comment_content_' + commentableID).cumulativeOffset().top);
+    window.scrollTo(0, $(commentableType + '_comment_form_' + commentableID).cumulativeOffset().top);
   },
 
   more: function(commentableType, commentableID, link){
@@ -111,22 +111,22 @@ Object.extend(Iyxzone.WallMessage, {
       error('留言最多140个字节');
       return false;
     }
-    return true;  
+    return true; 
   },
 
   save: function(wallType, wallID, button, form){
-    if(Iyxzone.WallMessage.validate($('comment_content'))){
-      new Ajax.Request('/wall_messages', {
+		if(this.validate($('comment_content'))){
+			new Ajax.Request('/wall_messages', {
         method: 'post',
-        parameters: form.serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         },
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-        }
+        },
+				parameters: $(form).serialize()
       });
-    } 
+		} 
   },
 
   fetch: function(wallType, wallID){
