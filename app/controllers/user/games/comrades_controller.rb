@@ -9,7 +9,7 @@ class User::Games::ComradesController < UserBaseController
 				@comrades = @comrades | server.characters
 			}
 		end
-		@comrades = @comrades.paginate :page=>params[:page], :per_page => 10
+		@comrades = @comrades.paginate :page => params[:page], :per_page => 20
 	end
 
 	def search
@@ -23,7 +23,7 @@ class User::Games::ComradesController < UserBaseController
     @users = User.search(params[:key])
 		@users.each{ |user| @characters = @characters | user.characters}
 		@comrades = @characters & @comrades
-    @comrades = @comrades.paginate :page => params[:page], :per_page => 10 
+    @comrades = @comrades.paginate :page => params[:page], :per_page => 20 
 	end
 
 	def character_search
