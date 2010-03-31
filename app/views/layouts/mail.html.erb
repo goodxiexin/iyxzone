@@ -1,15 +1,20 @@
 <%= @user.login %>
-
+<br/>
+<br/>
 您好！
-
-<%= @comment.poster %>对您或您评论过的博客<%= @comment.commentable.title %>表示了强烈的兴趣，并且发表了评论！
-
-“<%= @comment.content %>”
-
+<br/>
+<br/>
+<%= yield %>
+<br/>
+<br/>
 请点击 <a href=<%= @url %>><%= @url %></a> 查看详细情况～
-
+<br/>
+<br/>
 祝您开心每一天
+<br/>
 17gaming.com
-
-－－
+<br/>
+<br/>
+－－<br/>
 此邮件由系统发出，请勿回复这封邮件。如果想联系我们，请登录17gaming.com。
+

@@ -19,11 +19,11 @@ class CommentObserver < ActiveRecord::Observer
 		
 		if poster != commentor
 			comment.notices.create(:user_id => poster.id, :data => "comment") 
-      CommentMailer.deliver_blog_comment(comment, poster) if poster.mail_setting.comment_my_blog == 1
+      CommentMailer.deliver_blog_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_blog == 1
     end
     if recipient != poster and recipient != commentor
 			comment.notices.create(:user_id => recipient.id, :data => "reply")
-      CommentMailer.deliver_blog_comment(comment, recipient) if recipient.mail_setting.comment_same_blog_after_me == 1
+      CommentMailer.deliver_blog_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_blog_after_me == 1
     end
 
     (blog.relative_users - [poster, commentor, recipient].uniq).each do |friend|

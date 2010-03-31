@@ -48,6 +48,11 @@ namespace :deploy do
   task :chown_deployer, :roles => :app do
     run "cd /home/deployer && chown -R deployer:deployer 17gaming"
   end
+
+  desc "build all js"
+  task :pack_js, :roles => :app do
+    run "cd #{current_release} && rake asset:packager:build_all && chown -R deployer:deployer 17gaming"
+  end
  
   desc "update database configuration"
   task :update_database_config, :roles => :app do

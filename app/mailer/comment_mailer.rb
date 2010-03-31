@@ -1,9 +1,17 @@
 class CommentMailer < ActionMailer::Base
 
-  def blog_comment comment, user
+  layout 'mail'
+
+  def blog_comment_to_poster comment, user
     setup_email user
     subject			"17Gaming.com(一起游戏网) - #{comment.poster.login}在博客#{comment.commentable.title}发表评论"
 		body				:comment => comment, :user => user, :url => "#{SITE_URL}/blogs/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
+  end
+
+  def blog_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在博客#{comment.commentable.title}发表评论"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/blogs/#{comment.commentable_id}?reply_to=#{comment.poster_id}"  
   end
 
   def blog_comment_to_tagged_user comment, user
