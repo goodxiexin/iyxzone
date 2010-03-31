@@ -81,8 +81,8 @@ table.center td{vertical-align:top}
 
 #footer{padding:18px 0 9px;text-align:center;line-height:15px;color:#7E7F80}
 
-.box01{border:1px #238204 solid;}
-.box02{border:1px #E7F0E0 solid;zoom:1}
+.box01{border:1px #238204 solid;background:#fff}
+.box02{border:1px #E7F0E0 solid;background:#fff;zoom:1}
 .box03{border:1px #EEDEA0 solid;background:#FDFBE2}
 .box04{border:1px #E7F0E0 solid;background:#F8FCF6}
 .box05{border:1px #BBD2AA solid;background:#fff}
