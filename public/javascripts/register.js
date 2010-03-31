@@ -1,6 +1,6 @@
 Iyxzone.Register = {
   version: '1.0',
-  author: ['高侠鸿'],
+  author: ['高侠鸿']
 };
 
 Object.extend(Iyxzone.Register, {
@@ -12,10 +12,10 @@ Object.extend(Iyxzone.Register, {
   },
 
   error: function(div, content){
-    var span = new Element('span', {class: 'icon-warn'});
+    var span = new Element('span', {'class': 'icon-warn'});
     $(div).className = 'red';
     $(div).update(content);
-    Element.insert($(div), {top: span}); 
+    Element.insert($(div), {'top': span}); 
   },
 
   clearError: function(div){
@@ -321,6 +321,6 @@ Object.extend(Iyxzone.Register, {
 				Iyxzone.disableButton(button, '等待中..');
 			}
     }); 
-  },
+  }
 
 });
