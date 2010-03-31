@@ -12,11 +12,11 @@ class BlogObserver < ActiveRecord::Observer
 
     # issue feeds
     return if blog.draft
-    return unless blog.poster.application_setting.emit_blog_feed
+    return if blog.poster.application_setting.emit_blog_feed == 0
     return if blog.is_owner_privilege? # only for myself
-
+    
     recipients = [].concat blog.poster.guilds
-    recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed}
+    recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed == 1}
     blog.deliver_feeds :recipients => recipients
   end
 
@@ -42,14 +42,14 @@ class BlogObserver < ActiveRecord::Observer
     return if blog.draft
 
     if (blog.draft_was and blog.privilege != 4) or (blog.privilege_was == 4 and blog.privilege != 4)
-      if blog.poster.application_setting.emit_blog_feed
+      if blog.poster.application_setting.emit_blog_feed == 1
         recipients = [].concat blog.poster.guilds
-        recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed}
+        recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed == 1}
         blog.deliver_feeds :recipients => recipients
       end
       blog.tags.each do |tag|
         tag.notices.create(:user_id => tag.tagged_user_id)
-        TagMailer.deliver_blog_tag tag if tag.tagged_user.mail_setting.tag_me_in_blog
+        TagMailer.deliver_blog_tag tag if tag.tagged_user.mail_setting.tag_me_in_blog == 1
       end
     end 
   end

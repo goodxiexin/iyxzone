@@ -30,10 +30,10 @@ class EventObserver < ActiveRecord::Observer
     # event.poster.raw_increment :events_count
  
     # issue feeds
-    return unless event.poster.application_setting.emit_event_feed
+    return if event.poster.application_setting.emit_event_feed == 0
     recipients = [event.poster.profile, event.game]
     recipients.concat event.poster.guilds
-    recipients.concat event.poster.friends.find_all{|f| f.application_setting.recv_event_feed}
+    recipients.concat event.poster.friends.find_all{|f| f.application_setting.recv_event_feed == 1}
     event.deliver_feeds :recipients => recipients
   end
 

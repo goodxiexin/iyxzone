@@ -12,7 +12,7 @@ class GuildAlbum < Album
   attr_readonly :owner_id, :poster_id, :game_id, :privilege
 
 	def record_upload user, photos
-	  if user.application_setting.emit_photo_feed
+	  if user.application_setting.emit_photo_feed == 1
       recipients = user.friends.find_all {|f| f.application_setting.recv_photo_feed }
 			recipients.concat guild.people.find_all {|p| p != user and p.application_setting.recv_photo_feed }
 			deliver_feeds :recipients => recipients.uniq, :data => {:ids => photos.map(&:id), :poster_id => user.id}

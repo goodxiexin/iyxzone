@@ -28,7 +28,7 @@
 			<div class="friend-box">
 				<div class="box04 friend-one-search">
 					搜索游戏内的玩家
-					<% form_tag search_game_players_url(@game), :class => "formcontent", :id => 'user_form', :style => "display:none", :onsubmit=> "Iyxzone.disableButton($(game_username_search_btn),'请等待..');" do %>
+					<% form_tag search_game_players_url(@game), :class => "formcontent", :id => 'user_form', :style => "display:none", :onsubmit => "Iyxzone.disableButton($(game_username_search_btn),'请等待..');" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key','用户名查找', :onclick => "this.clear();" %></div>
