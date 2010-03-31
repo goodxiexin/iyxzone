@@ -454,7 +454,7 @@ a:hover{color:#D63200;}
 .friend-list .friend-list-header{padding:4px 6px 4px 11px;height:27px;line-height:27px;background:#F1F9E1;overflow:hidden}
 .friend-list .friend-list-header .textfield{width:150px}
 .friend-list .friend-list-body{margin:3px 0;}
-.friend-list .friend-list-body li{float:left;padding:3px;margin:5px 10px;width:200px;border:1px solid #fff;background:url(../images/skin/dotline.gif) repeat-x bottom;}
+.friend-list .friend-list-body li{float:left;padding:3px;margin:5px 10px;width:200px;border:1px solid #fff;background:url(../images/skin/dotline.gif) repeat-x bottom;z-index:1}
 .friend-list .friend-list-body li.bg{border:1px #E7F0E0 solid;background:url(../images/skin/hover-bg.gif) repeat-x;}
 .friend-list .friend-list-body li a.icon-active{visibility:hidden}
 .friend-list .friend-list-body li.bg a.icon-active{visibility: visible;position:relative;z-index:2}
@@ -844,7 +844,7 @@ a.i-s-8:hover span{background-position:right -310px;}
 .friend-invite-list li a:hover{background:#ecfdda}
 .friend-invite-list li.bg a{background:#defebb}
 .friend-invite-list li img{float:left;}
-.friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;}
+.friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .friend-invite-list li strong span{display:block;margin:5px 0 0 0;}
 /**/
 /*.relation-member{border:0}
