@@ -52,7 +52,7 @@
 										<% end %>
 										<% if @user == current_user %>
 										<span class="photo-op-edit"></span>
-                    <%= facebox_link '编辑', edit_avatar_url(@photo) %> | 
+                    <%= facebox_link '编辑', edit_avatar_url(@photo, :at => 'photo') %> | 
 										<span class="photo-op-del"></span>
                     <%= facebox_confirm '删除', avatar_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
 										<% end %>
@@ -65,9 +65,8 @@
 									<div class="pic-desc s_clear">
 										<h4 class="box06">
 										<% if @user == current_user %>
-											<%= in_place_text_area @photo, :notation, '点击增加照片描述', :param_name => 'photo[notation]' %>
 										<% else %>
-											<%= @photo.notation %>
+											<%= simple_format @photo.notation %>
 										<% end %>
 										</h4>
 										<ul class="mark-list s_clear" id='photo_tags'></ul>
@@ -96,6 +95,6 @@
 <%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user} %>
 
 <% unless @reply_to.blank? %>
-  <%= javascript_tag "Iyxzone.Comment.set('avatar', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+  <%= onload_javascript_tag "Iyxzone.Comment.set('avatar', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
 <% end %>
 

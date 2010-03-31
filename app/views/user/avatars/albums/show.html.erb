@@ -42,7 +42,7 @@
           </label>
           <span><%= album_link @album %></span><span>照片</span></p>
           <% if @user == current_user %>
-            <%= facebox_link '替换头像', new_avatar_url(:album_id => @album.id, :in_album => 1) %>
+            <%= facebox_link '替换头像', new_avatar_url(:album_id => @album.id, :at => 'album') %>
 					<% else %>
 					  <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Album', :shareable_id => @album.id), :class => 'right love-btn' %>
           <% end %>
@@ -74,9 +74,9 @@
 					<% @photos[j..j+n].each do |p| %>                         
 						<td> 
 						<% if @user.avatar != p %>
-						  <%= link_to_remote '', :method => 'put', :url => set_avatar_url(p), :html=>{:class=>'icon-active icon-active-camera', :title=>'设置为头像'} %>
+						  <%= link_to_remote '', :method => 'put', :url => avatar_url(p, "photo[cover]" => 1, :at => 'set_cover'), :html => {:class => 'icon-active icon-active-camera', :title => '设置为头像'} %>
 						<% end %>
-						<%= facebox_link "", edit_avatar_url(p), :class => "icon-active icon-active-edit" %>  
+						<%= facebox_link "", edit_avatar_url(p, :at => 'album'), :class => "icon-active icon-active-edit" %>  
             <% if @user.avatar != p %>
               <%= facebox_confirm '', avatar_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %>
             <% end %>
@@ -88,7 +88,7 @@
         <%= will_paginate @photos %>
         <% else %>
 					<% if @user == current_user %>
-					<div class='tip'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :album => 1) %>吧</div>
+					<div class='tip'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'album') %>吧</div>
 					<% else %>
 					<div class='tip'>还没有图片</div>
 					<% end %>
@@ -96,9 +96,8 @@
 				</table>
       <div class="pic-desc">
         <% if @user == current_user %>
-          <h4 class="box06"><%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]' %></h4>
         <% else %>
-          <h4 class="box06"><%= @album.description %></h4>
+          <h4 class="box06"><%= simple_format @album.description %></h4>
         <% end %>
         <p class="gray">
         <% unless @album.uploaded_at.blank? %>
@@ -120,6 +119,6 @@
 </div></div></div></div>
 
 <% unless @reply_to.blank? %>
-<%= javascript_tag "Iyxzone.Comment.set('avatar_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+<%= onload_javascript_tag "Iyxzone.Comment.set('avatar_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
 <% end %>
 

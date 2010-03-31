@@ -34,21 +34,21 @@ class ParticipationObserver < ActiveRecord::Observer
 		participant = participation.participant
     character = participation.character
  
-    if participation.was_invitation? and participation.is_authorized?
+    if participation.recently_accept_invitation
 			event.raw_decrement :invitations_count
       event.raw_increment field(participation.status)
       participant.raw_decrement :event_invitations_count
 			event.poster.notifications.create(
         :category => Notification::Participation,
         :data => "#{profile_link participant}接受了你的邀请: 同意让游戏角色 #{character.name} 加入活动#{event_link event}")
-		elsif participation.was_request? and participation.is_authorized?
+		elsif participation.recently_accept_request
 			event.raw_decrement :requests_count
       event.raw_increment field(participation.status)
       event.poster.raw_decrement :event_requests_count
 			participant.notifications.create(
         :category => Notification::Participation, 
         :data => "#{profile_link event.poster} 同意了你让游戏角色 #{character.name} 加入活动 #{event_link event} 的请求")
-		elsif participation.was_authorized? and participation.is_authorized?
+		elsif participation.recently_change_status
 			event.raw_decrement field(participation.status_was)
       event.raw_increment field(participation.status)
       event.poster.notifications.create(
@@ -70,7 +70,7 @@ class ParticipationObserver < ActiveRecord::Observer
 		event = participation.event
 		participant = participation.participant
    
-    if participation.is_invitation?
+    if participation.recently_decline_invitation
 			# invitation is declined
 			participant.raw_decrement :event_invitations_count
       unless event.recently_deleted?
@@ -79,7 +79,7 @@ class ParticipationObserver < ActiveRecord::Observer
           :category => Notification::Participation,
           :data => "#{profile_link participant} 拒绝让游戏角色 #{participation.character.name} 加入你的活动 #{event_link event}")
       end
-		elsif participation.is_request?
+		elsif participation.recently_decline_request
 			# request is declined
       unless event.recently_deleted?
         event.poster.raw_decrement :event_requests_count
@@ -88,7 +88,7 @@ class ParticipationObserver < ActiveRecord::Observer
           :category => Notification::Participation,
           :data => "#{profile_link event.poster}拒绝了让你的游戏角色 #{participation.character.name} 加入活动#{event_link event}的请求")
       end
-    elsif participation.is_authorized?
+    else participation
       # paricipant is evicted
       unless event.recently_deleted?
         event.raw_decrement field(participation.status)

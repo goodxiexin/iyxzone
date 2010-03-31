@@ -39,8 +39,10 @@ class User::PokesController < UserBaseController
 
   def destroy_all
 		PokeDelivery.destroy_all(:recipient_id => current_user.id)
-    flash[:notice] = "删除成功"
-    redirect_to pokes_url
+    render :update do |page|
+      flash[:notice] = "删除成功"
+      page.redirect_to pokes_url
+    end
   end
 
 protected

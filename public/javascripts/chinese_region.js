@@ -26,7 +26,8 @@ Iyxzone.ChineseRegion.Selector = Class.create({
   },
 
   resetCityInfo: function(){
-    $(this.citySelectorID).innerHTML = '<option value="">---</option>'; 
+//    $(this.citySelectorID).innerHTML = '<option value="">---</option>'; 
+    $(this.citySelectorID).update( '<option value="">---</option>'); 
   },
 
   setupCityInfo: function(cities){
@@ -34,11 +35,13 @@ Iyxzone.ChineseRegion.Selector = Class.create({
     for(var i=0;i<cities.length;i++){
       html += "<option value='" + cities[i].city.id + "'>" + cities[i].city.name + "</option>";
     }
-    $(this.citySelectorID).innerHTML = html;
+//    $(this.citySelectorID).innerHTML = html;
+    $(this.citySelectorID).update( html);
   },
 
   resetDistrictInfo: function(){
-    $(this.districtSelectorID).innerHTML = '<option value="">---</option>'; 
+//    $(this.districtSelectorID).innerHTML = '<option value="">---</option>'; 
+    $(this.districtSelectorID).update( '<option value="">---</option>'); 
   },
 
   setupDistrictInfo: function(districts){
@@ -46,7 +49,8 @@ Iyxzone.ChineseRegion.Selector = Class.create({
     for(var i=0;i<districts.length;i++){
       html += "<option value='" + districts[i].district.id + "'>" + districts[i].district.name + "</option>";
     }
-    $(this.districtSelectorID).innerHTML = html;
+//    $(this.districtSelectorID).innerHTML = html;
+    $(this.districtSelectorID).update( html);
   },
 
   onRegionChange: function(){

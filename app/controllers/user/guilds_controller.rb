@@ -30,7 +30,7 @@ class User::GuildsController < UserBaseController
   end
 
   def show
-    @memberships = @guild.memberships_for current_user
+    @memberships = @guild.all_memberships_for current_user
     @role = @guild.role_for current_user
     @album = @guild.album
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?

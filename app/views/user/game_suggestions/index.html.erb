@@ -15,7 +15,7 @@
         <div class="box02 canvas_con">
           <div class="formComposer">
 						<div class="multibox">
-            <div class="title">你想玩什么样的游戏?</div>
+            <div class="title"><b>你想玩什么样的游戏?</b></div>
             <div class="feed-box">
                  想玩最新最热的游戏？记不清楚游戏名称？<br />
                  点击关键字，系统会自动帮你推荐合适的游戏
@@ -31,12 +31,8 @@
                 </div>
                 <div class="fldbtn">
                   <span class="button"><span><button type="reset" onclick="Iyxzone.Game.Suggestor.suggest(this)">推荐</button></span></span>
-                  <%= link_to_function "高级", "Iyxzone.Game.Suggestor.toggleAdvancedOptions();" %>
+                  <div class="fldvalue"> 1 年内的新游戏<%= check_box_tag 'new_game', 1, true %></div>
                 </div>
-              </div>
-              <div class="rows s_clear" id="advanced_options" style="display:none">
-                <div class="fldid">比较新的游戏</div>
-                <div class="fldvalue"><%= check_box_tag 'new_game', 1, true %></div>
               </div>
             </div>
             <div class="multibox">

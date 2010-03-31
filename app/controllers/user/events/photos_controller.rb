@@ -17,7 +17,6 @@ class User::Events::PhotosController < UserBaseController
 			render :text => @photo.id
 		else
       # TODO
-      logger.error "erorrrrrrrrrrrrrs: #{@photo.errors}"
     end
 	end
 
@@ -34,12 +33,18 @@ class User::Events::PhotosController < UserBaseController
   end
 
   def update
-    @album.update_attribute('cover_id', @photo.id) if params[:cover]
-    if @photo.update_attributes((params[:photo] || {}).merge({:poster_id => @photo.poster_id}))
+    if @photo.update_attributes(params[:photo])
 			respond_to do |format|
 				format.json { render :json => @photo }
 				format.html { render :update do |page|
-					page << "facebox.close();"
+          if params[:at] == 'album'
+					  page << "facebox.close();"
+          elsif params[:at] == 'photo'
+            page<< "facebox.close();"
+#            page << "$('event_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
+            page << "$('event_photo_notation_#{@photo.id}').update( '#{@photo.notation.gsub(/\n/, '<br/>')}');"
+
+          end
 				end }
 			end
     else
@@ -57,11 +62,11 @@ class User::Events::PhotosController < UserBaseController
   end
 
   def update_multiple
-    @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     params[:photos].each do |id, attributes|
       photo = @album.photos.find(id)
       photo.update_attributes(attributes)
     end
+    @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     redirect_to event_album_url(@album)
   end
 

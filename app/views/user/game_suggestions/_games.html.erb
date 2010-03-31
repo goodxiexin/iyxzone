@@ -1,7 +1,10 @@
 <div class="title">
-  <b>推荐游戏</b>
+  <b><%= "搜索到#{games.total_entries}个游戏" %></b>
 </div>
-              
+
+<% if games.blank? %>
+<div class='feed-box'>没有你想要的游戏类型，换几个关键词试试？</div>
+<% else %>
 <table class="data-table01 game-table" cellpadding="0">
   <tr>
     <th>游戏图片</th>
@@ -46,3 +49,4 @@
   <% end %>
 </table>
 <%= remote_will_paginate games, :remote => @remote %>
+<% end %>

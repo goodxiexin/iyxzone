@@ -17,11 +17,10 @@ class User::Guilds::MembershipsController < UserBaseController
   end
   
   def update
-    old_status = @membership.status
-    if @membership.update_attributes(:status => params[:status])
+    if @membership.change_role params[:status]
       render :update do |page|
         page << "facebox.close();"
-        if old_status != @membership.status
+        if @membership.recently_change_role
           page << "$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
         end
       end

@@ -4,7 +4,7 @@ class PokeDeliveryObserver < ActiveRecord::Observer
     delivery.recipient.raw_increment :poke_deliveries_count
   end
 
-  def after_destroy
+  def after_destroy delivery
     delivery.recipient.raw_decrement :poke_deliveries_count
   end
 

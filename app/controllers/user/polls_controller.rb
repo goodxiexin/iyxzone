@@ -47,8 +47,8 @@ class User::PollsController < UserBaseController
   def edit
     if params[:type].to_i == 0
       render :action => 'edit_deadline', :layout => false
-    else
-      render :action => 'edit_summary', :layout => false
+    elsif params[:type].to_i == 1
+      render :action => 'edit_explanation', :layout => false
     end
   end
 
@@ -59,7 +59,7 @@ class User::PollsController < UserBaseController
       end
     else
       render :update do |page|
-        page << "error('错误');"
+        page.replace_html 'errors', :inline => "<%= error_messages_for :poll, :header_message => '遇到以下问题没法保存', :message => nil %>"
       end
     end 
   end

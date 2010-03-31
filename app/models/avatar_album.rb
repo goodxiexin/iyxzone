@@ -13,13 +13,4 @@ class AvatarAlbum < Album
   # 这些属性都是系统创建的，不需要检查
   attr_readonly :owner_id, :poster_id, :privilege, :game_id
 
-  def set_cover photo
-    Avatar.transaction do
-      user.update_attribute('avatar_id', photo.id)
-      self.update_attribute('cover_id', photo.id)
-    end
-  rescue
-    return false
-  end
-
 end

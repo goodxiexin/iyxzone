@@ -10,7 +10,9 @@ class Sharing < ActiveRecord::Base
 
   needs_verification 
  
-  acts_as_commentable :order => 'created_at ASC', :recipient_required => false
+  acts_as_commentable :order => 'created_at ASC',
+                      :delete_condition => lambda {|user, sharing, comment| user == comment.poster || user == sharing.poster}, 
+                      :recipient_required => false
 
   acts_as_resource_feeds
 

@@ -96,7 +96,8 @@ var Facebox = Class.create({
 	set_content: function(data, klass){
 		bodyWrapper = $$('#facebox .body').first();
 		if(klass) bodyWrapper.addClassName(klass);
-		bodyWrapper.innerHTML = data;
+//		bodyWrapper.innerHTML = data;
+		bodyWrapper.update( data);
     $$('#facebox .body').first().childElements().each(function(elem,i){
 			elem.show();
     });
@@ -159,11 +160,13 @@ var Facebox = Class.create({
 		var div = new Element('div');
     for(var i = 0;i < this.codes.length;i++){
 			var span = new Element('span');
-			span.innerHTML = this.codes[i];
+//			span.innerHTML = this.codes[i];
+			span.update( this.codes[i]);
 			span.setStyle({color: colors[Math.floor(Math.random()*10)]});
 			div.appendChild(span);
     }
-		$('validation').innerHTML = div.innerHTML;
+//		$('validation').innerHTML = div.innerHTML;
+		$('validation').update( div.innerHTML);
 	},
 	
 	validate: function(){
@@ -209,7 +212,8 @@ var Facebox = Class.create({
 			var target = elem.href.replace(url+'#','');
 			var d = $(target);
 			var data = new Element(d.tagName);
-			data.innerHTML = d.innerHTML;
+//			data.innerHTML = d.innerHTML;
+			data.update( d.innerHTML);
 			this.reveal(data, klass);
 		 }else if(elem.href.match(this.settings.image_types)) {
 			var image = new Image();

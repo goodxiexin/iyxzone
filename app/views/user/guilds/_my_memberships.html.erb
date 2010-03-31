@@ -16,9 +16,9 @@
           <% elsif status == Membership::Member %>
             <tr><td><%= m.character.name %></td><td>会员</td></tr>
           <% elsif status == Membership::Invitation %>
-            <tr><td><%= m.character.name %></td><td>[<%= facebox_link "回复", edit_guild_invitation_url(@guild, m) %>]</td></tr>
+            <tr><td><%= m.character.name %></td><td>邀请[<%= facebox_link "回复", edit_guild_invitation_url(@guild, m) %>]</td></tr>
           <% elsif status == Membership::Request %>
-            <tr><td><%= m.character.name %></td><td><%= "请求加入.." %></td></tr>
+            <tr><td><%= m.character.name %></td><td>请求[等待]</td></tr>
           <% end %>
         <% end %>
       <% end %>

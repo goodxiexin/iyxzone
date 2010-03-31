@@ -280,7 +280,7 @@ Iyxzone.Photo.Tagger = Class.create({
       this.hideTagWithContent(tagInfo.photo_tag.id);
     }.bind(this));
     if(this.isCurrentUser){
-      var deleteLink = new Element('a', {href:'#', 'class': 'icon-active'});
+      var deleteLink = new Element('a', {href:'javascript: void(0)', 'class': 'icon-active'});
 			var spaceBar = new Element('span');
       li.appendChild(deleteLink);
 			li.appendChild(spaceBar);

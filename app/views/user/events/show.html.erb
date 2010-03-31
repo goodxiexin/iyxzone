@@ -90,7 +90,7 @@
 	  <h3 class="png">
       名称：<b><%= @event.title %></b>
       <% if @event.is_guild_event? %>
-        <span>   公会活动: </span><%= guild_link @event.guild %>
+        <span>   公会活动: </span> <b><%= guild_link @event.guild %></b>
       <% end %>
     </h3>
 	  <div class="formcontent">
@@ -151,6 +151,10 @@
 
   <% if @event.has_participant? current_user %>
     <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @event, :recipient => @event.poster} %>
+  <% else %>
+    <div class="bookbox">
+      <h3><label for="book">留言板</label>(共<%= @event.comments_count %>条留言)</h3>
+    </div>
   <% end %>
 
   <div class='feed-box' id='comments'>

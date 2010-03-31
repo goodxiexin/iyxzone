@@ -34,11 +34,12 @@ Object.extend(Iyxzone.Comment, {
   showForm: function(commentableType, commentableID, login, recipientID){
     $('add_' + commentableType + '_comment_' + commentableID).hide();
     $(commentableType + '_comment_' + commentableID).show();
-    if(recipientID != null && login != null){
-      $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
-      $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + ":";
-    }
+    $(commentableType + '_comment_recipient_' + commentableID).value = recipientID;
     $(commentableType + '_comment_content_' + commentableID).focus();
+    if(login == null)
+      $(commentableType + '_comment_content_' + commentableID).value = "";
+    else
+      $(commentableType + '_comment_content_' + commentableID).value = "回复" + login + "：";
   },
 
   hideForm: function(commentableType, commentableID, event){
@@ -67,8 +68,7 @@ Object.extend(Iyxzone.Comment, {
 
   set: function(commentableType, commentableID, login, commentorID){
     this.showForm(commentableType, commentableID, login, commentorID);
-    $(commentableType + '_comment_content_' + commentableID).focus();
-    window.scrollTo(0, $(commentableType + '_comment_content_' + commentableID).cumulativeOffset().top);
+    window.scrollTo(0, $(commentableType + '_comment_form_' + commentableID).cumulativeOffset().top);
   },
 
   more: function(commentableType, commentableID, link){
@@ -76,7 +76,8 @@ Object.extend(Iyxzone.Comment, {
     new Ajax.Request('/comments?commentable_id=' + commentableID + '&commentable_type=' + commentableType, {
       method: 'get',
       onSuccess: function(transport){
-        $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
+//        $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
+        $(commentableType + '_comments_' + commentableID).update( transport.responseText);
       }
     });
   },
@@ -135,7 +136,8 @@ Object.extend(Iyxzone.WallMessage, {
         $('comments').innerHTML = '<img src="images/loading.gif" />';
       },
       onSuccess: function(transport){
-        $('comments').innerHTML = transport.responseText;
+//        $('comments').innerHTML = transport.responseText;
+        $('comments').update( transport.responseText);
       }
     });
   },

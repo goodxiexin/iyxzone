@@ -80,7 +80,8 @@ var Facebox = Class.create({
 
 	set_content: function(data, klass){
 		if(klass) this.content.addClassName(klass);
-		this.content.innerHTML = data;
+//		this.content.innerHTML = data;
+		this.content.update( data);
     		
 		if(!this.facebox.visible()) 
 			new Effect.Appear(this.facebox, {'duration': 0.3});
@@ -121,7 +122,7 @@ var Facebox = Class.create({
 	show_confirm: function(confirm_message, url, token, method){
     var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="facebox.close();" class="icon2-close right"></a></p>';
     html += '<div class="z-con"><p>' + confirm_message + "</p>";
-    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' onclick=\"new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onLoading: function(){Iyxzone.disableButton($('fb-confirm').down('button',0),'请等待..')}, onComplete: function(transport){facebox.close();}});\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
+    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' onclick=\"new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onLoading: function(){Iyxzone.disableButton($('fb-confirm').down('button',0),'请等待..');Iyxzone.changeCursor('wait');}, onComplete: function(transport){facebox.close();Iyxzone.changeCursor('default');}});\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
 		this.remove_loading();
 		this.set_content(html);
 		this.locate();
@@ -155,16 +156,18 @@ var Facebox = Class.create({
     html += '<div class="z-con"><div id="error"></div><p>' + confirm_message + "<br/>";
     html += "输入验证码<input id='validation_code' type='text' size=4 />";
     html += "<span id='validation'>正在生成验证码</span></p></div>";
-    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' onclick=\"if(facebox.validate()){new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onLoading: function(){Iyxzone.disableButton($('fb-confirm').down('button',0),'请等待..')} });}else{$('error').innerHTML = '验证码错误';}\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
+    html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' onclick=\"if(facebox.validate()){new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onLoading: function(){Iyxzone.disableButton($('fb-confirm').down('button',0),'请等待..'); Iyxzone.changeCursor('wait');}, onComplete: function(){Iyxzone.changeCursor('default');} });}else{$('error').innerHTML = '验证码错误';}\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
     this.remove_loading();
     this.set_content(html);
     this.locate();
     var validation = Iyxzone.validationCode(4);
-    $('validation').innerHTML = validation.div.innerHTML;
+//    $('validation').innerHTML = validation.div.innerHTML;
+    $('validation').update( validation.div.innerHTML);
     this.codes = validation.codes;
     $('validation').observe('click', function(){
       var validation = Iyxzone.validationCode(4);
-      $('validation').innerHTML = validation.div.innerHTML;
+//      $('validation').innerHTML = validation.div.innerHTML;
+      $('validation').update( validation.div.innerHTML);
       this.codes = validation.codes;
     }.bind(this));	
 	},
@@ -188,7 +191,8 @@ var Facebox = Class.create({
 			var target = elem.href.replace(url+'#','');
 			var d = $(target);
 			var data = new Element(d.tagName);
-			data.innerHTML = d.innerHTML;
+//			data.innerHTML = d.innerHTML;
+			data.update( d.innerHTML);
 			this.reveal(data, klass);
 		 }else if(elem.href.match(this.settings.image_types)) {
 			var image = new Image();

@@ -48,19 +48,21 @@ class User::PhotosController < UserBaseController
   end
 
   def update
-    logger.error "params[:photo] = #{params[:photo][:album_id]}"
-    logger.error "old album_id #{@photo.album_id}"
     if @photo.update_attributes(params[:photo])
-      logger.error "current_album_id #{@photo.album_id}"
 			respond_to do |format|
 				format.json { render :json => @photo }
 				format.html { render :update do |page|
-					if @album.id != @photo.album_id
-            # stay in old album
-						page.redirect_to personal_album_url(@album)
-					else
-						page << "facebox.close();"
-						page << "if($('personal_photo_notation_#{@photo.id}'))$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation}';"
+          if params[:at] == 'album'
+					  if @album.id != @photo.album_id
+						  page.redirect_to personal_album_url(@album)
+					  else
+						  page << "facebox.close();"
+            end
+          elsif params[:at] == 'photo'
+            page << "facebox.close();"
+#						page << "$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
+						page << "$('personal_photo_notation_#{@photo.id}').update(     '#{@photo.notation.gsub(/\n/, '<br/>')}');"
+
 					end
 				end }
 			end 
@@ -79,11 +81,11 @@ class User::PhotosController < UserBaseController
   end
 
   def update_multiple
-    @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     params[:photos].each do |id, attributes|
       photo = @album.photos.find(id)
       photo.update_attributes(attributes)
     end
+    @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     redirect_to personal_album_url(@album) 
   end
 

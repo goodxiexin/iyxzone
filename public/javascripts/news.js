@@ -66,13 +66,13 @@ Object.extend(Iyxzone.News.Builder, {
   },
 
   expand: function(data){
-    $('news-data').innerHTML = data;
+    $('news-data').update(data);
     $('news-expand').hide();
     $('news-hide').show();
   },
 
   hide: function(data){
-    $('news-data').innerHTML = data;
+    $('news-data').update(data);
     $('news-expand').show();
     $('news-hide').show();
   }

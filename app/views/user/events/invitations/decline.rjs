@@ -1,5 +1,6 @@
-if params[:show].to_i == 1
+if params[:at] == 'event'
   page.redirect_to event_url(@event)
-elsif params[:show].to_i == 2
-  page << "$('event_invitation_option_#{@invitation.id}').innerHTML = '已拒绝';"
+elsif params[:at] == 'invitations'
+  page << "$('event_invitation_option_#{@invitation.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>拒绝邀请成功！</strong>';"
+  page << "setTimeout(\"new Effect.Fade('event_invitation_#{@invitation.id}')\", 2000);"
 end

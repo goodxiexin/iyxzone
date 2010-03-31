@@ -3,17 +3,19 @@
   <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
 </p>
 
-<div id='error'></div>
 <div class='z-con'>
 <% form_remote_tag :url => poll_answers_url(@poll), :html=> {:onsubmit=> "Iyxzone.disableButton($(new_poll_answer_btn),'请等待..');"}do %>
 <div class='formcontent'>
 <div class='content'>
   <div id='poll_answers'>
-    <%= render :partial => 'user/polls/answer_input', :object => PollAnswer.new %>
+    <%= render :partial => 'answer_input', :object => PollAnswer.new %>
   </div>
+  <div class='rows s_clear'>
+  <div class='fldid'><label>
   <%= link_to_function '添加选项' do |page|
-        page.insert_html :bottom, :poll_answers, :partial => 'user/polls/answer_input', :object => PollAnswer.new
-      end %><br/>
+        page.insert_html :bottom, :poll_answers, :partial => 'answer_input', :object => PollAnswer.new
+      end %></label></div>
+  </div>
 </div>
 </div>
 <div class="z-submit s_clear space">

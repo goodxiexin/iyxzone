@@ -79,6 +79,11 @@
             <% else %>
               <li><%= link_to "<span>玩家</span>", sharings_url(:uid => @user.id, :type => 8) %></li>
             <% end %>
+            <% if params[:type].to_i == 9 %>
+              <li class="hover"><%= link_to "<span>话题</span>", sharings_url(:uid => @user.id, :type => 9) %></li>
+            <% else %>
+              <li><%= link_to "<span>话题</span>", sharings_url(:uid => @user.id, :type => 9) %></li>
+            <% end %>
           </ul>
         </div>
         <div class="feed-img-list rows">
@@ -89,9 +94,9 @@
           <%= will_paginate @sharings %>
         <% else %>
           <% if @user == current_user %>
-            <div class='gray'>你啥都没分享，怎么能这样呢？！</div>
+            <div class='tip'>你啥都没分享，怎么能这样呢？！</div>
           <% else %>
-            <div class='gray'><%= get_subject @user %>都没分享，真是一个没情趣的人 </div>
+            <div class='tip'><%= get_subject @user %>都没分享，真是一个没情趣的人 </div>
           <% end %>
         <% end %>
         </div>

@@ -274,7 +274,9 @@ class User < ActiveRecord::Base
 
   def friend_polls
     poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id").map(&:poll_id).uniq
-    Poll.find(poll_ids, :order => 'created_at DESC')
+    participated = Poll.find(poll_ids)
+    posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = polls.poster_id", :order => 'created_at desc')
+    participated.concat(polls).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
   end
 
 	# guilds
@@ -338,7 +340,7 @@ class User < ActiveRecord::Base
 	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4"
 
   def friend_albums
-    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
+    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "(privilege != 4) AND (uploaded_at != NULL)", :order => 'uploaded_at desc')
   end
 
 	# feeds

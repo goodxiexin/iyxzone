@@ -1,8 +1,7 @@
-if params[:show].to_i == 0
-	page << "$('guild_status_#{@guild.id}').innerHTML = '#{@invitation.to_s}'; $('reply_guild_#{@guild.id}').innerHTML = '';facebox.close()"	
-elsif params[:show].to_i == 1
+if params[:at] == 'guild'
 	flash[:notice] = "提交成功"
 	page.redirect_to guild_url(@guild)
-elsif params[:show].to_i == 2
-	page << "$('guild_invitation_option_#{@invitation.id}').innerHTML = '已接受';"
+elsif params[:at] == 'invitations'
+	page << "$('guild_invitation_option_#{@invitation.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>接受邀请成功！</strong>';"
+  page << "setTimeout(\"new Effect.Fade('guild_invitation_#{@invitation.id}')\", 2000);"
 end

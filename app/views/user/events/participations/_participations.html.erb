@@ -1,12 +1,22 @@
-<% participations.each do |participation| %>
+<ul id='participations'>
+  <% participations.each do |participation| %>
   <% participant = participation.participant %>
   <% character = participation.character %>
-  <li id='<%= "participation_#{participation.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
-    <%= avatar participant, :size => :medium, :class=>'imgbox01'%>
-    <% if participation.participant != @event.poster %>
-    <%= facebox_confirm '', event_participation_url(@event, participation), {:method => :delete, :msg => '你确定要删除吗?'}, :class=>'right icon-active icon-active-del' %>
-    <% end %>
-    <p><%= profile_link participant, :class=>'blk' %>
-    <span class='red blk'><%= participation.character.name %></span></p>
+  <li class='bg' id='<%= "participation_#{participation.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+    <div class='card'>
+      <% if current_user == @event.poster and participant != current_user %>
+        <%= facebox_confirm '', event_participation_url(@event, participation), {:method => :delete, :msg => '你确定要删除吗?'}, :class=>'icon-active right' %>
+      <% end %>
+      <div class='img'>
+        <div class='middle'><div class='middle-center'><div class='center'>
+          <%= avatar participant, :class => 'imgbox01' %>
+        </div></div></div>
+      </div>
+      <div class='info member s_clear'>
+        <h4><%= profile_link participant, :class=>'blk' %></h4>
+        <span class='red nowrap'><%= participation.character.name %></span>
+      </div>
+    </div>
   </li>
-<% end %>
+  <% end %>
+</ul>

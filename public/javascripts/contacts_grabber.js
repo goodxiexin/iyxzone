@@ -72,7 +72,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
     table.down('tbody').childElements().each(function(tr){
       var box = tr.down('input');
       if(box.type == 'checkbox' && box.checked){
-        invitees.push(tr.childElements()[2].innerHTML);
+        invitees.push(tr.childElements()[2].down('span').innerHTML);
       }
     });
 

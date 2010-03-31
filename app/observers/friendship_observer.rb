@@ -12,7 +12,7 @@ class FriendshipObserver < ActiveRecord::Observer
 	end
 
 	def after_update friendship
-		if friendship.was_request? and friendship.is_friend? 
+		if friendship.recently_accepted
       # delete some obsoleted friend/comrade suggestions
 			friendship.user.destroy_obsoleted_friend_suggestions friendship.friend
 			friendship.user.destroy_obsoleted_comrade_suggestions friendship.friend
@@ -37,7 +37,7 @@ class FriendshipObserver < ActiveRecord::Observer
 	end
 
 	def after_destroy friendship
-    if friendship.is_request?
+    if friendship.recently_declined
 			friendship.user.notifications.create(:data => "#{profile_link friendship.friend}决绝了你的好友请求", :category => Notification::Friend)
       friendship.friend.raw_decrement :friend_requests_count
 		elsif friendship.is_friend?

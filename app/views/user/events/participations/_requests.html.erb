@@ -1,16 +1,25 @@
-<% requests.each do |request| %>
-<% character = request.character %>
-<% participant = request.participant %>
-<li id='event_request_<%= request.id %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
-  <%= avatar participant, :class=>'imgbox01'%>
-  <p><%= profile_link participant, :class=>'blk' %>
-  <span class='red blk'><%= character.name %></span>
-  <span class='operation' id='event_request_option_<%= request.id %>'>
-	<% if @event.poster == current_user %>
-    <%= link_to_remote '接受', :url => accept_event_request_url(@event, request), :method => :put  %> |
-    <%= facebox_confirm '拒绝', decline_event_request_url(@event, request), {:msg => '你确定要决绝这个人加入的请求吗?', :method => :delete} %>
+<ul id='participations'>
+  <% requests.each do |request| %>
+  <% character = request.character %>
+  <% participant = request.participant %>
+  <li class='bg' id='event_request_<%= request.id %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+    <div class='card'>
+      <div class='img'>
+        <div class='middle'><div class='middle-center'><div class='center'>
+          <%= avatar participant, :class=>'imgbox01'%>
+        </div></div></div>
+      </div>
+      <div class='info member s_clear'>
+        <h4><%= profile_link participant, :class => 'blk' %></h4>
+        <span class='red nowrap'><%= character.name %></span><br/>
+        <% if @event.poster == current_user %>
+        <span class='blk op' id='event_request_option_<%= request.id %>'>
+          <%= link_to_remote '接受', :url => accept_event_request_url(@event, request, :at => 'event'), :method => 'put', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %> |
+          <%= link_to_remote '拒绝', :url => decline_event_request_url(@event, request, :at => 'event'), :method => 'delete', :class => 'gray', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %>
+        </span>
+        <% end %>
+      </div>
+    </div>
+  </li>
   <% end %>
-	</span>
-	</p>
-</li>
-<% end %>
+</ul>

@@ -5,7 +5,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover @event.album, :class => "imgbox01" %></span>
+      <span class="left"><%= album_cover @event.album, :class => "imgbox01", :size => 'medium', :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @event.title%>活动照片</strong><br/>
         <%= link_to '活动主页', event_url(@event), :class => 'red' %>
@@ -54,7 +54,7 @@
         <% if @user == current_user %>
 					<tr>
 					<% @photos[j..j+n].each do |p| %>                         
-						<td><%= facebox_link "", edit_event_photo_url(p), :class => "icon-active icon-active-edit" %><%= facebox_confirm '', event_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %></td>
+						<td><%= facebox_link "", edit_event_photo_url(p, :at => 'album'), :class => "icon-active icon-active-edit" %><%= facebox_confirm '', event_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %></td>
 					<% end %>
 					<% if n < 3 %>
 						<% n.upto(2){ %>
@@ -67,9 +67,9 @@
         <%= will_paginate @photos %>
         <% else %>
 					<% if @user == current_user %>
-					<div class='gray'>活动还没有图片，你赶紧<%= link_to '上传', new_event_photo_url(:album_id => @album.id) %>吧</div>
+					<div class='tip'>活动还没有图片，你赶紧<%= link_to '上传', new_event_photo_url(:album_id => @album.id) %>吧</div>
 					<% else %>
-					<div class='gray'>活动还没有图片</div>
+					<div class='tip'>活动还没有图片</div>
 					<% end %>
         <% end %>
 				</table>
@@ -77,7 +77,7 @@
 				<% if @user == current_user %>
           <h4 class='box06'><%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]'  %></h4>
         <% else %>
-          <h4 class="box06"><%= h @album.description %></h4>
+          <h4 class="box06"><%= simple_format @album.description %></h4>
         <% end %>
         <p class="gray">
         <% unless @album.uploaded_at.blank? %>
@@ -99,5 +99,5 @@
 </div></div></div></div>
 
 <% unless @reply_to.blank? %>
-<%= javascript_tag "Iyxzone.Comment.set('event_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id})" %>
+<%= onload_javascript_tag "Iyxzone.Comment.set('event_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id})" %>
 <% end %>

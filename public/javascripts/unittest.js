@@ -109,12 +109,11 @@ Test.Unit.Logger.prototype = {
     this.logsummary.innerHTML = this._toHTML(summary);
   },
   _createLogTable: function() {
-    this.log.innerHTML =
-    '<div id="logsummary"></div>' +
+    this.log.innerHTML = ('<div id="logsummary"></div>' +
     '<table id="logtable">' +
     '<thead><tr><th>Status</th><th>Test</th><th>Message</th></tr></thead>' +
     '<tbody id="loglines"></tbody>' +
-    '</table>';
+    '</table>');
     this.logsummary = $('logsummary');
     this.loglines = $('loglines');
   },

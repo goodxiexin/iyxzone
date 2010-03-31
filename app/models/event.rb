@@ -93,8 +93,32 @@ class Event < ActiveRecord::Base
     participations.find(:all, :conditions => {:participant_id => user.id})
   end
 
+  def confirmed_and_maybe_participations_for user
+    participation.find(:all, :conditions => {:status => [Participation::Confirmed, Participation::Maybe], :participant_id => user.id})
+  end
+
+  def requests_for user
+    requests.find(:all, :conditions => {:participant_id => user.id})
+  end
+
+  def invitations_for user
+    invitations.find(:all, :conditions => {:participant_id => user.id})
+  end
+
   def characters_for user
     all_characters.find(:all, :conditions => {:user_id => user.id})  
+  end
+
+  def confirmed_and_maybe_characters_for user
+    characters.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def request_characters_for user
+    request_characters.find(:all, :conditions => {:user_id => user.id})
+  end
+
+  def invite_characters_for user
+    invite_characters.find(:all, :conditions => {:user_id => user.id})
   end
 
   def is_guild_event?
@@ -109,15 +133,19 @@ class Event < ActiveRecord::Base
     start_time_changed? || end_time_changed?
   end
 
+  def requestable_characters_for user
+    user.characters.find(:all, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) - characters_for(user)
+  end
+
   def is_requestable_by? user
     return -3 if expired? 
-    return -1 if user.characters.find(:first, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}).blank?
+    return -1 if requestable_characters_for(user).blank? 
 
     if is_guild_event?
       return 1 if guild.has_member?(user)
       return -2
     else
-      return 1 if privilege == 1 || (privilege == 2 and poster.has_friend? user)
+      return 1 if poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
       return 0
     end
   end

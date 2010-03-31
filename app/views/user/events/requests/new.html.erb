@@ -4,13 +4,22 @@
 </p>
 
 <div class="z-con">
-<% form_remote_for :request, :url => event_requests_url(@event, :show => params[:show]), :html => {:method => :post, :onsubmit=> "Iyxzone.disableButton($(new_event_request_btn),'请等待..');"} do |f| %>
+<% form_remote_for :request, :url => event_requests_url(@event, :at => 'event'), :html => {:method => :post, :onsubmit=> "Iyxzone.disableButton($(new_event_request_btn),'请等待..');"} do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
     <% if @characters.blank? %>
-      你所有的游戏角色都已经在这个活动了，或者被邀请，或者已经发送请求了
+      <div class='tip'>你所有的游戏角色都已经在这个活动了，或者被邀请，或者已经发送请求了</div>
     <% else %>
-      <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %>
+      <% if !@request_characters.blank? %>
+        <div class='tip'>你的 <%= @request_characters.map(&:name).join(', ') %> 已经请求加入了这个活动</div>
+      <% end %>
+      <% if !@invite_characters.blank? %>
+        <div class='tip'>你的 <%= @invite_characters.map(&:name).join(', ') %> 已经被邀请加入这个活动了</div>
+      <% end %>
+      <% if !@confirmed_and_maybe_characters.blank? %>
+        <div class='tip'>你的 <%= @confirmed_and_maybe_characters.map(&:name).join(', ') %> 已经加入这个活动了</div>
+      <% end %>
+      <div class='tip'>你还可以选择 <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %> 加入这个活动? </div>
     <% end %>
   </div>
 </div>
