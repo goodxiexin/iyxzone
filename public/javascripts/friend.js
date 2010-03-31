@@ -247,7 +247,8 @@ Iyxzone.Friend.Tagger = Class.create({
     // toggle button event
     Event.observe(this.toggleButton, 'click', function(e){
       this.toggleFriends();
-    }.bind(this));
+			Event.stop(e);
+    }.bind(this), false);
 
     // confirm button event
     Event.observe(this.confirmButton, 'click', function(event){
@@ -297,12 +298,13 @@ Iyxzone.Friend.Tagger = Class.create({
     Event.observe(this.cancelButton, 'click', function(event){
       Event.stop(event);
       this.toggleFriends();
-    }.bind(this));
+    }.bind(this),false);
 
     // game selector event
     Event.observe(this.gameSelector, 'change', function(e){
       this.getFriends(this.gameSelector.value);
-    }.bind(this)); 
+			Event.stop(e);
+    }.bind(this), false); 
 
     // custom auto completer
     var pinyins = [];
