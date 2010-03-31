@@ -85,6 +85,8 @@ class Membership < ActiveRecord::Base
 
   attr_accessor :recently_change_role
 
+  attr_accessor :recently_evicted
+
   attr_accessor :recently_accept_invitation
 
   attr_accessor :recently_decline_invitation
@@ -97,6 +99,13 @@ class Membership < ActiveRecord::Base
     if self.status != status
       self.recently_change_role = true
       self.update_attributes(:status => status)
+    end
+  end
+
+  def evict
+    if self.is_authorized?
+      self.recently_evicted = true
+      self.destroy
     end
   end
 

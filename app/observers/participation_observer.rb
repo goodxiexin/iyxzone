@@ -73,29 +73,23 @@ class ParticipationObserver < ActiveRecord::Observer
     if participation.recently_decline_invitation
 			# invitation is declined
 			participant.raw_decrement :event_invitations_count
-      unless event.recently_deleted?
-        event.raw_decrement :invitations_count
-        event.poster.notifications.create(
-          :category => Notification::Participation,
-          :data => "#{profile_link participant} 拒绝让游戏角色 #{participation.character.name} 加入你的活动 #{event_link event}")
-      end
+      event.raw_decrement :invitations_count
+      event.poster.notifications.create(
+        :category => Notification::Participation,
+        :data => "#{profile_link participant} 拒绝让游戏角色 #{participation.character.name} 加入你的活动 #{event_link event}")
 		elsif participation.recently_decline_request
 			# request is declined
-      unless event.recently_deleted?
-        event.poster.raw_decrement :event_requests_count
-        event.raw_decrement :requests_count
-			  participant.notifications.create(
-          :category => Notification::Participation,
-          :data => "#{profile_link event.poster}拒绝了让你的游戏角色 #{participation.character.name} 加入活动#{event_link event}的请求")
-      end
-    else participation
+      event.poster.raw_decrement :event_requests_count
+      event.raw_decrement :requests_count
+			participant.notifications.create(
+        :category => Notification::Participation,
+        :data => "#{profile_link event.poster}拒绝了让你的游戏角色 #{participation.character.name} 加入活动#{event_link event}的请求")
+    elsif participation.recently_evicted
       # paricipant is evicted
-      unless event.recently_deleted?
-        event.raw_decrement field(participation.status)
-        participant.notifications.create(
-          :category => Notification::Participation,
-          :data => "你的游戏角色 #{participation.character.name} 被剔除出了活动 #{event_link event}")
-      end
+      event.raw_decrement field(participation.status)
+      participant.notifications.create(
+        :category => Notification::Participation,
+        :data => "你的游戏角色 #{participation.character.name} 被剔除出了活动 #{event_link event}")
     end
 	end
 

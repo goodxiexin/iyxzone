@@ -103,7 +103,7 @@ class MembershipObserver < ActiveRecord::Observer
 			user.notifications.create(
         :category => Notification::Membership,
         :data => "#{profile_link guild.president} 拒绝了你的请求: 不让你的游戏角色 #{ membership.character.name } 加入工会#{guild_link guild}")
-		else
+		elsif membership.recently_evicted
 			# user is evicted
 			user.raw_decrement :participated_guilds_count unless guild.has_member? user
 			guild.raw_decrement field(membership.status)
