@@ -11,20 +11,10 @@
 	<%= profile_link user %> <span> 分享了 <%= profile_link photo.poster%> 的照片</span>
   <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %><% end %>
   <p class="gray jl-con">
-		<div class="mcAvatar jl-gray-bd">
-			<div class="picwrap">
-				<div class="middle">
-					<div class="middle-center">
-						<div class="center">
-							<%= photo_link photo, :size => :large %>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<%= photo_link photo, :class=>'imgbox01', :size => :large %>
 	</p>
 	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('#{photo.class.name.underscore}', #{photo.id}, null);", :class => "gray"%></p>
-	<%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => photo, :recipient => photo.poster} %>
+	<%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => sharing, :recipient => sharing.poster} %>
   </div>
 </div>
 </div>

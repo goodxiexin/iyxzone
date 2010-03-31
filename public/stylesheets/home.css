@@ -454,7 +454,7 @@ a:hover{color:#D63200;}
 .friend-list .friend-list-header{padding:4px 6px 4px 11px;height:27px;line-height:27px;background:#F1F9E1;overflow:hidden}
 .friend-list .friend-list-header .textfield{width:150px}
 .friend-list .friend-list-body{margin:3px 0;}
-.friend-list .friend-list-body li{float:left;padding:3px;margin:5px 10px;width:200px;border:1px solid #fff;background:url(../images/skin/dotline.gif) repeat-x bottom;}
+.friend-list .friend-list-body li{float:left;padding:3px;margin:5px 10px;width:200px;border:1px solid #fff;background:url(../images/skin/dotline.gif) repeat-x bottom;z-index:1}
 .friend-list .friend-list-body li.bg{border:1px #E7F0E0 solid;background:url(../images/skin/hover-bg.gif) repeat-x;}
 .friend-list .friend-list-body li a.icon-active{visibility:hidden}
 .friend-list .friend-list-body li.bg a.icon-active{visibility: visible;position:relative;z-index:2}
@@ -640,16 +640,10 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 /*首页/个人/好友主页*/
 /*.home-wrap .icon-active{margin-left:30px;margin-left:10px !important;}
 */
-<<<<<<< HEAD:public/stylesheets/home.css
-.home-wrap .s-dialog{margin-right:30px}
-/*.home-wrap .feed-list-box .feed-list{padding-left:32px}
-*/
-=======
 .home-wrap .s-dialog{margin:0 30px 0 10px;}
 /*.home-wrap .feed-list-box .feed-list{padding-left:32px}
 */
 .feed-wrap,.home-wrap{zoom:1}
->>>>>>> 0e699310e2426915f3e5a1678cd29c7ca525c977:public/stylesheets/home.css
 .feed-wrap .feed-list,.home-wrap .feed-list{padding-left:0;}
 .feed-wrap .feed-list-box{margin:10px 0}
 .jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;}
@@ -660,11 +654,7 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
-<<<<<<< HEAD:public/stylesheets/home.css
-#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;}
-=======
 #roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative}
->>>>>>> 0e699310e2426915f3e5a1678cd29c7ca525c977:public/stylesheets/home.css
 #roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
 #roll-photo .roll-photo-list a{margin:0 9px;}
 #roll-photo a img{width:100px;}
@@ -854,7 +844,7 @@ a.i-s-8:hover span{background-position:right -310px;}
 .friend-invite-list li a:hover{background:#ecfdda}
 .friend-invite-list li.bg a{background:#defebb}
 .friend-invite-list li img{float:left;}
-.friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;}
+.friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .friend-invite-list li strong span{display:block;margin:5px 0 0 0;}
 /**/
 /*.relation-member{border:0}
