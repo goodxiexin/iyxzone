@@ -19,7 +19,7 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   clearError: function(div){
-    $(div).innerHTML = '';
+    $(div).update('');
   },
 
   regionSelector: null,
@@ -307,13 +307,13 @@ Object.extend(Iyxzone.Profile.Editor, {
     var id = this.newCharacterID;
     var div = new Element('div', {id: 'new_character_' + id});
   
-    var html = '<div class="rows s_clear"><div class="fldid"><label>名字：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterNameValid(' + id + ', 1)" name="profile[new_characters][' + id + '][name]" id="profile_new_characters_' + id + '_name"/></div></div><span id="new_character_' + id + '_name_error" class="red"/></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>等级：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterLevelValid(' + id + ', 1)" name="profile[new_characters][' + id + '][level]" id="profile_new_characters_' + id + '_level"/></div></div><span id="new_character_' + id + '_level_error" class="red"/></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_game_id_error" class="red"/></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>服务区：</label></div><div class="fldvalue"><div><select name="profile[new_characters]['+ id + '][area_id]" id="profile_new_characters_' + id + '_area_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_area_id_error" class="red"/></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>服务器：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][server_id]" id="profile_new_characters_' + id + '_server_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_server_id_error" class="red"/></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>种族：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][race_id]" id="profile_new_characters_' + id + '_race_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_race_id_error" class="red"/></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>职业：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][profession_id]" id="profile_new_characters_' + id + '_profession_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_profession_id_error" class="red"/></div>';
+    var html = '<div class="rows s_clear"><div class="fldid"><label>名字：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterNameValid(' + id + ', 1)" name="profile[new_characters][' + id + '][name]" id="profile_new_characters_' + id + '_name"/></div></div><span id="new_character_' + id + '_name_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>等级：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterLevelValid(' + id + ', 1)" name="profile[new_characters][' + id + '][level]" id="profile_new_characters_' + id + '_level"/></div></div><span id="new_character_' + id + '_level_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_game_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>服务区：</label></div><div class="fldvalue"><div><select name="profile[new_characters]['+ id + '][area_id]" id="profile_new_characters_' + id + '_area_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_area_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>服务器：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][server_id]" id="profile_new_characters_' + id + '_server_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_server_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>种族：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][race_id]" id="profile_new_characters_' + id + '_race_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_race_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>职业：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][profession_id]" id="profile_new_characters_' + id + '_profession_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_profession_id_error" class="red"></span></div>';
     html += '<p class="foot s_clear"><a onclick="Iyxzone.Profile.Editor.removeCharacter(' + id + ', 1, this);; return false;" href="javascript: void(0)" class="right red">删除角色</a></p>';
 
 //    div.innerHTML = html;
@@ -437,7 +437,7 @@ Object.extend(Iyxzone.Profile.Editor, {
  
   validateCharactersInfo: function(form){
     var valid = true;
-    var inputs = form.getInputs();
+    var inputs = $(form).getInputs();
     var characterIDs = new Array();
 
     this.gameSelectors.keys().each(function(key){

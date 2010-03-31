@@ -24,7 +24,8 @@ class User::PrivacySettingController < UserBaseController
 
   def update
     if @setting.update_attributes(params[:setting])
-      respond_to do |format|
+			logger.error "format: #{params[:format]}"
+			respond_to do |format|
         format.js {
           render :update do |page|
             page << "facebox.close();"
