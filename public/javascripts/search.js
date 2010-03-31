@@ -27,7 +27,7 @@ Iyxzone.Search = {
   searchUsers: function(button){
     if(this.validateUserForm()){
       Iyxzone.disableButton(button, '请等待..');
-      $('user_form').submit();
+      window.location.href = $('user_form').action + '?' + $('user_form').serialize();
     }
   },
 
@@ -73,7 +73,7 @@ Iyxzone.Search = {
   searchCharacters: function(button){
     if(this.validateCharacterForm()){
       Iyxzone.disableButton(button, '请等待..');
-      $('character_form').submit();
+      window.location.href = $('character_form').action + '?' + $('character_form').serialize();
     }
   }
 

@@ -17,17 +17,14 @@
       <%= link_to "新建活动", new_event_url %>
     </div>
 		<ul>
-			<li><span><%= link_to "热门活动", hot_events_url(:uid => @user.id) %></span></li>
+			<li><span><%= link_to "热门活动", hot_events_url(:uid => current_user.id) %></span></li>
 			<li class='hover'><span><%= link_to "#{@game.name}的活动", game_events_url(:game_id => @game.id) %></span></li>
-			<% if @user == current_user %>
-			<li><span><%= link_to "朋友的活动", friends_events_url %></span></li>
-      <% end %>
 		</ul>
   </div>
   <div class="piclist-rows" id='events'>
     <div class='path-box'>
-      <label>游戏"<%= game_link @game %>"</label>
-      <span>相册</span>
+      <label>游戏 "<%= game_link @game %>"</label>
+      <span>活动</span>
     </div>
 		<%= render :partial => 'user/events/event_items', :object => @events %>
   </div>

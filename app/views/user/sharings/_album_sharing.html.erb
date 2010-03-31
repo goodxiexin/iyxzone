@@ -1,4 +1,5 @@
 <% album = album_sharing.shareable %>
+<% style = (album_sharing.comments_count == 0) ? 'display:none' : '' %>
 <div class="feed-list feed-share">
   <%= dig_link album_sharing %>
   <div class="feed-header">
@@ -19,7 +20,7 @@
       <%= link_to "更多分享", sharings_url(:uid => album.first_sharer.id, :type => 0) %>
     </div>
   </div>
-<div id="sharing_comment_box_<%= album_sharing.id %>" style="display:none">
-  <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => album_sharing, :recipient => nil} %>
+<div id="sharing_comment_box_<%= album_sharing.id %>" style="<%= style %>">
+  <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => album_sharing, :recipient => album_sharing.poster} %>
 </div>
 </div>

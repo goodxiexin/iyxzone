@@ -19,7 +19,7 @@
         <div class="path-box">
         </div>
         <div class="privacy-form formcontent">
-          <% form_for :setting, :url => privacy_setting_url(:type => 0), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(profile_privacy_submit_btn),'请等待..');"} do |f| %>
+          <% form_for :setting, :url => privacy_setting_url(:type => 0, :format => 'html'), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(profile_privacy_submit_btn),'请等待..');"} do |f| %>
             <div class="form-group">
               <h3>谁可以浏览你的个人主页？</h3>
               <div class="rows s_clear">

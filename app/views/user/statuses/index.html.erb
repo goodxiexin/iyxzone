@@ -87,7 +87,6 @@
 
 <% if !@reply_to.blank? and !@status.blank? %>
   <%= onload_javascript_tag "
-    Iyxzone.Comment.toggleBox('status', #{@status.id}, #{@status.comments_count});
     Iyxzone.Comment.set('status', #{@status.id}, '#{@reply_to.login}', #{@reply_to.id});" 
   %>
 <% end %>

@@ -180,6 +180,12 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
     this.update.show();
   },
 
+  // to prevent ie onbeforeunload from being fired
+  onClick: function($super, event){
+    Event.stop(event);
+    $super(event);
+  },
+
   updateChoices: function($super, data){
     if(data.indexOf('ul') < 0){
 //      this.update.innerHTML = data;

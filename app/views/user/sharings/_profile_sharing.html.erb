@@ -1,4 +1,5 @@
 <% profile = profile_sharing.shareable %>
+<% style = (profile_sharing.comments_count == 0) ? 'display:none' : '' %>
 <div class="feed-list feed-share">
   <%= dig_link profile_sharing %>
   <div class="feed-header">
@@ -15,7 +16,7 @@
       <%= link_to "更多分享", sharings_url(:uid => profile.first_sharer.id, :type => 0) %>
     </div>
   </div>
-<div id="sharing_comment_box_<%= profile_sharing.id %>" style="display:none">
-  <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => profile_sharing, :recipient => nil} %>
+<div id="sharing_comment_box_<%= profile_sharing.id %>" style="<%= style %>">
+  <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => profile_sharing, :recipient => profile_sharing.poster} %>
 </div>
 </div>
