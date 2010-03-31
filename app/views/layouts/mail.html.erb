@@ -7,9 +7,11 @@
 <%= yield %>
 <br/>
 <br/>
+<% if !@url.blank? %>
 请点击 <a href=<%= @url %>><%= @url %></a> 查看详细情况～
 <br/>
 <br/>
+<% end %>
 祝您开心每一天
 <br/>
 17gaming.com

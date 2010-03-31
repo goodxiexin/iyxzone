@@ -1,15 +1,4 @@
-<%= @membership.user.login %>
-
-您好！
-
-在您加入公会<%= @membership.guild.name %>中，您的<%= @membership.character %>
-
-从<%= @old_role %>变成了<%= @membership.to_s %>
-
-请点击 <a href=<%= @url %>><%= @url %></a> 查看更多活动详情
-
-祝您开心每一天
-17gaming.com
-
-－－
-此邮件由系统发出，请勿回复这封邮件。如果想联系我们，请登录17gaming.com。
+在您加入公会<%= @membership.guild.name %>中，您的游戏角色<%= @membership.character.name %> <br/>
+<br/>
+从<%= (@old_role == 4) ? "长老" : "会员" %>变成了<%= @membership.to_s %> <br/>
+<br/>

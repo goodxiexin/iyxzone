@@ -76,7 +76,7 @@ class CommentMailer < ActionMailer::Base
 
   def status_comment_to_recipient comment, user
     setup_email user
-    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在你的状态里留言了"
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在状态里回复了你"
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/statuses?uid=#{user.id}&reply_to=#{comment.poster_id}&status_id=#{comment.commentable_id}"
   end
 
@@ -92,23 +92,41 @@ class CommentMailer < ActionMailer::Base
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/polls/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
   end
 
-	def event_comment comment, user
+	def event_comment_to_poster comment, user
     setup_email user
-		subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在活动#{comment.commentable.title}留言了"
+		subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在你的活动#{comment.commentable.title}留言了"
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/events/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
 
-	def guild_comment comment, user
+  def event_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在活动#{comment.commentable.title}里回复了你"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/events/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
+  end
+
+	def guild_comment_to_president comment, user
     setup_email user
 		subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在公会#{comment.commentable.name}留言了"
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/guilds/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
 
-	def profile_comment comment, user
+  def guild_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在公会#{comment.commentable.name}留言了"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/guilds/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
+  end
+
+	def profile_comment_to_poster comment, user
 		setup_email	user
 		subject			"17Gaming.com(一起游戏网) - #{comment.poster.login}在你的留言版上留言了"
 		body				:comment => comment, :user => user, :url => "#{SITE_URL}/profiles/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
+
+  def profile_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在留言版上给你留言了"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/profiles/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
+  end
 
   def game_comment comment, user
     setup_email user
@@ -116,9 +134,15 @@ class CommentMailer < ActionMailer::Base
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/games/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
   end
 
-  def sharing_comment comment, user
+  def sharing_comment_to_poster comment, user
     setup_email user
     subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在你的分享里留言了"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/sharings?uid=#{user.id}&reply_to=#{comment.poster_id}&sharing_id=#{comment.commentable_id}"
+  end
+
+  def sharing_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在分享里回复你了"
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/sharings?uid=#{user.id}&reply_to=#{comment.poster_id}&sharing_id=#{comment.commentable_id}"
   end
 

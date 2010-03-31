@@ -6,7 +6,7 @@ namespace :polls do
     polls.each do |poll|
       poll.subscribers.each do |user|
         poll.notifications.create(:user_id => user.id) 
-        PollMailer.deliver_result poll, user if user.mail_setting.poll_expire
+        PollMailer.deliver_result poll, user if user.mail_setting.poll_expire == 1
       end
     end
   end

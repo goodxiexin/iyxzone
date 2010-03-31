@@ -17,11 +17,11 @@ class ParticipationObserver < ActiveRecord::Observer
     if participation.is_invitation?
 			participant.raw_increment :event_invitations_count
 			event.raw_increment :invitations_count	
-			EventMailer.deliver_invitation event, participation if participant.mail_setting.invite_me_to_event
+			EventMailer.deliver_invitation event, participation if participant.mail_setting.invite_me_to_event == 1
 		elsif participation.is_request?
 			event.poster.raw_increment :event_requests_count
 			event.raw_increment :requests_count
-			EventMailer.deliver_request event, participation if event.poster.mail_setting.request_to_attend_my_event
+			EventMailer.deliver_request event, participation if event.poster.mail_setting.request_to_attend_my_event == 1
     elsif participation.is_confirmed?
       event.raw_increment :confirmed_count
 		end	

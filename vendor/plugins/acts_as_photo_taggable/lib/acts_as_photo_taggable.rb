@@ -10,7 +10,7 @@ module PhotoTaggable
       
       has_many :tags, :class_name => 'PhotoTag', :foreign_key => 'photo_id', :dependent => :destroy
 
-      has_many :relative_users, :through => :tags, :source => :tagged_user
+      has_many :relative_users, :through => :tags, :source => :tagged_user, :uniq => true
 
       cattr_accessor :photo_taggable_opts
 

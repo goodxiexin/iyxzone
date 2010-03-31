@@ -1,5 +1,7 @@
 class PollMailer < ActionMailer::Base
 
+  layout 'mail'
+
   def result poll, user
     setup_email	user
 		subject			"17Gaming.com(一起游戏网) - 投票#{poll.name}结束了，快去看看结果"

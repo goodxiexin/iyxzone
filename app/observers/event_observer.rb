@@ -47,7 +47,7 @@ class EventObserver < ActiveRecord::Observer
     if event.time_changed?
       event.participants.each do |participant|
         participant.notifications.create(:category => Notification::EventChange, :data => "活动 #{event_link event} 时间改变了")
-        EventMailer.deliver_time_change event, participant if participant.mail_setting.change_event
+        EventMailer.deliver_time_change event, participant if participant.mail_setting.change_event == 1
       end
     end
   end

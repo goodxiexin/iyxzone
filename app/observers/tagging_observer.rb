@@ -7,7 +7,7 @@ class TaggingObserver < ActiveRecord::Observer
     tag = Tag.find_or_create :name => tagging.tag_name, :taggable_type => tagging.taggable_type
     tagging.tag_id = tag.id
   
-    # 一定要有 
+    # 一定要有, 不然和导入游戏的代码不兼容 
     return if tagging.poster_id.blank?
 
     # 删除已经有的tagging
@@ -25,7 +25,7 @@ class TaggingObserver < ActiveRecord::Observer
       profile.user.notifications.create(
         :category => Notification::FriendTag,
         :data => "#{profile_link tagging.poster} 对你的印象是: #{tagging.tag.name}")
-      TagMailer.deliver_profile_tag tagging if profile.user.mail_setting.tag_my_profile
+      TagMailer.deliver_profile_tag tagging if profile.user.mail_setting.tag_my_profile == 1
     end
   end
 

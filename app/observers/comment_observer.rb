@@ -175,12 +175,12 @@ class CommentObserver < ActiveRecord::Observer
 
     if poster != commentor 
 			comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_event_comment(comment, poster) if poster.mail_setting.comment_my_event == 1
+      CommentMailer.deliver_event_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_event == 1
     end
 
     if recipient != poster and recipient != commentor
 			comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_event_comment(comment, recipient) if recipient.mail_setting.comment_same_event_after_me == 1
+      CommentMailer.deliver_event_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_event_after_me == 1
     end
 	end
 
@@ -192,12 +192,12 @@ class CommentObserver < ActiveRecord::Observer
     
     if president != commentor
 			comment.notices.create(:user_id => president.id, :data => 'comment')
-      CommentMailer.deliver_guild_comment(comment, president) if president.mail_setting.comment_my_guild == 1
+      CommentMailer.deliver_guild_comment_to_president(comment, president) if president.mail_setting.comment_my_guild == 1
     end
 
     if recipient != president and recipient != commentor
 			comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_guild_comment(comment, recipient) if recipient.mail_setting.comment_same_guild_after_me == 1
+      CommentMailer.deliver_guild_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_guild_after_me == 1
     end
 	end
 
@@ -209,12 +209,12 @@ class CommentObserver < ActiveRecord::Observer
 
     if poster != commentor
 			comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_profile_comment(comment, poster) if poster.mail_setting.comment_my_profile == 1
+      CommentMailer.deliver_profile_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_profile == 1
     end
 
     if recipient != poster and recipient != commentor
 			comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_profile_comment(comment, recipient) if recipient.mail_setting.comment_same_profile_after_me == 1
+      CommentMailer.deliver_profile_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_profile_after_me == 1
     end
   end
 
@@ -237,12 +237,12 @@ class CommentObserver < ActiveRecord::Observer
 
     if poster != commentor
       comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_sharing_comment comment, poster if poster.mail_setting.comment_my_sharing == 1
+      CommentMailer.deliver_sharing_comment_to_poster comment, poster if poster.mail_setting.comment_my_sharing == 1
     end
 
     if recipient != poster and recipient != commentor and !recipient.blank?
       comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_sharing_comment comment, recipient if recipient.mail_setting.comment_same_sharing_after_me == 1
+      CommentMailer.deliver_sharing_comment_to_recipient comment, recipient if recipient.mail_setting.comment_same_sharing_after_me == 1
     end
   end
 

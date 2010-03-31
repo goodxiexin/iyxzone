@@ -24,12 +24,12 @@ class MembershipObserver < ActiveRecord::Observer
 			# invitation created
 			user.raw_increment :guild_invitations_count
 			guild.raw_increment :invitations_count
-			GuildMailer.deliver_invitation guild, membership if user.mail_setting.invite_me_to_guild
+			GuildMailer.deliver_invitation guild, membership if user.mail_setting.invite_me_to_guild == 1
 		elsif membership.is_request?
 			# request created
 			guild.president.raw_increment :guild_requests_count
 			guild.raw_increment :requests_count
-			GuildMailer.deliver_request guild, membership if guild.president.mail_setting.request_to_attend_my_guild
+			GuildMailer.deliver_request guild, membership if guild.president.mail_setting.request_to_attend_my_guild == 1
 		elsif membership.is_authorized?
       guild.raw_increment field(membership.status)
       user.raw_increment :participated_guilds_count
@@ -73,7 +73,7 @@ class MembershipObserver < ActiveRecord::Observer
 			user.notifications.create(
         :category => Notification::Promotion,
         :data => "你的游戏角色 #{membership.character.name} 在工会#{guild_link guild}里的职务更改为#{membership.to_s}")
-      GuildMailer.deliver_promotion membership, membership.status_was if user.mail_setting.promotion_in_guild
+      GuildMailer.deliver_promotion membership, membership.status_was if user.mail_setting.promotion_in_guild == 1
 		end
 
     # issue feeds if necessary

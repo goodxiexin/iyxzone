@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100330040208) do
+ActiveRecord::Schema.define(:version => 20100331145244) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -741,6 +741,10 @@ ActiveRecord::Schema.define(:version => 20100330040208) do
     t.integer  "videos_count2",                            :default => 0
     t.integer  "videos_count3",                            :default => 0
     t.integer  "videos_count4",                            :default => 0
+    t.integer  "albums_count1",                            :default => 0
+    t.integer  "albums_count2",                            :default => 0
+    t.integer  "albums_count3",                            :default => 0
+    t.integer  "albums_count4",                            :default => 0
   end
 
   create_table "videos", :force => true do |t|
