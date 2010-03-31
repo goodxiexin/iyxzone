@@ -43,11 +43,11 @@ class CommentObserver < ActiveRecord::Observer
     
     if poster != commentor
 			comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_video_comment(comment, poster) if poster.mail_setting.comment_my_video == 1
+      CommentMailer.deliver_video_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_video == 1
     end
     if recipient != poster and recipient != commentor   
 			comment.notices.create(:user_id => recipient.id, :data => 'reply')       
-      CommentMailer.deliver_video_comment(comment, recipient) if recipient.mail_setting.comment_same_video_after_me == 1
+      CommentMailer.deliver_video_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_video_after_me == 1
     end
 
     (video.relative_users - [poster, commentor, recipient].uniq).each do |friend|
@@ -84,11 +84,11 @@ class CommentObserver < ActiveRecord::Observer
 
     if poster != commentor
 			comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_photo_comment(comment, poster) if poster.mail_setting.comment_my_photo == 1
+      CommentMailer.deliver_photo_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_photo == 1
     end
     if recipient != poster and recipient != commentor
 			comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_photo_comment(comment, recipient) if recipient.mail_setting.comment_same_photo_after_me == 1
+      CommentMailer.deliver_photo_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_photo_after_me == 1
     end
 
     (photo.relative_users - [poster, commentor, recipient].uniq).each do |friend|
@@ -124,12 +124,12 @@ class CommentObserver < ActiveRecord::Observer
 
     if poster != commentor 
       comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_album_comment(comment, poster) if poster.mail_setting.comment_my_album == 1
+      CommentMailer.deliver_album_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_album == 1
     end
 
     if recipient != poster and recipient != commentor
 			comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_album_comment(comment, recipient) if recipient.mail_setting.comment_same_album_after_me == 1
+      CommentMailer.deliver_album_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_album_after_me == 1
     end
 	end
 
@@ -141,12 +141,12 @@ class CommentObserver < ActiveRecord::Observer
 
     if poster != commentor
 			comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_status_comment(comment, poster) if poster.mail_setting.comment_my_status == 1
+      CommentMailer.deliver_status_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_status == 1
     end
 
     if recipient != poster and recipient != commentor
 			comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_status_comment(comment, recipient) if recipient.mail_setting.comment_same_status_after_me == 1
+      CommentMailer.deliver_status_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_status_after_me == 1
     end
 	end
 
@@ -158,12 +158,12 @@ class CommentObserver < ActiveRecord::Observer
 
     if poster != commentor
 			comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_poll_comment(comment, poster) if poster.mail_setting.comment_my_poll == 1
+      CommentMailer.deliver_poll_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_poll == 1
     end
 
     if recipient != poster and recipient != commentor
 			comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_poll_comment(comment, recipient) if recipient.mail_setting.comment_same_poll_after_me == 1
+      CommentMailer.deliver_poll_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_poll_after_me == 1
     end
 	end
 

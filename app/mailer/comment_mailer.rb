@@ -20,11 +20,17 @@ class CommentMailer < ActionMailer::Base
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/blogs/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
 
-  def video_comment comment, user
+  def video_comment_to_poster comment, user
     setup_email user
 		subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在视频#{comment.commentable.title}发表评论"
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/videos/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
+
+  def video_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在视频#{comment.commentable.title}发表评论"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/videos/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
+  end
 
   def video_comment_to_tagged_user comment, user
     setup_email user
@@ -32,11 +38,17 @@ class CommentMailer < ActionMailer::Base
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/videos/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
 
-  def photo_comment comment, user
+  def photo_comment_to_poster comment, user
     setup_email user
 		subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}对相册#{comment.commentable.album.title}中的照片发表评论"
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/#{comment.commentable.class.to_s.underscore}s/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
+
+  def photo_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}对相册#{comment.commentable.album.title}中的照片发表评论"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/#{comment.commentable.class.to_s.underscore}s/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
+  end  
 
   def photo_comment_to_tagged_user comment, user
     setup_email user
@@ -44,23 +56,41 @@ class CommentMailer < ActionMailer::Base
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/#{comment.commentable.class.to_s.underscore}s/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
 
-	def album_comment comment, user
+	def album_comment_to_poster comment, user
 		setup_email user
 		subject			"17Gaming.com(一起游戏网) - #{comment.poster.login}在相册#{comment.commentable.title}发表评论"
 		body				:comment => comment, :user => user, :url => "#{SITE_URL}/#{comment.commentable.class.to_s.underscore}s/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
 
-  def status_comment comment, user
+  def album_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在相册#{comment.commentable.title}发表评论"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/#{comment.commentable.class.to_s.underscore}s/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
+  end
+
+  def status_comment_to_poster comment, user
     setup_email user
 		subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在你的状态里留言了"
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/statuses?uid=#{user.id}&reply_to=#{comment.poster_id}&status_id=#{comment.commentable_id}"
 	end
 
-  def poll_comment comment, user
+  def status_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在你的状态里留言了"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/statuses?uid=#{user.id}&reply_to=#{comment.poster_id}&status_id=#{comment.commentable_id}"
+  end
+
+  def poll_comment_to_poster comment, user
     setup_email user
 		subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在投票#{comment.commentable.name}发表评论"
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/polls/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
 	end
+
+  def poll_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在投票#{comment.commentable.name}发表评论"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/polls/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
+  end
 
 	def event_comment comment, user
     setup_email user
