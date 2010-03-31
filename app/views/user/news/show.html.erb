@@ -14,5 +14,5 @@
 </div></div></div></div>
 
 <% unless @reply_to.blank? %>
-  <%= javascript_tag "Iyxzone.Comment.set('news', #{@news.id}, '#{@reply_to.login}', #{@reply_to.id});"%>
+  <%= onload_javascript_tag "Iyxzone.Comment.set('news', #{@news.id}, '#{@reply_to.login}', #{@reply_to.id});"%>
 <% end %>

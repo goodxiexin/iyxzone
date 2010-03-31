@@ -30,3 +30,13 @@ Mysql::Error: Table 'dayday3_production.events' doesn't exist: SELECT * FROM `ev
 (in /home/gaoxh04/iyxzone)
 (in /home/gaoxh04/iyxzone)
 (in /home/gaoxh04/iyxzone)
+rake aborted!
+Access denied for user 'root'@'localhost' (using password: YES)
+
+(See full trace by running task with --trace)
+(in /home/gaoxh04/iyxzone)
+rake aborted!
+Access denied for user 'root'@'localhost' (using password: YES)
+
+(See full trace by running task with --trace)
+(in /home/gaoxh04/iyxzone)

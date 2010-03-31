@@ -21,6 +21,7 @@ a:hover{color:#D63200;}
 #appbar .applist li{height:37px;line-height:37px;padding:5px 0;overflow:hidden;}
 #appbar .applist li a{display:block;height:100%;padding-left:50px;background-repeat:no-repeat;font-size:14px;}
 
+#canvas{zoom:1}
 #canvas .round_m{padding:2px 8px;}
 #canvas h1{margin-bottom:8px;height:37px;line-height:37px;padding-left:50px;overflow:hidden}
 #canvas .canvas-status{float:right;padding-right:18px;line-height:37px;}
@@ -639,16 +640,10 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 /*首页/个人/好友主页*/
 /*.home-wrap .icon-active{margin-left:30px;margin-left:10px !important;}
 */
-<<<<<<< HEAD:public/stylesheets/home.css
-.home-wrap .s-dialog{margin-right:30px}
-/*.home-wrap .feed-list-box .feed-list{padding-left:32px}
-*/
-=======
 .home-wrap .s-dialog{margin:0 30px 0 10px;}
 /*.home-wrap .feed-list-box .feed-list{padding-left:32px}
 */
 .feed-wrap,.home-wrap{zoom:1}
->>>>>>> 0e699310e2426915f3e5a1678cd29c7ca525c977:public/stylesheets/home.css
 .feed-wrap .feed-list,.home-wrap .feed-list{padding-left:0;}
 .feed-wrap .feed-list-box{margin:10px 0}
 .jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;}
@@ -659,11 +654,7 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
-<<<<<<< HEAD:public/stylesheets/home.css
-#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;}
-=======
 #roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative}
->>>>>>> 0e699310e2426915f3e5a1678cd29c7ca525c977:public/stylesheets/home.css
 #roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
 #roll-photo .roll-photo-list a{margin:0 9px;}
 #roll-photo a img{width:100px;}

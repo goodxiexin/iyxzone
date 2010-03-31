@@ -18,9 +18,9 @@
 					<%= link_to "新建相册", new_personal_album_url, :rel => 'facebox' %>
         </div>
         <ul>
-					<% subject = get_subject @user %>
-          <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => @user.id) %></span></li>
-          <li><span><%= link_to "#{@game.name}的相册", game_albums_url(@game) %></span></li>
+					<% subject = get_subject current_user %>
+          <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
+          <li class='hover'><span><%= link_to "#{@game.name}的相册", game_albums_url(@game) %></span></li>
         </ul>				
 			</div>
       <div class="box02 appcontent01">

@@ -4,13 +4,12 @@
  */
 
 Iyxzone.Comment = {
-  version: '1.0',
-  author: ['高侠鸿']
+  version: '1.1',
+  author: ['高侠鸿'],
+  changeLog: '修正了wall message的一个bug'
 };
 
 Object.extend(Iyxzone.Comment, {
-
-  mappings: new Hash(),
 
   pluralize: function(str){
     if(str == 'status')
@@ -68,7 +67,8 @@ Object.extend(Iyxzone.Comment, {
 
   set: function(commentableType, commentableID, login, commentorID){
     this.showForm(commentableType, commentableID, login, commentorID);
-    window.scrollTo(0, $(commentableType + '_comment_form_' + commentableID).cumulativeOffset().top);
+    
+    Element.scrollTo(commentableType + '_comment_form_' + commentableID);
   },
 
   more: function(commentableType, commentableID, link){
@@ -102,6 +102,8 @@ Iyxzone.WallMessage = Class.create({});
 
 Object.extend(Iyxzone.WallMessage, {
 
+  recipientID: null, // initialize this in your page
+
   validate: function(content){
     if(content.value.length == 0){
       error('留言不能为空');
@@ -120,10 +122,12 @@ Object.extend(Iyxzone.WallMessage, {
         method: 'post',
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
-        },
+        }.bind(this),
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-        },
+          $('comment_recipient_id').value = this.recipientID;
+          $('comment_content').focus();
+        }.bind(this),
 				parameters: $(form).serialize()
       });
 		} 
@@ -144,8 +148,8 @@ Object.extend(Iyxzone.WallMessage, {
 
   set: function(login, id){
     $('comment_recipient_id').value = id;
-    $('comment_content').value = '回复' + login + ':';
     $('comment_content').focus();
+    $('comment_content').value = '回复' + login + '：';
   }
 
 });

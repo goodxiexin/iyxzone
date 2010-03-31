@@ -52,10 +52,12 @@ class User::MailsController < UserBaseController
     @new_mail.recipient_id = (@root_mail.sender == current_user)? @root_mail.recipient_id : @root_mail.sender_id
     @new_mail.parent_id = @root_mail.id
     if @new_mail.save
+=begin
       render :juggernaut => {:type => :send_to_client, :client_id => @new_mail.recipient_id} do |page|
         page << "Iyxzone.startBlinkTitle('新邮件');"
         page << "var num = parseInt($('navinbox-num').innerHTML); $('navinbox-num').innerHTML = (num + 1);"
       end
+=end
       render :update do |page|
         page.insert_html :bottom, 'mails', :partial => 'mail', :object => @new_mail
         page << "$('mail_content').value = '';"
