@@ -11,7 +11,7 @@ class TagMailer < ActionMailer::Base
   def video_tag tag
 		setup_email tag
     subject     "17Gaming.com(一起游戏网) - #{tag.poster.login}在视频里标记了你"
-    body        :tag => tag, :url => "#{SITE_URL}/videos/#{tag.taggable_id}"
+    body        :tag => tag, :user => tag.tagged_user, :url => "#{SITE_URL}/videos/#{tag.taggable_id}"
 	end
 
   def photo_tag tag

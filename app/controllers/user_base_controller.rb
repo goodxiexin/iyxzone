@@ -71,7 +71,7 @@ protected
   end
 
   def render_privilege_denied resource
-    if resource.is_owner_privilege?
+    if resource.is_owner_privilege? #自己
       render_not_enough_privilege
     else
       render_add_friend resource.resource_owner
