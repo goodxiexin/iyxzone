@@ -61,7 +61,9 @@ class ParticipationObserver < ActiveRecord::Observer
     
     if participation.recently_accept_invitation or participation.recently_accept_request 
       recipients = [participant.profile, character.game]
-      recipients.concat participant.guilds
+      if event.is_guild_event?
+        recipients.concat event.guild
+      end
       recipients.concat participant.friends.find_all{|f| f.application_setting.recv_event_feed == 1}
       participation.deliver_feeds :recipients => (recipients - event.poster)
     end
