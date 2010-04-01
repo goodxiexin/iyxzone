@@ -15,10 +15,12 @@ role :web, domain
 role :db,  domain, :primary => true
 
 
-after "deploy:update_code", "deploy:chown_deployer"
 after "deploy:update_code", "deploy:update_crontab"
 after "deploy:update_code", "deploy:update_database_config"
 after "deploy:update_code", "deploy:update_mail_config"
+after "deploy:update_code", "deploy:add_timestamps_to_css"
+after "deploy:update_code", "deploy:pack_js"
+after "deploy:update_code", "deploy:chown_deployer"
 
 after "deploy:symlink", "assets:symlink"
 
@@ -49,9 +51,14 @@ namespace :deploy do
     run "cd /home/deployer && chown -R deployer:deployer 17gaming"
   end
 
+  desc "add timestamps to css images, so that cache can be invalidated"
+  task :add_timestamps_to_css, :roles => :app do
+    # TODO
+  end
+
   desc "build all js"
   task :pack_js, :roles => :app do
-    run "cd #{current_release} && rake asset:packager:build_all && chown -R deployer:deployer 17gaming"
+    run "cd #{current_release} && rake asset:packager:build_all"
   end
  
   desc "update database configuration"
