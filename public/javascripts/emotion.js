@@ -1,4 +1,4 @@
-/**
+/*
  * Change Log
  * 1.2
  * change view generation and simplify code
@@ -142,9 +142,18 @@ Object.extend(Iyxzone.Emotion.Manager, {
 });
 
 document.observe('dom:loaded', function(){
-  document.body.observe('click', function(){
+  $(document.body).observe('click', function(){
     if(Iyxzone.Emotion.Manager.facesSingle){
       Iyxzone.Emotion.Manager.facesSingle.hide();
     }
   });
 });
+/*
+document.observe('dom:loaded', function(){
+Event.observe($(document.body), 'click', function(){
+    if(Iyxzone.Emotion.Manager.facesSingle){
+      Iyxzone.Emotion.Manager.facesSingle.hide();
+    }
+  });
+});
+*/

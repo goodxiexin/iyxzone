@@ -85,8 +85,9 @@
 				</table>
       <div class="pic-desc">
         <% if @user == current_user %>
+				  <h4 class="box06"> <%= in_place_text_area @album, :description, '点击修改', :param_name => 'album[description]' %> </h4>
         <% else %>
-          <h4 class="box06"><%= simple_format @album.description %></h4>
+          <h4 class="box06"> <%= simple_format @album.description %></h4>
         <% end %>
         <p class="gray">
         <% unless @album.uploaded_at.blank? %>

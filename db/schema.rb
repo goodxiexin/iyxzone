@@ -341,7 +341,7 @@ ActiveRecord::Schema.define(:version => 20100331145244) do
     t.integer  "game_id"
     t.integer  "game_area_id"
     t.integer  "game_server_id"
-    t.text     "description"
+    t.string   "description"
     t.integer  "president_id"
     t.integer  "character_id"
     t.integer  "members_count",     :default => 0
@@ -397,6 +397,13 @@ ActiveRecord::Schema.define(:version => 20100331145244) do
   end
 
   add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
+
+  create_table "moderator_forums", :force => true do |t|
+    t.integer  "forum_id"
+    t.integer  "moderator_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "news", :force => true do |t|
     t.integer  "game_id"
