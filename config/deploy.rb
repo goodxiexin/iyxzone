@@ -20,9 +20,9 @@ after "deploy:update_code", "deploy:update_database_config"
 after "deploy:update_code", "deploy:update_mail_config"
 after "deploy:update_code", "deploy:add_timestamps_to_css"
 after "deploy:update_code", "deploy:pack_js"
-after "deploy:update_code", "deploy:chown_deployer"
 
 after "deploy:symlink", "assets:symlink"
+after "deploy:symlink", "deploy:chown_deployer"
 
 namespace :deploy do
 

@@ -81,8 +81,8 @@ class MembershipObserver < ActiveRecord::Observer
 
     if membership.recently_accept_request or membership.recently_accept_invitation
       recipients = [user.profile, character.game]
-      recipients.concat user.friends.find_all{|f| f.application_setting.recv_guild_feed}
-      membership.deliver_feeds :recipients => recipients
+      recipients.concat user.friends.find_all{|f| f.application_setting.recv_guild_feed == 1}
+      membership.deliver_feeds :recipients => (recipients - guild.president)
     end
 	end
 
