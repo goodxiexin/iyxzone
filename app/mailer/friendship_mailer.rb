@@ -1,9 +1,11 @@
 class FriendshipMailer < ActionMailer::Base
 
+  layout 'mail'
+
 	def request user, friend
 		setup_email friend
 		subject			"17Gaming.com(一起游戏网) - #{user.login}要求加你为好友"
-		body				:user => user, :friend => friend, :url => "#{SITE_URL}/requests"
+		body				:user => friend, :friend => user, :url => "#{SITE_URL}/requests"
 	end
 
   def confirm user, friend
