@@ -107,6 +107,7 @@
 
 <% if !@reply_to.blank? and !@sharing.blank? %>
   <% onload_javascript_tag do %>
+    $('sharing_comment_box_<%= @sharing.id %>').show();
     Iyxzone.Comment.set('sharing', <%= @sharing.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
   <% end %>
 <% end %>
