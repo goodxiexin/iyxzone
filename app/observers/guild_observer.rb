@@ -41,16 +41,4 @@ class GuildObserver < ActiveRecord::Observer
     end
   end
   
-  def after_update guild
-    if guild.name_changed?
-      guild.veterans_and_members.each do |member|
-        if member.mail_setting.change_name_of_guild == 1 and member != guild.president
-          GuildMailer.deliver_name_change(guild, member)
-        end
-      end
-    end 
-  end
-
-	# a guild can never be destroyed once it's created
-
 end

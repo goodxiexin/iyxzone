@@ -57,13 +57,14 @@ class ParticipationObserver < ActiveRecord::Observer
 		end
 
     # issue feeds if necessary
-    return unless participant.application_setting.emit_event_feed
-    return if participation.was_authorized? and participation.is_authorized?
+    return if participant.application_setting.emit_event_feed == 0
     
-    recipients = [participant.profile, character.game]
-    recipients.concat participant.guilds
-    recipients.concat participant.friends.find_all{|f| f.application_setting.recv_event_feed}
-    participation.deliver_feeds :recipients => recipients
+    if participation.recently_accept_invitation or participation.recently_accept_request 
+      recipients = [participant.profile, character.game]
+      recipients.concat participant.guilds
+      recipients.concat participant.friends.find_all{|f| f.application_setting.recv_event_feed == 1}
+      participation.deliver_feeds :recipients => recipients
+    end
 	end
 	
   def after_destroy participation

@@ -23,11 +23,6 @@
 				<h3>发送电子邮件通知到：<%= current_user.email %></h3><br/>
 				<% form_for :setting, :url => mail_setting_url, :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(setting_submit),'请等待..');"} do |f| %>
 				<h3>基本设定</h3>
-				<div class='rows s_clear'>
-					<div class='fldid'><label for='addfriend'></label></div>
-					<div class='fldstatus fldstatus-lock'></div>
-					<div class='fldvalue'> <%= f.check_box 'mail_me' %>给我发消息</div>
-				</div>
         <div class='rows s_clear'>
           <div class='fldid'><label for='addfriend'></label></div>
           <div class='fldstatus fldstatus-lock'></div>

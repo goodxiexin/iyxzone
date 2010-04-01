@@ -77,12 +77,13 @@ class MembershipObserver < ActiveRecord::Observer
 		end
 
     # issue feeds if necessary
-    return unless user.application_setting.emit_guild_feed
-    return if membership.was_authorized? and membership.is_authorized?
+    return if user.application_setting.emit_guild_feed == 0
 
-    recipients = [user.profile, character.game]
-    recipients.concat user.friends.find_all{|f| f.application_setting.recv_guild_feed}
-    membership.deliver_feeds :recipients => recipients
+    if membership.recently_accept_request or membership.recently_accept_invitation
+      recipients = [user.profile, character.game]
+      recipients.concat user.friends.find_all{|f| f.application_setting.recv_guild_feed}
+      membership.deliver_feeds :recipients => recipients
+    end
 	end
 
 	def after_destroy membership

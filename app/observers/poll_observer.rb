@@ -25,16 +25,6 @@ class PollObserver < ActiveRecord::Observer
     end
   end
   
-  def after_update poll
-    if poll.summary_changed?
-      poll.voters.each do |voter|
-        if voter.mail_setting.poll_summary_change and voter != poll.poster
-          PollMailer.deliver_summary_change poll, voter
-        end
-      end
-    end
-  end
-
   def after_destroy poll
     poll.poster.raw_decrement :polls_count
   end
