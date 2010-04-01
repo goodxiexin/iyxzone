@@ -35,7 +35,7 @@
           </div><br/>
           <div class="friend-invite-head">
           <% unless @characters.blank? %>
-            <strong class="green"><% if @guild %>搜索工会战友的游戏角色：<% else %>搜索好友的游戏角色：<% end %></strong> 
+            <strong class="green"><% if @guild %>搜索公会战友的游戏角色：<% else %>搜索好友的游戏角色：<% end %></strong> 
             <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "this.clear()", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
           <% end %>  
           </div>

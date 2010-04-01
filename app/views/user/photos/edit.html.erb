@@ -14,13 +14,13 @@
       </div>
     </div>
     <div class="rows s_clear">
-      <div class="fldid"><label for="name">所属专辑：</label></div>
+      <div class="fldid"><label for="name">所属相册：</label></div>
       <div class="fldvalue"> 
         <%= collection_select :photo, :album_id, current_user.albums, :id, :title %>
       </div>
     </div>
     <div class="rows s_clear">
-      <div class="fldid"><label for="name">专辑封面：</label></div>
+      <div class="fldid"><label for="name">相册封面：</label></div>
       <div class="fldvalue"> 
         <%= check_box_tag 'photo[cover]', 1, @photo.is_cover? %>设置为封面
       </div>
