@@ -60,8 +60,8 @@ Object.extend(Iyxzone.Profile.Editor, {
     }
   },
 
-  cancelEditBasicInfo: function(event){
-    Event.stop(event);
+  cancelEditBasicInfo: function(){
+   // Event.stop(event);
     $('basic_info_frame').update( this.basicInfoHTML);
     this.isEditingBasicInfo = false;
   },
