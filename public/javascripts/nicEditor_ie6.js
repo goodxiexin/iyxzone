@@ -251,6 +251,8 @@ Function.prototype.closureListener = function() {
 
 var nicEditorConfig = bkClass.extend({
 	buttons : {
+    'redo' : {name : __('重做'), command : 'Redo', noActive : true},
+    'undo' : {name : __('撤销'), command : 'Undo', noActive : true},
 		'bold' : {name : __('黑体(Ctrl+B)'), command : 'Bold', tags : ['B','STRONG'], css : {'font-weight' : 'bold'}, key : 'b'},
 		'italic' : {name : __('斜体(Ctrl+I)'), command : 'Italic', tags : ['EM','I'], css : {'font-style' : 'italic'}, key : 'i'},
 		'underline' : {name : __('下划线(Ctrl+U)'), command : 'Underline', tags : ['U'], css : {'text-decoration' : 'underline'}, key : 'u'},
@@ -269,8 +271,8 @@ var nicEditorConfig = bkClass.extend({
 		'hr' : {name : __('水平线'), command : 'insertHorizontalRule', noActive : true}
 	},
 	iconsPath : '/images/nicEditor/nicEditorIcons.gif',
-	buttonList : ['bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','image','link','forecolor','bgcolor'],
-	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"emotion":26}
+	buttonList : ['redo', 'undo', 'bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','image','link','forecolor','bgcolor'],
+	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"emotion":26, "redo": 27, "undo": 28}
 	
 });
 /* END CONFIG */
@@ -1324,22 +1326,23 @@ var nicImageButton = nicEditorAdvancedButton.extend({
               </div>",
 	
 	addPane : function() {
-    //this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
-    //facebox.reveal(this.paneHTML);
-    //$BK('url_image_submit_btn').addEvent('click', function(){
-    //  this.submit();
-    //}.closure(this));
-		this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+    this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+    facebox.reveal(this.paneHTML);
+    $BK('url_image_submit_btn').addEvent('click', function(){
+      this.submit();
+    }.closure(this));
+		/*this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
 		this.addForm({
 			'' : {type : 'title', txt : '插入/编辑'},
 			'src' : {type : 'text', txt : '图片URL', 'value' : 'http://', style : {width: '150px'}}
 		//, 'alt' : {type : 'text', txt : '文字', style : {width: '100px'}},
 		//	'align' : {type : 'select', txt : '位置', options : {none : '默认','left' : '靠左', 'right' : '靠右'}}
-		},this.im);
+		},this.im);*/
 	},
 	
 	submit : function(e) {
-		var src = this.inputs['src'].value; //$BK('image_url_field').value; 
+		//var src = this.inputs['src'].value; 
+    var src = $BK('image_url_field').value; 
 		if(src == "" || src == "http://") {
 			alert("你必须插入一个图片的链接地址");
 			return false;
