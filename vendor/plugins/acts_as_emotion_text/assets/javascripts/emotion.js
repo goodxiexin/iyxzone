@@ -30,7 +30,7 @@ EmotionConverter = Class.create({
   },
 
   show_faces: function(link){
-    this.faces = new Element('table', {class:'face-table'});
+    this.faces = new Element('table', {'class':'face-table'});
     for(var i=0;i<this.rows;i++){
       var row = new Element('tr');
       for(var j=0;j<this.faces_per_row && i*this.faces_per_row + j < this.faces_count;j++){
