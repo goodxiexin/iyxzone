@@ -1,16 +1,17 @@
-<html>
 
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
-<title>新建网页 3</title>
-</head>
-
- <body>
-     
-     <div contentEditable="true">
-         <span contentEditable = "true">This span is contentEditable</span>
-     </div>
-
- </body>
-
-</html>
+    <html>
+   
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+    <title>新建网页 3</title>
+    </head>
+   
+    <body>
+        
+       <div contentEditable="true">
+           <span contentEditable = "true" oncontrolselect="javascript:return false">This span is contentEditable</span>
+       </div>
+  
+   </body>
+  
+   </html>
