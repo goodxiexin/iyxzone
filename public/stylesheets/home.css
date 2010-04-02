@@ -227,7 +227,7 @@ a:hover{color:#D63200;}
 #leftsidebar .formcontent .fldid{width:88px}
 
 #leftsidebar .multibox .photolist-box{margin:6px 2px 15px}
-#leftsidebar .multibox .photolist-box li{padding:5px 10px 5px 11px;}
+#leftsidebar .multibox .photolist-box li{padding:5px 8px;_padding:5px 6px;}
 
 #rightsidebar .multibox .request{padding:8px 3px;}
 #rightsidebar .multibox .request li a{color:#000}
@@ -352,6 +352,7 @@ a:hover{color:#D63200;}
 
 
 .inbox-form .textfield, .photo-form .textfield, .cons-form .textfield, .poly-form .textfield{width:268px;_width:266px;}
+.cons-form .new_guild .fldid{width:100px}
 .photo-form textarea{width:275px;height:90px}
 .photo-form select{width:197px}
 .photo-form .buttons{margin-left:91px;}
@@ -1151,9 +1152,9 @@ h1.app-share{float:left}
 .theme-head .button-gray span button{color:#666}
 
 /*打招呼*/
-.face-hello{margin:10px;padding-left:80px}
-.face-hello .avatar{float:left;margin-left:-80px;display:inline}
-.face-hello .content{float:left;color:#666;width:100%;}
+.face-hello{margin:10px;padding-left:80px;}
+.face-hello .avatar{float:left;margin-left:-80px;display:inline;}
+.z-box .z-con .face-hello .content{float:left;color:#666;width:100%;margin:0}
 .face-hello h2{border-bottom:1px solid #bbd2aa;padding-bottom:5px;font-weight:700}
 .face-hello ul li{float:left;margin:8px 5px;color:#333;width:90px}
 .hello-history{border:0}

@@ -20,7 +20,7 @@
 	  						<% form_for(@skin) do |f| %>
 		  						<span class="button w-l"><span><button name="act" type="submit" value ="apply">应用</button> </span></span>
                 <% end %>
-			  				<span class="button button-gray"><span><button onclick= <%= "'location.href=#{profile_url(current_user.profile)}'"-%> type="submit">取消</button> </span></span>
+			  				<span class="button button-gray"><span><button onclick= <%= "'location.href=\"#{profile_url(current_user.profile)}\"'"-%> type="submit">取消</button> </span></span>
               </p>
             </div>
           </li>
