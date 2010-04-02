@@ -9,12 +9,12 @@
 	    <div class="tab tab01">
 		    <% subject = get_subject @user %>
 		    <ul>
-			    <li><span><%= link_to "热门工会", hot_guilds_url %></span></li>
-          <li class='hover'><span><%= link_to "#{subject}的工会", guilds_url(:uid => @user.id) %></span></li>
-          <li><span><%= link_to "好友工会", friends_guilds_url %></span></li>
+			    <li><span><%= link_to "热门公会", hot_guilds_url %></span></li>
+          <li class='hover'><span><%= link_to "#{subject}的公会", guilds_url(:uid => @user.id) %></span></li>
+          <li><span><%= link_to "好友公会", friends_guilds_url %></span></li>
 		    </ul>
 		    <div class='right'>
-			    <%= link_to "新工会", new_guild_url %>
+			    <%= link_to "新公会", new_guild_url %>
 		    </div>
       </div>
 	    <div class="piclist-rows">
@@ -27,7 +27,7 @@
         <% if @guilds.total_entries != 0 %>
 		      <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
         <% else %>
-          <div class='tip'>你还没加入过别人的工会，你可以加入<%= link_to '好友的工会', friends_guilds_url %> 或者 <%= link_to '最近别人创建的工会', recent_guilds_url %> 或者 <%= link_to '最近的热门工会', hot_guilds_url %></div>
+          <div class='tip'>你还没加入过别人的公会，你可以加入<%= link_to '好友的公会', friends_guilds_url %> 或者 <%= link_to '最近别人创建的公会', recent_guilds_url %> 或者 <%= link_to '最近的热门公会', hot_guilds_url %></div>
         <% end %>
       </div>
     </div>

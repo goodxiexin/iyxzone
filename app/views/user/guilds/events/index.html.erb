@@ -26,13 +26,13 @@
   </div>
   <div class="piclist-rows" id='events'>
     <div class='path-box'>
-      <label>工会"<%= guild_link @guild %>"</label>
+      <label>公会"<%= guild_link @guild %>"</label>
       <span>活动</span>
     </div>
     <% if @events.total_entries != 0 %>
 		  <%= render :partial => 'user/events/event_items', :object => @events %>
     <% else %>
-      <div class='gray'>该工会还没有相关活动</div>
+      <div class='gray'>该公会还没有相关活动</div>
     <% end %>
   </div>
 </div>

@@ -31,7 +31,7 @@
 			</div>
       <div class="path-box">
 				<div class="left">
-				<%= "共#{@count}篇博客" %>
+				<%= "共#{@count}篇日志" %>
 				<%= link_to '上一篇', blog_url(@prev) %> |
 				<%= link_to '下一篇', blog_url(@next) %> <br/>
 				</div>
@@ -45,7 +45,7 @@
 	<p class="right">
       <% if @user == current_user %>
       <%= link_to "<span class='icon2-edit'></span>编辑", edit_blog_url(@blog), :class=>"red" %>
-      <%= facebox_confirm "<span class='icon2-close'></span>删除", blog_url(@blog), {:msg => '你确定要删除这篇博客吗', :method => :delete}, :class=>"red w-l" %>
+      <%= facebox_confirm "<span class='icon2-close'></span>删除", blog_url(@blog), {:msg => '你确定要删除这篇日志吗', :method => :delete}, :class=>"red w-l" %>
       <% end %>
       <%= facebox_link "分享", new_sharing_url(:shareable_type => 'Blog', :shareable_id => @blog.id), :class => 'share-btn' %>
 	</p> 

@@ -8,7 +8,7 @@
       首次分享人：<%= avatar topic.first_sharer, :with => '27px', :height => '27px' %>
       <%= profile_link topic.first_sharer%>
     </div>
-    <h3>工会<%= topic.forum.guild.name %>的话题: <%= topic_link topic, :popup => true %></h3>
+    <h3>公会<%= topic.forum.guild.name %>的话题: <%= topic_link topic, :popup => true %></h3>
     <p class="con"><%= truncate topic_sharing.reason, :length => 100, :omission => '...' %></p>
     <div class="feeds">
       <%= link_to_function "评论(#{topic_sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{topic_sharing.id}, #{topic_sharing.comments_count})" %> |

@@ -27,9 +27,9 @@
               <li><%= link_to "<span>全部</span>", recent_sharings_url(:uid => current_user.id, :type => 0) %></li>
             <% end %>
             <% if params[:type].to_i == 1 %>
-              <li class="hover"><%= link_to "<span>博客</span>", recent_sharings_url(:uid => current_user.id, :type => 1) %></li>
+              <li class="hover"><%= link_to "<span>日志</span>", recent_sharings_url(:uid => current_user.id, :type => 1) %></li>
             <% else %>
-              <li><%= link_to "<span>博客</span>", recent_sharings_url(:uid => current_user.id, :type => 1) %></li>
+              <li><%= link_to "<span>日志</span>", recent_sharings_url(:uid => current_user.id, :type => 1) %></li>
             <% end %>
             <% if params[:type].to_i == 2 %>
               <li class="hover"><%= link_to "<span>视频</span>", recent_sharings_url(:uid => current_user.id, :type => 2) %></li>

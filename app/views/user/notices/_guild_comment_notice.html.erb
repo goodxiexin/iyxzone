@@ -12,9 +12,9 @@
 		<%= link_to_function '', "Iyxzone.Home.NoticeManager.readSingle(#{notice.id}, '#{form_authenticity_token}')", :class => 'icon-active' %>
 		<% end %>
     <% if notice.data == 'comment' %>
-			<%= profile_link comment.poster %> 在工会 <%= link %> 上留言了 
+			<%= profile_link comment.poster %> 在公会 <%= link %> 上留言了 
 		<% elsif notice.data == 'reply' %>
-			<%= profile_link comment.poster %> 在工会 <%= link %> 中回复了你
+			<%= profile_link comment.poster %> 在公会 <%= link %> 中回复了你
 		<% end %> 		
 	</div>
 </li>
