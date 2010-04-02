@@ -7,11 +7,17 @@
     </head>
    
     <body>
-        
+			<button onclick="document.execCommand('InsertImage', false, 'javascript:nicImTemp()')" >adf</button>        
        <div contentEditable="true">
            <div contentEditable = "true" oncontrolselect="alert('adf');javascript:return false">This span is contentEditable</span>
        </div>
   
    </body>
-  
+ <script type='text/javascript'>
+	document.body.onkeydown = function(k){
+		if(k.keyCode == 8){
+			alert(window.getSelection());
+		}
+	};
+</script> 
    </html>
