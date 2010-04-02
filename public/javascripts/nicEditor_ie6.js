@@ -1326,23 +1326,23 @@ var nicImageButton = nicEditorAdvancedButton.extend({
               </div>",
 	
 	addPane : function() {
-    this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+    /*this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
     facebox.reveal(this.paneHTML);
     $BK('url_image_submit_btn').addEvent('click', function(){
       this.submit();
-    }.closure(this));
-		/*this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+    }.closure(this));*/
+		this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
 		this.addForm({
 			'' : {type : 'title', txt : '插入/编辑'},
-			'src' : {type : 'text', txt : '图片URL', 'value' : 'http://', style : {width: '150px'}}
+			'src' : {type : 'text', txt : '图片URL', 'value' : 'http://', style : {width: '200px'}}
 		//, 'alt' : {type : 'text', txt : '文字', style : {width: '100px'}},
 		//	'align' : {type : 'select', txt : '位置', options : {none : '默认','left' : '靠左', 'right' : '靠右'}}
-		},this.im);*/
+		},this.im);
 	},
 	
 	submit : function(e) {
-		//var src = this.inputs['src'].value; 
-    var src = $BK('image_url_field').value; 
+		var src = this.inputs['src'].value; 
+    //var src = $BK('image_url_field').value; 
 		if(src == "" || src == "http://") {
 			alert("你必须插入一个图片的链接地址");
 			return false;

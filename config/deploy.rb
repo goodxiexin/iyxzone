@@ -43,7 +43,7 @@ namespace :deploy do
 
   desc "regenerate periodical tasks configuration"
   task :update_crontab, :roles => :app do
-    run "cd #{release_path} && whenever --update-crontab"
+    run "cd #{release_path} && whenever -w"
   end
 
   desc "change owner to deployer"
