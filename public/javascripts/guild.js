@@ -42,10 +42,10 @@ Object.extend(Iyxzone.Guild.MemberManager, {
   },
 
   buildRoleList: function(){
-      this.roleList = new Element('div', {class: 'drop-wrap'});
-      var div = new Element('div', {class: 'wrap-bg'});
+      this.roleList = new Element('div', {'class': 'drop-wrap'});
+      var div = new Element('div', {'class': 'wrap-bg'});
       var dl = new Element('dl');
-      var dd = new Element('dd', {class: 'jt-cutline'});
+      var dd = new Element('dd', {'class': 'jt-cutline'});
       var veteran = new Element('a', {href: 'javascript:void(0)'}).update('工会长老');
       var member = new Element('a', {href: 'javascript:void(0)'}).update('普通会员');
       

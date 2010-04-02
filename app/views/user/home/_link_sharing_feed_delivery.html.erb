@@ -7,7 +7,7 @@
 		<div class="imgbox01"><%= avatar sharing.poster, :size => "small" %></div>
 	</div>
 	<div class="jl-list-con jl-cutline">
-  <%= profile_link sharing.poster %> 分享了连接 <%= link_to link.url, :class => "shine" %>
+  <p><%= profile_link sharing.poster %> 分享了连接 <%= link_to "#{link.url}", sharing_url(sharing), :class => "shine", :popup => true %></p>
 	<% if delivery.is_deleteable_by? current_user %>
 	<%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
 	<% end %>

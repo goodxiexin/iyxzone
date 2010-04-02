@@ -7,7 +7,7 @@ ResizableTextBox = Class.create({
       step: 7
     }, options || {});
     this.element = element;
-    this.element.setStyle({width: this.options.min});
+    this.element.setStyle({'width': this.options.min});
 
     Event.observe(this.element, 'keyup', function(){
       var newSize = this.options.step * this.element.value.length;
@@ -17,13 +17,13 @@ ResizableTextBox = Class.create({
 	      newSize = this.options.min;
       else
 	      newSize = newSize;
-      this.element.setStyle({width: newSize + 'px'});
+      this.element.setStyle({'width': newSize + 'px'});
     }.bind(this));
       
   },
 
   reset: function(){
-    this.element.setStyle({width: this.options.min + 'px'});
+    this.element.setStyle({'width': this.options.min + 'px'});
   }
 
 });
@@ -188,7 +188,7 @@ TextBoxList = Class.create({
      * create input and insert it before box element created in previous step
      */
     var input = this.createInput({value: val});
-    Element.insert(el, {before: input});
+    Element.insert(el, {'before': input});
     input.hide();
 
     /*
@@ -234,7 +234,7 @@ TextBoxList = Class.create({
   },
 
   createMainInput: function(){
-    var li = new Element('li', {width: '100%'});//, {class: this.options.bitClassName});
+    var li = new Element('li', {'width': '100%'});//, {class: this.options.bitClassName});
     var el = new Element('input', {type: 'text'}); //Object.extend({type: 'text', name: this.options.paramName}, options || {}));
     li.appendChild(el);
     this.inputTextField = el;
