@@ -85,7 +85,7 @@ Object.extend(Iyxzone, {
 
 Iyxzone.limitedTextField = Class.create({
 
-  initialize: function(el, max, div){
+  initialize: function(el, max, div, autoClear){
     this.el = el;
     this.max = max;
     this.div = div;
@@ -95,7 +95,8 @@ Iyxzone.limitedTextField = Class.create({
     
     this.el.observe('focus', function(){
       if(this.firstFocus){
-        this.el.clear();
+				if(autoClear)
+					this.el.clear();
         if(this.div)
           this.div.innerHTML = '0/' + this.max;
         this.firstFocus = false;
