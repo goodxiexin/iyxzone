@@ -65,7 +65,7 @@ class ParticipationObserver < ActiveRecord::Observer
         recipients.concat event.guild
       end
       recipients.concat participant.friends.find_all{|f| f.application_setting.recv_event_feed == 1}
-      participation.deliver_feeds :recipients => (recipients - event.poster)
+      participation.deliver_feeds :recipients => (recipients - [event.poster])
     end
 	end
 	
