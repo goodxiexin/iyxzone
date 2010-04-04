@@ -39,7 +39,7 @@ javascripts:
   - cropper
 - blog:
   - blog
-  - nicEditor_ie6
+  - nicEdit
   - friend
   - textboxlist
 - event:

@@ -36,12 +36,11 @@ class User::MailsController < UserBaseController
         end
       end
     end
-=begin
     render :juggernaut => {:type => :send_to_clients, :client_ids => @notify.map(&:id)} do |page|
       page << "Iyxzone.startBlinkTitle('新邮件');"
-      page << "var num = parseInt($('navinbox-num').innerHTML); $('navinbox-num').innerHTML = (num + 1);"
+      page << "var num = $('navinbox-num');if(num){num.innerHTML = parseInt(num.innerHTML) + 1;}else{$('navinbox').innerHTML = '站内信<b id=\"navinbox-num\">1</b>';};"
+      page << "Sound.play('/music/test.mp3');"
     end
-=end
     redirect_to mails_url(:type => 0)
   end
 
@@ -52,12 +51,11 @@ class User::MailsController < UserBaseController
     @new_mail.recipient_id = (@root_mail.sender == current_user)? @root_mail.recipient_id : @root_mail.sender_id
     @new_mail.parent_id = @root_mail.id
     if @new_mail.save
-=begin
       render :juggernaut => {:type => :send_to_client, :client_id => @new_mail.recipient_id} do |page|
         page << "Iyxzone.startBlinkTitle('新邮件');"
-        page << "var num = parseInt($('navinbox-num').innerHTML); $('navinbox-num').innerHTML = (num + 1);"
+        page << "var num = $('navinbox-num');if(num){num.innerHTML = parseInt(num.innerHTML) + 1;}else{$('navinbox').innerHTML = '站内信<b id=\"navinbox-num\">1</b>';};"
+        page << "Sound.play('/music/test.mp3');"
       end
-=end
       render :update do |page|
         page.insert_html :bottom, 'mails', :partial => 'mail', :object => @new_mail
         page << "$('mail_content').value = '';"

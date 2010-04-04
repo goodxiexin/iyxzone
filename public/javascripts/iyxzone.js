@@ -67,18 +67,13 @@ Object.extend(Iyxzone, {
   },
 
   startBlinkTitle: function(text){
-    if(this.documentTitleTimer != null){
-      this.recoverTitle();
-    }
-    this.documentTitle = document.title;
-    alert(this.documentTitle);
-    this.blinkText = text;
-    setTimeout(this.blinkTitle.bind(this), 500);
-  },
-
-  recoverTitle: function(){
-    document.title = this.documentTitle;
-    cancelTimeout(this.documentTitleTimer);
+    if(this.documentTitleTimer == null){
+      this.documentTitle = document.title;
+      this.blinkText = text;
+      this.documentTitleTimer = setTimeout(this.blinkTitle.bind(this), 500);
+    }else{
+      this.blinkText = text;
+    } 
   }
 
 });
