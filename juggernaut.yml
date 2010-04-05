@@ -1,9 +1,8 @@
 :subscription_url:  http://localhost:3000/juggernaut/subscription
 
 :allowed_ips:  
-  - 192.168.0.103 #217.83
-  - 127.0.0.1  # - 192.168.0.102
-  #- 192.168.0.101
+  - 127.0.0.1
+  - 192.168.0.101
      
 #:broadcast_query_login_url: http://localhost:3000/juggernaut/broadcast
      

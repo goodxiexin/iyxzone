@@ -39,7 +39,7 @@ class User::MailsController < UserBaseController
     render :juggernaut => {:type => :send_to_clients, :client_ids => @notify.map(&:id)} do |page|
       page << "Iyxzone.startBlinkTitle('新邮件');"
       page << "var num = $('navinbox-num');if(num){num.innerHTML = parseInt(num.innerHTML) + 1;}else{$('navinbox').innerHTML = '站内信<b id=\"navinbox-num\">1</b>';};"
-      page << "Sound.play('/music/test.mp3');"
+      page << "Sound.play('/music/test.wav');"
     end
     redirect_to mails_url(:type => 0)
   end
@@ -54,7 +54,7 @@ class User::MailsController < UserBaseController
       render :juggernaut => {:type => :send_to_client, :client_id => @new_mail.recipient_id} do |page|
         page << "Iyxzone.startBlinkTitle('新邮件');"
         page << "var num = $('navinbox-num');if(num){num.innerHTML = parseInt(num.innerHTML) + 1;}else{$('navinbox').innerHTML = '站内信<b id=\"navinbox-num\">1</b>';};"
-        page << "Sound.play('/music/test.mp3');"
+        page << "Sound.play('/music/test.wav');"
       end
       render :update do |page|
         page.insert_html :bottom, 'mails', :partial => 'mail', :object => @new_mail
