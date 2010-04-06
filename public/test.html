@@ -1,22 +1,26 @@
-
-    <html>
-   
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
-    <title>新建网页 3</title>
-    </head>
-   
-    <body>
-			<button onclick="document.execCommand('InsertImage', false, 'javascript:nicImTemp()')" >adf</button>        
-				<span contentEditable = "true" oncontrolselect="alert('adf');javascript:return false">This span is contentEditable</span>
-  
-   </body>
-	<div id='info'></div>
- <script type='text/javascript'>
-	document.body.onkeydown = function(k){
-		if(k.keyCode == 8){
-			alert(window.getSelection());
-		}
-	};
-</script> 
-   </html>
+<html>
+<head>
+<script type="text/javascript" src="/javascripts/prototype.js?1270183220"></script>
+<script type="text/javascript" src="/javascripts/transport.js"></script>
+<script type="text/javascript" src="/javascripts/effects.js?1269412829"></script>
+<script type="text/javascript" src="/javascripts/dragdrop.js?1269412829"></script>
+<script type="text/javascript" src="/javascripts/controls.js?1270183327"></script>
+</head>
+<body>
+<div id='content'></div>
+<script>
+new Ajax.CrossSiteRequest('http://www.baidu.com', {
+	method: 'get',
+	crossSite: true,
+	onLoading: function() {
+		alert('on loading');
+	},
+	onSuccess: function(transport) {
+		alert('on success');
+		var html = transport.responseText;
+		alert(html);
+	},
+});
+</script>
+</body>
+</html>

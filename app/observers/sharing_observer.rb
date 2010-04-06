@@ -1,15 +1,18 @@
 class SharingObserver < ActiveRecord::Observer
 
   def after_create sharing
+    share = sharing.share
+    poster = sharing.poster
+
     # increment counter
-    sharing.shareable.raw_increment :sharings_count
-    sharing.poster.raw_increment :sharings_count
+    share.raw_increment :sharings_count
+    poster.raw_increment :sharings_count
 
     # issue feeds if necessary
-    return if sharing.poster.application_setting.emit_sharing_feed == 0
-    recipients = [sharing.poster.profile].concat sharing.poster.guilds
-    recipients.concat sharing.poster.friends.find_all {|f| f.application_setting.recv_sharing_feed == 1}
-    sharing.deliver_feeds :recipients => recipients, :data => {:type => sharing.shareable_type}
+    return if poster.application_setting.emit_sharing_feed == 0
+    recipients = [poster.profile].concat poster.guilds
+    recipients.concat poster.friends.find_all {|f| f.application_setting.recv_sharing_feed == 1}
+    sharing.deliver_feeds :recipients => recipients, :data => {:type => share.shareable_type}
   end
 
   # update verified column
@@ -20,7 +23,7 @@ class SharingObserver < ActiveRecord::Observer
   end
   
   def after_destroy sharing
-    sharing.shareable.raw_decrement :sharings_count
+    sharing.share.raw_decrement :sharings_count
 		sharing.poster.raw_decrement :sharings_count
   end
 

@@ -227,7 +227,7 @@ a:hover{color:#D63200;}
 #leftsidebar .formcontent .fldid{width:88px}
 
 #leftsidebar .multibox .photolist-box{margin:6px 2px 15px}
-#leftsidebar .multibox .photolist-box li{padding:5px 10px 5px 11px;}
+#leftsidebar .multibox .photolist-box li{padding:5px 8px;_padding:5px 6px;}
 
 #rightsidebar .multibox .request{padding:8px 3px;}
 #rightsidebar .multibox .request li a{color:#000}
@@ -352,6 +352,7 @@ a:hover{color:#D63200;}
 
 
 .inbox-form .textfield, .photo-form .textfield, .cons-form .textfield, .poly-form .textfield{width:268px;_width:266px;}
+.cons-form .new_guild .fldid{width:100px}
 .photo-form textarea{width:275px;height:90px}
 .photo-form select{width:197px}
 .photo-form .buttons{margin-left:91px;}
@@ -1008,6 +1009,14 @@ h1.app-share{float:left}
 .feed-img-list .feed-share .feeds {border:0;padding:5px}
 .feed-img-list .feed-share .feed-header .con .quote{color:#999;margin:0 3px}
 
+/*分享弹出框*/
+.share-box{margin:10px;padding:10px;}
+.share-box .item .fldvalue input,.share-box .item .fldvalue textarea{width:260px;padding:5px;border:1px solid #999;color:#666}
+.share-box .item .share-title{background:#feffcf;padding:3px}
+.share-box .item .share-title input{width:254px}
+.share-box .item span{color:#999;padding:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:250px;display:block}
+
+
 /*每日十闻*/
 .news10-list{line-height:22px;margin:10px 15px}
 
@@ -1151,9 +1160,9 @@ h1.app-share{float:left}
 .theme-head .button-gray span button{color:#666}
 
 /*打招呼*/
-.face-hello{margin:10px;padding-left:80px}
-.face-hello .avatar{float:left;margin-left:-80px;display:inline}
-.face-hello .content{float:left;color:#666;width:100%;}
+.face-hello{margin:10px;padding-left:80px;}
+.face-hello .avatar{float:left;margin-left:-80px;display:inline;}
+.z-box .z-con .face-hello .content{float:left;color:#666;width:100%;margin:0}
 .face-hello h2{border-bottom:1px solid #bbd2aa;padding-bottom:5px;font-weight:700}
 .face-hello ul li{float:left;margin:8px 5px;color:#333;width:90px}
 .hello-history{border:0}
@@ -1180,9 +1189,10 @@ h1.app-share{float:left}
 
 /*表情列表*/
 .emot-box{width:266px;}
-.emot-box .con{padding:5px 1px 1px 1px}
-.emot-box .con a{margin:3px}
+.emot-box .con{padding:3px 1px 1px 1px;}
+.emot-box .con a{margin:3px;*margin:3px 2px}
 .emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;padding:5px;}
+.z-box .emot-box .foot{background:none;border:0;padding:5px 5px 0 0}
 
 /*简单翻页*/
 .pager-simple a{width:14px;height:14px;display:inline-block;font-size:0;line-height:0;overflow:hidden;background:url(../images/skin/skin2010.png) no-repeat;vertical-align:middle;}

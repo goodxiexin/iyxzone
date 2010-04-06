@@ -5,7 +5,7 @@ var Facebox = Class.create({
 			loading_image	: '/images/loading.gif',
 			image_types		: new RegExp('\.' + ['png', 'jpg', 'jpeg', 'gif'].join('|') + '$', 'i'),
 			inited				: true,	
-			facebox_html	: '<div class="z-box" id="facebox" style="width:350px;overflow:hidden;display:none"><div class="z-t"><span class="l"><strong></strong></span><span class="r"></span></div><div class="z-m rows s_clear"><div class="box01 s_clear" id="facebox-content"></div><div class="bg"></div></div><div class="z-b"><span class="l"><strong></strong></span><span class="r"></span></div>'
+			facebox_html	: '<div class="z-box" id="facebox" style="overflow:hidden;display:none"><div class="z-t"><span class="l"><strong></strong></span><span class="r"></span></div><div class="z-m rows s_clear"><div class="box01 s_clear" id="facebox-content"></div><div class="bg"></div></div><div class="z-b"><span class="l"><strong></strong></span><span class="r"></span></div>'
 		};
 		if (extra_set) Object.extend(this.settings, extra_set);
 		$(document.body).insert({'bottom': this.settings.facebox_html});
@@ -176,7 +176,20 @@ var Facebox = Class.create({
 		 new Effect.Fade('facebox', {'duration': .3});
 	},
 
+  set_width: function(width){
+    this.facebox.setStyle({
+      'width': width + 'px'
+    });
+  },
+
 	click_handler	: function(elem, e){
+    var width = elem.readAttribute('facebox_width');
+    if(width){
+      this.set_width(width);
+    }else{
+      this.set_width(350);
+    }
+ 
 		this.loading();
 		Event.stop(e);
 
@@ -191,8 +204,7 @@ var Facebox = Class.create({
 			var target = elem.href.replace(url+'#','');
 			var d = $(target);
 			var data = new Element(d.tagName);
-//			data.innerHTML = d.innerHTML;
-			data.update( d.innerHTML);
+			data.update(d.innerHTML);
 			this.reveal(data, klass);
 		 }else if(elem.href.match(this.settings.image_types)) {
 			var image = new Image();
@@ -204,8 +216,7 @@ var Facebox = Class.create({
 		}else{
 			var fb  = this;
 			var type = elem.readAttribute('facebox_type');
-      var style = elem.readAttribute('facebox_style');
-		
+	
 			if(type == 'confirm'){
 				var confirm_message = elem.readAttribute('facebox_confirm');
 				var method = elem.readAttribute('facebox_method');

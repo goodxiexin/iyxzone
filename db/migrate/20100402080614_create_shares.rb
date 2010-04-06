@@ -14,4 +14,5 @@ class CreateShares < ActiveRecord::Migration
   def self.down
     drop_table :shares
   end
+
 end

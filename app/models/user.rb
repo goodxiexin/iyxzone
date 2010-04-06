@@ -253,9 +253,9 @@ class User < ActiveRecord::Base
   has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC'
 
   with_options :class_name => 'Sharing', :foreign_key => 'poster_id', :order => 'created_at DESC' do |user|
-
+    
     user.has_many :blog_sharings, :conditions => {:shareable_type => 'Blog'}
-
+  
     user.has_many :video_sharings, :conditions => {:shareable_type => 'Video'}
 
     user.has_many :link_sharings, :conditions => {:shareable_type => 'Link'}
@@ -267,10 +267,34 @@ class User < ActiveRecord::Base
     user.has_many :poll_sharings, :conditions => {:shareable_type => 'Poll'}
 
     user.has_many :game_sharings, :conditions => {:shareable_type => 'Game'}
-  
+
     user.has_many :profile_sharings, :conditions => {:shareable_type => 'Profile'}
 
     user.has_many :topic_sharings, :conditions => {:shareable_type => 'Topic'}
+  
+  end
+
+  has_many :shares, :through => :sharings, :order => 'created_at DESC'
+
+  with_options :source => 'share', :order => 'created_at DESC' do |user|
+
+    user.has_many :blog_shares, :through => 'blog_sharings'
+
+    user.has_many :video_shares, :through => 'video_sharings'
+
+    user.has_many :link_shares, :through => 'link_sharings'
+
+    user.has_many :photo_shares, :through => 'photo_sharings'
+
+    user.has_many :album_shares, :through => 'album_sharings'
+
+    user.has_many :poll_shares, :through => 'poll_sharings'
+
+    user.has_many :game_shares, :through => 'game_sharings'
+  
+    user.has_many :profile_shares, :through => 'profile_sharings'
+
+    user.has_many :topic_shares, :through => 'topic_sharings'
 
   end
 

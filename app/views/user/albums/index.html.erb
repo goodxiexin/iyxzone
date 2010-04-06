@@ -19,7 +19,7 @@
 	    <div class="tab tab01">
 		    <div class="right">
 			    <%= link_to "上传照片", select_personal_albums_url %>
-			    <%= facebox_link "新建相册", new_personal_album_url %>
+			    <%= facebox_link "新建相册", new_personal_album_url(:at => 'index') %>
         </div>
         <ul>
 			    <% subject = get_subject @user %><li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => @user.id) %></span></li>

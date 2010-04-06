@@ -16,7 +16,7 @@
         </ul>
       </div>
       <div class="box02 appcontent01">
-        <p> 请选择照片相册 <%= collection_select :album, :id, @albums, :id, :title, {:prompt => '---'} %> 或者 <%= facebox_link "新建相册", new_personal_album_url(:show => 'select') %> </p>
+        <p> 请选择照片相册 <%= collection_select :album, :id, @albums, :id, :title, {:prompt => '---'} %> 或者 <%= facebox_link "新建相册", new_personal_album_url(:at => 'select') %> </p>
 				<div class="buttons">
 					<span class="button"><span><%= button_to_function "下一步", "if(!$('album_id').value){error('请选择一个相册');}else{ Iyxzone.disableButton(this, '请等待'); window.location.href = '#{new_personal_photo_url}?album_id=' + $('album_id').value;}" %></span></span>
 				</div>

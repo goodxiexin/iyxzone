@@ -75,6 +75,7 @@
 									<div class="pic-desc s_clear">
 										<h4 class="box06">
 										<% if @user == current_user %>
+                      <%= in_place_text_area @photo, :notation, '点击添加照片描述', :param_name => 'photo[notation]' %>
 										<% else %>
 											<%= simple_format @photo.notation %>
 										<% end %>

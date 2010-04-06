@@ -74,7 +74,9 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :links
 
-    users.resources :sharings, :collection => {:hot => :get, :recent => :get, :friends => :get}
+    users.resources :sharings
+
+    users.resources :shares, :collection => {:hot => :get, :recent => :get, :friends => :get}
 
     users.resources :notices, :collection => {:first_ten => :get}, :member => {:read => :put}
 

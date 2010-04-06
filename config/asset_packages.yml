@@ -4,6 +4,7 @@ javascripts:
   - effects
   - dragdrop
   - controls
+  - sound
   - juggernaut/swfobject
   - juggernaut/juggernaut
   - iyxzone

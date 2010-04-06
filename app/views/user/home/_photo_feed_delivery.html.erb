@@ -6,7 +6,7 @@
 	<div class="img left">
 		<div class="imgbox01"><%= avatar album.poster %></div>
 	</div>
-	<div class="jl-list-con jlcutline">
+	<div class="jl-list-con jl-cutline">
 	<%= profile_link album.poster %> <span> 更新了 <%= link_to "个人头像", avatar_albums_url(album), :class => "shine"%></span>
   <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %><% end %>
   <p class="gray jl-con">
