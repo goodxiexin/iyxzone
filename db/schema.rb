@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100330040208) do
+ActiveRecord::Schema.define(:version => 20100402082104) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -317,6 +317,17 @@ ActiveRecord::Schema.define(:version => 20100330040208) do
   end
 
   add_index "gears", ["guild_id"], :name => "index_gears_on_guild_id"
+
+  create_table "guestbooks", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "description"
+    t.integer  "priority"
+    t.date     "done_date"
+    t.text     "reply"
+    t.string   "catagory"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "guild_friendships", :force => true do |t|
     t.integer  "guild_id"
