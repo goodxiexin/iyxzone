@@ -16,13 +16,18 @@ class User::SharesController < UserBaseController
 
   def index
     if params[:type].blank? || params[:type].to_i == 0
-      @shares = @user.shares.paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = @user.sharings.paginate :page => params[:page], :per_page => PER_PAGE
     else
-      @shares = eval("@user.#{ShareCategory[params[:type].to_i]}_shares").paginate :page => params[:page], :per_page => PER_PAGE
+      @sharings = eval("@user.#{ShareCategory[params[:type].to_i]}_sharings").paginate :page => params[:page], :per_page => PER_PAGE
     end
   end
 
   def friends
+    if params[:type].blank? || params[:type].to_i == 0
+      @sharings = current_user.friend_sharings.paginate :page => params[:page], :per_page => PER_PAGE
+    else
+      @sharings = current_user.friend_sharings(ShareCategory[params[:type].to_i]).paginate :page => params[:page], :per_page => PER_PAGE
+    end
   end
 
 protected

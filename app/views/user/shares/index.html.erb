@@ -27,7 +27,7 @@
           <li><span><%= link_to "最新创建", recent_shares_url %></span></li>
           <li class='hover'><span><%= link_to "#{subject}的分享", shares_url(:uid => @user.id) %></span></li>
 					<% if @user == current_user %>
-          <li><span><%= link_to "好友的分享", friends_shares_url(:type => 0) %></span></li>
+          <li><span><%= link_to "好友的分享", friends_shares_url %></span></li>
 					<% end %>
         </ul>
       </div>
@@ -87,11 +87,11 @@
           </ul>
         </div>
         <div class="feed-img-list rows">
-        <% if @shares.total_entries != 0 %>
-          <% @shares.each do |share| %>
-            <%= render :partial => "#{share.shareable_type.underscore}_share", :locals => {:share => share, :sharing => share.sharings.first(:conditions => {:poster_id => @user.id})} %>
+        <% if @sharings.total_entries != 0 %>
+          <% @sharings.each do |sharing| %>
+            <%= render :partial => "#{sharing.shareable_type.underscore}_share", :locals => {:share => sharing.share, :sharing => sharing} %>
           <% end %>
-          <%= will_paginate @shares %>
+          <%= will_paginate @sharings %>
         <% else %>
           <% if @user == current_user %>
             <div class='tip'>你啥都没分享，怎么能这样呢？！</div>

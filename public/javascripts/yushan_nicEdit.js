@@ -1188,19 +1188,75 @@ var nicLinkOptions = {
 };
 /* END CONFIG */
 
-var nicLinkButton = nicEditorAdvancedButton.extend({	
-	addPane : function() {
-		this.ln = this.ne.selectedInstance.selElm().parentTag('A');
-		this.addForm({
-			'' : {type : 'title', txt : '添加/编辑链接'},
-			'href' : {type : 'text', txt : '地址', value : 'http://', style : {width: '150px'}},
-	//		'title' : {type : 'text', txt : '名称'},
-			'target' : {type : 'select', txt : '打开', options : {'' : '当前窗口', '_blank' : '新窗口'},style : {width : '100px'}}
-		},this.ln);
-	},
+var nicLinkButton = nicEditorAdvancedButton.extend({
+
+  paneHTML: "<div class='z-box'><div class='z-t'> \
+        <span class='l'><strong></strong></span> \
+        <span class='r'></span> \
+        </div> \
+        <div class='z-m rows s_clear'> \
+            <div class='box01 s_clear'> \
+                <p class='z-h'>插入编辑链接</p> \
+                <div class='z-con'> \
+                    <div class='content'> \
+                      <div class='formcontent'>  \
+                            <div class='rows s_clear'> \
+                              <div class='fldid'><label>链接地址：</label></div> \
+                              <div class='fldvalue'> \
+                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='http://' id='nicEdit-link-url-field'></div> \
+                              </div> \
+                            </div> \
+                            <div class='rows s_clear'> \
+                              <div class='fldid'><label>位置：</label></div> \
+                              <div class='fldvalue'> \
+                                <div style='width: 150px;' class='textfield'> \
+                                  <select id='nicEdit-link-open-scheme'> \
+                                    <option value=''>在当前窗口打开</option> \
+                                    <option value='_blank'>在新窗口打开</option> \
+                                  </select> \
+                              </div> \
+                            </div> \
+                         </div> \
+                    </div> \
+                    <div class='rows'></div> \
+                        <div class='z-submit s_clear space'> \
+                            <div class='buttons'> \
+                                 <span class='button'><span><button type='submit' id='nicEdit-link-submit'>插入</button></span></span> \
+                                 <span class='button button-gray'><span><button type='reset' id='nicEdit-link-cancel'>取消</button></span></span> \
+                            </div> \
+                    </div> \
+                </div> \
+            </div> \
+            <div class='bg'></div> \
+        </div> \
+        <div class='z-b'> \
+        <span class='l'><strong></strong></span> \
+        <span class='r'></span> \
+        </div> \
+    </div></div>",
+  
+  addPane : function() {
+    var scroll = document.viewport.getScrollOffsets();
+    var height = document.viewport.getHeight();
+    var width = document.viewport.getWidth();
+
+    this.pane.contain.setStyle({'width' : '350px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 175) + 'px', 'z-index' : '9999'});
+    this.pane.pane.setStyle({'width':'350px', 'border' : 'none', 'padding' : '0px'});
+    this.pane.close.remove();
+    this.pane.close = null;
+
+    this.ln = this.ne.selectedInstance.selElm().parentTag('A');
+    this.pane.setContent(this.paneHTML);
+    $BK('nicEdit-link-submit').addEvent('click', function(){
+      this.submit();
+    }.closure(this));
+    $BK('nicEdit-link-cancel').addEvent('click', function(){
+      this.removePane();
+    }.closure(this));
+  },
 	
 	submit : function(e) {
-		var url = this.inputs['href'].value;
+		var url = $BK('nicEdit-link-url-field').value;
 		if(url == "http://" || url == "") {
 			alert("请输入合法的URL");
 			return false;
@@ -1214,9 +1270,8 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
 		}
 		if(this.ln) {
 			this.ln.setAttributes({
-				href : this.inputs['href'].value,
-		//		title : this.inputs['title'].value,
-				target : this.inputs['target'].options[this.inputs['target'].selectedIndex].value
+				href : url,
+				target : $BK('nicEdit-link-open-scheme').value
 			});
 		}
 	}
@@ -1347,7 +1402,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     var height = document.viewport.getHeight();
     var width = document.viewport.getWidth();
 
-    this.pane.contain.setStyle({'className' : 'z-box', 'width' : '450px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 225) + 'px', 'z-index' : '9999'});
+    this.pane.contain.setStyle({'width' : '450px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 225) + 'px', 'z-index' : '9999'});
     this.pane.pane.setStyle({'width':'450px', 'border' : 'none', 'padding' : '0px'});
     this.pane.close.remove();
     this.pane.close = null;
@@ -1371,7 +1426,6 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 	},
 	
 	submit : function(e) {
-	//	var src = this.inputs['src'].value; 
     var src = this.src; 
 		if(src == "" || src == "http://") {
 			alert("你必须插入一个图片的链接地址");
