@@ -31,12 +31,17 @@ Iyxzone.Share = {
   },
 
   isInsiteURL: function(url){
+    if(url.include("www.17gaming.com") || url.include("17gaming.com")){
+      return true;
+    }
+    return false;
   },
 
   new: function(){
     var url = $('link').value;
-    alert(url);
-    if(this.isVideoURL(url) || this.isValidURL(url)){
+    if(this.isInsiteURL(url)){
+      error('站内内容请直接在站内分享，这里请分享站外内容');
+    }else if(this.isVideoURL(url) || this.isValidURL(url)){
       facebox.set_width(450);
       facebox.loading();
       new Ajax.Request('/sharings/new', {

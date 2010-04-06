@@ -8,7 +8,7 @@
     <td class="value"><%= ftime2 @game.sale_date %></td>
   </tr>
   <tr>
-    <td colspan="2" align="center"><%= facebox_link "分享", new_sharing_url(:shareable_type => 'Game', :shareable_id => @game.id, :id => @game.id), :class => 'share-btn' %> </td>
+    <td colspan="2" align="center"><%= facebox_link "分享", new_sharing_url(:url => game_url(@game)), :width => 450, :class => 'share-btn' %> </td>
   </tr>
   <tr>
     <td class="id">玩家打分：</td>

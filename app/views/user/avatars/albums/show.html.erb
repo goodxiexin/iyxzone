@@ -44,7 +44,7 @@
           <% if @user == current_user %>
             <%= facebox_link '替换头像', new_avatar_url(:album_id => @album.id, :at => 'album') %>
 					<% else %>
-					  <%= facebox_link '分享', new_sharing_url(:shareable_type => 'Album', :shareable_id => @album.id), :class => 'right love-btn' %>
+					  <%= facebox_link '分享', new_sharing_url(:url => avatar_album_url(@album)), :width => 450, :class => 'right love-btn' %>
           <% end %>
         </div>
         <table class="photo-edit-list">

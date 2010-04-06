@@ -40,7 +40,7 @@ javascripts:
   - cropper
 - blog:
   - blog
-  - nicEdit
+  - yushan_nicEdit
   - friend
   - textboxlist
 - event:
