@@ -950,7 +950,7 @@ dl.menu-op dd a{color:#333}
 .vote-detail h3,.vote-detail p,.vote-detail ul{padding:0 20px}
 .vote-detail h3{font-weight:400;line-height:24px;}
 .vote-detail ul li{margin:5px 0;padding-left:20px;}
-.vote-detail ul li.now{background:url(../images/icons/homeIcons.png) no-repeat 0 -320px}
+.vote-detail ul li.now{background:url(../images/icons/homeIcons.gif) no-repeat 0 -1440px}
 .vote-detail .time{color:#999}
 .vote-detail .jl-cutline{padding-bottom:15px}
 
@@ -1189,9 +1189,9 @@ h1.app-share{float:left}
 
 /*表情列表*/
 .emot-box{width:266px;}
-.emot-box .con{padding:3px 1px 1px 1px;}
-.emot-box .con a{margin:3px;*margin:3px 2px}
-.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;padding:5px;}
+.emot-box .con a{margin:0 4px 6px 5px;_margin:0 4px 6px 4px;display:block;float:left}
+.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;margin:5px;clear:both;}
+.emot-box .con .foot a{float:none;display:inline-block;margin:0}
 .z-box .emot-box .foot{background:none;border:0;padding:5px 5px 0 0}
 
 /*简单翻页*/

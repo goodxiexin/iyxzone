@@ -1208,17 +1208,16 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
                             </div> \
                             <div class='rows s_clear'> \
                               <div class='fldid'><label>位置：</label></div> \
-                              <div class='fldvalue'> \
-                                <div style='width: 150px;' class='textfield'> \
+                              <div class='fldvalue' class='textfield'> \
                                   <select id='nicEdit-link-open-scheme'> \
                                     <option value=''>在当前窗口打开</option> \
                                     <option value='_blank'>在新窗口打开</option> \
                                   </select> \
-                              </div> \
                             </div> \
                          </div> \
                     </div> \
                     <div class='rows'></div> \
+                    </div> \
                         <div class='z-submit s_clear space'> \
                             <div class='buttons'> \
                                  <span class='button'><span><button type='submit' id='nicEdit-link-submit'>插入</button></span></span> \
@@ -1248,6 +1247,8 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
     this.ln = this.ne.selectedInstance.selElm().parentTag('A');
     this.pane.setContent(this.paneHTML);
     $BK('nicEdit-link-submit').addEvent('click', function(){
+      this.url = $BK('nicEdit-link-url-field').value;
+      this.scheme = $BK('nicEdit-link-open-scheme').value;
       this.submit();
     }.closure(this));
     $BK('nicEdit-link-cancel').addEvent('click', function(){
@@ -1256,7 +1257,9 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
   },
 	
 	submit : function(e) {
-		var url = $BK('nicEdit-link-url-field').value;
+		var url = this.url;
+    var scheme = this.scheme;
+
 		if(url == "http://" || url == "") {
 			alert("请输入合法的URL");
 			return false;
@@ -1271,7 +1274,7 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
 		if(this.ln) {
 			this.ln.setAttributes({
 				href : url,
-				target : $BK('nicEdit-link-open-scheme').value
+				target : scheme
 			});
 		}
 	}
