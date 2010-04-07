@@ -83,10 +83,6 @@ class User < ActiveRecord::Base
 
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
-  def online_friends
-    User.find(friendships.map(&:friend_id) & (Juggernaut.show_clients.map {|c| c['client_id']}))
-  end
-
   def has_friend? user
     user_id = (user.is_a? Integer)? user : user.id
 		!friendships.find_by_friend_id(user_id).blank? 

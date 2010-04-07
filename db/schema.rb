@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100407041022) do
+ActiveRecord::Schema.define(:version => 20100407140840) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -436,6 +436,12 @@ ActiveRecord::Schema.define(:version => 20100407041022) do
   end
 
   add_index "notifications", ["user_id"], :name => "index_notifications_on_user_id"
+
+  create_table "online_users", :force => true do |t|
+    t.integer "user_id"
+    t.string  "session_id"
+    t.integer "status",     :default => 0
+  end
 
   create_table "participations", :force => true do |t|
     t.integer  "participant_id"
