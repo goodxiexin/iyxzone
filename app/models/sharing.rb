@@ -21,7 +21,7 @@ class Sharing < ActiveRecord::Base
 
   validates_size_of :title, :within => 1..100, :too_short => '最短1个字符', :too_long => '最长100个字符', :allow_nil => true
 
-  validates_size_of :reason, :within => 1..10000, :too_short => '最短1个字符', :too_long => '最长10000个字符', :allow_nil => true  
+  validates_size_of :reason, :maximum => 10000, :too_long => '最长10000个字符', :allow_nil => true  
 
   def shareable
     share.blank? ? nil : share.shareable
