@@ -22,8 +22,7 @@
               <li><%= link_to "游戏", games_url(:uid => current_user.id), :class => "app-game" %></li>
               <li><%= link_to "推荐游戏", game_suggestions_url, :class => 'app-vgame' %></li>
               <li><%= link_to "每日十闻", news_index_url, :class => "app-news" %></li>
-							<!--<li><%= link_to_function "汇报错误", new_guestbook_url, :class => "app-guestbook" %> </li> -->
-							<li><%= facebox_link "汇报错误", new_guestbook_url %> </li>
+							<li><%= facebox_link "汇报错误", new_guestbook_url, :class => "app-error" %> </li>
             </ul>
           </div>
 			  </div></div>
