@@ -13,7 +13,7 @@
     <p class="con"><%= truncate sharing.reason, :length => 100, :omission => '...' %></p>
     <div class="feeds">
       <%= link_to_function "评论(#{sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %> |
-      <%= facebox_link "我也分享", new_sharing_url(:url => blog_url(blog)) %><span>(<%= share.sharings_count %>)</span> | 
+      <%= facebox_link "我也分享", new_sharing_url(:url => blog_url(blog)), :width => 450 %><span>(<%= share.sharings_count %>)</span> | 
       <%= link_to "更多分享", shares_url(:uid => poster.id) %>
     </div>
   </div>

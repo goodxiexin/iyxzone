@@ -8,13 +8,16 @@ module Shareable
   module ClassMethods
 
     def acts_as_shareable opts={}
-
+puts "register #{self.name}"
       # 只能有一个
       has_one :share, :as => 'shareable', :dependent => :destroy
 
       include Shareable::InstanceMethods
 
       extend Shareable::SingletonMethods
+
+      # register this resource with share class
+      Share.register(self.name, opts.delete(:path_reg) || /\/[^\/]+\/([\d]+)/)
 
       cattr_accessor :share_opts
 
