@@ -458,7 +458,7 @@ class User < ActiveRecord::Base
     if login.blank?
       errors.add_to_base("昵称不能为空")
       return
-    elsif login.length < 2 or login.length > 16
+    elsif login.length < 4 or login.length > 16
       errors.add_to_base("昵称长度不对")
       return
     elsif /^\d/.match(login)
@@ -482,7 +482,7 @@ class User < ActiveRecord::Base
     elsif !/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.match(email)
       errors.add_to_base("邮件格式不对")
       return
-    elsif !User.find_by_email(email).blank?
+    elsif !User.find_by_email(email.downcase).blank?
       errors.add_to_base("邮件已经被注册了")
       return
     end
