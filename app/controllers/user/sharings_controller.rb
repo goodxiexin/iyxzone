@@ -7,6 +7,10 @@ class User::SharingsController < UserBaseController
       @shareable_id = @path.split('/')[2]
       @shareable = @shareable_type.constantize.find(@shareable_id)
       @title = @shareable.default_share_title
+      if @shareable.shared_by? current_user
+        render :action => 'already_shared'
+        return
+      end
     else
       if Youku.identify_url(@my_url)
         @video = Video.new
@@ -50,7 +54,7 @@ class User::SharingsController < UserBaseController
       end       
     else
       render :update do |page|
-        page << "error('同一个资源只能分享一次');"
+        page << "error('发生错误');"
       end
     end 
   end
