@@ -61,7 +61,7 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   cancelEditBasicInfo: function(){
-//    $('basic_info_frame').innerHTML = this.basicInfoHTML;
+   // Event.stop(event);
     $('basic_info_frame').update( this.basicInfoHTML);
     this.isEditingBasicInfo = false;
   },
@@ -493,6 +493,13 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   removeCharacter: function(characterID, newCharacter, link){
+    var currentCharactersCount = this.newGameSelectors.keys().length + this.gameSelectors.keys().length - this.delCharacterIDs.length;
+    
+    if(currentCharactersCount == 1){
+      error('至少要有1个游戏角色');
+      return;
+    }
+
     if(newCharacter)
       prefix = 'new';
     else

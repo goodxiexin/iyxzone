@@ -14,17 +14,17 @@
 <div class="box02 canvas_int">
 	<div class="tab tab01">
 		<ul>
-      <li><span><%= link_to "热门工会", hot_guilds_url %></span></li>
-      <li class='hover'><span><%= link_to "#{@game.name}的工会", game_guilds_url(:game_id => @game.id) %></span></li>
+      <li><span><%= link_to "热门公会", hot_guilds_url %></span></li>
+      <li class='hover'><span><%= link_to "#{@game.name}的公会", game_guilds_url(:game_id => @game.id) %></span></li>
     </ul>
 		<div class='right'>
-			<%= link_to "新工会", new_guild_url %>
+			<%= link_to "新公会", new_guild_url %>
 		</div>
   </div>
 	<div class="piclist-rows">
     <div class='path-box'>
       <label>游戏"<%= game_link @game %>"</label>
-      <span>工会</span>
+      <span>公会</span>
     </div>
 		<%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
   </div>

@@ -1,5 +1,7 @@
 class UserMailer < ActionMailer::Base
 
+  layout 'mail', :only => [:activation, :forgot_password, :reset_password]
+
   def long_time_no_seen user
     setup_email user
     subject     "17Gaming(一起游戏网) - 你已经一周以上没有上线了"

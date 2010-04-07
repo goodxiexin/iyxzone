@@ -49,7 +49,7 @@ class Profile < ActiveRecord::Base
                             :sharing => 'Sharing'
                           } 
 
-  def is_viewable_by? viewer
+  def available_for? viewer
     privilege = user.privacy_setting.personal
     user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
   end

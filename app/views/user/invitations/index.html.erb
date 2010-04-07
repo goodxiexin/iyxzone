@@ -33,9 +33,9 @@
               <li><%= link_to "活动邀请", invitations_url(:type => 2) %></li>
             <% end %>
             <% if params[:type].to_i == 3 %>
-              <li class='hover'><%= link_to "<span>工会邀请</span>", invitations_url(:type => 3) %></li>
+              <li class='hover'><%= link_to "<span>公会邀请</span>", invitations_url(:type => 3) %></li>
             <% else %>
-              <li><%= link_to "工会邀请", invitations_url(:type => 3) %></li>
+              <li><%= link_to "公会邀请", invitations_url(:type => 3) %></li>
             <% end %>
           </ul>
         </div>

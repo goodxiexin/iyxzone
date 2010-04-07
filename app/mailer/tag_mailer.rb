@@ -1,21 +1,23 @@
 class TagMailer < ActionMailer::Base
 
+  layout 'mail'
+
   def blog_tag tag
     setup_email	tag
 		subject			"17Gaming.com(一起游戏网) - #{tag.poster.login}在博客里标记了你"
-		body				:tag => tag, :url => "#{SITE_URL}/blogs/#{tag.taggable_id}"
+		body				:tag => tag, :user => tag.tagged_user, :url => "#{SITE_URL}/blogs/#{tag.taggable_id}"
   end
 
   def video_tag tag
 		setup_email tag
     subject     "17Gaming.com(一起游戏网) - #{tag.poster.login}在视频里标记了你"
-    body        :tag => tag, :url => "#{SITE_URL}/videos/#{tag.taggable_id}"
+    body        :tag => tag, :user => tag.tagged_user, :url => "#{SITE_URL}/videos/#{tag.taggable_id}"
 	end
 
   def photo_tag tag
 		setup_email tag
     subject     "17Gaming.com(一起游戏网) - #{tag.poster.login}在相册里圈了你"
-    body        :tag => tag, :url => "#{SITE_URL}/#{tag.photo.class.to_s.underscore.pluralize}/#{tag.photo_id}"
+    body        :user => tag.tagged_user, :tag => tag, :url => "#{SITE_URL}/#{tag.photo.class.to_s.underscore.pluralize}/#{tag.photo_id}"
   end
 
   def photo_tag_to_owner tag
@@ -24,7 +26,7 @@ class TagMailer < ActionMailer::Base
     from        SITE_MAIL
     sent_on     Time.now
     subject     "17Gaming.com(一起游戏网) - #{tag.poster.login}标记了你的相册"
-    body        :tag => tag, :user => poster, :url => "#{SITE_URL}/#{tag.photo.class.to_s.underscore.pluralize}/#{tag.photo_id}"
+    body        :user => poster, :tag => tag, :url => "#{SITE_URL}/#{tag.photo.class.to_s.underscore.pluralize}/#{tag.photo_id}"
 	end
 
   def profile_tag tagging

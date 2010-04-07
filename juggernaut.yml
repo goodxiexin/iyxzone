@@ -1,14 +1,14 @@
-#:subscription_url:  http://localhost:3000/juggernaut/subscription
+# :subscription_url:  http://localhost:3000/juggernaut/subscription
 
 :allowed_ips:  
-  - 192.168.217.81 # - 192.168.0.102
-  #- 192.168.0.101
+  - 127.0.0.1
+  - 192.168.217.81 #0.101
      
 #:broadcast_query_login_url: http://localhost:3000/juggernaut/broadcast
      
-#:logout_connection_url: http://localhost:3000/juggernaut/logout
+# :logout_connection_url: http://localhost:3000/juggernaut/logout
 
-# :logout_url: http://localhost:3000/sessions/juggernaut_logout
+# :logout_url: http://localhost:3000/juggernaut/logout
 
 # :timeout: 10
 

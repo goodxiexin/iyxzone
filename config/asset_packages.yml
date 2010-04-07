@@ -4,6 +4,7 @@ javascripts:
   - effects
   - dragdrop
   - controls
+  - sound
   - juggernaut/swfobject
   - juggernaut/juggernaut
   - iyxzone
@@ -39,7 +40,7 @@ javascripts:
   - cropper
 - blog:
   - blog
-  - nicEdit
+  - yushan_nicEdit
   - friend
   - textboxlist
 - event:
@@ -71,7 +72,7 @@ javascripts:
   - textboxlist
 - forum:
   - forum
-  - nicEdit
+  - yushan_nicEdit
 stylesheets: 
 - base: 
   - common

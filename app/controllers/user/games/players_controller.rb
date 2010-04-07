@@ -29,8 +29,6 @@ protected
 		@game = Game.find(params[:game_id])
 		@playing = current_user.games.include?(@game)
 		@user = current_user
-	rescue
-		not_found
 	end
 
 end

@@ -18,13 +18,13 @@
     <div class="box02 canvas_int">
 	    <div class="tab tab01">
         <div class="icon">
-          <%= link_to "新建工会", new_guild_url, :class => "icon-add-table" %>
+          <%= link_to "新建公会", new_guild_url, :class => "icon-add-table" %>
         </div>
 		  <% subject = get_subject @user %>
 		    <ul>
-			    <li><span><%= link_to "热门工会", hot_guilds_url %></span></li>
-			    <li class='hover'><span><%= link_to "#{subject}的工会", guilds_url(:uid => @user.id) %></span></li>
-			    <li><span><%= link_to "好友工会", friends_guilds_url %></span></li>
+			    <li><span><%= link_to "热门公会", hot_guilds_url %></span></li>
+			    <li class='hover'><span><%= link_to "#{subject}的公会", guilds_url(:uid => @user.id) %></span></li>
+			    <li><span><%= link_to "好友公会", friends_guilds_url %></span></li>
 		    </ul>
       </div>
 	    <div class="piclist-rows">
@@ -37,7 +37,7 @@
         <% if @guilds.total_entries != 0 %>
 		      <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
         <% elsif @user == current_user %>
-          <div class='tip'>你还没创建任何工会，赶紧<%= link_to "创建一个", new_guild_url %>吧</div>
+          <div class='tip'>你还没创建任何公会，赶紧<%= link_to "创建一个", new_guild_url %>吧</div>
         <% else %>
           <div class='tip'><%= subject %>是个懒虫</div>
         <% end %>

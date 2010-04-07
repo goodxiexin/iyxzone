@@ -22,8 +22,6 @@ class Mail < ActiveRecord::Base
 
   validates_presence_of :recipient_id, :message => "不能为空"
 
-  #validate_on_create :recipient_is_valid
-
   validates_presence_of :parent_id, :message => "不能为空"
 
   validates_presence_of :content, :message => "不能为空"
@@ -46,13 +44,6 @@ private
 
   def sender?(user_id)
     (sender_id == user_id)? true : false
-  end
-
-  def recipient_is_valid
-    return if recipient.blank? or sender.blank?
-    unless recipient.is_mailable_by? sender
-      errors.add(:recipient_id, "没有权限")
-    end
   end
 
 end

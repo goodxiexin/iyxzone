@@ -29,9 +29,9 @@ class GuildObserver < ActiveRecord::Observer
     guild.president.raw_increment :guilds_count
 
     # issue feeds if necessary
-    return unless guild.president.application_setting.emit_guild_feed
+    return if guild.president.application_setting.emit_guild_feed == 0
     recipients = [guild.president.profile, guild.game]
-    recipients.concat guild.president.friends.find_all{|f| f.application_setting.recv_guild_feed}
+    recipients.concat guild.president.friends.find_all{|f| f.application_setting.recv_guild_feed == 1}
     guild.deliver_feeds :recipients => recipients
   end
 
@@ -41,16 +41,4 @@ class GuildObserver < ActiveRecord::Observer
     end
   end
   
-  def after_update(guild)
-    if guild.name_changed?
-      guild.veterans_and_members.each do |member|
-        if member.mail_setting.change_name_of_guild and member != guild.president
-          GuildMailer.deliver_name_change(guild, member)
-        end
-      end
-    end 
-  end
-
-	# a guild can never be destroyed once it's created
-
 end

@@ -27,7 +27,7 @@
       </div>
       <div class="photo-box">
         <div class='path-box'>
-          <label>工会"<%= guild_link @guild %>"</label>
+          <label>公会"<%= guild_link @guild %>"</label>
           <span>编辑照片</span>
         </div>
         <% form_tag update_multiple_guild_photos_url(:album_id => @album.id), :method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_multiple_guild_photos_btn),'请等待..');" do %>
@@ -43,7 +43,7 @@
               <div class="rows s_clear">
                 <div class="fldid">封面：</div>
                 <div class="fldrd"><%= radio_button_tag 'cover_id', p.id, false %></div>
-                <div class="fldrdvalue"><label for="r1">设为工会封面</label></div>
+                <div class="fldrdvalue"><label for="r1">设为公会封面</label></div>
               </div>
             </div>
           </div>

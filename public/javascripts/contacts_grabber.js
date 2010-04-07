@@ -36,7 +36,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
     var params = '';
 
     // get all checked emails
-    table.childElements().each(function(tr){
+    table.down('tbody').childElements().each(function(tr){
       var box = tr.down('input');
       if(box.type == 'checkbox' && box.checked){
         ids.push(box.readAttribute('user_id'));

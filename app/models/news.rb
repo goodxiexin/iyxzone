@@ -12,8 +12,7 @@ class News < ActiveRecord::Base
 
   attr_readonly :poster_id
   
-  acts_as_commentable :order => 'created_at ASC',
-    :delete_conditions => lambda { |user, news, comment| user.has_role?('admin') || comment.poster == user }, :recipient_required => false
+  acts_as_commentable :order => 'created_at ASC', :recipient_required => false
   
   acts_as_diggable  
   

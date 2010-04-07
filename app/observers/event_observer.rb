@@ -30,10 +30,10 @@ class EventObserver < ActiveRecord::Observer
     # event.poster.raw_increment :events_count
  
     # issue feeds
-    return unless event.poster.application_setting.emit_event_feed
+    return if event.poster.application_setting.emit_event_feed == 0
     recipients = [event.poster.profile, event.game]
     recipients.concat event.poster.guilds
-    recipients.concat event.poster.friends.find_all{|f| f.application_setting.recv_event_feed}
+    recipients.concat event.poster.friends.find_all{|f| f.application_setting.recv_event_feed == 1}
     event.deliver_feeds :recipients => recipients
   end
 
@@ -47,7 +47,7 @@ class EventObserver < ActiveRecord::Observer
     if event.time_changed?
       event.participants.each do |participant|
         participant.notifications.create(:category => Notification::EventChange, :data => "活动 #{event_link event} 时间改变了")
-        EventMailer.deliver_time_change event, participant if participant.mail_setting.change_event
+        EventMailer.deliver_time_change event, participant if participant.mail_setting.change_event == 1
       end
     end
   end
@@ -55,17 +55,10 @@ class EventObserver < ActiveRecord::Observer
   def before_destroy event
     # modify request count
     event.poster.raw_decrement :event_requests_count, event.requests_count
-    #event.poster.raw_decrement :events_count
-    event.recently_deleted = true
- 
     event.participants.each do |p|
-      p.notifications.create(
-        :category => Notification::EventCancel,
-        :data => "活动 #{event.title} 取消了"
-      )
-      EventMailer.deliver_event_cancel event, p if p.mail_setting.cancel_event
+      p.notifications.create(:category => Notification::EventCancel, :data => "活动 #{event.title} 取消了")
+      EventMailer.deliver_event_cancel event, p if p.mail_setting.cancel_event == 1
     end
-
   end
 
 end

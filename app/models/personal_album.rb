@@ -27,9 +27,12 @@ class PersonalAlbum < Album
   validate_on_create :game_is_valid
 
 	def record_upload user, photos
-	  if !photos.blank? and user.application_setting.emit_photo_feed and privilege != 4
+    if !photos.blank?
+      update_attribute('uploaded_at', Time.now)
+    end
+	  if user.application_setting.emit_photo_feed == 1 and privilege != 4
       recipients = []
-			recipients.concat user.friends.find_all{|f| f.application_setting.recv_photo_feed}
+			recipients.concat user.friends.find_all{|f| f.application_setting.recv_photo_feed == 1}
 			deliver_feeds :recipients => recipients, :data => {:ids => photos.map(&:id)}
       update_attribute('uploaded_at', Time.now)
     end

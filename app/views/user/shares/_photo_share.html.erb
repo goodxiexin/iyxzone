@@ -1,0 +1,26 @@
+<% photo = share.shareable %>
+<% first_sharer = photo.first_sharer %>
+<% poster = sharing.poster %>
+<div class="feed-list feed-share">
+  <%= dig_link share %>
+  <div class="feed-header">
+    <div class="right">
+      <%= ftime share.created_at %><br/>
+      首次分享人：<%= avatar first_sharer, :with => '27px', :height => '27px' %>
+			<%= profile_link first_sharer %>
+    </div>
+    <h3>照片：<%= album_link photo.album, :popup => true %></h3>
+    <p class="con">
+      <%= photo_link photo, :class => 'imgbox01', :popup => true%>
+      <%= truncate sharing.reason, :length => 100, :omission => '...' %>
+    </p>
+    <div class="feeds">
+      <%= link_to_function "评论(#{ sharing.comments_count })", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %> | 
+      <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Photo', :shareable_id => photo.id) %><span>(<%= photo.sharings_count %>)</span> | 
+      <%= link_to "更多分享", sharings_url(:uid => poster.id) %>
+    </div>
+  </div>
+  <div id="sharing_comment_box_<%= sharing.id %>" style="display: none">
+    <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => sharing, :recipient => poster} %>
+  </div>
+</div>

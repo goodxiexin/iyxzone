@@ -36,7 +36,7 @@ class Game < ActiveRecord::Base
 
   acts_as_shareable :default_title => lambda {|game| game.name }
 
-	acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, game, comment| false }, :recipient_required => false
+	acts_as_commentable :order => 'created_at DESC', :recipient_required => false
 
   acts_as_pinyin :name => "pinyin" 
 

@@ -1,0 +1,28 @@
+<script>
+alert('a');
+function getTitle(html){
+    //alert(html);
+    var reg=/<title>([^<>]*)<\/title>/i;
+    var m=html.match(reg);
+    alert("该网址的标题是："+m[1]);
+}
+function getDoc(url,fun){
+    var xmlhttp;
+    try{
+        xmlhttp=new XMLHttpRequest();
+    }catch(e){
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function(){
+        if(xmlhttp.readyState==4){
+                if(xmlhttp.status==200){
+                        fun(xmlhttp.responseText);
+                }
+        }
+    };
+    xmlhttp.open("get",url,true);
+    xmlhttp.send();
+}
+
+getDoc("http://www.baidu.com",getTitle);//要等一会
+</script>

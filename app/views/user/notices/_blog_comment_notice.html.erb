@@ -12,11 +12,11 @@
 		<%= link_to_function '', "Iyxzone.Home.NoticeManager.readSingle(#{notice.id}, '#{form_authenticity_token}')", :class => 'icon-active' %>
     <% end %>
 		<% if notice.data == 'comment' %>
-			<%= profile_link comment.poster %> 评论了你的博客 <%= link %>
+			<%= profile_link comment.poster %> 评论了你的日志 <%= link %>
 		<% elsif notice.data == 'reply' %>
 			<%= profile_link comment.poster %> 在 <%= link %> 回复了你
 		<% elsif notice.data == 'tag' %>
-			<%= profile_link comment.poster %> 评论了和你有关的博客 <%= link %>
+			<%= profile_link comment.poster %> 评论了和你有关的日志 <%= link %>
 		<% end %> 		
 	</div>
 </li>

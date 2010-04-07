@@ -154,6 +154,24 @@ class User < ActiveRecord::Base
 
   has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
+  def friend_albums
+    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "(privilege != 4) AND (uploaded_at != NULL)", :order => 'uploaded_at desc')
+  end
+
+  def albums_count relationship='owner'
+    # dont forget avatar album which is not accessible to none-friend
+    case relationship
+    when 'owner'
+      albums_count1 + albums_count2 + albums_count3 + albums_count4 + 1
+    when 'friend'
+      albums_count1 + albums_count2 + albums_count3 + 1
+    when 'same_game'
+      albums_count1 + albums_count2 + 1
+    when 'stranger'
+      albums_count1
+    end
+  end
+
   # blogs
   with_options :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id do |user|
     
@@ -235,9 +253,9 @@ class User < ActiveRecord::Base
   has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC'
 
   with_options :class_name => 'Sharing', :foreign_key => 'poster_id', :order => 'created_at DESC' do |user|
-
+    
     user.has_many :blog_sharings, :conditions => {:shareable_type => 'Blog'}
-
+  
     user.has_many :video_sharings, :conditions => {:shareable_type => 'Video'}
 
     user.has_many :link_sharings, :conditions => {:shareable_type => 'Link'}
@@ -249,10 +267,34 @@ class User < ActiveRecord::Base
     user.has_many :poll_sharings, :conditions => {:shareable_type => 'Poll'}
 
     user.has_many :game_sharings, :conditions => {:shareable_type => 'Game'}
-  
+
     user.has_many :profile_sharings, :conditions => {:shareable_type => 'Profile'}
 
     user.has_many :topic_sharings, :conditions => {:shareable_type => 'Topic'}
+  
+  end
+
+  has_many :shares, :through => :sharings, :order => 'created_at DESC'
+
+  with_options :source => 'share', :order => 'created_at DESC' do |user|
+
+    user.has_many :blog_shares, :through => 'blog_sharings'
+
+    user.has_many :video_shares, :through => 'video_sharings'
+
+    user.has_many :link_shares, :through => 'link_sharings'
+
+    user.has_many :photo_shares, :through => 'photo_sharings'
+
+    user.has_many :album_shares, :through => 'album_sharings'
+
+    user.has_many :poll_shares, :through => 'poll_sharings'
+
+    user.has_many :game_shares, :through => 'game_sharings'
+  
+    user.has_many :profile_shares, :through => 'profile_sharings'
+
+    user.has_many :topic_shares, :through => 'topic_sharings'
 
   end
 
@@ -338,10 +380,6 @@ class User < ActiveRecord::Base
 	has_many :photo_tags, :foreign_key => 'tagged_user_id'
 
 	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4"
-
-  def friend_albums
-    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "(privilege != 4) AND (uploaded_at != NULL)", :order => 'uploaded_at desc')
-  end
 
 	# feeds
 	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'

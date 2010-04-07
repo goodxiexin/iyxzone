@@ -66,7 +66,7 @@ protected
 
     @contacts.each do |c|
       h = {:nickname => c[0], :email => c[1]}
-      user = User.find_by_email(c[1])
+      user = User.activated.find_by_email(c[1])
       if user.blank?
         @unregistered_contacts << h
       else

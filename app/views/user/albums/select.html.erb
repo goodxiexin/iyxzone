@@ -1,6 +1,6 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="app-photo">选择照片专辑</h1>
+    <h1 class="app-photo">选择照片相册</h1>
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right">
@@ -16,7 +16,7 @@
         </ul>
       </div>
       <div class="box02 appcontent01">
-        <p> 请选择照片专辑 <%= collection_select :album, :id, @albums, :id, :title, {:prompt => '---'} %> 或者 <%= facebox_link "新建专辑", new_personal_album_url(:show => 'select') %> </p>
+        <p> 请选择照片相册 <%= collection_select :album, :id, @albums, :id, :title, {:prompt => '---'} %> 或者 <%= facebox_link "新建相册", new_personal_album_url(:at => 'select') %> </p>
 				<div class="buttons">
 					<span class="button"><span><%= button_to_function "下一步", "if(!$('album_id').value){error('请选择一个相册');}else{ Iyxzone.disableButton(this, '请等待'); window.location.href = '#{new_personal_photo_url}?album_id=' + $('album_id').value;}" %></span></span>
 				</div>

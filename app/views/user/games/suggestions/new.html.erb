@@ -1,5 +1,5 @@
 <p class="z-h s_clear">
-  <strong class="left">新建专辑</strong>
+  <strong class="left">新建相册</strong>
   <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
 </p>
 
@@ -8,13 +8,13 @@
 <% form_remote_for :album, :url => personal_albums_url(:show => params[:show]) do |f| %>
 <div class='formcontent'>
   <div class="rows s_clear">
-<div class="fldid"><label for="name">专辑名称：</label></div>
+<div class="fldid"><label for="name">相册名称：</label></div>
     <div class="fldvalue">
       <div class="textfield"><%= f.text_field 'title' %></div>
     </div>
   </div>
   <div class="rows s_clear">
-    <div class="fldid"><label for="des">专辑描述：</label></div>
+    <div class="fldid"><label for="des">相册描述：</label></div>
     <div class="fldvalue">
       <%= f.text_area 'description' %>
     </div>

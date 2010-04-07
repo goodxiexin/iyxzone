@@ -22,14 +22,13 @@ class PasswordsController < ApplicationController
 
   def edit
     if params[:password_reset_code].blank?
-      flash.now[:error] = "非法的重置码"
-      render :action => 'new'
+      render :text => '非法的重置码'
       return
     end
     @user = User.find_by_password_reset_code(params[:password_reset_code]) if params[:password_reset_code]
     if @user.blank?
-      flash.now[:error] = "非法的重置码"
-      render login_path
+      render :text => "非法的重置码"
+      return
     end   
   end
 
@@ -55,13 +54,13 @@ class PasswordsController < ApplicationController
         @user.reset_password
         if @user.save
           flash[:notice] = "密码已经重置"
-          render '/login'
+          redirect_to '/login'
         else
-          flash[:error] = "发生错误"
+          flash.now[:error] = "发生错误"
           render :action => 'edit', :password_reset_code => params[:password_reset_code]
         end
       else
-        flash.now[:error] = "2此密码不匹配"
+        flash.now[:error] = "两次密码不匹配"
         render :action => 'edit', :password_reset_code => params[:password_reset_code]
         return
       end

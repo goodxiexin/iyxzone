@@ -15,12 +15,14 @@ role :web, domain
 role :db,  domain, :primary => true
 
 
-after "deploy:update_code", "deploy:chown_deployer"
 after "deploy:update_code", "deploy:update_crontab"
 after "deploy:update_code", "deploy:update_database_config"
 after "deploy:update_code", "deploy:update_mail_config"
+after "deploy:update_code", "deploy:add_timestamps_to_css"
+after "deploy:update_code", "deploy:pack_js"
 
 after "deploy:symlink", "assets:symlink"
+after "deploy:symlink", "deploy:chown_deployer"
 
 namespace :deploy do
 
@@ -41,12 +43,22 @@ namespace :deploy do
 
   desc "regenerate periodical tasks configuration"
   task :update_crontab, :roles => :app do
-    run "cd #{release_path} && whenever --update-crontab"
+    run "cd #{release_path} && whenever -w"
   end
 
   desc "change owner to deployer"
   task :chown_deployer, :roles => :app do
     run "cd /home/deployer && chown -R deployer:deployer 17gaming"
+  end
+
+  desc "add timestamps to css images, so that cache can be invalidated"
+  task :add_timestamps_to_css, :roles => :app do
+    # TODO
+  end
+
+  desc "build all js"
+  task :pack_js, :roles => :app do
+    run "cd #{current_release} && rake asset:packager:build_all"
   end
  
   desc "update database configuration"

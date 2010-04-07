@@ -1,15 +1,3 @@
-<%= @user.login %>
-
-您好！
-
-<%= @comment.poster %>对您评论过的新闻<%= @comment.commentable.title %>表示了强烈的兴趣，并且发表了评论！
-
-“<%= @comment.content %>”
-
-请点击 <a href=<%= @url %>><%= @url %></a> 查看详细情况～
-
-祝您开心每一天
-17gaming.com
-
-－－
-此邮件由系统发出，请勿回复这封邮件。如果想联系我们，请登录17gaming.com。
+<%= @comment.poster.login %>在新闻<%= @comment.commentable.title %>里回复了您! <br/>
+<br/>
+“<%= @comment.content %>”<br/>
