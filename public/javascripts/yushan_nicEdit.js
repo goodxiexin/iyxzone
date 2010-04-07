@@ -1366,9 +1366,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
                     <div class='content'> \
                     		<div class='tab tab01'> \
                             <ul> \
-                                 <li><span><a href='#'>上传图片</a></span></li> \
                                  <li class='hover'><span><a href='#'>网络照片</a></span></li> \
-                                 <li><span><a href='#'>我的相册</a></span></li> \
                  			</ul> \
                         </div> \
                     	<div class='formcontent'>	 \
