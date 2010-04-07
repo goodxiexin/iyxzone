@@ -1,5 +1,10 @@
 class SharingObserver < ActiveRecord::Observer
 
+  def before_created sharing
+    # duplicate shareable type for performance reason
+    sharing.shareable_type = sharing.share.shareable_type  
+  end
+
   def after_create sharing
     share = sharing.share
     poster = sharing.poster

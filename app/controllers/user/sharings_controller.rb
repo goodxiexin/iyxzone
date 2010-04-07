@@ -24,7 +24,7 @@ class User::SharingsController < UserBaseController
   end
 
   def create
-    if @host =~ /#{SITE_URL}/
+    if SITE_URL =~ /#{@host}/
       # in site url
       @shareable_type = @path.split('/')[1].singularize.camelize
       @shareable_id = @path.split('/')[2]
@@ -37,7 +37,7 @@ class User::SharingsController < UserBaseController
         @shareable = Link.create(params[:link])
       end
     end
-
+    
     if @shareable.share_by current_user, params[:title], params[:reason]
       render :update do |page|
         if params[:at] == 'outside'

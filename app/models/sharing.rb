@@ -9,6 +9,8 @@ class Sharing < ActiveRecord::Base
 
   acts_as_resource_feeds
 
+  attr_protected :shareable_type
+
   validates_presence_of :poster_id, :message => "不能为空"
 
   validates_presence_of :share_id, :message => "不能为空"

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100402080614) do
+ActiveRecord::Schema.define(:version => 20100407041022) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -625,6 +625,7 @@ ActiveRecord::Schema.define(:version => 20100402080614) do
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.integer  "verified",       :default => 0
+    t.string   "shareable_type"
   end
 
   add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"

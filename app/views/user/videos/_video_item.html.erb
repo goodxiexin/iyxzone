@@ -5,5 +5,5 @@
     <td class="icon"><%= link_to "", edit_video_url(video_item), :class => "icon-active icon-active-edit" %></td>
     <td class="icon"><%= facebox_confirm '', video_url(video_item), {:msg => "你确定要删除这个视频吗?", :method => :delete}, {:class => 'icon-active'}%></td>
     <% end %>
-    <td><%= facebox_link "分享", new_sharing_url(:url => video_url(video_item)), {:width => 450, class => "share-btn"}%></td>
+    <td><%= facebox_link "分享", new_sharing_url(:url => video_url(video_item)), {:width => 450, :class => "share-btn"}%></td>
 </tr>
