@@ -130,10 +130,10 @@ ActionMailer::Base.delivery_method = :activerecord
     put juggernaut_config, "#{release_path}/juggernaut.yml"
     juggernaut_hosts_config = <<-CMD
 :hosts:
-  -:port: 5001
-   :host: 127.0.0.1
-   :public_host: 114.80.110.75 
-   :environement: :production
+  - :port: 5001
+    :host: 127.0.0.1
+    :public_host: 112.65.248.180
+    :environment: :production
     CMD
     put juggernaut_hosts_config, "#{release_path}/config/juggernaut_hosts.yml"
   end

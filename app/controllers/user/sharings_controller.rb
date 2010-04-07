@@ -116,6 +116,7 @@ protected
     case resp
     when Net::HTTPSuccess     then [resp, body]
     when Net::HTTPRedirection then fetch(resp['location'], limit - 1)
+    when Net::HTTPMovedPermanently then fetch(resp['location'], limit - 1)
     else
       raise ArgumentError, 'invalid url'
     end
