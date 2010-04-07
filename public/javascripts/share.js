@@ -30,7 +30,7 @@ Iyxzone.Share = {
     return false;
   },
 
-  new: function(){
+  newShare: function(){
     var url = $('link').value;
     if(this.isInsiteURL(url)){
       error('站内内容请直接在站内分享，这里请分享站外内容');

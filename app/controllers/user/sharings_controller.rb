@@ -17,7 +17,11 @@ class User::SharingsController < UserBaseController
       else
         @link = Link.new 
       end
-      @title = (params[:at] == 'outside')? params[:title] : get_page_title
+      if params[:at] == 'outside'
+        @title = params[:title]
+      else
+        @title = get_page_title
+      end
     end
     
     if params[:at] == 'outside'
@@ -88,20 +92,7 @@ protected
 
   def get_page_title
     require 'iconv'
-    @query = @uri.query
-    http = Net::HTTP.new(@host, @uri.port)
-    if @uri.scheme.downcase == 'https'
-      http.use_ssl = true
-    end
-    if @path.blank?
-      resp, body = http.get('/')
-    else
-      if @query.blank?
-        resp, body = http.get(@path)
-      else
-        resp, body = http.get("#{@path}/#{@query}")
-      end
-    end
+    resp, body = fetch(@my_url)
     if resp.is_a? Net::HTTPSuccess
       body =~ /<title>(.*?)<\/title>/
       title = $1
@@ -111,6 +102,22 @@ protected
       Iconv.iconv('utf8', charset, title)
     else
       @my_url
+    end
+  rescue
+    # 或者是除了200和300以外的返回码，或者就是redirect太多
+    # 凡此种种，皆以下法导入神通
+    @my_url
+  end
+
+  def fetch(uri_str, limit = 5)
+    raise ArgumentError, 'HTTP redirect too deep' if limit == 0
+
+    resp, body = Net::HTTP.get_response(URI.parse(uri_str))
+    case resp
+    when Net::HTTPSuccess     then [resp, body]
+    when Net::HTTPRedirection then fetch(resp['location'], limit - 1)
+    else
+      raise ArgumentError, 'invalid url'
     end
   end
 
