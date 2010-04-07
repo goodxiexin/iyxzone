@@ -77,7 +77,7 @@ protected
       @user = User.find(params[:uid])
       require_friend_or_owner @user
     elsif ['hot', 'recent'].include? params[:action]
-      @user = User.find(params[:uid])
+      @user = current_user
     elsif ['show'].include? params[:action]
       @video = Video.find(params[:id])
       @user = @video.poster

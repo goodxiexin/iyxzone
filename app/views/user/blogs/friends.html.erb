@@ -21,7 +21,7 @@
       <div class="tab tab01">
         <div class="right"><%= link_to "写新日志", new_blog_url %></div>
         <ul>
-          <li><span><%= link_to "热门日志", hot_blogs_url(:uid => current_user.id) %></span></li>
+          <li><span><%= link_to "热门日志", hot_blogs_url %></span></li>
           <li><span><%= link_to "我的日志", blogs_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "与我相关的日志", relative_blogs_url(:uid => current_user.id) %></span></li>
           <li class='hover'><span><%= link_to "好友日志", friends_blogs_url %></span></li>

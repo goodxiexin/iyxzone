@@ -37,7 +37,7 @@
         <% subject = get_subject @user %>
         <div class="right"><%= link_to "新视频", new_video_url %></div>
         <ul>
-          <li class='hover'><span><%= link_to "热门视频", hot_videos_url(:uid => @user.id) %></span></li>
+          <li class='hover'><span><%= link_to "热门视频", hot_videos_url %></span></li>
           <li><span><%= link_to "#{subject}的视频", videos_url(:uid => @user.id) %></span></li>
           <li><span><%= link_to "#{subject}的相关视频", relative_videos_url(:uid => @user.id) %></span></li>
           <% if @user == current_user %>
@@ -48,8 +48,8 @@
       <div>
         <div class="nav-link">
           <ul class="s_clear">
-            <li class='hover'><%= link_to "<span>人气最高</span>", hot_videos_url(:uid => @user.id) %></li>
-            <li><%= link_to "<span>最新创建</span>", recent_videos_url(:uid => @user.id) %></li>
+            <li class='hover'><%= link_to "<span>人气最高</span>", hot_videos_url %></li>
+            <li><%= link_to "<span>最新创建</span>", recent_videos_url %></li>
           </ul>
         </div>
         <% if @videos.blank? %>

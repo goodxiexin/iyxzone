@@ -15,7 +15,7 @@
       <div class="tab tab01">
         <div class="right"><%= link_to "新视频", new_video_url %></div>
         <ul>
-          <li><span><%= link_to "热门视频", hot_videos_url(:uid => current_user.id) %></span></li>
+          <li><span><%= link_to "热门视频", hot_videos_url %></span></li>
           <li><span><%= link_to "我的视频", videos_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "我的相关视频", relative_videos_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "好友的视频", friends_videos_url %>

@@ -112,7 +112,7 @@ protected
       @album = PersonalAlbum.find(params[:album_id])
       require_owner @album.poster
 		elsif ['hot'].include? params[:action]
-      @user = User.find(params[:uid])
+      @user = current_user
     elsif ['relative'].include? params[:action]
 			@user = User.find(params[:uid])
       require_friend_or_owner @user
