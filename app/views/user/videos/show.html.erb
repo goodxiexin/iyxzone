@@ -48,7 +48,7 @@
       <%= link_to "<span class='icon2-edit'></span>编辑", edit_video_url(@video), :class => 'red' %>
       <%= facebox_confirm "<span class='icon2-close'></span>删除", video_url(@video), {:msg => '你确定要删除这个视频吗', :method => :delete}, :class=>'red w-l' %>
       <% end %>
-      <%= facebox_link "分享", new_sharing_url(:shareable_type => 'Video', :shareable_id => @video.id), :class=>'share-btn'%>
+      <%= facebox_link "分享", new_sharing_url(:url => video_url(@video)), :width => 450, :class=>'share-btn'%>
 		</p>
   </div>
   <div class='con'>

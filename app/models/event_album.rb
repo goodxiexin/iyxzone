@@ -13,11 +13,13 @@ class EventAlbum < Album
   attr_readonly :game_id, :poster_id, :owner_id, :privilege
 
 	def record_upload user, photos
+    if !photos.blank?
+      update_attribute('uploaded_at', Time.now)
+    end
 	  if user.application_setting.emit_photo_feed == 1
       recipients = user.friends.find_all {|f| f.application_setting.recv_photo_feed == 1}
 			recipients.concat event.participants.find_all {|p| (p != user) and p.application_setting.recv_photo_feed == 1}
 			deliver_feeds :recipients => recipients.uniq, :data => {:ids => photos.map(&:id), :poster_id => user.id}
-			update_attribute('uploaded_at', Time.now)
     end
 	end
 

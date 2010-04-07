@@ -124,7 +124,7 @@ table.center td{vertical-align:top}
 .collection{width:100%;}
 .collection td{text-align:center;overflow:hidden;vertical-align:top;}
 .collection li{float:left;text-align:center;overflow:hidden}
-.collection td p,.collection li p{margin-top:2px;line-height:20px;}
+.collection td p,.collection li p{margin-top:2px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 .collection .middle{width:100%;height:60px;}
 /*图片展示*/
 
@@ -238,7 +238,7 @@ input.gobtn,input.loginbtn,input.registbtn{display:inline-block;border:0;}
 /*按钮样式*/
 .button{float:left;cursor:pointer;display:block;background:url(../images/skin/btn2010.png) no-repeat right 0;padding:0 10px 0 0;}
 .button span{display:block;padding:0 0 0 10px;background:url(../images/skin/btn2010.png) no-repeat;}
-.button span button{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:20px;line-height:20px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
+.button span button,.button span a{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:20px;line-height:20px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
 
 a.button,a.button:hover{height:20px;line-height:19px;_line-height:21px;padding:0 16px 0 0;color:#fff;font-weight:bold;overflow:hidden}
 a.button span{float:left;height:100%;padding:0 0 0 16px;}
@@ -246,7 +246,7 @@ a.button-gray,a.button-gray:hover{font-weight:normal;color:#666}
 
 .button-gray{background-position:right -25px;}
 .button-gray span{background-position:0 -25px;}
-.button-gray span button{font-weight:normal;color:#666}
+.button-gray span button,.button-gray span a{font-weight:normal;color:#666}
 
 .attention-btn,.love-btn{display:block;width:58px;height:20px;line-height:21px;padding-right:12px;background:url(../images/skin/skin2010.png) no-repeat;text-align:right;overflow:hidden}
 .attention-btn{background-position:-130px -267px;}
@@ -362,7 +362,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 .round_m{margin-right:-6px;padding:0 6px;border-left:1px #BBD2AA solid;border-right:1px #BBD2AA solid;background:#F8FCF6;word-wrap:break-word;word-break:normal;}
 .round_m .round_body{width:100%;/*overflow:hidden好友管理弹出框显示*/}
-.app-log,.app-video,.app-photo,.app-status,.app-ploy,.app-vote,.app-cons,.app-game,.app-vgame,.app-friend,.app-lock,.app-setting,.app-gift,.app-archives,.app-news,.app-share,.app-notice{background:url(../images/icons/app-icons.png) no-repeat}
+.app-log,.app-video,.app-photo,.app-status,.app-ploy,.app-vote,.app-cons,.app-game,.app-vgame,.app-friend,.app-lock,.app-setting,.app-gift,.app-archives,.app-news,.app-share,.app-notice,.app-error{background:url(../images/icons/app-icons.png) no-repeat}
 .app-log{background-position:0 0;}
 .app-video{background-position:0 -50px;}
 .app-photo{background-position:0 -100px;}
@@ -380,6 +380,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 .app-news{background-position:0 -677px;}
 .app-share{background-position:0 -729px;}
 .app-notice{background-position:0 -780px;}
+.app-error{background-position:0 -838px;}
 
 .round02,.round02 .round_l_t,.round02 .round_l_b,.round02 .round_r_b{background-image:url(../images/skin/roundBoxbg02.gif);}
 .round02 .round_m{border-left:1px #E7F0E0 solid;border-right:1px #E7F0E0 solid;background:#F8FCF6;}
@@ -508,14 +509,15 @@ a.msg-btn{background-position:-118px -186px}
 .app-letter{background:url(../images/skin/skin2010.png) no-repeat -166px -5px;height:34px;line-height:34px;margin-bottom:8px;overflow:hidden;}
 
 /*评论回复发表框*/
-.cmt-box{margin-top:5px;padding:7px}
+.cmt-box{margin-top:5px;padding:7px;zoom:1;overflow:hidden;}
 .cmt-box .img{float:left;margin:0 0 4px 0}
-#navbar #navmain .drop-box .cmt-box .con{background:#F8FCF6} 
+#navbar #navmain .drop-box .cmt-box .con{background:#F8FCF6;} 
 .cmt-box .con{float:left;margin-left:8px;*margin-left:3px;}
 .cmt-box .con .button03{float:right;}
 .cmt-box .con .button{float:right;}
 .cmt-box .con .submit{margin:5px 0 0 5px;}
-.cmt-box textarea{width:345px;height:42px}
+.cmt-box textarea{width:345px;width:343px\0;height:42px}
+.feed-list-box .cmt-box,.feed-img-list .cmt-box{margin-bottom:10px;width:383px;/*float:left\0*/}/*IE8 评论首次切换margin-top失效bug*/
 
 /*通用下拉框*/
 .select-toggle{border:0}

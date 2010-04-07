@@ -6,30 +6,37 @@
 <div id='errors'></div>
 <div class='z-con'>
 <% form_remote_for :sharing, :url => sharings_url, :html => {:onsubmit => "Iyxzone.disableButton($('new_sharing_btn'), '请等待..');"} do |f| %>
-<%= hidden_field_tag 'sharing[shareable_type]', params[:shareable_type] %>
-<%= hidden_field_tag 'sharing[shareable_id]', params[:shareable_id] %>
-<% if params[:link] %>
-  <%= hidden_field_tag 'sharing[link]', params[:link] %>
+<% if @link %>
+  <%= hidden_field_tag 'link[url]', @my_url %>
+<% elsif @video %>
+  <%= hidden_field_tag 'video[video_url]', @my_url %>
+<% else %>
+  <%= hidden_field_tag 'shareable_type', @shareable_type %>
+  <%= hidden_field_tag 'shareable_id', @shareable_id %>
 <% end %>
-<div class='formcontent'>
-  <div class="rows s_clear">
-    <div class="fldid"><label for="name">分享标题：</label></div>
-    <div class="fldvalue">
-      <div class="textfield"><%= text_field_tag 'sharing[title]', @title %></div>
+  <%= hidden_field_tag 'url', @my_url %>
+  <%= hidden_field_tag 'at', params[:at] %>
+  <div class="share-box formcontent s_clear">
+    <div class="item rows">
+      <div class="fldid"><label for="name">分享理由</label></div>
+      <div class="fldvalue"><%= text_area_tag 'reason', '' %></div>
+    </div>
+    <% if @video %>
+    <div class="item rows">
+      <div class="fldid"><label for="name">视频分类</label></div>
+      <div class="fldvalue"><%= collection_select :video, :game_id, current_user.games, :id, :name %></div>
+    </div>
+    <% end %>
+    <div class="item rows">
+      <div class="fldid"><label for="name">分享标题</label></div>
+      <div class="fldvalue share-title"><%= text_field_tag 'title', @title %><span title=""><%= @my_url %></span></div>
     </div>
   </div>
-  <div class="rows s_clear">
-    <div class="fldid"><label for="des">分享理由：</label></div>
-    <div class="fldvalue">
-      <%= f.text_area 'reason' %>
-    </div>
+  <div class="z-submit s_clear space">
+    <table class="center" cellpadding="0"><tr><td>
+      <span class="button"><span><button type="submit" id='new_sharing_btn'>完成</button></span></span>
+      <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
+    </td></tr></table>
   </div>
-</div>
-<div class="z-submit s_clear space">
-  <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit" id='new_sharing_btn'>完成</button></span></span>
-    <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
-  </td></tr></table>
-</div>
 <% end %>
 </div>

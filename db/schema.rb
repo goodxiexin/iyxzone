@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100331145244) do
+ActiveRecord::Schema.define(:version => 20100407041022) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -607,16 +607,25 @@ ActiveRecord::Schema.define(:version => 20100331145244) do
     t.string "name"
   end
 
+  create_table "shares", :force => true do |t|
+    t.integer  "shareable_id"
+    t.string   "shareable_type"
+    t.integer  "digs_count",     :default => 0
+    t.integer  "sharings_count", :default => 0
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "sharings", :force => true do |t|
     t.string   "title"
     t.text     "reason"
-    t.integer  "shareable_id"
-    t.string   "shareable_type"
+    t.integer  "share_id"
     t.integer  "poster_id"
-    t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.integer  "verified",       :default => 0
+    t.string   "shareable_type"
   end
 
   add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"

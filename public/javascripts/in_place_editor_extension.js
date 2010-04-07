@@ -51,8 +51,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     if (transport && transport.status == 200) {
       new Effect.Highlight(element.id, {"startcolor": "#00ffff"});
       var json = transport.responseText.evalJSON();
-//      element.innerHTML = eval("json." + this.options.updateClass + "." + this.options.updateAttr);
-      element.update( eval("json." + this.options.updateClass + "." + this.options.updateAttr));
+      element.update(eval("json." + this.options.updateClass + "." + this.options.updateAttr));
       this.checkElement();
     }
   }, 
@@ -62,7 +61,6 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     var fld;
 
 		var div_decorator = document.createElement("div");
-//		div_decorator.setStyle(this.options.textAreaStyle);
 
     fld = document.createElement('textarea');
     fld.name = this.options.paramName;
@@ -79,10 +77,7 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
 
     if (this.options.loadTextURL)
       this.loadExternalText();
-   // this._form.appendChild(this._controls.editor);
     this._form.appendChild(this._controls.decorator);
-		//$('editor_field').setStyle(this.options.textAreaStyle);
-
   }
 
 });

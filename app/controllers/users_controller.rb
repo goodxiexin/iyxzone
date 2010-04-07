@@ -20,7 +20,6 @@ class UsersController < ApplicationController
     @user.email = @email
     if @user.save
       # send email
-      logger.error "nil?: #{params[:invite_token].nil?}"
       UserMailer.deliver_signup_notification @user, params[:invite_token]
       # create characters
       @user.profile.update_attributes(params[:profile]) # TODO

@@ -41,11 +41,15 @@ Object.extend(Iyxzone.Emotion.Manager, {
 		var a, img, pageIndex = -1;
 
 		this.facesSingle = new Element('div', {'class':"emot-box drop-wrap"});
+		this.facesSingle.addClassName("emot-box");
+		this.facesSingle.addClassName("drop-wrap");
+
 
 		for (var i =0; i < facesCount; i++){
 			if (i % facesPerPage == 0){
 				pageIndex++;
-				this.facePages[pageIndex] = new Element('div', {'class':"con"});
+				this.facePages[pageIndex] = new Element('div', {'class' : "con"});
+				//this.facePages[pageIndex].addClassName("con");
 			}	
 			a = new Element('a', {title: myFaces[i], href: 'javascript: void(0)'});
 			img = new Element('img', {src: "/images/faces/"+ myFaces[i].slice(1,myFaces[i].length-1) +".gif",  alt: myFaces[i], index: i});
@@ -69,7 +73,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
 					this.facesSingle.removeChild(el.up().up());
         }.bind(this));
 			}else{
-        prev.writeAttribute('class', 'first');
+        prev.addClassName('first');
         prev.observe('click', function(e){
           Event.stop(e);
         }.bind(this));
@@ -85,7 +89,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
 					this.facesSingle.removeChild(el.up().up());
         }.bind(this));
 			}else{
-        next.writeAttribute('class', 'last');
+        next.addClassName('last');
         next.observe('click', function(e){
           Event.stop(e);
         }.bind(this));
@@ -99,7 +103,7 @@ Object.extend(Iyxzone.Emotion.Manager, {
 			this.facePages[i].appendChild(foot);
 		} //end of for i
 
-		this.facesSingle.appendChild(this.facePages[0]);
+		$(this.facesSingle).appendChild(this.facePages[0]);
 		document.body.appendChild(this.facesSingle);
 		this.setFaceStyle(link,textField);
   },
@@ -109,8 +113,8 @@ Object.extend(Iyxzone.Emotion.Manager, {
 		this.currentLink = link;
 		this.facesSingle.setStyle({
 				"position": 'absolute',
-				"left": (link.cumulativeOffset().left) + 'px',
-				"top": (link.cumulativeOffset().top) + 'px',
+				"left": ($(link).cumulativeOffset().left) + 'px',
+				"top": ($(link).cumulativeOffset().top) + 'px',
 				"width": '244px'
 		});
 		this.currentField = textField;

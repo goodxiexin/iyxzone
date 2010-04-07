@@ -47,7 +47,7 @@
       <%= link_to "<span class='icon2-edit'></span>编辑", edit_blog_url(@blog), :class=>"red" %>
       <%= facebox_confirm "<span class='icon2-close'></span>删除", blog_url(@blog), {:msg => '你确定要删除这篇日志吗', :method => :delete}, :class=>"red w-l" %>
       <% end %>
-      <%= facebox_link "分享", new_sharing_url(:shareable_type => 'Blog', :shareable_id => @blog.id), :class => 'share-btn' %>
+      <%= facebox_link "分享", new_sharing_url(:url => blog_url(@blog)), :width => 450, :class => 'share-btn' %>
 	</p> 
   </div>
   <div class='con'>

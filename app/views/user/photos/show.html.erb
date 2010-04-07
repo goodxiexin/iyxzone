@@ -1,4 +1,4 @@
-<% content_for :javascript_include do %>
+% content_for :javascript_include do %>
   <%= javascript_include_merged :photo %>
 <% end %>
 
@@ -67,7 +67,7 @@
                     <%= facebox_confirm '删除', personal_photo_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
 										<% end %>
 										<span class="photo-op-share" ></span>
-										<%= facebox_link "分享", new_sharing_url(:shareable_type => 'Photo', :shareable_id => @photo.id) %> |
+										<%= facebox_link "分享", new_sharing_url(:url => personal_photo_url(@photo)), :width => 450 %>
 										<span class="photo-op-praise" ></span>
 										<%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @photo.class.base_class.to_s, "dig[diggable_id]" => @photo), :html => {:id=> "digging_#{@photo.class.to_s.underscore}_#{@photo.id}"}%>(<span id="dig_<%=@photo.class.to_s.underscore%>_<%=@photo.id%>" class='gray'><%= @photo.digs_count %></span>人赞过)
 									</div>
@@ -75,6 +75,7 @@
 									<div class="pic-desc s_clear">
 										<h4 class="box06">
 										<% if @user == current_user %>
+                      <%= in_place_text_area @photo, :notation, '点击添加照片描述', :param_name => 'photo[notation]' %>
 										<% else %>
 											<%= simple_format @photo.notation %>
 										<% end %>

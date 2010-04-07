@@ -1,14 +1,17 @@
 class JuggernautController < ApplicationController
 
+  protect_from_forgery :except => [:subscription, :broadcast, :logout]
+
   def subscription
-    if current_user == User.find(params[:client_id])
-      @info = {:login => current_user.login, :id => current_user.id, :avatar => avatar_path(current_user), :pinyin => current_user.pinyin}
-      render :juggernaut => {:type => :send_to_clients, :client_ids => current_user.online_friends.map(&:id)} do |page|
-        page << "Iyxzone.Chat.newOnlineFriend(#{@info.to_json})"
-      end
-      render :text => 'ok'
-    else
+    @user = User.find(params[:client_id])
+    @info = {:avatar => avatar_path(@user), :login => @user.login}
+    @friends = @user.friends
+    
+    render :juggernaut => {:type => :send_to_clients, :client_ids => @friends.map(&:id)} do |page|
+      page << "Iyxzone.Chat.newOnlineFriend(#{ {:pinyin => @user.pinyin, :id => @user.id, :login => @user.login, :avatar => avatar_path(@user)}.to_json })"
     end
+    
+    render :text => 'ok'
   end
 
   def broadcast
@@ -16,6 +19,11 @@ class JuggernautController < ApplicationController
   end
 
   def logout
+    @user = User.find(params[:client_id])
+    @friends = @user.friends
+    render :juggernaut => {:type => :send_to_clients, :client_ids => @friends.map(&:id)} do |page|
+      page << "Iyxzone.Chat.friendOffline(#{@user.id});"
+    end
     render :text => 'ok'
   end
 

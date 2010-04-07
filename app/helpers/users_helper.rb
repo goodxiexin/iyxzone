@@ -12,6 +12,7 @@ module UsersHelper
     when 'sina.com.cn' then 'http://mail.sina.com.cn'
     when '163.com' then 'http://mail.163.com'
     when '263.com' then 'http://mail.263.com'
+    when 'qq.com' then 'http://mail.qq.com'
     else
       # guess
       "http://#{domain}"
@@ -29,6 +30,7 @@ module UsersHelper
     when 'sina.com' then '新浪'
     when '163.com' then '163'
     when '263.com' then '263'
+    when 'qq.com' then 'QQ'
     else
       # guess
       domain

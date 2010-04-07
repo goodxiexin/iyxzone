@@ -32,9 +32,9 @@ class User::GamesController < UserBaseController
   end
 
   def show
-    @blogs = @game.blogs.find(:all, :limit => 3)
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-		@comrades = []
+		
+    @comrades = []
 		if current_user.games.include?(@game)
 			current_user.servers.find(:all, :conditions=> {:game_id => @game.id}).each {|server| 
 				@comrades = @comrades | server.characters
@@ -45,7 +45,8 @@ class User::GamesController < UserBaseController
     @messages = @game.comments.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @game.id, :wall_type => 'game'}}
 
-    @albums = @game.albums.find(:all, :limit => 3)
+    @albums = @game.albums.find(:all, :conditions => {:privilege => 1}, :limit => 3)
+    @blogs = @game.blogs.find(:all, :conditions => {:privilege => 1}, :limit => 3)
     @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
 		@first_fetch_size = FirstFetchSize
   end

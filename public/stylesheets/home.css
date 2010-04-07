@@ -27,7 +27,7 @@ a:hover{color:#D63200;}
 #canvas .canvas-status{float:right;padding-right:18px;line-height:37px;}
 
 #canvas .canvas_int{padding:12px 13px;}
-#canvas .canvas_int .tab{margin-bottom:10px;padding:0 16px;}
+#canvas .canvas_int .tab,.tab{margin-bottom:10px;padding:0 16px;}
 #canvas .canvas_con{padding:2px 17px 19px;}
 #canvas .canvas_con #ployComposer{margin-left:-7px;}
 #canvas .tipbar{border:1px solid #bbd2aa;background:#defeb5;padding:15px 8px;line-height:20px;color:#999;font-size:14px}
@@ -85,7 +85,7 @@ a:hover{color:#D63200;}
 .multibox .diary-more{line-height:29px;text-align:right}
 
 .multibox .data-table{width:100%;}
-.multibox .data-table th,.multibox .data-table td{padding:0 8px;height:23px;line-height:23px;vertical-align:top;overflow:hidden;}
+.multibox .data-table th,.multibox .data-table td{padding:0 8px;height:23px;line-height:23px;vertical-align:top;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 .multibox .data-table th{border-bottom:1px #E7F0E0 solid;background:#fff;text-align:left;color:#25700D}
 .multibox .data-table a{color:#333}
 .multibox .data-table a:hover{color:#D63200;}
@@ -139,7 +139,7 @@ a:hover{color:#D63200;}
 .feed-box .tab{margin-bottom:20px;padding:0 16px;position:relative}
 /*.feed-box .feed-wrap{padding:0 10px;}
 */
-.feed-box .feed-list-box{margin-bottom:20px;zoom:1}
+.feed-box .feed-list-box{margin-bottom:20px;zoom:1;overflow:hidden;clear:both}
 .feed-box .feed-img-list{margin-bottom:20px;position:relative;}
 
 .feed-list-box h4{color:#D63200}
@@ -189,7 +189,6 @@ a:hover{color:#D63200;}
 .feed-img-list .feed-list .feed-header{padding:8px 13px;border-top:1px #BBD2AA solid;background:#F8FCF6}
 .feed-img-list .feed-list .feed-header p{word-spacing:5px;}
 .feed-img-list .feed-list .feeds{padding:8px 10px;border-top:1px #E7F0E0 solid;word-spacing:5px;}
-.feed-list-box .cmt-box,.feed-img-list .cmt-box{margin-bottom:10px;width:383px;}
 
 .feed-box01{padding-left:27px;line-height:21px;}
 .feed-box01 .page{margin-bottom:15px;line-height:18px;color:#7E7F80}
@@ -228,7 +227,7 @@ a:hover{color:#D63200;}
 #leftsidebar .formcontent .fldid{width:88px}
 
 #leftsidebar .multibox .photolist-box{margin:6px 2px 15px}
-#leftsidebar .multibox .photolist-box li{padding:5px 10px 5px 11px;}
+#leftsidebar .multibox .photolist-box li{padding:5px 8px;_padding:5px 6px;}
 
 #rightsidebar .multibox .request{padding:8px 3px;}
 #rightsidebar .multibox .request li a{color:#000}
@@ -239,8 +238,8 @@ a:hover{color:#D63200;}
 #rightsidebar .multibox .data-table th.level{width:30px;}
 #rightsidebar .multibox .data-table th.name02{width:100px;}
 #rightsidebar .multibox .data-table th.level02{width:60px;}
-#rightsidebar .multibox .data-table .name{padding:0 0 0 15px;}
-#rightsidebar .multibox .data-table .level{padding:0 7px;}
+#rightsidebar .multibox .data-table .name{padding:0 0 0 5px;}
+#rightsidebar .multibox .data-table .level{padding:0 5px;}
 
 #rightsidebar .multibox .keybtn-box{margin:0 -1px 0 -2px;padding:5px 0}
 #rightsidebar .multibox .keybtn-box a{margin:1px 1px 2px;}
@@ -353,6 +352,7 @@ a:hover{color:#D63200;}
 
 
 .inbox-form .textfield, .photo-form .textfield, .cons-form .textfield, .poly-form .textfield{width:268px;_width:266px;}
+.cons-form .new_guild .fldid{width:100px}
 .photo-form textarea{width:275px;height:90px}
 .photo-form select{width:197px}
 .photo-form .buttons{margin-left:91px;}
@@ -638,15 +638,14 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .jl-fldbtn{margin-top:10px}
 
 /*首页/个人/好友主页*/
-/*.home-wrap .icon-active{margin-left:30px;margin-left:10px !important;}
-*/
 .home-wrap .s-dialog{margin:0 30px 0 10px;}
-/*.home-wrap .feed-list-box .feed-list{padding-left:32px}
-*/
 .feed-wrap,.home-wrap{zoom:1}
 .feed-wrap .feed-list,.home-wrap .feed-list{padding-left:0;}
 .feed-wrap .feed-list-box{margin:10px 0}
 .jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;}
+.jl-list-con:after{content:".";display:block;height:0;clear:both;visibility:hidden;}/*ie8 cmt-box float clear*/
+.jl-list-con{zoom:1;}
+
 .home-wrap .jl-list-con{margin-left:20px;}
 .feed-list .jl-list-con .word-box textarea{width:390px}
 .feed-box .feed-list-box{margin-bottom:10px;}
@@ -951,7 +950,7 @@ dl.menu-op dd a{color:#333}
 .vote-detail h3,.vote-detail p,.vote-detail ul{padding:0 20px}
 .vote-detail h3{font-weight:400;line-height:24px;}
 .vote-detail ul li{margin:5px 0;padding-left:20px;}
-.vote-detail ul li.now{background:url(../images/icons/homeIcons.png) no-repeat 0 -320px}
+.vote-detail ul li.now{background:url(../images/icons/homeIcons.gif) no-repeat 0 -1440px}
 .vote-detail .time{color:#999}
 .vote-detail .jl-cutline{padding-bottom:15px}
 
@@ -1010,6 +1009,14 @@ h1.app-share{float:left}
 .feed-img-list .feed-share .feeds {border:0;padding:5px}
 .feed-img-list .feed-share .feed-header .con .quote{color:#999;margin:0 3px}
 
+/*分享弹出框*/
+.share-box{margin:10px;padding:10px;}
+.share-box .item .fldvalue input,.share-box .item .fldvalue textarea{width:260px;padding:5px;border:1px solid #999;color:#666}
+.share-box .item .share-title{background:#feffcf;padding:3px}
+.share-box .item .share-title input{width:254px}
+.share-box .item span{color:#999;padding:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:250px;display:block}
+
+
 /*每日十闻*/
 .news10-list{line-height:22px;margin:10px 15px}
 
@@ -1061,6 +1068,10 @@ h1.app-share{float:left}
 .z-box .z-error .box01{border:1px solid #cf6079}
 .z-box .z-error .z-h{background:#fd3361;border:1px solid #fd8b6c}
 .z-box .z-error .z-con{border-color:#f31f50}
+
+/*日志插入图片lightbox*/
+.blog-ins-imglist{overflow-x:hidden;overflow-y:auto;height:200px;min-height:200px;border:1px solid #BBD2AA;margin:10px 0;}
+.blog-ins-imglist li{float:left;width:80px;margin:10px 20px;_margin:10px 13px;}
 
 /*编辑档案*/
 .archives-box .percent-box{margin-bottom:7px;}
@@ -1149,9 +1160,9 @@ h1.app-share{float:left}
 .theme-head .button-gray span button{color:#666}
 
 /*打招呼*/
-.face-hello{margin:10px;padding-left:80px}
-.face-hello .avatar{float:left;margin-left:-80px;display:inline}
-.face-hello .content{float:left;color:#666;width:100%;}
+.face-hello{margin:10px;padding-left:80px;}
+.face-hello .avatar{float:left;margin-left:-80px;display:inline;}
+.z-box .z-con .face-hello .content{float:left;color:#666;width:100%;margin:0}
 .face-hello h2{border-bottom:1px solid #bbd2aa;padding-bottom:5px;font-weight:700}
 .face-hello ul li{float:left;margin:8px 5px;color:#333;width:90px}
 .hello-history{border:0}
@@ -1178,9 +1189,10 @@ h1.app-share{float:left}
 
 /*表情列表*/
 .emot-box{width:266px;}
-.emot-box .con{padding:5px 1px 1px 1px}
-.emot-box .con a{margin:3px}
-.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;padding:5px;}
+.emot-box .con a{margin:0 4px 6px 5px;_margin:0 4px 6px 4px;display:block;float:left}
+.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;margin:5px;clear:both;}
+.emot-box .con .foot a{float:none;display:inline-block;margin:0}
+.z-box .emot-box .foot{background:none;border:0;padding:5px 5px 0 0}
 
 /*简单翻页*/
 .pager-simple a{width:14px;height:14px;display:inline-block;font-size:0;line-height:0;overflow:hidden;background:url(../images/skin/skin2010.png) no-repeat;vertical-align:middle;}
