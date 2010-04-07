@@ -13,7 +13,7 @@ class User::SharingsController < UserBaseController
       else
         @link = Link.new 
       end
-      @title = (params[:at] == 'outside')? params[:title] : @my_url
+      @title = (params[:at] == 'outside')? params[:title] : get_page_title
     end
     
     if params[:at] == 'outside'
@@ -69,6 +69,9 @@ protected
       require_external_link @share
     elsif ["new", "create"].include? params[:action]
       @my_url = params[:url]
+      if !@my_url.starts_with? 'http://' and !@my_url.starts_with? 'https'
+        @my_url = "http://#{@my_url}"
+      end
       @uri = URI.parse(@my_url)
       @host = @uri.host
       @path = @uri.path
@@ -79,6 +82,32 @@ protected
     share.shareable_type == 'Link' || render_not_found
   end
 
-  
+  def get_page_title
+    require 'iconv'
+    @query = @uri.query
+    http = Net::HTTP.new(@host, @uri.port)
+    if @uri.scheme.downcase == 'https'
+      http.use_ssl = true
+    end
+    if @path.blank?
+      resp, body = http.get('/')
+    else
+      if @query.blank?
+        resp, body = http.get(@path)
+      else
+        resp, body = http.get("#{@path}/#{@query}")
+      end
+    end
+    if resp.is_a? Net::HTTPSuccess
+      body =~ /<title>(.*?)<\/title>/
+      title = $1
+      content_type = resp['Content-Type']
+      content_type =~ /charset=(.*)/
+      charset = $1
+      Iconv.iconv('utf8', charset, title)
+    else
+      @my_url
+    end
+  end
 
 end

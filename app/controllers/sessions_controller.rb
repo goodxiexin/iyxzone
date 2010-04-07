@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
       if params[:at] == 'outside'
         render :action => 'new_from_outside'
       else
-        render :action => 'new_from_outside'
+        render :action => 'new'
       end
     elsif current_user.enabled == false
       flash.now[:error] = "你的帐号被删除了"

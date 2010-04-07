@@ -3,13 +3,6 @@ Iyxzone.Share = {
   
   author: ['高侠鸿'],
   
-  getPage: function(link){
-    this.node = new Element('script', {type: 'text/javascript', src: 'http://www.baidu.com'});
-    var head = $('shared_link');
-    head.appendChild(this.node);
-    alert(this.node.innerHTML);
-  },
-
   isValidURL: function(url){
     if(!url.match(/(http:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-%=&]+)?/)){
       return false;
