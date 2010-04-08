@@ -1,3 +1,4 @@
+.gitignore
 log/*
 public/photos/*
 config/database.yml
