@@ -6,7 +6,8 @@
 
 <div class="z-con">
   <div id='error'></div>
-  <% form_remote_for :guestbook, :url => guestbooks_url, :html => {:method => :post, :onsubmit=> "Iyxzone.disableButton($(button2),'请等待..'); Iyxzone.disableButton($(button1), '感谢您的参与');"} do |f| %>
+  <% form_remote_for :guestbook, :url => guestbooks_url, :html => {:method => :post, :onsubmit => "Iyxzone.disableButton($(button2),'请等待..'); Iyxzone.disableButton($(button1), '感谢您的参与');"} do |f| %>
+  <%= hidden_field_tag 'guestbook[priority]', 1, :id => 'priority_field' %>
   <div class='formcontent'>
     <div class="rows s_clear">
       <div class="fldid"><label for="des">错误描述:</label></div>
@@ -23,8 +24,8 @@
   </div>
   <div class="z-submit s_clear space">
     <table class="center" cellpadding="0"><tr><td>
-      <span class="button"><span><button type="submit" name='priority2' id='button2'>这错误难以忍受！</button></span></span>
-      <span class="button"><span><button type="submit" name='priority1' id='button1'>这错误让人不爽！</button></span></span>
+      <span class="button"><span><button type="submit" onclick="$('priority_field').value=2" id='button2'>这错误难以忍受！</button></span></span>
+      <span class="button"><span><button type="submit" onclick="$('priority_field').value=1" id='button1'>这错误让人不爽！</button></span></span>
     </td></tr></table>
   </div>
   <% end %>
