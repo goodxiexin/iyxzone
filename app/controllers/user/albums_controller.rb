@@ -23,7 +23,7 @@ class User::AlbumsController < UserBaseController
     respond_to do |format|
       format.json {
         @photos = @album.photos
-        @json = @photos.map {|p| p.public_filename(:medium)}
+        @json = @photos.map {|p| p.public_filename}
         render :json => @json
       }
       format.html {

@@ -81,7 +81,25 @@ var bkElement = bkClass.extend({
 		} while(elm);
 		return false;
 	},
+
+  // 下面3个函数是高侠鸿添加的，不属于nicEdit
+  up : function(){
+    var elm = this;
+    return $BK(elm.parentNode);
+  },
 	
+  show : function(){
+    var elm = this;
+    elm.style.display = '';
+    return elm;
+  },
+
+  hide : function(){
+    var elm = this;
+    elm.style.display = 'none'
+    return elm;
+  },
+
 	hasClass : function(cls) {
 		return this.className.match(new RegExp('(\\s|^)nicEdit-'+cls+'(\\s|$)'));
 	},
@@ -1352,9 +1370,10 @@ var nicImageOptions = {
 	buttons : {
 		'image' : {name : '添加图片', type : 'nicImageButton', tags : ['IMG']}
 	}
-	
 };
 /* END CONFIG */
+
+albums =[];
 
 var nicImageButton = nicEditorAdvancedButton.extend({
 
@@ -1369,22 +1388,38 @@ var nicImageButton = nicEditorAdvancedButton.extend({
                     <div class='content'> \
                     		<div class='tab tab01'> \
                             <ul> \
-                                 <li class='hover'><span><a href='#'>网络照片</a></span></li> \
-                 			</ul> \
+                                <li><span><a href='javascript: void(0)' id='local_image_tab'>上传照片</a></span></li> \
+                                <li class='hover'><span><a href='javascript: void(0)' id='url_image_tab'>网络照片</a></span></li> \
+                                <li><span><a href='javascript: void(0)' id='album_image_tab'>相册照片</a></span></li> \
+                 			      </ul> \
                         </div> \
-                    	<div class='formcontent'>	 \
-                            <div class='rows s_clear'> \
+                      <div class='formcontent' id='local_image_frame' style='display:none'> \
+                          <div class='rows s_clear'> \
+                              <div class='fldid'><label>上传本地图片：</label></div> \
+                              <div class='fldvalue'> \
+                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='http://'/></div> \
+                              </div> \
+                          </div> \
+                      </div> \
+                    	<div class='formcontent' id='url_image_frame'>	 \
+                          <div class='rows s_clear'> \
                               <div class='fldid'><label>连接地址：</label></div> \
                               <div class='fldvalue'> \
-                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='http://' id='image_url_field'></div> \
+                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='http://' id='image_url_field' /></div> \
                               </div> \
-                            </div> \
-                         </div> \
+                          </div> \
+                      </div> \
+                      <div class='space' id='album_image_frame' style='display:none'>\
+                               选择 <select id='album_selector'><option value=''>---</option></select> 专辑内的图片\
+                                 <div class='blog-ins-imglist'> \
+                                  <ul id='album_images_list'></ul>\
+                                 </div> \
+                         </div>\
                     </div> \
                     <div class='rows'></div> \
                         <div class='z-submit s_clear space'> \
                             <div class='buttons'> \
-                                 <span class='button'><span><button type='submit' id='url_image_submit_btn'>插入</button></span></span> \
+                                 <span class='button'><span><button type='submit' id='image_submit_btn'>插入</button></span></span> \
                                  <span class='button button-gray'><span><button type='reset' id='image_cancel'>取消</button></span></span> \
                             </div> \
                     </div> \
@@ -1397,7 +1432,23 @@ var nicImageButton = nicEditorAdvancedButton.extend({
         <span class='r'></span> \
         </div> \
     </div></div>",
-	
+
+  currentTab : null,
+
+  selectedPhotos: [], // this is only used for album images,
+
+  clickTab : function(type){
+    this.currentTab = type;
+    $BK('local_image_tab').up().up().setStyle({'className' : ''});
+    $BK('url_image_tab').up().up().setStyle({'className' : ''});
+    $BK('album_image_tab').up().up().setStyle({'className' : ''});
+    $BK(type + '_tab').up().up().setStyle({'className' : 'hover'});
+    $BK('local_image_frame').hide();
+    $BK('url_image_frame').hide();
+    $BK('album_image_frame').hide();
+    $BK(type + '_frame').show();
+  },
+
   addPane : function() {
     var scroll = document.viewport.getScrollOffsets();
     var height = document.viewport.getHeight();
@@ -1408,10 +1459,93 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     this.pane.close.remove();
     this.pane.close = null;
 
-    this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
     this.pane.setContent(this.paneHTML);
-    $BK('url_image_submit_btn').addEvent('click', function(){
-      this.src = $BK('image_url_field').value;
+
+    this.currentTab = 'url_image';
+
+    // set album selector
+    for(var i=0;i<albums.length;i++){
+      var album = albums[i];
+      var option = new bkElement('option').update(album.title);
+      option.setAttributes({'value': album.id});
+      $BK('album_selector').appendChild(option);
+    }
+    
+    // set album selector event
+    $BK('album_selector').addEvent('change', function(){
+      var albumID = $BK('album_selector').value;
+      // send ajax request
+      // 这个东西很2比，因为用的是prototype的东西，和我的初衷“尽量在nicEditor里不用prototype”不符合
+      // 但也没办法，先将就一下
+      var type;
+      for(var i=0;i<albums.length;i++){
+        if(albumID == albums[i].id){
+          type = albums[i].type;
+          break;
+        }
+      }
+      new Ajax.Request('/' + type + 's/' + albumID + '.json', {
+        method: 'get',
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          var ul = $BK('album_images_list');
+          ul.update('');
+          for(var i=0;i<json.length;i++){
+            var path = json[i];
+            var li = new bkElement('li');
+            var img = new bkElement('img').setStyle({'className': 'imgbox02'}).setAttributes({'src': path, 'width': 75, 'height': 75});
+            img.appendTo(li);
+            ul.appendChild(li);
+            img.addEvent('click', function(e){
+              var img = null;
+              if(navigator.userAgent.indexOf("MSIE") > 0)
+                img = e.srcElement;
+              else
+                img = e.target; 
+              var src = img.src;
+              var li = img.up();
+              if(this.selectedPhotos.include(src)){
+                li.setStyle({'className': ''});
+                this.selectedPhotos.splice(this.selectedPhotos.indexOf(src), 1);
+              }else{
+                li.setStyle({'className': 'selected'});
+                this.selectedPhotos.push(src);
+              }
+            }.closure(this));
+          }
+        }.bind(this)
+      });
+    }.closure(this));
+  
+    // set tab events
+    $BK('local_image_tab').addEvent('click', function(){
+      this.clickTab('local_image');
+    }.closure(this));
+    $BK('url_image_tab').addEvent('click', function(){
+      this.clickTab('url_image');
+    }.closure(this));
+    $BK('album_image_tab').addEvent('click', function(){
+      this.clickTab('album_image');
+    }.closure(this));  
+
+    // set submit/cancel event
+    $BK('image_submit_btn').addEvent('click', function(){
+      if(this.currentTab == 'url_image'){
+        this.src = $BK('image_url_field').value;
+        this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+        this.submit();
+        this.removePane();
+      }else if(this.currentTab == 'local_image'){
+      }else if(this.currentTab == 'album_image'){
+        for(var i=0;i<this.selectedPhotos.length;i++){
+          this.src = this.selectedPhotos[i];
+          this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+          this.submit();
+        }
+        this.removePane();
+        this.selectedPhotos = [];
+      }
+      
       this.submit();
     }.closure(this));
     $BK('image_cancel').addEvent('click', function(){
@@ -1425,7 +1559,6 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 			alert("你必须插入一个图片的链接地址");
 			return false;
 		}
-		this.removePane();
 
 		if(!this.im) {
 			var tmp = 'javascript:nicImTemp();';

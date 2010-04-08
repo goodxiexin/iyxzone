@@ -321,7 +321,7 @@ a:hover{color:#D63200;}
 .formcontent .buttons{padding:15px 0;}
 .formcontent .emotions{padding:12px 0 2px;}
 .formcontent .button{margin:3px 8px 0 0;}
-.formcontent .fldid{float:left;margin-right:5px;width:73px;white-space:nowrap;text-align:right;overflow:hidden}
+.formcontent .fldid{float:left;margin-right:5px;width:90px;white-space:nowrap;text-align:right;overflow:hidden}
 .formcontent .fldvalue,.formcontent .fldbtn, .formcontent .fldcb, .formcontent .fldrd,.formcontent .fldrdvalue,.formcontent .fldfilevalue{_display:inline;float:left;margin-right:5px;}
 .formcontent .fldfilevalue{margin-right:15px;}
 .formcontent .fldvalue select{margin-top:3px;}
@@ -1072,6 +1072,8 @@ h1.app-share{float:left}
 /*日志插入图片lightbox*/
 .blog-ins-imglist{overflow-x:hidden;overflow-y:auto;height:200px;min-height:200px;border:1px solid #BBD2AA;margin:10px 0;}
 .blog-ins-imglist li{float:left;width:80px;margin:10px 20px;_margin:10px 13px;}
+.blog-ins-imglist li a:hover img{border-color:#7FB73D}
+.blog-ins-imglist li.selected img{border-color:#C5DE83;background:#C5DE83}
 
 /*编辑档案*/
 .archives-box .percent-box{margin-bottom:7px;}
@@ -1188,9 +1190,9 @@ h1.app-share{float:left}
 .i-f-anger{background-position:-48px -72px}
 
 /*表情列表*/
-.emot-box{width:266px;}
+.emot-box .con{zoom:1;padding-top:3px}
 .emot-box .con a{margin:0 4px 6px 5px;_margin:0 4px 6px 4px;display:block;float:left}
-.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;margin:5px;clear:both;}
+.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;padding:5px 10px;clear:both;}
 .emot-box .con .foot a{float:none;display:inline-block;margin:0}
 .z-box .emot-box .foot{background:none;border:0;padding:5px 5px 0 0}
 
