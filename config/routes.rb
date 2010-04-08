@@ -26,8 +26,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.reset_password '/reset_password/:password_reset_code', :controller => 'passwords', :action => 'edit'
 
-	map.upload_image '/upload_blog_images', :controller => 'user/blog_images', :action => 'upload'
-
   map.regions '/regions', :controller => 'chinese_region', :action => 'regions'
 
   map.cities '/cities', :controller => 'chinese_region', :action => 'cities'
@@ -134,6 +132,8 @@ ActionController::Routing::Routes.draw do |map|
     users.resource :mail_setting, :controller => 'mail_setting'
 
     users.resources :blogs, :collection => [:hot, :recent, :relative, :friends]
+
+    users.resources :blog_images, :controller => 'blogs/images'
 
     users.resources :drafts
 
