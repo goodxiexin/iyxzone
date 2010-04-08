@@ -1373,7 +1373,7 @@ var nicImageOptions = {
 };
 /* END CONFIG */
 
-albums =[];
+nicEditors.albums =[];
 
 var nicImageButton = nicEditorAdvancedButton.extend({
 
@@ -1464,8 +1464,8 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     this.currentTab = 'url_image';
 
     // set album selector
-    for(var i=0;i<albums.length;i++){
-      var album = albums[i];
+    for(var i=0;i<nicEditors.albums.length;i++){
+      var album = nicEditors.albums[i];
       var option = new bkElement('option').update(album.title);
       option.setAttributes({'value': album.id});
       $BK('album_selector').appendChild(option);
@@ -1478,9 +1478,9 @@ var nicImageButton = nicEditorAdvancedButton.extend({
       // 这个东西很2比，因为用的是prototype的东西，和我的初衷“尽量在nicEditor里不用prototype”不符合
       // 但也没办法，先将就一下
       var type;
-      for(var i=0;i<albums.length;i++){
-        if(albumID == albums[i].id){
-          type = albums[i].type;
+      for(var i=0;i<nicEditors.albums.length;i++){
+        if(albumID == nicEditors.albums[i].id){
+          type = nicEditors.albums[i].type;
           break;
         }
       }
