@@ -14,7 +14,7 @@
     <div class="feeds">
       <%= link_to_function "评论(#{sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %> | 
       <%= facebox_link "我也分享", new_sharing_url(:url => game_url(game)), :width => 450 %><span>(<%= game.sharings_count %>)</span> | 
-      <%= link_to "更多分享", sharings_url(:uid => poster.id) %>
+      <%= link_to "更多分享", shares_url(:uid => poster.id) %>
     </div>
   </div>
   <div id="sharing_comment_box_<%= sharing.id %>" style="display: none">
