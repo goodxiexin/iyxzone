@@ -3,3 +3,4 @@ public/photos/*
 config/database.yml
 juggernaut.yml
 config/juggernaut_hosts.yml
+try_ignore.txt

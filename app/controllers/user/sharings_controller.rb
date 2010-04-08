@@ -1,6 +1,7 @@
 class User::SharingsController < UserBaseController
 
   def new
+		logger.error "--"*20 + "in User::SharingsController::new" + "--"*20
     if SITE_URL =~ /#{@host}/
       # in site url
       @shareable_type, @shareable_id = Share.get_type_and_id(@path)
@@ -70,6 +71,7 @@ class User::SharingsController < UserBaseController
 protected
 
   def setup
+		logger.error "--"*20 + "in User::SharingsController::setup" + "--"*20
     if ["show"].include? params[:action]
       @sharing = Sharing.find(params[:id])
       @share = @sharing.share 
