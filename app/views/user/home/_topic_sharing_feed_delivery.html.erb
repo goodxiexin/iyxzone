@@ -10,7 +10,7 @@
     <div class="jl-list-con jl-cutline">
       <%= profile_link sharing.poster %> 分享了公会 <%= link_to topic.forum.guild.name, forum_topic_posts_url(topic.forum, topic), :class => 'shine' %> 的话题
       <p class='gray jl-con'><%= truncate topic.subject, :length => 80, :omission => '...' %></p>
-      <p class='gray'><%= ftime delivery.created_at %> <%= link_to_function '评论', "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id}" %></p>
+      <p class='gray'><%= ftime delivery.created_at %> <%= link_to_function '评论', "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id})" %></p>
       <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => sharing, :recipient => sharing.poster} %>
     </div>
   </div>

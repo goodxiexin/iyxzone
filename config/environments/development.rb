@@ -1,5 +1,4 @@
 # Settings specified here will take precedence over those in config/environment.rb
-#SITE_URL = "http://localhost:3000"
 SITE_URL = "http://192.168.217.81:3000"
 SITE_MAIL = "gaoxh04@gmail.com"
 
