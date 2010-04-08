@@ -38,6 +38,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :admin do |admin|
   
+  	admin.resources :guestbooks, :only => [ :index, :show , :edit, :update, :destroy]
+
     admin.resources :users, :member => {:enable => :put, :disable => :put, :activate => :put}, :collection => {:search => :get}
 
     admin.resources :blogs, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
@@ -69,6 +71,8 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
+		
+		users.resources :guestbooks, :only => [ :new, :create ]
 
     users.resources :applications
 
