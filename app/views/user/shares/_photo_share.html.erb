@@ -16,7 +16,7 @@
     </p>
     <div class="feeds">
       <%= link_to_function "评论(#{ sharing.comments_count })", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %> | 
-      <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Photo', :shareable_id => photo.id) %><span>(<%= photo.sharings_count %>)</span> | 
+      <%= facebox_link "我也分享", new_sharing_url(:url => eval("#{photo.class.name.underscore}_url(photo)")), :width => 450 %><span>(<%= photo.sharings_count %>)</span> | 
       <%= link_to "更多分享", shares_url(:uid => poster.id) %>
     </div>
   </div>

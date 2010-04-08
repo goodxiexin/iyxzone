@@ -70,6 +70,7 @@
 </div></div></div></div>
 
 <% onload_javascript_tag do %>
+  nicEditors.albums = <%= current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json %>;
   Iyxzone.Blog.Builder.editor = new nicEditor().panelInstance('blog_content', {token: '<%= form_authenticity_token %>'});
   Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, [], [], [], 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
 <% end %>

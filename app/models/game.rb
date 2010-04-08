@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-
+  
   has_many :servers, :class_name => 'GameServer', :dependent => :destroy
   
   has_many :areas, :class_name => 'GameArea', :dependent => :destroy
@@ -29,12 +29,12 @@ class Game < ActiveRecord::Base
 	named_scope :hot, :conditions => "attentions_count != 0", :order => "(attentions_count - last_week_attentions_count) DESC" 
 
 	named_scope :beta, :conditions => ["sale_date > ?", Time.now.to_s(:db)], :order => 'sale_date DESC'
+  
+  acts_as_shareable :default_title => lambda {|game| game.name }, :path_reg => /\/games\/([\d]+)/
 
 	acts_as_taggable :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 10.days.ago }
   
 	acts_as_rateable :create_conditions => lambda {|rating, game, user| (rating.nil? || rating.created_at < 10.days.ago) and user.games.include?(game) }
-
-  acts_as_shareable :default_title => lambda {|game| game.name }
 
 	acts_as_commentable :order => 'created_at DESC', :recipient_required => false
 

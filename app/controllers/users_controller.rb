@@ -17,7 +17,7 @@ class UsersController < ApplicationController
 
     @email = params[:user].delete(:email)
     @user = User.new(params[:user])
-    @user.email = @email
+    @user.email = @email.downcase
     if @user.save
       # send email
       UserMailer.deliver_signup_notification @user, params[:invite_token]

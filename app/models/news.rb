@@ -16,7 +16,7 @@ class News < ActiveRecord::Base
   
   acts_as_diggable  
   
-  acts_as_shareable :default_title => lambda {|news| news.title}
+  acts_as_shareable :default_title => lambda {|news| news.title}, :path_reg => /\/news\/([\d]+)/
   
   acts_as_viewable
 

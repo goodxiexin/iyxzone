@@ -83,10 +83,6 @@ class User < ActiveRecord::Base
 
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
-  def online_friends
-    User.find(friendships.map(&:friend_id) & (Juggernaut.show_clients.map {|c| c['client_id']}))
-  end
-
   def has_friend? user
     user_id = (user.is_a? Integer)? user : user.id
 		!friendships.find_by_friend_id(user_id).blank? 
@@ -172,6 +168,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def all_albums
+    (all_events.map(&:album) + all_guilds.map(&:album) + albums.to_a + avatar_album.to_a).uniq
+  end
+
   # blogs
   with_options :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id do |user|
     
@@ -235,10 +235,6 @@ class User < ActiveRecord::Base
 		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
 
 	end
-
-  def friend_participations
-    Participation.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1")
-  end
 
   def friend_events
     event_ids = Participation.find(:all, :select => :event_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1").map(&:event_id).uniq
@@ -328,11 +324,11 @@ class User < ActiveRecord::Base
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC' do |user|
 
+    user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"
+
     user.has_many :privileged_guilds, :conditions => "memberships.status = 3 or memberships.status = 4"
 
 		user.has_many :participated_guilds, :conditions => "memberships.status = 4 or memberships.status = 5"
-
-		user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"
 
 	end
 
@@ -458,7 +454,7 @@ class User < ActiveRecord::Base
     if login.blank?
       errors.add_to_base("昵称不能为空")
       return
-    elsif login.length < 2 or login.length > 16
+    elsif login.length < 4 or login.length > 16
       errors.add_to_base("昵称长度不对")
       return
     elsif /^\d/.match(login)
@@ -482,7 +478,7 @@ class User < ActiveRecord::Base
     elsif !/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.match(email)
       errors.add_to_base("邮件格式不对")
       return
-    elsif !User.find_by_email(email).blank?
+    elsif !User.find_by_email(email.downcase).blank?
       errors.add_to_base("邮件已经被注册了")
       return
     end

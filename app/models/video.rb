@@ -13,7 +13,7 @@ class Video < ActiveRecord::Base
   acts_as_friend_taggable :delete_conditions => lambda {|user, video| video.poster == user },
                           :create_conditions => lambda {|user, video| video.poster == user }
 
-  acts_as_shareable :default_title => lambda {|video| video.title}
+  acts_as_shareable :default_title => lambda {|video| video.title}, :path_reg => /\/videos\/([\d]+)/
 
 	acts_as_diggable :create_conditions => lambda {|user, video| video.privilege != 4 or video.poster == user}
 

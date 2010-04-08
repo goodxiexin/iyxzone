@@ -22,4 +22,27 @@ class Share < ActiveRecord::Base
 
   acts_as_diggable
 
+  cattr_accessor :registered_resources
+
+  self.registered_resources = {}
+
+  def self.register resource, path_reg
+    if path_reg.is_a? Array
+      registered_resources["#{resource}"] = path_reg
+    else
+      registered_resources["#{resource}"] = [path_reg]
+    end
+  end
+
+  def self.get_type_and_id path
+    self.registered_resources.each do |resource, path_regs|
+      path_regs.each do |reg|
+        if path =~ reg
+          return [resource, $1]
+        end
+      end
+    end
+    [nil, nil]
+  end
+
 end

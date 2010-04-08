@@ -5,7 +5,7 @@ class RegisterController < ApplicationController
   end
 
   def validates_email_uniqueness
-    if User.find_by_email(params[:email])
+    if User.find_by_email(params[:email].downcase)
       render :text => 'no'
     else
       render :text => 'yes'

@@ -1,6 +1,6 @@
 class Link < ActiveRecord::Base
 
-  acts_as_shareable :default_title => lambda {|link| link.url}
+  acts_as_shareable :default_title => lambda {|link| link.url}, :path_reg => /\/links\/([\d]+)/
 
   before_create :modify_url
   

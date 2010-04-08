@@ -18,6 +18,7 @@ role :db,  domain, :primary => true
 after "deploy:update_code", "deploy:update_crontab"
 after "deploy:update_code", "deploy:update_database_config"
 after "deploy:update_code", "deploy:update_mail_config"
+after "deploy:update_code", "deploy:update_juggernaut_config"
 after "deploy:update_code", "deploy:add_timestamps_to_css"
 after "deploy:update_code", "deploy:pack_js"
 
@@ -117,6 +118,26 @@ ActionMailer::Base.delivery_method = :activerecord
     put mail_config, "#{release_path}/config/initializers/mail.rb"
   end
    
+  desc "update juggernaut configuration"
+  task :update_juggernaut_config, :roles => :app do
+    juggernaut_config = <<-CMD
+:allowed_ips:
+  - 127.0.0.1
+  - 192.168.1.16
+:port: 5001
+:public_port: 5001
+    CMD
+    put juggernaut_config, "#{release_path}/juggernaut.yml"
+    juggernaut_hosts_config = <<-CMD
+:hosts:
+  - :port: 5001
+    :host: 127.0.0.1
+    :public_host: 112.65.248.180
+    :environment: :production
+    CMD
+    put juggernaut_hosts_config, "#{release_path}/config/juggernaut_hosts.yml"
+  end
+
 end
 
 namespace :assets do

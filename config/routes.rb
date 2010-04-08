@@ -86,8 +86,6 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :visitor_records
 
-    users.resources :forums
-
     users.resources :messages, :collection => {:read => :put}
 
     users.resources :requests, :collection => {:destroy_all => :delete}
@@ -241,12 +239,12 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :forums do |forums|
   
-      forums.resources :topics, :collection => {:top => :get}, :member => {:toggle => :put} do |posts|
-  
-        posts.resources :posts
-  
+      forums.resources :topics, :collection => {:top => :get}, :member => {:toggle => :put} do |topics|
+    
+        topics.resources :posts
+    
       end
-  
+
     end
 
     users.resources :ratings

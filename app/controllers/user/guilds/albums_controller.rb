@@ -3,9 +3,19 @@ class User::Guilds::AlbumsController < UserBaseController
   layout 'app'
 
   def show
-    @membership = @guild.memberships.find_by_user_id(current_user.id)
-    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    @photos = @album.photos.paginate :page => params[:page], :per_page => 12
+    respond_to do |format|
+      format.json {
+        @photos = @album.photos
+        @json = @photos.map {|p| p.public_filename}
+        render :json => @json
+      }
+      format.html {
+        @membership = @guild.memberships.find_by_user_id(current_user.id)
+        @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
+        @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+        render :action => 'show'
+      }
+    end
   end
 
   def update

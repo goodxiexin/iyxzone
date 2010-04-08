@@ -1,15 +1,20 @@
+# 很奇怪，在development模式下，game.rb有时候不加载
+if RAILS_ENV == 'development'
+  require 'app/models/game.rb'
+end
+
 class User::SharingsController < UserBaseController
 
   def new
     if SITE_URL =~ /#{@host}/
       # in site url
-      @shareable_type = @path.split('/')[1].singularize.camelize
-      @shareable_id = @path.split('/')[2]
+      @shareable_type, @shareable_id = Share.get_type_and_id(@path)
       @shareable = @shareable_type.constantize.find(@shareable_id)
-      @title = @shareable.default_share_title
       if @shareable.shared_by? current_user
         render :action => 'already_shared'
         return
+      else
+        @title = @shareable.default_share_title
       end
     else
       if Youku.identify_url(@my_url)
@@ -34,8 +39,7 @@ class User::SharingsController < UserBaseController
   def create
     if SITE_URL =~ /#{@host}/
       # in site url
-      @shareable_type = @path.split('/')[1].singularize.camelize
-      @shareable_id = @path.split('/')[2]
+      @shareable_type, @shareable_id = Share.get_type_and_id @path
       @shareable = @shareable_type.constantize.find(@shareable_id)
     else
       if Youku.identify_url(@my_url)
@@ -116,6 +120,7 @@ protected
     case resp
     when Net::HTTPSuccess     then [resp, body]
     when Net::HTTPRedirection then fetch(resp['location'], limit - 1)
+    when Net::HTTPMovedPermanently then fetch(resp['location'], limit - 1)
     else
       raise ArgumentError, 'invalid url'
     end

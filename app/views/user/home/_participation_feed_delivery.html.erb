@@ -5,7 +5,7 @@
 	<div class="s-img left">
 		<div class="imgbox01"><%= avatar participation.participant, :size => "small" %></div>
 	</div>
-  <div class='jl-list-con jl-cotline'>
+  <div class='jl-list-con jl-cutline'>
     <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html=> {:class=>'icon-active'} %><% end %> 
     <%= profile_link participation.participant %> 参加了活动 <%= event_link participation.event, :class=>'shine'%>
 	  <span class="gray"><%= ftime delivery.created_at %></span>

@@ -12,7 +12,7 @@ class Profile < ActiveRecord::Base
 
   acts_as_viewable :create_conditions => lambda {|user, profile| profile.user != user}
 
-  acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}
+  acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, :path_reg => /\/profiles\/([\d]+)/
   
   acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
                          :categories => {

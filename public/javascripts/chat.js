@@ -106,7 +106,8 @@ Object.extend(Iyxzone.Chat, {
   },
 
   // 搜索
-  search: function(key){
+  search: function(){
+    var key = this.searchField.value;
     $('chat-list').childElements().each(function(li){
       if(key == '' || li.readAttribute('pinyin').indexOf(key) >= 0 || li.readAttribute('login').indexOf(key) >= 0){
         li.show();
@@ -114,6 +115,16 @@ Object.extend(Iyxzone.Chat, {
         li.hide();
       }
     }.bind(this));
+    this.searchTimer = setTimeout(this.search.bind(this) , 200); 
+  },
+
+  startObservingSearch: function(field){
+    this.searchField = field;
+    this.searchTimer = setTimeout(this.search.bind(this) , 200); 
+  },
+
+  stopObservingSearch: function(){
+    clearTimeout(this.searchTimer);
   },
 
   buildChatForm: function(friendID, friendLogin){
