@@ -11,7 +11,6 @@ class User::SharingsController < UserBaseController
       @shareable_type, @shareable_id = Share.get_type_and_id(@path)
       @shareable = @shareable_type.constantize.find(@shareable_id)
       if @shareable.shared_by? current_user
-				logger.error "share by dyc"
         render :action => 'already_shared'
         return
       else
@@ -81,8 +80,6 @@ protected
       @share = @sharing.share 
       require_external_link @share
     elsif ["new", "create"].include? params[:action]
-			logger.error "---"*10
-			logger.error "OUTPUT: params: " + params.to_s
 			if params[:url]
 				@my_url = params[:url]
 				if !@my_url.starts_with? 'http://' and !@my_url.starts_with? 'https'
@@ -91,9 +88,6 @@ protected
 				@uri = URI.parse(@my_url)
 				@host = @uri.host
 				@path = @uri.path
-			elsif params[:shareable_id] && params[:shareable_type]
-				@shareable_id = params[:shareable_id]
-				@shareable_type = params[:shareable_type] 
 			else
 				logger.error "WRONG share link"
 			end
@@ -110,9 +104,11 @@ protected
     if resp.is_a? Net::HTTPSuccess
       body =~ /<title>(.*?)<\/title>/
       title = $1
+      logger.error "title: #{title}" 
       content_type = resp['Content-Type']
       content_type =~ /charset=(.*)/
-      charset = $1
+      charset = $1 || 'gb2312'
+      logger.error "charset: #{charset}"
       Iconv.iconv('utf8', charset, title)
     else
       @my_url
@@ -120,10 +116,11 @@ protected
   rescue
     # 或者是除了200和300以外的返回码，或者就是redirect太多
     # 凡此种种，皆以下法导入神通
+    logger.error 'error'
     @my_url
   end
 
-  def fetch(uri_str, limit = 5)
+  def fetch(uri_str, limit = 10)
     raise ArgumentError, 'HTTP redirect too deep' if limit == 0
 
     resp, body = Net::HTTP.get_response(URI.parse(uri_str))

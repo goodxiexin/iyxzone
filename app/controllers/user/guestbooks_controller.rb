@@ -1,12 +1,12 @@
 class User::GuestbooksController < UserBaseController
 	
   def new
-		@error_elements = GuestBook::ErrorElements
+		@error_elements = Guestbook::ErrorElements
     @guestbook = Guestbook.new(:catagory => get_default)
   end
 
   def create
-    @guestbook = Guestbook.new((params[:guestbook] || {}).merge{:user_id => current_user.id}))
+    @guestbook = Guestbook.new((params[:guestbook] || {}).merge({:user_id => current_user.id}))
 
     if @guestbook.save
 			render :update do |page|

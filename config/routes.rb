@@ -72,7 +72,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
 		
-		users.resources :guestbooks, :only => [ :new, :create ]
+		users.resources :guestbooks
 
     users.resources :applications
 

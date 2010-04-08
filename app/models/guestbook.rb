@@ -14,16 +14,16 @@ class Guestbook < ActiveRecord::Base
 
   validates_inclusion_of :priority, :in => [1, 2], :message => "只能是1或者2"
 
-  validates_inclusion_of :category, :in => ErrorElements, :message => "类型不对" 
+  validates_inclusion_of :catagory, :in => ErrorElements, :message => "类型不对" 
 
-  attr_readonly :user_id
+  attr_readonly :user_id, :catagory, :priority
 
   attr_protected :reply, :done_date
 
-  attr_accessor :recently_reply
+  attr_accessor :recently_reply_to_poster
 
   def reply_to_poster text
-    self.recently_reply = true
+    self.recently_reply_to_poster = true
     self.reply = text
     self.save
   end

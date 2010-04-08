@@ -1,6 +1,6 @@
 require 'app/mailer/guestbook_mailer'
 
-class ParticipationObserver < ActiveRecord::Observer
+class GuestbookObserver < ActiveRecord::Observer
 
   def after_update guestbook
     if guestbook.recently_reply_to_poster
