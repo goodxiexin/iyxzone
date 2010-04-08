@@ -1373,6 +1373,7 @@ var nicImageOptions = {
 };
 /* END CONFIG */
 
+/* 考虑到一页可能有多个nicEditors，然后每个nicEditor都应该共享这一个变量，所以这样设置了 */
 nicEditors.albums =[];
 
 var nicImageButton = nicEditorAdvancedButton.extend({
