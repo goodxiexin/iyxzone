@@ -1,3 +1,8 @@
+# 很奇怪，在development模式下，game.rb有时候不加载
+if RAILS_ENV == 'development'
+  require 'app/models/game.rb'
+end
+
 class User::SharingsController < UserBaseController
 
   def new
