@@ -1417,13 +1417,6 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     $BK('image_cancel').addEvent('click', function(){
       this.removePane();
     }.closure(this));
-		/*this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
-		this.addForm({
-			'' : {type : 'title', txt : '插入/编辑'},
-			'src' : {type : 'text', txt : '图片URL', 'value' : 'http://', style : {width: '200px'}}
-		//, 'alt' : {type : 'text', txt : '文字', style : {width: '100px'}},
-		//	'align' : {type : 'select', txt : '位置', options : {none : '默认','left' : '靠左', 'right' : '靠右'}}
-		},this.im);*/
 	},
 	
 	submit : function(e) {
@@ -1535,7 +1528,15 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
     }
 
     for(var i = 0; i < this.cache.length; i++){
-      var prev = new bkElement('A').setStyle({'className':'prev'}).setAttributes({'pageNum': i});
+      var prev = new bkElement('a').setStyle({'className':'prev'}).setAttributes({'pageNum': i});
+      var next = new bkElement('a').setStyle({'className':'next'}).setAttributes({'pageNum': i});
+      var foot = new bkElement('div').setStyle({'className': 'pager-simple foot'});
+      var pagenum = new bkElement('span').update(i+1);
+      foot.appendChild(prev);
+      foot.appendChild(pagenum);
+      foot.appendChild(next);
+      this.cache[i].appendChild(foot);
+
       if (i != 0){
         prev.addEvent('click',function(e){
           var el;
@@ -1544,8 +1545,9 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
           else
             el = e.target;
           var pageTo = parseInt(el.getAttribute('pageNum')) -1;
-          this.pane.pane.appendChild(this.cache[pageTo]);
-          this.pane.pane.removeChild(el.parentNode.parentNode);
+          el.parentNode.parentNode.remove();
+          this.pane.setContent(this.paneHTML);
+          $BK('nicEdit-emot-box').appendChild(this.cache[0]);
         }.closure(this));
       }else{
         prev.setStyle({'className': 'prev first'});
@@ -1553,7 +1555,6 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
         }.closure(this));
       }
 
-      var next = new bkElement('A').setStyle({'className':'next'}).setAttributes({pageNum: i});
       if (i != this.cache.length - 1){
         next.addEvent('click',function(e){
           var el;
@@ -1562,21 +1563,15 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
           else
             el = e.target;
           var pageTo = parseInt(el.getAttribute("pageNum")) + 1;
-          this.pane.pane.appendChild(this.cache[pageTo]);
-          this.pane.pane.removeChild(el.parentNode.parentNode);
+          el.parentNode.parentNode.remove();
+          this.pane.setContent(this.paneHTML);
+          $BK('nicEdit-emot-box').appendChild(this.cache[1]);
         }.closure(this));
       }else{
-        next.setStyle({'className': 'prev first'});
+        next.setStyle({'className': 'next last'});
         next.addEvent('click', function(e){
         }.closure(this));
       }
-
-      var foot = new bkElement('div').setStyle({'className': 'pager-simple foot'});
-      var pagenum = new bkElement('span').update(i+1);
-      foot.appendChild(prev);
-      foot.appendChild(pagenum);
-      foot.appendChild(next);
-      this.cache[i].appendChild(foot);
     } //end of for i
 
   },
