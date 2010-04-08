@@ -1,0 +1,29 @@
+
+	<p>
+		汇报用户:
+		<%= h @guestbook.user_id %>
+	</p>
+	<p>
+		错误描述:
+    <%= h @guestbook.description %>
+  </p>
+  <p>
+		错误分类:
+    <%= h @guestbook.catagory %>
+  </p>
+  <p>
+		错误等级:
+    <%= h @guestbook.priority %>
+  </p>
+  <p>
+		修正日期:
+    <%= h @guestbook.done_date %>
+  </p>
+  <p>
+		给用户的回复:
+    <%= h @guestbook.reply %>
+  </p>
+
+
+<%= link_to 'Edit', edit_admin_guestbook_path(@guestbook) %> |
+<%= link_to 'Back', admin_guestbooks_path %>

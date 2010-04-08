@@ -15,6 +15,9 @@ class User::SharesController < UserBaseController
   end
 
   def index
+		logger.error "---"*20 + "index" + "---"*20
+		logger.error params
+		logger.error "---"*20
     if params[:type].blank? || params[:type].to_i == 0
       @sharings = @user.sharings.paginate :page => params[:page], :per_page => PER_PAGE
     else
@@ -23,11 +26,16 @@ class User::SharesController < UserBaseController
   end
 
   def friends
+		logger.error "---"*20 + "friends" + "---"*20
+		logger.error params
+		logger.error "---"*20
     if params[:type].blank? || params[:type].to_i == 0
       @sharings = current_user.friend_sharings.paginate :page => params[:page], :per_page => PER_PAGE
     else
       @sharings = current_user.friend_sharings(ShareCategory[params[:type].to_i]).paginate :page => params[:page], :per_page => PER_PAGE
     end
+		logger.error  @sharings.to_yaml
+
   end
 
 protected
