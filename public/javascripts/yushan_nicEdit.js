@@ -1394,12 +1394,15 @@ var nicImageButton = nicEditorAdvancedButton.extend({
                  			      </ul> \
                         </div> \
                       <div class='formcontent' id='local_image_frame' style='display:none'> \
+                          <form action='/blog_images' id='upload_image_form' enctype='multipart/form-data' method='post' target='upload_iframe'> \
                           <div class='rows s_clear'> \
                               <div class='fldid'><label>上传本地图片：</label></div> \
                               <div class='fldvalue'> \
-                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='http://'/></div> \
+                                <input id='photo_uploaded_data' name='photo[uploaded_data]' size='20' type='file' />\
                               </div> \
                           </div> \
+                          </form>\
+                          <iframe id='upload_iframe' name='upload_iframe' style='border: 0px none ; width: 1px; height: 1px;' src='about:blank'></iframe> \
                       </div> \
                     	<div class='formcontent' id='url_image_frame'>	 \
                           <div class='rows s_clear'> \
@@ -1450,6 +1453,8 @@ var nicImageButton = nicEditorAdvancedButton.extend({
   },
 
   addPane : function() {
+    nicImageButton.lastPlugin = this;
+
     var scroll = document.viewport.getScrollOffsets();
     var height = document.viewport.getHeight();
     var width = document.viewport.getWidth();
@@ -1536,6 +1541,8 @@ var nicImageButton = nicEditorAdvancedButton.extend({
         this.submit();
         this.removePane();
       }else if(this.currentTab == 'local_image'){
+        this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+        $BK('upload_image_form').submit();
       }else if(this.currentTab == 'album_image'){
         for(var i=0;i<this.selectedPhotos.length;i++){
           this.src = this.selectedPhotos[i];
@@ -1572,13 +1579,34 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 	//			align : this.inputs['align'].value
 			});
 		}
-	}
+	},
+
+  // 这个函数是服务器那边调用的，可以告诉这里什么时候上传结束
+  update: function(o){
+    if(o.url) {
+      if(!this.im) {
+        this.ne.selectedInstance.restoreRng();
+        var tmp = 'javascript:nicImTemp();';
+        this.ne.nicCommand("insertImage",tmp);
+        this.im = this.findElm('IMG','src',tmp);
+      }
+      if(this.im) {
+        this.im.setAttributes({
+          src : o.url,
+          width : (o.width) ? o.width : ''
+        });
+      }
+      this.removePane();
+    } 
+  }
+
 });
 
 nicEditors.registerPlugin(nicPlugin,nicImageOptions);
 
-
-
+nicImageButton.statusCb = function(o) {
+  nicImageButton.lastPlugin.update(o);
+}
 
 /* START CONFIG */
 var nicSaveOptions = {
