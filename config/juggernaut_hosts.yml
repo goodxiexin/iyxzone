@@ -1,4 +1,5 @@
 :hosts:
   - :port: 5001
-    :host: 192.168.0.100 #127.0.0.1 #192.168.217.81
-    :environment: :production #development
+    :host: 127.0.0.1
+    :public_host: 192.168.0.100
+    :environment: :development

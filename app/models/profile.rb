@@ -12,7 +12,7 @@ class Profile < ActiveRecord::Base
 
   acts_as_viewable :create_conditions => lambda {|user, profile| profile.user != user}
 
-  acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}
+  acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, :path_reg => /\/profiles\/([\d]+)/
   
   acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
                          :categories => {
@@ -49,7 +49,7 @@ class Profile < ActiveRecord::Base
                             :sharing => 'Sharing'
                           } 
 
-  def is_viewable_by? viewer
+  def available_for? viewer
     privilege = user.privacy_setting.personal
     user == viewer || privilege == 1 || user.has_friend?(viewer) || (privilege == 2 and user.has_same_game_with?(viewer))
   end

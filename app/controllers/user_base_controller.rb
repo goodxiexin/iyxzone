@@ -4,8 +4,6 @@ class UserBaseController < ApplicationController
 
   before_filter :setup_verify_scope
 
-  #before_filter :setup_instant_messenger
-
   before_filter :set_last_seen_at
 
   before_filter :setup
@@ -18,21 +16,8 @@ protected
   
   def setup_verify_scope
     # 下面这些资源，在user里都只能看到审核通过的
-    [Comment, Event, Guild, Photo, PhotoTag, Sharing, Status, Video].each do |klass|
+    [Comment, Event, Guild, Photo, PhotoTag, Status, Video].each do |klass|
       klass.enable_verify_scope
-    end
-  end
-
-  def setup_instant_messenger
-    @my_info = {:avatar => avatar_path(current_user), :login => current_user.login}
-    @online_friends = current_user.online_friends.map {|f| {:login => f.login, :id => f.id, :avatar => avatar_path(f), :pinyin => f.pinyin}}
-    @unread_messages = {}
-    current_user.unread_messages.group_by(&:poster).each do |poster, messages|
-      @unread_messages["#{poster.id}"] = {
-        :login => poster.login,
-        :avatar => avatar_path(poster),
-        :messages => messages.map{|m| {:content => m.content, :created_at => m.created_at, :id => m.id}}
-      }
     end
   end
 
@@ -71,7 +56,7 @@ protected
   end
 
   def render_privilege_denied resource
-    if resource.is_owner_privilege?
+    if resource.is_owner_privilege? #自己
       render_not_enough_privilege
     else
       render_add_friend resource.resource_owner

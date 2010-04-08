@@ -55,6 +55,8 @@ class Participation < ActiveRecord::Base
 
   attr_accessor :recently_change_status
 
+  attr_accessor :recently_evicted
+
   attr_accessor :recently_accept_request
 
   attr_accessor :recently_decline_request
@@ -67,6 +69,13 @@ class Participation < ActiveRecord::Base
     if self.status != status
       self.recently_change_status = true
       self.update_attributes(:status => status)
+    end
+  end
+
+  def evict
+    if self.is_authorized?
+      self.recently_evicted = true
+      self.destroy
     end
   end
 

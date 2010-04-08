@@ -31,7 +31,7 @@ module Commentable
     end
 
     def is_comment_deleteable_by? user, comment
-      proc = self.class.commentable_opts[:delete_conditions] || lambda { true }
+      proc = self.class.commentable_opts[:delete_conditions] || lambda { false }
       proc.call user, self, comment
     end
 

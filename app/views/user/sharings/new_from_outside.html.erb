@@ -7,16 +7,15 @@
 <%= stylesheet_link_tag 'common' %>
 <%= javascript_include_merged :base %>
 <style type="text/css">
-.z-box{width:420px}
-.z-con{background:#f8fcf6;color:#666;width:98%}
+.z-box{width:450px}
+.z-con{background:#f8fcf6;color:#666;width:100%}
 .login-box{border:1px solid #ebf3e5;background:#fff;margin:10px;padding:10px;}
 .formcontent .fldid{width:60px}
 .login-box .item input,.login-box .item textarea{width:260px;padding:5px;border:1px solid #999;color:#666}
 .login-box .item .share-title{background:#feffcf;padding:3px}
 .login-box .item .share-title input{width:254px}
 .login-box .item span{color:#999;padding:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:250px;display:block}
-.sign-cookie{float:left}
-.z-box .z-submit .buttons {margin-left:120px;}
+.sign-cookie{float:left} 
 </style>
 </head>
 <body>
@@ -25,21 +24,31 @@
     <div class="box01 s_clear">
       <p class="z-h"><%= image_tag "skin/logo.png" %></p>
       <div class="z-con">
-      <% form_remote_for :sharing, :url => sharings_url(:outside => 1), :html=> {:onsubmit=> "Iyxzone.disableButton($(new_from_outside_btn),'请等待..');"} do |f| %>
-        <% if params[:link] %>
-          <%= hidden_field_tag 'sharing[link]', params[:link] %>
-        <% end %>
+      <% form_remote_for :sharing, :url => sharings_url, :html=> {:onsubmit => "Iyxzone.disableButton($(new_from_outside_btn),'请等待..');"} do |f| %>
+        <% if @link %>
+          <%= hidden_field_tag 'link[url]', @my_url %>
+        <% elsif @video %>
+          <%= hidden_field_tag 'video[video_url]', @my_url %>
+        <% else %>
+          <%= hidden_field_tag 'shareable_type', @shareable_type %>
+          <%= hidden_field_tag 'shareable_id', @shareable_id %>
+        <% end %> 
+          <%= hidden_field_tag 'url', @my_url %>
+          <%= hidden_field_tag 'at', 'outside' %>
         <div class="login-box formcontent s_clear">
           <div class="item rows">
             <div class="fldid"><label for="name">分享理由</label></div>
-            <div class="fldvalue"><%= f.text_area 'reason' %></div>
+            <div class="fldvalue"><%= text_area_tag 'reason', '' %></div>
           </div>
+          <% if @video %>
+          <div class="item rows">
+            <div class="fldid"><label for="name">视频分类</label></div>
+            <div class="fldvalue"><%= collection_select :video, :game_id, current_user.games, :id, :name %></div>
+          </div>
+          <% end %>
           <div class="item rows">
             <div class="fldid"><label for="name">分享标题</label></div>
-            <div class="fldvalue share-title">
-              <%= f.text_field 'title' %>
-              <span><%= params[:link] %></span>
-            </div>
+            <div class="fldvalue share-title"><%= text_field_tag 'title', @title %><span><%= @my_url %></span></div>
           </div>
         </div>
         <div class="z-submit s_clear space">

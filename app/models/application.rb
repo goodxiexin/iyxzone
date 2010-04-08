@@ -1,10 +1,6 @@
 class Application < ActiveRecord::Base
 
-  acts_as_commentable :order => 'created_at DESC',
-                      :recipient_required => false,
-                      :delete_conditions => lambda {|user, app, comment| false},
-                      :create_conditions => lambda {|user, app| true},
-                      :view_conditions => lambda { true }
+  acts_as_commentable :order => 'created_at DESC', :recipient_required => false
 
   def validate
     if name.blank?

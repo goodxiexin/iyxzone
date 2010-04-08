@@ -1,13 +1,3 @@
-<%= @user.login %>
-
-您好！
-
-<%= @request.participant.login %>请求让游戏角色<%= @request.character.name %>加入活动<%= @event.title%>！看来您的活动很受欢迎嘛～
-
-请点击 <a href=<%= @url %>><%= @url %></a> 查看活动详情
-
-祝您开心每一天
-17gaming.com
-
-－－
-此邮件由系统发出，请勿回复这封邮件。如果想联系我们，请登录17gaming.com。
+<%= @character.user.login %>请求让游戏角色<%= @character.name %>加入您的活动“<%= @event.title%>” !! <br/>
+看来您的活动很受欢迎嘛～
+<br/>

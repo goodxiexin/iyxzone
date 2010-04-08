@@ -1,4 +1,6 @@
 class EventMailer < ActionMailer::Base
+
+  layout 'mail'
   
   def time_change event, participant 
     setup_email	participant
@@ -21,13 +23,13 @@ class EventMailer < ActionMailer::Base
 	def invitation event, invitation
 		setup_email invitation.participant
 		subject			"17Gaming.com(一起游戏网) - 你的游戏角色 #{invitation.character.name} 被邀请加入活动'#{event.title}'"
-		body				:event => event, :user => invitation.participant, :url => "#{SITE_URL}/events/#{event.id}"
+		body				:event => event, :user => invitation.participant, :character => invitation.character, :url => "#{SITE_URL}/events/#{event.id}"
 	end
 
 	def request event, request
 		setup_email event.poster
 		subject			"17Gaming.com(一起游戏网) - #{request.participant.login}请求让游戏角色 #{request.character.name} 加入活动'#{event.title}'"
-		body				:request => request, :event => event, :user => event.poster, :url => "#{SITE_URL}/events/#{event.id}"
+		body				:event => event, :user => event.poster, :character => request.character, :url => "#{SITE_URL}/events/#{event.id}"
 	end
 
 protected

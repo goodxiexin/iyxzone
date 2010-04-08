@@ -33,6 +33,8 @@ class Friendship < ActiveRecord::Base
 
   attr_accessor :recently_declined
 
+  attr_accessor :recently_destroyed
+
   def accept
     if status == Request
       self.recently_accepted = true
@@ -43,6 +45,13 @@ class Friendship < ActiveRecord::Base
   def decline
     if status == Request
       self.recently_declined = true
+      self.destroy
+    end
+  end
+
+  def cancel
+    if status == Friend
+      self.recently_destroyed = true
       self.destroy
     end
   end

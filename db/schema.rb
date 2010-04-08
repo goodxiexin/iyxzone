@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100330040208) do
+ActiveRecord::Schema.define(:version => 20100407140840) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -341,7 +341,7 @@ ActiveRecord::Schema.define(:version => 20100330040208) do
     t.integer  "game_id"
     t.integer  "game_area_id"
     t.integer  "game_server_id"
-    t.string   "description"
+    t.text     "description"
     t.integer  "president_id"
     t.integer  "character_id"
     t.integer  "members_count",     :default => 0
@@ -398,13 +398,6 @@ ActiveRecord::Schema.define(:version => 20100330040208) do
 
   add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
 
-  create_table "moderator_forums", :force => true do |t|
-    t.integer  "forum_id"
-    t.integer  "moderator_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "news", :force => true do |t|
     t.integer  "game_id"
     t.integer  "poster_id"
@@ -443,6 +436,12 @@ ActiveRecord::Schema.define(:version => 20100330040208) do
   end
 
   add_index "notifications", ["user_id"], :name => "index_notifications_on_user_id"
+
+  create_table "online_users", :force => true do |t|
+    t.integer "user_id"
+    t.string  "session_id"
+    t.integer "status",     :default => 0
+  end
 
   create_table "participations", :force => true do |t|
     t.integer  "participant_id"
@@ -614,16 +613,25 @@ ActiveRecord::Schema.define(:version => 20100330040208) do
     t.string "name"
   end
 
+  create_table "shares", :force => true do |t|
+    t.integer  "shareable_id"
+    t.string   "shareable_type"
+    t.integer  "digs_count",     :default => 0
+    t.integer  "sharings_count", :default => 0
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "sharings", :force => true do |t|
     t.string   "title"
     t.text     "reason"
-    t.integer  "shareable_id"
-    t.string   "shareable_type"
+    t.integer  "share_id"
     t.integer  "poster_id"
-    t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.integer  "verified",       :default => 0
+    t.string   "shareable_type"
   end
 
   add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"
@@ -748,6 +756,10 @@ ActiveRecord::Schema.define(:version => 20100330040208) do
     t.integer  "videos_count2",                            :default => 0
     t.integer  "videos_count3",                            :default => 0
     t.integer  "videos_count4",                            :default => 0
+    t.integer  "albums_count1",                            :default => 0
+    t.integer  "albums_count2",                            :default => 0
+    t.integer  "albums_count3",                            :default => 0
+    t.integer  "albums_count4",                            :default => 0
   end
 
   create_table "videos", :force => true do |t|

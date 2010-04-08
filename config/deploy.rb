@@ -15,12 +15,15 @@ role :web, domain
 role :db,  domain, :primary => true
 
 
-after "deploy:update_code", "deploy:chown_deployer"
 after "deploy:update_code", "deploy:update_crontab"
 after "deploy:update_code", "deploy:update_database_config"
 after "deploy:update_code", "deploy:update_mail_config"
+after "deploy:update_code", "deploy:update_juggernaut_config"
+after "deploy:update_code", "deploy:add_timestamps_to_css"
+after "deploy:update_code", "deploy:pack_js"
 
 after "deploy:symlink", "assets:symlink"
+after "deploy:symlink", "deploy:chown_deployer"
 
 namespace :deploy do
 
@@ -41,12 +44,22 @@ namespace :deploy do
 
   desc "regenerate periodical tasks configuration"
   task :update_crontab, :roles => :app do
-    run "cd #{release_path} && whenever --update-crontab"
+    run "cd #{release_path} && whenever -w"
   end
 
   desc "change owner to deployer"
   task :chown_deployer, :roles => :app do
     run "cd /home/deployer && chown -R deployer:deployer 17gaming"
+  end
+
+  desc "add timestamps to css images, so that cache can be invalidated"
+  task :add_timestamps_to_css, :roles => :app do
+    # TODO
+  end
+
+  desc "build all js"
+  task :pack_js, :roles => :app do
+    run "cd #{current_release} && rake asset:packager:build_all"
   end
  
   desc "update database configuration"
@@ -105,6 +118,26 @@ ActionMailer::Base.delivery_method = :activerecord
     put mail_config, "#{release_path}/config/initializers/mail.rb"
   end
    
+  desc "update juggernaut configuration"
+  task :update_juggernaut_config, :roles => :app do
+    juggernaut_config = <<-CMD
+:allowed_ips:
+  - 127.0.0.1
+  - 192.168.1.16
+:port: 5001
+:public_port: 5001
+    CMD
+    put juggernaut_config, "#{release_path}/juggernaut.yml"
+    juggernaut_hosts_config = <<-CMD
+:hosts:
+  - :port: 5001
+    :host: 127.0.0.1
+    :public_host: 112.65.248.180
+    :environment: :production
+    CMD
+    put juggernaut_hosts_config, "#{release_path}/config/juggernaut_hosts.yml"
+  end
+
 end
 
 namespace :assets do

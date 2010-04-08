@@ -1394,7 +1394,7 @@ Ajax.Request = Class.create(Ajax.Base, {
       params['_method'] = this.method;
       this.method = 'post';
     }
-
+    
     this.parameters = params;
 
     if (params = Object.toQueryString(params)) {

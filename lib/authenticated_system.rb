@@ -99,10 +99,10 @@ protected
       respond_to do |format|
         format.html do
           store_location
-          if params[:outside].blank?
-            redirect_to login_path
+          if params[:at] == 'outside'
+            redirect_to login_path(:at => 'outside')
           else
-            redirect_to login_path(:outside => 1)
+            redirect_to login_path
           end
         end
         format.any do

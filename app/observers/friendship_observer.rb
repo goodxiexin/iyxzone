@@ -4,7 +4,7 @@ class FriendshipObserver < ActiveRecord::Observer
 
 	def after_create friendship
 		if friendship.is_request? 
-			FriendshipMailer.deliver_request(friendship.user, friendship.friend) if friendship.friend.mail_setting.request_to_be_friend
+			FriendshipMailer.deliver_request(friendship.user, friendship.friend) if friendship.friend.mail_setting.request_to_be_friend == 1
 			friendship.friend.raw_increment :friend_requests_count
 		elsif friendship.is_friend?
       friendship.user.raw_increment :friends_count      
@@ -31,8 +31,11 @@ class FriendshipObserver < ActiveRecord::Observer
       recipients.concat friendship.user.friends.reject {|f| f == friendship.friend} # friendship.friend 刚刚成为好友
       friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.user_id}
       recipients = [friendship.friend.profile]
-      recipients.concat(friendship.friend.friends - friendship.user.friends) # this prevents people from receiving two feeds
+      recipients.concat(friendship.friend.friends - friendship.user.friends) # this prevents people from receiving same feed twice
       friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.friend_id}
+    
+      # deliver mail
+      FriendshipMailer.deliver_confirm(friendship.user, friendship.friend) if friendship.user.mail_setting.confirm_friend == 1
     end
 	end
 
@@ -40,10 +43,10 @@ class FriendshipObserver < ActiveRecord::Observer
     if friendship.recently_declined
 			friendship.user.notifications.create(:data => "#{profile_link friendship.friend}决绝了你的好友请求", :category => Notification::Friend)
       friendship.friend.raw_decrement :friend_requests_count
-		elsif friendship.is_friend?
+		elsif friendship.recently_destroyed
 		  friendship.friend.notifications.create(:data => "你和#{profile_link friendship.user}的好友关系解除了", :category => Notification::Friend)
       friendship.user.raw_decrement :friends_count
-		end
+    end
 	end
 
 end

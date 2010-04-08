@@ -1,4 +1,5 @@
 <% content_for :javascript_include do %>
+  <%= juggernaut :client_id => current_user.id %>
 <% end %>
 
 <% content_for :body do %>
@@ -18,7 +19,7 @@
 				  		<li><%= link_to "活动", events_url(:uid => current_user.id), :class => 'app-ploy' %></li>
 					  	<li><%= link_to "投票", polls_url(:uid => current_user.id), :class => 'app-vote' %></li>
 						  <li><%= link_to "公会", guilds_url(:uid => current_user.id), :class => 'app-cons' %></li>
-              <li><%= link_to "分享", sharings_url(:uid => current_user.id), :class => 'app-share' %></li>
+              <li><%= link_to "分享", shares_url(:uid => current_user.id), :class => 'app-share' %></li>
               <li><%= link_to "游戏", games_url(:uid => current_user.id), :class => "app-game" %></li>
               <li><%= link_to "推荐游戏", game_suggestions_url, :class => 'app-vgame' %></li>
               <li><%= link_to "每日十闻", news_index_url, :class => "app-news" %></li>
@@ -42,6 +43,7 @@
 		  </div>
 	  </div>
   </div>
+  <%= render :partial => 'layouts/imbar' %>
   <%= render :partial => 'layouts/footer' %>
 </body>
 <% end %>

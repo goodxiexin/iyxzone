@@ -45,7 +45,7 @@
         <div class="fldid">&nbsp;</div>
         <div class="fldvalue">
           <span class="button"><span><button type='submit' id='contact_info_submit_btn'>保存</button></span></span>
-          <span class="button button-gray"><span><%= button_to_function "取消", "Iyxzone.Profile.Editor.cancelEditContactInfo();" %></span></span>
+          <span class="button button-gray"><span><%= button_to_function "取消", "Iyxzone.Profile.Editor.cancelEditContactInfo();", :type => 'reset' %></span></span>
         </div>
       </div>
     <% end %>

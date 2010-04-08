@@ -16,7 +16,7 @@ class FriendTagObserver < ActiveRecord::Observer
     
     if blog.poster != tag.tagged_user
       tag.notices.create(:user_id => tag.tagged_user_id)
-      TagMailer.deliver_blog_tag tag if tag.tagged_user.mail_setting.tag_me_in_blog
+      TagMailer.deliver_blog_tag tag if tag.tagged_user.mail_setting.tag_me_in_blog == 1
     end
   end
 
@@ -27,7 +27,7 @@ class FriendTagObserver < ActiveRecord::Observer
     
     if video.poster != tag.tagged_user
       tag.notices.create(:user_id => tag.tagged_user_id) 
-      TagMailer.deliver_video_tag tag if tag.tagged_user.mail_setting.tag_me_in_video
+      TagMailer.deliver_video_tag tag if tag.tagged_user.mail_setting.tag_me_in_video == 1
     end
   end
 

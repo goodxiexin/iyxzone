@@ -74,7 +74,9 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :links
 
-    users.resources :sharings, :collection => {:hot => :get, :recent => :get, :friends => :get}
+    users.resources :sharings
+
+    users.resources :shares, :collection => {:hot => :get, :recent => :get, :friends => :get}
 
     users.resources :notices, :collection => {:first_ten => :get}, :member => {:read => :put}
 
@@ -83,8 +85,6 @@ ActionController::Routing::Routes.draw do |map|
     users.resources :characters
 
     users.resources :visitor_records
-
-    users.resources :forums
 
     users.resources :messages, :collection => {:read => :put}
 
@@ -239,12 +239,12 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :forums do |forums|
   
-      forums.resources :topics, :collection => {:top => :get}, :member => {:toggle => :put} do |posts|
-  
-        posts.resources :posts
-  
+      forums.resources :topics, :collection => {:top => :get}, :member => {:toggle => :put} do |topics|
+    
+        topics.resources :posts
+    
       end
-  
+
     end
 
     users.resources :ratings

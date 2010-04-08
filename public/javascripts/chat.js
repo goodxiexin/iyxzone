@@ -39,8 +39,8 @@ Object.extend(Iyxzone.Chat, {
   // 显示聊天栏
   toggleBar: function(event){
     Event.stop(event);
-    $('tiny-chat-bar').hide();
-    $('chat-bar').show();
+    $('tiny-chat-bar').toggle();
+    $('chat-bar').toggle();
   },
 
   // 闪烁头像
@@ -48,20 +48,16 @@ Object.extend(Iyxzone.Chat, {
     var target = $('tiny-im-icon');
 
     if(target.innerHTML == '' || target.down('img').src.include('/images/blank.gif')){
-//      target.innerHTML = this.blinkFriendIcon;
       target.update( this.blinkFriendIcon);
     }else{
-//      target.innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
       target.update( '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
     }
 
     target = $('im-icon');
 
     if(target.down('img').src.include('/images/blank.gif')){
-//      target.innerHTML = this.blinkFriendIcon;
       target.update( this.blinkFriendIcon);
     }else{
-//      target.innerHTML = '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />';
       target.update( '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
     }
 
@@ -87,7 +83,6 @@ Object.extend(Iyxzone.Chat, {
     $('tiny-im-icon').stopObserving('click');
     $('im-icon').stopObserving('click');
     $('tiny-im-icon').innerHTML = '';
-//    $('im-icon').innerHTML = this.myIcon;
     $('im-icon').update( this.myIcon);
 
     this.blinkFriendID = null;
@@ -111,7 +106,8 @@ Object.extend(Iyxzone.Chat, {
   },
 
   // 搜索
-  search: function(key){
+  search: function(){
+    var key = this.searchField.value;
     $('chat-list').childElements().each(function(li){
       if(key == '' || li.readAttribute('pinyin').indexOf(key) >= 0 || li.readAttribute('login').indexOf(key) >= 0){
         li.show();
@@ -119,9 +115,19 @@ Object.extend(Iyxzone.Chat, {
         li.hide();
       }
     }.bind(this));
+    this.searchTimer = setTimeout(this.search.bind(this) , 200); 
   },
 
-  buildForm: function(friendID, friendLogin){
+  startObservingSearch: function(field){
+    this.searchField = field;
+    this.searchTimer = setTimeout(this.search.bind(this) , 200); 
+  },
+
+  stopObservingSearch: function(){
+    clearTimeout(this.searchTimer);
+  },
+
+  buildChatForm: function(friendID, friendLogin){
     var div = new Element('div', {"id": 'chat-form-' + friendID, "class": 'im-dialog', "left": '500px', "top": '100px'});
     div.hide();
     
@@ -132,14 +138,13 @@ Object.extend(Iyxzone.Chat, {
     html += '<div class="im-dlg-send s_clear">';
     html += '<textarea class="left" id="message-content-' + friendID + '" name=""></textarea>';
     html += '<div class="right">';
-    html += '<button type="submit" class="right btn-v2 w-l" onclick=\'Iyxzone.Chat.sendMessage(' + friendID + ', "' + friendLogin + '", this, event);\'>确定</button><a href="javascript:void(0)" onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $(\'message-content-' + friendID + '\'));" class="icon-face right w-l"></a><p class="rows">字数：<span id="im_words_count_' + friendID + '">0/200</span></p>';
+    html += '<button type="submit" class="right btn-v2 w-l" onclick=\'Iyxzone.Chat.sendMessage(' + friendID + ', "' + friendLogin + '", this, event);\'>确定</button><a href="javascript:void(0)" onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $(\'message-content-' + friendID + '\'), event);" class="icon-face right w-l"></a><p class="rows">字数：<span id="im_words_count_' + friendID + '">0/200</span></p>';
     html += '</div></div>';
     html += '<div class="im-dlg-log">';
     html += '<h2><a class="" href="javascript:void(0)" onclick="Iyxzone.Chat.toggleHistory(' + friendID + ', this);">聊天记录<span/></a></h2>';
     html += '<div style="display: none;" class="im-dlg-show rows" id="chat-history-' + friendID + '"></div>';
     html += '</div></div></div>';
 
-//    div.innerHTML = html;
     $(div).update( html);
     document.body.appendChild(div);
 
@@ -233,11 +238,9 @@ Object.extend(Iyxzone.Chat, {
       new Ajax.Request('/messages?friend_id=' + friendID, {
         method: 'get',
         onLoading: function(){
-//          cont.innerHTML = '<image src="/images/loading.gif" />';
           $(cont).update( '<image src="/images/loading.gif" />');
         },
         onSuccess: function(transport){
-//          cont.innerHTML = transport.responseText;
           $(cont).update( transport.responseText);
         }.bind(this)
       });
@@ -284,6 +287,15 @@ Object.extend(Iyxzone.Chat, {
     }
   },
 
+  modifyCounter: function(by){
+    var h = $('online_friends_count').innerHTML;
+    var count = parseInt(h.substr(1, h.length - 1));
+    $('online_friends_count').update('[' + (count + by) + ']');
+
+    h= $('tiny_online_friends_count').innerHTML;
+    count = parseInt(h.substr(1, h.length - 1));
+    $('tiny_online_friends_count').update('[' + (count + by) + ']');
+  },
 
   // 新的好友上线
   newOnlineFriend: function(info){
@@ -292,17 +304,21 @@ Object.extend(Iyxzone.Chat, {
       return;
     }else{
       var dd = new Element('dd', {pinyin: info.pinyin, login: info.login});
-//      dd.innerHTML = '<a href="javascript: void(0)" ondblclick="Iyxzone.Chat.showChatForm(' + info.id + ', "' + info.login + '")"><img src="' + info.avatar + '" class="left w-l" width=20 height=20 /><span class="left">' + info.login  + '</span></a>';
-      $(dd).update( '<a href="javascript: void(0)" ondblclick="Iyxzone.Chat.showChatForm(' + info.id + ', "' + info.login + '")"><img src="' + info.avatar + '" class="left w-l" width=20 height=20 /><span class="left">' + info.login  + '</span></a>');
+      $(dd).update( '<a href="javascript: void(0)" ondblclick="Iyxzone.Chat.showChatForm(' + info.id + ', \'' + info.login + '\');"><img src="' + info.avatar + '" class="left w-l" width=20 height=20 /><span class="left">' + info.login  + '</span></a>');
       $('chat-list').appendChild(dd);
       this.onlineFriendIDs.set(friendID, dd);
+
+      this.modifyCounter(1);
     }
   },
 
   // 好友下线
-  delOnlineFriend: function(friendID){
+  friendOffline: function(friendID){
     var dd = this.onlineFriendIDs.unset(friendID);
-    dd.remove();
+    if(dd){
+      dd.remove();
+      this.modifyCounter(-1);
+    }      
   }
 
 });

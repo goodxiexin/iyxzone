@@ -9,16 +9,18 @@ class PersonalAlbumObserver < ActiveRecord::Observer
 
   def after_update album
     if album.privilege_changed?
+      album.poster.raw_increment "albums_count#{album.privilege}"
+      album.poster.raw_decrement "albums_count#{album.privilege_was}"
       PersonalPhoto.update_all("privilege = #{album.privilege}", {:album_id => album.id})
     end
   end
 
   def after_create album
-    album.poster.raw_increment :albums_count
+    album.poster.raw_increment "albums_count#{album.privilege}"
   end
 
   def after_destroy album
-    album.poster.raw_decrement :albums_count
+    album.poster.raw_decrement "albums_count#{album.privilege}"
   end
 
 end

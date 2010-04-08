@@ -10,14 +10,16 @@ class PhotoTagObserver < ActiveRecord::Observer
     photo.raw_increment :tags_count
 
     # issue notices and mail if necessary
-		return if album.is_owner_privilege? 
+		return if album.is_owner_privilege?
+ 
 		if tag.poster_id != tag.tagged_user_id
 			tag.notices.create(:user_id => tag.tagged_user_id)
-			TagMailer.deliver_photo_tag tag if tag.tagged_user.mail_setting.tag_me_in_photo
+			TagMailer.deliver_photo_tag tag if tag.tagged_user.mail_setting.tag_me_in_photo == 1
     end
+
 		if album.poster_id != tag.tagged_user_id and album.poster_id != tag.poster_id
       tag.notices.create(:user_id => album.poster_id)
-      TagMailer.deliver_photo_tag_to_owner tag if album.poster.mail_setting.tag_my_photo
+      TagMailer.deliver_photo_tag_to_owner tag if album.poster.mail_setting.tag_my_photo == 1
     end  
   end
   

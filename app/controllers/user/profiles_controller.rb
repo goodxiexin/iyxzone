@@ -77,7 +77,7 @@ protected
   end
 
   def require_adequate_privilege profile
-    profile.is_viewable_by?(current_user) || render_add_friend(profile.user)
+    profile.available_for?(current_user) || render_add_friend(profile.user)
   end
   
 end

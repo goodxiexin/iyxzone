@@ -1,22 +1,10 @@
-<%= @user.login %>
-
-您好！
-
-<%= @guild.president.login %>邀请您加入公会<%= @guild.name %>
-
-公会主席：<%= @guild.president_character.name %>
-公会游戏详情：
-游戏名称:    <%= @guild.game.name %>
-		<% unless @guild.game_area.nil? %>
-区域：		<%= @guild.game_area.name %>
-		<% end %>
-服务器：		<%= @guild.game_server.name %>
-公会描述描述：“<%= @guild.description %>”
-
-请点击 <a href=<%= @url %>><%= @url %></a> 查看更多活动详情
-
-祝您开心每一天
-17gaming.com
-
-－－
-此邮件由系统发出，请勿回复这封邮件。如果想联系我们，请登录17gaming.com。
+<%= @guild.president.login %>邀请您的游戏角色<%= @character.name %>加入公会“<%= @guild.name %>”<br/>
+<br/>
+公会主席: <%= @guild.president_character.name %><br/>
+游戏名称: <%= @guild.game.name %> <br/>
+		<% unless @guild.game_area.nil? %> <br/>
+    区域: <%= @guild.game_area.name %> <br/>
+		<% end %> <br/>
+  服务器: <%= @guild.game_server.name %> <br/>
+公会描述: “<%= @guild.description %>” <br/>
+<br/>

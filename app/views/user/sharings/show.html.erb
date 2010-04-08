@@ -21,30 +21,30 @@
                 <%= link_to_function "<span>评论</span>", "$('comments_form').toggle();", :id => 'cmt' %>
                 <div class="drop-box" style="display:none" id='comments_form'>
 									<div class='feed-list'>
-                  <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @sharing, :recipient => nil} %>
+                  <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @sharing, :recipient => @sharing.poster} %>
 									</div>
                 </div>
               </li>
-              <li id='dig_sharing_<%= @sharing.id %>'>
-                <%= link_to_remote "<strong><span id='dig_sharing_#{@sharing.id}'>#{@sharing.digs_count}</span></strong>", :url => digs_url("dig[diggable_type]" => 'Sharing', "dig[diggable_id]" => @sharing.id, :at => 'sharing'), :html => {:class => 'praise'} %>
+              <li>
+                <%= link_to_remote "<strong><span id='dig_sharing_#{@share.id}'>#{@share.digs_count}</span></strong>", :url => digs_url("dig[diggable_type]" => 'Share', "dig[diggable_id]" => @share.id, :at => 'sharing'), :html => {:class => 'praise'} %>
               </li>
               <li>
-                <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => @shareable.id) %>(<%= @shareable.sharings_count %>)
+                <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => @link.id) %>(<%= @link.sharings_count %>)
               </li>
               <li style="_margin-top:6px">
-                <span>首次分享人：</span><%= avatar_image @shareable.first_sharer, :width => 27, :height => 27 %> <%= profile_link @shareable.first_sharer %></a>
+                <span>首次分享人：</span><%= avatar_image @link.first_sharer, :width => 27, :height => 27 %> <%= profile_link @link.first_sharer %></a>
               </li>
             </ul>
           </div>
           <div id="navextra">
-            <%= link_to_function "<span class='close w-l'></span>关闭顶栏", "window.location.href = '#{@shareable.url}';" %>
+            <%= link_to_function "<span class='close w-l'></span>关闭顶栏", "window.location.href = '#{@link.url}';" %>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<iframe frameborder="0" width="100%" height="100%" id="ifr" src="<%= @shareable.url %>">
+<iframe frameborder="0" width="100%" height="100%" id="ifr" src="<%= @link.url %>">
 </iframe>
 
 <%= onload_javascript_tag "

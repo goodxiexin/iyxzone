@@ -5,5 +5,5 @@ elsif @feed_deliveries.size < @fetch_size
 	page.replace_html 'more_feed', "<div class='jl-more'>没有更多了...</div>"
 else
 	page.insert_html :bottom, 'feed_list', :partial => 'feed_deliveries', :object => @feed_deliveries
-  page.replace_html 'more_feed', "#{link_to_function '更多新鲜事', "Iyxzone.Profile.Feeder.moreFeeds(#{@profile.id})"}"
+  page.replace_html 'more_feed', "#{link_to_function '更多新鲜事', "Iyxzone.Profile.Feeder.moreFeeds(#{@profile.id})", :class => 'jl-more'}"
 end

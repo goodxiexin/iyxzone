@@ -18,8 +18,8 @@ class Blog < ActiveRecord::Base
 	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.is_owner_privilege? or blog.poster == user}
 
   acts_as_resource_feeds
-
-  acts_as_shareable :default_title => lambda {|blog| blog.title}
+  
+  acts_as_shareable :default_title => lambda {|blog| blog.title}, :path_reg => /\/blogs\/([\d]+)/
 
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 

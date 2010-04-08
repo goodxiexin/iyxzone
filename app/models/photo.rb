@@ -16,7 +16,7 @@ class Photo < ActiveRecord::Base
 
 	acts_as_resource_feeds
 
-  acts_as_shareable :default_title => lambda {|photo| "相册#{photo.album.title}的照片"}
+  acts_as_shareable :default_title => lambda {|photo| "相册#{photo.album.title}的照片"}, :path_reg => [/\/personal_photos\/([\d]+)/, /\/event_photos\/([\d]+)/, /\/guild_photos\/([\d]+)/, /\/avatars\/([\d]+)/]
 
   acts_as_diggable :create_conditions => lambda {|user, photo| (photo.type != 'PersonalPhoto' and photo.type != 'Avatar') or photo.privilege != 4}
 

@@ -11,10 +11,10 @@ class PollObserver < ActiveRecord::Observer
     poll.poster.raw_increment :polls_count
 
     # issue feeds if necessary
-    return unless poll.poster.application_setting.emit_poll_feed
+    return if poll.poster.application_setting.emit_poll_feed == 0
     recipients = [poll.poster.profile, poll.game]
     recipients.concat poll.poster.guilds
-    recipients.concat poll.poster.friends.find_all{|f| f.application_setting.recv_poll_feed}
+    recipients.concat poll.poster.friends.find_all{|f| f.application_setting.recv_poll_feed == 1}
     poll.deliver_feeds :recipients => recipients
   end
 
@@ -25,16 +25,6 @@ class PollObserver < ActiveRecord::Observer
     end
   end
   
-  def after_update poll
-    if poll.summary_changed?
-      poll.voters.each do |voter|
-        if voter.mail_setting.poll_summary_change and voter != poll.poster
-          PollMailer.deliver_summary_change poll, voter
-        end
-      end
-    end
-  end
-
   def after_destroy poll
     poll.poster.raw_decrement :polls_count
   end

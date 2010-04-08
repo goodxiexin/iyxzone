@@ -1,0 +1,26 @@
+<html>
+<head>
+<script type="text/javascript" src="/javascripts/prototype.js?1270183220"></script>
+<script type="text/javascript" src="/javascripts/transport.js"></script>
+<script type="text/javascript" src="/javascripts/effects.js?1269412829"></script>
+<script type="text/javascript" src="/javascripts/dragdrop.js?1269412829"></script>
+<script type="text/javascript" src="/javascripts/controls.js?1270183327"></script>
+</head>
+<body>
+<div id='content'></div>
+<script>
+new Ajax.CrossSiteRequest('http://www.baidu.com', {
+	method: 'get',
+	crossSite: true,
+	onLoading: function() {
+		alert('on loading');
+	},
+	onSuccess: function(transport) {
+		alert('on success');
+		var html = transport.responseText;
+		alert(html);
+	},
+});
+</script>
+</body>
+</html>

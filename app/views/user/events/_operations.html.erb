@@ -22,9 +22,9 @@
     <% elsif code == 0 %>
       <div>只有他的好友可以参加，<%= facebox_link '加他为好友', new_friend_request_url(:friend_id => @user.id), :class => 'red' %></div> 
     <% elsif code == -1 %>
-      <dd>你没有在该游戏、服务器的游戏角色，无法加入该工会</dd>
+      <dd>你已经没有在该游戏、服务器的游戏角色，无法加入该活动</dd>
     <% elsif code == -2 %>
-      <dd>只有该工会的会员才能参加, 去工会 <%= guild_link @event.guild, :class => 'red' %> 看看</dd>
+      <dd>只有该公会的会员才能参加, 去公会 <%= guild_link @event.guild, :class => 'red' %> 看看</dd>
     <% end %>
 <% end %>
 </dl>

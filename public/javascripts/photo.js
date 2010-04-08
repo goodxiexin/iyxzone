@@ -360,6 +360,7 @@ Iyxzone.Photo.Tagger = Class.create({
   },
 
   save: function(){
+    Iyxzone.disableButton(this.confirmButton, '保存中');
     if(this.validate()){
       var params = "";
       params = $('tag_form').serialize();
@@ -370,7 +371,6 @@ Iyxzone.Photo.Tagger = Class.create({
       params += "&tag[height]=" + this.cropImg.calcH();
       params += "&tag[photo_id]=" + this.photoID;
       params += "&tag[photo_type]=" + this.type;
-      alert(params);
       new Ajax.Request('/photo_tags', {
         method: 'post', 
         parameters: params,
@@ -379,8 +379,11 @@ Iyxzone.Photo.Tagger = Class.create({
           this.contentInput.clear();
           var tagInfo = transport.responseText.evalJSON();
           this.insertTag(tagInfo);
+          Iyxzone.enableButton(this.confirmButton, '保存');
         }.bind(this)
       });
+    }else{
+      Iyxzone.enableButotn(this.confirmButotn, '保存');
     } 
   },
 

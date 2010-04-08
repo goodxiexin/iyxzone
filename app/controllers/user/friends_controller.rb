@@ -32,7 +32,7 @@ class User::FriendsController < UserBaseController
   end
 
   def destroy
-    if @friendship.destroy && @friendship.reverse.destroy
+    if @friendship.reverse.destroy && @friendship.cancel
       render :update do |page|
         page << "tip('删除成功');$('friend_#{params[:id]}').remove();"
       end
