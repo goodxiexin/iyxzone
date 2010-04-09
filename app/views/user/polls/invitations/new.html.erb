@@ -21,7 +21,7 @@
           <div class="friend-invite-head">
             <strong class="green">搜索好友</strong> 
 						<% unless @friends.blank? %>
-            <%= text_field_tag 'search', '输入好友的名字', :class => 'ipt', :onclick => "this.clear();", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
+            <%= text_field_tag 'search', '输入好友的名字', :class => 'ipt', :onclick => "$(this).clear();", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
 						<% end %>
           </div>
           <div class="friend-invite-list">

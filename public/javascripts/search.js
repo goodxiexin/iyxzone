@@ -58,7 +58,7 @@ Iyxzone.Search = {
 
   validateCharacterForm: function(){
     var value = $('character_form').getInputs('text')[0].value;
-    if((value  == '角色名字' || value == '') && gameID == '' && areaID == '' && serverID == ''){
+    if((value  == '角色名字' || value == '') && $(game_id).value == '' && $(area_id).value == '' && $(server_id).value == ''){
       error('请输入你要查找的玩家的信息');
       return false;
     }

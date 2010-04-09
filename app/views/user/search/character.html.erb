@@ -23,7 +23,7 @@
 					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :style => "display:none", :onsubmit => "Iyxzone.Search.searchUsers($('user_search_submit_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'key', '要搜索的用户的昵称', :onclick => "this.clear();" %></div>
+                <div class="textfield"><%= text_field_tag 'key', '要搜索的用户的昵称', :onclick => "$(this).clear();" %></div>
               </div>
               <div class="fldbtn"><span class="button"><span><button type="submit" id='user_search_submit_btn'>查找</button></span></span></div>
               <div class="link"><%= link_to_function "按游戏角色查找", "Iyxzone.Search.showCharacterForm();" %></div>
@@ -32,7 +32,7 @@
 					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :onsubmit => "Iyxzone.Search.searchCharacters($('character_search_submit_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldid"><label for="username">游戏角色名称：</label></div>
-                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "this.clear();" %></div></div>
+                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "$(this).clear();" %></div></div>
             </div>
             <div id='character_options'>
             <div class="rows s_clear">

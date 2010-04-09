@@ -15,7 +15,7 @@
           <% form_tag search_users_url, :class => "formcontent", :id => 'normal_form', :onsumbit => "return user_searcher.validate_user();", :style => "display:none" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'key', '好友名字', :onclick => "this.clear();" %></div>
+                <div class="textfield"><%= text_field_tag 'key', '好友名字', :onclick => "$(this).clear();" %></div>
               </div>
               <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
               <div class='link'><%= link_to_function "找游戏角色", "user_searcher.show_character_form();" %></div>
@@ -24,7 +24,7 @@
           <% form_tag search_characters_url, :class => "formcontent", :onsubmit => "return user_searcher.validate_character();", :id => 'character_form' do %>
             <div class="rows s_clear">
               <div class="fldvalue">
-                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', params[:key], :onclick => "this.clear();" %></div></div>
+                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', params[:key], :onclick => "$(this).clear();" %></div></div>
                 <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
                 <div class="link"><%= link_to_function "找好友", "user_searcher.show_normal_form();" %></div>
                 <span> <%= link_to_function "高级", "user_searcher.toggle_character_options();" %> </span>

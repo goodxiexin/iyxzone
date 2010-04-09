@@ -47,14 +47,14 @@
         <td>
           <div class="textfield" id='new_boss'><input value="点击添加新的BOSS名字" onclick="Iyxzone.Event.Summary.Boss.newBoss()" /></div>
           <div id='new_boss_name' style="display:none" class='textfield'>
-            <%= text_field_tag 'boss[name]', '', :onclick => "this.clear()" %>
+            <%= text_field_tag 'boss[name]', '', :onclick => "$(this).clear()" %>
           </div>
         </td>
         <td>
         </td>
         <td>
           <div class='textfield' id='new_boss_reward' style="width: 80px; margin: 0 auto; display:none">
-            <%= text_field_tag 'boss[reward]', '', :onclick => "this.clear()" %>
+            <%= text_field_tag 'boss[reward]', '', :onclick => "$(this).clear()" %>
           </div>
         </td>
         <td>
