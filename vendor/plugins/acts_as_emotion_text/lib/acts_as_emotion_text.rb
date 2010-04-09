@@ -7,8 +7,10 @@ module Emotion
 
   def acts_as_emotion_text(options={})
     define_method("before_create") do
+      puts "convert_emotion"
       options[:columns].each do |column|
         eval("self.#{column}").gsub!(Re, "<img src='/images/faces/\\1.gif'/>")
+        puts "self.#{column} = #{eval("self.#{column}")}"
       end
     end
   end

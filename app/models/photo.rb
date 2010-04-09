@@ -12,6 +12,8 @@ class Photo < ActiveRecord::Base
 
   needs_verification
 
+  escape_html :sanitize => :notation
+
 	acts_as_privileged_resources :owner_field => :poster
 
 	acts_as_resource_feeds

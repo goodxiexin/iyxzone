@@ -10,6 +10,8 @@ class Profile < ActiveRecord::Base
 
 	belongs_to :district
 
+  escape_html :sanitize => :about_me
+
   acts_as_viewable :create_conditions => lambda {|user, profile| profile.user != user}
 
   acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, :path_reg => /\/profiles\/([\d]+)/
@@ -209,15 +211,6 @@ class Profile < ActiveRecord::Base
       end
     end
   
-    # check website
-    unless website.blank?
-      # TODO: 这个regular expression貌似不够强大，不能把adsfadsf视为非法的url
-      unless website =~ /^((https?:\/\/)?)([a-zA-Z0-9_-])((\.)([a-zA-Z0-9_-])+)+(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/
-        errors.add_to_base("非法的url")
-        return
-      end 
-    end
-
   end
 
 end

@@ -8,19 +8,6 @@
 </head>
 <body>
 <div id='content'></div>
-<script>
-new Ajax.CrossSiteRequest('http://www.baidu.com', {
-	method: 'get',
-	crossSite: true,
-	onLoading: function() {
-		alert('on loading');
-	},
-	onSuccess: function(transport) {
-		alert('on success');
-		var html = transport.responseText;
-		alert(html);
-	},
-});
-</script>
+&lt;
 </body>
 </html>

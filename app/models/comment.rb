@@ -9,6 +9,9 @@ class Comment < ActiveRecord::Base
 	has_many :notices, :as => 'producer', :dependent => :destroy
 
   needs_verification
+
+  # escape html before convert emotion image, otherwise emotion would also be escaped
+  escape_html :sanitize => :content
   
   acts_as_emotion_text :columns => [:content]
 

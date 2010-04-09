@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  unloadable 
+  
   has_many :servers, :class_name => 'GameServer', :dependent => :destroy
   
   has_many :areas, :class_name => 'GameArea', :dependent => :destroy

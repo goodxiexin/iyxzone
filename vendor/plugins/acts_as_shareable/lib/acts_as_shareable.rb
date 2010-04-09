@@ -8,7 +8,6 @@ module Shareable
   module ClassMethods
 
     def acts_as_shareable opts={}
-puts "register #{self.name}"
       # 只能有一个
       has_one :share, :as => 'shareable', :dependent => :destroy
 
