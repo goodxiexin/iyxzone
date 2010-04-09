@@ -45,11 +45,11 @@
           <div class="fldvalue">
 						<div class='bookbox'>
 							<%= f.text_area 'content' %>
-						</div>
-						<div class='buttons'>
-							<span class="button"><span><button type='submit' id='submit_btn'>发送</button></span></span>
-							<span class="button button-gray"><span><button type="reset">取消</button></span></span>
-						<%= emotion_link 'mail_content', :class => 'icon-face right', :align=>"absmiddle" %>
+							<div class='buttons'>
+								<span class="button"><span><button type='submit' id='submit_btn'>发送</button></span></span>
+								<span class="button button-gray"><span><button type="reset">取消</button></span></span>
+							<%= emotion_link 'mail_content', :class => 'icon-face right' , :align => "absmiddle"%>
+							</div>
 						</div>
 					</div>
         </div>
