@@ -21,12 +21,13 @@ a:hover{color:#D63200;}
 #appbar .applist li{height:37px;line-height:37px;padding:5px 0;overflow:hidden;}
 #appbar .applist li a{display:block;height:100%;padding-left:50px;background-repeat:no-repeat;font-size:14px;}
 
+#canvas{zoom:1}
 #canvas .round_m{padding:2px 8px;}
 #canvas h1{margin-bottom:8px;height:37px;line-height:37px;padding-left:50px;overflow:hidden}
 #canvas .canvas-status{float:right;padding-right:18px;line-height:37px;}
 
 #canvas .canvas_int{padding:12px 13px;}
-#canvas .canvas_int .tab{margin-bottom:10px;padding:0 16px;}
+#canvas .canvas_int .tab,.tab{margin-bottom:10px;padding:0 16px;}
 #canvas .canvas_con{padding:2px 17px 19px;}
 #canvas .canvas_con #ployComposer{margin-left:-7px;}
 #canvas .tipbar{border:1px solid #bbd2aa;background:#defeb5;padding:15px 8px;line-height:20px;color:#999;font-size:14px}
@@ -84,7 +85,7 @@ a:hover{color:#D63200;}
 .multibox .diary-more{line-height:29px;text-align:right}
 
 .multibox .data-table{width:100%;}
-.multibox .data-table th,.multibox .data-table td{padding:0 8px;height:23px;line-height:23px;vertical-align:top;overflow:hidden;}
+.multibox .data-table th,.multibox .data-table td{padding:0 8px;height:23px;line-height:23px;vertical-align:top;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 .multibox .data-table th{border-bottom:1px #E7F0E0 solid;background:#fff;text-align:left;color:#25700D}
 .multibox .data-table a{color:#333}
 .multibox .data-table a:hover{color:#D63200;}
@@ -127,23 +128,23 @@ a:hover{color:#D63200;}
 #canvas .canvas_con .multibox .news-list{padding:11px 9px}
 /*#canvas .canvas_con .multibox .data-table01 th{border-bottom:1px #BBD2AA solid;}
 */
-.feed-message-box{margin-bottom:19px;position:relative;}
+.feed-message-box{margin-bottom:19px;position:relative}
 .feed-message-box h4{height:27px;line-height:27px;color:#000;overflow:hidden}
 .feed-message-box h4 span{color:#D63200}
 .feed-message-box li{padding-left:22px;height:30px;line-height:30px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -73px;color:#000;overflow:hidden}
 .feed-message-box .feed-message{height:29px;line-height:29px;border-bottom:1px #E7F0E0 solid;overflow:hidden}
 .feed-message-box .feed-message a.icon-active{float:right;_display:inline-block;margin:10px 8px 0 0;}
 
-.feed-box{line-height:24px;word-spacing:5px}
+.feed-box{line-height:24px;word-spacing:5px;}
 .feed-box .tab{margin-bottom:20px;padding:0 16px;position:relative}
 /*.feed-box .feed-wrap{padding:0 10px;}
 */
-.feed-box .feed-list-box{margin-bottom:20px;}
-.feed-box .feed-img-list{margin-bottom:20px;position:relative}
+.feed-box .feed-list-box{margin-bottom:20px;zoom:1;overflow:hidden;clear:both}
+.feed-box .feed-img-list{margin-bottom:20px;position:relative;zoom:1}
 
 .feed-list-box h4{color:#D63200}
-.feed-list-box .feed-list{padding-left:34px;_height:24px;min-height:24px;}
-.feed-list-box .feed-list .feed-icon{position:absolute;left:0;top:0;width:16px;height:16px;overflow:hidden;margin-top:3px}
+.feed-list-box .feed-list{padding-left:34px;_height:24px;min-height:24px}
+.feed-list-box .feed-list .feed-icon{/*position:absolute;left:0;top:0;*/float:left;width:16px;height:16px;overflow:hidden;margin-top:3px}
 /*.feed-list-box .feed-list .icon-friend{background-position:left -2px;}
 .feed-list-box .feed-list .icon-info{background-position:left -38px;}
 .feed-list-box .feed-list .icon-blog{background-position:left -116px;}
@@ -161,9 +162,9 @@ a:hover{color:#D63200;}
 .feed-list .word-box,.feed-list .comment-box{margin-top:4px;}
 
 .feed-list .info-box{padding:0 8px;}
-.feed-list .word-box{padding:7px;line-height:18px;position:relative;width:385px}
-.feed-list .word-box .icon-active{position:absolute;right:0;top:0}
-.feed-list .word-box .img{float:left;margin:4px 0;width:27px;text-align:center;overflow:hidden;position:relative}
+.feed-list .word-box{padding:7px;line-height:18px;/*position:relative;*/width:385px}
+.feed-list .word-box .icon-active{/*position:absolute;right:0;top:0*/float:right}
+.feed-list .word-box .img{float:left;margin:4px 0;width:27px;text-align:center;overflow:hidden;/*position:relative*/}
 .feed-list .word-box .word{margin-left:48px;_margin-left:45px;}
 .feed-list .word-box .form-wrap{float:left;margin-left:-27px;width:100%;}
 .feed-list .word-box .form-wrap .formcontent{margin-left:27px;padding-left:21px;width:auto;}
@@ -171,7 +172,7 @@ a:hover{color:#D63200;}
 .feed-list .comment-box textarea,.feed-list .word-box .textarea{width:270px;}
 .feed-list .comment-box .txt-add-comment,.feed-list .word-box .txt-add-comment{padding:5px;width:260px;height:13px;overflow:hidden}
 
-.feed-list .comment-box{padding:7px 8px;width:383px}
+.feed-list .comment-box{padding:7px 8px;width:383px;}
 .feed-list .comment-box .rows,.feed-list .word-box .rows{padding-bottom:5px;}
 .feed-list .comment-box .buttons .button,.feed-list .word-box .buttons .button{float:right;margin-left:1px;margin-right:4px;}
 .feed-list .comment-box .formcontent,.feed-list .word-box .formcontent{padding:3px 0;line-height:13px;}
@@ -188,7 +189,6 @@ a:hover{color:#D63200;}
 .feed-img-list .feed-list .feed-header{padding:8px 13px;border-top:1px #BBD2AA solid;background:#F8FCF6}
 .feed-img-list .feed-list .feed-header p{word-spacing:5px;}
 .feed-img-list .feed-list .feeds{padding:8px 10px;border-top:1px #E7F0E0 solid;word-spacing:5px;}
-.feed-list-box .cmt-box,.feed-img-list .cmt-box{margin-bottom:10px;width:383px;}
 
 .feed-box01{padding-left:27px;line-height:21px;}
 .feed-box01 .page{margin-bottom:15px;line-height:18px;color:#7E7F80}
@@ -210,12 +210,13 @@ a:hover{color:#D63200;}
 #leftsidebar .avatarbox ul.op li{float:left;width:75px;overflow:hidden;white-space:nowrap;margin:5px 2px;}
 
 #leftsidebar .profile-list{margin:5px 0 5px 30px;}
-#leftsidebar .info-list{margin-bottom:10px;padding:7px 13px;line-height:25px;}
+#leftsidebar .info-list{margin-bottom:10px;padding:7px 5px;line-height:25px;}
 #leftsidebar .info-list table{width:100%;}
 #leftsidebar .info-list td{vertical-align:top;height:25px;}
 #leftsidebar .info-list td.id{text-align:right; white-space:nowrap}
 #leftsidebar .info-list td.value{color:#25700D;word-spacing:5px}
 #leftsidebar .info-list td.value b{color:#D63200}
+
 
 #leftsidebar .formcontent{margin:5px 0;padding:0;}
 #leftsidebar .formcontent table{margin:0 auto;}
@@ -226,7 +227,7 @@ a:hover{color:#D63200;}
 #leftsidebar .formcontent .fldid{width:88px}
 
 #leftsidebar .multibox .photolist-box{margin:6px 2px 15px}
-#leftsidebar .multibox .photolist-box li{padding:5px 10px 5px 11px;}
+#leftsidebar .multibox .photolist-box li{padding:5px 8px;_padding:5px 6px;}
 
 #rightsidebar .multibox .request{padding:8px 3px;}
 #rightsidebar .multibox .request li a{color:#000}
@@ -237,8 +238,8 @@ a:hover{color:#D63200;}
 #rightsidebar .multibox .data-table th.level{width:30px;}
 #rightsidebar .multibox .data-table th.name02{width:100px;}
 #rightsidebar .multibox .data-table th.level02{width:60px;}
-#rightsidebar .multibox .data-table .name{padding:0 0 0 15px;}
-#rightsidebar .multibox .data-table .level{padding:0 7px;}
+#rightsidebar .multibox .data-table .name{padding:0 0 0 5px;}
+#rightsidebar .multibox .data-table .level{padding:0 5px;}
 
 #rightsidebar .multibox .keybtn-box{margin:0 -1px 0 -2px;padding:5px 0}
 #rightsidebar .multibox .keybtn-box a{margin:1px 1px 2px;}
@@ -320,7 +321,7 @@ a:hover{color:#D63200;}
 .formcontent .buttons{padding:15px 0;}
 .formcontent .emotions{padding:12px 0 2px;}
 .formcontent .button{margin:3px 8px 0 0;}
-.formcontent .fldid{float:left;margin-right:5px;width:73px;white-space:nowrap;text-align:right;overflow:hidden}
+.formcontent .fldid{float:left;margin-right:5px;width:90px;white-space:nowrap;text-align:right;overflow:hidden}
 .formcontent .fldvalue,.formcontent .fldbtn, .formcontent .fldcb, .formcontent .fldrd,.formcontent .fldrdvalue,.formcontent .fldfilevalue{_display:inline;float:left;margin-right:5px;}
 .formcontent .fldfilevalue{margin-right:15px;}
 .formcontent .fldvalue select{margin-top:3px;}
@@ -351,6 +352,7 @@ a:hover{color:#D63200;}
 
 
 .inbox-form .textfield, .photo-form .textfield, .cons-form .textfield, .poly-form .textfield{width:268px;_width:266px;}
+.cons-form .new_guild .fldid{width:100px}
 .photo-form textarea{width:275px;height:90px}
 .photo-form select{width:197px}
 .photo-form .buttons{margin-left:91px;}
@@ -452,7 +454,7 @@ a:hover{color:#D63200;}
 .friend-list .friend-list-header{padding:4px 6px 4px 11px;height:27px;line-height:27px;background:#F1F9E1;overflow:hidden}
 .friend-list .friend-list-header .textfield{width:150px}
 .friend-list .friend-list-body{margin:3px 0;}
-.friend-list .friend-list-body li{float:left;padding:3px;margin:5px 10px;width:200px;border:1px solid #fff;background:url(../images/skin/dotline.gif) repeat-x bottom;}
+.friend-list .friend-list-body li{float:left;padding:3px;margin:5px 10px;width:200px;border:1px solid #fff;background:url(../images/skin/dotline.gif) repeat-x bottom;z-index:1}
 .friend-list .friend-list-body li.bg{border:1px #E7F0E0 solid;background:url(../images/skin/hover-bg.gif) repeat-x;}
 .friend-list .friend-list-body li a.icon-active{visibility:hidden}
 .friend-list .friend-list-body li.bg a.icon-active{visibility: visible;position:relative;z-index:2}
@@ -541,13 +543,15 @@ a:hover{color:#D63200;}
 .vote-box .vote-header-table .vote-content h5{font-size:14px;color:#D63200;margin-bottom:9px;}
 .vote-box .vote-header-table .vote-content h5 span{color:#333;font-size:12px;font-weight:normal}
 .vote-box .vote-header-table .vote-content h5 span span{color:#7E7F80}
-.vote-box .vote-header-table .vote-content p{padding-left:23px;color:#7E7F80}
+.vote-box .vote-header-table .vote-content p{color:#7E7F80}
 .vote-box .vote-header-table .status{padding-left:40px;width:96px}
 .vote-box .vote-header-table .btn{padding-right:0;width:70px;}
 
 .vote-box .vote-status-table{margin:10px auto;}
 .vote-box .vote-status-table td{padding:5px;line-height:20px;}
 .vote-box .vote-status-table .title{text-align:right;padding-right:2px;}
+.myblog .myblog-table .title div{padding-left:22px;height:21px;width:320px; white-space:nowrap;background:url(../images/icons/homeIcons.gif) no-repeat 0 -801px;overflow:hidden}
+
 .vote-box .vote-status-table .percent{width:211px;padding-left:2px;}
 .vote-box .vote-status-table .cb{width:22px;}
 .vote-box .vote-status-table .btn{text-align:right;width:56px}
@@ -633,17 +637,23 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .jl-mcAvatar a{width:50px;height:50px;}
 .jl-fldbtn{margin-top:10px}
 
-.feed-box{position:relative}
-.feed-wrap .feed-list{padding-left:0}
+/*首页/个人/好友主页*/
+.home-wrap .s-dialog{margin:0 30px 0 10px;}
+.feed-wrap,.home-wrap{zoom:1}
+.feed-wrap .feed-list,.home-wrap .feed-list{padding-left:0;}
 .feed-wrap .feed-list-box{margin:10px 0}
-.jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;position:relative}
+.jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;}
+.jl-list-con:after{content:".";display:block;height:0;clear:both;visibility:hidden;}/*ie8 cmt-box float clear*/
+.jl-list-con{zoom:1;}
+
+.home-wrap .jl-list-con{margin-left:20px;}
 .feed-list .jl-list-con .word-box textarea{width:390px}
 .feed-box .feed-list-box{margin-bottom:10px;}
 .feed-list-box h4{background:url(../images/skin/skin2010.png) repeat-x 0 -47px;}
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
-#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative;}
+#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative}
 #roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
 #roll-photo .roll-photo-list a{margin:0 9px;}
 #roll-photo a img{width:100px;}
@@ -654,11 +664,6 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 span.jl-my-gold{background:url(../images/icons/homeIcons.png) no-repeat 0 -704px;padding-left:20px;margin-right:20px}
 a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:center;width:85px;height:18px;line-height:18px;background:url(../images/skin/skin2010.png) no-repeat -115px -372px;display:inline-block;color:#fff}
 
-/*个人/好友主页*/
-/*.home-wrap .icon-active{margin-left:30px;margin-left:10px !important;}
-*/
-.home-wrap .s-dialog{margin-right:30px}
-.home-wrap .feed-list-box .feed-list{padding-left:32px}
 
 
 /**/
@@ -838,7 +843,7 @@ a.i-s-8:hover span{background-position:right -310px;}
 .friend-invite-list li a:hover{background:#ecfdda}
 .friend-invite-list li.bg a{background:#defebb}
 .friend-invite-list li img{float:left;}
-.friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;}
+.friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .friend-invite-list li strong span{display:block;margin:5px 0 0 0;}
 /**/
 /*.relation-member{border:0}
@@ -945,7 +950,7 @@ dl.menu-op dd a{color:#333}
 .vote-detail h3,.vote-detail p,.vote-detail ul{padding:0 20px}
 .vote-detail h3{font-weight:400;line-height:24px;}
 .vote-detail ul li{margin:5px 0;padding-left:20px;}
-.vote-detail ul li.now{background:url(../images/icons/homeIcons.png) no-repeat 0 -320px}
+.vote-detail ul li.now{background:url(../images/icons/homeIcons.gif) no-repeat 0 -1440px}
 .vote-detail .time{color:#999}
 .vote-detail .jl-cutline{padding-bottom:15px}
 
@@ -959,7 +964,9 @@ dl.menu-op dd a{color:#333}
 .list-v2 .feed-list .feed-header .icon-active{margin-left:20px}
 
 /*视频 日志详细页面*/
-a.share-btn{background:url(../images/skin/skin2010.png) no-repeat -130px -288px;display:inline-block;width:70px;height:20px;line-height:20px;text-indent:28px;color:#508119}
+a.share-btn,a.concern-btn{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:70px;height:20px;line-height:20px;text-indent:28px;color:#508119}
+a.share-btn{background-position:-130px -288px}
+a.concern-btn{background-position:0 -411px}
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 15px}
 .detail-video-head p.left,.detail-blog-head p.left{margin-top:6px}
 .detail-video-head strong,.detail-blog-head strong{color:#cc3300;font-size:14px;font-weight:400}
@@ -1001,6 +1008,14 @@ h1.app-share{float:left}
 .feed-img-list .feed-share .feed-header h3 a{font-weight:700}
 .feed-img-list .feed-share .feeds {border:0;padding:5px}
 .feed-img-list .feed-share .feed-header .con .quote{color:#999;margin:0 3px}
+
+/*分享弹出框*/
+.share-box{margin:10px;padding:10px;}
+.share-box .item .fldvalue input,.share-box .item .fldvalue textarea{width:260px;padding:5px;border:1px solid #999;color:#666}
+.share-box .item .share-title{background:#feffcf;padding:3px}
+.share-box .item .share-title input{width:254px}
+.share-box .item span{color:#999;padding:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:250px;display:block}
+
 
 /*每日十闻*/
 .news10-list{line-height:22px;margin:10px 15px}
@@ -1053,6 +1068,12 @@ h1.app-share{float:left}
 .z-box .z-error .box01{border:1px solid #cf6079}
 .z-box .z-error .z-h{background:#fd3361;border:1px solid #fd8b6c}
 .z-box .z-error .z-con{border-color:#f31f50}
+
+/*日志插入图片lightbox*/
+.blog-ins-imglist{overflow-x:hidden;overflow-y:auto;height:200px;min-height:200px;border:1px solid #BBD2AA;margin:10px 0;}
+.blog-ins-imglist li{float:left;width:80px;margin:10px 20px;_margin:10px 13px;}
+.blog-ins-imglist li a:hover img{border-color:#7FB73D}
+.blog-ins-imglist li.selected img{border-color:#C5DE83;background:#C5DE83}
 
 /*编辑档案*/
 .archives-box .percent-box{margin-bottom:7px;}
@@ -1141,9 +1162,9 @@ h1.app-share{float:left}
 .theme-head .button-gray span button{color:#666}
 
 /*打招呼*/
-.face-hello{margin:10px;padding-left:80px}
-.face-hello .avatar{float:left;margin-left:-80px;display:inline}
-.face-hello .content{float:left;color:#666;width:100%;}
+.face-hello{margin:10px;padding-left:80px;}
+.face-hello .avatar{float:left;margin-left:-80px;display:inline;}
+.z-box .z-con .face-hello .content{float:left;color:#666;width:100%;margin:0}
 .face-hello h2{border-bottom:1px solid #bbd2aa;padding-bottom:5px;font-weight:700}
 .face-hello ul li{float:left;margin:8px 5px;color:#333;width:90px}
 .hello-history{border:0}
@@ -1169,10 +1190,11 @@ h1.app-share{float:left}
 .i-f-anger{background-position:-48px -72px}
 
 /*表情列表*/
-.emot-box{width:266px;}
-.emot-box .con{padding:5px 1px 1px 1px}
-.emot-box .con a{margin:3px}
-.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;padding:5px;}
+.emot-box .con{zoom:1;padding-top:3px}
+.emot-box .con a{margin:0 4px 6px 5px;_margin:0 4px 6px 4px;display:block;float:left}
+.emot-box .foot{background:#edf5e8;border-top:1px solid #d8e6ce;text-align:right;padding:5px 10px;clear:both;}
+.emot-box .con .foot a{float:none;display:inline-block;margin:0}
+.z-box .emot-box .foot{background:none;border:0;padding:5px 5px 0 0}
 
 /*简单翻页*/
 .pager-simple a{width:14px;height:14px;display:inline-block;font-size:0;line-height:0;overflow:hidden;background:url(../images/skin/skin2010.png) no-repeat;vertical-align:middle;}
