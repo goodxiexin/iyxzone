@@ -18,6 +18,12 @@ class EventPhoto < Photo
 
   validates_size_of :notation, :within => 0..1000, :too_long => "最多1000个字节", :allow_nil => true
 
+  def partitioned_path(*args)
+    dir = (attachment_path_id / 10000).to_s
+    sub_dir = (attachment_path_id % 10000).to_s
+    [dir, sub_dir] + args
+  end
+
 protected
 
   def album_is_valid

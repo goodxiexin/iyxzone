@@ -21,6 +21,12 @@ class PersonalPhoto < Photo
 
   # game_id, poster_id 和 privilege 都是继承相册的权限，且不能改变，因此不需要校验
 
+  def partitioned_path(*args)
+    dir = (attachment_path_id / 10000).to_s
+    sub_dir = (attachment_path_id % 10000).to_s
+    [dir, sub_dir] + args
+  end
+
 protected
 
   def album_is_valid

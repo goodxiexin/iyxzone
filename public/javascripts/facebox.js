@@ -35,6 +35,12 @@ var Facebox = Class.create({
 				f.click_handler(elem, e);
 			});
 		});
+    $$('button[rel=facebox]').each(function(elem,i){
+      Event.observe(elem, 'click', function(e){
+        Event.stop(e);
+        f.click_handler(elem, e);
+      });
+    });
 	},
 
 	watchClickEvent: function(elem){
@@ -78,18 +84,16 @@ var Facebox = Class.create({
 		});
 	},
 
-	set_content: function(data, klass){
-		if(klass) this.content.addClassName(klass);
-//		this.content.innerHTML = data;
+	set_content: function(data){
 		this.content.update( data);
     		
 		if(!this.facebox.visible()) 
 			new Effect.Appear(this.facebox, {'duration': 0.3});
 	},
 
-	reveal: function(data, klass){
+	reveal: function(data){
 		this.remove_loading();
-		this.set_content(data, klass);
+		this.set_content(data);
 		this.locate();
     
 		//Event.observe(document, 'keypress', this.keyPressListener);
@@ -161,12 +165,10 @@ var Facebox = Class.create({
     this.set_content(html);
     this.locate();
     var validation = Iyxzone.validationCode(4);
-//    $('validation').innerHTML = validation.div.innerHTML;
     $('validation').update( validation.div.innerHTML);
     this.codes = validation.codes;
     $('validation').observe('click', function(){
       var validation = Iyxzone.validationCode(4);
-//      $('validation').innerHTML = validation.div.innerHTML;
       $('validation').update( validation.div.innerHTML);
       this.codes = validation.codes;
     }.bind(this));	
@@ -184,61 +186,44 @@ var Facebox = Class.create({
 
 	click_handler	: function(elem, e){
     var width = elem.readAttribute('facebox_width');
+    var rel = elem.readAttribute('rel');
+    var type = elem.readAttribute('facebox_type');
+    var fb = this; 
+
+    // set width if necessary
     if(width){
       this.set_width(width);
     }else{
       this.set_width(350);
     }
  
+    // load facebox
 		this.loading();
 		Event.stop(e);
-
-		// support for rel="facebox[.inline_popup]" syntax, to add a class
-		var klass = elem.rel.match(/facebox\[\.(\w+)\]/);
-		if (klass) klass = klass[1];
-		
 		new Effect.Appear(this.facebox, {'duration': .3});
-	
-		if(elem.href.match(/#/)){
-			var url = window.location.href.split('#')[0];
-			var target = elem.href.replace(url+'#','');
-			var d = $(target);
-			var data = new Element(d.tagName);
-			data.update(d.innerHTML);
-			this.reveal(data, klass);
-		 }else if(elem.href.match(this.settings.image_types)) {
-			var image = new Image();
-			fb = this;
-			image.onload = function() {
-				fb.reveal('<div class="image"><img src="' + image.src + '" /></div>', klass)
-			}
-			image.src = elem.href;
+
+    // parse facebox type	
+		if(type == 'confirm'){
+			var confirm_message = elem.readAttribute('facebox_confirm');
+			var method = elem.readAttribute('facebox_method');
+			var authenticity_token = elem.readAttribute('authenticity_token');
+			fb.show_confirm(confirm_message, elem.href, authenticity_token, method); 
+		}else if(type == 'confirm_with_validation'){
+			var confirm_message = elem.readAttribute('facebox_confirm');
+      var method = elem.readAttribute('facebox_method');
+      var authenticity_token = elem.readAttribute('authenticity_token');
+      fb.show_confirm_with_validation(confirm_message, elem.href, authenticity_token, method);
 		}else{
-			var fb  = this;
-			var type = elem.readAttribute('facebox_type');
-	
-			if(type == 'confirm'){
-				var confirm_message = elem.readAttribute('facebox_confirm');
-				var method = elem.readAttribute('facebox_method');
-				var authenticity_token = elem.readAttribute('authenticity_token');
-				fb.show_confirm(confirm_message, elem.href, authenticity_token, method); 
-			}else if(type == 'confirm_with_validation'){
-				var confirm_message = elem.readAttribute('facebox_confirm');
-        var method = elem.readAttribute('facebox_method');
-        var authenticity_token = elem.readAttribute('authenticity_token');
-        fb.show_confirm_with_validation(confirm_message, elem.href, authenticity_token, method);
-			}else{
-				// get one page
-				new Ajax.Request(elem.href, {
-					method: 'get',
-					onFailure: function(transport){
-            fb.reveal(transport.responseText, klass);
-          },
-          onComplete: function(transport){
-            fb.reveal(transport.responseText, klass);
-          }
-        });
-			}
+			// get one page
+			new Ajax.Request(elem.href, {
+				method: 'get',
+				onFailure: function(transport){
+          fb.reveal(transport.responseText);
+        },
+        onComplete: function(transport){
+          fb.reveal(transport.responseText);
+        }
+      });
 		}
 	}
 });
@@ -253,9 +238,9 @@ document.observe('dom:loaded', function(){
 	};
 	
  	// override default alert
-/*	window.alert = function(mess){
-		return facebox.show_notice(mess);
-	};*/
+  //window.alert = function(mess){
+	//	return facebox.show_notice(mess);
+	//};
 
   window.tip = function(mess){
 		return facebox.show_tip(mess);
