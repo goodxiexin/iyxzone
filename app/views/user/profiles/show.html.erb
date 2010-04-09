@@ -152,7 +152,7 @@
       <span><%= simple_format @profile.about_me %></span>
     <% end %>
 	<% else %>
-    <%= in_place_text_area @profile, :about_me, '介绍下自己?' %>
+    <%= in_place_text_area @profile, :about_me, '介绍下自己?', :param_name => 'profile[about_me]' %>
 	<% end %>
 	</div>
 	</div>

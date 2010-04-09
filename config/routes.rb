@@ -26,8 +26,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.reset_password '/reset_password/:password_reset_code', :controller => 'passwords', :action => 'edit'
 
-	map.upload_image '/upload_blog_images', :controller => 'user/blog_images', :action => 'upload'
-
   map.regions '/regions', :controller => 'chinese_region', :action => 'regions'
 
   map.cities '/cities', :controller => 'chinese_region', :action => 'cities'
@@ -38,6 +36,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :admin do |admin|
   
+  	admin.resources :guestbooks, :only => [ :index, :show , :edit, :update, :destroy]
+
     admin.resources :users, :member => {:enable => :put, :disable => :put, :activate => :put}, :collection => {:search => :get}
 
     admin.resources :blogs, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
@@ -69,6 +69,8 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
+		
+		users.resources :guestbooks
 
     users.resources :applications
 
@@ -130,6 +132,8 @@ ActionController::Routing::Routes.draw do |map|
     users.resource :mail_setting, :controller => 'mail_setting'
 
     users.resources :blogs, :collection => [:hot, :recent, :relative, :friends]
+
+    users.resources :blog_images, :controller => 'blogs/images'
 
     users.resources :drafts
 

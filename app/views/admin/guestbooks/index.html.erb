@@ -1,0 +1,27 @@
+<h1>Listing guestbooks</h1>
+
+<table>
+  <tr>
+	<td> 问题描述</td>
+	<td> 问题等级</td>
+	<td> 完成日期</td>
+	<td> 问题分类</td>
+	<td> 回复</td>
+  </tr>
+
+<% @guestbooks.each do |guestbook| %>
+	<tr>
+		<td><%=h guestbook.description %>  </td>
+		<td><%=h guestbook.priority %>  </td>
+		<td><%=h guestbook.done_date %>  </td>
+		<td><%=h guestbook.catagory %>  </td>
+		<td><%=h guestbook.reply %>  </td>
+    <td><%= link_to 'Show', admin_guestbook_path(guestbook) %></td>
+    <td><%= link_to 'Edit', edit_admin_guestbook_path(guestbook) %></td>
+    <td><%= link_to 'Destroy', admin_guestbook_path(guestbook), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

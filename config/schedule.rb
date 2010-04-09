@@ -22,12 +22,16 @@
 # 输出到tmp/cron_log
 set :output, "#{RAILS_ROOT}/tmp/cron_log"
 
-every :monday, :at => '3:00am' do
-  rake "users:send_long_time_no_seen"
-end
-
 every 1.day, :at => '0:00am' do
   rake "events:send_approaching_notification"
+end
+
+every 2.weeks, :at => '2:00am' do
+  rake "tags:delete_unused_tags"
+end
+
+every :monday, :at => '3:00am' do
+  rake "users:send_long_time_no_seen"
 end
 
 every :tuesday, :at => '2:00am' do
@@ -42,7 +46,6 @@ every :wednesday, :at => '2:30am' do
   rake "games:update_last_week_attentions_count"
 end
 
-every 2.weeks, :at => '2:00am' do
-  rake "tags:delete_unused_tags"
-end
-
+every :thursday, :at => '2:00am' do
+  rake "blogs:clear_orphan_blog_images"
+end 
