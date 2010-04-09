@@ -112,7 +112,7 @@ protected
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @event = Event.find(params[:id])
       require_owner @event.poster
-      require_event_not_expired @event if params[:action] == 'destroy'
+      require_event_not_expired @event
     elsif ['index', 'upcoming', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user

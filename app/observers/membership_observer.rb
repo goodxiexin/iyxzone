@@ -90,27 +90,33 @@ class MembershipObserver < ActiveRecord::Observer
 		guild = membership.guild
     user = membership.user
 
-		if membership.recently_decline_invitation
+		if membership.is_invitation?
 			# invitation declined
 			user.raw_decrement :guild_invitations_count
 			guild.raw_decrement :invitations_count
-			guild.president.notifications.create(
-        :category => Notification::Membership,
-        :data => "#{profile_link user} 拒绝了你的邀请: 不让你的游戏角色 #{ membership.character.name } 参加工会#{guild_link guild}")
-		elsif membership.recently_decline_request
+      if membership.recently_decline_invitation
+			  guild.president.notifications.create(
+          :category => Notification::Membership,
+          :data => "#{profile_link user} 拒绝了你的邀请: 不让你的游戏角色 #{ membership.character.name } 参加工会#{guild_link guild}")
+      end
+		elsif membership.is_request?
 			# request declined
 			guild.president.raw_decrement :guild_requests_count
 			guild.raw_decrement :requests_count
-			user.notifications.create(
-        :category => Notification::Membership,
-        :data => "#{profile_link guild.president} 拒绝了你的请求: 不让你的游戏角色 #{ membership.character.name } 加入工会#{guild_link guild}")
-		elsif membership.recently_evicted
+      if membership.recently_decline_request
+			  user.notifications.create(
+          :category => Notification::Membership,
+          :data => "#{profile_link guild.president} 拒绝了你的请求: 不让你的游戏角色 #{ membership.character.name } 加入工会#{guild_link guild}")
+      end
+		elsif membership.is_authorized?
 			# user is evicted
 			user.raw_decrement :participated_guilds_count unless guild.has_member? user
 			guild.raw_decrement field(membership.status)
-		  user.notifications.create(
-        :category => Notification::Membership,
-        :data => "你的游戏角色 #{membership.character.name} 被剔除出了工会#{guild_link guild}")
+      if membership.recently_evicted
+		    user.notifications.create(
+          :category => Notification::Membership,
+          :data => "你的游戏角色 #{membership.character.name} 被剔除出了工会#{guild_link guild}")
+      end
     end	
 	end
 

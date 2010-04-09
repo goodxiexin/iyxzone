@@ -30,10 +30,15 @@ module EscapeHTML
       opts = self.class.escape_html_opts
       return if opts[:sanitize].blank?
       (opts[:sanitize].is_a?(Array) ? opts[:sanitize] : [opts[:sanitize]]).each do |col|
-        # escape html
-        eval("self.#{col}=CGI.escapeHTML(self.#{col})")
-        # convert /n to <br/>
-        eval("self.#{col}=self.#{col}.gsub '\n', '<br/>'")
+        html = eval("self.#{col}")
+        if !html.blank? 
+          # escape html
+          html = CGI.escapeHTML(html)
+          # convert /n to <br/>
+          html.gsub! '\n', '<br/>'
+          # save
+          eval("self.#{col} = html")
+        end
       end
     end
 
