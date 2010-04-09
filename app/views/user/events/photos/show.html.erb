@@ -16,7 +16,7 @@
       <span class="left"><%= album_cover @event.album, :class => "imgbox01", :size => "medium", :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @event.title%>活动照片</strong><br/>
-        <%= link_to '活动主页', event_url(@event), :class => 'red' %>
+        <%= link_to '活动主页', event_url(@event) %>
       </p>
     </div>
     <div class="box02 canvas_int">
@@ -29,7 +29,7 @@
         <ul>
           <% subject = get_subject @user %>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
-          <li class='hover'><span><%= link_to "#{@event.title}的相册", event_album_url(@album) %></span></li>
+          <li class='hover'><span><%= link_to "#{@event.title}的相册", event_album_url(@album, :format => 'html') %></span></li>
         </ul>
       </div>
       <div class="pic-box">
@@ -38,7 +38,7 @@
             <div class="img-container">
               <div class="path-box">
 								<label>活动 "<%= event_link @event %>"</label>
-                <label><%= link_to "相册", event_album_url(@event.album) %></label>
+                <label><%= link_to "相册", event_album_url(@event.album, :format => 'html') %></label>
                 <span>查看照片</span>
               </div>
               <div class="img-main">

@@ -26,7 +26,12 @@ class Friendship < ActiveRecord::Base
   end
 
   def reverse
-    Friendship.find_or_create(:user_id => friend_id, :friend_id => user_id, :status => status)
+    f = Friendship.find(:first, :conditions => {:user_id => friend_id, :friend_id => user_id, :status => status})
+		if f.blank?
+			Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => 1)
+		else
+			f
+		end
   end
 
   attr_accessor :recently_accepted

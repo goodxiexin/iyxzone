@@ -100,14 +100,14 @@ module ApplicationHelper
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
-      link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album)")
+      link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     else
-      link_to image_tag(album.cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album)")
+      link_to image_tag(album.cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
   end
 
   def album_link album, opts={}
-    link_to (truncate album.title, :length => 20), eval("#{album.class.name.underscore}_url(album)"), opts
+    link_to (truncate album.title, :length => 20), eval("#{album.class.name.underscore}_url(album, :format => 'html')"), opts
   end
 
   def photo_link(photo, opts={})

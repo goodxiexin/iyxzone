@@ -10,7 +10,7 @@
         <span><%= ftime n.created_at %></span>
       </td>
       <td class="close jl-cutline">
-        <%= link_to_remote 'x', :url => notification_url(n), :method => :delete, :class => "icon-active" %>
+        <%= link_to_remote '', :url => notification_url(n), :method => :delete, :html => {:class => "icon-active"} %>
       </td>
     </tr>
   <% end %>

@@ -109,7 +109,7 @@
               <div class="fldstatus fldstatus-none"></div>
               <div class="fldvalue">
                 <span class="button"><span><button type="submit" id='profile_privacy_submit_btn'>保存修改</button></span></span>
-                <span class="button button-gray"><span><%= link_to '取消', privacy_setting_url%></span></span>
+                <%= link_to '<span>取消</span>', privacy_setting_url, :class => 'button button-gray'%>
               </div>
             </div>
           <% end %>
