@@ -1,33 +1,22 @@
 class User::GuestbooksController < UserBaseController
-	ErrorElements = ['日志', '视频','照片','状态','活动','投票','工会','分享','游戏','推荐游戏','每日十闻','首页','个人主页','好友','站内信','通知','邀请','设置',    '其它']
-
-
-  # GET /guestbooks/new
+	
   def new
-		@error_elements = ErrorElements
+		@error_elements = Guestbook::ErrorElements
     @guestbook = Guestbook.new(:catagory => get_default)
   end
 
-
-  # POST /guestbooks
   def create
-    @guestbook = Guestbook.new(params[:guestbook])
-		if params['priority1'] 
-			@guestbook.priority = 1
-		elsif params['priority2'] 
-			@guestbook.priority = 2
-		end
+    @guestbook = Guestbook.new((params[:guestbook] || {}).merge({:user_id => current_user.id}))
 
-		@guestbook.user_id = @current_user.id;
-		logger.error(@guestbook.catagory);
-
-      if @guestbook.save
-					render :update do |page|
-						page << "tip('17gaming感谢您的参与!')"
-					end
-      else
-        	logger.error "用户汇报错误出错"
+    if @guestbook.save
+			render :update do |page|
+				page << "tip('17gaming感谢您的参与!')"
+			end
+    else
+      render :update do |page|
+        page << "error('用户汇报错误出错')"
       end
+    end
   end
 
 

@@ -19,6 +19,7 @@
   </div></div>
 </div></div></div></div>
 
-<%= javascript_tag "
-  new nicEditor().panelInstance('application_about', {token: '#{form_authenticity_token}'});   
-" %>
+<% onload_javascript_tag do %>
+  nicEditors.albums = <%= current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json %>;
+  new nicEditor().panelInstance('application_about', {token: '<%= form_authenticity_token %>'});   
+<% end %>

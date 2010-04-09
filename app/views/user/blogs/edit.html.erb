@@ -29,7 +29,7 @@
 				    <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
 			    </div>
 			    <div class='rows s_clear'>
-				    <%= f.text_area 'content', :style =>"width: 100%; height: 300px;" %>
+				    <%= f.text_area 'content', :style =>"width: 98%; height: 300px;" %>
 			    </div>
 			    <div class='rows s_clear'>
 				    <div class='fldid'><%= f.label "日志类别: " %></div><div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}%></div>
@@ -58,6 +58,7 @@
 <% tag_ids = '[' + @blog.tags.map(&:id).join(',') + ']' %>
 <% user_names = '[' + @blog.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
 <% onload_javascript_tag do %>
+  nicEditors.albums = <%= current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json %>;
   Iyxzone.Blog.Builder.editor = new nicEditor().panelInstance('blog_content'); 
   Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, <%= tagged_user_ids %>, <%= tag_ids %>, <%= user_names %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
 <% end %>

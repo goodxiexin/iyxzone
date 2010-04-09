@@ -63,7 +63,8 @@ Rails::Initializer.run do |config|
     :guild_rule_observer,
     :rating_observer,
     :signup_invitation_observer,
-    :poke_delivery_observer
+    :poke_delivery_observer,
+    :guestbook_observer
 
   #config.time_zone = 'UTC'
 

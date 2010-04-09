@@ -26,7 +26,7 @@
 </div>
 
 <% onload_javascript_tag do %>
-  new Iyxzone.limitedTextField($('comment_content'), 140, $('wall_<%= wall.id %>_words_count'));
+  new Iyxzone.limitedTextField($('comment_content'), 140, $('wall_<%= wall.id %>_words_count'), false);
   Iyxzone.WallMessage.recipientID = <%= recipient.nil? ? 'null' : recipient.id %>;
 <% end %>
 

@@ -36,6 +36,7 @@
 </div></div></div></div>
 
 <% onload_javascript_tag do %>
+  nicEditors.albums = <%= current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json %>;
   Iyxzone.Forum.Topic.editor = new nicEditor().panelInstance('topic_content', {token: '<%= form_authenticity_token %>'});
 <% end %>
 

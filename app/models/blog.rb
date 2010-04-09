@@ -4,6 +4,8 @@ class Blog < ActiveRecord::Base
 
 	belongs_to :poster, :class_name => 'User'
 
+  has_many :images, :class_name => 'BlogImage', :dependent => :destroy
+
   named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
 
   named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
@@ -50,6 +52,8 @@ class Blog < ActiveRecord::Base
 
   validate_on_create :game_is_valid
 
+  after_save :update_blog_images
+
 protected
 
   def game_is_valid
@@ -57,6 +61,18 @@ protected
     errors.add('game_id', "不存在") unless Game.exists?(game_id)
     return if poster_id.blank?
     errors.add('game_id', "该用户没有这个游戏") unless poster.characters.map(&:game_id).include?(game_id)
+  end
+
+  def update_blog_images
+    ids = []
+    doc = Nokogiri::HTML(Blog.last.content)
+    doc.xpath("//img[starts-with(@src, '/blog_images/')]").each do |l|
+      l[:src] =~ /\/blog_images\/([\d]+)\/([\d]+)\//
+      id = (10000 * $1.to_i + $2.to_i)
+      puts "id: #{id}"
+      ids << id
+    end
+    BlogImage.update_all({:blog_id => self.id, :updated_at => self.updated_at}, {:id => ids})
   end
 
 end

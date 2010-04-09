@@ -2,11 +2,6 @@
 
 :allowed_ips:  
   - 127.0.0.1
-<<<<<<< HEAD:juggernaut.yml
-  - 192.168.217.81
-=======
-  - 192.168.217.81 #0.101
->>>>>>> newcommit:juggernaut.yml
      
 #:broadcast_query_login_url: http://localhost:3000/juggernaut/broadcast
      

@@ -1,5 +1,4 @@
-class Admin::GuestbooksController < UserBaseController
-	ErrorElements = ['日志', '视频','照片','状态','活动','投票','工会','分享','游戏','推荐游戏','每日十闻','首页','个人主页','好友','站内信','通知','邀请','设置',    '其它']
+class Admin::GuestbooksController < AdminBaseController
 
   # GET /admin/guestbooks
   def index
@@ -16,17 +15,28 @@ class Admin::GuestbooksController < UserBaseController
     @guestbook = Guestbook.find(params[:id])
   end
 
-  # PUT /admin/guestbooks/1
+=begin
   def update
     @guestbook = Guestbook.find(params[:id])
 
-      if @guestbook.update_attributes(params[:guestbook])
-        flash[:notice] = 'Guestbook was successfully updated.'
-        redirect_to(admin_guestbook_url) 
-      else
-        render :action => "edit"
-      end
+    if @guestbook.update_attributes(params[:guestbook])
+      flash[:notice] = 'Guestbook was successfully updated.'
+      redirect_to(admin_guestbook_url) 
+    else
+      render :action => "edit"
+    end
+  end
+=end
 
+  def update
+    @guestbook = Guestbook.find(params[:id])
+
+    if @guestbook.reply_to_poster params[:reply]
+      flash[:notice] = 'Guestbook was successfully updated.'
+      redirect_to(admin_guestbook_url) 
+    else
+      render :action => "edit"
+    end    
   end
 
   # DELETE /admin/guestbooks/1

@@ -28,7 +28,7 @@
                   <%= hidden_field_tag 'home', 1 %>
                   <div class="fldvalue">
 										<div id="mcStatus" class="textfield02"><%= f.text_area :content %></div>
-                    <%= javascript_tag "new Iyxzone.limitedTextField($('status_content'), 140, null);" %>
+                    <%= javascript_tag "new Iyxzone.limitedTextField($('status_content'), 140, null, true);" %>
                   </div>
                   <div class="fldbtn jl-fldbtn">
 										<span class="button03"><span><button type='submit' id='status_submit_btn'>发布</button></span></span>

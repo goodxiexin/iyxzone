@@ -168,6 +168,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def all_albums
+    (all_events.map(&:album) + all_guilds.map(&:album) + albums.to_a + avatar_album.to_a).uniq
+  end
+
   # blogs
   with_options :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id do |user|
     
@@ -231,10 +235,6 @@ class User < ActiveRecord::Base
 		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
 
 	end
-
-  def friend_participations
-    Participation.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1")
-  end
 
   def friend_events
     event_ids = Participation.find(:all, :select => :event_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1").map(&:event_id).uniq
@@ -324,11 +324,11 @@ class User < ActiveRecord::Base
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC' do |user|
 
+    user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"
+
     user.has_many :privileged_guilds, :conditions => "memberships.status = 3 or memberships.status = 4"
 
 		user.has_many :participated_guilds, :conditions => "memberships.status = 4 or memberships.status = 5"
-
-		user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"
 
 	end
 
