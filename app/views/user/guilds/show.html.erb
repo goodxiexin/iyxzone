@@ -36,7 +36,7 @@
   
   <div class="big-head space">
     <p class="left">
-      <strong><%= @guild.name %>公会</strong>
+      <strong><%= h @guild.name %>公会</strong>
     </p>
   </div>
   <div class="rows"></div>
@@ -44,9 +44,9 @@
     <div class="title"><b>描述</b></div>
     <div class="feed-box">
       <% if @guild.president == current_user %>
-				<%= in_place_text_area @guild, :description, '介绍一下公会？' %>
+				<%= in_place_text_area @guild, :description, '介绍一下公会？', :param_name => 'guild[description]' %>
       <% else %>
-      <%= simple_format @guild.description %>
+      <%= simple_format h @guild.description %>
       <% end %>
     </div>
   </div>

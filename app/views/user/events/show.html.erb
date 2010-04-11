@@ -88,7 +88,7 @@
 <div class='box02 canvas_con'>
   <div class="formComposer">
 	  <h3 class="png">
-      名称：<b><%= @event.title %></b>
+      名称：<b><%= h @event.title %></b>
       <% if @event.is_guild_event? %>
         <span>   公会活动: </span> <b><%= guild_link @event.guild %></b>
       <% end %>
@@ -118,7 +118,7 @@
   <div class="multibox">
     <div class="title"><b>描述</b></div>
     <div class="feed-box">
-			<%= h @event.description %>
+			<%= simple_format h @event.description %>
 		</div>
   </div>
 

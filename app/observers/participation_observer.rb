@@ -34,26 +34,32 @@ class ParticipationObserver < ActiveRecord::Observer
 		participant = participation.participant
     character = participation.character
  
-    if participation.recently_accept_invitation
+    if participation.was_invitation? and participation.is_authorized?
 			event.raw_decrement :invitations_count
       event.raw_increment field(participation.status)
       participant.raw_decrement :event_invitations_count
-			event.poster.notifications.create(
-        :category => Notification::Participation,
-        :data => "#{profile_link participant}接受了你的邀请: 同意让游戏角色 #{character.name} 加入活动#{event_link event}")
-		elsif participation.recently_accept_request
+      if participation.recently_accept_invitation
+			  event.poster.notifications.create(
+          :category => Notification::Participation,
+          :data => "#{profile_link participant}接受了你的邀请: 同意让游戏角色 #{character.name} 加入活动#{event_link event}")
+      end
+		elsif participation.was_request? and participation.is_authorized?
 			event.raw_decrement :requests_count
       event.raw_increment field(participation.status)
       event.poster.raw_decrement :event_requests_count
-			participant.notifications.create(
-        :category => Notification::Participation, 
-        :data => "#{profile_link event.poster} 同意了你让游戏角色 #{character.name} 加入活动 #{event_link event} 的请求")
-		elsif participation.recently_change_status
+      if participation.recently_accept_request
+			  participant.notifications.create(
+          :category => Notification::Participation, 
+          :data => "#{profile_link event.poster} 同意了你让游戏角色 #{character.name} 加入活动 #{event_link event} 的请求")
+      end
+		elsif participation.was_authorized? and participation.is_authorized?
 			event.raw_decrement field(participation.status_was)
       event.raw_increment field(participation.status)
-      event.poster.notifications.create(
-        :category => Notification::EventStatus,
-        :data => "#{profile_link participant} 的游戏角色 #{character.name} 改变了在活动 #{event_link event} 的状态：现在#{participation.to_s}")
+      if eparticipation.recently_change_status
+        event.poster.notifications.create(
+          :category => Notification::EventStatus,
+          :data => "#{profile_link participant} 的游戏角色 #{character.name} 改变了在活动 #{event_link event} 的状态：现在#{participation.to_s}")
+      end
 		end
 
     # issue feeds if necessary
