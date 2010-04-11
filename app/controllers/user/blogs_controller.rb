@@ -94,8 +94,6 @@ protected
     if ['index', 'relative'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
-    elsif ['recent', 'hot'].include? params[:action]
-      @user = User.find(params[:uid])
     elsif ['show'].include? params[:action]
       @blog = Blog.find(params[:id])
       @user = @blog.poster
