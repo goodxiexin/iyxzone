@@ -214,7 +214,7 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
 
 Iyxzone.Friend.Tagger = Class.create({
  
-  initialize: function(max, friendIDs, tagIDs, friendNames, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
+  initialize: function(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
     this.max = max;
     this.tags = new Hash(); // friendID => [tagIDs, div]
     this.newTags = new Hash(); // friendID => div
@@ -234,9 +234,10 @@ Iyxzone.Friend.Tagger = Class.create({
       bitClassName: ''
     });
 
-    for(var i=0;i<friendIDs.length;i++){
-      var el = this.taggedUserList.add(friendIDs[i], friendNames[i]);
-      this.tags.set(friendIDs[i], [tagIDs[i], el]);
+    for(var i=0;i<tagInfos.length;i++){
+      var info = tagInfos[i];
+      var el = this.taggedUserList.add(info.friend_id, info.friend_name);
+      this.tags.set(info.friend_id, [info.tag_id, el]);
     }
 
     var inputs = $$('input');

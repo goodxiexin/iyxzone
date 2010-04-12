@@ -67,6 +67,11 @@ Object.extend(Iyxzone.Video.Builder, {
     }else{
       Iyxzone.enableButtonThree(button, '更新');
     }
+  },
+
+  init: function(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
+    // set tagger
+    this.tagBuilder = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton); 
   }
 
 });

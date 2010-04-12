@@ -1,15 +1,15 @@
 module ObserverLinkHelpers
 
 	def video_link video
-		"<a href='/videos/#{video.id}'>#{video.title}</a>"
+		"<a href='/videos/#{video.id}'>#{CGI::escapeHTML video.title}</a>"
 	end
 
 	def blog_link blog
-		"<a href='/blogs/#{blog.id}'>#{blog.title}</a>"
+		"<a href='/blogs/#{blog.id}'>#{CGI::escapeHTML blog.title}</a>"
 	end
 
 	def event_link event
-		"<a href='/events/#{event.id}'>#{event.title}</a>"
+		"<a href='/events/#{event.id}'>#{CGI::escapeHTML event.title}</a>"
 	end
 
 	def profile_link user
@@ -17,15 +17,15 @@ module ObserverLinkHelpers
 	end 
 
 	def guild_link guild
-		"<a href='/guilds/#{guild.id}'>#{guild.name}</a>"
+		"<a href='/guilds/#{guild.id}'>#{CGI::escapeHTML guild.name}</a>"
 	end
 
 	def poll_link poll
-		"<a href='/polls/#{poll.id}'>#{poll.name}</a>"
+		"<a href='/polls/#{poll.id}'>#{CGI::escapeHTML poll.name}</a>"
 	end
 
 	def album_link album
-		"<a href='/#{album.class.to_s.underscore}s/#{album.id}>#{album.title}</a>"
+		"<a href='/#{album.class.to_s.underscore}s/#{album.id}>#{CGI::escapeHTML album.title}</a>"
 	end
 
 	def photo_link photo

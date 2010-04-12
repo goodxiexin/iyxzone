@@ -8,7 +8,7 @@ class User::AlbumsController < UserBaseController
   end
 
 	def recent
-    @albums = Album.recent.paginate :page => params[:page], :per_page => 10
+    @albums = Album.recent.paginate :page => params[:page], :per_page => 10, :conditions => "privilege != 4"
   end
 
   def friends
@@ -103,8 +103,6 @@ protected
     if ["index"].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
-    elsif ["recent"].include? params[:action]
-      @user = User.find(params[:uid])
     elsif ["show"].include? params[:action]
       @album = PersonalAlbum.find(params[:id])
       require_adequate_privilege @album

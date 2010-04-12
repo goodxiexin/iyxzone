@@ -2,9 +2,9 @@ class User::VideosController < UserBaseController
 
   layout 'app'
 
-  before_filter :setup_video_privilege_cond, :only => [:index, :show]
-
   def index
+    @relationship = @user.relationship_with current_user
+    @privilege = get_privilege_cond @relationship
     @count = @user.videos_count @relationship
     @videos = @user.videos.paginate :page => params[:page], :per_page => 10, :conditions => @privilege
   end
@@ -41,6 +41,8 @@ class User::VideosController < UserBaseController
   end
 
   def show
+    @relationship = @user.relationship_with current_user
+    @privilege = get_privilege_cond @relationship
     @next = @video.next @privilege
     @prev = @video.prev @privilege
     @count = @user.videos_count @relationship
@@ -48,6 +50,7 @@ class User::VideosController < UserBaseController
   end
 
   def edit
+    @tag_infos = @video.tags.map {|t| {:tag_id => t.id, :friend_id => t.tagged_user_id, :friend_name => t.tagged_user.login}}.to_json
   end
 
   def update
@@ -76,8 +79,6 @@ protected
     if ['index', 'relative'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
-    elsif ['hot', 'recent'].include? params[:action]
-      @user = User.find(params[:uid])
     elsif ['show'].include? params[:action]
       @video = Video.find(params[:id])
       @user = @video.poster
@@ -87,19 +88,5 @@ protected
       require_owner @video.poster
     end  
   end
-
-  def setup_video_privilege_cond
-    @relationship = @user.relationship_with current_user
-    if @relationship == 'owner'
-      @privilege = {:privilege => [1,2,3,4]}
-    elsif @relationship == 'friend'
-      @privilege = {:privilege => [1,2,3]}
-    elsif @relationship == 'same_game'
-      @privilege = {:privilege => [1,2]}
-    else
-      @privilege = {:privilege => 1}
-    end
-  end
-
 
 end

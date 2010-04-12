@@ -26,7 +26,6 @@ class User::EventsController < UserBaseController
 
   def friends
     @events = current_user.friend_events.paginate :page => params[:page], :per_page => 10
-    #event_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def show
@@ -112,7 +111,7 @@ protected
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @event = Event.find(params[:id])
       require_owner @event.poster
-      require_event_not_expired @event if params[:action] == 'destroy'
+      require_event_not_expired @event
     elsif ['index', 'upcoming', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user

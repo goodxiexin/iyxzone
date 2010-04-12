@@ -1,8 +1,6 @@
-<%= stylesheet_link_tag 'test' %>
-<%= javascript_include_tag 'textboxlist' %>
-<%= javascript_include_tag 'nicEdit' %>
-<%= javascript_include_tag 'video' %>
-<%= javascript_include_tag 'friend' %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :video %>
+<% end %>
 
 <% content_for :html_title, "#{current_user.login} - 编辑视频 - 17Gaming.com" %>
 <% content_for :html_description, "#{current_user.login} - 编辑视频 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
@@ -15,7 +13,7 @@
       <div class="tab tab01">
         <div class="right"><%= link_to "新视频", new_video_url %></div>
         <ul>
-          <li><span><%= link_to "热门视频", hot_videos_url(:uid => current_user.id) %></span></li>
+          <li><span><%= link_to "热门视频", hot_videos_url %></span></li>
           <li><span><%= link_to "我的视频", videos_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "我的相关视频", relative_videos_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "好友的视频", friends_videos_url %>
@@ -31,7 +29,7 @@
   				  </div>
 				    <div class="rows s_clear">
 					    <div class="fldid"><%= f.label '连接地址：' %></div>
-					    <div class="fldvalue"><div class='textfield'><%= f.text_field 'video_url',:disabled => true, :id => 'video_url' %></div></div>
+					    <div class="fldvalue"><%= f.text_field 'video_url',:disabled => true, :id => 'video_url' %></div>
 				    </div>
 				    <div class="rows s_clear">
       				<div class="fldid"><%= f.label '视频简介：' %></div>
@@ -62,10 +60,7 @@
   </div></div>
 </div></div></div></div>
 
-<% tagged_user_ids = '[' + @video.tags.map(&:tagged_user_id).join(',') + ']' %>
-<% tag_ids = '[' + @video.tags.map(&:id).join(',') + ']' %>
-<% user_names = '[' + @video.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
 <% onload_javascript_tag do %>
-  Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, <%= tagged_user_ids %>, <%= tag_ids %>, <%= user_names %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
+  Iyxzone.Video.Builder.init(10, <%= @tag_infos %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
 <% end %>
 

@@ -104,11 +104,9 @@ protected
     if resp.is_a? Net::HTTPSuccess
       body =~ /<title>(.*?)<\/title>/
       title = $1
-      logger.error "title: #{title}" 
       content_type = resp['Content-Type']
       content_type =~ /charset=(.*)/
       charset = $1 || 'gb2312'
-      logger.error "charset: #{charset}"
       Iconv.iconv('utf8', charset, title)
     else
       @my_url

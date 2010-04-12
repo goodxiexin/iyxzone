@@ -11,7 +11,7 @@
           <%= link_to "新建活动", new_event_url, :class => 'icon-add-table' %>
         </div>
 		    <ul>
-			    <li class='hover'><span><%= link_to "热门活动", hot_events_url(:uid => current_user.id) %></span></li>
+			    <li class='hover'><span><%= link_to "热门活动", hot_events_url %></span></li>
 			    <li><span><%= link_to "我的活动", events_url(:uid => current_user.id) %></span></li>
 			    <li><span><%= link_to "朋友的活动", friends_events_url %></span></li>
 		    </ul>

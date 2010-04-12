@@ -10,6 +10,8 @@ class Profile < ActiveRecord::Base
 
 	belongs_to :district
 
+  escape_html :sanitize => :about_me
+
   acts_as_viewable :create_conditions => lambda {|user, profile| profile.user != user}
 
   acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, :path_reg => /\/profiles\/([\d]+)/
@@ -217,7 +219,7 @@ class Profile < ActiveRecord::Base
         return
       end 
     end
-
+  
   end
 
 end

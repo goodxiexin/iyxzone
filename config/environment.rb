@@ -66,8 +66,4 @@ Rails::Initializer.run do |config|
     :poke_delivery_observer,
     :guestbook_observer
 
-  #config.time_zone = 'UTC'
-
 end
-
-CalendarDateSelect.format = :iso_date 

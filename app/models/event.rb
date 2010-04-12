@@ -197,8 +197,16 @@ protected
 
   def time_is_valid
     return if start_time.blank? or end_time.blank?
-    errors.add(:start_time, "不能比现在早") if start_time <= Time.now
-    errors.add(:end_time, "不能比开始时间早") if end_time <= start_time
+
+    if self.new_record?
+      # 创建的时候开始时间不能比现在早
+      errors.add(:start_time, "不能比现在早") if start_time <= Time.now
+      errors.add(:end_time, "不能比开始时间早") if end_time <= start_time
+    else
+      # 更新的时候要求活动还没过期，就是结束时间还没到
+      errors.add(:end_time, "不能比现在早") if end_time <= Time.now
+      errors.add(:end_time, "不能比开始时间早") if end_time <= start_time
+    end      
   end
 
   def guild_is_valid

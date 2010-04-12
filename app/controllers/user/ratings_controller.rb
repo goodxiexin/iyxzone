@@ -10,7 +10,7 @@ class User::RatingsController < UserBaseController
       end
     else
       render :update do |page|
-        page << "error('#{@rating.errors.on_base}');"
+        page << "error('发生错误');"
       end
     end
   end

@@ -107,7 +107,7 @@ module ApplicationHelper
   end
 
   def album_link album, opts={}
-    link_to (truncate album.title, :length => 20), eval("#{album.class.name.underscore}_url(album)"), opts
+    link_to (truncate h(album.title), :length => 20), eval("#{album.class.name.underscore}_url(album)"), opts
   end
 
   def photo_link(photo, opts={})
@@ -137,55 +137,56 @@ module ApplicationHelper
   end
 
   def blog_link blog, opts={}
-    link_to (truncate blog.title, :length => 20), blog_url(blog), opts
+    link_to (truncate (h blog.title), :length => 40), blog_url(blog), opts
   end
 
 	def video_link video, opts={}
-		link_to (truncate video.title, :length => 20), video_url(video), opts
+		link_to (truncate (h video.title), :length => 40), video_url(video), opts
 	end
 
 	def video_thumbnail video, opts={}
-		if (video.thumbnail_url.nil?)
-			tempimg = "/images/photo/video01.png"
-		else
-			tempimg = video.thumbnail_url
-		end
-		image_tag tempimg, :size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"
+    temping = video.thumbnail_url.blank? ? "/images/photo/video01.png" : video.thumbnail_url
+		image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"}.merge(opts)
 	end
 
+  def video_thumbnail_link video, opts={}
+    temping = video.thumbnail_url.blank? ? "/images/photo/video01.png" : video.thumbnail_url
+    link_to (image_tag temping, :size => "120x90", :class => "imgbox01"), video_url(video), opts
+  end
+
   def game_link game, opts={}
-    link_to game.name, game_url(game), opts
+    link_to h(game.name), game_url(game), opts
   end
 
   def event_link event, opts={}
-    link_to (truncate event.title, :length => 20), event_url(event), opts
+    link_to (truncate h(event.title), :length => 40), event_url(event), opts
   end
 
 	def poll_link poll, opts={}
-		link_to (truncate poll.name, :length => 20), poll_url(poll), opts
+		link_to (truncate h(poll.name), :length => 40), poll_url(poll), opts
 	end
 
 	def guild_link guild, opts={}
-		link_to (truncate guild.name, :length => 20), guild_url(guild), opts
+		link_to (truncate h(guild.name), :length => 40), guild_url(guild), opts
 	end
 
 	def forum_link forum, opts={}
-		link_to (truncate forum.name, :length => 20), forum_url(forum), opts
+		link_to (truncate h(forum.name), :length => 40), forum_url(forum), opts
 	end
 
 	def topic_link topic, opts={}
-		link_to (truncate topic.subject, :length => 40), forum_topic_posts_url(topic.forum, topic), opts
+		link_to (truncate h(topic.subject), :length => 40), forum_topic_posts_url(topic.forum, topic), opts
 	end
 
 	def mail_link mail
 		if mail.recipient == current_user # in recv box
 			if mail.read_by_recipient
-				link_to mail.title, mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title"
+				link_to h(mail.title), mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title"
 			else
-				link_to "#{mail.title}", mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title", :style => "font-weight: bold"
+				link_to "#{h mail.title}", mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title", :style => "font-weight: bold"
 			end
 		else # in sent box
-			link_to mail.title, mail_url(mail, :type => 0), :id => "mail_#{mail.id}_title"
+			link_to h(mail.title), mail_url(mail, :type => 0), :id => "mail_#{mail.id}_title"
 		end
 	end
 

@@ -1650,25 +1650,23 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
 
   options: {iconFiles :  '/images/faces/' + encodeURIComponent('亲亲') +'.gif'},
 
-  facesPerPage: 32,
+  facesPerPage: 50,
 
   cache: [],
 
-  buildFaces: function(){
-    if(this.cache.length != 0){
-      return;
-    }
-
+  buildFaces: function(pageNum){
     var len = this.symbols.length;
     var symbols = this.symbols;
     var perPage = this.facesPerPage;
-    var pageIndex = -1;
+    var total = (len % perPage == 0) ? (len/perPage) : (parseInt(len/perPage) + 1);
+    var div = new bkElement('DIV').setStyle({'className' : 'con'});
+    
+    if(pageNum < 0 || pageNum > total - 1){
+      alert(pageNum);
+      return div;
+    }
 
-    for(var i = 0; i < len; i++){
-      if(i % perPage == 0){
-        pageIndex++;
-        this.cache[pageIndex] = new bkElement('DIV').setStyle({'className' : 'con'});
-      }
+    for(var i = pageNum * perPage; i < len && i < (pageNum + 1) * perPage; i++){
       a = new bkElement('a').setAttributes({title: symbols[i], href: 'javascript: void(0)'});
       img = new bkElement('img').setAttributes({src: "/images/faces/"+ symbols[i].slice(1,symbols[i].length-1) +".gif",  alt: symbols[i], index: i});
       img.appendTo(a);
@@ -1686,59 +1684,59 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
         this.removePane();
         this.ne.nicCommand("Unselect",this.im);    
       }.closure(this));
-      a.appendTo(this.cache[pageIndex]);
+      a.appendTo(div);
+    }
+    //var prev = new bkElement('a').setStyle({'className':'prev'});
+    //prev.setAttribute('pageNum', pageNum - 1);
+    //var next = new bkElement('a').setStyle({'className':'next'});
+    //next.setAttribute('pageNum', pageNum + 1);
+    var foot = new bkElement('div').setStyle({'className': 'pager-simple foot'});
+    //var pagenum = new bkElement('span').update(pageNum + 1);
+    //foot.appendChild(prev);
+    //foot.appendChild(pagenum);
+    //foot.appendChild(next);
+    div.appendChild(foot);
+/*
+    if (pageNum != 0){
+      prev.addEvent('click',function(e){
+        var el;
+        if(navigator.userAgent.indexOf("MSIE") > 0)
+          el = e.srcElement;
+        else
+          el = e.target;
+        var pageTo = parseInt(el.getAttribute('pageNum'));
+        el.parentNode.parentNode.remove();
+        this.pane.setContent(this.paneHTML);
+        $BK('nicEdit-emot-box').appendChild(this.buildFaces(pageTo));
+      }.closure(this));
+    }else{
+      prev.setStyle({'className': 'prev first'});
+      prev.addEvent('click', function(e){
+      }.closure(this));
     }
 
-    for(var i = 0; i < this.cache.length; i++){
-      var prev = new bkElement('a').setStyle({'className':'prev'}).setAttributes({'pageNum': i});
-      var next = new bkElement('a').setStyle({'className':'next'}).setAttributes({'pageNum': i});
-      var foot = new bkElement('div').setStyle({'className': 'pager-simple foot'});
-      var pagenum = new bkElement('span').update(i+1);
-      foot.appendChild(prev);
-      foot.appendChild(pagenum);
-      foot.appendChild(next);
-      this.cache[i].appendChild(foot);
-
-      if (i != 0){
-        prev.addEvent('click',function(e){
-          var el;
-          if(navigator.userAgent.indexOf("MSIE") > 0)
-            el = e.srcElement;
-          else
-            el = e.target;
-          var pageTo = parseInt(el.getAttribute('pageNum')) -1;
-          el.parentNode.parentNode.remove();
-          this.pane.setContent(this.paneHTML);
-          $BK('nicEdit-emot-box').appendChild(this.cache[0]);
-        }.closure(this));
-      }else{
-        prev.setStyle({'className': 'prev first'});
-        prev.addEvent('click', function(e){
-        }.closure(this));
-      }
-
-      if (i != this.cache.length - 1){
-        next.addEvent('click',function(e){
-          var el;
-          if(navigator.userAgent.indexOf("MSIE") > 0)
-            el = e.srcElement;
-          else
-            el = e.target;
-          var pageTo = parseInt(el.getAttribute("pageNum")) + 1;
-          el.parentNode.parentNode.remove();
-          this.pane.setContent(this.paneHTML);
-          $BK('nicEdit-emot-box').appendChild(this.cache[1]);
-        }.closure(this));
-      }else{
-        next.setStyle({'className': 'next last'});
-        next.addEvent('click', function(e){
-        }.closure(this));
-      }
-    } //end of for i
-
+    if (pageNum != total - 1){
+      next.addEvent('click',function(e){
+        var el;
+        if(navigator.userAgent.indexOf("MSIE") > 0)
+          el = e.srcElement;
+        else
+          el = e.target;
+        var pageTo = parseInt(el.getAttribute("pageNum"));
+        el.parentNode.parentNode.remove();
+        this.pane.setContent(this.paneHTML);
+        $BK('nicEdit-emot-box').appendChild(this.buildFaces(pageTo));
+      }.closure(this));
+    }else{
+      next.setStyle({'className': 'next last'});
+      next.addEvent('click', function(e){
+      }.closure(this));
+    }
+*/
+    return div;
   },
 
-  paneHTML: "<div class='z-box' style='width:330px;overflow:hidden;'><div class='z-t'>\
+  paneHTML: "<div class='z-box' style='width:400px;overflow:hidden;'><div class='z-t'>\
         <span class='l'><strong></strong></span> \
         <span class='r'></span> \
       </div> \
@@ -1759,20 +1757,17 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
       </div></div>",
 
 	addPane : function(){
-    this.buildFaces();
-
     var scroll = document.viewport.getScrollOffsets();
     var height = document.viewport.getHeight();
     var width = document.viewport.getWidth();
 
-    this.pane.contain.setStyle({'width' : '330px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 165) + 'px', 'z-index' : '9999'});
-    this.pane.pane.setStyle({'width':'330px', 'border' : 'none', 'padding' : '0px'});
+    this.pane.contain.setStyle({'width' : '400px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 165) + 'px', 'z-index' : '9999'});
+    this.pane.pane.setStyle({'width':'400px', 'border' : 'none', 'padding' : '0px'});
     this.pane.close.remove();
     this.pane.close = null;//将pane上面叉号去掉
 
     this.pane.setContent(this.paneHTML);
- 
-    $BK('nicEdit-emot-box').appendChild(this.cache[0]);
+    $BK('nicEdit-emot-box').appendChild(this.buildFaces(0));
 	}
 });
 
