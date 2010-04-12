@@ -312,4 +312,8 @@ module ApplicationHelper
     end
   end
 
+	def insert_copyright
+	  "<p>Copyright &copy; 2010-2010 MingZen. All Rights Reserved</p> <p><a href='#'>鸣禅公司 版权所有</a></p>"
+	end
+
 end
