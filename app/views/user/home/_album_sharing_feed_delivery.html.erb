@@ -9,7 +9,7 @@
       <%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
     <% end %>
 	  <div class="jl-list-con jl-cutline">
-		  <%= profile_link sharing.poster %> 分享了相册 <%= album_link album %>
+		  <%= profile_link sharing.poster %> 分享了相册 <%= album_link album, :class => "shine" %>
 	    <p class="grayi jl-con"></p>
       <p><%= album_cover album, :class => 'imgbox01' %></p>
       <p class='gray'><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id});", :class => "gray"%></p>

@@ -14,7 +14,7 @@
 	<div class="s-img left">
 		<div class="imgbox01"><%= avatar User.find(friendship_feed.data[:friend]), :size => "small" %></div>
 	</div>
-	<div class="jl-list-con jl-cutline"><%= profile_link user %> 和 <%= profile_link friend %> 成为了好朋友 <%= ftime delivery.created_at %>
+	<div class="jl-list-con jl-cutline"><%= profile_link user %> 和 <%= profile_link friend , :class => "shine" %> 成为了好朋友 <%= ftime delivery.created_at %>
 	<span class="gray"><%= ftime delivery.created_at %></span>
 	</div>
 </div>	
