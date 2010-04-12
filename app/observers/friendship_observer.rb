@@ -12,30 +12,32 @@ class FriendshipObserver < ActiveRecord::Observer
 	end
 
 	def after_update friendship
-		if friendship.recently_accepted
+		if friendship.was_request? and friendship.is_friend?
       # delete some obsoleted friend/comrade suggestions
 			friendship.user.destroy_obsoleted_friend_suggestions friendship.friend
 			friendship.user.destroy_obsoleted_comrade_suggestions friendship.friend
 			friendship.friend.destroy_obsoleted_friend_suggestions friendship.user
       friendship.friend.destroy_obsoleted_comrade_suggestions friendship.user
 
-      # send notification
-			friendship.user.notifications.create(:data => "#{profile_link friendship.friend}同意了你的好友请求", :category => Notification::Friend)
-			
       # change counter
       friendship.friend.raw_decrement :friend_requests_count
       friendship.user.raw_increment :friends_count
-		
-      # issue feeds
-      recipients = [friendship.user.profile]
-      recipients.concat friendship.user.friends.reject {|f| f == friendship.friend} # friendship.friend 刚刚成为好友
-      friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.user_id}
-      recipients = [friendship.friend.profile]
-      recipients.concat(friendship.friend.friends - friendship.user.friends) # this prevents people from receiving same feed twice
-      friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.friend_id}
+
+      if friendship.recently_accepted
+        # send notification
+			  friendship.user.notifications.create(:data => "#{profile_link friendship.friend}同意了你的好友请求", :category => Notification::Friend)
+			
+        # issue feeds
+        recipients = [friendship.user.profile]
+        recipients.concat friendship.user.friends.reject {|f| f == friendship.friend} # friendship.friend 刚刚成为好友
+        friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.user_id}
+        recipients = [friendship.friend.profile]
+        recipients.concat(friendship.friend.friends - friendship.user.friends) # this prevents people from receiving same feed twice
+        friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.friend_id}
     
-      # deliver mail
-      FriendshipMailer.deliver_confirm(friendship.user, friendship.friend) if friendship.user.mail_setting.confirm_friend == 1
+        # deliver mail
+        FriendshipMailer.deliver_confirm(friendship.user, friendship.friend) if friendship.user.mail_setting.confirm_friend == 1
+      end
     end
 	end
 

@@ -1,5 +1,9 @@
 # Settings specified here will take precedence over those in config/environment.rb
+<<<<<<< HEAD:config/environments/development.rb
 SITE_URL = "http://localhost:3000"
+=======
+SITE_URL = "http://192.168.217.3:3000"
+>>>>>>> 59331bfa18927a908bbb2d256cd4a95c5981df00:config/environments/development.rb
 SITE_MAIL = "gaoxh04@gmail.com"
 
 # In the development environment your application's code is reloaded on

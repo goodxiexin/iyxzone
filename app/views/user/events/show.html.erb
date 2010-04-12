@@ -123,7 +123,7 @@
   </div>
 
 	<div class="multibox">
-		<div class="title"><%= link_to "更多", event_album_url(@album) %><b>照片</b></div>
+		<div class="title"><%= link_to "更多", event_album_url(@album, :format => 'html') %><b>照片</b></div>
     <div class="photolist-big-box">
 			<ul class="collection s_clear">
 				<% @album.photos[0..4].each do |p| %>

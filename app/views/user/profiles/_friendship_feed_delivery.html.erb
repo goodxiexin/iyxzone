@@ -13,7 +13,7 @@
 	<div class='feed-icon icon-data'></div>
 		<div class='jl-list-con jl-cutline'>
 	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html=>{ :class => "icon-active"} %><% end %> 
-	<p><%= profile_link user %> 和 <%= profile_link friend %> 成为了好朋友 <%= ftime delivery.created_at %></p>
+	<p><%= profile_link user %> 和 <%= profile_link friend %> 成为了好朋友</p>
 	<p class="gray"><%= ftime delivery.created_at %></p>
 	</div>
 </div>	

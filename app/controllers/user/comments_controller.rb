@@ -4,7 +4,7 @@ class User::CommentsController < UserBaseController
     @comment = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
     unless @comment.save
       render :update do |page|
-        page << "error('发生错误');"
+        page << "error('评论由于某些问题而出错');"
       end
     end
   end

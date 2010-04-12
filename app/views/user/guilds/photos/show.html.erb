@@ -16,10 +16,10 @@
       <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01", :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @guild.name%>公会照片</strong><br/>
-        <%= link_to '公会主页', guild_url(@guild), :class => 'red' %>
+        <%= link_to '公会主页', guild_url(@guild)  %>
       </p>
     </div>
-    <div class="box02 canvas_int">
+    <div class="box02 canvas_int space">
       <div class="tab tab01">
         <div class="right">
           <% if @guild.president == current_user %>
@@ -28,7 +28,7 @@
         </div>
         <ul>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
-          <li><span><%= link_to "#{@guild.name}的相册", guild_album_url(@album) %></span></li>
+          <li><span><%= link_to "#{@guild.name}的相册", guild_album_url(@album, :format => 'html') %></span></li>
         </ul>
       </div>
       <div class="pic-box">
@@ -37,7 +37,7 @@
             <div class="img-container">
               <div class="path-box">
 								<label><%= guild_link @guild %></label>
-                <label><%= link_to "相册", guild_album_url(@album) %></label><span>查看照片</span>
+                <label><%= link_to "相册", guild_album_url(@album, :format => 'html') %></label><span>查看照片</span>
 							</div>
               <div class="img-main">
                 <div class="imgwrap box05">

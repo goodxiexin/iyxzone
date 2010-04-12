@@ -5,6 +5,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="app-log">日志</h1>
+<<<<<<< HEAD:app/views/user/blogs/hot.html.erb
     <div class="box02 canvas_int">
       <div class="tab tab01">
         <div class="right"><%= link_to "写新日志", new_blog_url %></div>
@@ -12,6 +13,26 @@
           <li class="hover"><span><%= link_to "热门日志", hot_blogs_url %></span></li>
           <li><span><%= link_to "我的日志", blogs_url(:uid => current_user.id) %></span></li>
           <li><span><%= link_to "与我相关的日志", relative_blogs_url(:uid => current_user.id) %></span></li>
+=======
+	<% else %>
+    <div class="friend-head space s_clear">
+      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
+      <p class="left">
+        <strong><%= @user.login %>的日志</strong><br />
+        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
+      </p>
+    </div>
+	<% end %>
+    <div class="box02 canvas_int space">
+      <div class="tab tab01">
+        <div class="right"><%= link_to "写新日志", new_blog_url %></div>
+        <ul>
+          <% subject = get_subject @user %>
+          <li class="hover"><span><%= link_to "热门日志", hot_blogs_url %></span></li>
+          <li><span><%= link_to "#{subject}的日志", blogs_url(:uid => @user.id) %></span></li>
+          <li><span><%= link_to "与#{subject}相关的日志", relative_blogs_url(:uid => @user.id) %></span></li>
+        <% if @user == current_user %>
+>>>>>>> 59331bfa18927a908bbb2d256cd4a95c5981df00:app/views/user/blogs/hot.html.erb
           <li><span><%= link_to "好友日志", friends_blogs_url %></span></li>
           <li><span><%= link_to "草稿箱", drafts_url %></span></li>
         </ul>

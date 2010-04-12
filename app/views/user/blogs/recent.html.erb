@@ -19,8 +19,8 @@
       <div class="feed-box01">
         <div class="nav-link">
           <ul class="s_clear">
-            <li><%= link_to "<span>人气最高</span>", hot_blogs_url(:uid => current_user.id) %></li>
-            <li class='hover'><%= link_to "<span>最新创建</span>", recent_blogs_url(:uid => current_user.id) %></li>
+            <li><%= link_to "<span>人气最高</span>", hot_blogs_url %></li>
+            <li class='hover'><%= link_to "<span>最新创建</span>", recent_blogs_url %></li>
           </ul>
         </div>
         <% if @blogs.total_entries != 0 %>

@@ -5,10 +5,10 @@
 <div class="feed-list-box">
   <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
 	  <div class="img left"><div class="imgbox01"><%= avatar user %></div></div>
+    <div class="jl-list-con jl-cutline">
 	  <% if delivery.is_deleteable_by? current_user %>
       <%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
     <% end %>
-    <div class="jl-list-con jl-cutline">
 	    <%= profile_link user %> <span> 分享了 <%= profile_link photo.poster%> 的照片</span>
       <p class="gray jl-con"><%= photo_link photo, :class=>'imgbox01', :size => :large %></p>
 	    <p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('#{photo.class.name.underscore}', #{photo.id}, null);", :class => "gray"%></p>
