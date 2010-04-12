@@ -40,7 +40,6 @@ class User::Guilds::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.json { render :json => @photo }
 				format.html { render :update do |page|
           if params[:at] == 'album'
 					  page << "facebox.close();"
@@ -51,6 +50,7 @@ class User::Guilds::PhotosController < UserBaseController
 
           end
 				end }
+				format.json { render :json => @photo }
 			end
     else
       respond_to do |format|

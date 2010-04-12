@@ -42,7 +42,6 @@ class User::Avatars::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.json { render :json => @photo }
 				format.html { render :update do |page|
 					page << "facebox.close();"
           if params[:at] == 'set_cover'
@@ -51,6 +50,7 @@ class User::Avatars::PhotosController < UserBaseController
 					  page << "$('avatar_notation_#{@photo.id}').update('#{@photo.notation.gsub(/\n/, '<br/>')}');"
           end
 				end }
+				format.json { render :json => @photo }
 			end
     else
       respond_to do |format|

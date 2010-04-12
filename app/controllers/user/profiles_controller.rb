@@ -43,7 +43,6 @@ class User::ProfilesController < UserBaseController
   def update
     if @profile.update_attributes(params[:profile])
 			respond_to do |format|
-				format.json { render :json => @profile.to_json }
 				format.html {
 					case params[:type].to_i
 					when 1
@@ -54,6 +53,7 @@ class User::ProfilesController < UserBaseController
             render :partial => 'characters', :locals => {:profile => @profile}
 					end
 				}
+				format.json { render :json => @profile.to_json }
 			end
     end
   end

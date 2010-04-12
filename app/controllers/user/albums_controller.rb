@@ -21,16 +21,16 @@ class User::AlbumsController < UserBaseController
 
   def show
     respond_to do |format|
-      format.json {
-        @photos = @album.photos
-        @json = @photos.map {|p| p.public_filename}
-        render :json => @json
-      }
       format.html {
         @user = @album.poster
         @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
         @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
         render :action => 'show'
+      }
+      format.json {
+        @photos = @album.photos
+        @json = @photos.map {|p| p.public_filename}
+        render :json => @json
       }
     end
   end
@@ -58,12 +58,12 @@ class User::AlbumsController < UserBaseController
   def update
     if @album.update_attributes(params[:album] || {})
 			respond_to do |format|
-        format.json { render :json => @album }
         format.html {    
 					render :update do |page|
 						page << "tip('成功');"
 					end
 				}
+        format.json { render :json => @album }
 			end
     else
       respond_to do |format|
