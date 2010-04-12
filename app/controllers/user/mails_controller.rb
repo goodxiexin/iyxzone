@@ -113,11 +113,6 @@ class User::MailsController < UserBaseController
     end     
   end
 
-  def auto_complete_for_recipients
-    @friends = current_user.friends.search(params[:friend][:login])
-    render :partial => 'friends', :object => @friends
-  end
-
 protected
 
   def catch_mail

@@ -1,0 +1,14 @@
+<ul>
+  <% friends.each do |f| %>
+  <li>
+    <%= avatar f, :class => 'imgbox01' %>
+    <p>
+      <%= link_to "<strong class='red'>#{h f.login}</strong>", profile_url(f.profile) %><br/>
+      <br/>
+      <%= facebox_link '<span class="icon-friend02"></span>加为好友', new_friend_request_url(:friend_id => f.id) %>
+    </p>
+  </li>
+  <% end %>
+</ul>
+
+<%= will_paginate friends %>

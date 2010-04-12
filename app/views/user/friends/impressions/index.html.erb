@@ -23,15 +23,11 @@
                 <th class="img"><%= avatar f, :class => 'imgbox01' %></th>
                 <td>
                   <h4><%= profile_link f %></h4>
-                  <% unless tagged %>
-                    <p>暂无印象评价</p>
-                  <% else %>
-                    <div class="i-show02 s_clear space">
+                  <div class="i-show02 s_clear space">
                     <% f.profile.tag_list.each{|tag| %>
                       <a class="i-s-<%=rand(4)%>"><strong><%=tag%></strong><span></span></a>
 										<% } %>
-										</div>
-                  <% end %>
+									</div>
                 </td>
                 <th class="remark">
                   <% unless tagged %>

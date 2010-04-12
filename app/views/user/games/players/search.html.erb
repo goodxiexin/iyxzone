@@ -50,6 +50,9 @@
 				<div class="box02 appcontent01">
           <div class="piclist-rows cmt-space">
             <table cellspacing='0' cellpadding='0'>
+            <% if @players.blank? %>
+              <tr><td><strong> 没有符合条件的玩家 </strong></td></tr>
+            <% else %>
               <% @players.each do |character| %>
               <% f = character.user %>
               <tr>
@@ -75,6 +78,7 @@
 								</td>
               </tr>
               <% end %>
+            <% end %>
             </table>
             <div class="space s_clear">
               <%= will_paginate @players %>

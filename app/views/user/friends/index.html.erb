@@ -64,7 +64,7 @@
 							  所有好友(共<%= current_user.friends_count %>个)
               </div>
               <div class="friend-list-body s_clear" id='friends'>
-						    <%= render :partial => 'friends', :object => @friends %>
+						    <%= render :partial => 'friends', :locals => {:friends => @friends, :owner => current_user, :remote => nil} %>
 						  </div>
             </div>
           </div>
