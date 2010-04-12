@@ -23,7 +23,7 @@
 					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :style => "display:none", :onsubmit => "Iyxzone.Search.searchUsers($('user_search_submit_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'key', '要搜索的用户的昵称', :onclick => "this.clear();" %></div>
+                <div class="textfield"><%= text_field_tag 'key', '要搜索的用户的昵称', :onclick => "$(this).clear();" %></div>
               </div>
               <div class="fldbtn"><span class="button"><span><button type="submit" id='user_search_submit_btn'>查找</button></span></span></div>
               <div class="link"><%= link_to_function "按游戏角色查找", "Iyxzone.Search.showCharacterForm();" %></div>
@@ -32,7 +32,7 @@
 					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :onsubmit => "Iyxzone.Search.searchCharacters($('character_search_submit_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldid"><label for="username">游戏角色名称：</label></div>
-                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "this.clear();" %></div></div>
+                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "$(this).clear();" %></div></div>
             </div>
             <div id='character_options'>
             <div class="rows s_clear">
@@ -64,32 +64,40 @@
         <div class="box02 appcontent01">
           <div class="piclist-rows cmt-space">
             <table cellspacing='0' cellpadding='0'>
-              <% @users.each do |user_id, characters| %>
-              <% f = User.find(user_id) %>
-              <tr>
-                <td>
-									<div class='imgwrap'>
-										<%= avatar f, :size => :medium, :class=>'imgbox01' %>
-									</div>
-									<div class='data jl-data'>
-										<p><%= profile_link f %></p>
-										<% characters[0..2].each{ |character| %>
-											<p><%= character.game.name %>,
-											<%= character.server.name unless character.server.nil? %>的
-											<%= character.name %></p>
-											<% } %>
-										<p class="space">
-											<%unless current_user == f %>
-											<% unless current_user.relationship_with(f)=='friend' %>
-											<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
-											<% end %>
-											<%= link_to '', new_mail_url(:recipient_ids => [f.id]), :class => "msg-btn" %>
-											<% end %>
-										</p>
-									</div>
-								</td>
-              </tr>
-              <% end %>
+							<% if @users.empty? %>
+								<tr>
+									<td>
+										<strong> 没有符合条件的用户 </strong>
+									</td>
+								</tr>
+							<% else %>
+								<% @users.each do |user_id, characters| %>
+								<% f = User.find(user_id) %>
+								<tr>
+									<td>
+										<div class='imgwrap'>
+											<%= avatar f, :size => :medium, :class=>'imgbox01' %>
+										</div>
+										<div class='data jl-data'>
+											<p><%= profile_link f %></p>
+											<% characters[0..2].each{ |character| %>
+												<p><%= character.game.name %>,
+												<%= character.server.name unless character.server.nil? %>的
+												<%= character.name %></p>
+												<% } %>
+											<p class="space">
+												<%unless current_user == f %>
+												<% unless current_user.relationship_with(f)=='friend' %>
+												<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
+												<% end %>
+												<%= link_to '', new_mail_url(:recipient_ids => [f.id]), :class => "msg-btn" %>
+												<% end %>
+											</p>
+										</div>
+									</td>
+								</tr>
+								<% end %>
+							<% end %>
             </table>
             <div class="space s_clear">
               <%= will_paginate @users %>

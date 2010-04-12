@@ -1,4 +1,5 @@
 class User::GamesController < UserBaseController
+	unloadable
 
   layout 'app2'
 

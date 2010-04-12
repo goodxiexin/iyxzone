@@ -32,7 +32,7 @@
 					<% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :onsubmit => "Iyxzone.Search.searchUsers($('user_search_submit_btn')); return false;", :style => "display:none" do %>
 						<div class="rows s_clear">
               <div class="fldvalue">
-								<div class="textfield"><%= text_field_tag 'key', '好友名字', :onclick => "this.clear();" %></div>
+								<div class="textfield"><%= text_field_tag 'key', '好友名字', :onclick => "$(this).clear();" %></div>
               </div>
               <div class="fldbtn">
                 <span class="button"><span><button type="submit" id="user_search_submit_btn">查找</button></span></span>
@@ -46,7 +46,7 @@
 					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :onsubmit => "Iyxzone.Search.searchCharacters($('character_search_submit_btn')); return false;", :style => "display:none" do %>
             <div class="rows s_clear">
               <div class="fldid"><label for="username">游戏角色名称：</label></div>
-                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "this.clear();" %></div></div>
+                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "$(this).clear();" %></div></div>
             </div>
             <div id='character_options'>
             <div class="rows s_clear">

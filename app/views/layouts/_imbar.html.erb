@@ -23,7 +23,7 @@
             </div>
           </div>
           <div class="im-search rows">
-            <%= text_field_tag '', '搜索好友', :onclick => "this.clear();", :onfocus => "Iyxzone.Chat.startObservingSearch($(this))", :onblur => "Iyxzone.Chat.stopObservingSearch()" %>
+            <%= text_field_tag '', '搜索好友', :onclick => "$(this).clear();", :onfocus => "Iyxzone.Chat.startObservingSearch($(this))", :onblur => "Iyxzone.Chat.stopObservingSearch()" %>
             <%= button_to_function '', '', :class => 'go' %> 
           </div>
           <div class="im-group s_clear">

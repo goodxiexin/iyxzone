@@ -183,13 +183,13 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.clearError('phone_error');
 
     if(phone != ''){
-      if(phone.match(/\d+/)){
-        if(phone.length < 8 || phone.length > 15){
+      if(phone.match(/\d+(-\d+)*/)){
+        if(phone.length < 7 || phone.length > 15){
           this.showError('phone_error', '联系电话长度不对');
           return false;
         }
       }else{
-        this.showError('phone_error', '联系电话只能由数字组成');
+        this.showError('phone_error', '联系电话只能由数字或-组成');
         return false;
       }
     }
@@ -203,7 +203,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.clearError('url_error');
 
     if(url != ''){
-      if(!url.match(/^((https?:\/\/)?)(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/)){
+			if(!url.match(/^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/)){
         this.showError('url_error', '非法的url地址');
         return false;
       }
