@@ -15,7 +15,7 @@
     <div class="friend-head space s_clear">
       <span class="left"><%= album_cover @event.album, :class => "imgbox01", :size => "medium", :width => 50, :height => 50 %></span>
       <p class="left">
-        <strong><%= @event.title%>活动照片</strong><br/>
+        <strong><%= h @event.title%>活动照片</strong><br/>
         <%= link_to '活动主页', event_url(@event) %>
       </p>
     </div>

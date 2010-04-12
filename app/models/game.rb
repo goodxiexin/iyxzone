@@ -12,7 +12,7 @@ class Game < ActiveRecord::Base
 
 	has_many :guilds, :order => '(members_count + veterans_count + 1) DESC'
 
-	has_many :albums, :class_name => 'PersonalAlbum', :order => "uploaded_at DESC", :conditions => ["photos_count != ?", 0]
+	has_many :albums, :class_name => 'Album', :order => "uploaded_at DESC", :conditions => ["photos_count != ?", 0]
 
 	has_many :blogs, :order => 'digs_count DESC'
 

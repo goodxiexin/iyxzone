@@ -4,11 +4,21 @@ class PollInvitation < ActiveRecord::Base
 
 	belongs_to :poll
 
-	def validate_on_create
-    errors.add_to_base('没有人') if user_id.blank?
-    errors.add_to_base('没有投票') if poll_id.blank?
-    errors.add_to_base('邀请的不是好友') if poll_id and user_id and !poll.poster.has_friend?(user_id)
-	  errors.add_to_base('已经邀请过了') if poll_id and !poll.invitations.find_by_user_id(user_id).blank?
+  validates_presence_of :poll_id, :message => "不能为空"
+
+  validates_presence_of :user_id, :message => "不能为空"
+
+  validate_on_create :user_is_valid
+
+protected
+
+  def user_is_valid
+    return if user_id.blank? or poll.blank?
+    if !poll.invitations.find_by_user_id(user_id).blank?
+      errors.add(:user_id, '已经邀请过了')
+    elsif !poll.poster.has_friend? user_id
+      errors.add(:user_id, '邀请的不是好友')
+    end
   end
 
 end

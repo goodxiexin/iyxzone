@@ -14,9 +14,9 @@
     <td colspan="2" align="center">
 				<span id='game_attention_<%= @game.id %>'>
 				<% if @attention %>
-					<%= link_to_remote "取消关注", :url => game_attention_url(@game, @attention, :at => 0), :method => :delete, :html => {:class => "concern-btn"} %>
+					<%= link_to_remote "取消关注", :url => game_attention_url(@game, @attention, :at => 0), :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');", :method => :delete, :html => {:class => "concern-btn"} %>
 				<% else %>
-					<%= link_to_remote "关注", :url => game_attentions_url(@game, :at => 0), :html => {:class => "concern-btn"} %>
+					<%= link_to_remote "关注", :url => game_attentions_url(@game, :at => 0), :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');", :html => {:class => "concern-btn"} %>
 				<% end %>
 				</span> 
 		</td>

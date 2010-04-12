@@ -40,7 +40,7 @@
 					<% form_tag character_search_game_comrades_url(@game), :class => "formcontent", :id => 'character_form', :onsubmit => "Iyxzone.Search.searchCharacters($('game_charactername_search_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'key','游戏角色查找', :onclick => "$(this).clear();" %></div>
+                <div class="textfield"><%= text_field_tag 'key', params[:key] || '游戏角色查找', :onclick => "$(this).clear();" %></div>
               </div>
               <div class="fldbtn"><span class="button"><span><button type="submit" id="game_charactername_search_btn">查找</button></span></span></div>
 							<div class='link'><%= link_to_function '按用户名查找', "Iyxzone.Search.showUserForm()" %></div>

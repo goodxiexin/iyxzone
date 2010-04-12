@@ -59,7 +59,7 @@ class Poll < ActiveRecord::Base
     user == poster || privilege == 1 || (privilege == 2 and poster.friends.include? user)
   end
 
-  def answers=(answer_attributes)
+  def answers= answer_attributes
     @answer_attributes = answer_attributes.find_all {|a| !a[:description].blank?}
   end
 
@@ -71,6 +71,13 @@ class Poll < ActiveRecord::Base
       @answer_attributes = nil
     end
   end 
+
+  def invitees= user_ids
+    return if user_ids.blank?
+    user_ids.each do |user_id|
+      invitations.build(:user_id => user_id)
+    end
+  end
 
 protected
 

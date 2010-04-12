@@ -50,7 +50,7 @@ class Event < ActiveRecord::Base
 
     event.has_many :confirmed_characters, :through => :confirmed_participations
 
-    event.has_many :maybe_characters, :through => :maybe_participations
+      event.has_many :maybe_characters, :through => :maybe_participations
 
     event.has_many :characters, :through => :participations, :conditions => "participations.status = 3 or participations.status = 4"
 
@@ -157,9 +157,6 @@ class Event < ActiveRecord::Base
       invitations.build(:character_id => character.id, :participant_id => character.user_id)
     end
   end
-
-  class CantDeleteExpired < StandardError
-  end 
 
   validates_presence_of :poster_id, :message => "不能为空", :on => :create
 

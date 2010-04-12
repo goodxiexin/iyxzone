@@ -58,8 +58,9 @@ a:hover{color:#D63200;}
 #homeComposer .mcPanel .buttons a.icon-log{background-position:0 -120px}
 #homeComposer .mcPanel .buttons a.icon-share{background-position:0 -363px}
 
-.formComposer h3{margin-bottom:16px;padding-left:79px;height:75px;line-height:75px;background:url(../images/icons/ployIcons.png) #fff no-repeat;overflow:hidden;}
-.formComposer h3.game{background-position:left -85px;}
+.formComposer h3{margin-bottom:16px;}
+/*.formComposer h3.game{background-position:left -85px;}
+*/
 .formComposer h3 b{font-size:14px;color:#D63200;}
 .formComposer .formcontent .fldid{width:76px;}
 .formComposer .formcontent .fldvalue{margin-right:7px;}
@@ -592,6 +593,7 @@ a:hover{color:#D63200;}
 
 .photo-box .photo-list .form-wrap{clear:none;float:right;margin-left:-86px;width:100%;}
 .photo-box .photo-list .form-wrap .formcontent{margin-left:86px;padding:0 0 0 11px;}
+.photo-box .photo-list .form-wrap .formcontent .fldid{width:auto}
 .photo-box .photo-list .rows{padding:2px 0;}
 .photo-box .photo-list textarea{width:526px;height:90px;}
 .photo-box .buttons{margin-top:40px;}
@@ -878,10 +880,11 @@ button.add-friend{background:url(../images/skin/skin2010.png) no-repeat -115px -
 .member .nowrap{width:100px;}
 .member .op a{color:#333;}
 .member .op strong{color:#25700d;padding:1px 2px;display:block;line-height:16px;height:16px;font-weight:400;border:1px solid #e2b76c;background:url(../images/skin/skin2010.png) repeat-x 0 -536px;}
-/*.level-toggle{color:#333;padding:1px 5px 1px 8px;margin-top:5px;text-align:center;position:relative}
-.level-toggle:hover{color:#333;background:#e4fcc9}
-.level-toggle span{display:block;padding-right:10px;background:url(../images/skin/dropArrow01.gif) no-repeat right;}
-*/
+
+/*活动标题*/
+.event-logo{float:left;margin-top:10px}
+.event-title{float:left;line-height:22px;margin:20px 0 0 10px}
+
 /*公会活动游戏标题*/
 .big-head{line-height:24px}
 .big-head img{ vertical-align:middle;margin-right:10px}
@@ -974,6 +977,10 @@ a.concern-btn{background-position:0 -411px}
 .detail-blog .con{text-align:left;padding:0 15px}
 .detail-video-foot p,.detail-blog-foot p{padding:10px 15px}
 .detail-blog-foot h2{margin:0 20px}
+.detail-blog-foot .word-box{padding:7px;width:385px;margin-top:4px}
+.detail-blog-foot .comment-box{padding:7px 8px;width:383px;margin-top:4px}
+.detail-blog-foot .cmt-box{margin-top:5px;width:383px;overflow:hidden;padding:7px;}
+.detail-blog-foot .cmt-box .con{margin:0 0 0 8px;padding:0}
 /*站内信*/
 .list-msg h4{font-size:14px;font-weight:700;margin:10px 0}
 .list-msg .list-msg-head{padding:10px 0}
@@ -999,7 +1006,7 @@ a.btn-17gaming,.tab01 .right a.btn-17gaming,.tab01 .right a.btn-17gaming:hover{b
 h1.app-share{float:left}
 .share-url{float:right;margin-top:5px;padding:5px 10px;background:url(../images/skin/title-bg02.gif) repeat-x;color:#666}
 .share-url input{width:150px;height:16px;border:1px solid #bbb;color:#bbb}
-.feed-img-list .feed-share{margin-bottom:10px}
+.feed-img-list .feed-share{margin-bottom:10px;min-height:80px}
 .feed-img-list .feed-share .feed-header h3,.feed-img-list .feed-share .feed-header .con{padding-right:170px;}
 .feed-img-list .feed-share .feed-header{border:1px solid #dbeec7;}
 .feed-img-list .feed-share .feed-header .right{border-left:1px solid #dbeec7;padding:0 10px}
@@ -1020,8 +1027,14 @@ h1.app-share{float:left}
 /*每日十闻*/
 .news10-list{line-height:22px;margin:10px 15px}
 
-/*全屏顶栏*/
-#w-nav{margin-left:20px}
+/*web分享 全屏顶栏*/
+/*iframe高度自适应*/
+.share-web-top{position:absolute;left:0;top:0;right:0;bottom:0;height:42px;*margin-top:-42px;*margin-bottom:10px;*position:relative;z-index:999}
+.share-web-con{position:absolute;left:0;top:42px;bottom:0;right:0;*height:100%;*position:relative;*top:0;_top:-10px;overflow:hidden;}
+.share-web-con iframe{width:100%;height:100%;overflow-y:auto;overflow-x:hidden;}
+
+.share-web-top .cmt-box{width:385px}
+#w-nav{margin-left:20px;}
 #w-nav li{line-height:42px;color:#e0ffbe;float:left;margin-right:10px}
 #w-nav a{color:#fff;cursor:pointer}
 #w-nav #cmt:hover,#w-nav .current{background:url(../images/skin/navbar01.gif) 0 -180px;}
@@ -1039,6 +1052,7 @@ h1.app-share{float:left}
 /*#navextra .close{background:url(../images/icons/close.gif) no-repeat;width:19px;height:19px;display:inline-block;vertical-align:middle}
 */
 /*z-box*/
+.z-box{width:350px}
 .z-t span,.z-b span{display:block;height:10px;font-size:1px;filter:alpha(opacity=90);opacity:0.9;}
 .z-t span strong,.z-b span strong,.z-box .z-t span.r,.z-box .z-b span.r{display:block;background:url(../images/skin/z-box-corner.gif) no-repeat;height:10px;}
 .z-box .z-t span.l{width:100%;margin-right:-10px;float:left}

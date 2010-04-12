@@ -1,10 +1,9 @@
 <% content_for :left do %>
 
 <div class="mcAvatar">
-	<a href="#"></a>
   <div class="picwrap">
 		<div class="middle"><div class="middle-center"><div class="center">
-			<%= album_cover_image @event.album, :size => :large %>
+			<%= avatar_image @event.poster, :size => :large, :width => '100px', :height => '112px' %>
     </div></div></div>
   </div>
 </div>
@@ -87,11 +86,14 @@
 
 <div class='box02 canvas_con'>
   <div class="formComposer">
-	  <h3 class="png">
-      名称：<b><%= h @event.title %></b>
+    <div class="event-logo"><%= album_cover @event.album, :size => :medium, :width => 60, :height => 60, :class => 'imgbox01' %></div>
+    <h3 class="event-title">
       <% if @event.is_guild_event? %>
-        <span>   公会活动: </span> <b><%= guild_link @event.guild %></b>
-      <% end %>
+      名称：<b><%= h @event.title %></b><br />
+      公会：<%= guild_link @event.guild %>
+      <% else %>
+      名称：<b><%= h @event.title %></b><br />
+      <% end %>      
     </h3>
 	  <div class="formcontent">
   		<div class="rows s_clear">

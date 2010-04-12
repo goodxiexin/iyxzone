@@ -108,7 +108,7 @@
           <h3 class='space'>投票情况</h3>
 					<ul class='jl-cutline'>
           <% if @vote %>
-            <li class='now'><%= profile_link current_user %> 投给了 <%= @vote.answers.map{|a| "\"#{truncate h(a.description), :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
+            <li class='now'>你 投给了 <%= @vote.answers.map{|a| "\"#{truncate h(a.description), :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
           <% end %>
           <% @vote_feeds.each do |v| %>
             <li class='now'><%= profile_link v.voter %> 投给了 <%= v.answers.map{|a| "\"#{truncate h(a.description), :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
