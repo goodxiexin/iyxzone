@@ -21,11 +21,7 @@ development:
   database: dayday3_development
   pool: 5
   username: root
-<<<<<<< HEAD:config/database.yml
-  password: root
-=======
-  password: 123456
->>>>>>> 59331bfa18927a908bbb2d256cd4a95c5981df00:config/database.yml
+  password: 20041065
   socket: /var/run/mysqld/mysqld.sock 
 
 # Warning: The database defined as "test" will be erased and

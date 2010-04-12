@@ -2,4 +2,4 @@
 :allowed_ips: 
   - 127.0.0.1
 :logout_url: http://192.168.217.81:3000/juggernaut/logout
-     :port: 5001
+:port: 5001
