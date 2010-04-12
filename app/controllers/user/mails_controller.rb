@@ -23,6 +23,7 @@ class User::MailsController < UserBaseController
   end
 
   def new
+    @infos = @recipients.map{|r| {:id => r.id, :profileID => r.profile.id, :login => r.login}}.to_json    
   end
 
   def create
@@ -133,7 +134,7 @@ protected
   end
 
   def catch_recipients
-    @recipients = User.find(params[:recipient_ids]) unless params[:recipient_ids].blank?
+    @recipients = params[:recipient_ids].blank? ? [] : User.find(params[:recipient_ids])
   end
 
 end

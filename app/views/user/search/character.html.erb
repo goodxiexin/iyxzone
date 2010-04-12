@@ -32,7 +32,7 @@
 					<% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :onsubmit => "Iyxzone.Search.searchCharacters($('character_search_submit_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldid"><label for="username">游戏角色名称：</label></div>
-                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "$(this).clear();" %></div></div>
+                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', params[:key] || '要搜索的游戏角色名称', :onclick => "$(this).clear();" %></div></div>
             </div>
             <div id='character_options'>
             <div class="rows s_clear">

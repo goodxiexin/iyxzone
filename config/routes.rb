@@ -108,7 +108,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :mails, :collection => {:read_multiple => :put, :unread_multiple => :put, :destroy_multiple => :delete}, :member => {:reply => :post}
 
-    users.resources :friend_suggestions, :collection => { :user_search => :any, :character_search => :any}
+    users.resources :friend_suggestions
 
     users.resources :friend_impressions, :controller => 'friends/impressions'
 

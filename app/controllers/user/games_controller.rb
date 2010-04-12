@@ -73,7 +73,8 @@ protected
 
   def setup
     if ["index", "interested"].include? params[:action]
-      @user = User.find(params[:uid]) 
+      @user = User.find(params[:uid])
+      require_friend_or_owner @user
     elsif ["more_feeds", "show"].include? params[:action]
       @game = Game.find(params[:id])
     end

@@ -31,14 +31,29 @@ class User::FriendSuggestionsController < UserBaseController
     end
 
 		if !params[:server_id].nil?
-			@suggestion = current_user.find_or_create_comrade_suggestions(@server).reject{|s| @except.include?(s)}.sort_by{rand}.first
+			@suggestions = current_user.find_or_create_comrade_suggestions(@server).reject{|s| @except.include?(s)}
+      if @suggestions.blank?
+        # this could barely happen, but it's still possible
+        # in this case, we just return the origin comrade suggestion
+        @suggestion = ComradeSuggestion.find(params[:sid])
+      else
+        @suggestion = @suggestions.sort_by{rand}.first
+      end
 			render :partial => 'comrade_suggestion', :object => @suggestion
-		elsif !params[:nicer].nil?
-			@suggestion = current_user.find_or_create_friend_suggestions.reject{|s| @except.include?(s)}.sort_by{rand}.first
-			render :partial => 'nicer_friend_suggestion', :object => @suggestion
 		else
-			@suggestion = current_user.find_or_create_friend_suggestions.reject{|s| @except.include?(s)}.sort_by{rand}.first
-			render :partial => 'friend_suggestion', :object => @suggestion
+			@suggestions = current_user.find_or_create_friend_suggestions.reject{|s| @except.include?(s)}
+      if @suggestions.blank?
+        # this could barely happen, but it's still possible
+        # in this case, we just return the origin friend suggestions 
+        @suggestion = FriendSuggestion.find(params[:sid])
+      else
+        @suggestion = @suggestions.sort_by{rand}.first
+      end
+      if params[:nicer].nil?
+			  render :partial => 'friend_suggestion', :object => @suggestion
+      else
+        render :partial => 'nicer_friend_suggestion', :object => @suggestion
+      end
 		end
 	end
 
