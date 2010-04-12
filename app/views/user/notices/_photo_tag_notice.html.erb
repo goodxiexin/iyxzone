@@ -1,9 +1,9 @@
 <% photo = tag.photo %>
 <% album = photo.album %>
 <% if home_page%>
-<% link = link_to_function album.title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}');window.open('/#{photo.class.to_s.underscore}s/#{photo.id}');" %>
+<% link = link_to_function h(album.title), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}');window.open('/#{photo.class.to_s.underscore}s/#{photo.id}');" %>
 <% else %>
-<% link = link_to_function album.title, "window.open('/#{photo.class.to_s.underscore}s/#{photo.id}');" %>
+<% link = link_to_function h(album.title), "window.open('/#{photo.class.to_s.underscore}s/#{photo.id}');" %>
 <% end %>
 <li>
   <div class="feed-message">

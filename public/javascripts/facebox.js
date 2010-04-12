@@ -133,7 +133,10 @@ var Facebox = Class.create({
 	},
 
   // TODO: 怎么传多个参数?
-  show_confirm_with_callbacks: function(confirm_message, callbacks, args){
+  show_confirm_with_callbacks: function(){
+    var properties = $A(arguments);
+    var confirm_message = properties.shift();
+    var callback= properties.shift();
     var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="facebox.close();" class="icon2-close right"></a></p>';
     html += '<div class="z-con"><p>' + confirm_message + "</p>";
     html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button'><span><button type='submit' id='facebox_confirm'>确定</button></span></span><span class='button button-gray'><span><button type='button' onclick='facebox.close();'>取消</button></span></span></div></div></div>";
@@ -141,8 +144,7 @@ var Facebox = Class.create({
     this.set_content(html);
     this.locate();
     Event.observe('facebox_confirm', 'click', function(){
-      callbacks(args);
-      this.close();
+      callback.apply(this, properties);
     }.bind(this));
   },
 

@@ -4,7 +4,8 @@ class GuildAlbum < Album
 
   belongs_to :guild, :foreign_key => 'owner_id'
 
-  has_many :photos, :class_name => 'GuildPhoto', :foreign_key => 'album_id', :order => 'created_at DESC', :dependent => :destroy
+  # 理论上工会相册是不能删除的
+  has_many :photos, :class_name => 'GuildPhoto', :foreign_key => 'album_id', :order => 'created_at DESC'
 
   acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}

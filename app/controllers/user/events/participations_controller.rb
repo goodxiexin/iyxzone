@@ -28,7 +28,7 @@ class User::Events::ParticipationsController < UserBaseController
   end
 
   def destroy
-    if @participation.destroy
+    if @participation.evict
       render :update do |page|
         page << "$('participation_#{@participation.id}').remove();"
       end

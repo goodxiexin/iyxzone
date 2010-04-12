@@ -34,10 +34,12 @@ class VideoObserver < ActiveRecord::Observer
         recipients.concat video.poster.friends.find_all{|f| f.application_setting.recv_video_feed == 1}
         video.deliver_feeds :recipients => recipients
       end
+=begin
       video.tags.each do |tag|
         tag.notices.create(:user_id => tag.tagged_user_id)
         TagMailer.deliver_video_tag tag if tag.tagged_user.mail_setting.tag_me_in_video == 1
       end
+=end
     end
 
     # destroy feeds if necessary

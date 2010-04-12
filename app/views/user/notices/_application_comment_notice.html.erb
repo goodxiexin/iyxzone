@@ -2,9 +2,9 @@
 <% title = "应用#{application.name}的主页" %>
 
 <% if home_page %>
-  <% link = link_to_function title, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/applications/#{application.id}?reply_to=#{comment.poster_id}');" %>
+  <% link = link_to_function h(title), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/applications/#{application.id}?reply_to=#{comment.poster_id}');" %>
 <% else %>
-  <% link = link_to_function title, "window.open('/applications/#{application.id}?reply_to=#{comment.poster_id}');" %>
+  <% link = link_to_function h(title), "window.open('/applications/#{application.id}?reply_to=#{comment.poster_id}');" %>
 <% end %>
 <li>
   <div class="feed-message">

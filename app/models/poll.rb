@@ -4,13 +4,15 @@ class Poll < ActiveRecord::Base
 
   belongs_to :game
 
-  has_many :answers, :class_name => 'PollAnswer', :dependent => :destroy
+  has_many :answers, :class_name => 'PollAnswer', :dependent => :delete_all
 
-  has_many :votes, :dependent => :destroy
+  has_many :votes # 不写:dependent => :destroy, 手动来删，提高效率
 
   has_many :voters, :through => :votes
 
-	has_many :invitations, :class_name => 'PollInvitation', :dependent => :destroy, :order => 'created_at DESC'
+	has_many :invitations, :class_name => 'PollInvitation', :order => 'created_at DESC' # 不写:dependent => :destroy, 手动来删，提高效率
+
+  has_many :invitees, :through => :invitations, :source => 'user'
 
   named_scope :hot, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Time.now.to_s(:db)], :order => "voters_count DESC"
 

@@ -32,7 +32,7 @@ class User::Guilds::MembershipsController < UserBaseController
   end
 
   def destroy
-    if @membership.destroy
+    if @membership.evict
       render :update do |page|
         page << "$('membership_#{@membership.id}').remove();"
       end

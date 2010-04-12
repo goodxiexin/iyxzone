@@ -64,6 +64,7 @@ Rails::Initializer.run do |config|
     :rating_observer,
     :signup_invitation_observer,
     :poke_delivery_observer,
+    :viewing_observer,
     :guestbook_observer
 
 end

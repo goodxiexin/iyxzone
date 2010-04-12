@@ -25,9 +25,6 @@ class EventObserver < ActiveRecord::Observer
 
     # create participation
     event.participations.create(:participant_id => event.poster_id, :character_id => event.character_id, :status => Participation::Confirmed)
-
-    # increment user's counter
-    # event.poster.raw_increment :events_count
  
     # issue feeds
     return if event.poster.application_setting.emit_event_feed == 0
@@ -55,10 +52,20 @@ class EventObserver < ActiveRecord::Observer
   def before_destroy event
     # modify request count
     event.poster.raw_decrement :event_requests_count, event.requests_count
-    event.participants.each do |p|
+    
+    # modify invitations count
+    event.invitations.each do |invitation|
+      invitation.participant.raw_decrement :event_invitations_count
+    end
+    
+    # send notifications
+    (event.participants - [event.poster]).each do |p|
       p.notifications.create(:category => Notification::EventCancel, :data => "活动 #{event.title} 取消了")
       EventMailer.deliver_event_cancel event, p if p.mail_setting.cancel_event == 1
     end
+
+    # destroy all participations
+    Participation.delete_all(:event_id => event.id)
   end
 
 end

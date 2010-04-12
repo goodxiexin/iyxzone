@@ -78,7 +78,7 @@ class ParticipationObserver < ActiveRecord::Observer
   def after_destroy participation
 		event = participation.event
 		participant = participation.participant
-   
+    
     if participation.is_invitation?
 			# invitation is declined
 			participant.raw_decrement :event_invitations_count

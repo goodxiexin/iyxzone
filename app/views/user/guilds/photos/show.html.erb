@@ -91,7 +91,7 @@
 </div></div>
 </div></div></div></div>
 
-<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user} %>
+<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @guild.people - [current_user]} %>
 
 <% unless @reply_to.blank? %>
   <%= onload_javascript_tag "Iyxzone.Comment.set('guild_photo', '#{@photo.id}', '#{@reply_to.login}', #{@reply_to.id})" %>

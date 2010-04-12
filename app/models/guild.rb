@@ -14,9 +14,9 @@ class Guild < ActiveRecord::Base
 
   named_scope :recent, :order => 'created_at DESC'
 
-  has_one :forum, :dependent => :destroy
+  has_one :forum
 
-  has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
+  has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id'
   
   has_many :events
 

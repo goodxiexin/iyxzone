@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
 
-  has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id', :dependent => :destroy
+  has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id'
 
   belongs_to :poster, :class_name => 'User'
 
@@ -18,7 +18,7 @@ class Event < ActiveRecord::Base
 	
 	named_scope :recent, :conditions => ["end_time > ?", Time.now], :order => 'start_time DESC'
 
-  has_many :participations, :dependent => :destroy
+  has_many :participations #, :dependent => :delete_all, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
 
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
 
@@ -156,14 +156,6 @@ class Event < ActiveRecord::Base
       character = GameCharacter.find(character_id)
       invitations.build(:character_id => character.id, :participant_id => character.user_id)
     end
-  end
-
-  def recently_deleted?
-    @recently_deleted
-  end
-
-  def recently_deleted= val
-    @recently_deleted = val
   end
 
   class CantDeleteExpired < StandardError

@@ -8,7 +8,7 @@ module Diggable
 
     def acts_as_diggable opts={}
 
-      has_many :digs, :as => 'diggable', :dependent => :destroy
+      has_many :digs, :as => 'diggable', :dependent => :delete_all
 
       cattr_accessor :diggable_opts
 

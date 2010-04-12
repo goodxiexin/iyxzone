@@ -4,7 +4,7 @@ class Blog < ActiveRecord::Base
 
 	belongs_to :poster, :class_name => 'User'
 
-  has_many :images, :class_name => 'BlogImage', :dependent => :destroy
+  has_many :images, :class_name => 'BlogImage', :dependent => :delete_all
 
   named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
 
