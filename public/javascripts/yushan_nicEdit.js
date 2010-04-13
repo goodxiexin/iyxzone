@@ -1374,11 +1374,14 @@ var nicImageOptions = {
 /* END CONFIG */
 
 /* 考虑到一页可能有多个nicEditors，然后每个nicEditor都应该共享这一个变量，所以这样设置了 */
-nicEditors.albums =[];
+nicEditors.albums = [];
+
+/* authenticity token， 考虑到一页可能有多个nicEditors, 每个nicEditor应该能共享这一个token */
+nicEditors.authenticityToken = null;
 
 var nicImageButton = nicEditorAdvancedButton.extend({
 
-  paneHTML: "<div class='z-box'><div class='z-t'> \
+  paneHTML: "<div class='z-box' style='width:450px'><div class='z-t'> \
         <span class='l'><strong></strong></span> \
         <span class='r'></span> \
         </div> \
@@ -1396,12 +1399,13 @@ var nicImageButton = nicEditorAdvancedButton.extend({
                         </div> \
                       <div class='formcontent' id='local_image_frame' style='display:none'> \
                           <form action='/blog_images' id='upload_image_form' enctype='multipart/form-data' method='post' target='upload_iframe'> \
-                          <div class='rows s_clear'> \
+                            <input type='hidden' value='' name='authenticity_token'/> \
+                            <div class='rows s_clear'> \
                               <div class='fldid'><label>上传本地图片：</label></div> \
                               <div class='fldvalue'> \
                                 <input id='photo_uploaded_data' name='photo[uploaded_data]' size='20' type='file' />\
                               </div> \
-                          </div> \
+                            </div> \
                           </form>\
                           <iframe id='upload_iframe' name='upload_iframe' style='border: 0px none ; width: 1px; height: 1px;' src='about:blank'></iframe> \
                       </div> \
@@ -1464,10 +1468,12 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     this.pane.pane.setStyle({'width':'450px', 'border' : 'none', 'padding' : '0px'});
     this.pane.close.remove();
     this.pane.close = null;
-
     this.pane.setContent(this.paneHTML);
 
     this.currentTab = 'url_image';
+
+    // set token
+    $BK('upload_image_form').childElements()[0].value = nicEditors.authenticityToken;
 
     // set album selector
     for(var i=0;i<nicEditors.albums.length;i++){

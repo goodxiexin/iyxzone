@@ -26,7 +26,6 @@ class User::GuildsController < UserBaseController
 
   def friends
     @guilds = current_user.friend_guilds.paginate :page => params[:page], :per_page => 10
-    #guild_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def show
@@ -49,7 +48,7 @@ class User::GuildsController < UserBaseController
     guild_params = (params[:guild] || {}).merge({:president_id => current_user.id})
     @guild = Guild.new(guild_params)
     if @guild.save
-      redirect_to new_guild_invitations_url(@guild)
+      redirect_to new_guild_invitation_url(@guild)
     else
       render :action => 'new'
     end

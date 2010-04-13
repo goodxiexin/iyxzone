@@ -121,8 +121,9 @@ Object.extend(Iyxzone.Blog.Builder, {
 
   init: function(textAreaID, token, albumInfos, max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
     // set nicEditor
-    this.editor = new nicEditor().panelInstance(textAreaID, {'token': token});
+    this.editor = new nicEditor().panelInstance(textAreaID);
     nicEditors.albums = albumInfos;
+    nicEditors.authenticityToken = token;
 
     // set last content and beforeunload
     this.lastContent = $(textAreaID).value;
