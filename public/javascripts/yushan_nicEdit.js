@@ -1221,7 +1221,7 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
                             <div class='rows s_clear'> \
                               <div class='fldid'><label>链接地址：</label></div> \
                               <div class='fldvalue'> \
-                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='http://' id='nicEdit-link-url-field'></div> \
+                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='' id='nicEdit-link-url-field'></div> \
                               </div> \
                             </div> \
                             <div class='rows s_clear'> \
@@ -1413,7 +1413,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
                           <div class='rows s_clear'> \
                               <div class='fldid'><label>连接地址：</label></div> \
                               <div class='fldvalue'> \
-                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='http://' id='image_url_field' /></div> \
+                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='' id='image_url_field' /></div> \
                               </div> \
                           </div> \
                       </div> \
@@ -1692,53 +1692,8 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
       }.closure(this));
       a.appendTo(div);
     }
-    //var prev = new bkElement('a').setStyle({'className':'prev'});
-    //prev.setAttribute('pageNum', pageNum - 1);
-    //var next = new bkElement('a').setStyle({'className':'next'});
-    //next.setAttribute('pageNum', pageNum + 1);
     var foot = new bkElement('div').setStyle({'className': 'pager-simple foot'});
-    //var pagenum = new bkElement('span').update(pageNum + 1);
-    //foot.appendChild(prev);
-    //foot.appendChild(pagenum);
-    //foot.appendChild(next);
     div.appendChild(foot);
-/*
-    if (pageNum != 0){
-      prev.addEvent('click',function(e){
-        var el;
-        if(navigator.userAgent.indexOf("MSIE") > 0)
-          el = e.srcElement;
-        else
-          el = e.target;
-        var pageTo = parseInt(el.getAttribute('pageNum'));
-        el.parentNode.parentNode.remove();
-        this.pane.setContent(this.paneHTML);
-        $BK('nicEdit-emot-box').appendChild(this.buildFaces(pageTo));
-      }.closure(this));
-    }else{
-      prev.setStyle({'className': 'prev first'});
-      prev.addEvent('click', function(e){
-      }.closure(this));
-    }
-
-    if (pageNum != total - 1){
-      next.addEvent('click',function(e){
-        var el;
-        if(navigator.userAgent.indexOf("MSIE") > 0)
-          el = e.srcElement;
-        else
-          el = e.target;
-        var pageTo = parseInt(el.getAttribute("pageNum"));
-        el.parentNode.parentNode.remove();
-        this.pane.setContent(this.paneHTML);
-        $BK('nicEdit-emot-box').appendChild(this.buildFaces(pageTo));
-      }.closure(this));
-    }else{
-      next.setStyle({'className': 'next last'});
-      next.addEvent('click', function(e){
-      }.closure(this));
-    }
-*/
     return div;
   },
 

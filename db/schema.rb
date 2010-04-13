@@ -601,12 +601,8 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.string   "website"
     t.datetime "birthday"
     t.text     "about_me"
-    t.integer  "skin_id",        :default => 1
-    t.integer  "sharings_count", :default => 0
-    t.integer  "viewings_count", :default => 0
-    t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "completeness", :default => 0
+    t.integer  "skin_id",      :default => 1
   end
 
   add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
