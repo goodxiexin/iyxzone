@@ -106,6 +106,9 @@
 </div></div></div></div>
 
 <% if !@reply_to.blank? and !@sharing.blank? %>
-  <%= onload_javascript_tag "Iyxzone.Comment.set('sharing', #{@sharing.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+  <% onload_javascript_tag do %>
+    Iyxzone.Comment.toggleBox('sharing', <%= @sharing.id %>, <%= @sharing.comments_count %>);
+    Iyxzone.Comment.set('sharing', <%= @sharing.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
+  <% end %>
 <% end %>
 
