@@ -21,7 +21,9 @@ class Blog < ActiveRecord::Base
 
   acts_as_resource_feeds
   
-  acts_as_shareable :default_title => lambda {|blog| blog.title}, :path_reg => /\/blogs\/([\d]+)/
+  acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
+                    :default_title => lambda {|blog| blog.title}, 
+                    :create_conditions => lambda {|user, blog| blog.privilege != 4}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 

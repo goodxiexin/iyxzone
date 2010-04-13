@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  
+
   has_many :servers, :class_name => 'GameServer', :dependent => :delete_all
   
   has_many :areas, :class_name => 'GameArea', :dependent => :delete_all

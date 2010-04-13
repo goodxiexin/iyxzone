@@ -10,7 +10,6 @@ class CreateVideos < ActiveRecord::Migration
       t.string :video_url
 			t.string :embed_html
 			t.string :thumbnail_url
-      t.integer :sharings_count, :default => 0
       t.integer :digs_count, :default => 0
       t.integer :comments_count, :default => 0
       t.integer :tags_count, :default => 0

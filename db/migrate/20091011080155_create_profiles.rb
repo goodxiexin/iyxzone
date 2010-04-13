@@ -14,6 +14,8 @@ class CreateProfiles < ActiveRecord::Migration
       t.text :about_me
       t.integer :completeness, :default => 0
       t.integer :skin_id, :default => 1
+      t.integer :viewings_count, :default => 0
+      t.integer :comments_count, :default => 0
     end
   end
 
