@@ -1,6 +1,7 @@
 .gitignore
 log/*
 public/photos/*
+public/blog_images/*
 config/database.yml
 juggernaut.yml
 config/juggernaut_hosts.yml
