@@ -1,0 +1,23 @@
+<% post = notice.producer %>
+<% topic = post.topic %>
+<% forum = topic.forum %>
+
+<% if home_page %>
+  <% link = link_to_function truncate(h(topic.subject), :length => 20, :omission => '...'), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/forums/#{forum.id}/topics/#{topic.id}/posts?post_id=#{post.id}');" %>
+<% else %>
+  <% link = link_to_function truncate(h(post.subject), :length => 20, :omission => '...'), "window.open('/forums/#{forum.id}/topics/#{topic.id}/posts?post_id=#{post.id}');" %>
+<% end %>
+
+<li>
+  <div class="feed-message">
+    <% if home_page %>
+    <%= link_to_function '', "Iyxzone.Home.NoticeManager.readSingle(#{notice.id}, '#{form_authenticity_token}')", :class => 'icon-active' %>
+    <% end %>
+    <% if notice.data == 'comment' %>
+      <%= profile_link post.poster %> 回复了你的帖子 <%= link %>
+    <% elsif notice.data == 'reply' %>
+      <%= profile_link post.poster %> 在帖子 <%= link %> 里回复了你
+    <% end %>     
+  </div>
+</li>
+

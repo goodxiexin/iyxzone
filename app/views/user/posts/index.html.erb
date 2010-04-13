@@ -12,7 +12,10 @@
     </div>
     <div class="box02 canvas_int space">
       <div class="tab tab01">
-        <div class="right"><%= link_to "发布新话题", new_forum_topic_url(@forum) %></div>
+        <div class="right">
+          <%= link_to "发布新话题", new_forum_topic_url(@forum) %>
+          <%= link_to "返回论坛首页", forum_topics_url(@forum) %>
+        </div>
         <ul>
           <li class="hover"><span><%= link_to "话题区", forum_topics_url(@forum) %></span></li>
         </ul>
@@ -20,7 +23,7 @@
       <div class="forum s_clear">
         <div class="feed-box">
           <h2 class='s_clear'>
-            <span class='left'>标题： <%= @topic.subject %></span>
+            <span class='left'>标题： <%= h @topic.subject %></span>
             <div class='op'>
             <% if @guild.president == current_user %>
               <% if !@topic.top %>
@@ -45,12 +48,12 @@
               </div>
               <div class="feed-header jl-cutline">
                 <span class="right">楼主</span>
-                <h3><%= link_to "<b class='red'>#{@topic.poster.login}</b>", profile_url(@topic.poster.profile) %> <%= ftime @topic.created_at %></h3>
+                <h3><%= link_to "<b class='red'>#{h @topic.poster.login}</b>", profile_url(@topic.poster.profile) %> <%= ftime @topic.created_at %></h3>
               </div>
               <div class="bd jl-cutline">
                 <p><%= @topic.content %></p>
               </div>
-              <div class="ft"><a href="javascript:void(0)">分享(<%= @topic.sharings_count %>)</a> | <a href="javascript:void(0)">阅读(<%= @topic.viewings_count %>)</a>  | <a href="javascript:void(0)">评论(<%= @topic.posts_count %>)</a></div>
+              <div class="ft"><a href="javascript:void(0)">分享(<%= @topic.sharings_count %>)</a> | <a href="javascript:void(0)">阅读(<%= @topic.viewings_count %>)</a>  | <%= link_to_function "回复(#{ @topic.posts_count })", "Iyxzone.Forum.Post(null, '#{@topic.poster.login}', #{@topic.poster_id})" %></div>
             </div>
             <% @posts.each do |p| %>
             <div class="feed-list s_clear" id='post_<%= p.id %>'>
@@ -64,13 +67,13 @@
               </div>
               <div class="feed-header jl-cutline">
                 <span class="right"><%= p.floor %>楼</span>
-                <h3><%= link_to "<b class='red'>#{p.poster.login}</b>", profile_url(p.poster.profile) %> <%= ftime p.created_at %></h3>
+                <h3><%= link_to "<b class='red'>#{h p.poster.login}</b>", profile_url(p.poster.profile) %> <%= ftime p.created_at %></h3>
               </div>
               <div class="bd jl-cutline">
                 <p><%= p.content %></p>
               </div>
               <div class="ft">
-                <%= link_to_function "回复", "Iyxzone.Forum.Post.reply(#{p.floor}, '#{p.poster.login}');" %>
+                <%= link_to_function "回复", "Iyxzone.Forum.Post.reply(#{p.floor}, '#{p.poster.login}', #{p.poster_id});" %>
                 <% if @guild.president == current_user %>
                   | <%= facebox_confirm '删除', forum_topic_post_url(@forum, @topic, p, :at => 'show'), {:msg => "你确定要删除这个回复吗？", :method => :delete} %>
                 <% end %>
@@ -80,13 +83,13 @@
             <div class="forum-pager">
               <%= link_to '<< 上一个话题', forum_topic_posts_url(@forum, @prev) %> | <%= link_to "下一个话题 >>", forum_topic_posts_url(@forum, @next) %>
               <%= link_to_function "返回话题顶部", "window.scrollTo(0,0);" %>
-              <%= link_to "返回话题主页", forum_topics_url(@forum) %>
               <%= will_paginate @posts %>
             </div>
             <div class="space20 s_clear">
               <div class="forum-cmt" id='new_post'>
                 <h2>回复话题</h2>
                 <% form_for :post, :url => forum_topic_posts_url(@forum, @topic), :html => {:onsubmit => "Iyxzone.Forum.Post.save($('post_submit_btn'), this); return false;" } do |f| %>
+                <%= hidden_field_tag 'post[recipient_id]', @topic.poster_id %>
                 <div class="formcontent">
                   <div class="rows s_clear">
                     <div class="fldvalue"><%= f.text_area 'content', :style =>"width: 98%" %></div>
@@ -122,6 +125,8 @@
 </div></div></div></div>
 
 <% onload_javascript_tag do %>
-  nicEditors.albums = <%= current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json %>;
-  Iyxzone.Forum.Post.editor = new nicEditor().panelInstance('post_content', {token: '<%= form_authenticity_token %>'});
+  Iyxzone.Forum.Post.init(<%= @albums %>, 'post_content', '<%= form_authenticity_token %>');
+  <% if !@post.blank? %>
+    Iyxzone.Forum.Post.reply(<%= @post.floor %>, '<%= @post.poster.login %>', <%= @post.poster_id %>);
+  <% end %>
 <% end %>

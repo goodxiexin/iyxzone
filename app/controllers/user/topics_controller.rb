@@ -3,6 +3,7 @@ class User::TopicsController < UserBaseController
   layout 'app'
 
   def index
+    @hot_topics = Topic.hot("forum_id != #{@forum.id}")
     @top_topics = @forum.top_topics.find(:all, :offset => 0, :limit => 5)
     @topics = @forum.normal_topics.paginate :page => params[:page], :per_page => 20
   end
@@ -12,6 +13,7 @@ class User::TopicsController < UserBaseController
   end
 
   def new
+    @albums = current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
   end
 
   def create
