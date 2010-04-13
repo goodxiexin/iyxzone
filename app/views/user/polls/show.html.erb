@@ -98,10 +98,8 @@
         <% end %>
         <div class='vote-detail gray'>
           <h3 class='space'>投票选项说明：</h3>
-          <% if @poll.past %>
-            <p class='jl-cutline' id='poll_explanation'><%= simple_format h @poll.explanation %></p>
-          <% elsif @vote %>
-            <p class='jl-cutline' id='poll_explanation'><%= simple_format h @poll.explanation %></p>
+          <% if @poll.past or @vote %>
+            <%= simple_format h(@poll.explanation), :class => 'jl-cutline', :id => 'poll_explanation' %>
           <% else %>
             <p class='jl-cutline'>投票后才能看</p>
           <% end %>

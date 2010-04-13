@@ -3,7 +3,7 @@
     <div class="friend-head space s_clear">
       <span class="left"><%= album_cover_image @guild.album, :class => 'imgbox01', :width => 50, :height => 50 %></span>
       <p class="left">
-        <strong><%= @guild.name %></strong><br />
+        <strong><%= h @guild.name %></strong><br />
         <%= guild_link @guild, :class => 'red' %>的主页
       </p>
     </div>
