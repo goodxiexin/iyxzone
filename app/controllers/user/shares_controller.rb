@@ -16,6 +16,11 @@ class User::SharesController < UserBaseController
 
   def index
     if params[:type].blank? || params[:type].to_i == 0
+      if !params[:sharing_id].blank? and !params[:reply_to].blank?
+        @reply_to = User.find(params[:reply_to])
+        @sharing = Sharing.find(params[:sharing_id])
+        params[:page] = @user.sharings.index(@sharing) / 10 + 1
+      end
       @sharings = @user.sharings.paginate :page => params[:page], :per_page => PER_PAGE
     else
       @sharings = eval("@user.#{ShareCategory[params[:type].to_i]}_sharings").paginate :page => params[:page], :per_page => PER_PAGE

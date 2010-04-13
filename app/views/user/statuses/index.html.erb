@@ -86,8 +86,6 @@
 </div></div></div></div>
 
 <% if !@reply_to.blank? and !@status.blank? %>
-  <%= onload_javascript_tag "
-    Iyxzone.Comment.set('status', #{@status.id}, '#{@reply_to.login}', #{@reply_to.id});" 
-  %>
+  <%= onload_javascript_tag "Iyxzone.Comment.set('status', #{@status.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
 <% end %>
 
