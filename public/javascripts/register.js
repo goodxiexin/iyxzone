@@ -44,28 +44,15 @@ Object.extend(Iyxzone.Register, {
       return false;
     }
 
-    if(login.length < 4){
-      this.error('login_info', '至少要4个字符');
+    if(login.length < 2){
+      this.error('login_info', '至少要2个字符');
       return false;
     }
-    if(login.length > 16){
-      this.error('login_info', '最多16个字符');
+    if(login.length > 100){
+      this.error('login_info', '最多100个字符');
       return false;
     }
 
-    first = login[0];
-    if((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')){
-      if(login.match(/[A-Za-z0-9\_]+/)){
-        this.pass('login_info');
-        return true;
-      }else{
-        this.error('login_info', '只允许字母和数字');
-        return false;
-      }
-    }else{
-      this.error('login_info', '必须以字母开头');
-      return false;
-    }
   },
 
   showEmailRequirement: function(){
