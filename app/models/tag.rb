@@ -1,6 +1,7 @@
 class Tag < ActiveRecord::Base
 
-	has_many :taggings, :dependent => :destroy
+  # 理论上我们指挥删除那些taggings_count = 0的tag
+	has_many :taggings, :dependent => :delete_all
 
 	named_scope :game_tags, :conditions => {:taggable_type => 'Game'}
 

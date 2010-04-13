@@ -17,6 +17,8 @@ class AddFriends < ActiveRecord::Migration
       micai.friendships.create(:friend_id => user.id)
       user.friendships.create(:user_id => user.id, :friend_id => micai.id)
     end
+    xiexin.friendships.create(:friend_id => gaoxh.id)
+    xiexin.friendships.create(:friend_id => micai.id)
   end
 
   def self.down

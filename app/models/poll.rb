@@ -4,13 +4,15 @@ class Poll < ActiveRecord::Base
 
   belongs_to :game
 
-  has_many :answers, :class_name => 'PollAnswer', :dependent => :destroy
+  has_many :answers, :class_name => 'PollAnswer', :dependent => :delete_all
 
-  has_many :votes, :dependent => :destroy
+  has_many :votes # 不写:dependent => :destroy, 手动来删，提高效率
 
   has_many :voters, :through => :votes
 
-	has_many :invitations, :class_name => 'PollInvitation', :dependent => :destroy, :order => 'created_at DESC'
+	has_many :invitations, :class_name => 'PollInvitation', :order => 'created_at DESC' # 不写:dependent => :destroy, 手动来删，提高效率
+
+  has_many :invitees, :through => :invitations, :source => 'user'
 
   named_scope :hot, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Time.now.to_s(:db)], :order => "voters_count DESC"
 
@@ -57,7 +59,7 @@ class Poll < ActiveRecord::Base
     user == poster || privilege == 1 || (privilege == 2 and poster.friends.include? user)
   end
 
-  def answers=(answer_attributes)
+  def answers= answer_attributes
     @answer_attributes = answer_attributes.find_all {|a| !a[:description].blank?}
   end
 
@@ -69,6 +71,13 @@ class Poll < ActiveRecord::Base
       @answer_attributes = nil
     end
   end 
+
+  def invitees= user_ids
+    return if user_ids.blank?
+    user_ids.each do |user_id|
+      invitations.build(:user_id => user_id)
+    end
+  end
 
 protected
 

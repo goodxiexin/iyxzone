@@ -1,9 +1,9 @@
 <% sharing = comment.commentable %>
 
 <% if home_page %>
-  <% link = link_to_function truncate(sharing.title, :length => 20, :omission => '...'), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/sharings?uid=#{sharing.poster_id}&sharing_id=#{sharing.id}&reply_to=#{comment.poster_id}');" %>
+  <% link = link_to_function truncate(h(sharing.title), :length => 20, :omission => '...'), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/sharings?uid=#{sharing.poster_id}&sharing_id=#{sharing.id}&reply_to=#{comment.poster_id}');" %>
 <% else %>
-  <% link = link_to_function truncate(sharing.title, :length => 20, :omission => '...'), "window.open('/sharings?uid=#{sharing.poster_id}&sharing_id=#{sharing.id}&reply_to=#{comment.poster_id}');" %>
+  <% link = link_to_function truncate(h(sharing.title), :length => 20, :omission => '...'), "window.open('/sharings?uid=#{sharing.poster_id}&sharing_id=#{sharing.id}&reply_to=#{comment.poster_id}');" %>
 <% end %>
 
 <li>

@@ -1,9 +1,9 @@
 <% status = comment.commentable %>
 
 <% if home_page %>
-  <% link = link_to_function truncate(status.content, :length => 20, :omission => '...'), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/statuses?uid=#{status.poster_id}&status_id=#{status.id}&reply_to=#{comment.poster_id}');" %>
+  <% link = link_to_function truncate(h(status.content), :length => 20, :omission => '...'), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/statuses?uid=#{status.poster_id}&status_id=#{status.id}&reply_to=#{comment.poster_id}');" %>
 <% else %>
-  <% link = link_to_function truncate(status.content, :length => 20, :omission => '...'), "window.open('/statuses?uid=#{status.poster_id}&status_id=#{status.id}&reply_to=#{comment.poster_id}');" %>
+  <% link = link_to_function truncate(h(status.content), :length => 20, :omission => '...'), "window.open('/statuses?uid=#{status.poster_id}&status_id=#{status.id}&reply_to=#{comment.poster_id}');" %>
 <% end %>
 
 <li>

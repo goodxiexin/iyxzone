@@ -15,7 +15,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
 		<h1 class="app-friend">好友</h1>
-    <div class="box02 canvas_int">
+    <div class="box02 canvas_int space">
 			<div class="tab tab01">
 				<div class="right"><%= link_to "激请好友加入" %></div>
 				<ul>
@@ -76,34 +76,71 @@
 						</div>
           <% end %>
 				</div>
-					<h3><%= link_to_function '找MSN/EMAIL联系人', "Iyxzone.Search.toggleMSNForm()" %></h3>
-          <div class="formcontent" id="msnform" style="display:none">
-						<form action="">
+					<h3><%= link_to_function '找MSN/EMAIL联系人', "Iyxzone.Search.toggleMsnEmailForm()" %></h3>
+          <div class="formcontent" id="msn_email_form" style="display:none">
+						<% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'), {:onsubmit => "return Iyxzone.Search.checkMsnInputs();", :id => 'msn_input_form'} do %>
+              <%= hidden_field_tag 'type', 'msn' %>
               <div class="rows s_clear">
                 <div class="fldid">&nbsp;</div>
-                <div class="fldrd"><input id="msn" name="contact" type="radio" /></div>
+                <div class="fldrd"><input name="contact" type="radio" /></div>
 								<div class="fldvalue"><label for="msn">msn</label></div>
-								<div class="fldrd"><input id="email" name="contact" type="radio" /></div>
+								<div class="fldrd"><input name="contact" type="radio" onclick="Iyxzone.Search.toggleEmailInput($(this))" /></div>
                 <div class="fldvalue"><label for="email">email</label></div>
               </div>
               <div class="rows s_clear">
 								<div class="fldid"><label for="username">msn帐号：</label></div>
                 <div class="fldvalue">
-									<div class="textfield"><input id="username" /></div>
+									<div class="textfield"><%= text_field_tag "user_name" %></div>
                 </div>
               </div>
               <div class="rows s_clear">
 								<div class="fldid"><label for="password">msn密码：</label></div>
                 <div class="fldvalue">
-									<div class="textfield"><input id="password" /></div>
+									<div class="textfield"><%= password_field_tag 'password' %></div>
 								</div>
 							</div>
 							<span class="remind">本站不会存储您的密码，请放心使用</span>
               <div class="rows s_clear">
 								<div class="fldid">&nbsp;</div>
-								<div class="fldbtn"><span class="button"><span><button type="submit" id='msn_friend_finder_btn'>查找</button></span></span></div>
+								<div class="fldbtn"><span class="button"><span><button type="submit" id='msn_submit_btn'>查找</button></span></span></div>
               </div>
-            </form>
+            <% end %>
+            <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'), {:onsubmit => "return Iyxzone.Search.checkEmailInputs();", :id => 'email_input_form', :style => 'display:none'} do %>
+              <div class="rows s_clear">
+                <div class="fldid">&nbsp;</div>
+                <div class="fldrd"><input name="contact" type="radio" onclick="Iyxzone.Search.toggleMsnInput($(this))" /></div>
+                <div class="fldvalue"><label for="msn">msn</label></div>
+                <div class="fldrd"><input name="contact" type="radio" /></div>
+                <div class="fldvalue"><label for="email">email</label></div>
+              </div>
+              <div class="rows s_clear">
+                <div class="fldid"><label>你的邮箱：</label></div>
+                <div class="fldvalue">
+                  <div class="textfield left w-l" style="width:200px"><%= text_field_tag 'user_name' %></div>
+                  <span class="left w-l">@</span>
+                  <select class="selector selector02 left" id='email_selector' style="width:100px;" name="type">
+                    <option value=''>---</option>
+                    <option value='gmail'>gmail.com</option>
+                    <option value='sina'>sina.com.cn</option>
+                    <option value='yahoo'>yahoo.com</option>
+                    <option value='yahoo'>yahoo.com.cn</option>
+                    <option value='netease'>netease.com</option>
+                    <option value='hotmail'>hotmail.com</option>
+                  </select>
+                </div>
+              </div>
+              <div class="rows s_clear">
+                <div class="fldid"><label for="password">邮箱密码：</label></div>
+                <div class="fldvalue">
+                  <div class="textfield"><%= password_field_tag 'password' %></div>
+                </div>
+              </div>
+              <span class="remind">本站不会存储您的密码，请放心使用</span>
+              <div class="rows s_clear">
+                <div class="fldid">&nbsp;</div>
+                <div class="fldbtn"><span class="button"><span><button type="submit" id='email_submit_btn'>查找</button></span></span></div>
+              </div>
+            <% end %>
           </div>
 				</div>
 				<div class="box02 appcontent01">

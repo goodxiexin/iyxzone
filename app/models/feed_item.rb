@@ -4,6 +4,6 @@ class FeedItem < ActiveRecord::Base
 
 	belongs_to :originator, :polymorphic => true
 
-	has_many :deliveries, :class_name => 'FeedDelivery', :dependent => :destroy
+	has_many :deliveries, :class_name => 'FeedDelivery', :dependent => :delete_all
 
 end

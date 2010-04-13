@@ -9,7 +9,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
   <h1 class="app-letter">站内信</h1>
-  <div class="box02 canvas_int">
+  <div class="box02 canvas_int space">
 		<div class="tab tab01">
       <ul>
 				<li><span><%= link_to "收件箱", mails_url(:type => 1) %></span></li>
@@ -61,13 +61,5 @@
 </div></div></div></div>
 
 <% onload_javascript_tag do %>
-  Iyxzone.Mail.Builder.recipientBuilder = new Iyxzone.Friend.Tagger(10, [],[],[],'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', null);
-<% end %>
-
-<% unless @recipients.blank? %>
-  <% onload_javascript_tag do %>
-  <% @recipients.each do |r| %>
-    Iyxzone.Mail.Builder.recipientBuilder.addTags([{id: <%= r.id %>, profileID: <%= r.profile.id %>, login: '<%= r.login %>'}]);
-  <% end %>
-  <% end %>
+  Iyxzone.Mail.Builder.init(10, [], 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', <%= @infos %>);
 <% end %>

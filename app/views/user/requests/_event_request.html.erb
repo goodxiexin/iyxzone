@@ -7,7 +7,7 @@
       <p> <%= profile_link request.participant %> 请求加入你的活动 <%= event_link request.event %>, 是否同意？</p>
       <div class="buttons" id='event_request_option_<%= request.id %>'>
         <span class="button"><span><%= button_to_remote '同意', :url => accept_event_request_url(request.event, request, :at => 'requests'), :method => :put, :loading => "Iyxzone.disableButton($('event_request_#{request.id}').down('button',0),'请等待..'); Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %></span></span>
-        <span class="button button-gray"><span><%= facebox_confirm '<button>拒绝</button>', decline_event_request_url(request.event, request, :at => 'requests'), {:msg => '你确定要拒绝吗?', :method => :delete} %></span></span>
+        <span class="button button-gray"><span><%= facebox_button_confirm '拒绝', decline_event_request_url(request.event, request, :at => 'requests'), {:msg => '你确定要拒绝吗?', :method => :delete}%></span></span>
       </div>
     </div>
   </div>

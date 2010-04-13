@@ -80,6 +80,7 @@ protected
     return if user.blank? or friend.blank?
     friendship = user.all_friendships.find_by_friend_id(friend_id)
     if friendship.blank?
+# 现在改为任何人都能加为好友
 =begin
       unless friend.is_friendable_by? user
         errors.add(:friend_id, "不能加为好友")

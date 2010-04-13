@@ -13,7 +13,7 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="app-photo">照片</h1>
-    <div class="box02 canvas_int">
+    <div class="box02 canvas_int space">
       <div class="tab tab01">
         <div class="right">
           <%= link_to "上传照片", select_personal_albums_url %>
@@ -95,7 +95,7 @@
 </div></div>
 </div></div></div></div>
 
-<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user} %>
+<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => current_user.friends} %>
 
 <% unless @reply_to.blank? %>
   <%= onload_javascript_tag "Iyxzone.Comment.set('avatar', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>

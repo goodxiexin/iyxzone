@@ -23,6 +23,7 @@ class User::MailsController < UserBaseController
   end
 
   def new
+    @infos = @recipients.map{|r| {:id => r.id, :profileID => r.profile.id, :login => r.login}}.to_json    
   end
 
   def create
@@ -113,11 +114,6 @@ class User::MailsController < UserBaseController
     end     
   end
 
-  def auto_complete_for_recipients
-    @friends = current_user.friends.search(params[:friend][:login])
-    render :partial => 'friends', :object => @friends
-  end
-
 protected
 
   def catch_mail
@@ -138,7 +134,7 @@ protected
   end
 
   def catch_recipients
-    @recipients = User.find(params[:recipient_ids]) unless params[:recipient_ids].blank?
+    @recipients = params[:recipient_ids].blank? ? [] : User.find(params[:recipient_ids])
   end
 
 end

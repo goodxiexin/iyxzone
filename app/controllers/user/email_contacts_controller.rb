@@ -46,8 +46,7 @@ protected
 
   def render_authentication_error e
     render :update do |page|
-      flash[:notice] = "用户名或者密码错误"
-      page.redirect_to signup_invitations_url
+      page << "history.back();alert('用户名或者密码错误')" #.redirect_to signup_invitations_url
     end
   end
 

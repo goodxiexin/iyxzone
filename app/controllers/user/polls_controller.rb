@@ -20,14 +20,13 @@ class User::PollsController < UserBaseController
 
   def friends
     @polls = current_user.friend_polls.paginate :page => params[:page], :per_page => 10
-    #poll_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def show
 		@poll = Poll.find(params[:id])
     @user = @poll.poster
     @vote = @poll.votes.find_by_voter_id(current_user.id)
-    @vote_feeds = current_user.vote_feed_items.map(&:originator).find_all {|v| v.poll_id == @poll.id}
+    @vote_feeds = current_user.friend_votes_for @poll
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 

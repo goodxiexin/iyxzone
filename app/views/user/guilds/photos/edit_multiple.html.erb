@@ -8,10 +8,10 @@
       <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01" %></span>
       <p class="left">
         <strong>编辑照片</strong><br/>
-        <%= guild_link @guild, :class => 'red' %>的主页
+        <%= guild_link @guild %>的主页
       </p>
     </div>
-    <div class="box02 canvas_int">
+    <div class="box02 canvas_int space">
       <div class="tab tab01">
         <div class="right">
           <% if @membership and (@membership.is_president? or @membership.is_veteran?) %> 

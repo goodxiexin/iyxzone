@@ -52,13 +52,9 @@ Iyxzone.Search = {
     }
   },
 
-	toggleMSNForm: function(){
-    $('msnform').toggle();
-	},
-
   validateCharacterForm: function(){
     var value = $('character_form').getInputs('text')[0].value;
-    if((value  == '角色名字' || value == '') && $(game_id).value == '' && $(area_id).value == '' && $(server_id).value == ''){
+    if((value  == '角色名字' || value == '') && $('game_id').value == '' && $('area_id').value == '' && $('server_id').value == ''){
       error('请输入你要查找的玩家的信息');
       return false;
     }
@@ -72,6 +68,66 @@ Iyxzone.Search = {
       Iyxzone.disableButton(button, '请等待..');
       window.location.href = $('character_form').action + '?' + $('character_form').serialize();
     }
+  },
+
+  toggleMsnEmailForm: function(){
+    $('msn_email_form').toggle();
+  },
+
+  toggleMsnInput: function(){
+    $('msn_input_form').show();
+    $('email_input_form').hide();
+    var group = document.forms['msn_input_form'].elements['contact'];
+    group[0].checked = true;
+    group[1].checked = false;
+  },
+
+  toggleEmailInput: function(){
+    $('msn_input_form').hide();
+    $('email_input_form').show();
+    var group = document.forms['email_input_form'].elements['contact'];
+    group[0].checked = false;
+    group[1].checked = true;
+  },
+
+  checkMsnInput: function(){
+    Iyxzone.disableButton($('msn_submit_btn'), '请等待..');
+    var form = $('msn_input_form');
+    var id = form.getInputs('text')[0];
+    var pwd = form.getInputs('password')[0];
+    if(id.value == ''){
+      error('请输入msn用户名');
+      Iyxzone.enableButton($('msn_submit_btn'), '导入');
+      return false;
+    }
+    if(pwd.value == ''){
+      error('请输入msn密码');
+      Iyxzone.enableButton($('msn_submit_btn'), '导入');
+      return false;
+    }
+    return true;
+  },
+
+  checkEmailInput: function(){
+    Iyxzone.disableButton($('email_submit_btn'),'请等待..');
+    var form = $('email_input_form');
+    var email = form.getInputs('text')[0];
+    var pwd = form.getInputs('password')[0];
+    if(email.value == ''){
+      error('请输入邮箱');
+      Iyxzone.enableButton($('email_submit_btn'),'导入');
+      return false;
+    }else if(!email.value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
+      error('非法的邮箱地址');
+      Iyxzone.enableButton($('email_submit_btn'),'导入');
+      return false;
+    }
+    if(pwd.value == ''){
+      error('请输入邮箱密码');
+      Iyxzone.enableButton($('email_submit_btn'), '导入');
+      return false;
+    }
+    return true;
   }
 
 };

@@ -8,10 +8,10 @@
       <span class="left"><%= album_cover_image @event.album, :class => "imgbox01", :width => 50, :height => 50%></span>
       <p class="left">
         <strong><%= @event.title %>活动</strong><br />
-        <%= link_to '活动主页', event_url(@event), :class=>'red'%>
+        <%= link_to '活动主页', event_url(@event)%>
       </p>
     </div>
-    <div class="box02 canvas_int">
+    <div class="box02 canvas_int space">
       <div class="tab tab01">
         <div class="icon">
           <%= link_to "返回活动", event_url(@event) %>

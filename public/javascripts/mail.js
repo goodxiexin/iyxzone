@@ -128,6 +128,14 @@ Object.extend(Iyxzone.Mail.Builder, {
 
   recipientBuilder: null, // initialize this in your page
 
+  init: function(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton, recipients){
+    // set tagger
+    this.recipientBuilder = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton);
+
+    // add recipient infos
+    this.recipientBuilder.addTags(recipients);
+  },
+
   validate: function(){
     if(this.recipientBuilder.getNewTags().length == 0){
       error('至少要有1个收件者');

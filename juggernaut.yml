@@ -1,21 +1,5 @@
 :subscription_url:  http://192.168.217.81:3000/juggernaut/subscription
-
-:allowed_ips:  
+:allowed_ips: 
   - 127.0.0.1
-     
-#:broadcast_query_login_url: http://localhost:3000/juggernaut/broadcast
-     
-# :logout_connection_url: http://localhost:3000/juggernaut/logout
-
 :logout_url: http://192.168.217.81:3000/juggernaut/logout
-
-# :timeout: 10
-
-# :store_messages: false
-
-# :host: 0.0.0.0
-
-# Port is mandatory
 :port: 5001
-     
-:public_port: 5001

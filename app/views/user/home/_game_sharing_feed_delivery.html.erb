@@ -5,6 +5,7 @@
 <div class="feed-list-box">
   <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
 	  <div class="img left"><div class="imgbox01"><%= avatar sharing.poster %></div></div>
+	  <div class="jl-list-con jl-cutline">
     <% if delivery.is_deleteable_by? current_user %>
       <%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
     <% end %>

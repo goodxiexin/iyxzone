@@ -50,6 +50,11 @@ class User < ActiveRecord::Base
 		!game_attentions.find_by_game_id(game.id).nil?
   end
 
+  def has_game? game
+    game_id = game.is_a?(Integer) ? game : game.id
+    !characters.find_by_game_id(game_id).blank?
+  end
+
   has_many :game_attentions
 
 	has_many :interested_games, :through => :game_attentions, :source => :game, :order => 'sale_date DESC'
@@ -306,8 +311,8 @@ class User < ActiveRecord::Base
 
   has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
 
-  def friend_votes
-    Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id")
+  def friend_votes_for poll
+    Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id", :conditions => {:poll_id => poll.id})
   end
 
   def friend_polls

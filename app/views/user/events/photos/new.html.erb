@@ -1,13 +1,13 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover @event.album, :class => "imgbox01" %></span>
+      <span class="left"><%= album_cover @event.album, :class => "imgbox01", :size => "medium", :width => 50, :height => 50 %></span>
       <p class="left">
         <strong><%= @event.title%>活动照片</strong><br/>
-        <%= link_to "活动主页", event_url(@event), :class => 'red' %>
+        <%= link_to "活动主页", event_url(@event) %>
       </p>
     </div>
-    <div class="box02 canvas_int">
+    <div class="box02 canvas_int space">
       <div class="tab tab01">
         <div class="right">
           <% if @event.poster == current_user %>
