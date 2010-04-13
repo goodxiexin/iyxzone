@@ -3,35 +3,31 @@
 <% content_for :html_keywords, "#{@guild.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-        <div class="round_m"><div class="round_body">
+  <div class="round_m"><div class="round_body">
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01" %></span>
+      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01", :width => 50, :height => 50 %></span>
       <p class="left">
         <strong>公会活动</strong><br/>
         <%= guild_link @guild, :class => 'red' %>的主页
       </p>
     </div>
-<div class="box02 canvas_int space">
-	<div class="tab tab01">
-    <div class="right">
-      <%= link_to "新建活动", new_event_url %>
+    <div class="box02 canvas_int space">
+	    <div class="tab tab01">
+        <div class="icon">
+          <%= link_to "新建活动", new_event_url, :class => 'icon-add-table' %>
+        </div>
+		    <ul>
+			    <li><span><%= link_to "热门活动", hot_events_url %></span></li>
+			    <li class='hover'><span><%= link_to "公会#{truncate h(@guild.name), :length => 20, :omission => '..'}的活动", guild_events_url(@guild) %></span></li>
+		    </ul>
+      </div>
+      <div class="piclist-rows" id='events'>
+        <% if @events.total_entries != 0 %>
+		      <%= render :partial => 'user/events/event_items', :object => @events %>
+        <% else %>
+          <div class='tip'>该公会还没有相关活动</div>
+        <% end %>
+      </div>
     </div>
-		<ul>
-			<li><span><%= link_to "热门活动", hot_events_url(:uid => current_user.id) %></span></li>
-			<li class='hover'><span><%= link_to "公会#{truncate h(@guild.name), :length => 8, :omission => '..'}的活动", guild_events_url(@guild) %></span></li>
-		</ul>
-  </div>
-  <div class="piclist-rows" id='events'>
-    <div class='path-box'>
-      <label>公会"<%= guild_link @guild %>"</label>
-      <span>活动</span>
-    </div>
-    <% if @events.total_entries != 0 %>
-		  <%= render :partial => 'user/events/event_items', :object => @events %>
-    <% else %>
-      <div class='gray'>该公会还没有相关活动</div>
-    <% end %>
-  </div>
-</div>
-</div></div>
+  </div></div>
 </div></div></div></div>
