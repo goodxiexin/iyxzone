@@ -77,7 +77,6 @@ stylesheets:
 - base: 
   - common
   - home
-  - pagination
   - calendar_date_select/silver
 - photo:
   - swfupload
