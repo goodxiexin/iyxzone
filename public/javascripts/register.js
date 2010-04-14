@@ -33,7 +33,7 @@ Object.extend(Iyxzone.Register, {
   },
 
   showLoginRequirement: function(){
-    this.tip('login_info', '只能由数字，字母组成，大小4-16字符');
+    this.tip('login_info', '只能有2-100字符');
   },
 
   validateLogin: function(){
