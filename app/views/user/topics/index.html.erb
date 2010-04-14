@@ -3,7 +3,7 @@
     <div class="friend-head space s_clear">
       <span class="left"><%= album_cover_image @guild.album, :class => 'imgbox01', :width => 50, :height => 50 %></span>
       <p class="left">
-        <strong><%= @guild.name %></strong><br />
+        <strong><%= h @guild.name %></strong><br />
         <%= guild_link @guild, :class => 'red' %>的主页
       </p>
     </div>
@@ -19,17 +19,22 @@
           <h2>论坛公告</h2>
           <div class="msg">不要进行人身攻击，不要骚扰他人，并请大家举报此类恶劣行为。违者一律删除并视情况严重性作封ID处理。
     说明：每个人和每个人的观点不一样，有些人是真心需要帮助的，请大家以诚相待，给需要帮助的人良好的意见和建议，切勿误导他人、嘲笑他人和攻击他人，尤其不要在帖子里面发生口水战，如果有此现象发生，请在此投诉，斑竹会处理此事的 。尤其不要在帖子里面发生口水战，如果有此现象发生，请在此投诉，斑竹会处理此事的 。  </div>
+          <% if !@hot_topics.blank? %>
           <div class="hot-post">
             <h4>【其他公会论坛热帖集合】</h4>
             <ul>
-              <% Topic.hot("forum_id != #{@forum.id}").each do |t| %>
-              <li><%= link_to "【#{t.forum.guild.name}】#{t.subject}", forum_topic_url(t.forum, t) %>><br/><a href="javascript:void(0)"><%= "#{forum_topic_url(t.forum, t)}" %></a></li>
+              <% @hot_topics.each do |t| %>
+              <li><%= link_to "【#{h t.forum.guild.name}】#{h t.subject}", forum_topic_url(t.forum, t) %>><br/><a href="javascript:void(0)"><%= "#{forum_topic_url(t.forum, t)}" %></a></li>
               <% end %>
             </ul>
           </div>
+          <% end %>
           <h2 class="s_clear"><span class="left">精华区</span><%= link_to '更多', top_forum_topics_url(@forum), :class => 'right' %></h2>
           <div class="posts digest">
             <table cellpadding="0" cellspacing="3" border="0" width="100%">
+              <% if @top_topics.blank? %>
+              <tr><td><strong class='gray'>没有任何精华帖子</strong></td></tr>
+              <% else %>
               <tr>
                 <th class="tl">话题</th>
                 <th>浏览</th>
@@ -52,11 +57,15 @@
                 <% end %>
               </tr>
               <% end %>
+              <% end %>
             </table>
           </div>
           <h2>论坛话题区<span>（共<%= @forum.topics_count %>条）</span></h2>
           <div class="posts">
             <table cellpadding="0" cellspacing="3" border="0" width="100%">
+              <% if @topics.blank? %>
+                <tr><td><strong class='gray'>这个论坛很冷清，还没有帖子</strong></td></tr>
+              <% else %>
               <tr>
                 <th class="tl">话题</th>
                 <th>浏览</th>
@@ -78,6 +87,7 @@
                 <td><%= link_to '', toggle_forum_topic_url(@forum, t, :top => 1, :at => 'index'), :class => "icon-up", :method => :put %><%= facebox_confirm '', forum_topic_url(@forum, t, :at => 'index'), {:msg => '你确定要删除这个话题吗？', :method => :delete}, {:class => "icon-active"} %></td>
                 <% end %>
               </tr>
+              <% end %>
               <% end %>
             </table>
           </div>

@@ -1,4 +1,4 @@
-<% form_remote_for :rating, :url => ratings_url(:rateable_id => rateable.id, :rateable_type => rateable.class.name) do |f| %>
+<% form_remote_for :rating, :url => ratings_url(:rateable_id => rateable.id, :rateable_type => rateable.class.name), :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" do |f| %>
   <%= hidden_field_tag 'rating[rateable_type]', rateable.class.name %>
   <%= hidden_field_tag 'rating[rateable_id]', rateable.id %> 
   <%= hidden_field_tag 'rating[rating]', Rating::Default, :id => "#{rateable.class.name.underscore}_#{rateable.id}_rating"%>

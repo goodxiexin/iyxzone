@@ -22,14 +22,10 @@
               </div>
             </div>
             <ul class="checkboxes rows s_clear" id='friend_items'>
-            <% if current_user.friends.blank? %>
-              没有匹配的好友
-            <% else %>
               <li info='<%= {:games => current_user.games.map(&:id)}.to_json %>'><span><%= check_box_tag '', current_user.id, false, :pinyin => current_user.pinyin, :login => "自己" %><%= "自己" %></span></li>
-              <% current_user.friends.each do |f| %>
+              <% tagged_users.each do |f| %>
                 <li info='<%= {:games => f.games.map(&:id)}.to_json %>'><span><%= check_box_tag '', f.id, false, :pinyin => f.pinyin, :login => f.login %><%= f.login %></span></li>
               <% end %>
-            <% end %>
             </ul>
           </div>
         </div>

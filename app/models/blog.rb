@@ -4,7 +4,7 @@ class Blog < ActiveRecord::Base
 
 	belongs_to :poster, :class_name => 'User'
 
-  has_many :images, :class_name => 'BlogImage', :dependent => :destroy
+  has_many :images, :class_name => 'BlogImage', :dependent => :delete_all
 
   named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
 
@@ -21,7 +21,9 @@ class Blog < ActiveRecord::Base
 
   acts_as_resource_feeds
   
-  acts_as_shareable :default_title => lambda {|blog| blog.title}, :path_reg => /\/blogs\/([\d]+)/
+  acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
+                    :default_title => lambda {|blog| blog.title}, 
+                    :create_conditions => lambda {|user, blog| blog.privilege != 4}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 
@@ -65,7 +67,7 @@ protected
 
   def update_blog_images
     ids = []
-    doc = Nokogiri::HTML(Blog.last.content)
+    doc = Nokogiri::HTML(self.content)
     doc.xpath("//img[starts-with(@src, '/blog_images/')]").each do |l|
       l[:src] =~ /\/blog_images\/([\d]+)\/([\d]+)\//
       id = (10000 * $1.to_i + $2.to_i)

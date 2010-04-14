@@ -20,7 +20,7 @@
       </div>
 			<div class="friend-box">
 				<div class="box02 appcontent01">
-					<h3>你在<%= server_location @server %>可能认识的人</h3>
+					<div class='d6-head'><strong class='gray'>你在<%= server_location @server %>可能认识的人</strong></div>
           <div class="piclist-rows cmt-space">
             <table cellspacing='0' cellpadding='0'>
               <% @comrade_suggestions.each do |suggestion| %>
@@ -28,21 +28,19 @@
               <tr>
                 <td>
 									<div class='imgwrap'>
-										<%= avatar f, :size => :medium, :class=>'imgbox01' %>
+										<%= avatar f, :size => :medium, :class => 'imgbox01' %>
 									</div>
 									<div class='data jl-data'>
 										<p><%= profile_link f %></p>
-										<% f.characters.find(:all, :conditions=>{:server_id => @server.id})[0..2].each { |character| %>
+										<% f.characters.find(:all, :conditions => {:server_id => @server.id}, :offset => 0, :limit => 3).each do |character| %>
 											<p><%= character.game.name %>,
 											<%= character.server.name %>的
 											<%= character.name %></p>
-											<% } %>
+										<% end %>
 										<p class="space">
 											<%unless current_user == f %>
-											<% unless current_user.relationship_with(f)=='friend' %>
-											<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
-											<% end %>
-											<%= link_to '', new_mail_url(:recipient_id => f.id), :class => "msg-btn" %>
+											  <%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
+											  <%= link_to '', new_mail_url(:recipient_id => f.id), :class => "msg-btn" %>
 											<% end %>
 										</p>
 									</div>
@@ -59,8 +57,3 @@
     </div>
 	</div></div>
 </div></div></div></div>
-
-<%= javascript_tag "
-  Iyxzone.Search.gameSelector = new Iyxzone.Game.PinyinSelector(#{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')}, 'character_game_id', 'character_area_id', 'character_server_id', null, null, {});
-  Iyxzone.Search.gameSelector.setEvents();
-" %> 

@@ -3,7 +3,6 @@ class User::FriendsController < UserBaseController
   layout 'app'
   
   def index
-		@user = current_user
     @game = Game.find(params[:game_id]) unless params[:game_id].nil?
     @guild = Guild.find(params[:guild_id]) unless params[:guild_id].nil?
     case params[:term].to_i
@@ -32,7 +31,7 @@ class User::FriendsController < UserBaseController
   end
 
   def destroy
-    if @friendship.reverse.destroy && @friendship.cancel
+    if @friendship.cancel
       render :update do |page|
         page << "tip('删除成功');$('friend_#{params[:id]}').remove();"
       end
@@ -47,15 +46,14 @@ class User::FriendsController < UserBaseController
     @friends = current_user.friends.search(params[:key])
     @friends = @friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
     @remote = {:update => 'friends', :url => {:action => 'search', :key => params[:key]}}
-    render :partial => 'friends', :object => @friends
+    render :partial => 'friends', :locals => {:friends => @friends, :owner => current_user, :remote => @remote}
   end
 
 protected
 
   def setup
     if ["destroy"].include? params[:action]
-      @friendship = current_user.friendships.find_by_friend_id(params[:id])#Friendship.find_by_friend_id(params[:friend_id])
-      #require_owner @friendship.user
+      @friendship = current_user.friendships.find_by_friend_id(params[:id])
     elsif ["new"].include? params[:action]
       @user = User.find(params[:uid])
       @profile = @user.profile

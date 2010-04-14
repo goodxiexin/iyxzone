@@ -12,8 +12,22 @@ class PostObserver < ActiveRecord::Observer
   end
 
   def after_create post
+    # change counter
     post.forum.raw_increment :posts_count
     post.topic.raw_increment :posts_count
+    
+    # issue notice
+    poster = post.poster
+    recipient = post.recipient
+    owner = post.topic.poster
+
+    if poster != owner
+      post.notices.create(:user_id => owner.id, :data => "comment")
+    end
+
+    if recipient != poster and recipient != owner
+      post.notices.create(:user_id => recipient.id, :data => "reply")
+    end  
   end
 
   def after_destroy post

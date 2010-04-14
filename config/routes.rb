@@ -106,12 +106,9 @@ ActionController::Routing::Routes.draw do |map|
 
 		users.resources :skins, :only=> [:index, :show, :update]
 
-    # 这个貌似没什么用
-    users.auto_complete_for_mail_recipients '/auto_complete_for_mail_recipients', :controller => 'mails', :action => 'auto_complete_for_recipients'
-
     users.resources :mails, :collection => {:read_multiple => :put, :unread_multiple => :put, :destroy_multiple => :delete}, :member => {:reply => :post}
 
-    users.resources :friend_suggestions, :collection => { :user_search => :any, :character_search => :any}
+    users.resources :friend_suggestions
 
     users.resources :friend_impressions, :controller => 'friends/impressions'
 

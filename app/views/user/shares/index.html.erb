@@ -89,7 +89,7 @@
         <div class="feed-img-list rows">
         <% if @sharings.total_entries != 0 %>
           <% @sharings.each do |sharing| %>
-            <%= render :partial => "#{sharing.share.shareable_type.underscore}_share", :locals => {:share => sharing.share, :sharing => sharing} %>
+            <%= render :partial => "#{sharing.share.shareable_type.underscore}_share", :locals => {:share => sharing.share, :sharing => sharing, :is_mine => true} %>
           <% end %>
           <%= will_paginate @sharings %>
         <% else %>
@@ -104,3 +104,11 @@
     </div>
   </div></div>
 </div></div></div></div>
+
+<% if !@reply_to.blank? and !@sharing.blank? %>
+  <% onload_javascript_tag do %>
+    Iyxzone.Comment.toggleBox('sharing', <%= @sharing.id %>, <%= @sharing.comments_count %>);
+    Iyxzone.Comment.set('sharing', <%= @sharing.id %>, '<%= @reply_to.login %>', <%= @reply_to.id %>);
+  <% end %>
+<% end %>
+

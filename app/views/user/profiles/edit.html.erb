@@ -24,9 +24,9 @@
         <div class="percent-box">
           <h3>档案完成度：</h3>
           <div class="percent">
-            <span style="width:43%"></span>
+            <span style="width:<%= @profile.completeness %>%"></span>
           </div>
-          <div class="left">100%</div>
+          <div class="left"><%= @profile.completeness %>%</div>
           <div class="right">
             <% if @user == current_user %>
             <ul><li><%= link_to_function "编辑个人档案", "Iyxzone.Profile.Editor.edit(#{@profile.id})" %></li></ul>

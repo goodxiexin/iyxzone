@@ -10,6 +10,7 @@
   <%= stylesheet_link_tag 'welcome' %>
   <%= javascript_include_tag :defaults %>
 	<%= javascript_include_tag 'swfobject' %>
+	<%= javascript_include_tag "addFavorites" %>
 </head>
 
 <body class="body_bg01">
@@ -20,7 +21,7 @@
 					<a href="#" class="logo-top logo-v2 png" title="一起游戏"></a>
 					<p class="top_link right">
 					<%= link_to_function "设为主页", "homepage()" %> |
-					<%= link_to_function "加入收藏", "bookmark()" %> |
+					<%= link_to_function "加入收藏", "addBookmark()" %> |
 					<%= link_to '反映建议' %> | 
 					<%= link_to '关于我们'%>
 					</p>

@@ -31,8 +31,11 @@ protected
 
   def sharing_is_valid
     return if share.blank? or poster.blank?
-    if share.shareable.shared_by? poster
+    shareable = share.shareable
+    if shareable.shared_by? poster
       errors.add(:share_id, '已经分享过了')
+    elsif !shareable.is_shareable_by? poster
+      errors.add(:share_id, '没有权限分享')
     end
   end
 

@@ -12,6 +12,12 @@ Object.extend(Iyxzone.Blog.Builder, {
   editor: null, // initialize this in your page
 
   tagBuilder: null, // initialize this in your page
+  
+  lastContent: null,
+
+  contentChanged: function(){
+    return (this.lastContent != this.editor.nicInstances[0].getContent());
+  },
 
   validate: function(){
     if($('blog_privilege').value == ''){
@@ -35,18 +41,18 @@ Object.extend(Iyxzone.Blog.Builder, {
 
   prepare: function(form){
     // fix nicEdit bug
-    for(var i=0;i<$(this).editor.nicInstances.length;i++){
-      $(this).editor.nicInstances[i].saveContent();
+    for(var i=0;i<this.editor.nicInstances.length;i++){
+      this.editor.nicInstances[i].saveContent();
     }
     
-    $(this).parameters = form.serialize();
-    var newTags = $(this).tagBuilder.getNewTags();
-    var delTags = $(this).tagBuilder.getDelTags();
+    this.parameters = form.serialize();
+    var newTags = this.tagBuilder.getNewTags();
+    var delTags = this.tagBuilder.getDelTags();
     for(var i=0;i<newTags.length;i++){
-      $(this).parameters += "&blog[new_friend_tags][]=" + newTags[i];
+      this.parameters += "&blog[new_friend_tags][]=" + newTags[i];
     }
     for(var i=0;i<delTags.length;i++){
-      $(this).parameters += "&blog[del_friend_tags][]=" + delTags[i];
+      this.parameters += "&blog[del_friend_tags][]=" + delTags[i];
     }
     
     window.onbeforeunload = null;
@@ -54,8 +60,8 @@ Object.extend(Iyxzone.Blog.Builder, {
 
   saveBlog: function(button, form){
     Iyxzone.disableButtonThree(button, '发布中..');
-    if($(this).validate()){
-      $(this).prepare(form);
+    if(this.validate()){
+      this.prepare(form);
       new Ajax.Request('/blogs', {
         method: 'post',
         parameters: this.parameters
@@ -67,8 +73,8 @@ Object.extend(Iyxzone.Blog.Builder, {
     
   saveDraft: function(button, form){
     Iyxzone.disableButtonThree(button, '保存中..');
-    if($(this).validate()){
-      $(this).prepare(form);
+    if(this.validate()){
+      this.prepare(form);
       new Ajax.Request('/drafts', {
         method: 'post',
         parameters: this.parameters
@@ -80,11 +86,11 @@ Object.extend(Iyxzone.Blog.Builder, {
 
   updateBlog: function(button, blogID, form){
     Iyxzone.disableButtonThree(button, '修改中..');
-    if($(this).validate()){
-      $(this).prepare(form);
+    if(this.validate()){
+      this.prepare(form);
       new Ajax.Request('/blogs/' + blogID, {
         method: 'put',
-        parameters: $(this).parameters
+        parameters: this.parameters
       });
     }else{
       Iyxzone.enableButtonThree(button, '修改');
@@ -93,23 +99,44 @@ Object.extend(Iyxzone.Blog.Builder, {
 
   updateDraft: function(button, draftID, form){
     Iyxzone.disableButtonThree(button, '保存中..');
-    if($(this).validate()){
-      $(this).prepare(form);
+    if(this.validate()){
+      this.prepare(form);
       new Ajax.Request('/drafts/' + draftID, {
         method: 'put',
-        parameters: $(this).parameters,
+        parameters: this.parameters,
         onSuccess: function(transport){
           var ret = transport.responseText.evalJSON();
-          $(this).tagBuilder.reset(ret.tags);
+          this.tagBuilder.reset(ret.tags);
+          this.lastContent = this.editor.nicInstances[0].getContent();  
 					Iyxzone.enableButtonThree(button, '保存为草稿');
           tip('保存成功，可以继续写了');
           $('errors').innerHTML = '';
-          $(this).saved = true;
-        }.bind($(this))
+          this.saved = true;
+        }.bind(this)
       });
     }else{
       Iyxzone.enableButtonThree(button, '保存为草稿');
     }
+  },
+
+  init: function(textAreaID, token, albumInfos, max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
+    // set nicEditor
+    this.editor = new nicEditor().panelInstance(textAreaID);
+    nicEditors.albums = albumInfos;
+    nicEditors.authenticityToken = token;
+
+    // set last content and beforeunload
+    this.lastContent = $(textAreaID).value;
+    window.onbeforeunload = function(){ 
+      if(Iyxzone.Blog.Builder.contentChanged()){
+        return "你还没保存，你确定要离开?";
+      }else{
+        return null;
+      }
+    };
+
+    // set tagger
+    this.tagBuilder = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton);
   }
 
 });

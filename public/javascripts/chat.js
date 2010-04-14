@@ -37,10 +37,14 @@ Object.extend(Iyxzone.Chat, {
   },
 
   // 显示聊天栏
-  toggleBar: function(event){
-    Event.stop(event);
-    $('tiny-chat-bar').toggle();
-    $('chat-bar').toggle();
+  showBar: function(){
+    $('tiny-chat-bar').hide();
+    $('chat-bar').show();
+  },
+
+  hideBar: function(){
+    $('tiny-chat-bar').show();
+    $('chat-bar').hide();
   },
 
   // 闪烁头像
@@ -196,6 +200,10 @@ Object.extend(Iyxzone.Chat, {
       form.show();
     }
 
+    form.observe('click', function(event){
+      Event.stop(event);
+    });
+
     if(info){
       info.messages.each(function(m){
         Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, m, false)});
@@ -319,6 +327,18 @@ Object.extend(Iyxzone.Chat, {
       dd.remove();
       this.modifyCounter(-1);
     }      
+  },
+
+  init: function(){
+    $(document.body).observe('click', function(){
+      this.hideBar();
+    }.bind(this));
+    $('chat-bar').observe('click', function(event){
+      Event.stop(event);
+    });
+    $('tiny-chat-bar').observe('click', function(event){
+      Event.stop(event);
+    });
   }
 
 });

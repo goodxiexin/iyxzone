@@ -54,6 +54,7 @@ Rails::Initializer.run do |config|
     :game_server_observer,
     :game_race_observer,
     :game_profession_observer,
+    :game_attention_observer,
     :topic_observer,
     :post_observer,
     :tag_observer,
@@ -64,10 +65,7 @@ Rails::Initializer.run do |config|
     :rating_observer,
     :signup_invitation_observer,
     :poke_delivery_observer,
+    :viewing_observer,
     :guestbook_observer
 
-  #config.time_zone = 'UTC'
-
 end
-
-CalendarDateSelect.format = :iso_date 

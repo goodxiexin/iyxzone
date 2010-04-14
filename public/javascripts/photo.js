@@ -261,7 +261,7 @@ Iyxzone.Photo.Tagger = Class.create({
 		rectTag.appendChild(posterLink);
 		rectTag.innerHTML += ('标记了');
 		rectTag.appendChild(taggedUserLink);
-		rectTag.innerHTML += (' : ' + tagInfo.photo_tag.content);
+		rectTag.innerHTML += (' : ' + tagInfo.photo_tag.content.escapeHTML());
 		li.appendChild(rectTag);
 
     if(this.isLoading){
@@ -285,7 +285,7 @@ Iyxzone.Photo.Tagger = Class.create({
       li.appendChild(deleteLink);
 			li.appendChild(spaceBar);
       deleteLink.observe('click', function(e){
-        facebox.show_confirm_with_callbacks('你确定要删除这个标价吗?', this.remove.bind(this), tagInfo.photo_tag.id);// this.remove(tagInfo.photo_tag.id);
+        facebox.show_confirm_with_callbacks('你确定要删除这个标价吗?', this.remove.bind(this), tagInfo.photo_tag.id);
       }.bind(this));
     }
   },
@@ -350,11 +350,15 @@ Iyxzone.Photo.Tagger = Class.create({
     new Ajax.Request('/photo_tags/' + tagID, {
       method: 'delete',
       parameters: 'authenticity_token=' + encodeURIComponent(this.token),
+      loading: function(){
+        Iyxzone.changeCursor('wait');
+      },
       onSuccess: function(transport){
         if($('square_'+tagID)) $('square_'+tagID).remove();
         if($('content_'+tagID)) $('content_'+tagID).remove();
         $('tag_' + tagID).remove();
         this.tagInfos.unset(tagID);
+        Iyxzone.changeCursor('default');
       }.bind(this)
     });
   },

@@ -23,7 +23,9 @@ class User::PhotoTagsController < UserBaseController
 
   def destroy
     if @tag.destroy
-			render :nothing => true
+			render :update do |page|
+        page << "facebox.close();"
+      end
     else
       render :update do |page|
         page << "alert('错误，稍后再试');"

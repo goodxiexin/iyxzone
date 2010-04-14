@@ -11,6 +11,18 @@ Iyxzone.Forum = {
 Object.extend(Iyxzone.Forum.Topic, {
   
   editor: null,
+
+  init: function(albums, textAreaID, token){
+    // set nicEditors
+    nicEditors.albums = albums;
+    nicEditors.authenticityToken = token;
+    this.editor = new nicEditor({buttonList: ['bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','link','forecolor']}).panelInstance(textAreaID);
+
+    // set last content and beforeunload
+    window.onbeforeunload = function(){
+      return "你还没保存，你确定要离开?";
+    };
+  },
   
   validate: function(){
     if($('topic_subject').value == ''){
@@ -50,6 +62,13 @@ Object.extend(Iyxzone.Forum.Post, {
   
   editor: null,
 
+  init: function(albums, textAreaID, token){
+    // set nicEditors
+    nicEditors.albums = albums;
+    nicEditors.authenticityToken = token;
+    this.editor = new nicEditor({buttonList: ['bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','link','forecolor']}).panelInstance(textAreaID);
+  },
+
   validate: function(){
     var content = this.editor.instanceById('post_content').getContent();
     if(content.length < 6){
@@ -73,7 +92,8 @@ Object.extend(Iyxzone.Forum.Post, {
     }   
   },
 
-  reply: function(floor, name){
+  reply: function(floor, name, id){
+    $('post_recipient_id').value = id;
     if(floor)
       this.editor.instanceById('post_content').setContent("<span style='font-size: 14px;font-weight:bold'>回复" + floor + "楼" + name + ":</span><hr/>");
     else

@@ -1,5 +1,5 @@
     <div class="im-tinybar" id='tiny-chat-bar' style="right:5px;top:100px;">
-      <div class="im-toggle"><a class="r-t" href="javascript:void(0)" onclick="Iyxzone.Chat.toggleBar(event)"></a><p>在线好友<span id='tiny_online_friends_count'>[0]</span><a href="javascript:void(0)" id='tiny-im-icon'><img src=''/></a></p><span class="r-b"></span></div>
+      <div class="im-toggle"><a class="r-t" href="javascript:void(0)" onclick="Iyxzone.Chat.showBar(event)"></a><p>在线好友<span id='tiny_online_friends_count'>[0]</span><a href="javascript:void(0)" id='tiny-im-icon'><img src=''/></a></p><span class="r-b"></span></div>
     </div>
     <div style="right: 5px; top: 100px;display:none" class="im-bar" id='chat-bar'>
       <div class="r-m">
@@ -23,7 +23,7 @@
             </div>
           </div>
           <div class="im-search rows">
-            <%= text_field_tag '', '搜索好友', :onclick => "this.clear();", :onfocus => "Iyxzone.Chat.startObservingSearch($(this))", :onblur => "Iyxzone.Chat.stopObservingSearch()" %>
+            <%= text_field_tag '', '搜索好友', :onclick => "$(this).clear();", :onfocus => "Iyxzone.Chat.startObservingSearch($(this))", :onblur => "Iyxzone.Chat.stopObservingSearch()" %>
             <%= button_to_function '', '', :class => 'go' %> 
           </div>
           <div class="im-group s_clear">
@@ -39,3 +39,7 @@
       </div>
       <span class="r-b rows"></span>
     </div>
+
+<% onload_javascript_tag do %>
+  Iyxzone.Chat.init();
+<% end %>

@@ -4,7 +4,7 @@ class User::WallMessagesController < UserBaseController
     @message = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
     unless @message.save
       render :update do |page|
-        page << "error('#{@message.errors.on_base}');"
+        page << "error('发生错误');"
       end
     end
   end

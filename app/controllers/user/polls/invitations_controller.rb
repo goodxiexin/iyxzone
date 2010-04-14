@@ -7,10 +7,12 @@ class User::Polls::InvitationsController < UserBaseController
   end
 
   def create
-    params[:values].each do |user_id| 
-      @poll.invitations.create(:user_id => user_id)
+    if @poll.update_attributes(:invitees => params[:values])
+      redirect_to poll_url(@poll)
+    else
+      flash.now[:error] = '生成邀请出错'
+      render :action => 'new'
     end
-    redirect_to poll_url(@poll)
   end
 
 	def destroy

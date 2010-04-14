@@ -12,9 +12,9 @@ class User::ProfilesController < UserBaseController
 		@common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2]
     @relationship = @user.relationship_with current_user
     # 个人主页可能是所有人都能看，所以要挑那些能看的显示
-		@blogs = @user.blogs.viewable(@relationship)[0..2]
-    # 相册也是这个问题
-		@albums = @user.active_albums.viewable(@relationship)[0..2]
+    @cond = get_privilege_cond @relationship
+		@blogs = @user.blogs.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
+		@albums = @user.active_albums.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
     @setting = @user.privacy_setting
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')

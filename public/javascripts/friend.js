@@ -3,7 +3,6 @@ Iyxzone.Friend = {
   version: '1.0',
   author: ['高侠鸿'],
   Suggestor: {},
-	NicerSuggestor: {}, //for layout reason
   Tagger: Class.create({}) // only used in Blog or Video
 };
 
@@ -17,9 +16,9 @@ Iyxzone.Comrade = {
 
 Object.extend(Iyxzone.Friend.Suggestor, {
 
-  newSuggestion: function(suggestionID, token){
+  newSuggestion: function(suggestionID, token, nicerLayout){
     // consturct except parameters
-    var url = 'friend_suggestions/new';
+    var url = '/friend_suggestions/new';
     var exceptIDs = [];
     var suggestions = $('friend_suggestions').childElements();
     for(var i=0;i<suggestions.length;i++){
@@ -36,53 +35,14 @@ Object.extend(Iyxzone.Friend.Suggestor, {
     // send ajax request
     new Ajax.Request(url, {
       method: 'get',
-      parameters: {authenticity_token: encodeURIComponent(token)}, //encodeURIComponent(token)},
+      parameters: {sid: suggestionID, authenticity_token: encodeURIComponent(token), nicer: nicerLayout},
       onSuccess: function(transport){
         var card = $('friend_suggestion_' + suggestionID);
         var temp_parent = new Element('div');
-//        temp_parent.innerHTML = transport.responseText;
-        temp_parent.update( transport.responseText);
+        temp_parent.update(transport.responseText);
         var li = temp_parent.childElements()[0];
-        li.hide();
         Element.replace(card, li);
-        li.appear({duration: 3.0});
-      }.bind(this)
-    });
-  }
-
-});
-
-Object.extend(Iyxzone.Friend.NicerSuggestor, {
-
-  newSuggestion: function(suggestionID, token){
-    // consturct except parameters
-    var url = 'friend_suggestions/new';
-    var exceptIDs = [];
-    var suggestions = $('friend_suggestions').childElements();
-    for(var i=0;i<suggestions.length;i++){
-      exceptIDs.push(suggestions[i].readAttribute('suggestion_id'));
-    }
-    var exceptParam = "";
-    for(var i=0;i<exceptIDs.length;i++){
-      exceptParam += "except_ids[]=" + exceptIDs[i] + "&";
-    }
-    
-    // construct url
-    url += "?" + exceptParam;
-    
-    // send ajax request
-    new Ajax.Request(url, {
-      method: 'get',
-      parameters: {authenticity_token: encodeURIComponent(token), nicer: 1}, //encodeURIComponent(token)},
-      onSuccess: function(transport){
-        var card = $('friend_suggestion_' + suggestionID);
-        var temp_parent = new Element('div');
-//        temp_parent.innerHTML = transport.responseText;
-        temp_parent.update( transport.responseText);
-        var li = temp_parent.childElements()[0];
-        li.hide();
-        Element.replace(card, li);
-        li.appear({duration: 3.0});
+        new Effect.Opacity(li, { from: 0, to: 1 })
       }.bind(this)
     });
   }
@@ -110,16 +70,14 @@ Object.extend(Iyxzone.Comrade.Suggestor, {
     // send ajax request
     new Ajax.Request(url, {
       method: 'get',
-      parameters: {server_id: serverID, authenticity_token: encodeURIComponent(token)}, //encodeURIComponent(token)},
+      parameters: {sid: suggestionID, server_id: serverID, authenticity_token: encodeURIComponent(token)},
       onSuccess: function(transport){
         var card = $('comrade_suggestion_' + suggestionID);
         var temp_parent = new Element('div');
-//        temp_parent.innerHTML = transport.responseText;
         temp_parent.update( transport.responseText);
         var li = temp_parent.childElements()[0];
-        li.hide();
         Element.replace(card, li);
-        li.appear({duration: 3.0});
+        new Effect.Opacity(li, { from: 0, to: 1 })
       }.bind(this)
     });
 
@@ -214,7 +172,7 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
 
 Iyxzone.Friend.Tagger = Class.create({
  
-  initialize: function(max, friendIDs, tagIDs, friendNames, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
+  initialize: function(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
     this.max = max;
     this.tags = new Hash(); // friendID => [tagIDs, div]
     this.newTags = new Hash(); // friendID => div
@@ -234,9 +192,10 @@ Iyxzone.Friend.Tagger = Class.create({
       bitClassName: ''
     });
 
-    for(var i=0;i<friendIDs.length;i++){
-      var el = this.taggedUserList.add(friendIDs[i], friendNames[i]);
-      this.tags.set(friendIDs[i], [tagIDs[i], el]);
+    for(var i=0;i<tagInfos.length;i++){
+      var info = tagInfos[i];
+      var el = this.taggedUserList.add(info.friend_id, info.friend_name);
+      this.tags.set(info.friend_id, [info.tag_id, el]);
     }
 
     var inputs = $$('input');

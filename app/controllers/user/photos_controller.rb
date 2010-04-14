@@ -3,7 +3,7 @@ class User::PhotosController < UserBaseController
   layout 'app'
 
 	def hot
-    @photos = Photo.hot.paginate :page => params[:page], :per_page => 10
+    @photos = Photo.hot.paginate :page => params[:page], :per_page => 10, :conditions => "privilege != 4"
   end
 
   def relative
@@ -52,18 +52,19 @@ class User::PhotosController < UserBaseController
 			respond_to do |format|
 				format.json { render :json => @photo }
 				format.html { render :update do |page|
-          if params[:at] == 'album'
-					  if @album.id != @photo.album_id
+					if @album.id != @photo.album_id
+            if params[:at] == 'album'
 						  page.redirect_to personal_album_url(@album)
-					  else
-						  page << "facebox.close();"
+            elsif params[:at] == 'photo'
+              page.redirect_to personal_photo_url(@photo)
             end
-          elsif params[:at] == 'photo'
-            page << "facebox.close();"
-#						page << "$('personal_photo_notation_#{@photo.id}').innerHTML = '#{@photo.notation.gsub(/\n/, '<br/>')}';"
-						page << "$('personal_photo_notation_#{@photo.id}').update(     '#{@photo.notation.gsub(/\n/, '<br/>')}');"
-
-					end
+					else
+            if params[:at] == 'album'
+						  page << "facebox.close();"
+            elsif params[:at] == 'photo'
+              page.redirect_to personal_photo_url(@photo)
+					  end
+          end
 				end }
 			end 
     else
@@ -111,8 +112,6 @@ protected
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = PersonalAlbum.find(params[:album_id])
       require_owner @album.poster
-		elsif ['hot'].include? params[:action]
-      @user = current_user
     elsif ['relative'].include? params[:action]
 			@user = User.find(params[:uid])
       require_friend_or_owner @user

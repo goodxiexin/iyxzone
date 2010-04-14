@@ -11,7 +11,7 @@
     <% end %>
 	    <%= profile_link user %> <span> 分享了 <%= profile_link photo.poster%> 的照片</span>
       <p class="gray jl-con"><%= photo_link photo, :class=>'imgbox01', :size => :large %></p>
-	    <p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('#{photo.class.name.underscore}', #{photo.id}, null);", :class => "gray"%></p>
+	    <p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null);", :class => "gray"%></p>
 	    <%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => sharing, :recipient => sharing.poster} %>
     </div>
   </div>

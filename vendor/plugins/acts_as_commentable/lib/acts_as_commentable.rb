@@ -7,7 +7,8 @@ module Commentable
 	module ClassMethods
 
 		def acts_as_commentable opts={}
-			has_many :comments, :as => 'commentable', :dependent => :destroy, :order => opts[:order]
+
+			has_many :comments, :as => 'commentable', :dependent => :delete_all, :order => opts[:order]
 
 			include Commentable::InstanceMethods
 

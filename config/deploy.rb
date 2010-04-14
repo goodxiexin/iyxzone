@@ -121,11 +121,11 @@ ActionMailer::Base.delivery_method = :activerecord
   desc "update juggernaut configuration"
   task :update_juggernaut_config, :roles => :app do
     juggernaut_config = <<-CMD
+:subscription_url:  http://localhost/juggernaut/subscription
 :allowed_ips:
   - 127.0.0.1
-  - 192.168.1.16
+:logout_url: http://localhost/juggernaut/logout
 :port: 5001
-:public_port: 5001
     CMD
     put juggernaut_config, "#{release_path}/juggernaut.yml"
     juggernaut_hosts_config = <<-CMD

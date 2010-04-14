@@ -4,6 +4,7 @@ class PersonalAlbum < Album
 
   belongs_to :user, :foreign_key => 'owner_id'
 
+  # 由于每张图片还得删除评论，圈人等等，所以还是用destroy比较方便
   has_many :photos, :class_name => 'PersonalPhoto', :foreign_key => 'album_id', :order => 'created_at DESC', :dependent => :destroy
 
   acts_as_commentable :order => 'created_at ASC',

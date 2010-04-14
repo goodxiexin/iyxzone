@@ -80,4 +80,16 @@ protected
     end
   end
 
+  def get_privilege_cond relationship
+    if relationship == 'owner'
+      {:privilege => [1,2,3,4]}
+    elsif relationship == 'friend'
+      {:privilege => [1,2,3]}
+    elsif relationship == 'same_game'
+      {:privilege => [1,2]}
+    else
+      {:privilege => 1}
+    end
+  end
+
 end

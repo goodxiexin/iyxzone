@@ -20,7 +20,23 @@ module FaceboxMacroHelpers
 		link_to_function text, "alert('#{msg}');"
 	end
 
-  def facebox_confirm(text, url, confirm_options={}, html_options={})
+  def facebox_button_confirm text, url, confirm_options={}, html_options={}
+    width = html_options.delete(:width) || DEFAULT_FACEBOX_WIDTH
+    confirm_msg = confirm_options[:msg] || "你确定吗"
+    method = confirm_options[:method] || 'post'
+    options = html_options.merge({
+      :href => url, 
+      :rel => 'facebox',
+      :facebox_width => width, 
+      :facebox_confirm => confirm_msg, 
+      :facebox_method => method,
+      :authenticity_token => form_authenticity_token,
+      :facebox_type => 'confirm'})
+
+    content_tag :button, text, options
+  end
+
+  def facebox_confirm text, url, confirm_options={}, html_options={}
     width = html_options.delete(:width) || DEFAULT_FACEBOX_WIDTH
     confirm_msg = confirm_options[:msg] || "你确定吗"
     method = confirm_options[:method] || 'post'

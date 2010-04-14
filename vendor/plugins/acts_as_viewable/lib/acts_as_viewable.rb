@@ -10,7 +10,7 @@ module Model
 
     def acts_as_viewable opts={}
 
-      has_many :viewings, :as => 'viewable', :order => 'viewed_at DESC', :dependent => :destroy
+      has_many :viewings, :as => 'viewable', :order => 'viewed_at DESC', :dependent => :delete_all
 
       has_many :viewers, :through => :viewings, :source => 'user'
 

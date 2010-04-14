@@ -1,9 +1,9 @@
 <% poll = comment.commentable %>
 
 <% if home_page %>
-  <% link = link_to_function poll.name, "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/polls/#{poll.id}?reply_to=#{comment.poster_id}');" %>
+  <% link = link_to_function h(poll.name), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/polls/#{poll.id}?reply_to=#{comment.poster_id}');" %>
 <% else %>
-  <% link = link_to_function poll.name, "window.open('/polls/#{poll.id}?reply_to=#{comment.poster_id}');" %>
+  <% link = link_to_function h(poll.name), "window.open('/polls/#{poll.id}?reply_to=#{comment.poster_id}');" %>
 <% end %>
 
 <li>

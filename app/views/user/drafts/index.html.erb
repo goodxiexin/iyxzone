@@ -1,15 +1,3 @@
-<% content_for :left do %>
-  <%= render :partial => '/app_menu' %><br/>
-  <div class='blog-right-bar'>
-    <div class='part'>
-      <h3>日志分类: </h3>
-      <% game_options = [['全部', nil]] %>
-      <% current_user.games.each {|g| game_options << [g.name, g.id] } %>
-      <%= select_tag '', options_for_select(game_options, params[:game_id].to_i), :onchange => "window.location.href = '#{hot_blogs_url(:uid => current_user.id)}&game_id='+this.value;" %> 
-    </div>
-  </div>
-<% end %>
-
 <% content_for :html_title, "#{current_user.login} - 日志草稿 - 17Gaming.com" %>
 <% content_for :html_description, "#{current_user.login}的日志草稿 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>

@@ -45,11 +45,11 @@
           <div class="fldvalue">
 						<div class='bookbox'>
 							<%= f.text_area 'content' %>
-						</div>
-						<div class='buttons'>
-							<span class="button"><span><button type='submit' id='submit_btn'>发送</button></span></span>
-							<span class="button button-gray"><span><button type="reset">取消</button></span></span>
-						<%= emotion_link 'mail_content', :class => 'icon-face right', :align=>"absmiddle" %>
+							<div class='buttons'>
+								<span class="button"><span><button type='submit' id='submit_btn'>发送</button></span></span>
+								<span class="button button-gray"><span><button type="reset">取消</button></span></span>
+							<%= emotion_link 'mail_content', :class => 'icon-face right' , :align => "absmiddle"%>
+							</div>
 						</div>
 					</div>
         </div>
@@ -61,13 +61,5 @@
 </div></div></div></div>
 
 <% onload_javascript_tag do %>
-  Iyxzone.Mail.Builder.recipientBuilder = new Iyxzone.Friend.Tagger(10, [],[],[],'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', null);
-<% end %>
-
-<% unless @recipients.blank? %>
-  <% onload_javascript_tag do %>
-  <% @recipients.each do |r| %>
-    Iyxzone.Mail.Builder.recipientBuilder.addTags([{id: <%= r.id %>, profileID: <%= r.profile.id %>, login: '<%= r.login %>'}]);
-  <% end %>
-  <% end %>
+  Iyxzone.Mail.Builder.init(10, [], 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', <%= @infos %>);
 <% end %>

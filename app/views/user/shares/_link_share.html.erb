@@ -9,9 +9,15 @@
       首次分享人：<%= avatar first_sharer, :with => '27px', :height => '27px' %>
 			<%= profile_link first_sharer %>
     </div>
-    <h3><%= link_to link.url, sharing_url(sharing), :popup => true %></h3>
-    <p class="con"><%= truncate sharing.reason, :length => 100, :omission => '...' %></p>
-    <div class="feeds"><%= link_to_function "评论(#{sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %> | <%= facebox_link "我也分享", new_sharing_url(:url => link_url(link)), :width => 450 %><span>(<%= link.sharings_count %>)</span></a> | <%= link_to "更多分享", shares_url(:uid => poster.id) %></div>
+    <h3>连接：<%= link_to h(sharing.title), sharing_url(sharing), :popup => true %></h3>
+    <%= sharing_reason sharing %>
+    <div class="feeds">
+      <%= link_to_function "评论(#{sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %>
+      <% if !is_mine %>
+        | <%= facebox_link "我也分享", new_sharing_url(:url => link_url(link)), :width => 450 %><span>(<%= link.sharings_count %>)</span></a> 
+        | <%= link_to "更多分享", shares_url(:uid => poster.id) %>
+      <% end %>
+    </div>
   </div>
   <div id="sharing_comment_box_<%= sharing.id %>" style="display: none">
     <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => sharing, :recipient => poster} %>

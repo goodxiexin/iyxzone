@@ -3,20 +3,20 @@
   <div class="feed-list">
     <div class="feed-img"><%= avatar poster, :class => 'imgbox01' %></div>
     <div class="feed-header">
-    <% if current_user == poster %>
-      <%= facebox_confirm '', status_url(status), {:method => :delete, :msg => '你确定要删除这条状态吗?'}, {:class => 'icon2-close right', :id => "delete_status_#{status.id}"} %>
-    <% end %>
+      <% if current_user == poster %>
+        <%= facebox_confirm '', status_url(status), {:method => :delete, :msg => '你确定要删除这条状态吗?'}, {:class => 'icon2-close right', :id => "delete_status_#{status.id}"} %>
+      <% end %>
       <p><%= profile_link poster %>：<%= status.content %><% if poster != current_user and params[:action] != 'index'%>(<%= link_to "更多", statuses_url(:uid => poster.id) %>)<% end %></p>
     </div>
 		<% unless status.comments_count > 0 %>
-    <div class="feeds"><%= ftime status.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.toggleBox('status', #{status.id}, #{status.comments_count})", :id => "status_comment_link_#{status.id}" %></div>
+      <div class="feeds"><%= ftime status.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.toggleBox('status', #{status.id}, #{status.comments_count})", :id => "status_comment_link_#{status.id}" %></div>
 		<% else %>
-    <div class="feeds"><%= ftime status.created_at %> <%= link_to_function "#{status.comments_count}条回复", "Iyxzone.Comment.toggleBox('status', #{status.id}, #{status.comments_count})", :id => "status_comment_link_#{status.id}" %></div>
+      <div class="feeds"><%= ftime status.created_at %> <%= link_to_function "#{status.comments_count}条回复", "Iyxzone.Comment.toggleBox('status', #{status.id}, #{status.comments_count})", :id => "status_comment_link_#{status.id}" %></div>
 		<% end %>
     <% if status.comments_count != 0 %>
-    <div id='status_comment_box_<%= status.id %>'>
+      <div id='status_comment_box_<%= status.id %>'>
     <% else %>
-    <div id='status_comment_box_<%= status.id %>' style='display:none'>
+      <div id='status_comment_box_<%= status.id %>' style='display:none'>
     <% end %>
       <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => status, :recipient => poster} %>
     </div>

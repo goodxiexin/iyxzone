@@ -1,7 +1,9 @@
 <% blog = blog_item2 %>
 <div class="feed-img-list">
   <div class='feed-list eval-list'>
-			<%= dig_link blog %>
+    <div class='feed-img'>
+      <%= avatar blog.poster, :class => 'imgbox01' %>
+    </div>
     <div class='feed-header'>
       <%= facebox_link '分享', new_sharing_url(:url => blog_url(blog)), :width => 450, :class => 'right love-btn' %>
       <h3><%= blog_link blog %></h3>
@@ -10,6 +12,6 @@
     <div class='feeds'>
       <p><%= blog_content blog, :length => 100, :omission => '...' %></p>
     </div>
-    <div class='feeds'><%= link_to "阅读(#{blog.viewings_count})", blog_url(blog) %> | <%= link_to "评论(#{blog.comments_count})", blog_url(blog) %> | <%= facebox_link "分享(#{blog.sharings_count})", new_sharing_url(:url => blog_url(blog)), :width => 450%></div>
+    <div class='feeds'><%= link_to "阅读(#{blog.viewings_count})", blog_url(blog) %> | <%= link_to "评论(#{blog.comments_count})", blog_url(blog) %> | <%= facebox_link "分享(#{blog.sharings_count})", new_sharing_url(:url => blog_url(blog)), :width => 450%> | <%= link_to "赞(#{blog.digs_count})", blog_url(blog) %></div>
   </div>
 </div>

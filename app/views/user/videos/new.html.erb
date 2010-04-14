@@ -1,5 +1,5 @@
 <% content_for :javascript_include do %>
-<%= javascript_include_merged :video %>
+  <%= javascript_include_merged :video %>
 <% end %>
 
 <% content_for :html_title, "#{current_user.login} - 新建视频 - 17Gaming.com" %>
@@ -61,5 +61,5 @@
 </div></div></div></div>
 
 <% onload_javascript_tag do %>
-  Iyxzone.Video.Builder.tagBuilder = new Iyxzone.Friend.Tagger(10, [], [], [], 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn'); 
+  Iyxzone.Video.Builder.init(10, [], 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn'); 
 <% end %>

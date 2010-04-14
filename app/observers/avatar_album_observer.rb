@@ -9,12 +9,4 @@ class AvatarAlbumObserver < ActiveRecord::Observer
     album.title = "#{album.poster.login}的头像相册"
   end
 
-  def after_create album
-    # nothing to do right now
-  end
-
-  def after_destroy album
-    # nothing to do right now
-  end
-
 end

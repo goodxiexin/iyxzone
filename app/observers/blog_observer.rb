@@ -38,19 +38,27 @@ class BlogObserver < ActiveRecord::Observer
       blog.poster.raw_increment "blogs_count#{blog.privilege}"
     end
     
-    # issue feeds if necessary
     return if blog.draft
 
+    # issue feeds if necessary
     if (blog.draft_was and blog.privilege != 4) or (blog.privilege_was == 4 and blog.privilege != 4)
       if blog.poster.application_setting.emit_blog_feed == 1
         recipients = [].concat blog.poster.guilds
         recipients.concat blog.poster.friends.find_all{|f| f.application_setting.recv_blog_feed == 1}
         blog.deliver_feeds :recipients => recipients
       end
+# TODO: 左思右想，决定这个还是不要再发送了，重复不好，而且又有开销
+=begin
       blog.tags.each do |tag|
         tag.notices.create(:user_id => tag.tagged_user_id)
         TagMailer.deliver_blog_tag tag if tag.tagged_user.mail_setting.tag_me_in_blog == 1
       end
+=end
+    end
+
+    # destroy feeds if necessary
+    if blog.privilege_was != 4 and blog.privilege == 4
+      blog.destroy_feeds      
     end 
   end
 

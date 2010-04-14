@@ -50,13 +50,13 @@
         <td>
           <div class="textfield" id='new_rule'><input value="点击添加新的规则" onclick="Iyxzone.Event.Summary.Rule.newRule()" /></div>
           <div id='new_rule_reason' style="display:none">
-            <div class='textfield'><%= text_field_tag 'rule[reason]', '', :onclick => "this.clear()" %></div>
+            <div class='textfield'><%= text_field_tag 'rule[reason]', '', :onclick => "$(this).clear()" %></div>
           </div>
         </td>
         <td></td>
         <td>
           <div id='new_rule_outcome' style='display:none'>
-            <div class='textfield' style="width: 80px; margin: 0 auto;"><%= text_field_tag 'rule[outcome]', '', :onclick => "this.clear()" %></div>
+            <div class='textfield' style="width: 80px; margin: 0 auto;"><%= text_field_tag 'rule[outcome]', '', :onclick => "$(this).clear()" %></div>
           </div>
         </td>
         <td>

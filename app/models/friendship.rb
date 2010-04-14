@@ -26,12 +26,7 @@ class Friendship < ActiveRecord::Base
   end
 
   def reverse
-    f = Friendship.find(:first, :conditions => {:user_id => friend_id, :friend_id => user_id, :status => status})
-		if f.blank?
-			Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => 1)
-		else
-			f
-		end
+    Friendship.find(:first, :conditions => {:user_id => friend_id, :friend_id => user_id, :status => status})
   end
 
   attr_accessor :recently_accepted
@@ -44,6 +39,10 @@ class Friendship < ActiveRecord::Base
     if status == Request
       self.recently_accepted = true
       self.update_attributes(:status => Friendship::Friend)
+      # 检查我是否也有加他为好友的请求, 有就删除
+      reverse_request = self.reverse
+      reverse_request.destroy if reverse_request
+      Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friendship::Friend)
     end
   end
 
@@ -58,6 +57,10 @@ class Friendship < ActiveRecord::Base
     if status == Friend
       self.recently_destroyed = true
       self.destroy
+      reverse_friendship = self.reverse
+      if reverse_friendship
+        reverse_friendship.destroy
+      end
     end
   end
 
@@ -77,6 +80,7 @@ protected
     return if user.blank? or friend.blank?
     friendship = user.all_friendships.find_by_friend_id(friend_id)
     if friendship.blank?
+# 现在改为任何人都能加为好友
 =begin
       unless friend.is_friendable_by? user
         errors.add(:friend_id, "不能加为好友")

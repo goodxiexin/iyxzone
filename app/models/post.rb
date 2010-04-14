@@ -2,9 +2,13 @@ class Post < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User'
 
+  belongs_to :recipient, :class_name => 'User'
+
   belongs_to :forum
 
   belongs_to :topic
+
+  has_many :notices, :as => 'producer', :dependent => :destroy
 
   validates_presence_of :poster_id, :message => "没有发布者"
 

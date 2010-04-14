@@ -50,6 +50,11 @@ class User < ActiveRecord::Base
 		!game_attentions.find_by_game_id(game.id).nil?
   end
 
+  def has_game? game
+    game_id = game.is_a?(Integer) ? game : game.id
+    !characters.find_by_game_id(game_id).blank?
+  end
+
   has_many :game_attentions
 
 	has_many :interested_games, :through => :game_attentions, :source => :game, :order => 'sale_date DESC'
@@ -146,12 +151,12 @@ class User < ActiveRecord::Base
   has_one :avatar_album, :foreign_key => 'owner_id'
 
   # 为了保证avatar album一定在最后一个，我们不在这里加上avatar album
-  has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'uploaded_at DESC'
+  has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'created_at DESC'
 
   has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
   def friend_albums
-    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "(privilege != 4) AND (uploaded_at != NULL)", :order => 'uploaded_at desc')
+    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "privilege != 4 AND photos_count != 0", :order => 'uploaded_at desc')
   end
 
   def albums_count relationship='owner'
@@ -197,7 +202,7 @@ class User < ActiveRecord::Base
   end
 
   def friend_blogs
-    Blog.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = blogs.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
+    Blog.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = blogs.poster_id", :conditions => "privilege != 4 AND draft != 1", :order => 'created_at desc')
   end
 
   # videos
@@ -306,15 +311,15 @@ class User < ActiveRecord::Base
 
   has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
 
-  def friend_votes
-    Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id")
+  def friend_votes_for poll
+    Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id", :conditions => {:poll_id => poll.id})
   end
 
   def friend_polls
     poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id").map(&:poll_id).uniq
     participated = Poll.find(poll_ids)
     posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = polls.poster_id", :order => 'created_at desc')
-    participated.concat(polls).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
+    participated.concat(posted).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
   end
 
 	# guilds
@@ -369,7 +374,7 @@ class User < ActiveRecord::Base
 	# tags
 	has_many :friend_tags, :foreign_key => 'tagged_user_id'
 
-	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4"
+	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4 AND draft != 1"
 
 	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4"
 

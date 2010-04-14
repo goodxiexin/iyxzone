@@ -92,7 +92,7 @@
 	<div class="piclist s_clear">
 	<% unless @albums.blank? %> 
     <% @albums.each do |album| %>
-        <div class="picitem">
+        <div class="picitem jl-picitem">
           <div class="picbox01">
             <a class="btn" href="#"></a>
             <div class="picwrap">
@@ -110,7 +110,11 @@
       </div>  
     <% end %> 
 	<% else %>
-		<div class='space'>还没照片赶紧去<%= link_to '弄一个', personal_albums_url(:id=>current_user.id)%>，马上就能上游戏主页</div>
+    <% if @has_game %>
+		<div class='space'>还没照片赶紧去<%= link_to '弄一个', personal_albums_url(:uid => current_user.id)%>，马上就能上游戏主页</div>
+    <% else %>
+    <div class='space'>还没有任何相关的相册</div>
+    <% end %>
 	<% end %>
   </div>
 </div>
@@ -127,7 +131,11 @@
     </div>
   <% end %>
 	<% else %>
+    <% if @has_game %>
 		<div class='space'>还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>,马上就能上游戏主页</div>
+    <% else %>
+    <div class='space'>还没任何相关的日志</div>
+    <% end %>
 	<% end %>	
 </div>
 

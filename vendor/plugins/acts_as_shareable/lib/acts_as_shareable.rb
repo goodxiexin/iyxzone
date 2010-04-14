@@ -8,7 +8,6 @@ module Shareable
   module ClassMethods
 
     def acts_as_shareable opts={}
-puts "register #{self.name}"
       # 只能有一个
       has_one :share, :as => 'shareable', :dependent => :destroy
 
@@ -45,6 +44,11 @@ puts "register #{self.name}"
       share = Share.find_or_create(:shareable_type => self.class.base_class.name, :shareable_id => self.id)
       sharing = share.sharings.build(:poster_id => user.id, :title => title, :reason => reason)
       sharing.save
+    end
+
+    def is_shareable_by? user
+      proc = self.class.share_opts[:create_conditions] || lambda { true }
+      proc.call user, self 
     end
 
     def first_sharer

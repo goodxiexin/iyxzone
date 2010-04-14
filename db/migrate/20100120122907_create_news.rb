@@ -7,7 +7,6 @@ class CreateNews < ActiveRecord::Migration
       t.text :data
       t.integer :comments_count, :default => 0
       t.integer :viewings_count, :default => 0
-      t.integer :sharings_count, :default => 0
       t.timestamps
     end
   end

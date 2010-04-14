@@ -127,6 +127,19 @@ class Profile < ActiveRecord::Base
     end
     @del_characters_ids = nil
   end
+
+  before_save :set_completeness
+
+  def set_completeness
+    total = Profile.columns.count - 1 # except completeness column
+    not_blank = 0
+    Profile.columns.each do |c|
+      if c.name != 'completeness' and !eval("self.#{c.name}").blank?
+        not_blank = not_blank + 1
+      end
+    end
+    self.completeness = (not_blank * 100) / total
+  end
   
   attr_readonly :user_id
 
@@ -200,10 +213,10 @@ class Profile < ActiveRecord::Base
 
     # check phone
     unless phone.blank?
-      if !/\d+/.match(phone)
-        errors.add_to_base("电话只能是数字")
+      if !/\d+(-(\d+))*/.match(phone)
+        errors.add_to_base("电话只能是数字或-")
         return
-      elsif phone.length < 8 or phone.length > 15
+      elsif phone.length < 7 or phone.length > 15 
         errors.add_to_base("电话长度不对")
         return
       end
@@ -212,12 +225,12 @@ class Profile < ActiveRecord::Base
     # check website
     unless website.blank?
       # TODO: 这个regular expression貌似不够强大，不能把adsfadsf视为非法的url
-      unless website =~ /^((https?:\/\/)?)([a-zA-Z0-9_-])((\.)([a-zA-Z0-9_-])+)+(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/
+      unless website =~ /^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/
         errors.add_to_base("非法的url")
         return
       end 
     end
-
+  
   end
 
 end

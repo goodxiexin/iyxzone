@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
 
-  has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id', :dependent => :destroy
+  has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id'
 
   belongs_to :poster, :class_name => 'User'
 
@@ -18,7 +18,7 @@ class Event < ActiveRecord::Base
 	
 	named_scope :recent, :conditions => ["end_time > ?", Time.now], :order => 'start_time DESC'
 
-  has_many :participations, :dependent => :destroy
+  has_many :participations #, :dependent => :delete_all, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
 
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
 
@@ -50,7 +50,7 @@ class Event < ActiveRecord::Base
 
     event.has_many :confirmed_characters, :through => :confirmed_participations
 
-    event.has_many :maybe_characters, :through => :maybe_participations
+      event.has_many :maybe_characters, :through => :maybe_participations
 
     event.has_many :characters, :through => :participations, :conditions => "participations.status = 3 or participations.status = 4"
 
@@ -158,17 +158,6 @@ class Event < ActiveRecord::Base
     end
   end
 
-  def recently_deleted?
-    @recently_deleted
-  end
-
-  def recently_deleted= val
-    @recently_deleted = val
-  end
-
-  class CantDeleteExpired < StandardError
-  end 
-
   validates_presence_of :poster_id, :message => "不能为空", :on => :create
 
   validates_presence_of :title, :message => "不能为空"
@@ -197,8 +186,16 @@ protected
 
   def time_is_valid
     return if start_time.blank? or end_time.blank?
-    errors.add(:start_time, "不能比现在早") if start_time <= Time.now
-    errors.add(:end_time, "不能比开始时间早") if end_time <= start_time
+
+    if self.new_record?
+      # 创建的时候开始时间不能比现在早
+      errors.add(:start_time, "不能比现在早") if start_time <= Time.now
+      errors.add(:end_time, "不能比开始时间早") if end_time <= start_time
+    else
+      # 更新的时候要求活动还没过期，就是结束时间还没到
+      errors.add(:end_time, "不能比现在早") if end_time <= Time.now
+      errors.add(:end_time, "不能比开始时间早") if end_time <= start_time
+    end      
   end
 
   def guild_is_valid

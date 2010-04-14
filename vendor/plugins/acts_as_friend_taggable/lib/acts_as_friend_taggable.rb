@@ -8,7 +8,7 @@ module FriendTaggable
 
     def acts_as_friend_taggable opts={}
       
-      has_many :tags, :class_name => 'FriendTag', :as => 'taggable', :dependent => :destroy
+      has_many :tags, :class_name => 'FriendTag', :as => 'taggable', :dependent => :delete_all
 
       has_many :relative_users, :through => :tags, :source => :tagged_user
 

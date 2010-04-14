@@ -25,8 +25,25 @@ class PollObserver < ActiveRecord::Observer
     end
   end
   
-  def after_destroy poll
+  def before_destroy poll
+    # decrement poster's polls_count
     poll.poster.raw_decrement :polls_count
+
+    # decrement voters' participated_polls_count
+    (poll.voters - [poll.poster]).each do |voter|
+      voter.raw_decrement :participated_polls_count
+    end
+
+    # delete all votes
+    Vote.delete_all(:poll_id => poll.id)
+
+    # decrement invitees' poll_invitations_count
+    poll.invitees.each do |invitee|
+      invitee.raw_decrement :poll_invitations_count
+    end
+
+    # delete all invitations
+    PollInvitation.delete_all(:poll_id => poll.id) 
   end
 
 end

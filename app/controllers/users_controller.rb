@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
 
+  before_filter :logout_required
   #before_filter :allow_only_admin_invitation
 
   def new

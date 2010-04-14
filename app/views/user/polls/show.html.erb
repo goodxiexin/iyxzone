@@ -23,10 +23,10 @@
       <div class="tab tab01">
         <div class="right"><%= link_to "新投票", new_poll_url %></a></div>
         <ul>
-          <li><span><%= link_to "热门投票", hot_polls_url(:uid => @user.id) %></span></li>
+          <li><span><%= link_to "热门投票", hot_polls_url %></span></li>
           <li class='hover'><span><%= link_to "#{get_subject @user}的投票", polls_url(:uid => @user.id) %></span></li>
           <% if @user == current_user %>
-          <li><span><%= link_to "朋友的投票", friends_polls_url(:uid => @user.id) %></span></li>
+          <li><span><%= link_to "朋友的投票", friends_polls_url %></span></li>
 					<% end %>
         </ul>
       </div>
@@ -58,11 +58,11 @@
           <table class="vote-header-table" cellpadding="0">
             <tr>
               <td class="vote-content" align='center'>
-                <h5><%= @poll.name %> 
+                <h5><%= h @poll.name %> 
                   <span>（限选<%= @poll.max_multiple %>项）<span><%= time_ago_in_chinese @poll.created_at %></span></span>
                 </h5>
 								<p>关于<%= @poll.game.name%></p>
-                <p><%= simple_format @poll.description %></p>
+                <p><%= simple_format h @poll.description %></p>
               </td>
             </tr>
           </table>
@@ -70,7 +70,7 @@
           <table class="vote-status-table" cellpadding="0">
             <% @poll.answers.each_with_index do |answer, i| %>
             <tr>
-              <td class="title"><%= answer.description %>：</td>
+              <td class="title"><%= h answer.description %>：</td>
               <%= generate_percentage_bar answer, @poll %>
               <td class="cb">
                 <% if !@poll.past and !@vote and @poll.is_votable_by? current_user %>
@@ -98,20 +98,18 @@
         <% end %>
         <div class='vote-detail gray'>
           <h3 class='space'>投票选项说明：</h3>
-          <% if @poll.past %>
-            <p class='jl-cutline' id='poll_explanation'><%= @poll.explanation %></p>
-          <% elsif @vote %>
-            <p class='jl-cutline' id='poll_explanation'><%= @poll.explanation %></p>
+          <% if @poll.past or @vote %>
+            <%= simple_format h(@poll.explanation), :class => 'jl-cutline', :id => 'poll_explanation' %>
           <% else %>
             <p class='jl-cutline'>投票后才能看</p>
           <% end %>
           <h3 class='space'>投票情况</h3>
 					<ul class='jl-cutline'>
           <% if @vote %>
-            <li class='now'><%= profile_link current_user %> 投给了 <%= @vote.answers.map{|a| "\"#{truncate a.description, :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
+            <li class='now'>你 投给了 <%= @vote.answers.map{|a| "\"#{truncate h(a.description), :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
           <% end %>
           <% @vote_feeds.each do |v| %>
-            <li class='now'><%= profile_link v.voter %> 投给了 <%= v.answers.map{|a| "\"#{truncate a.description, :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
+            <li class='now'><%= profile_link v.voter %> 投给了 <%= v.answers.map{|a| "\"#{truncate h(a.description), :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
           <% end %>
 					</ul>
         </div>

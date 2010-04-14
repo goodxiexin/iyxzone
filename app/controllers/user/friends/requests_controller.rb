@@ -2,6 +2,20 @@ class User::Friends::RequestsController < UserBaseController
 
 	def new
 	  @recipient = User.find(params[:friend_id])
+
+    if @recipient == current_user
+      render :text => "<p class='z-h s_clear'><strong class='left'>提示</strong><a onclick='facebox.close();' class='icon2-close right'></a></p><div class='z-con'><p>不能发送好友请求给自己</p></div>"
+      return
+    end
+      
+    @friendship = current_user.all_friendships.find_by_friend_id(@recipient.id)
+    if @friendship.blank?
+      render :action => 'new'
+    elsif @friendship.is_request?
+      render :text => "<p class='z-h s_clear'><strong class='left'>提示</strong><a onclick='facebox.close();' class='icon2-close right'></a></p><div class='z-con'><p>你已经发送好友请求了</p></div>"
+    elsif @friendship.is_friend?
+      render :text => "<p class='z-h s_clear'><strong class='left'>提示</strong><a onclick='facebox.close();' class='icon2-close right'></a></p><div class='z-con'><p>你们已经是好友了</p></div>"
+    end
   end
 
   def create
@@ -12,7 +26,7 @@ class User::Friends::RequestsController < UserBaseController
       end
     else
       render :update do |page|
-        page << "error('#{@request.errors.on(:friend_id)}');"
+        page << "error('发生错误');"
       end
     end  
   end
@@ -26,7 +40,7 @@ class User::Friends::RequestsController < UserBaseController
   end
 
 	def accept
-		if @request.reverse.update_attributes(:status => 1) and @request.accept
+		if @request.accept
 			render :update do |page|
         page << "$('friend_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>添加好友成功！</strong>';"
         page << "setTimeout(\"new Effect.Fade('friend_request_#{@request.id}')\", 2000);"

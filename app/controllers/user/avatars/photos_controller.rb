@@ -48,7 +48,7 @@ class User::Avatars::PhotosController < UserBaseController
           if params[:at] == 'set_cover'
             page.redirect_to avatar_album_url(@album)
           elsif params[:at] == 'photo'
-					  page << "$('avatar_notation_#{@photo.id}').update('#{@photo.notation.gsub(/\n/, '<br/>')}');"
+            page.redirect_to avatar_url(@photo)
           end
 				end }
 			end

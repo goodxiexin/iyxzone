@@ -51,7 +51,7 @@
               <div class="friend-list-header">
 							  <div class="right">
 								  <div class="textfield">
-									  <%= text_field_tag 'search', "搜索您的好友", :onfocus => "this.clear()" %>
+									  <%= text_field_tag 'search', "搜索您的好友", :onfocus => "$(this).clear()" %>
 									  <%= observe_field :search,
 										  							  :complete  => "facebox.watchClickEvents();",
 											  						  :update    => "friends",
@@ -64,7 +64,7 @@
 							  所有好友(共<%= current_user.friends_count %>个)
               </div>
               <div class="friend-list-body s_clear" id='friends'>
-						    <%= render :partial => 'friends', :object => @friends %>
+						    <%= render :partial => 'friends', :locals => {:friends => @friends, :remote => nil} %>
 						  </div>
             </div>
           </div>

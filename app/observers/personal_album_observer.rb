@@ -19,7 +19,7 @@ class PersonalAlbumObserver < ActiveRecord::Observer
     album.poster.raw_increment "albums_count#{album.privilege}"
   end
 
-  def after_destroy album
+  def before_destroy album
     album.poster.raw_decrement "albums_count#{album.privilege}"
   end
 

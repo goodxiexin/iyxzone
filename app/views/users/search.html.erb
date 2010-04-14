@@ -10,7 +10,7 @@
           <% form_tag search_users_url, :class => "formcontent", :id => 'normal_form' do %>
             <div class="rows s_clear">
               <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'user[key]', '用户名字', :onclick => "this.clear();" %></div>
+                <div class="textfield"><%= text_field_tag 'user[key]', '用户名字', :onclick => "$(this).clear();" %></div>
               </div>
               <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
               <div class='link'><%= link_to_function "找游戏角色", "user_searcher.show_character_form();" %></div>
@@ -20,7 +20,7 @@
           <% form_tag search_users_url, :class => "formcontent", :id => 'character_form', :style => "display:none" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'character[key]', '角色名字', :onclick => "this.clear();" %></div>
+                <div class="textfield"><%= text_field_tag 'character[key]', '角色名字', :onclick => "$(this).clear();" %></div>
               </div>
               <div class="fldbtn"><span class="button"><span><button type="submit">查找</button></span></span></div>
               <div class='link'><%= link_to_function "找用户", "user_searcher.show_normal_form();" %></div>
@@ -31,7 +31,7 @@
             <div class="rows s_clear">
               <div class="fldvalue">
                 <div class="fldid"><%= label_tag '名字: ' %></div>
-                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'comrade[key]', params[:key], :onclick => "this.clear();" %></div></div>
+                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'comrade[key]', params[:key], :onclick => "$(this).clear();" %></div></div>
               </div>
             </div>
             <div class="rows s_clear">

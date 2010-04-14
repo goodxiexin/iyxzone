@@ -13,6 +13,9 @@ class User::SharingsController < UserBaseController
       if @shareable.shared_by? current_user
         render :action => 'already_shared'
         return
+      elsif !@shareable.is_shareable_by? current_user
+        render :action => 'privilege_denied'
+        return
       else
         @title = @shareable.default_share_title
       end
@@ -104,11 +107,9 @@ protected
     if resp.is_a? Net::HTTPSuccess
       body =~ /<title>(.*?)<\/title>/
       title = $1
-      logger.error "title: #{title}" 
       content_type = resp['Content-Type']
       content_type =~ /charset=(.*)/
       charset = $1 || 'gb2312'
-      logger.error "charset: #{charset}"
       Iconv.iconv('utf8', charset, title)
     else
       @my_url

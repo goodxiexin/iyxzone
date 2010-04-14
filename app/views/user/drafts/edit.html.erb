@@ -57,21 +57,6 @@
   </div></div>
 </div></div></div></div>
 
-<% tagged_user_ids = '[' + @blog.tags.map(&:tagged_user_id).join(',') + ']' %>
-<% tag_ids = '[' + @blog.tags.map(&:id).join(',') + ']' %>
-<% user_ids = '[' + @blog.relative_users.map{|u| "'#{u.login}'"}.join(',') + ']' %>
 <% onload_javascript_tag do %>
-  nicEditors.albums = <%= current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json %>;
-  Iyxzone.Blog.Builder.editor = new nicEditor().panelInstance('blog_content'); 
-  Iyxzone.Blog.Builder.tagBuilder = new Iyxzone.Friend.Tagger(5, <%= tagged_user_ids %>, <%= tag_ids %>, <%= user_ids %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', '<%= form_authenticity_token %>');
-<% end %>
-
-<% onload_javascript_tag do %>
-  window.onbeforeunload = function(){ 
-    if(Iyxzone.Blog.Builder.saved){
-      return null;
-    }else{
-      return "你还没保存，你确定要离开?";
-    }
-  }; 
+  Iyxzone.Blog.Builder.init('blog_content', '<%= form_authenticity_token %>', <%= @album_infos %>, 10, <%= @tag_infos %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
 <% end %>

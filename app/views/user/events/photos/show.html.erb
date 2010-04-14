@@ -15,7 +15,7 @@
     <div class="friend-head space s_clear">
       <span class="left"><%= album_cover @event.album, :class => "imgbox01", :size => "medium", :width => 50, :height => 50 %></span>
       <p class="left">
-        <strong><%= @event.title%>活动照片</strong><br/>
+        <strong><%= h @event.title%>活动照片</strong><br/>
         <%= link_to '活动主页', event_url(@event) %>
       </p>
     </div>
@@ -29,7 +29,7 @@
         <ul>
           <% subject = get_subject @user %>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
-          <li class='hover'><span><%= link_to "#{@event.title}的相册", event_album_url(@album, :format => 'html') %></span></li>
+          <li class='hover'><span><%= link_to "#{h @event.title}的相册", event_album_url(@album, :format => 'html') %></span></li>
         </ul>
       </div>
       <div class="pic-box">
@@ -57,7 +57,7 @@
 										<span class="photo-op-share" ></span>
 										<%= facebox_link "分享", new_sharing_url(:url => event_photo_url(@photo)), :width => 450 %> |
 										<span class="photo-op-praise" ></span>
-										<%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @photo.class.base_class.to_s, "dig[diggable_id]" => @photo), :html => {:id=> "digging_#{@photo.class.to_s.underscore}_#{@photo.id}", :class => "red"}%>(已经被<span id="dig_<%=@photo.class.to_s.underscore%>_<%=@photo.id%>" class='gray'><%= @photo.digs_count %></span>人赞过)
+										<%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @photo.class.base_class.to_s, "dig[diggable_id]" => @photo), :html => {:id=> "digging_#{@photo.class.to_s.underscore}_#{@photo.id}"}%>(已经被<span id="dig_<%=@photo.class.to_s.underscore%>_<%=@photo.id%>" class='gray'><%= @photo.digs_count %></span>人赞过)
 									</div>
                   <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
 									<div class="pic-desc s_clear">
@@ -65,7 +65,7 @@
 										<% if @event.poster == current_user %>
 											<%= in_place_text_area @photo, :notation, '点击增加照片描述', :param_name => 'photo[notation]' %>
 										<% else %>
-											<%= simple_format @photo.notation %>
+											<%= simple_format h @photo.notation %>
 										<% end %>
 										</h4>
 										<ul class="mark-list s_clear" id='photo_tags'>
@@ -91,7 +91,7 @@
   </div></div>
 </div></div></div></div>
 
-<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user} %>
+<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @event.participants - [current_user]} %>
 
 <% unless @reply_to.blank? %>
 <%= onload_javascript_tag "Iyxzone.Comment.set('event_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>

@@ -49,13 +49,13 @@
         <td>
           <div class="textfield" id='new_gear'><input value="点击添加新的装备名字" onclick="Iyxzone.Event.Summary.Gear.newGear()" /></div>
           <div id='new_gear_name' style="display:none">
-            <div class='textfield'><%= text_field_tag 'gear[name]', '', :onclick => "this.clear()" %></div>
+            <div class='textfield'><%= text_field_tag 'gear[name]', '', :onclick => "$(this).clear()" %></div>
           </div>
         </td>
         <td></td>
         <td>
           <div id='new_gear_cost' style='display:none'>
-            <div class='textfield' style="width: 60px; margin: 0 auto;"><%= text_field_tag 'gear[cost]', '', :onclick => "this.clear()" %></div>
+            <div class='textfield' style="width: 60px; margin: 0 auto;"><%= text_field_tag 'gear[cost]', '', :onclick => "$(this).clear()" %></div>
           </div>
         </td>
         <td></td>
