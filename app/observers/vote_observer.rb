@@ -22,4 +22,13 @@ class VoteObserver < ActiveRecord::Observer
     vote.deliver_feeds :recipients => recipients
   end
 
+  # 这个可能在某个用户被删除后触发
+  def after_destroy vote
+    vote.answers.each do |answer|
+      answer.raw_decrement :votes_count
+    end
+    vote.poll.raw_decrement :votes_count, vote.answers.count
+    vote.poll.raw_decrement :voters_count 
+  end
+
 end

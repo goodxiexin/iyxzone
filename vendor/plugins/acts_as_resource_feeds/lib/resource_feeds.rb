@@ -9,7 +9,7 @@ module ResourceFeeds
 
     def acts_as_feed_recipient opts={}
     
-      has_many :feed_deliveries, :as => 'recipient', :dependent => :destroy
+      has_many :feed_deliveries, :as => 'recipient', :dependent => :delete_all
 
       cattr_accessor :feed_recipient_opts
 

@@ -41,6 +41,7 @@ Object.extend(Iyxzone.Friend.Suggestor, {
         var temp_parent = new Element('div');
         temp_parent.update(transport.responseText);
         var li = temp_parent.childElements()[0];
+        li.setStyle({'opacity': 0});
         Element.replace(card, li);
         new Effect.Opacity(li, { from: 0, to: 1 })
       }.bind(this)
@@ -76,6 +77,7 @@ Object.extend(Iyxzone.Comrade.Suggestor, {
         var temp_parent = new Element('div');
         temp_parent.update( transport.responseText);
         var li = temp_parent.childElements()[0];
+        li.setStyle({'opacity': 0});
         Element.replace(card, li);
         new Effect.Opacity(li, { from: 0, to: 1 })
       }.bind(this)
