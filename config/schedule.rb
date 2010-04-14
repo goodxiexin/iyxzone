@@ -48,4 +48,9 @@ end
 
 every :thursday, :at => '2:00am' do
   rake "blogs:clear_orphan_blog_images"
+end
+
+every :thursday, :at => '5:00am' do
+  rake "suggestions:create_friend_suggestions"
+  rake "suggestions:create_comrade_suggestions"
 end 

@@ -20,7 +20,7 @@ namespace :suggestions do
     start_time = Time.now
     User.all.each do |user|
       user.servers.each do |server|
-        if user.comrade_suggestions(server).count < 25
+        if user.comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id}).count < 25
           user.create_comrade_suggestions server
           puts "#{user.id} - #{user.login}: generate #{user.comrade_suggestions(server).count} suggestions"
         end

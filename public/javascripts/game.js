@@ -16,17 +16,14 @@ Iyxzone.Game = {
   Feeder: {},
 
   // 相当于一个factory方法，返回一个 pinyin selector， 这样避免在每个pinyin selector里保存游戏信息，浪费
-  initPinyinSelector: function(game, area, server, race, profession, prompt, initValue, options){
+  initPinyinSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options){
     if(Iyxzone.Game.infos == null || Iyxzone.Game.pinyins == null){
       alert('错误');
       return;
     }
 
     $(game).innerHTML = '';
-
-    if(prompt)
-//      $(game).innerHTML = '<option value="">---</option>';
-      $(game).update( '<option value="">---</option>');
+    $(game).update( '<option value="">---</option>');
 
     Iyxzone.Game.infos.each(function(info){
       Element.insert(game, {bottom: '<option value=' + info.game.id + '>' + info.game.name + '</option>'});
@@ -34,7 +31,7 @@ Iyxzone.Game = {
     
     $(game).value = '';
  
-    return new Iyxzone.Game.PinyinSelector(game, area, server, race, profession, initValue, options);
+    return new Iyxzone.Game.PinyinSelector(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options);
   }
 };
 
@@ -42,14 +39,20 @@ Iyxzone.Game.Selector = Class.create({
 
   details: new Hash(),
 
-  initialize: function(gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, gameDetails, options){
+  initialize: function(gameSelectorID, gameInfoDiv, areaSelectorID, areaInfoDiv, serverSelectID, serverInfoDiv, raceSelectorID, raceInfoDiv, professionSelectorID, professionInfoDiv, gameDetails, options){
     this.gameSelectorID = gameSelectorID;
+    this.gameInfoDiv = gameInfoDiv;
     this.areaSelectorID = areaSelectorID;
+    this.areaInfoDiv = areaInfoDiv;
     this.serverSelectID = serverSelectID;
+    this.serverInfoDiv = serverInfoDiv;
     this.raceSelectorID = raceSelectorID;
+    this.raceInfoDiv = raceInfoDiv;
     this.professionSelectorID = professionSelectorID;
+    this.professionInfoDiv = professionInfoDiv;
     this.details = gameDetails;
- 
+
+    // 钩子函数 
     this.options = Object.extend({
       onGameChange: Prototype.emptyFunction,
       onAreaChange: Prototype.emptyFunction,
@@ -79,13 +82,13 @@ Iyxzone.Game.Selector = Class.create({
   },
 
   resetGameInfo: function(){
+    if($(this.gameSelectorID))
       $(this.gameSelectorID).value = '';
   },
 
   resetAreaInfo: function(){
     if($(this.areaSelectorID))
-//      $(this.areaSelectorID).innerHTML = '<option value="">---</option>';
-      $(this.areaSelectorID).update( '<option value="">---</option>');
+      $(this.areaSelectorID).update('<option value="">---</option>');
   },
 
   setupAreaInfo: function(areas){
@@ -93,13 +96,11 @@ Iyxzone.Game.Selector = Class.create({
     for(var i=0;i<areas.length;i++){
       html += "<option value='" + areas[i].id + "'>" + areas[i].name + "</option>";
     }
-//    $(this.areaSelectorID).innerHTML = html;
-    $(this.areaSelectorID).update( html);
+    $(this.areaSelectorID).update(html);
   },
 
   resetServerInfo: function(){
-//    $(this.serverSelectID).innerHTML = '<option value="">---</option>';
-    $(this.serverSelectID).update( '<option value="">---</option>');
+    $(this.serverSelectID).update('<option value="">---</option>');
   },
 
   setupServerInfo: function(servers){
@@ -107,13 +108,11 @@ Iyxzone.Game.Selector = Class.create({
     for(var i=0;i<servers.length;i++){
       html += "<option value='" + servers[i].id + "'>" + servers[i].name + "</option>";
     }
-//    $(this.serverSelectID).innerHTML = html;
     $(this.serverSelectID).update( html);
   },
 
   resetProfessionInfo: function(){
-//      $(this.professionSelectorID).innerHTML = '<option value="">---</option>';
-      $(this.professionSelectorID).update( '<option value="">---</option>');
+    $(this.professionSelectorID).update( '<option value="">---</option>');
   },
 
   setupProfessionInfo: function(professions){
@@ -121,12 +120,10 @@ Iyxzone.Game.Selector = Class.create({
     for(var i=0;i<professions.length;i++){
       html += "<option value='" + professions[i].id + "'>" + professions[i].name + "</option>";
     }
-//    $(this.professionSelectorID).innerHTML = html;
     $(this.professionSelectorID).update( html);
   },
 
   resetRaceInfo: function(){
-//    $(this.raceSelectorID).innerHTML = '<option value="">---</option>';
     $(this.raceSelectorID).update( '<option value="">---</option>');
   },
 
@@ -135,7 +132,6 @@ Iyxzone.Game.Selector = Class.create({
     for(var i=0;i<races.length;i++){
       html += "<option value='" + races[i].id + "'>" + races[i].name + "</option>";
     }
-//    $(this.raceSelectorID).innerHTML = html;
     $(this.raceSelectorID).update( html);
   },
 
@@ -146,8 +142,20 @@ Iyxzone.Game.Selector = Class.create({
     }
     new Ajax.Request('/game_details/' + $(this.gameSelectorID).value + '.json', {
       method: 'get',
+      onLoading: function(){
+        if(this.gameInfoDiv){
+          $(this.gameInfoDiv).update('正在加载游戏信息...');
+        }
+        Iyxzone.changeCursor('wait');
+      }.bind(this),
+      onComplete: function(){
+        if(this.gameInfoDiv)
+          $(this.gameInfoDiv).update('');
+        Iyxzone.changeCursor('default');
+      }.bind(this),      
       onSuccess: function(transport){
         this.details = transport.responseText.evalJSON().game;
+
         // reset all details if exists
         if(this.areaSelectorID)
           this.resetAreaInfo();
@@ -159,16 +167,25 @@ Iyxzone.Game.Selector = Class.create({
           this.resetProfessionInfo();
     
         // set all informations
-        if(!this.details.no_areas){
-          this.setupAreaInfo(this.details.areas);
+        if(this.details.no_areas){
+          if(this.areaInfoDiv)
+            $(this.areaInfoDiv).update('该游戏没有服务区');
+          if(this.details.no_servers){
+            if(this.serverInfoDiv)
+              $(this.serverInfoDiv).update('该游戏我们还没统计服务器');
+          }else{
+            this.setupServerInfo(this.details.servers);
+          }
         }else{
-          this.setupServerInfo(this.details.servers);
+          this.setupAreaInfo(this.details.areas);
         }
+        
         if(!this.details.no_professions && this.professionSelectorID)
           this.setupProfessionInfo(this.details.professions);
         if(!this.details.no_races && this.raceSelectorID)
           this.setupRaceInfo(this.details.races);
-        
+
+        // invoke game change hook        
         this.options.onGameChange($(this.gameSelectorID).value);
       }.bind(this)
     });
@@ -182,9 +199,22 @@ Iyxzone.Game.Selector = Class.create({
     }
     new Ajax.Request('/area_details/' + $(this.areaSelectorID).value + '.json', {
       method: 'get',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        if(this.areaInfoDiv){
+          $(this.areaInfoDiv).update('正在加载服务器信息...');
+        }
+      }.bind(this),
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+        if(this.areaInfoDiv){
+          $(this.areaInfoDiv).update('');
+        }
+      }.bind(this),
       onSuccess: function(transport){
         var areaInfo = transport.responseText.evalJSON().game_area;
 
+        //这里假设每个area下面都有server
         if(this.serverSelectID)
           this.setupServerInfo(areaInfo.servers);
 
@@ -235,15 +265,22 @@ Iyxzone.Game.Selector = Class.create({
 
 Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
 
-  initialize: function($super, gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, gameDetails, options){
+  initialize: function($super, gameSelectorID, gameInfoDiv, areaSelectorID, areaInfoDiv, serverSelectID, serverInfoDiv, raceSelectorID, raceInfoDiv, professionSelectorID, professionInfoDiv, gameDetails, options){
     if(Iyxzone.Game.pinyins == null){
       return;
     }
+
+    $super(gameSelectorID, gameInfoDiv, areaSelectorID, areaInfoDiv, serverSelectID, serverInfoDiv, raceSelectorID, raceInfoDiv, professionSelectorID, professionInfoDiv, gameDetails, options);
+
     this.mappings = new Hash();
     this.keyPressed = '';
     this.lastPressedAt = null;
     this.currentGameID = null;
     
+    if(this.gameInfoDiv){
+      $(this.gameInfoDiv).update('可以输入游戏的拼音来快速定位');
+    }
+
     // save start position of each letter: a-z A-Z 
     var i=0;
     for(var i=0;i<26;i++){
@@ -255,7 +292,6 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
       }
     }
 
-    $super(gameSelectorID, areaSelectorID, serverSelectID, raceSelectorID, professionSelectorID, gameDetails, options);
   },
 
   setEvents: function($super){
@@ -365,7 +401,6 @@ Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Base, {
 
   onComplete: function(request) {
     if(request.responseText.indexOf('li') < 0){
-//      this.update.innerHTML = this.options.emptyText;
       this.update.update( this.options.emptyText);
     }else{
       this.updateChoices(request.responseText);

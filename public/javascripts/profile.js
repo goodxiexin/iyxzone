@@ -253,13 +253,19 @@ Object.extend(Iyxzone.Profile.Editor, {
 
   addGameSelector: function(characterID, gameDetails){
     var prefix = 'profile_existing_characters_' + characterID + '_';
+    var dprefix = 'existing_characters_' + characterID + '_';
 
     var selector = new Iyxzone.Game.PinyinSelector(
       prefix + 'game_id',
+      dprefix + 'game_id_error',
       prefix + 'area_id',
+      dprefix + 'area_id_error',
       prefix + 'server_id',
+      dprefix + 'server_id_error',
       prefix + 'race_id',
+      dprefix + 'race_id_error',
       prefix + 'profession_id',
+      dprefix + 'profession_id_error',
       gameDetails,
       {}
     );
@@ -307,29 +313,33 @@ Object.extend(Iyxzone.Profile.Editor, {
     var id = this.newCharacterID;
     var div = new Element('div', {id: 'new_character_' + id});
   
-    var html = '<div class="rows s_clear"><div class="fldid"><label>名字：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterNameValid(' + id + ', 1)" name="profile[new_characters][' + id + '][name]" id="profile_new_characters_' + id + '_name"/></div></div><span id="new_character_' + id + '_name_error" class="red"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>等级：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterLevelValid(' + id + ', 1)" name="profile[new_characters][' + id + '][level]" id="profile_new_characters_' + id + '_level"/></div></div><span id="new_character_' + id + '_level_error" class="red"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_game_id_error" class="red"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>服务区：</label></div><div class="fldvalue"><div><select name="profile[new_characters]['+ id + '][area_id]" id="profile_new_characters_' + id + '_area_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_area_id_error" class="red"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>服务器：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][server_id]" id="profile_new_characters_' + id + '_server_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_server_id_error" class="red"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>种族：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][race_id]" id="profile_new_characters_' + id + '_race_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_race_id_error" class="red"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>职业：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][profession_id]" id="profile_new_characters_' + id + '_profession_id"><option value="">---</option></select></div></div><span id="new_character_' + id + '_profession_id_error" class="red"></span></div>';
+    var html = '<div class="rows s_clear"><div class="fldid"><label>名字：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterNameValid(' + id + ', 1)" name="profile[new_characters][' + id + '][name]" id="profile_new_characters_' + id + '_name"/></div></div><span id="new_characters_' + id + '_name_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>等级：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterLevelValid(' + id + ', 1)" name="profile[new_characters][' + id + '][level]" id="profile_new_characters_' + id + '_level"/></div></div><span id="new_characters_' + id + '_level_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_game_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>服务区：</label></div><div class="fldvalue"><div><select name="profile[new_characters]['+ id + '][area_id]" id="profile_new_characters_' + id + '_area_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_area_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>服务器：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][server_id]" id="profile_new_characters_' + id + '_server_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_server_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>种族：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][race_id]" id="profile_new_characters_' + id + '_race_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_race_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>职业：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][profession_id]" id="profile_new_characters_' + id + '_profession_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_profession_id_error" class="red"></span></div>';
     html += '<p class="foot s_clear"><a onclick="Iyxzone.Profile.Editor.removeCharacter(' + id + ', 1, this);; return false;" href="javascript: void(0)" class="right red">删除角色</a></p>';
 
-//    div.innerHTML = html;
     div.update( html);
     $('user_characters').appendChild(div);
     this.newCharacterID++;
     
     // set game selector
     var prefix = 'profile_new_characters_' + id + '_';
+    var dprefix = 'new_characters_' + id + '_';
     var selector = Iyxzone.Game.initPinyinSelector(
       prefix + 'game_id',
+      dprefix + 'game_id_error',
       prefix + 'area_id',
+      dprefix + 'area_id_error',
       prefix + 'server_id',
+      dprefix + 'server_id_error',
       prefix + 'race_id',
+      dprefix + 'race_id_error',
       prefix + 'profession_id',
-      true, //start with ---
+      dprefix + 'profession_id_error',
       null,
       {});
     this.newGameSelectors.set("new_" + id, selector);
@@ -342,7 +352,7 @@ Object.extend(Iyxzone.Profile.Editor, {
       prefix = 'existing';
 
     var name = $('profile_' + prefix + '_characters_' + characterID + '_name').value;
-    var div = prefix + '_character_' + characterID + '_name_error';
+    var div = prefix + '_characters_' + characterID + '_name_error';
     
     this.clearError(div);
 
@@ -361,7 +371,7 @@ Object.extend(Iyxzone.Profile.Editor, {
       prefix = 'existing';
     
     var level = $('profile_' + prefix + '_characters_' + characterID + '_level').value;
-    var div = prefix + '_character_' + characterID + '_level_error';
+    var div = prefix + '_characters_' + characterID + '_level_error';
     
     this.clearError(div);
 
@@ -387,15 +397,15 @@ Object.extend(Iyxzone.Profile.Editor, {
       prefix = 'existing';
    
     var gameID = $('profile_' + prefix + '_characters_' + characterID + '_game_id').value;
-    var gameDiv = prefix + '_character_' + characterID + '_game_id_error';
+    var gameDiv = prefix + '_characters_' + characterID + '_game_id_error';
     var areaID = $('profile_' + prefix + '_characters_' + characterID + '_area_id').value;
-    var areaDiv = prefix + '_character_' + characterID + '_area_id_error';
+    var areaDiv = prefix + '_characters_' + characterID + '_area_id_error';
     var serverID = $('profile_' + prefix + '_characters_' + characterID + '_server_id').value;
-    var serverDiv = prefix + '_character_' + characterID + '_server_id_error';
+    var serverDiv = prefix + '_characters_' + characterID + '_server_id_error';
     var raceID = $('profile_' + prefix + '_characters_' + characterID + '_race_id').value;
-    var raceDiv = prefix + '_character_' + characterID + '_race_id_error';
+    var raceDiv = prefix + '_characters_' + characterID + '_race_id_error';
     var professionID = $('profile_' + prefix + '_characters_' + characterID + '_profession_id').value;
-    var professionDiv = prefix + '_character_' + characterID + '_profession_id_error';
+    var professionDiv = prefix + '_characters_' + characterID + '_profession_id_error';
     var game = null;
     if(newCharacter)
       game = this.newGameSelectors.get(prefix + '_' + characterID).getDetails();
