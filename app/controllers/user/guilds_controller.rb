@@ -49,7 +49,7 @@ class User::GuildsController < UserBaseController
     guild_params = (params[:guild] || {}).merge({:president_id => current_user.id})
     @guild = Guild.new(guild_params)
     if @guild.save
-      redirect_to new_guild_invitations_url(@guild)
+      redirect_to new_guild_invitation_url(@guild)
     else
       render :action => 'new'
     end
