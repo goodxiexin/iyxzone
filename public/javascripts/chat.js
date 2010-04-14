@@ -132,7 +132,7 @@ Object.extend(Iyxzone.Chat, {
   },
 
   buildChatForm: function(friendID, friendLogin){
-    var div = new Element('div', {"id": 'chat-form-' + friendID, "class": 'im-dialog', "left": '500px', "top": '100px'});
+    var div = new Element('div', {"id": 'chat-form-' + friendID, "class": 'im-dialog', "left": '500px', "top": '100px', "zIndex": 1000});
     div.hide();
     
     var html = '';

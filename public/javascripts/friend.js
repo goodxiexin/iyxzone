@@ -119,7 +119,6 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
   },
 
   showTip: function(){
-//    this.update.innerHTML = this.options.tipText;
     this.update.update( this.options.tipText);
     var comp = this.options.comp;
     
@@ -129,7 +128,8 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
         top: (comp.positionedOffset().top + comp.getHeight()) + 'px',
         width: (comp.getWidth() - 10) + 'px',
         maxHeight: '200px',
-        overflow: 'auto',
+        overflowX: 'hidden',
+        overflowY: 'auto',
         padding: '5px',
         background: 'white',
         border: '1px solid #E7F0E0'
@@ -146,7 +146,6 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
 
   updateChoices: function($super, data){
     if(data.indexOf('ul') < 0){
-//      this.update.innerHTML = data;
       this.update.update( data);
       this.update.show();
     }else{
@@ -161,7 +160,8 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
         top: (comp.positionedOffset().top + comp.getHeight()) + 'px',
         width: (comp.getWidth() - 10) + 'px',
         maxHeight: '200px',
-        overflow: 'auto',
+        overflowX: 'hidden',
+        autoflowY: 'auto',
         padding: '5px',
         background: 'white',
         border: '1px solid #E7F0E0'

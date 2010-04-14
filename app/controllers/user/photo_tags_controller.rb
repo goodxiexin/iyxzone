@@ -16,7 +16,7 @@ class User::PhotoTagsController < UserBaseController
 			render :text => (@tag.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:poster => {:only => [:login, :id]}, :tagged_user => {:only => [:login, :id]}})
 		else
       render :update do |page|
-        page << "alert('#{@tag.errors.on_base}');"
+        page << "error('发生错误，请稍后再试');"
       end
     end
   end

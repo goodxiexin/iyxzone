@@ -289,8 +289,8 @@ var nicEditorConfig = bkClass.extend({
 		'hr' : {name : __('水平线'), command : 'insertHorizontalRule', noActive : true}
 	},
 	iconsPath : '/images/nicEditor/nicEditorIcons.gif',
-	buttonList : ['redo', 'undo', 'bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','image','link','forecolor','bgcolor'],
-	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"emotion":26, "redo": 27, "undo": 28}
+	buttonList : ['undo', 'redo', 'bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','image','link','forecolor','bgcolor'],
+	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"emotion":26, "undo": 27, "redo": 28}
 	
 });
 /* END CONFIG */

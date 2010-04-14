@@ -9,7 +9,7 @@ class User::BlogsController < UserBaseController
     @relationship = @user.relationship_with current_user
     @privilege = get_privilege_cond @relationship
     @count = @user.blogs_count @relationship
-    @blogs = @user.blogs.paginate :page => params[:page], :per_page => 10, :conditions => @privilege
+    @blogs = @user.blogs.paginate :page => params[:page], :per_page => 5, :conditions => @privilege
   end
 
 	def hot

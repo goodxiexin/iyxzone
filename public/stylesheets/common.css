@@ -178,6 +178,10 @@ table.center td{vertical-align:top}
 .icon-up{background-position:0 -832px;}
 .icon-down{background-position:0 -848px;}
 
+.quote-start,.quote-end{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:16px;height:16px; vertical-align:middle;}
+.quote-start{background-position:-108px -72px;margin-right:5px}
+.quote-end{background-position:-124px -73px;margin-left:5px}
+
 .i-avatar{background-position:0 -480px;}
 .i-mail{background-position:0 -496px;}
 .i-hello{background-position:0 -512px;}
@@ -210,7 +214,7 @@ table.center td{vertical-align:top}
 input.gobtn,input.loginbtn,input.registbtn{display:inline-block;border:0;}
 
 /*特殊组件*/
-.selector{width:278px;height:24px;line-height:24px;border:1px #bdd6ad solid;background:#fff;position:relative;/*background:url(../images/skin/tf01.png) no-repeat;*/}
+.selector{width:268px;height:24px;line-height:24px;border:1px #bdd6ad solid;background:#fff;position:relative;/*background:url(../images/skin/tf01.png) no-repeat;*/}
 .selector .dropbox{position:relative;clear:both;}
 .selector input{margin:4px 5px 0;height:16px;color:#7E7F80;border:0;background:none}
 .selector a{float:right;display:block;width:24px;height:24px;background:url(../images/skin/skin2010.png) no-repeat 4px -21px;overflow:hidden}
@@ -218,7 +222,7 @@ input.gobtn,input.loginbtn,input.registbtn{display:inline-block;border:0;}
 .selector02{width:200px;}
 .selector02 a{background:url(../images/skin/skin2010.png) no-repeat 3px 3px;}
 
-.selector .drop-menu{position:absolute;left:-1px;border:1px #699D3F solid;width:278px; z-index:9999;}
+.selector .drop-menu{background:#fff;position:absolute;left:-1px;border:1px #699D3F solid;width:278px; z-index:9999;}
 .selector .drop-menu ul{border:1px #fff solid;}
 .selector .drop-menu li{height:21px;line-height:21px;overflow:hidden;}
 .selector .drop-menu li a{float:none;padding:0 5px;width:266px;height:100%;color:#333;background:#FFF}
@@ -248,9 +252,10 @@ a.button-gray,a.button-gray:hover{font-weight:normal;color:#666}
 .button-gray span{background-position:0 -25px;}
 .button-gray span button,.button-gray span a{font-weight:normal;color:#666}
 
-.attention-btn,.love-btn{display:block;width:58px;height:20px;line-height:21px;padding-right:12px;background:url(../images/skin/skin2010.png) no-repeat;text-align:right;overflow:hidden}
-.attention-btn{background-position:-130px -267px;}
-.love-btn{background-position:-130px -288px;}
+.attention-btn,.love-btn,.share-btn,.concern-btn{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:83px;height:20px;line-height:20px;text-align:center;text-indent:25px;color:#508119}
+.attention-btn{background-position:-117px -267px;}
+.love-btn,.share-btn{background-position:-117px -288px;}
+.concern-btn{background-position:0 -448px}
 
 .icon-active{display:inline-block;width:8px;height:8px;line-height:normal;font-size:1px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -1156px;}
 .icon-active-del{background-position:0 -1182px;}
@@ -520,7 +525,6 @@ a.msg-btn{background-position:-118px -186px}
 .feed-list-box .cmt-box,.feed-img-list .cmt-box{margin-bottom:10px;width:383px;/*float:left\0*/}/*IE8 评论首次切换margin-top失效bug*/
 
 /*通用下拉框*/
-.select-toggle{border:0}
 .selector a.toggle{position:absolute;z-index:1;right:0;display:block;width:24px;height:24px;background:url(../images/skin/skin2010.png) no-repeat 4px -21px;overflow:hidden}
 .drop-wrap{background:#fff;position:absolute;top:100%;left:0;z-index:100;overflow:hidden;display:block;width:100%}
 .drop-wrap iframe{position:absolute;z-index:0;height:300px;width:100%;border:0;}
@@ -565,10 +569,10 @@ a.msg-btn{background-position:-118px -186px}
 .im-tinybar p span{font-weight:400;margin-bottom:8px;display:block}
 .im-toggle .r-t,.im-toggle .r-b,.im-bar .r-b{display:block;height:26px}
 .im-toggle .r-b,.im-bar .r-b{background-position:0 bottom;height:10px}
-.im-bar{position:absolute;z-index:2;width:159px;color:#666}
+.im-bar{position:absolute;z-index:9999999;width:159px;color:#666}
 .im-bar .r-m{background-position:0 -53px;padding:15px 10px}
 	.im-title{line-height:20px}
-		.im-state{background-position:0 -27px;width:30px;height:18px;position:relative}
+		.im-state{background-position:0 -27px;width:30px;height:18px;position:relative;z-index:2}
 		.im-state .selector01 .drop-wrap {width:55px;}
 		.im-state .selector01 dl dd a{padding:0}
 		.im-state .selector01 dd a:hover{background:#f8fef5;color:#25700d;}
@@ -590,6 +594,10 @@ a.msg-btn{background-position:-118px -186px}
 	.im-group dd a{display:block;height:20px;padding:3px;cursor:pointer}
 	.im-group dd a:hover{background:#e4e3e3}
 	.im-expand dt{background-position:-150px -16px}
+	.im-expand dd{position:relative}
+	.im-expand dd .im-info{position:absolute;left:-190px;top:0;width:180px;overflow:hidden;padding:5px;background:#fff;border:1px solid #b6dd8b}
+	.im-expand dd .im-info p{width:100px}
+	.im-expand dd .im-info strong{width:100px;display:inline-block;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 .im-bar .foot{border-top:1px solid #d5e8c8;padding:10px;}
 .im-manage,.im-manage:hover{width:56px;padding-left:23px;height:18px;line-height:18px;display:inline-block;background-position:-25px 0;color:#25700d}
 	
@@ -608,7 +616,7 @@ a.msg-btn{background-position:-118px -186px}
 	.im-dlg-log h2 span{width:16px;height:16px;display:inline-block;background-position:-150px -16px}
 	.im-dlg-log h2 a,.im-dlg-log h2 a:hover{color:#25700d}
 	.im-dlg-log h2 a.show span{background-position:-150px -32px}
-	.im-dlg-log .im-dlg-show{border:1px solid #c4d8b5;background:#f7f7f7;padding:5px}
+	.im-dlg-log .im-dlg-show{border:1px solid #c4d8b5;background:#f7f7f7;padding:5px;height:auto;}
 	
 .cut-side{background:url(../images/skin/page-cutline.gif) repeat-y right}
 
@@ -619,9 +627,10 @@ div.tip{color:#999;padding:10px 25px}
 #errorExplanation .icon-error,#errorExplanation .con{float:left}
 
 /*翻页*/
-.pagination {text-align:center; background:#fff;margin:10px;padding-bottom:10px;clear:both;zoom:1}
-.pagination a, .pagination span{padding:5px; float: left; margin-right:2px}
+.pagination {text-align:center; background:none;margin:10px 0 5px 0;padding:5px 0;clear:both;zoom:1}
+.pagination:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.pagination a, .pagination span{padding:5px; /*float: left;*/ margin-right:2px;height:20px;line-height:20px;font-size:12px;font-family:"宋体",Tahoma}
 .pagination span.disabled {display:none}
 .pagination span.current {font-weight: bold;border-color:#fff;font-weight:bold;color:#25700D}
-.pagination a {text-decoration: none;border:1px #E7F0E0 solid;color:#7E7F80}
+.pagination a {text-decoration: none;border:1px #E7F0E0 solid;color:#7E7F80;background:#fff}
 .pagination a:hover, .pagination a:focus {color:#D63200;}

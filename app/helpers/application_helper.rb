@@ -315,8 +315,7 @@ module ApplicationHelper
 
   def sharing_reason sharing, opts={}
     class_name = opts[:class] || 'con'
-    reason = simple_format h("“" + sharing.reason + "”"), :class => class_name
-    truncate reason, :length => 100, :omission => '...'
+    simple_format "<span class='quote-start'></span>#{h sharing.reason}<span class='quote-end'></span>", :class => class_name
   end
 
 end

@@ -29,7 +29,7 @@ class UsersController < ApplicationController
       end
     else
       render :update do |page|
-        page << "error('#{@user.errors.on_base}');"
+        page << "error('发生错误，稍后再试');"
       end
     end
 	end

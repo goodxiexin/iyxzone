@@ -319,7 +319,7 @@ class User < ActiveRecord::Base
     poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id").map(&:poll_id).uniq
     participated = Poll.find(poll_ids)
     posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = polls.poster_id", :order => 'created_at desc')
-    participated.concat(posted).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
+    (participated + posted - polls).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
   end
 
 	# guilds
