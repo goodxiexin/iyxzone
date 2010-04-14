@@ -8,7 +8,10 @@ class Album < ActiveRecord::Base
 
   acts_as_privileged_resources :owner_field => :poster
 
-  acts_as_shareable :default_title => lambda { |album| album.title }, :path_reg => [/\/personal_albums\/([\d]+)/, /\/event_albums\/([\d]+)/, /\/guild_albums\/([\d]+)/, /\/avatar_albums\/([\d]+)/]
+  acts_as_shareable :path_reg => [/\/personal_albums\/([\d]+)/, /\/event_albums\/([\d]+)/, /\/guild_albums\/([\d]+)/, /\/avatar_albums\/([\d]+)/],
+                    :default_title => lambda {|album| album.title}, 
+                    :create_conditions => lambda {|user, album| album.privilege != 4}
+
 
   acts_as_resource_feeds
 

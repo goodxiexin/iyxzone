@@ -10,7 +10,7 @@
     <div class="item space">
     <% profile.user.characters.each do |c| %>
       <div class="rows s_clear">
-        <div class="fldid"><label><%= c.name %>：</label></div>
+        <div class="fldid"><label><%= h c.name %>：</label></div>
         <div class="fldvalue">
           <span class='red'><%= game_link c.game, :class => 'red' %> , </span>
           <% unless c.game.no_areas %>

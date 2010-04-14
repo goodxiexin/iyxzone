@@ -54,6 +54,7 @@ Rails::Initializer.run do |config|
     :game_server_observer,
     :game_race_observer,
     :game_profession_observer,
+    :game_attention_observer,
     :topic_observer,
     :post_observer,
     :tag_observer,

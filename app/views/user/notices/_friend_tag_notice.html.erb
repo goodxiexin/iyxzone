@@ -1,0 +1,3 @@
+<% producer = notice.producer %>
+<%= render :partial => "user/notices/#{producer.taggable_type.underscore}_tag_notice", :locals => {:notice => notice, :tag => producer, :home_page => home_page } %>
+

@@ -26,8 +26,13 @@ class User::NotificationsController < UserBaseController
   end
 
   def destroy_all
-    Notification.destroy_all(:user_id => current_user.id)
-    redirect_to notifications_url
+    Notification.delete_all(:user_id => current_user.id)
+    current_user.update_attribute(:notifications_count, 0)
+    current_user.update_attribute(:unread_notifications_count, 0)
+    flash[:notice] = '删除成功'
+    render :update do |page|
+      page.redirect_to notifications_url
+    end
   end
 
 protected

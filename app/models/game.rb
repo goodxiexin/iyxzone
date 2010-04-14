@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  
+
   has_many :servers, :class_name => 'GameServer', :dependent => :delete_all
   
   has_many :areas, :class_name => 'GameArea', :dependent => :delete_all
@@ -14,7 +14,7 @@ class Game < ActiveRecord::Base
 
 	has_many :albums, :class_name => 'Album', :order => "uploaded_at DESC", :conditions => ["photos_count != ?", 0]
 
-	has_many :blogs, :order => 'digs_count DESC'
+	has_many :blogs, :order => 'created_at DESC'
 
 	has_many :characters, :class_name => 'GameCharacter'
 

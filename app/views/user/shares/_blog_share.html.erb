@@ -9,12 +9,14 @@
       首次分享人：<%= avatar first_sharer, :with => '27px', :height => '27px' %>
 			<%= profile_link first_sharer %>
     </div>
-    <h3>日志:<%= blog_link blog, :popup => true %></h3>
-    <p class="con"><%= truncate sharing.reason, :length => 100, :omission => '...' %></p>
+    <h3>日志：<%= link_to h(sharing.title), blog_url(blog), :popup => true %></h3>
+    <%= sharing_reason sharing %>
     <div class="feeds">
-      <%= link_to_function "评论(#{sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %> |
-      <%= facebox_link "我也分享", new_sharing_url(:url => blog_url(blog)), :width => 450 %><span>(<%= share.sharings_count %>)</span> | 
-      <%= link_to "更多分享", shares_url(:uid => poster.id) %>
+      <%= link_to_function "评论(#{sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %>
+      <% if !is_mine %>
+        | <%= facebox_link "我也分享", new_sharing_url(:url => blog_url(blog)), :width => 450 %><span>(<%= share.sharings_count %>)</span> 
+        | <%= link_to "更多分享", shares_url(:uid => poster.id) %>
+      <% end %>
     </div>
   </div>
   <div id="sharing_comment_box_<%= sharing.id %>" style="display:none">

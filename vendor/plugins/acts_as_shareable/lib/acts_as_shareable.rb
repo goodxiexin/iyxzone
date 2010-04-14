@@ -46,6 +46,11 @@ module Shareable
       sharing.save
     end
 
+    def is_shareable_by? user
+      proc = self.class.share_opts[:create_conditions] || lambda { true }
+      proc.call user, self 
+    end
+
     def first_sharer
       share.blank? ? nil : share.sharings.find(:first, :order => "created_at ASC").poster
     end

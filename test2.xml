@@ -1,9 +1,0 @@
-<inventory title="OmniCorp Store #45x10^3">
-	text node
-	<a> a </a>
-	text node again
-	<b> b </b>
-	<c> c <cc> text in cc </cc></c>
-	<d/>
-	after d
-</inventory>

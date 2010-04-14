@@ -1,7 +1,5 @@
 class User::Blogs::ImagesController < UserBaseController
   
-    protect_from_forgery :except => [:create]
-
   def create
     @image = BlogImage.new(params[:photo])
     if @image.save

@@ -317,4 +317,10 @@ module ApplicationHelper
 	  "<p>Copyright &copy; 2010-2010 MingZen. All Rights Reserved</p> <p><a href='#'>鸣禅公司 版权所有</a></p>"
 	end
 
+  def sharing_reason sharing, opts={}
+    class_name = opts[:class] || 'con'
+    reason = simple_format h("“" + sharing.reason + "”"), :class => class_name
+    truncate reason, :length => 100, :omission => '...'
+  end
+
 end

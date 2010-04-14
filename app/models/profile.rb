@@ -10,8 +10,6 @@ class Profile < ActiveRecord::Base
 
 	belongs_to :district
 
-  escape_html :sanitize => :about_me
-
   acts_as_viewable :create_conditions => lambda {|user, profile| profile.user != user}
 
   acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, :path_reg => /\/profiles\/([\d]+)/
@@ -128,6 +126,19 @@ class Profile < ActiveRecord::Base
       end
     end
     @del_characters_ids = nil
+  end
+
+  before_save :set_completeness
+
+  def set_completeness
+    total = Profile.columns.count - 1 # except completeness column
+    not_blank = 0
+    Profile.columns.each do |c|
+      if c.name != 'completeness' and !eval("self.#{c.name}").blank?
+        not_blank = not_blank + 1
+      end
+    end
+    self.completeness = (not_blank * 100) / total
   end
   
   attr_readonly :user_id

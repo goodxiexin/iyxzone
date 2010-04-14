@@ -16,6 +16,8 @@ class Notice < ActiveRecord::Base
 			(producer.taggable_id == notice.producer.taggable_id) and (producer.taggable_type == notice.producer.taggable_type)
 		elsif producer_type == 'PhotoTag'
 			(producer.photo_id == notice.producer.photo_id)
+    elsif producer_type == 'Post'
+      (producer.id == notice.producer_id)
 		end
 	end
 

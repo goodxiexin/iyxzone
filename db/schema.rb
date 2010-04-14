@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100408143203) do
+ActiveRecord::Schema.define(:version => 20100413162614) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -21,7 +21,6 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.integer  "cover_id"
     t.string   "title"
     t.text     "description"
-    t.integer  "sharings_count", :default => 0
     t.integer  "comments_count", :default => 0
     t.datetime "uploaded_at"
     t.datetime "created_at"
@@ -55,7 +54,6 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.integer  "game_id"
     t.string   "title",            :limit => 64
     t.text     "content",          :limit => 16777215
-    t.integer  "sharings_count",                       :default => 0
     t.integer  "digs_count",                           :default => 0
     t.integer  "comments_count",                       :default => 0
     t.integer  "tags_count",                           :default => 0
@@ -303,7 +301,6 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.boolean  "no_servers",                 :default => false
     t.boolean  "no_races",                   :default => false
     t.boolean  "no_professions",             :default => false
-    t.integer  "sharings_count",             :default => 0
     t.integer  "areas_count",                :default => 0
     t.integer  "servers_count",              :default => 0
     t.integer  "professions_count",          :default => 0
@@ -380,8 +377,7 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
   add_index "guilds", ["president_id"], :name => "index_guilds_on_president_id"
 
   create_table "links", :force => true do |t|
-    t.string  "url"
-    t.integer "sharings_count", :default => 0
+    t.string "url"
   end
 
   create_table "mails", :force => true do |t|
@@ -428,7 +424,6 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.text     "data"
     t.integer  "comments_count",                  :default => 0
     t.integer  "viewings_count",                  :default => 0
-    t.integer  "sharings_count",                  :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "title",            :limit => 64
@@ -498,7 +493,6 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.string   "type"
     t.integer  "digs_count",     :default => 0
     t.integer  "tags_count",     :default => 0
-    t.integer  "sharings_count", :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "album_id"
     t.integer  "game_id"
@@ -566,7 +560,6 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.text     "summary"
     t.integer  "privilege",      :default => 1
     t.integer  "invitees_count", :default => 0
-    t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "votes_count",    :default => 0
@@ -587,6 +580,7 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.integer  "floor"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "recipient_id"
   end
 
   create_table "profiles", :force => true do |t|
@@ -601,12 +595,10 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.string   "website"
     t.datetime "birthday"
     t.text     "about_me"
+    t.integer  "completeness",   :default => 0
     t.integer  "skin_id",        :default => 1
-    t.integer  "sharings_count", :default => 0
     t.integer  "viewings_count", :default => 0
     t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
@@ -717,7 +709,6 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "viewings_count",   :default => 0
-    t.integer  "sharings_count",   :default => 0
     t.text     "content_abstract"
   end
 
@@ -793,7 +784,6 @@ ActiveRecord::Schema.define(:version => 20100408143203) do
     t.string   "video_url"
     t.string   "embed_html"
     t.string   "thumbnail_url"
-    t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "tags_count",     :default => 0

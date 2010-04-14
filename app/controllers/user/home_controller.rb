@@ -2,9 +2,9 @@ class User::HomeController < UserBaseController
 
   layout 'app'
 
-  FirstFetchSize = 5
+  FirstFetchSize = 10
 
-  FetchSize = 5
+  FetchSize = 10
 
   FeedCategory = ['status', 'blog', 'all_album_related', 'video', 'sharing']
 

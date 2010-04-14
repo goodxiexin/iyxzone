@@ -19,7 +19,7 @@
   </div>
   <p class="link">
     <% if !no_operations and album.poster == current_user and album.class.name != 'AvatarAlbum' %>
-      <%= facebox_link "", edit_personal_album_url(album), :class => "icon-active icon-active-edit" %>  <%= facebox_link '', confirm_destroy_personal_album_url(album), :class => "icon-active" %>
+      <%= facebox_link "", edit_personal_album_url(album), :class => "icon-active icon-active-edit w-l" %>  <%= facebox_link '', confirm_destroy_personal_album_url(album), :class => "icon-active" %>
     <% end %>
   </p>
 </li>

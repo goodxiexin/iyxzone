@@ -35,8 +35,8 @@
 	    <div class="piclist-rows">
         <div class='nav-link'>
           <ul class="s_clear">
-            <li class='hover'><%= link_to "<span>#{subject}玩的游戏</span>", games_url(:uid => @user.id) %></li>
-            <li><%= link_to "<span>#{subject}关注的游戏</span>", interested_games_url(:uid => @user.id) %></li>
+            <li class='hover'><%= link_to "<span>#{subject}玩的游戏(#{@user.games_count})</span>", games_url(:uid => @user.id) %></li>
+            <li><%= link_to "<span>#{subject}关注的游戏(#{@user.game_attentions_count})</span>", interested_games_url(:uid => @user.id) %></li>
           </ul>
         </div>
 		    <%= render :partial => 'game_items', :object => @games %>
