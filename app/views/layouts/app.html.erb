@@ -20,7 +20,7 @@
 					  	<li><%= link_to "投票", hot_polls_url(:uid => current_user.id), :class => 'app-vote' %></li>
 				  		<li><%= link_to "活动", hot_events_url(:uid => current_user.id), :class => 'app-ploy' %></li>
 						  <li><%= link_to "公会", hot_guilds_url(:uid => current_user.id), :class => 'app-cons' %></li>
-              <li><%= link_to "游戏", hot_games_url(:uid => current_user.id), :class => "app-game" %></li>
+              <li><%= link_to "游戏", sexy_games_url(:uid => current_user.id), :class => "app-game" %></li>
               <li><%= link_to "推荐游戏", game_suggestions_url, :class => 'app-vgame' %></li>
               <li><%= link_to "每日十闻", news_index_url, :class => "app-news" %></li>
 							<li><%= facebox_link "汇报错误", new_guestbook_url, :class => "app-error" %> </li>
