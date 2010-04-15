@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100413162614) do
+ActiveRecord::Schema.define(:version => 20100415074212) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -608,6 +608,7 @@ ActiveRecord::Schema.define(:version => 20100413162614) do
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "completeness",   :default => 0
   end
 
   add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
