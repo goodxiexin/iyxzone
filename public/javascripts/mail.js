@@ -1,8 +1,12 @@
 Iyxzone.Mail = {
+
   version: '1.0',
+
   author: ['高侠鸿'],
+
   Manager: {},
-  Builder: {}
+
+  Builder: {},
 };
 
 Object.extend(Iyxzone.Mail.Manager, {

@@ -8,7 +8,7 @@ class NotificationObserver < ActiveRecord::Observer
 
     # send data to push server
     # 实际上这段代码我感觉很不好，不应该放这，毕竟这是和view有关的
-    Juggernaut.send_to_client "Iyxzone.startBlinkTitle('新通知');$('navnotice').update('通知<em class=\"notice-bubble\"><strong>#{user.unread_notifications_count}</strong></em>'); $('notifications_dropdown_list').update(''); $('notifications_dropdown').hide(); Sound.play('/music/test.wav');", user.id
+    Juggernaut.send_to_client "Iyxzone.newNotificationNotice();", user.id
   end
  
   def after_update notification
