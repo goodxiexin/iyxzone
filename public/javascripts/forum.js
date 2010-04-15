@@ -99,6 +99,6 @@ Object.extend(Iyxzone.Forum.Post, {
     else
       this.editor.instanceById('post_content').setContent("<span style='font-size: 14px;font-weight:bold'>回复楼主:</span><hr/>"); 
     window.scrollTo(0, $('new_post').positionedOffset().top);
-  },
+  }
 
 });
