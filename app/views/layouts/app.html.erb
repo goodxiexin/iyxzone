@@ -12,15 +12,15 @@
 			  <div class="round_m"><div class="round_body">
           <div class="applist">
             <ul>
-  						<li><%= link_to "日志", blogs_url(:uid => current_user.id), :class => 'app-log' %></li>
-	  					<li><%= link_to "视频", videos_url(:uid => current_user.id), :class => 'app-video' %></li>
-		  				<li><%= link_to "照片", personal_albums_url(:uid => current_user.id), :class => 'app-photo' %></li>
-			  			<li><%= link_to "状态", statuses_url(:uid => current_user.id), :class => 'app-status' %></li>
-				  		<li><%= link_to "活动", events_url(:uid => current_user.id), :class => 'app-ploy' %></li>
-					  	<li><%= link_to "投票", polls_url(:uid => current_user.id), :class => 'app-vote' %></li>
-						  <li><%= link_to "公会", guilds_url(:uid => current_user.id), :class => 'app-cons' %></li>
-              <li><%= link_to "分享", shares_url(:uid => current_user.id), :class => 'app-share' %></li>
-              <li><%= link_to "游戏", games_url(:uid => current_user.id), :class => "app-game" %></li>
+			  			<li><%= link_to "状态", friends_statuses_url(:uid => current_user.id), :class => 'app-status' %></li>
+              <li><%= link_to "分享", hot_shares_url(:uid => current_user.id), :class => 'app-share' %></li>
+  						<li><%= link_to "日志", hot_blogs_url(:uid => current_user.id), :class => 'app-log' %></li>
+		  				<li><%= link_to "照片", hot_personal_photos_url(:uid => current_user.id), :class => 'app-photo' %></li>
+	  					<li><%= link_to "视频", hot_videos_url(:uid => current_user.id), :class => 'app-video' %></li>
+					  	<li><%= link_to "投票", hot_polls_url(:uid => current_user.id), :class => 'app-vote' %></li>
+				  		<li><%= link_to "活动", hot_events_url(:uid => current_user.id), :class => 'app-ploy' %></li>
+						  <li><%= link_to "公会", hot_guilds_url(:uid => current_user.id), :class => 'app-cons' %></li>
+              <li><%= link_to "游戏", hot_games_url(:uid => current_user.id), :class => "app-game" %></li>
               <li><%= link_to "推荐游戏", game_suggestions_url, :class => 'app-vgame' %></li>
               <li><%= link_to "每日十闻", news_index_url, :class => "app-news" %></li>
 							<li><%= facebox_link "汇报错误", new_guestbook_url, :class => "app-error" %> </li>

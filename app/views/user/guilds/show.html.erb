@@ -18,9 +18,7 @@
 <div class="info-list">
 	<%= render :partial => 'guild_info' %>
   <%= render :partial => 'guild_menu' %>
-<% if @guild.is_requestable_by? current_user %>
   <%= render :partial => 'guild_request' %>
-<% end %>
 </div>
 <% end %>
 
@@ -36,7 +34,7 @@
   
   <div class="big-head space">
     <p class="left">
-      <strong><%= h @guild.name %>公会</strong>
+      <strong>公会：</strong><span class='shine'><strong><%= h @guild.name %></strong></span>
     </p>
   </div>
   <div class="rows"></div>

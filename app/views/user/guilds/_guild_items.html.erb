@@ -9,8 +9,10 @@
         <p><%= guild_link guild, :class => 'shine' %></p>
         <p>游戏：<%= server_location guild.game_server %></p>
         <p>会长: <%= profile_link guild.president %></p>
-        <p>创建于：<%= ftime guild.created_at %> </p>
         <p>你的状态：<%= guild.has_member?(current_user) ? '已经加入' : '还没加入' %></p>
+        <p><span>
+					<% if current_user == guild.president %><%= link_to "邀请更多人", new_guild_invitation_url(guild) %> | <% end %> <%= link_to "逛逛论坛", forum_topics_url(guild.forum) %>
+				</span></p>
       </div>
     </td>
 		<td class="party-num">

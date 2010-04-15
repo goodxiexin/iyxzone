@@ -7,6 +7,7 @@
     <dd><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [@event.poster_id]) %></dd>
   <% end %>
   <dd>该活动已经过期</dd>
+	</dl>
 <% else %>
   <% if @user == current_user %>
     <dd><%= link_to '编辑活动', edit_event_url(@event) %></dd>
@@ -16,15 +17,18 @@
   <% elsif @event.has_participant? current_user %>
     <dd><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [@event.poster_id]) %></dd>
   <% end %>
+	</dl>
     <% code = @event.is_requestable_by?(current_user).to_i %>
+		<dl class='menu-op space20'>
+			<dt>请求加入</dt>
+		</dl>
     <% if code > 0 %>
-      <dd>发送 <%= facebox_link '请求', new_event_request_url(@event) %> 加入该活动？</dd>
+      <div class='tip'>发送 <%= facebox_link '请求', new_event_request_url(@event) %> 加入该活动？</div>
     <% elsif code == 0 %>
-      <dd>只有他的好友可以参加，<%= facebox_link '加他为好友', new_friend_request_url(:friend_id => @user.id), :class => 'red' %></dd> 
+      <div class='tip'>只有他的好友可以参加，<%= facebox_link '加他为好友', new_friend_request_url(:friend_id => @user.id), :class => 'red' %></div> 
     <% elsif code == -1 %>
-      <dd>你已经没有在该游戏、服务器的游戏角色，无法加入该活动</dd>
+      <div class='tip'>你已经没有在该游戏、服务器的游戏角色，无法加入该活动</div>
     <% elsif code == -2 %>
-      <dd>只有该公会的会员才能参加, 去公会 <%= guild_link @event.guild, :class => 'red' %> 看看</dd>
+      <div class='tip'>只有该公会的会员才能参加, 去公会 <%= guild_link @event.guild, :class => 'red' %> 看看</div>
     <% end %>
 <% end %>
-</dl>
