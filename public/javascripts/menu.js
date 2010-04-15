@@ -67,7 +67,6 @@ Iyxzone.Menu.AjaxDropdown = Class.create({
         new Ajax.Request(this.url, {
           method: 'get',
           onSuccess: function(transport){
-//            this.update.innerHTML = transport.responseText;
             this.update.update( transport.responseText);
           }.bind(this)
         });

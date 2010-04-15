@@ -926,6 +926,7 @@ dl.menu-op dd a{color:#333}
 /*评价按钮*/
 .evaluate span,.evaluate a{width:54px;display:block;text-align:center;background:url(../images/skin/skin2010.png) no-repeat}
 .evaluate span{height:53px;background-position:0 -164px;color:#fff;line-height:40px;font-weight:700;font-size:14px}
+.evaluate span.dug{background-position:0 -588px;}
 .evaluate a{height:25px;background-position:-60px -238px;margin-top:3px;color:#217308;text-indent:10px;line-height:25px}
 
 .feed-list .evaluate{position:absolute;top:0;left:0}

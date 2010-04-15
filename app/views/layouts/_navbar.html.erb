@@ -12,13 +12,13 @@
                 <% if unread_mails_count == 0 %>
                 <li><%= link_to '<span id="navinbox">站内信</span>', mails_url(:type => 1) %></li>
                 <% else %>
-                <li><%= link_to "<span id='navinbox'>站内信(<b id='navinbox-num'>#{unread_mails_count}</b>)</span>", mails_url(:type => 1) %></li>
+                <li><%= link_to "<span id='navinbox'>站内信<em class='notice-bubble'><strong>#{unread_mails_count}</strong></em></span>", mails_url(:type => 1) %></li>
                 <% end %>
                 <% notifications_count = current_user.notifications.unread.count %> 
                 <% if notifications_count == 0 %>
                 <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知</span>", "", :id => "notifications_link" %>
                 <% else %>
-                  <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知(#{notifications_count})</span>", "", :id => "notifications_link" %>
+                  <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知<em class='notice-bubble'><strong>#{notifications_count}</strong></em></span>", "", :id => "notifications_link" %>
                 <% end %>
                   <div class="drop-box" id='notifications_dropdown' style="display:none">
                     <div id="notice-wrap">
