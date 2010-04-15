@@ -102,12 +102,11 @@ Object.extend(Iyxzone.Profile.Editor, {
     if(this.validateBasicInfo()){
       new Ajax.Request('/profiles/' + profileID + '?type=1', {
         method: 'put',
-        parameters: form.serialize(),
+        parameters: $(form).serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         },
         onSuccess: function(transport){
-//          $('basic_info_frame').innerHTML = transport.responseText;
           $('basic_info_frame').update( transport.responseText);
           this.isEditingBasicInfo = false;
           this.editBasicInfoHTML = null;
@@ -223,13 +222,12 @@ Object.extend(Iyxzone.Profile.Editor, {
     if(this.validateContactInfo()){
       new Ajax.Request('/profiles/' + profileID + '?type=2', {
         method: 'put',
-        parameters: form.serialize(),
+        parameters: $(form).serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         }.bind(this),
         onSuccess: function(transport){
           this.editContactInfoHTML = null;
-//          $('contact_info_frame').innerHTML = transport.responseText;
           $('contact_info_frame').update( transport.responseText);
           this.isEditingContactInfo = false;
         }.bind(this)
