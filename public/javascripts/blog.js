@@ -1,6 +1,6 @@
 Iyxzone.Blog = {
   version: '1.0',
-  author: ['高侠鸿'],
+  author: ['高侠鸿 '],
   Builder: {}
 };
 
