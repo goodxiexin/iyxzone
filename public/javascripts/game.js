@@ -3,8 +3,6 @@ Iyxzone.Game = {
 
   author: ['高侠鸿'],
 
-  pinyins: null,
-
   infos: null, // name and id 
 
   Suggestor: {},
@@ -17,7 +15,7 @@ Iyxzone.Game = {
 
   // 相当于一个factory方法，返回一个 pinyin selector， 这样避免在每个pinyin selector里保存游戏信息，浪费
   initPinyinSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options){
-    if(Iyxzone.Game.infos == null || Iyxzone.Game.pinyins == null){
+    if(Iyxzone.Game.infos == null){
       alert('错误');
       return;
     }
@@ -140,8 +138,10 @@ Iyxzone.Game.Selector = Class.create({
       this.reset();
       return;
     }
+    this.currentGameID = $(this.gameSelectorID).value;
     new Ajax.Request('/game_details/' + $(this.gameSelectorID).value + '.json', {
       method: 'get',
+/*
       onLoading: function(){
         if(this.gameInfoDiv){
           $(this.gameInfoDiv).update('正在加载游戏信息...');
@@ -153,9 +153,16 @@ Iyxzone.Game.Selector = Class.create({
           $(this.gameInfoDiv).update('');
         Iyxzone.changeCursor('default');
       }.bind(this),      
+*/
       onSuccess: function(transport){
-        this.details = transport.responseText.evalJSON().game;
-
+        var details = transport.responseText.evalJSON().game;
+        
+        if(details.id != this.currentGameID){
+          return;
+        }else{
+          this.details = details;
+        }
+  
         // reset all details if exists
         if(this.areaSelectorID)
           this.resetAreaInfo();
@@ -200,16 +207,8 @@ Iyxzone.Game.Selector = Class.create({
     new Ajax.Request('/area_details/' + $(this.areaSelectorID).value + '.json', {
       method: 'get',
       onLoading: function(){
-        Iyxzone.changeCursor('wait');
-        if(this.areaInfoDiv){
-          $(this.areaInfoDiv).update('正在加载服务器信息...');
-        }
       }.bind(this),
       onComplete: function(){
-        Iyxzone.changeCursor('default');
-        if(this.areaInfoDiv){
-          $(this.areaInfoDiv).update('');
-        }
       }.bind(this),
       onSuccess: function(transport){
         var areaInfo = transport.responseText.evalJSON().game_area;
@@ -266,7 +265,7 @@ Iyxzone.Game.Selector = Class.create({
 Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
 
   initialize: function($super, gameSelectorID, gameInfoDiv, areaSelectorID, areaInfoDiv, serverSelectID, serverInfoDiv, raceSelectorID, raceInfoDiv, professionSelectorID, professionInfoDiv, gameDetails, options){
-    if(Iyxzone.Game.pinyins == null){
+    if(Iyxzone.Game.infos == null){
       return;
     }
 
@@ -276,7 +275,7 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
     this.keyPressed = '';
     this.lastPressedAt = null;
     this.currentGameID = null;
-    
+ 
     if(this.gameInfoDiv){
       $(this.gameInfoDiv).update('可以输入游戏的拼音来快速定位');
     }
@@ -292,6 +291,8 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
       }
     }
 
+    // set timer
+    setTimeout(this.fireGameChangeEvent.bind(this), 500);
   },
 
   setEvents: function($super){
@@ -309,35 +310,35 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
   },
 
   binarySearch: function(keyCode){
-    var pinyins = Iyxzone.Game.pinyins;
-    var size = pinyins.length;
+    var infos = Iyxzone.Game.infos;
+    var size = infos.length;
     var i = 0;
     var j = size - 1;
-    var c1 = pinyins[i].toLowerCase().charCodeAt(0);
-    var c2 = pinyins[j].toLowerCase().charCodeAt(0);
+    var c1 = infos[i].pinyin.toLowerCase().charCodeAt(0);
+    var c2 = infos[j].pinyin.toLowerCase().charCodeAt(0);
     if(c1 > keyCode) return -1;
     if(c2 < keyCode) return -1;
     while(i != j-1){
       var m = Math.ceil((i+j)/2);
-      var c = pinyins[m].toLowerCase().charCodeAt(0);
+      var c = infos[m].pinyin.toLowerCase().charCodeAt(0);
       if(c < keyCode){
         i = m;
       }else{
         j = m;
       }
     }
-    c1 = pinyins[i].toLowerCase().charCodeAt(0);
-    c2 = pinyins[j].toLowerCase().charCodeAt(0);
+    c1 = infos[i].pinyin.toLowerCase().charCodeAt(0);
+    c2 = infos[j].pinyin.toLowerCase().charCodeAt(0);
     if(c1 != keyCode && c2 != keyCode) return -1;
     if(c1 == keyCode) return i;
     if(c2 == keyCode) return j;
   },
   
   onKeyUp: function(e){
-    var pinyins = Iyxzone.Game.pinyins;
+    var infos = Iyxzone.Game.infos;
     var code = e.keyCode;
     var now = new Date().getTime();
-    if(this.lastPressedAt == null || (now - this.lastPressedAt) < 1000){
+    if(this.lastPressedAt == null || (now - this.lastPressedAt) < 500){
       this.lastPressedAt = now;
       this.keyPressed += String.fromCharCode(e.keyCode);
     }else{
@@ -347,9 +348,10 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
     var len = this.keyPressed.length;
     var startPos = this.mappings.get(this.keyPressed.charCodeAt(0));
     if(startPos == null) return;
-    for(var i = startPos;i < pinyins.length; i++){
-      if(pinyins[i].substr(0, len) == this.keyPressed.toLowerCase()){ // start with this.keyPressed?
+    for(var i = startPos;i < infos.length; i++){
+      if(infos[i].pinyin.substr(0, len) == this.keyPressed.toLowerCase()){ // start with this.keyPressed?
         if($(this.gameSelectorID).selectedIndex != i){
+          // 这样改变值是不会产生onChange的callback的
           $(this.gameSelectorID).value = $(this.gameSelectorID).options[i].value;
           this.currentGameID = $(this.gameSelectorID).value;
           setTimeout(this.fireGameChangeEvent.bind(this), 500);
@@ -361,8 +363,8 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
 
   fireGameChangeEvent: function(){
     if(this.currentGameID == null) return;
-    $(this.gameSelectorID).simulate('change'); // be sure to include event.simulate.js first
     this.currentGameID = null;
+    $(this.gameSelectorID).simulate('change'); // be sure to include event.simulate.js first
   }
 
 });

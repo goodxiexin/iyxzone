@@ -1,8 +1,7 @@
 <% @games = Game.all(:order => 'pinyin ASC') %>
-<%= javascript_tag "
-  Iyxzone.Game.pinyins = #{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')};
-  Iyxzone.Game.infos = #{@games.to_json :only => [:id, :name]}
-" %>
+<% javascript_tag do %>
+  Iyxzone.Game.infos = <%= @games.map{|g| {:id => g.id,:name => g.name, :pinyin => g.pinyin}}.to_json} %>;
+<% end %>
 
 <div class="edit-toggle space edit">
   <h3 class="s_clear">
