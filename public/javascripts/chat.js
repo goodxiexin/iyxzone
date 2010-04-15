@@ -52,17 +52,17 @@ Object.extend(Iyxzone.Chat, {
     var target = $('tiny-im-icon');
 
     if(target.innerHTML == '' || target.down('img').src.include('/images/blank.gif')){
-      target.update( this.blinkFriendIcon);
+      target.update(this.blinkFriendIcon);
     }else{
-      target.update( '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
+      target.update('<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
     }
 
     target = $('im-icon');
 
     if(target.down('img').src.include('/images/blank.gif')){
-      target.update( this.blinkFriendIcon);
+      target.update(this.blinkFriendIcon);
     }else{
-      target.update( '<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
+      target.update('<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
     }
 
     this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
@@ -171,7 +171,7 @@ Object.extend(Iyxzone.Chat, {
     else
       html += '<h4>' + login + "(" + message.created_at + ")</h4>";
 
-    html += '<p>' + message.content + "</p>";
+    html += '<p>' + message.content.escapeHTML().replace(/<br>/g, '\n') + "</p>";
     return html;
   },
 
@@ -187,6 +187,16 @@ Object.extend(Iyxzone.Chat, {
     });
   },
 
+  locateForm: function(draggable){
+    var elm = draggable.element;
+    var pos = elm.cumulativeOffset();
+    var form = elm.up();
+    form.setStyle({
+      'left': pos.left + 'px',
+      'top': pos.top + 'px'
+    });
+  },
+
   showChatForm: function(friendID, friendLogin){
     var form = $('chat-form-' + friendID);
     var info = this.unreadMessages.unset(friendID);
@@ -195,7 +205,8 @@ Object.extend(Iyxzone.Chat, {
       form = this.buildChatForm(friendID, friendLogin);
       form.setStyle({'left': '500px', 'top': '100px'});
       form.show();
-      new Draggable('chat-form-' + friendID);
+      // 注意，能drag的只是title而已
+      new Draggable($('chat-form-' + friendID).childElements()[0], {onDrag: this.locateForm.bind(this), endDrag: this.locateForm.bind(this)});
     }else{
       form.show();
     }
@@ -258,8 +269,9 @@ Object.extend(Iyxzone.Chat, {
   // 发送消息
   sendMessage: function(friendID, friendLogin, button, event){
     Event.stop(event);
-    new Ajax.Request('/messages?friend_id=' + friendID + "&authenticity_token=" + encodeURIComponent(this.token) + "&message[content]=" + $('message-content-' + friendID).value, {
+    new Ajax.Request('/messages?friend_id=' + friendID + "&authenticity_token=" + encodeURIComponent(this.token), {
       method: 'post',
+      parameters: {'message[content]' : $('message-content-' + friendID).value},
       onLoading: function(){
         $('message-content-' + friendID).clear();        
       },

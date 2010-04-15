@@ -1,5 +1,5 @@
     <div class="im-tinybar" id='tiny-chat-bar' style="right:5px;top:100px;">
-      <div class="im-toggle"><a class="r-t" href="javascript:void(0)" onclick="Iyxzone.Chat.showBar(event)"></a><p>在线好友<span id='tiny_online_friends_count'>[0]</span><a href="javascript:void(0)" id='tiny-im-icon'><img src=''/></a></p><span class="r-b"></span></div>
+      <div class="im-toggle"><a class="r-t" href="javascript:void(0)" onclick="Iyxzone.Chat.showBar(event)"></a><p>在线好友<span id='tiny_online_friends_count'>[0]</span><a href="javascript:void(0)" id='tiny-im-icon'></a></p><span class="r-b"></span></div>
     </div>
     <div style="right: 5px; top: 100px;display:none" class="im-bar" id='chat-bar'>
       <div class="r-m">
@@ -27,11 +27,10 @@
             <%= button_to_function '', '', :class => 'go' %> 
           </div>
           <div class="im-group s_clear">
-            <dl class="im-expand">
+            <dl class="im-expand" id='chat-list'>
               <dt>
                 <a href="javascript:void(0)" onclick="Iyxzone.Chat.toggleOnline(this);">在线好友<span id='online_friends_count'>[0]</span></a>
               </dt>
-              <div id='chat-list'></div>
             </dl>
           </div>
         </div>
