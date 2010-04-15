@@ -74,7 +74,35 @@ Object.extend(Iyxzone, {
     }else{
       this.blinkText = text;
     } 
-  }
+  },
+
+	
+	addToBookmark: function(){
+		title = "17gaming 一起游戏网";
+		url="http://www.17gaming.com/";
+		if (window.sidebar) // firefox
+			window.sidebar.addPanel(title, url, "");
+		else if(window.opera && window.print){ // opera
+			var elem = document.createElement('a');
+			elem.setAttribute('href',url);
+			elem.setAttribute('title',title);
+			elem.setAttribute('rel','sidebar');
+			elem.click();
+		}
+		else if(document.all)// ie
+			window.external.AddFavorite(url, title);
+	},
+
+	addToHomepage: function(){
+		if (Prototype.Browser.IE){
+			document.body.style.behavior='url(#default#homepage)';
+			document.body.setHomePage('http://www.17gaming.com');
+		}
+		else{
+			alert("您的浏览器不支持自动设置首页，请手动添加!");
+		}
+	}
+
 
 });
 
@@ -114,5 +142,4 @@ Iyxzone.limitedTextField = Class.create({
     }
     this.timer = setTimeout(this.checkLength.bind(this), this.interval);
   }
-
 });

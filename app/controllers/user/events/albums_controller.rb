@@ -4,16 +4,16 @@ class User::Events::AlbumsController < UserBaseController
 
   def show
     respond_to do |format|
-      format.json {
-        @photos = @album.photos
-        @json = @photos.map {|p| p.public_filename}
-        render :json => @json
-      }
       format.html {
         @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
         @participation = @event.participations.find_by_participant_id(current_user.id)
         @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
         render :action => 'show'
+      }
+      format.json {
+        @photos = @album.photos
+        @json = @photos.map {|p| p.public_filename}
+        render :json => @json
       }
     end
   end

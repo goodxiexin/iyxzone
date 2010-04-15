@@ -469,12 +469,12 @@ class User < ActiveRecord::Base
     if login.blank?
       errors.add_to_base("昵称不能为空")
       return
-    elsif login.length < 4 or login.length > 16
-      errors.add_to_base("昵称长度不对")
+    elsif login.length < 2 
+      errors.add_to_base("昵称长度至少是2")
       return
-    elsif /^\d/.match(login)
-      errors.add_to_base("昵称不能以数字开头")
-      return
+		else login.length > 100
+			errors.add_to_base("昵称长度不能超过100……")
+			return
     end
 
     # check gender

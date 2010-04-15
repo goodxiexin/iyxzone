@@ -55,7 +55,7 @@ class ParticipationObserver < ActiveRecord::Observer
 		elsif participation.was_authorized? and participation.is_authorized?
 			event.raw_decrement field(participation.status_was)
       event.raw_increment field(participation.status)
-      if eparticipation.recently_change_status
+      if participation.recently_change_status
         event.poster.notifications.create(
           :category => Notification::EventStatus,
           :data => "#{profile_link participant} 的游戏角色 #{character.name} 改变了在活动 #{event_link event} 的状态：现在#{participation.to_s}")

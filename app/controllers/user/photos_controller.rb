@@ -50,7 +50,6 @@ class User::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.json { render :json => @photo }
 				format.html { render :update do |page|
 					if @album.id != @photo.album_id
             if params[:at] == 'album'
@@ -66,6 +65,7 @@ class User::PhotosController < UserBaseController
 					  end
           end
 				end }
+				format.json { render :json => @photo }
 			end 
     else
       respond_to do |format|

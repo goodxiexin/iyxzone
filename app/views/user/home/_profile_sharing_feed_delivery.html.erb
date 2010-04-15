@@ -9,7 +9,7 @@
       <%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
     <% end %>
 	  <div class="jl-list-con jl-cutline">
-      <%= profile_link sharing.poster %> 分享了玩家 <%= profile_link profile.user %>
+      <%= profile_link sharing.poster %> 分享了玩家 <%= profile_link profile.user, :class => "shine"  %>
 	    <p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id});", :class => "gray"%></p>
 	    <%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => sharing, :recipient => sharing.poster} %>
 	  </div>
