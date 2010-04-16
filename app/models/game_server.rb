@@ -6,6 +6,6 @@ class GameServer < ActiveRecord::Base
 
 	has_many :characters, :class_name => 'GameCharacter', :foreign_key => 'server_id'
 
-	has_many :users, :through => :characters, :conditions => "users.actviated_at IS NOT NULL", :uniq => true
+	has_many :users, :through => :characters, :conditions => "users.activated_at IS NOT NULL", :uniq => true
 
 end

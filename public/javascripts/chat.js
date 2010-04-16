@@ -171,7 +171,7 @@ Object.extend(Iyxzone.Chat, {
     else
       html += '<h4>' + login + "(" + message.created_at + ")</h4>";
 
-    html += '<p>' + message.content.escapeHTML().replace(/<br>/g, '\n') + "</p>";
+    html += '<p>' + message.content.escapeHTML().replace(/\n/g, '<br/>') + "</p>";
     return html;
   },
 

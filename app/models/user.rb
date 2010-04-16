@@ -12,6 +12,12 @@ class User < ActiveRecord::Base
 
 	has_many :comrade_suggestions, :dependent => :destroy
 
+  # 方便删除
+  has_many :friend_friend_suggestions, :foreign_key => 'suggested_friend_id', :class_name => 'FriendSuggestion', :dependent => :destroy
+
+  # 方便删除
+  has_many :friend_comrade_suggestions, :foreign_key => 'comrade_id', :class_name => 'ComradeSuggestion', :dependent => :destroy
+
   has_one :profile, :dependent => :destroy
 
 	# mails
@@ -86,7 +92,7 @@ class User < ActiveRecord::Base
   # friend
 	has_many :all_friendships, :class_name => 'Friendship', :dependent => :destroy
 
-  # 定义这个完全是为了删除方便
+    # 定义这个完全是为了删除方便
   has_many :friend_friendships, :class_name => 'Friendship', :foreign_key => 'friend_id', :dependent => :destroy
 
   has_many :friendships, :conditions => {:status => 1}
