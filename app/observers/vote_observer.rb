@@ -16,7 +16,7 @@ class VoteObserver < ActiveRecord::Observer
 
     # issue feeds if necessary
     return if vote.voter.application_setting.emit_poll_feed == 0
-    recipients = [vote.voter.profile]
+    recipients = [vote.voter.profile, vote.poll.game]
     recipients.concat vote.voter.guilds
     recipients.concat vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed == 1}
     vote.deliver_feeds :recipients => recipients

@@ -46,7 +46,7 @@ module FriendSuggestor
 		end
 
     # radom picked users
-    User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :except => friends.map(&:id).concat([self.id])).each do |u|
+    User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :except => friends.map(&:id).concat([self.id]), :conditions => "activated_at != NULL").each do |u|
       friend_suggestions[u.id] += 1 # 加1分
     end
 

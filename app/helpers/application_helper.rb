@@ -321,4 +321,8 @@ module ApplicationHelper
     simple_format "<span class='quote-start'></span>#{h sharing.reason}<span class='quote-end'></span>", :class => class_name
   end
 
+  def game_infos
+    Game.find(:all, :order => "pinyin ASC").map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
+  end
+
 end

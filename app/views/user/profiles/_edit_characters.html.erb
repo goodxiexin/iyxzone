@@ -1,6 +1,6 @@
-<% @games = Game.all(:order => 'pinyin ASC') %>
+<% @games = Game.find(:all, :order => 'pinyin ASC').insert(0, Game.new(:id => '---', :name => '---')) %>
 <% javascript_tag do %>
-  Iyxzone.Game.infos = <%= @games.map{|g| {:id => g.id,:name => g.name, :pinyin => g.pinyin}}.to_json} %>;
+  Iyxzone.Game.infos = <%= game_infos %>;
 <% end %>
 
 <div class="edit-toggle space edit">
@@ -31,7 +31,7 @@
               <div class="rows s_clear">
                 <div class="fldid"><label>游戏：</label></div>
                 <div class="fldvalue">
-                  <div><%= c.collection_select :game_id, @games.insert(0, Game.new(:id => '', :name => '---')), :id, :name, {:prompt => '---'} %></div>
+                  <div><%= c.collection_select :game_id, @games, :id, :name, {:prompt => '---'} %></div>
                 </div>
                 <span class='red' id='existing_characters_<%= character.id %>_game_id_error'></span>
               </div>

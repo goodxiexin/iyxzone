@@ -6,7 +6,6 @@ javascripts:
   - controls
   - sound
   - juggernaut/swfobject
-  - juggernaut/juggernaut
   - iyxzone
   - comment
   - facebox
@@ -17,6 +16,7 @@ javascripts:
   - calendar_date_select/calendar_date_select
   - calendar_date_select/locale/cn
   - calendar_date_select/format_iso_date
+  - production_config
 - register:
   - game
   - register

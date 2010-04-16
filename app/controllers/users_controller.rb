@@ -1,11 +1,9 @@
 class UsersController < ApplicationController
 
-  before_filter :logout_required
   #before_filter :allow_only_admin_invitation
 
   def new
     @user = User.new
-    @games = Game.find(:all, :order => "pinyin ASC")
     render :action => 'new', :layout => 'root'
   end
 

@@ -43,7 +43,7 @@ class User::TopicsController < UserBaseController
     @topic.destroy
     render :update do |page|
       if params[:at] == 'index'
-        page << "$('topic_#{@topic.id}').remove();alert('成功')"
+        page << "$('topic_#{@topic.id}').remove(); tip('成功')"
       elsif params[:at] == 'show'
         page.redirect_to forum_topics_url(@forum)
       end

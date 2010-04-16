@@ -22,9 +22,9 @@ Iyxzone.Game = {
 
     $(game).innerHTML = '';
     $(game).update( '<option value="">---</option>');
-
+    
     Iyxzone.Game.infos.each(function(info){
-      Element.insert(game, {bottom: '<option value=' + info.game.id + '>' + info.game.name + '</option>'});
+      Element.insert(game, {bottom: '<option value=' + info.id + '>' + info.name + '</option>'});
     }.bind(this));
     
     $(game).value = '';
@@ -82,6 +82,8 @@ Iyxzone.Game.Selector = Class.create({
   resetGameInfo: function(){
     if($(this.gameSelectorID))
       $(this.gameSelectorID).value = '';
+    if($(this.gameInfoDiv))
+      $(this.gameInfoDiv).update('');
   },
 
   resetAreaInfo: function(){
@@ -95,6 +97,8 @@ Iyxzone.Game.Selector = Class.create({
       html += "<option value='" + areas[i].id + "'>" + areas[i].name + "</option>";
     }
     $(this.areaSelectorID).update(html);
+    if($(this.areaInfoDiv))
+      $(this.areaInfoDiv).update('');
   },
 
   resetServerInfo: function(){
@@ -107,6 +111,8 @@ Iyxzone.Game.Selector = Class.create({
       html += "<option value='" + servers[i].id + "'>" + servers[i].name + "</option>";
     }
     $(this.serverSelectID).update( html);
+    if($(this.serverInfoDiv))
+      $(this.serverInfoDiv).update('');
   },
 
   resetProfessionInfo: function(){
@@ -119,6 +125,8 @@ Iyxzone.Game.Selector = Class.create({
       html += "<option value='" + professions[i].id + "'>" + professions[i].name + "</option>";
     }
     $(this.professionSelectorID).update( html);
+    if($(this.professionInfoDiv))
+      $(this.professionInfoDiv).update('');
   },
 
   resetRaceInfo: function(){
@@ -131,6 +139,8 @@ Iyxzone.Game.Selector = Class.create({
       html += "<option value='" + races[i].id + "'>" + races[i].name + "</option>";
     }
     $(this.raceSelectorID).update( html);
+    if($(this.raceInfoDiv))
+      $(this.raceInfoDiv).value = '';
   },
 
   gameChange: function(){
@@ -138,26 +148,24 @@ Iyxzone.Game.Selector = Class.create({
       this.reset();
       return;
     }
-    this.currentGameID = $(this.gameSelectorID).value;
     new Ajax.Request('/game_details/' + $(this.gameSelectorID).value + '.json', {
       method: 'get',
-/*
       onLoading: function(){
-        if(this.gameInfoDiv){
-          $(this.gameInfoDiv).update('正在加载游戏信息...');
-        }
+        if($(gameInfoDiv))
+          $(gameInfoDiv).update('加载游戏信息..');
         Iyxzone.changeCursor('wait');
       }.bind(this),
       onComplete: function(){
-        if(this.gameInfoDiv)
-          $(this.gameInfoDiv).update('');
+        if($(gameInfoDiv))
+          $(gameInfoDiv).update('');
         Iyxzone.changeCursor('default');
       }.bind(this),      
-*/
       onSuccess: function(transport){
         var details = transport.responseText.evalJSON().game;
-        
-        if(details.id != this.currentGameID){
+        var gameID = details.id;
+
+        if(gameID != $(this.gameSelectorID).value){
+          // 不复原上面的reset了，因为会被请求$(this.gameSelectorID).value的游戏信息覆盖
           return;
         }else{
           this.details = details;
@@ -175,22 +183,35 @@ Iyxzone.Game.Selector = Class.create({
     
         // set all informations
         if(this.details.no_areas){
-          if(this.areaInfoDiv)
+          if($(this.areaInfoDiv))
             $(this.areaInfoDiv).update('该游戏没有服务区');
           if(this.details.no_servers){
-            if(this.serverInfoDiv)
-              $(this.serverInfoDiv).update('该游戏我们还没统计服务器');
+            if($(this.serverInfoDiv))
+              $(this.serverInfoDiv).update('该游戏的服务器还没有统计');
           }else{
-            this.setupServerInfo(this.details.servers);
+            if(this.serverSelectID)
+              this.setupServerInfo(this.details.servers);
           }
         }else{
-          this.setupAreaInfo(this.details.areas);
+          if(this.areaSelectorID)
+            this.setupAreaInfo(this.details.areas);
         }
         
-        if(!this.details.no_professions && this.professionSelectorID)
-          this.setupProfessionInfo(this.details.professions);
-        if(!this.details.no_races && this.raceSelectorID)
-          this.setupRaceInfo(this.details.races);
+        if(this.details.no_professions){
+          if($(this.professionInfoDiv))
+            $(this.professionInfoDiv).update('该游戏没有职业');
+        }else{
+          if(this.professionSelectorID)
+            this.setupProfessionInfo(this.details.professions);
+        }
+
+        if(this.details.no_races){
+          if($(this.racesInfoDiv))
+            $(this.racesInfoDiv).update('该游戏没有种族');
+        }else{
+          if(this.raceSelectorID)
+            this.setupRaceInfo(this.details.races);
+        }
 
         // invoke game change hook        
         this.options.onGameChange($(this.gameSelectorID).value);
@@ -207,8 +228,10 @@ Iyxzone.Game.Selector = Class.create({
     new Ajax.Request('/area_details/' + $(this.areaSelectorID).value + '.json', {
       method: 'get',
       onLoading: function(){
+        Iyxzone.changeCursor('wait');
       }.bind(this),
       onComplete: function(){
+        Iyxzone.changeCursor('default');
       }.bind(this),
       onSuccess: function(transport){
         var areaInfo = transport.responseText.evalJSON().game_area;
@@ -290,9 +313,6 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
         this.mappings.set(code - 32, j); //upper case
       }
     }
-
-    // set timer
-    setTimeout(this.fireGameChangeEvent.bind(this), 500);
   },
 
   setEvents: function($super){
@@ -350,9 +370,9 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
     if(startPos == null) return;
     for(var i = startPos;i < infos.length; i++){
       if(infos[i].pinyin.substr(0, len) == this.keyPressed.toLowerCase()){ // start with this.keyPressed?
-        if($(this.gameSelectorID).selectedIndex != i){
+        if($(this.gameSelectorID).selectedIndex != i + 1){
           // 这样改变值是不会产生onChange的callback的
-          $(this.gameSelectorID).value = $(this.gameSelectorID).options[i].value;
+          $(this.gameSelectorID).value = $(this.gameSelectorID).options[i + 1].value;
           this.currentGameID = $(this.gameSelectorID).value;
           setTimeout(this.fireGameChangeEvent.bind(this), 500);
         }
@@ -362,9 +382,11 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
   },
 
   fireGameChangeEvent: function(){
-    if(this.currentGameID == null) return;
+    if(this.currentGameID == null){
+      return;
+    }
     this.currentGameID = null;
-    $(this.gameSelectorID).simulate('change'); // be sure to include event.simulate.js first
+    this.gameChange();
   }
 
 });
