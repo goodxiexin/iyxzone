@@ -1,6 +1,6 @@
 #
 # 其实就是把一群大便代码日到这里，让user减肥下
-# 这一群代码是关于注册／激活／密码的
+# 这一群代码是关于注册／激活／密码／校验的
 #
 module UserAuthentication
 
@@ -21,6 +21,22 @@ module UserAuthentication
       named_scope :activated, :conditions => {:activation_code => nil}
       
       named_scope :pending, :conditions => "activation_code IS NOT NULL"
+
+      attr_accessible :login, :password, :password_confirmation, :gender, :avatar_id
+
+      validates_presence_of :login, :message => "不能为空"
+
+      validates_size_of :login, :within => 2..100, :too_long => "最长100个字符", :too_short => "最短2个字符"
+
+      validates_presence_of :gender, :message => "不能为空"
+
+      validates_inclusion_of :gender, :in => ['male', 'female'], :message => "只能是male或者female"
+
+      validates_presence_of :email, :message => "不能为空"
+
+      validates_format_of :email, :with => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, :message => "邮件格式不对"
+
+      validate_on_create :email_is_unique
 
     end
 
@@ -158,6 +174,13 @@ protected
 
     def make_msn_invite_code
       self.msn_invite_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+    end
+
+    def email_is_unique
+      return if email.blank?
+      if !User.find_by_email(email.downcase).blank?
+        errors.add(:email, "邮件已经被注册了")
+      end
     end
 
   end

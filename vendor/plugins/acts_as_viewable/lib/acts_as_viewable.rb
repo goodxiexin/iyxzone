@@ -40,6 +40,15 @@ module Model
       proc.call user, self
     end
 
+    def viewed_by user
+      viewing = viewings.first(:conditions => {:user_id => user.id})
+      if viewing.blank?
+        viewings.create(:user_id => user.id) if self.is_viewing_createable_by? user
+      else
+        viewing.update_attribute(:viewed_at, Time.now) 
+      end
+    end
+
   end
 
 end
@@ -71,12 +80,7 @@ module Controller
       klass = model_name.camelize.constantize
       through = opts[:through]
       viewable = klass.find(params["#{through}"])
-      viewing = viewable.viewings.find(:first, :conditions => {:user_id => current_user.id})
-      if viewing.nil?
-        viewable.viewings.create(:user_id => current_user.id)
-      else
-        viewing.update_attribute('viewed_at', Time.now.to_s(:db))
-      end
+      viewable.viewed_by current_user
     end
  
   end

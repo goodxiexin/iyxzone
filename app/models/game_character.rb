@@ -20,95 +20,59 @@ class GameCharacter < ActiveRecord::Base
 
 	acts_as_resource_feeds
 
-  def validate
-    if user_id.blank?
-      errors.add_to_base("没有用户")
-      return
-    end
+  validates_presence_of :user_id, "不能为空"
 
-    if name.blank?
-      errors.add_to_base("没有名字")
-      return
-    end
+  validates_presence_of :level, "不能为空"
 
-    if level.blank?
-      errors.add_to_base("没有等级")
-      return
-    end
+  validates_presence_of :name, "不能为空"
 
-    if game_id_changed? or area_id_changed? or server_id_changed?    
-    if game_id.blank?
-      errors.add_to_base("没有游戏")
-      return
+  validate :game_is_valid
+
+  validate :area_is_valid
+
+  validate :server_is_valid
+
+  validate :race_is_valid
+  
+  validate :profession_is_valid
+
+protected
+
+  def game_is_valid
+    return if game_id.blank?
+    errors.add(:game_id, "不存在") unless Game.exists? game_id
+  end
+
+  def area_is_valid
+    return if game.blank?
+    if game.no_areas
+      errors.add(:area_id, "该游戏没有服务区") unless area_id.blank?
     else
-      game = Game.find(:first, :conditions => {:id => game_id})
-      if game.blank?
-        errors.add_to_base("游戏不存在")
-        return
-      else
-        if game.no_areas
-          if !area_id.blank?
-            errors.add_to_base("服务区不应该有")
-            return 
-          elsif server_id.blank? 
-            errors.add_to_base("没有服务器")
-            return
-          elsif GameServer.find(:first, :conditions => {:game_id => game_id, :id => server_id}).blank?
-            errors.add_to_base("服务器不存在")
-            return
-          end
-        else
-          if area_id.blank?
-            errors.add_to_base("没有服务区")
-            return
-          else
-            area = GameArea.find(:first, :conditions => {:game_id => game_id, :id => area_id})
-            if area.blank?
-              errors.add_to_base("服务区不存在")
-              return
-            elsif server_id.blank?
-              errors.add_to_base("没有服务器")
-              return
-            elsif GameServer.find(:first, :conditions => {:game_id => game_id, :area_id => area_id, :id => server_id}).blank?
-              errors.add_to_base("服务器不存在")
-              return
-            end
-          end
-        end
-        
-        if game.no_races
-          if !race_id.blank?
-            errors.add_to_base("种族不应该有")
-            return
-          end
-        else
-          if race_id.blank?
-            errors.add_to_base("没有种族")
-            return
-          elsif GameRace.find(:first, :conditions => {:game_id => game_id, :id => race_id}).blank?   
-            errors.add_to_base("种族不存在")
-            return
-          end
-        end
-        
-        if game.no_professions
-          if !profession_id.blank?
-            errors.add_to_base("职业不应该有")
-            return
-          end
-        else
-          if profession_id.blank?
-            errors.add_to_base("没有职业")
-            return
-          elsif GameProfession.find(:first, :conditions => {:game_id => game_id, :id => profession_id}).blank?
-            errors.add_to_base("职业不存在")
-            return
-          end
-        end
-      end
+      errors.add(:area_id, "该服务区不存在") unless GameArea.exists? :game_id => game_id, :id => area_id
     end
-    end
+  end
 
+  def server_is_valid
+    return if game.blank?
+    # TODO
+  end
+
+  def race_is_valid
+    return if game.blank?
+    if game.no_races
+      errors.add(:race_id, "该游戏没有种族") unless race_id.blank?
+    else
+      errors.add(:race_id, "该种族不存在") unless GameRace.exists? :game_id => game_id, :id => race_id
+    end
+  end
+
+  def profession_is_valid
+    return if game.blank?
+    if game.no_professions
+      errors.add(:profession_id, "该游戏没有职业") unless profession_id.blank?
+    else
+      errors.add(:profession_id, "该职业不存在") unless GameProfession.exists? :game_id => game_id, :id => profession_id
+    end
   end
 
 end

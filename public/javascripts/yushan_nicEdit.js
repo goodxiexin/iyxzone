@@ -1022,9 +1022,7 @@ var nicEditorAdvancedButton = nicEditorButton.extend({
 	
 	findElm : function(tag,attr,val) {
 		var list = this.ne.selectedInstance.getElm().getElementsByTagName(tag);
-alert('list: ' + list.length);
 		for(var i=0;i<list.length;i++) {
-alert('attr: ' + list[i].getAttribute(attr));
 			if(list[i].getAttribute(attr) == val) {
 				return $BK(list[i]);
 			}
@@ -1566,8 +1564,6 @@ var nicImageButton = nicEditorAdvancedButton.extend({
         this.removePane();
         this.selectedPhotos = [];
       }
-      
-      this.submit();
     }.closure(this));
     $BK('image_cancel').addEvent('click', function(){
       this.removePane();
@@ -1682,18 +1678,18 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
       a = new bkElement('a').setAttributes({title: symbols[i], href: 'javascript: void(0)'});
       img = new bkElement('img').setAttributes({src: "/images/faces/"+ symbols[i].slice(1,symbols[i].length-1) +".gif",  alt: symbols[i]});
       img.appendTo(a);
-      a.addEvent('click', function(e){
-        bkLib.cancelEvent(e);
+      a.onclick = bkLib.cancelEvent;
+      img.addEvent('click', function(e){
         var url = bkLib.eventTarget(e).getAttribute('src');
         if(!this.im){
           var tmp = 'javascript:nicImTemp();';
-          this.ne.nicCommand("InsertImage", tmp);
-          alert(this.ne.selectedInstance.elm.innerHTML);
+          this.ne.nicCommand("insertImage", tmp);
           this.im = this.findElm('IMG','src',tmp);
         }
         this.im.setAttributes( {src: url});
         this.removePane();
         this.ne.nicCommand("Unselect",this.im);
+        bkLib.cancelEvent(e);
       }.closure(this));
       a.appendTo(div);
     }

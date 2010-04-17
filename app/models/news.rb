@@ -20,27 +20,23 @@ class News < ActiveRecord::Base
   
   acts_as_viewable
 
-  def validate
-    #check title
-    if title.blank?
-      errors.add_to_base('没有标题')
-    end
+  validates_presence_of :title, "没有标题"
 
-    #check game
-    if game_id.blank?
-      errors.add_to_base('没有游戏')
-    elsif Game.find(:first, :conditions => {:id => game_id}).nil?
-      errors.add_to_base('游戏不存在')
-    end
+  validates_presence_of :game_id, "没有游戏"
 
-    #check news type
-    if news_type.blank?
-      errors.add_to_base('没有新闻种类')
-    end
+  validate :game_is_valid
 
-    #check data
-    if data.blank?
-      errors.add_to_base('没有内容')
-    end
+  validates_presence_of :news_type, "没有类型"
+
+  validates_inclusion_of :news_type, :in => ['文字', '图片', '新闻'], :message => "只能是文字、图片或者新闻"
+
+  validates_presence_of :data, :message => "没有内容"
+
+protected
+
+  def game_is_valid
+    return if game_id.blank?
+    errors.add(:game_id, "不存在") unless Game.exists? game_id
   end
+
 end

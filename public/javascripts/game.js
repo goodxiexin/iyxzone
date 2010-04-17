@@ -151,13 +151,9 @@ Iyxzone.Game.Selector = Class.create({
     new Ajax.Request('/game_details/' + $(this.gameSelectorID).value + '.json', {
       method: 'get',
       onLoading: function(){
-        if($(gameInfoDiv))
-          $(gameInfoDiv).update('加载游戏信息..');
         Iyxzone.changeCursor('wait');
       }.bind(this),
       onComplete: function(){
-        if($(gameInfoDiv))
-          $(gameInfoDiv).update('');
         Iyxzone.changeCursor('default');
       }.bind(this),      
       onSuccess: function(transport){

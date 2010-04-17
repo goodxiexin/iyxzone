@@ -46,7 +46,6 @@ module Jabberwock # :nodoc:
                 count     = columns.size
                 bind_vars = crit * count
                 bind_vars.insert(0,build_like_query(self.searchable_columns, crit.count))
-
                 cond = opts[:conditions]
                 if cond.blank?
                   opts[:conditions] = bind_vars 
@@ -69,7 +68,11 @@ module Jabberwock # :nodoc:
                 for i in 0..columns.size
                     break if i==columns.size
                     str += "OR " if i>0
-                    str += columns[i].to_s + " LIKE ? OR " + columns[i].to_s + " LIKE ? "
+                    for j in 0..count
+                      break if j == count
+                      str += "OR " if j > 0
+                      str += columns[i].to_s + " LIKE ? "
+                    end
                 end
                 str
             end

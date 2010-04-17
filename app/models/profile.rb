@@ -132,94 +132,58 @@ class Profile < ActiveRecord::Base
   
   attr_readonly :user_id
 
-  def validate_on_update
-    # check login
-    if login.blank?
-      errors.add_to_base("昵称不能为空")
-      return
-    elsif login.length < 4 or login.length > 16
-      errors.add_to_base("昵称长度不对")
-      return
-    elsif /^\d/.match(login)
-      errors.add_to_base("昵称不能以数字开头")
-      return
-      # TODO: how to validate chinese characters
-    end
+  validates_presence_of :login, :message => "不能为空"
 
-    # check gender
-    if gender.blank?
-      errors.add_to_base("性别为空")
-      return
-    elsif gender != 'male' and gender != 'female'
-      errors.add_to_base("未知的性别")
-      return
-    end
+  validates_size_of :login, :within => 2..100, :too_long => "最长100个字符", :too_short => "最短2个字符"
 
-    # check birthday
-    unless birthday.blank?
-      if birthday > Time.now
-        errors.add_to_base("生日比今天还晚")
-        return
-      elsif birthday < 40.years.ago
-        errors.add_to_base("你这么老了阿")
-        return
-      end
-    end
+  validates_presence_of :gender, :message => "不能为空"
+
+  validates_inclusion_of :gender, :in => ['male', 'female'], :message => "只能是male或者female"
+
+  validate :birthday_is_valid
     
-    # check region, city, district
-    if region_id.blank?
-      if !city_id.blank? or !district_id.blank?
-        errors.add_to_base("没有省份")
-        return
-      end
-    else
-      if city_id.blank?
-        if !district_id.blank?
-          errors.add_to_base("没有城市")
-          return
-        end
-      else
-        if City.find(:first, :conditions => {:region_id => region_id, :id => city_id}).blank? 
-          errors.add_to_base("城市不存在")
-          return
-        elsif !district_id.blank? and District.find(:first, :conditions => {:city_id => city_id, :id => district_id}).blank?
-          errors.add_to_base("地区不存在")
-          return
-        end
-      end
-    end
-    
-    # check qq
-    unless qq.blank?
-      if !/\d+/.match(qq)   
-        errors.add_to_base("qq只能是数字") 
-        return
-      elsif qq.length < 4 or qq.length > 15
-        errors.add_to_base("qq号码长度不对")
-        return
-      end
-    end
+  validate :region_is_valid
 
-    # check phone
-    unless phone.blank?
-      if !/\d+(-(\d+))*/.match(phone)
-        errors.add_to_base("电话只能是数字或-")
-        return
-      elsif phone.length < 7 or phone.length > 15 
-        errors.add_to_base("电话长度不对")
-        return
-      end
-    end
+  validate :city_is_valid
   
-    # check website
-    unless website.blank?
-      # TODO: 这个regular expression貌似不够强大，不能把adsfadsf视为非法的url
-      unless website =~ /^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/
-        errors.add_to_base("非法的url")
-        return
-      end 
+  validate :district_is_valid
+
+  validates_size_of :qq, :within => 4..15, :too_short => "最短4位", :too_long => "最长15位", :if => "!qq.blank?"
+
+  validates_format_of :qq, :with => /\d+/, :message => "只能是数字", :if => "!qq.blank?"
+
+  validates_size_of :phone, :within => 7..15, :too_short => "最短7位", :too_long => "最长15位", :if => "!phone.blank?"
+
+  validates_format_of :phone, :with => /\d+(-(\d+))*/, :message => "只能是数字或者-", :if => "!phone.blank?"
+
+  validates_format_of :website, :with => /^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/, :message => "非法的url", :if => "!website.blank?"
+
+protected
+
+  def birthday_is_valid
+    return if birthday.blank?
+    if birthday > Time.now
+      errors.add(:birthday, "生日比今天还晚")
+      return
+    elsif birthday < 40.years.ago
+      errors.add(:birthday, "你这么老了阿")
+      return
     end
-  
+  end
+
+  def region_is_valid
+    return if region_id.blank?
+    errors.add(:region_id, "不存在") unless Region.exists? region_id
+  end
+
+  def city_is_valid
+    return if region.blank? or city_id.blank?
+    errors.add(:city_id, "不存在") unless City.exists? :region_id => region_id, :id => city_id
+  end
+
+  def district_is_valid
+    return if city.blank? or district_id.blank?
+    errors.add(:district_id, "不存在") unless District.exists? :city_id => city_id, :id => district_id
   end
 
 end

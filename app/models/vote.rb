@@ -48,7 +48,7 @@ protected
       poll.answers.find(answer_ids)
     end
   rescue
-    errors.add_to_base("选项不存在")
+    errors.add(:answer_ids, "选项不存在")
   end
 
 end

@@ -154,7 +154,7 @@ Object.extend(Iyxzone.Register, {
 
   isCharacterNameValid: function(id){
     var name = $('profile_new_characters_' + id + '_name').value;
-    var div = 'character_' + id + '_name_error';
+    var div = 'characters_' + id + '_name_error';
 
     this.clearError(div);
 
@@ -168,7 +168,7 @@ Object.extend(Iyxzone.Register, {
 
   isCharacterLevelValid: function(id){
     var level = $('profile_new_characters_' + id + '_level').value;
-    var div = 'character_' + id + '_level_error';
+    var div = 'characters_' + id + '_level_error';
 
     this.clearError(div);
 
@@ -188,15 +188,15 @@ Object.extend(Iyxzone.Register, {
   isGameValid: function(id){
     var valid = true;
     var gameID = $('profile_new_characters_' + id + '_game_id').value;
-    var gameDiv = 'character_' + id + '_game_id_error';
+    var gameDiv = 'characters_' + id + '_game_id_error';
     var areaID = $('profile_new_characters_' + id + '_area_id').value;
-    var areaDiv = 'character_' + id + '_area_id_error';
+    var areaDiv = 'characters_' + id + '_area_id_error';
     var serverID = $('profile_new_characters_' + id + '_server_id').value;
-    var serverDiv = 'character_' + id + '_server_id_error';
+    var serverDiv = 'characters_' + id + '_server_id_error';
     var raceID = $('profile_new_characters_' + id + '_race_id').value;
-    var raceDiv = 'character_' + id + '_race_id_error';
+    var raceDiv = 'characters_' + id + '_race_id_error';
     var professionID = $('profile_new_characters_' + id + '_profession_id').value;
-    var professionDiv = 'character_' + id + '_profession_id_error';
+    var professionDiv = 'characters_' + id + '_profession_id_error';
     var game = this.gameSelectors.get(id).getDetails();
     this.clearError(gameDiv);
     this.clearError(areaDiv);
