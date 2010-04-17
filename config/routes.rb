@@ -6,6 +6,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :area_details, :controller => 'game_areas'
 
+  map.resources :regions, :controller => 'regions'
+
+  map.resources :cities, :controller => 'cities'
+
+  map.resources :districts, :controller => 'districts'
+
   map.resources :sessions
 
   map.root :controller => 'sessions', :action => 'new' 
@@ -25,12 +31,6 @@ ActionController::Routing::Routes.draw do |map|
   map.forgot_password '/forgot_password', :controller => 'passwords', :action => 'new'
 
   map.reset_password '/reset_password/:password_reset_code', :controller => 'passwords', :action => 'edit'
-
-  map.regions '/regions', :controller => 'chinese_region', :action => 'regions'
-
-  map.cities '/cities', :controller => 'chinese_region', :action => 'cities'
-
-  map.districts '/districts', :controller => 'chinese_region', :action => 'districts'
 
   map.invite '/invite', :controller => 'register', :action => 'invite'
 

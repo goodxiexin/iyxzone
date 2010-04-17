@@ -26,30 +26,26 @@ Iyxzone.ChineseRegion.Selector = Class.create({
   },
 
   resetCityInfo: function(){
-//    $(this.citySelectorID).innerHTML = '<option value="">---</option>'; 
     $(this.citySelectorID).update( '<option value="">---</option>'); 
   },
 
   setupCityInfo: function(cities){
     var html = '<option value="">---</option>';
     for(var i=0;i<cities.length;i++){
-      html += "<option value='" + cities[i].city.id + "'>" + cities[i].city.name + "</option>";
+      html += "<option value='" + cities[i].id + "'>" + cities[i].name + "</option>";
     }
-//    $(this.citySelectorID).innerHTML = html;
     $(this.citySelectorID).update( html);
   },
 
   resetDistrictInfo: function(){
-//    $(this.districtSelectorID).innerHTML = '<option value="">---</option>'; 
     $(this.districtSelectorID).update( '<option value="">---</option>'); 
   },
 
   setupDistrictInfo: function(districts){
     var html = '<option value="">---</option>';
     for(var i=0;i<districts.length;i++){
-      html += "<option value='" + districts[i].district.id + "'>" + districts[i].district.name + "</option>";
+      html += "<option value='" + districts[i].id + "'>" + districts[i].name + "</option>";
     }
-//    $(this.districtSelectorID).innerHTML = html;
     $(this.districtSelectorID).update( html);
   },
 
@@ -59,17 +55,16 @@ Iyxzone.ChineseRegion.Selector = Class.create({
       this.resetDistrictInfo();
       return;
     }
-    new Ajax.Request('/cities', {
+    new Ajax.Request('/regions/' + $(this.regionSelectorID).value + '.json', {
       method: 'get',
-      parameters: {region_id: $(this.regionSelectorID).value},
       onSuccess: function(transport){
-        details = transport.responseText.evalJSON();
+        details = transport.responseText.evalJSON().region;
         if(this.citySelectorID)
           this.resetCityInfo();
         if(this.districtSelectorID)
           this.resetDistrictInfo();
         if(this.citySelectorID)
-          this.setupCityInfo(details);
+          this.setupCityInfo(details.cities);
       
         this.options.onRegionChange($(this.regionSelectorID).value);
       }.bind(this)
@@ -82,14 +77,13 @@ Iyxzone.ChineseRegion.Selector = Class.create({
         this.resetDistrictInfo();
       return;
     }
-    new Ajax.Request('/districts', {
+    new Ajax.Request('/cities/' + $(this.citySelectorID).value + '.json', {
       method: 'get',
-      parameters: {region_id: $(this.regionSelectorID).value, city_id: $(this.citySelectorID).value},
       onSuccess: function(transport){
-        details = transport.responseText.evalJSON();
+        details = transport.responseText.evalJSON().city;
         if(this.districtSelectorID){
           this.resetDistrictInfo();
-          this.setupDistrictInfo(details);
+          this.setupDistrictInfo(details.districts);
         }
 
         this.options.onCityChange($(this.citySelectorID).value);
