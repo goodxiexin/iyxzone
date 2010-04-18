@@ -8,4 +8,8 @@ class GameServer < ActiveRecord::Base
 
 	has_many :users, :through => :characters, :conditions => "users.activated_at IS NOT NULL", :uniq => true
 
+  def is_temp?
+    ip == '0.0.0.0'
+  end
+
 end

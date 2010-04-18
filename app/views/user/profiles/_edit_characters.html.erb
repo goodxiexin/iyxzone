@@ -71,7 +71,7 @@
               </div>
             <% end %>
             <p class='foot s_clear'>
-              <%= link_to_function "删除角色", "Iyxzone.Profile.Editor.removeCharacter(#{character.id}, 0, this)", :class => 'right red' %>
+              <%= link_to_function "删除角色", "Iyxzone.Profile.Editor.removeCharacter(#{character.id}, 0, this)", :class => 'right red', :href => "javascript:void(0);" %>
             </p>
           </div>
           <%= javascript_tag "Iyxzone.Profile.Editor.addGameSelector(#{character.id}, #{character.game.to_json(:include => [:servers, :areas, :races, :professions])}.game);" %>

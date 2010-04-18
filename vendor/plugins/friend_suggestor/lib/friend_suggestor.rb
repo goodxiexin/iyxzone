@@ -92,8 +92,9 @@ module FriendSuggestor
 	def collect_comrades server
 		comrade_suggestions = {}
 		comrade_suggestions.default =	0	
+    candidates = server.is_temp? ? server.game.users : server.users
 
-		server.users.each do |u|
+		candidates.each do |u|
 			if u != self and !self.has_friend?(u)	and !self.wait_for?(u) and !u.wait_for?(self)
 				comrade_suggestions[u.id] += 20 * u.common_friends_with(self).count
 				comrade_suggestions[u.id] += 10 * u.common_events_with(self).count
@@ -111,7 +112,7 @@ module FriendSuggestor
 	end
 
 	def fetch_comrade_suggestions server
-		suggestions = comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id})
+		comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id})
 
     # 本来这里，如果没有的话(或者推荐的玩家很少的时候)，就进行计算
     # 但是考虑到如果该游戏玩家基本没有，那岂不是每次都要计算，而且计算一次的开销较大
@@ -123,8 +124,6 @@ module FriendSuggestor
       suggestions = comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id})
     end
 =end
-
-    suggestions
   end
 
   def create_comrade_suggestions server

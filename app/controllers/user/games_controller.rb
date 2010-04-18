@@ -34,17 +34,16 @@ class User::GamesController < UserBaseController
   def show
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		
-    @comrades = []
-		if current_user.games.include?(@game)
-			current_user.servers.find(:all, :conditions=> {:game_id => @game.id}).each {|server| 
-				@comrades = @comrades | server.characters
-			}
+		if current_user.has_game? @game
+      servers = current_user.servers.all(:conditions => {:game_id => @game.id})
+      # 这里不考虑temp server，不然很容易就返回了游戏下的全部角色
+      @comrades = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:server_id => servers.map(&:id)})
 		end
-		@players = @game.characters.find(:all)	
+		@players = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:game_id => @game.id})
+    
     @attention = @game.attentions.find_by_user_id(current_user.id)
     @messages = @game.comments.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @game.id, :wall_type => 'game'}}
-
     @albums = @game.albums.find(:all, :conditions => "privilege != 4 AND photos_count != 0", :limit => 3)
     @blogs = @game.blogs.find(:all, :conditions => "privilege != 4", :limit => 3)
     @has_game = current_user.has_game? @game

@@ -44,13 +44,21 @@ module Jabberwock # :nodoc:
                 crit      = crit.split(/\s+/).map {|s| "%#{s}%"}
                 columns   = self.searchable_columns 
                 count     = columns.size
-                bind_vars = crit * count
-                bind_vars.insert(0,build_like_query(self.searchable_columns, crit.count))
+    
+                if crit.blank?
+                  bind_vars = nil
+                else
+                  bind_vars = crit * count
+                  bind_vars.insert(0,build_like_query(self.searchable_columns, crit.count))
+                end
+
                 cond = opts[:conditions]
                 if cond.blank?
                   opts[:conditions] = bind_vars 
                 else
-                  opts[:conditions] = "(#{sanitize_sql_for_conditions(cond)}) AND (#{sanitize_sql_for_conditions(bind_vars)})"
+                  if !bind_vars.nil?
+                    opts[:conditions] = "(#{sanitize_sql_for_conditions(cond)}) AND (#{sanitize_sql_for_conditions(bind_vars)})"
+                  end
                 end
                 self.find(:all, opts)
             end

@@ -1390,7 +1390,7 @@ nicEditors.authenticityToken = null;
 
 var nicImageButton = nicEditorAdvancedButton.extend({
 
-  paneHTML: "<div class='z-box' style='width:450px'><div class='z-t'> \
+  paneHTML: "<div class='z-t'> \
         <span class='l'><strong></strong></span> \
         <span class='r'></span> \
         </div> \
@@ -1408,7 +1408,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
                         </div> \
                       <div class='formcontent' id='local_image_frame' style='display:none'> \
                           <form action='/blog_images' id='upload_image_form' enctype='multipart/form-data' method='post' target='upload_iframe'> \
-                            <input type='hidden' value='' name='authenticity_token'/> \
+                            <input type='hidden' value='' name='authenticity_token' id='authenticity_token_field'/> \
                             <div class='rows s_clear'> \
                               <div class='fldid'><label>上传本地图片：</label></div> \
                               <div class='fldvalue'> \
@@ -1448,7 +1448,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
         <span class='l'><strong></strong></span> \
         <span class='r'></span> \
         </div> \
-    </div></div>",
+    </div>",
 
   currentTab : null,
 
@@ -1473,21 +1473,25 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     var height = document.viewport.getHeight();
     var width = document.viewport.getWidth();
 
+    var zBox = new bkElement('div').setStyle({'className': 'z-box', 'width': '450px'});
+    zBox.innerHTML = this.paneHTML;
+
     this.pane.contain.setStyle({'width' : '450px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 225) + 'px', 'z-index' : '9999'});
     this.pane.pane.setStyle({'width':'450px', 'border' : 'none', 'padding' : '0px'});
     this.pane.close.remove();
     this.pane.close = null;
-    this.pane.setContent(this.paneHTML);
+    this.pane.append(zBox.noSelect());
 
     this.currentTab = 'url_image';
 
     // set token
-    $BK('upload_image_form').childElements()[0].value = nicEditors.authenticityToken;
+    $BK('authenticity_token_field').value = nicEditors.authenticityToken;
 
     // set album selector
     for(var i=0;i<nicEditors.albums.length;i++){
       var album = nicEditors.albums[i];
-      var option = new bkElement('option').update(album.title);
+      var option = new bkElement('option');
+      option.innerHTML = (album.title);
       option.setAttributes({'value': album.id});
       $BK('album_selector').appendChild(option);
     }
@@ -1507,10 +1511,22 @@ var nicImageButton = nicEditorAdvancedButton.extend({
       }
       new Ajax.Request('/' + type + 's/' + albumID + '.json', {
         method: 'get',
+        onLoading: function(){
+          Iyxzone.changeCursor('wait');
+        },
+        onComplete: function(){
+          Iyxzone.changeCursor('default');
+        },
         onSuccess: function(transport){
           var json = transport.responseText.evalJSON();
           var ul = $BK('album_images_list');
-          ul.update('');
+          ul.innerHTML = '';
+          if(json.length == 0){
+            var li = new bkElement('li');
+            li.innerHTML = '没有照片';
+            ul.appendChild(li);
+            return;
+          }
           for(var i=0;i<json.length;i++){
             var path = json[i];
             var li = new bkElement('li');
@@ -1537,24 +1553,27 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     // set tab events
     $BK('local_image_tab').addEvent('click', function(){
       this.clickTab('local_image');
+      return false;
     }.closure(this));
     $BK('url_image_tab').addEvent('click', function(){
       this.clickTab('url_image');
+      return false;
     }.closure(this));
     $BK('album_image_tab').addEvent('click', function(){
       this.clickTab('album_image');
+      return false;
     }.closure(this));  
 
     // set submit/cancel event
     $BK('image_submit_btn').addEvent('click', function(){
       if(this.currentTab == 'url_image'){
         this.src = $BK('image_url_field').value;
+        this.removePane(); // 必须先removePane(), 然后selElm().parentTag('IMG')才能找到争取的tag
         this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
         this.submit();
-        this.removePane();
       }else if(this.currentTab == 'local_image'){
-        this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
         $BK('upload_image_form').submit();
+        this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
       }else if(this.currentTab == 'album_image'){
         for(var i=0;i<this.selectedPhotos.length;i++){
           this.src = this.selectedPhotos[i];
@@ -1657,29 +1676,36 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
 
   symbols: [ '[惊吓]', '[晕]', '[流鼻涕]', '[挖鼻子]', '[鼓掌]', '[骷髅]', '[坏笑]', '[傲慢]', '[大哭]', '[砸头]', '[衰]', '[哭]', '[可爱]', '[冷汗]', '[抽烟]', '[擦汗]', '[亲亲]', '[糗]', '[吃惊]', '[左哼哼]', '[疑问]', '[惊恐]', '[睡觉]', '[皱眉头]', '[可怜]', '[打呵欠]', '[害羞]', '[花痴]', '[右哼哼]', '[囧]', '[大便]', '[咒骂]', '[贼笑]', '[嘘]', '[吐]', '[苦恼]', '[白眼]', '[流汗]', '[大笑]', '[羞]', '[撇嘴]', '[偷笑]', '[BS]', '[困]', '[火]', '[闭嘴]', '[抓狂]', '[强]', '[不行]', '[装酷]' ], 
 
-  options: {iconFiles :  '/images/faces/' + encodeURIComponent('亲亲') +'.gif'},
+  buildFaces: function(){
+    var zBox = new bkElement('div').setStyle({'className': 'z-box', 'width': '400px', 'overflow': 'hidden'});
+    
+    var zt = new bkElement('div').setStyle({'className': 'z-t'});
+    zt.innerHTML = '<span class="l"><strong></strong></span><span class="r"></span>';
+    
+    var zm = new bkElement('div').setStyle({'className': 'z-m rows s_clear'});
+    var box01 = new bkElement('div').setStyle({'className': 'box01 s_clear'});
+    var p = new bkElement('p').setStyle({'className': 'z-h'});
+    p.innerHTML = ('插入表情');
+    var zcon = new bkElement('div').setStyle({'className': 'z-con'});
+    var content = new bkElement('div').setStyle({'className': 'content'});
+    var emotBox = new bkElement('div').setStyle({'className': 'emot-box'});
+    var bg = new bkElement('div').setStyle({'className': 'bg'}); 
+    content.appendChild(emotBox);
+    zcon.appendChild(content);
+    box01.appendChild(p);
+    box01.appendChild(zcon);
+    zm.appendChild(box01);
+    zm.appendChild(bg);
 
-  facesPerPage: 50,
-
-  cache: [],
-
-  buildFaces: function(pageNum){
     var len = this.symbols.length;
     var symbols = this.symbols;
     var perPage = this.facesPerPage;
-    var total = (len % perPage == 0) ? (len/perPage) : (parseInt(len/perPage) + 1);
     var div = new bkElement('DIV').setStyle({'className' : 'con'});
-    
-    if(pageNum < 0 || pageNum > total - 1){
-      return div;
-    }
-
-    for(var i = pageNum * perPage; i < len && i < (pageNum + 1) * perPage; i++){
+    for(var i = 0; i < len; i++){
       a = new bkElement('a').setAttributes({title: symbols[i], href: 'javascript: void(0)'});
       img = new bkElement('img').setAttributes({src: "/images/faces/"+ symbols[i].slice(1,symbols[i].length-1) +".gif",  alt: symbols[i]});
       img.appendTo(a);
-      a.onclick = bkLib.cancelEvent;
-      img.addEvent('click', function(e){
+      a.addEvent('click', function(e){
         var url = bkLib.eventTarget(e).getAttribute('src');
         if(!this.im){
           var tmp = 'javascript:nicImTemp();';
@@ -1689,48 +1715,39 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
         this.im.setAttributes( {src: url});
         this.removePane();
         this.ne.nicCommand("Unselect",this.im);
-        bkLib.cancelEvent(e);
+        return false; // 如果没有，在IE6下会触发onbeforeunload
       }.closure(this));
       a.appendTo(div);
     }
     var foot = new bkElement('div').setStyle({'className': 'pager-simple foot'});
     div.appendChild(foot);
-    return div;
-  },
+    emotBox.appendChild(div);
 
-  paneHTML: "<div class='z-box' style='width:400px;overflow:hidden;'><div class='z-t'>\
-        <span class='l'><strong></strong></span> \
-        <span class='r'></span> \
-      </div> \
-      <div class='z-m rows s_clear'> \
-        <div class='box01 s_clear'> \
-          <p class='z-h'>插入表情</p> \
-          <div class='z-con'> \
-            <div class='content'> \
-              <div id='nicEdit-emot-box' class='emot-box'></div> \
-            </div> \
-          </div> \
-        </div> \
-        <div class='bg'></div> \
-      </div> \
-      <div class='z-b'> \
-        <span class='l'><strong></strong></span> \
-        <span class='r'></span> \
-      </div></div>",
+    var zb = new bkElement('div').setStyle({'className': 'z-b'});
+    zb.innerHTML = '<span class="l"><strong></strong></span>';
+    
+    zBox.appendChild(zt);
+    zBox.appendChild(zm);
+    zBox.appendChild(zb);
+
+    return zBox;    
+  },
 
 	addPane : function(){
     var scroll = document.viewport.getScrollOffsets();
     var height = document.viewport.getHeight();
     var width = document.viewport.getWidth();
 
+    var zBox = this.buildFaces();
+    
     this.pane.contain.setStyle({'width' : '400px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 165) + 'px', 'z-index' : '9999'});
     this.pane.pane.setStyle({'width':'400px', 'border' : 'none', 'padding' : '0px'});
     this.pane.close.remove();
     this.pane.close = null;//将pane上面叉号去掉
+    this.pane.append(zBox.noSelect());
 
     this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
-    this.pane.setContent(this.paneHTML);
-    $BK('nicEdit-emot-box').appendChild(this.buildFaces(0));
+    //$BK('nicEdit-emot-box').appendChild(this.buildFaces());
 	}
 });
 

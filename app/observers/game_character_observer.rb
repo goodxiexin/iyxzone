@@ -20,6 +20,12 @@ class GameCharacterObserver < ActiveRecord::Observer
 	end
 
   def after_update character
+    # delete comrade suggestions if game server changes
+    if character.server_id_changed?
+      # TODO: 怎么删除那些没有用的战友推荐呢
+    end
+
+    # issue feeds
 		recipients = [character.user.profile, character.game, character.guild]
 		recipients.concat character.user.friends
     if character.playing and !character.playing_was

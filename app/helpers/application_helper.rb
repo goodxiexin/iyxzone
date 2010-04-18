@@ -207,7 +207,9 @@ module ApplicationHelper
 	end
 
 	def server_location server
-		if server.game.no_areas
+		if server.is_temp?
+      "#{game_link server.game}"
+    elsif server.game.no_areas
 			"#{game_link server.game}, #{server.name}"
 		else
 			"#{game_link server.game}, #{server.area.name}, #{server.name}"

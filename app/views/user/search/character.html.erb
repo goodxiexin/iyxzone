@@ -65,12 +65,9 @@
           <div class="piclist-rows cmt-space">
             <table cellspacing='0' cellpadding='0'>
 							<% if @users.empty? %>
-								<tr>
-									<td>
-										<strong> 没有符合条件的用户 </strong>
-									</td>
-								</tr>
+								<tr><td><strong> 没有符合条件的用户 </strong></td></tr>
 							<% else %>
+                <tr><td><strong> 共有<%= @users.total_entries %>个符合条件的用户 </strong></td></tr>
 								<% @users.each do |user_id, characters| %>
 								<% f = User.find(user_id) %>
 								<tr>
@@ -81,9 +78,7 @@
 										<div class='data jl-data'>
 											<p><%= profile_link f %></p>
 											<% characters[0..2].each do |character| %>
-												<p><%= character.game.name %>,
-												<%= character.server.name unless character.server.nil? %>的
-												<%= character.name %></p>
+												<p><%= server_location character.server %> 的 <%= character.name %></p>
 											<% end %>
 											<p class="space">
 												<% unless current_user == f %>

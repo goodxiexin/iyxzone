@@ -4,7 +4,7 @@ class User::SearchController < UserBaseController
 
   def user
     @games = Game.find(:all, :order => 'pinyin ASC')
-    @users = User.search(params[:key]).paginate :page => params[:page], :per_page => 10 
+    @users = User.search(params[:key]).paginate :page => params[:page], :per_page => 20 
 		@key = params[:key]
   end
 
@@ -14,11 +14,11 @@ class User::SearchController < UserBaseController
     @server = @game.servers.find(params[:server_id]) unless params[:server_id].blank?
 
     cond = {}
-    cond.merge!({:game_id => @game.id}) unless @game.nil? 
-    cond.merge!({:area_id => @area.id}) unless @area.nil? 
-    cond.merge!({:server_id => @server.id}) unless @server.nil?
+    cond.merge!({:game_id => @game.id}) if !@game.nil? 
+    cond.merge!({:area_id => @area.id}) if !@area.nil?
+    # 如果是temp server, 那么就相当于去找@game 
+    cond.merge!({:server_id => @server.id}) if !@server.nil? and !@server.is_temp?
     
-    @areas = @game.areas if !@game.nil? and !@game.no_areas
     if @game.nil?
       @areas = []
       @servers = []
@@ -33,7 +33,7 @@ class User::SearchController < UserBaseController
     @games = Game.find(:all, :order => 'pinyin ASC')
 		@total_users = GameCharacter.search(params[:key], :conditions => cond).group_by(&:user_id).to_a
 		@key = params[:key]
-    @users = @total_users.paginate :page => params[:page], :per_page => 10
+    @users = @total_users.paginate :page => params[:page], :per_page => 20
   end
 
 end

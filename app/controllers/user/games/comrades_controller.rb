@@ -4,47 +4,37 @@ class User::Games::ComradesController < UserBaseController
 
 	def index
 		@comrades = []
-		if current_user.games.include?(@game)
-			current_user.servers.find(:all, :conditions=> { :game_id => @game.id}).each { |server|
-				@comrades = @comrades | server.characters
-			}
-		end
-		@comrades = @comrades.paginate :page => params[:page], :per_page => 20
+		if @playing
+      servers = current_user.servers.all(:conditions => { :game_id => @game.id})
+		  @comrades = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => {:server_id => servers.map(&:id)}
+    end
 	end
 
 	def search
 		@comrades = []
-		if current_user.games.include?(@game)
-			current_user.servers.find(:all, :conditions=> { :game_id => @game.id}).each { |server|
-				@comrades = @comrades | server.characters
-			}
+		if @playing
+			servers = current_user.servers.all(:conditions=> { :game_id => @game.id})
+      @comrades = GameCharacter.all :conditions => {:server_id => servers.map(&:id)}
 		end
-		@characters = []
-    @users = User.search(params[:key])
-		@users.each{ |user| @characters = @characters | user.characters}
+    @characters = User.search(params[:key]).map {|user| user.characters}.flatten
 		@comrades = @characters & @comrades
     @comrades = @comrades.paginate :page => params[:page], :per_page => 20 
 	end
 
 	def character_search
 		@comrades = []
-		if current_user.games.include?(@game)
-			current_user.servers.find(:all, :conditions=> { :game_id => @game.id}).each { |server|
-				@comrades = @comrades | server.characters
-			}
-		end
-    @characters = GameCharacter.search(params[:key])
-		@comrades = @characters & @comrades
-    @comrades = @comrades.paginate :page => params[:page], :per_page => 10 
+		if @playing
+      servers = current_user.servers.all(:conditions => {:game_id => @game.id})
+      @comrades = GameCharacter.search(params[:key], :conditions => {:server_id => servers.map(&:id)})
+    end
+    @comrades = @comrades.paginate :page => params[:page], :per_page => 20 
 	end
 
 protected
 
 	def setup
 		@game = Game.find(params[:game_id])
-		@playing = current_user.games.include?(@game)
-		@user = current_user
-	rescue
-		not_found
+		@playing = current_user.has_game? @game
 	end
+
 end

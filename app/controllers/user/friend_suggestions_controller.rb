@@ -13,13 +13,13 @@ class User::FriendSuggestionsController < UserBaseController
 
 	def friend
 		@games = Game.find(:all, :order => 'pinyin ASC')
-    @friend_suggestions = current_user.fetch_friend_suggestions.paginate :page => params[:page], :per_page => 10
+    @friend_suggestions = current_user.fetch_friend_suggestions.paginate :page => params[:page], :per_page => 20
 	end
 
 	def comrade
     @games = Game.find(:all, :order => 'pinyin ASC')
     @server = GameServer.find(params[:server_id])
-		@comrade_suggestions = current_user.fetch_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 10
+		@comrade_suggestions = current_user.fetch_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 20
 	end
 
 	def new

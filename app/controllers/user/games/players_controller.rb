@@ -3,24 +3,17 @@ class User::Games::PlayersController < UserBaseController
 	layout 'app'
 
 	def index
-		@players = @game.characters.find(:all)
-		@players = @players.paginate :page=>params[:page], :per_page => 10
+		@players = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => {:game_id => @game.id}
 	end
 
 	def search
-		@players = @game.characters.find(:all)
-		@characters = []
-    @users = User.search(params[:key])
-		@users.each{ |user| @characters = @characters | user.characters}
-		@players = @characters & @players
-    @players = @players.paginate :page => params[:page], :per_page => 10 
+		@players = User.search(params[:key]).map {|user| user.characters}.flatten & @game.characters
+    @players = @players.paginate :page => params[:page], :per_page => 20 
 	end
 
 	def character_search
-		@players = @game.characters.find(:all)
-    @characters = GameCharacter.search(params[:key])
-		@players = @characters & @players
-    @players = @players.paginate :page => params[:page], :per_page => 10 
+    @players = GameCharacter.search(params[:key], :conditions => {:game_id => @game.id})
+    @players = @players.paginate :page => params[:page], :per_page => 20 
 	end
 
 protected
@@ -28,7 +21,6 @@ protected
 	def setup
 		@game = Game.find(params[:game_id])
 		@playing = current_user.games.include?(@game)
-		@user = current_user
 	end
 
 end

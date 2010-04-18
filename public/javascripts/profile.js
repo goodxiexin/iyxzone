@@ -520,7 +520,7 @@ Object.extend(Iyxzone.Profile.Editor, {
       this.delCharacterIDs.push(characterID); 
     }
 
-    $(prefix + '_character_' + characterID).remove();
+    $(prefix + '_characters_' + characterID).remove();
   },
 
   edit: function(profileID){

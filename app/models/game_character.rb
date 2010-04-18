@@ -1,8 +1,10 @@
 class GameCharacter < ActiveRecord::Base
 
+  acts_as_random
+
   acts_as_pinyin :name => 'pinyin'
 
-  searcher_column :name
+  searcher_column :name, :pinyin
 
   belongs_to :user
 
@@ -20,11 +22,11 @@ class GameCharacter < ActiveRecord::Base
 
 	acts_as_resource_feeds
 
-  validates_presence_of :user_id, "不能为空"
+  validates_presence_of :user_id, :message => "不能为空"
 
-  validates_presence_of :level, "不能为空"
+  validates_presence_of :level, :message => "不能为空"
 
-  validates_presence_of :name, "不能为空"
+  validates_presence_of :name, :message => "不能为空"
 
   validate :game_is_valid
 
