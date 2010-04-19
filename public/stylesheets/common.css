@@ -57,6 +57,9 @@ a:active {text-decoration: none;}
 .blk{display:block}
 .nowrap{overflow:hidden;text-overflow:ellipsis;word-break:keep-all;white-space:nowrap;display:inline-block}
 
+.top-banner{margin:0 auto 1px auto;width:940px;overflow:hidden}
+.welcome-box .top-banner{width:970px;}
+
 
 .path-box{height:17px;line-height:17px;overflow:hidden}
 .path-box label,.path-box span{display:block;float:left;margin-right:12px;}
@@ -541,7 +544,7 @@ a.msg-btn{background-position:-118px -186px}
 .drop-wrap .foot{text-align:center;background:#f4fdef;border-top:1px solid #bdd6ad;padding:10px 0}
 .drop-wrap .foot .button{float:none;display:inline-block}
 .drop-wrap .checkboxes,.drop-box .checkboxes{height:160px;overflow-y:auto;overflow-x:hidden}
-.drop-wrap .checkboxes li{float:left;margin:3px;white-space:nowrap;width:80px;_width:78px;overflow:hidden}
+.drop-wrap .checkboxes li{float:left;margin:3px;width:75px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 
 /*下拉框 如：好友标记*/
 .selector01 span a{padding-right:13px;color:#333;background:url(../images/skin/arrow.gif) no-repeat right 0;display:inline-block;width:50px;overflow:hidden;height:15px;line-height:15px;}
@@ -569,12 +572,15 @@ a.msg-btn{background-position:-118px -186px}
 
 /*IM 聊天*/
 .im-toggle .r-t,.im-toggle .r-b,.im-bar .r-b,.im-bar .r-m,.im-state,.im-online,.im-busy,.im-leave,.im-hide,.im-search .go,.im-group dt,.im-manage,.im-dlg-log h2 span{background:url(../images/skin/im.png) no-repeat;}
-.im-tinybar{position:absolute;z-index:2;width:25px;}
+
+.im-tinybar,.im-bar{position:fixed;right:5px;top:50px;z-index:9999999;_position:absolute;_margin-top:50px;_bottom:auto;_right:5px;_top:expression(eval(document.documentElement.scrollTop));}
+
+.im-tinybar{width:25px;}
 .im-tinybar p{background:#fcfefb;color:#217308;border-left:1px solid #e8f1e1;padding:10px 2px;text-align:center;font-weight:700;height:200px}
 .im-tinybar p span{font-weight:400;margin-bottom:8px;display:block}
 .im-toggle .r-t,.im-toggle .r-b,.im-bar .r-b{display:block;height:26px}
 .im-toggle .r-b,.im-bar .r-b{background-position:0 bottom;height:10px}
-.im-bar{position:absolute;z-index:9999999;width:159px;color:#666}
+.im-bar{width:159px;color:#666}
 .im-bar .r-m{background-position:0 -53px;padding:15px 10px}
 	.im-title{line-height:20px}
 		.im-state{background-position:0 -27px;width:30px;height:18px;position:relative;z-index:2}
@@ -606,7 +612,7 @@ a.msg-btn{background-position:-118px -186px}
 .im-bar .foot{border-top:1px solid #d5e8c8;padding:10px;}
 .im-manage,.im-manage:hover{width:56px;padding-left:23px;height:18px;line-height:18px;display:inline-block;background-position:-25px 0;color:#25700d}
 	
-.im-dialog{border:1px solid #91ca4f;background:#fff;position:absolute;z-index:999999999;width:350px}
+.im-dialog{border:1px solid #91ca4f;background:#fff;position:absolute;z-index:999999999;width:350px;}
 .im-dialog .head{border:1px solid #a7cd65;background:#7fb73d;padding:5px;color:#fff;font-weight:700}
 .im-dialog .con{border-top:1px solid #73a637;padding:10px;}
 	.im-dlg-show{overflow-x:hidden;overflow-y:auto;height:180px}

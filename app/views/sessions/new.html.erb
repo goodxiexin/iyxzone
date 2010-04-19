@@ -22,8 +22,7 @@
 					<p class="top_link right">
 					<%= link_to_function "设为主页", "Iyxzone.addToHomepage()" %> |
 					<%= link_to_function "加入收藏", "Iyxzone.addToBookmark()" %> |
-					<%= link_to '反映建议' %> | 
-					<%= link_to '关于我们'%>
+					<%= link_to '关于我们', about_us_help_url %>
 					</p>
 				</div>
 			</div>
@@ -73,14 +72,11 @@
           <div class="fldvalue"><%= link_to '', signup_url, :class => 'registbtn png' %></div>
         </div>
         <div class="sperator"></div>
-        <div class="rows">
-          <div class="fldid">&nbsp;</div>
-					<% form_tag search_users_url do %>
-						<div class="fldvalue">
-						<div class="textfield"><%= text_field_tag 'key', "搜搜您的好友吧", :onfocus => "$(key).clear()" %></div>
-						</div>
-						<input type="submit" class="gobtn" value="" />
-					<% end %>
+        <div class="site-info">          
+          <h2>为了一起游戏网更美好，我们一直在努力</h2><br/>
+					<div><span class="time">04月19日</span><strong>加入667个游戏</strong></div>
+					<div><span class="time">04月19日</span><strong>宣传片正式上线</strong></div>
+					<div><span class="time">04月19日</span><strong>拾闻开始更新</strong></div>
         </div>
       </div>
       <span class="r-b"></span>
@@ -105,9 +101,13 @@
             </div>
         </div>
 
+<<<<<<< HEAD:app/views/sessions/new.html.erb
 <div id="footer">
 <%= insert_copyright %>
 </div>
+=======
+  <%= render :partial => 'layouts/footer' %>  
+>>>>>>> 7daf0ef86b5fc3a1f2b289d54e11ac904d13330a:app/views/sessions/new.html.erb
 
 </body>
 

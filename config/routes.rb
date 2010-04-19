@@ -14,6 +14,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :sessions
 
+  map.resources :help, :collection => {:about_us => :get, :app_info => :get, :contact_info => :get, :privacy_info => :get}
+
   map.root :controller => 'sessions', :action => 'new' 
 
   map.signup '/signup', :controller => 'users', :action => 'new'

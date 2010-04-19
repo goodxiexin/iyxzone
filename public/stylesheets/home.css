@@ -2,11 +2,12 @@ body{color:#333;}
 a{color:#25700D;}
 a:hover{color:#D63200;}
 
+
 .main .foot{margin:10px 0 0;}
 .main .foot .feed-list{width:400px;}
 .main .foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
 
-#header,#page,#footer{margin:0 auto;width:940px;clear:both}
+#header,#page,#footer{margin:0 auto;width:940px;clear:both;}
 #page{margin-top:6px;}
 #footer a{color:#7E7F80}
 #footer a:hover{color:#D63200;}
@@ -412,7 +413,7 @@ a:hover{color:#D63200;}
 .photolist-box li .btns{width:30px;margin:0 auto;}
 .photolist-box li .btns a{_display:inline;float:left;margin:0 4px 0 3px}
 
-.photolist-big-box li{float:left;padding:5px 8px;width:86px;height:95px;overflow:hidden}
+.photolist-big-box li{float:left;padding:5px 8px;width:86px;/*height:95px;*/overflow:hidden}
 .photolist-big-box .collection .middle{height:100%;}
 .photolist-big-box .collection .middle img{width:75px}
 
@@ -550,12 +551,12 @@ a:hover{color:#D63200;}
 
 .vote-box .vote-status-table{margin:10px auto;}
 .vote-box .vote-status-table td{padding:5px;line-height:20px;}
-.vote-box .vote-status-table .title{text-align:right;padding-right:2px;}
-.myblog .myblog-table .title div{padding-left:22px;height:21px;width:320px; white-space:nowrap;background:url(../images/icons/homeIcons.gif) no-repeat 0 -801px;overflow:hidden}
+.vote-box .vote-status-table .title{text-align:right;padding-right:2px;width:260px;}
+.myblog .myblog-table .title div{padding-left:22px;height:21px;width:320px;white-space:nowrap;background:url(../images/icons/homeIcons.gif) no-repeat 0 -801px;overflow:hidden}
 
 .vote-box .vote-status-table .percent{width:211px;padding-left:2px;}
 .vote-box .vote-status-table .cb{width:22px;}
-.vote-box .vote-status-table .btn{text-align:right;width:56px}
+.vote-box .vote-status-table .btn{text-align:right;width:100px}
 /*.vote-box .foot{margin-top:150px;}
 */.vote-box .foot .feed-list{padding-left:23px;width:400px;}
 .vote-box .foot .feed-list .textarea{width:298px;}
@@ -575,7 +576,7 @@ a:hover{color:#D63200;}
 .photo-upload-box .buttons{padding:13px 0;}
 .photo-upload-box .buttons a{_display:inline-block;margin:0 4px;}
 
-.photo-upload-form{width:400px;margin-bottom:}
+.photo-upload-form{width:400px;}
 .photo-upload-form .title h5{font-size:14px;}
 .photo-upload-form .title span,.photo-upload-box li span{float:left;display:block;width:80px;text-align:center;color:#fff;overflow:hidden}
 .photo-upload-form .upload-body{min-height:224px;_height:224px;}
@@ -969,8 +970,9 @@ dl.menu-op dd a{color:#333}
 
 /*视频 日志详细页面*/
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 15px}
-.detail-video-head p.left,.detail-blog-head p.left{margin-top:6px}
-.detail-video-head strong,.detail-blog-head strong{color:#cc3300;font-size:14px;font-weight:400}
+.detail-video-head p.left,.detail-blog-head p.left{margin-top:6px;width:500px}
+.detail-video-head p.left .gray,.detail-blog-head p.left .gray{float:left;margin-left:5px}
+.detail-video-head strong,.detail-blog-head strong{color:#cc3300;font-size:14px;font-weight:400;width:78%;float:left;display:inline-block}
 .detail-video .con,.detail-blog .con{text-align:center;margin:10px 0}
 .detail-blog .con{text-align:left;padding:0 15px}
 .detail-video-foot p,.detail-blog-foot p{padding:10px 15px}
@@ -1255,3 +1257,24 @@ h1.app-share{float:left}
 .forum .list-box{margin-left:10px}
 .forum-pager{margin-top:10px}
 .forum-pager a{color:#666}
+
+/*帮助、关于我们等*/
+.info-nav{padding:5px 0;position:relative}
+.info-nav dt{margin:10px 0;font-weight:700;color:#217308;padding-left:20px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -1542px;}
+.info-nav dt.focus{background:url(../images/icons/homeIcons.gif) no-repeat 0 -1574px;}
+.info-nav dt a{color:#217308;display:block;}
+.info-nav dd a{color:#217308;display:block;padding:5px;margin:1px 5px;text-align:center}
+.info-nav dd a:hover,.info-nav dd.focus a{color:#fff;background:#7bbe31}
+.info-title{padding:10px}
+.info-title h2{color:#217308;font-weight:700}
+.info-banner{text-align:center;}
+.info-content{font-size:14px;line-height:24px;margin:10px;padding:10px}
+.info-content .info-idx{font-size:12px;}
+.info-content .info-idx a{text-decoration:underline;}
+.info-content .info-idx span{margin:0 10px}
+.info-content h3.sub-title{background:#f8f8f8;border-top:1px solid #c2e29d;padding:5px;font-size:14px;margin-top:10px}
+.info-content h4.item-title{margin-top:10px}
+.info-content h4.item-title a{font-size:14px;text-decoration:underline;color:#217308;}
+.info-content .sub-con{border:1px dashed #ccc;margin:10px;padding:10px;font-size:12px;line-height:22px}
+.info-content p{text-indent:2em;margin:3px 0}
+.info-foot span{margin:0 8px}
