@@ -315,6 +315,14 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.datetime "updated_at"
   end
 
+  create_table "gameswithholes", :force => true do |t|
+    t.integer  "txtid"
+    t.integer  "sqlid"
+    t.string   "gamename"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "gears", :force => true do |t|
     t.string   "name"
     t.string   "gear_type"

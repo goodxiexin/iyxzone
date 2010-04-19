@@ -880,7 +880,7 @@ game86 = Game.create(
       game86.tag_list = "Q版, 奇幻, 角色扮演, 道具收费, 即时战斗, 3D"
       game86.save
 game87 = Game.create(
-      :name => "西游Q记",
+      :name => "西游Q版",
       :official_web => "http://xy.gyyx.cn/Index_xy.aspx",
       :sale_date => "2008-12-26",
       :company => "火石软件",
