@@ -1,5 +1,7 @@
 class AddProfessionAndRace < ActiveRecord::Migration
   def self.up
+		GameProfession.delete_all("game_id > 319")
+		GameRace.delete_all("game_id > 319")
 
 GameRace.create(
         :name => "美兰纳",

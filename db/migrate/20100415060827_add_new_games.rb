@@ -1,5 +1,7 @@
 class AddNewGames < ActiveRecord::Migration
   def self.up
+		Game.delete_all("id > 319")
+		Gameswithhole.delete_all("sqlid > 319")
 	game320 = Game.create(
 			:name => "十二天之贰",
 			:official_web => "http://12sky2.gfyoyo.com.cn/new/home/index.aspx",

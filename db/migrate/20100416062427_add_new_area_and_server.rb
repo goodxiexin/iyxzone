@@ -1,6 +1,8 @@
 class AddNewAreaAndServer < ActiveRecord::Migration
 
   def self.up
+		GameServer.destroy_all("id > 5484")
+		GameArea.destroy_all("id >1097")
 thisgameid = Game.find(:first, :conditions => ["name = ?","征途怀旧版"]).id
 aRecord = GameArea.create( :name => '双线区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '龙腾轩辕',  :game_id => thisgameid)
