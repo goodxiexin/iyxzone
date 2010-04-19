@@ -78,7 +78,6 @@
   </div>
 
 <%= javascript_tag "
-  Iyxzone.Game.infos = #{@games.to_json :only => [:id, :name]};
-  Iyxzone.Game.pinyins = #{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')};
+  Iyxzone.Game.infos = #{game_infos};
   Iyxzone.Register.newCharacter();
 " %>

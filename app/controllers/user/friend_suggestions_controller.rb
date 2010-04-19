@@ -4,22 +4,22 @@ class User::FriendSuggestionsController < UserBaseController
 
 	def index
     @games = Game.find(:all, :order => 'pinyin ASC')
-		@friend_suggestions = current_user.find_or_create_friend_suggestions.paginate :page => params[:page], :per_page => 6
+		@friend_suggestions = current_user.fetch_friend_suggestions.paginate :page => params[:page], :per_page => 6
 		@comrade_suggestions = {}
 		current_user.servers.each do |s|
-			@comrade_suggestions[s.id] = current_user.find_or_create_comrade_suggestions(s).paginate :page => params[:page], :per_page => 3
+			@comrade_suggestions[s.id] = current_user.fetch_comrade_suggestions(s).paginate :page => params[:page], :per_page => 3
 		end
 	end
 
 	def friend
 		@games = Game.find(:all, :order => 'pinyin ASC')
-    @friend_suggestions = current_user.find_or_create_friend_suggestions.paginate :page => params[:page], :per_page => 10
+    @friend_suggestions = current_user.fetch_friend_suggestions.paginate :page => params[:page], :per_page => 10
 	end
 
 	def comrade
     @games = Game.find(:all, :order => 'pinyin ASC')
     @server = GameServer.find(params[:server_id])
-		@comrade_suggestions = current_user.find_or_create_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 10
+		@comrade_suggestions = current_user.fetch_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 10
 	end
 
 	def new
@@ -31,7 +31,7 @@ class User::FriendSuggestionsController < UserBaseController
     end
 
 		if !params[:server_id].nil?
-			@suggestions = current_user.find_or_create_comrade_suggestions(@server).reject{|s| @except.include?(s)}
+			@suggestions = current_user.fetch_comrade_suggestions(@server).reject{|s| @except.include?(s)}
       if @suggestions.blank?
         # this could barely happen, but it's still possible
         # in this case, we just return the origin comrade suggestion
@@ -41,7 +41,7 @@ class User::FriendSuggestionsController < UserBaseController
       end
 			render :partial => 'comrade_suggestion', :object => @suggestion
 		else
-			@suggestions = current_user.find_or_create_friend_suggestions.reject{|s| @except.include?(s)}
+			@suggestions = current_user.fetch_friend_suggestions.reject{|s| @except.include?(s)}
       if @suggestions.blank?
         # this could barely happen, but it's still possible
         # in this case, we just return the origin friend suggestions 

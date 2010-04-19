@@ -160,6 +160,15 @@ var bkElement = bkClass.extend({
 
 var bkLib = {
 	isMSIE : (navigator.userAgent.indexOf("MSIE") > 0),
+
+  // added by gaoxh
+  eventTarget: function(e){
+    if(this.isMSIE){
+      return e.srcElement;
+    }else{
+      return e.target;
+    }
+  },
 	
 	addEvent : function(obj, type, fn) {
 		(obj.addEventListener) ? obj.addEventListener( type, fn, false ) : obj.attachEvent("on"+type, fn);	
@@ -289,8 +298,8 @@ var nicEditorConfig = bkClass.extend({
 		'hr' : {name : __('水平线'), command : 'insertHorizontalRule', noActive : true}
 	},
 	iconsPath : '/images/nicEditor/nicEditorIcons.gif',
-	buttonList : ['redo', 'undo', 'bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','image','link','forecolor','bgcolor'],
-	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"emotion":26, "redo": 27, "undo": 28}
+	buttonList : ['undo', 'redo', 'bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','image','link','forecolor','bgcolor'],
+	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"emotion":26, "undo": 27, "redo": 28}
 	
 });
 /* END CONFIG */
@@ -1013,7 +1022,9 @@ var nicEditorAdvancedButton = nicEditorButton.extend({
 	
 	findElm : function(tag,attr,val) {
 		var list = this.ne.selectedInstance.getElm().getElementsByTagName(tag);
+alert('list: ' + list.length);
 		for(var i=0;i<list.length;i++) {
+alert('attr: ' + list[i].getAttribute(attr));
 			if(list[i].getAttribute(attr) == val) {
 				return $BK(list[i]);
 			}
@@ -1509,11 +1520,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
             img.appendTo(li);
             ul.appendChild(li);
             img.addEvent('click', function(e){
-              var img = null;
-              if(navigator.userAgent.indexOf("MSIE") > 0)
-                img = e.srcElement;
-              else
-                img = e.target; 
+              var img = bkLib.eventTarget(e);
               var src = img.src;
               var li = img.up();
               if(this.selectedPhotos.include(src)){
@@ -1668,27 +1675,25 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
     var div = new bkElement('DIV').setStyle({'className' : 'con'});
     
     if(pageNum < 0 || pageNum > total - 1){
-      alert(pageNum);
       return div;
     }
 
     for(var i = pageNum * perPage; i < len && i < (pageNum + 1) * perPage; i++){
       a = new bkElement('a').setAttributes({title: symbols[i], href: 'javascript: void(0)'});
-      img = new bkElement('img').setAttributes({src: "/images/faces/"+ symbols[i].slice(1,symbols[i].length-1) +".gif",  alt: symbols[i], index: i});
+      img = new bkElement('img').setAttributes({src: "/images/faces/"+ symbols[i].slice(1,symbols[i].length-1) +".gif",  alt: symbols[i]});
       img.appendTo(a);
       a.addEvent('click', function(e){
-        var url;
-        if(navigator.userAgent.indexOf("MSIE") > 0)
-          url = e.srcElement.getAttribute('src');
-        else
-          url = e.target.getAttribute('src');
-        var tmp = 'javascript:nicImTemp();';
-        this.ne.nicCommand("insertImage", tmp);
-        this.im = this.findElm('IMG','src',tmp);
-        if (this.im)
-          this.im.setAttributes( {src: url});
+        bkLib.cancelEvent(e);
+        var url = bkLib.eventTarget(e).getAttribute('src');
+        if(!this.im){
+          var tmp = 'javascript:nicImTemp();';
+          this.ne.nicCommand("InsertImage", tmp);
+          alert(this.ne.selectedInstance.elm.innerHTML);
+          this.im = this.findElm('IMG','src',tmp);
+        }
+        this.im.setAttributes( {src: url});
         this.removePane();
-        this.ne.nicCommand("Unselect",this.im);    
+        this.ne.nicCommand("Unselect",this.im);
       }.closure(this));
       a.appendTo(div);
     }
@@ -1727,6 +1732,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
     this.pane.close.remove();
     this.pane.close = null;//将pane上面叉号去掉
 
+    this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
     this.pane.setContent(this.paneHTML);
     $BK('nicEdit-emot-box').appendChild(this.buildFaces(0));
 	}

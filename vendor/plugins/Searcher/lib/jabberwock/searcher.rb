@@ -41,11 +41,11 @@ module Jabberwock # :nodoc:
                     searcher_columns(*get_column_names)
                 end
 
-                crit      = "%#{crit}%"
+                crit      = crit.split(/\s+/).map {|s| "%#{s}%"}
                 columns   = self.searchable_columns 
                 count     = columns.size
-                bind_vars = crit.to_a * count
-                bind_vars.insert(0,build_like_query(self.searchable_columns))
+                bind_vars = crit * count
+                bind_vars.insert(0,build_like_query(self.searchable_columns, crit.count))
 
                 cond = opts[:conditions]
                 if cond.blank?
@@ -64,12 +64,12 @@ module Jabberwock # :nodoc:
             end
 
             # Build the LIKE clauses of the SQL query based on our matching columns
-            def build_like_query(columns)
+            def build_like_query(columns, count)
                 str = ''
                 for i in 0..columns.size
                     break if i==columns.size
                     str += "OR " if i>0
-                    str += columns[i].to_s + " LIKE ? "
+                    str += columns[i].to_s + " LIKE ? OR " + columns[i].to_s + " LIKE ? "
                 end
                 str
             end

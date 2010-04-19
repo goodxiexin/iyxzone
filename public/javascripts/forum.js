@@ -34,12 +34,13 @@ Object.extend(Iyxzone.Forum.Topic, {
       return false;
     }
     var content = this.editor.instanceById('topic_content').getContent();
+
     if(content.length < 6){
       error('内容不能少于6个字符');
       return false;
     }
-    if(content.length > 10000){
-      error('内容最长10000个字符');
+    if(content.length > 100000){
+      error('内容最长100000个字符');
       return false;
     }
     return true;
@@ -75,8 +76,8 @@ Object.extend(Iyxzone.Forum.Post, {
       error('回复不能少于6个字符');
       return false;
     }
-    if(content.length > 10000){
-      error('回复最长10000个字符');
+    if(content.length > 100000){
+      error('回复最长100000个字符');
       return false;
     }
     return true;
@@ -99,6 +100,6 @@ Object.extend(Iyxzone.Forum.Post, {
     else
       this.editor.instanceById('post_content').setContent("<span style='font-size: 14px;font-weight:bold'>回复楼主:</span><hr/>"); 
     window.scrollTo(0, $('new_post').positionedOffset().top);
-  },
+  }
 
 });

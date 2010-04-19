@@ -10,7 +10,8 @@
     <%= stylesheet_link_merged :base %>
     <%= yield :stylesheet_link %>
     <%= javascript_include_merged :base %>
-    <%= javascript_include_tag "#{RAILS_ENV}_config" %>
+    <!-- 下面这个文件打包有错，所以不打包了-->
+    <%= javascript_include_tag "juggernaut/juggernaut" %>
     <%= yield :javascript_include %>
   </head>
 

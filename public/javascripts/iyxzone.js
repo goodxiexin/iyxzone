@@ -101,8 +101,36 @@ Object.extend(Iyxzone, {
 		else{
 			alert("您的浏览器不支持自动设置首页，请手动添加!");
 		}
-	}
+	},
 
+  // 下面这个函数只是用于你收到邮件后的提示
+  newMailNotice: function(){
+    Iyxzone.startBlinkTitle('新邮件');
+    var navItem = $('navinbox');
+    var elm = navItem.down('strong');
+    if(elm){
+      var num = parseInt(elm.innerHTML) + 1;
+      elm.update(num);
+    }else{
+      navItem.update('站内信<em class="notice-bubble"><strong>1</strong></em>');
+    }
+    Sound.play('music/test.wav');
+  },
+
+  newNotificationNotice: function(){
+    Iyxzone.startBlinkTitle('新通知');
+    var navItem = $('navnotice');
+    var elm = navItem.down('strong');
+    if(elm){
+      var num = parseInt(elm.innerHTML) + 1;
+      elm.update(num);
+    }else{
+      navItem.update('通知<em class=\"notice-bubble\"><strong>1</strong></em>'); 
+    }
+    $('notifications_dropdown_list').update(''); 
+    $('notifications_dropdown').hide(); 
+    Sound.play('/music/test.wav');
+  }
 
 });
 

@@ -3,7 +3,7 @@
 <div class="mcAvatar">
   <div class="picwrap">
 		<div class="middle"><div class="middle-center"><div class="center">
-			<%= avatar_image @event.poster, :size => :large, :width => '100px', :height => '112px' %>
+			<%= album_cover @event.album %>
     </div></div></div>
   </div>
 </div>
@@ -86,16 +86,22 @@
 
 <div class='box02 canvas_con'>
   <div class="formComposer">
-    <div class="event-logo"><%= album_cover @event.album, :size => :medium, :width => 60, :height => 60, :class => 'imgbox01' %></div>
-    <h3 class="event-title">
-      <% if @event.is_guild_event? %>
-      名称：<b><%= h @event.title %></b><br />
-      公会：<%= guild_link @event.guild %>
-      <% else %>
-      名称：<b><%= h @event.title %></b><br />
-      <% end %>      
-    </h3>
 	  <div class="formcontent">
+      <% if @event.is_guild_event? %>
+  		<div class="rows s_clear">
+				<div class='fldid'><strong>名称：</strong></div>
+				<div class='fldvalue'><span class='shine'><strong><%= h @event.title %></strong></span></div>
+			</div>
+  		<div class="rows s_clear">
+				<div class='fldid'><strong>公会：</strong></div>
+				<div class='fldvalue'><span class='shine'><strong><%= guild_link @event.guild %></strong></span></div>
+			</div>
+      <% else %>
+  		<div class="rows s_clear">
+				<div class='fldid'><strong>名称：</strong></div>
+				<div class='fldvalue'><span class='shine'><strong><%= h @event.title %></strong></span></div>
+			</div>
+      <% end %>      
   		<div class="rows s_clear">
         <div class="fldid"><label for="server">游戏：</label></div>
 		  	<div class="fldvalue"><%= @event.game.name %></div>
@@ -112,7 +118,7 @@
       </div>
 	  	<div class="rows s_clear">
         <div class="fldid"><label for="server">时间：</label></div>
-        <div class="fldvalue">从<%= ftime @event.start_time %>到<%= ftime @event.end_time %></div>
+        <div class="fldvalue">从 <span class='shine'><%= ftime @event.start_time %></span> 到 <span class='shine'><%= ftime @event.end_time %></span> </div>
       </div>
   	</div>
   </div>

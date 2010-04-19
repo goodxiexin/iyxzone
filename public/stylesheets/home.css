@@ -5,9 +5,8 @@ a:hover{color:#D63200;}
 .main .foot{margin:10px 0 0;}
 .main .foot .feed-list{width:400px;}
 .main .foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
-/*.main .foot .feed-list .word-box .txt-add-comment{width:342px;}
-*/
-#header,#page,#footer{margin:0 auto;width:940px;}
+
+#header,#page,#footer{margin:0 auto;width:940px;clear:both}
 #page{margin-top:6px;}
 #footer a{color:#7E7F80}
 #footer a:hover{color:#D63200;}
@@ -415,6 +414,7 @@ a:hover{color:#D63200;}
 
 .photolist-big-box li{float:left;padding:5px 8px;width:86px;height:95px;overflow:hidden}
 .photolist-big-box .collection .middle{height:100%;}
+.photolist-big-box .collection .middle img{width:75px}
 
 .friend-box .appcontent01{margin-top:10px}
 .friend-box .formcontent .fldid{width:97px;}
@@ -462,7 +462,7 @@ a:hover{color:#D63200;}
 
 .friend-list .friend-list-body .card{padding:5px;height:60px;}
 .friend-list .friend-list-body .card .img{float:left;width:60px;height:100%;text-align:center;overflow:hidden}
-.friend-list .friend-list-body .card .info{margin-left:65px;position:relative;}
+.friend-list .friend-list-body .card .info{margin-left:70px;position:relative;}
 .friend-list .friend-list-body .card .info h4 a:hover{text-decoration:underline}
 
 .friend-list .friend-list-body .friend-man li{width:160px}
@@ -655,9 +655,9 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
-#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;white-space:nowrap;overflow-x:hidden;position:relative}
+#roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;*width:382px;*margin:0 10px;overflow:hidden;word-wrap:normal;white-space:nowrap;word-break:keep-all;position:relative}
 #roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
-#roll-photo .roll-photo-list a{margin:0 9px;}
+#roll-photo .roll-photo-list a{margin:0 13px;}
 #roll-photo a img{width:100px;}
 .roll-left,.roll-right{float:left;background:url(../images/skin/skin2010.png) no-repeat -102px -446px;width:22px;height:22px;display:block;margin-top:55px}
 .roll-right{background-position:-124px -446px}
@@ -926,6 +926,7 @@ dl.menu-op dd a{color:#333}
 /*评价按钮*/
 .evaluate span,.evaluate a{width:54px;display:block;text-align:center;background:url(../images/skin/skin2010.png) no-repeat}
 .evaluate span{height:53px;background-position:0 -164px;color:#fff;line-height:40px;font-weight:700;font-size:14px}
+.evaluate span.dug{background-position:0 -588px;}
 .evaluate a{height:25px;background-position:-60px -238px;margin-top:3px;color:#217308;text-indent:10px;line-height:25px}
 
 .feed-list .evaluate{position:absolute;top:0;left:0}
@@ -967,9 +968,6 @@ dl.menu-op dd a{color:#333}
 .list-v2 .feed-list .feed-header .icon-active{margin-left:20px}
 
 /*视频 日志详细页面*/
-a.share-btn,a.concern-btn{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:70px;height:20px;line-height:20px;text-indent:28px;color:#508119}
-a.share-btn{background-position:-130px -288px}
-a.concern-btn{background-position:0 -411px}
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 15px}
 .detail-video-head p.left,.detail-blog-head p.left{margin-top:6px}
 .detail-video-head strong,.detail-blog-head strong{color:#cc3300;font-size:14px;font-weight:400}
@@ -1115,7 +1113,7 @@ h1.app-share{float:left}
 
 /*好友下拉选择列表*/
 .selector03{height:auto;position:relative;z-index:9999}
-.selector03 ul.friend-select-list{position:relative;cursor:text;line-height:18px;min-height:20px;padding:2px 3px 0;border:1px solid #bdd6ad}
+.selector03 ul.friend-select-list{position:relative;cursor:text;line-height:18px;min-height:20px;padding:2px 3px 0;}
 .selector03 ul.friend-select-list li{padding:0 4px 0 0;margin:2px 0;position:relative;float:left;}
 .selector03 ul.friend-select-list li a {border-color:#d1e2c5;border-style:solid;border-width:1px 0;color:#333;display:block;float:left;text-decoration:none;background:#f4fdef;width:auto;height:auto;overflow:visible;position:relative;}
 .selector03 ul.friend-select-list li a span {position:relative;border-color:#d1e2c5;border-style:solid;border-width:0 1px;cursor:pointer;display:block;float:left;height:16px;line-height:16px;margin:0 -1px;padding:0 5px 0;white-space:nowrap;}

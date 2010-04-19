@@ -3472,7 +3472,7 @@ Gameswithhole.create( :txtid => 701, :sqlid => game701.id, :gamename => game701.
 			game701.tag_list = "休闲, 2D, 道具收费, 横板战斗, 轻松"
 			game701.save
 game702 = Game.create(
-			:name => "洛汗",
+			:name => "洛汗(台服)",
 			:official_web => "http://rohan.com.cn/",
 			:sale_date =>"2010-4-24" ,
 			:company => "Geomind",

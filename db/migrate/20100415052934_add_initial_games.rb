@@ -1,8 +1,9 @@
 class AddInitialGames < ActiveRecord::Migration
   def self.up
- 		319.times do |i|
-			Gameswithhole.create(:txtid => i+1, :sqlid => i+1, :gamename => Game.find(i+1).name )
-		end
+		allgames = Game.find(:all)
+		allgames.each do |game|
+			Gameswithhole.create(:txtid => game.id, :sqlid => game.id, :gamename => game.name)
+ 		end
  end
 
   def self.down

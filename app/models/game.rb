@@ -18,7 +18,7 @@ class Game < ActiveRecord::Base
 
 	has_many :characters, :class_name => 'GameCharacter'
 
-	has_many :users, :through => :characters, :uniq => true
+	has_many :users, :through => :characters, :conditions => "users.activated_at IS NOT NULL", :uniq => true
 
   has_many :attentions, :class_name => 'GameAttention'
 

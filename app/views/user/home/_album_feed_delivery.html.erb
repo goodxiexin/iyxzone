@@ -21,10 +21,8 @@
         <% end %>
         <div class='roll-photo-list'>
           <% if photos.count > 3 %>
-          <span style='left: -135px' id='frames_<%= delivery.id %>'>
-          <% 5.times do |p| %>
-            <a></a>
-          <% end %>
+          <span style='left: -136px;' id='frames_<%= delivery.id %>'>
+            <a></a><a></a><a></a><a></a><a></a><a></a>
           </span>
           <% else %>
             <% photos.each do |p| %>

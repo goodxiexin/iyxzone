@@ -116,16 +116,15 @@ module ApplicationHelper
   end
 
   def dig_link diggable
-		dig_html="<div class='evaluate'>
-							<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>"
+		dig_html = "<div class='evaluate'>"
 		if diggable.digged_by? current_user
-		  dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'><a href='#'>已赞</a>"
+		  dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}' class='dug'>#{diggable.digs_count}</span><a href='javascript: void(0)'>赞</a>"
 		else
-			dig_html+="<div id='digging_#{diggable.class.to_s.underscore}_#{diggable.id}'>"
-		  dig_html+= link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable)
+			dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>"
+		  dig_html += link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable), :html => {:id => "digging_#{diggable.class.name.underscore}_#{diggable.id}"}, :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
 		end
-		dig_html+="</div></div>"
-		return dig_html
+		dig_html += "</div>"
+    dig_html
   end
 
   def blog_content blog, opts={}
@@ -319,8 +318,11 @@ module ApplicationHelper
 
   def sharing_reason sharing, opts={}
     class_name = opts[:class] || 'con'
-    reason = simple_format h("“" + sharing.reason + "”"), :class => class_name
-    truncate reason, :length => 100, :omission => '...'
+    simple_format "<span class='quote-start'></span>#{h sharing.reason}<span class='quote-end'></span>", :class => class_name
+  end
+
+  def game_infos
+    Game.find(:all, :order => "pinyin ASC").map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
   end
 
 end

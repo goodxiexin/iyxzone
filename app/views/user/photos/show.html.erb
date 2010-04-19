@@ -19,7 +19,7 @@
       <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
       <p class="left">
         <strong><%= @user.login %>的照片</strong><br />
-        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
+        <%= link_to '个人主页', profile_url(@user.profile) %>
       </p>
     </div>
 	<% end %>

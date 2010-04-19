@@ -2,64 +2,64 @@ class AddDnfData < ActiveRecord::Migration
   def self.up
 GameRace.create(
         :name => "神枪手",
-        :game_id => 3)
+        :game_id => 47)
 GameRace.create(
         :name => "鬼剑士",
-        :game_id => 3)
+        :game_id => 47)
 GameRace.create(
         :name => "格斗家",
-        :game_id => 3)
+        :game_id => 47)
 GameRace.create(
         :name => "魔法师",
-        :game_id => 3)
+        :game_id => 47)
 GameRace.create(
         :name => "圣职者",
-        :game_id => 3)
+        :game_id => 47)
 GameProfession.create(
         :name => "狂战士",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "阿修罗",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "鬼泣",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "剑魂",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "气功师",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "柔道家",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "散打",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "街霸",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "魔道学者",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "召唤师",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "元素师",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "战斗法师",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "圣骑士",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "驱魔师",
-        :game_id => 2)
+        :game_id => 47)
 GameProfession.create(
         :name => "蓝拳圣使",
-        :game_id => 2)
+        :game_id => 47)
 gamearea1 = GameArea.create(
           :name => "西北区",
           :game_id => 47)

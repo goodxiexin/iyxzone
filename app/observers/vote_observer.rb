@@ -16,10 +16,19 @@ class VoteObserver < ActiveRecord::Observer
 
     # issue feeds if necessary
     return if vote.voter.application_setting.emit_poll_feed == 0
-    recipients = [vote.voter.profile]
+    recipients = [vote.voter.profile, vote.poll.game]
     recipients.concat vote.voter.guilds
     recipients.concat vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed == 1}
     vote.deliver_feeds :recipients => recipients
+  end
+
+  # 这个可能在某个用户被删除后触发
+  def after_destroy vote
+    vote.answers.each do |answer|
+      answer.raw_decrement :votes_count
+    end
+    vote.poll.raw_decrement :votes_count, vote.answers.count
+    vote.poll.raw_decrement :voters_count 
   end
 
 end

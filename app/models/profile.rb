@@ -24,7 +24,8 @@ class Profile < ActiveRecord::Base
                             :participation => 'Participation',
                             :guild => 'Guild',
                             :membership => 'Membership',
-														:friendship => 'Friendship'
+														:friendship => 'Friendship',
+                            :sharing => 'Sharing'
 													}
 
 	acts_as_resource_feeds
@@ -36,18 +37,6 @@ class Profile < ActiveRecord::Base
                       :delete_conditions => lambda {|user, profile, comment| profile.user == user}, 
                       :create_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.leave_wall_message == 1 || (profile.user.privacy_setting.leave_wall_message == 2 and profile.user.has_same_game_with?(user))},
                       :view_conditions => lambda {|user, profile| profile.user == user || profile.user.has_friend?(user) || profile.user.privacy_setting.wall == 1 || (profile.user.privacy_setting.wall == 2 and profile.user.has_same_game_with?(user))}  
-
-  acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
-                         :categories => {
-                            :video => 'Video',
-                            :poll => 'Poll',
-                            :vote => 'Vote',
-                            :event => 'Event',
-                            :participation => 'Participation',
-                            :guild => 'Guild',
-                            :membership => 'Membership',
-                            :sharing => 'Sharing'
-                          } 
 
   def available_for? viewer
     privilege = user.privacy_setting.personal

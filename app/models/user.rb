@@ -2,13 +2,15 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  acts_as_random 
+
   acts_as_pinyin :login => "pinyin"
 
 	searcher_column :pinyin, :login
 
-	has_many :friend_suggestions
+	has_many :friend_suggestions, :dependent => :destroy
 
-	has_many :comrade_suggestions
+	has_many :comrade_suggestions, :dependent => :destroy
 
   has_one :profile, :dependent => :destroy
 
@@ -55,14 +57,14 @@ class User < ActiveRecord::Base
     !characters.find_by_game_id(game_id).blank?
   end
 
-  has_many :game_attentions
+  has_many :game_attentions, :dependent => :destroy
 
 	has_many :interested_games, :through => :game_attentions, :source => :game, :order => 'sale_date DESC'
 
 	# notifications
-	has_many :notifications, :order => 'created_at DESC'
+	has_many :notifications, :order => 'created_at DESC', :dependent => :destroy
 
-	has_many :notices, :order => 'created_at DESC' # comment, tag notices
+	has_many :notices, :order => 'created_at DESC', :dependent => :destroy # comment, tag notices
 
 	# pokes
 	has_many :poke_deliveries, :foreign_key => 'recipient_id', :order => 'created_at DESC'
@@ -82,9 +84,12 @@ class User < ActiveRecord::Base
   end
 
   # friend
-	has_many :all_friendships, :class_name => 'Friendship'
+	has_many :all_friendships, :class_name => 'Friendship', :dependent => :destroy
 
-  has_many :friendships, :dependent => :destroy, :conditions => {:status => 1}
+  # 定义这个完全是为了删除方便
+  has_many :friend_friendships, :class_name => 'Friendship', :foreign_key => 'friend_id', :dependent => :destroy
+
+  has_many :friendships, :conditions => {:status => 1}
 
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
@@ -148,10 +153,10 @@ class User < ActiveRecord::Base
   # album
   belongs_to :avatar
 
-  has_one :avatar_album, :foreign_key => 'owner_id'
+  has_one :avatar_album, :foreign_key => 'owner_id', :dependent => :destroy
 
   # 为了保证avatar album一定在最后一个，我们不在这里加上avatar album
-  has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'created_at DESC'
+  has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'created_at DESC', :dependent => :destroy
 
   has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
@@ -226,18 +231,18 @@ class User < ActiveRecord::Base
   end
 
   # events
-  has_many :participations, :foreign_key => 'participant_id', :conditions => {:status => [3,4,5]} 
+  has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy
 
-  has_many :events, :foreign_key => 'poster_id', :order => 'created_at DESC', :conditions => ["end_time >= ?", Time.now.to_s(:db)]
+  has_many :events, :foreign_key => 'poster_id', :order => 'start_time DESC', :conditions => ["end_time >= ?", Time.now.to_s(:db)], :dependent => :destroy
 
 	with_options :order =>  'created_at DESC', :through => :participations, :source => :event do |user|
 
-		user.has_many :all_events
+		user.has_many :all_events, :conditions => "participations.status IN (3,4,5)"
 
     # 不包括我发起的，这样的都在events里
-		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ?', Time.now.to_s(:db)]
+		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ? AND participations.status IN (3,4,5)', Time.now.to_s(:db)]
 
-		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
+		user.has_many :participated_events, :conditions => ["events.end_time < ? AND participations.status IN (3,4,5)", Time.now.to_s(:db)]
 
 	end
 
@@ -250,8 +255,13 @@ class User < ActiveRecord::Base
 		events & user.events
 	end
 
+  # comments, digs
+  has_many :comments, :foreign_key => 'poster_id', :dependent => :destroy
+
+  has_many :digs, :foreign_key => 'poster_id', :dependent => :destroy
+
   # sharings
-  has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC'
+  has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
   with_options :class_name => 'Sharing', :foreign_key => 'poster_id', :order => 'created_at DESC' do |user|
     
@@ -305,9 +315,9 @@ class User < ActiveRecord::Base
   end
 
   # polls
-  has_many :votes, :foreign_key => 'voter_id'
+  has_many :votes, :foreign_key => 'voter_id', :dependent => :destroy
 
-  has_many :polls, :foreign_key => 'poster_id', :order => 'created_at DESC'
+  has_many :polls, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
   has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
 
@@ -319,13 +329,13 @@ class User < ActiveRecord::Base
     poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id").map(&:poll_id).uniq
     participated = Poll.find(poll_ids)
     posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = polls.poster_id", :order => 'created_at desc')
-    participated.concat(posted).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
+    (participated + posted - polls).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
   end
 
 	# guilds
-	has_many :memberships
+	has_many :memberships, :dependent => :destroy
 
-  has_many :guilds, :foreign_key => 'president_id'
+  has_many :guilds, :foreign_key => 'president_id', :dependent => :destroy
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC' do |user|
 
@@ -353,13 +363,13 @@ class User < ActiveRecord::Base
 	# invitation and requests
 	has_many :event_requests, :through => :events, :source => :requests
 
-	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => 0}
+	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => 0}, :dependent => :destroy
 
-	has_many :poll_invitations 
+	has_many :poll_invitations, :dependent => :destroy
 
 	has_many :guild_requests, :through => :guilds, :source => :requests 
 
-	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => 0}
+	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => 0}, :dependent => :destroy
 
 	has_many :friend_requests, :class_name => 'Friendship', :foreign_key => 'friend_id', :conditions => {:status => 0}
 
@@ -372,13 +382,13 @@ class User < ActiveRecord::Base
   end
 
 	# tags
-	has_many :friend_tags, :foreign_key => 'tagged_user_id'
+	has_many :friend_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
 	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4 AND draft != 1"
 
 	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4"
 
-	has_many :photo_tags, :foreign_key => 'tagged_user_id'
+	has_many :photo_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
 	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4"
 
@@ -435,7 +445,7 @@ class User < ActiveRecord::Base
   end
 
   # messages
-  has_many :messages, :foreign_key => 'recipient_id'
+  has_many :messages, :foreign_key => 'recipient_id', :dependent => :destroy
 
   has_many :unread_messages, :class_name => 'Message', :foreign_key => 'recipient_id', :conditions => {:read => 0}
 
@@ -444,7 +454,7 @@ class User < ActiveRecord::Base
   end
   
   # invitation
-  has_many :signup_invitations, :class_name => 'SignupInvitation', :foreign_key => 'sender_id'
+  has_many :signup_invitations, :class_name => 'SignupInvitation', :foreign_key => 'sender_id', :dependent => :destroy
 
   include UserAuthentication 
 

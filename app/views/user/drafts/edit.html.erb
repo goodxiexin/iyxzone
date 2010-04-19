@@ -29,7 +29,7 @@
 				    <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
 			    </div>
 			    <div class='rows s_clear'>
-				    <%= f.text_area 'content', :style =>"width: 98%; height: 300px;" %>
+				    <%= f.text_area 'content', :style =>"width: 700px; height: 300px;" %>
 			    </div>
 			    <div class='rows s_clear'>
 				    <div class='fldid'><%= f.label "日志类别: " %></div><div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %></div>

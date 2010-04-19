@@ -23,8 +23,6 @@ protected
       @region = Region.find(params[:region_id])
       @city = @region.cities.find(params[:city_id])
     end
-  rescue
-    not_found
   end
 
 end

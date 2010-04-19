@@ -1,11 +1,9 @@
 class UsersController < ApplicationController
 
-  before_filter :logout_required
   #before_filter :allow_only_admin_invitation
 
   def new
     @user = User.new
-    @games = Game.find(:all, :order => "pinyin ASC")
     render :action => 'new', :layout => 'root'
   end
 
@@ -29,7 +27,7 @@ class UsersController < ApplicationController
       end
     else
       render :update do |page|
-        page << "error('#{@user.errors.on_base}');"
+        page << "error('发生错误，稍后再试');"
       end
     end
 	end
