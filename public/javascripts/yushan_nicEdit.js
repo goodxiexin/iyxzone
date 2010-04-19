@@ -1484,6 +1484,8 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 
     this.currentTab = 'url_image';
 
+    this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+
     // set token
     $BK('authenticity_token_field').value = nicEditors.authenticityToken;
 
@@ -1568,19 +1570,16 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     $BK('image_submit_btn').addEvent('click', function(){
       if(this.currentTab == 'url_image'){
         this.src = $BK('image_url_field').value;
-        this.removePane(); // 必须先removePane(), 然后selElm().parentTag('IMG')才能找到争取的tag
-        this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+        this.removePane(); // 必须先removePane(), 然后selElm().parentTag('IMG')才能找到正确的tag
         this.submit();
       }else if(this.currentTab == 'local_image'){
         $BK('upload_image_form').submit();
-        this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
       }else if(this.currentTab == 'album_image'){
+        this.removePane(); // 必须先removePane(), 然后selEml().parentTag('IMG')才能找到正确的tag
         for(var i=0;i<this.selectedPhotos.length;i++){
           this.src = this.selectedPhotos[i];
-          this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
           this.submit();
         }
-        this.removePane();
         this.selectedPhotos = [];
       }
     }.closure(this));
@@ -1707,14 +1706,16 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
       img.appendTo(a);
       a.addEvent('click', function(e){
         var url = bkLib.eventTarget(e).getAttribute('src');
+        this.removePane();
         if(!this.im){
-          var tmp = 'javascript:nicImTemp();';
+          var tmp = 'javascript: void(0);';
           this.ne.nicCommand("insertImage", tmp);
           this.im = this.findElm('IMG','src',tmp);
         }
-        this.im.setAttributes( {src: url});
-        this.removePane();
-        this.ne.nicCommand("Unselect",this.im);
+        if(this.im){
+          this.im.setAttributes( {src: url});
+          this.ne.nicCommand("Unselect",this.im);
+        }
         return false; // 如果没有，在IE6下会触发onbeforeunload
       }.closure(this));
       a.appendTo(div);
@@ -1747,7 +1748,6 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
     this.pane.append(zBox.noSelect());
 
     this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
-    //$BK('nicEdit-emot-box').appendChild(this.buildFaces());
 	}
 });
 

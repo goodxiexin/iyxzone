@@ -6,9 +6,12 @@ class Status < ActiveRecord::Base
                       :delete_conditions => lambda {|user, status, comment| status.poster == user || comment.poster == user },
                       :create_conditions => lambda {|user, status| status.poster == user || status.poster.has_friend?(user)}
 
+  # 下面这3个要注意顺序
   escape_html :sanitize => :content
 
   acts_as_emotion_text :columns => [:content]
+
+  acts_as_abstract :columns => [:content]
 
 	acts_as_resource_feeds
 

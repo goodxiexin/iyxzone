@@ -1,5 +1,17 @@
 class GameCharacter < ActiveRecord::Base
 
+  def has_event?
+    !Event.first(:conditions => {:character_id => id}).blank?
+  end
+
+  def has_guild?
+    !Guild.first(:conditions => {:character_id => id}).blank?
+  end
+
+  def is_locked?
+    has_event? or has_guild?
+  end
+
   acts_as_random
 
   acts_as_pinyin :name => 'pinyin'
@@ -22,21 +34,23 @@ class GameCharacter < ActiveRecord::Base
 
 	acts_as_resource_feeds
 
+  attr_readonly :game_id, :area_id, :server_id, :race_id, :profession_id
+
   validates_presence_of :user_id, :message => "不能为空"
 
   validates_presence_of :level, :message => "不能为空"
 
   validates_presence_of :name, :message => "不能为空"
 
-  validate :game_is_valid
+  validate_on_create :game_is_valid
 
-  validate :area_is_valid
+  validate_on_create :area_is_valid
 
-  validate :server_is_valid
+  validate_on_create :server_is_valid
 
-  validate :race_is_valid
+  validate_on_create :race_is_valid
   
-  validate :profession_is_valid
+  validate_on_create :profession_is_valid
 
 protected
 
@@ -56,7 +70,11 @@ protected
 
   def server_is_valid
     return if game.blank?
-    # TODO
+    if game.no_servers
+      errors.add(:server_id, "该游戏没有服务器")
+    else
+      errors.add(:server_id, "该服务器不存在") unless GameServer.exists? :game_id => game_id, :id => area_id
+    end
   end
 
   def race_is_valid

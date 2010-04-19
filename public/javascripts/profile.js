@@ -43,7 +43,6 @@ Object.extend(Iyxzone.Profile.Editor, {
     var frame = $('basic_info_frame');
     this.basicInfoHTML = frame.innerHTML;
     if(this.editBasicInfoHTML){
-//      frame.innerHTML = this.editBasicInfoHTML;
       frame.update( this.editBasicInfoHTML);
       this.regionSelector.setEvents();
     }else{
@@ -131,7 +130,6 @@ Object.extend(Iyxzone.Profile.Editor, {
     var frame = $('contact_info_frame');
     this.contactInfoHTML = frame.innerHTML;
     if(this.editContactInfoHTML){
-//      frame.innerHTML = this.editContactInfoHTML;
       frame.update( this.editContactInfoHTML);
       facebox.watchClickEvents();
     }else{
@@ -142,7 +140,6 @@ Object.extend(Iyxzone.Profile.Editor, {
         }.bind(this),
         onSuccess: function(transport){
           this.editContactInfoHTML = transport.responseText;
-//          $('contact_info_frame').innerHTML = transport.responseText;
           $('contact_info_frame').update( transport.responseText);
           facebox.watchClickEvents();
         }.bind(this)

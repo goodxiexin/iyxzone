@@ -54,10 +54,6 @@ class User::GuildsController < UserBaseController
     end
   end
 
-  def edit
-    render :action => 'edit', :layout => false
-  end
-
   def edit_rules
     render :action => 'edit_rules'
   end
@@ -66,6 +62,18 @@ class User::GuildsController < UserBaseController
     if @guild.update_attributes(params[:guild])
       render :json => @guild
     end
+  end
+
+  def destroy
+    if @guild.destroy
+      render :update do |page|
+        page.redirect_to guilds_url(:uid => current_user.id)
+      end
+    else
+      render :update do |page|
+        page << "error('发生错误');"
+      end
+    end 
   end
 
 	def more_feeds
@@ -92,7 +100,7 @@ protected
       require_friend_or_owner @user
     elsif ['show', 'more_feeds'].include? params[:action]
       @guild = Guild.find(params[:id])
-    elsif ['edit', 'edit_rules', 'update'].include? params[:action]
+    elsif ['edit_rules', 'update', 'destroy'].include? params[:action]
       @guild = Guild.find(params[:id])
       require_owner @guild.president unless params[:action] == 'edit_rules'
     end

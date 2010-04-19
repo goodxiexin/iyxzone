@@ -198,6 +198,7 @@ Object.extend(Iyxzone.Register, {
     var professionID = $('profile_new_characters_' + id + '_profession_id').value;
     var professionDiv = 'characters_' + id + '_profession_id_error';
     var game = this.gameSelectors.get(id).getDetails();
+
     this.clearError(gameDiv);
     this.clearError(areaDiv);
     this.clearError(serverDiv);
@@ -272,14 +273,20 @@ Object.extend(Iyxzone.Register, {
       prefix + 'area_id',
       dprefix + 'area_id_error',
       prefix + 'server_id',
-      dprefix + 'sever_id_error',
+      dprefix + 'server_id_error',
       prefix + 'race_id',
       dprefix + 'race_id_error',
       prefix + 'profession_id',
       dprefix + 'profession_id_error',
       null,
-      {});
+      {onGameChange: this.showInfoWhenNoServers.bind(this)});
     this.gameSelectors.set(id, selector);
+  },
+
+  showInfoWhenNoServers: function(gameSelector){
+    var gameDetails = gameSelector.getDetails;
+    if(gameDetails.no_servers)
+      gameSelector.updateGameInfoDiv('该游戏没有服务器，暂时无法注册，点击<a href="" rel=facebox>通知</a>我们');
   },
 
   removeCharacter: function(id){

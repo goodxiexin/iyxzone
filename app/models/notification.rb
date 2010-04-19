@@ -12,6 +12,7 @@ class Notification < ActiveRecord::Base
   Participation = 5 # 邀请被接受／拒绝，请求被接受／拒绝, 被剔除活动
   Membership = 6 # 邀请被接受／拒绝，请求被接受／拒绝，被剔除工会
   Promotion = 7 # 职务变动
+  GuildCancel = 8 # 工会取消了
 
   def self.read notifications, user
     return if notifications.blank?

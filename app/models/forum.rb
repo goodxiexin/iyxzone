@@ -2,8 +2,7 @@ class Forum < ActiveRecord::Base
 
   belongs_to :guild
 
-  # 理论上论坛是没法删除的
-  has_many :topics
+  has_many :topics, :dependent => :destroy
 
   has_many :top_topics, :class_name => 'Topic', :conditions => {:top => 1}, :order => 'created_at desc'
 

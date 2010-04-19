@@ -152,12 +152,3 @@ document.observe('dom:loaded', function(){
     }
   });
 });
-/*
-document.observe('dom:loaded', function(){
-Event.observe($(document.body), 'click', function(){
-    if(Iyxzone.Emotion.Manager.facesSingle){
-      Iyxzone.Emotion.Manager.facesSingle.hide();
-    }
-  });
-});
-*/

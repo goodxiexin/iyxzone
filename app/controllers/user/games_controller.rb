@@ -36,7 +36,6 @@ class User::GamesController < UserBaseController
 		
 		if current_user.has_game? @game
       servers = current_user.servers.all(:conditions => {:game_id => @game.id})
-      # 这里不考虑temp server，不然很容易就返回了游戏下的全部角色
       @comrades = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:server_id => servers.map(&:id)})
 		end
 		@players = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:game_id => @game.id})

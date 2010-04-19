@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100415162458) do
+ActiveRecord::Schema.define(:version => 20100419074357) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -670,10 +670,11 @@ ActiveRecord::Schema.define(:version => 20100415162458) do
   create_table "statuses", :force => true do |t|
     t.integer  "poster_id"
     t.text     "content"
-    t.integer  "comments_count", :default => 0
+    t.integer  "comments_count",   :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "verified",       :default => 0
+    t.integer  "verified",         :default => 0
+    t.text     "content_abstract"
   end
 
   add_index "statuses", ["poster_id"], :name => "index_statuses_on_poster_id"

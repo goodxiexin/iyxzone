@@ -16,8 +16,7 @@ class User::SearchController < UserBaseController
     cond = {}
     cond.merge!({:game_id => @game.id}) if !@game.nil? 
     cond.merge!({:area_id => @area.id}) if !@area.nil?
-    # 如果是temp server, 那么就相当于去找@game 
-    cond.merge!({:server_id => @server.id}) if !@server.nil? and !@server.is_temp?
+    cond.merge!({:server_id => @server.id}) if !@server.nil?
     
     if @game.nil?
       @areas = []

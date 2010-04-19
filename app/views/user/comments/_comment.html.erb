@@ -6,6 +6,6 @@
 	<div class="img"><%= avatar comment.poster, :size => :small %></div>
   <div class="word">
     <p><%= profile_link comment.poster %> <span><%= ftime comment.created_at %> -</span> <%= link_to_function '回复', "Iyxzone.Comment.showForm('#{type}', #{comment.commentable.id}, '#{comment.poster.login}', #{comment.poster_id})" %></p>
-    <p><%= comment.content %></p>
+    <%= simple_format comment.content %>
   </div>
 </div>

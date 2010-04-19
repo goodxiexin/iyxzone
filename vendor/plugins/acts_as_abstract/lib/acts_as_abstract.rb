@@ -17,19 +17,32 @@ module ActsAsAbstract
 
       before_save :save_abstract
 
-      define_method "save_abstract" do
-        opts = self.class.abstract_opts
-        opts[:columns].each do |column|
-          changed = eval("self.#{column}_changed?")
-					if changed
-            eval("self.#{column}_abstract = Sanitize.clean(self.#{column})")
-					end
-        end 
-      end
+      include ActsAsAbstract::InstanceMethods
 
+      extend ActsAsAbstract::SingletonMethods 
+    
     end
+
+  end
+
+  module InstanceMethods
+
+    def save_abstract
+      opts = self.class.abstract_opts
+puts "abstract"
+      opts[:columns].each do |column|
+        changed = eval("self.#{column}_changed?")
+        if changed
+          eval("self.#{column}_abstract = Sanitize.clean(self.#{column})")
+        end
+      end 
+    end
+
+  end
   
-  end 
+  module SingletonMethods
+
+  end
 
 end
 

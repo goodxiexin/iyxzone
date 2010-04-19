@@ -2,12 +2,6 @@
   <%= javascript_include_merged :search %>
 <% end %>
 
-<% @games = Game.all(:order => 'pinyin ASC') %>
-<%= javascript_tag "
-  Iyxzone.Game.pinyins = #{array_or_string_for_javascript @games.map(&:pinyin).insert(0, '---')};
-  Iyxzone.Game.infos = #{@games.to_json :only => [:id, :name]}
-" %>
-
 <% content_for :html_title, "#{current_user.login} - 寻找好友 - 17Gaming.com" %>
 <% content_for :html_description, "#{current_user.login}寻找好友 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>

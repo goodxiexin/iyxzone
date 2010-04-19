@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
 
-  has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id'
+  has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id', :dependent => :destroy
 
   belongs_to :poster, :class_name => 'User'
 
@@ -18,7 +18,7 @@ class Event < ActiveRecord::Base
 	
 	named_scope :recent, :conditions => ["end_time > ?", Time.now], :order => 'start_time DESC'
 
-  has_many :participations #, :dependent => :delete_all, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
+  has_many :participations # 没有dependent, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
 
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
 

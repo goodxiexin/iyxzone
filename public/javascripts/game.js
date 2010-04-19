@@ -80,10 +80,15 @@ Iyxzone.Game.Selector = Class.create({
   },
 
   resetGameInfo: function(){
+    if(!this.gameSelectorID) return;
     if($(this.gameSelectorID))
       $(this.gameSelectorID).value = '';
-    if($(this.gameInfoDiv))
-      $(this.gameInfoDiv).update('');
+  },
+
+  updateGameInfoDiv: function(text){
+    if($(this.gameInfoDiv)){
+      $(this.gameInfoDiv).update(text);
+    }
   },
 
   resetAreaInfo: function(){
@@ -92,6 +97,7 @@ Iyxzone.Game.Selector = Class.create({
   },
 
   setupAreaInfo: function(areas){
+    if(!this.areaSelectorID) return;
     var html = '<option value="">---</option>';
     for(var i=0;i<areas.length;i++){
       html += "<option value='" + areas[i].id + "'>" + areas[i].name + "</option>";
@@ -101,11 +107,20 @@ Iyxzone.Game.Selector = Class.create({
       $(this.areaInfoDiv).update('');
   },
 
+  updateAreaInfoDiv: function(text){
+    if($(this.areaInfoDiv)){
+      $(this.areaInfoDiv).update(text);
+    }
+  },
+
   resetServerInfo: function(){
-    $(this.serverSelectID).update('<option value="">---</option>');
+    if($(this.serverSelectID)){
+      $(this.serverSelectID).update('<option value="">---</option>');
+    }
   },
 
   setupServerInfo: function(servers){
+    if(!this.serverSelectID) return;
     var html = '<option value="">---</option>';
     for(var i=0;i<servers.length;i++){
       html += "<option value='" + servers[i].id + "'>" + servers[i].name + "</option>";
@@ -115,11 +130,20 @@ Iyxzone.Game.Selector = Class.create({
       $(this.serverInfoDiv).update('');
   },
 
+  updateServerInfoDiv: function(text){
+    if($(this.serverInfoDiv)){
+      $(this.serverInfoDiv).update(text);
+    }
+  },
+
   resetProfessionInfo: function(){
-    $(this.professionSelectorID).update( '<option value="">---</option>');
+    if($(this.professionSelectorID)){
+      $(this.professionSelectorID).update( '<option value="">---</option>');
+    }
   },
 
   setupProfessionInfo: function(professions){
+    if(!this.professionSelectorID) return;
     var html = '<option value="">---</option>';
     for(var i=0;i<professions.length;i++){
       html += "<option value='" + professions[i].id + "'>" + professions[i].name + "</option>";
@@ -129,11 +153,20 @@ Iyxzone.Game.Selector = Class.create({
       $(this.professionInfoDiv).update('');
   },
 
+  updateProfessionInfoDiv: function(text){
+    if($(this.professionInfoDiv)){
+      $(this.professionInfoDiv).update(text);
+    }
+  },
+
   resetRaceInfo: function(){
-    $(this.raceSelectorID).update( '<option value="">---</option>');
+    if($(this.raceSelectorID)){
+      $(this.raceSelectorID).update( '<option value="">---</option>');
+    }
   },
 
   setupRaceInfo: function(races){
+    if(!this.raceSelectorID) return;
     var html = '<option value="">---</option>';
     for(var i=0;i<races.length;i++){
       html += "<option value='" + races[i].id + "'>" + races[i].name + "</option>";
@@ -141,6 +174,12 @@ Iyxzone.Game.Selector = Class.create({
     $(this.raceSelectorID).update( html);
     if($(this.raceInfoDiv))
       $(this.raceInfoDiv).value = '';
+  },
+
+  updateRaceInfoDiv: function(text){
+    if($(this.raceInfoDiv)){
+      $(this.raceInfoDiv).update(text);
+    }
   },
 
   gameChange: function(){
@@ -152,9 +191,11 @@ Iyxzone.Game.Selector = Class.create({
       method: 'get',
       onLoading: function(){
         Iyxzone.changeCursor('wait');
+        this.updateGameInfoDiv('正在加载游戏信息');
       }.bind(this),
       onComplete: function(){
         Iyxzone.changeCursor('default');
+        this.updateGameInfoDiv('');
       }.bind(this),      
       onSuccess: function(transport){
         var details = transport.responseText.evalJSON().game;
@@ -168,75 +209,67 @@ Iyxzone.Game.Selector = Class.create({
         }
   
         // reset all details if exists
-        if(this.areaSelectorID)
-          this.resetAreaInfo();
-        if(this.serverSelectID)
-          this.resetServerInfo();
-        if(this.raceSelectorID)
-          this.resetRaceInfo();
-        if(this.professionSelectorID)
-          this.resetProfessionInfo();
+        this.resetAreaInfo();
+        this.updateAreaInfoDiv('');
+        this.resetServerInfo();
+        this.updateServerInfoDiv('');
+        this.resetRaceInfo();
+        this.updateRaceInfoDiv('');
+        this.resetProfessionInfo();
+        this.updateProfessionInfoDiv('');
     
         // set all informations
         if(this.details.no_areas){
-          if($(this.areaInfoDiv))
-            $(this.areaInfoDiv).update('该游戏没有服务区');
+          this.updateAreaInfoDiv('该游戏没有服务区');
           if(this.details.no_servers){
-            if($(this.serverInfoDiv))
-              $(this.serverInfoDiv).update('该游戏的服务器还没有统计');
+            this.updateServerInfoDiv('该游戏的服务器还没统计');
           }else{
-            if(this.serverSelectID)
-              this.setupServerInfo(this.details.servers);
+            this.setupServerInfo(this.details.servers);
           }
         }else{
-          if(this.areaSelectorID)
-            this.setupAreaInfo(this.details.areas);
+          this.setupAreaInfo(this.details.areas);
         }
         
         if(this.details.no_professions){
-          if($(this.professionInfoDiv))
-            $(this.professionInfoDiv).update('该游戏没有职业');
+          this.updateProfessionInfoDiv('该游戏没有职业');
         }else{
-          if(this.professionSelectorID)
-            this.setupProfessionInfo(this.details.professions);
+          this.setupProfessionInfo(this.details.professions);
         }
 
         if(this.details.no_races){
-          if($(this.racesInfoDiv))
-            $(this.racesInfoDiv).update('该游戏没有种族');
+          this.updateRaceInfoDiv('该游戏没有种族');
         }else{
-          if(this.raceSelectorID)
-            this.setupRaceInfo(this.details.races);
+          this.setupRaceInfo(this.details.races);
         }
 
         // invoke game change hook        
-        this.options.onGameChange($(this.gameSelectorID).value);
+        this.options.onGameChange(this);
       }.bind(this)
     });
   },
 
   areaChange: function(){
     if(this.areaSelectorID && $(this.areaSelectorID).value == ''){
-      if(this.serverSelectID)
-        this.resetServerInfo();
+      this.resetServerInfo();
       return;
     }
     new Ajax.Request('/area_details/' + $(this.areaSelectorID).value + '.json', {
       method: 'get',
       onLoading: function(){
         Iyxzone.changeCursor('wait');
+        this.updateAreaInfoDiv('正在加载服务区信息');
       }.bind(this),
       onComplete: function(){
         Iyxzone.changeCursor('default');
+        this.updateAreaInfoDiv('');
       }.bind(this),
       onSuccess: function(transport){
         var areaInfo = transport.responseText.evalJSON().game_area;
 
         //这里假设每个area下面都有server
-        if(this.serverSelectID)
-          this.setupServerInfo(areaInfo.servers);
+        this.setupServerInfo(areaInfo.servers);
 
-        this.options.onAreaChange($(this.areaSelectorID).value);
+        this.options.onAreaChange(this);
       }.bind(this)
     });
   },
@@ -245,33 +278,29 @@ Iyxzone.Game.Selector = Class.create({
     if(this.serverSelectID && $(this.serverSelectID).value == ''){
       return;
     }
-    this.options.onServerChange($(this.serverSelectID).value);
+    this.options.onServerChange(this);
   },
 
   raceChange: function(){
     if(this.raceSelectorID && $(this.raceSelectorID).value == ''){
       return;
     }
-    this.options.onRaceChange($(this.raceSelectorID).value);
+    this.options.onRaceChange(this);
   },
 
   professionChange: function(){
     if(this.professionSelectorID && $(this.professionSelectorID).value == ''){
       return;
     }
-    this.options.onProfessionChange($(this.professionSelectorID).value);
+    this.options.onProfessionChange(this);
   },
 
   reset: function(){
     this.resetGameInfo();
-    if(this.areaSelectorID)
-      this.resetAreaInfo();
-    if(this.serverSelectID)
-      this.resetServerInfo();
-    if(this.professionSelectorID)
-      this.resetProfessionInfo();
-    if(this.raceSelectorID)
-      this.resetRaceInfo();
+    this.resetAreaInfo();
+    this.resetServerInfo();
+    this.resetProfessionInfo();
+    this.resetRaceInfo();
     this.details = null;
   },
 

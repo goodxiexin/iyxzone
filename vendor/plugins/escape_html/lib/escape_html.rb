@@ -34,8 +34,6 @@ module EscapeHTML
         if !html.blank? 
           # escape html
           html = CGI.escapeHTML(html)
-          # convert /n to <br/>
-          html.gsub! '\n', '<br/>'
           # save
           eval("self.#{col} = html")
         end

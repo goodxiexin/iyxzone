@@ -40,5 +40,24 @@ class GuildObserver < ActiveRecord::Observer
       guild.verified = 0
     end
   end
+
+  def before_destroy guild
+    # modify requests count
+    guild.president.raw_decrement :guild_requests_count, guild.requests_count
+
+    # modify invitations count
+    guild.invitations.each do |invitation|
+      invitation.user.raw_decrement :guild_invitations_count
+    end
+
+    # send notifications
+    (guild.people - [guild.president]).each do|p|
+      p.notifications.create(:category => Notification::GuildCancel, :data => "工会 #{guild.name} 取消了")
+      GuildMailer.deliver_guild_cancel guild, p if p.mail_setting.cancel_guild == 1
+    end
+
+    # destroy all memberships
+    Membership.delete_all(:guild_id => guild.id) 
+  end
   
 end

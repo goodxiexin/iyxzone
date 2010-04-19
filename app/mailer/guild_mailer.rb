@@ -26,6 +26,18 @@ class GuildMailer < ActionMailer::Base
 		body			 :user => membership.user, :membership => membership, :old_role => old_role, :url => "#{SITE_URL}/guilds/#{membership.guild_id}"
 	end
 
+  def guild_cancel guild, member
+    setup_email member
+    subject     "17Gaming.com(一起游戏网) - 工会'#{guild.name}'取消了"
+    body        :guild => guild, :user => member, :president => guild.president
+  end
+
+  def post post, recipient
+    setup_email recipient
+    subject     "17Gaming.com(一起游戏网) - 工会'#{guild.name}'取消了"
+    body        :topic => post.topic, :user => recipient, :url => "#{SITE_URL}/forums/#{post.forum_id}/topics/#{post.topic_id}/posts?post_id=#{post.id}"
+  end
+
 protected
 
   def setup_email member

@@ -25,9 +25,7 @@
             <a></a><a></a><a></a><a></a><a></a><a></a>
           </span>
           <% else %>
-            <% photos.each do |p| %>
-              <a><%= photo_link p, :class => 'imgbox01', :size => 'large' %></a>
-            <% end %>
+            <% photos.each do |p| %><%= photo_link p, :class => 'imgbox01', :size => 'large' %><% end %>
           <% end %>
         </div>
         <% if photos.count > 3 %>

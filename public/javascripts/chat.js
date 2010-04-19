@@ -132,7 +132,7 @@ Object.extend(Iyxzone.Chat, {
   },
 
   buildChatForm: function(friendID, friendLogin){
-    var div = new Element('div', {"id": 'chat-form-' + friendID, "class": 'im-dialog', "left": '500px', "top": '100px', "zIndex": 1000});
+    var div = new Element('div', {"id": 'chat-form-' + friendID, "class": 'im-dialog', "left": '500px', "top": '100px', "style": {'zIndex': 1000}});
     div.hide();
     
     var html = '';
@@ -171,7 +171,7 @@ Object.extend(Iyxzone.Chat, {
     else
       html += '<h4>' + login + "(" + message.created_at + ")</h4>";
 
-    html += '<p>' + message.content.escapeHTML().replace(/\n/g, '<br/>') + "</p>";
+    html += '<p>' + message.content.gsub('\n', '<br/>') + "</p>";
     return html;
   },
 

@@ -111,7 +111,8 @@ class Profile < ActiveRecord::Base
     # 我对这个很不满意，为了敷衍编辑档案那里，但是招不到更好的办法了   
     unless @del_characters_ids.blank?
       @del_characters_ids.each do |id|
-        user.characters.find(id).destroy
+        character = user.characters.find(id)
+        character.destroy if !character.is_locked?
       end
     end
     @del_characters_ids = nil

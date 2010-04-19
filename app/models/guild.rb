@@ -14,17 +14,17 @@ class Guild < ActiveRecord::Base
 
   named_scope :recent, :order => 'created_at DESC'
 
-  has_one :forum
+  has_one :forum, :dependent => :destroy
 
-  has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id'
+  has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
   
-  has_many :events
+  has_many :events, :dependent => :destroy
 
-  has_many :gears
+  has_many :gears, :dependent => :delete_all
 
-  has_many :bosses
+  has_many :bosses, :dependent => :delete_all
 
-  has_many :rules, :class_name => 'GuildRule'
+  has_many :rules, :class_name => 'GuildRule', :dependent => :delete_all
 
   has_many :basic_rules, :class_name => 'GuildRule', :conditions => {:rule_type => 2}
 

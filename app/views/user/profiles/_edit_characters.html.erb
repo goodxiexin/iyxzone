@@ -31,35 +31,35 @@
               <div class="rows s_clear">
                 <div class="fldid"><label>游戏：</label></div>
                 <div class="fldvalue">
-                  <div><%= c.collection_select :game_id, @games, :id, :name, {:prompt => '---'} %></div>
+                  <div><%= c.collection_select :game_id, [character.game], :id, :name, {}, :disabled => true %></div>
                 </div>
                 <span class='red' id='existing_characters_<%= character.id %>_game_id_error'></span>
               </div>
               <div class="rows s_clear">
                 <div class="fldid"><label>服务区：</label></div>
                 <div class="fldvalue">
-                  <div><%= c.collection_select :area_id, character.game.no_areas ? [] : character.game.areas, :id, :name, {:prompt => '---'} %></div>
+                  <div><%= c.collection_select :area_id, character.game.no_areas ? [] : [character.area], :id, :name, {}, :disabled => true %></div>
                 </div>
                 <span class='red' id='existing_characters_<%= character.id %>_area_id_error'></span>
               </div>
               <div class="rows s_clear">
                 <div class="fldid"><label>服务器：</label></div>
                 <div class="fldvalue">
-                  <div><%= c.collection_select :server_id, character.game.no_areas ? character.game.servers : character.area.servers, :id, :name, {:prompt => '---'} %></div>
+                  <div><%= c.collection_select :server_id, [character.server], :id, :name, {}, :disabled => true %></div>
                 </div>
                 <span class='red' id='existing_characters_<%= character.id %>_server_id_error'></span>
               </div>
               <div class="rows s_clear">
                 <div class="fldid"><label>种族：</label></div>
                 <div class="fldvalue">
-                  <div><%= c.collection_select :race_id, character.game.races, :id, :name, {:prompt => '---'} %></div>
+                  <div><%= c.collection_select :race_id, character.game.no_races ? [] : [character.race], :id, :name, {}, :disabled => true %></div>
                 </div>
                 <span class='red' id='existing_characters_<%= character.id %>_race_id_error'></span>
               </div>
               <div class="rows s_clear">
                 <div class="fldid"><label>职业：</label></div>
                 <div class="fldvalue">
-                  <div><%= c.collection_select :profession_id, character.game.professions, :id, :name, {:prompt => '---'} %></div>
+                  <div><%= c.collection_select :profession_id, character.game.no_professions ? [] : [character.profession], :id, :name, {:prompt => '---'}, :disabled => true %></div>
                 </div>
                 <span class='red' id='existing_characters_<%= character.id %>_profession_id_error'></span>
               </div>
@@ -71,10 +71,13 @@
               </div>
             <% end %>
             <p class='foot s_clear'>
-              <%= link_to_function "删除角色", "Iyxzone.Profile.Editor.removeCharacter(#{character.id}, 0, this)", :class => 'right red', :href => "javascript:void(0);" %>
+              <% if character.is_locked? %>
+                <%= facebox_tip "无法删除游戏角色", "无法删除该游戏角色，因为该角色可能是某活动的组织者或者是某工会的会长。请先删除活动或工会，然后才能删除该角色", :class => 'right red' %>
+              <% else %>
+                <%= link_to_function "删除角色", "Iyxzone.Profile.Editor.removeCharacter(#{character.id}, 0, this)", :class => 'right red', :href => "javascript:void(0);" %>
+              <% end %>
             </p>
           </div>
-          <%= javascript_tag "Iyxzone.Profile.Editor.addGameSelector(#{character.id}, #{character.game.to_json(:include => [:servers, :areas, :races, :professions])}.game);" %>
         <% end %>
       </div>
       <div id='new_character_loading'></div>
