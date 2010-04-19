@@ -1,6 +1,12 @@
 <% delivery = game_character_feed_delivery %>
 <% item = delivery.feed_item %>
-<% character = item.originator %>
+<% if item.data[:type] == 4 %>
+  <% character = item.data[:character] %>
+  <% user = User.find(character.user_id) %>
+<% else %>
+  <% character = item.originator %>
+  <% user = character.user %>
+<% end %>
 
 <div class="feed-list-box">
 <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
@@ -10,11 +16,13 @@
 	<div class="jl-list-con jl-cutline">
 	<% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %><% end %> 
 <% if item.data[:type] == 0 %>
-  <%= profile_link character.user %> 创建了游戏角色 <%= link_to character.name, edit_profile_url(character.user.profile), :class => "shine" %>
+  <%= profile_link user %> 创建了游戏角色 <%= link_to character.name, edit_profile_url(user.profile), :class => "shine" %>
 <% elsif item.data[:type] == 1 %>
-  <%= profile_link character.user %> 放弃了游戏角色 <%= link_to character.name, edit_profile_url(character.user.profile), :class => "shine" %>
+  <%= profile_link user %> 开始不玩游戏角色 <%= link_to character.name, edit_profile_url(user.profile), :class => "shine" %>
 <% elsif item.data[:type] == 2 %>
-  <%= profile_link character.user %> 开始玩游戏角色 <%= link_to character.name, edit_profile_url(character.user.profile), :class => "shine"%>
+  <%= profile_link user %> 开始玩游戏角色 <%= link_to character.name, edit_profile_url(user.profile), :class => "shine" %>
+<% elsif item.data[:type] == 3 %>
+  <%= profile_link user %> 删除了游戏角色 <%= link_to character.name, edit_profile_url(user.profile), :class => "shine" %>
 <% end %>
 	<span class='gray'><%= ftime delivery.created_at %></span>
 	</div>

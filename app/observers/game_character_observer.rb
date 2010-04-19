@@ -20,11 +20,6 @@ class GameCharacterObserver < ActiveRecord::Observer
 	end
 
   def after_update character
-    # delete comrade suggestions if game server changes
-    if character.server_id_changed?
-      # TODO: 怎么删除那些没有用的战友推荐呢
-    end
-
     # issue feeds
 		recipients = [character.user.profile, character.game, character.guild]
 		recipients.concat character.user.friends
@@ -40,7 +35,14 @@ class GameCharacterObserver < ActiveRecord::Observer
     character.game.raw_decrement :characters_count
     character.user.raw_decrement :characters_count
 
-		character.user.raw_decrement :games_count unless character.user.games.include?(character.game) 
+    # decrement game counter if necessary
+		character.user.raw_decrement :games_count unless character.user.has_game? character.game_id
+
+    # issue feeds if necessary
+    # TODO: 这里是有点问题的, 因为feed_item的originator是空的，但是deliver_feeds方法还是会自动赋值的
+    recipients = [character.user.profile]
+    recipients.concat character.user.friends
+    character.deliver_feeds :recipients => recipients, :data => {:type => 3, :character => character}
   end
 
 end
