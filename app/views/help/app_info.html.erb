@@ -1,0 +1,62 @@
+<div id="page" class="page_side_wrap s_clear">
+  <!--sidebar-->
+  <div class="sidebar">
+      <div class="round_r_t">
+      	<div class="round_l_t">
+        <div class="round_r_b">
+        <div class="round_l_b">
+        <div class="round_m">
+        <div class="round_body s_clear">
+        
+       		<div class="info-nav">
+            	<dl>
+            	  <dt><%= link_to '关于我们', about_us_help_url %></dt>
+            	</dl>
+            	<dl>
+            	  <dt class='focus'><%= link_to '应用介绍', app_info_help_url %></dt>
+            	</dl>
+            	<dl>
+            	  <dt><%= link_to '联系方式', contact_info_help_url %></dt>
+            	</dl>
+            	<dl>
+            	  <dt><%= link_to '隐私说明', privacy_info_help_url %></dt>
+            	</dl>
+            </div>
+       
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+      
+  </div>
+  <!--sidebar-->
+  <!--main-->
+  <div class="main">
+    <div class="content">
+      <div class="round_r_t">
+      	<div class="round_l_t">
+            <div class="round_r_b">
+                <div class="round_l_b">
+                    <div class="round_m">
+                        <div class="round_body s_clear">
+                        	<div class="info-title"><h2>应用说明</h2></div>
+                            <div class="info-content">
+														<% @applications.each do |application| %>
+															<h4 class="item-title"><%= link_to_function "#{application.name}的说明", "$('#{application.name}_explaination').toggle();" %></h4>
+                                <div class="sub-con" id="<%=application.name%>_explaination" style="display:none">
+																	<%= application.about %>
+																</div>
+														<% end %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+  </div>
+  <!--main-->
+</div>

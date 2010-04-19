@@ -22,8 +22,7 @@
 					<p class="top_link right">
 					<%= link_to_function "设为主页", "homepage()" %> |
 					<%= link_to_function "加入收藏", "addBookmark()" %> |
-					<%= link_to '反映建议' %> | 
-					<%= link_to '关于我们'%>
+					<%= link_to '关于我们', about_us_help_url %>
 					</p>
 				</div>
 			</div>
@@ -105,10 +104,7 @@
             </div>
         </div>
 
-<div id="footer">
-	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
-    <p><a href="#">网游公司 版权所有</a></p>
-</div>
+  <%= render :partial => 'layouts/footer' %>  
 
 </body>
 

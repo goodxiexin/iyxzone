@@ -115,7 +115,8 @@ Object.extend(Iyxzone.Emotion.Manager, {
 				"position": 'absolute',
 				"left": ($(link).cumulativeOffset().left) + 'px',
 				"top": ($(link).cumulativeOffset().top) + 'px',
-				"width": '270px'
+				"width": '270px',
+				"z-index": '10000'
 		});
 		this.currentField = textField;
 		this.currentLink = link;
