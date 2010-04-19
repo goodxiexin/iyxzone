@@ -47,7 +47,7 @@ protected
 		when /game_suggestion/
 			return "推荐游戏"
 		when /news/
-			return "每日十闻"
+			return "拾闻"
 		when /home/
 			return "首页"
 		when /profile/
