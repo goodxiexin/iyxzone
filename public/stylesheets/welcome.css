@@ -22,7 +22,12 @@
 .welcome{margin-top:25px;overflow:hidden}
 .welcome .login-box{float:left;width:336px;background:url(../images/welcome/loginBg01.png) no-repeat 0 0;}
 .welcome .login-box .r-m{margin:70px 7px 0 15px}
-.welcome .login-box .r-b{width:336px;height:185px;_height:192px;display:block;background:url(../images/welcome/loginBg01-b.png) no-repeat 0 bottom}
+.welcome .login-box .r-b{width:336px;height:80px;display:block;background:url(../images/welcome/loginBg01-b.png) no-repeat 0 bottom}
+.site-info{height:150px;font-size:12px;line-height:22px;width:260px;margin:0 auto}
+.site-info h2{font-weight:700;font-size:12px;margin-bottom:3px}
+.site-info .time{color:#888;margin-right:10px;float:left}
+.site-info strong{color:#888;float:left;font-weight:400;display:block;width:180px}
+
 .welcome .right{margin-top:3px;width:618px;}
 .welcome .right p.later{margin-top:17px;border:1px solid #acd296}
 .welcome .slogon-box{text-align:center;border:1px solid #acd296;background:#fff;padding-top:15px;}

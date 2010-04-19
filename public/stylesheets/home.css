@@ -627,7 +627,9 @@ a:hover{color:#D63200;}
 
 a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;height:16px;display:inline-block}/*表情icon*/
 #homeComposer .mcPanel .buttons a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;padding-left:25px;margin-right:80px}
-#homeComposer .mcPanel .home-dialog{padding-left:5px;}
+#homeComposer .mcPanel .home-dialog{padding-left:5px;height:auto}
+#homeComposer .mcPanel .home-dialog span.left{width:270px;display:block;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-break:keep-all;word-wrap:normal;white-space:nowrap}
+#homeComposer .mcPanel .home-dialog span.left img{vertical-align:middle}
 #homeComposer .img{width:60px;}
 #homeComposer .mcContent{margin-left:75px;}
 #homeComposer .mcPanel #mcStatus{width:335px;}
