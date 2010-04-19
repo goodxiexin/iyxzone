@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100419074357) do
+ActiveRecord::Schema.define(:version => 20100419134333) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.integer  "game_id"
     t.string   "title",            :limit => 64
     t.text     "content",          :limit => 16777215
+    t.text     "content_abstract"
     t.integer  "digs_count",                           :default => 0
     t.integer  "comments_count",                       :default => 0
     t.integer  "tags_count",                           :default => 0
@@ -63,7 +64,6 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",                             :default => 0
-    t.text     "content_abstract"
   end
 
   add_index "blogs", ["poster_id"], :name => "index_blogs_on_poster_id"
@@ -246,11 +246,9 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.integer  "area_id"
     t.integer  "profession_id"
     t.integer  "race_id"
-    t.integer  "guild_id"
     t.string   "name"
     t.string   "pinyin"
     t.integer  "level"
-    t.integer  "dkp"
     t.boolean  "playing",       :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -429,15 +427,16 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.integer  "game_id"
     t.integer  "poster_id"
     t.string   "news_type"
+    t.string   "origin_address"
+    t.string   "title"
     t.text     "data"
-    t.integer  "comments_count",                  :default => 0
-    t.integer  "viewings_count",                  :default => 0
+    t.text     "data_abstract"
+    t.integer  "comments_count", :default => 0
+    t.integer  "viewings_count", :default => 0
+    t.integer  "sharings_count", :default => 0
+    t.integer  "digs_count",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",            :limit => 64
-    t.string   "origin_addr",      :limit => 256
-    t.integer  "digs_count",                      :default => 0
-    t.text     "content_abstract"
   end
 
   create_table "notices", :force => true do |t|
@@ -584,11 +583,11 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.integer  "topic_id"
     t.integer  "forum_id"
     t.integer  "poster_id"
+    t.integer  "recipient_id"
     t.text     "content"
     t.integer  "floor"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "recipient_id"
   end
 
   create_table "profiles", :force => true do |t|
@@ -649,12 +648,12 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
   create_table "sharings", :force => true do |t|
     t.string   "title"
     t.text     "reason"
+    t.string   "shareable_type"
     t.integer  "share_id"
     t.integer  "poster_id"
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.integer  "verified",       :default => 0
-    t.string   "shareable_type"
   end
 
   add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"
@@ -678,11 +677,10 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
   create_table "statuses", :force => true do |t|
     t.integer  "poster_id"
     t.text     "content"
-    t.integer  "comments_count",   :default => 0
+    t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "verified",         :default => 0
-    t.text     "content_abstract"
+    t.integer  "verified",       :default => 0
   end
 
   add_index "statuses", ["poster_id"], :name => "index_statuses_on_poster_id"
@@ -713,12 +711,12 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.integer  "poster_id"
     t.string   "subject"
     t.text     "content"
+    t.text     "content_abstract"
     t.integer  "posts_count",      :default => 0
+    t.integer  "viewings_count",   :default => 0
     t.boolean  "top",              :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "viewings_count",   :default => 0
-    t.text     "content_abstract"
   end
 
   create_table "users", :force => true do |t|
@@ -741,7 +739,7 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.string   "pinyin"
     t.datetime "last_seen_at"
     t.integer  "privacy_setting",            :limit => 8,  :default => 123076522
-    t.integer  "mail_setting",               :limit => 8,  :default => 281474976710655
+    t.integer  "mail_setting",               :limit => 8,  :default => 562949953421311
     t.integer  "application_setting",        :limit => 8,  :default => 262143
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
@@ -752,15 +750,24 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.integer  "notifications_count",                      :default => 0
     t.integer  "unread_notifications_count",               :default => 0
     t.integer  "friends_count",                            :default => 0
-    t.integer  "albums_count",                             :default => 0
+    t.integer  "albums_count1",                            :default => 0
+    t.integer  "albums_count2",                            :default => 0
+    t.integer  "albums_count3",                            :default => 0
+    t.integer  "albums_count4",                            :default => 0
     t.integer  "photos_count",                             :default => 0
     t.integer  "guilds_count",                             :default => 0
     t.integer  "participated_guilds_count",                :default => 0
     t.integer  "polls_count",                              :default => 0
     t.integer  "participated_polls_count",                 :default => 0
-    t.integer  "blogs_count",                              :default => 0
+    t.integer  "blogs_count1",                             :default => 0
+    t.integer  "blogs_count2",                             :default => 0
+    t.integer  "blogs_count3",                             :default => 0
+    t.integer  "blogs_count4",                             :default => 0
     t.integer  "drafts_count",                             :default => 0
-    t.integer  "videos_count",                             :default => 0
+    t.integer  "videos_count1",                            :default => 0
+    t.integer  "videos_count2",                            :default => 0
+    t.integer  "videos_count3",                            :default => 0
+    t.integer  "videos_count4",                            :default => 0
     t.integer  "statuses_count",                           :default => 0
     t.integer  "friend_requests_count",                    :default => 0
     t.integer  "guild_requests_count",                     :default => 0
@@ -771,18 +778,6 @@ ActiveRecord::Schema.define(:version => 20100419074357) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "blogs_count1",                             :default => 0
-    t.integer  "blogs_count2",                             :default => 0
-    t.integer  "blogs_count3",                             :default => 0
-    t.integer  "blogs_count4",                             :default => 0
-    t.integer  "videos_count1",                            :default => 0
-    t.integer  "videos_count2",                            :default => 0
-    t.integer  "videos_count3",                            :default => 0
-    t.integer  "videos_count4",                            :default => 0
-    t.integer  "albums_count1",                            :default => 0
-    t.integer  "albums_count2",                            :default => 0
-    t.integer  "albums_count3",                            :default => 0
-    t.integer  "albums_count4",                            :default => 0
   end
 
   create_table "videos", :force => true do |t|

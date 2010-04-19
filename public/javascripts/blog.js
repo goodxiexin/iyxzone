@@ -45,7 +45,7 @@ Object.extend(Iyxzone.Blog.Builder, {
       this.editor.nicInstances[i].saveContent();
     }
     
-    this.parameters = form.serialize();
+    this.parameters = $(form).serialize();
     var newTags = this.tagBuilder.getNewTags();
     var delTags = this.tagBuilder.getDelTags();
     for(var i=0;i<newTags.length;i++){

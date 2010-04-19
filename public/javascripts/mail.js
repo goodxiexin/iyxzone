@@ -6,7 +6,7 @@ Iyxzone.Mail = {
 
   Manager: {},
 
-  Builder: {},
+  Builder: {}
 };
 
 Object.extend(Iyxzone.Mail.Manager, {

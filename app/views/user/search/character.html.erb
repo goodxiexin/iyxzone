@@ -102,7 +102,10 @@
 	</div></div>
 </div></div></div></div>
 
-<%= onload_javascript_tag "
-  Iyxzone.Game.infos = #{game_infos};
+<% onload_javascript_tag do %>
+  Iyxzone.Game.infos = <%= game_infos %>;
   Iyxzone.Game.initPinyinSelector('game_id', null, 'area_id', null, 'server_id', null, null, null, null, null, null, null);
-" %>
+  <% if !@game.blank? %>
+    $('game_id').value = <%= @game.id %>
+  <% end %>
+<% end %>

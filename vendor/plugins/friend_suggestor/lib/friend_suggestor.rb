@@ -92,7 +92,7 @@ module FriendSuggestor
 	def collect_comrades server
 		comrade_suggestions = {}
 		comrade_suggestions.default =	0	
-    candidates = server.is_temp? ? server.game.users : server.users
+    candidates = server.users
 
 		candidates.each do |u|
 			if u != self and !self.has_friend?(u)	and !self.wait_for?(u) and !u.wait_for?(self)

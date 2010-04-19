@@ -312,7 +312,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     html += '<div class="rows s_clear"><div class="fldid"><label>等级：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterLevelValid(' + id + ', 1)" name="profile[new_characters][' + id + '][level]" id="profile_new_characters_' + id + '_level"/></div></div><span id="new_characters_' + id + '_level_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_game_id_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>服务区：</label></div><div class="fldvalue"><div><select name="profile[new_characters]['+ id + '][area_id]" id="profile_new_characters_' + id + '_area_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_area_id_error" class="red"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>服务器：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][server_id]" id="profile_new_characters_' + id + '_server_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_server_id_error" class="red">server info</span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>服务器：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][server_id]" id="profile_new_characters_' + id + '_server_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_server_id_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>种族：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][race_id]" id="profile_new_characters_' + id + '_race_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_race_id_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>职业：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][profession_id]" id="profile_new_characters_' + id + '_profession_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_profession_id_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>正在玩：</label></div><div class="fldvalue"><input name="profile[new_characters][' + id + '][playing]" value="0" type="hidden"><input checked="checked" id="profile_new_characters_' + id + '_playing" name="profile[new_characters][' + id + '][playing]" value="1" type="checkbox"></div></div>'; 
@@ -481,12 +481,11 @@ Object.extend(Iyxzone.Profile.Editor, {
 
       new Ajax.Request('/profiles/' + profileID + '?type=3', {
         method: 'put',
-        parameters: delCharacterParams + form.serialize(),
+        parameters: delCharacterParams + $(form).serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         },
         onSuccess: function(transport){
-//          $('character_frame').innerHTML = transport.responseText;
           $('character_frame').update( transport.responseText);
           this.editCharactersHTML = null;
           this.gameSelectors = new Hash();

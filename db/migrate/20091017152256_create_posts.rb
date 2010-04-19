@@ -4,6 +4,7 @@ class CreatePosts < ActiveRecord::Migration
       t.integer :topic_id
       t.integer :forum_id
       t.integer :poster_id
+      t.integer :recipient_id
       t.text :content
       t.integer :floor
 

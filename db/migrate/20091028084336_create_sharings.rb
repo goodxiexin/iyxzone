@@ -3,6 +3,7 @@ class CreateSharings < ActiveRecord::Migration
     create_table :sharings do |t|
       t.string  :title
       t.text    :reason # 分享理由
+      t.string :shareable_type # a cache to improve performance
       t.integer :share_id
 			t.integer :poster_id
       t.integer :comments_count, :default => 0

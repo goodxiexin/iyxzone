@@ -325,4 +325,15 @@ module ApplicationHelper
     Game.find(:all, :order => "pinyin ASC").map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
   end
 
+  # 系统默认的中间的p标签也会加上html_option，这是我不想要的
+  def simple_format(text, html_options={})
+    start_tag = tag('p', html_options, true)
+    text = text.to_s.dup
+    text.gsub!(/\r\n?/, "\n")
+    text.gsub!(/\n/, "<br/>")
+    text.insert 0, start_tag
+    text << "</p>"
+  end
+
+
 end

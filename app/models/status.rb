@@ -11,8 +11,6 @@ class Status < ActiveRecord::Base
 
   acts_as_emotion_text :columns => [:content]
 
-  acts_as_abstract :columns => [:content]
-
 	acts_as_resource_feeds
 
   needs_verification 

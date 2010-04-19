@@ -286,9 +286,8 @@ Object.extend(Iyxzone.Guild.Editor, {
     if(this.validateAttendanceRules()){
       new Ajax.Request('/guilds/' + guildID + '/rules/create_or_update?type=0', {
         method: 'post',
-        parameters: form.serialize(),
+        parameters: $(form).serialize(),
         onSuccess: function(transport){
-//          $('attendance_rule_frame').innerHTML = transport.responseText;
           $('attendance_rule_frame').update( transport.responseText);
           this.editAttendanceRulesHTML = null;
         }.bind(this)
@@ -417,9 +416,8 @@ Object.extend(Iyxzone.Guild.Editor, {
 
       new Ajax.Request('/guilds/' + guildID + '/rules/create_or_update?type=1', {
         method: 'post',
-        parameters: delParams + form.serialize(),
+        parameters: delParams + $(form).serialize(),
         onSuccess: function(transport){
-//          $('basic_rule_frame').innerHTML = transport.responseText;
           $('basic_rule_frame').update( transport.responseText);
           this.editBasicRulesHTML = null;
           this.delRuleIDs = new Array();
@@ -565,7 +563,7 @@ Object.extend(Iyxzone.Guild.Editor, {
       }
       new Ajax.Updater('boss_frame', '/guilds/' + guildID + '/bosses/create_or_update', {
         method: 'post',
-        parameters: delParams + form.serialize(),
+        parameters: delParams + $(form).serialize(),
         onSuccess: function(transport){
           this.editBossesHTML = null;
           this.delBossIDs = new Array();
@@ -711,9 +709,8 @@ Object.extend(Iyxzone.Guild.Editor, {
       }
       this.updateGearRequest = new Ajax.Request('/guilds/' + guildID + '/gears/create_or_update', {
         method: 'post',
-        parameters: delParams + form.serialize(),
+        parameters: delParams + $(form).serialize(),
         onSuccess: function(transport){
-//          $('gear_frame').innerHTML = transport.responseText;
           $('gear_frame').update( transport.responseText);
           this.editGearsHTML = null;
           this.delGearIDs = new Array();
@@ -725,7 +722,6 @@ Object.extend(Iyxzone.Guild.Editor, {
   },
 
   cancelEditGears: function(guildID){
-//    $('gear_frame').innerHTML = this.gearsHTML;
     $('gear_frame').update( this.gearsHTML);
     this.delGearIDs = new Array();
   },

@@ -5,7 +5,9 @@ class CreateTopics < ActiveRecord::Migration
       t.integer :poster_id
       t.string :subject
 			t.text :content
+      t.text :content_abstract
       t.integer :posts_count, :default => 0
+      t.integer :viewings_count, :default => 0
       t.boolean :top, :default => false
       t.timestamps
     end

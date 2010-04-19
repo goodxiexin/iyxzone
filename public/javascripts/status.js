@@ -22,7 +22,7 @@ Object.extend(Iyxzone.Status.Builder, {
     if(this.validate()){
       new Ajax.Request('/statuses', {
         method: 'post', 
-        parameters: form.serialize(),
+        parameters: $(form).serialize(),
 				onComplete: function(){
 					Iyxzone.enableButtonThree(button, '发布');
           if($('words_count')){

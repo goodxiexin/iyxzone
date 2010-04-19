@@ -317,7 +317,7 @@ Object.extend(Iyxzone.Register, {
 
     new Ajax.Request('/users/', {
       method: 'post',
-      parameters: form.serialize(),
+      parameters: $(form).serialize(),
 			onloading: function(){
 				Iyxzone.disableButton(button, '等待中..');
 			}

@@ -29,6 +29,7 @@ module ResourceFeeds
 			has_many :feed_items, :as => 'originator', :dependent => :destroy
 
 			define_method(:deliver_feeds) do |opts|
+        puts "recipients: #{opts[:recipients]}"
 				return if opts[:recipients].blank?
 				item = feed_items.create(:data => opts[:data])
 				values = []

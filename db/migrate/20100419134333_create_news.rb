@@ -7,6 +7,7 @@ class CreateNews < ActiveRecord::Migration
       t.string :origin_address
       t.string :title
       t.text :data
+      t.text :data_abstract
       t.integer :comments_count, :default => 0
       t.integer :viewings_count, :default => 0
       t.integer :sharings_count, :default => 0
