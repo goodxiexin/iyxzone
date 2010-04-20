@@ -8,13 +8,21 @@ Object.extend(Iyxzone.News.Builder, {
 
   editor:null,
 
-  validate: function() {
+  validateTextNews: function() {
     if ($('news_title').value == '') {
       error("请填写标题")
       return false;
     }
-    if ($('news_title').length > 64) {
-      error("标题最长为64个字符")
+    if ($('news_title').length > 300) {
+      error("标题最长为300个字节")
+      return false;
+    }
+    if ($('news_data').value == '') {
+      error("请填写内容")
+      return false;
+    }
+    if ($('news_data').length > 10000) {
+      error("内容最长为10000个字节")
       return false;
     }
     if ($('news_game_id').value == '') {
@@ -24,44 +32,80 @@ Object.extend(Iyxzone.News.Builder, {
     return true;
   },
 
-  prepare: function() {
+  validateVideoNews: function() {
+    if ($('news_title').value == '') {
+      error("请填写标题")
+      return false;
+    }
+    if ($('news_title').length > 300) {
+      error("标题最长为300个字节")
+      return false;
+    }
+    if ($('news_video_url').value == '') {
+      error("请填写视频url")
+      return false;
+    }
+    if ($('news_game_id').value == '') {
+      error("请选择与新闻相关的游戏")
+      return false;
+    }
+    return true;
+  },
+
+  prepare: function(form) {
     for(var i=0; i<this.editor.nicInstances.length; i++) {
       this.editor.nicInstances[i].saveContent();
     }
-    this.parameters = $('news_form').serialize();
+    this.parameters = $(form).serialize();
   },
 
-  saveNews: function(event){
-    Event.stop(event);
-    if (this.validate()) {
-      this.prepare();
-      new Ajax.Request('/admin/news/create', {
+  saveTextNews: function(button, form){
+    Iyxzone.disableButtonThree(button, '发布中..');
+    if(this.validateTextNews()) {
+      this.prepare(form);
+      new Ajax.Request('/admin/news', {
         method: 'post',
-        parameters: this.parameters,
-        onLoading: function(){
-          Iyxzone.disableButton(button, '请等待..');
-        },
-        onComplete: function(){
-          Iyxzone.enableButton(button, '发布');
-        }
+        parameters: this.parameters
       });
+    }else{
+      Iyxzone.enableButtonThree(button, '发布');
     }
   },
 
-  updateNews: function(blogID, event){
-    Event.stop(event);
-    if (this.validate()) {
-      this.prepare();
-      new Ajax.Request('/admin/news/update/' + blogID, {
+  updateTextNews: function(button, newsID, form){
+    Iyxzone.disableButtonThree(button, '修改中..')
+    if (this.validateTextNews()) {
+      this.prepare(form);
+      new Ajax.Request('/admin/news/' + newsID, {
         method: 'put',
-        parameters: this.parameters,
-        onLoading: function(){
-          Iyxzone.disableButton(button, '请等待..');
-        },
-        onComplete: function(){
-          Iyxzone.enableButton(button, '发布');
-        }
+        parameters: this.parameters
       });
+    }else{
+      Iyxzone.enableButtonThree(button, '修改');
+    }
+  },
+
+  saveVideoNews: function(button, form){
+    Iyxzone.disableButtonThree(button, '发布中..');
+    if(this.validateVideoNews()) {
+      new Ajax.Request('/admin/news', {
+        method: 'post',
+        parameters: $(form).serialize(),
+      });
+    }else{
+      Iyxzone.enableButtonThree(button, '发布');
+    }
+  },
+
+  updateVideoNews: function(button, newsID, form){
+    Iyxzone.disableButtonThree(button, '修改中..');
+    if(this.validateVideoNews()) {
+      new Ajax.Request('/admin/news/' + newsID, {
+        method: 'put',
+        parameters: $(form).serialize(),
+      });
+    }else{
+      Iyxzone.enableButtonThree(button, '修改');
     }
   },
 
@@ -75,5 +119,12 @@ Object.extend(Iyxzone.News.Builder, {
     $('news-data').update(data);
     $('news-expand').show();
     $('news-hide').show();
+  },
+
+  init: function(textAreaID, token, albumInfos){
+    this.editor = new nicEditor().panelInstance(textAreaID);
+    nicEditors.albums = albumInfos;
+    nicEditors.authenticity_token = token;
   }
+
 });

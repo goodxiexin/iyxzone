@@ -1,0 +1,52 @@
+<%= javascript_include_tag 'textboxlist' %>
+<%= javascript_include_tag 'nicEdit' %>
+<%= javascript_include_tag 'news' %>
+
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-news">修改新闻</h1>
+    <div class="box02 canvas_int space">
+      <div class='appcontent01'>
+        <div id='errors'></div>
+        <div class="cons-form formcontent">
+          <% form_for :news, :html => {:id => 'news_form', :onsubmit => "Iyxzone.News.Builder.updateTextNews($('news_submit_btn'), #{@news.id}, this); return false;"} do |f| %>
+            <div class='rows s_clear'>
+              <div class='fldid'><%= f.label "新闻标题：" %></div>
+              <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
+            </div>
+            <div class='rows s_clear'>
+              <%= f.text_area 'data', :style => "width: 700px; height: 300px;" %>
+            </div>
+            <div class='rows s_clear'>
+              <div class='fldid'><%= f.label "新闻原地址："%></div>
+              <div class='fldvalue'><div class='textfield'><%= f.text_field 'origin_address' %></div></div>
+            </div>
+            <div class='rows s_clear'>
+              <div class='fldid'>
+                <%= f.label "新闻类别：" %>
+              </div>
+              <div class='fldvalue'>
+                <%= f.select :news_type, %w{text video picture}, :class => "selector selector02"%>
+              </div>
+            </div>
+            <div class='rows s_clear'>
+              <div class='fldid'>
+                <%= f.label "相关游戏：" %>
+              </div>
+              <div class='fldvalue'>
+                <%= f.collection_select 'game_id', Game.find(:all), :id, :name, {:prompt => '---'}, :class => "selector selector02"%>
+              </div>
+            </div>
+            <div class='rows s_clear'>
+              <div class='fldid'>&nbsp;</div>
+              <div class='fldvalue'><span class='button03 w-l'><span><button type='submit' id='news_submit_btn'>发布</button></span></span></div>
+            </div>
+          <%end%>
+      </div></div></div>
+
+  </div></div>
+</div></div></div></div>
+
+<% onload_javascript_tag do %>
+  Iyxzone.News.Builder.init('news_data', '<%= form_authenticity_token %>', <%= album_infos %>);
+<% end  %>

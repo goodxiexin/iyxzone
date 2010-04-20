@@ -64,8 +64,9 @@
       </div>
       <div class="foot cmt-space">
         <div class="feed-list">
-          <p class="s_clear red">评论(<%= @blog.comments_count %>)
-			      <%=link_to_remote '赞', :url => digs_url("dig[diggable_type]" => @blog.class.base_class.to_s, "dig[diggable_id]" => @blog), :html => {:id=> "digging_#{@blog.class.to_s.underscore}_#{@blog.id}", :class => "red"}%>(<span id="dig_<%=@blog.class.to_s.underscore%>_<%=@blog.id%>" class='gray'><%= @blog.digs_count %></span>人赞过)
+          <p class="s_clear red">
+            评论(<%= @blog.comments_count %>)
+            <%= text_dig_link @blog, :class => 'red' %>
 		      </p>
           <% cache [@blog, @blog.comments_count] do %>
 		        <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @blog, :recipient => @blog.poster} %>

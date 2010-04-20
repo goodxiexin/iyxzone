@@ -1,0 +1,18 @@
+<% delivery = news_sharing_feed_delivery %>
+<% sharing = delivery.feed_item.originator %>
+<% news = sharing.shareable %>
+
+<div class="feed-list-box">
+  <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
+	  <div class="img left"><div class="imgbox01"><%= avatar sharing.poster %></div></div>
+    <div class="jl-list-con jl-cutline">
+	  <% if delivery.is_deleteable_by? current_user %>
+      <%= link_to_remote '', :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => 'icon-active'} %>
+	  <% end %>
+      <%= profile_link sharing.poster%> 分享了新闻 <%= news_link news, :class => 'shine'%>
+      <p class="gray jl-con"><%= news_content news, :length => 80, :omission => '...' %></p>
+      <p class="gray"><%= ftime delivery.created_at %><%= link_to_function '评论', "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id})" %></p>
+	    <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => sharing, :recipient => sharing.poster} %>
+	  </div>
+  </div>
+</div>

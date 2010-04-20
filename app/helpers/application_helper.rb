@@ -115,7 +115,8 @@ module ApplicationHelper
     link_to (image_tag photo.public_filename(size), opts), eval("#{photo.class.name.underscore}_url(photo)")
   end
 
-  def dig_link diggable
+  # 这个dig_link是有图标的那个
+  def icon_dig_link diggable
 		dig_html = "<div class='evaluate'>"
 		if diggable.digged_by? current_user
 		  dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}' class='dug'>#{diggable.digs_count}</span><a href='javascript: void(0)'>赞</a>"
@@ -127,12 +128,22 @@ module ApplicationHelper
     dig_html
   end
 
+  def text_dig_link diggable, html_opts={}
+    dig_html = link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable, :at => 'show'), :html => {:id => "digging_#{diggable.class.to_s.underscore}_#{diggable.id}"}.merge(html_opts), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
+    dig_html += "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}' class='gray'>#{diggable.digs_count}</span>人赞过)"
+    dig_html
+  end
+
   def blog_content blog, opts={}
     if blog.content_abstract.length > opts[:length]
       (truncate blog.content_abstract, opts) + (link_to '查看全文>>', blog_url(blog))
     else
       truncate blog.content_abstract, opts
     end
+  end
+
+  def news_link news, opts={}
+    link_to (truncate (h news.title), :length => 40), news_url(news), opts
   end
 
   def blog_link blog, opts={}
@@ -316,6 +327,10 @@ module ApplicationHelper
     Game.find(:all, :order => "pinyin ASC").map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
   end
 
+  def album_infos
+    current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
+  end
+
   # 系统默认的中间的p标签也会加上html_option，这是我不想要的
   def simple_format(text, html_options={})
     start_tag = tag('p', html_options, true)
@@ -324,6 +339,16 @@ module ApplicationHelper
     text.gsub!(/\n/, "<br/>")
     text.insert 0, start_tag
     text << "</p>"
+  end
+
+  def news_type news
+    if news.news_type == 'text'
+      "文字新闻"
+    elsif news.news_type == 'picture'
+      "图片新闻"
+    elsif news.news_type == 'video'
+      "视频新闻"
+    end
   end
 
 end

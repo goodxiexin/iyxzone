@@ -37,6 +37,8 @@ ActionController::Routing::Routes.draw do |map|
   map.invite '/invite', :controller => 'register', :action => 'invite'
 
   map.namespace :admin do |admin|
+
+    admin.resources :news
   
   	admin.resources :guestbooks, :only => [ :index, :show , :edit, :update, :destroy]
 
@@ -262,7 +264,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.search_users '/search_users', :controller => 'search', :action => 'user'
 
-    users.resources :news, :collection => {:text => :get, :video => :get, :pic => :get}
+    users.resources :news
 
     users.resources :contacts, :controller => 'email_contacts', :collection => {:sina => :get, :netease => :get, :hotmail => :get, :yahoo => :get, :gmail => :get, :msn => :get}
   end
