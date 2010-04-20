@@ -13,7 +13,7 @@
 			<h1 class="app-ploy">活动</h1>
 		<% else %>
     <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01" %></span>
+      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01", :size => 'medium' %></span>
       <p class="left">
         <strong>公会活动</strong><br/>
         <%= guild_link @guild, :class => 'red' %>的主页

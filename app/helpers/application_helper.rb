@@ -99,7 +99,13 @@ module ApplicationHelper
   def album_cover_image album, opts={}
     size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
-      image_tag "default_cover_#{size}.png", opts
+			if album.is_a? GuildAlbum
+				image_tag "default_guild_#{size}.png", opts
+			elsif album.is_a? EventAlbum
+				image_tag "default_event_#{size}.png", opts
+			else
+				image_tag "default_cover_#{size}.png", opts
+			end
     else
       image_tag album.cover.public_filename(size), opts
     end
@@ -108,7 +114,13 @@ module ApplicationHelper
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
-      link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+			if album.is_a? GuildAlbum
+				link_to image_tag("default_guild_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+			elsif album.is_a? EventAlbum
+				link_to image_tag("default_event_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+			else
+				link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+			end
     else
       link_to image_tag(album.cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
@@ -278,15 +290,6 @@ module ApplicationHelper
       height = photo.height * 500 / photo.width
       image_tag photo.public_filename, opts.merge({:width => width, :height => height})
     end
-  end
-
-  def crop_image photo, opts={}
-    size = opts.delete(:size) || ''
-    width = photo.width
-    height = photo.height
-    left = (opts[:width] - width)/2
-    top  = (opts[:height] - height)/2
-    image_tag photo.public_filename(size), opts.merge({:left => "#{left}px", :top => "#{top}px"})
   end
 
   def integer_array_for_javascript array
