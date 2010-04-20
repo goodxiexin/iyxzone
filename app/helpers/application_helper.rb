@@ -18,6 +18,14 @@ module ApplicationHelper
     end
   end
 
+	def game_image(game_name, opts={})
+		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.jpg")
+			image_tag "/images/gamepic/#{game_name}.jpg", opts
+		else
+			image_tag "/images/gamepic/default.jpg", opts
+		end
+	end
+
   def avatar(user, img_opts={}, a_opts={})
 		size = img_opts.delete(:size) || "medium"
     a_opts.merge!({:popup => true})
