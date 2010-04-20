@@ -112,5 +112,7 @@ Gameswithhole.create( :txtid => 741, :sqlid => game741.id, :gamename => game741.
   end
 
   def self.down
+		g = Game.find(:first, :conditions => "name='魔兽世界（台服）'")
+		g.destroy
   end
 end

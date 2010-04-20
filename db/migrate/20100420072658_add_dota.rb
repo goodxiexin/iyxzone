@@ -22,5 +22,7 @@ Gameswithhole.create( :txtid => 743, :sqlid => game743.id, :gamename => game743.
   end
 
   def self.down
+		g = Game.find(:first, :conditions => "name='Dota'")
+		g.destroy
   end
 end
