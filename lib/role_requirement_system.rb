@@ -33,7 +33,7 @@ module RoleRequirementSystem
     end
 
     def role_denied
-      render :template => 'not_found', :layout => false
+      render :template => '/errors/404', :status => 404, :layout => false
     end
 
   end

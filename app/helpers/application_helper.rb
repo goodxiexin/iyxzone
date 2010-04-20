@@ -272,15 +272,6 @@ module ApplicationHelper
     end
   end
 
-  def crop_image photo, opts={}
-    size = opts.delete(:size) || ''
-    width = photo.width
-    height = photo.height
-    left = (opts[:width] - width)/2
-    top  = (opts[:height] - height)/2
-    image_tag photo.public_filename(size), opts.merge({:left => "#{left}px", :top => "#{top}px"})
-  end
-
   def integer_array_for_javascript array
     if array.nil?
       "[]"
@@ -334,6 +325,5 @@ module ApplicationHelper
     text.insert 0, start_tag
     text << "</p>"
   end
-
 
 end
