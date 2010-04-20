@@ -1,0 +1,2 @@
+class NewsAlbum < Album
+end

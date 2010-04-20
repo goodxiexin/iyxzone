@@ -12,7 +12,6 @@ class Album < ActiveRecord::Base
                     :default_title => lambda {|album| album.title}, 
                     :create_conditions => lambda {|user, album| album.privilege != 4}
 
-
   acts_as_resource_feeds
 
 	def recent_photos limit
