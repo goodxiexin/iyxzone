@@ -32,10 +32,10 @@ class GuildMailer < ActionMailer::Base
     body        :guild => guild, :user => member, :president => guild.president
   end
 
-  def post post, recipient
+  def reply_post post, recipient
     setup_email recipient
-    subject     "17Gaming.com(一起游戏网) - 工会'#{guild.name}'取消了"
-    body        :topic => post.topic, :user => recipient, :url => "#{SITE_URL}/forums/#{post.forum_id}/topics/#{post.topic_id}/posts?post_id=#{post.id}"
+    subject     "17Gaming.com(一起游戏网) - 工会'#{post.forum.guild.name}'取消了"
+    body        :post => post, :user => recipient, :url => "#{SITE_URL}/forums/#{post.forum_id}/topics/#{post.topic_id}/posts?post_id=#{post.id}"
   end
 
 protected

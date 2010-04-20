@@ -25,12 +25,12 @@ class PostObserver < ActiveRecord::Observer
 
     if poster != owner
       post.notices.create(:user_id => owner.id, :data => "comment")
-      GuildMailer.deliver_post post, owner if owner.mail_setting.reply_my_post == 1
+      GuildMailer.deliver_reply_post post, owner if owner.mail_setting.reply_my_post == 1
     end
 
     if recipient != poster and recipient != owner
       post.notices.create(:user_id => recipient.id, :data => "reply")
-      GuildMailer.deliver_post post, recipient if recipient.mail_setting.reply_my_post == 1
+      GuildMailer.deliver_reply_post post, recipient if recipient.mail_setting.reply_my_post == 1
     end  
   end
 

@@ -1069,6 +1069,7 @@ h1.app-share{float:left}
 .z-box .z-m .bg{background:#a3a4a3;filter:alpha(opacity=90);opacity:0.9;width:100%;height:1000px;position:absolute;top:0;z-index:1}
 
 .z-box .z-h{background:#7fb73d;border:1px solid #a7cd65;padding:5px 10px;font-size:14px;font-weight:700;color:#fff}
+.z-box .z-h-error{background:#ffece8;color:#333;border:1px solid #c78d99;}
 .z-box .z-w{background:#feffe6;padding:5px 10px;color:#666;margin-bottom:10px;text-align:center}
 .z-box .z-con{border-top:1px solid #73a637;}
 .z-box .z-con .left{margin-left:15px}

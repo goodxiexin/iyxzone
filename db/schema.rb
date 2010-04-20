@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100419134333) do
+ActiveRecord::Schema.define(:version => 20100420025650) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(:version => 20100419134333) do
     t.datetime "updated_at"
   end
 
+  add_index "game_characters", ["name", "pinyin"], :name => "index_game_characters_on_name_and_pinyin"
   add_index "game_characters", ["user_id"], :name => "index_game_characters_on_user_id"
 
   create_table "game_professions", :force => true do |t|
@@ -779,6 +780,8 @@ ActiveRecord::Schema.define(:version => 20100419134333) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"
 
   create_table "videos", :force => true do |t|
     t.integer  "poster_id"

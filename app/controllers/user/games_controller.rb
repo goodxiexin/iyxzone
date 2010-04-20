@@ -52,13 +52,11 @@ class User::GamesController < UserBaseController
 
   def hot
     @games = Game.hot.paginate :page => params[:page], :per_page => 10
-    @remote = {:update => 'hot_games_list', :url => {:action => 'hot'}} 
     render :action => 'hot', :layout => 'app'
   end
 
   def beta
-    @games = Game.beta.paginate :page => params[:page], :per_page => 1
-    @remote = {:update => 'beta_games_list', :url => {:action => 'beta'}}
+    @games = Game.beta.paginate :page => params[:page], :per_page => 5
     render :action => 'beta', :layout => 'app'
   end
 
