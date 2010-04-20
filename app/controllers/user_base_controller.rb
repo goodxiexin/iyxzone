@@ -22,8 +22,7 @@ protected
   end
 
   def set_last_seen_at
-    current_user.last_seen_at = Time.now
-    current_user.save
+    current_user.update_attribute(:last_seen_at, Time.now)
   end
 
   def setup
