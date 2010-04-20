@@ -9,7 +9,6 @@ class GameCharacterObserver < ActiveRecord::Observer
   end
 	
   def after_create character
-    puts "after create"
     # increment counter
     character.game.raw_increment :characters_count
     character.user.raw_increment :characters_count
