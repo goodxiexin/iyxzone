@@ -12,13 +12,9 @@ class Admin::NewsController < AdminBaseController
   def create
     @news = News.new((params[:news] || {}).merge({:poster_id => current_user.id}))
     if @news.save
-      render :update do |page|
-        page.redirect_to admin_news_index_url
-      end
+      render :json => {:id => @news.id}
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render :json => {:id => -1}
     end
   end
 
@@ -28,11 +24,9 @@ class Admin::NewsController < AdminBaseController
 
   def update
     if @news.update_attributes((params[:news] || {}).merge({:poster_id => current_user.id}))
-      render :update do |page|
-        page.redirect_to :action => :index
-      end
+      render :json => {:id => @news.id}
     else
-      page << "error('发生错误');"
+      render :json => {:id => -1}
     end
   end
 

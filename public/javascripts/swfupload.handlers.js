@@ -1,7 +1,8 @@
 /*
- * 问题：
- * 貌似所有的handler参数都是一个参数，这个对于计算全部大小有点小尴尬
- * 如何实现不自动上传
+ * TODO: 
+ * 这个文件是我很早以前照着别人的模板改的，其实这样很不好，应该封装到一个类里，这样不会有命名问题
+ * 比较好的可以参照Iyxzone.News.Builder.SwfUploader的实现
+ * 如果重写，可以考虑弄个base class, 封装基本操作，然后把Iyxzone.News.Builder.SwfUploader和Iyxzone.Photo.SwfUploader都继承那个base class
  */
 
 function abbreviateSize(size){

@@ -1,10 +1,12 @@
 class News < ActiveRecord::Base
 
+  has_many :pictures, :class_name => 'NewsImage' # only valid for picture news
+
   belongs_to :game
 
   belongs_to :poster, :class_name => 'User' # this must be an admin
 
-  acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, news, comment| user.has_role? 'admin'}
+  acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, news, comment| user.has_role? 'admin'}, :recipient_required =>false
 
   acts_as_viewable
 

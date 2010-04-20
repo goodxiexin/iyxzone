@@ -8,6 +8,7 @@
 				<div class="cons-form formcontent">
           <div id='errors'></div>
           <% form_for :news, :html => {:id => 'news_form', :onsubmit => "Iyxzone.News.Builder.saveVideoNews($('news_submit_btn'), this); return false;"} do |f| %>
+            <%= hidden_field_tag 'news[news_type]', 'video' %>
             <div class='rows s_clear'>
               <div class='fldid'><%= f.label "新闻标题：" %></div>
               <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
@@ -21,14 +22,6 @@
             <div class='rows s_clear'>
               <div class='fldid'><%= f.label "新闻原地址："%></div>
               <div class='fldvalue'><div class='textfield'><%= f.text_field 'origin_address' %></div></div>
-            </div>
-            <div class='rows s_clear'>
-              <div class='fldid'>
-                <%= f.label "新闻类别：" %>
-              </div>
-              <div class='fldvalue'>
-                <%= f.select :news_type, %w{text video picture}, :class => "selector selector02"%>
-              </div>
             </div>
             <div class='rows s_clear'>
               <div class='fldid'>
