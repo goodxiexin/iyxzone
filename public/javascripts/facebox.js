@@ -116,7 +116,7 @@ var Facebox = Class.create({
   },
 
   show_error: function(info){
-    var html = '<p class="z-h s_clear"><strong class="left">提示</strong><a onclick="facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + info + '</p></div>';
+    var html = '<p class="z-h z-h-error s_clear"><strong class="left">提示</strong><a onclick="facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + info + '</p></div>';
 		this.remove_loading();
 		this.set_content(html);
 		this.locate();

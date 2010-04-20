@@ -2,7 +2,7 @@
   <%= link_to "分享到17gaming", "
 javascript: void((
   function(s,d,e){
-    if(/localhost\:3000/.test(d.location))
+    if(/17gaming\.com/.test(d.location))
       return;
     var f='#{SITE_URL}/sharings/new?at=outside&url=',u=d.location,l=d.title,p=[e(u),'&title=',e(l)].join('');
     function a(){

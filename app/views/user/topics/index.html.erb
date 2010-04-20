@@ -81,7 +81,7 @@
                 <td class="title"><div><%= topic_link t %></div></td>
                 <td><%= t.viewings_count %></td>
                 <td><%= t.posts_count %></td>
-                <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %></div></td>
+                <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %><%= profile_link t.poster %></div></td>
                 <td class="tr"><%= ftime t.created_at %></td>
                 <% if @guild.president == current_user %>
                 <td><%= link_to '', toggle_forum_topic_url(@forum, t, :top => 1, :at => 'index'), :class => "icon-up", :method => :put %><%= facebox_confirm '', forum_topic_url(@forum, t, :at => 'index'), {:msg => '你确定要删除这个话题吗？', :method => :delete}, {:class => "icon-active"} %></td>

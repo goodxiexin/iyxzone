@@ -38,12 +38,6 @@ class GameCharacterObserver < ActiveRecord::Observer
 
     # decrement game counter if necessary
 		character.user.raw_decrement :games_count unless character.user.has_game? character.game_id
-
-    # issue feeds if necessary
-    # TODO: 这里是有点问题的, 因为feed_item的originator是空的，但是deliver_feeds方法还是会自动赋值的
-    recipients = [character.user.profile]
-    recipients.concat character.user.friends
-    character.deliver_feeds :recipients => recipients, :data => {:type => 3, :character => character}
   end
 
 end

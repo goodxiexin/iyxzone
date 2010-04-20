@@ -240,12 +240,15 @@ Object.extend(Iyxzone.Profile.Editor, {
 
   isEditingCharacters: false,
 
-  gameSelectors: new Hash(),
+  gameSelectors: new Hash(), // deprecated
+
+  existingCharactersCount: 0, 
 
   newGameSelectors: new Hash(),
 
   delCharacterIDs: new Array(),
 
+  // deprecated
   addGameSelector: function(characterID, gameDetails){
     var prefix = 'profile_existing_characters_' + characterID + '_';
     var dprefix = 'existing_characters_' + characterID + '_';
@@ -277,27 +280,26 @@ Object.extend(Iyxzone.Profile.Editor, {
     var frame = $('character_frame');
     this.charactersHTML = frame.innerHTML;
     if(this.editCharactersHTML){
-//      frame.innerHTML = this.editCharactersHTML;
-      frame.update( this.editCharactersHTML);
-      this.gameSelectors.values().each(function(selector){
+      frame.update(this.editCharactersHTML);
+      /*this.gameSelectors.values().each(function(selector){
         selector.setEvents();
-      });
+      });*/
     }else{
-      new Ajax.Updater('character_frame', '/profiles/' + profileID + '/edit?type=3', {
+      new Ajax.Request('/profiles/' + profileID + '/edit?type=3', {
         method: 'get',
-        evalScripts: true,
         onLoading: function(){
           this.loading(frame, '游戏角色信息');
         }.bind(this),
         onSuccess: function(transport){
           this.editCharactersHTML = transport.responseText;
+          $('character_frame').update(this.editCharactersHTML);
+          this.existingCharactersCount = $('user_characters').childElements().length;
         }.bind(this)
       });
     }
   },
 
   cancelEditCharacters: function(){
-//    $('character_frame').innerHTML = this.charactersHTML;
     $('character_frame').update( this.charactersHTML);
     this.isEditingCharacters = false;
     this.delCharacterIDs = new Array();
@@ -498,7 +500,8 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   removeCharacter: function(characterID, newCharacter, link){
-    var currentCharactersCount = this.newGameSelectors.keys().length + this.gameSelectors.keys().length - this.delCharacterIDs.length;
+    //var currentCharactersCount = this.newGameSelectors.keys().length + this.gameSelectors.keys().length - this.delCharacterIDs.length;
+    var currentCharactersCount = this.newGameSelectors.keys().length + this.existingCharactersCount - this.delCharacterIDs.length;
     
     if(currentCharactersCount == 1){
       error('至少要有1个游戏角色');
