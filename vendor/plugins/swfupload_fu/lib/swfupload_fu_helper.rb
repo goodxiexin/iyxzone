@@ -23,8 +23,6 @@ module SwfUploadFuHelper
     render :partial => "/#{path}/#{template}",:locals => {:upload_url => upload_path_with_session_information(upload_url)}
   end
 
-private
-
   def upload_path_with_session_information url
     session_key = ActionController::Base.session_options[:key]
     url_for url.merge({"#{session_key}" => cookies[session_key], :request_forgery_protection_token => form_authenticity_token})

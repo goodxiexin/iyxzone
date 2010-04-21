@@ -2,6 +2,7 @@ class CreateGuestbooks < ActiveRecord::Migration
   def self.up
 		create_table :guestbooks do |t|
 			t.integer	:user_id
+			t.string 	:email
 			t.text	 	:description
 			t.integer :priority
 			t.date		:done_date

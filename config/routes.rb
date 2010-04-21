@@ -2,6 +2,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :collection => {:search => :get}
 
+	map.resources :guestbooks
+
   map.resources :game_details, :controller => 'games'
 
   map.resources :area_details, :controller => 'game_areas'
@@ -72,8 +74,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
 		
-		users.resources :guestbooks
-
     users.resources :applications
 
     users.resources :links

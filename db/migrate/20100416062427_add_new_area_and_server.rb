@@ -1,6 +1,8 @@
 class AddNewAreaAndServer < ActiveRecord::Migration
 
   def self.up
+
+
 thisgameid = Game.find(:first, :conditions => ["name = ?","征途怀旧版"]).id
 aRecord = GameArea.create( :name => '双线区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '龙腾轩辕',  :game_id => thisgameid)
@@ -207,11 +209,13 @@ thisgameid = Game.find(:first, :conditions => ["name = ?","三国群英传2"]).i
 aRecord = GameArea.create( :name => '测试区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '测试服',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","新破天一剑"]).id
-aRecord = GameArea.create( :name => '电信一区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '电信二区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '网通一区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '网通二区', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '网通二区',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '电信一区', :game_id => thisgameid)
+GameServer.create(:name => '电信二区', :game_id => thisgameid)
+GameServer.create(:name => '网通一区', :game_id => thisgameid)
+GameServer.create(:name => '网通二区', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","万王之王3(台服)"]).id
 aRecord = GameArea.create( :name => '台湾', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '戴尼亚',  :game_id => thisgameid)
@@ -1291,10 +1295,12 @@ aRecord.servers.create(:name => '封缘星04',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '网通', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '封缘星01',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","蜀山新传"]).id
-aRecord = GameArea.create( :name => '全国电信', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '全国网通', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '东北网通', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '东北网通',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '全国电信', :game_id => thisgameid)
+GameServer.create(:name => '全国网通', :game_id => thisgameid)
+GameServer.create(:name => '东北网通', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","千秋霸业"]).id
 aRecord = GameArea.create( :name => '电信区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '碧海晴天',  :game_id => thisgameid)
@@ -1404,9 +1410,11 @@ aRecord.servers.create(:name => '百工天都',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '电信区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '天梯昆仑',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","战地之王"]).id
-aRecord = GameArea.create( :name => '华南电信一区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '华北网通一区', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '华北网通一区',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '华南电信一区', :game_id => thisgameid)
+GameServer.create(:name => '华北网通一区', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","梦三国"]).id
 aRecord = GameArea.create( :name => '技术测试区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '黄巾之乱',  :game_id => thisgameid)
@@ -1611,11 +1619,13 @@ aRecord.servers.create(:name => '名樱',  :game_id => thisgameid)
 aRecord.servers.create(:name => '青森',  :game_id => thisgameid)
 aRecord.servers.create(:name => '福冈',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","梦幻龙族"]).id
-aRecord = GameArea.create( :name => '电信一区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '电信二区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '电信三区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '网通一区', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '网通一区',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '电信一区', :game_id => thisgameid)
+GameServer.create(:name => '电信二区', :game_id => thisgameid)
+GameServer.create(:name => '电信三区', :game_id => thisgameid)
+GameServer.create(:name => '网通一区', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","苍穹"]).id
 aRecord = GameArea.create( :name => '电信', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '风暴深渊',  :game_id => thisgameid)
@@ -1722,12 +1732,16 @@ aRecord.servers.create(:name => '梦幻岛',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '网通大区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '叉腰肌',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","炎黄传说"]).id
-aRecord = GameArea.create( :name => '原始天尊—电信入口一', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '原始天尊—网通入口一', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '原始天尊—网通入口一',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '原始天尊—电信入口一', :game_id => thisgameid)
+GameServer.create(:name => '原始天尊—网通入口一', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","拍拍部落"]).id
-aRecord = GameArea.create( :name => '拍拍村（全国）', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '拍拍村（全国）',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '拍拍村（全国）', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","天道online"]).id
 aRecord = GameArea.create( :name => '电信', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '岐山',  :game_id => thisgameid)
@@ -1950,11 +1964,13 @@ aRecord = GameArea.create( :name => '网通四区', :game_id => thisgameid , :se
 aRecord.servers.create(:name => '碧海',  :game_id => thisgameid)
 aRecord.servers.create(:name => '啸天',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","纸客帝国"]).id
-aRecord = GameArea.create( :name => '电信初级频道', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '电信高级频道', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '网通初级频道', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '网通高级频道', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '网通高级频道',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '电信初级频道', :game_id => thisgameid)
+GameServer.create(:name => '电信高级频道', :game_id => thisgameid)
+GameServer.create(:name => '网通初级频道', :game_id => thisgameid)
+GameServer.create(:name => '网通高级频道', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","唯舞独尊"]).id
 aRecord = GameArea.create( :name => '华东电信', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '指舞情缘',  :game_id => thisgameid)
@@ -2000,12 +2016,16 @@ aRecord.servers.create(:name => '金星(香港)',  :game_id => thisgameid)
 aRecord.servers.create(:name => '南斗(香港)',  :game_id => thisgameid)
 aRecord.servers.create(:name => '上班族',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","九阴真经OL"]).id
-aRecord = GameArea.create( :name => '测试区', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '测试区',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '测试区', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","仙侣奇缘"]).id
-aRecord = GameArea.create( :name => '封测1服', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '封测2服', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '封测2服',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '封测1服', :game_id => thisgameid)
+GameServer.create(:name => '封测2服', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","神界外传"]).id
 aRecord = GameArea.create( :name => '电信一区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '神之叹息',  :game_id => thisgameid)
@@ -2392,16 +2412,18 @@ aRecord.servers.create(:name => '电信1-8区',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '网通1-4区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '网通',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","幻灵游侠"]).id
-aRecord = GameArea.create( :name => '梦幻国度', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '风之谷', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '情深似海', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '君临天下', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '唯我独尊', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '一生相随', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '叱咤风云', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '天之骄子', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '体验服务器', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '体验服务器',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '梦幻国度', :game_id => thisgameid)
+GameServer.create(:name => '风之谷', :game_id => thisgameid)
+GameServer.create(:name => '情深似海', :game_id => thisgameid)
+GameServer.create(:name => '君临天下', :game_id => thisgameid)
+GameServer.create(:name => '唯我独尊', :game_id => thisgameid)
+GameServer.create(:name => '一生相随', :game_id => thisgameid)
+GameServer.create(:name => '叱咤风云', :game_id => thisgameid)
+GameServer.create(:name => '天之骄子', :game_id => thisgameid)
+GameServer.create(:name => '体验服务器', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","新蜀山剑侠"]).id
 aRecord = GameArea.create( :name => '电信', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '紫青剑',  :game_id => thisgameid)
@@ -2982,12 +3004,14 @@ aRecord = GameArea.create( :name => '网通', :game_id => thisgameid , :servers_
 aRecord.servers.create(:name => '回春林',  :game_id => thisgameid)
 aRecord.servers.create(:name => '百草园',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","疯狂赛车"]).id
-aRecord = GameArea.create( :name => '一区 急速乐园', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '二区 欢乐时速', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '三区 藏宝海湾', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '四区 紫禁之巅', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '五区 我行我速', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '五区 我行我速',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '一区 急速乐园', :game_id => thisgameid)
+GameServer.create(:name => '二区 欢乐时速', :game_id => thisgameid)
+GameServer.create(:name => '三区 藏宝海湾', :game_id => thisgameid)
+GameServer.create(:name => '四区 紫禁之巅', :game_id => thisgameid)
+GameServer.create(:name => '五区 我行我速', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","QQ侠义道II"]).id
 aRecord = GameArea.create( :name => '电信区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '圣火初动',  :game_id => thisgameid)
@@ -3404,11 +3428,13 @@ aRecord.servers.create(:name => '坦塔罗斯',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '网通一区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '火焰山口',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","大唐风云"]).id
-aRecord = GameArea.create( :name => '一区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '二区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '三区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '四区（网通）', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '四区（网通）',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '一区', :game_id => thisgameid)
+GameServer.create(:name => '二区', :game_id => thisgameid)
+GameServer.create(:name => '三区', :game_id => thisgameid)
+GameServer.create(:name => '四区（网通）', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","剑侠情缘(台服)"]).id
 aRecord = GameArea.create( :name => '台湾', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '华山',  :game_id => thisgameid)
@@ -3446,10 +3472,12 @@ thisgameid = Game.find(:first, :conditions => ["name = ?","K1拳霸天下"]).id
 aRecord = GameArea.create( :name => '测试区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '测试服',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","盛大富翁"]).id
-aRecord = GameArea.create( :name => '富甲天下', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '金玉满堂', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '招财进宝', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '招财进宝',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '富甲天下', :game_id => thisgameid)
+GameServer.create(:name => '金玉满堂', :game_id => thisgameid)
+GameServer.create(:name => '招财进宝', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","神话国际中文版"]).id
 aRecord = GameArea.create( :name => '电信一区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '瑶池',  :game_id => thisgameid)
@@ -3496,11 +3524,13 @@ aRecord = GameArea.create( :name => '网通怀旧专区 峥嵘岁月', :game_id 
 aRecord.servers.create(:name => '峥嵘岁月二线',  :game_id => thisgameid)
 aRecord.servers.create(:name => '峥嵘岁月一线',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","新郑和online"]).id
-aRecord = GameArea.create( :name => '影子暗盟', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '契约之塔', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '明镜湖', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '寂静海洋', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '寂静海洋',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '影子暗盟', :game_id => thisgameid)
+GameServer.create(:name => '契约之塔', :game_id => thisgameid)
+GameServer.create(:name => '明镜湖', :game_id => thisgameid)
+GameServer.create(:name => '寂静海洋', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","逍遥传说"]).id
 aRecord = GameArea.create( :name => '广东电信', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '凤凰山',  :game_id => thisgameid)
@@ -4656,9 +4686,11 @@ aRecord.servers.create(:name => '齐鲁风云',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '酷狗专区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '蝶舞宝贝',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","梦幻情天"]).id
-aRecord = GameArea.create( :name => '旭日峰(联通)', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '水星港(电信)', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '水星港(电信)',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '旭日峰(联通)', :game_id => thisgameid)
+GameServer.create(:name => '水星港(电信)', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","魔力宝贝"]).id
 aRecord = GameArea.create( :name => '电信二区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '牧羊',  :game_id => thisgameid)
@@ -4739,9 +4771,11 @@ aRecord.servers.create(:name => '电信一组(电信0',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '顺游大区(圣战)', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '王者天空(电信)',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","新密传"]).id
-aRecord = GameArea.create( :name => '沙加', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '童虎', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '童虎',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '沙加', :game_id => thisgameid)
+GameServer.create(:name => '童虎', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","顺游新魔界"]).id
 aRecord = GameArea.create( :name => '顺游娱乐', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '横扫千军',  :game_id => thisgameid)
@@ -5100,9 +5134,11 @@ aRecord.servers.create(:name => '波吉',  :game_id => thisgameid)
 aRecord.servers.create(:name => '加扎',  :game_id => thisgameid)
 aRecord.servers.create(:name => '科森',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","街头拳皇"]).id
-aRecord = GameArea.create( :name => '电信测试一区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '网通测试一区', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '网通测试一区',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '电信测试一区', :game_id => thisgameid)
+GameServer.create(:name => '网通测试一区', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","QQ三国"]).id
 aRecord = GameArea.create( :name => '上海(电信)', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '计安天下',  :game_id => thisgameid)
@@ -5615,9 +5651,11 @@ aRecord.servers.create(:name => '西南电信1服',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '瀚海长风', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '东北网通1服',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","街头篮球2"]).id
-aRecord = GameArea.create( :name => '电信测试一区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '网通测试一区', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '网通测试一区',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '电信测试一区', :game_id => thisgameid)
+GameServer.create(:name => '网通测试一区', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","乱世枭雄"]).id
 aRecord = GameArea.create( :name => '中国电信', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '(一二服)乱世枭雄',  :game_id => thisgameid)
@@ -6078,8 +6116,10 @@ aRecord.servers.create(:name => '全服',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '网通一服', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '全服',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","超级乐者"]).id
-aRecord = GameArea.create( :name => '劲乐王者', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '劲乐王者',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '劲乐王者', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","佣兵天下"]).id
 aRecord = GameArea.create( :name => '测试区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '测试服',  :game_id => thisgameid)
@@ -6796,9 +6836,11 @@ aRecord.servers.create(:name => '华北',  :game_id => thisgameid)
 aRecord = GameArea.create( :name => '网通区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '网通区',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","梦幻骑士"]).id
-aRecord = GameArea.create( :name => '测试区', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '测试服', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '测试服',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '测试区', :game_id => thisgameid)
+GameServer.create(:name => '测试服', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","烽火情缘"]).id
 aRecord = GameArea.create( :name => '电信', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '金戈铁马 一服',  :game_id => thisgameid)
@@ -7258,13 +7300,15 @@ thisgameid = Game.find(:first, :conditions => ["name = ?","远航游艺中心"])
 aRecord = GameArea.create( :name => '全区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '全服',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","星际文明"]).id
-aRecord = GameArea.create( :name => '金星', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '木星', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '北极星', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '南极星', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '天龙星', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '天罡星', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '天罡星',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '金星', :game_id => thisgameid)
+GameServer.create(:name => '木星', :game_id => thisgameid)
+GameServer.create(:name => '北极星', :game_id => thisgameid)
+GameServer.create(:name => '南极星', :game_id => thisgameid)
+GameServer.create(:name => '天龙星', :game_id => thisgameid)
+GameServer.create(:name => '天罡星', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","永恒纪元(台湾)"]).id
 aRecord = GameArea.create( :name => '台湾', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '希埃爾',  :game_id => thisgameid)
@@ -7308,16 +7352,18 @@ aRecord.servers.create(:name => '笑卧长城',  :game_id => thisgameid)
 aRecord.servers.create(:name => '秦关万里',  :game_id => thisgameid)
 aRecord.servers.create(:name => '鸭绿风云',  :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","155热血三国"]).id
-aRecord = GameArea.create( :name => '关公显圣', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '西凉马超', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '三顾茅庐', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '赤壁凝云', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '风云际会', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '魏武飞鞭', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '龙飞凤舞', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '倾城一战', :game_id => thisgameid , :servers_count => 0)
-aRecord = GameArea.create( :name => '烽火之战', :game_id => thisgameid , :servers_count => 0)
-aRecord.servers.create(:name => '烽火之战',  :game_id => thisgameid)
+thisgame = Game.find(thisgameid)
+thisgame.no_areas = true
+thisgame.save
+GameServer.create(:name => '关公显圣', :game_id => thisgameid)
+GameServer.create(:name => '西凉马超', :game_id => thisgameid)
+GameServer.create(:name => '三顾茅庐', :game_id => thisgameid)
+GameServer.create(:name => '赤壁凝云', :game_id => thisgameid)
+GameServer.create(:name => '风云际会', :game_id => thisgameid)
+GameServer.create(:name => '魏武飞鞭', :game_id => thisgameid)
+GameServer.create(:name => '龙飞凤舞', :game_id => thisgameid)
+GameServer.create(:name => '倾城一战', :game_id => thisgameid)
+GameServer.create(:name => '烽火之战', :game_id => thisgameid)
 thisgameid = Game.find(:first, :conditions => ["name = ?","热舞派对百度版"]).id
 aRecord = GameArea.create( :name => '电信游戏区', :game_id => thisgameid , :servers_count => 0)
 aRecord.servers.create(:name => '百度一下',  :game_id => thisgameid)
@@ -7756,12 +7802,13 @@ aRecord = GameArea.create( :name => '内测区', :game_id => thisgameid , :serve
 aRecord.servers.create(:name => '猛龙过江',  :game_id => thisgameid)
 aRecord.servers.create(:name => '群雄逐鹿',  :game_id => thisgameid)
 
+		count_errors = Game.find(:all, :conditions => ["no_servers = false and servers_count =0"])
+		count_errors.each do |err|
+			err.no_servers = true
+			err.save
+		end
 
-
-
-
-
-  end
+	end
 
   def self.down
 		GameServer.destroy_all("id > 5484")

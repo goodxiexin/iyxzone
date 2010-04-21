@@ -6,6 +6,8 @@ class Guestbook < ActiveRecord::Base
 
   validates_presence_of :user_id, :message => "不能为空"
 
+	validates_presence_of :email, :message => "不能为空"
+
   validates_presence_of :description, :message => "不能为空"
 
   validates_size_of :description, :within => 1..10000, :too_long => "最长10000个字符", :too_short => "最短1个字符", :if => "description"

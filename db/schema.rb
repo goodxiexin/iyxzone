@@ -336,6 +336,7 @@ ActiveRecord::Schema.define(:version => 20100420025650) do
 
   create_table "guestbooks", :force => true do |t|
     t.integer  "user_id"
+    t.string   "email"
     t.text     "description"
     t.integer  "priority"
     t.date     "done_date"
