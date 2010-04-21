@@ -100,6 +100,14 @@ var Facebox = Class.create({
     //Event.observe(document, 'click', this.keyPressListener);
 	},
 
+	show_large_tip: function(info){
+		var html = '<p class="z-h s_clear"><strong class="left">提示</strong><a onclick="facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + info + '</p><div class="z-submit s_clear space"><div class="buttons"><span class="button"><span><button onclick="facebox.close();">确定</button></span></span></div></div></div>';
+    this.remove_loading();
+    this.set_content(html);
+		this.set_width(800);
+    this.locate();
+	},
+
 	show_tip: function(info){
 		var html = '<p class="z-h s_clear"><strong class="left">提示</strong><a onclick="facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + info + '</p><div class="z-submit s_clear space"><div class="buttons"><span class="button"><span><button onclick="facebox.close();">确定</button></span></span></div></div></div>';
     this.remove_loading();
@@ -243,6 +251,9 @@ document.observe('dom:loaded', function(){
   //window.alert = function(mess){
 	//	return facebox.show_notice(mess);
 	//};
+  window.largetip = function(mess){
+		return facebox.show_large_tip(mess);
+  };
 
   window.tip = function(mess){
 		return facebox.show_tip(mess);

@@ -16,6 +16,10 @@ module FaceboxMacroHelpers
 		link_to_function text, "tip('#{msg}');", options
 	end
 
+	def facebox_large_tip text, msg, options={}
+		link_to_function text, "largetip('#{msg}');", options
+	end
+
 	def facebox_notice text, msg, options={}
 		link_to_function text, "alert('#{msg}');", options
 	end

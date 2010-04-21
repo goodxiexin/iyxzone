@@ -3,9 +3,10 @@ a{color:#25700D;}
 a:hover{color:#D63200;}
 
 
-.main .foot{margin:10px 0 0;}
-.main .foot .feed-list{width:400px;}
-.main .foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
+.main .page-foot{margin:10px 0 0;}
+.main .page-foot .feed-list{width:400px;float:left}
+.main .page-foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
+.prompt-list-box{padding-right:12px;float:right;width:300px;}
 
 #header,#page,#footer{margin:0 auto;width:940px;clear:both;}
 #page{margin-top:6px;}
@@ -561,7 +562,6 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 */.vote-box .foot .feed-list{padding-left:23px;width:400px;}
 .vote-box .foot .feed-list .textarea{width:298px;}
 .vote-box .foot .feed-list .txt-add-comment{width:336px;}
-.vote-box .foot .prompt-list-box,.prompt-list-box{padding-right:12px;float:right;width:301px;}
 
 .vote-form .fldid{width:117px;}
 .vote-form .textfield{width:300px;}
@@ -618,6 +618,7 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 
 
 /*Created By Jolly 20100111*/
+.foot-func{margin:5px 15px 0 15px}
 
 /*导航栏搜索框*/
 .nav-search{border:1px #6b9c42 solid;background:url(../images/skin/skin2010.png) no-repeat 0 -471px;}
@@ -650,6 +651,8 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .jl-list-con{margin-left:75px;padding-bottom:15px;line-height:28px;}
 .jl-list-con:after{content:".";display:block;height:0;clear:both;visibility:hidden;}/*ie8 cmt-box float clear*/
 .jl-list-con{zoom:1;}
+
+.feed-avatar-list{margin-bottom:10px}
 
 .home-wrap .jl-list-con{margin-left:20px;}
 .feed-list .jl-list-con .word-box textarea{width:390px}
@@ -843,12 +846,12 @@ a.i-s-8:hover span{background-position:right -310px;}
 .friend-invite-list{text-align:center;padding:10px 0;border:1px solid #bdd6ad;border-top:0}
 .friend-invite-list .button{float:none;display:inline-block;margin:0 auto}
 .friend-invite-list ul{height:260px;overflow-y:auto;overflow-x:hidden;margin-bottom:20px}
-.friend-invite-list li{float:left;margin:10px 0 10px 10px;width:160px;}
+.friend-invite-list li{float:left;margin:10px 0 10px 10px;_margin:10px 0 10px 8px;width:160px;}
 .friend-invite-list li a{height:60px;display:block;padding:5px;cursor:pointer}
 .friend-invite-list li a:hover{background:#ecfdda}
 .friend-invite-list li.bg a{background:#defebb}
 .friend-invite-list li img{float:left;}
-.friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;white-space:nowrap;text-overflow:ellipsis;-o-text-overflow:ellipsis;overflow:hidden;word-break:keep-all;word-wrap:normal;}
 .friend-invite-list li strong span{display:block;margin:5px 0 0 0;}
 /**/
 /*.relation-member{border:0}
@@ -978,11 +981,11 @@ dl.menu-op dd a{color:#333}
 .detail-video .con,.detail-blog .con{text-align:center;margin:10px 0}
 .detail-blog .con{text-align:left;padding:0 15px}
 .detail-video-foot p,.detail-blog-foot p{padding:10px 15px}
-.detail-blog-foot h2{margin:0 20px}
+/*.detail-blog-foot h2{margin:0 20px}
 .detail-blog-foot .word-box{padding:7px;width:385px;margin-top:4px}
 .detail-blog-foot .comment-box{padding:7px 8px;width:383px;margin-top:4px}
 .detail-blog-foot .cmt-box{margin-top:5px;width:383px;overflow:hidden;padding:7px;}
-.detail-blog-foot .cmt-box .con{margin:0 0 0 8px;padding:0}
+.detail-blog-foot .cmt-box .con{margin:0 0 0 8px;padding:0}*/
 /*站内信*/
 .list-msg h4{font-size:14px;font-weight:700;margin:10px 0}
 .list-msg .list-msg-head{padding:10px 0}
