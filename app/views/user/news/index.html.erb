@@ -25,12 +25,11 @@
             <span class="gray"><%= ftime n.created_at %></span>
             <div class="con">
               <% if n.news_type == 'text' %>
-                <%= truncate n.data_abstract, :length => 100, :omission => '...' %>
-                <%= link_to "查看全文 >>", news_url(n) %>
+                <%= news_content n, :length => 100, :omission => '...' %>
               <% elsif n.news_type == 'picture' %>
                 <%= link_to (image_tag n.pictures.first.public_filename, :class => 'imgbox01', :width => 100), news_url(n) %>
               <% else %>
-                <%= link_to (image_tag n.thumbnail_url), news_url(n) %>
+                <%= link_to (image_tag n.thumbnail_url, :width => 150, :class => 'imgbox01'), news_url(n) %>
               <% end %>
             </div>
             <strong class="gray"><span class="w-l">评论:<%= n.comments_count %></span><span class="w-l">|</span><span class="w-l">浏览:<%= n.viewings_count %></span><span class="w-l">|</span><span class="w-l">分享:<%= n.sharings_count %></span></strong>

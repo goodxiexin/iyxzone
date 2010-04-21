@@ -10,9 +10,6 @@
         <%= link_to_remote '', :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => 'icon-active'} %>
       <% end %>
       <p><%= profile_link sharing.poster%> 分享了新闻 <%= news_link news, :class => 'shine'%></p>
-      <p class='gray'>
-		    <%= news_content news, :length => 80, :omission => '...' %>
-	    </p>
       <p class='gray'><%= ftime delivery.created_at %><%= link_to_function '评论', "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id})" %></p>
 	    <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => sharing, :recipient => sharing.poster} %>
 	  </div>

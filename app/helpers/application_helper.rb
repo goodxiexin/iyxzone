@@ -156,9 +156,17 @@ module ApplicationHelper
 
   def blog_content blog, opts={}
     if blog.content_abstract.length > opts[:length]
-      (truncate blog.content_abstract, opts) + (link_to '查看全文>>', blog_url(blog))
+      (truncate blog.content_abstract, opts) + (link_to '查看全文 >>', blog_url(blog))
     else
       truncate blog.content_abstract, opts
+    end
+  end
+
+  def news_content news, opts={}
+    if news.data_abstract.length > opts[:length]
+      (truncate news.data_abstract, opts) + (link_to '查看全文 >>', news_url(news))
+    else
+      truncate news.data_abstract, opts
     end
   end
 

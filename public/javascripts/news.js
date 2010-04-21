@@ -269,7 +269,7 @@ Object.extend(Iyxzone.News.Builder, {
           if(news.id < 0){
             error('发生错误');
           }else{
-            window.href.location = '/admin/news';
+            window.location.href = '/admin/news';
           }
         }.bind(this)
       });
@@ -290,7 +290,7 @@ Object.extend(Iyxzone.News.Builder, {
           if(news.id < 0){
             error('发生错误');
           }else{
-            window.href.location = '/admin/news';
+            window.location.href = '/admin/news';
           }
         }.bind(this)
       });
@@ -310,7 +310,7 @@ Object.extend(Iyxzone.News.Builder, {
           if(news.id < 0){
             error('发生错误');
           }else{
-            window.href.location = '/admin/news';
+            window.location.href = '/admin/news';
           }
         }.bind(this)
       });
@@ -330,7 +330,7 @@ Object.extend(Iyxzone.News.Builder, {
           if(news.id < 0){
             error('发生错误');
           }else{
-            window.href.location = '/admin/news';
+            window.location.href = '/admin/news';
           }
         }.bind(this)
       });
