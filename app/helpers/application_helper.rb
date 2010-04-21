@@ -30,7 +30,11 @@ module ApplicationHelper
 		size = img_opts.delete(:size) || "medium"
     a_opts.merge!({:popup => true})
     if user.avatar.blank?
-      link_to image_tag("default_#{size}.png", img_opts), profile_url(user.profile), a_opts
+      if user.gender == 'male'
+        link_to image_tag("default_male_#{size}.png", img_opts), profile_url(user.profile), a_opts
+      else
+        link_to image_tag("default_female_#{size}.png", img_opts), profile_url(user.profile), a_opts
+      end
     else
       link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
     end
