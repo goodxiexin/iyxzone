@@ -42,7 +42,8 @@ ActionController::Routing::Routes.draw do |map|
 
     admin.resources :news do |news|
 
-      news.resources :pictures, :controller => 'news_pictures'
+
+      news.resources :pictures, :controller => 'news_pictures', :collection => {:update_multiple => :put, :edit_multiple => :get}
 
     end
   

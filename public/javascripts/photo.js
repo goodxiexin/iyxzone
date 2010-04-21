@@ -720,8 +720,7 @@ Iyxzone.Photo.Slide2 = Class.create({
 
 Iyxzone.Photo.Slide3 = Class.create({
   
-  initialize: function(photoType, currentID, ids, urls, frames, downBtn, upBtn){
-    this.photoType = photoType + 's';
+  initialize: function(currentID, photoInfos, frames, downBtn, upBtn){
     this.downBtn = downBtn;
     this.upBtn = upBtn;
     this.loadingImage = new Image();
@@ -730,16 +729,24 @@ Iyxzone.Photo.Slide3 = Class.create({
     this.blankImage.src = '/images/photo/nopic50x50.png';
 
     // 只保存图片的url，到了需要的时候再去加载图片
-    this.urls = urls;
-    this.ids = ids;
+    this.urls = [];
+    this.ids = [];
+    this.notations = [];
     this.currentID = currentID; // 当前照片的id
-    this.idPos = 0; // 正中间那张照片对应的id在ids中的位置
     this.mappings = new Hash(); // photo id => image object
     this.frames = frames; 
-   
-    this.upTimer = null;
-    this.downTimer = null;
+  
+    for(var i=0;i<photoInfos.length;i++){
+      var info = photoInfos[i];
+      this.ids.push(info.id);
+      this.urls.push(info.url);
+      this.notations.push(info.notation);
+    }
  
+    this.upOffset = 0;
+    this.downOffset = 0;
+
+    this.idPos = 0; 
     for(var i=0;i<this.ids.length;i++){
       if(this.ids[i] == this.currentID){
         this.idPos = i;
@@ -748,7 +755,9 @@ Iyxzone.Photo.Slide3 = Class.create({
     }
 
     var pos = Math.floor(frames.length/2);     
-    
+   
+    this.frames[pos].addClassName('now');
+ 
     for(var i=0;i<this.frames.length;i++){
       var p = (this.idPos + i - pos);
       if(p >= 0 && p < this.ids.length){
@@ -763,8 +772,18 @@ Iyxzone.Photo.Slide3 = Class.create({
   },
 
   setBtnEvents: function(){
-    this.downBtn.observe('click', this.scrollDown.bindAsEventListener(this));
-    this.upBtn.observe('click', this.scrollUp.bindAsEventListener(this));
+    this.downBtn.observe('click', function(event){
+      if(this.upOffset != 0 || this.downOffset != 0)
+        return;
+      this.downOffset = 1;
+      this.scrollDown();
+    }.bind(this));
+    this.upBtn.observe('click', function(event){
+      if(this.upOffset != 0 || this.downOffset != 0)
+        return;
+      this.upOffset = 1;
+      this.scrollUp();
+    }.bind(this));
   },
 
   changeBtn: function(){
@@ -793,22 +812,54 @@ Iyxzone.Photo.Slide3 = Class.create({
       img.src = this.urls[photoIdx];
       this.mappings.set(this.ids[photoIdx], img);
     }
-    if(this.currentID == this.ids[photoIdx]){
-      this.frames[idx].addClassName('now');
-    }
-    this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
+    var img = new Element('img', {src: img.src});
+    img.setStyle({width: '50px', height: '50px'});
+    img.addClassName('imgbox01');
+    var a = new Element('a', {href: 'javascript:void(0)', index: photoIdx});
+    a.appendChild(img);
+    a.observe('click', function(e){
+      var pos = Math.floor(this.frames.length/2);
+      var img = e.target;
+      var index = parseInt(img.up('a').readAttribute('index'));
+      var idPos = this.idPos;
+      if(index == idPos){
+      }else if(index < idPos){
+        // scroll down
+        if(this.downOffset != 0)
+          return;
+        this.frames[pos].writeAttribute('class', 'img');
+        this.downOffset = idPos - index;
+        this.scrollDown();
+        this.frames[pos + index - idPos].addClassName('now');
+      }else if(index > idPos){
+        // scroll up
+        if(this.upOffset != 0)
+          return;
+        this.frames[pos].writeAttribute('class', 'img');
+        this.upOffset = index - idPos;
+        this.scrollUp();
+        this.frames[pos + index - idPos].addClassName('now');
+      }
+      $('picture').update("<img src='" + img.src + "' />");
+      $('notation').update(this.notations[index].escapeHTML().gsub('\n', '<br/>'));
+    }.bind(this));
+    this.frames[idx].update(a);
+    //this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
   },
 
   scrollDown: function(){
-    if(this.idPos == 0 || this.downTimer != null){
+    if(this.idPos == 0){
       return;
     }
 
     var div = this.frames[0].up();
-    new Effect.Morph(div, {style: 'top: 0px', duration: 0.5});
-    this.downTimer = setTimeout(this.afterScrollDown.bind(this), 550);
+    new Effect.Morph(div, {
+      style: 'top: 0px', 
+      duration: 0.5,
+      afterFinish: this.afterScrollDown.bind(this)
+    });
     
-    this.idPos--;
+    this.idPos = this.idPos - 1;
     this.changeBtn();
   },
 
@@ -831,16 +882,22 @@ Iyxzone.Photo.Slide3 = Class.create({
     this.frames.splice(len - 1, 1);
 
     // reset timer
-    this.downTimer = null;
+    this.downOffset--;
+    if(this.downOffset != 0){
+      this.scrollDown();
+    }      
   },
 
   scrollUp: function(){
-    if(this.idPos == this.ids.length - 1 || this.upTimer != null)
+    if(this.idPos == this.ids.length - 1)
       return;
 
     var div = this.frames[0].up();
-    new Effect.Morph(div, {style: 'top: -134px', duration: 0.5});
-    this.upTimer = setTimeout(this.afterScrollUp.bind(this), 550);
+    new Effect.Morph(div, {
+      style: 'top: -134px', 
+      duration: 0.5, 
+      afterFinish: this.afterScrollUp.bind(this)
+    });
 
     this.idPos++;
     this.changeBtn();
@@ -864,7 +921,10 @@ Iyxzone.Photo.Slide3 = Class.create({
     }
   
     // reset timer
-    this.upTimer = null;
+    this.upOffset--;
+    if(this.upOffset != 0){
+      this.scrollUp();
+    }
   }
 
 });

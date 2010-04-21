@@ -1,6 +1,6 @@
 Iyxzone.News = {
   version: '1.0',
-  author: ['李玉山'],
+  author: ['李玉山', '高侠鸿'],
   Builder: {}
 };
 
@@ -60,6 +60,7 @@ Iyxzone.News.Builder.SWFUploader = Class.create({
     },
 
     setUploadURL: function(newsID){
+      this.newsID = newsID;
       this.swfu.setUploadURL('/admin/news/' + newsID + '/pictures?' + this.sessionKey + '=' + this.cookieValue);
     },
 
@@ -173,7 +174,7 @@ Iyxzone.News.Builder.SWFUploader = Class.create({
     },
 
     queueComplete: function(numFilesUploaded){
-      window.location.href = '/admin/news';
+      window.location.href = '/admin/news_pictures/edit_multiple?newsID=' + this.newsID;
     }
 
 });

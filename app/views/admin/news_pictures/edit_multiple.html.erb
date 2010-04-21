@@ -1,0 +1,35 @@
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-news">拾闻</h1>
+    <div class="box02 canvas_int space">
+      <div class="photo-box">
+        <% form_tag update_multiple_admin_news_pictures_url(:news_id => @news.id), :method => :put, :onsubmit => "Iyxzone.disableButton($('edit_multiple_photos_btn'), '正在保存..');" do %>
+        <% @pictures.each do |p| %>
+        <% fields_for 'pictures[]', p do |f| %>        
+        <div class="photo-list box04 s_clear">
+          <div class="form-wrap">
+            <div class="formcontent">
+              <div class="rows s_clear">
+                <div class="fldid"><label for="desc1">描述：</label></div>
+                <div class="fldvalue"><%= f.text_area :notation %></div>
+              </div>
+            </div>
+          </div>
+          <div class="img">
+            <p><%= image_tag p.public_filename, :class => 'imgbox01', :width => '76px', :height => '85px' %></p>
+          </div>
+        </div>
+      <% end %>
+      <% end %>
+        <div class="buttons s_clear">
+          <table class="center" cellpadding="0">
+            <tr><td>
+              <span class="button"><span><button type="submit" id="edit_multiple_photos_btn">保存修改</button></span></span>
+            </td></tr>
+          </table>
+        </div>
+      <% end %>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>

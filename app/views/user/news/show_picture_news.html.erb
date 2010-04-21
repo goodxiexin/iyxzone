@@ -38,7 +38,8 @@
 									</div>
                   <p id='picture'><%= resize_image @picture %></p>
 									<div class="pic-desc s_clear">
-										<h4 class="box06">
+										<h4 class="box06" id='notation'>
+                      <%= simple_format h @picture.notation %>
 										</h4>
 										<div class="rows"></div> 
 									</div>
@@ -57,11 +58,9 @@
               </div>
             </div>
             <div class="btn downbtn" id="down_btn"></div>
-            <% type = @picture.class.name.underscore %>
-            <% photo_ids = array_or_string_for_javascript @news.pictures.map(&:id) %>
-            <% urls = array_or_string_for_javascript @news.pictures.map {|p| p.public_filename} %>
+            <% photo_infos = @news.pictures.map {|p| {:id => p.id, :url => p.public_filename, :notation => p.notation}}.to_json %> 
             <%= onload_javascript_tag "
-              slide = new Iyxzone.Photo.Slide3('#{type}', #{@picture.id}, #{photo_ids}, #{urls}, $('frames').childElements(), $('down_btn'), $('up_btn'));
+              slide = new Iyxzone.Photo.Slide3(#{@picture.id}, #{photo_infos}, $('frames').childElements(), $('down_btn'), $('up_btn'));
             "%>
           </div>
         </div>
