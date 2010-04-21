@@ -15,7 +15,7 @@
   </tr>
   <% games.each do |g| %>
   <tr>
-    <td class="img"><img class="imgbox01" src="images/photo/photo11.png" alt="" /></td>
+    <td class="img"><%= game_image g.name, :size => "50x50" %></td>
     <td class="name"><%= game_link g %>
       <% if g.official_web.blank? %>
         (暂无官网)

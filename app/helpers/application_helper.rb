@@ -18,6 +18,14 @@ module ApplicationHelper
     end
   end
 
+	def game_image(game_name, opts={})
+		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.jpg")
+			image_tag "/images/gamepic/#{game_name}.jpg", opts
+		else
+			image_tag "/images/gamepic/default.jpg", opts
+		end
+	end
+
   def avatar(user, img_opts={}, a_opts={})
 		size = img_opts.delete(:size) || "medium"
     a_opts.merge!({:popup => true})
@@ -91,7 +99,13 @@ module ApplicationHelper
   def album_cover_image album, opts={}
     size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
-      image_tag "default_cover_#{size}.png", opts
+			if album.is_a? GuildAlbum
+				image_tag "default_guild_#{size}.png", opts
+			elsif album.is_a? EventAlbum
+				image_tag "default_event_#{size}.png", opts
+			else
+				image_tag "default_cover_#{size}.png", opts
+			end
     else
       image_tag album.cover.public_filename(size), opts
     end
@@ -100,7 +114,13 @@ module ApplicationHelper
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'large'
     if album.cover_id.blank?
-      link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+			if album.is_a? GuildAlbum
+				link_to image_tag("default_guild_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+			elsif album.is_a? EventAlbum
+				link_to image_tag("default_event_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+			else
+				link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+			end
     else
       link_to image_tag(album.cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
