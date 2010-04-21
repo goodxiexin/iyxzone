@@ -11,7 +11,12 @@
     <h1 class="app-news">拾闻</h1>
     <div class="box02 canvas_int space">
       <div class="tab tab01">
-        <%= render :partial => "columns" %>
+        <ul>
+          <li <% if params[:type] == nil || params[:type] == '0' %> class="hover" <% end %>><span><%= link_to "拾闻", news_index_url(:type => 0) %></a></span></li>
+          <li <% if params[:type] == '1' %> class='hover' <% end %>><span><%= link_to "文字新闻", news_index_url(:type => 1)%></span></li>
+          <li <% if params[:type] == '2' %> class='hover' <% end %>><span><%= link_to "视频新闻", news_index_url(:type => 2) %></span></li>
+          <li <% if params[:type] == '3' %> class='hover' <% end %>><span><%= link_to "图片新闻", news_index_url(:type => 3) %></span></li>
+        </ul>
       </div>
       <% if @news_list.length != 0 %>
         <% @news_list.each do |n| %>

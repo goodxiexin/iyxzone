@@ -2,6 +2,7 @@ class Admin::NewsController < AdminBaseController
 
   def new
     @news = News.new
+    render :action => "new_#{params[:type]}_news"
   end
 
   def index
@@ -11,34 +12,33 @@ class Admin::NewsController < AdminBaseController
   def create
     @news = News.new((params[:news] || {}).merge({:poster_id => current_user.id}))
     if @news.save
-      render :update do |page|
-        page.redirect_to :action => :index
-      end
+      render :json => {:id => @news.id}
     else
-      render :update do |page|
-        page << "error(@news.errors.on_base);"
-      end
+      render :json => {:id => -1}
     end
   end
 
   def edit
+    render :action => "edit_#{@news.news_type}_news"
   end
 
   def update
     if @news.update_attributes((params[:news] || {}).merge({:poster_id => current_user.id}))
-      render :update do |page|
-        page.redirect_to :action => :index
-      end
+      render :json => {:id => @news.id}
     else
-      page << "error(@news.errors.on_base)"
+      render :json => {:id => -1}
     end
   end
 
   def destroy
     if @news.destroy
-      redirect_to :action => :index
+      render :update do |page|
+        page << "$('news_#{@news.id}').remove();"
+      end
     else
-      page << "error('删除新闻出错')"
+      render :update do |page|
+        page << "error('删除新闻出错')"
+      end
     end
   end
 

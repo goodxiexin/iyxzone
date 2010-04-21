@@ -7,12 +7,60 @@
     <h1 class="app-news">拾闻</h1>
     <div class="box02 canvas_int space20">
       <div class="tab tab01">
-        <%= render :partial => "columns" %>
+        <ul>
+          <li><span><%= link_to "拾闻", news_index_url(:type => 0) %></a></span></li>
+          <li><span><%= link_to "文字新闻", news_url(:type => 1)%></span></li>
+          <li><span><%= link_to "视频新闻", news_url(:type => 2) %></span></li>
+          <li><span><%= link_to "图片新闻", news_url(:type => 3) %></span></li>
+        </ul>
       </div>
-      <%= render :partial => 'show_news' %>
+      <div class="detail-blog">
+        <div class="detail-blog-head jl-cutline s_clear">
+          <p class="left">
+            <strong><%= @news.title %></strong> <span class="gray"><%= ftime @news.created_at %><strong>类型：</strong><%= news_type @news %></span>
+          </p>
+          <p class="right">
+            <%= facebox_link "分享", new_sharing_url(:url => news_url(@news)), :width => 450, :class => 'share-btn' %>
+          </p>
+        </div>
+        <div class="con">
+          <% if @news.news_type == 'text' %>
+          <%= @news.data %>
+          <% elsif @news.news_type == 'video' %>
+          <%= @news.embed_html %>
+          <% end %>
+        </div>
+        <div class="detail-blog-foot s_clear">
+          <h2 class="gray">相关游戏：<%= game_link @news.game %></h2>
+          <% if !@news.origin_address.nil? %>
+            <h2 class="gray">本帖转自：<%= link_to @news.origin_address, @news.origin_address %></h2>
+          <% end %>
+          <div class="foot cmt-space feed-list">
+            <p class="jl-cutline"></p>
+            <p class="red">
+        <span class="red w-l">评论(<%= @news.comments_count %>)</span>
+        <span class="w-l">|</span>
+        <span class="red w-l">浏览(<%= @news.viewings_count %>)</span>
+        <span class="w-l">|</span>
+        <span class="photo-op-praise"></span>
+        <span><%= text_dig_link @news %></span>
+        <span class="w-l">|</span>
+        <span class="icon-heart"></span>
+        <%= facebox_link "分享", new_sharing_url(:url => news_url(@news)), :width => 450 %><span class="w-l">(<%= @news.sharings_count%>)</span>
+            </p>
+            <%= render :partial => 'user/comments/comment_box', :locals => { :commentable => @news, :recipient => nil} %>
+          </div>
+          <div class="prompt-list-box">
+            <h5>随便看看</h5>
+            <div class="list-box box04">
+              <ul class="lister02">
+                <% @random_news.each do |news| %>
+                  <li><%= news_link news %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div></div>
 </div></div></div></div>
-
-<% unless @reply_to.blank? %>
-  <%= onload_javascript_tag "Iyxzone.Comment.set('news', #{@news.id}, '#{@reply_to.login}', #{@reply_to.id});"%>
-<% end %>

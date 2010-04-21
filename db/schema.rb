@@ -439,6 +439,9 @@ ActiveRecord::Schema.define(:version => 20100420072658) do
     t.integer  "digs_count",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "video_url"
+    t.string   "embed_html"
+    t.string   "thumbnail_url"
   end
 
   create_table "notices", :force => true do |t|

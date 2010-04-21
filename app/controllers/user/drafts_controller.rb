@@ -22,7 +22,6 @@ class User::DraftsController < UserBaseController
   end
 
   def edit
-    @album_infos = current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
     @tag_infos = @blog.tags.map {|t| {:tag_id => t.id, :friend_id => t.tagged_user_id, :friend_name => t.tagged_user.login}}.to_json
   end
 

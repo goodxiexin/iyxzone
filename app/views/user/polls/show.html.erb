@@ -125,7 +125,7 @@
             </div>
           </div>
           <div class="feed-list">
-            <h4>评论(<%= @poll.comments_count %>)</h4>
+            <h4>评论(<%= @poll.comments_count %>) | <%= text_dig_link @poll, :class => 'red' %></h4>
             <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @poll, :recipient => @poll.poster} %> 
           </div>
         </div>
