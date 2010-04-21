@@ -112,7 +112,6 @@ protected
   rescue
     # 或者是除了200和300以外的返回码，或者就是redirect太多
     # 凡此种种，皆以下法导入神通
-    logger.error 'error'
     @my_url
   end
 
