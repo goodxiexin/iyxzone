@@ -58,9 +58,6 @@ class AddTestUsers < ActiveRecord::Migration
     user.characters.create(:game_id => tow.id, :area_id => tow.areas.first.id, :server_id => tow.areas.first.servers.first.id, :race_id => tow.races.first.id, :profession_id => tow.professions.first.id, :name => "小样20的角色", :level => 100)
 
 
-    # gaoxh04, user0, user4, miliniu
-    # 都已经创建过了
- 
     # tlrn
     user = User.new
     user.login = "冥浩"
@@ -127,10 +124,10 @@ class AddTestUsers < ActiveRecord::Migration
     user.login = "高侠鸿"
     user.password = '111111'
     user.password_confirmation = '111111'
-    user.email = "gaoxh05@sina.com.cn"
+    user.email = "gaoxh04@gmail.com"
     user.save(false)
     user.activate
-    gaoxh = User.find_by_email("gaoxh05@sina.com.cn")
+    gaoxh = User.find_by_email("gaoxh04@gmail.com")
     user.characters.create(:game_id => wow.id, :area_id => wow.areas.first.id, :server_id => wow.areas.first.servers.first.id, :race_id => wow.races.first.id, :profession_id => wow.professions.first.id, :name => "色魔的角色", :level => 100)
     20.times do |i|
       user = User.new
