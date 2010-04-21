@@ -7,9 +7,11 @@ Iyxzone.Photo = {
 
   SlideManager: {},
 
-  Slide: Class.create({}), // slide in app/views/user/photos/show.html.erb 
+  Slide: Class.create({}), // 纵向的图片浏览
 
-  Slide2: Class.create({}) // slide in home page
+  Slide2: Class.create({}), // 横向的图片浏览
+
+  Slide3: Class.create({}) // 纵向的图片浏览，而且不不切换url的
 };
 
 Iyxzone.Photo.FriendSelector = Class.create({

@@ -7,11 +7,11 @@
 <% content_for :html_keywords, "#{@game.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% content_for :left do %>
-<div class="mcAvatar">
+<div class="mcAvatar" style="width:100px; height: 141px" >
   <a href="#"></a>
   <div class="picwrap">
     <div class="middle"><div class="middle-center"><div class="center">
-			<%= game_image @game.name, :size => '100x112'%>
+			<%= game_image @game.name, :class => 'game-m' %>
 		</div></div></div>
 	</div>
 </div>

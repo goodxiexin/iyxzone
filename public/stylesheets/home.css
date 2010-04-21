@@ -197,7 +197,7 @@ a:hover{color:#D63200;}
 .feed-box01 .feed-img-list .feed-list{padding-left:73px;}
 
 .mcAvatar{border:1px #BBD2AA solid;width:100px;height:112px;background:#fff;padding:5px;overflow:hidden;position:relative} 
-.mcAvatar a{display:block;width:110px;height:122px;position:absolute;left:0;top:0;background:url(../images/blank.gif) no-repeat 0 -500px;z-index:1000}
+.mcAvatar a{display:block;width:110px;height:122px;position:absolute;left:0;top:0;background:url(../images/blank.gif) no-repeat 0 -500px;z-index:2}
 .mcAvatar .picwrap{width:100%;height:100%;text-align:center;overflow:hidden}
 
 #leftsidebar .mcAvatar{margin:0 auto}
@@ -255,10 +255,10 @@ a:hover{color:#D63200;}
 .piclist-rows table .data h3,.piclist-rows table .data span,.piclist-rows table .data .link a{color:#25700D}
 .piclist-rows table .data a{color:#D63200}
 .piclist-rows table .data a:hover{text-decoration:underline}
-/*.piclist-rows table.big .imgwrap{width:210px;}
-.piclist-rows table.big .imgwrap img{width:200px;height:150px;}
-.piclist-rows table.big .data{margin-left:236px;_margin-left:233px;}
-*/
+
+/*各种图片尺寸定义*/
+img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
+
 .piclist-rows table.big .imgwrap{width:110px;}
 .piclist-rows table.big .imgwrap img{width:100px;height:100px;}
 .piclist-rows table.big .data{margin-left:120px;_margin-left:117px;}
@@ -1069,7 +1069,6 @@ h1.app-share{float:left}
 .z-box .z-m .bg{background:#a3a4a3;filter:alpha(opacity=90);opacity:0.9;width:100%;height:1000px;position:absolute;top:0;z-index:1}
 
 .z-box .z-h{background:#7fb73d;border:1px solid #a7cd65;padding:5px 10px;font-size:14px;font-weight:700;color:#fff}
-.z-box .z-h-error{background:#ffece8;color:#333;border:1px solid #c78d99;}
 .z-box .z-w{background:#feffe6;padding:5px 10px;color:#666;margin-bottom:10px;text-align:center}
 .z-box .z-con{border-top:1px solid #73a637;}
 .z-box .z-con .left{margin-left:15px}
@@ -1082,9 +1081,9 @@ h1.app-share{float:left}
 .z-box .z-submit .buttons{text-align:center}
 .z-box .z-submit .button{margin:0 5px;float:none;display:inline-block}
 
-.z-box .z-error .box01{border:1px solid #cf6079}
-.z-box .z-error .z-h{background:#fd3361;border:1px solid #fd8b6c}
-.z-box .z-error .z-con{border-color:#f31f50}
+.z-box .z-error .box01{border:1px solid #c78d99}
+.z-box .z-error .z-h{background:#ffece8;color:#333;border:1px solid #fff}
+.z-box .z-error .z-con{border-color:#c78d99}
 
 /*日志插入图片lightbox*/
 .blog-ins-imglist{overflow-x:hidden;overflow-y:auto;height:200px;min-height:200px;border:1px solid #BBD2AA;margin:10px 0;}
@@ -1117,7 +1116,7 @@ h1.app-share{float:left}
 
 
 /*好友下拉选择列表*/
-.selector03{height:auto;position:relative;z-index:9999}
+.selector03{height:auto;position:relative;z-index:10}
 .selector03 ul.friend-select-list{position:relative;cursor:text;line-height:18px;min-height:20px;padding:2px 3px 0;}
 .selector03 ul.friend-select-list li{padding:0 4px 0 0;margin:2px 0;position:relative;float:left;}
 .selector03 ul.friend-select-list li a {border-color:#d1e2c5;border-style:solid;border-width:1px 0;color:#333;display:block;float:left;text-decoration:none;background:#f4fdef;width:auto;height:auto;overflow:visible;position:relative;}
