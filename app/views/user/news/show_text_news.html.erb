@@ -17,7 +17,7 @@
       <div class="detail-blog">
         <div class="detail-blog-head jl-cutline s_clear">
           <p class="left">
-            <strong><%= @news.title %></strong> <span class="gray"><%= ftime @news.created_at %><strong>类型：</strong>文字新闻</span>
+            <strong><%= @news.title %></strong> <span class="gray"><%= ftime @news.created_at %></span>
           </p>
           <p class="right">
             <%= facebox_link "分享", new_sharing_url(:url => news_url(@news)), :width => 450, :class => 'share-btn' %>
@@ -34,7 +34,7 @@
           <div class="page-foot s_clear">
             <div class="foot-func">
               <span class="w-l red">评论(<%= @news.comments_count %>)</span><span class="w-l">|</span>
-              <span class="w-l red">浏览(<%= @news.views_count %>)</span><span class="w-l">|</span>
+              <span class="w-l red">浏览(<%= @news.viewings_count %>)</span><span class="w-l">|</span>
               <span class="photo-op-praise" ></span><%= text_dig_link @news, :class => 'red' %>
             </div>
             <div class='s_clear rows'>

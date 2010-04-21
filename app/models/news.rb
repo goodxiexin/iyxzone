@@ -1,5 +1,5 @@
 class News < ActiveRecord::Base
-
+puts "load news"
   has_many :pictures, :class_name => 'NewsPicture' # only valid for picture news
 
   belongs_to :game
@@ -11,6 +11,8 @@ class News < ActiveRecord::Base
   acts_as_viewable
 
   acts_as_shareable :path_reg => /\/news\/([\d]+)/, :default_title => lambda {|news| news.title}
+
+  acts_as_abstract :columns => [:data], :if => "news_type == 'text'"
 
   acts_as_diggable
 
