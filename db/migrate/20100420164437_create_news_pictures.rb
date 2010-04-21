@@ -2,6 +2,7 @@ class CreateNewsPictures < ActiveRecord::Migration
   def self.up
     create_table :news_pictures do |t|
       t.integer :news_id
+      t.string :notation
       # attachment_fu fields
       t.integer :parent_id
       t.string :content_type
