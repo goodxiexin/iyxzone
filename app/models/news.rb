@@ -1,6 +1,6 @@
 class News < ActiveRecord::Base
 
-  has_many :pictures, :class_name => 'NewsImage' # only valid for picture news
+  has_many :pictures, :class_name => 'NewsPicture' # only valid for picture news
 
   belongs_to :game
 

@@ -3,7 +3,7 @@ module ApplicationHelper
 
   def avatar_path user, size="medium"
     if user.avatar.blank?
-      "default_#{size}.png"
+      "default_#{user.gender}_#{size}.png"
     else
       user.avatar.public_filename(size)
     end
@@ -12,7 +12,7 @@ module ApplicationHelper
   def avatar_image(user, opts={})
     size = opts.delete(:size) || "medium"
     if user.avatar.blank?
-      image_tag "default_#{size}.png", opts
+      image_tag "default_#{user.gender}_#{size}.png", opts
     else
       image_tag user.avatar.public_filename(size), opts
     end
@@ -20,9 +20,9 @@ module ApplicationHelper
 
 	def game_image(game_name, opts={})
 		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.jpg")
-			image_tag "/images/gamepic/#{game_name}.jpg", opts
+			image_tag "/images/gamepic/#{game_name}.gif", opts
 		else
-			image_tag "/images/gamepic/default.jpg", opts
+			image_tag "/images/gamepic/default.gif", opts
 		end
 	end
 
@@ -30,11 +30,7 @@ module ApplicationHelper
 		size = img_opts.delete(:size) || "medium"
     a_opts.merge!({:popup => true})
     if user.avatar.blank?
-      if user.gender == 'male'
-        link_to image_tag("default_male_#{size}.png", img_opts), profile_url(user.profile), a_opts
-      else
-        link_to image_tag("default_female_#{size}.png", img_opts), profile_url(user.profile), a_opts
-      end
+      link_to image_tag("default_#{user.gender}_#{size}.png", img_opts), profile_url(user.profile), a_opts
     else
       link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
     end

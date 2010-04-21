@@ -52,26 +52,28 @@
         <div class='con'>
           <%= @blog.content %>
         </div>
-        <div class="detail-blog-foot" id='friend_tags'>
-    	    <p class="jl-cutline">
-    		    <% if @blog.tags.size == 0 %>
-		    	    这篇日志跟任何人都无关
-		        <% else %>
-    			    这篇日志有关的人: <%= @blog.tags.map { |t| profile_link t.tagged_user }.join(',') %>
-		        <% end %>
-    	    </p>
-        </div>
-      </div>
-      <div class="foot cmt-space">
-        <div class="feed-list">
-          <p class="s_clear red">
-            评论(<%= @blog.comments_count %>)
-            <%= text_dig_link @blog, :class => 'red' %>
-		      </p>
-          <% cache [@blog, @blog.comments_count] do %>
-		        <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @blog, :recipient => @blog.poster} %>
+        <div class="detail-blog-foot">
+          <p class=" jl-cutline"></p>
+          <% if @blog.tags.size == 0 %>
+            <p>这篇日志跟任何人都无关</p>
+          <% else %>
+            <p>这篇日志有关的人: <%= @blog.tags.map { |t| profile_link t.tagged_user, :class => 'red' }.join(',') %></p>
           <% end %>
-	      </div>
+        </div>
+        <div class="page-foot s_clear">
+          <div class="foot-func">
+            <span class="w-l red">评论(<%= @blog.comments_count %>)</span><span class="w-l">|</span>
+            <span class="w-l red">浏览(<%= @blog.viewings_count %>)</span><span class="w-l">|</span>
+            <span class="photo-op-praise" ></span><%= text_dig_link @blog, :class => 'red' %>
+          </div>
+          <div class="s_clear rows">
+            <div class="feed-list">
+              <% cache [@blog, @blog.comments_count] do %>
+                <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @blog, :recipient => @blog.poster} %>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div></div>

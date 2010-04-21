@@ -40,7 +40,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :admin do |admin|
 
-    admin.resources :news
+    admin.resources :news do |news|
+
+      news.resources :pictures, :controller => 'news_pictures'
+
+    end
   
   	admin.resources :guestbooks, :only => [ :index, :show , :edit, :update, :destroy]
 

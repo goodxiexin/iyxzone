@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100420072658) do
+ActiveRecord::Schema.define(:version => 20100420164437) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -442,6 +442,18 @@ ActiveRecord::Schema.define(:version => 20100420072658) do
     t.string   "video_url"
     t.string   "embed_html"
     t.string   "thumbnail_url"
+  end
+
+  create_table "news_pictures", :force => true do |t|
+    t.integer  "news_id"
+    t.integer  "parent_id"
+    t.string   "content_type"
+    t.string   "filename"
+    t.string   "thumbnail"
+    t.integer  "size"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "updated_at"
   end
 
   create_table "notices", :force => true do |t|

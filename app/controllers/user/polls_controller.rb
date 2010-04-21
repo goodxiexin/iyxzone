@@ -24,6 +24,7 @@ class User::PollsController < UserBaseController
 
   def show
 		@poll = Poll.find(params[:id])
+    @random_polls = Poll.random :limit => 5, :except => [@poll]
     @user = @poll.poster
     @vote = @poll.votes.find_by_voter_id(current_user.id)
     @vote_feeds = current_user.friend_votes_for @poll

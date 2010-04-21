@@ -716,3 +716,155 @@ Iyxzone.Photo.Slide2 = Class.create({
   }
 
 });
+
+
+Iyxzone.Photo.Slide3 = Class.create({
+  
+  initialize: function(photoType, currentID, ids, urls, frames, downBtn, upBtn){
+    this.photoType = photoType + 's';
+    this.downBtn = downBtn;
+    this.upBtn = upBtn;
+    this.loadingImage = new Image();
+    this.loadingImage.src = '/images/loading.gif';
+    this.blankImage = new Image();
+    this.blankImage.src = '/images/photo/nopic50x50.png';
+
+    // 只保存图片的url，到了需要的时候再去加载图片
+    this.urls = urls;
+    this.ids = ids;
+    this.currentID = currentID; // 当前照片的id
+    this.idPos = 0; // 正中间那张照片对应的id在ids中的位置
+    this.mappings = new Hash(); // photo id => image object
+    this.frames = frames; 
+   
+    this.upTimer = null;
+    this.downTimer = null;
+ 
+    for(var i=0;i<this.ids.length;i++){
+      if(this.ids[i] == this.currentID){
+        this.idPos = i;
+        break;
+      }
+    }
+
+    var pos = Math.floor(frames.length/2);     
+    
+    for(var i=0;i<this.frames.length;i++){
+      var p = (this.idPos + i - pos);
+      if(p >= 0 && p < this.ids.length){
+        this.loadImage(i, p);
+      }else{
+        this.setBlank(i);
+      }
+    }
+
+    this.setBtnEvents();
+    this.changeBtn();
+  },
+
+  setBtnEvents: function(){
+    this.downBtn.observe('click', this.scrollDown.bindAsEventListener(this));
+    this.upBtn.observe('click', this.scrollUp.bindAsEventListener(this));
+  },
+
+  changeBtn: function(){
+    if(this.idPos == 0){
+      this.downBtn.className = 'btn downbtn-gray';
+    }else{
+      this.downBtn.className = 'btn downbtn';
+    }
+    
+    if(this.idPos == this.ids.length - 1){
+      this.upBtn.className = 'btn upbtn-gray';
+    }else{
+      this.upBtn.className = 'btn upbtn';
+    }
+  },
+
+  setBlank: function(idx){
+    this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" + this.blankImage.src + "' class='imgbox01'/></a>";
+  },
+
+  loadImage: function(idx, photoIdx){
+    this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
+    var img = this.mappings.get(this.ids[photoIdx]);
+    if(!img){
+      img = new Image();
+      img.src = this.urls[photoIdx];
+      this.mappings.set(this.ids[photoIdx], img);
+    }
+    if(this.currentID == this.ids[photoIdx]){
+      this.frames[idx].addClassName('now');
+    }
+    this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
+  },
+
+  scrollDown: function(){
+    if(this.idPos == 0 || this.downTimer != null){
+      return;
+    }
+
+    var div = this.frames[0].up();
+    new Effect.Morph(div, {style: 'top: 0px', duration: 0.5});
+    this.downTimer = setTimeout(this.afterScrollDown.bind(this), 550);
+    
+    this.idPos--;
+    this.changeBtn();
+  },
+
+  afterScrollDown: function(){
+    // insert frame to the top and reset div position
+    var frame = new Element('div', {'class': 'img'});
+    Element.insert(this.frames[0], {before: frame});
+    this.frames = frame.up().childElements();
+    var p = this.idPos - Math.floor((this.frames.length-1)/2);
+    if(p >= 0){
+      this.loadImage(0, p);
+    }else{
+      this.setBlank(0);
+    }
+    frame.up().setStyle({'top': '-67px'});
+
+    // remove last frame
+    var len = this.frames.length;
+    this.frames[len - 1].remove();
+    this.frames.splice(len - 1, 1);
+
+    // reset timer
+    this.downTimer = null;
+  },
+
+  scrollUp: function(){
+    if(this.idPos == this.ids.length - 1 || this.upTimer != null)
+      return;
+
+    var div = this.frames[0].up();
+    new Effect.Morph(div, {style: 'top: -134px', duration: 0.5});
+    this.upTimer = setTimeout(this.afterScrollUp.bind(this), 550);
+
+    this.idPos++;
+    this.changeBtn();
+  },
+
+  afterScrollUp: function(){
+    // remove first frame
+    this.frames[0].remove();
+    this.frames.splice(0, 1);
+    this.frames[0].up().setStyle({'top': '-67px'});
+
+    // add last frame
+    var frame = new Element('div', {'class': 'img'});
+    Element.insert(this.frames[this.frames.length - 1], {after: frame});
+    this.frames = frame.up().childElements();
+    var p = this.idPos + this.frames.length - 2 - Math.floor((this.frames.length - 3)/2);
+    if(p < this.ids.length){
+      this.loadImage(this.frames.length - 1, p);
+    }else{
+      this.setBlank(this.frames.length - 1);
+    }
+  
+    // reset timer
+    this.upTimer = null;
+  }
+
+});

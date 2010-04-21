@@ -81,10 +81,14 @@
           </div>
         </div>
       </div>
-      <div class="foot">
-        <div class="feed-list">
-          <h4>评论(<%= @photo.comments_count %>)</h4>
-          <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @photo, :recipient => @user} %>
+      <div class="page-foot s_clear">
+        <div class="foot-func">
+          <span class="w-l red">评论(<%= @photo.comments_count %>)</span><span class="w-l">|</span>
+        </div>
+        <div class='s_clear rows'>
+          <div class="feed-list">
+            <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @photo, :recipient => @photo.poster} %>
+          </div>
         </div>
       </div>
     </div>

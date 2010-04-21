@@ -28,6 +28,10 @@
           <%= @news.data %>
           <% elsif @news.news_type == 'video' %>
           <%= @news.embed_html %>
+          <% elsif @news.news_type == 'picture' %>
+          <% @news.pictures.each do |p| %>
+            <%= image_tag p.public_filename %>
+          <% end %>
           <% end %>
         </div>
         <div class="detail-blog-foot s_clear">

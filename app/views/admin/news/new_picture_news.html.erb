@@ -38,6 +38,7 @@
               <div class='fldid'>&nbsp;</div>
               <div class='fldvalue'><span class='button03 w-l'><span><button type='submit' id='news_submit_btn'>发布</button></span></span></div>
             </div>
+          <%end%>
 <form enctype="multipart/form-data">
   <h4><a id='spanButtonPlaceHolder'></a></h4>
   <div class="photo-upload-form box05">
@@ -54,16 +55,13 @@
       <div id='total_entries'>总共0张照片</div>
     </div>
   </div>
-  <div class="buttons">
-    <span class="button"><span><button id='news_submit_btn' type='submit'>开始上传</button></span></span>
-    <span class="button button-gray"><span><button id='btnCancel' onclick="Event.stop(event);Iyxzone.enableButton($('btnSubmit'), '开始上传');swfu.cancelQueue();">取消上传</button></span></span>
-  </div>
 </form>
-          <%end%>
+
       </div></div></div>
   </div></div>
 </div></div></div></div>
 
 <% onload_javascript_tag do %>
-  Iyxzone.News.Builder.initPictureNews('<%= form_authenticity_token %>');
+  <% session_key = ActionController::Base.session_options[:key] %>
+  Iyxzone.News.Builder.initPictureNews('<%= form_authenticity_token %>', '<%= session_key %>', '<%= cookies[session_key] %>');
 <% end  %>

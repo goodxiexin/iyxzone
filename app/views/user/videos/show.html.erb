@@ -54,21 +54,23 @@
 		      <p class='space20'><%= simple_format h @video.description %></p>
         </div>
         <div class="detail-video-foot" id='friend_tags'>
-	        <p class="jl-cutline">
-		        <% if @video.tags.size == 0 %>
-			        这个视频没有相关人员
-		        <% else %>
-			        标签: <%= @video.tags.map { |t| profile_link t.tagged_user }.join(',') %>
-		        <% end %>
-	        </p>
+	        <p class="jl-cutline"></p>
+		      <% if @video.tags.size == 0 %>
+			      <p>这个视频没有相关人员</p>
+		      <% else %>
+			      <p>标签: <%= @video.tags.map { |t| profile_link t.tagged_user, :class => 'red' }.join(',') %></p>
+		      <% end %>
         </div>
-      </div>
-      <div class="foot cmt-space">
-        <div class="feed-list">
-          <p class="s_clear red">
-            评论(<%= @video.comments_count %>) | <%= text_dig_link @video %>
-					</p>
-          <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @video, :recipient => @video.poster} %>
+        <div class="page-foot s_clear">
+          <div class="foot-func">
+            <span class="w-l red">评论(<%= @video.comments_count %>)</span><span class="w-l">|</span>
+            <span class="photo-op-praise" ></span><%= text_dig_link @video, :class => 'red' %>
+          </div>
+          <div class='s_clear rows'>
+            <div class="feed-list">
+              <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @video, :recipient => @video.poster} %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
