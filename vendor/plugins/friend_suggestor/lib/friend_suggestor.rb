@@ -60,14 +60,15 @@ module FriendSuggestor
 	end
 
 	def fetch_friend_suggestions
-    # 放后台去，这个还比较好办
-    # 因为这个不像推荐战友，推荐好友为空几乎是不可能的
-    if friend_suggestions.count == 0
+    suggestions = friend_suggestions
+
+    # 这个应该不常发生，因为只要有用户，就会有friend_suggestions
+    if suggestions.count == 0
       self.create_friend_suggestions # this should happen barely
       self.reload
     end
 
-    friend_suggestions
+    suggestions
   end
 
   def create_friend_suggestions
@@ -110,16 +111,17 @@ module FriendSuggestor
 	end
 
 	def fetch_comrade_suggestions server
-		comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id})
+		suggestions = comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id})
 
-    # 本来这里，如果没有的话(或者推荐的玩家很少的时候)，就进行计算
-    # 但是考虑到如果该游戏玩家基本没有，那岂不是每次都要计算，而且计算一次的开销较大
-    # 所以现在就把计算放到了后台，当服务器比较空闲的时候就计算下
+    # 这个可能经常发生，因为如果这个server的玩家为0，那肯定suggestion为0
+    # 但是就算发生了，开销也不大，因为既然没有玩家，那collect_comrades里的candidates为空
     if suggestions.blank?
       self.create_comrade_suggestions server # this happens barely
       self.reload
       suggestions = comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id})
     end
+
+    suggestions
   end
 
   def create_comrade_suggestions server
