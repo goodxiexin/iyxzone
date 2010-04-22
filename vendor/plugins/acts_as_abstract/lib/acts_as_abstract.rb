@@ -29,10 +29,10 @@ module ActsAsAbstract
 
     def save_abstract
       opts = self.class.abstract_opts
-puts "abstract"
+      if_cond = opts[:if] || "true" 
       opts[:columns].each do |column|
         changed = eval("self.#{column}_changed?")
-        if changed
+        if changed and eval(if_cond)
           eval("self.#{column}_abstract = Sanitize.clean(self.#{column})")
         end
       end 

@@ -16,7 +16,7 @@ parameters:
 
 <div class="box04 cmt-box s_clear" id='<%= type %>_comment_<%= commentable.id %>' style="display:none">
 	<div class="img"><%= avatar current_user, :size => :small %></div>
-	<div class="con">
+	<div class="cmt-con">
     <% form_remote_for :comment, :html => {:id => "#{type}_comment_form_#{commentable.id}"} do |f| %>
       <%= hidden_field_tag 'comment[commentable_id]', commentable.id %>
       <%= hidden_field_tag 'comment[commentable_type]', commentable.class.base_class.name %>

@@ -1,0 +1,67 @@
+<%= javascript_include_tag 'swfupload' %>
+<%= javascript_include_tag 'swfupload.fileprogress' %>
+<%= javascript_include_tag 'swfupload.queue' %>
+<%= javascript_include_tag 'swfupload.handlers' %>
+<%= javascript_include_tag 'news' %>
+
+
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-news">新建新闻</h1>
+    <div class="box02 canvas_int space">
+      <div class='appcontent01'>
+        <div id='errors'></div>
+        <div class="cons-form formcontent">
+          <% form_for :news, :html => {:id => 'news_form', :onsubmit => "Iyxzone.News.Builder.savePictureNews($('news_submit_btn'), this); return false;"} do |f| %>
+            <%= hidden_field_tag 'news[news_type]', 'picture' %>
+            <div class='rows s_clear'>
+              <div class='fldid'><%= f.label "新闻标题：" %></div>
+              <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
+            </div>
+            <div class='rows s_clear'>
+              <div class='fldid'><%= f.label "新闻描述：" %></div>
+              <div class='fldvalue'><div class='textfield'><%= f.text_field 'data' %></div></div>
+            </div>
+            <div class='rows s_clear'>
+              <div class='fldid'><%= f.label "新闻原地址："%></div>
+              <div class='fldvalue'><div class='textfield'><%= f.text_field 'origin_address' %></div></div>
+            </div>
+            <div class='rows s_clear'>
+              <div class='fldid'>
+                <%= f.label "相关游戏：" %>
+              </div>
+              <div class='fldvalue'>
+                <%= f.collection_select 'game_id', Game.find(:all), :id, :name, {:prompt => '---'}, :class => "selector selector02"%>
+              </div>
+            </div>
+            <div class='rows s_clear'>
+              <div class='fldid'>&nbsp;</div>
+              <div class='fldvalue'><span class='button03 w-l'><span><button type='submit' id='news_submit_btn'>发布</button></span></span></div>
+            </div>
+          <%end%>
+<form enctype="multipart/form-data">
+  <h4><a id='spanButtonPlaceHolder'></a></h4>
+  <div class="photo-upload-form box05">
+    <div class="title title01">
+      <div class="right"><span>大小</span><span>状态</span></div>
+      <h5>照片</h5>
+    </div>
+    <div class="upload-body">
+      <ul id='fsUploadProgress'>
+      </ul>
+    </div>
+    <div class="foot">
+      <div class="right" id='total_size'>总计：0 KB</div>
+      <div id='total_entries'>总共0张照片</div>
+    </div>
+  </div>
+</form>
+
+      </div></div></div>
+  </div></div>
+</div></div></div></div>
+
+<% onload_javascript_tag do %>
+  <% session_key = ActionController::Base.session_options[:key] %>
+  Iyxzone.News.Builder.initPictureNews('<%= form_authenticity_token %>', '<%= session_key %>', '<%= cookies[session_key] %>');
+<% end  %>

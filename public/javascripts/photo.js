@@ -716,3 +716,215 @@ Iyxzone.Photo.Slide2 = Class.create({
   }
 
 });
+
+
+Iyxzone.Photo.Slide3 = Class.create({
+  
+  initialize: function(currentID, photoInfos, frames, downBtn, upBtn){
+    this.downBtn = downBtn;
+    this.upBtn = upBtn;
+    this.loadingImage = new Image();
+    this.loadingImage.src = '/images/loading.gif';
+    this.blankImage = new Image();
+    this.blankImage.src = '/images/photo/nopic50x50.png';
+
+    // 只保存图片的url，到了需要的时候再去加载图片
+    this.urls = [];
+    this.ids = [];
+    this.notations = [];
+    this.currentID = currentID; // 当前照片的id
+    this.mappings = new Hash(); // photo id => image object
+    this.frames = frames; 
+  
+    for(var i=0;i<photoInfos.length;i++){
+      var info = photoInfos[i];
+      this.ids.push(info.id);
+      this.urls.push(info.url);
+      this.notations.push(info.notation);
+    }
+ 
+    this.upOffset = 0;
+    this.downOffset = 0;
+
+    this.idPos = 0; 
+    for(var i=0;i<this.ids.length;i++){
+      if(this.ids[i] == this.currentID){
+        this.idPos = i;
+        break;
+      }
+    }
+
+    var pos = Math.floor(frames.length/2);     
+   
+    this.frames[pos].addClassName('now');
+ 
+    for(var i=0;i<this.frames.length;i++){
+      var p = (this.idPos + i - pos);
+      if(p >= 0 && p < this.ids.length){
+        this.loadImage(i, p);
+      }else{
+        this.setBlank(i);
+      }
+    }
+
+    this.setBtnEvents();
+    this.changeBtn();
+  },
+
+  setBtnEvents: function(){
+    this.downBtn.observe('click', function(event){
+      if(this.upOffset != 0 || this.downOffset != 0)
+        return;
+      this.downOffset = 1;
+      this.scrollDown();
+    }.bind(this));
+    this.upBtn.observe('click', function(event){
+      if(this.upOffset != 0 || this.downOffset != 0)
+        return;
+      this.upOffset = 1;
+      this.scrollUp();
+    }.bind(this));
+  },
+
+  changeBtn: function(){
+    if(this.idPos == 0){
+      this.downBtn.className = 'btn downbtn-gray';
+    }else{
+      this.downBtn.className = 'btn downbtn';
+    }
+    
+    if(this.idPos == this.ids.length - 1){
+      this.upBtn.className = 'btn upbtn-gray';
+    }else{
+      this.upBtn.className = 'btn upbtn';
+    }
+  },
+
+  setBlank: function(idx){
+    this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" + this.blankImage.src + "' class='imgbox01'/></a>";
+  },
+
+  loadImage: function(idx, photoIdx){
+    this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
+    var img = this.mappings.get(this.ids[photoIdx]);
+    if(!img){
+      img = new Image();
+      img.src = this.urls[photoIdx];
+      this.mappings.set(this.ids[photoIdx], img);
+    }
+    var img = new Element('img', {src: img.src});
+    img.setStyle({width: '50px', height: '50px'});
+    img.addClassName('imgbox01');
+    var a = new Element('a', {href: 'javascript:void(0)', index: photoIdx});
+    a.appendChild(img);
+    a.observe('click', function(e){
+      var pos = Math.floor(this.frames.length/2);
+      var img = e.target;
+      var index = parseInt(img.up('a').readAttribute('index'));
+      var idPos = this.idPos;
+      if(index == idPos){
+      }else if(index < idPos){
+        // scroll down
+        if(this.downOffset != 0)
+          return;
+        this.frames[pos].writeAttribute('class', 'img');
+        this.downOffset = idPos - index;
+        this.scrollDown();
+        this.frames[pos + index - idPos].addClassName('now');
+      }else if(index > idPos){
+        // scroll up
+        if(this.upOffset != 0)
+          return;
+        this.frames[pos].writeAttribute('class', 'img');
+        this.upOffset = index - idPos;
+        this.scrollUp();
+        this.frames[pos + index - idPos].addClassName('now');
+      }
+      $('picture').update("<img src='" + img.src + "' />");
+      $('notation').update(this.notations[index].escapeHTML().gsub('\n', '<br/>'));
+    }.bind(this));
+    this.frames[idx].update(a);
+    //this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
+  },
+
+  scrollDown: function(){
+    if(this.idPos == 0){
+      return;
+    }
+
+    var div = this.frames[0].up();
+    new Effect.Morph(div, {
+      style: 'top: 0px', 
+      duration: 0.5,
+      afterFinish: this.afterScrollDown.bind(this)
+    });
+    
+    this.idPos = this.idPos - 1;
+    this.changeBtn();
+  },
+
+  afterScrollDown: function(){
+    // insert frame to the top and reset div position
+    var frame = new Element('div', {'class': 'img'});
+    Element.insert(this.frames[0], {before: frame});
+    this.frames = frame.up().childElements();
+    var p = this.idPos - Math.floor((this.frames.length-1)/2);
+    if(p >= 0){
+      this.loadImage(0, p);
+    }else{
+      this.setBlank(0);
+    }
+    frame.up().setStyle({'top': '-67px'});
+
+    // remove last frame
+    var len = this.frames.length;
+    this.frames[len - 1].remove();
+    this.frames.splice(len - 1, 1);
+
+    // reset timer
+    this.downOffset--;
+    if(this.downOffset != 0){
+      this.scrollDown();
+    }      
+  },
+
+  scrollUp: function(){
+    if(this.idPos == this.ids.length - 1)
+      return;
+
+    var div = this.frames[0].up();
+    new Effect.Morph(div, {
+      style: 'top: -134px', 
+      duration: 0.5, 
+      afterFinish: this.afterScrollUp.bind(this)
+    });
+
+    this.idPos++;
+    this.changeBtn();
+  },
+
+  afterScrollUp: function(){
+    // remove first frame
+    this.frames[0].remove();
+    this.frames.splice(0, 1);
+    this.frames[0].up().setStyle({'top': '-67px'});
+
+    // add last frame
+    var frame = new Element('div', {'class': 'img'});
+    Element.insert(this.frames[this.frames.length - 1], {after: frame});
+    this.frames = frame.up().childElements();
+    var p = this.idPos + this.frames.length - 2 - Math.floor((this.frames.length - 3)/2);
+    if(p < this.ids.length){
+      this.loadImage(this.frames.length - 1, p);
+    }else{
+      this.setBlank(this.frames.length - 1);
+    }
+  
+    // reset timer
+    this.upOffset--;
+    if(this.upOffset != 0){
+      this.scrollUp();
+    }
+  }
+
+});

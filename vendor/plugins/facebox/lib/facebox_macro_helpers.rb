@@ -13,7 +13,7 @@ module FaceboxMacroHelpers
   end
 
 	def facebox_tip text, msg, options={}
-		link_to_function text, "tip('#{msg}');", options
+		link_to_function text, "facebox.set_width(width);tip('#{msg}');", options
 	end
 
 	def facebox_large_tip text, msg, options={}
@@ -21,7 +21,7 @@ module FaceboxMacroHelpers
 	end
 
 	def facebox_notice text, msg, options={}
-		link_to_function text, "alert('#{msg}');", options
+		link_to_function text, "facebox.set_width(width); alert('#{msg}');", options
 	end
 
   def facebox_button_confirm text, url, confirm_options={}, html_options={}

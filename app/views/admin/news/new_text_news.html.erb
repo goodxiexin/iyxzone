@@ -9,7 +9,8 @@
       <div class='appcontent01'>
         <div id='errors'></div>
         <div class="cons-form formcontent">
-          <% form_for :news, :html => {:id => 'news_form', :method => :post} do |f| %>
+          <% form_for :news, :html => {:id => 'news_form', :onsubmit => "Iyxzone.News.Builder.saveTextNews($('news_submit_btn'), this); return false;"} do |f| %>
+            <%= hidden_field_tag 'news[news_type]', 'text' %>
             <div class='rows s_clear'>
               <div class='fldid'><%= f.label "新闻标题：" %></div>
               <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
@@ -23,14 +24,6 @@
             </div>
             <div class='rows s_clear'>
               <div class='fldid'>
-                <%= f.label "新闻类别：" %>
-              </div>
-              <div class='fldvalue'>
-                <%= f.select :news_type, %w{文字 视频 图片}, :class => "selector selector02"%>
-              </div>
-            </div>
-            <div class='rows s_clear'>
-              <div class='fldid'>
                 <%= f.label "相关游戏：" %>
               </div>
               <div class='fldvalue'>
@@ -39,7 +32,7 @@
             </div>
             <div class='rows s_clear'>
               <div class='fldid'>&nbsp;</div>
-              <div class='fldvalue'><span class='button03 w-l'><span><%= button_to_function("发布", "Iyxzone.News.Builder.saveNews(event)") %></span></span></div>
+              <div class='fldvalue'><span class='button03 w-l'><span><button type='submit' id='news_submit_btn'>发布</button></span></span></div>
             </div>
           <%end%>
       </div></div></div>
@@ -48,6 +41,5 @@
 </div></div></div></div>
 
 <% onload_javascript_tag do %>
-nicEditors.albums = <%= current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json %>;
-Iyxzone.News.Builder.editor = new nicEditor().panelInstance('news_data', {token: '<%= form_authenticity_token %>'});
+  Iyxzone.News.Builder.initTextNews('news_data', '<%= form_authenticity_token %>', <%= album_infos %>);
 <% end  %>

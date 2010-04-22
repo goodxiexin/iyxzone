@@ -8,6 +8,9 @@ class CreateNews < ActiveRecord::Migration
       t.string :title
       t.text :data
       t.text :data_abstract
+      t.string :video_url
+      t.string :thumbnail_url
+      t.string :embed_html
       t.integer :comments_count, :default => 0
       t.integer :viewings_count, :default => 0
       t.integer :sharings_count, :default => 0

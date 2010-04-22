@@ -3,7 +3,7 @@ module ApplicationHelper
 
   def avatar_path user, size="medium"
     if user.avatar.blank?
-      "default_#{size}.png"
+      "default_#{user.gender}_#{size}.png"
     else
       user.avatar.public_filename(size)
     end
@@ -12,7 +12,7 @@ module ApplicationHelper
   def avatar_image(user, opts={})
     size = opts.delete(:size) || "medium"
     if user.avatar.blank?
-      image_tag "default_#{size}.png", opts
+      image_tag "default_#{user.gender}_#{size}.png", opts
     else
       image_tag user.avatar.public_filename(size), opts
     end
@@ -20,9 +20,9 @@ module ApplicationHelper
 
 	def game_image(game_name, opts={})
 		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.jpg")
-			image_tag "/images/gamepic/#{game_name}.jpg", opts
+			image_tag "/images/gamepic/#{game_name}.gif", opts
 		else
-			image_tag "/images/gamepic/default.jpg", opts
+			image_tag "/images/gamepic/default.gif", opts
 		end
 	end
 
@@ -30,7 +30,7 @@ module ApplicationHelper
 		size = img_opts.delete(:size) || "medium"
     a_opts.merge!({:popup => true})
     if user.avatar.blank?
-      link_to image_tag("default_#{size}.png", img_opts), profile_url(user.profile), a_opts
+      link_to image_tag("default_#{user.gender}_#{size}.png", img_opts), profile_url(user.profile), a_opts
     else
       link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
     end
@@ -135,7 +135,8 @@ module ApplicationHelper
     link_to (image_tag photo.public_filename(size), opts), eval("#{photo.class.name.underscore}_url(photo)")
   end
 
-  def dig_link diggable
+  # 这个dig_link是有图标的那个
+  def icon_dig_link diggable
 		dig_html = "<div class='evaluate'>"
 		if diggable.digged_by? current_user
 		  dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}' class='dug'>#{diggable.digs_count}</span><a href='javascript: void(0)'>赞</a>"
@@ -147,12 +148,30 @@ module ApplicationHelper
     dig_html
   end
 
+  def text_dig_link diggable, html_opts={}
+    dig_html = link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable, :at => 'show'), :html => {:id => "digging_#{diggable.class.to_s.underscore}_#{diggable.id}"}.merge(html_opts), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
+    dig_html += "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}' class='gray'>#{diggable.digs_count}</span>人赞过)"
+    dig_html
+  end
+
   def blog_content blog, opts={}
     if blog.content_abstract.length > opts[:length]
-      (truncate blog.content_abstract, opts) + (link_to '查看全文>>', blog_url(blog))
+      (truncate blog.content_abstract, opts) + (link_to '查看全文 >>', blog_url(blog))
     else
       truncate blog.content_abstract, opts
     end
+  end
+
+  def news_content news, opts={}
+    if news.data_abstract.length > opts[:length]
+      (truncate news.data_abstract, opts) + (link_to '查看全文 >>', news_url(news))
+    else
+      truncate news.data_abstract, opts
+    end
+  end
+
+  def news_link news, opts={}
+    link_to (truncate (h news.title), :length => 40), news_url(news), opts
   end
 
   def blog_link blog, opts={}
@@ -336,6 +355,10 @@ module ApplicationHelper
     Game.find(:all, :order => "pinyin ASC").map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
   end
 
+  def album_infos
+    current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
+  end
+
   # 系统默认的中间的p标签也会加上html_option，这是我不想要的
   def simple_format(text, html_options={})
     start_tag = tag('p', html_options, true)
@@ -344,6 +367,16 @@ module ApplicationHelper
     text.gsub!(/\n/, "<br/>")
     text.insert 0, start_tag
     text << "</p>"
+  end
+
+  def news_type news
+    if news.news_type == 'text'
+      "文字新闻"
+    elsif news.news_type == 'picture'
+      "图片新闻"
+    elsif news.news_type == 'video'
+      "视频新闻"
+    end
   end
 
 end

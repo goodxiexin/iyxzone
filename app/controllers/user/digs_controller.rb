@@ -7,7 +7,10 @@ class User::DigsController < UserBaseController
       render :update do |page|
         if params[:at] == 'sharing'
           page << "$('dig_sharing_#{@diggable.id}').update( \"<a class='praise' href='javascript:void(0)'><strong><span>#{@diggable.digs_count}</span></strong></a>\");"
-        else
+        elsif params[:at] == 'show'
+          page << "$('dig_#{@diggable.class.name.underscore}_#{@diggable.id}').update(#{@diggable.digs_count})"
+          page << "Element.replace($('digging_#{@diggable.class.name.underscore}_#{@diggable.id}'), '<a href=\"javascript:void(0)\">赞</a>')" 
+       else
           page << "$('dig_#{@diggable.class.name.underscore}_#{@diggable.id}').addClassName('dug');"
 				  page << "$('dig_#{@diggable.class.name.underscore}_#{@diggable.id}').update(#{@diggable.digs_count})"
 				  page << "Element.replace($('digging_#{@diggable.class.name.underscore}_#{@diggable.id}'), '<a href=\"javascript:void(0)\">赞</a>')"
