@@ -17,8 +17,16 @@
         </div>
         <div class="detail-blog-foot s_clear">
           <p class=" jl-cutline"></p>
-          <p class="red"><span class="w-l">评论(<%= @application.comments_count %>)</span></p>
-          <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @application, :recipient => nil} %>
+        </div>
+        <div class='page-foot s_clear'>
+          <div class='foot-func'>
+            <span class='w-l red'>评论(<%= @application.comments_count %>)</span>
+          </div>
+          <div class='s_clear rows'>
+            <div class='feed-list'>
+              <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @application, :recipient => nil} %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
