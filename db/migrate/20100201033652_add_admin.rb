@@ -8,9 +8,9 @@ class AddAdmin < ActiveRecord::Migration
     admin.save(false)
     admin.activate
 
-    roel = Role.create(:name => 'admin')
+    role = Role.create(:name => 'admin')
     
-    RoleUser.create(:role_id => role.id, :admin_id => admin.id)
+    RoleUser.create(:role_id => role.id, :user_id => admin.id)
   end
 
   def self.down

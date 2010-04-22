@@ -3,7 +3,7 @@
     <h1 class="app-news">管理新闻</h1>
     <div class="box02 canvas_int space">
       <div class="tab tab01">
-        <div class="right"><%= link_to "发表新闻", :action => :new %></div>
+        <div class="right"><%= link_to "发表图片新闻", new_admin_news_url(:type => 'picture') %><%= link_to "发表新闻", new_admin_news_url(:type => 'text') %><%= link_to "发表视频新闻", new_admin_news_url(:type => 'video') %></div>
         <ul>
           <li class="hover"><span><%= link_to "新闻列表", :action => :new%></span></li>
         </ul>

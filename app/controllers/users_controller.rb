@@ -48,6 +48,11 @@ class UsersController < ApplicationController
       end
       # send email
       UserMailer.deliver_activation current_user
+      # create friend/comrade suggestions??
+      current_user.create_friend_suggestions
+      current_user.servers.each do |s|
+        current_user.create_comrade_suggestions s
+      end
       flash[:notice] = "激活成功"
     end
     redirect_back_or_default('/login')
