@@ -4,9 +4,7 @@ class Guestbook < ActiveRecord::Base
 
   belongs_to :user
 
-  validates_presence_of :user_id, :message => "不能为空"
-
-	validates_presence_of :email, :message => "不能为空"
+  validate_on_create :user_or_email_exists
 
   validates_presence_of :description, :message => "不能为空"
 
@@ -18,8 +16,7 @@ class Guestbook < ActiveRecord::Base
 
   validates_inclusion_of :catagory, :in => ErrorElements, :message => "类型不对" 
 
-  attr_readonly :user_id, :catagory, :priority
-
+  # 不能让用户修改这2个域
   attr_protected :reply, :done_date
 
   attr_accessor :recently_reply_to_poster
@@ -28,6 +25,14 @@ class Guestbook < ActiveRecord::Base
     self.recently_reply_to_poster = true
     self.reply = text
     self.save
+  end
+
+protected
+
+  def user_or_email_exists
+    if user_id.blank? and email.blank?
+      errors.add(:user_id, 'email或者用户id不能为空')
+    end
   end
 
 end
