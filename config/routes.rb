@@ -2,7 +2,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :collection => {:search => :get}
 
-	map.resources :guestbooks
+	map.resources :guest_books, :controller => 'guestbooks'
 
   map.resources :game_details, :controller => 'games'
 
@@ -270,6 +270,8 @@ ActionController::Routing::Routes.draw do |map|
     users.search_users '/search_users', :controller => 'search', :action => 'user'
 
     users.resources :news
+
+    users.resources :guestbooks
 
     users.resources :contacts, :controller => 'email_contacts', :collection => {:sina => :get, :netease => :get, :hotmail => :get, :yahoo => :get, :gmail => :get, :msn => :get}
   end

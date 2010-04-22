@@ -40,7 +40,7 @@ protected
 			return "投票"
 		when /guild/
 			return "工会"
-		when /sharing/
+		when /share/
 			return "分享"
 		when /games/
 			return "游戏"

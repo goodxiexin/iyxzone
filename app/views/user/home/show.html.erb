@@ -76,6 +76,7 @@
                     <div class="d6-list s_clear">
 											<ul>
 											<% @friend_suggestions.each do |f| %>
+                        <% f = f.suggested_friend %>
 												<li>
 													<%= avatar f, :size => :medium, :class => "imgbox01" %>
 													<p>
