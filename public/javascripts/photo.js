@@ -841,7 +841,8 @@ Iyxzone.Photo.Slide3 = Class.create({
         this.frames[pos + index - idPos].addClassName('now');
       }
       $('picture').update("<img src='" + img.src + "' />");
-      $('notation').update(this.notations[index].escapeHTML().gsub('\n', '<br/>'));
+      if(this.notations[index] && this.notations[index] != '')
+        $('notation').update(this.notations[index].escapeHTML().gsub('\n', '<br/>'));
     }.bind(this));
     this.frames[idx].update(a);
     //this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";

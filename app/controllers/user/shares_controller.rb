@@ -4,7 +4,7 @@ class User::SharesController < UserBaseController
 
   PER_PAGE = 10
 
-  ShareCategory = ['all', 'blog', 'video', 'link', 'photo', 'album', 'poll', 'game', 'profile', 'topic']
+  ShareCategory = ['all', 'blog', 'video', 'link', 'photo', 'album', 'poll', 'game', 'profile', 'topic', 'news']
 
   def hot
     @shares = Share.hot(ShareCategory[params[:type].to_i]).paginate :page => params[:page], :per_page => PER_PAGE

@@ -288,7 +288,9 @@ class User < ActiveRecord::Base
     user.has_many :profile_sharings, :conditions => {:shareable_type => 'Profile'}
 
     user.has_many :topic_sharings, :conditions => {:shareable_type => 'Topic'}
-  
+ 
+    user.has_many :news_sharings, :conditions => {:shareable_type => 'News'}
+ 
   end
 
   has_many :shares, :through => :sharings, :order => 'created_at DESC'
@@ -312,6 +314,8 @@ class User < ActiveRecord::Base
     user.has_many :profile_shares, :through => 'profile_sharings'
 
     user.has_many :topic_shares, :through => 'topic_sharings'
+
+    user.has_many :news_shares, :through => 'news_sharings'
 
   end
 

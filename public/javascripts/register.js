@@ -310,7 +310,7 @@ Object.extend(Iyxzone.Register, {
       return;
     }
 
-    if(this.gameSelectors.keys().count == 0){
+    if(this.gameSelectors.keys().length == 0){
       tip("至少要有1个游戏角色");
       return;
     }

@@ -84,6 +84,11 @@
             <% else %>
               <li><%= link_to "<span>话题</span>", shares_url(:uid => @user.id, :type => 9) %></li>
             <% end %>
+            <% if params[:type].to_i == 10 %>
+              <li class="hover"><%= link_to "<span>拾闻</span>", shares_url(:uid => @user.id, :type => 10) %></li>
+            <% else %>
+              <li><%= link_to "<span>拾闻</span>", shares_url(:uid => @user.id, :type => 10) %></li>
+            <% end %>
           </ul>
         </div>
         <div class="feed-img-list rows">
