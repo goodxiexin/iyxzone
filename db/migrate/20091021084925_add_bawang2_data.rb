@@ -27,28 +27,6 @@ GameProfession.create(
 GameProfession.create(
         :name => "剑客",                                                          
         :game_id => 65)
-gamearea1 = GameArea.create(
-          :name => "电信",
-          :game_id => 65)
-GameServer.create(
-          :name => "电信一区",
-          :game_id => 65,
-          :area_id => gamearea1.id)
-GameServer.create(
-          :name => "电信二区",
-          :game_id => 65,
-          :area_id => gamearea1.id)
-GameServer.create(
-          :name => "上古英雄",
-          :game_id => 65,
-          :area_id => gamearea1.id)
-gamearea2 = GameArea.create(
-          :name => "网通",
-          :game_id => 65)
-GameServer.create(
-          :name => "网通一区",
-          :game_id => 65,
-          :area_id => gamearea2.id)
   end
 
   def self.down
