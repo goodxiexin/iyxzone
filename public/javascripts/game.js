@@ -222,7 +222,7 @@ Iyxzone.Game.Selector = Class.create({
         if(this.details.no_areas){
           this.updateAreaInfoDiv('该游戏没有服务区');
           if(this.details.no_servers){
-            this.updateServerInfoDiv('该游戏的服务器还没统计');
+            this.updateServerInfoDiv('该游戏的服务器还没统计,因此不能注册。请通知我们，我们会火速加上');
           }else{
             this.setupServerInfo(this.details.servers);
           }

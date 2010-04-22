@@ -178,7 +178,7 @@ Object.extend(Iyxzone.Register, {
     }
 
     if(!parseInt(level)){
-      this.error(div, '等级不合法');
+      this.error(div, '等级必须是数字');
       return false;
     }
 
