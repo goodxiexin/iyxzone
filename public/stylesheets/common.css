@@ -1,7 +1,8 @@
-body{font-size:12px;font-family:Arial,Simsun,"宋体",Helvetica;color:#0a3100;}
+body{font-size:12px;font-family:Arial,Simsun,"宋体",Helvetica;color:#0a3100;height:100%}
 body,div,form,img,ul,li,p,pre,button,dd,dt,dl{margin:0; padding:0;border:0;}
 table{border:0;border-collapse:collapse;border-spacing:0;}
 h1,h2,h3,h4,h5,h6,fieldset{margin:0; padding:0;}
+
 
 ul {list-style:none;}
 input{font-size:12px;vertical-align:middle}
@@ -55,7 +56,7 @@ a:active {text-decoration: none;}
 .rows,.buttons{clear:both;}
 
 .blk{display:block}
-.nowrap{overflow:hidden;text-overflow:ellipsis;word-break:keep-all;white-space:nowrap;display:inline-block}
+.nowrap,.member-name,.role-name{overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;display:inline-block;}
 
 .top-banner{margin:0 auto 1px auto;width:940px;overflow:hidden}
 .welcome-box .top-banner{width:970px;}
@@ -127,6 +128,7 @@ table.center td{vertical-align:top}
 .collection{width:100%;}
 .collection td{text-align:center;overflow:hidden;vertical-align:top;}
 .collection li{float:left;text-align:center;overflow:hidden}
+.collection li span{overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;display:inline-block;width:60px}
 .collection td p,.collection li p{margin-top:2px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 .collection .middle{width:100%;height:60px;}
 /*图片展示*/
@@ -181,9 +183,10 @@ table.center td{vertical-align:top}
 .icon-up{background-position:0 -832px;}
 .icon-down{background-position:0 -848px;}
 
-.quote-start,.quote-end{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:16px;height:16px; vertical-align:middle;}
+.quote-start,.quote-end,.icon-movie{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:16px;height:16px; vertical-align:middle;}
 .quote-start{background-position:-108px -72px;margin-right:5px}
 .quote-end{background-position:-124px -73px;margin-left:5px}
+.icon-movie{width:18px;height:10px;background-position:-147px -74px;}
 
 .i-avatar{background-position:0 -480px;}
 .i-mail{background-position:0 -496px;}
@@ -341,10 +344,11 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 .tab01 li.nobg a:hover{text-decoration:underline}
 
 .tab01 .right{word-spacing:10px;position:relative;z-index:10}
+.tab01 .right .icon-movie{margin:0 20px 0 0;_margin:8px 20px 0 0;_vertical-align:text-bottom}
 .tab01 .right a,.tab01 .gray a:hover{color:#D63200}
 .tab01 .gray a{color:#7E7F80}
 .tab01 .right a:hover{text-decoration:underline}
-.tab01 .icon{/*position:absolute;right:14px;top:0;*/float:right}
+.tab01 .icon{float:right}
 .tab01 .icon a{display:block;float:left;height:30px;line-height:30px;margin-left:15px;padding-left:22px;color:#D63200}
 .tab01 .icon a:hover{ text-decoration:underline}
 .tab01 .icon a.inbox-read{background:url(../images/icons/homeIcons.gif) no-repeat 0 -1073px;}
@@ -612,10 +616,11 @@ a.msg-btn{background-position:-118px -186px}
 .im-bar .foot{border-top:1px solid #d5e8c8;padding:10px;}
 .im-manage,.im-manage:hover{width:56px;padding-left:23px;height:18px;line-height:18px;display:inline-block;background-position:-25px 0;color:#25700d}
 	
-.im-dialog{border:1px solid #91ca4f;background:#fff;position:absolute;z-index:800;width:350px;}
+.im-dialog{position:absolute;z-index:800;width:350px;}
+.im-dialog .mask-con{border:1px solid #91ca4f;background:#fff;}
 .im-dialog .head{border:1px solid #a7cd65;background:#7fb73d;padding:5px;color:#fff;font-weight:700}
 .im-dialog .con{border-top:1px solid #73a637;padding:10px;}
-	.im-dlg-show{overflow-x:hidden;overflow-y:auto;height:180px}
+	.im-dlg-show{overflow-x:hidden;overflow-y:auto;height:180px;zoom:1}
 	.im-dlg-show h4{color:#25700d;font-size:12px}
 	.im-dlg-show h4.own{color:#ec7a0b}
 	.im-dlg-show p{color:#666;margin:5px 0}
@@ -645,3 +650,10 @@ div.tip{color:#999;padding:10px 25px}
 .pagination span.current {font-weight: bold;border-color:#fff;font-weight:bold;color:#25700D}
 .pagination a {text-decoration: none;border:1px #E7F0E0 solid;color:#7E7F80;background:#fff}
 .pagination a:hover, .pagination a:focus {color:#D63200;}
+
+/*遮罩层*/
+.mask-layer{position:fixed;_position:absolute;top:0;left:0;z-index:999;width:100%;height:100%;background:transparent;}
+.mask-layer iframe{width:100%;height:100%;border:0;filter:mask();}
+.mask-wrap{position:relative;width:100%;height:100%;}
+.mask-iframe{position:absolute;width:100%;height:100%;border:0;top:0;left:0;z-index:-1;}
+.mask-iframe iframe{width:100%;height:100%;border:0;}

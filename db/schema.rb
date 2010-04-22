@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD:db/schema.rb
 ActiveRecord::Schema.define(:version => 20100420164437) do
+=======
+ActiveRecord::Schema.define(:version => 20100422072054) do
+>>>>>>> 03f3b64f2f983dcf950a265d203a18694d61e752:db/schema.rb
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -336,7 +340,6 @@ ActiveRecord::Schema.define(:version => 20100420164437) do
 
   create_table "guestbooks", :force => true do |t|
     t.integer  "user_id"
-    t.string   "email"
     t.text     "description"
     t.integer  "priority"
     t.date     "done_date"

@@ -39,8 +39,8 @@ protected
 		when /poll/
 			return "投票"
 		when /guild/
-			return "工会"
-		when /share/
+			return "公会"
+		when /sharing/
 			return "分享"
 		when /games/
 			return "游戏"
