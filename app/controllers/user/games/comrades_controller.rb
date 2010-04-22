@@ -6,7 +6,7 @@ class User::Games::ComradesController < UserBaseController
 		@comrades = []
 		if @playing
       servers = current_user.servers.all(:conditions => { :game_id => @game.id})
-		  @comrades = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => {:server_id => servers.map(&:id)}
+		  @comrades = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => "server_id IN (#{servers.map(&:id).join(',')}) AND activated_at IS NOT NULL") 
     end
 	end
 
@@ -14,7 +14,7 @@ class User::Games::ComradesController < UserBaseController
 		@comrades = []
 		if @playing
 			servers = current_user.servers.all(:conditions=> { :game_id => @game.id})
-      @comrades = GameCharacter.all :conditions => {:server_id => servers.map(&:id)}
+      @comrades = GameCharacter.all :conditions => "server_id IN (#{servers.map(&:id).join(',')}) AND activated_at IS NOT NULL"
 		end
     @characters = User.search(params[:key]).map {|user| user.characters}.flatten
 		@comrades = @characters & @comrades

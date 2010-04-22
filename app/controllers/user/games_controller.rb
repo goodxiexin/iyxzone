@@ -36,9 +36,9 @@ class User::GamesController < UserBaseController
 		
 		if current_user.has_game? @game
       servers = current_user.servers.all(:conditions => {:game_id => @game.id})
-      @comrades = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:server_id => servers.map(&:id)})
+      @comrades = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => "server_id IN (#{servers.map(&:id).join(',')}) AND activated_at IS NOT NULL")
 		end
-		@players = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:game_id => @game.id})
+		@players = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => "game_id = #{@game.id} AND activated_at IS NOT NULL")
     
     @attention = @game.attentions.find_by_user_id(current_user.id)
     @messages = @game.comments.paginate :page => params[:page], :per_page => 10
