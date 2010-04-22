@@ -8,6 +8,8 @@ Iyxzone.News.Builder.SWFUploader = Class.create({
 
     swfu: null,
 
+    newsID: null,
+
     initialize: function(token, sessionKey, cookieValue){
       this.token = token;
       this.sessionKey = sessionKey;
@@ -53,7 +55,7 @@ Iyxzone.News.Builder.SWFUploader = Class.create({
         upload_error_handler : this.uploadError,
         upload_success_handler : this.uploadSuccess,
         upload_complete_handler : this.uploadComplete,
-        queue_complete_handler : this.queueComplete,
+        queue_complete_handler : this.queueComplete.bind(this) // bind(this)是为了能够取到newsID
       };
   
       this.swfu = new SWFUpload(this.settings); 
@@ -174,7 +176,7 @@ Iyxzone.News.Builder.SWFUploader = Class.create({
     },
 
     queueComplete: function(numFilesUploaded){
-      window.location.href = '/admin/news_pictures/edit_multiple?newsID=' + this.newsID;
+      window.location.href = '/admin/news/' + this.newsID + '/pictures/edit_multiple';
     }
 
 });
