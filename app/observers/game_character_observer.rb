@@ -21,14 +21,11 @@ class GameCharacterObserver < ActiveRecord::Observer
 
   def after_update character
     # issue feeds
-		recipients = [character.user.profile, character.game, character.guild]
+		recipients = [character.user.profile, character.game]
 		recipients.concat character.user.friends
-    puts "recipients: #{recipients}"
     if character.playing and !character.playing_was
-puts "开始不玩"
       character.deliver_feeds :recipients => recipients, :data => {:type => 1}
     elsif !character.playing and character.playing_was
-puts "开始玩"
       character.deliver_feeds :recipients => recipients, :data => {:type => 2}
     end
   end

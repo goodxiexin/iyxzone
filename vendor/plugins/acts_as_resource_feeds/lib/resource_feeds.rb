@@ -34,9 +34,7 @@ module ResourceFeeds
 				values = []
 				# use self.class.name rather than item.originator_type ensures correct class name
 				opts[:recipients].each do |recipient|
-				puts "recipient: #{recipient}"
-puts "id: #{recipient.id}"
-	values << "(NULL, #{recipient.id}, '#{recipient.class.to_s}', #{item.id}, '#{self.class.name}', '#{Time.now.to_s(:db)}')"
+	        values << "(NULL, #{recipient.id}, '#{recipient.class.to_s}', #{item.id}, '#{self.class.name}', '#{Time.now.to_s(:db)}')"
 				end
 				sql = "insert into feed_deliveries values #{values.join(',')}"
 				ActiveRecord::Base.connection.execute(sql)	
