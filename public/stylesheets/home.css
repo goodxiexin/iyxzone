@@ -144,6 +144,15 @@ a:hover{color:#D63200;}
 .feed-box .feed-list-box{margin-bottom:20px;zoom:1;overflow:hidden;clear:both}
 .feed-box .feed-img-list{margin-bottom:20px;position:relative;zoom:1}
 
+.welcome-once{font-size:14px;}
+.welcome-once h2{font-weight:700;font-size:16px;line-height:30px;text-align:center;color:#D63200}
+.welcome-once p{text-indent:2em}
+.home-video{text-align:center;}
+.home-avatar-list{margin-bottom:10px}
+.home-avatar-list .title{font-size:14px;font-weight:700;line-height:30px}
+.home-avatar-list .d6-list{height:260px;max-height:260px;overflow-x:hidden;overflow-y:auto;border:1px solid #BBD2AA}
+.home-avatar-list .d6-list li{width:160px;margin:5px}
+
 .feed-list-box h4{color:#D63200}
 .feed-list-box .feed-list{padding-left:34px;_height:24px;min-height:24px}
 .feed-list-box .feed-list .feed-icon{/*position:absolute;left:0;top:0;*/float:left;width:16px;height:16px;overflow:hidden;margin-top:3px}
