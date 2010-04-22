@@ -21,9 +21,9 @@ class CreateUsers < ActiveRecord::Migration
       t.datetime :last_seen_at
 			
 			# settings
-			t.integer :privacy_setting, :limit => 8, :default => PrivacySetting.default
-			t.integer :mail_setting, :limit => 8, :default => MailSetting.default  
-			t.integer :application_setting, :limit => 8, :default => ApplicationSetting.default
+			t.integer :privacy_setting, :limit => 8, :default => 0
+			t.integer :mail_setting, :limit => 8, :default => 0
+			t.integer :application_setting, :limit => 8, :default => 0
 
       # counters
       t.integer :characters_count, :default => 0 

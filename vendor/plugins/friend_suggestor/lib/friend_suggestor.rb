@@ -46,7 +46,7 @@ module FriendSuggestor
 		end
 
     # radom picked users
-    User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :except => friends.map(&:id).concat([self.id]), :conditions => "activated_at IS NOT NULL").each do |u|
+    User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :except => friends.to_a.concat([self]), :conditions => "activated_at IS NOT NULL").each do |u|
       friend_suggestions[u.id] += 1 # 加1分
     end
 
@@ -62,12 +62,10 @@ module FriendSuggestor
 	def fetch_friend_suggestions
     # 放后台去，这个还比较好办
     # 因为这个不像推荐战友，推荐好友为空几乎是不可能的
-=begin
     if friend_suggestions.count == 0
       self.create_friend_suggestions # this should happen barely
       self.reload
     end
-=end
 
     friend_suggestions
   end
@@ -117,13 +115,11 @@ module FriendSuggestor
     # 本来这里，如果没有的话(或者推荐的玩家很少的时候)，就进行计算
     # 但是考虑到如果该游戏玩家基本没有，那岂不是每次都要计算，而且计算一次的开销较大
     # 所以现在就把计算放到了后台，当服务器比较空闲的时候就计算下
-=begin 
     if suggestions.blank?
       self.create_comrade_suggestions server # this happens barely
       self.reload
       suggestions = comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id})
     end
-=end
   end
 
   def create_comrade_suggestions server

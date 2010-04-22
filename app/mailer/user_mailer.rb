@@ -1,6 +1,6 @@
 class UserMailer < ActionMailer::Base
 
-  layout 'mail', :only => [:activation, :forgot_password, :reset_password]
+  layout 'mail', :only => [:signup_notification, :activation, :forgot_password, :reset_password]
 
   def long_time_no_seen user
     setup_email user
