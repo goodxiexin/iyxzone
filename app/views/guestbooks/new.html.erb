@@ -1,0 +1,76 @@
+<%= javascript_include_merged :defaults %>
+<p class="z-h s_clear">
+  <strong class="left">汇报错误</strong>
+  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
+</p>
+
+<div class="z-con">
+  <div id='error'></div>
+  <% form_remote_for :guestbook, :url => guestbooks_url, :html => {:method => :post, :onsubmit => "return false"} do |f| %>
+  <%= hidden_field_tag 'guestbook[priority]', 1, :id => 'priority_field' %>
+  <div class='formcontent'>
+    <div class="rows s_clear">
+
+		<% unless current_user %>	
+      <div class="fldid"><label for="email">您的E-mail:</label></div>
+      <div class="fldvalue">
+        <%= f.text_field 'email', :onblur => "checkemail();" %>
+			<span id= "email_error_msg"> </span>
+      </div>
+			
+		<% end %>
+		</div>
+			
+    <div class="rows s_clear">
+      <div class="fldid"><label for="des">错误描述:</label>
+			<span id= "description_error_msg"> </span>
+		</div>
+      <div class="fldvalue">
+        <%= f.text_area 'description'  %>
+      </div>
+    </div>
+    <div class="rows s_clear">
+      <div class="fldid"><label for="des">错误分类:</label></div>
+      <div class="fldvalue">
+        <%= collection_select :guestbook, :catagory , @error_elements, 'to_s', "to_s", {:prompt => '---'} %>
+      </div>
+    </div>
+  </div>
+  <div class="z-submit s_clear space">
+    <table class="center" cellpadding="0"><tr><td>
+      <span class="button"><span><button type="submit" onclick="$('priority_field').value=2" id='button2'>这错误难以忍受！</button></span></span>
+      <span class="button"><span><button type="submit" onclick="$('priority_field').value=1" id='button1'>这错误让人不爽！</button></span></span>
+    </td></tr></table>
+  </div>
+  <% end %>
+</div>
+
+
+<script type="text/javascript">
+	function check_email(){
+		if (!$('guestbook_email').value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
+			$('email_error_msg').update('非法的邮件格式');
+			return false;
+		}
+		else{
+			$('email_error_msg').value = 'OK';
+			return true;
+		}
+	}
+	function check_description(){
+		if ($('guestbook_description').value == ''){
+			$('description_error_msg').update('描述不能为空');
+			return false;
+		}
+		else{
+			$('description_error_msg').update('');
+			return true;
+		}
+	}
+	function try_submit(){
+	if (!checkemail()) {
+		Iyxzone.disableButton($(button2),'请等待..'); 
+		Iyxzone.disableButton($(button1), '感谢您的参与');
+		} 
+	}
+</script>
