@@ -7807,6 +7807,21 @@ aRecord.servers.create(:name => '群雄逐鹿',  :game_id => thisgameid)
 			err.no_servers = true
 			err.save
 		end
+		count_errors = Game.find(:all, :conditions => ["no_areas= false and areas_count =0"])
+		count_errors.each do |err|
+			err.no_areas = true
+			err.save
+		end
+		count_errors = Game.find(:all, :conditions => ["no_professions = false and professions_count =0"])
+		count_errors.each do |err|
+			err.no_professions = true
+			err.save
+		end
+		count_errors = Game.find(:all, :conditions => ["no_races = false and races_count =0"])
+		count_errors.each do |err|
+			err.no_races = true
+			err.save
+		end
 
 	end
 
