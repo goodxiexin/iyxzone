@@ -17,7 +17,7 @@
 	<% end %>
     <div class="box02 canvas_int space">
       <div class="tab tab01">
-        <div class="right"><%= link_to "写新日志", new_blog_url %></div>
+        <div class="right"><%= application_link %><%= link_to "写新日志", new_blog_url %></div>
         <ul>
           <% subject = get_subject @user %>
           <li><span><%= link_to "热门日志", hot_blogs_url %></span></li>
@@ -33,7 +33,10 @@
         <div class="myblog">
         <% if @count == 0 %>
           <% if @user == current_user %>
-          <div class='tip'>你还没有日志，赶紧<%= link_to '写一篇', new_blog_url %>?</h4>
+          <div class='tip'>你还没有日志，赶紧<%= link_to '写一篇', new_blog_url %>
+					<br/><br/>或者观看以下视频对这项功能进行进一步的了解，随时点击右上角<a href="#" class="icon-movie"></a>都可以观看此视频<br/><br/>
+					<%= application_show %>
+					</div>
           <% else %>
           <div class='tip'><%= subject %>还没写日志，是个懒虫</div>
           <% end %>

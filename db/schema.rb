@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100421120603) do
+ActiveRecord::Schema.define(:version => 20100422072054) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -336,7 +336,6 @@ ActiveRecord::Schema.define(:version => 20100421120603) do
 
   create_table "guestbooks", :force => true do |t|
     t.integer  "user_id"
-    t.string   "email"
     t.text     "description"
     t.integer  "priority"
     t.date     "done_date"
@@ -439,13 +438,11 @@ ActiveRecord::Schema.define(:version => 20100421120603) do
     t.integer  "digs_count",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "video_url"
-    t.string   "embed_html"
-    t.string   "thumbnail_url"
   end
 
   create_table "news_pictures", :force => true do |t|
     t.integer  "news_id"
+    t.string   "notation"
     t.integer  "parent_id"
     t.string   "content_type"
     t.string   "filename"
@@ -454,7 +451,6 @@ ActiveRecord::Schema.define(:version => 20100421120603) do
     t.integer  "width"
     t.integer  "height"
     t.datetime "updated_at"
-    t.string   "notation"
   end
 
   create_table "notices", :force => true do |t|

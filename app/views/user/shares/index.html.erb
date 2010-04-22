@@ -94,7 +94,10 @@
           <%= will_paginate @sharings %>
         <% else %>
           <% if @user == current_user %>
-            <div class='tip'>你啥都没分享，怎么能这样呢？！</div>
+            <div class='tip'>你啥都没分享，怎么能这样呢？！
+						<br/><br/>观看以下视频对这项功能进行进一步的了解，随时点击了解详情都可以观看此视频<br/><br/>
+						<%= application_show %>
+						</div>
           <% else %>
             <div class='tip'><%= get_subject @user %>都没分享，真是一个没情趣的人 </div>
           <% end %>

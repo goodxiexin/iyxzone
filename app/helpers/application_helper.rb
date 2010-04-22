@@ -378,5 +378,36 @@ module ApplicationHelper
       "视频新闻"
     end
   end
+	
+	def get_application
+		uri = URI.parse(request.env['HTTP_REFERER'])
+		path = uri.path
+		case path
+		when /blog/
+			return "日志" 
+		when /video/
+			return "视频"
+		when /event/
+			return "活动"
+		when /poll/
+			return "投票"
+		when /guild/
+			return "公会"
+		when /share/
+			return "分享"
+		end
+	end
+
+	def application_link
+	  name = get_application
+		app = Application.find(:first, :conditions => "name = '#{name}'")
+		link_to "", application_url(app) , :class=>"icon-movie", :alt => "操作视频"
+	end
+
+	def application_show
+	  name = get_application
+		app = Application.find(:first, :conditions => "name = '#{name}'")
+		app.about
+	end
 
 end
