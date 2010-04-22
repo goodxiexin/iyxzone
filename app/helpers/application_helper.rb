@@ -19,10 +19,13 @@ module ApplicationHelper
   end
 
 	def game_image(game_name, opts={})
+    size = opts.delete(:size)
 		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.jpg")
-			image_tag "/images/gamepic/#{game_name}.gif", opts
+      file_name = size.blank? ? "#{game_name}.gif" : "#{game_name}_#{size}.gif"
+			image_tag "/images/gamepic/#{file_name}", opts
 		else
-			image_tag "/images/gamepic/default.gif", opts
+      file_name = size.blank? ? "default.gif" : "default_medium.gif"
+			image_tag "/images/gamepic/#{file_name}", opts
 		end
 	end
 
