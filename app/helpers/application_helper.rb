@@ -383,9 +383,8 @@ module ApplicationHelper
   end
 	
 	def get_application
-		uri = URI.parse(request.env['HTTP_REFERER'])
-		path = uri.path
-		case path
+		uri = request.request_uri
+		case uri
 		when /blog/
 			return "日志" 
 		when /video/
@@ -404,13 +403,15 @@ module ApplicationHelper
 	def application_link
 	  name = get_application
 		app = Application.find(:first, :conditions => "name = '#{name}'")
-		link_to "", application_url(app) , :class=>"icon-movie", :alt => "操作视频"
+    if !app.blank?
+		  link_to "", application_url(app) , :class=>"icon-movie", :alt => "操作视频"
+    end
 	end
 
 	def application_show
 	  name = get_application
 		app = Application.find(:first, :conditions => "name = '#{name}'")
-		app.about
+		app.about if !app.blank?
 	end
 
 end
