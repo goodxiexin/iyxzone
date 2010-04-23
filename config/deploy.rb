@@ -24,6 +24,7 @@ after "deploy:update_code", "deploy:pack_js"
 
 after "deploy:symlink", "assets:symlink"
 after "deploy:symlink", "deploy:chown_deployer"
+after "deploy:symlink", "deploy:clear_online_records"
 
 namespace :deploy do
 
@@ -136,6 +137,11 @@ ActionMailer::Base.delivery_method = :activerecord
     :environment: :production
     CMD
     put juggernaut_hosts_config, "#{release_path}/config/juggernaut_hosts.yml"
+  end
+
+  desc "clear onlineuser table"
+  task :clear_online_record, :roles => :db do
+    run "cd #{current_release} && rake juggernaut:delete_all_online_records"
   end
 
 end

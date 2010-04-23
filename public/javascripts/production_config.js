@@ -1,5 +1,5 @@
 Object.extend(Iyxzone, {
 
-  SiteURL: "http://17gaming.com"
+  SiteURL: "http://www.17gaming.com"
 
 });
