@@ -142,7 +142,7 @@ end
 
 namespace :assets do
 
-  ASSETS = %w(photos game_details area_details regions cities blog_images news_pictures)
+  ASSETS = %w(photos regions cities blog_images news_pictures)
 
   desc "preserve resources across deployment"
   task :symlink, :roles => :app do

@@ -12,37 +12,7 @@ namespace :games do
 
   desc "显示不干净的数据"
   task :show_dirty_data => :environment do
-    games = Game.all.select {|g| ((g.servers.count != 0) and g.no_servers) or ((g.servers.count == 0) and !g.no_servers)}
-    puts "no_servers标志位不对的有#{games.count}个"
-    if !games.blank?
-      games.each do |g|
-        puts "ID: #{g.id}, name: #{g.name}, no_servers: #{g.no_servers}, servers.count: #{g.servers.count}"
-      end
-    end
-
-    games = Game.all.select {|g| ((g.areas.count != 0) and g.no_areas) or ((g.areas.count == 0) and !g.no_areas)}
-    puts "no_areas标志位不对的有#{games.count}个"
-    if !games.blank?
-      games.each do |g|
-        puts "ID: #{g.id}, name: #{g.name}, no_areas: #{g.no_areas}, areas.count: #{g.areas.count}"
-      end
-    end
-
-    games = Game.all.select {|g| ((g.races.count != 0) and g.no_races) or ((g.races.count == 0) and !g.no_races)}
-    puts "no_races标志位不对的有#{games.count}个"
-    if !games.blank?
-      games.each do |g|
-        puts "ID: #{g.id}, name: #{g.name}, no_races: #{g.no_races}, races.count: #{g.races.count}"
-      end
-    end
-
-    games = Game.all.select {|g| ((g.professions.count != 0) and g.no_professions) or ((g.professions.count == 0) and !g.no_professions)}
-    puts "no_professions标志位不对的有#{games.count}个"
-    if !games.blank?
-      games.each do |g|
-        puts "ID: #{g.id}, name: #{g.name}, no_professions: #{g.no_professions}, professions.count: #{g.professions.count}"
-      end
-    end
+    games = Game.all.map(&:name) - Game.all.map(&:name).uniq
 
     ret = [] 
     GameArea.all.select do |a|
