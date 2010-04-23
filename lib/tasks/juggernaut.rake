@@ -1,4 +1,4 @@
-namespace :system do
+namespace :juggernaut do
 
   desc "提醒要维护了"
   task :send_maintainence_notification => :environment do

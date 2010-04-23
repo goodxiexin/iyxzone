@@ -275,13 +275,13 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 
 /*顶部导航条*/
-.logo-top{width:120px;height:40px;display:block;position:absolute;left:5px;top:5px;cursor:pointer;background:url(../images/skin/logo.png) no-repeat;}
+.logo-top{width:150px;height:40px;display:block;position:absolute;left:5px;top:5px;cursor:pointer;background:url(../images/skin/logo.png) no-repeat;}
 
 #navbar{padding-left:9px;height:42px;background-image:url(../images/skin/navbar01.gif);background-repeat:no-repeat;}
 #navbar #navwrap{padding-right:9px;height:100%;background-image:url(../images/skin/navbar01.gif);background-repeat:no-repeat;background-position:right -45px;}
 #navbar #navwrap #navmid{height:100%;background-image:url(../images/skin/navbar01.gif);background-repeat:repeat-x;background-position:right -90px;position:relative;z-index:30}
 
-#navbar #navmain{_display:inline;float:left;margin-left:151px;height:100%;position:relative;z-index:2}
+#navbar #navmain{_display:inline;float:left;/*margin-left:151px;*/margin-left:175px;height:100%;position:relative;z-index:2}
 #navbar #navmain #navmain-title li{float:left;margin-left:1px;position:relative}
 #navbar #navmain #navmain-title a{display:inline-block;height:42px;line-height:41px;_line-height:42px;font-size:14px;font-weight:bold;cursor:pointer;background-repeat:repeat-x;}
 #navbar #navmain #navmain-title a span{display:block;padding:0 15px 0 27px;background-repeat:no-repeat}
@@ -616,8 +616,9 @@ a.msg-btn{background-position:-118px -186px}
 .im-bar .foot{border-top:1px solid #d5e8c8;padding:10px;}
 .im-manage,.im-manage:hover{width:56px;padding-left:23px;height:18px;line-height:18px;display:inline-block;background-position:-25px 0;color:#25700d}
 	
-.im-dialog{position:absolute;z-index:800;width:350px;}
-.im-dialog .mask-con{border:1px solid #91ca4f;background:#fff;}
+.im-dialog{position:absolute;z-index:800;width:350px;border:1px solid #91ca4f;background:#fff;}
+/*.im-dialog .mask-con{border:1px solid #91ca4f;background:#fff;}
+*/
 .im-dialog .head{border:1px solid #a7cd65;background:#7fb73d;padding:5px;color:#fff;font-weight:700}
 .im-dialog .con{border-top:1px solid #73a637;padding:10px;}
 	.im-dlg-show{overflow-x:hidden;overflow-y:auto;height:180px;zoom:1}
