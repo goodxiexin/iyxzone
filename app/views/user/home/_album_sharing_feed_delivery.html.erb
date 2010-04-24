@@ -11,7 +11,7 @@
       <% end %>
 		  <%= profile_link sharing.poster %> 分享了相册 <%= album_link album, :class => "shine" %>
 	    <p class="grayi jl-con"></p>
-      <p><%= album_cover album, :class => 'imgbox01' %></p>
+      <p class='con space'><span class='share-album-cover'><%= album_cover album, :class => 'imgbox01', :width => 75, :height => 75, :size => 'large' %></span></p>
       <p class='gray'><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id});", :class => "gray"%></p>
 	    <%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => sharing, :recipient => sharing.poster} %>
     </div>

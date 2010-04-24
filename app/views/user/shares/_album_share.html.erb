@@ -10,10 +10,10 @@
 			<%= profile_link first_sharer %>
     </div>
     <h3>相册: <%= link_to h(sharing.title), eval("#{album.class.name.underscore}_url(album)"), :popup => true %></h3>
-    <p class="con">
-      <%= album_cover album, :class => 'imgbox01', :size => :small, :popup => true %>
-      <%= sharing_reason sharing %>
+    <p class="con space">
+      <span class="share-album-cover"><%= album_cover album, :class => 'imgbox01', :size => :large, :width => 75, :height => 75, :popup => true %></span><br/>
     </p>
+    <%= sharing_reason sharing %>
     <div class="feeds">
       <%= link_to_function "评论(#{sharing.comments_count})", "iyxzone.comment.togglebox('sharing', #{sharing.id}, #{sharing.comments_count})" %>
       <% if !is_mine %> 
