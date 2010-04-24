@@ -8,7 +8,7 @@
 		<span><%= poke_action poke_delivery %></span>
 	</div>
   <div class='operation'>
-    <%= link_to 'reply', new_poke_url(:id => poke_delivery.sender_id), :rel => 'facebox' %> |
+    <%= facebox_link 'reply', new_poke_url(:id => poke_delivery.sender_id) %> |
     <%= facebox_confirm 'delete', poke_url(poke_delivery), {:method => :delete, :msg => '你确定要删除这条招呼吗'} %> 
   </div>
 </div>

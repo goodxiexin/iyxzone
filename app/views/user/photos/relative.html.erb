@@ -20,7 +20,7 @@
         <% if @user == current_user %>
         <div class="right">
           <%= link_to "上传照片", select_personal_albums_url(:uid => @user.id) %>
-          <%= link_to "新建相册", new_personal_album_url, :rel => 'facebox' %>
+          <%= facebox_link "新建相册", new_personal_album_url %>
         </div>
         <% end %>
         <ul>

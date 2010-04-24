@@ -6,10 +6,9 @@
   <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
 	  <div class="img left"><div class="imgbox01"><%= avatar sharing.poster %></div></div>
 	  <div class="jl-list-con jl-cutline">
-    <% if delivery.is_deleteable_by? current_user %>
-      <%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
-    <% end %>
-	  <div class="jl-list-con jl-cutline">
+      <% if delivery.is_deleteable_by? current_user %>
+        <%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
+      <% end %>
 		  <%= profile_link sharing.poster %> 分享了相册 <%= album_link album, :class => "shine" %>
 	    <p class="grayi jl-con"></p>
       <p><%= album_cover album, :class => 'imgbox01' %></p>

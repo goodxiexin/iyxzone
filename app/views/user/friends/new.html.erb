@@ -60,7 +60,7 @@
 
 	<div class="multibox">
 		<div class="title"><b></b></div>
-		<strong><%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id), :rel => 'facebox' %></strong> 或者 <strong><%= link_to "发站内信", new_mail_url(:recipient_ids => [@user.id]) %></strong>
+		<strong><%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %></strong> 或者 <strong><%= link_to "发站内信", new_mail_url(:recipient_ids => [@user.id]) %></strong>
 	</div>
 
 <% unless @common_friends.blank? %>

@@ -140,8 +140,8 @@ ActionMailer::Base.delivery_method = :activerecord
   end
 
   desc "clear onlineuser table"
-  task :clear_online_record, :roles => :db do
-    run "cd #{current_release} && rake juggernaut:delete_all_online_records"
+  task :clear_online_records, :roles => :db do
+    run "cd #{current_release} && RAILS_ENV=production rake juggernaut:delete_all_online_records"
   end
 
 end
