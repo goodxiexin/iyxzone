@@ -10,7 +10,7 @@
 			<%= profile_link first_sharer %>
     </div>
     <h3>
-      <a href="#" class="left"><img class="imgbox01" src="images/photo/photo11.png" alt="" /></a>
+      <a href="#" class="left"><%= game_image game.name, :class => 'game-m' %></a>
       <span>
         游戏: <%= link_to h(sharing.title), game_url(game), :popup => true %>
       </span>

@@ -153,7 +153,6 @@ namespace :games do
 
       # 修正server输入2遍的
       # 不太好检查，很多server名字都一样
-
       # 修正area 输入2遍的
       # 修正race 输入2遍的
       # 修正profession输入2遍的

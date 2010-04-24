@@ -50,4 +50,20 @@ class Game < ActiveRecord::Base
 		sale_date.nil? or sale_date > Date.today<<(12)
 	end  
 
+	def no_servers
+		servers_count == 0
+	end
+
+	def no_areas
+		areas_count == 0
+	end
+
+	def no_races
+		races_count == 0
+	end
+
+	def no_professions
+		professions_count == 0
+	end
+
 end
