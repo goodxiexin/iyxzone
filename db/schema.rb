@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100423034632) do
+ActiveRecord::Schema.define(:version => 20100425065936) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -296,10 +296,6 @@ ActiveRecord::Schema.define(:version => 20100423034632) do
     t.text     "description"
     t.float    "average_rating",             :default => 0.0
     t.boolean  "stop_running",               :default => false
-    t.boolean  "no_areas",                   :default => false
-    t.boolean  "no_servers",                 :default => false
-    t.boolean  "no_races",                   :default => false
-    t.boolean  "no_professions",             :default => false
     t.integer  "areas_count",                :default => 0
     t.integer  "servers_count",              :default => 0
     t.integer  "professions_count",          :default => 0
@@ -756,9 +752,9 @@ ActiveRecord::Schema.define(:version => 20100423034632) do
     t.integer  "avatar_id"
     t.string   "pinyin"
     t.datetime "last_seen_at"
-    t.integer  "privacy_setting",            :limit => 8,  :default => 0
-    t.integer  "mail_setting",               :limit => 8,  :default => 0
-    t.integer  "application_setting",        :limit => 8,  :default => 0
+    t.integer  "privacy_setting",            :limit => 8,  :default => 123076522
+    t.integer  "mail_setting",               :limit => 8,  :default => 562949953421311
+    t.integer  "application_setting",        :limit => 8,  :default => 262143
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
     t.integer  "game_attentions_count",                    :default => 0

@@ -219,9 +219,9 @@ Iyxzone.Game.Selector = Class.create({
         this.updateProfessionInfoDiv('');
     
         // set all informations
-        if(this.details.no_areas){
+        if(this.details.areas_count == 0){
           this.updateAreaInfoDiv('该游戏没有服务区');
-          if(this.details.no_servers){
+          if(this.details.servers_count == 0){
             this.updateServerInfoDiv('该游戏的服务器还没统计,因此不能注册。请通知我们，我们会火速加上');
           }else{
             this.setupServerInfo(this.details.servers);
@@ -230,13 +230,13 @@ Iyxzone.Game.Selector = Class.create({
           this.setupAreaInfo(this.details.areas);
         }
         
-        if(this.details.no_professions){
+        if(this.details.professions_count == 0){
           this.updateProfessionInfoDiv('该游戏没有职业');
         }else{
           this.setupProfessionInfo(this.details.professions);
         }
 
-        if(this.details.no_races){
+        if(this.details.races_count == 0){
           this.updateRaceInfoDiv('该游戏没有种族');
         }else{
           this.setupRaceInfo(this.details.races);
