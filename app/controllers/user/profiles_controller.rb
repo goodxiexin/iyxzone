@@ -9,7 +9,7 @@ class User::ProfilesController < UserBaseController
 	FetchSize = 5
 
   def show
-		@common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2]
+		@common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..5]
     @relationship = @user.relationship_with current_user
     # 个人主页可能是所有人都能看，所以要挑那些能看的显示
     @cond = get_privilege_cond @relationship

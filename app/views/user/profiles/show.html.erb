@@ -86,7 +86,7 @@
   </div>
   <div class="photolist-box">
     <ul class="collection s_clear">
-      <% @profile.viewings.each do |r| %>
+      <% @profile.viewings[0..5].each do |r| %>
         <li>
           <div class="middle"><div class="middle-center"><div class="center"><a href="#"><%= avatar r.viewer, :class => 'imgbox01' %></a></div></div></div>
           <p><%= profile_link r.viewer %></p>
@@ -129,7 +129,7 @@
   </div>
   <div class="photolist-box">
     <ul class="collection s_clear">
-      <% @user.friends.sort_by{rand}[0..2].each do |u| %>
+      <% @user.friends.sort_by{rand}[0..5].each do |u| %>
         <li>
           <div class="middle"><div class="middle-center"><div class="center"><a href="#"><%= avatar u, :class => 'imgbox01' %></a></div></div></div>
           <p><%= profile_link u %></p>
