@@ -12,6 +12,8 @@ Rails::Initializer.run do |config|
 
   config.gem "calendar_date_select"
 
+  config.cache_classes = true
+
 	config.cache_store = :mem_cache_store	
 
   config.load_paths += %W(#{RAILS_ROOT}/app/sweepers)

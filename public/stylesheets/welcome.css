@@ -28,7 +28,7 @@
 .site-info .time{color:#888;margin-right:10px;float:left}
 .site-info strong{color:#888;float:left;font-weight:400;display:block;width:180px}
 
-.welcome .right{margin-top:3px;width:618px;}
+.welcome .right{margin-top:3px;width:620px;}
 .welcome .right p.later{margin-top:17px;border:1px solid #acd296}
 .welcome .slogon-box{text-align:center;border:1px solid #acd296;background:#fff;padding-top:15px;}
 .slogon{background:url(../images/welcome/slogon-bg.png) no-repeat;width:465px;height:120px;padding-top:30px;*padding-top:40px;margin:0 auto}
@@ -72,6 +72,7 @@
 .regist-box .answer-box h3{padding-left:21px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -1358px;color:#25700D}
 
 .regist-box .edit .con p.foot {border-bottom:1px solid #9ACE5F;line-height:30px;margin:0 20px;}
+.regist-box .edit .con p.foot a.reg-role-add{background:url(../images/welcome/reg-role-add.png) no-repeat;width:162px;height:34px;display:block;margin:10px auto;}
 
 #footer{width:972px;margin:0 auto;padding:15px 0;}
 

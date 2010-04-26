@@ -79,7 +79,9 @@
         <div class="feed-img-list rows">
         <% if @shares.total_entries != 0 %>
           <% @shares.each do |share| %>
+<% cache("share-#{share.id}")do %>
             <%= render :partial => "#{share.shareable_type.underscore}_share", :locals => {:share => share, :sharing => share.sharings.first, :is_mine => false} %>
+<% end %>
           <% end %>
           <%= will_paginate @shares %>
         <% else %>

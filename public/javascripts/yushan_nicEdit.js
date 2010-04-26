@@ -1266,7 +1266,7 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
     var height = document.viewport.getHeight();
     var width = document.viewport.getWidth();
 
-    this.pane.contain.setStyle({'width' : '350px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 175) + 'px', 'z-index' : '9999'});
+    this.pane.contain.setStyle({'width' : '350px', 'overflow' : '', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 175) + 'px', 'z-index' : '9999'});
     this.pane.pane.setStyle({'width':'350px', 'border' : 'none', 'padding' : '0px'});
     this.pane.close.remove();
     this.pane.close = null;
@@ -1476,7 +1476,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
     var zBox = new bkElement('div').setStyle({'className': 'z-box', 'width': '450px'});
     zBox.innerHTML = this.paneHTML;
 
-    this.pane.contain.setStyle({'width' : '450px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 225) + 'px', 'z-index' : '9999'});
+    this.pane.contain.setStyle({'width' : '450px', 'overflow' : '', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 225) + 'px', 'z-index' : '9999'});
     this.pane.pane.setStyle({'width':'450px', 'border' : 'none', 'padding' : '0px'});
     this.pane.close.remove();
     this.pane.close = null;
@@ -1676,7 +1676,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
   symbols: [ '[惊吓]', '[晕]', '[流鼻涕]', '[挖鼻子]', '[鼓掌]', '[骷髅]', '[坏笑]', '[傲慢]', '[大哭]', '[砸头]', '[衰]', '[哭]', '[可爱]', '[冷汗]', '[抽烟]', '[擦汗]', '[亲亲]', '[糗]', '[吃惊]', '[左哼哼]', '[疑问]', '[惊恐]', '[睡觉]', '[皱眉头]', '[可怜]', '[打呵欠]', '[害羞]', '[花痴]', '[右哼哼]', '[囧]', '[大便]', '[咒骂]', '[贼笑]', '[嘘]', '[吐]', '[苦恼]', '[白眼]', '[流汗]', '[大笑]', '[羞]', '[撇嘴]', '[偷笑]', '[BS]', '[困]', '[火]', '[闭嘴]', '[抓狂]', '[强]', '[不行]', '[装酷]' ], 
 
   buildFaces: function(){
-    var zBox = new bkElement('div').setStyle({'className': 'z-box', 'width': '400px', 'overflow': 'hidden'});
+    var zBox = new bkElement('div').setStyle({'className': 'z-box', 'width': '400px'});
     
     var zt = new bkElement('div').setStyle({'className': 'z-t'});
     zt.innerHTML = '<span class="l"><strong></strong></span><span class="r"></span>';
@@ -1725,7 +1725,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
     emotBox.appendChild(div);
 
     var zb = new bkElement('div').setStyle({'className': 'z-b'});
-    zb.innerHTML = '<span class="l"><strong></strong></span>';
+    zb.innerHTML = '<span class="l"><strong></strong></span><span class="r"></span>';
     
     zBox.appendChild(zt);
     zBox.appendChild(zm);
@@ -1740,13 +1740,11 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
     var width = document.viewport.getWidth();
 
     var zBox = this.buildFaces();
-    
-    this.pane.contain.setStyle({'width' : '400px', 'overflow' : 'hidden', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 165) + 'px', 'z-index' : '9999'});
-    this.pane.pane.setStyle({'width':'400px', 'border' : 'none', 'padding' : '0px'});
+    this.pane.contain.setStyle({'width' : '400px', 'overflow': '', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 165) + 'px'});
+    this.pane.pane.setStyle({'width':'400px', 'padding' : '0px'});
     this.pane.close.remove();
     this.pane.close = null;//将pane上面叉号去掉
     this.pane.append(zBox.noSelect());
-
     this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
 	}
 });

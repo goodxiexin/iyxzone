@@ -52,7 +52,7 @@ module Shareable
     end
 
     def first_sharer
-      share.blank? ? nil : share.sharings.find(:first, :order => "created_at ASC").poster
+      share.blank? ? nil : share.first_sharer
     end
 
     def default_share_title

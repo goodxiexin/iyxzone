@@ -4,6 +4,10 @@ class Share < ActiveRecord::Base
 
   has_many :sharings, :order => 'created_at ASC', :dependent => :destroy
 
+  has_many :sharers, :source => :poster , :through => :sharings
+
+  has_one :first_sharer, :source => :poster, :through => :sharings, :order => "sharings.created_at DESC"
+
   named_scope :hot, lambda { |type|
     if type == 'all'
       { :conditions => ["created_at > ?", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC' }

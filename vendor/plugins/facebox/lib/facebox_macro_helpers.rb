@@ -6,10 +6,11 @@ module FaceboxMacroHelpers
     width = options.delete(:width) || DEFAULT_FACEBOX_WIDTH
     options = options.merge({
 			:rel => 'facebox',
+      :facebox_href => url,
       :facebox_width => width,
 			:facebox_type => 'normal'})
 
-    link_to text, url, options
+    link_to text, "javascript:void(0)", options
   end
 
 	def facebox_tip text, msg, options={}
@@ -27,8 +28,8 @@ module FaceboxMacroHelpers
     confirm_msg = confirm_options[:msg] || "你确定吗"
     method = confirm_options[:method] || 'post'
     options = html_options.merge({
-      :href => url, 
       :rel => 'facebox',
+      :facebox_href => url, 
       :facebox_width => width, 
       :facebox_confirm => confirm_msg, 
       :facebox_method => method,
@@ -44,13 +45,14 @@ module FaceboxMacroHelpers
     method = confirm_options[:method] || 'post'
     options = html_options.merge({
 			:rel => 'facebox',
+      :facebox_href => url, 
       :facebox_width => width, 
 			:facebox_confirm => confirm_msg, 
 			:facebox_method => method,
 			:authenticity_token => form_authenticity_token,
 			:facebox_type => 'confirm'})
 
-    link_to text, url, options
+    link_to text, "javascript:void(0)", options
   end
 
 	def facebox_confirm_with_validation(text, url, confirm_options={}, html_options={})
@@ -59,13 +61,14 @@ module FaceboxMacroHelpers
 		method = confirm_options[:method] || "post"
 		options = html_options.merge({
 			:rel => 'facebox',
+      :facebox_href => url,
       :facebox_width => width, 
 			:facebox_confirm => confirm_msg, 
 			:facebox_method => method,
 			:authenticity_token => form_authenticity_token, 
 			:facebox_type => 'confirm_with_validation'})
 		
-		link_to text, url, options
+		link_to text, "javascript:void(0)", options
 	end
 
 end

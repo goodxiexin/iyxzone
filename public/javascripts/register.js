@@ -210,22 +210,22 @@ Object.extend(Iyxzone.Register, {
       valid = false;
     }
 
-    if(game && !game.no_areas && areaID == ''){
+    if(game && game.areas_count != 0 && areaID == ''){
       this.error(areaDiv, "请选择服务区");
       valid = false;
     }
 
-    if(game && !game.no_servers && serverID == ''){
+    if(game && game.servers_count != 0 && serverID == ''){
       this.error(serverDiv, "请选择服务器");
       valid = false;
     }
 
-    if(game && !game.no_races && raceID == ''){
+    if(game && game.races_count != 0 && raceID == ''){
       this.error(raceDiv, "请选择种族");
       valid = false;
     }
 
-    if(game && !game.no_professions && professionID == ''){
+    if(game && game.professions_count != 0 && professionID == ''){
       this.error(professionDiv, "请选择职业");
       valid = false;
     }
@@ -285,7 +285,7 @@ Object.extend(Iyxzone.Register, {
 
   showInfoWhenNoServers: function(gameSelector){
     var gameDetails = gameSelector.getDetails;
-    if(gameDetails.no_servers)
+    if(gameDetails.servers_count == 0)
       gameSelector.updateGameInfoDiv('该游戏没有服务器，暂时无法注册，点击<a href="" rel=facebox>通知</a>我们');
   },
 

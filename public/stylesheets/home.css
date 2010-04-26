@@ -406,12 +406,12 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .inbox-box .index-list td.end{width:20px;text-align:right}
 .inbox-box .index-list td.end a{float:right;}
 
-.photolist-box li{float:left;margin:5px 7px;width:60px;/*height:92px;*/color:#25700D;overflow:hidden}
+.photolist-box li{float:left;margin:5px 7px;width:60px;color:#25700D;overflow:hidden}
 .photolist-box li p{white-space:nowrap;}
 .photolist-box li .btns{width:30px;margin:0 auto;}
 .photolist-box li .btns a{_display:inline;float:left;margin:0 4px 0 3px}
 
-.photolist-big-box li{float:left;padding:5px 8px;width:86px;/*height:95px;*/overflow:hidden}
+.photolist-big-box li{float:left;padding:5px 8px;width:86px;overflow:hidden}
 .photolist-big-box .collection .middle{height:100%;}
 .photolist-big-box .collection .middle img{width:75px}
 
@@ -1023,6 +1023,8 @@ h1.app-share{float:left}
 .share-box .item .share-title input{width:254px}
 .share-box .item span{color:#999;padding:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:250px;display:block}
 
+.share-album-cover{background:url(../images/skin/skin2010.png) no-repeat -80px -588px;width:120px;height:127px;text-align:center;display:table-cell;vertical-align:middle;*display: block;*font-size:104px;*font-family:Arial;}
+.share-album-cover img{vertical-align:middle;margin-top:12px;*margin-top:18px}
 
 /*每日十闻*/
 .news10-list{line-height:22px;margin:10px 15px}

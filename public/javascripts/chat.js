@@ -33,7 +33,10 @@ Object.extend(Iyxzone.Chat, {
       link.up().up().writeAttribute('class', 'im-expand')
     }
 
-    $('chat-list').toggle();
+    var dd = $('chat-list').childElements();
+    for(var i=1;i<dd.length;i++){
+      dd[i].toggle();
+    }
   },
 
   // 显示聊天栏
@@ -50,19 +53,28 @@ Object.extend(Iyxzone.Chat, {
   // 闪烁头像
   toggleIcon: function(){
     var target = $('tiny-im-icon');
+    var img = null;
 
-    if(target.innerHTML == '' || target.down('img').src.include('/images/blank.gif')){
-      target.update(this.blinkFriendIcon);
+    if(target.innerHTML == ''){
+      img = new Element('img', {src: this.blinkFriendIcon});
+      img.addClassName('left w-l');
+      img.setStyle({'width': '20px', 'height': '20px'});
+      target.appendChild(img);
     }else{
-      target.update('<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
+      img = target.down('img');
+      if(img.src.include('/images/blank.gif'))
+        img.src = this.blinkFriendIcon;
+      else
+        img.src = this.blankIcon.src;
     }
 
     target = $('im-icon');
+    img = target.down('img');
 
-    if(target.down('img').src.include('/images/blank.gif')){
-      target.update(this.blinkFriendIcon);
+    if(img.src.include('/images/blank.gif')){
+      img.src = this.blinkFriendIcon;
     }else{
-      target.update('<img src="/images/blank.gif" class="left w-l" width=20 height=20 />');
+      img.src = this.blankIcon.src;
     }
 
     this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
@@ -72,7 +84,7 @@ Object.extend(Iyxzone.Chat, {
   setBlink: function(){
     if(this.blinkFriendID == null && this.unreadMessages.keys().length != 0){
       this.blinkFriendID = this.unreadMessages.keys()[0];
-      this.blinkFriendIcon = '<img src="' + this.unreadMessages.get(this.blinkFriendID).avatar + '" class="left w-l" width=20 height=20/>';
+      this.blinkFriendIcon = this.unreadMessages.get(this.blinkFriendID).avatar;//'<img src="' + this.unreadMessages.get(this.blinkFriendID).avatar + '" class="left w-l" width=20 height=20/>';
       this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
 
       $('tiny-im-icon').observe('click', this.showUnreadMessages.bindAsEventListener(this));
@@ -104,8 +116,6 @@ Object.extend(Iyxzone.Chat, {
     for(var i=0;i<onlineFriends.length;i++){
       this.newOnlineFriend(onlineFriends[i]);
     }
-    this.blankIcon = new Image();
-    this.blankIcon.src = '/images/blank.gif';
     this.setBlink();
   },
 
@@ -342,6 +352,8 @@ Object.extend(Iyxzone.Chat, {
   },
 
   init: function(){
+    this.blankIcon = new Image();
+    this.blankIcon.src = '/images/blank.gif';
     $(document.body).observe('click', function(){
       this.hideBar();
     }.bind(this));

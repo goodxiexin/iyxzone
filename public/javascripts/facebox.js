@@ -191,6 +191,7 @@ var Facebox = Class.create({
     var rel = elem.readAttribute('rel');
     var type = elem.readAttribute('facebox_type');
     var fb = this; 
+    var href = elem.readAttribute('facebox_href');
 
     // set width if necessary
     if(width){
@@ -209,15 +210,15 @@ var Facebox = Class.create({
 			var confirm_message = elem.readAttribute('facebox_confirm');
 			var method = elem.readAttribute('facebox_method');
 			var authenticity_token = elem.readAttribute('authenticity_token');
-			fb.show_confirm(confirm_message, elem.href, authenticity_token, method); 
+			fb.show_confirm(confirm_message, href, authenticity_token, method); 
 		}else if(type == 'confirm_with_validation'){
 			var confirm_message = elem.readAttribute('facebox_confirm');
       var method = elem.readAttribute('facebox_method');
       var authenticity_token = elem.readAttribute('authenticity_token');
-      fb.show_confirm_with_validation(confirm_message, elem.href, authenticity_token, method);
+      fb.show_confirm_with_validation(confirm_message, href, authenticity_token, method);
 		}else{
 			// get one page
-			new Ajax.Request(elem.href, {
+			new Ajax.Request(href, {
 				method: 'get',
 				onFailure: function(transport){
           fb.reveal(transport.responseText);

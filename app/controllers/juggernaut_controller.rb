@@ -58,7 +58,7 @@ class JuggernautController < ApplicationController
     if user.avatar.blank?
       "/images/default_#{user.gender}_small.png"
     else
-      user.avatar.public_filename(:medium)
+      user.avatar.public_filename(:small)
     end
   end
 

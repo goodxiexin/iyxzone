@@ -420,22 +420,22 @@ Object.extend(Iyxzone.Profile.Editor, {
       valid = false;
     }
 
-    if(game && !game.no_areas && areaID == ''){
+    if(game && game.areas_count != 0 && areaID == ''){
       this.showError(areaDiv, "请选择服务区");
       valid = false;
     }
 
-    if(game && !game.no_servers && serverID == ''){
+    if(game && game.servers_count != 0 && serverID == ''){
       this.showError(serverDiv, "请选择服务器");
       valid = false;
     }
 
-    if(game && !game.no_races && raceID == ''){
+    if(game && game.races_count != 0 && raceID == ''){
       this.showError(raceDiv, "请选择种族");
       valid = false;
     }
 
-    if(game && !game.no_professions && professionID == ''){
+    if(game && game.profession_count != 0 && professionID == ''){
       this.showError(professionDiv, "请选择职业");
       valid = false;
     }

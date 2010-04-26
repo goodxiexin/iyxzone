@@ -3,7 +3,7 @@ class User::Games::PlayersController < UserBaseController
 	layout 'app'
 
 	def index
-		@players = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => "game_id = #{@game.id} AND activated_at IS NOT NULL" 
+		@players = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => {:game_id => @game.id}
 	end
 
 	def search

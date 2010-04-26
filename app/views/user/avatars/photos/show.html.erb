@@ -63,7 +63,7 @@
 										<span class="photo-op-praise" ></span>
                     <%= text_dig_link @photo %>
 									</div>
-                  <p><%= image_tag @photo.public_filename, :id => "photo_#{@photo.id}" %></p>
+                  <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
 									<div class="pic-desc s_clear">
 										<h4 class="box06">
 										<% if @user == current_user %>
