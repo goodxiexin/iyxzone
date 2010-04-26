@@ -117,7 +117,7 @@ module ApplicationHelper
 
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'large'
-    if album.photots_count == 0
+    if album.photos_count == 0
 			if album.is_a? GuildAlbum
 				link_to image_tag("default_guild_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			elsif album.is_a? EventAlbum
