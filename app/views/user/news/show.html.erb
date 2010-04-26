@@ -28,6 +28,7 @@
           <%= @news.data %>
           <% elsif @news.news_type == 'video' %>
           <%= @news.embed_html %>
+		      <p class='space20'><%= simple_format h @news.data %></p>
           <% elsif @news.news_type == 'picture' %>
           <% @news.pictures.each do |p| %>
             <%= image_tag p.public_filename %>

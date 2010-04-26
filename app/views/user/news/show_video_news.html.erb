@@ -25,6 +25,7 @@
         </div>
         <div class="con">
           <%= @news.embed_html %>
+					<p class='space20'><%= simple_format h @news.data %></p>
         </div>
         <div class="detail-blog-foot s_clear">
           <h2 class="gray">相关游戏：<%= game_link @news.game %></h2>
