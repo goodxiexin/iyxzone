@@ -101,7 +101,7 @@ module ApplicationHelper
 
   def album_cover_image album, opts={}
     size = opts.delete(:size) || 'large'
-    if album.cover_id.blank?
+    if album.photos_count == 0
 			if album.is_a? GuildAlbum
 				image_tag "default_guild_#{size}.png", opts
 			elsif album.is_a? EventAlbum
@@ -110,13 +110,14 @@ module ApplicationHelper
 				image_tag "default_cover_#{size}.png", opts
 			end
     else
-      image_tag album.cover.public_filename(size), opts
+      cover = album.cover || album.photos.first
+      image_tag cover.public_filename(size), opts
     end
   end
 
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'large'
-    if album.cover_id.blank?
+    if album.photots_count == 0
 			if album.is_a? GuildAlbum
 				link_to image_tag("default_guild_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			elsif album.is_a? EventAlbum
@@ -125,7 +126,8 @@ module ApplicationHelper
 				link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			end
     else
-      link_to image_tag(album.cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
+      cover = album.cover || album.photos.first
+      link_to image_tag(cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
   end
 
