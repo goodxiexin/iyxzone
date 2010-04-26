@@ -35,7 +35,9 @@
           </ul>
         </div>
         <% if @user.participated_polls_count != 0 %>
-          <%= render :partial => 'poll_items', :object => @polls %>
+          <table class="vote-table" cellpadding="0"> 
+            <%= render :partial => 'poll_item', :collection => @polls %>
+          </table>
           <%= will_paginate @polls %>
         <% else %>
           <div class='tip'>

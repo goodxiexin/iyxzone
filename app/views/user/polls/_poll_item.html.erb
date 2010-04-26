@@ -1,5 +1,4 @@
-  <table class="vote-table" cellpadding="0">
-  <% poll_items.each do |poll| %>
+    <% poll= poll_item %>
     <tr>
       <th class="img">
         <div class="imgwrap"><%= avatar poll.poster, :class => 'imgbox01' %></div>
@@ -24,5 +23,3 @@
         </div>
       </td>
     </tr>
-  <% end %>
-  </table>

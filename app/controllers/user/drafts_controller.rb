@@ -3,7 +3,7 @@ class User::DraftsController < UserBaseController
   layout 'app'
 
   def index
-    @blogs = current_user.drafts.paginate :page => params[:page], :per_page => 15
+    @blogs = current_user.drafts.paginate :page => params[:page]
   end
 
   def create

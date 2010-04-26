@@ -110,7 +110,7 @@ module ApplicationHelper
 				image_tag "default_cover_#{size}.png", opts
 			end
     else
-      cover = album.cover || album.photos.first
+      cover = album.cover_id.nil? ? album.photos.first : album.cover
       image_tag cover.public_filename(size), opts
     end
   end
@@ -126,7 +126,7 @@ module ApplicationHelper
 				link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			end
     else
-      cover = album.cover || album.photos.first
+      cover = album.cover_id.nil? ? album.photos.first : album.cover
       link_to image_tag(cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
   end

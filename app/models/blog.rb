@@ -30,7 +30,7 @@ class Blog < ActiveRecord::Base
   acts_as_privileged_resources :owner_field => :poster # 指明资源的拥有者的域是poster
 
   acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster}, 
+                      :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster},
                       :create_conditions => lambda {|user, blog| blog.available_for? user}
 
   acts_as_abstract :columns => [:content]

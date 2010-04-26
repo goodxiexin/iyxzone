@@ -17,7 +17,7 @@ protected
   def setup_verify_scope
     # 下面这些资源，在user里都只能看到审核通过的
     [Comment, Blog, Event, Guild, Photo, PhotoTag, Status, Video].each do |klass|
-      klass.enable_verify_scope
+ #     klass.enable_verify_scope
     end
   end
 

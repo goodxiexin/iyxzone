@@ -16,7 +16,9 @@
       </div>
       <div class="vote-box">
         <% if @polls.total_entries != 0 %>
-          <%= render :partial => 'poll_items', :object => @polls %>
+          <table class="vote-table" cellpadding="0"> 
+            <%= render :partial => 'poll_item', :collection => @polls %>
+          </table>
           <%= will_paginate @polls %>
         <% else %>
           <div class='tip'>你的好友都有问题，没发起过任何投票</div>

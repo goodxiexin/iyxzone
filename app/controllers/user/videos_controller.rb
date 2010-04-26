@@ -6,24 +6,23 @@ class User::VideosController < UserBaseController
     @relationship = @user.relationship_with current_user
     @privilege = get_privilege_cond @relationship
     @count = @user.videos_count @relationship
-    @videos = @user.videos.paginate :page => params[:page], :per_page => 10, :conditions => @privilege
+    @videos = @user.videos.paginate :page => params[:page], :per_page => 10, :conditions => @privilege, :include => [{:poster => :profile}, :share]
   end
 
 	def hot
-    @videos = Video.hot.paginate :page => params[:page], :per_page => 5
+    @videos = Video.hot.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
   end
 
   def recent
-    @videos = Video.recent.paginate :page => params[:page], :per_page => 10
+    @videos = Video.recent.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
   end
 
   def relative
-    @videos = @user.relative_videos.paginate :page => params[:page], :per_page => 10
+    @videos = @user.relative_videos.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
   end
 
   def friends
     @videos = current_user.friend_videos.paginate :page => params[:page], :per_page => 10
-    #video_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10 
   end
 
   def new
@@ -80,7 +79,7 @@ protected
       @user = User.find(params[:uid])
       require_friend_or_owner @user
     elsif ['show'].include? params[:action]
-      @video = Video.find(params[:id])
+      @video = Video.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, {:tags => :tagged_user}, {:poster => :profile}])
       @user = @video.poster
       require_adequate_privilege @video
     elsif ['edit', 'update', 'destroy'].include? params[:action]

@@ -77,7 +77,9 @@
         <div class='list-v2-head'>以下是<%= @user.login %>所发布的所有状态</div>
         <% end %>
         <div id='statuses'>
-        <%= render :partial => 'status', :collection => @statuses %>
+        <% @statuses.each do |status| %>
+          <%= render :partial => 'status', :object => status %>
+        <% end %>
         </div>
         <%= will_paginate @statuses %>
       </div>

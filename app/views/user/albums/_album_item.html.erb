@@ -1,0 +1,24 @@
+<li>
+  <div class="picbox01-wide">
+    <div class="new"></div>
+    <div class="img">
+      <table cellpadding="0"><tr><td>
+        <%= album_cover album, :class => 'imgbox01', :width => '75px', :height => '86px' %>
+      </td></tr></table>
+    </div>
+    <div class="info">
+      <h4><%= album_link album %>共<span><%= album.photos_count %></span>张</h4>
+      <p><%= ftime2 album.created_at %>更新</p>
+      <ul>
+        <% album.photos[0..2].each do |p| %>
+          <li><%= photo_link p, :class => 'imgbox01', :width => '50px', :height => '50px' %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <p class="link">
+    <% if !no_operations and album.poster == current_user and album.class.name != 'AvatarAlbum' %>
+      <%= facebox_link "", edit_personal_album_url(album), :class => "icon-active icon-active-edit w-l" %>  <%= facebox_link '', confirm_destroy_personal_album_url(album), :class => "icon-active" %>
+    <% end %>
+  </p>
+</li>

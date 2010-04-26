@@ -21,7 +21,7 @@
       <% if current_user.friends.blank? %>
         没有匹配的好友
       <% else %>
-        <% current_user.friends.each do |f| %>
+        <% current_user.friends.all(:include => :games).each do |f| %>
           <li info='<%= {:games => f.games.map(&:id) }.to_json %>'><span><%= check_box_tag '', f.id, false, :pinyin => f.pinyin, :login => f.login %><%= f.login %></span></li>
         <% end %>
       <% end %>

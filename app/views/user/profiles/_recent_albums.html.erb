@@ -1,0 +1,31 @@
+<div class="multibox">
+  <div class="title"><%=link_to '全部相册', personal_albums_url(:uid => @user.id) %><b>最近照片</b></div>
+  <div class="piclist s_clear">
+  <% unless @albums.blank? %>
+    <% @albums.each do |album| %>
+        <div class="picitem jl-picitem">
+          <div class="picbox01">
+            <div class="picwrap">
+              <table cellpadding="0">
+                <tr><td><%= album_cover album, :size => :large, :class => 'imgbox01' %></td></tr>
+              </table>          
+            </div>
+          </div>
+          <p><b><%= album_link album %></b></p>
+          <% if album.uploaded_at.blank? %>
+            <p><span><%= ftime album.created_at %></span> 创建</p>
+          <% else %>
+            <p><span><%= ftime album.uploaded_at %></span> 更新</p>
+          <% end %>
+      </div>  
+    <% end %> 
+  <% else %>
+    <% if @user==current_user %>
+      <div class='space'>还没更新照片赶紧去<%= link_to '弄一个', personal_albums_url(:uid => @user.id)%>吧</div>
+    <% else %>
+      <div class='space'>这家伙没更新照片</div>
+    <% end %>
+  <% end %>
+  </div>
+</div>
+

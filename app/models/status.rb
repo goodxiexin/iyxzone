@@ -3,7 +3,7 @@ class Status < ActiveRecord::Base
   belongs_to :poster, :class_name => 'User'
 
 	acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, status, comment| status.poster == user || comment.poster == user },
+                      :delete_conditions => lambda {|user, status, comment| status.poster == user || comment.poster == user},
                       :create_conditions => lambda {|user, status| status.poster == user || status.poster.has_friend?(user)}
 
   # 下面这3个要注意顺序

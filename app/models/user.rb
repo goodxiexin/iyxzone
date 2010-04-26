@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
 	has_one :latest_status, :foreign_key => 'poster_id', :class_name => 'Status', :order => 'created_at DESC'
 
   def friend_statuses
-    Status.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = statuses.poster_id", :order => 'created_at desc')
+    Status.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = statuses.poster_id", :order => 'created_at desc', :include => [{:first_comment => [:commentable, {:poster => :profile}]}, {:last_comment => [:commentable, {:poster => :profile}]}, {:poster => :profile}])
   end
 
   # friend
@@ -167,7 +167,7 @@ class User < ActiveRecord::Base
   has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
   def friend_albums
-    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "privilege != 4 AND photos_count != 0", :order => 'uploaded_at desc')
+    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = albums.poster_id", :conditions => "privilege != 4 AND photos_count != 0", :order => 'uploaded_at desc', :include => [{:poster => :profile}, :poster, :cover])
   end
 
   def albums_count relationship='owner'
@@ -213,7 +213,7 @@ class User < ActiveRecord::Base
   end
 
   def friend_blogs
-    Blog.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = blogs.poster_id", :conditions => "privilege != 4 AND draft != 1", :order => 'created_at desc')
+    Blog.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = blogs.poster_id", :conditions => "privilege != 4 AND draft != 1", :order => 'created_at desc', :include => [{:poster => [:avatar, :profile]}, :share])
   end
 
   # videos
@@ -233,7 +233,7 @@ class User < ActiveRecord::Base
   end
 
   def friend_videos
-    Video.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = videos.poster_id", :conditions => "privilege != 4", :order => 'created_at desc')
+    Video.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = videos.poster_id", :conditions => "privilege != 4", :order => 'created_at desc', :include => [{:poster => :profile}, :share])
   end
 
   # events
@@ -336,9 +336,9 @@ class User < ActiveRecord::Base
   end
 
   def friend_polls
-    poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id").map(&:poll_id).uniq
-    participated = Poll.find(poll_ids)
-    posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = polls.poster_id", :order => 'created_at desc')
+    poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = votes.voter_id", :limit => 20).map(&:poll_id).uniq
+    participated = Poll.find(poll_ids, :include => [{:poster => :profile}, :answers])
+    posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.friend_id = polls.poster_id", :order => 'created_at desc', :include => [{:poster => :profile}, :answers], :limit => 20)
     (participated + posted - polls).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
   end
 

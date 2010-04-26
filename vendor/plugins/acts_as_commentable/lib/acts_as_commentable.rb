@@ -8,7 +8,15 @@ module Commentable
 
 		def acts_as_commentable opts={}
 
-			has_many :comments, :as => 'commentable', :dependent => :delete_all, :order => opts[:order]
+      order = opts[:order] || 'created_at DESC'
+      
+      reverse_order = order.include?('ASC') ? order.gsub('ASC', 'DESC') : order.gsub('DESC', 'ASC')
+			
+      has_many :comments, :as => 'commentable', :dependent => :delete_all, :order => order
+
+      has_one :first_comment, :class_name => 'Comment', :as => 'commentable', :order => order
+
+      has_one :last_comment, :class_name => 'Comment', :as => 'commentable', :order => reverse_order
 
 			include Commentable::InstanceMethods
 

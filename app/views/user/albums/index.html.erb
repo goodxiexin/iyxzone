@@ -34,7 +34,9 @@
 		    <h3>共 <span><%= @user.albums_count @relationship %></span> 个相册</h3>
         <div class="piclist">
           <ul class='pics-list s_clear'>
-			      <%= render :partial => 'album_items', :locals => {:albums => @albums, :no_operations => false} %>
+          <% @albums.each do |album| %>
+			      <%= render :partial => 'album_item', :locals => {:album => album, :no_operations => false} %>
+          <% end %>
           </ul>
         </div>
       </div>

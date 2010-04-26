@@ -1,22 +1,8 @@
-<!--
-parameters:
-  commentable: 
-  recipient: default recipient of comment. this value can be null
--->
 <% type = commentable.class.to_s.underscore %>
 <div id='<%= type %>_comments_<%= commentable.id %>'>
-	<% Comment.all(:conditions => {:commentable_type => type, :commentable_id => commentable.id}, :include => [{:poster => [:avatar, :profile]}]).each do |comment| %>
-	<div class="box04 word-box" id='comment_<%= comment.id %>'>
-  <% if comment.is_deleteable_by? current_user %>
-    <%= link_to_remote '', :url => comment_url(comment), :method => :delete, :html =>{ :class => 'icon-active'} %>
+	<% commentable.comments.each do |c| %>
+    <%= render :partial => 'user/comments/comment', :object => c %>
   <% end %>
-  <div class="img"><%= avatar comment.poster, :size => :small %></div>
-  <div class="word">
-    <p><%= profile_link comment.poster %> <span><%= ftime comment.created_at %> -</span> <%= link_to_function '回复', "Iyxzone.Comment.showForm('#{type}', #{comment.commentable.id}, '#{comment.poster.login}', #{comment.poster_id})" %></p>
-    <%= simple_format comment.content %>
-  </div>
-</div>
-<% end %>
 </div>
 
 <div class='box04 comment-box' id= 'add_<%= type %>_comment_<%= commentable.id %>'>
@@ -42,4 +28,3 @@ parameters:
 </div>
 
 <%= javascript_tag "new Iyxzone.limitedTextField($('#{type}_comment_content_#{commentable.id}'), 140, $('#{type}_#{commentable.id}_words_count'), false)" %>
-

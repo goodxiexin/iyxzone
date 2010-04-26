@@ -9,12 +9,11 @@ class User::StatusesController < UserBaseController
       params[:page] = @user.statuses.index(@status) / 10 + 1
     end
 
-    @statuses = @user.statuses.paginate :page => params[:page], :per_page => 10
+    @statuses = @user.statuses.paginate :page => params[:page], :per_page => 10, :include => [{:first_comment => [:commentable, :poster]}, {:last_comment => [:commentable, :poster]}, {:poster => :profile}]
   end
 
   def friends
     @statuses = current_user.friend_statuses.paginate :page => params[:page], :per_page => 10
-    #status_feed_items.map(&:originator).paginate :page => params[:page], :per_page => 10
   end
 
   def create
