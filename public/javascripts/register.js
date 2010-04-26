@@ -286,7 +286,7 @@ Object.extend(Iyxzone.Register, {
   showInfoWhenNoServers: function(gameSelector){
     var gameDetails = gameSelector.getDetails;
     if(gameDetails.servers_count == 0)
-      gameSelector.updateGameInfoDiv('该游戏没有服务器，暂时无法注册，点击<a href="" rel=facebox>通知</a>我们');
+      tip('该游戏没有服务器，暂时无法注册，点击<a href="" rel=facebox>通知</a>我们');
   },
 
   removeCharacter: function(id){

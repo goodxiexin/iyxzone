@@ -106,7 +106,7 @@
         <div class="fldid"><label for="server">游戏：</label></div>
 		  	<div class="fldvalue"><%= @event.game.name %></div>
       </div>
-	  	<% unless @event.game.no_areas? %>
+	  	<% unless @event.game.no_areas %>
 		  <div class="rows s_clear">
         <div class="fldid"><label for="server">游戏服务区：</label></div>
         <div class="fldvalue"><%= @event.game_area.name %></div>
