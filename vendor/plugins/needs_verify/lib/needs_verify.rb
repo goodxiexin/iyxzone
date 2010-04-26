@@ -36,12 +36,12 @@ module NeedsVerify
   module InstanceMethods
 
     def verify
-      verified = 1
+      self.verified = 1
       save  
     end
 
     def unverify
-      verified = 2
+      self.verified = 2
       save
     end
   
