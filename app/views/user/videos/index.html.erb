@@ -32,8 +32,7 @@
           <% end %>
         </ul>
       </div>
-      <div class="appcontent05">
-				<div class="myblog">
+      <div class="box02 canvas_int space">
         <% if @count == 0 %>
 					<% if @user == current_user %>
 						<div class='tip'>还没有视频，赶紧<%= link_to '弄一个', new_video_url %>? 
@@ -44,15 +43,12 @@
 						<div class='tip'><%= subject %>还没分享视频呢。</div>
 					<% end %>
         <% else %>
-        <div class='tip'><%= "共#{@count}个视频" %></div>
-        <div class="myblog-table">
-					<table cellpadding='0'>
-          <%= render :partial => 'video_item', :collection => @videos %>
-					</table>
-        </div>
-        <%= will_paginate @videos %>
+					<div class='tip'><%= "共#{@count}个视频" %></div>
+					<div class='feed-img-list' id='videos'>
+						<%= render :partial => 'video_item2', :collection => @videos %>
+					</div>
+						<%= will_paginate @videos %>
         <% end %>
-				</div>
       </div>
     </div>
   </div></div>
