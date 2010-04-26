@@ -14,9 +14,10 @@ class User::BlogsController < UserBaseController
 
 	def hot
     # 或者我们可以直接cache view, page cache，这样是最快的，当然耗费也是最多的 
-    @blogs = Rails.cache.fetch "hot_blogs", :expires_in => 30.minutes do
-      Blog.hot.to_a # 最好有to_a，不然miss的时候，paginate仍然要执行sql查询
-    end.paginate :page => params[:page], :per_page => 10
+    #@blogs = Rails.cache.fetch "hot_blogs", :expires_in => 30.minutes do
+    #  Blog.hot.to_a # 最好有to_a，不然miss的时候，paginate仍然要执行sql查询
+    #end.paginate :page => params[:page], :per_page => 10
+    @blogs = Blog.paginate :page => 1, :per_page => 10, :order => "digs_count DESC", :include => [{:poster => :profile}, :share]
   end
 
   def recent
