@@ -4,27 +4,9 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover @event.album, :class => "imgbox01" %></span>
-      <p class="left">
-        <strong><%= @event.title%>活动照片</strong><br/>
-        <%= link_to '活动主页', event_url(@event), :class => 'red' %>
-      </p>
-    </div>
+    <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}的照片"} %>
     <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <div class="right">
-          <% if @participation and !@participation.is_authorized? %>
-            <%= link_to "上传照片", new_event_photo_url(:album_id => @album.id) %>
-          <% end %>
-        </div>            
-        <ul>                  
-          <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
-          <li><span><%= link_to "我的相册", personal_albums_url(:uid => current_user.id) %></span></li>
-          <li><span><%= link_to '好友相册', friends_personal_albums_url(:uid => current_user.id) %></span></li>
-          <li><span><%= link_to "圈了我的照片", relative_personal_photos_url(:uid => current_user.id) %></span></li>
-        </ul>
-      </div>
+      <%= render :partial => 'tab' %>
       <div class="photo-box">
         <div class='path-box'>
           <label>活动"<%= event_link @event %>"</label>

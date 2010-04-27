@@ -4,13 +4,7 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @guild.album, :class => "imgbox01", :width => 50, :height => 50 %></span>
-      <p class="left">
-        <strong>公会活动</strong><br/>
-        <%= guild_link @guild, :class => 'red' %>的主页
-      </p>
-    </div>
+    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{@guild.name}的活动"} %>
     <div class="box02 canvas_int space">
 	    <div class="tab tab01">
         <div class="icon">
@@ -22,8 +16,11 @@
 		    </ul>
       </div>
       <div class="piclist-rows" id='events'>
-        <% if @events.total_entries != 0 %>
-		      <%= render :partial => 'user/events/event_items', :object => @events %>
+        <% if @events.count != 0 %>
+          <table cellpadding="0" cellspacing="0">
+            <%= render :partial => 'user/events/event_item', :collection => @events %>
+          </table>
+          <%= will_paginate @events %>
         <% else %>
           <div class='tip'>该公会还没有相关活动</div>
         <% end %>

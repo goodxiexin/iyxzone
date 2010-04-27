@@ -3,7 +3,7 @@ class User::Guilds::EventsController < UserBaseController
   layout 'app'
 
   def index
-    @events = @guild.events.paginate :page => params[:page], :per_page => 10
+    @events = @guild.events.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, {:album => :cover}, {:game_server => [:area, :game]}]
   end
 
 	def search

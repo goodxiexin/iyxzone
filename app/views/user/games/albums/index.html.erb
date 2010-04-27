@@ -4,13 +4,7 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"></span>
-      <p class="left">
-        <strong><%= game_link @game %>的相关相册</strong><br />
-        <%= link_to '游戏主页', game_url(@game), :class=>'red'%>
-      </p>
-    </div>
+    <%= render :partial => "user/games/game_header", :locals => {:text => "#{@game.name}的相关相册"} %>
     <div class="box02 canvas_int space">
 	    <div class="tab tab01">
 		    <div class="right">
@@ -26,7 +20,9 @@
 		    <h3>共 <span><%= @albums.total_entries %></span> 个相册</h3>
         <div class="piclist">
           <ul class='pics-list s_clear'>
-			      <%= render :partial => 'user/albums/album_items', :locals => {:no_operations => true, :albums => @albums} %>
+            <% @albums.each do |album| %>
+			        <%= render :partial => 'user/albums/album_item', :locals => {:no_operations => true, :album => album} %>
+            <% end %>
           </ul>
         </div>
       </div>

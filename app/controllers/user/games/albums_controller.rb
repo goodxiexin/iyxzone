@@ -4,7 +4,7 @@ class User::Games::AlbumsController < UserBaseController
 
   def index
     @game = Game.find(params[:game_id])
-    @albums = @game.albums.paginate :conditions => "privilege != 4 AND photos_count != 0", :page => params[:page], :per_page => 10
+    @albums = @game.albums.paginate :conditions => "privilege != 4 AND photos_count != 0", :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :cover, :latest_photos]
   end
 
 end

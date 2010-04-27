@@ -1,0 +1,20 @@
+                <tr>
+                  <td>
+                    <div class='imgwrap'>
+                      <%= avatar user, :size => :medium, :class=>'imgbox01' %>
+                    </div>
+                    <div class='data jl-data'>
+                      <p><%= profile_link user %></p>
+                      <% characters.each do |character| %>
+                        <p><%= server_location character.server %>的<%= character.name %></p>
+                      <% end %>
+                      <p class="space">
+                        <% unless current_user == user %>
+                          <%= facebox_link '', new_friend_request_url(:friend_id => user.id), :class => "friend-btn w-l" %>
+                          <%= link_to '', new_mail_url(:recipient_id => user.id), :class => "msg-btn" %>
+                        <% end %>
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+

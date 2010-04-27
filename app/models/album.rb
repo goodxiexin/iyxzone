@@ -14,8 +14,4 @@ class Album < ActiveRecord::Base
 
   acts_as_resource_feeds
 
-	def recent_photos limit
-		photos.find(:all, :limit => limit)
-	end
-
 end
