@@ -31,7 +31,7 @@ class Youku
 		if @response
 			@response["data"][0]["logo"] 
 		else
-			"/images/blank_video.png"
+			"/images/videoThumb/youku.png"
 		end
 	end
 

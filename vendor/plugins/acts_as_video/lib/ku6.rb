@@ -36,7 +36,7 @@ class Ku6
 	end
 
 	def thumbnail_url
-		"/images/blank_video.png"
+		"/images/videoThumb/ku6.png"
 	end
 
 	def embed_html
