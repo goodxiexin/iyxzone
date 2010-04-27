@@ -1,5 +1,5 @@
 class News < ActiveRecord::Base
-puts "load news"
+  
   has_many :pictures, :class_name => 'NewsPicture' # only valid for picture news
 
   belongs_to :game

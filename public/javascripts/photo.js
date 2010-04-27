@@ -730,16 +730,19 @@ Iyxzone.Photo.Slide3 = Class.create({
 
     // 只保存图片的url，到了需要的时候再去加载图片
     this.urls = [];
+    this.thumbnails = [];
     this.ids = [];
     this.notations = [];
     this.currentID = currentID; // 当前照片的id
     this.mappings = new Hash(); // photo id => image object
+    this.thumbnailMappings = new Hash();
     this.frames = frames; 
   
     for(var i=0;i<photoInfos.length;i++){
       var info = photoInfos[i];
       this.ids.push(info.id);
       this.urls.push(info.url);
+      this.thumbnails.push(info.thumbnail_url);
       this.notations.push(info.notation);
     }
  
@@ -804,17 +807,49 @@ Iyxzone.Photo.Slide3 = Class.create({
     this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" + this.blankImage.src + "' class='imgbox01'/></a>";
   },
 
-  loadImage: function(idx, photoIdx){
-    this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
-    var img = this.mappings.get(this.ids[photoIdx]);
+  getThumbnail: function(idx){
+    var img = this.thumbnailMappings.get(this.ids[idx]);
     if(!img){
       img = new Image();
-      img.src = this.urls[photoIdx];
-      this.mappings.set(this.ids[photoIdx], img);
+      img.src = this.thumbnails[idx];
+      this.thumbnailMappings.set(this.ids[idx], img);
     }
-    var img = new Element('img', {src: img.src});
+    return img;
+  },
+
+  getPicture: function(idx){
+    var img = this.mappings.get(this.ids[idx]);
+    if(!img){
+      img = new Image();
+      img.src = this.urls[idx];
+      this.mappings.set(this.ids[idx], img);
+    }
+    return img;
+  },
+
+  getImageElement: function(img){
+    var el = new Element('img', {src: img.src});
+    var width = img.width;
+    var height = img.height;
+    if(width < 500){
+      el.setStyle({"width": width, "height": height});
+    }else{
+      width = 500;
+      height = height * 500 / width;
+      el.setStyle({"width": width, "height": height});
+    }
+    return el;  
+  },
+
+  loadImage: function(idx, photoIdx){
+    this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
+    var thumbnail = this.getThumbnail(photoIdx);
+    var picture = this.getPicture(photoIdx);
+    
+    var img = new Element('img', {src: thumbnail.src});
     img.setStyle({width: '50px', height: '50px'});
     img.addClassName('imgbox01');
+    
     var a = new Element('a', {href: 'javascript:void(0)', index: photoIdx});
     a.appendChild(img);
     a.observe('click', function(e){
@@ -822,6 +857,7 @@ Iyxzone.Photo.Slide3 = Class.create({
       var img = e.target;
       var index = parseInt(img.up('a').readAttribute('index'));
       var idPos = this.idPos;
+
       if(index == idPos){
       }else if(index < idPos){
         // scroll down
@@ -840,12 +876,16 @@ Iyxzone.Photo.Slide3 = Class.create({
         this.scrollUp();
         this.frames[pos + index - idPos].addClassName('now');
       }
-      $('picture').update("<img src='" + img.src + "' />");
+
+      var picture = this.getPicture(index);
+      var img = this.getImageElement(picture);
+  
+      $('picture').update('');
+      $('picture').appendChild(img);
       if(this.notations[index] && this.notations[index] != '')
         $('notation').update(this.notations[index].escapeHTML().gsub('\n', '<br/>'));
     }.bind(this));
     this.frames[idx].update(a);
-    //this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
   },
 
   scrollDown: function(){
