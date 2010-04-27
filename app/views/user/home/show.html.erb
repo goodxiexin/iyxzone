@@ -150,7 +150,7 @@
         </div>
         <div class="photolist-box">
 					<ul class="collection s_clear">
-						<% current_user.profile.viewings.each do |r| %>
+						<% current_user.profile.viewings[0..5].each do |r| %>
               <li>
 								<div class="middle"><div class="middle-center"><div class="center"><%= avatar r.viewer, :class => 'imgbox01' %></div></div></div>
 								<p><%= profile_link r.viewer %></p>
@@ -167,7 +167,7 @@
         </div>
         <div class="photolist-box">
 					<ul class="collection s_clear" id='friend_suggestions'>
-						<%= render :partial => 'user/friend_suggestions/friend_suggestion', :collection => @friend_suggestions[0..2] %>
+						<%= render :partial => 'user/friend_suggestions/friend_suggestion', :collection => @friend_suggestions[0..5] %>
           </ul>
         </div>
       </div>
