@@ -1260,6 +1260,11 @@ h1.app-share{float:left}
 .forum-pager{margin-top:10px}
 .forum-pager a{color:#666}
 
+.z-box .z-con .photolist-box{padding:10px;_padding:3px}
+.z-box .z-con .collection p{padding:0}
+.z-box .z-con .collection li{margin:5px 10px;width:80px}
+.z-box .z-con .collection li span{width:80px}
+
 /*帮助、关于我们等*/
 .info-nav{padding:5px 0;position:relative}
 .info-nav dt{margin:10px 0;font-weight:700;color:#217308;padding-left:20px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -1542px;}
