@@ -24,7 +24,9 @@
           </ul>
         </div> 
       <% if @guilds.total_entries != 0 %>
-		    <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
+        <table cellpadding="0" cellspacing="0">
+          <%= render :partial => 'user/guilds/guild_item', :collection => @guilds %>
+        </table>
         <%= will_paginate @guilds %>
       <% else %>
         <div class='tip'>没有热门公会，你赶紧<%= link_to '创建一个', new_guild_url %>吧</div>

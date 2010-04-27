@@ -1,4 +1,5 @@
-<dl class='menu-op space20'>
+<div class='avatarbox'>
+<dl class='menu-op'>
   <dt>操作</dt>
   <% if @role.blank? %>
     <dd><%= link_to '逛逛论坛', forum_topics_url(@guild.forum) %></dd>
@@ -19,3 +20,4 @@
     <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [@guild.president_id]) %></dd>
   <% end %>
 </dl>
+</div>

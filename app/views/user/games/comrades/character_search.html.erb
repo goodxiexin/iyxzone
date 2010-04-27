@@ -8,13 +8,7 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"></span>
-      <p class="left">
-        <strong><%= game_link @game %>的玩家</strong><br />
-        <%= link_to '游戏主页', game_url(@game), :class=>'red'%>
-      </p>
-    </div>
+    <%= render :partial => 'user/games/game_header', :locals => {:text => "#{@game.name}的玩家"} %>
     <div class="box02 canvas_int space">
 			<div class="tab tab01">
 				<ul>
@@ -53,29 +47,7 @@
               <tr><td><strong> 没有符合条件的用户 </strong></td></tr>
             <% else %>
               <tr><td><strong> 共有<%= @comrades.total_entries %>个游戏角色 </strong></td></tr>
-              <% @comrades.each do |character| %>
-              <% f = character.user %>
-              <tr>
-                <td>
-									<div class='imgwrap'>
-										<%= avatar f, :size => :medium, :class=>'imgbox01' %>
-									</div>
-									<div class='data jl-data'>
-										<p><%= profile_link f %></p>
-										<p>
-											<%= character.server.name %>,
-											<%= character.name %>
-										</p>
-										<p class="space">
-											<% unless current_user == f %>
-											  <%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
-											  <%= link_to '', new_mail_url(:recipient_ids => [f.id]), :class => "msg-btn" %>
-											<% end %>
-										</p>
-									</div>
-								</td>
-              </tr>
-              <% end %>
+              <%= render :partial => 'comrade_item', :collection => @comrades %>
             <% end %>
             </table>
             <div class="space s_clear">

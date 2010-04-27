@@ -4,41 +4,9 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @event.album, :class => "imgbox01", :width => 50, :height => 50%></span>
-      <p class="left">
-        <strong><%= @event.title %>活动</strong><br />
-        <%= link_to '活动主页', event_url(@event)%>
-      </p>
-    </div>
+    <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}活动"} %>
     <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <div class="icon">
-          <%= link_to "返回活动", event_url(@event) %>
-        </div>
-        <ul>
-        <% if params[:type].to_i == 0 %>
-          <li class='hover'><span><%= link_to "一定去的人", event_participations_url(@event, :type => 0) %></span></li>
-        <% else %>
-          <li><span><%= link_to "一定去的人", event_participations_url(@event, :type => 0) %></span></li>
-        <% end %>
-        <% if params[:type].to_i == 1 %>
-          <li class='hover'><span><%= link_to "可能去的人", event_participations_url(@event, :type => 1) %></span></li>
-        <% else %>
-          <li><span><%= link_to "可能去的人", event_participations_url(@event, :type => 1) %></span></li>
-        <% end %>
-        <% if !@event.expired? and params[:type].to_i == 2 %>
-          <li class='hover'><span><%= link_to "受邀请的人", event_participations_url(@event, :type => 2) %></span></li>
-        <% else %>
-          <li><span><%= link_to "受邀请的人", event_participations_url(@event, :type => 2) %></span></li>
-        <% end %>
-        <% if !@event.expired? and params[:type].to_i == 3 %>
-          <li class='hover'><span><%= link_to "请求加入的人", event_participations_url(@event, :type => 3) %></span></li>
-        <% else %>
-          <li><span><%= link_to "请求加入的人", event_participations_url(@event, :type => 3) %></span></li>
-        <% end %>
-        </ul>
-      </div>
+      <%= render :partial => 'tab' %>
       <div class='friend-box'>
         <div class='appcontent01'>
           <div class='friend-invite-head'>
@@ -50,33 +18,11 @@
           <div class='friend-list'>
             <div class='friend-list-body s_clear'>
 	          <% if params[:type].to_i == 2 %>
-              <% if @event.invitations_count == 0 %>
-                <% if @event.poster == current_user %>
-                <div class='tip'>还没有人被邀请，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
-                <% else %>
-                <div class='tip'>还没有人被邀请参加这个活动</div>
-                <% end %>
-              <% else %>
-								<div class='d6-list s_clear'>
-		            <%= render :partial => 'invitations', :object => @participations %>
-								</div>
-              <% end %>
+              <%= render :partial => 'invitee_list', :object => @participations %>
 	          <% elsif params[:type].to_i == 3 %>
-              <% if @event.requests_count == 0 %>
-                <div class='tip'>还没有人请求参加这个活动</div>
-              <% else %>
-		            <%= render :partial => 'requests', :object => @participations %>
-              <% end %>
+              <%= render :partial => 'request_list', :object => @participations %>
 	          <% else %>
-              <% if @participations.count == 0 %>
-                <% if @event.poster == current_user %>
-                <div class='tip'>还没有成员...囧，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
-                <% else %>
-                <div class='tip'>还没有成员...囧</div>
-                <% end %>
-              <% else %>
-		            <%= render :partial => 'participations', :object => @participations %>
-              <% end %>
+              <%= render :partial => 'participation_list', :object => @participations %>
 	          <% end %>
             </div>
           </div>

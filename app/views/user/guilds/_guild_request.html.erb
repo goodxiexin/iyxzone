@@ -1,4 +1,5 @@
-<dl class='menu-op space20'>
+<div class='avatarbox'>
+<dl class='menu-op'>
   <dt>请求加入</dt>
 </dl>
 <% if @guild.is_requestable_by? current_user %>
@@ -6,3 +7,4 @@
 <% else %>
   <div class='tip'>你已经没有在该游戏、服务器的游戏角色，无法加入该公会</div>
 <% end %>
+</div>

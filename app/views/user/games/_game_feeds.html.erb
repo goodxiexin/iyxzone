@@ -1,0 +1,25 @@
+<div class='multibox'>
+  <div class='title'><b>新鲜事</b></div>
+  <div class="feed-wrap" id='feed_list'>
+    <%= render :partial => 'user/home/feed_deliveries', :object => @feed_deliveries %>
+  </div>
+  <div class="s_clear"></div>
+    <div class="round04 round_r_t jl-read-more space s_clear">
+      <div class="round_l_t">
+        <div class="round_r_b">
+          <div class="round_l_b">
+            <div class="round_m">
+              <div class="round_body" id="more_feed">
+                <% if @feed_deliveries.size < @first_fetch_size %>
+                  <div class='jl-more'>没有更多了...</div>
+                <% else %>
+                  <%= link_to_function "更多新鲜事", "Iyxzone.Game.Feeder.moreFeeds(#{@game.id});", :class => "jl-more"%>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+

@@ -86,7 +86,7 @@ protected
 
   def setup
     if ['show', 'edit', 'update', 'destroy'].include? params[:action]
-      @photo = EventPhoto.find(params[:id])
+      @photo = EventPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
       @album = @photo.album
       @event = @album.event
       @user = @event.poster

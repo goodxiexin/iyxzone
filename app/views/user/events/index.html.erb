@@ -37,8 +37,11 @@
         </ul>
       </div>
       <div class="piclist-rows">
-        <% if @user.events.count != 0 %>
-				<%= render :partial => 'event_items', :object => @events %>
+        <% if @events.count != 0 %>
+          <table cellpadding="0" cellspacing="0">
+            <%= render :partial => 'event_item', :collection => @events %>
+          </table>
+          <%= will_paginate @events %>
         <% else %>
           <% if @user == current_user %>
             <div class='tip'>你还没有发起任何活动，赶紧<%= link_to '发起', new_event_url %>吧!

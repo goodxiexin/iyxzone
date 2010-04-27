@@ -36,8 +36,11 @@
             <li><%= link_to "<span>#{get_subject @user}参加过的(#{@user.participated_events.count})</span>", participated_events_url(:uid => @user.id) %></li>
           </ul>
         </div>
-        <% if @user.upcoming_events.count != 0 %> 
-	        <%= render :partial => 'event_items', :object => @events %>
+        <% if @events.count != 0 %> 
+          <table cellpadding="0" cellspacing="0">
+            <%= render :partial => 'event_item', :collection => @events %>
+          </table>
+          <%= will_paginate @events %>
         <% else %>
           <div class='gray'>
           <% if @user == current_user %>

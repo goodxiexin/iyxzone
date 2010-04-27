@@ -36,7 +36,10 @@
           </ul>
         </div>
         <% if @guilds.total_entries != 0 %>
-		      <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
+          <table cellpadding="0" cellspacing="0">
+		        <%= render :partial => 'user/guilds/guild_item', :collection => @guilds %>
+          </table>
+          <%= will_paginate @guilds %>
         <% elsif @user == current_user %>
           <div class='tip'>你还没创建任何公会，赶紧<%= link_to "创建一个", new_guild_url %>吧
 					<br/><br/>或者观看以下视频对这项功能进行进一步的了解，随时点击右上角<a href="#" class="icon-movie"></a>都可以观看此视频<br/><br/>

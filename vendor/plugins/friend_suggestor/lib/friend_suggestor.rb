@@ -131,7 +131,7 @@ module FriendSuggestor
 	  # construct new suggestions and insert into database
 	  values = []
 	  collect_comrades(server).each do |friend_id|
-  		if server.game.no_areas?
+  		if server.game.no_areas
 	  		values << "(NULL, #{id}, #{friend_id}, #{server.game_id}, NULL, #{server.id})"
 		  else
 			  values << "(NULL, #{id}, #{friend_id}, #{server.game_id}, #{server.area_id}, #{server.id})"

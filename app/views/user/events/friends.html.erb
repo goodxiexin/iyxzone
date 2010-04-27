@@ -17,8 +17,11 @@
 		    </ul>
       </div>
       <div class="piclist-rows" id='events'>
-        <% if @events.total_entries != 0 %>
-	        <%= render :partial => 'event_items', :object => @events %>
+        <% if @events.count != 0 %>
+          <table cellpadding="0" cellspacing="0">
+            <%= render :partial => 'event_item', :collection => @events %>
+          </table>
+          <%= will_paginate @events %>
         <% else %>
           <div class='tip'>你的好友最近都人间蒸发了，没人创建活动</div>
         <% end %>

@@ -1,0 +1,17 @@
+<div class="multibox">
+  <div class="title">
+    <%= link_to "更多", event_participations_url(@event, :type => 2) %>
+    <b>被邀请的人(<%= @event.invitations_count %>)</b>
+  </div>
+  <div class="photolist-box">
+    <ul class="collection s_clear">
+      <% @invite_characters.each do |c| %>
+      <li>
+        <div class="middle"><div class="middle-center"><div class="center"><%= avatar c.user, :class => 'imgbox01' %></div></div></div>
+        <p><%= profile_link c.user %></p>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+

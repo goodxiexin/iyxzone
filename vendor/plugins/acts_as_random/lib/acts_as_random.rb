@@ -21,6 +21,7 @@ module ActsAsRandom
     
     def random opts={}
       cond = opts[:conditions] || {}
+      prefetch = opts[:include] || []
       count = self.count(:conditions => cond)
       except = opts[:except] || []
       count = count - except.uniq.count
@@ -29,11 +30,11 @@ module ActsAsRandom
       picked = []
       if count < limit
         # just return all records
-        picked = self.all(:conditions => cond) - except
+        picked = self.all(:conditions => cond, :include => prefetch) - except
       else
         limit.times.each do
           while 1
-            record = self.find(:first, :conditions => cond, :offset => rand(count))
+            record = self.find(:first, :conditions => cond, :include => prefetch, :offset => rand(count))
             if !picked.include?(record) and !except.include?(record)
               picked << record
               break

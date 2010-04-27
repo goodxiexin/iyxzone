@@ -5,11 +5,11 @@
   </div>
   <div class="piclist-rows">
     <table class="small" cellpadding="0">
-		<% @guild.events[0..2].each do |event| %>
+		<% @events.each do |event| %>
 			<tr>
         <td>
           <div class="imgwrap">
-            <%= album_cover event.album, :size => :medium %>
+            <%= album_cover event.album, :size => :medium, :class => 'imgbox01' %>
           </div>
           <div class="data">
             <p>名称：<span><%= event_link event %></span></p>

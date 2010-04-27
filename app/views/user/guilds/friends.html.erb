@@ -19,7 +19,10 @@
       </div>
 	    <div class="piclist-rows">
         <% if @guilds.total_entries != 0 %>
-          <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
+          <table cellpadding="0" cellspacing="0">
+            <%= render :partial => 'user/guilds/guild_item', :collection => @guilds %>
+          </table>
+          <%= will_paginate @guilds %>
         <% else %>
           <div class='tip'>你好友最近都死光了，报告完毕</div>
         <% end %> 

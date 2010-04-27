@@ -95,7 +95,9 @@
   </div></div>
 </div></div></div></div>
 
-<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @event.participants - [current_user]} %>
+<% if @participation and @participation.is_authorized? %>
+<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @event.participants.all(:include => :games) - [current_user]} %>
+<% end %>
 
 <% unless @reply_to.blank? %>
 <%= onload_javascript_tag "Iyxzone.Comment.set('event_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>

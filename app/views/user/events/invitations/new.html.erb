@@ -8,13 +8,7 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @event.album, :size => 'medium', :class => "imgbox01", :width => 50, :height => 50 %></span>
-      <p class="left">
-        <strong><%= @event.title %>活动邀请</strong><br/>
-        <%= link_to '活动主页', event_url(@event), :class => 'red' %>
-      </p>
-    </div>
+    <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}活动邀请"} %>
     <div class="box02 canvas_int space">
       <div class="tab tab01">
         <div class="icon">

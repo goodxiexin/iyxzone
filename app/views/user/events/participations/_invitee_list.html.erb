@@ -1,0 +1,30 @@
+<% if invite_list.count == 0 %>
+  <% if @event.poster == current_user %>
+    <div class='tip'>还没有人被邀请，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
+  <% else %>
+    <div class='tip'>还没有人被邀请参加这个活动</div>
+  <% end %>
+<% else %>
+  <div class='d6-list s_clear'>
+    <ul id='participations'>
+      <% invitee_list.each do |invitation| %>
+        <% character = invitation.character %>
+        <% participant = invitation.participant %>
+        <li class='bg' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+          <div class='card'>
+            <div class='img'>
+              <div class='middle'><div class='middle-center'><div class='center'>
+                <%= avatar participant, :class => 'imgbox01' %>
+              </div></div></div>
+            </div>
+            <div class='info member s_clear'>
+              <h4><%= profile_link participant, :class => 'blk' %></h4>
+              <span class='red nowrap'><%= character.name %></span>
+              <span class='blk op'><%= link_to '发站内信', new_mail_url(:recipient_ids => [invitation.participant_id]), :class => 'blk gray02' %></span>
+	          </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

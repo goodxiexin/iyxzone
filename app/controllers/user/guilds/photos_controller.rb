@@ -8,7 +8,7 @@ class User::Guilds::PhotosController < UserBaseController
   end
 
   def show
-    @photo = GuildPhoto.find(params[:id])
+    @photo = GuildPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
     @album = @photo.album
     @guild = @album.guild
     @user = @guild.president

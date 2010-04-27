@@ -1,0 +1,18 @@
+  <div class="big-head space">
+    <p class="left">
+      <strong>公会：</strong><span class='shine'><strong><%= h @guild.name %></strong></span>
+    </p>
+  </div>
+  <div class="rows"></div>
+  <div class="multibox space20">
+    <div class="title"><b>描述</b></div>
+    <div class="feed-box">
+      <% if @guild.president == current_user %>
+        <%= in_place_text_area @guild, :description, '介绍一下公会？', :param_name => 'guild[description]' %>
+      <% else %>
+      <%= simple_format h @guild.description %>
+      <% end %>
+    </div>
+  </div>
+
+

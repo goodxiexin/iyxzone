@@ -6,7 +6,7 @@ class User::Games::ComradesController < UserBaseController
 		@comrades = []
 		if @playing
       servers = current_user.servers.all(:conditions => { :game_id => @game.id})
-		  @comrades = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => {:server_id => servers.map(&:id)}
+		  @comrades = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => {:server_id => servers.map(&:id)}, :include => [{:user => :profile}, :server]
     end
 	end
 
