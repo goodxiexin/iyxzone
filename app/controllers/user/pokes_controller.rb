@@ -3,7 +3,7 @@ class User::PokesController < UserBaseController
 	layout 'app'
 
   def index
-    @deliveries = current_user.poke_deliveries.paginate :page => params[:page], :per_page => 10
+    @deliveries = current_user.poke_deliveries.paginate :page => params[:page], :per_page => 10, :include => [:sender]
   end
 
   def new

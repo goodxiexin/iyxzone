@@ -26,6 +26,8 @@ class User::ProfilesController < UserBaseController
     @skin = @profile.skin
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 
+    @viewings = @profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
+
     # wall messages
     @wall_viewable = @profile.is_comment_viewable_by? current_user
     @messages = @profile.comments.paginate :page => params[:page], :per_page => 10

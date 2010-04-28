@@ -14,11 +14,11 @@ class User::BlogsController < UserBaseController
   end
 
 	def hot
-    @blogs = Blog.hot.paginate :page => 1, :per_page => PER_PAGE, :include => [{:poster => :profile}, :share]
+    @blogs = Blog.hot.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :share]
   end
 
   def recent
-    @blogs = Blog.recent.paginate :page => 1, :per_page => PER_PAGE, :include => [{:poster => :profile}, :share]
+    @blogs = Blog.recent.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :share]
   end
 
   def relative
