@@ -22,7 +22,8 @@ class UserMailer < ActionMailer::Base
 
   def signup_invitation invitation
     recipients  invitation.recipient_email
-    from        SITE_MAIL
+		from				"17gaming" + '<' + SITE_MAIL + '>'
+#    from        SITE_MAIL
     sent_on     Time.now
 		charset			"utf-8"
 		content_type	"text/html"
@@ -52,7 +53,8 @@ protected
   
   def setup_email user
     recipients	user.email
-    from				SITE_MAIL
+		from				"17gaming" + '<' + SITE_MAIL + '>'
+#		from				SITE_MAIL
     sent_on			Time.now
   end
 
