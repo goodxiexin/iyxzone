@@ -24,7 +24,7 @@
             <h4>【其他公会论坛热帖集合】</h4>
             <ul>
               <% @hot_topics.each do |t| %>
-              <li><%= link_to "【#{h t.forum.guild.name}】#{h t.subject}", forum_topic_url(t.forum, t) %></li>
+              <li><%= link_to "【#{h t.forum.guild.name}】#{h t.subject}", forum_topic_posts_url(t.forum, t) %></li>
               <% end %>
             </ul>
           </div>

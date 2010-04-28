@@ -1,16 +1,16 @@
 class Ku6
 
 	# http://v.ku6.com/show/WZM-9HN3rTfu_qzS.html
-	KU6_SINGLE	= /http:\/\/v\.ku6\.com\/show\/[\w]*\.html/
+	KU6_SINGLE	= /http:\/\/v\.ku6\.com\/show\/[\w]*\.htm[l]/
 	# http://v.ku6.com/special/show_3743641/iEz6t9G4drXhYVl_.html
 	# <embed src="http://player.ku6.com/refer/iEz6t9G4drXhYVl_/v.swf" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" allowfullscreen="true" type="application/x-shockwave-flash"></embed>
-	KU6_ALBUM		=	/http:\/\/v\.ku6\.com\/special\/show_[\d]*\/[\w]*\.html/
+	KU6_ALBUM		=	/http:\/\/v\.ku6\.com\/special\/show_[\d]*\/[\w]*\.htm[l]/
 	# http://hd.ku6.com/show/6QZCPddfBQOue1xL.html
 	# <embed src="http://player.ku6.com/refer/tGwGU3N2KITR36lN/v.swf" quality="high" width="414" height="305" align="middle" allowScriptAccess="always" allowfullscreen="true" type="application/x-shockwave-flash"></embed>
 
 	# http://hd.ku6.com/show/6QZCPddfBQOue1xL.html
 	# <embed src="http://player.ku6.com/refer/tGwGU3N2KITR36lN/v.swf" quality="high" width="414" height="305" align="middle" allowScriptAccess="always" allowfullscreen="true" type="application/x-shockwave-flash"></embed>
-	KU6_HD			= /http:\/\/hd\.ku6\.com\/show\/[\w]*\.html/
+	KU6_HD			= /http:\/\/hd\.ku6\.com\/show\/[\w]*\.htm[l]/
 
 	include HTTParty
 

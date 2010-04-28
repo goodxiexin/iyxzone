@@ -561,8 +561,8 @@ Object.extend(Iyxzone.Game.Suggestor, {
           Iyxzone.enableButton(button, '推荐');
         },
         onSuccess: function(transport){
-//          $('game_suggestion_area').innerHTML = transport.responseText;
           $('game_suggestion_area').update( transport.responseText);
+          window.scrollTo(0, $('game_suggestion_area').cumulativeOffset().top);
         }.bind(this)
       });
     }
