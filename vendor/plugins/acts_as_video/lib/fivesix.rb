@@ -41,7 +41,7 @@ class FiveSix
 	end
 
 	def thumbnail_url
-			"/images/blank_video.png"
+			"/images/videoThumb/56.png"
 	end
 
 	def embed_html

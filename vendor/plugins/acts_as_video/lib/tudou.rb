@@ -36,7 +36,7 @@ class Tudou
 	end
 
 	def thumbnail_url
-		"/images/blank.gif"
+		"/images/videoThumb/tudou.png"
 	end
 
 	def embed_html

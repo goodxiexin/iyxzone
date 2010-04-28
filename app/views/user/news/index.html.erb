@@ -13,28 +13,44 @@
       <div class="tab tab01">
         <ul>
           <li <% if params[:type] == nil || params[:type] == '0' %> class="hover" <% end %>><span><%= link_to "拾闻", news_index_url(:type => 0) %></a></span></li>
-          <li <% if params[:type] == '1' %> class='hover' <% end %>><span><%= link_to "文字新闻", news_index_url(:type => 1)%></span></li>
-          <li <% if params[:type] == '2' %> class='hover' <% end %>><span><%= link_to "视频新闻", news_index_url(:type => 2) %></span></li>
-          <li <% if params[:type] == '3' %> class='hover' <% end %>><span><%= link_to "图片新闻", news_index_url(:type => 3) %></span></li>
+          <li <% if params[:type] == '1' %> class='hover' <% end %>><span><%= link_to "文字新闻", news_index_url(:type => 1, :time => 1)%></span></li>
+          <li <% if params[:type] == '2' %> class='hover' <% end %>><span><%= link_to "视频新闻", news_index_url(:type => 2, :time => 1) %></span></li>
+          <li <% if params[:type] == '3' %> class='hover' <% end %>><span><%= link_to "图片新闻", news_index_url(:type => 3, :time => 1) %></span></li>
         </ul>
       </div>
+      <div class="feed-box01">
+        <div class="nav-link">
+          <ul class="s_clear">
+              <li <%if params[:time].blank? || params[:time] == '1'%> class="hover"<% end %>><%= link_to "<span>今天</span>", news_index_url(:type => params[:type], :time => 1) %></li>
+              <li <%if params[:time] == '2'%> class="hover"<% end %>><%= link_to "<span>昨天</span>", news_index_url(:type => params[:type], :time => 2) %></li>
+              <li <%if params[:time] == '3'%> class="hover"<% end %>><%= link_to "<span>这周</span>", news_index_url(:type => params[:type], :time => 3) %></li>
+              <li <%if params[:time] == '4'%> class="hover"<% end %>><%= link_to "<span>更早</span>", news_index_url(:type => params[:type], :time => 4) %></li>
+					</ul>
+				</div>
       <% if @news_list.length != 0 %>
+				<div class="news10-list">
         <% @news_list.each do |n| %>
-          <div class="news10-list jl-cutline">
+          <div class="jl-cutline">
             <h2><strong><%= news_link n, :class => "shine" %></strong></h2>
             <span class="gray"><%= ftime n.created_at %></span>
             <div class="con">
               <% if n.news_type == 'text' %>
                 <%= news_content n, :length => 100, :omission => '...' %>
               <% elsif n.news_type == 'picture' %>
-                <%= link_to (image_tag n.pictures.first.public_filename, :class => 'imgbox01', :width => 100), news_url(n) %>
+							<span class="share-album-cover">
+                <%= link_to (image_tag n.pictures.first.public_filename, :class => 'imgbox01', :size => '100x100'), news_url(n) %>
+								</span><br/>
+                <%= simple_format h n.data %>
               <% else %>
-                <%= link_to (image_tag n.thumbnail_url, :width => 150, :class => 'imgbox01'), news_url(n) %>
+                <%= link_to (image_tag n.thumbnail_url, :width => 150, :class => 'imgbox01'), news_url(n) %><br/>
+                <%= simple_format h n.data %>
               <% end %>
-            </div>
+						</div>
             <strong class="gray"><span class="w-l">评论:<%= n.comments_count %></span><span class="w-l">|</span><span class="w-l">浏览:<%= n.viewings_count %></span><span class="w-l">|</span><span class="w-l">分享:<%= n.sharings_count %></span></strong>
           </div>
         <% end %>
+        </div>
+        </div>
         <%= will_paginate @news_list %>
       <% else %>
         <div class="gray">
