@@ -7,7 +7,7 @@ class User::FriendsController < UserBaseController
     @guild = Guild.find(params[:guild_id]) unless params[:guild_id].nil?
     case params[:term].to_i
     when 0
-      @friends = current_user.friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
+      @friends = current_user.friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC', :include => :profile
     when 1
       @friends = current_user.friends.find_all {|f| f.games.include?(@game) }.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
     when 2
@@ -22,12 +22,12 @@ class User::FriendsController < UserBaseController
 
   # other people's friends list
   def other
-    @friends = @user.friends.paginate :page => params[:page], :per_page => 18
+    @friends = @user.friends.paginate :page => params[:page], :per_page => 18, :include => [:profile]
   end
 
   # common friends with ...
   def common
-    @friends = @user.common_friends_with(current_user).paginate :page => params[:page], :per_page => 18
+    @friends = @user.common_friends_with(current_user).paginate :page => params[:page], :per_page => 18, :include => [:profile]
   end
 
   def destroy

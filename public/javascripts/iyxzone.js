@@ -114,7 +114,7 @@ Object.extend(Iyxzone, {
     }else{
       navItem.update('站内信<em class="notice-bubble"><strong>1</strong></em>');
     }
-    //Sound.play('music/test.wav');
+    Sound.play('music/tip.wav');
   },
 
   newNotificationNotice: function(){
@@ -129,7 +129,7 @@ Object.extend(Iyxzone, {
     }
     $('notifications_dropdown_list').update(''); 
     $('notifications_dropdown').hide(); 
-    //Sound.play('/music/test.wav');
+    Sound.play('/music/tip.wav');
   }
 
 });

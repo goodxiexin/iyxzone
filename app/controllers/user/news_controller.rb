@@ -17,7 +17,7 @@ class User::NewsController < UserBaseController
   end
 
   def show
-    @news = News.find(params[:id])
+    @news = News.find(params[:id], :comments => [:commentable, {:poster => :profile}] )
     @random_news = News.random :limit => 5, :except => [@news]
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     render :action => "show_#{@news.news_type}_news"
