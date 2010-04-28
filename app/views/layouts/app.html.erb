@@ -4,9 +4,7 @@
 
 <% content_for :body do %>
 <body class='cut-side'>
-  <% cache("navbar-#{current_user.id}") do %>
   <%= render :partial => 'layouts/navbar' %>
-  <% end %>
   <div id="page" class="page_side_wrap s_clear">
     <% cache("appbar-#{current_user.id}") do %>
       <%= render :partial => 'layouts/appbar' %>

@@ -395,6 +395,7 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .inbox-box .index-list td{padding:12px 8px;border-bottom:1px #E7F0E0 solid;vertical-align:top;line-height:20px;}
 .inbox-box .index-list td h3 a{color:#25700D}
 .inbox-box .index-list td p{color:#7E7F80}
+.inbox-box .index-list td.cont p{width:380px;overflow:hidden;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 .inbox-box .index-list td a{color:#D63200}
 .inbox-box .index-list td a:hover{text-decoration:underline}
 

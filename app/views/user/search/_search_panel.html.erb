@@ -2,7 +2,7 @@
           <% form_tag search_users_url, :class => "formcontent", :id => 'user_form', :style => "#{search_type == 'user' ? '':'display:none'}", :onsubmit => "Iyxzone.Search.searchUsers($('user_search_submit_btn')); return false;", :id => 'user_form' do %>
             <div class="rows s_clear">
               <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'key', params[:key] || '要搜索的用户的昵称', :onclick => "$(this).clear();" %></div>
+                <div class="textfield"><%= text_field_tag 'key', params[:key] %></div>
               </div>
               <div class="fldbtn"><span class="button"><span><button type="submit" id='user_search_submit_btn'>查找</button></span></span></div>
               <div class="link"><%= link_to_function "按游戏角色查找", "Iyxzone.Search.showCharacterForm();" %></div>
@@ -11,7 +11,7 @@
           <% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :style => "#{search_type == 'character' ? '':'display:none'}", :onsubmit => "Iyxzone.Search.searchCharacters($('character_search_submit_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldid"><label for="username">游戏角色名称：</label></div>
-                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "$(this).clear();" %></div></div>
+              <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', params[:key] %></div></div>
             </div>
             <div id='character_options'>
             <div class="rows s_clear">
@@ -22,14 +22,14 @@
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务区: ' %></div>
-              <div class='fldvalue'>
-              <%= collection_select :area, :id, @areas, :id, :name, {:prompt => '---'}, {:name => :area_id} %>
+              <div class='fldvalue' >
+              <%= collection_select :area, :id, @areas || [], :id, :name, {:prompt => '---'}, {:name => :area_id} %>
               </div>
             </div>
             <div class="rows s_clear">
               <div class="fldid"><%= label_tag '服务器: ' %></div>
               <div class='fldvalue'>
-              <%= collection_select :server, :id, @servers, :id, :name, {:prompt => '---'}, {:name => :server_id} %>
+              <%= collection_select :server, :id, @servers || [], :id, :name, {:prompt => '---'}, {:name => :server_id} %>
               </div>
             </div>
             </div>

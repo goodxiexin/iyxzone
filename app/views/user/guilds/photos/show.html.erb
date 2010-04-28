@@ -77,7 +77,9 @@
   </div></div>
 </div></div></div></div>
 
+<% if @membership and (@membership.is_authorized? or @membership.is_president?) %>
 <%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @guild.people - [current_user]} %>
+<% end %>
 
 <% unless @reply_to.blank? %>
   <%= onload_javascript_tag "Iyxzone.Comment.set('guild_photo', '#{@photo.id}', '#{@reply_to.login}', #{@reply_to.id})" %>

@@ -109,7 +109,7 @@
 
 <% if @relationship == 'owner' or @relationship == 'friend' %>
 <%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => current_user.friends.all(:include => :games)} %>
-<% end %?
+<% end %>
 
 <% unless @reply_to.blank? %>
 <%= onload_javascript_tag "Iyxzone.Comment.set('personal_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
