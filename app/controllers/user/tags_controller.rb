@@ -13,7 +13,7 @@ class User::TagsController < UserBaseController
 		if @taggable.destroy_tag @tag.name 
 			render :update do |page|
         page << "$('tag_#{@tag.id}').remove();"
-        page << "tip('成功删除');"
+        #page << "tip('成功删除');"
 			end
 		end
 	end

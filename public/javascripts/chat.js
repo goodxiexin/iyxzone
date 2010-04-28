@@ -56,7 +56,7 @@ Object.extend(Iyxzone.Chat, {
     var img = null;
 
     if(target.innerHTML == ''){
-      img = new Element('img', {src: this.blinkFriendIcon});
+      img = new Element('img', {src: this.blinkFriendIcon.src});
       img.addClassName('left w-l');
       img.setStyle({'width': '20px', 'height': '20px'});
       target.appendChild(img);
@@ -72,7 +72,7 @@ Object.extend(Iyxzone.Chat, {
     img = target.down('img');
 
     if(img.src.include('/images/blank.gif')){
-      img.src = this.blinkFriendIcon;
+      img.src = this.blinkFriendIcon.src;
     }else{
       img.src = this.blankIcon.src;
     }
@@ -84,7 +84,8 @@ Object.extend(Iyxzone.Chat, {
   setBlink: function(){
     if(this.blinkFriendID == null && this.unreadMessages.keys().length != 0){
       this.blinkFriendID = this.unreadMessages.keys()[0];
-      this.blinkFriendIcon = this.unreadMessages.get(this.blinkFriendID).avatar;//'<img src="' + this.unreadMessages.get(this.blinkFriendID).avatar + '" class="left w-l" width=20 height=20/>';
+      this.blinkFriendIcon = new Image();
+      this.blinkFriendIcon.src = this.unreadMessages.get(this.blinkFriendID).avatar;//'<img src="' + this.unreadMessages.get(this.blinkFriendID).avatar + '" class="left w-l" width=20 height=20/>';
       this.blinkTimer = setTimeout(this.toggleIcon.bind(this), 300);
 
       $('tiny-im-icon').observe('click', this.showUnreadMessages.bindAsEventListener(this));
@@ -142,7 +143,7 @@ Object.extend(Iyxzone.Chat, {
   },
 
   buildChatForm: function(friendID, friendLogin){
-    var div = new Element('div', {"id": 'chat-form-' + friendID, "class": 'im-dialog', "left": '500px', "top": '100px', "style": {'zIndex': 1000}});
+    var div = new Element('div', {"id": 'chat-form-' + friendID, "class": 'im-dialog', "style": {'zIndex': 1000}});
     div.hide();
     
     var html = '';
@@ -161,7 +162,11 @@ Object.extend(Iyxzone.Chat, {
 
     $(div).update( html);
     document.body.appendChild(div);
-
+    $('message-content-' + friendID).observe('keydown', function(event){
+      if(event.ctrlKey && event.keyCode == 13){
+        this.sendMessage(friendID, friendLogin, null, null); 
+      }
+    }.bind(this)); 
     new Iyxzone.limitedTextField($('message-content-' + friendID), 200, $('im_words_count_' + friendID));
 
     return div;
@@ -210,13 +215,16 @@ Object.extend(Iyxzone.Chat, {
   showChatForm: function(friendID, friendLogin){
     var form = $('chat-form-' + friendID);
     var info = this.unreadMessages.unset(friendID);
-    
+
     if(form == null){
       form = this.buildChatForm(friendID, friendLogin);
-      form.setStyle({'left': '500px', 'top': '100px'});
+      var pageScroll = document.viewport.getScrollOffsets();
+      var pageWidth = document.viewport.getWidth();
+      var pageHeight = document.viewport.getHeight();
+      form.setStyle({'left': (pageWidth/4 + pageScroll.left) + 'px', 'top': pageHeight/4 + pageScroll.top + 'px'});
       form.show();
       // 注意，能drag的只是title而已
-      new Draggable($('chat-form-' + friendID).childElements()[0], {onDrag: this.locateForm.bind(this), endDrag: this.locateForm.bind(this)});
+      new Draggable(form.childElements()[0], {onDrag: this.locateForm.bind(this), endDrag: this.locateForm.bind(this)});
     }else{
       form.show();
     }
@@ -228,6 +236,7 @@ Object.extend(Iyxzone.Chat, {
     if(info){
       info.messages.each(function(m){
         Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(friendLogin, m, false)});
+        $('chat-form-content-' + friendID).scrollTop = $('chat-form-content-' + friendID).scrollHeight;
       }.bind(this));
     }
 
@@ -278,7 +287,7 @@ Object.extend(Iyxzone.Chat, {
 
   // 发送消息
   sendMessage: function(friendID, friendLogin, button, event){
-    Event.stop(event);
+    if(event!=null)Event.stop(event);
     new Ajax.Request('/messages?friend_id=' + friendID + "&authenticity_token=" + encodeURIComponent(this.token), {
       method: 'post',
       parameters: {'message[content]' : $('message-content-' + friendID).value},
@@ -287,7 +296,9 @@ Object.extend(Iyxzone.Chat, {
       },
       onSuccess: function(transport){
         var message = transport.responseText.evalJSON();
-        Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(this.myLogin, message)});
+        var content = 'chat-form-content-' + friendID;
+        Element.insert(content, {bottom: this.buildMessageHTML(this.myLogin, message)});
+        $(content).scrollTop = $(content).scrollHeight;
       }.bind(this)
     });
   },
@@ -311,7 +322,8 @@ Object.extend(Iyxzone.Chat, {
       this.setBlink();
     }else{
       Element.insert('chat-form-content-' + friendID, {bottom: this.buildMessageHTML(login, message)});
-      
+      $('chat-form-content-' + friendID).scrollTop = $('chat-form-content-' + friendID).scrollHeight;
+    
       // send ajax request
       this.markRead([message]);
     }

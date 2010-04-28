@@ -430,7 +430,7 @@ Iyxzone.Photo.Tagger = Class.create({
 
   hideTagWithContent: function(tagID){
     var square = $('square_' + tagID);
-    var info = $('content_' + tagID);
+    var info = $('tag_content_' + tagID);
     if(square) square.hide();
     if(info) info.hide();
   },
@@ -456,9 +456,9 @@ Iyxzone.Photo.Tagger = Class.create({
       'border': '2px solid #eeeeee',
       'display': 'block',
       'zIndex': 4});
-    var info = $('content_' + tagID);
+    var info = $('tag_content_' + tagID);
     if(!info){
-      info = new Element('div', {id: 'content_' + tagID}).update(tag.content);
+      info = new Element('div', {id: 'tag_content_' + tagID}).update(tag.content);
       document.body.appendChild(info);
     }
     info.setStyle({

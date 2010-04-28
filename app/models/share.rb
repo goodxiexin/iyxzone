@@ -10,7 +10,7 @@ class Share < ActiveRecord::Base
 
   named_scope :hot, lambda { |type|
     if type == 'all'
-      { :conditions => ["created_at > ?", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC' }
+      { :conditions => ["created_at > ?", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC, created_at DESC' }
     else 
       { :conditions => ["created_at > ? AND shareable_type = ?", 2.weeks.ago.to_s(:db), type], :order => 'digs_count DESC' }
     end

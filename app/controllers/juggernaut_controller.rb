@@ -23,7 +23,7 @@ class JuggernautController < ApplicationController
       @unread_messages["#{poster.id}"] = {
         :login => poster.login,
         :avatar => avatar_path(poster),
-        :messages => messages.map{|m| {:content => m.content, :created_at => m.created_at, :id => m.id}}
+        :messages => messages.map{|m| {:content => m.content, :created_at => m.created_at.strftime("%Y-%m-%d %H:%M"), :id => m.id}}
       }
     end
     render :juggernaut => {:type => :send_to_client, :client_id => @user.id} do |page|

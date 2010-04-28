@@ -352,8 +352,9 @@ module ApplicationHelper
 	end
 
   def sharing_reason sharing, opts={}
+    reason = sharing.reason.blank? ? '。。。哥笑而不语。。。' : sharing.reason
     class_name = opts[:class] || 'con'
-    simple_format "<span class='quote-start'></span>#{h sharing.reason}<span class='quote-end'></span>", :class => class_name
+    simple_format "<span class='quote-start'></span>#{h reason}<span class='quote-end'></span>", :class => class_name
   end
 
   def game_infos

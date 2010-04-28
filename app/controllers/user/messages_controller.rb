@@ -16,7 +16,7 @@ class User::MessagesController < UserBaseController
     message_params = (params[:message] || {}).merge({:poster_id => current_user.id, :recipient_id => @friend.id})
     @message = Message.new(message_params)
     if @message.save
-      @info = {:content => @message.content, :created_at => @message.created_at, :id => @message.id}
+      @info = {:content => @message.content, :created_at => @message.created_at.strftime("%Y-%m-%d %H:%M"), :id => @message.id}
       @sender = {:id => current_user.id, :login => current_user.login, :avatar => avatar_path(current_user)}
       render :juggernaut => {:type => :send_to_client, :client_id => @friend.id} do |page|
         page << "Iyxzone.Chat.recvMessage(#{@info.to_json}, #{@sender.to_json})"

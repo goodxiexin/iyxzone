@@ -12,6 +12,7 @@
     <%= javascript_include_merged :base %>
     <!-- 下面这个文件打包有错，所以不打包了-->
     <%= javascript_include_tag "juggernaut/juggernaut" %>
+    <%= javascript_include_tag "juggernaut/swfobject" %>
     <%= yield :javascript_include %>
   </head>
 
