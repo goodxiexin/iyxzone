@@ -9,10 +9,14 @@ class User::HomeController < UserBaseController
   FeedCategory = ['status', 'blog', 'all_album_related', 'video', 'sharing']
 
   def show
-    @feed_deliveries = current_user.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => "created_at DESC")
-    @friend_suggestions = current_user.fetch_friend_suggestions.sort_by{rand}
-    @notices = current_user.notices.unread.find(:all, :limit => 10, :include => [:producer])
-		@first_fetch_size = FirstFetchSize
+    @feed_deliveries = current_user.feed_deliveries.all(:limit => FirstFetchSize, :order => "created_at DESC", :include => [{:feed_item => :originator}])
+    @first_fetch_size = FirstFetchSize
+  
+    @viewings = current_user.profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
+
+    @friend_suggestions = FriendSuggestion.random(:limit => 6, :conditions => {:user_id => current_user.id}, :include => [{:suggested_friend => :profile}])
+    
+    @notices = current_user.notices.unread.all(:limit => 10, :include => [:producer])
   end
 
   def feeds

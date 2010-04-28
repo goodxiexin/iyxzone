@@ -10,4 +10,6 @@ class ComradeSuggestion < ActiveRecord::Base
 
 	belongs_to :area, :class_name => 'GameArea'
 
+  acts_as_random
+
 end

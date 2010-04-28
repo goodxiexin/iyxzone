@@ -4,22 +4,22 @@ class User::FriendSuggestionsController < UserBaseController
 
 	def index
     @games = Game.find(:all, :order => 'pinyin ASC')
-		@friend_suggestions = current_user.fetch_friend_suggestions.paginate :page => params[:page], :per_page => 6
+		@friend_suggestions = current_user.friend_suggestions.paginate :page => params[:page], :per_page => 12, :include => [{:suggested_friend => [:profile, {:characters => [:game, :server]}]}]
 		@comrade_suggestions = {}
 		current_user.servers.each do |s|
-			@comrade_suggestions[s.id] = current_user.fetch_comrade_suggestions(s).paginate :page => params[:page], :per_page => 3
+			@comrade_suggestions[s.id] = current_user.comrade_suggestions.paginate :page => params[:page], :per_page => 6, :conditions => {:server_id => s.id}, :include => [{:comrade => [:profile, {:characters => [:game, :server]}]}]
 		end
 	end
 
 	def friend
 		@games = Game.find(:all, :order => 'pinyin ASC')
-    @friend_suggestions = current_user.fetch_friend_suggestions.paginate :page => params[:page], :per_page => 20
+    @friend_suggestions = current_user.friend_suggestions.paginate :page => params[:page], :per_page => 20, :include => [{:suggested_friend => [:profile, {:characters => [:game, :server]}]}]
 	end
 
 	def comrade
     @games = Game.find(:all, :order => 'pinyin ASC')
     @server = GameServer.find(params[:server_id])
-		@comrade_suggestions = current_user.fetch_comrade_suggestions(@server).paginate :page => params[:page], :per_page => 20
+		@comrade_suggestions = current_user.comrade_suggestions.paginate :page => params[:page], :per_page => 20, :conditions => {:server_id => @server.id}, :include => [{:comrade => [:profile, {:characters => [:game, :server]}]}]
 	end
 
 	def new
@@ -31,23 +31,21 @@ class User::FriendSuggestionsController < UserBaseController
     end
 
 		if !params[:server_id].nil?
-			@suggestions = current_user.fetch_comrade_suggestions(@server).reject{|s| @except.include?(s)}
-      if @suggestions.blank?
-        # this could barely happen, but it's still possible
+      @suggestion = ComradeSuggestion.random(:limit => 1, :conditions => {:user_id => current_user.id}, :except => @except)
+      if @suggestion.blank?
         # in this case, we just return the origin comrade suggestion
         @suggestion = ComradeSuggestion.find(params[:sid])
       else
-        @suggestion = @suggestions.sort_by{rand}.first
+        @suggestion = @suggestion[0]
       end
 			render :partial => 'comrade_suggestion', :object => @suggestion
 		else
-			@suggestions = current_user.fetch_friend_suggestions.reject{|s| @except.include?(s)}
-      if @suggestions.blank?
-        # this could barely happen, but it's still possible
+			@suggestion = FriendSuggestion.random(:limit => 1, :conditions => {:user_id => current_user.id}, :except => @except)
+      if @suggestion.blank?
         # in this case, we just return the origin friend suggestions 
         @suggestion = FriendSuggestion.find(params[:sid])
       else
-        @suggestion = @suggestions.sort_by{rand}.first
+        @suggestion = @suggestion[0]
       end
       if params[:nicer].nil?
 			  render :partial => 'friend_suggestion', :object => @suggestion

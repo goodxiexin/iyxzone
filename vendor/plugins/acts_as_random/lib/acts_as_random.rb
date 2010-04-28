@@ -24,11 +24,9 @@ module ActsAsRandom
       prefetch = opts[:include] || []
       count = self.count(:conditions => cond)
       except = opts[:except] || []
-      count = count - except.uniq.count
-      count = 0 if count < 0
       limit = opts[:limit] || 1
       picked = []
-      if count < limit
+      if limit + except.uniq.count >= count
         # just return all records
         picked = self.all(:conditions => cond, :include => prefetch) - except
       else
