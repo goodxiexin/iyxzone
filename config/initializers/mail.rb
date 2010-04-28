@@ -4,12 +4,12 @@ ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.default_charset = "utf-8"
 ActionMailer::Base.smtp_settings = {
-  :address => "smtp.gmail.com",
-  :port => 587,
+  :address => "17gaming.com",
+  :port => 25,
   :enable_starttls_auto => true,
-  :domain => "gmail.com",
+  :domain => "17gaming.com",
   :authentication => :plain,
-  :user_name => "gaoxh04@gmail.com",
+  :user_name => "deployer",
   :password => "20041065"
 }
 ActionMailer::Base.delivery_method = :activerecord
