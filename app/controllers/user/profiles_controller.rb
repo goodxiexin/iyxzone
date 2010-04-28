@@ -29,7 +29,6 @@ class User::ProfilesController < UserBaseController
     @viewings = @profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
 
     # wall messages
-    @wall_viewable = @profile.is_comment_viewable_by? current_user
     @messages = @profile.comments.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
 	end
