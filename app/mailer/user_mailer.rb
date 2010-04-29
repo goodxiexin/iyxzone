@@ -1,6 +1,6 @@
 class UserMailer < ActionMailer::Base
 
-  layout 'mail', :only => [:signup_notification, :activation, :forgot_password, :reset_password]
+  layout 'mail', :only => [:activation, :forgot_password, :reset_password]
 
   def long_time_no_seen user
     setup_email user
@@ -11,6 +11,8 @@ class UserMailer < ActionMailer::Base
   def signup_notification user, token
     setup_email	user
     subject			"17Gaming(一起游戏网) - 激活您的帐号"
+		charset			"utf-8"
+		content_type	"text/html"
     if token.blank?
       body			:user => user, :url => "#{SITE_URL}/activate/#{user.activation_code}"
     else
@@ -20,8 +22,11 @@ class UserMailer < ActionMailer::Base
 
   def signup_invitation invitation
     recipients  invitation.recipient_email
-    from        SITE_MAIL
+		from				"17gaming" + '<' + SITE_MAIL + '>'
+#    from        SITE_MAIL
     sent_on     Time.now
+		charset			"utf-8"
+		content_type	"text/html"
     subject     "17Gaming(一起游戏网) - #{invitation.sender.login} 邀请您加入"
     body        :user => invitation.sender, :url => "#{SITE_URL}/invite?token=#{invitation.token}"
   end
@@ -48,7 +53,8 @@ protected
   
   def setup_email user
     recipients	user.email
-    from				SITE_MAIL
+		from				"17gaming" + '<' + SITE_MAIL + '>'
+#		from				SITE_MAIL
     sent_on			Time.now
   end
 

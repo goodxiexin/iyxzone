@@ -39,6 +39,8 @@ ActionController::Routing::Routes.draw do |map|
   map.invite '/invite', :controller => 'register', :action => 'invite'
 
   map.namespace :admin do |admin|
+		
+		admin.resources	:tasks
 
     admin.resources :news do |news|
 
@@ -80,6 +82,8 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
+
+		users.resources :tasks
 		
     users.resources :applications
 

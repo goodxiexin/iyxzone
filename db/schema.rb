@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100425065936) do
+ActiveRecord::Schema.define(:version => 20100428031910) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -493,6 +493,17 @@ ActiveRecord::Schema.define(:version => 20100425065936) do
 
   add_index "participations", ["participant_id", "event_id"], :name => "index_participations_on_participant_id_and_event_id"
 
+  create_table "pending_tasks", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "task_id"
+    t.time     "start_time"
+    t.time     "complete_time"
+    t.text     "achievement"
+    t.integer  "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "photo_tags", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "tagged_user_id"
@@ -718,6 +729,16 @@ ActiveRecord::Schema.define(:version => 20100425065936) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",       :default => 0
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.text     "content"
+    t.text     "reward"
+    t.text     "requirement"
+    t.integer  "catagory"
+    t.integer  "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "topics", :force => true do |t|
