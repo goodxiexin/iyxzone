@@ -63,7 +63,7 @@ Object.extend(Iyxzone.Chat, {
     }else{
       img = target.down('img');
       if(img.src.include('/images/blank.gif'))
-        img.src = this.blinkFriendIcon;
+        img.src = this.blinkFriendIcon.src;
       else
         img.src = this.blankIcon.src;
     }
