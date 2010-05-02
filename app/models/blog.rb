@@ -19,7 +19,7 @@ class Blog < ActiveRecord::Base
 
 	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.is_owner_privilege? or blog.poster == user}
 
-  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed == 1} + blog.poster.guilds}
+  acts_as_resource_feeds
   
   acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
                     :default_title => lambda {|blog| blog.title}, 

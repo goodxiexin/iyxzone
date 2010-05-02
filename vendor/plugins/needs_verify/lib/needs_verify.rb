@@ -62,6 +62,10 @@ module NeedsVerify
       save
     end
 
+    def masked?
+      self.verified == 2
+    end
+
     def verify_sensitive_columns_on_create
       verify_sensitive_columns
     end

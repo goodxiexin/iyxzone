@@ -1,0 +1,12 @@
+        <div class="box02 appcontent01">
+          <div class='d6-head s_clear'>
+          <strong class='gray left'>你可能认识的人</strong>
+          <span><%= link_to '更多', {:controller => 'user/friend_suggestions', :action => 'friend'}, :class => 'right' %></span>
+          </div>
+          <div class="d6-list s_clear rows">
+            <ul id='friend_suggestions'>
+              <%= render :partial => 'nicer_friend_suggestion', :collection => @friend_suggestions %>
+            </ul>
+          </div>
+        </div>
+

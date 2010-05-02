@@ -1,15 +1,14 @@
 class Admin::BlogsController < AdminBaseController
 
   def index
-    @blogs = Blog.unverified
-  end
-  
-  def accept
-    @blogs = Blog.accepted
-  end
-  
-  def reject
-    @blogs = Blog.rejected
+    case params[:type].to_i
+    when 0
+      @blogs = Blog.unverified.paginate :page => params[:page], :per_page => 20
+    when 1
+      @blogs = Blog.accepted.paginate :page => params[:page], :per_page => 20
+    when 2
+      @blogs = Blog.rejected.paginate :page => params[:page], :per_page => 20
+    end
   end
 
   def verify
@@ -18,7 +17,7 @@ class Admin::BlogsController < AdminBaseController
         page << "$('blog_#{@blog.id}').remove();"
       end
     else
-      err
+      render_js_error
     end
   end
   
@@ -29,7 +28,7 @@ class Admin::BlogsController < AdminBaseController
         page << "$('blog_#{@blog.id}').remove();"
       end
     else
-      err
+      render_js_error
     end
   end
   

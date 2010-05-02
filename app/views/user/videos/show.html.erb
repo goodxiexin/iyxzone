@@ -6,77 +6,23 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-	<% if @user==current_user %>
-    <h1 class="app-video">视频</h1>
-	<% else %>
-    <div class="friend-head space s_clear">
-      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
-      <p class="left">
-        <strong><%= @user.login %>的视频</strong><br />
-        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
-      </p>
-    </div>
-	<% end %>
+	  <% if @user==current_user %>
+      <h1 class="app-video">视频</h1>
+	  <% else %>
+	    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的视频"} %>
+    <% end %>
     <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <div class="right">
-					<%= link_to "新视频", new_video_url %>
-				</div>
-				<ul>
-					<li><span><%= link_to "热门视频", hot_videos_url %></span></li>
-					<li class='hover'><span><%= link_to "#{subject}的视频", videos_url(:uid => @user.id) %></span></li>
-					<li><span><%= link_to "#{subject}的相关视频", relative_videos_url(:uid => @user.id)%></span></li>
-          <% if @user == current_user %>
-					<li><span><%= link_to "好友视频", friends_videos_url %></span></li>
-					<% end %>
-				</ul>
-			</div>
+      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>
       <div class='detail-video'>
-        <div class="path-box">
-	  			<div class="left">
-		  		<%= "共#{@count}篇视频" %>
-			  	<%= link_to '前一个', video_url(@prev) %> |
-				  <%= link_to '后一个', video_url(@next) %>
-				  </div>
-        </div>
-        <div class='detail-video-head jl-cutline s_clear'>
-          <p class="left"><%= h @video.title %> <span class='gray'><%= ftime @video.created_at %></span></p>
-      		<p class="right">
-            <% if @user == current_user %>
-              <%= link_to "<span class='icon2-edit'></span>编辑", edit_video_url(@video), :class => 'red' %>
-              <%= facebox_confirm "<span class='icon2-close'></span>删除", video_url(@video), {:msg => '你确定要删除这个视频吗', :method => :delete}, :class=>'red w-l' %>
-            <% end %>
-            <%= facebox_link "分享", new_sharing_url(:url => video_url(@video)), :width => 450, :class=>'share-btn'%>
-		      </p>
-        </div>
+        <%= render :partial => 'video_path' %>
+        <%= render :partial => 'video_head' %>
         <div class='con'>
           <%= @video.embed_html %>
 		      <p class='space20'><%= simple_format h @video.description %></p>
         </div>
-        <div class="detail-video-foot" id='friend_tags'>
-	        <p class="jl-cutline"></p>
-		      <% if @video.tags.size == 0 %>
-			      <p>这个视频没有相关人员</p>
-		      <% else %>
-			      <p>标签: <%= @video.tags.map { |t| profile_link t.tagged_user, :class => 'red' }.join(',') %></p>
-		      <% end %>
-        </div>
-        <div class="page-foot s_clear">
-          <div class="foot-func">
-            <span class="w-l red">评论(<%= @video.comments_count %>)</span><span class="w-l">|</span>
-            <span class="photo-op-praise" ></span><%= text_dig_link @video, :class => 'red' %>
-          </div>
-          <div class='s_clear rows'>
-            <div class="feed-list">
-              <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @video, :recipient => @video.poster} %>
-            </div>
-          </div>
-        </div>
+        <%= render :partial => 'video_foot' %>
+        <%= render :partial => 'video_func' %>
       </div>
     </div>
   </div></div>
 </div></div></div></div>
-
-<% unless @reply_to.blank? %>
-<%= onload_javascript_tag "Iyxzone.Comment.set('video', #{@video.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
-<% end %>

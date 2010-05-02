@@ -417,4 +417,12 @@ module ApplicationHelper
 		app.about if !app.blank?
 	end
 
+  def verify_link resource, opts={}
+    link_to_remote '通过', :url => eval("verify_admin_#{resource.class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
+  end
+
+  def unverify_link resource, opts={}
+    link_to_remote '屏蔽', :url => eval("unverify_admin_#{resource.class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
+  end
+
 end

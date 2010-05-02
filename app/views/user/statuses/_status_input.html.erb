@@ -1,0 +1,39 @@
+      <div id="homeComposer" class="cmt-space">
+        <div class="img">
+          <div class="mcAvatar jl-mcAvatar"> 
+            <a href="#"></a>
+            <div class="picwrap"> <%= avatar @user %> </div>
+          </div>
+        </div>
+        <div class="mcContent">
+          <div class="mcPanel round02 round_r_t">
+            <div class="round_l_t">
+              <div class="round_r_b">
+                <div class="round_l_b">
+                  <div class="round_m jl-round_m"> <span class="arrow-dialog"></span>
+                    <div class="round_body s_clear">
+                      <% form_for :status, :html => {:onsubmit => "Iyxzone.Status.Builder.save($('submit_btn'), this); return false", :class => 'formcontent s_clear'} do |f| %>
+                        <%= hidden_field_tag 'home', 0 %>
+                        <div class="fldvalue">
+                          <div id="mcStatus" class="textfield02" style="width:500px;">
+                            <%= f.text_area 'content', :value => "你正在干嘛呢?" %>
+                          </div>
+                        </div>
+                        <div class="fldbtn jl-fldbtn"> <span class="button03"><span>
+                          <button type='submit' id='submit_btn' class='confirm-button' >发布</button>
+                        </span></span> </div>
+                      <% end %>
+                      <div class="buttons home-dialog"> 
+                        <span class="left" id='words_count'>0/140</span>
+                        <span class='right'><%= emotion_link 'status_content', :class => 'icon-face' %></span>
+                      </div>
+                            <%= javascript_tag "new Iyxzone.limitedTextField($('status_content'), 140, $('words_count'), true);" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+

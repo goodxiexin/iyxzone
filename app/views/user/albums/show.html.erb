@@ -1,16 +1,10 @@
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-	<% if @user==current_user %>
-    <h1 class="app-photo">照片</h1>
-	<% else %>
-    <div class="friend-head space s_clear">
-      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
-      <p class="left">
-        <strong><%= @user.login %>的照片</strong><br />
-        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
-      </p>
-    </div>
-	<% end %>
+	  <% if @user==current_user %>
+      <h1 class="app-photo">照片</h1>
+  	<% else %>
+      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的照片"} %>
+	  <% end %>
     <div class="box02 canvas_int space">
       <div class="tab tab01">
         <div class="right">
@@ -83,29 +77,28 @@
 					<% end %>
         <% end %>
 				</table>
-      <div class="pic-desc">
-        <% if @user == current_user %>
-				  <h4 class="box06"> <%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]' %> </h4>
-        <% else %>
-          <h4 class="box06"> <%= simple_format h @album.description %></h4>
-        <% end %>
-        <p class="gray">
-        <% unless @album.uploaded_at.blank? %>
-            <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
+        <div class="pic-desc">
+          <% if @user == current_user %>
+	  			  <h4 class="box06"> <%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]' %> </h4>
+          <% else %>
+            <h4 class="box06"> <%= simple_format h @album.description %></h4>
           <% end %>
-          <span class="time-create"><%= ftime @album.created_at %>创建</span>
-        </p>
-      </div>
-			</div>
-      <div class="foot cmt-space">
-        <div class="feed-list">
-          <h4>评论(<%= @album.comments_count %>)</h4>
-          <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @album, :recipient => @user} %>
+          <p class="gray">
+            <% unless @album.uploaded_at.blank? %>
+              <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
+            <% end %>
+            <span class="time-create"><%= ftime @album.created_at %>创建</span>
+          </p>
         </div>
-      </div>
+        <div class="page-foot s_clear">
+          <div class='s_clear rows'><div class="feed-list">
+            <h4>评论(<%= @album.comments_count %>)</h4>
+            <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @album, :recipient => @user} %>
+          </div></div>
+        </div>
+			</div>
     </div>
-  </div>
-</div></div>
+  </div></div>
 </div></div></div></div>
 
 <% unless @reply_to.blank? %>

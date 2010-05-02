@@ -80,6 +80,7 @@ protected
       require_friend_or_owner @user
     elsif ['show'].include? params[:action]
       @video = Video.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, {:tags => :tagged_user}, {:poster => :profile}])
+      require_verified @video
       @user = @video.poster
       require_adequate_privilege @video
     elsif ['edit', 'update', 'destroy'].include? params[:action]

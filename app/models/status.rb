@@ -13,7 +13,7 @@ class Status < ActiveRecord::Base
 
 	acts_as_resource_feeds
 
-  needs_verification 
+  needs_verification :sensitive_columns => [:content]
  
   attr_readonly :poster_id, :content
 

@@ -92,6 +92,7 @@ protected
       require_friend_or_owner @user
     elsif ['show'].include? params[:action]
       @blog = Blog.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, {:tags => :tagged_user}, {:poster => :profile}])
+      require_verified @blog
       @user = @blog.poster
       require_adequate_privilege @blog
     elsif ['edit', 'destroy', 'update'].include? params[:action]

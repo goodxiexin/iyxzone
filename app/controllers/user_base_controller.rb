@@ -45,6 +45,10 @@ protected
     resource.available_for?(current_user) || render_privilege_denied(resource)
   end
 
+  def require_verified resource
+    !resource.masked? || is_admin || render_not_found 
+  end
+
   def render_privilege_denied resource
     if resource.is_owner_privilege? #自己
       render_not_enough_privilege

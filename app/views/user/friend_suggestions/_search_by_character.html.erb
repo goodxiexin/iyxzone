@@ -1,0 +1,41 @@
+          <div class='bd-bt'>
+            <h3><%= link_to_function '按游戏角色查找', "Iyxzone.Search.toggleCharacterForm()" %></h3>
+            <% form_tag search_characters_url, :class => "formcontent", :id => 'character_form', :onsubmit => "Iyxzone.Search.searchCharacters($('character_search_submit_btn')); return false;", :style => "display:none" do %>
+              <div class="rows s_clear">
+                <div class="fldid"><label for="username">游戏角色名称：</label></div>
+                <div class='fldvalue'><div class='textfield'><%= text_field_tag 'key', '', :onclick => "$(this).clear();" %></div></div>
+              </div>
+              <div id='character_options'>
+                <div class="rows s_clear">
+                  <div class="fldid"><%= label_tag '游戏: ' %></div>
+                  <div class='fldvalue'>
+                  <%= collection_select :game, :id, [], :id, :name, {:prompt => '---'}, {:name => 'game_id'} %>
+                  </div>
+                </div>
+                <div class="rows s_clear">
+                  <div class="fldid"><%= label_tag '服务区: ' %></div>
+                  <div class='fldvalue'>
+                  <%= collection_select :area, :id, [], :id, :name, {:prompt => '---'}, {:name => 'area_id'} %>
+                  </div>
+                </div>
+                <div class="rows s_clear">
+                  <div class="fldid"><%= label_tag '服务器: ' %></div>
+                  <div class='fldvalue'>
+                  <%= collection_select :server, :id, [], :id, :name, {:prompt => '---'}, {:name => 'server_id'} %>
+                  </div>
+                </div>
+              </div>
+              <div class="rows s_clear">
+                <div class='fldid'>&nbsp;</div>
+                <div class="fldbtn">
+                  <span class="button"><span><button type="submit" id='character_search_submit_btn'>查找</button></span></span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+<%= onload_javascript_tag "
+  Iyxzone.Game.infos = #{game_infos};
+  Iyxzone.Game.initPinyinSelector('game_id', null, 'area_id', null, 'server_id', null, null, null, null, null, null);
+" %>
+
