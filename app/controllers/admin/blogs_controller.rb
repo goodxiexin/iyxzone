@@ -1,26 +1,22 @@
 class Admin::BlogsController < AdminBaseController
 
   def index
-    @blogs = Blog.unverified.paginate :page => params[:page], :per_page => 20
+    @blogs = Blog.unverified
   end
   
   def accept
-    @blogs = Blog.accepted.paginate :page => params[:page], :per_page => 20
+    @blogs = Blog.accepted
   end
   
   def reject
-    @blogs = Blog.rejected.paginate :page => params[:page], :per_page => 20
-  end
-
-  def show
-  end
-
-  def destroy
+    @blogs = Blog.rejected
   end
 
   def verify
     if @blog.verify
-      succ
+      render :update do |page|
+        page << "$('blog_#{@blog.id}').remove();"
+      end
     else
       err
     end
@@ -29,7 +25,9 @@ class Admin::BlogsController < AdminBaseController
   # reject
   def unverify
     if @blog.unverify
-      succ
+      render :update do |page|
+        page << "$('blog_#{@blog.id}').remove();"
+      end
     else
       err
     end
@@ -39,7 +37,7 @@ class Admin::BlogsController < AdminBaseController
 protected
 
   def setup
-    if ["show", "destroy", "verify", "unverify"].include? params[:action]
+    if ["verify", "unverify"].include? params[:action]
       @blog = Blog.find(params[:id])
     end
   end

@@ -15,9 +15,7 @@ class User::CommentsController < UserBaseController
         page << "facebox.close();Effect.BlindUp($('comment_#{@comment.id}'));"
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 

@@ -10,7 +10,7 @@ class Blog < ActiveRecord::Base
 
   named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
   
-  needs_verification
+  needs_verification :sensitive_columns => [:content, :title]
   
   acts_as_friend_taggable :delete_conditions => lambda {|user, blog| blog.poster == user},
                           :create_conditions => lambda {|user, blog| blog.poster == user}
@@ -19,7 +19,7 @@ class Blog < ActiveRecord::Base
 
 	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.is_owner_privilege? or blog.poster == user}
 
-  acts_as_resource_feeds
+  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed == 1} + blog.poster.guilds}
   
   acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
                     :default_title => lambda {|blog| blog.title}, 
@@ -30,7 +30,7 @@ class Blog < ActiveRecord::Base
   acts_as_privileged_resources :owner_field => :poster # 指明资源的拥有者的域是poster
 
   acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster},
+                      :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster || user.is_admin?},
                       :create_conditions => lambda {|user, blog| blog.available_for? user}
 
   acts_as_abstract :columns => [:content]

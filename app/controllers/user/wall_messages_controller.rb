@@ -15,9 +15,7 @@ class User::WallMessagesController < UserBaseController
         page << "facebox.close();Effect.BlindUp($('comment_#{@message.id}'));"
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
@@ -40,11 +38,11 @@ protected
   end
 
   def require_delete_privilege message
-    message.is_deleteable_by? current_user || render_not_found
+    message.is_deleteable_by?(current_user) || render_not_found
   end
 
   def require_view_privilege wall
-    wall.is_comment_viewable_by? current_user || not_found
+    wall.is_comment_viewable_by?(current_user) || render_not_found
   end
 
 end

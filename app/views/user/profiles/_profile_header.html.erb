@@ -1,0 +1,8 @@
+    <div class="friend-head space s_clear">
+      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
+      <p class="left">
+        <strong><%= h text %></strong><br />
+        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
+      </p>
+    </div>
+

@@ -20,12 +20,6 @@ class BlogObserver < ActiveRecord::Observer
     blog.deliver_feeds :recipients => recipients
   end
 
-  def before_update blog 
-    if blog.title_changed? or blog.content_changed? # only title or content changed must update column 'verified'
-      blog.verified = 0
-    end
-  end
-  
   def after_update blog
     # update counter if necessary
     if blog.draft_was

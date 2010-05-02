@@ -44,7 +44,6 @@ ActionController::Routing::Routes.draw do |map|
 
     admin.resources :news do |news|
 
-
       news.resources :pictures, :controller => 'news_pictures', :collection => {:update_multiple => :put, :edit_multiple => :get}
 
     end
@@ -274,6 +273,8 @@ ActionController::Routing::Routes.draw do |map|
     users.search_users '/search_users', :controller => 'search', :action => 'user'
 
     users.resources :news
+
+    users.resources :reports
 
     users.resources :guestbooks
 

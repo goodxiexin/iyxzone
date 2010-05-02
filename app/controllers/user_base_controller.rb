@@ -2,8 +2,6 @@ class UserBaseController < ApplicationController
 
   before_filter :login_required
 
-  before_filter :setup_verify_scope
-
   before_filter :set_last_seen_at
 
   before_filter :setup
@@ -14,13 +12,6 @@ protected
     {:game_id => current_user.characters.map(&:game_id).uniq}
   end
   
-  def setup_verify_scope
-    # 下面这些资源，在user里都只能看到审核通过的
-    [Comment, Blog, Event, Guild, Photo, PhotoTag, Status, Video].each do |klass|
- #     klass.enable_verify_scope
-    end
-  end
-
   def set_last_seen_at
     current_user.update_attribute(:last_seen_at, Time.now)
   end

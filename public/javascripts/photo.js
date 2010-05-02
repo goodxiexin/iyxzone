@@ -492,7 +492,7 @@ Iyxzone.Photo.Slide = Class.create({
     this.blankImage.src = '/images/photo/nopic50x50.png';
 
     // 帮定事件到photo上
-    this.photo.observe('mouseover', this.mouseOnPhoto.bind(this));
+    this.photo.observe('mousemove', this.mouseOnPhoto.bind(this));
     this.photo.observe('click', this.clickOnPhoto.bind(this));
     this.photo.observe('mouseoff', this.mouseOffPhoto.bind(this));  
   
@@ -546,7 +546,9 @@ Iyxzone.Photo.Slide = Class.create({
   mouseOnPhoto: function(event){
     var side = this.getSide(event);
     if(side == 'left'){
+        this.photo.writeAttribute('style', "cursor:url(/images/skin/left.cur), auto;");
     }else if(side == 'right'){
+        this.photo.writeAttribute('style', "cursor:url(/images/skin/right.cur), auto;");
     }
   },
 
@@ -835,7 +837,9 @@ Iyxzone.Photo.Slide3 = Class.create({
   mouseOnPhoto: function(event){
     var side = this.getSide(event);
     if(side == 'left'){
+        this.photo.writeAttribute('style', "cursor:url(/images/skin/left.cur), auto;");
     }else if(side == 'right'){
+        this.photo.writeAttribute('style', "cursor:url(/images/skin/right.cur), auto;");
     }
   },
 
@@ -931,7 +935,7 @@ Iyxzone.Photo.Slide3 = Class.create({
       $('notation').update(this.notations[index].escapeHTML().gsub('\n', '<br/>'));
 
     this.photo = $('picture').childElements()[0];
-    this.photo.observe('mouseover', this.mouseOnPhoto.bind(this));
+    this.photo.observe('mousemove', this.mouseOnPhoto.bind(this));
     this.photo.observe('click', this.clickOnPhoto.bind(this));
     this.photo.observe('mouseoff', this.mouseOffPhoto.bind(this));  
   },
