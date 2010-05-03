@@ -1,0 +1,28 @@
+        <h4><%= link_to_function "向MSN联系人发送邀请", "this.up().next().toggle();this.up().next().next().toggle();" %></h4>
+        <div class="invite-tip jl-cutline">导入MSN联系人名单并邀请其加入，对方会直接加入你的好友。</div>
+        <div class="invite-msn jl-cutline" style="display:none">
+          <div id='msn_invite'></div>
+          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'),  {:onsubmit => "return Iyxzone.ContactsGrabber.checkMsnInput(this);"} do %>
+          <%= hidden_field_tag 'type', 'msn'%>
+          <div class="s_clear space">
+            <div class="fldid"><label>你的MSN账号</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= text_field_tag 'user_name' %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid"><label>你的MSN密码</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= password_field_tag 'password' %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              <span class="red">提示：17Gaming不会记录您的MSN信息，请放心使用。</span><br />
+              <span class="button"><span><button type="submit" id='msn_contact_grabber_btn'>导入联系人</button></span></span>
+            </div>
+          </div>
+          <% end %>
+        </div>
+

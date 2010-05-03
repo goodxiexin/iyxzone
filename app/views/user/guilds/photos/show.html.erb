@@ -14,65 +14,25 @@
   <div class="round_m"><div class="round_body">
     <%= render :partial => "user/guilds/guild_header", :locals => {:text => "#{@guild.name}的照片"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'tab' %>
+      <%= render :partial => 'user/guilds/albums/tab' %>
       <div class="pic-box">
         <div class="img-container-main s_clear">
           <div class="img-container-wrap">
             <div class="img-container">
-              <div class="path-box">
-								<label><%= guild_link @guild %></label>
-                <label><%= link_to "相册", guild_album_url(@album, :format => 'html') %></label><span>查看照片</span>
-							</div>
+              <%= render :partial => 'photo_path' %>
               <div class="img-main">
                 <div class="imgwrap box05">
-                  <div class="photo-op">
-										<% if @membership and (@membership.is_authorized? or @membership.is_president?) %>
-										<span class="photo-op-mark"></span>
-										<%= link_to_function "圈人", "tagger.start()" %> | 
-										<% end %>
-										<% if @guild.president == current_user %>
-										<span class="photo-op-edit"></span>
-                    <%= facebox_link '编辑', edit_guild_photo_url(@photo, :at => 'photo') %> | 
-										<span class="photo-op-del"></span>
-                    <%= facebox_confirm '删除', guild_photo_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
-										<% end %>
-										<span class="photo-op-share" ></span>
-										<%= facebox_link "分享", new_sharing_url(:url => guild_photo_url(@photo)), :width => 450 %> |
-										<span class="photo-op-praise" ></span>
-                    <%= text_dig_link @photo %>
-									</div>
+                  <%= render:partial => 'photo_operations' %>
                   <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
-									<div class="pic-desc s_clear">
-										<h4 class="box06">
-										<% if @guild.president == current_user %>
-											<%= in_place_text_area @photo, :notation, '点击增加照片描述', :param_name => 'photo[notation]' %>
-										<% else %>
-											<%= simple_format h @photo.notation %>
-										<% end %>
-										</h4>
-										<ul class="mark-list s_clear" id='photo_tags'>
-										</ul>
-										<div class="rows"></div> 
-									</div>
+                  <%= render :partial => 'user/photos/photo_desc' %>
                 </div>
               </div>
             </div>
           </div>
-          <div class="album">
-            <%= render :partial => 'shared/photo_slide', :locals => {:album => @album, :photo => @photo} %>
-          </div>
+          <%= render :partial => 'shared/photo_slide', :locals => {:album => @album, :photo => @photo} %>
         </div>
       </div>
-      <div class="page-foot s_clear">
-        <div class="foot-func">
-          <span class="w-l red">评论(<%= @photo.comments_count %>)</span>
-        </div>
-        <div class='s_clear rows'>
-          <div class="feed-list">
-            <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @photo, :recipient => @photo.poster} %>
-          </div>
-        </div>
-      </div>
+      <%= render :partial => 'user/photos/photo_func' %>
     </div>
   </div></div>
 </div></div></div></div>
@@ -80,7 +40,3 @@
 <% if @membership and (@membership.is_authorized? or @membership.is_president?) %>
 <%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @guild.people - [current_user]} %>
 <% end %>
-
-<% unless @reply_to.blank? %>
-  <%= onload_javascript_tag "Iyxzone.Comment.set('guild_photo', '#{@photo.id}', '#{@reply_to.login}', #{@reply_to.id})" %>
-<% end %> 

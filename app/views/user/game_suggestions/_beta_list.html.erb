@@ -1,0 +1,14 @@
+      <div class="multibox">
+        <div class="title">
+          <%= link_to "更多", beta_games_url %>
+          <b>近期测试</b>
+        </div>
+        <div class="chart-list menu-list">
+          <ul>
+            <% @beta_list.each_with_index do |g, i| %>
+              <li><%= game_link g %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+

@@ -1,0 +1,37 @@
+        <table class="photo-edit-list">
+        <% k = @photos.size/4 %>
+        <% 0.upto(k) { |i| %>
+        <% if k == i%>
+          <% n = @photos.size % 4 - 1 %>
+        <% else %>
+          <% n = 3 %>
+        <% end %>
+        <% j = i*4 %>
+        <tr>
+        <% @photos[j..j+n].each do |p| %>                         
+          <td valign="bottom" width=25%>
+            <%= photo_link p, :class => 'imgbox02' %>
+          </td>
+        <% end %>
+        <% if n < 3 %>
+          <% n.upto(2){ %>
+            <td valign="bottom" width=25%></td>
+          <% } %>
+        <% end %>
+        </tr>
+        <% if @album.poster == current_user %>
+          <tr>
+          <% @photos[j..j+n].each do |p| %>                         
+            <td><%= facebox_link "", edit_personal_photo_url(p, :at => 'album'), :class => "icon-active icon-active-edit" %><%= facebox_confirm '', personal_photo_url(p), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %></td>
+          <% end %>
+          <% if n < 3 %>
+            <% n.upto(2){ %>
+              <td></td>
+            <% } %>
+          <% end %>
+          </tr>
+        <% end %>
+        <% } %>
+        <%= will_paginate @photos %>
+        </table>
+

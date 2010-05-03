@@ -1,0 +1,13 @@
+      <div class="tab tab01">
+        <div class="right">
+          <%= application_link %>
+          <%= link_to "新建公会", new_guild_url %>
+        </div>
+      <% subject = get_subject user %>
+        <ul>
+          <li <% if hover==0 %>class='hover'<% end %>><span><%= link_to "热门公会", hot_guilds_url %></span></li>
+          <li <% if hover==1 %>class='hover'<% end %>><span><%= link_to "#{subject}的公会", guilds_url(:uid => user.id) %></span></li>
+          <li <% if hover==2 %>class='hover'<% end %>><span><%= link_to "好友公会", friends_guilds_url %></span></li>
+        </ul>
+      </div>
+

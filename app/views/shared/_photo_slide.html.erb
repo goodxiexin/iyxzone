@@ -1,4 +1,5 @@
-<span class="num">一共<%= album.photos_count %>张</span>
+          <div class='album'>
+            <span class="num">一共<%= album.photos_count %>张</span>
             <div class="btn upbtn" id="up_btn"></div>
             <div class="small-imgs">
               <div class="imgList" id='frames'>
@@ -8,7 +9,7 @@
               </div>
             </div>
             <div class="btn downbtn" id="down_btn"></div>
-
+          </div>
 <% type = photo.class.name.underscore %>
 <% photo_ids = array_or_string_for_javascript album.photos.map(&:id) %>
 <% urls = array_or_string_for_javascript album.photos.map {|p| p.public_filename(:medium)} %>

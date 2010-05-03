@@ -12,105 +12,35 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-	<% if @user==current_user %>
-    <h1 class="app-photo">照片</h1>
-	<% else %>
-    <div class="friend-head space s_clear">
-      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
-      <p class="left">
-        <strong><%= @user.login %>的照片</strong><br />
-        <%= link_to '个人主页', profile_url(@user.profile) %>
-      </p>
-    </div>
-	<% end %>
+	  <% if @user==current_user %>
+      <h1 class="app-photo">照片</h1>
+	  <% else %>
+      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的相册"} %>
+	  <% end %>
     <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <div class="right">
-          <%= link_to "上传照片", select_personal_albums_url %>
-          <%= facebox_link "新建相册", new_personal_album_url %>
-        </div>
-        <ul>
-          <% subject = get_subject @user %>
-          <li><span><%= link_to "热门照片", hot_personal_photos_url %></span></li>
-          <li class='hover'><span><%= link_to "#{subject}的相册", personal_albums_url(:uid => @user.id) %></span></li>
-          <li><span><%= link_to "圈了#{subject}的照片", relative_personal_photos_url(:uid => @user.id) %></span></li>
-          <% if @user == current_user %>
-            <li><span><%= link_to '好友相册', friends_personal_albums_url(:uid => @user.id) %></span></li>
-          <% end %>
-        </ul>       
-      </div>
+      <%= render :partial => 'user/albums/tab', :locals => {:user => @user, :hover => 1} %>
       <div class="pic-box">
         <div class="img-container-main s_clear">
           <div class="img-container-wrap">
             <div class="img-container">
-              <div class="path-box">
-                <label>
-                  <% if @user == current_user %>
-                    <%= link_to "我的相册", personal_albums_url(:uid => @user.id) %>
-                  <% else %>
-                    <%= link_to "#{@user.login}的相册", personal_albums_url(:uid => @user.id) %>
-                  <% end %>
-                </label>
-                <label><%= album_link @album %></label><span>查看照片</span>
-              </div>
+              <%= render :partial => 'photo_path' %>
               <div class="img-main">
                 <div class="imgwrap box05">
-                  <div class="photo-op">
-										<% if @relationship == 'owner' or @relationship == 'friend' %>
-										  <span class="photo-op-mark"></span>
-										  <%= link_to_function "圈人", "tagger.start()" %> | 
-										<% end %>
-										<% if @user == current_user %>
-										  <span class="photo-op-edit"></span>
-                      <%= facebox_link '编辑', edit_personal_photo_url(@photo, :at => 'photo') %> | 
-										  <span class="photo-op-del"></span>
-                      <%= facebox_confirm '删除', personal_photo_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
-										<% end %>
-										<span class="photo-op-share" ></span>
-										<%= facebox_link "分享", new_sharing_url(:url => personal_photo_url(@photo)), :width => 450 %> |
-										<span class="photo-op-praise" ></span>
-                    <%= text_dig_link @photo %>
-									</div>
+                  <%= render :partial => 'photo_operations' %>
                   <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
-									<div class="pic-desc s_clear">
-										<h4 class="box06">
-										<% if @user == current_user %>
-                      <%= in_place_text_area @photo, :notation, '点击添加照片描述', :param_name => 'photo[notation]' %>
-										<% else %>
-											<%= simple_format h @photo.notation %>
-										<% end %>
-										</h4>
-										<ul class="mark-list s_clear" id='photo_tags'>
-										</ul>
-										<div class="rows"></div> 
-									</div>
+                  <%= render :partial => 'photo_desc' %>
 								</div>
 							</div>
 						</div>
 					</div>
-          <div class="album">
-            <%= render :partial => 'shared/photo_slide', :locals => {:album => @album, :photo => @photo} %>
-          </div>
+          <%= render :partial => 'shared/photo_slide', :locals => {:album => @album, :photo => @photo} %>
         </div>
       </div>
-      <div class="page-foot s_clear">
-        <div class="foot-func">
-          <span class="w-l red">评论(<%= @photo.comments_count %>)</span>
-        </div>
-        <div class='s_clear rows'>
-          <div class="feed-list">
-            <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @photo, :recipient => @photo.poster} %>
-          </div>
-        </div>
-      </div>
+      <%= render :partial => 'photo_func' %>
     </div>
   </div></div>
 </div></div></div></div>
 
 <% if @relationship == 'owner' or @relationship == 'friend' %>
-<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => current_user.friends.all(:include => :games)} %>
-<% end %>
-
-<% unless @reply_to.blank? %>
-<%= onload_javascript_tag "Iyxzone.Comment.set('personal_photo', #{@photo.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+  <%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => current_user.friends.all(:include => :games)} %>
 <% end %>

@@ -1,19 +1,12 @@
+<% content_for :html_title, "#{current_user.login} - 最新相册 - 17Gaming.com" %>
+<% content_for :html_description, "#{current_user.login}的最新列表 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
     <h1 class="app-photo">照片</h1>
     <div class="box02 canvas_int">
-	    <div class="tab tab01">
-		    <div class="right">
-		      <%= link_to "上传照片", select_personal_albums_url %>
-		      <%= facebox_link "新建相册", new_personal_album_url %>
-        </div>
-        <ul>
-          <li class='hover'><span><%= link_to "热门照片", hot_personal_photos_url %></span></li>
-          <li><span><%= link_to "我的相册", personal_albums_url(:uid => current_user.id) %></span></li>
-          <li><span><%= link_to "圈了我的照片", relative_personal_photos_url(:uid => current_user.id) %></span></li>
-					<li><span><%= link_to '好友相册', friends_personal_albums_url %></span></li>
-        </ul>				
-	    </div>
+      <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 0} %>
       <div class="piclist-rows">
         <div class="nav-link">
           <ul class="s_clear">

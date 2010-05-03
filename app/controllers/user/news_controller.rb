@@ -8,30 +8,13 @@ class User::NewsController < UserBaseController
 
   NewsCategory = ['all', 'text', 'video', 'picture']
 
+  TimeRange = [Time.now, Time.now.beginning_of_day, 1.day.ago.beginning_of_day, Time.now.beginning_of_week, Time.now.beginning_of_year]
+
   def index
-  beginning_of_today = Time.now.beginning_of_day
-	beginning_of_yesterday = 1.day.ago.beginning_of_day
-	beginning_of_this_week = Time.now.beginning_of_week
-    if params[:type].blank? || params[:type].to_i == 0
-			if params[:time].blank? || params[:time].to_i == 1
-				@news_list = News.find(:all, :conditions => ["created_at > ?", beginning_of_today],:order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
-			elsif params[:time].to_i == 2
-				@news_list = News.find(:all, :conditions => ["created_at > ? and created_at < ?", beginning_of_yesterday, beginning_of_today],:order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
-			elsif params[:time].to_i == 3
-				@news_list = News.find(:all, :conditions => ["created_at > ?", beginning_of_this_week],:order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
-			elsif params[:time].to_i == 4
-				@news_list = News.find(:all, :conditions => ["created_at < ?", beginning_of_this_week],:order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
-			end
+    if params[:type].to_i == 0
+      @news_list = News.all(:conditions => ["created_at > ? and created_at < ?", TimeRange[params[:time].to_i+1], TimeRange[params[:time].to_i]], :order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
     else
-			if params[:time].blank? || params[:time].to_i == 1
-				@news_list = News.find(:all, :conditions => ["created_at > ? and news_type = ?", beginning_of_today, NewsCategory[params[:type].to_i]], :order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
-			elsif params[:time].to_i == 2
-				@news_list = News.find(:all, :conditions => ["created_at > ? and created_at < ? and news_type = ?", beginning_of_yesterday, beginning_of_today, NewsCategory[params[:type].to_i]],:order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
-			elsif params[:time].to_i == 3
-				@news_list = News.find(:all, :conditions => ["created_at > ? and news_type = ?", beginning_of_this_week, NewsCategory[params[:type].to_i]],:order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
-			elsif params[:time].to_i == 4
-				@news_list = News.find(:all, :conditions => ["created_at < ? and news_type = ?", beginning_of_this_week,NewsCategory[params[:type].to_i]],:order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
-			end
+      @news_list = News.all(:conditions => ["created_at > ? and created_at < ? and news_type = ?", TimeRange[params[:time].to_i+1], TimeRange[params[:time].to_i], NewsCategory[params[:type].to_i]], :order => 'created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
     end
   end
 

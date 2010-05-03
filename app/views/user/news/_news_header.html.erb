@@ -1,0 +1,9 @@
+        <div class="detail-blog-head jl-cutline s_clear">
+          <p class="left">
+            <strong><%= @news.title %></strong> <span class="gray"><%= ftime @news.created_at %></span>
+          </p>
+          <p class="right">
+            <%= facebox_link "分享", new_sharing_url(:url => news_url(@news)), :width => 450, :class => 'share-btn' %>
+          </p>
+        </div>
+

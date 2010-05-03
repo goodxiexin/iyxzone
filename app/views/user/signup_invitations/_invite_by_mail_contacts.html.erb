@@ -1,0 +1,37 @@
+        <h4><%= link_to_function "向邮箱联系人发送邀请", "this.up().next().toggle();this.up().next().next().toggle();" %></h4>
+        <div class="invite-tip jl-cutline">导入邮箱联系人名单并邀请其加入，对方会直接加入你的好友。</div>
+        <div class="invite-email jl-cutline" style="display:none">
+          <div id='email_contacts'></div>
+          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'), {:onsubmit => "return Iyxzone.ContactsGrabber.checkEmailContactsInput(this);"} do %>
+          <div class="s_clear space">
+            <div class="fldid"><label>你的邮箱</label></div>
+            <div class="fldvalue">
+              <div class="textfield left w-l" style="width:200px"><%= text_field_tag 'user_name' %></div>
+              <span class="left w-l">@</span>
+              <select class="selector selector02 left" id='email_selector' style="width:100px;" name="type">
+                <option value=''>---</option>
+                <option value='gmail'>gmail.com</option>
+                <option value='sina'>sina.com.cn</option>
+                <option value='yahoo'>yahoo.com</option>
+                <option value='yahoo'>yahoo.com.cn</option>
+                <option value='netease'>netease.com</option>
+                <option value='hotmail'>hotmail.com</option>
+              </select>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid"><label>你的密码</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= password_field_tag 'password' %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              <span class="red">提示：17Gaming不会记录您的邮箱信息，请放心使用。</span><br />
+              <span class="button"><span><button type="submit" id='other_mail_contact_grabber_btn'>导入联系人</button></span></span>
+            </div>
+          </div>
+          <% end %>
+        </div>
+

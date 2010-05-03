@@ -1,0 +1,16 @@
+          <div class="friend-menu menu-bg-list">
+            <ul>
+              <li <% if params[:term].to_i == 0 %>class='current'<% end %>><%= link_to "所有好友", friends_url %></li>
+              <li>游戏分类</li>
+              <% current_user.games.each do |g| %>
+                <li <% if g.id == params[:game_id].to_i %>class='current'<% end %>><%= link_to g.name, friends_url(:term => 1, :game_id => g.id) %></li>
+              <% end %>
+              <% unless current_user.participated_guilds_count == 0 and current_user.guilds_count == 0%>
+                <li><h3>公会</h3></li>
+                <% current_user.all_guilds.each do |g| %>
+                  <li <% if g.id == params[:guild_id].to_i %>class='current'<% end %>><%= link_to g.name, friends_url(:term => 2, :guild_id => g.id) %></li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+

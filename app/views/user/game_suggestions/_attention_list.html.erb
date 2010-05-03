@@ -1,0 +1,14 @@
+      <div class="multibox">
+        <div class="title">
+          <%= link_to "更多", hot_games_url %>
+          <b>关注榜</b>
+        </div>
+        <div class="chart-list chart-list01 menu-list">
+          <ul>
+            <% @game_list.each_with_index do |g, i| %>
+              <li><%= game_link g %><span><%=g.attentions_count %></span></li>
+            <% end %>
+          </ul>
+        </div> 
+      </div>
+

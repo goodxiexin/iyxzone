@@ -46,9 +46,7 @@ class GuildObserver < ActiveRecord::Observer
     guild.president.raw_decrement :guild_requests_count, guild.requests_count
 
     # modify invitations count
-    guild.invitations.each do |invitation|
-      invitation.user.raw_decrement :guild_invitations_count
-    end
+    User.update_all("guild_invitations_count = guild_invitations_count - 1", {:id => guild.invitations.map(&:user_id)})
 
     # send notifications
     (guild.people - [guild.president]).each do|p|
@@ -57,7 +55,14 @@ class GuildObserver < ActiveRecord::Observer
     end
 
     # destroy all memberships
-    Membership.delete_all(:guild_id => guild.id) 
+    guild.memberships.each do |m|
+      m.destroy_feeds
+    end
+    Membership.delete_all(:guild_id => guild.id)
+  end
+
+  def after_destroy guild
+    guild.president.raw_decrement :guilds_count
   end
   
 end

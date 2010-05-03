@@ -14,84 +14,17 @@
 				<h1 class='app-vgame'>推荐游戏</h1>
         <div class="box02 canvas_con">
           <div class="formComposer">
-						<div class="multibox">
-            <div class="title"><b>你想玩什么样的游戏?</b></div>
-            <div class="feed-box">
-                 想玩最新最热的游戏？记不清楚游戏名称？<br />
-                 点击关键字，系统会自动帮你推荐合适的游戏
-            </div>
-						</div>
-            <div class="formcontent" style="padding-top:0">
-              <div class="s_clear">
-                <div class="fldvalue">
-                  <div class="selector selector03 select-toggle s_clear">
-                    <%= text_field_tag 'tags', '点击关键字词,支持多个关键字词', :id => 'game_tags', :class=>"textfield", :style =>"width: 350px" %>
-                    <div id='game_tag_list' class='drop-menu' style="display:none"></div>
-                  </div>
-                </div>
-                <div class="fldbtn">
-                  <span class="button"><span><button type="reset" onclick="Iyxzone.Game.Suggestor.suggest(this)">推荐</button></span></span>
-                  <div class="fldvalue"> 1 年内的新游戏<%= check_box_tag 'new_game', 1, true %></div>
-                </div>
-              </div>
-            </div>
-            <div class="multibox">
-              <div class="title">
-                <b>关键词</b>
-              </div>
-              <div class="impress-show s_clear space">
-                <% @game_tags.each do |tag| %>
-                  <%= link_to_function "<span>#{tag.name}</span>", "Iyxzone.Game.Suggestor.addTag('#{tag.name}')", :class => "impress-0" %>
-                <% end %>
-              </div>
-            </div>
-            <div class="multibox" id='game_suggestion_area'>
-            </div>
+            <%= render :partial => 'game_suggestion_input' %>
+            <div class="multibox" id='game_suggestion_area'></div>
           </div>
         </div>
       </div>
     </div>
     <div id="rightsidebar" class="canvas_r">
-      <div class="multibox">
-        <div class="title">
-          <%= link_to "更多", interested_games_url(:uid => current_user.id) %>
-          <b>我关注</b>
-        </div>
-        <div class="chart-list chart-list01 menu-list">
-          <ul id='my_attentions'>
-            <% @interested_games.each_with_index do |g, i| %>
-              <li><%= game_link g %><span><%=g.sale_date%></span></li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
-      <div class="multibox">
-        <div class="title">
-          <%= link_to "更多", hot_games_url %>
-          <b>关注榜</b>
-        </div>
-        <div class="chart-list chart-list01 menu-list">
-          <ul>
-            <% @game_list.each_with_index do |g, i| %>
-              <li><%= game_link g %><span><%=g.attentions_count %></span></li>
-            <% end %>
-          </ul>
-        </div> 
-      </div>
+      <%= render :partial => 'my_attentions' %>
+      <%= render :partial => 'attention_list' %>
       <% unless @beta_games.blank? %>
-      <div class="multibox">
-        <div class="title">
-          <%= link_to "更多", beta_games_url %>
-          <b>近期测试</b>
-        </div>
-        <div class="chart-list menu-list">
-          <ul>
-            <% @beta_list.each_with_index do |g, i| %>
-              <li><%= game_link g %></li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
+        <%= render :partial => 'beta_list' %>
       <% end %>
     </div>
   </div></div>

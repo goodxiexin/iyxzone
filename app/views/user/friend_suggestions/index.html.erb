@@ -10,7 +10,7 @@
 	<div class="round_m"><div class="round_body">
 		<h1 class="app-friend">好友</h1>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'tab' %>
+      <%= render :partial => 'user/friends/tab', :locals => {:hover => 1} %>
 			<div class="friend-box">
 				<div class="box02 appcontent01 jl-friend-search">
           <%= render :partial => 'search_by_login' %>

@@ -7,17 +7,9 @@
   <div class="round_m"><div class="round_body">
     <h1 class="app-lock">隐私设置</h1>
     <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <ul>
-          <li><span><%= link_to '个人主页', edit_privacy_setting_url(:type => 0) %></span></li>
-          <li class='hover'><span><%= link_to '操作', edit_privacy_setting_url(:type => 1) %></span></li>
-          <li><span><%= link_to '站外搜索', edit_privacy_setting_url(:type => 2) %></span></li>
-          <li><span><%= link_to '邮件提醒', edit_mail_setting_url(:type => 6) %></span></li>
-        </ul>
-      </div>
+      <%= render :partial => 'tab', :locals => {:hover => 1} %>
       <div class="box02 appcontent04">
-        <div class="path-box">
-        </div>
+        <div class="path-box"></div>
         <div class="privacy-form formcontent">
           <% form_for :setting, :url => privacy_setting_url(:type => 1, :format => 'html'), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(going_privacy_submit_btn),'请等待..');"} do |f| %>
             <h3>谁可以对你进行以下操作？</h3>

@@ -8,36 +8,10 @@
   <div class="round_m"><div class="round_body">
     <h1 class="app-friend">好友</h1>
       <div class="box02 canvas_int space">
-        <div class="tab tab01">
-          <ul>
-            <li><span><%= link_to '好友管理', friends_url %></span></li>
-            <li><span><%= link_to '寻找好友', friend_suggestions_url %></span></li>
-            <li class="hover"><span><%= link_to '好友印象', friend_impressions_url %></span></li>
-          </ul>
-        </div>
+        <%= render :partial => 'user/friends/tab', :locals => {:hover => 2} %>
         <div class="friend-table table01">
           <table cellpadding="0">
-            <% @friends.each do |f| %>
-              <% tagged = f.profile.tagged_by? current_user %>
-              <tr>
-                <th class="img"><%= avatar f, :class => 'imgbox01' %></th>
-                <td>
-                  <h4><%= profile_link f %></h4>
-                  <div class="i-show02 s_clear space">
-                    <% f.profile.tag_list.each{|tag| %>
-                      <a href="javascript:void(0)" class="i-s-<%=rand(4)%>"><strong><%=tag%></strong><span></span></a>
-										<% } %>
-									</div>
-                </td>
-                <th class="remark">
-                  <% unless tagged %>
-                    <%= link_to "去#{get_subject f}的主页评价", profile_url(f.profile) %>
-                  <% else %>
-                    <a class="gray" href="#">已评价</a>
-                  <% end %>
-                </th>
-              </tr>
-            <% end %>
+            <%= render :partial => 'friend', :collection => @friends %>
           </table>
         </div>
 				<div class='s_clear'>
