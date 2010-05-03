@@ -267,7 +267,7 @@ class CommentObserver < ActiveRecord::Observer
       CommentMailer.deliver_news_comment comment, recipient if recipient.mail_setting.comment_same_news_after_me == 1
     end
   end
-  
+
   def after_destroy comment
     comment.commentable.raw_decrement :comments_count
   end
