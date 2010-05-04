@@ -29,8 +29,6 @@ class User::GuildsController < UserBaseController
   end
 
   def show
-    @guild = Guild.find(params[:id], :include => [:forum, :game, {:president => :profile}])
-
     @guild_characters = @guild.characters.all(:include => [{:user => :profile}], :limit => 6) 
 
     @hot_topics = @guild.forum.hot_topics.all(:include => [:forum], :limit => 6)
@@ -111,6 +109,9 @@ protected
     if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
+    elsif ['show'].include? params[:action]
+      @guild = Guild.find(params[:id], :include => [:forum, :game, {:president => :profile}])
+      require_verified @guild
     elsif ['edit_rules', 'update', 'destroy'].include? params[:action]
       @guild = Guild.find(params[:id])
       require_owner @guild.president unless params[:action] == 'edit_rules'

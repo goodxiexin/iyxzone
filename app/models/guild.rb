@@ -18,7 +18,7 @@ class Guild < ActiveRecord::Base
 
   has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
   
-  has_many :events, :dependent => :destroy
+  has_many :events, :conditions => {:verified => [0,1]}, :dependent => :destroy
 
   has_many :gears, :dependent => :delete_all
 
@@ -70,7 +70,7 @@ class Guild < ActiveRecord::Base
 
   end
 
-  needs_verification
+  needs_verification :sensitive_columns => [:name, :description]
 
   acts_as_feed_recipient :delete_conditions => lambda {|user, guild| guild.president == user },
                          :categories => {
@@ -83,7 +83,7 @@ class Guild < ActiveRecord::Base
                             :personal_album => 'PersonalAlbum'
                           }
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|guild| [guild.president.profile, guild.game] + guild.president.friends.find_all {|f| f.application_setting.recv_guild_feed == 1} }
 
 	acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, guild, comment| guild.president == user}, 

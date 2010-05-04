@@ -8,10 +8,6 @@ class User::Guilds::PhotosController < UserBaseController
   end
 
   def show
-    @photo = GuildPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
-    @album = @photo.album
-    @guild = @album.guild
-    @user = @guild.president
     @membership = @guild.memberships.find_by_user_id(current_user.id)
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
@@ -90,15 +86,18 @@ class User::Guilds::PhotosController < UserBaseController
 protected
 
   def setup
-    if ['edit', 'update', 'destroy'].include? params[:action]
-      @photo = GuildPhoto.find(params[:id])
+    if ['show', 'edit', 'update', 'destroy'].include? params[:action]
+      @photo = GuildPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
+      require_verified @photo
       @album = @photo.album
       @guild = @album.guild
+      require_verified @guild
       @user = @guild.president
       require_owner @user
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = GuildAlbum.find(params[:album_id])
       @guild = @album.guild
+      require_verified @guild
       @user = @guild.president
       require_owner @user
     end

@@ -1,0 +1,21 @@
+	<% event = event_item %>
+  <tr id='event_<%= event.id %>'>
+    <td>
+      <div class="imgwrap">
+        <%= album_cover_image event.album, :size => 'large', :class => 'imgbox01' %>
+      </div>
+      <div class="data jl-data">
+        <p><%= event_link event, :class => 'shine' %></p>
+        <p><%= simple_format h event.description %></p>
+      </div>
+    </td>
+		<td>
+      <% if event.verified == 2 %>
+        <%= verify_link event %>
+      <% elsif event.verified == 1 %>
+        <%= unverify_link event %>
+      <% else %>
+        <%= verify_link event %> <%= unverify_link event %>
+      <% end %>
+    </td>
+  </tr>

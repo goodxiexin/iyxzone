@@ -32,6 +32,7 @@ protected
 	def setup
 		if ['new', 'create'].include? params[:action]
 			@poll = Poll.find(params[:poll_id])
+      require_verified @poll
       require_owner @poll.poster
 		elsif ['destroy'].include? params[:action]
       @invitation = PollInvitation.find(params[:id])

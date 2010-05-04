@@ -1,46 +1,55 @@
 require 'app/mailer/poll_mailer'
 
-#
-# 如果投票的小结出来了，通知大家
-# 不过小结目前在投票中没有实现，觉得没有必要
-#
 class PollObserver < ActiveRecord::Observer
 
   def after_create poll
+    # verify
+    # 如果是投票的选项是sensitive的，那是在poll_answer的after_create里判断的
+    if poll.sensitive?
+      poll.verified = 0
+    else
+      poll.verified = 1
+    end
+
     # increment user's counter
     poll.poster.raw_increment :polls_count
 
     # issue feeds if necessary
-    return if poll.poster.application_setting.emit_poll_feed == 0
-    recipients = [poll.poster.profile, poll.game]
-    recipients.concat poll.poster.guilds
-    recipients.concat poll.poster.friends.find_all{|f| f.application_setting.recv_poll_feed == 1}
-    poll.deliver_feeds :recipients => recipients
+    if poll.poster.application_setting.emit_poll_feed == 1
+      poll.deliver_feeds
+    end
   end
 
-  # update verified column
   def before_update poll 
-    if poll.name_changed? or poll.explanation_changed? or poll.description_changed? 
+    if poll.sensitive_columns_changed? and poll.sensitive?
       poll.verified = 0
     end
   end
-  
+ 
+  def after_update poll
+    if poll.verified_changed?
+      if poll.verified_was == 2 and poll.verified == 1
+        poll.poster.raw_increment :polls_count
+        User.update_all("participated_polls_count = participated_polls_count + 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
+      elsif (poll.verified_was == 0 or poll.verified_was == 1) and poll.verified == 2
+        poll.poster.raw_decrement :polls_count
+        User.update_all("participated_polls_count = participated_polls_count - 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
+      end
+    end
+  end
+ 
   def before_destroy poll
-    # decrement poster's polls_count
-    poll.poster.raw_decrement :polls_count
-
-    # decrement voters' participated_polls_count
-    (poll.voters - [poll.poster]).each do |voter|
-      voter.raw_decrement :participated_polls_count
+    # decrement counter
+    if poll.verified != 2
+      poll.poster.raw_decrement :polls_count
+      User.update_all("participated_polls_count = participated_polls_count - 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
     end
 
     # delete all votes
     Vote.delete_all(:poll_id => poll.id)
 
     # decrement invitees' poll_invitations_count
-    poll.invitees.each do |invitee|
-      invitee.raw_decrement :poll_invitations_count
-    end
+    User.update_all("poll_invitations_count = poll_invitations_count - 1", {:id => poll.invitees.map(&:id)})
 
     # delete all invitations
     PollInvitation.delete_all(:poll_id => poll.id) 

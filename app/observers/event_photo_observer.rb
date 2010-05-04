@@ -8,9 +8,11 @@ class EventPhotoObserver < ActiveRecord::Observer
   def before_save photo
     return unless photo.thumbnail.blank?
 
-    album = photo.album
-    
+    # verify
+    photo.verified = 1 
+
     # inherit some attributes from album
+    album = photo.album
     photo.poster_id = album.poster_id
     photo.privilege = album.privilege
     photo.game_id = album.game_id
@@ -25,13 +27,27 @@ class EventPhotoObserver < ActiveRecord::Observer
 
   def before_update photo 
     return unless photo.thumbnail.blank?
-    if photo.notation_changed?
+    
+    if photo.sensitive_columns_changed? and photo.sensitive?
       photo.verified = 0
     end
   end
 
   def after_update photo
     return unless photo.thumbnail.blank?
+   
+    # verify
+    if photo.verified_changed?
+      if photo.verified_was == 2 and photo.verified == 1
+        photo.album.raw_increment :photos_count
+      end
+      if (photo.verified_was == 0 or photo.verified_was == 1) and photo.verified == 2
+        photo.album.raw_decrement :photos_count
+      end
+      return
+    end
+
+    # change cover if necessary 
     if photo.cover
       photo.album.update_attribute(:cover_id, photo.id) if photo.album.cover_id != photo.id
     else
@@ -41,9 +57,11 @@ class EventPhotoObserver < ActiveRecord::Observer
   
   def after_destroy photo
     return unless photo.thumbnail.blank?
-    
+
     # decrement counter
-    photo.album.raw_decrement :photos_count
+    if photo.verified != 2
+      photo.album.raw_decrement :photos_count
+    end
 
     # check if the deleted photo is cover
     album = photo.album

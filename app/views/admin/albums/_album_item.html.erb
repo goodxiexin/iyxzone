@@ -1,0 +1,22 @@
+<% album = album_item %>
+            <tr id='album_<%= album.id %>'>
+              <td>
+                <div class="imgwrap">
+                  <%= album_cover album, :size => :large, :class => 'imgbox01' %>
+                </div>
+                <div class="data">
+                  <h3><%= profile_link album.poster%>的<%= album_link album %>共<span><%= album.photos_count %></span>张</h3>
+                  <p><%= simple_format h album.description %></p>
+                </div>
+              </td>
+              <td>
+                  <% if album.verified == 0 %>
+                    <%= verify_link album %> <%= unverify_link album %>
+                  <% elsif album.verified == 1 %>
+                    <%= unverify_link album %>
+                  <% elsif album.verified == 2 %>
+                    <%= verify_link album %>
+                  <% end %>
+              </td>
+            </tr>
+

@@ -97,6 +97,7 @@ protected
       require_adequate_privilege @blog
     elsif ['edit', 'destroy', 'update'].include? params[:action]
       @blog = Blog.find(params[:id])
+      require_verified @blog
       require_owner @blog.poster
     end
   end

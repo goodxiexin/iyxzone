@@ -1,0 +1,15 @@
+  <% comment = comment_item %>
+  <tr id='comment_<%= comment.id %>'>
+	<td><%= comment.content %></td>
+	<td><%= comment.commentable_type %></td>
+  <td><%= ftime comment.updated_at %></td>
+  <td>
+    <% if comment.verified == 0 %>
+      <%= verify_link comment %> </td><td> <%= unverify_link comment %>
+    <% elsif comment.verified == 1 %>
+      <%= unverify_link comment %>
+    <% else %>
+      <%= verify_link comment %>
+    <% end %>
+  </td>
+  </tr> 

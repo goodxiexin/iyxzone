@@ -6,6 +6,8 @@ class Album < ActiveRecord::Base
 
   named_scope :recent, :conditions => "photos_count != 0 AND privilege != 4", :order => 'uploaded_at DESC'
 
+  needs_verification :sensitive_columns => [:title, :description]
+
   acts_as_privileged_resources :owner_field => :poster
 
   acts_as_shareable :path_reg => [/\/personal_albums\/([\d]+)/, /\/event_albums\/([\d]+)/, /\/guild_albums\/([\d]+)/, /\/avatar_albums\/([\d]+)/],

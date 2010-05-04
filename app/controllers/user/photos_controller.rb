@@ -107,17 +107,22 @@ protected
   def setup
     if ['show'].include? params[:action]
       @photo = PersonalPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
+      require_verified @photo
       @album = @photo.album
+      require_verified @album
       require_adequate_privilege @album
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = PersonalAlbum.find(params[:album_id])
+      require_verified @album
       require_owner @album.poster
     elsif ['relative'].include? params[:action]
 			@user = User.find(params[:uid])
       require_friend_or_owner @user
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @photo = PersonalPhoto.find(params[:id])
+      require_verified @photo
       @album = @photo.album
+      require_verified @album
       require_owner @album.poster
     end
   end

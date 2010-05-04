@@ -29,8 +29,6 @@ class User::EventsController < UserBaseController
   end
 
   def show
-    @event = Event.find(params[:id], :include => [:game, :game_server, :game_area, {:comments => [{:poster => :profile}]}, :guild])
-    
     @maybe_characters = @event.maybe_characters.find(:all, :limit => 6, :include => [{:user => :profile}])
     @invite_characters = @event.invite_characters.find(:all, :limit => 6, :include => [{:user => :profile}])
     @request_characters = @event.request_characters.find(:all, :limit => 6, :include => [{:user => :profile}])		
@@ -117,10 +115,14 @@ protected
   def setup
     if ['new'].include? params[:action]
       @guild = current_user.privileged_guilds.find(params[:guild_id]) if !params[:guild_id].blank?
-    elsif ['edit', 'update'].include? params[:action]
+    elsif ['show'].include? params[:action]
+      @event = Event.find(params[:id], :include => [:game, :game_server, :game_area, {:comments => [{:poster => :profile}]}, :guild])
+      require_verified @event
+    elsif ['edit', 'update', 'destroy'].include? params[:action]
       @event = Event.find(params[:id])
+      require_verified @event 
       require_owner @event.poster
-      require_event_not_expired @event if params[:action] != 'destroy'
+      require_event_not_expired @event
     elsif ['index', 'upcoming', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user

@@ -1,13 +1,13 @@
 class PersonalAlbum < Album
 
-  belongs_to :cover, :class_name => 'PersonalPhoto'
+  belongs_to :cover, :class_name => 'PersonalPhoto', :conditions => {:verified => [0,1]}
 
   belongs_to :user, :foreign_key => 'owner_id'
 
   # 由于每张图片还得删除评论，圈人等等，所以还是用destroy比较方便
-  has_many :photos, :class_name => 'PersonalPhoto', :foreign_key => 'album_id', :order => 'created_at DESC', :dependent => :destroy
+  has_many :photos, :class_name => 'PersonalPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :order => 'created_at DESC', :dependent => :destroy
 
-  has_many :latest_photos, :class_name => 'PersonalPhoto', :foreign_key => 'album_id', :limit => 3, :order => "created_at DESC"
+  has_many :latest_photos, :class_name => 'PersonalPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :limit => 3, :order => "created_at DESC"
 
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}, 

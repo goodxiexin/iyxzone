@@ -85,6 +85,7 @@ protected
       require_adequate_privilege @video
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @video = Video.find(params[:id])
+      require_verified @video
       require_owner @video.poster
     end  
   end

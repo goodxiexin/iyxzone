@@ -110,7 +110,7 @@ module ApplicationHelper
 				image_tag "default_cover_#{size}.png", opts
 			end
     else
-      cover = album.cover_id.nil? ? album.photos.first : album.cover
+      cover = album.cover.nil? ? album.photos.first : album.cover
       image_tag cover.public_filename(size), opts
     end
   end
@@ -126,7 +126,7 @@ module ApplicationHelper
 				link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			end
     else
-      cover = album.cover_id.nil? ? album.photos.first : album.cover
+      cover = album.cover.nil? ? album.photos.first : album.cover
       link_to image_tag(cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
   end
@@ -418,11 +418,11 @@ module ApplicationHelper
 	end
 
   def verify_link resource, opts={}
-    link_to_remote '通过', :url => eval("verify_admin_#{resource.class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
+    link_to_remote '通过', :url => eval("verify_admin_#{resource.class.base_class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
   end
 
   def unverify_link resource, opts={}
-    link_to_remote '屏蔽', :url => eval("unverify_admin_#{resource.class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
+    link_to_remote '屏蔽', :url => eval("unverify_admin_#{resource.class.base_class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
   end
 
 end

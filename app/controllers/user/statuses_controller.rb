@@ -5,8 +5,8 @@ class User::StatusesController < UserBaseController
   def index
     if !params[:status_id].blank? and !params[:reply_to].blank?
       @reply_to = User.find(params[:reply_to])
-      @status = Status.find(params[:status_id])
-      params[:page] = @user.statuses.index(@status) / 10 + 1
+      @status = Status.find(:first, :conditions => {:id => params[:status_id], :verified => [0,1]})
+      params[:page] = @user.statuses.index(@status) / 10 + 1 if @status
     end
 
     @statuses = @user.statuses.paginate :page => params[:page], :per_page => 10, :include => [{:first_comment => [:commentable, :poster]}, {:last_comment => [:commentable, :poster]}, {:poster => :profile}]

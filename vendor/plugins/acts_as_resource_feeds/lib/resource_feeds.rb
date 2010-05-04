@@ -21,40 +21,64 @@ module ResourceFeeds
         has_many "#{item_key}_feed_items", :through => "#{item_key}_feed_deliveries", :source => 'feed_item', :order => 'created_at DESC' 
       end unless opts[:categories].blank?
 
-      include ResourceFeeds::InstanceMethods
+      include FeedRecipient::InstanceMethods
+
     end
 		
-		def acts_as_resource_feeds
+		def acts_as_resource_feeds opts={}
 
 			has_many :feed_items, :as => 'originator', :dependent => :destroy
 
-			define_method(:deliver_feeds) do |opts|
-				return if opts[:recipients].blank?
-				item = feed_items.create(:data => opts[:data])
-				values = []
-				# use self.class.name rather than item.originator_type ensures correct class name
-				opts[:recipients].each do |recipient|
-	        values << "(NULL, #{recipient.id}, '#{recipient.class.to_s}', #{item.id}, '#{self.class.name}', '#{Time.now.to_s(:db)}')"
-				end
-				sql = "insert into feed_deliveries values #{values.join(',')}"
-				ActiveRecord::Base.connection.execute(sql)	
-			end	
+      cattr_accessor :resource_feeds_opts
 
-      define_method(:destroy_feeds) do
-        feed_items.each {|item| item.destroy}
-      end
+      self.resource_feeds_opts = opts
+
+      include FeedProvider::InstanceMethods
 
 		end
 
 	end
 
-  module InstanceMethods
+  module FeedRecipient
+    
+    module InstanceMethods
   
-    def is_feed_deleteable_by? user, feed_delivery
-      proc = self.class.feed_recipient_opts[:delete_conditions] || lambda { false }
-      proc.call user, self
+      def is_feed_deleteable_by? user, feed_delivery
+        proc = self.class.feed_recipient_opts[:delete_conditions] || lambda { false }
+        proc.call user, self
+      end
+
     end
 
+  end
+
+  module FeedProvider
+ 
+    module InstanceMethods
+
+      def deliver_feeds opts={}
+        if opts[:recipients].blank?
+          recipients = (self.class.resource_feeds_opts[:recipients] || lambda {[]}).call self
+        else
+          recipients = opts[:recipients]
+        end
+        return if recipients.blank?
+        item = feed_items.create(:data => opts[:data])
+        values = []
+        # use self.class.name rather than item.originator_type ensures correct class name
+        recipients.each do |recipient|
+          values << "(NULL, #{recipient.id}, '#{recipient.class.to_s}', #{item.id}, '#{self.class.name}', '#{Time.now.to_s(:db)}')"
+        end
+        sql = "insert into feed_deliveries values #{values.join(',')}"
+        ActiveRecord::Base.connection.execute(sql)  
+      end
+
+      def destroy_feeds
+        feed_items.each {|f| f.destroy}
+      end
+
+    end
+ 
   end
 
 end

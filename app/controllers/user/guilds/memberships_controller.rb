@@ -47,9 +47,11 @@ protected
   def setup
     if ['index'].include? params[:action]
       @guild = Guild.find(params[:guild_id])
+      require_verified @guild
       @user = @guild.president
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @guild = Guild.find(params[:guild_id])
+      require_verified @guild
       require_owner @guild.president
       @membership = @guild.memberships.find(params[:id])
     end

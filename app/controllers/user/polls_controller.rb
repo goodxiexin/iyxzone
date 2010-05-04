@@ -23,7 +23,6 @@ class User::PollsController < UserBaseController
   end
 
   def show
-		@poll = Poll.find(params[:id], :include => [{:poster => :profile}, :votes, {:comments => [{:poster => :profile}, :commentable]}])
     @random_polls = Poll.random :limit => 5, :except => [@poll]
     @user = @poll.poster
     @vote = @poll.votes.find_by_voter_id(current_user.id)
@@ -83,8 +82,12 @@ protected
     if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
+    elsif ['show'].include? params[:action]
+      @poll = Poll.find(params[:id], :include => [{:poster => :profile}, :votes, {:comments => [{:poster => :profile}, :commentable]}])
+      require_verified @poll
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @poll = Poll.find(params[:id])
+      require_verified @poll
       require_owner @poll.poster
     end
   end

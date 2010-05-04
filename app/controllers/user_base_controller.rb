@@ -46,7 +46,7 @@ protected
   end
 
   def require_verified resource
-    !resource.masked? || is_admin || render_not_found 
+    (resource.verified != 2) || is_admin || render_not_found 
   end
 
   def render_privilege_denied resource

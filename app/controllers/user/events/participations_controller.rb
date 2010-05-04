@@ -44,13 +44,16 @@ protected
   def setup
     if ["index"].include? params[:action]
       @event = Event.find(params[:event_id])
+      require_verified @event
     elsif ["edit", "update"].include? params[:action]
       @participation = Participation.find(params[:id])
       @event = @participation.event
+      require_verified @event
       require_owner @participation.participant
     elsif ["destroy"].include? params[:action]
       @participation = Participation.find(params[:id])
       @event = @participation.event
+      require_verified @event
       require_owner @event.poster
       require_not_event_poster @participation
     end

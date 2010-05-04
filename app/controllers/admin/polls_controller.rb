@@ -1,38 +1,34 @@
 class Admin::PollsController < AdminBaseController
 
   def index
-    @polls = Poll.unverified.paginate :page => params[:page], :per_page => 20
+    case params[:type].to_i
+    when 0
+      @polls = Poll.unverified.paginate :page => params[:page], :per_page => 20
+    when 1
+      @polls = Poll.accepted.paginate :page => params[:page], :per_page => 20
+    when 2
+      @polls = Poll.rejected.paginate :page => params[:page], :per_page => 20
+    end
   end
 
-  def accept
-    @polls = Poll.accepted.paginate :page => params[:page], :per_page => 20
-  end
-  
-  def reject
-    @polls = Poll.rejected.paginate :page => params[:page], :per_page => 20
-  end
-
-  def show
-  end
-
-  def destroy
-  end
-
-  # accept
   def verify
     if @poll.verify
-      succ
+      render :update do |page|
+        page << "$('poll_#{@poll.id}').remove();"
+      end
     else
-      err
+      render_js_error
     end
   end
   
   # reject
   def unverify
     if @poll.unverify
-      succ
+      render :update do |page|
+        page << "$('poll_#{@poll.id}').remove();"
+      end
     else
-      err
+      render_js_error
     end
   end
   
@@ -40,7 +36,7 @@ class Admin::PollsController < AdminBaseController
 protected
 
   def setup
-    if ["show", "destroy", "verify", "unverify"].include? params[:action]
+    if ["verify", "unverify"].include? params[:action]
       @poll = Poll.find(params[:id])
     end
   end

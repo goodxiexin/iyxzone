@@ -10,7 +10,7 @@ class Photo < ActiveRecord::Base
 
 	named_scope :hot, :conditions => ["parent_id IS NULL and created_at > ? and privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
 
-  needs_verification
+  needs_verification :sensitive_columns => [:notation]
 
 	acts_as_privileged_resources :owner_field => :poster
 

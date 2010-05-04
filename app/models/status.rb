@@ -11,7 +11,7 @@ class Status < ActiveRecord::Base
 
   acts_as_emotion_text :columns => [:content]
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|status| [status.poster.profile] + status.poster.friends}
 
   needs_verification :sensitive_columns => [:content]
  

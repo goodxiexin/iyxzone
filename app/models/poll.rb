@@ -18,7 +18,7 @@ class Poll < ActiveRecord::Base
 
   named_scope :recent, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Date.today.to_s(:db)], :order => 'created_at DESC'
 
-  needs_verification 
+  needs_verification :sensitive_columns => [:description, :explanation, :name] 
  
   acts_as_diggable
 
@@ -27,7 +27,7 @@ class Poll < ActiveRecord::Base
 	acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, poll, comment| poll.poster == user || comment.poster == user}
 
-  acts_as_resource_feeds
+  acts_as_resource_feeds :recipients => lambda {|poll| [poll.poster.profile, poll.name] + poll.poster.guilds + poll.poster.friends.find_all {|f| f.application_setting.recv_poll_feed == 1 } }
 
   acts_as_random
   

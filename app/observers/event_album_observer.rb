@@ -1,7 +1,7 @@
 class EventAlbumObserver < ActiveRecord::Observer
 
-  # works for both save and update
-  def before_save album
+  def before_create album
+    # inherit some attributes from album
     event = album.event
     album.poster_id = event.poster_id
     album.privilege = 1

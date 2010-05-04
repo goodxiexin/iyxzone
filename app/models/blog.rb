@@ -19,13 +19,13 @@ class Blog < ActiveRecord::Base
 
 	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.is_owner_privilege? or blog.poster == user}
 
-  acts_as_resource_feeds
+  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed == 1}}
   
   acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
                     :default_title => lambda {|blog| blog.title}, 
                     :create_conditions => lambda {|user, blog| blog.privilege != 4}
 
-  acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
+  acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false, :verified => [0,1]}
 
   acts_as_privileged_resources :owner_field => :poster # 指明资源的拥有者的域是poster
 

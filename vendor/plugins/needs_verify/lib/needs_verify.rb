@@ -33,11 +33,6 @@ module NeedsVerify
     
       self.verify_opts = opts
 
-      if !opts[:sensitive_columns].blank?
-        before_create :verify_sensitive_columns_on_create
-        before_update :verify_sensitive_columns_on_update
-      end
-
       include InstanceMethods
 
       extend SingletonMethods
@@ -62,19 +57,17 @@ module NeedsVerify
       save
     end
 
-    def masked?
-      self.verified == 2
+    def sensitive?
+      self.class.verify_opts[:sensitive_columns].each do |column|
+        con = eval("self.#{column}")
+        if !con.blank?
+          SENSITIVE_WORDS.each do |word|
+            return true if con.include? word
+          end
+        end
+      end
+      return false    
     end
-
-    def verify_sensitive_columns_on_create
-      verify_sensitive_columns
-    end
-
-    def verify_sensitive_columns_on_update
-      verify_sensitive_columns if sensitive_columns_changed?
-    end
-
-  protected
 
     def sensitive_columns_changed?
       changed = false
@@ -84,20 +77,6 @@ module NeedsVerify
       changed
     end
 
-    # 如果不包含敏感词，就自动变成审核通过，如果包含敏感词，就变成待审核
-    def verify_sensitive_columns
-      self.class.verify_opts[:sensitive_columns].each do |column|
-        con = eval("self.#{column}")
-        SENSITIVE_WORDS.each do |word|
-          if con.include? word
-            self.verified = 0
-            return
-          end
-        end  
-      end
-      self.verified = 1
-    end
-  
   end
 
 end

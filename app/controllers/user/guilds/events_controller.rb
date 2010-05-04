@@ -16,6 +16,7 @@ protected
 
   def setup
     @guild = Guild.find(params[:guild_id])
+    require_verified @guild
   end
 
 end

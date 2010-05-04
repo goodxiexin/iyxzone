@@ -2,6 +2,14 @@ require 'app/mailer/comment_mailer'
 
 class CommentObserver < ActiveRecord::Observer
 
+  def before_create comment
+    if comment.sensitive?
+      comment.verified = 0
+    else
+      comment.verified = 1
+    end
+  end
+
   def after_create comment
     # increment counter
     comment.commentable.raw_increment :comments_count
@@ -268,8 +276,22 @@ class CommentObserver < ActiveRecord::Observer
     end
   end
 
+  def after_update comment
+    if comment.verified_changed?
+      if (comment.verified_was == 0 or comment.verified_was == 1) and comment.verified == 2
+        # 如果有相关的notice怎么办, 现在就忽略他
+        comment.commentable.raw_decrement :comments_count
+      end
+      if comment.verified_was == 2 and comment.verified == 1
+        comment.commentable.raw_increment :comments_count
+      end
+    end
+  end
+
   def after_destroy comment
-    comment.commentable.raw_decrement :comments_count
+    if comment.verified != 2
+      comment.commentable.raw_decrement :comments_count
+    end
   end
 
 end

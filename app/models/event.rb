@@ -58,14 +58,14 @@ class Event < ActiveRecord::Base
 
   end
 
-  needs_verification
+  needs_verification :sensitive_columns => [:title, :description]
 
   acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, event, comment| event.poster == user}, 
                       :create_conditions => lambda {|user, event| event.has_participant?(user)},
                       :view_conditions => lambda { true } # this means anyone can view
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|event| [event.poster.profile, event.game] + event.poster.guilds + event.poster.friends.find_all {|f| f.application_setting.recv_event_feed == 1} }
 
 	searcher_column :title
 
@@ -185,7 +185,7 @@ class Event < ActiveRecord::Base
 protected
 
   def time_is_valid
-    return if start_time.blank? or end_time.blank?
+    return if start_time.blank? or end_time.blank? or expired?
 
     if self.new_record?
       # 创建的时候开始时间不能比现在早
@@ -218,6 +218,7 @@ protected
   end
 
   def event_is_not_expired
+    return if self.verified_changed?
     errors.add(:event_id, "已经过期") if expired?
   end
 
