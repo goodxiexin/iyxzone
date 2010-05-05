@@ -17,6 +17,7 @@ class User::HomeController < UserBaseController
     @friend_suggestions = FriendSuggestion.random(:limit => 6, :conditions => {:user_id => current_user.id}, :include => [{:suggested_friend => :profile}])
     
     @notices = current_user.notices.unread.all(:limit => 10, :include => [:producer])
+    @news_list = News.all(:conditions => ["created_at > ? and created_at < ?", Time.now.beginning_of_day, Time.now], :order => 'created_at DESC')
   end
 
   def feeds
