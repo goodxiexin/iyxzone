@@ -43,7 +43,12 @@ module Shareable
       # find or create a share
       share = Share.find_or_create(:shareable_type => self.class.base_class.name, :shareable_id => self.id)
       sharing = share.sharings.build(:poster_id => user.id, :title => title, :reason => reason)
-      sharing.save
+      if sharing.save
+        true 
+      else
+        share.destroy
+        false
+      end
     end
 
     def is_shareable_by? user

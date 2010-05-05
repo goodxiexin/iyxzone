@@ -54,10 +54,12 @@ class GuildObserver < ActiveRecord::Observer
       if (guild.verified_was == 0 or guild.verified_was == 1) and guild.verified == 2
         User.update_all("participated_guilds_count = participated_guilds_count - 1", {:id => (guild.people - [guild.president]).map(&:id)})
         guild.president.raw_decrement :guilds_count
+        guild.destroy_feeds # membership的feed就不删了，反正他们本来就没评论
       end
       if guild.verified_was == 2 and guild.verified == 1
         User.update_all("participated_guilds_count = participated_guilds_count + 1", {:id => (guild.people - [guild.president]).map(&:id)})
         guild.president.raw_increment :guilds_count
+        guild.deliver_feeds 
       end
     end
   end
@@ -80,6 +82,7 @@ class GuildObserver < ActiveRecord::Observer
     end
 
     # destroy all memberships
+    # 如果memberships的dependent是destroy，很有可能在这个before_destroy之前，他就被删除了，那上面的guild.people是空的，就没法发通知了
     guild.memberships.each do |m|
       m.destroy_feeds
     end

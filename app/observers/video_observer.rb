@@ -29,8 +29,10 @@ class VideoObserver < ActiveRecord::Observer
     if video.verified_changed?
       if (video.verified_was == 0 or video.verified_was == 1) and video.verified == 2
         video.poster.raw_decrement "videos_count#{video.privilege}"
+        video.destroy_feeds
       elsif video.verified_was == 2 and video.verified == 1
         video.poster.raw_increment "videos_count#{video.privilege}"
+        video.deliver_feeds
       end
       return
     end

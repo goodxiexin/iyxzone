@@ -14,9 +14,9 @@ class Event < ActiveRecord::Base
 
   belongs_to :guild
 
-	named_scope :hot, :conditions => ["end_time > ?", Time.now], :order => 'confirmed_count DESC'
+	named_scope :hot, :conditions => ["end_time > ? AND verified IN (0,1)", Time.now], :order => 'confirmed_count DESC'
 	
-	named_scope :recent, :conditions => ["end_time > ?", Time.now], :order => 'start_time DESC'
+	named_scope :recent, :conditions => ["end_time > ? AND verified IN (0,1)", Time.now], :order => 'start_time DESC'
 
   has_many :participations # 没有dependent, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
 

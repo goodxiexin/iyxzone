@@ -20,6 +20,8 @@ protected
     diggable = diggable_type.constantize.find(:first, :conditions => {:id => diggable_id})
     if diggable.blank?
       errors.add(:diggable_id, "不存在")
+    elsif diggable.respond_to? :verified and diggable.verified == 2
+      errors.add(:diggable_id, "已经被和谐了")
     elsif diggable.digged_by? poster
       errors.add(:diggable_id, '已经挖过了')
     elsif !diggable.is_diggable_by? poster

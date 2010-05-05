@@ -10,9 +10,9 @@ class Guild < ActiveRecord::Base
 
   belongs_to :game_area
 
-  named_scope :hot, :order => '(members_count + veterans_count + 1) DESC'
+  named_scope :hot, :conditions => {:verified => [0,1]}, :order => '(members_count + veterans_count + 1) DESC'
 
-  named_scope :recent, :order => 'created_at DESC'
+  named_scope :recent, :conditions => {:verified => [0,1]}, :order => 'created_at DESC'
 
   has_one :forum, :dependent => :destroy
 

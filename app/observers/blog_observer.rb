@@ -40,6 +40,7 @@ class BlogObserver < ActiveRecord::Observer
         else
           blog.poster.raw_increment "blogs_count#{blog.privilege}"
         end
+        blog.deliver_feeds
       end
       if (blog.verified_was == 0 or blog.verified_was == 1) and blog.verified == 2
         if blog.draft
@@ -47,6 +48,7 @@ class BlogObserver < ActiveRecord::Observer
         else
           blog.poster.raw_decrement "blogs_count#{blog.privilege}"
         end
+        blog.destroy_feeds
       end
       return
     end

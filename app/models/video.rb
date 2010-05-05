@@ -4,9 +4,9 @@ class Video < ActiveRecord::Base
 
   belongs_to :game
 
-  named_scope :hot, :conditions => ["created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC'
+  named_scope :hot, :conditions => ["created_at > ? AND privilege != 4 AND verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC, created_at DESC'
 
-  named_scope :recent, :conditions => ["created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => 'created_at DESC'
+  named_scope :recent, :conditions => ["created_at > ? AND privilege != 4 AND verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => 'created_at DESC'
 
   needs_verification :sensitive_columns => [:title, :description] 
  

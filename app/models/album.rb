@@ -4,7 +4,7 @@ class Album < ActiveRecord::Base
 
   belongs_to :game
 
-  named_scope :recent, :conditions => "photos_count != 0 AND privilege != 4", :order => 'uploaded_at DESC'
+  named_scope :recent, :conditions => "photos_count != 0 AND privilege != 4 AND verified IN (0,1)", :order => 'uploaded_at DESC'
 
   needs_verification :sensitive_columns => [:title, :description]
 

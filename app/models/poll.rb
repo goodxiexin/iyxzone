@@ -14,9 +14,9 @@ class Poll < ActiveRecord::Base
 
   has_many :invitees, :through => :invitations, :source => 'user'
 
-  named_scope :hot, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Time.now.to_s(:db)], :order => "voters_count DESC"
+  named_scope :hot, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1) AND verified IN (0,1)", 2.weeks.ago.to_s(:db), Time.now.to_s(:db)], :order => "voters_count DESC, created_at DESC"
 
-  named_scope :recent, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Date.today.to_s(:db)], :order => 'created_at DESC'
+  named_scope :recent, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1) AND verified IN (0,1)", 2.weeks.ago.to_s(:db), Date.today.to_s(:db)], :order => 'created_at DESC'
 
   needs_verification :sensitive_columns => [:description, :explanation, :name] 
  

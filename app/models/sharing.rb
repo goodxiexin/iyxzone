@@ -34,6 +34,8 @@ protected
     shareable = share.shareable
     if shareable.shared_by? poster
       errors.add(:share_id, '已经分享过了')
+    elsif shareable.respond_to? :verified and shareable.verified == 2
+      errors.add(:share_id, '已经被和谐了，没法再分享')
     elsif !shareable.is_shareable_by? poster
       errors.add(:share_id, '没有权限分享')
     end

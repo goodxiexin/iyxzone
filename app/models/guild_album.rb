@@ -4,8 +4,7 @@ class GuildAlbum < Album
 
   belongs_to :guild, :foreign_key => 'owner_id'
 
-  # 理论上工会相册是不能删除的
-  has_many :photos, :class_name => 'GuildPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :order => 'created_at DESC'
+  has_many :photos, :class_name => 'GuildPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :order => 'created_at DESC', :dependent => :destroy
 
   has_many :latest_photos, :class_name => 'GuildPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :limit => 3, :order => "created_at DESC"
 

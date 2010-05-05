@@ -31,9 +31,13 @@ class PollObserver < ActiveRecord::Observer
       if poll.verified_was == 2 and poll.verified == 1
         poll.poster.raw_increment :polls_count
         User.update_all("participated_polls_count = participated_polls_count + 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
+        # 和他相关的投票呢？还恢复吗？
+        poll.deliver_feeds
       elsif (poll.verified_was == 0 or poll.verified_was == 1) and poll.verified == 2
         poll.poster.raw_decrement :polls_count
         User.update_all("participated_polls_count = participated_polls_count - 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
+        # 和他相关的投票就不删feed了，因为反正没有评论，dig啥的
+        poll.destroy_feeds
       end
     end
   end

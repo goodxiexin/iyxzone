@@ -50,7 +50,11 @@ class EventObserver < ActiveRecord::Observer
   def after_update event
     # verify
     if event.verified_changed?
-      # 因为event用的不是计数器，所以这里没啥可干的
+      if event.verified_was == 2 and event.verified == 1
+        event.deliver_feeds
+      elsif (event.verified_was == 0 or event.verified_was == 1) and event.verified == 2
+        event.destroy_feeds # participation的feed就不删了，反正他们本来就没评论
+      end
       return
     end
 

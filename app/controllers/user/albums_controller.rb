@@ -109,9 +109,11 @@ protected
       require_friend_or_owner @user
     elsif ["show"].include? params[:action]
       @album = PersonalAlbum.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}])
+      require_verified @album
       require_adequate_privilege @album
     elsif ["edit", "update", "confirm_destroy", "destroy"].include? params[:action]
       @album = PersonalAlbum.find(params[:id])
+      require_verified @album
       require_owner @album.poster
     end
   end

@@ -46,7 +46,16 @@ protected
   end
 
   def require_verified resource
-    (resource.verified != 2) || is_admin || render_not_found 
+    if resource.verified == 2 and !is_admin
+      respond_to do |format|
+        format.js { 
+          render :update do |page|
+            page << "tip('该资源已经被和谐')"
+          end
+        }
+        format.html { render_not_found }
+      end
+    end 
   end
 
   def render_privilege_denied resource

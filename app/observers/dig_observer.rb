@@ -4,4 +4,8 @@ class DigObserver < ActiveRecord::Observer
     dig.diggable.raw_increment :digs_count
   end
 
+  def after_destroy dig
+    dig.diggable.raw_decrement :digs_count
+  end
+
 end

@@ -2,6 +2,7 @@ class User::DigsController < UserBaseController
 
   def create
     @dig = Dig.new((params[:dig] || {}).merge(:poster_id => current_user.id))
+    
     if @dig.save
       @diggable = @dig.diggable
       render :update do |page|
@@ -18,7 +19,7 @@ class User::DigsController < UserBaseController
       end
     else
       render :update do |page|
-        page << "tip('已经赞过了！');"
+        page << "tip('#{@dig.errors.on(:diggable_id)}');"
       end
     end
   end

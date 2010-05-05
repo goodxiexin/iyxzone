@@ -45,6 +45,8 @@ protected
     taggable = taggable_type.constantize.find(:first, :conditions => {:id => taggable_id})
     if taggable.blank?
       errors.add(:taggable_id, "不存在")
+    elsif taggable.verified == 2
+      errors.add(:taggable_id, "已经被和谐了")
     elsif !taggable.is_taggable_by? poster
       errors.add(:taggable_id, "没有权限标记")
     elsif taggable.has_tag? tagged_user_id
