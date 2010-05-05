@@ -6,7 +6,17 @@ class Participation < ActiveRecord::Base
 
   belongs_to :event
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|participation|
+    participant = participation.participant
+    character = participation.character
+    event = participation.event
+    recipients = [participant.profile, character.game]
+    if event.is_guild_event?
+      recipients.concat [event.guild]
+    end
+    recipients.concat participant.friends.find_all {|f| f.application_setting.recv_event_feed == 1} 
+    recipients - [event.poster]
+  }
 
 	Invitation			= 0 # 邀请
   Request         = 1 # 请求 

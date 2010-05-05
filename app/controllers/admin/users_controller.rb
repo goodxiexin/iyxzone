@@ -10,31 +10,33 @@ class Admin::UsersController < AdminBaseController
         page.redirect_to admin_users_url
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
   def enable
     unless @user.update_attribute(:enabled, true)
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
   def disable
     unless @user.update_attribute(:enabled, false)
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
   def activate
     if @user and !@user.active?
       @user.activate
+      # 如果是被别人邀请的，那也没辙了，因为没有那个invite_token了，所以没法加好友
+      # send email
+      UserMailer.deliver_activation @user
+      # create friend/comrade suggestions??
+      @user.create_friend_suggestions
+      @user.servers.each do |s|
+        @user.create_comrade_suggestions s
+      end
       redirect_to :action => 'index'
     end
   end 

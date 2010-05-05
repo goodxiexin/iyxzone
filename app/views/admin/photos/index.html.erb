@@ -4,10 +4,13 @@
     <div class="box02 canvas_int space">
       <div class="tab tab01">
 		    <ul>
-          <li class='hover'><span><%= link_to "未审核", admin_photos_url(:type => 0) %></span></li>
-          <li><span><%= link_to "已通过", admin_photos_url(:type => 1) %></span></li>
-          <li><span><%= link_to "已屏蔽", admin_photos_url(:type => 2) %></span></li>
+          <li <% if params[:type].to_i == 0 %>class="hover"<% end %>><span><%= link_to "待审核照片", admin_photos_url(:type => 0) %></span></li>
+          <li <% if params[:type].to_i == 1 %>class="hover"<% end %>><span><%= link_to "通过照片", admin_photos_url(:type => 1) %></span></li>
+          <li <% if params[:type].to_i == 2 %>class="hover"<% end %>><span><%= link_to "屏蔽照片", admin_photos_url(:type => 2) %></span></li>
         </ul>
+        <div class='right'>
+          <%= render :partial => 'admin/verify/category', :locals => {:selected => 4} %>
+        </div>
       </div>
       <div class="piclist-rows">
         <table class="big" cellpadding="0" cellspacing="1">

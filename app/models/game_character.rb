@@ -32,7 +32,7 @@ class GameCharacter < ActiveRecord::Base
 
 	belongs_to :guild
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|character| [character.user.profile, character.game] + character.user.friends}
 
   attr_readonly :game_id, :area_id, :server_id, :race_id, :profession_id
 

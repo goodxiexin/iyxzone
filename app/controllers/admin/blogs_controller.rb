@@ -3,11 +3,11 @@ class Admin::BlogsController < AdminBaseController
   def index
     case params[:type].to_i
     when 0
-      @blogs = Blog.unverified.paginate :page => params[:page], :per_page => 20
+      @blogs = Blog.unverified.paginate :page => params[:page], :per_page => 20, :conditions => {:draft => 0}
     when 1
-      @blogs = Blog.accepted.paginate :page => params[:page], :per_page => 20
+      @blogs = Blog.accepted.paginate :page => params[:page], :per_page => 20, :conditions => {:draft => 0}
     when 2
-      @blogs = Blog.rejected.paginate :page => params[:page], :per_page => 20
+      @blogs = Blog.rejected.paginate :page => params[:page], :per_page => 20, :conditions => {:draft => 0}
     end
   end
 

@@ -1,0 +1,16 @@
+    <div class="sidebar">
+      <div id="appbar" class="round_title_r_t"><div class="round_title_l_t"><div class="round_r_b"><div class="round_l_b">
+        <h1 class="round_title">Admin应用</h1>
+        <div class="round_m"><div class="round_body">
+          <div class="applist">
+            <ul>
+              <li><%= link_to "用户状态", admin_users_url, :class => 'app-status' %></li>
+              <li><%= link_to "资源审核", admin_blogs_url, :class => 'app-share' %></li>
+              <li><%= link_to "发布新闻", admin_news_index_url, :class => 'app-log' %></li>
+              <li><%= link_to "错误汇报", admin_guestbooks_url, :class => 'app-photo' %></li>
+              <li><%= link_to "编辑应用", admin_applications_url, :class => 'app-video' %></li>
+            </ul>
+          </div>
+        </div></div>
+      </div></div></div></div>
+    </div>

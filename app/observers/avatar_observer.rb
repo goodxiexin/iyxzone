@@ -31,9 +31,9 @@ class AvatarObserver < ActiveRecord::Observer
     avatar.album.raw_increment :photos_count
 
     # issue avatar feeds if necessary 
-    return if avatar.album.poster.application_setting.emit_photo_feed == 0
-		recipients = avatar.album.poster.friends.find_all {|f| f.application_setting.recv_photo_feed == 1}
-		avatar.deliver_feeds :recipients => recipients
+    if avatar.album.poster.application_setting.emit_photo_feed == 1
+		  avatar.deliver_feeds
+    end
 	end
 
   def before_update avatar

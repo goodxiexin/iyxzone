@@ -6,7 +6,7 @@ class Membership < ActiveRecord::Base
 
   belongs_to :guild
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|membership| [membership.user.profile, membership.character.game] + membership.user.friends.find_all{|f| f.application_setting.recv_guild_feed == 1} - [membership.guild.president] }
 
 	Invitation			= 0
 	Request         = 1

@@ -8,6 +8,9 @@
           <li <% if params[:type].to_i == 1 %>class="hover"<% end %>><span><%= link_to "通过状态", admin_statuses_url(:type => 1) %></span></li>
           <li <% if params[:type].to_i == 2 %>class="hover"<% end %>><span><%= link_to "屏蔽状态", admin_statuses_url(:type => 2) %></span></li>
         </ul>
+        <div class='right'>
+          <%= render :partial => 'admin/verify/category', :locals => {:selected => 1} %>
+        </div>
       </div>
       <div class="feed-box01">
         <div class='gray'>共<%= @statuses.total_entries %>篇</div>

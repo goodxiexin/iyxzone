@@ -1,27 +1,19 @@
-<h1>Listing guestbooks</h1>
-
-<table>
-  <tr>
-	<td> 问题描述</td>
-	<td> 问题等级</td>
-	<td> 完成日期</td>
-	<td> 问题分类</td>
-	<td> 回复</td>
-  </tr>
-
-<% @guestbooks.each do |guestbook| %>
-	<tr>
-		<td><%=h guestbook.description %>  </td>
-		<td><%=h guestbook.priority %>  </td>
-		<td><%=h guestbook.done_date %>  </td>
-		<td><%=h guestbook.catagory %>  </td>
-		<td><%=h guestbook.reply %>  </td>
-    <td><%= link_to 'Show', admin_guestbook_path(guestbook) %></td>
-    <td><%= link_to 'Edit', edit_admin_guestbook_path(guestbook) %></td>
-    <td><%= link_to 'Destroy', admin_guestbook_path(guestbook), :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-log">guestbook</h1>
+    <div class="box02 canvas_int space">
+      <div class="appcontent05">
+        <div class="myblog">
+          <div class="tip">共<%= @guestbooks.total_entries %>篇日志</div>
+          <div class="myblog-table">
+            <table cellpadding="0">
+              <%= render :partial => 'guestbook', :collection => @guestbooks %>
+            </table>
+          </div>
+          <%= will_paginate @guestbooks %>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>
 

@@ -8,6 +8,9 @@
           <li <% if params[:type].to_i == 1 %>class="hover"<% end %>><span><%= link_to "通过工会", admin_guilds_url(:type => 1) %></span></li>
           <li <% if params[:type].to_i == 2 %>class="hover"<% end %>><span><%= link_to "屏蔽工会", admin_guilds_url(:type => 2) %></span></li>
         </ul>
+        <div class='right'>
+          <%= render :partial => 'admin/verify/category', :locals => {:selected => 6} %>
+        </div>
       </div>
       <div class="piclist-rows">
         <div class='gray'>共<%= @guilds.total_entries %>篇</div>

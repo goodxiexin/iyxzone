@@ -14,10 +14,9 @@ class SharingObserver < ActiveRecord::Observer
     poster.raw_increment :sharings_count
 
     # issue feeds if necessary
-    return if poster.application_setting.emit_sharing_feed == 0
-    recipients = [poster.profile].concat poster.guilds
-    recipients.concat poster.friends.find_all {|f| f.application_setting.recv_sharing_feed == 1}
-    sharing.deliver_feeds :recipients => recipients, :data => {:type => share.shareable_type}
+    if poster.application_setting.emit_sharing_feed == 1
+      sharing.deliver_feeds :data => {:type => share.shareable_type}
+    end
   end
 
   # update verified column

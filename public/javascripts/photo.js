@@ -927,7 +927,6 @@ Iyxzone.Photo.Slide3 = Class.create({
   updatePhotoInfo: function(index){
     var picture = this.getPicture(index);
     var img = this.getImageElement(picture);
-  
     $('picture').update('');
     $('picture').appendChild(img);
       

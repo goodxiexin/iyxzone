@@ -15,11 +15,9 @@ class VoteObserver < ActiveRecord::Observer
 	  vote.poll.raw_increment :voters_count
 
     # issue feeds if necessary
-    return if vote.voter.application_setting.emit_poll_feed == 0
-    recipients = [vote.voter.profile, vote.poll.game]
-    recipients.concat vote.voter.guilds
-    recipients.concat vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed == 1}
-    vote.deliver_feeds :recipients => recipients
+    if vote.voter.application_setting.emit_poll_feed == 1
+      vote.deliver_feeds
+    end
   end
 
   # 这个可能在某个用户被删除后触发
