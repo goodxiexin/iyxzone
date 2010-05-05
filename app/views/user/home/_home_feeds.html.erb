@@ -38,7 +38,10 @@
       <% end %>
     </div>
     <% else %>
+			<h2 class='shine'><strong>今日拾闻摘要</strong></h2>
       <div id="feed_list">
+				<%= render :partial => 'user/home/news_deliveries', :object => @news_list[0..4] %>
+				<div class='multibox'><div class='title'><%= link_to '看更多拾闻>>>', news_index_url %></div></div>
         <%= render :partial => 'user/home/feed_deliveries', :object => @feed_deliveries %>
       </div>
     <% end %>

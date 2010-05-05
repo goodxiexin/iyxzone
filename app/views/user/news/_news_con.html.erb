@@ -7,7 +7,7 @@
                 <%= news_content n, :length => 100, :omission => '...' %>
               <% elsif n.news_type == 'picture' %>
               <span class="share-album-cover">
-                <%= link_to (image_tag n.pictures.first.public_filename, :class => 'imgbox01', :size => '100x100'), news_url(n) %>
+                <%= link_to (image_tag n.pictures.first.public_filename, :class => 'imgbox01', :size => '95x95'), news_url(n) %>
                 </span><br/>
                 <%= simple_format h n.data %>
               <% else %>
