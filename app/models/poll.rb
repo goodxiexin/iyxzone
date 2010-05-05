@@ -6,7 +6,7 @@ class Poll < ActiveRecord::Base
 
   has_many :answers, :class_name => 'PollAnswer', :dependent => :delete_all
 
-  has_many :votes # 不写:dependent => :destroy, 手动来删，提高效率
+  has_many :votes
 
   has_many :voters, :through => :votes
 

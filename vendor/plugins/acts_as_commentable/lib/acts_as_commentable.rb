@@ -11,8 +11,8 @@ module Commentable
       order = opts[:order] || 'created_at DESC'
       
       reverse_order = order.include?('ASC') ? order.gsub('ASC', 'DESC') : order.gsub('DESC', 'ASC')
-			
-      has_many :comments, :conditions => {:verified => [0,1]}, :as => 'commentable', :dependent => :delete_all, :order => order
+
+      has_many :comments, :conditions => {:verified => [0,1]}, :dependent => :destroy, :as => 'commentable', :order => order
 
       has_one :first_comment, :conditions => {:verified => [0,1]}, :class_name => 'Comment', :as => 'commentable', :order => order
 

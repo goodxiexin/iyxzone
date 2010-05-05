@@ -25,10 +25,10 @@ class SharingObserver < ActiveRecord::Observer
       sharing.verified = 0
     end
   end
-  
-  def after_destroy sharing
-    sharing.share.raw_decrement :sharings_count
-		sharing.poster.raw_decrement :sharings_count
-  end
 
+  def after_destroy sharing
+    sharing.poster.raw_decrement :sharings_count
+    sharing.share.raw_decrement :sharings_count
+  end
+  
 end

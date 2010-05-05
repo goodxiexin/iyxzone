@@ -81,6 +81,10 @@ class EventObserver < ActiveRecord::Observer
     end
 
     # destroy all participations
+    event.participations.each do |p|
+      p.destroy_feeds
+    end
+
     Participation.delete_all(:event_id => event.id)
   end
 

@@ -243,6 +243,8 @@ class User < ActiveRecord::Base
 
 	with_options :order =>  'created_at DESC', :through => :participations, :source => :event, :uniq => true do |user|
 
+    user.has_many :v_events, :conditions => "participations.status IN (3,4,5)"
+
 		user.has_many :all_events, :conditions => "participations.status IN (3,4,5) AND verified IN (0,1)"
 
     # 不包括我发起的，这样的都在events里
@@ -349,6 +351,8 @@ class User < ActiveRecord::Base
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC', :uniq => true do |user|
 
+    user.has_many :v_guilds, :conditions => "memberships.status IN (3,4,5)"
+
     user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5) AND verified IN (0,1)"
 
     user.has_many :privileged_guilds, :conditions => "memberships.status IN (3,4) AND verified IN (0,1)"
@@ -371,13 +375,13 @@ class User < ActiveRecord::Base
 	end
 
 	# invitation and requests
-	has_many :event_requests, :through => :events, :source => :requests
+	has_many :event_requests, :through => :v_events, :source => :requests
 
 	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => 0}, :dependent => :destroy
 
 	has_many :poll_invitations, :dependent => :destroy
 
-	has_many :guild_requests, :through => :guilds, :source => :requests 
+	has_many :guild_requests, :through => :v_guilds, :source => :requests 
 
 	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => 0}, :dependent => :destroy
 

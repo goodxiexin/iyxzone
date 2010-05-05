@@ -67,7 +67,9 @@ class GuildObserver < ActiveRecord::Observer
     guild.president.raw_decrement :guild_requests_count, guild.requests_count
 
     # modify invitations count
-    User.update_all("guild_invitations_count = guild_invitations_count - 1", {:id => guild.invitations.map(&:user_id)})
+    guild.invitations.each do |invitation|
+      invitation.user.raw_decrement :guild_invitations_count
+    end
 
     # send notifications
     if guild.verified != 2

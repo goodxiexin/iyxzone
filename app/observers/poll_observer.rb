@@ -46,6 +46,9 @@ class PollObserver < ActiveRecord::Observer
     end
 
     # delete all votes
+    poll.votes.each do |vote|
+      vote.destroy_feeds
+    end
     Vote.delete_all(:poll_id => poll.id)
 
     # decrement invitees' poll_invitations_count

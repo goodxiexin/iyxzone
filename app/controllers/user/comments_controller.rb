@@ -37,11 +37,11 @@ protected
   end
 
   def require_delete_privilege comment
-    comment.is_deleteable_by? current_user || render_not_found
+    comment.is_deleteable_by?(current_user) || render_not_found
   end
 
   def require_view_privilege commentable
-    commentable.is_comment_viewable_by? current_user || render_not_found
+    commentable.is_comment_viewable_by?(current_user) || render_not_found
   end
 
 end

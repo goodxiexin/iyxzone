@@ -93,7 +93,7 @@ protected
       @guild = @album.guild
       require_verified @guild
       @user = @guild.president
-      require_owner @user
+      require_owner @user unless params[:action] == 'show'
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = GuildAlbum.find(params[:album_id])
       @guild = @album.guild

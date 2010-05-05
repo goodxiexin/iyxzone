@@ -4,7 +4,7 @@ class Topic < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User'
 
-  has_many :posts, :dependent => :delete_all
+  has_many :posts, :dependent => :destroy
 
   acts_as_viewable
 
