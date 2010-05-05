@@ -493,17 +493,6 @@ ActiveRecord::Schema.define(:version => 20100428031910) do
 
   add_index "participations", ["participant_id", "event_id"], :name => "index_participations_on_participant_id_and_event_id"
 
-  create_table "pending_tasks", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "task_id"
-    t.time     "start_time"
-    t.time     "complete_time"
-    t.text     "achievement"
-    t.integer  "state"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "photo_tags", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "tagged_user_id"
@@ -732,13 +721,13 @@ ActiveRecord::Schema.define(:version => 20100428031910) do
   end
 
   create_table "tasks", :force => true do |t|
-    t.text     "content"
-    t.text     "reward"
+    t.text     "prerequisite"
     t.text     "requirement"
+    t.text     "reward"
+    t.text     "description"
     t.integer  "catagory"
-    t.integer  "state"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "starts_at"
+    t.datetime "expires_at"
   end
 
   create_table "topics", :force => true do |t|
@@ -752,6 +741,15 @@ ActiveRecord::Schema.define(:version => 20100428031910) do
     t.boolean  "top",              :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "user_tasks", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "task_id"
+    t.datetime "starts_at"
+    t.datetime "done_at"
+    t.text     "achievement"
+    t.datetime "expires_at"
   end
 
   create_table "users", :force => true do |t|
