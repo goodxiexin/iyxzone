@@ -731,6 +731,16 @@ ActiveRecord::Schema.define(:version => 20100504094536) do
     t.integer  "verified",       :default => 0
   end
 
+  create_table "tasks", :force => true do |t|
+    t.text     "prerequisite"
+    t.text     "requirement"
+    t.text     "reward"
+    t.text     "description"
+    t.integer  "catagory"
+    t.datetime "starts_at"
+    t.datetime "expires_at"
+  end
+
   create_table "topics", :force => true do |t|
     t.integer  "forum_id"
     t.integer  "poster_id"
@@ -742,6 +752,15 @@ ActiveRecord::Schema.define(:version => 20100504094536) do
     t.boolean  "top",              :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "user_tasks", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "task_id"
+    t.datetime "starts_at"
+    t.datetime "done_at"
+    t.text     "achievement"
+    t.datetime "expires_at"
   end
 
   create_table "users", :force => true do |t|
@@ -763,9 +782,9 @@ ActiveRecord::Schema.define(:version => 20100504094536) do
     t.integer  "avatar_id"
     t.string   "pinyin"
     t.datetime "last_seen_at"
-    t.integer  "privacy_setting",            :limit => 8,  :default => 123076522
-    t.integer  "mail_setting",               :limit => 8,  :default => 562949953421311
-    t.integer  "application_setting",        :limit => 8,  :default => 262143
+    t.integer  "privacy_setting",            :limit => 8,  :default => 0
+    t.integer  "mail_setting",               :limit => 8,  :default => 0
+    t.integer  "application_setting",        :limit => 8,  :default => 0
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
     t.integer  "game_attentions_count",                    :default => 0
