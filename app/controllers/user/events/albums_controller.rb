@@ -34,8 +34,8 @@ protected
 
   def setup
 		@album = EventAlbum.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}])
+    require_verified @album
     @event = @album.event
-    require_verified @event
 		@user = @event.poster
     require_owner @user if params[:action] == 'update'
   end

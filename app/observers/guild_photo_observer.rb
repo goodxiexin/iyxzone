@@ -5,8 +5,11 @@
 #
 class GuildPhotoObserver < ActiveRecord::Observer
 
-  def before_save photo
+  def before_create photo
     return unless photo.thumbnail.blank?
+
+    # verify
+    photo.verified = 0
 
     # inherit some attributes from album
     album = photo.album
@@ -23,13 +26,23 @@ class GuildPhotoObserver < ActiveRecord::Observer
 
   def before_update photo 
     return unless photo.thumbnail.blank?
-    if photo.notation_changed?
+    
+    if photo.sensitive_columns_changed? and photo.sensitive?
       photo.verified = 0
     end
   end
 
   def after_update photo
     return unless photo.thumbnail.blank?
+
+    # verify
+    if photo.recently_verified_from_unverified
+      photo.album.raw_increment :photos_count
+    elsif photo.recently_unverified
+      photo.album.raw_decrement :photos_count
+    end
+
+    # change cover
     if photo.cover
       photo.album.update_attribute(:cover_id, photo.id) if photo.album.cover_id != photo.id
     else

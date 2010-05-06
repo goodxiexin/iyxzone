@@ -90,13 +90,12 @@ protected
       require_verified @photo
       @album = @photo.album
       @event = @album.event
-      require_verified @event
       @user = @event.poster
       require_owner @user if params[:action] != 'show'
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = EventAlbum.find(params[:album_id])
+      require_verified @album
       @event = @album.event
-      require_verified @event
       @user = @event.poster
       require_owner @user
     end

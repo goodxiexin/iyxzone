@@ -5,12 +5,9 @@ class PersonalAlbumObserver < ActiveRecord::Observer
 
   def before_create album
     # verify?
-    if album.sensitive?
-      album.verified = 0
-    else
-      album.verified = 1
-    end
+    album.verified = album.sensitive? ? 0 : 1
 
+    # inherit some attributes from owner
     album.poster_id = album.owner_id
   end
 
@@ -25,13 +22,14 @@ class PersonalAlbumObserver < ActiveRecord::Observer
   end
   
   def after_update album
-    if album.verified_changed?
-      if album.verified_was == 2 and album.verified == 1
-        album.poster.raw_increment "albums_count#{album.privilege}"
-      elsif (album.verified_was == 0 or album.verified_was == 1) and album.verified == 2
-        album.poster.raw_decrement "albums_count#{album.privilege}"
-      end
-      return
+    if album.recently_verified_from_unverified
+      album.poster.raw_increment "albums_count#{album.privilege}"
+      Photo.update_all("verified = 1", {:album_id => album.id})
+      # 没法恢复新鲜事，因为根部没记录照片是分几次，怎么上传的
+    elsif album.recently_unverified
+      album.poster.raw_decrement "albums_count#{album.privilege}"
+      Photo.update_all("verified = 2", {:album_id => album.id})
+      album.destroy_feeds 
     end
 
     if album.privilege_changed?
@@ -43,8 +41,9 @@ class PersonalAlbumObserver < ActiveRecord::Observer
   end
 
   def before_destroy album
-    return if album.verified == 2
-    album.poster.raw_decrement "albums_count#{album.privilege}"
+    if album.verified != 2
+      album.poster.raw_decrement "albums_count#{album.privilege}"
+    end
   end
 
 end

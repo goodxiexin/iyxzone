@@ -7,11 +7,7 @@ class EventObserver < ActiveRecord::Observer
 
   def before_create event
     # verify
-    if event.sensitive?
-      event.verified = 0
-    else
-      event.verified = 1
-    end
+    event.verified = event.sensitive? ? 0 : 1
 
     # inherit some attributes from character or guild
     if event.is_guild_event?
@@ -49,13 +45,12 @@ class EventObserver < ActiveRecord::Observer
   
   def after_update event
     # verify
-    if event.verified_changed?
-      if event.verified_was == 2 and event.verified == 1
-        event.deliver_feeds
-      elsif (event.verified_was == 0 or event.verified_was == 1) and event.verified == 2
-        event.destroy_feeds # participation的feed就不删了，反正他们本来就没评论
-      end
-      return
+    if event.recently_verified_from_unverified
+      event.deliver_feeds
+      event.album.verify
+    elsif event.recently_unverified
+      event.destroy_feeds # participation的feed就不删了，反正他们本来就没评论
+      event.album.unverify
     end
 
     # if time changes, deliver some notifications

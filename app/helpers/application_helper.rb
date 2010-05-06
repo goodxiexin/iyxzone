@@ -2,7 +2,7 @@
 module ApplicationHelper
 
   def avatar_path user, size="medium"
-    if user.avatar.blank?
+    if user.avatar.blank? || user.avatar.verified == 2
       "default_#{user.gender}_#{size}.png"
     else
       user.avatar.public_filename(size)
@@ -11,7 +11,7 @@ module ApplicationHelper
 
   def avatar_image(user, opts={})
     size = opts.delete(:size) || "medium"
-    if user.avatar.blank?
+    if user.avatar.blank? || user.avatar.verified == 2
       image_tag "default_#{user.gender}_#{size}.png", opts
     else
       image_tag user.avatar.public_filename(size), opts
@@ -32,7 +32,7 @@ module ApplicationHelper
   def avatar(user, img_opts={}, a_opts={})
 		size = img_opts.delete(:size) || "medium"
     a_opts.merge!({:popup => true})
-    if user.avatar.blank?
+    if user.avatar.blank? || user.avatar.verified == 2
       link_to image_tag("default_#{user.gender}_#{size}.png", img_opts), profile_url(user.profile), a_opts
     else
       link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
@@ -101,7 +101,7 @@ module ApplicationHelper
 
   def album_cover_image album, opts={}
     size = opts.delete(:size) || 'large'
-    if album.photos_count == 0
+    if album.verified == 2 || album.photos_count == 0
 			if album.is_a? GuildAlbum
 				image_tag "default_guild_#{size}.png", opts
 			elsif album.is_a? EventAlbum
@@ -117,7 +117,7 @@ module ApplicationHelper
 
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'large'
-    if album.photos_count == 0
+    if album.verified == 2 || album.photos_count == 0
 			if album.is_a? GuildAlbum
 				link_to image_tag("default_guild_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			elsif album.is_a? EventAlbum

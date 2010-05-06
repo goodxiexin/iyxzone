@@ -91,13 +91,12 @@ protected
       require_verified @photo
       @album = @photo.album
       @guild = @album.guild
-      require_verified @guild
       @user = @guild.president
       require_owner @user unless params[:action] == 'show'
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = GuildAlbum.find(params[:album_id])
+      require_verified @album
       @guild = @album.guild
-      require_verified @guild
       @user = @guild.president
       require_owner @user
     end

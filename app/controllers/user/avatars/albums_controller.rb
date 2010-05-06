@@ -30,10 +30,12 @@ protected
   def setup
     if ["show"].include? params[:action]
       @album = AvatarAlbum.find(params[:id])
+      require_verified @album
       @user = @album.poster
       require_friend_or_owner @user
     elsif ["update"].include? params[:action]
       @album = AvatarAlbum.find(params[:id])
+      require_verified @album
       @user = @album.poster
       require_owner @user
     end

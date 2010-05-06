@@ -1,8 +1,9 @@
 <% album = album_item %>
+<% cover = album.cover %>
             <tr id='album_<%= album.id %>'>
               <td>
                 <div class="imgwrap">
-                  <%= album_cover album, :size => :large, :class => 'imgbox01' %>
+                  <%= image_tag (cover.blank? ? 'default_cover_large.png' : cover.public_filename(:large)), :class => 'imgbox01' %>
                 </div>
                 <div class="data">
                   <h3><%= profile_link album.poster%>的<%= album_link album %>共<span><%= album.photos_count %></span>张</h3>
