@@ -155,8 +155,15 @@ module ApplicationHelper
 
   def text_dig_link diggable, html_opts={}
     dig_html = link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable, :at => 'show'), :html => {:id => "digging_#{diggable.class.to_s.underscore}_#{diggable.id}"}.merge(html_opts), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
-    dig_html += "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}' class='gray'>#{diggable.digs_count}</span>人赞过)"
+    #dig_html += "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}' class='gray'>#{diggable.digs_count}</span>人赞过)"
     dig_html
+  end
+
+  def dig_count_html diggable
+    "<div class=\"box04 cmt-tips\">
+      <span class=\"arrow-tip03\"></span>
+      <div><span class=\"photo-op-praise\"></span>有#{diggable.digs_count}人觉得比较赞</div>
+    </div>"
   end
 
   def blog_content blog, opts={}
@@ -423,6 +430,10 @@ module ApplicationHelper
 
   def unverify_link resource, opts={}
     link_to_remote '屏蔽', :url => eval("unverify_admin_#{resource.class.base_class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
+  end
+
+  def report_link reportable
+    facebox_link "举报", new_report_url(:reportable_id => reportable.id, :reportable_type => reportable.type)
   end
 
 end
