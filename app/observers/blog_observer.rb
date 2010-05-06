@@ -3,11 +3,7 @@ require 'app/mailer/tag_mailer'
 class BlogObserver < ActiveRecord::Observer
 
   def before_create blog
-    if blog.sensitive?
-      blog.verified = 0
-    else
-      blog.verified = 1
-    end
+    blog.verified = blog.sensitive? ? 0 : 1
   end
 
   def after_create blog
@@ -33,24 +29,20 @@ class BlogObserver < ActiveRecord::Observer
   def after_update blog
     # 如果验证不通过，那需要减少计数器
     # 如果验证由不通过变成通过，那需要增加计数器
-    if blog.verified_changed?
-      if blog.verified_was == 2 and blog.verified == 1
-        if blog.draft
-          blog.poster.raw_increment "drafts_count"
-        else
-          blog.poster.raw_increment "blogs_count#{blog.privilege}"
-        end
-        blog.deliver_feeds
+    if blog.recently_verified_from_unverified
+      if blog.draft
+        blog.poster.raw_increment "drafts_count"
+      else
+        blog.poster.raw_increment "blogs_count#{blog.privilege}"
       end
-      if (blog.verified_was == 0 or blog.verified_was == 1) and blog.verified == 2
-        if blog.draft
-          blog.poster.raw_decrement "drafts_count"
-        else
-          blog.poster.raw_decrement "blogs_count#{blog.privilege}"
-        end
-        blog.destroy_feeds
+      blog.deliver_feeds
+    elsif blog.recently_unverified
+      if blog.draft
+        blog.poster.raw_decrement "drafts_count"
+      else
+        blog.poster.raw_decrement "blogs_count#{blog.privilege}"
       end
-      return
+      blog.destroy_feeds
     end
 
     # update counter if necessary

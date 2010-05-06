@@ -1,11 +1,7 @@
 class StatusObserver < ActiveRecord::Observer
 
   def before_create status
-    if status.sensitive?
-      status.verified = 0
-    else
-      status.verified = 1
-    end
+    status.verified = status.sensitive? ? 0 : 1
   end
 
   def after_create status
@@ -23,11 +19,10 @@ class StatusObserver < ActiveRecord::Observer
   end
 
   def after_update status
-    if status.verified_was == 2 and status.verified == 1
+    if status.recently_verified_from_unverified
       status.poster.raw_increment :statuses_count
       status.deliver_feeds  
-    end
-    if (status.verified_was == 0 or status.verified_was == 1) and status.verified == 2
+    elsif status.recently_unverified
       status.poster.raw_decrement :statuses_count
       status.destroy_feeds
     end

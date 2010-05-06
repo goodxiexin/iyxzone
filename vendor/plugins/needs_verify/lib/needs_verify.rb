@@ -33,6 +33,8 @@ module NeedsVerify
     
       self.verify_opts = opts
 
+      attr_accessor :recently_verified, :recently_verified_from_unverified, :recently_unverified
+
       include InstanceMethods
 
       extend SingletonMethods
@@ -47,14 +49,30 @@ module NeedsVerify
 
   module InstanceMethods
 
+    def needs_verify
+      self.verified = 0
+      self.save
+    end
+
     def verify
-      self.verified = 1
-      save  
+      if self.verified != 1
+        if self.verified == 2
+          self.recently_verified_from_unverified = true
+        else
+          self.recently_verified = true
+        end
+        self.verified = 1
+        save
+      end  
     end
 
     def unverify
-      self.verified = 2
-      save
+      if self.verified == 0 or self.verified == 1
+        self.verified = 2
+        puts "#{self.verified}"
+self.recently_unverified = true
+        save
+      end
     end
 
     def sensitive?

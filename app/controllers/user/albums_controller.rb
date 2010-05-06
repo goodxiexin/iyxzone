@@ -7,7 +7,8 @@ class User::AlbumsController < UserBaseController
   def index
     @relationship = @user.relationship_with current_user
     @privilege = get_privilege_cond @relationship
-    @albums = @user.albums.all(:conditions => @privilege).push(@user.avatar_album)
+    @albums = @user.albums.all(:conditions => @privilege)
+    @albums.push(@user.avatar_album) if @user.avatar_album.verified != 2
     @albums = @albums.paginate :page => params[:page], :per_page => PER_PAGE
   end
 

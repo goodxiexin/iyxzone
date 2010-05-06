@@ -4,11 +4,7 @@ class GuildObserver < ActiveRecord::Observer
 
   def before_create guild
     # verify
-    if guild.sensitive?
-      guild.verified = 0
-    else
-      guild.verified = 1
-    end
+    guild.verified = guild.sensitive? ? 0 : 1
 
     # inherit some attributes from character
     c = guild.president_character
@@ -50,17 +46,16 @@ class GuildObserver < ActiveRecord::Observer
   end
 
   def after_update guild
-    if guild.verified_changed?
-      if (guild.verified_was == 0 or guild.verified_was == 1) and guild.verified == 2
-        User.update_all("participated_guilds_count = participated_guilds_count - 1", {:id => (guild.people - [guild.president]).map(&:id)})
-        guild.president.raw_decrement :guilds_count
-        guild.destroy_feeds # membership的feed就不删了，反正他们本来就没评论
-      end
-      if guild.verified_was == 2 and guild.verified == 1
-        User.update_all("participated_guilds_count = participated_guilds_count + 1", {:id => (guild.people - [guild.president]).map(&:id)})
-        guild.president.raw_increment :guilds_count
-        guild.deliver_feeds 
-      end
+    if guild.recently_unverified
+      User.update_all("participated_guilds_count = participated_guilds_count - 1", {:id => (guild.people - [guild.president]).map(&:id)})
+      guild.president.raw_decrement :guilds_count
+      guild.destroy_feeds # membership的feed就不删了，反正他们本来就没评论
+      guild.album.unverify
+    elsif guild.recently_verified_from_unverified
+      User.update_all("participated_guilds_count = participated_guilds_count + 1", {:id => (guild.people - [guild.president]).map(&:id)})
+      guild.president.raw_increment :guilds_count
+      guild.deliver_feeds 
+      guild.album.verify
     end
   end
 

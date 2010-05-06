@@ -1,11 +1,7 @@
 class VideoObserver < ActiveRecord::Observer
 
   def before_create video
-    if video.sensitive?
-      video.verified = 0
-    else
-      video.verified = 1
-    end
+    video.verified = video.sensitive? ? 0 : 1
   end
 
 	def after_create video
@@ -26,15 +22,12 @@ class VideoObserver < ActiveRecord::Observer
 
   def after_update video
     # change counter if verified changes
-    if video.verified_changed?
-      if (video.verified_was == 0 or video.verified_was == 1) and video.verified == 2
-        video.poster.raw_decrement "videos_count#{video.privilege}"
-        video.destroy_feeds
-      elsif video.verified_was == 2 and video.verified == 1
-        video.poster.raw_increment "videos_count#{video.privilege}"
-        video.deliver_feeds
-      end
-      return
+    if video.recently_unverified
+      video.poster.raw_decrement "videos_count#{video.privilege}"
+      video.destroy_feeds
+    elsif video.recently_verified_from_unverified
+      video.poster.raw_increment "videos_count#{video.privilege}"
+      video.deliver_feeds
     end
 
     # change counter if necessary

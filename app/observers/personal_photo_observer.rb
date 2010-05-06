@@ -17,7 +17,6 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank?
     
     # increment counter
-    photo.poster.raw_increment :photos_count
     photo.album.raw_increment :photos_count
   end
 
@@ -33,17 +32,13 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank?
    
     # verify
-    if photo.verified_changed?
-      if (photo.verified_was == 0 or photo.verified_was == 1) and photo.verified == 2
-        photo.album.raw_decrement :photos_count
-        photo.poster.raw_decrement :photos_count
-      elsif photo.verified_was == 2 and photo.verified == 1
-        photo.album.raw_increment :photos_count
-        photo.poster.raw_increment :photos_count
-      end
-      return
+    if photo.recently_verified_from_unverified
+      photo.album.raw_decrement :photos_count
+    elsif photo.recently_unverified
+      photo.album.raw_increment :photos_count
     end
- 
+
+    # change cover 
     if photo.album_id_changed?
       # if photo is moved to another album, change counter and change cover if necessary
       from = PersonalAlbum.find(photo.album_id_was)
@@ -71,7 +66,6 @@ class PersonalPhotoObserver < ActiveRecord::Observer
 
     # decrement counter
     if photo.verified != 2
-      photo.poster.raw_decrement :photos_count
       photo.album.raw_decrement :photos_count
     end
 

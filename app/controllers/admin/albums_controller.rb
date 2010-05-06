@@ -3,11 +3,11 @@ class Admin::AlbumsController < AdminBaseController
   def index
     case params[:type].to_i
     when 0
-      @albums = PersonalAlbum.unverified.paginate :page => params[:page], :per_page => 20
+      @albums = Album.unverified.paginate :page => params[:page], :per_page => 20
     when 1
-      @albums = PersonalAlbum.accepted.paginate :page => params[:page], :per_page => 20
+      @albums = Album.accepted.paginate :page => params[:page], :per_page => 20
     when 2
-      @albums = PersonalAlbum.rejected.paginate :page => params[:page], :per_page => 20
+      @albums = Album.rejected.paginate :page => params[:page], :per_page => 20
     end
   end
 
