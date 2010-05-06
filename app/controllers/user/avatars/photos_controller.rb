@@ -79,18 +79,18 @@ protected
   def setup
     if ['show'].include? params[:action]
       @photo = Avatar.find(params[:id])
+      require_verified @photo
       @album = @photo.album
       @user = @album.poster
-      require_verified @photo
       require_friend_or_owner @user
     elsif ['edit', 'update', 'destroy', 'update_notation'].include? params[:action]
       @album = current_user.avatar_album
       @photo = @album.photos.find(params[:id])
-      # 头像相册不能屏蔽
       require_verified @photo
       require_owner @photo.poster
     elsif ['new', 'create'].include? params[:action]
       @album = current_user.avatar_album
+      require_verified @album
     end
   end
 	

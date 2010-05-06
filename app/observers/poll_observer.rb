@@ -5,11 +5,7 @@ class PollObserver < ActiveRecord::Observer
   def after_create poll
     # verify
     # 如果是投票的选项是sensitive的，那是在poll_answer的after_create里判断的
-    if poll.sensitive?
-      poll.verified = 0
-    else
-      poll.verified = 1
-    end
+    poll.verified = poll.sensitive? ? 0 : 1
 
     # increment user's counter
     poll.poster.raw_increment :polls_count
@@ -27,18 +23,16 @@ class PollObserver < ActiveRecord::Observer
   end
  
   def after_update poll
-    if poll.verified_changed?
-      if poll.verified_was == 2 and poll.verified == 1
-        poll.poster.raw_increment :polls_count
-        User.update_all("participated_polls_count = participated_polls_count + 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
-        # 和他相关的投票呢？还恢复吗？
-        poll.deliver_feeds
-      elsif (poll.verified_was == 0 or poll.verified_was == 1) and poll.verified == 2
-        poll.poster.raw_decrement :polls_count
-        User.update_all("participated_polls_count = participated_polls_count - 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
-        # 和他相关的投票就不删feed了，因为反正没有评论，dig啥的
-        poll.destroy_feeds
-      end
+    if poll.recently_verified_from_unverified
+      poll.poster.raw_increment :polls_count
+      User.update_all("participated_polls_count = participated_polls_count + 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
+      # 和他相关的投票呢？还恢复吗？
+      poll.deliver_feeds
+    elsif poll.recently_unverified
+      poll.poster.raw_decrement :polls_count
+      User.update_all("participated_polls_count = participated_polls_count - 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
+      # 和他相关的投票就不删feed了，因为反正没有评论，dig啥的
+      poll.destroy_feeds
     end
   end
  

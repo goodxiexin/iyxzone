@@ -15,6 +15,8 @@ class Report < ActiveRecord::Base
   validate_on_create :reportable_is_valid
 
   validates_inclusion_of :category, :in => CATEGORY, :message => "类型不对"
+
+  after_create :set_verified_flag
   
 protected
 
@@ -23,6 +25,12 @@ protected
     reportable = reportable_type.camelize.constantize.find(:first, :conditions => {:id => reportable_id})
     if reportable.blank?
       errors.add(:reportable_id, "不存在")
+    end
+  end
+
+  def set_verified_flag
+    if reportable.verified != 2
+      reportable.needs_verify
     end
   end
 

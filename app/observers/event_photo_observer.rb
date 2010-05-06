@@ -5,11 +5,11 @@
 #
 class EventPhotoObserver < ActiveRecord::Observer
 
-  def before_save photo
+  def before_create photo
     return unless photo.thumbnail.blank?
 
     # verify
-    photo.verified = 1 
+    photo.verified = 0
 
     # inherit some attributes from album
     album = photo.album
@@ -37,14 +37,10 @@ class EventPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank?
    
     # verify
-    if photo.verified_changed?
-      if photo.verified_was == 2 and photo.verified == 1
-        photo.album.raw_increment :photos_count
-      end
-      if (photo.verified_was == 0 or photo.verified_was == 1) and photo.verified == 2
-        photo.album.raw_decrement :photos_count
-      end
-      return
+    if photo.recently_verified_from_unverified
+      photo.album.raw_increment :photos_count
+    elsif photo.recently_unverified
+      photo.album.raw_decrement :photos_count
     end
 
     # change cover if necessary 

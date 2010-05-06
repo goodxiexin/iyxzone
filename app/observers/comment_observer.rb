@@ -3,11 +3,7 @@ require 'app/mailer/comment_mailer'
 class CommentObserver < ActiveRecord::Observer
 
   def before_create comment
-    if comment.sensitive?
-      comment.verified = 0
-    else
-      comment.verified = 1
-    end
+    comment.verified = comment.sensitive? ? 0 : 1
   end
 
   def after_create comment
@@ -277,14 +273,11 @@ class CommentObserver < ActiveRecord::Observer
   end
 
   def after_update comment
-    if comment.verified_changed?
-      if (comment.verified_was == 0 or comment.verified_was == 1) and comment.verified == 2
-        # 如果有相关的notice怎么办, 现在就忽略他
-        comment.commentable.raw_decrement :comments_count
-      end
-      if comment.verified_was == 2 and comment.verified == 1
-        comment.commentable.raw_increment :comments_count
-      end
+    if comment.recently_unverified
+      # 如果有相关的notice怎么办, 现在就忽略他
+      comment.commentable.raw_decrement :comments_count
+    elsif comment.recenlty_verified
+      comment.commentable.raw_increment :comments_count
     end
   end
 

@@ -157,7 +157,7 @@ class User < ActiveRecord::Base
 	end
 
   # album
-  belongs_to :avatar, :conditions => {:verified => [0,1]}
+  belongs_to :avatar
 
   has_one :avatar_album, :foreign_key => 'owner_id', :dependent => :destroy
 
@@ -172,15 +172,15 @@ class User < ActiveRecord::Base
 
   def albums_count relationship='owner'
     # dont forget avatar album which is not accessible to none-friend
-    case relationship
-    when 'owner'
-      albums_count1 + albums_count2 + albums_count3 + albums_count4 + 1
-    when 'friend'
-      albums_count1 + albums_count2 + albums_count3 + 1
-    when 'same_game'
-      albums_count1 + albums_count2 + 1
-    when 'stranger'
-      albums_count1
+    avatar_album_count = (self.avatar_album.verified == 2) ? 0 : 1
+    if relationship == 'owner'
+      avatar_album_count + albums_count1 + albums_count2 + albums_count3 + albums_count4
+    elsif relationship == 'friend'
+      avatar_album_count + albums_count1 + albums_count2 + albums_count3
+    elsif relationship == 'same_game'
+      avatar_album_count + albums_count1 + albums_count2
+    elsif relationship == 'stranger'
+      avatar_album_count + albums_count1
     end
   end
 

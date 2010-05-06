@@ -48,16 +48,13 @@ class AvatarObserver < ActiveRecord::Observer
     return unless avatar.thumbnail.blank?
 
     # verify
-    if avatar.verified_changed?
-      if avatar.verified_was == 2 and avatar.verified == 1
-        avatar.poster.raw_increment :photos_count
-        avatar.album.raw_increment :photos_count
-      end
-      if (avatar.verified_was == 0 or avatar.verified_was == 1) and avatar.verified == 2
-        avatar.poster.raw_decrement :photos_count
-        avatar.album.raw_decrement :photos_count
-      end
-      return
+    if avatar.recently_verified_from_unverified
+      avatar.poster.raw_increment :photos_count
+      avatar.album.raw_increment :photos_count
+    elsif avatar.recently_unverified
+      avatar.poster.raw_decrement :photos_count
+      avatar.album.raw_decrement :photos_count
+      avatar.destroy_feeds
     end
 
     # change cover if necessary
