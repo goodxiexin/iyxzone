@@ -2,7 +2,7 @@
   没有消息
 <% else %>
 <% @messages.each do |m| %>
-  <h4><%= m.poster.login %>(<%= ftime m.created_at %>)</h4>
+  <%= m.poster == current_user ? "<h4 class='own'>" : "<h4>" %><%= m.poster.login %>(<%= ftime m.created_at %>)</h4>
   <p><%= m.content %></p>
 <% end %>
 

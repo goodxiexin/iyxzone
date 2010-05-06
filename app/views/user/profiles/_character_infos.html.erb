@@ -1,0 +1,20 @@
+<div class="multibox">
+  <div class="title">
+    <b>游戏人物资料</b>
+  </div>
+  <table class="data-table jl-data-table" cellpadding='0'>
+    <tr>
+      <th class='name'>游戏名称</th>
+      <th class='id'>玩家昵称</th>
+      <th class='level'>等级</th>
+    </tr>
+    <% @user.characters.each do |c| %>
+    <tr>
+      <td class='name'><%= game_link c.game %></td>
+      <td class='id'><%= c.name %></td>
+      <td class='level'><%= c.level %></td>
+    </tr>
+    <% end %>
+  </table>
+</div>
+

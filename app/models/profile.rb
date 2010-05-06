@@ -28,7 +28,7 @@ class Profile < ActiveRecord::Base
                             :sharing => 'Sharing'
 													}
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|profile| [profile] + profile.user.friends}
 
   acts_as_taggable :delete_conditions => lambda {|profile, user| profile.user == user},
                    :create_conditions => lambda {|tagging, profile, user| (tagging.nil? || tagging.created_at < 10.days.ago) and (profile.user.has_friend? user)}

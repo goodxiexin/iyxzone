@@ -4,79 +4,22 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-	<% if @user == current_user %>
-    <h1 class="app-log">日志</h1>
-	<% else %>
-    <div class="friend-head space s_clear">
-      <span class="left"><%= avatar @user, :class=>"imgbox01"%></span>
-      <p class="left">
-        <strong><%= @user.login %>的日志</strong><br />
-        <%= link_to '个人主页', profile_url(@user.profile), :class=>'red'%>
-      </p>
-    </div>
-	<% end %>
+	  <% if @user == current_user %>
+      <h1 class="app-log">日志</h1>
+	  <% else %>
+      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的日志"} %>
+	  <% end %>
     <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <div class="right"><%= link_to "写新日志", new_blog_url %></div>
-				<ul>
-					<% subject = get_subject @user %>
-					<li><span><%= link_to "热门日志", hot_blogs_url %></span></li>
-					<li class='hover'><span><%= link_to "#{subject}的日志", blogs_url(:uid => @user.id) %></span></li>
-					<li><span><%= link_to "与#{subject}的相关日志", relative_blogs_url(:uid => @user.id) %></span></li>
-					<% if @user == current_user %>
-						<li><span><%= link_to "好友日志", friends_blogs_url %></span></li>
-						<li><span><%= link_to "草稿箱", drafts_url %></span></li>
-					<% end %>
-				</ul>
-			</div>
-      <div class="path-box">
-				<div class="left">
-				<%= "共#{@count}篇日志" %>
-				<%= link_to '上一篇', blog_url(@prev) %> |
-				<%= link_to '下一篇', blog_url(@next) %> <br/>
-				</div>
-      </div>		
+      <%= render :partial => 'tab', :locals => {:hover => 1, :user => current_user} %>
+      <%= render :partial => 'blog_path' %>
       <div class='detail-blog'>
-        <div class='detail-blog-head jl-cutline s_clear'>
-	        <p class="left">
-            <strong style="width: 75%;"><%= h @blog.title %></strong> <span class='gray'><%= ftime @blog.created_at %></span>
-	        </p>
-  	      <p class="right">
-            <% if @user == current_user %>
-              <%= link_to "<span class='icon2-edit'></span>编辑", edit_blog_url(@blog), :class=>"red" %>
-              <%= facebox_confirm "<span class='icon2-close'></span>删除", blog_url(@blog), {:msg => '你确定要删除这篇日志吗', :method => :delete}, :class=>"red w-l" %>
-            <% end %>
-            <%= facebox_link "分享", new_sharing_url(:url => blog_url(@blog)), :width => 450, :class => 'share-btn' %>
-  	      </p> 
-        </div>
+        <%= render :partial => 'blog_head' %>
         <div class='con'>
           <%= @blog.content %>
         </div>
-        <div class="detail-blog-foot">
-          <p class=" jl-cutline"></p>
-          <% if @blog.tags.size == 0 %>
-            <p>这篇日志跟任何人都无关</p>
-          <% else %>
-            <p>这篇日志有关的人: <%= @blog.tags.map { |t| profile_link t.tagged_user, :class => 'red' }.join(',') %></p>
-          <% end %>
-        </div>
-        <div class="page-foot s_clear">
-          <div class="foot-func">
-            <span class="w-l red">评论(<%= @blog.comments_count %>)</span><span class="w-l">|</span>
-            <span class="w-l red">浏览(<%= @blog.viewings_count %>)</span><span class="w-l">|</span>
-            <span class="photo-op-praise" ></span><%= text_dig_link @blog, :class => 'red' %>
-          </div>
-          <div class="s_clear rows">
-            <div class="feed-list">
-              <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @blog, :recipient => @blog.poster} %>
-            </div>
-          </div>
-        </div>
+        <%= render :partial => 'blog_foot' %>
+        <%= render :partial => 'blog_func' %>
       </div>
     </div>
   </div></div>
 </div></div></div></div>
-
-<% unless @reply_to.blank? %>
-<%= onload_javascript_tag "Iyxzone.Comment.set('blog', #{@blog.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
-<% end %>

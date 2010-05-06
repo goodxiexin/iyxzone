@@ -4,4 +4,6 @@ class FriendSuggestion < ActiveRecord::Base
 
 	belongs_to :suggested_friend, :class_name => 'User'
 
+  acts_as_random
+
 end

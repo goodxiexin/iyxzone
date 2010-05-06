@@ -42,6 +42,7 @@ protected
   def setup
     if ['new', 'create'].include? params[:action]
       @guild = Guild.find(params[:guild_id])
+      require_verified @guild
       @user = @guild.president
     elsif ['accept', 'decline'].include? params[:action]
       @guild = Guild.find(params[:guild_id])

@@ -7,7 +7,7 @@ module AuthenticatedSystem
   
     recipient.extend(AuthenticatedSystem::ClassMethods)
 
-    recipient.send :helper_method, :current_user, :current_profile, :logged_in?
+    recipient.send :helper_method, :current_user, :is_admin, :current_profile, :logged_in?
 
   end
  
@@ -39,8 +39,11 @@ protected
       @current_user ||= (login_from_session || login_from_basic_auth || login_from_cookie) unless @current_user == false
     end
 
-    def current_profile
-      current_user.profile
+    # if current_user is admin
+    def is_admin
+      return @is_admin unless @is_admin.nil?
+      @is_admin = @current_user.has_role?('admin')
+      @is_admin 
     end
 
     # Store the given user id in the session.

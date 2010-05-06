@@ -1,38 +1,34 @@
 class Admin::GuildsController < AdminBaseController
 
   def index
-    @guilds = Guild.unverified.paginate :page => params[:page], :per_page => 20
+    case params[:type].to_i
+    when 0
+      @guilds = Guild.unverified.paginate :page => params[:page], :per_page => 20
+    when 1
+      @guilds = Guild.accepted.paginate :page => params[:page], :per_page => 20
+    when 2
+      @guilds = Guild.rejected.paginate :page => params[:page], :per_page => 20
+    end
   end
 
-  def accept
-    @guilds = Guild.accepted.paginate :page => params[:page], :per_page => 20
-  end
-  
-  def reject
-    @guilds = Guild.rejected.paginate :page => params[:page], :per_page => 20
-  end
-  
-  def show
-  end
-
-  def destroy
-  end
-
-  # accept
   def verify
     if @guild.verify
-      succ
+      render :update do |page|
+        page << "$('guild_#{@guild.id}').remove();"
+      end
     else
-      err
+      render_js_error
     end
   end
   
   # reject
   def unverify
     if @guild.unverify
-      succ
+      render :update do |page|
+        page << "$('guild_#{@guild.id}').remove();"
+      end
     else
-      err
+      render_js_error
     end
   end
   
@@ -40,7 +36,7 @@ class Admin::GuildsController < AdminBaseController
 protected
 
   def setup
-    if ["show", "destroy", "verify", "unverify"].include? params[:action]
+    if ["verify", "unverify"].include? params[:action]
       @guild = Guild.find(params[:id])
     end
   end

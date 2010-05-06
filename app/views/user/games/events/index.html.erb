@@ -3,32 +3,30 @@
 <% content_for :html_keywords, "#{@game.name}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-        <div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"></span>
-      <p class="left">
-        <strong><%= game_link @game %>的相关活动</strong><br />
-        <%= link_to '游戏主页', game_url(@game), :class=>'red'%>
-      </p>
+  <div class="round_m"><div class="round_body">
+    <%= render :partial => 'user/games/game_header', :locals => {:text => "#{@game.name}的相关活动"} %>
+    <div class="box02 canvas_int space">
+	    <div class="tab tab01">
+        <div class="right">
+          <%= link_to "新建活动", new_event_url %>
+        </div>
+		    <ul>
+			    <li><span><%= link_to "热门活动", hot_events_url(:uid => current_user.id) %></span></li>
+			    <li class='hover'><span><%= link_to "#{@game.name}的活动", game_events_url(:game_id => @game.id) %></span></li>
+		    </ul>
+      </div>
+      <div class="piclist-rows" id='events'>
+        <div class='path-box'>
+          <label>游戏 "<%= game_link @game %>"</label>
+          <span>活动</span>
+        </div>
+        <% if @events.count != 0 %>
+        <table cellpadding="0" cellspacing="0">
+		    <%= render :partial => 'user/events/event_item', :collection => @events %>
+        </table>
+        <%= will_paginate @events %>
+        <% end %>
+      </div>
     </div>
-<div class="box02 canvas_int space">
-	<div class="tab tab01">
-    <div class="right">
-      <%= link_to "新建活动", new_event_url %>
-    </div>
-		<ul>
-			<li><span><%= link_to "热门活动", hot_events_url(:uid => current_user.id) %></span></li>
-			<li class='hover'><span><%= link_to "#{@game.name}的活动", game_events_url(:game_id => @game.id) %></span></li>
-		</ul>
-  </div>
-  <div class="piclist-rows" id='events'>
-    <div class='path-box'>
-      <label>游戏 "<%= game_link @game %>"</label>
-      <span>活动</span>
-    </div>
-		<%= render :partial => 'user/events/event_items', :object => @events %>
-  </div>
-</div>
-
-</div></div>
+  </div></div>
 </div></div></div></div>

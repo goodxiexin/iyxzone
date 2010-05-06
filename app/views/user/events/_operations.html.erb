@@ -1,34 +1,45 @@
-<dl class='menu-op space20'>
-  <dt>操作</dt>
-<% if @event.expired? %>
-  <% if @user == current_user %>
-    <dd><%= link_to '上传照片', new_event_photo_url(:album_id => @album) %></dd>
-  <% elsif @event.has_participant? current_user %>
-    <dd><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [@event.poster_id]) %></dd>
+<div class='info-list'>
+  <div class="avatarbox">
+    <b>组织者：</b><span><%= profile_link @event.poster %></span>
+  </div>
+  <% if @event.expired? %>
+    <div class='avatarbox'>
+      <dl class='menu-op'>
+        <dt>操作</dt>
+        <% if @user == current_user %>
+          <dd><%= link_to '上传照片', new_event_photo_url(:album_id => @album) %></dd>
+        <% elsif @event.has_participant? current_user %>
+          <dd><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [@event.poster_id]) %></dd>
+        <% end %>
+        <dd>该活动已经过期</dd>
+      </dl>
+    </div>
+  <% else %>
+    <div class='avatarbox'>
+      <dl class='menu-op'>
+        <dt>操作</dt>
+        <% if @user == current_user %>
+          <dd><%= link_to '编辑活动', edit_event_url(@event) %></dd>
+          <dd><%= link_to '邀请更多人', new_event_invitation_url(@event) %></dd>
+          <dd><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></dd>
+          <dd><%= facebox_confirm '放所有人鸽子', event_url(@event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></dd>
+        <% elsif @event.has_participant? current_user %>
+          <dd><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [@event.poster_id]) %></dd>
+        <% end %>
+      </dl>
+    </div>
+    <div class='avatarbox'>
+      <% code = @event.is_requestable_by?(current_user).to_i %>
+  		<dl class='menu-op'><dt>请求加入</dt></dl>
+      <% if code > 0 %>
+        <div class='tip'>发送 <%= facebox_link '请求', new_event_request_url(@event) %> 加入该活动？</div>
+      <% elsif code == 0 %>
+        <div class='tip'>只有他的好友可以参加，<%= facebox_link '加他为好友', new_friend_request_url(:friend_id => @user.id), :class => 'red' %></div> 
+      <% elsif code == -1 %>
+        <div class='tip'>你已经没有在该游戏、服务器的游戏角色，无法加入该活动</div>
+      <% elsif code == -2 %>
+        <div class='tip'>只有该公会的会员才能参加, 去公会 <%= guild_link @event.guild, :class => 'red' %> 看看</div>
+      <% end %>
+    </div>
   <% end %>
-  <dd>该活动已经过期</dd>
-	</dl>
-<% else %>
-  <% if @user == current_user %>
-    <dd><%= link_to '编辑活动', edit_event_url(@event) %></dd>
-    <dd><%= link_to '邀请更多人', new_event_invitation_url(@event) %></dd>
-    <dd><%= link_to '上传图片', new_event_photo_url(:album_id => @album) %></dd>
-    <dd><%= facebox_confirm '放所有人鸽子', event_url(@event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></dd>
-  <% elsif @event.has_participant? current_user %>
-    <dd><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [@event.poster_id]) %></dd>
-  <% end %>
-	</dl>
-    <% code = @event.is_requestable_by?(current_user).to_i %>
-		<dl class='menu-op space20'>
-			<dt>请求加入</dt>
-		</dl>
-    <% if code > 0 %>
-      <div class='tip'>发送 <%= facebox_link '请求', new_event_request_url(@event) %> 加入该活动？</div>
-    <% elsif code == 0 %>
-      <div class='tip'>只有他的好友可以参加，<%= facebox_link '加他为好友', new_friend_request_url(:friend_id => @user.id), :class => 'red' %></div> 
-    <% elsif code == -1 %>
-      <div class='tip'>你已经没有在该游戏、服务器的游戏角色，无法加入该活动</div>
-    <% elsif code == -2 %>
-      <div class='tip'>只有该公会的会员才能参加, 去公会 <%= guild_link @event.guild, :class => 'red' %> 看看</div>
-    <% end %>
-<% end %>
+</div>

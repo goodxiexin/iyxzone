@@ -1,4 +1,3 @@
-<% hot_topics = @guild.forum.hot_topics[0..3] %>
 <div class="multibox">
   <div class="title">
     <%= link_to "更多", forum_topics_url(@guild.forum) %>
@@ -6,7 +5,7 @@
   </div>    
   <div class="news-list menu-list">
 		<ul>
-			<% hot_topics.each do |t| %>
+			<% @hot_topics.each do |t| %>
 				<li><span>[<%= ftime3 t.created_at %>]</span> <%= topic_link t %></li>
 			<% end %>
 		</ul>

@@ -1,0 +1,19 @@
+          <tr>
+            <td>
+              <div class="imgwrap">
+                <%= photo_link photo, :size => :large, :class => 'imgbox01' %>
+              </div>
+              <div class="data">
+                <h3><%= profile_link photo.poster %> 上传</h3>
+                <p>创建于 <%= ftime photo.created_at %></p>
+                <p class="link">
+                  <%= link_to '查看相片', eval("#{photo.class.name.underscore}_url(photo)") %> | 
+                  <%= link_to '查看相册', eval("#{photo.album.class.name.underscore}_url(photo.album)") %>
+                </p>
+              </div>
+              <td align="right">
+              <%= icon_dig_link photo %>
+              </td>
+            </td>
+          </tr>
+

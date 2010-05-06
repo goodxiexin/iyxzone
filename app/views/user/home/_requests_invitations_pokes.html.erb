@@ -1,0 +1,21 @@
+      <% if current_user.requests_count != 0 or current_user.invitations_count != 0 or current_user.poke_deliveries_count != 0 %> 
+      <div class="multibox">
+        <div class="title">
+          <b>请求</b>
+        </div>
+        <div class="request menu-icon-list01">
+          <ul>
+            <% if current_user.requests_count != 0 %>
+              <li class="icon-add"><span><%= link_to "#{current_user.requests_count}个请求", requests_url %></span></li>
+            <% end %>
+            <% if current_user.invitations_count != 0 %>
+              <li class='icon-add'><span><%= link_to "#{current_user.invitations_count}个邀请", invitations_url %></span></li>
+            <% end %>
+            <% if current_user.poke_deliveries_count != 0 %>
+              <li class='icon-invite'><%= link_to "<span>#{current_user.poke_deliveries.count}个招呼</span>", pokes_url %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <% end %>
+

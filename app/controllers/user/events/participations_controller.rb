@@ -5,13 +5,13 @@ class User::Events::ParticipationsController < UserBaseController
   def index
     case params[:type].to_i
     when 0
-      @participations = @event.confirmed_participations
+      @participations = @event.confirmed_participations.all(:include => [:character, {:participant => :profile}])
     when 1
-      @participations = @event.maybe_participations
+      @participations = @event.maybe_participations.all(:include => [:character, {:participant => :profile}])
 		when 2
-			@participations = @event.invitations
+			@participations = @event.invitations.all(:include => [:character, {:participant => :profile}])
 		when 3
-			@participations = @event.requests
+			@participations = @event.requests.all(:include => [:character, {:participant => :profile}])
     end
   end
 
@@ -44,13 +44,16 @@ protected
   def setup
     if ["index"].include? params[:action]
       @event = Event.find(params[:event_id])
+      require_verified @event
     elsif ["edit", "update"].include? params[:action]
       @participation = Participation.find(params[:id])
       @event = @participation.event
+      require_verified @event
       require_owner @participation.participant
     elsif ["destroy"].include? params[:action]
       @participation = Participation.find(params[:id])
       @event = @participation.event
+      require_verified @event
       require_owner @event.poster
       require_not_event_poster @participation
     end

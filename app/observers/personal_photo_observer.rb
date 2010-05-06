@@ -1,11 +1,13 @@
 class PersonalPhotoObserver < ActiveRecord::Observer
 
-  def before_save photo
+  def before_create photo
     return unless photo.thumbnail.blank?
-  
-    album = photo.album
+ 
+    # verify?
+    photo.verified = 0 # 总是需要验证的
 
-    # inherit some attributes from album
+    # inherit some attributes from album 
+    album = photo.album
     photo.privilege = album.privilege
     photo.poster_id = album.poster_id
     photo.game_id = album.game_id
@@ -22,14 +24,26 @@ class PersonalPhotoObserver < ActiveRecord::Observer
   def before_update photo
     return unless photo.thumbnail.blank?
  
-    if photo.notation_changed?
+    if photo.sensitive_columns_changed? and photo.sensitive?
       photo.verified = 0
     end
   end
  
   def after_update photo
     return unless photo.thumbnail.blank?
-    
+   
+    # verify
+    if photo.verified_changed?
+      if (photo.verified_was == 0 or photo.verified_was == 1) and photo.verified == 2
+        photo.album.raw_decrement :photos_count
+        photo.poster.raw_decrement :photos_count
+      elsif photo.verified_was == 2 and photo.verified == 1
+        photo.album.raw_increment :photos_count
+        photo.poster.raw_increment :photos_count
+      end
+      return
+    end
+ 
     if photo.album_id_changed?
       # if photo is moved to another album, change counter and change cover if necessary
       from = PersonalAlbum.find(photo.album_id_was)
@@ -56,8 +70,10 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank? 
 
     # decrement counter
-    photo.poster.raw_decrement :photos_count
-    photo.album.raw_decrement :photos_count
+    if photo.verified != 2
+      photo.poster.raw_decrement :photos_count
+      photo.album.raw_decrement :photos_count
+    end
 
     # check if the deleted photo is cover
     album = photo.album

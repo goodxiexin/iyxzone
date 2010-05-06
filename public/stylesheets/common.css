@@ -656,5 +656,5 @@ div.tip{color:#999;padding:10px 25px}
 .mask-layer{position:fixed;_position:absolute;top:0;left:0;z-index:999;width:100%;height:100%;background:transparent;}
 .mask-layer iframe{width:100%;height:100%;border:0;filter:mask();}
 .mask-wrap{position:relative;width:100%;height:100%;}
-.mask-iframe{position:absolute;width:100%;height:100%;border:0;top:0;left:0;z-index:-1;}
+.mask-iframe,iframe.mask-iframe{position:absolute;width:100%;height:100%;border:0;top:0;left:0;z-index:-1;filter:mask();}
 .mask-iframe iframe{width:100%;height:100%;border:0;}

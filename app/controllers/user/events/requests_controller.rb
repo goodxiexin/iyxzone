@@ -42,6 +42,7 @@ protected
   def setup
     if ['new', 'create'].include? params[:action]
       @event = Event.find(params[:event_id])
+      require_verified @event
       @user = @event.poster
     elsif ['accept', 'decline'].include? params[:action]
       @event = Event.find(params[:event_id])

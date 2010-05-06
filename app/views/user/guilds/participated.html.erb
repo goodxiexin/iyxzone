@@ -4,28 +4,20 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
-    <h1 class="app-cons">公会</h1>
-    <div class="box02 canvas_int">
-	    <div class="tab tab01">
-		    <% subject = get_subject @user %>
-		    <ul>
-			    <li><span><%= link_to "热门公会", hot_guilds_url %></span></li>
-          <li class='hover'><span><%= link_to "#{subject}的公会", guilds_url(:uid => @user.id) %></span></li>
-          <li><span><%= link_to "好友公会", friends_guilds_url %></span></li>
-		    </ul>
-		    <div class='right'>
-			    <%= link_to "新公会", new_guild_url %>
-		    </div>
-      </div>
-	    <div class="piclist-rows">
-        <div class='nav-link'>
-          <ul class='s_clear'>
-            <li><%= link_to "<span>#{subject}发起的(#{@user.guilds_count})</span>", guilds_url(:uid => @user.id) %></li>
-            <li class='hover'><%= link_to "<span>#{subject}参加的(#{@user.participated_guilds_count})</span>", participated_guilds_url(:uid => @user.id) %></li>
-          </ul>
-        </div>
+    <% if @user==current_user %>
+      <h1 class="app-cons">公会</h1>
+    <% else %>
+      <%= render :partial => 'guild_header', :locals => {:text => "#{@user.login}的工会"} %>
+    <% end %>
+    <div class="box02 canvas_int space">
+      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>
+      <div class="piclist-rows">
+        <%= render :partial => 'index_nav', :locals => {:user => @user, :hover => 1} %>
         <% if @guilds.total_entries != 0 %>
-		      <%= render :partial => 'user/guilds/guild_items', :object => @guilds %>
+          <table cellpadding="0" cellspacing="0">
+            <%= render :partial => 'user/guilds/guild_item', :collection => @guilds %>
+          </table>
+          <%= will_paginate @guilds %>
         <% else %>
           <div class='tip'>你还没加入过别人的公会，你可以加入<%= link_to '好友的公会', friends_guilds_url %> 或者 <%= link_to '最近别人创建的公会', recent_guilds_url %> 或者 <%= link_to '最近的热门公会', hot_guilds_url %></div>
         <% end %>

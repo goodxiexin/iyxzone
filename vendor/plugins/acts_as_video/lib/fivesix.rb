@@ -2,13 +2,13 @@ class FiveSix
 	
 	# http://www.56.com/u61/v_NDk2OTc4NzQ.html
 	# <embed src="http://player.56.com/v_NDk2OTc4NzQ.swf"  type="application/x-shockwave-flash" width="480" height="395"></embed>
-	FIVESIX_SINGLE  = /http:\/\/(www\.)?56\.com\/u[\d]*\/v_[\w]*\.html/
+	FIVESIX_SINGLE  = /http:\/\/(www\.)?56\.com\/u[\d]*\/v_[\w]*\.htm[l]/
 	# http://www.56.com/w88/play_album-aid-7928642_vid-NDk1MzA4NTg.html
 	#	<embed src="http://www.56.com/cpm_NDk1MzA4NTg.swf"  type="application/x-shockwave-flash" width="480" height="395"></embed> 
-	FIVESIX_ALBUM		= /http:\/\/(www\.)?56\.com\/w[\d]*\/play_album-aid-[\d]*_vid-[\w]*\.html/
+	FIVESIX_ALBUM		= /http:\/\/(www\.)?56\.com\/w[\d]*\/play_album-aid-[\d]*_vid-[\w]*\.htm[l]/
 	# http://www.56.com/p80/v_NzQxMTA2Nzc.html
 	# <embed src="http://www.56.com/deux13_74110677.swf"  type="application/x-shockwave-flash" width="460" height="385"></embed>
-	FIVESIX_PHOTO 	= /http:\/\/(www\.)?56\.com\/p[\d]*\/v_[\w]*\.html/
+	FIVESIX_PHOTO 	= /http:\/\/(www\.)?56\.com\/p[\d]*\/v_[\w]*\.htm[l]/
 
 	include HTTParty
 
@@ -41,7 +41,7 @@ class FiveSix
 	end
 
 	def thumbnail_url
-			"/images/blank_video.png"
+			"/images/videoThumb/56.png"
 	end
 
 	def embed_html

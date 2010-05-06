@@ -1,50 +1,41 @@
 class Admin::GuestbooksController < AdminBaseController
 
-  # GET /admin/guestbooks
   def index
-    @guestbooks = Guestbook.all
+    @guestbooks = Guestbook.paginate :page => params[:page], :per_page => 20
   end
 
-  # GET /admin/guestbooks/1
-  def show
-    @guestbook = Guestbook.find(params[:id])
-  end
-
-  # GET /admin/guestbooks/1/edit
   def edit
-    @guestbook = Guestbook.find(params[:id])
+    render :action => 'edit', :layout => false
   end
 
-=begin
   def update
-    @guestbook = Guestbook.find(params[:id])
-
-    if @guestbook.update_attributes(params[:guestbook])
-      flash[:notice] = 'Guestbook was successfully updated.'
-      redirect_to(admin_guestbook_url) 
+    if @guestbook.reply_to_poster params[:guestbook][:reply]
+      render :update do |page|
+        page << "var a = new Element('a', {href: 'javascript:void(0)'}).update('已经回复了');a.observe('click', function(e){facebox.set_width(350);tip('回复内容:<br/>#{@guestbook.reply}');});$('guestbook_#{@guestbook.id}').childElements()[2].update(a);"
+        page << "facebox.close();"
+      end
     else
-      render :action => "edit"
-    end
-  end
-=end
-
-  def update
-    @guestbook = Guestbook.find(params[:id])
-
-    if @guestbook.reply_to_poster params[:reply]
-      flash[:notice] = 'Guestbook was successfully updated.'
-      redirect_to(admin_guestbook_url) 
-    else
-      render :action => "edit"
+      render_js_error
     end    
   end
 
-  # DELETE /admin/guestbooks/1
   def destroy
-    @guestbook = Guestbook.find(params[:id])
-    @guestbook.destroy
-		redirect_to(guestbooks_url) 
+    if @guestbook.destroy
+      render :update do |page|
+        page << "$('guestbook_#{@guestbook.id}').remove();"
+      end
+    else
+      render_js_error
+    end
 	end
+
+protected
+
+  def setup
+    if ['edit', 'update', 'destroy'].include? params[:action]
+      @guestbook = Guestbook.find(params[:id])
+    end
+  end
 
 end
 

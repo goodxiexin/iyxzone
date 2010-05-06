@@ -9,17 +9,26 @@ class User::ProfilesController < UserBaseController
 	FetchSize = 5
 
   def show
-		@common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2]
     @relationship = @user.relationship_with current_user
-    # 个人主页可能是所有人都能看，所以要挑那些能看的显示
     @cond = get_privilege_cond @relationship
+    @setting = @user.privacy_setting
+
+    if @user != current_user
+      @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2]
+    end
+
 		@blogs = @user.blogs.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
 		@albums = @user.active_albums.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
-    @setting = @user.privacy_setting
-    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-		@feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
+		
+    @feed_deliveries = @profile.feed_deliveries.all(:limit => FirstFetchSize, :order => 'created_at DESC', :include => [{:feed_item => :originator}])
 		@first_fetch_size = FirstFetchSize
-		@skin = @profile.skin
+		
+    @skin = @profile.skin
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+
+    @viewings = @profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
+
+    # wall messages
     @messages = @profile.comments.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
 	end

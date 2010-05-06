@@ -45,6 +45,7 @@ protected
     if ['new', 'create'].include? params[:action]
       @event = Event.find(params[:event_id])
       @guild = @event.guild
+      require_verified @event
       require_owner @event.poster
     elsif ['edit', 'accept', 'decline'].include? params[:action]
       @invitation = Participation.find(params[:id])

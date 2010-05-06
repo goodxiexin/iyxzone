@@ -41,10 +41,12 @@ end
 Factory.define :blog do |b|
   b.sequence(:title) {|n| "blog-#{n}"}
   b.content {|b| "cotent of #{b.title}"}
+  b.privilege 1
   b.draft false
 end
 
 Factory.define :draft, :parent => 'blog' do |d|
+  d.privilege 1
   d.draft true
 end
 

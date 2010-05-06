@@ -1,0 +1,12 @@
+      <div class="multibox">
+        <div class="title">
+          <%= link_to "更多", friend_suggestions_url %>
+          <b>你可能认识</b>
+        </div>
+        <div class="photolist-box">
+          <ul class="collection s_clear" id='friend_suggestions'>
+            <%= render :partial => 'user/friend_suggestions/friend_suggestion', :collection => @friend_suggestions %>
+          </ul>
+        </div>
+      </div>
+

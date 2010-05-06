@@ -2,100 +2,209 @@ require 'test_helper'
 
 class BlogTest < ActiveSupport::TestCase
 
-  test "保存日志，日志计数器加1" do
-    b = BlogFactory.build
+  def setup
+    @user       = Factory.create :user
+    @game       = Factory.create :game
+    @area       = Factory.create :game_area, :game_id => @game.id
+    @server     = Factory.create :game_server, :game_id => @game.id, :area_id => @area.id
+    @race       = Factory.create :game_race, :game_id => @game.id
+    @profession = Factory.create :game_profession, :game_id => @game.id
+    @character  = Factory.create :game_character, :user_id => @user.id, :game_id => @game.id, :area_id => @area.id, :server_id => @server.id, :race_id => @race.id, :profession_id => @profession.id  
+    @friend     = Factory.create :user
+    @sensitive  = "政府"
+    Factory.create :friendship, :user_id => @user.id, :friend_id => @friend.id
+    Factory.create :friendship, :user_id => @friend.id, :friend_id => @user.id
+  end
+
+  test "日志标题包含敏感词" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => @sensitive,
+      :content  => '牛比'
+    })
     
-    assert_difference "b.poster(true).blogs_count" do
-      b.save
-    end
+    assert_equal blog.verified, 0 
+    assert_equal blog.poster.blogs_count1, 1
   end
   
-  test "保存草稿，草稿计数器加1" do
-    d = DraftFactory.build
+  test "日志内容包含敏感词" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => 'zhengfu',
+      :content  => @sensitive
+    })
 
-    assert_difference "d.poster(true).drafts_count" do
-      d.save
-    end
+    assert_equal blog.verified, 0 
+    assert_equal blog.poster.blogs_count1, 1
   end
 
-  test "把草稿变成日志, 草稿计数器减一，日志计数器加一" do
-    d = DraftFactory.create
+  test "日志标题和内容不包含敏感词" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => 'sb',
+      :content  => 'sb'
+    })
 
-    assert_difference "d.poster(true).drafts_count", -1 do
-      d.update_attributes(:draft => false)
-    end
-
-    d = DraftFactory.create
-
-    assert_difference "d.poster(true).blogs_count" do
-      d.update_attributes(:draft => false)
-    end
+    assert_equal blog.verified, 1 
+    assert_equal blog.poster.blogs_count1, 1
   end
+
+  test "屏蔽某篇待审核的日志" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => @sensitive,
+      :content  => @sensitive
+    })
+
+    assert_equal blog.verified, 0 
+    assert_equal blog.poster.blogs_count1, 1
   
-  test "删除日志，日志计数器减一" do
-    b = BlogFactory.create
+    blog.unverify
+    blog.reload
 
-    assert_difference "b.poster(true).blogs_count", -1 do
-      b.destroy
-    end
+    assert_equal blog.verified, 2
+    assert_equal blog.poster.blogs_count1, 0
   end
+
+  test "将审核通过的日志变为审核不通过" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => 'sb',
+      :content  => 'sb'
+    })
+
+    assert_equal blog.verified, 1 
+    assert_equal blog.poster.blogs_count1, 1
+
+    blog.unverify
+    blog.reload
+
+    assert_equal blog.verified, 2
+    assert_equal blog.poster.blogs_count1, 0
+  end
+
+  test "将审核不通过的日志变成审核通过" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => @sensitive,
+      :content  => @sensitive
+    })
+
+    assert_equal blog.verified, 0 
+    assert_equal blog.poster.blogs_count1, 1
   
-  test "删除草稿，草稿计数器减一" do
-    d = DraftFactory.create
+    blog.unverify
+    blog.reload
 
-    assert_difference "d.poster(true).drafts_count", -1 do
-      d.destroy
-    end
+    assert_equal blog.verified, 2
+    assert_equal blog.poster.blogs_count1, 0
+
+    blog.verify
+    blog.reload
+
+    assert_equal blog.verified, 1
+    assert_equal blog.poster.blogs_count1, 1    
   end
+
+  test "删除审核通过的日志" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => 'sb',
+      :content  => 'sb'
+    })
+
+    assert_equal blog.verified, 1 
+    assert_equal blog.poster.blogs_count1, 1
   
-  test "没有作者" do
-    b = BlogFactory.build(:poster_id => nil)
-    b.save
+    blog.destroy
+    @user.reload
 
-    assert_not_nil b.errors.on(:poster_id)
+    assert_equal @user.blogs_count1, 0
   end
 
-  test "没有标题" do
-    b = BlogFactory.build(:title => nil)
-    b.save
+  test "删除审核不通过的日志" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => @sensitive,
+      :content  => @sensitive
+    })
 
-    assert_not_nil b.errors.on(:title)
-  end
-
-  test "没有内容" do
-    b = BlogFactory.build(:content => nil)
-    b.save
-
-    assert_not_nil b.errors.on(:content)
-  end
+    assert_equal blog.verified, 0 
+    assert_equal blog.poster.blogs_count1, 1
   
-  test "没有游戏类别" do
-    b = BlogFactory.build(:game_id => nil)
-    b.save
+    blog.unverify
+    blog.reload
 
-    assert_not_nil b.errors.on(:game_id) 
+    assert_equal blog.verified, 2
+    assert_equal blog.poster.blogs_count1, 0
+
+    blog.destroy
+    @user.reload
+
+    assert_equal @user.blogs_count1, 0
   end
 
-  test "游戏不存在" do
-    b = BlogFactory.build(:game_id => 9999)
-    b.save
+  test "我的日志列表中不包括审核不通过的日志" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => @sensitive,
+      :content  => @sensitive
+    })
 
-    assert_not_nil b.errors.on(:game_id)
+    assert_equal blog.verified, 0 
+    assert_equal blog.poster.blogs_count1, 1
+  
+    blog.unverify
+    @user.reload
+
+    assert @user.blogs_count1, 0
+    assert @user.blogs.blank?
   end
 
-  test "该用户没有这个游戏" do
-    g = GameFactory.create
-    b = BlogFactory.build(:game_id => g.id)
-    b.save
+  test "好友日志不包括审核不通过的日志" do
+    assert @friend.has_friend? @user    
 
-    assert_not_nil b.errors.on(:game_id)
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => @sensitive,
+      :content  => @sensitive
+    })
+
+    assert_equal blog.verified, 0 
+    assert_equal @friend.friend_blogs, [blog] 
+
+    blog.unverify
+    @friend.reload
+
+    assert @friend.friend_blogs.blank?
   end
 
-  test "权限不正确" do
-    b = BlogFactory.build(:privilege => 100)
-    b.save
+  test "相关日志不包括审核不通过的日志" do
+    blog = Blog.create({
+      :poster_id  => @user.id,
+      :game_id  => @game.id,
+      :title    => @sensitive,
+      :content  => @sensitive,
+      :friend_tags => [@friend.id]
+    })
 
-    assert_not_nil b.errors.on(:privilege)
+    assert_equal blog.verified, 0
+    assert_equal @friend.relative_blogs, [blog] 
+
+    blog.unverify
+    @friend.reload
+
+    assert @friend.relative_blogs.blank?
   end
 
 end

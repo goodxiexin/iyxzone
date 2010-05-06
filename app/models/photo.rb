@@ -8,13 +8,13 @@ class Photo < ActiveRecord::Base
 
 	has_many :relative_users, :through => :tags, :source => 'tagged_user'
 
-	named_scope :hot, :conditions => ["parent_id IS NULL and created_at > ? and privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC"
+	named_scope :hot, :conditions => ["parent_id IS NULL and created_at > ? and privilege != 4 and verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
 
-  needs_verification
+  needs_verification :sensitive_columns => [:notation]
 
 	acts_as_privileged_resources :owner_field => :poster
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|photo| photo.album.poster.friends.find_all{|f| f.application_setting.recv_photo_feed == 1}}
 
   acts_as_shareable :path_reg => [/\/personal_photos\/([\d]+)/, /\/event_photos\/([\d]+)/, /\/guild_photos\/([\d]+)/, /\/avatars\/([\d]+)/],
                     :default_title => lambda {|photo| "相册#{photo.album.title}的照片"},

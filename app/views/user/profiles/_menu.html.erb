@@ -1,3 +1,4 @@
+<div class='profile-list menu-icon-list'>
 <% subject = get_subject(@user) %>
 <ul>
 	<li><span class='icon-data'></span><%= link_to "#{subject}的档案", edit_profile_url(@profile) %></li>
@@ -11,3 +12,4 @@
   <li><span class='icon-cons'></span><%= link_to "#{subject}的公会", guilds_url(:uid => @user.id) %><span>(<%= @user.guilds_count%>)</span></li>
   <li><span class='icon-game'></span><%= link_to "#{subject}的游戏", games_url(:uid => @user.id) %><span>(<%= @user.games_count %>)</span></li>
 </ul>
+</div>

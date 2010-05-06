@@ -1,0 +1,10 @@
+        <div class="page-foot s_clear">
+          <div class='s_clear rows'><div class="feed-list">
+            <h4>评论(<%= @album.comments_count %>)</h4>
+            <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @album, :recipient => @user} %>
+          </div></div>
+        </div>
+<% unless @reply_to.blank? %>
+<%= onload_javascript_tag "Iyxzone.Comment.set('#{@album.class.name.underscore}', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+<% end %>
+

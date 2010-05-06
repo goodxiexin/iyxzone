@@ -14,19 +14,15 @@ class GameCharacterObserver < ActiveRecord::Observer
     character.user.raw_increment :characters_count
 
     # issue feeds if necessary
-		recipients = [character.user.profile, character.game]
-		recipients.concat character.user.friends
-		character.deliver_feeds :recipients => recipients, :data => {:type => 0}
+		character.deliver_feeds :data => {:type => 0}
 	end
 
   def after_update character
     # issue feeds
-		recipients = [character.user.profile, character.game]
-		recipients.concat character.user.friends
     if character.playing and !character.playing_was
-      character.deliver_feeds :recipients => recipients, :data => {:type => 1}
+      character.deliver_feeds :data => {:type => 1}
     elsif !character.playing and character.playing_was
-      character.deliver_feeds :recipients => recipients, :data => {:type => 2}
+      character.deliver_feeds :data => {:type => 2}
     end
   end
 

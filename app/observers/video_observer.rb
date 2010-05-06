@@ -1,25 +1,42 @@
 class VideoObserver < ActiveRecord::Observer
 
+  def before_create video
+    if video.sensitive?
+      video.verified = 0
+    else
+      video.verified = 1
+    end
+  end
+
 	def after_create video
     # first increment user's count
     video.poster.raw_increment "videos_count#{video.privilege}"
     
     # emit feed if necessary
-		return if video.poster.application_setting.emit_video_feed == 0
-		return if video.is_owner_privilege?
-		recipients = [video.poster.profile, video.game]
-		recipients.concat video.poster.guilds
-		recipients.concat video.poster.friends.find_all{|f| f.application_setting.recv_video_feed == 1}
-		video.deliver_feeds :recipients => recipients
+    if (video.poster.application_setting.emit_video_feed == 1) and !video.is_owner_privilege?
+		  video.deliver_feeds
+    end
 	end
 
-  def before_update video 
-    if video.title_changed? or video.video_url_changed? # only title or url changed must update column 'verified'
+  def before_update video
+    if video.sensitive_columns_changed? and video.sensitive?
       video.verified = 0
-    end
+    end 
   end
-  
+
   def after_update video
+    # change counter if verified changes
+    if video.verified_changed?
+      if (video.verified_was == 0 or video.verified_was == 1) and video.verified == 2
+        video.poster.raw_decrement "videos_count#{video.privilege}"
+        video.destroy_feeds
+      elsif video.verified_was == 2 and video.verified == 1
+        video.poster.raw_increment "videos_count#{video.privilege}"
+        video.deliver_feeds
+      end
+      return
+    end
+
     # change counter if necessary
     if video.privilege_changed?
       video.poster.raw_increment "videos_count#{video.privilege}"
@@ -29,17 +46,8 @@ class VideoObserver < ActiveRecord::Observer
     # issue feeds if necessary
     if video.privilege != 4 and video.privilege_was == 4
       if video.poster.application_setting.emit_video_feed == 1
-        recipients = [video.poster.profile]
-        recipients.concat video.poster.guilds
-        recipients.concat video.poster.friends.find_all{|f| f.application_setting.recv_video_feed == 1}
-        video.deliver_feeds :recipients => recipients
+        video.deliver_feeds
       end
-=begin
-      video.tags.each do |tag|
-        tag.notices.create(:user_id => tag.tagged_user_id)
-        TagMailer.deliver_video_tag tag if tag.tagged_user.mail_setting.tag_me_in_video == 1
-      end
-=end
     end
 
     # destroy feeds if necessary
@@ -49,7 +57,9 @@ class VideoObserver < ActiveRecord::Observer
   end
 
   def after_destroy video
-    video.poster.raw_decrement "videos_count#{video.privilege}"
+    if video.verified != 2
+      video.poster.raw_decrement "videos_count#{video.privilege}"
+    end
   end
 
 end

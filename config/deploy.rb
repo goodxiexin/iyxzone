@@ -24,7 +24,7 @@ after "deploy:update_code", "deploy:pack_js"
 
 after "deploy:symlink", "assets:symlink"
 after "deploy:symlink", "deploy:chown_deployer"
-#after "deploy:symlink", "deploy:clear_online_records"
+after "deploy:symlink", "deploy:clear_online_records"
 
 namespace :deploy do
 
@@ -106,12 +106,12 @@ ActionMailer::Base.perform_deliveries = true
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.default_charset = "utf-8"
 ActionMailer::Base.smtp_settings = {
-  :address => "smtp.gmail.com", 
-  :port => 587, 
+  :address => "localhost", 
+  :port => 25, 
   :enable_starttls_auto => true,
   :domain => "17gaming.com", 
   :authentication => :plain,
-  :user_name => "daye@17gaming.com", 
+  :user_name => "deployer", 
   :password => "20041065"
 }
 ActionMailer::Base.delivery_method = :activerecord

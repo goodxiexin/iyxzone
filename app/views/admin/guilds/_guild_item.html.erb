@@ -1,0 +1,21 @@
+	<% guild = guild_item %>
+  <tr id='guild_<%= guild.id %>'>
+    <td>
+      <div class="imgwrap">
+        <%= album_cover_image guild.album, :size => 'large', :class => 'imgbox01' %>
+      </div>
+      <div class="data jl-data">
+        <p><%= guild_link guild, :class => 'shine' %></p>
+        <p><%= guild.description %></p>
+      </div>
+    </td>
+		<td>
+      <% if guild.verified == 0 %>
+        <%= verify_link guild %> <%= unverify_link guild %>
+      <% elsif guild.verified == 1 %>
+        <%= unverify_link guild %>
+      <% else %>
+        <%= verify_link guild %>
+      <% end %>
+    </td>
+  </tr>

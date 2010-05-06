@@ -1,0 +1,8 @@
+        <div class='nav-link'>
+          <ul class="s_clear">
+            <li <% if hover==0 %>class='hover'<% end %>><%= link_to "<span>一周最火游戏榜</span>", sexy_games_url %></li>
+            <li <% if hover==1 %>class='hover'<% end %>><%= link_to "<span>一周关注游戏榜</span>", hot_games_url %></li>
+            <li <% if hover==2 %>class='hover'<% end %>><%= link_to "<span>要内测的游戏</span>", beta_games_url %></li>
+          </ul>
+        </div>
+

@@ -1,0 +1,9 @@
+      <div class="tab tab01">
+        <div class="right"><%= link_to "邀请好友加入" %></div>
+        <ul>
+          <li <% if hover==0 %>class="hover"<% end %>><span><%= link_to '好友管理', friends_url %></span></li>
+          <li <% if hover==1 %>class='hover'<% end %>><span><%= link_to '寻找好友', friend_suggestions_url %></span></li>
+          <li <% if hover==2 %>class='hover'<% end %>><span><%= link_to '好友印象', friend_impressions_url %></span></li>
+        </ul>
+      </div>
+

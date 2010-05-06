@@ -2,17 +2,21 @@ class User::AlbumsController < UserBaseController
 
   layout 'app'
 
+  PER_PAGE = 10
+
   def index
     @relationship = @user.relationship_with current_user
-    @albums = @user.albums.viewable(@relationship).push(@user.avatar_album).paginate :page => params[:page], :per_page => 10
+    @privilege = get_privilege_cond @relationship
+    @albums = @user.albums.all(:conditions => @privilege).push(@user.avatar_album)
+    @albums = @albums.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 	def recent
-    @albums = Album.recent.paginate :page => params[:page], :per_page => 10, :conditions => "privilege != 4"
+    @albums = Album.recent.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :poster, :cover]
   end
 
   def friends
-    @albums = current_user.friend_albums.paginate :page => params[:page], :per_page => 10 
+    @albums = current_user.friend_albums.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def select
@@ -104,10 +108,12 @@ protected
       @user = User.find(params[:uid])
       require_friend_or_owner @user
     elsif ["show"].include? params[:action]
-      @album = PersonalAlbum.find(params[:id])
+      @album = PersonalAlbum.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}])
+      require_verified @album
       require_adequate_privilege @album
     elsif ["edit", "update", "confirm_destroy", "destroy"].include? params[:action]
       @album = PersonalAlbum.find(params[:id])
+      require_verified @album
       require_owner @album.poster
     end
   end

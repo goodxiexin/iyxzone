@@ -434,8 +434,8 @@ Object.extend(Iyxzone.Profile.Editor, {
       this.showError(raceDiv, "请选择种族");
       valid = false;
     }
-
-    if(game && game.profession_count != 0 && professionID == ''){
+    
+    if(game && game.professions_count != 0 && professionID == ''){
       this.showError(professionDiv, "请选择职业");
       valid = false;
     }

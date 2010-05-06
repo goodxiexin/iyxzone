@@ -60,7 +60,7 @@ class User::SharingsController < UserBaseController
       end       
     else
       render :update do |page|
-        page << "error('发生错误');"
+        page << "error('发生错误, 该资源可能已经被和谐了');"
       end
     end 
   end

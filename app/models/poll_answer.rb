@@ -1,5 +1,7 @@
 class PollAnswer < ActiveRecord::Base
 
+  needs_verification :sensitive_columns => [:description]
+
   belongs_to :poll, :counter_cache => :answers_count
 
   attr_readonly :poll_id, :description

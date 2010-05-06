@@ -430,7 +430,7 @@ Iyxzone.Photo.Tagger = Class.create({
 
   hideTagWithContent: function(tagID){
     var square = $('square_' + tagID);
-    var info = $('content_' + tagID);
+    var info = $('tag_content_' + tagID);
     if(square) square.hide();
     if(info) info.hide();
   },
@@ -456,9 +456,9 @@ Iyxzone.Photo.Tagger = Class.create({
       'border': '2px solid #eeeeee',
       'display': 'block',
       'zIndex': 4});
-    var info = $('content_' + tagID);
+    var info = $('tag_content_' + tagID);
     if(!info){
-      info = new Element('div', {id: 'content_' + tagID}).update(tag.content);
+      info = new Element('div', {id: 'tag_content_' + tagID}).update(tag.content);
       document.body.appendChild(info);
     }
     info.setStyle({
@@ -482,6 +482,7 @@ Iyxzone.Photo.Tagger = Class.create({
 Iyxzone.Photo.Slide = Class.create({
   
   initialize: function(photoType, currentID, ids, urls, frames, downBtn, upBtn){
+    this.photo = $('photo_' + currentID);
     this.photoType = photoType + 's';
     this.downBtn = downBtn;
     this.upBtn = upBtn;
@@ -490,6 +491,11 @@ Iyxzone.Photo.Slide = Class.create({
     this.blankImage = new Image();
     this.blankImage.src = '/images/photo/nopic50x50.png';
 
+    // 帮定事件到photo上
+    this.photo.observe('mousemove', this.mouseOnPhoto.bind(this));
+    this.photo.observe('click', this.clickOnPhoto.bind(this));
+    this.photo.observe('mouseoff', this.mouseOffPhoto.bind(this));  
+  
     // 只保存图片的url，到了需要的时候再去加载图片
     this.urls = urls;
     this.ids = ids;
@@ -521,6 +527,43 @@ Iyxzone.Photo.Slide = Class.create({
 
     this.setBtnEvents();
     this.changeBtn();
+  },
+
+  getSide: function(event){
+    var mouseX = event.pointerX();
+    var photoLeft = this.photo.positionedOffset().left;
+    var photoWidth = this.photo.width;
+    var delta = mouseX - photoLeft;
+    
+    if(delta < photoWidth/2){
+      return 'left'; //left
+    }else if(delta > photoWidth/2 && delta < photoWidth){
+      return 'right'; //right
+    } 
+    return -1; // impossible
+  },
+
+  mouseOnPhoto: function(event){
+    var side = this.getSide(event);
+    if(side == 'left'){
+        this.photo.writeAttribute('style', "cursor:url(/images/skin/left.cur), auto;");
+    }else if(side == 'right'){
+        this.photo.writeAttribute('style', "cursor:url(/images/skin/right.cur), auto;");
+    }
+  },
+
+  mouseOffPhoto: function(event){
+    Iyxzone.changeCursor('default');
+  },
+
+  clickOnPhoto: function(event){
+    var side = this.getSide(event);
+    if(side == 'left'){
+      var idPos = (this.idPos - 1 + this.ids.length) % this.ids.length;
+    }else if(side == 'right'){
+      var idPos = (this.idPos + 1) % this.ids.length;
+    }
+    window.location.href = "http://localhost:3000/" + this.photoType + "/" + this.ids[idPos];
   },
 
   setBtnEvents: function(){
@@ -730,16 +773,19 @@ Iyxzone.Photo.Slide3 = Class.create({
 
     // 只保存图片的url，到了需要的时候再去加载图片
     this.urls = [];
+    this.thumbnails = [];
     this.ids = [];
     this.notations = [];
     this.currentID = currentID; // 当前照片的id
     this.mappings = new Hash(); // photo id => image object
+    this.thumbnailMappings = new Hash();
     this.frames = frames; 
   
     for(var i=0;i<photoInfos.length;i++){
       var info = photoInfos[i];
       this.ids.push(info.id);
       this.urls.push(info.url);
+      this.thumbnails.push(info.thumbnail_url);
       this.notations.push(info.notation);
     }
  
@@ -767,22 +813,62 @@ Iyxzone.Photo.Slide3 = Class.create({
       }
     }
 
+    // bind events to photo
+    this.updatePhotoInfo(this.idPos);
+
     this.setBtnEvents();
     this.changeBtn();
   },
 
+  getSide: function(event){
+    var mouseX = event.pointerX();
+    var photoLeft = this.photo.positionedOffset().left;
+    var photoWidth = this.photo.width;
+    var delta = mouseX - photoLeft;
+    
+    if(delta < photoWidth/2){
+      return 'left'; //left
+    }else if(delta > photoWidth/2 && delta < photoWidth){
+      return 'right'; //right
+    } 
+    return -1; // impossible
+  },
+
+  mouseOnPhoto: function(event){
+    var side = this.getSide(event);
+    if(side == 'left'){
+        this.photo.writeAttribute('style', "cursor:url(/images/skin/left.cur), auto;");
+    }else if(side == 'right'){
+        this.photo.writeAttribute('style', "cursor:url(/images/skin/right.cur), auto;");
+    }
+  },
+
+  mouseOffPhoto: function(event){
+    Iyxzone.changeCursor('default');
+  },
+
+  clickOnPhoto: function(event){
+    var side = this.getSide(event);
+    var pos = Math.floor(this.frames.length / 2);
+    if(side == 'left'){
+      if(this.idPos == 0){
+      }else{
+        this.scrollDown(1);
+      }
+    }else if(side == 'right'){
+      if(this.idPos == this.ids.length - 1){
+      }else{
+        this.scrollUp(1);
+      }
+    }
+  },
+
   setBtnEvents: function(){
     this.downBtn.observe('click', function(event){
-      if(this.upOffset != 0 || this.downOffset != 0)
-        return;
-      this.downOffset = 1;
-      this.scrollDown();
+      this.scrollDown(1);
     }.bind(this));
     this.upBtn.observe('click', function(event){
-      if(this.upOffset != 0 || this.downOffset != 0)
-        return;
-      this.upOffset = 1;
-      this.scrollUp();
+      this.scrollUp(1);
     }.bind(this));
   },
 
@@ -804,51 +890,107 @@ Iyxzone.Photo.Slide3 = Class.create({
     this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" + this.blankImage.src + "' class='imgbox01'/></a>";
   },
 
-  loadImage: function(idx, photoIdx){
-    this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
-    var img = this.mappings.get(this.ids[photoIdx]);
+  getThumbnail: function(idx){
+    var img = this.thumbnailMappings.get(this.ids[idx]);
     if(!img){
       img = new Image();
-      img.src = this.urls[photoIdx];
-      this.mappings.set(this.ids[photoIdx], img);
+      img.src = this.thumbnails[idx];
+      this.thumbnailMappings.set(this.ids[idx], img);
     }
-    var img = new Element('img', {src: img.src});
+    return img;
+  },
+
+  getPicture: function(idx){
+    var img = this.mappings.get(this.ids[idx]);
+    if(!img){
+      img = new Image();
+      img.src = this.urls[idx];
+      this.mappings.set(this.ids[idx], img);
+    }
+    return img;
+  },
+
+  getImageElement: function(img){
+    var el = new Element('img', {src: img.src});
+    var width = img.width;
+    var height = img.height;
+    if(width < 500){
+      el.setStyle({"width": width, "height": height});
+    }else{
+      width = 500;
+      height = height * 500 / width;
+      el.setStyle({"width": width, "height": height});
+    }
+    return el;  
+  },
+
+  updatePhotoInfo: function(index){
+    var picture = this.getPicture(index);
+    var img = this.getImageElement(picture);
+    $('picture').update('');
+    $('picture').appendChild(img);
+      
+    if(this.notations[index] && this.notations[index] != '')
+      $('notation').update(this.notations[index].escapeHTML().gsub('\n', '<br/>'));
+
+    this.photo = $('picture').childElements()[0];
+    this.photo.observe('mousemove', this.mouseOnPhoto.bind(this));
+    this.photo.observe('click', this.clickOnPhoto.bind(this));
+    this.photo.observe('mouseoff', this.mouseOffPhoto.bind(this));  
+  },
+
+  scrollUp: function(offset){
+    if(this.downOffset != 0 || this.upOffset != 0){
+      return;
+    }
+
+    var pos = Math.floor(this.frames.length/2);
+    this.frames[pos].writeAttribute('class', 'img');
+    this.upOffset = offset;
+    this.frames[pos + offset].addClassName('now');
+    this.updatePhotoInfo(this.idPos + offset);
+    this.startScrollUp();
+  },
+
+  scrollDown: function(offset){
+    if(this.downOffset != 0 || this.upOffset != 0){
+      return;
+    }
+
+    var pos = Math.floor(this.frames.length/2);
+    this.frames[pos].writeAttribute('class', 'img');
+    this.downOffset = offset;
+    this.frames[pos - offset].addClassName('now');
+    this.updatePhotoInfo(this.idPos - offset);
+    this.startScrollDown();
+  },
+
+  loadImage: function(idx, photoIdx){
+    this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
+    var thumbnail = this.getThumbnail(photoIdx);
+    var picture = this.getPicture(photoIdx);
+    
+    var img = new Element('img', {src: thumbnail.src});
     img.setStyle({width: '50px', height: '50px'});
     img.addClassName('imgbox01');
+    
     var a = new Element('a', {href: 'javascript:void(0)', index: photoIdx});
     a.appendChild(img);
     a.observe('click', function(e){
-      var pos = Math.floor(this.frames.length/2);
-      var img = e.target;
-      var index = parseInt(img.up('a').readAttribute('index'));
+      var index = parseInt(e.target.up('a').readAttribute('index'));
       var idPos = this.idPos;
+      
       if(index == idPos){
       }else if(index < idPos){
-        // scroll down
-        if(this.downOffset != 0)
-          return;
-        this.frames[pos].writeAttribute('class', 'img');
-        this.downOffset = idPos - index;
-        this.scrollDown();
-        this.frames[pos + index - idPos].addClassName('now');
+        this.scrollDown(idPos - index);
       }else if(index > idPos){
-        // scroll up
-        if(this.upOffset != 0)
-          return;
-        this.frames[pos].writeAttribute('class', 'img');
-        this.upOffset = index - idPos;
-        this.scrollUp();
-        this.frames[pos + index - idPos].addClassName('now');
+        this.scrollUp(index - idPos);
       }
-      $('picture').update("<img src='" + img.src + "' />");
-      if(this.notations[index] && this.notations[index] != '')
-        $('notation').update(this.notations[index].escapeHTML().gsub('\n', '<br/>'));
     }.bind(this));
     this.frames[idx].update(a);
-    //this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" +  img.src +"' class='imgbox01' width='50px' height='50px'/></a>";
   },
 
-  scrollDown: function(){
+  startScrollDown: function(){
     if(this.idPos == 0){
       return;
     }
@@ -885,11 +1027,11 @@ Iyxzone.Photo.Slide3 = Class.create({
     // reset timer
     this.downOffset--;
     if(this.downOffset != 0){
-      this.scrollDown();
+      this.startScrollDown();
     }      
   },
 
-  scrollUp: function(){
+  startScrollUp: function(){
     if(this.idPos == this.ids.length - 1)
       return;
 
@@ -924,7 +1066,7 @@ Iyxzone.Photo.Slide3 = Class.create({
     // reset timer
     this.upOffset--;
     if(this.upOffset != 0){
-      this.scrollUp();
+      this.startScrollUp();
     }
   }
 

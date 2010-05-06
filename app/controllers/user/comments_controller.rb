@@ -2,6 +2,7 @@ class User::CommentsController < UserBaseController
 
   def create
     @comment = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
+
     unless @comment.save
       render :update do |page|
         page << "error('评论由于某些问题而无法保存');"
@@ -15,9 +16,7 @@ class User::CommentsController < UserBaseController
         page << "facebox.close();Effect.BlindUp($('comment_#{@comment.id}'));"
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
@@ -39,11 +38,11 @@ protected
   end
 
   def require_delete_privilege comment
-    comment.is_deleteable_by? current_user || render_not_found
+    comment.is_deleteable_by?(current_user) || render_not_found
   end
 
   def require_view_privilege commentable
-    commentable.is_comment_viewable_by? current_user || render_not_found
+    commentable.is_comment_viewable_by?(current_user) || render_not_found
   end
 
 end

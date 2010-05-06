@@ -8,44 +8,11 @@
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
 	<div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"></span>
-      <p class="left">
-        <strong><%= game_link @game %>的玩家</strong><br />
-        <%= link_to '游戏主页', game_url(@game), :class=>'red'%>
-      </p>
-    </div>
+    <%= render :partial => 'user/games/game_header', :locals => {:text => "#{@game.name}的玩家"} %>
     <div class="box02 canvas_int space">
-			<div class="tab tab01">
-				<ul>
-					<% if @playing %>
-					<li class='hover'><span><%= link_to '同服玩家', game_comrades_url(@game) %></span></li>
-					<% end %>
-					<li><span><%= link_to '游戏玩家', game_players_url(@game) %></span></li>
-				</ul>
-      </div>
+      <%= render :partial => 'tab' %>
 			<div class="friend-box">
-				<div class="box04 friend-one-search">
-					搜索同服玩家
-					<% form_tag search_game_comrades_url(@game), :class => "formcontent", :id => 'user_form', :onsubmit => "Iyxzone.Search.searchUsers($('game_username_search_btn')); return false;" do %>
-            <div class="rows s_clear">
-              <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'key','用户名查找', :onclick => "$(this).clear();" %></div>
-              </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit" id="game_username_search_btn">查找</button></span></span></div>
-							<div class='link'><%= link_to_function '按游戏角色查找', "Iyxzone.Search.showCharacterForm()" %></div>
-            </div>
-          <% end %>
-					<% form_tag character_search_game_comrades_url(@game), :class => "formcontent", :id => 'character_form', :style => "display:none", :onsubmit => "Iyxzone.Search.searchCharacters($('game_charactername_search_btn')); return false;" do %>
-            <div class="rows s_clear">
-              <div class="fldvalue">
-                <div class="textfield"><%= text_field_tag 'key','游戏角色查找', :onclick => "$(this).clear();" %></div>
-              </div>
-              <div class="fldbtn"><span class="button"><span><button type="submit" id="game_charactername_search_btn">查找</button></span></span></div>
-							<div class='link'><%= link_to_function '按用户名查找', "Iyxzone.Search.showUserForm()" %></div>
-            </div>
-          <% end %>
-        </div>
+        <%= render :partial => 'search_panel', :locals => {:search_type => 'user'} %>
 				<div class="box02 appcontent01">
           <div class="piclist-rows cmt-space">
             <table cellspacing='0' cellpadding='0'>
@@ -53,29 +20,7 @@
               <tr><td><strong> 没有符合条件的用户 </strong></td></tr>
             <% else %>
               <tr><td><strong> 共有<%= @comrades.total_entries %>个游戏角色 </strong></td></tr>
-              <% @comrades.each do |character| %>
-              <% f = character.user %>
-              <tr>
-                <td>
-									<div class='imgwrap'>
-										<%= avatar f, :size => :medium, :class=>'imgbox01' %>
-									</div>
-									<div class='data jl-data'>
-										<p><%= profile_link f %></p>
-										<p>
-											<%= character.server.name %>,
-											<%= character.name %>
-										</p>
-										<p class="space">
-											<%unless current_user == f %>
-											  <%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
-											  <%= link_to '', new_mail_url(:recipient_ids => [f.id]), :class => "msg-btn" %>
-											<% end %>
-										</p>
-									</div>
-								</td>
-              </tr>
-              <% end %>
+              <%= render :partial => 'comrade_item', :collection => @comrades %>
             <% end %>
             </table>
             <div class="space s_clear">

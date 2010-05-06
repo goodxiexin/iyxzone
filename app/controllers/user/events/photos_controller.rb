@@ -86,14 +86,17 @@ protected
 
   def setup
     if ['show', 'edit', 'update', 'destroy'].include? params[:action]
-      @photo = EventPhoto.find(params[:id])
+      @photo = EventPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
+      require_verified @photo
       @album = @photo.album
       @event = @album.event
+      require_verified @event
       @user = @event.poster
       require_owner @user if params[:action] != 'show'
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = EventAlbum.find(params[:album_id])
       @event = @album.event
+      require_verified @event
       @user = @event.poster
       require_owner @user
     end

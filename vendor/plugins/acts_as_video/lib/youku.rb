@@ -2,10 +2,10 @@ class Youku
 	
 	# http://v.youku.com/v_show/id_XMTUzMzE4OTAw.html	
 	# 
-	YOUKU_SINGLE	= /http:\/\/v\.youku\.com\/v_show\/id_[\w]*\=?\.html/
+	YOUKU_SINGLE	= /http:\/\/v\.youku\.com\/v_show\/id_[\w]*\=?\.htm[l]?/
 	# http://v.youku.com/v_playlist/f3921377o1p0.html 
 	# <embed src="http://player.youku.com/player.php/Type/Folder/Fid/3921377/Ob/1/Pt/0/sid/XMTQyNzQ3MzY=/v.swf" quality="high" width="480" height="400" align="middle" allowScriptAccess="allways" mode="transparent" type="application/x-shockwave-flash"></embed>
-	YOUKU_ALBUM		= /http:\/\/v\.youku\.com\/v_playlist\/[\w]*\.html/
+	YOUKU_ALBUM		= /http:\/\/v\.youku\.com\/v_playlist\/[\w]*\.htm[l]?/
 
 	include HTTParty
 
@@ -31,7 +31,7 @@ class Youku
 		if @response
 			@response["data"][0]["logo"] 
 		else
-			"/images/blank_video.png"
+			"/images/videoThumb/youku.png"
 		end
 	end
 

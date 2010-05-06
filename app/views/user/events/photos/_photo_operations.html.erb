@@ -1,0 +1,17 @@
+                  <div class="photo-op">
+                    <% if @participation and @participation.is_authorized? %>
+                    <span class="photo-op-mark"></span>
+                    <%= link_to_function "圈人", "tagger.start()" %> | 
+                    <% end %>
+                    <% if @event.poster == current_user %>
+                    <span class="photo-op-edit"></span>
+                    <%= facebox_link '编辑', edit_event_photo_url(@photo, :at => 'photo') %> | 
+                    <span class="photo-op-del"></span>
+                    <%= facebox_confirm '删除', event_photo_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
+                    <% end %>
+                    <span class="photo-op-share" ></span>
+                    <%= facebox_link "分享", new_sharing_url(:url => event_photo_url(@photo)), :width => 450 %> |
+                    <span class="photo-op-praise" ></span>
+                    <%= text_dig_link @photo %>
+                  </div>
+

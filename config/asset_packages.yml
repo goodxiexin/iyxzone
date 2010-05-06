@@ -5,7 +5,6 @@ javascripts:
   - dragdrop
   - controls
   - sound
-  - juggernaut/swfobject
   - iyxzone
   - comment
   - facebox

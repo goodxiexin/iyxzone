@@ -1,0 +1,13 @@
+      <div class="tab tab01">
+        <% subject = get_subject user %>
+        <div class="right"><%= application_link %><%= link_to "新视频", new_video_url %></div>
+        <ul>
+          <li <% if hover==0 %>class='hover'<% end %>><span><%= link_to "热门视频", hot_videos_url %></span></li>
+          <li <% if hover==1 %>class='hover'<% end %>><span><%= link_to "#{subject}的视频", videos_url(:uid => user.id) %></span></li>
+          <li <% if hover==2 %>class='hover'<% end %>><span><%= link_to "#{subject}的相关视频", relative_videos_url(:uid => user.id) %></span></li>
+          <% if user == current_user %>
+            <li <% if hover==3 %>class='hover'<% end %>><span><%= link_to "好友的视频", friends_videos_url %>
+          <% end %>
+        </ul>
+      </div>
+

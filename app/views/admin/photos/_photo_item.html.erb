@@ -1,0 +1,26 @@
+          <% photo = photo_item %>
+          <tr id='photo_<%= photo.id %>'>
+            <td>
+              <div class="imgwrap">
+                <%= photo_link photo, :size => :large, :class => 'imgbox01' %>
+              </div>
+              <div class="data">
+                <h3><%= profile_link photo.poster %> 上传</h3>
+                <p>创建于 <%= ftime photo.created_at %></p>
+                <p class="link">
+                  <%= link_to '查看相片', eval("#{photo.class.name.underscore}_url(photo)") %> | 
+                  <%= link_to '查看相册', eval("#{photo.album.class.name.underscore}_url(photo.album)") %>
+                </p>
+              </div>
+              <td align="right">
+                <% if photo.verified == 0 %>
+                  <%= verify_link photo %> | <%= unverify_link photo %>
+                <% elsif photo.verified == 1 %>
+                  <%= unverify_link photo %>
+                <% elsif photo.verified == 2 %>
+                  <%= verify_link photo %>
+                <% end %>
+              </td>
+            </td>
+          </tr>
+

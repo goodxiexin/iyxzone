@@ -1,0 +1,9 @@
+      <div class="tab tab01">
+        <ul>
+          <li <% if params[:type] == '0' %> class="hover" <% end %>><span><%= link_to "拾闻", news_index_url(:type => 0) %></a></span></li>
+          <li <% if params[:type] == '1' %> class='hover' <% end %>><span><%= link_to "文字新闻", news_index_url(:type => 1, :time => 1)%></span></li>
+          <li <% if params[:type] == '2' %> class='hover' <% end %>><span><%= link_to "视频新闻", news_index_url(:type => 2, :time => 1) %></span></li>
+          <li <% if params[:type] == '3' %> class='hover' <% end %>><span><%= link_to "图片新闻", news_index_url(:type => 3, :time => 1) %></span></li>
+        </ul>
+      </div>
+

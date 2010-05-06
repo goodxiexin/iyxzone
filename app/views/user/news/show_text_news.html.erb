@@ -6,62 +6,19 @@
   <div class="round_m"><div class="round_body">
     <h1 class="app-news">拾闻</h1>
     <div class="box02 canvas_int space20">
-      <div class="tab tab01">
-        <ul>
-          <li><span><%= link_to "拾闻", news_index_url(:type => 0) %></a></span></li>
-          <li><span><%= link_to "文字新闻", news_url(:type => 1)%></span></li>
-          <li><span><%= link_to "视频新闻", news_url(:type => 2) %></span></li>
-          <li><span><%= link_to "图片新闻", news_url(:type => 3) %></span></li>
-        </ul>
-      </div>
+      <%= render :partial => 'tab' %>
       <div class="detail-blog">
-        <div class="detail-blog-head jl-cutline s_clear">
-          <p class="left">
-            <strong><%= @news.title %></strong> <span class="gray"><%= ftime @news.created_at %></span>
-          </p>
-          <p class="right">
-            <%= facebox_link "分享", new_sharing_url(:url => news_url(@news)), :width => 450, :class => 'share-btn' %>
-          </p>
-        </div>
-        <div class="con">
-          <%= @news.data %>
-        </div>
+        <%= render :partial => 'news_header' %>
+        <div class="con"><%= @news.data %></div>
         <div class="detail-blog-foot s_clear">
           <h2 class="gray">相关游戏：<%= game_link @news.game %></h2>
           <% if !@news.origin_address.nil? %>
             <h2 class="gray">本帖转自：<%= link_to @news.origin_address, @news.origin_address %></h2>
           <% end %>
-          <div class="page-foot s_clear">
-            <div class="foot-func">
-              <span class="w-l red">评论(<%= @news.comments_count %>)</span><span class="w-l">|</span>
-              <span class="w-l red">浏览(<%= @news.viewings_count %>)</span><span class="w-l">|</span>
-              <span class="photo-op-praise" ></span><%= text_dig_link @news, :class => 'red' %>
-            </div>
-            <div class='s_clear rows'>
-              <div class="feed-list">
-                <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @news, :recipient => nil} %>
-              </div>
-              <% unless @random_news.blank? %>
-              <div class="prompt-list-box">
-                <h5>随便看看</h5>
-                <div class="list-box box04">
-                  <ul class="lister02">
-                    <% @random_news.each do |news| %>
-                      <li><%= news_link news %></li>
-                    <% end %>
-                  </ul>
-                </div>
-              </div>
-              <% end %>
-            </div>
-          </div>
+          <%= render :partial => 'news_func' %>
         </div>
       </div>
     </div>
   </div></div>
 </div></div></div></div>
-
-<% unless @reply_to.blank? %>
-<%= onload_javascript_tag "Iyxzone.Comment.set('news', #{@news.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
-<% end %>
 

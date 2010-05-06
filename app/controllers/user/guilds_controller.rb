@@ -7,21 +7,21 @@ class User::GuildsController < UserBaseController
 	FetchSize = 5
 
   def index
-    @guilds = @user.guilds.paginate :page => params[:page], :per_page => 10
+    @guilds = @user.guilds.paginate :page => params[:page], :per_page => 10, :include => [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]
   end
 
 	def participated
-    @guilds = @user.participated_guilds.paginate :page => params[:page], :per_page => 10
+    @guilds = @user.participated_guilds.paginate :page => params[:page], :per_page => 10, :include => [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]
 	end
 
 	def hot
     cond = user_game_conds
-    @guilds = Guild.hot.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10	
+    @guilds = Guild.hot.find(:all, :conditions => cond, :include => [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]).paginate :page => params[:page], :per_page => 10	
   end
 
   def recent
     cond = user_game_conds
-    @guilds = Guild.recent.find(:all, :conditions => cond).paginate :page => params[:page], :per_page => 10
+    @guilds = Guild.recent.find(:all, :conditions => cond, :include => [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]).paginate :page => params[:page], :per_page => 10
 	end
 
   def friends
@@ -29,14 +29,24 @@ class User::GuildsController < UserBaseController
   end
 
   def show
+    @guild_characters = @guild.characters.all(:include => [{:user => :profile}], :limit => 6) 
+
+    @hot_topics = @guild.forum.hot_topics.all(:include => [:forum], :limit => 6)
+
+    @events = @guild.events.all(:include => [{:album => :cover}], :order => "confirmed_count DESC", :limit => 4)
+
     @memberships = @guild.all_memberships_for current_user
     @role = @guild.role_for current_user
+
     @album = @guild.album
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
+
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize, :order => "created_at DESC")
 		@first_fetch_size = FirstFetchSize
-		@messages = @guild.comments.paginate :page => params[:page], :per_page => 10
+
+		@messages = @guild.comments.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :commentable]
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @guild.id, :wall_type => 'guild'}}
+
     render :action => 'show', :layout => 'app2'
 	end
 
@@ -77,6 +87,7 @@ class User::GuildsController < UserBaseController
   end
 
 	def more_feeds
+    @guild = Guild.find(params[:id])
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize)
 		@fetch_size = FetchSize
   end
@@ -98,8 +109,9 @@ protected
     if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
-    elsif ['show', 'more_feeds'].include? params[:action]
-      @guild = Guild.find(params[:id])
+    elsif ['show'].include? params[:action]
+      @guild = Guild.find(params[:id], :include => [:forum, :game, {:president => :profile}])
+      require_verified @guild
     elsif ['edit_rules', 'update', 'destroy'].include? params[:action]
       @guild = Guild.find(params[:id])
       require_owner @guild.president unless params[:action] == 'edit_rules'

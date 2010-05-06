@@ -1,0 +1,9 @@
+        <div class="detail-video-foot" id='friend_tags'>
+          <p class="jl-cutline"></p>
+          <% if @video.tags.size == 0 %>
+            <p>这个视频没有相关人员</p>
+          <% else %>
+            <p>标签: <%= @video.tags.map { |t| profile_link t.tagged_user, :class => 'red' }.join(',') %></p>
+          <% end %>
+        </div>
+

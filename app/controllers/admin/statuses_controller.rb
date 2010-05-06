@@ -1,38 +1,34 @@
 class Admin::StatusesController < AdminBaseController
 
   def index
-    @statuses = Status.unverified.paginate :page => params[:page], :per_page => 20
+    case params[:type].to_i
+    when 0
+      @statuses = Status.unverified.paginate :page => params[:page], :per_page => 20
+    when 1
+      @statuses = Status.accepted.paginate :page => params[:page], :per_page => 20
+    when 2
+      @statuses = Status.rejected.paginate :page => params[:page], :per_page => 20
+    end
   end
 
-  def accept
-    @statuses = Status.accepted.paginate :page => params[:page], :per_page => 20
-  end
-  
-  def reject
-    @statuses = Status.rejected.paginate :page => params[:page], :per_page => 20
-  end
-
-  def show
-  end
-
-  def destroy
-  end
-
-  # accept
   def verify
     if @status.verify
-      succ
+      render :update do |page|
+        page << "$('status_#{@status.id}').remove();"
+      end
     else
-      err
+      render_js_error
     end
   end
   
   # reject
   def unverify
     if @status.unverify
-      succ
+      render :update do |page|
+        page << "$('status_#{@status.id}').remove();"
+      end
     else
-      err
+      render_js_error
     end
   end
   
@@ -40,7 +36,7 @@ class Admin::StatusesController < AdminBaseController
 protected
 
   def setup
-    if ["show", "destroy", "verify", "unverify"].include? params[:action]
+    if ["verify", "unverify"].include? params[:action]
       @status = Status.find(params[:id])
     end
   end

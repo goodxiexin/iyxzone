@@ -3,13 +3,13 @@ class User::PhotosController < UserBaseController
   layout 'app'
 
 	def hot
-    @photos = Photo.hot.paginate :page => params[:page], :per_page => 10, :conditions => "privilege != 4"
+    @photos = Photo.hot.paginate :page => params[:page], :per_page => 10, :conditions => "privilege != 4", :include => [:album, {:poster => :profile}]
   end
 
   def relative
     @infos = []
-    @user.photo_tags.group_by(&:photo_id).map do |photo_id, tags|
-      photo = Photo.find(photo_id)
+    @user.photo_tags.all(:include => [:photo, {:poster => :profile}]).group_by(&:photo_id).map do |photo_id, tags|
+      photo = tags.first.photo
       if !photo.is_owner_privilege?
         @infos << {:photo => photo, :posters => tags.map(&:poster).uniq}
       end
@@ -106,18 +106,23 @@ protected
 
   def setup
     if ['show'].include? params[:action]
-      @photo = PersonalPhoto.find(params[:id])
+      @photo = PersonalPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
+      require_verified @photo
       @album = @photo.album
+      require_verified @album
       require_adequate_privilege @album
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = PersonalAlbum.find(params[:album_id])
+      require_verified @album
       require_owner @album.poster
     elsif ['relative'].include? params[:action]
 			@user = User.find(params[:uid])
       require_friend_or_owner @user
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @photo = PersonalPhoto.find(params[:id])
+      require_verified @photo
       @album = @photo.album
+      require_verified @album
       require_owner @album.poster
     end
   end

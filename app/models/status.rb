@@ -3,7 +3,7 @@ class Status < ActiveRecord::Base
   belongs_to :poster, :class_name => 'User'
 
 	acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, status, comment| status.poster == user || comment.poster == user },
+                      :delete_conditions => lambda {|user, status, comment| status.poster == user || comment.poster == user},
                       :create_conditions => lambda {|user, status| status.poster == user || status.poster.has_friend?(user)}
 
   # 下面这3个要注意顺序
@@ -11,9 +11,9 @@ class Status < ActiveRecord::Base
 
   acts_as_emotion_text :columns => [:content]
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|status| [status.poster.profile] + status.poster.friends}
 
-  needs_verification 
+  needs_verification :sensitive_columns => [:content]
  
   attr_readonly :poster_id, :content
 

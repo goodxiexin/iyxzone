@@ -1,0 +1,13 @@
+            <% server = GameServer.find(server_id) %>
+            <div class="box02 appcontent01">
+              <div class='d6-head s_clear rows'>
+                <strong class='gray left'>你在<%= server_location server %>可能认识: </strong>
+                <span><%= link_to '更多', {:controller => 'user/friend_suggestions', :action => 'comrade', :server_id => server_id}, :class => 'right' %></span>
+              </div>
+              <div class="d6-list s_clear rows">
+                <ul id='server_<%= server_id %>_suggestions'>
+                  <%= render :partial => 'comrade_suggestion', :collection => suggestions %>
+                </ul>
+              </div>
+            </div>
+

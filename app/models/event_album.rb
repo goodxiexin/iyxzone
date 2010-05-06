@@ -1,11 +1,12 @@
 class EventAlbum < Album
 
-  belongs_to :cover, :class_name => 'EventPhoto'
+  belongs_to :cover, :class_name => 'EventPhoto', :conditions => {:verified => [0,1]}
 
   belongs_to :event, :foreign_key => 'owner_id'
 
-  # 理论上活动相册是没法删除的
-  has_many :photos, :class_name => 'EventPhoto', :foreign_key => 'album_id', :order => 'created_at DESC'
+  has_many :photos, :class_name => 'EventPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :order => 'created_at DESC', :dependent => :destroy
+
+  has_many :latest_photos, :class_name => 'EventPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :limit => 3, :order => "created_at DESC"
 
   acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}

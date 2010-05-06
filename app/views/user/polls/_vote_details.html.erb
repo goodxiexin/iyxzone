@@ -1,0 +1,18 @@
+        <div class='vote-detail gray'>
+          <h3 class='space'>投票选项说明：</h3>
+          <% if @poll.past or @vote %>
+            <%= simple_format h(@poll.explanation), :class => 'jl-cutline', :id => 'poll_explanation' %>
+          <% else %>
+            <p class='jl-cutline'>投票后才能看</p>
+          <% end %>
+          <h3 class='space'>投票情况</h3>
+          <ul class='jl-cutline'>
+          <% if @vote %>
+            <li class='now'>你 投给了 <%= @vote.answers.map{|a| "\"#{truncate h(a.description), :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
+          <% end %>
+          <% @vote_feeds.each do |v| %>
+            <li class='now'><%= profile_link v.voter %> 投给了 <%= v.answers.map{|a| "\"#{truncate h(a.description), :length => 20, :omission => '...'}\""}.join(',') %><span class='time'></span></li>
+          <% end %>
+          </ul>
+        </div>
+

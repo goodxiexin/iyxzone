@@ -29,8 +29,9 @@ class User::Guilds::AlbumsController < UserBaseController
 protected
 
   def setup
-    @album = GuildAlbum.find(params[:id])
+    @album = GuildAlbum.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}])
     @guild = @album.guild
+    require_verified @guild
     @user = @guild.president
     require_owner @user if params[:action] == 'update'
   end

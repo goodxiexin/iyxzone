@@ -1,0 +1,9 @@
+        <div class="nav-link">
+          <ul class="s_clear">
+              <li <%if params[:time].to_i == 0 %> class="hover"<% end %>><%= link_to "<span>今天</span>", news_index_url(:type => params[:type], :time => 0) %></li>
+              <li <%if params[:time].to_i == 1 %> class="hover"<% end %>><%= link_to "<span>昨天</span>", news_index_url(:type => params[:type], :time => 1) %></li>
+              <li <%if params[:time].to_i == 2 %> class="hover"<% end %>><%= link_to "<span>这周</span>", news_index_url(:type => params[:type], :time => 2) %></li>
+              <li <%if params[:time].to_i == 3 %> class="hover"<% end %>><%= link_to "<span>更早</span>", news_index_url(:type => params[:type], :time => 3) %></li>
+          </ul>
+        </div>
+

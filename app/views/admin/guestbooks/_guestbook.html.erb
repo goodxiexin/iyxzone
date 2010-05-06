@@ -1,0 +1,13 @@
+<tr id='guestbook_<%= guestbook.id %>'>
+  <td class="title"><div><%= guestbook.description %></div></td>
+  <td class="time"><%= ftime guestbook.created_at %></td>
+  <td class="icon" style='width:100px'>
+    <% if guestbook.reply.blank? %>
+      <%= facebox_link '回复', edit_admin_guestbook_url(guestbook)%>
+    <% else %>
+      <%= facebox_tip '已经回复了', "回复内容:<br/>#{guestbook.reply}" %>
+    <% end %>
+  </td>
+  <td class="icon"><%= facebox_confirm "忽略", admin_guestbook_url(guestbook), {:msg => '你确定要忽略这个报告吗', :method => :delete}, {:class => 'icon-active'} %></td>
+</tr> 
+

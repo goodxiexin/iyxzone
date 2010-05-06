@@ -4,11 +4,11 @@ class Video < ActiveRecord::Base
 
   belongs_to :game
 
-  named_scope :hot, :conditions => ["created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC'
+  named_scope :hot, :conditions => ["created_at > ? AND privilege != 4 AND verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC, created_at DESC'
 
-  named_scope :recent, :conditions => ["created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => 'created_at DESC'
+  named_scope :recent, :conditions => ["created_at > ? AND privilege != 4 AND verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => 'created_at DESC'
 
-  needs_verification 
+  needs_verification :sensitive_columns => [:title, :description] 
  
   acts_as_friend_taggable :delete_conditions => lambda {|user, video| video.poster == user },
                           :create_conditions => lambda {|user, video| video.poster == user }
@@ -19,13 +19,13 @@ class Video < ActiveRecord::Base
 
 	acts_as_diggable :create_conditions => lambda {|user, video| video.privilege != 4 or video.poster == user}
 
-  acts_as_list :order => 'created_at', :scope => 'poster_id'
+  acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:verified => [0,1]}
  
   acts_as_privileged_resources :owner_field => :poster
 
 	acts_as_video
 
-	acts_as_resource_feeds
+	acts_as_resource_feeds :recipients => lambda {|video| [video.poster.profile, video.game] + video.poster.guilds + video.poster.friends.find_all {|f| f.application_setting.recv_video_feed == 1} }
 
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, video, comment| user == video.poster || user == comment.poster},  

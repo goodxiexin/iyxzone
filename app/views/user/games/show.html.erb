@@ -7,170 +7,30 @@
 <% content_for :html_keywords, "#{@game.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% content_for :left do %>
-<div class="mcAvatar" style="width:100px; height: 141px" >
-  <a href="#"></a>
-  <div class="picwrap">
-    <div class="middle"><div class="middle-center"><div class="center">
-			<%= game_image @game.name, :class => 'game-m' %>
-		</div></div></div>
-	</div>
-</div>
-<div class="info-list">
-	<%= render :partial => 'game_info' %>
-</div>
+  <%= render :partial => 'game_avatar' %>
+  <div class="info-list">
+	  <%= render :partial => 'game_info' %>
+  </div>
 <% end %>
 
 <% content_for :right do %>
-
-<div class="multibox">
-	<div class="title"><b id='tag_cloud_head'>
-		<% if @game.is_taggable_by? current_user %>
-			你对这个游戏的印象是
-		<% else %>
-			玩家印象
-		<% end %>
-	</b></div>
-	<div id='tag_cloud'>
-  <% if @game.is_taggable_by? current_user %>
-		<div class='rows s_clear'>
-    <%= render :partial => 'user/games/tags/game_tag', :locals => {:game => @game} %>
-    <% form_remote_for :tag, :url => game_tags_url(@game), :html => {:onsubmit=> "Iyxzone.disableButton($(tag_submit),'请等待..');"} do |f| %>
-			<p class='space'>都不贴切？自己想个</p>
-      <div class='textfield04 left space'><%= text_field_tag 'tag_name', '' %></div>
-      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
-    <% end %>
-		</div>
-  <% else %>
-    <%= render :partial => 'user/games/tags/tag_cloud', :locals => {:game => @game} %>
-  <% end %>
-  </div>
-</div>
-
+  <%= render :partial => 'tag_panel' %>
 	<%= render :partial => 'game_events' %>
 	<%= render :partial => 'game_guilds' %>
 <% end %>
 
 <div class='box02 canvas_con'>
-
-<% unless @comrades.blank? %>
-<div class='multibox'>
-	<div class='title'><%= link_to '更多', game_comrades_url(@game) %><b>同服玩家</b></div>
-	<div class='photolist-box gamer-list'>
-			<ul class='collection s_clear'>
-			<% @comrades.each do |character| %>
-				<li>
-					<div class="middle"><div class="middle-center"><div class="center"><%= avatar character.user, :class => "imgbox01" %></div></div></div>
-					<p><strong><%= profile_link character.user %></strong></p>
-					<p><%= character.name %></p>
-				</li>
-			<% end %>
-			</ul>
-	</div>
-</div>
-<% end %>
-
-<div class='multibox'>
-	<div class='title'><%= link_to '更多', game_players_url(@game) %><b>游戏玩家</b></div>
-	<div class='photolist-box gamer-list'>
-		<% unless @players.blank? %>
-			<ul class='collection s_clear'>
-			<% @players.each do |character| %>
-				<li>
-					<div class="middle"><div class="middle-center"><div class="center"><%= avatar character.user, :class => "imgbox01" %></div></div></div>
-					<p><strong><%= profile_link character.user %></strong></p>
-					<p><%= character.name %></p>
-				</li>
-			<% end %>
-			</ul>
-		<% else %>
-			<div class='space'>这个游戏竟然没有玩家</div>
-		<% end %>
-	</div>
-</div>
-
-<div class="multibox">
-	<div class="title"><%= link_to '更多', game_albums_url(@game) %><b>相关相册</b></div>
-	<div class="piclist s_clear">
-	<% unless @albums.blank? %> 
-    <% @albums.each do |album| %>
-        <div class="picitem jl-picitem">
-          <div class="picbox01">
-            <a class="btn" href="#"></a>
-            <div class="picwrap">
-              <table cellpadding="0">
-                <tr><td><%= album_cover album, :class => 'imgbox01' %></td></tr>
-              </table>     
-            </div>
-          </div>
-          <p><b><%= album_link album %></b></p>
-          <% if album.uploaded_at.blank? %>
-            <p>于 <span><%= ftime album.created_at %></span> 创建</p>
-          <% else %>
-            <p>于 <span><%= ftime album.uploaded_at %></span> 更新</p>
-          <% end %>
-      </div>  
-    <% end %> 
-	<% else %>
-    <% if @has_game %>
-		<div class='space'>还没照片赶紧去<%= link_to '弄一个', personal_albums_url(:uid => current_user.id)%>，马上就能上游戏主页</div>
-    <% else %>
-    <div class='space'>还没有任何相关的相册</div>
-    <% end %>
-	<% end %>
-  </div>
-</div>
-
-<div class="multibox">
-	<div class="title"><%= link_to '更多', game_blogs_url(@game) %><b>相关日志</b></div>
-	<% unless @blogs.blank? %>
-	<% @blogs.each do |blog| %>
-    <div class="diary-box">
-      <div class="diary-header">
-        <p><%= blog_link blog %> <%= ftime blog.created_at %> <%= blog.digs_count %>人顶了</p>
-      </div>
-      <p> <%= blog_content blog, :length => 80, :omission => '...' %> </p>
-    </div>
+  <% unless @comrades.blank? %>
+    <%= render :partial => 'comrade_suggestions' %>
   <% end %>
-	<% else %>
-    <% if @has_game %>
-		<div class='space'>还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>,马上就能上游戏主页</div>
-    <% else %>
-    <div class='space'>还没任何相关的日志</div>
-    <% end %>
-	<% end %>	
-</div>
-
-<div class='multibox'>
-  <div class='title'><b>新鲜事</b></div>
-  <div class="feed-wrap" id='feed_list'>
-    <%= render :partial => 'user/home/feed_deliveries', :object => @feed_deliveries %>
+  <%= render :partial => 'player_suggestions' %>
+  <%= render :partial => 'recent_albums' %>
+  <%= render :partial => 'recent_blogs' %>
+  <%= render :partial => 'game_feeds' %>
+  <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @game, :recipient => nil, :with_comments => false} %>
+  <div class="feed-box" id='comments'>
+    <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>
   </div>
-	<div class="s_clear"></div>
-		<div class="round04 round_r_t jl-read-more space s_clear">
-			<div class="round_l_t">
-        <div class="round_r_b">
-          <div class="round_l_b">
-            <div class="round_m">
-              <div class="round_body" id="more_feed">
-								<% if @feed_deliveries.size < @first_fetch_size %>
-									<div class='jl-more'>没有更多了...</div>
-								<% else %>
-									<%= link_to_function "更多新鲜事", "Iyxzone.Game.Feeder.moreFeeds(#{@game.id});", :class => "jl-more"%>
-								<% end %>
-              </div>
-						</div>
-          </div>
-        </div>
-      </div>
-    </div>
-</div>
-
-<%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @game, :recipient => nil, :with_comments => false} %>
-
-<div class="feed-box" id='comments'>
-  <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>
-</div>
-
 </div>
 
 <% unless @reply_to.blank? %>

@@ -20,6 +20,7 @@ protected
 
   def setup
     @poll = Poll.find(params[:poll_id])
+    require_verified @poll
     require_owner @poll.poster
   end
 

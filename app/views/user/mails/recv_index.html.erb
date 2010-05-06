@@ -47,7 +47,7 @@
 						</td>
             <td class="cont">
 							<%= mail_link mail %>
-              <p><%= truncate mail.content, 80 %></p>
+              <p><%= mail.content %></p>
             </td>
             <td class="end">
 							<%= facebox_confirm '', mail_url(mail, :type => 1), {:msg => '你确定要删除这个邮件吗?', :method => :delete}, {:class => 'icon-active'} %>

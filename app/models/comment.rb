@@ -8,7 +8,7 @@ class Comment < ActiveRecord::Base
 
 	has_many :notices, :as => 'producer', :dependent => :destroy
 
-  needs_verification
+  needs_verification :sensitive_columns => [:content]
 
   # escape html before convert emotion image, otherwise emotion would also be escaped
   escape_html :sanitize => :content
@@ -45,6 +45,8 @@ protected
     commentable = commentable_type.camelize.constantize.find(:first, :conditions => {:id => commentable_id})
     if commentable.blank?
       errors.add(:commentable_id, "不存在")
+    elsif commentable.respond_to? :verified and commentable.verified == 2
+      errors.add(:commentable_id, "已经被和谐了")
     elsif !poster_id.blank? and !commentable.is_commentable_by? poster
       errors.add(:commentable_id, "没有权限")
     end

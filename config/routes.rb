@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :help, :collection => {:about_us => :get, :app_info => :get, :contact_info => :get, :privacy_info => :get}
 
-  map.root :controller => 'sessions', :action => 'new' 
+  map.root :controller => 'user/home', :action => 'show' 
 
   map.signup '/signup', :controller => 'users', :action => 'new'
 
@@ -39,9 +39,10 @@ ActionController::Routing::Routes.draw do |map|
   map.invite '/invite', :controller => 'register', :action => 'invite'
 
   map.namespace :admin do |admin|
+		
+		admin.resources	:tasks
 
     admin.resources :news do |news|
-
 
       news.resources :pictures, :controller => 'news_pictures', :collection => {:update_multiple => :put, :edit_multiple => :get}
 
@@ -68,7 +69,9 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :sharings, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
     
     admin.resources :tags, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
-    
+
+    admin.resources :albums, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}   
+ 
     admin.resources :photos, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
     
     admin.resources :photo_tags, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
@@ -80,6 +83,8 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
+
+		users.resources :tasks
 		
 		users.resources	:tasks
 
@@ -272,6 +277,8 @@ ActionController::Routing::Routes.draw do |map|
     users.search_users '/search_users', :controller => 'search', :action => 'user'
 
     users.resources :news
+
+    users.resources :reports
 
     users.resources :guestbooks
 

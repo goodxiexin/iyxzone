@@ -39,6 +39,7 @@ protected
   def setup
     if ['new', 'create'].include? params[:action]
       @guild = Guild.find(params[:guild_id])
+      require_verified @guild
       require_owner @guild.president
     elsif ['edit', 'accept', 'decline'].include? params[:action]
       @invitation = Membership.find(params[:id])

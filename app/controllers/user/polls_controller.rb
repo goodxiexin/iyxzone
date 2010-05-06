@@ -3,19 +3,19 @@ class User::PollsController < UserBaseController
   layout 'app'
 
   def index
-    @polls = @user.polls.paginate :page => params[:page], :per_page => 10
+    @polls = @user.polls.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :answers]
   end
 
 	def hot
-    @polls = Poll.hot.paginate :page => params[:page], :per_page => 10
+    @polls = Poll.hot.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :answers]
 	end
 
   def recent
-    @polls = Poll.recent.paginate :page => params[:page], :per_page => 10
+    @polls = Poll.recent.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :answers]
 	end
 
   def participated
-    @polls = @user.participated_polls.paginate :page => params[:page], :per_page => 10
+    @polls = @user.participated_polls.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :answers]
   end
 
   def friends
@@ -23,7 +23,6 @@ class User::PollsController < UserBaseController
   end
 
   def show
-		@poll = Poll.find(params[:id])
     @random_polls = Poll.random :limit => 5, :except => [@poll]
     @user = @poll.poster
     @vote = @poll.votes.find_by_voter_id(current_user.id)
@@ -83,8 +82,12 @@ protected
     if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
+    elsif ['show'].include? params[:action]
+      @poll = Poll.find(params[:id], :include => [{:poster => :profile}, :votes, {:comments => [{:poster => :profile}, :commentable]}])
+      require_verified @poll
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @poll = Poll.find(params[:id])
+      require_verified @poll
       require_owner @poll.poster
     end
   end

@@ -1,0 +1,22 @@
+<% status = status_item %>
+<div class="feed-img-list" id='status_<%= status.id %>'>
+  <div class='feed-list eval-list'>
+    <div class='feed-img'>
+      <%= avatar status.poster, :class => 'imgbox01' %>
+    </div>
+    <div class='feed-header'>
+      <% if status.verified == 0 %>
+        <%= verify_link status %>
+        <%= unverify_link status %>
+      <% elsif status.verified == 1 %>
+        <%= unverify_link status %>
+      <% elsif status.verified == 2 %>
+        <%= verify_link status %>
+      <% end %>
+      <p><%= profile_link status.poster, :class => "shine"%> <%= ftime status.created_at %></p>
+    </div>
+    <div class='feeds'>
+      <p><%= status.content %></p>
+    </div>
+  </div>
+</div>

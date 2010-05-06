@@ -6,6 +6,14 @@ require 'app/mailer/event_mailer'
 class EventObserver < ActiveRecord::Observer
 
   def before_create event
+    # verify
+    if event.sensitive?
+      event.verified = 0
+    else
+      event.verified = 1
+    end
+
+    # inherit some attributes from character or guild
     if event.is_guild_event?
       g = event.guild
       event.game_id = g.game_id
@@ -27,20 +35,30 @@ class EventObserver < ActiveRecord::Observer
     event.participations.create(:participant_id => event.poster_id, :character_id => event.character_id, :status => Participation::Confirmed)
  
     # issue feeds
-    return if event.poster.application_setting.emit_event_feed == 0
-    recipients = [event.poster.profile, event.game]
-    recipients.concat event.poster.guilds
-    recipients.concat event.poster.friends.find_all{|f| f.application_setting.recv_event_feed == 1}
-    event.deliver_feeds :recipients => recipients
+    if event.poster.application_setting.emit_event_feed == 1
+      event.deliver_feeds
+    end
   end
 
-  def before_update event 
-    if event.title_changed? or event.description_changed? # only title or url changed must update column 'verified'
+  def before_update event
+    # verify 
+    if event.sensitive_columns_changed? and event.sensitive?
       event.verified = 0
     end
   end
   
   def after_update event
+    # verify
+    if event.verified_changed?
+      if event.verified_was == 2 and event.verified == 1
+        event.deliver_feeds
+      elsif (event.verified_was == 0 or event.verified_was == 1) and event.verified == 2
+        event.destroy_feeds # participation的feed就不删了，反正他们本来就没评论
+      end
+      return
+    end
+
+    # if time changes, deliver some notifications
     if event.time_changed?
       event.participants.each do |participant|
         participant.notifications.create(:category => Notification::EventChange, :data => "活动 #{event_link event} 时间改变了")
@@ -59,12 +77,18 @@ class EventObserver < ActiveRecord::Observer
     end
     
     # send notifications
-    (event.participants - [event.poster]).each do |p|
-      p.notifications.create(:category => Notification::EventCancel, :data => "活动 #{event.title} 取消了")
-      EventMailer.deliver_event_cancel event, p if p.mail_setting.cancel_event == 1
+    if event.verified != 2
+      (event.participants - [event.poster]).each do |p|
+        p.notifications.create(:category => Notification::EventCancel, :data => "活动 #{event.title} 取消了")
+        EventMailer.deliver_event_cancel event, p if p.mail_setting.cancel_event == 1
+      end
     end
 
     # destroy all participations
+    event.participations.each do |p|
+      p.destroy_feeds
+    end
+
     Participation.delete_all(:event_id => event.id)
   end
 

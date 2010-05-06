@@ -4,11 +4,11 @@ class User::Guilds::MembershipsController < UserBaseController
 
   def index
 		if params[:type].to_i == 0
-			@memberships = @guild.memberships.find(:all, :conditions => {:status => [Membership::Veteran, Membership::Member]})
+			@memberships = @guild.memberships.find(:all, :conditions => {:status => [Membership::Veteran, Membership::Member]}, :include => [:character, {:user => :profile}])
     elsif params[:type].to_i == 1
-      @memberships = @guild.invitations
+      @memberships = @guild.invitations.all(:include => [:character, {:user => :profile}])
     elsif params[:type].to_i == 2
-			@memberships = @guild.requests
+			@memberships = @guild.requests.all(:include => [:character, {:user => :profile}])
 		end
   end
 
@@ -47,9 +47,11 @@ protected
   def setup
     if ['index'].include? params[:action]
       @guild = Guild.find(params[:guild_id])
+      require_verified @guild
       @user = @guild.president
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @guild = Guild.find(params[:guild_id])
+      require_verified @guild
       require_owner @guild.president
       @membership = @guild.memberships.find(params[:id])
     end

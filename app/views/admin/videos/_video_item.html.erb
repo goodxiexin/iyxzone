@@ -1,0 +1,24 @@
+<% video = video_item %>
+<div class="feed-img-list" id='video_<%= video.id %>'>
+  <div class='feed-list eval-list'>
+    <div class='feed-img'>
+      <%= avatar video.poster, :class => 'imgbox01' %>
+    </div>
+    <div class='feed-header'>
+      <% if video.verified == 0 %>
+        <%= verify_link video %>
+        <%= unverify_link video %>
+      <% elsif video.verified == 1 %>
+        <%= unverify_link video %>
+      <% elsif video.verified == 2 %>
+        <%= verify_link video %>
+      <% end %>
+      <h3><%= video_link video %></h3>
+      <p><%= profile_link video.poster, :class => "shine"%> <%= ftime video.created_at %></p>
+    </div>
+    <div class='feeds'>
+      <p><%= video.description %></p>
+    </div>
+    <div class='feeds'><%= link_to "评论(#{video.comments_count})", video_url(video) %> | <%= link_to "分享(#{video.sharings_count})", video_url(video) %> | <%= link_to "赞(#{video.digs_count})", video_url(video) %></div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+          <% n = news %>
+          <div class="jl-cutline">
+            <h2><strong><%= news_link n, :class => "shine" %></strong></h2>
+            <span class="gray"><%= ftime n.created_at %></span>
+            <div class="con">
+              <% if n.news_type == 'text' %>
+                <%= news_content n, :length => 100, :omission => '...' %>
+              <% elsif n.news_type == 'picture' %>
+              <span class="share-album-cover">
+                <%= link_to (image_tag n.pictures.first.public_filename, :class => 'imgbox01', :size => '95x95'), news_url(n) %>
+                </span><br/>
+                <%= simple_format h n.data %>
+              <% else %>
+                <%= link_to (image_tag n.thumbnail_url, :width => 150, :class => 'imgbox01'), news_url(n) %><br/>
+                <%= simple_format h n.data %>
+              <% end %>
+            </div>
+            <strong class="gray"><span class="w-l">评论:<%= n.comments_count %></span><span class="w-l">|</span><span class="w-l">浏览:<%= n.viewings_count %></span><span class="w-l">|</span><span class="w-l">分享:<%= n.sharings_count %></span></strong>
+          </div>
+

@@ -1,0 +1,29 @@
+          <div class="page-foot s_clear">
+            <div class="foot-func">
+              <span class="w-l red">评论(<%= @news.comments_count %>)</span><span class="w-l">|</span>
+              <span class="w-l red">浏览(<%= @news.viewings_count %>)</span><span class="w-l">|</span>
+              <span class="photo-op-praise" ></span><%= text_dig_link @news, :class => 'red' %>
+            </div>
+            <div class='s_clear rows'>
+              <div class="feed-list">
+                <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @news, :recipient => nil} %>
+              </div>
+              <% unless @random_news.blank? %>
+              <div class="prompt-list-box">
+                <h5>随便看看</h5>
+                <div class="list-box box04">
+                  <ul class="lister02">
+                    <% @random_news.each do |news| %>
+                      <li><%= news_link news %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+              <% end %>
+            </div>
+          </div>
+
+<% unless @reply_to.blank? %>
+<%= onload_javascript_tag "Iyxzone.Comment.set('news', #{@news.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+<% end %>
+

@@ -20,7 +20,7 @@ module ApplicationHelper
 
 	def game_image(game_name, opts={})
     size = opts.delete(:size)
-		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.jpg")
+		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.gif")
       file_name = size.blank? ? "#{game_name}.gif" : "#{game_name}_#{size}.gif"
 			image_tag "/images/gamepic/#{file_name}", opts
 		else
@@ -110,7 +110,7 @@ module ApplicationHelper
 				image_tag "default_cover_#{size}.png", opts
 			end
     else
-      cover = album.cover || album.photos.first
+      cover = album.cover.nil? ? album.photos.first : album.cover
       image_tag cover.public_filename(size), opts
     end
   end
@@ -126,7 +126,7 @@ module ApplicationHelper
 				link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			end
     else
-      cover = album.cover || album.photos.first
+      cover = album.cover.nil? ? album.photos.first : album.cover
       link_to image_tag(cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
   end
@@ -352,8 +352,9 @@ module ApplicationHelper
 	end
 
   def sharing_reason sharing, opts={}
+    reason = sharing.reason.blank? ? '。。。哥笑而不语。。。' : sharing.reason
     class_name = opts[:class] || 'con'
-    simple_format "<span class='quote-start'></span>#{h sharing.reason}<span class='quote-end'></span>", :class => class_name
+    simple_format "<span class='quote-start'></span>#{h reason}<span class='quote-end'></span>", :class => class_name
   end
 
   def game_infos
@@ -415,5 +416,13 @@ module ApplicationHelper
 		app = Application.find(:first, :conditions => "name = '#{name}'")
 		app.about if !app.blank?
 	end
+
+  def verify_link resource, opts={}
+    link_to_remote '通过', :url => eval("verify_admin_#{resource.class.base_class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
+  end
+
+  def unverify_link resource, opts={}
+    link_to_remote '屏蔽', :url => eval("unverify_admin_#{resource.class.base_class.name.underscore}_url(resource)"), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default');", :method => :put, :html => {:class => 'right'}
+  end
 
 end

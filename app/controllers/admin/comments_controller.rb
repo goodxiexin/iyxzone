@@ -1,38 +1,34 @@
 class Admin::CommentsController < AdminBaseController
 
   def index
-    @comments = Comment.unverified.paginate :page => params[:page], :per_page => 20
+    case params[:type].to_i
+    when 0
+      @comments = Comment.unverified.paginate :page => params[:page], :per_page => 20
+    when 1
+      @comments = Comment.accepted.paginate :page => params[:page], :per_page => 20
+    when 2
+      @comments = Comment.rejected.paginate :page => params[:page], :per_page => 20
+    end
   end
 
-  def accept
-    @comments = Comment.accepted.paginate :page => params[:page], :per_page => 20
-  end
-  
-  def reject
-    @comments = Comment.rejected.paginate :page => params[:page], :per_page => 20
-  end
-  
-  def show
-  end
-  
-  def destroy
-  end
-
-  # accept
   def verify
     if @comment.verify
-      succ
+      render :update do |page|
+        page << "$('comment_#{@comment.id}').remove();"
+      end
     else
-      err
+      render_js_error
     end
   end
   
   # reject
   def unverify
     if @comment.unverify
-      succ
+      render :update do |page|
+        page << "$('comment_#{@comment.id}').remove();"
+      end
     else
-      err
+      render_js_error
     end
   end
   
@@ -40,7 +36,7 @@ class Admin::CommentsController < AdminBaseController
 protected
 
   def setup
-    if ["show", "destroy", "verify", "unverify"].include? params[:action]
+    if ["verify", "unverify"].include? params[:action]
       @comment = Comment.find(params[:id])
     end
   end

@@ -10,47 +10,15 @@
 	<div class="round_m"><div class="round_body">
 		<h1 class="app-friend">好友</h1>
     <div class="box02 canvas_int space">
-			<div class="tab tab01">
-				<div class="right"><%= link_to "激请好友加入" %></div>
-				<ul>
-					<li><span><%= link_to '好友管理', friends_url %></span></li>
-					<li class='hover'><span><%= link_to '寻找好友', friend_suggestions_url %></span></li>
-					<li><span><%= link_to '好友印象', friend_impressions_url %></span></li>
-				</ul>
-      </div>
+      <%= render :partial => 'user/friends/tab', :locals => {:hover => 1} %>
 			<div class="friend-box">
 				<div class="box02 appcontent01">
           <div class="piclist-rows cmt-space">
             <div class='d6-head'><strong class='gray'>你可能认识以下用户</strong></div>
             <table cellspacing='0' cellpadding='0'>
-            <% if @friend_suggestions.blank? %>
-              <tr><td><strong>没有推荐的人，最近网站用户比较少，哈哈</strong></td></tr>
-            <% else %>
               <% @friend_suggestions.each do |suggestion| %>
-              <% f = suggestion.suggested_friend %>
-              <tr>
-                <td>
-									<div class='imgwrap'>
-										<%= avatar f, :size => :medium, :class=>'imgbox01' %>
-									</div>
-									<div class='data jl-data'>
-										<p><%= profile_link f %></p>
-										<% f.characters.find(:all)[0..2].each { |character| %>
-											<p><%= character.game.name %>,
-											<%= character.server.name unless character.server.nil? %>的
-											<%= character.name %></p>
-											<% } %>
-										<p class="space">
-                      <% unless current_user == f %>
-											  <%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "friend-btn w-l" %>
-											  <%= link_to '', new_mail_url(:recipient_ids => [f.id]), :class => "msg-btn" %>
-                      <% end %>
-										</p>
-									</div>
-								</td>
-              </tr>
+                <%= render :partial => 'user_item', :locals => {:user => suggestion.suggested_friend, :characters => suggestion.suggested_friend.characters[0..2]} %>
               <% end %>
-            <% end %>
             </table>
             <div class="space s_clear">
               <%= will_paginate @friend_suggestions %>

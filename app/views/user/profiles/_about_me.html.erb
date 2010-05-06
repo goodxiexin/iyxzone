@@ -1,0 +1,14 @@
+<div class='multibox'>
+  <div class='tipbar space'>
+  <% if @user != current_user %>
+    <% if @profile.about_me.blank? %>
+      <span>这家伙很懒，什么都没说...</span>
+    <% else %>
+      <span><%= @profile.about_me %></span>
+    <% end %>
+  <% else %>
+    <%= in_place_text_area @profile, :about_me, '介绍下自己?', :param_name => 'profile[about_me]' %>
+  <% end %>
+  </div>
+</div>
+

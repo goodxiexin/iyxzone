@@ -1,0 +1,30 @@
+    <% poll= poll_item %>
+    <tr id='poll_<%= poll.id %>'>
+      <th class="img">
+        <div class="imgwrap"><%= avatar poll.poster, :class => 'imgbox01' %></div>
+        <p><%= profile_link poll.poster %></p>
+      </th>
+      <td class="vote-content">
+        <h5><%= poll_link poll %><span>  <%= time_ago_in_chinese poll.created_at %></span></h5>
+        <p><%= simple_format h poll.description %></p>
+        <div class="formcontent">
+          <% poll.answers.each_with_index do |a, i| %>
+          <div class="rows s_clear">
+            <div class="fldcb"><%= radio_button_tag '', '', false, :disabled => true%></div>
+            <div class="fldvalue"><label><%= (i+1) %>. <%= h a.description %></label></div>
+          </div>
+          <% end %>
+        </div>
+        <p><%= simple_format h poll.explanation %></p>
+      </td>
+      <td class="status">
+      <% if poll.verified == 0 %>
+        <%= verify_link poll %>
+        <%= unverify_link poll %>
+      <% elsif poll.verified == 1 %>
+        <%= unverify_link poll %>
+      <% elsif poll.verified == 2 %>
+        <%= verify_link poll %>
+      <% end %>
+    </td>
+    </tr>

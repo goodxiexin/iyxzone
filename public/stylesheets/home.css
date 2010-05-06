@@ -189,17 +189,18 @@ a:hover{color:#D63200;}
 .feed-img-list .feed-list .feed-header p{word-spacing:5px;}
 .feed-img-list .feed-list .feeds{padding:8px 10px;border-top:1px #E7F0E0 solid;word-spacing:5px;}
 
-.feed-box01{padding-left:27px;line-height:21px;}
+.feed-box01{padding-left:20px;line-height:21px;}
 .feed-box01 .page{margin-bottom:15px;line-height:18px;color:#7E7F80}
 .feed-box01 .feed-img-list{border:0;padding:0;margin-bottom:10px;position:relative;}
 .feed-box01 .feed-img-list .feed-list{padding-left:73px;}
 
 .mcAvatar{border:1px #BBD2AA solid;width:100px;height:112px;background:#fff;padding:5px;overflow:hidden;position:relative} 
 .mcAvatar a{display:block;width:110px;height:122px;position:absolute;left:0;top:0;background:url(../images/blank.gif) no-repeat 0 -500px;z-index:2}
+#leftsidebar .mcAvatar a{width:auto;height:auto;position:static;background:none;}
 .mcAvatar .picwrap{width:100%;height:100%;text-align:center;overflow:hidden}
 
 #leftsidebar .mcAvatar{margin:0 auto}
-#leftsidebar .avatarbox{padding:5px 0;border-bottom:1px #E7F0E0 solid;text-align:center}
+#leftsidebar .avatarbox{padding:5px 0;border-bottom:1px #E7F0E0 solid;}
 #leftsidebar .avatarbox span{color:#25700D}
 #leftsidebar .avatarbox a{color:#000}
 #leftsidebar .avatarbox a:hover{color:#D63200}
@@ -394,6 +395,7 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .inbox-box .index-list td{padding:12px 8px;border-bottom:1px #E7F0E0 solid;vertical-align:top;line-height:20px;}
 .inbox-box .index-list td h3 a{color:#25700D}
 .inbox-box .index-list td p{color:#7E7F80}
+.inbox-box .index-list td.cont p{width:380px;overflow:hidden;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 .inbox-box .index-list td a{color:#D63200}
 .inbox-box .index-list td a:hover{text-decoration:underline}
 
@@ -918,9 +920,9 @@ button.add-friend{background:url(../images/skin/skin2010.png) no-repeat -115px -
 #act-select .drop-wrap{width:300px;}
 
 /*操作菜单*/
-dl.menu-op{margin-left:13px}
+dl.menu-op{margin-left:13px;}
 dl.menu-op dt{color:#25700D;font-weight:700;padding-left:22px;height:16px;width:auto;line-height:16px;background-position:0 -176px;margin:10px 0 10px 3px;}
-dl.menu-op dd{margin:3px}
+dl.menu-op dd{margin:3px 6px}
 dl.menu-op dd a{color:#333}
 
 
@@ -1027,15 +1029,15 @@ h1.app-share{float:left}
 .share-album-cover img{vertical-align:middle;margin-top:12px;*margin-top:18px}
 
 /*每日十闻*/
-.news10-list{line-height:22px;margin:10px 15px}
+.news10-list .jl-cutline{line-height:22px;margin:10px 0}
 
 /*web分享 全屏顶栏*/
 /*iframe高度自适应*/
 .share-web-top{position:absolute;left:0;top:0;right:0;bottom:0;height:42px;*margin-top:-42px;*margin-bottom:10px;*position:relative;z-index:999}
-.share-web-con{position:absolute;left:0;top:42px;bottom:0;right:0;*height:100%;*position:relative;*top:0;_top:-10px;overflow:hidden;}
-.share-web-con iframe{width:100%;height:100%;overflow-y:auto;overflow-x:hidden;}
+.share-web-con{position:absolute;left:0;top:42px;bottom:0;right:0;*height:100%;*position:relative;*top:0;_top:-10px;overflow:hidden;z-index:1}
+.share-web-con iframe{width:100%;height:100%;overflow-y:auto;overflow-x:hidden;z-index:1}
 
-.share-web-top .cmt-box{width:385px}
+.share-web-top .cmt-box{width:385px;}
 #w-nav{margin-left:20px;}
 #w-nav li{line-height:42px;color:#e0ffbe;float:left;margin-right:10px}
 #w-nav a{color:#fff;cursor:pointer}
@@ -1051,8 +1053,7 @@ h1.app-share{float:left}
 #w-nav .praise{background:url(../images/skin/skin2010.png) no-repeat -117px -236px;width:83px;height:30px;line-height:30px;display:inline-block;text-align:right;_margin-top:5px}
 #w-nav .praise strong{color:#66a421;margin-right:15px;}
 #w-nav img{vertical-align:middle;border:1px solid #63a21d;background:#fff;padding:1px;margin:0 2px}
-/*#navextra .close{background:url(../images/icons/close.gif) no-repeat;width:19px;height:19px;display:inline-block;vertical-align:middle}
-*/
+
 /*z-box*/
 .z-box{width:350px;z-index:1000;position:absolute}
 .z-t span,.z-b span{display:block;height:10px;font-size:1px;filter:alpha(opacity=90);opacity:0.9;}
@@ -1259,6 +1260,11 @@ h1.app-share{float:left}
 .forum .list-box{margin-left:10px}
 .forum-pager{margin-top:10px}
 .forum-pager a{color:#666}
+
+.z-box .z-con .photolist-box{padding:10px;_padding:3px}
+.z-box .z-con .collection p{padding:0}
+.z-box .z-con .collection li{margin:5px 10px;width:80px}
+.z-box .z-con .collection li span{width:80px}
 
 /*帮助、关于我们等*/
 .info-nav{padding:5px 0;position:relative}

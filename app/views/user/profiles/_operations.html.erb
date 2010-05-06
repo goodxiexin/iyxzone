@@ -1,3 +1,4 @@
+<div class='avatarbox'>
 <% subject = get_subject @user %>
 <ul class='op s_clear'>
 <% if @user == current_user %>
@@ -18,3 +19,4 @@
   <li><%= facebox_link "<span class='i-avatar'></span>分享用户", new_sharing_url(:url => profile_url(@profile)), :width => 450 %></li>
 <% end %>
 </ul>
+</div>

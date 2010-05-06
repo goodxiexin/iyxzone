@@ -53,7 +53,6 @@ Object.extend(Iyxzone.Friend.Suggestor, {
 Object.extend(Iyxzone.Comrade.Suggestor, {
 
   newSuggestion: function(serverID, suggestionID, token){
-    // construct except parameters
     var url = 'friend_suggestions/new';
     var exceptIDs = [];
     var suggestions = $('server_' + serverID + '_suggestions').childElements();

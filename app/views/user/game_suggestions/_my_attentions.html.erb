@@ -1,0 +1,14 @@
+      <div class="multibox">
+        <div class="title">
+          <%= link_to "更多", interested_games_url(:uid => current_user.id) %>
+          <b>我关注</b>
+        </div>
+        <div class="chart-list chart-list01 menu-list">
+          <ul id='my_attentions'>
+            <% @interested_games.each_with_index do |g, i| %>
+              <li><%= game_link g %><span><%=g.sale_date%></span></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
