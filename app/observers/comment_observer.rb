@@ -276,7 +276,7 @@ class CommentObserver < ActiveRecord::Observer
     if comment.recently_unverified
       # 如果有相关的notice怎么办, 现在就忽略他
       comment.commentable.raw_decrement :comments_count
-    elsif comment.recenlty_verified
+    elsif comment.recently_verified_from_unverified
       comment.commentable.raw_increment :comments_count
     end
   end

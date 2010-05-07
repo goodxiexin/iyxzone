@@ -69,8 +69,7 @@ module NeedsVerify
     def unverify
       if self.verified == 0 or self.verified == 1
         self.verified = 2
-        puts "#{self.verified}"
-self.recently_unverified = true
+        self.recently_unverified = true
         save
       end
     end

@@ -239,11 +239,11 @@ class User < ActiveRecord::Base
   # events
   has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy
 
+  has_many :v_events, :class_name => 'Event', :foreign_key => 'poster_id'
+
   has_many :events, :foreign_key => 'poster_id', :order => 'start_time DESC', :conditions => ["end_time >= ? AND verified IN (0,1)", Time.now.to_s(:db)], :dependent => :destroy
 
 	with_options :order =>  'created_at DESC', :through => :participations, :source => :event, :uniq => true do |user|
-
-    user.has_many :v_events, :conditions => "participations.status IN (3,4,5)"
 
 		user.has_many :all_events, :conditions => "participations.status IN (3,4,5) AND verified IN (0,1)"
 
@@ -347,11 +347,11 @@ class User < ActiveRecord::Base
 	# guilds
 	has_many :memberships, :dependent => :destroy
 
+  has_many :v_guilds, :class_name => 'Guild', :foreign_key => 'president_id'
+
   has_many :guilds, :conditions => {:verified => [0,1]}, :foreign_key => 'president_id', :dependent => :destroy
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC', :uniq => true do |user|
-
-    user.has_many :v_guilds, :conditions => "memberships.status IN (3,4,5)"
 
     user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5) AND verified IN (0,1)"
 

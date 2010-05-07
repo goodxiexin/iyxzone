@@ -17,7 +17,7 @@
               <div class="rows s_clear">
                 <div class="fldid"><label>名字：</label></div>
                 <div class="fldvalue">
-                  <div class="textfield"><%= c.text_field :name, :onblur => "Iyxzone.Profile.Editor.isCharacterNameValid(#{character.id}, 0)" %></div>
+                  <div class="textfield"><%= c.text_field :name, :onblur => "Iyxzone.Profile.Editor.isCharacterNameValid(#{character.id}, 0)", :disabled => true %></div>
                 </div>
                 <span class='red' id='existing_characters_<%= character.id %>_name_error'></span>
               </div>

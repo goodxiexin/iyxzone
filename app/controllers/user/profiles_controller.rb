@@ -28,6 +28,8 @@ class User::ProfilesController < UserBaseController
 
     @viewings = @profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
 
+    @characters = @user.characters.all(:include => [:game])
+
     # wall messages
     @messages = @profile.comments.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
