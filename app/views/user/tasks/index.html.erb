@@ -9,7 +9,7 @@
 			<th> reward: <%= task.reward %> </th>
 			<th> 开始时间: <%= task.starts_at %> </th>
 			<th> 结束时间: <%= task.expires_at %> </th>
-			<th> <%= link_to "详细信息", task_path(task) %> </th> 
+			<th> <%= link_to "详细信息", user_task_path(task) %> </th> 
 		</tr>
 	<% end %>
 </table>

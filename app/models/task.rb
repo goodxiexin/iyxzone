@@ -8,8 +8,9 @@ class Task < ActiveRecord::Base
 		REWARDRESOURCE = ["gold"]
 		CATAGORY_SET = [1,2,3]
 		
-		key_in_TASKRESOURCE = Proc.new {|k,v| k.to_s.humanize.split(' ').any?{|x| TASKRESOURCE.include?(x.downcase)}}
+		@key_in_TASKRESOURCE = Proc.new {|k,v| k.to_s.humanize.split(' ').any?{|x| TASKRESOURCE.include?(x.downcase)}}
 	end
+
 	include TaskResource
 
 	serialize :prerequisite, Hash
@@ -27,7 +28,7 @@ class Task < ActiveRecord::Base
 
 
 	def can_be_select_by? user
-		false
+		true	
 	end
 
 	#奖励现在只能是gold
@@ -44,7 +45,7 @@ class Task < ActiveRecord::Base
 		(prerequisite[:userinfo] &&
 		  prerequisite[:userinfo].is_a?(Hash) &&	
 		   #prerequisite[:userinfo].all?{|k,v| k.to_s.humanize.split(' ').any?{|x| TASKRESOURCE.include?(x.downcase)}} )
-			 prerequisite[:userinfo].all?(&:key_in_TASKRESOURCE) )
+			 prerequisite[:userinfo].all?(&@key_in_TASKRESOURCE) )
 		errors.add(:prerequisite, "前置任务不对") unless !prerequisite[:pretask] || 
 		(prerequisite[:pretask] && 
 		  prerequisite[:pretask].is_a?(Hash) && 
@@ -58,7 +59,7 @@ class Task < ActiveRecord::Base
 		errors.add(:description, "字段不能为空") unless description.is_a?(Hash)
 		errors.add(:description, "标题不能为空") unless description[:title] 
 		errors.add(:description, "任务描述不能为空") unless description[:text]
-		errors.add(:description, "请添加任务图片") unless !description[:image] && description[:image].is_a?(Array)
+		errors.add(:description, "请添加任务图片") unless description[:image] && description[:image].is_a?(Array)
 	end
 
 	def is_regular?
