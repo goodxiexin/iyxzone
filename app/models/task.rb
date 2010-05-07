@@ -26,7 +26,9 @@ class Task < ActiveRecord::Base
 	validates_inclusion_of :catagory, :in => CATAGORY_SET
 
 
-	
+	def can_be_select_by? user
+		false
+	end
 
 	#奖励现在只能是gold
 	def reward_pattern

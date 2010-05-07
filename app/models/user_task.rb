@@ -16,15 +16,19 @@ class UserTask < ActiveRecord::Base
 	end
 
 	def is_doing?
-		return true if task.is_visible && is_started? &&  !is_expired?
+		return true if task.is_visible? && is_started? &&  !is_expired?
 	end
 
 	def is_started?
-		return true if starts_at < task.starts_at
+		return true if task.is_visible? && starts_at < task.starts_at
 	end
 
 	def is_expired?
-		return true if DateTime.now < expires_at
+		return true if task.is_visible? && DateTime.now < expires_at
+	end
+
+	def is_done?
+		return true if task.is_visible? && done_at
 	end
 
 
