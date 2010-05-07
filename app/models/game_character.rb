@@ -12,6 +12,10 @@ class GameCharacter < ActiveRecord::Base
     has_event? or has_guild?
   end
 
+	def name_with_game_and_server
+		"#{name}(#{game.name}-#{server.name})"
+	end
+
   acts_as_random
 
   acts_as_pinyin :name => 'pinyin'

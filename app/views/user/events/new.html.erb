@@ -40,7 +40,7 @@
             <div class='rows s_clear'>
               <div class='fldid'><label for='name'>游戏角色：</label></div>
               <div class='fldvalue'>
-                <%= collection_select :event, :character_id, current_user.characters, :id, :name, {:prompt => '---'} %>
+                <%= collection_select :event, :character_id, current_user.characters, :id, :name_with_game_and_server, {:prompt => '---'} %>
               </div>
             </div>
 						<% else %>
@@ -57,7 +57,7 @@
             <div class='rows s_clear'>
               <div class='fldid'><label for='name'>游戏角色：</label></div>
               <div class='fldvalue'>
-                <%= collection_select :event, :character_id, @characters, :id, :name, {:prompt => '---'} %>
+                <%= collection_select :event, :character_id, @characters, :id, :name_with_game_and_server, {:prompt => '---'} %>
               </div>
             </div>
 						<% end %>

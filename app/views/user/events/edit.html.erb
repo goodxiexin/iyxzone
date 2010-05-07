@@ -43,7 +43,7 @@
             <div class='rows s_clear'>
               <div class='fldid'><label for='name'>游戏角色：</label></div>
               <div class='fldvalue'>
-                <%= collection_select :event, :character_id, [@event.poster_character], :id, :name, {:prompt => '---'}, :disabled => true %>
+                <%= collection_select :event, :character_id, [@event.poster_character], :id, :name_with_game_and_server, {:prompt => '---'}, :disabled => true %>
               </div>
             </div>
             <div class="rows s_clear">
