@@ -604,7 +604,40 @@ var nicEditorInstance = bkClass.extend({
 	
 	nicCommand : function(cmd,args) {
 		document.execCommand(cmd,false,args);
-	}		
+	},
+
+  /**
+   * 插入标签内容, 仿照tinyMCE
+   * by liyushan
+   */
+  insertContent : function (content) {
+    var range = this.getRng();
+    var doc = window.document;
+    if (range.insertNode) {
+      content += "<span id='__caret'>_</span>";
+      if (range.startContainer == doc && range.endContainer == doc) {
+        doc.body.innerHTML = content;
+      }
+      else {
+        range.deleteContents();
+        range.insertNode(this.getRng().createContextualFragment(content));
+      }
+      temp = document.getElementById('__caret');
+      range = doc.createRange();
+      range.setStartBefore(temp);
+      range.setEndBefore(temp);
+     // this.getSel().removeAllRanges();
+      this.selRng(range, this.getSel());
+      temp.parentNode.removeChild(temp);  
+    }
+    else {
+      if (range.item) {
+        doc.execCommand('Delete', false, null);
+        range = this.getRng();
+      }
+      range.pasteHTML(content);
+    }
+  }
 });
 
 var nicEditorIFrameInstance = nicEditorInstance.extend({
@@ -1280,6 +1313,7 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
     }.closure(this));
     $BK('nicEdit-link-cancel').addEvent('click', function(){
       this.removePane();
+      this.ne.selectedInstance.elm.focus();
     }.closure(this));
   },
 	
@@ -1572,6 +1606,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
         this.src = $BK('image_url_field').value;
         this.removePane(); // 必须先removePane(), 然后selElm().parentTag('IMG')才能找到正确的tag
         this.submit();
+        this.ne.selectedInstance.elm.focus();
       }else if(this.currentTab == 'local_image'){
         $BK('upload_image_form').submit();
       }else if(this.currentTab == 'album_image'){
@@ -1581,10 +1616,12 @@ var nicImageButton = nicEditorAdvancedButton.extend({
           this.submit();
         }
         this.selectedPhotos = [];
+        this.ne.selectedInstance.elm.focus();
       }
     }.closure(this));
     $BK('image_cancel').addEvent('click', function(){
       this.removePane();
+      this.ne.selectedInstance.elm.focus();
     }.closure(this));
 	},
 	
@@ -1594,7 +1631,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 			alert("你必须插入一个图片的链接地址");
 			return false;
 		}
-
+    /*
 		if(!this.im) {
 			var tmp = 'javascript:nicImTemp();';
 			this.ne.nicCommand("insertImage",tmp);
@@ -1606,7 +1643,8 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 	//		,	alt : this.inputs['alt'].value,
 	//			align : this.inputs['align'].value
 			});
-		}
+		} */
+    this.ne.selectedInstance.insertContent("<img src='" + src +"' />");
 	},
 
   // 这个函数是服务器那边调用的，可以告诉这里什么时候上传结束
@@ -1625,6 +1663,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
         });
       }
       this.removePane();
+      this.ne.selectedInstance.elm.focus();
     } 
   }
 
@@ -1707,7 +1746,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
       a.addEvent('click', function(e){
         var url = bkLib.eventTarget(e).getAttribute('src');
         this.removePane();
-        if(!this.im){
+       /* if(!this.im){
           var tmp = 'javascript: void(0);';
           this.ne.nicCommand("insertImage", tmp);
           this.im = this.findElm('IMG','src',tmp);
@@ -1715,7 +1754,9 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
         if(this.im){
           this.im.setAttributes( {src: url});
           this.ne.nicCommand("Unselect",this.im);
-        }
+        } */
+        this.ne.selectedInstance.insertContent("<img src='" + url +"' />");
+        this.ne.selectedInstance.elm.focus();
         return false; // 如果没有，在IE6下会触发onbeforeunload
       }.closure(this));
       a.appendTo(div);
@@ -1781,7 +1822,7 @@ var nicVideoButton = nicEditorAdvancedButton.extend({
                           <div class='rows s_clear'> \
                               <div class='fldid'><label>连接地址：</label></div> \
                               <div class='fldvalue'> \
-                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='http://' id='video_url_field' /></div> \
+                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='' id='video_url_field' /></div> \
                               </div> \
                           </div> \
                       </div> \
@@ -1825,9 +1866,11 @@ var nicVideoButton = nicEditorAdvancedButton.extend({
    //   this.submit();
       this.removePane();
       this.submit();
+      this.ne.selectedInstance.elm.focus();
     }.closure(this));
     $BK('video_cancel').addEvent('click', function(){
       this.removePane();
+      this.ne.selectedInstance.elm.focus();
     }.closure(this));
 
   },
@@ -1845,13 +1888,12 @@ var nicVideoButton = nicEditorAdvancedButton.extend({
     if (end == "") {
       src = this.parseURL(src);
       if (src == "") {
-        this.removePane();
         alert('无法识别的资源格式');
-        return;
+        return false;
       }
     //  alert(src);
     }
-
+/*
 		if(!this.im) {
 			var tmp = 'javascript:nicImTemp();';
 			this.ne.nicCommand("insertImage",tmp);
@@ -1860,10 +1902,11 @@ var nicVideoButton = nicEditorAdvancedButton.extend({
 		if(this.im) {
 			this.im.setAttributes({
 				src : picUrl,
-				alt : src,
+				alt : src
 			});
       this.im.setStyle({'className':img_class_name});
-		}
+		} */
+    this.ne.selectedInstance.insertContent("<img src='" + picUrl + "' alt='"  + src + "' class='" + img_class_name + "' />");
   },
 
   checkValid : function(src) {
