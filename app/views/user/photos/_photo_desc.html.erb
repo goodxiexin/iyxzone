@@ -1,9 +1,9 @@
                   <div class="pic-desc s_clear">
                     <h4 class="box06">
-                    <% if @user == current_user %>
-                      <%= in_place_text_area @photo, :notation, '点击添加照片描述', :param_name => 'photo[notation]' %>
+                    <% if user == current_user %>
+                      <%= in_place_text_area photo, :notation, '点击添加照片描述', :param_name => 'photo[notation]' %>
                     <% else %>
-                      <%= simple_format h @photo.notation %>
+                      <%= simple_format h photo.notation %>
                     <% end %>
                     </h4>
                     <ul class="mark-list s_clear" id='photo_tags'>

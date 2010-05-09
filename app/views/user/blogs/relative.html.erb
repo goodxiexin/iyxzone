@@ -2,24 +2,22 @@
 <% content_for :html_description, "#{@user.login}的相关日志 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-	  <% if @user == current_user %>
-      <h1 class="app-log">日志</h1>
-  	<% else %>
-      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的日志"} %>
-	  <% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 2} %>
-      <div class="feed-box01">
-        <% if @blogs.total_entries != 0 %>
+<% convas_tag do %>
+	<% if @user == current_user %>
+    <h1 class="app-log">日志</h1>
+  <% else %>
+    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的日志"} %>
+	<% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 2} %>
+    <div class="feed-box01">
+      <% if @blogs.total_entries != 0 %>
         <div class="gray">共<%= @blogs.total_entries %>篇</div>
         <%= render :partial => 'blog_item2', :collection => @blogs %>
         <%= will_paginate @blogs %>
-        <% else %>
-          <div class='tip'><%= get_subject @user %>朋友都不写和<%= get_subject @user %>相关的日志</div>
-        <% end %>
-      </div>
+      <% else %>
+        <div class='tip'><%= get_subject @user %>朋友都不写和<%= get_subject @user %>相关的日志</div>
+      <% end %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

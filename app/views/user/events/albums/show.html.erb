@@ -6,9 +6,9 @@
   <div class="round_m"><div class="round_body">
     <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}活动照片"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'tab' %>
+      <%= render :partial => 'tab', :locals => {:user => @user} %>
       <div class="pic-box">
-        <%= render :partial => 'album_path' %>
+        <%= render :partial => 'album_path', :locals => {:user => @user} %>
         <% if @photos.total_entries != 0 %>
           <%= render :partial => 'user/albums/album_table' %>
         <% else %>
@@ -18,7 +18,7 @@
           <div class='tip'>还没有图片</div>
           <% end %>
         <% end %>
-        <%= render :partial => 'user/albums/album_desc' %>
+        <%= render :partial => 'user/albums/album_desc', :locals => {:user => @user, :album => @album} %>
         <%= render :partial => 'user/albums/album_func' %>
       </div>
     </div>

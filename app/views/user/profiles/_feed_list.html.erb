@@ -1,10 +1,10 @@
 <div class='multibox'>
   <div class='title'><b>新鲜事</b></div>
-  <% unless @feed_deliveries.blank? %>
+  <% unless feed_deliveries.blank? %>
   <div class='feed-box'>
     <div class="home-wrap">
       <div id ='feed_list'>
-        <% group_deliveries(@feed_deliveries).each do |time, deliveries| %> 
+        <% group_deliveries(feed_deliveries).each do |time, deliveries| %> 
           <% deliveries.each do |f| %>
             <%= render :partial => "user/profiles/#{f.feed_item.originator.class.to_s.underscore}_feed_delivery", :object => f, :locals => {:with_comments => true}  %>
           <% end %>
@@ -17,10 +17,10 @@
               <div class="round_l_b">
                 <div class="round_m">
                   <div class="round_body" id="more_feed">
-                    <% if @feed_deliveries.size < @first_fetch_size %>
+                    <% if feed_deliveries.size < first_fetch_size %>
                       <div class='jl-more'>没有更多了...</div>
                     <% else %>
-                      <%= link_to_function "更多新鲜事", "Iyxzone.Profile.Feeder.moreFeeds(#{@profile.id});", :class => "jl-more"%>
+                      <%= link_to_function "更多新鲜事", "Iyxzone.Profile.Feeder.moreFeeds(#{profile.id});", :class => "jl-more"%>
                     <% end %>
                   </div>
                 </div>

@@ -18,7 +18,7 @@
 					<div class='tip'>公会还没有图片</div>
 					<% end %>
         <% end %>
-        <%= render :partial => 'user/albums/album_desc' %>
+        <%= render :partial => 'user/albums/album_desc', :locals => {:album => @album, :user => @user} %>
 			</div>
       <%= render :partial => 'user/albums/album_func' %>
     </div>

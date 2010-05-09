@@ -1,6 +1,6 @@
       <div class="tab tab01">
         <div class="right">
-          <% if @user == current_user %>
+          <% if user == current_user %>
             <%= link_to "上传照片", new_event_photo_url(:album_id => @album.id) %>
           <% end %>
         </div>

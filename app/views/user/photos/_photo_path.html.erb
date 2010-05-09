@@ -1,11 +1,11 @@
               <div class="path-box">
                 <label>
-                  <% if @user == current_user %>
-                    <%= link_to "我的相册", personal_albums_url(:uid => @user.id) %>
+                  <% if user == current_user %>
+                    <%= link_to "我的相册", personal_albums_url(:uid => user.id) %>
                   <% else %>
-                    <%= link_to "#{@user.login}的相册", personal_albums_url(:uid => @user.id) %>
+                    <%= link_to "#{user.login}的相册", personal_albums_url(:uid => user.id) %>
                   <% end %>
                 </label>
-                <label><%= album_link @album %></label><span>查看照片</span>
+                <label><%= album_link album %></label><span>查看照片</span>
               </div>
 

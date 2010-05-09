@@ -436,4 +436,9 @@ module ApplicationHelper
     facebox_link "举报", new_report_url(:reportable_id => reportable.id, :reportable_type => reportable.type)
   end
 
+  def canvas_tag opts={}, &block
+    body_class = opts[:with_sidebar].blank? ? 'canvas_body' : 'canvas_body canvas_wrap s_clear'
+    concat "<div id='canvas' class='round_r_t'><div class='round_l_t'><div class='round_r_b'><div class='round_l_b'><div class='round_m'><div class='#{body_class}'>" + capture(&block) + "</div></div></div></div></div></div>"
+  end
+
 end

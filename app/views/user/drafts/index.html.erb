@@ -2,16 +2,15 @@
 <% content_for :html_description, "#{current_user.login}的日志草稿 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <h1 class="app-log">日志</h1>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'user/blogs/tab', :locals => {:user => current_user, :hover => 4} %>
-      <div class="appcontent05">
-        <div class="myblog">
-          <% if current_user.drafts_count == 0 %>
+<% canvas_tag do %>
+  <h1 class="app-log">日志</h1>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'user/blogs/tab', :locals => {:user => current_user, :hover => 4} %>
+    <div class="appcontent05">
+      <div class="myblog">
+        <% if current_user.drafts_count == 0 %>
           <h4 class='gray'>你还没有草稿</h4>
-          <% else %>
+        <% else %>
           <h4 class="gray">共<%= current_user.drafts_count %>篇草稿</h4>
           <div class="myblog-table">
             <table cellpadding="0">
@@ -19,9 +18,8 @@
             </table>
           </div>
           <%= will_paginate @blogs %>
-        </div>
         <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

@@ -2,25 +2,23 @@
   <%= javascript_include_merged :share %>
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <h1 class="app-share">分享</h1>
-    <%= render :partial => 'new_link_sharing' %>
-    <div class="box02 canvas_int rows">
-      <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
-      <div class="feed-box01">
-        <%= render :partial => 'category', :locals => {:user => current_user, :url_func => "recent_shares_url"} %>
-        <div class="feed-img-list rows">
-        <% if @shares.total_entries != 0 %>
-          <% @shares.each do |share| %>
-            <%= render :partial => "#{share.shareable_type.underscore}_share", :locals => {:share => share, :sharing => share.sharings.first, :is_mine => false} %>
-          <% end %>
-          <%= will_paginate @shares %>
-        <% else %>
-          <div class='tip'>最近大家都死了，没人分享东西</div>
+<% canvas_tag do %>
+  <h1 class="app-share">分享</h1>
+  <%= render :partial => 'new_link_sharing' %>
+  <div class="box02 canvas_int rows">
+    <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
+    <div class="feed-box01">
+      <%= render :partial => 'category', :locals => {:user => current_user, :url_func => "recent_shares_url"} %>
+      <div class="feed-img-list rows">
+      <% if @shares.total_entries != 0 %>
+        <% @shares.each do |share| %>
+          <%= render :partial => "#{share.shareable_type.underscore}_share", :locals => {:share => share, :sharing => share.sharings.first, :is_mine => false} %>
         <% end %>
-        </div>
+        <%= will_paginate @shares %>
+      <% else %>
+        <div class='tip'>最近大家都死了，没人分享东西</div>
+      <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>
