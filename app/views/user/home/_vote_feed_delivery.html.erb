@@ -1,7 +1,7 @@
 <% delivery = vote_feed_delivery %>
 <% vote = delivery.feed_item.originator %>
 
-<% render :layout => 'small_feed_delivery', :locals => {:delivery => delivery, :poster => vote.voter} do %>
+<% render :layout => 'user/home/small_feed_delivery', :locals => {:delivery => delivery, :poster => vote.voter} do %>
   <%= profile_link vote.voter %> 参与了投票 <%= poll_link vote.poll, :class => "shine" %>
 	<span class="gray"><%= ftime delivery.created_at %></span>
 <% end %>

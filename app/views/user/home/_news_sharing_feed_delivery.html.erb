@@ -2,7 +2,7 @@
 <% sharing = delivery.feed_item.originator %>
 <% news = sharing.shareable %>
 
-<% render :layout => 'feed_delivery', :locals => {:delivery => delivery, :poster => sharing.poster} do %>
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => sharing.poster} do %>
   <%= profile_link sharing.poster%> 分享了新闻 <%= news_link news, :class => 'shine'%>
   <p class="gray jl-con">
     <% if news.news_type == 'text' %>

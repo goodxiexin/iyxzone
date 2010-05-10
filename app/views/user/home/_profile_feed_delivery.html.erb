@@ -2,7 +2,7 @@
 <% profile = delivery.feed_item.originator %>
 <% modified = delivery.feed_item.data[:modified].map { |m| link_to m, edit_profile_url(profile), :class => "shine" }.join(',')%>
 
-<% render :layout => 'small_feed_delivery', :locals => {:delivery => delivery, :poster => profile.user} do %>
+<% render :layout => 'user/home/small_feed_delivery', :locals => {:delivery => delivery, :poster => profile.user} do %>
   <%= profile_link profile.user %> 更改了 <%= modified %>
 	<p class="gray"><%= ftime delivery.created_at %></p>
 <% end %>

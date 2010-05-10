@@ -29,6 +29,7 @@ Iyxzone.Poll = {
 Object.extend(Iyxzone.Poll.Builder, {
 
   validate: function(){
+    return true;
     var game_id = $('poll_game_id');
     if(game_id.value == ''){
       error('游戏类别不能为空');

@@ -10,32 +10,36 @@
 <% content_for :html_description, "#{@event.title}的照片 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@event.title}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}的照片"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'user/events/albums/tab' %>
+      <%= render :partial => 'user/events/albums/tab', :locals => {:user => @user} %>
       <div class="pic-box">
         <div class="img-container-main s_clear">
           <div class="img-container-wrap">
             <div class="img-container">
-              <%= render :partial => 'photo_path' %>
+              <%= render :partial => 'photo_path', :locals => {:event => @event} %>
               <div class="img-main">
                 <div class="imgwrap">
-                  <%= render :partial => 'photo_operations' %>
+                  <%= render :partial => 'user/photos/photo_operations', :locals => {:photo => @photo,
+                      :taggable => (@participation and @participation.is_authorized?),
+                      :editable => (@event.poster == current_user),
+                      :deleteable => (@event.poster == current_user),
+                      :shareable => true,
+                      :diggable => true
+                    } %>
                   <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
-                  <%= render :partial => 'user/photos/photo_desc' %> 
+                  <%= render :partial => 'user/photos/photo_desc', :locals => {:photo => @photo, :user => @user} %> 
                 </div>
               </div>
             </div>
           </div>
-          <%= render :partial => 'shared/photo_slide', :locals => {:album => @album, :photo => @photo} %>
+          <%= render :partial => 'user/photos/photo_slide', :locals => {:album => @album, :photo => @photo} %>
         </div>
       </div>
-      <%= render :partial => 'user/photos/photo_func' %>
+      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @photo, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @photo, :recipient => @photo.poster}, :reply_to => @reply_to} %>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>
 
 <% if @participation and @participation.is_authorized? %>
 <%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @event.participants.all(:include => :games) - [current_user]} %>

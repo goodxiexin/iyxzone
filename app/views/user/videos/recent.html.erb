@@ -6,27 +6,25 @@
 <% content_for :html_description, "#{current_user.login} - 最新视频 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <h1 class="app-video">视频</h1>
-    <div class="box02 canvas_int">
-      <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 0} %>
-      <div class='feed-box01'>
-        <div class="nav-link">
-          <ul class="s_clear">
-            <li><%= link_to "<span>人气最高</span>", hot_videos_url %></li>
-            <li class='hover'><%= link_to "<span>最新创建</span>", recent_videos_url %></li>
-          </ul>
-        </div>
-        <% if @videos.blank? %>
-          <div class='tip'>没有视频，你赶紧<%= link_to '弄一个', new_video_url %></div>
-        <% else %>
-          <div class='feed-img-list' id='videos'>
-            <%= render :partial => 'video_item2', :collection => @videos %>
-          </div>
-          <%= will_paginate @videos %>
-        <% end %>
+<% canvas_tag do %>
+  <h1 class="app-video">视频</h1>
+  <div class="box02 canvas_int">
+    <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 0} %>
+    <div class='feed-box01'>
+      <div class="nav-link">
+        <ul class="s_clear">
+          <li><%= link_to "<span>人气最高</span>", hot_videos_url %></li>
+          <li class='hover'><%= link_to "<span>最新创建</span>", recent_videos_url %></li>
+        </ul>
       </div>
+      <% if @videos.blank? %>
+        <div class='tip'>没有视频，你赶紧<%= link_to '弄一个', new_video_url %></div>
+      <% else %>
+        <div class='feed-img-list' id='videos'>
+          <%= render :partial => 'video_item2', :collection => @videos %>
+        </div>
+        <%= will_paginate @videos %>
+      <% end %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

@@ -36,7 +36,7 @@ protected
     # Future calls avoid the database because nil is not equal to false.
 		# login_from_upload_token is designed for Swfupload which bypasses session_id
     def current_user
-      @current_user ||= (login_from_session || login_from_basic_auth || login_from_cookie) unless @current_user == false
+      @current_user ||= (login_from_session || login_from_cookie) unless @current_user == false
     end
 
     # if current_user is admin

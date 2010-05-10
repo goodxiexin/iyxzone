@@ -13,37 +13,14 @@
     <div class="appcontent01">
 			<div class="cons-form formcontent">
         <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
-        <% form_for @video, :html => {:onsubmit => "Iyxzone.Video.Builder.update($('submit_btn'), this); return false;"} do |f| %>
-          <div class="rows s_clear">
-		    		<div class="fldid"><%= f.label "视频标题：" %></div>
-			  		<div class="fldvalue"><div class='textfield'><%= f.text_field 'title' %></div></div>
-  			  </div>
-				  <div class="rows s_clear">
-				    <div class="fldid"><%= f.label '连接地址：' %></div>
-				    <div class="fldvalue"><%= f.text_field 'video_url',:disabled => true, :id => 'video_url' %></div>
-			    </div>
-				  <div class="rows s_clear">
-      			<div class="fldid"><%= f.label '视频简介：' %></div>
-			    	<div class="fldvalue"><%= f.text_area 'description' %></div>
-		  		</div>
-		    	<div class="rows s_clear">
-				  	<div class='fldid'><%= f.label "游戏类别:" %></div>
-            <div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class=>"selector selector02" %></div>
-    			</div>
-		    	<div class="rows s_clear">
-				  	<div class='fldid'><%= f.label "浏览权限:"%></div>
-            <div class='fldvalue'><%= privilege_select_tag(:video, :class=> "selector selector02") %></div>
-    			</div>
-			    <div class='rows s_clear'>
-    				<div class="fldid">添加相关好友：</div>
-		    		<div class='fldvalue'>
-              <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video} %>
-    				</div>
-		  		</div>
-          <div class='rows s_clear'>
-						<div class='fldid'>&nbsp;</div>
-            <div class='fldvalue'><span class='button03'><span><button type='submit' id='submit_btn' class='confirm-button'>更新</button></span></span></div>
-          </div>
+        <% rows_form_for @video, :html => {:onsubmit => "Iyxzone.Video.Builder.update($('submit_btn'), this); return false;"} do |f| %>
+          <%= f.text_field 'title', :label => '视频标题' %>
+          <%= f.text_field 'video_url', :label => '连接地址', :id => 'video_url', :disabled => true %>
+          <%= f.text_area 'description', :label => '视频连接' %>
+          <%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :label => '游戏类别', :class => "selector selector02" %>
+          <%= f.select 'privilege', privilege_options, {}, :label => '浏览权限', :class => "selector selector02" %>
+          <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video, :title => '点名相关好友'} %>
+          <%= f.submit '保存' => {:id => 'submit_btn', :type => 'submit'} %>
         <% end %>
       </div>
     </div>

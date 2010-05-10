@@ -1,7 +1,7 @@
 <% delivery = participation_feed_delivery %>
 <% participation = delivery.feed_item.originator %>
 
-<% render :layout => 'small_feed_delivery', :locals => {:delivery => delivery, :poster => participation.participant} do %>
+<% render :layout => 'user/home/small_feed_delivery', :locals => {:delivery => delivery, :poster => participation.participant} do %>
   <%= profile_link participation.participant %> 参加了活动 <%= event_link participation.event, :class=>'shine'%>
 	<span class="gray"><%= ftime delivery.created_at %></span>
 <% end %>

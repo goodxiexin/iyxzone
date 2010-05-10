@@ -39,6 +39,7 @@ class User::GuildsController < UserBaseController
     @role = @guild.role_for current_user
 
     @album = @guild.album
+    @photos = @album.latest_photos
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize, :order => "created_at DESC")

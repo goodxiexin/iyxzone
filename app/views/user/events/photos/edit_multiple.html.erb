@@ -2,16 +2,12 @@
 <% content_for :html_description, "#{@event.title}的照片编辑 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@event.title}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}的照片"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'user/events/albums/tab' %>
+      <%= render :partial => 'user/events/albums/tab', :locals => {:user => @user} %>
       <div class="photo-box">
-        <div class='path-box'>
-          <label>活动"<%= event_link @event %>"</label>
-          <span>编辑照片</span>
-        </div>
+        <%= render :partial => 'photo_path', :locals => {:event => @event} %>
         <% form_tag update_multiple_event_photos_url(:album_id => @album.id), :method => :put, :onsubmit => "Iyxzone.disableButton($(edit_multiple_event_photos_btn),'请等待..');" do %>
         <% @photos.each do |p| %>
         <% fields_for 'photos[]', p do |f| %>        
@@ -45,5 +41,4 @@
       <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>

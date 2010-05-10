@@ -6,21 +6,10 @@
   <%= javascript_include_tag 'invitation' %>
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}活动邀请"} %>
     <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <div class="icon">
-          <%= link_to "邀请更多人", new_event_invitation_url(@event), :class => 'icon-add-table' %>
-        </div>
-        <ul>
-          <li><span><%= link_to "一定去的人", event_participations_url(@event, :type => 0) %></span></li>
-          <li><span><%= link_to "可能去的人", event_participations_url(@event, :type => 1) %></span></li>
-          <li><span><%= link_to "受邀请的人", event_participations_url(@event, :type => 2) %></span></li>
-          <li><span><%= link_to "请求加入的人", event_participations_url(@event, :type => 3) %></span></li>
-        </ul>
-      </div>
+      <%= render :partial => 'user/events/participations/tab' %>
       <div class="friend-box">
         <div class="appcontent01">
           <div class="path-box">
@@ -37,7 +26,7 @@
           <% if @characters.blank? %>
               你的好友没有可以参加该活动的游戏角色
           <% else %>
-            <div id='invitations'><%= render :partial => 'characters' %></div>
+            <div id='invitations'><%= render :partial => 'characters', :object => @characters %></div>
             <div class="rows s_clear">
               <span class="button"><span><%= button_to_function '确定', "Iyxzone.Invitation.Builder.submit(this, $('invitation_form'))" %></span></span>
             </div>
@@ -46,7 +35,7 @@
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>
+
 <% form_tag event_invitations_url(@event), :id => 'invitation_form' do %>
 <% end %>

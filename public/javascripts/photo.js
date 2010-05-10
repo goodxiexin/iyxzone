@@ -814,7 +814,7 @@ Iyxzone.Photo.Slide3 = Class.create({
     }
 
     // bind events to photo
-    this.updatePhotoInfo(this.idPos);
+    //this.updatePhotoInfo(this.idPos);
 
     this.setBtnEvents();
     this.changeBtn();

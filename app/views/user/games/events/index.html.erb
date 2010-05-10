@@ -2,8 +2,7 @@
 <% content_for :html_description, "#{@game.name}游戏活动 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@game.name}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <%= render :partial => 'user/games/game_header', :locals => {:text => "#{@game.name}的相关活动"} %>
     <div class="box02 canvas_int space">
 	    <div class="tab tab01">
@@ -28,5 +27,4 @@
         <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>

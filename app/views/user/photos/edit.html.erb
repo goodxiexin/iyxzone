@@ -1,36 +1,13 @@
-<p class="z-h s_clear">
-  <strong class='left'>编辑照片</strong>
-  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
-</p>
-
-<div class='z-con'>
+<% facebox_tag '编辑照片' do %>
   <div id='errors'></div>
-  <% form_remote_for :photo, :url => personal_photo_url(@photo, :at => params[:at]), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');" } do |f| %>
-  <div class='formcontent'>
-    <div class="rows s_clear">
-      <div class="fldid"><label for="name">照片描述：</label></div>
-      <div class="fldvalue"> 
-        <%= f.text_area 'notation' %>
-      </div>
+  <% rows_form_remote_for :photo, :url => personal_photo_url(@photo, :at => params[:at]), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');" } do |f| %>
+    <div class='formcontent'>
+      <%= f.text_area 'notation', :label => '照片描述' %>
+      <%= f.collection_select :photo, :album_id, current_user.albums, :id, :title, {}, :label => '所属相册', :class => 'selector selector02' %>
+      <%= f.rows :label => '设置为封面' do %>
+        <%= check_box_tag 'photo[cover]', 1, @photo.is_cover? %>
+      <% end %>
     </div>
-    <div class="rows s_clear">
-      <div class="fldid"><label for="name">所属相册：</label></div>
-      <div class="fldvalue"> 
-        <%= collection_select :photo, :album_id, current_user.albums, :id, :title %>
-      </div>
-    </div>
-    <div class="rows s_clear">
-      <div class="fldid"><label for="name">相册封面：</label></div>
-      <div class="fldvalue"> 
-        <%= check_box_tag 'photo[cover]', 1, @photo.is_cover? %>设置为封面
-      </div>
-    </div>
-  </div>
-  <div class="z-submit s_clear space">
-    <table class="center" cellpadding="0"><tr><td>
-      <span class="button"><span><button type="submit" id='edit_photo_submit'>完成</button></span></span>
-      <span class="button button-gray"><span><button type="button" onclick="facebox.close()">取消</button></span></span>
-    </td></tr></table>
-  </div>
+    <%= f.z_submit '完成' => {:id => 'edit_photo_submit', :type => 'submit'}, '取消' => {:onclick => 'facebox.close();'} %>
   <% end %>
-</div>
+<% end %>

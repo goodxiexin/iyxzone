@@ -239,7 +239,7 @@ input.gobtn,input.loginbtn,input.registbtn{display:inline-block;border:0;}
 .textfield{/*padding:0 5px;*/height:24px;line-height:24px;border:1px #bdd6ad solid;background:#fff;/*background:url(../images/skin/tf01.png) no-repeat;*/}
 .textfield input{margin:3px 0 0;width:100%;height:16px;color:#7E7F80;border:0;background:none}
 /*日历*/
-.calendar-field input{padding:0 5px;width:100px;height:24px;line-height:24px;border:1px #bdd6ad solid;color:#7E7F80;background:#fff;margin-right:3px}
+.calendar-field input{padding:0 5px;width:200px;height:24px;line-height:24px;border:1px #bdd6ad solid;color:#7E7F80;background:#fff;margin-right:3px}
 .calendar-field img{vertical-align:middle}
 
 .textarea{border:1px #E7F0E0 solid;background:#fff;width:350px;height:65px;}

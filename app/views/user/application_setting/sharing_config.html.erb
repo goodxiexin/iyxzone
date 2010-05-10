@@ -1,29 +1,9 @@
-<p class="z-h s_clear">
-  <strong class="left">分享设置</strong>
-  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
-</p>
-
-<div class='z-con'>
-<% form_remote_for :setting, :url => application_setting_url(@setting), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(sharing_config_btn),'请等待..');"} do |f| %>
-<div class='formcontent'>
-  <div class="rows s_clear">
-    <div class="fldid"><%= f.check_box 'recv_sharing_feed' %></div>
-    <div class="fldvalue">
-      <label for="name">看到别人的新鲜事</label>
+<% facebox_tag '分享设置' do %>
+  <% rows_form_remote_for :setting, :url => application_setting_url(@setting), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(photo_config_btn),'请等待..');"} do |f| %>
+    <div class='formcontent'>
+      <%= f.check_box 'recv_sharing_feed', :label => '看到别人的新鲜事' %>
+      <%= f.check_box 'emit_sharing_feed', :label => '让别人看到我的新鲜事' %>
     </div>
-  </div>
-  <div class="rows s_clear">
-    <div class="fldid"><%= f.check_box 'emit_sharing_feed' %></div>
-    <div class="fldvalue">
-      <label for="des">让别人看到我的新鲜事</label>
-    </div>
-  </div>
-</div>
-<div class="z-submit s_clear space">
-  <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit" id='sharing_config_btn'>完成</button></span></span>
-    <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
-  </td></tr></table>
-</div>
+    <%= f.z_submit '完成' => {:type => 'submit', :id => 'sharing_config_btn'}, '取消' => {:type => 'button', :onclick => 'facebox.close();'} %>
+  <% end %>
 <% end %>
-</div>

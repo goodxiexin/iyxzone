@@ -1,7 +1,7 @@
 <% delivery = status_feed_delivery %>
 <% status = delivery.feed_item.originator %>
 
-<% render :layout => 'feed_delivery', :locals => {:delivery => delivery, :poster => status.poster} do %>
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => status.poster} do %>
 	<%= profile_link status.poster, :class => "shine"  %> <span> 更新了状态</span>
   <div class="round02 round_r_t s-dialog">
     <div class="round_l_t">

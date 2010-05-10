@@ -1,11 +1,11 @@
 <div class="multibox">
   <div class="title">
-    <%= link_to '更多', game_events_url(@game) %>
+    <%= link_to '更多', game_events_url(game) %>
     <b>活动</b>
   </div>
   <div class="piclist-rows">
 	<table class="small" cellpadding="0">
-    <% @events.each do |event| %>
+    <% events.each do |event| %>
       <tr>
         <td>
           <div class="imgwrap">

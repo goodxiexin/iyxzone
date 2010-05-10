@@ -1,0 +1,17 @@
+              <div class="avatar">
+                <%= avatar_image topic.poster, :class => 'imgbox01', :size => 'large', :width => 76, :height => 85 %><br />
+                <%= link_to "<span class='icon-home'></span>个人主页", profile_url(topic.poster.profile), :popup => true %>
+                <% unless current_user.has_friend? topic.poster %>
+                <%= facebox_link "<span class='icon-invitation'></span>加为好友", new_friend_request_url(:friend_id => topic.poster_id) %>
+                <% end %>
+                <%= link_to "<span class='icon-read'></span>发站内信", new_mail_url(:recipient_ids => [topic.poster_id]) %>
+              </div>
+              <div class="feed-header jl-cutline">
+                <span class="right">楼主</span>
+                <h3><%= link_to "<b class='red'>#{h topic.poster.login}</b>", profile_url(topic.poster.profile) %> <%= ftime topic.created_at %></h3>
+              </div>
+              <div class="bd jl-cutline">
+                <p><%= topic.content %></p>
+              </div>
+              <div class="ft"><a href="javascript:void(0)">分享(<%= topic.sharings_count %>)</a> | <a href="javascript:void(0)">阅读(<%= topic.viewings_count %>)</a>  | <%= link_to_function "回复(#{ topic.posts_count })", "Iyxzone.Forum.Post.reply(null, '#{topic.poster.login}', #{topic.poster_id})" %></div>
+

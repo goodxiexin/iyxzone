@@ -1,24 +1,24 @@
       <div class="tab tab01">
         <div class="icon">
-        <% if @guild.president == current_user %>
-          <%= link_to "邀请新会员", new_guild_invitation_url(@guild), :class => "icon-add-table" %>
+        <% if guild.president == current_user %>
+          <%= link_to "邀请新会员", new_guild_invitation_url(guild), :class => "icon-add-table" %>
         <% end %>
         </div>
         <ul>
-        <% if params[:type].to_i == 0 %>
-          <li class='hover'><span><%= link_to "所有会员", guild_memberships_url(@guild, :type => 0) %></span></li>
+        <% if params[:type] == '0' %>
+          <li class='hover'><span><%= link_to "所有会员", guild_memberships_url(guild, :type => 0) %></span></li>
         <% else %>
-          <li><span><%= link_to "所有会员", guild_memberships_url(@guild, :type => 0) %></span></li>
+          <li><span><%= link_to "所有会员", guild_memberships_url(guild, :type => 0) %></span></li>
         <% end %>
-        <% if params[:type].to_i == 1 %>
-          <li class='hover'><span><%= link_to "被邀请", guild_memberships_url(@guild, :type => 1) %></span></li>
+        <% if params[:type] == '1' %>
+          <li class='hover'><span><%= link_to "被邀请", guild_memberships_url(guild, :type => 1) %></span></li>
         <% else %>
-          <li><span><%= link_to "被邀请", guild_memberships_url(@guild, :type => 1) %></span></li>
+          <li><span><%= link_to "被邀请", guild_memberships_url(guild, :type => 1) %></span></li>
         <% end %>
-        <% if params[:type].to_i == 2 %> 
-          <li class='hover'><span><%= link_to "请求加入", guild_memberships_url(@guild, :type => 2) %></span></li>
+        <% if params[:type] == '2' %> 
+          <li class='hover'><span><%= link_to "请求加入", guild_memberships_url(guild, :type => 2) %></span></li>
         <% else %>
-          <li><span><%= link_to "请求加入", guild_memberships_url(@guild, :type => 2) %></span></li>
+          <li><span><%= link_to "请求加入", guild_memberships_url(guild, :type => 2) %></span></li>
         <% end %>
         </ul>
       </div>

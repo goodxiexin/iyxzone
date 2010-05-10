@@ -1,45 +1,34 @@
   <div class='formComposer'>
     <div class="formcontent">
-      <% if @event.is_guild_event? %>
-      <div class="rows s_clear">
-        <div class='fldid'><strong>名称：</strong></div>
-        <div class='fldvalue'><span class='shine'><strong><%= h @event.title %></strong></span></div>
-      </div>
-      <div class="rows s_clear">
-        <div class='fldid'><strong>公会：</strong></div>
-        <div class='fldvalue'><span class='shine'><strong><%= guild_link @event.guild %></strong></span></div>
-      </div>
-      <% else %>
-      <div class="rows s_clear">
-        <div class='fldid'><strong>名称：</strong></div>
-        <div class='fldvalue'><span class='shine'><strong><%= h @event.title %></strong></span></div>
-      </div>
-      <% end %>      
-      <div class="rows s_clear">
-        <div class="fldid"><label for="server">游戏：</label></div>
-        <div class="fldvalue"><%= @event.game.name %></div>
-      </div>
-      <% unless @event.game.no_areas %>
-      <div class="rows s_clear">
-        <div class="fldid"><label for="server">游戏服务区：</label></div>
-        <div class="fldvalue"><%= @event.game_area.name %></div>
-      </div>
+      <% rows_s_clear '<strong>名称</strong>: ' do %>
+        <span class='shine'><strong><%= h event.title %></strong></span>
       <% end %>
-      <div class="rows s_clear">
-        <div class="fldid"><label for="server">游戏服务器：</label></div>
-        <div class="fldvalue"><%= @event.game_server.name %></div>
-      </div>
-      <div class="rows s_clear">
-        <div class="fldid"><label for="server">时间：</label></div>
-        <div class="fldvalue">从 <span class='shine'><%= ftime @event.start_time %></span> 到 <span class='shine'><%= ftime @event.end_time %></span> </div>
-      </div>
+      <% if event.is_guild_event? %>
+        <% rows_s_clear '<strong>工会</strong>: ' do %>
+          <span class='shine'><strong><%= guild_link event.guild %></strong></span>
+        <% end %>
+      <% end %>
+      <% rows_s_clear '游戏: ' do %>      
+        <%= event.game.name %>
+      <% end %>
+      <% unless event.game.no_areas %>
+        <% rows_s_clear '游戏服务区: ' do %>
+          <%= event.game_area.name %>
+        <% end %>
+      <% end %>
+      <% rows_s_clear '游戏服务区: ' do %>
+        <%= event.game_server.name %>
+      <%end %>
+      <% rows_s_clear '时间: ' do %>
+        从 <span class='shine'><%= ftime event.start_time %></span> 到 <span class='shine'><%= ftime event.end_time %></span>
+      <% end %>
     </div>
   </div>
 
   <div class="multibox">
     <div class="title"><b>描述</b></div>
     <div class="feed-box">
-      <%= simple_format h @event.description %>
+      <%= simple_format h event.description %>
     </div>
   </div>
 

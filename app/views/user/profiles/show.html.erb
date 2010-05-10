@@ -14,7 +14,9 @@
 <% end %>
 
 <% content_for :left do %>
-  <%= render :partial => 'user/profiles/avatar', :locals => {:user => @user} %>
+  <% mc_avatar do %>
+    <%= avatar_image @user, :size => :large, :width => '100px', :height => '112px' %>
+  <% end %>
 	<%= render :partial => 'user/profiles/operations', :locals => {:profile => @profile, :user => @user, :relationship => @relationship} %>
 	<%= render :partial => 'user/profiles/menu', :locals => {:profile => @profile, :user => @user, :relationship => @relationship} %>
 <% end %>
@@ -37,7 +39,7 @@
   <%= render :partial => 'user/profiles/about_me', :locals => {:user => @user, :profile => @profile} %>
   <%= render :partial => 'user/profiles/recent_albums', :locals => {:user => @user, :profile => @profile, :albums => @albums} %>
   <%= render :partial => 'user/profiles/recent_blogs', :locals => {:user => @user, :profile => @profile, :blogs => @blogs} %>
-  <%= render :partial => 'user/profiles/feed_list', :locals => {:feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
+  <%= render :partial => 'user/profiles/feed_list', :locals => {:profile => @profile, :feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
   <% if @profile.is_commentable_by? current_user %>
     <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>
   <% else %>

@@ -1,7 +1,7 @@
 <% delivery = video_feed_delivery %>
 <% video = delivery.feed_item.originator %>
 
-<% render :layout => 'feed_delivery', :locals => {:delivery => delivery, :poster => video.poster} do %>
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => video.poster} do %>
   <%= profile_link video.poster %> 分享了视频 <%= video_link video, :class => "shine"%>
   <p class="gray jl-con s_clear" id='video_<%= video.id %>'> <%= video_thumbnail video, :class=>'imgbox01' %></p>
 	<p class="gray"><%= ftime video.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('video', #{video.id}, null, #{video.poster_id})", :class => "gray" %></p>

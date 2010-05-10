@@ -1,7 +1,7 @@
 <% delivery = guild_feed_delivery %>
 <% guild = delivery.feed_item.originator %>
 
-<% render :layout => 'feed_delivery', :locals => {:delivery => delivery, :poster => guild.president} do %>
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => guild.president} do %>
   <%= profile_link guild.president %> 创建了公会 <%= guild_link guild, :class => "shine" %> 
 	<p class='gray jl-con'><strong>游戏分类：<%= guild.game.name %></strong></p>
 	<p class="gray"><%= ftime delivery.created_at %></p>

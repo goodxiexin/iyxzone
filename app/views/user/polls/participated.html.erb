@@ -3,28 +3,22 @@
 <% content_for :html_description, "#{@user.login}的已参加投票 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <% if @user==current_user %>
-      <h1 class="app-vote">投票</h1>
-    <% else %>
-      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的投票"} %>
-    <% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>   
-      <div class="vote-box">
-        <div class="nav-link">
-          <ul class="s_clear">
-            <li><%= link_to "<span>#{get_subject @user}发起的投票(#{@user.polls_count})</span>", polls_url(:uid => @user.id) %></li>
-            <li class='hover'><%= link_to "<span>#{get_subject @user}参与的投票(#{@user.participated_polls_count})</span>", participated_polls_url(:uid => @user.id) %></li>
-          </ul>
-        </div>
-        <% if @user.participated_polls_count != 0 %>
+<% canvas_tag do %>
+  <% if @user==current_user %>
+    <h1 class="app-vote">投票</h1>
+  <% else %>
+    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的投票"} %>
+  <% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>   
+    <div class="vote-box">
+      <%= render :partial => 'index_nav', :locals => {:user => @user, :hover => 1} %>
+      <% if @user.participated_polls_count != 0 %>
           <table class="vote-table" cellpadding="0"> 
             <%= render :partial => 'poll_item', :collection => @polls %>
           </table>
           <%= will_paginate @polls %>
-        <% else %>
+      <% else %>
           <div class='tip'>
           <% if @user == current_user %>
             你还没参加过别人的投票，你可以参加 <%= link_to '好友的投票', friends_polls_url %> 或者 <%= link_to '最近别人创建的投票', recent_polls_url %> 或者 <%= link_to '最近的热门投票', hot_polls_url %>
@@ -32,8 +26,7 @@
             <%= get_subject @user %> 没创建过任何投票
           <% end %>
           </div>
-        <% end %>
-      </div>
+      <% end %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

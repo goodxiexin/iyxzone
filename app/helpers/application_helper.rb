@@ -66,7 +66,11 @@ module ApplicationHelper
   def gender_select_tag obj
     select_tag "#{obj.class.to_s.underscore}[gender]", options_for_select([['男', 'male'], ['女', 'female']], obj.gender) 
   end
-  
+ 
+  def privilege_options
+    [['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]]
+  end
+ 
   def privilege_select_tag object, opts={}
     select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]], eval("@#{object}.privilege")), opts 
   end
@@ -81,6 +85,10 @@ module ApplicationHelper
 
   def poll_privilege_select_tag object
     select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友', 2]], eval("@#{object}.privilege"))
+  end
+
+  def event_privilege_options
+    [['所有人', 1], ['好友', 2]]
   end
 
   def event_privilege_select_tag object
@@ -439,6 +447,28 @@ module ApplicationHelper
   def canvas_tag opts={}, &block
     body_class = opts[:with_sidebar].blank? ? 'canvas_body' : 'canvas_body canvas_wrap s_clear'
     concat "<div id='canvas' class='round_r_t'><div class='round_l_t'><div class='round_r_b'><div class='round_l_b'><div class='round_m'><div class='#{body_class}'>" + capture(&block) + "</div></div></div></div></div></div>"
+  end
+
+  def facebox_tag title, &block
+    concat "<p class='z-h s_clear'><strong class='left'>#{title}</strong>#{link_to_function '', "facebox.close();", :class => "icon2-close right"}</p><div class='z-con'>#{capture(&block)}</div>"
+  end
+
+  def rows_form_for(*args, &block)
+    options = args.extract_options!.merge(:builder => RowsFormBuilder)
+    form_for(*(args + [options]), &block)
+  end
+
+  def rows_form_remote_for(*args, &block)
+    options = args.extract_options!.merge(:builder => RowsFormBuilder)
+    form_remote_for(*(args + [options]), &block)
+  end
+
+  def rows_s_clear title, opts={}, &block
+    concat "<div class='rows s_clear'><div class='fldid'>#{title}</div><div class='fldvalue'>#{capture(&block)}</div></div>"
+  end
+
+  def mc_avatar opts={}, &block
+    concat "<div class='mcAvatar'><div class='picwrap'><div class='middle'><div class='middle-center'><div class='center' id='avatar'>#{capture(&block)}</div></div></div></div></div>"
   end
 
 end

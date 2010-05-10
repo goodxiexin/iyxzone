@@ -2,22 +2,20 @@
 <% content_for :html_description, "#{current_user.login}的热门活动 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <h1 class="app-ploy">活动</h1>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 0} %> 
-      <div class="piclist-rows" id='events'>
-        <%= render :partial => 'hot_nav', :locals => {:hover => 0} %>
-        <% if @events.count != 0 %>
-          <table cellpadding="0" cellspacing="0">
-	          <%= render :partial => 'event_item', :collection => @events %>
-          </table>
-          <%= will_paginate @events %>
-        <% else %>
-          <div class='tip'>还没有人创建活动，你赶紧<%= link_to '创建一个', new_event_url %>吧</div>
-        <% end %>
-      </div>
+<% canvas_tag do %>
+  <h1 class="app-ploy">活动</h1>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 0} %> 
+    <div class="piclist-rows" id='events'>
+      <%= render :partial => 'hot_nav', :locals => {:hover => 0} %>
+      <% if @events.count != 0 %>
+        <table cellpadding="0" cellspacing="0">
+	        <%= render :partial => 'event_item', :collection => @events %>
+        </table>
+        <%= will_paginate @events %>
+      <% else %>
+        <div class='tip'>还没有人创建活动，你赶紧<%= link_to '创建一个', new_event_url %>吧</div>
+      <% end %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

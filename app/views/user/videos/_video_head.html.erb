@@ -1,11 +1,11 @@
         <div class='detail-video-head jl-cutline s_clear'>
-          <p class="left"><%= h @video.title %> <span class='gray'><%= ftime @video.created_at %></span></p>
+          <p class="left"><%= h video.title %> <span class='gray'><%= ftime video.created_at %></span></p>
           <p class="right">
-            <% if @user == current_user %>
-              <%= link_to "<span class='icon2-edit'></span>编辑", edit_video_url(@video), :class => 'red' %>
-              <%= facebox_confirm "<span class='icon2-close'></span>删除", video_url(@video), {:msg => '你确定要删除这个视频吗', :method => :delete}, :class=>'red w-l' %>
+            <% if user == current_user %>
+              <%= link_to "<span class='icon2-edit'></span>编辑", edit_video_url(video), :class => 'red' %>
+              <%= facebox_confirm "<span class='icon2-close'></span>删除", video_url(video), {:msg => '你确定要删除这个视频吗', :method => :delete}, :class=>'red w-l' %>
             <% end %>
-            <%= facebox_link "分享", new_sharing_url(:url => video_url(@video)), :width => 450, :class=>'share-btn'%>
+            <%= facebox_link "分享", new_sharing_url(:url => video_url(video)), :width => 450, :class=>'share-btn'%>
           </p>
         </div>
 

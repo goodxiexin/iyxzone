@@ -11,8 +11,11 @@ class User::CharactersController < UserBaseController
   end
 
   def index
-    cond = @guild.blank? ? {} : {:game_id => @guild.game_id, :server_id => @guild.game_server_id, :area_id => @guild.game_area_id}
-    @characters = current_user.characters.find(:all, :conditions => cond)
+    if @guild.blank?
+      @characters = current_user.characters
+    else
+      @characters = GameCharacter.all(:joins => "inner join memberships on memberships.status IN (3,4) and memberships.character_id = game_characters.id and memberships.guild_id = #{@guild.id}")
+    end
     render :json => @characters, :only => [:id, :name]  
   end
 

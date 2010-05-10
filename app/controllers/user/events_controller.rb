@@ -36,6 +36,7 @@ class User::EventsController < UserBaseController
 
     @user = @event.poster
     @album = @event.album
+    @photos = @album.latest_photos
 
 		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @participations = @event.participations_for current_user

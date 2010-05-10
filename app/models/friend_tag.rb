@@ -42,7 +42,6 @@ protected
   def taggable_is_valid
     return if taggable_id.blank? or taggable_type.blank?
 
-    taggable = taggable_type.constantize.find(:first, :conditions => {:id => taggable_id})
     if taggable.blank?
       errors.add(:taggable_id, "不存在")
     elsif taggable.verified == 2

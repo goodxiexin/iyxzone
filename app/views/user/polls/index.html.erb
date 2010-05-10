@@ -3,40 +3,33 @@
 <% content_for :html_description, "#{@user.login}的个人投票 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-	  <% if @user==current_user %>
-      <h1 class="app-vote">投票</h1>
-	  <% else %>
-	    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的投票"} %>
-    <% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>   
-      <div class="vote-box">
-        <div class="nav-link">
-          <ul class="s_clear">
-            <li class='hover'><%= link_to "<span>#{get_subject @user}发起的投票(#{@user.polls_count})</span>", polls_url(:uid => @user.id) %></li>
-            <li><%= link_to "<span>#{get_subject @user}参与的投票(#{@user.participated_polls_count})</span>", participated_polls_url(:uid => @user.id) %></li>
-          </ul>
-        </div>
-        <% if @user.polls_count != 0 %>
-          <table class="vote-table" cellpadding="0"> 
-            <%= render :partial => 'poll_item', :collection => @polls %>
-          </table>
-          <%= will_paginate @polls %>
-        <% else %>
-          <div class='tip'>
-          <% if @user == current_user %>
-            <div class ='tip'>你还没发起任何投票，赶快<%= link_to '创建一个', new_poll_url %>吧
+<% canvas_tag do %>
+	<% if @user==current_user %>
+    <h1 class="app-vote">投票</h1>
+	<% else %>
+	  <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的投票"} %>
+  <% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>   
+    <div class="vote-box">
+      <%= render :partial => 'index_nav', :locals => {:user => @ueser, :hover => 0} %>
+      <% if @user.polls_count != 0 %>
+        <table class="vote-table" cellpadding="0"> 
+          <%= render :partial => 'poll_item', :collection => @polls %>
+        </table>
+        <%= will_paginate @polls %>
+      <% else %>
+        <div class='tip'>
+        <% if @user == current_user %>
+          <div class ='tip'>你还没发起任何投票，赶快<%= link_to '创建一个', new_poll_url %>吧
 						<br/><br/>或者观看以下视频对这项功能进行进一步的了解，随时点击右上角<a href="#" class="icon-movie"></a>都可以观看此视频<br/><br/>
 						<%= application_show %>
-						</div>
-          <% else %>
-            <%= get_subject @user %> 没创建过任何投票
-          <% end %>
-          </div>
+					</div>
+        <% else %>
+          <%= get_subject @user %> 没创建过任何投票
         <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

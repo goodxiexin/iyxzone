@@ -4,7 +4,7 @@
 <% poster = album.poster %>
 <% type = photos.first.class.name.underscore %>
 
-<% render :layout => 'feed_delivery', :locals => {:delivery => delivery, :poster => poster} do %>
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => poster} do %>
       <%= profile_link poster %> 上传了 <%= photos.count %> 张照片 到相册 <%= album_link album, :class => "shine" %>
       <% if photos.count != 0 %>
       <div class="s_clear" id="roll-photo">

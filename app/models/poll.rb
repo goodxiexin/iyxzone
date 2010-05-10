@@ -79,6 +79,10 @@ class Poll < ActiveRecord::Base
     end
   end
 
+  def has_answers? answer_ids
+    (answers.map(&:id) & answer_ids) == answer_ids
+  end
+
 protected
 
   def game_is_valid

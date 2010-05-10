@@ -2,8 +2,7 @@
   <%= javascript_include_tag "event" %>
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}活动"} %>
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab' %>
@@ -28,5 +27,4 @@
           </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>

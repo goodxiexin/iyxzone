@@ -3,7 +3,7 @@
 <% character = item.originator %>
 <% user = character.user %>
 
-<% render :layout => 'small_feed_delivery', :locals => {:delivery => delivery, :poster => character.user} do %>
+<% render :layout => 'user/home/small_feed_delivery', :locals => {:delivery => delivery, :poster => character.user} do %>
   <% if item.data[:type] == 0 %>
     <%= profile_link user %> 创建了游戏角色 <%= link_to character.name, edit_profile_url(user.profile), :class => "shine" %>
   <% elsif item.data[:type] == 1 %>

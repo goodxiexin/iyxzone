@@ -3,7 +3,7 @@
 <% user = sharing.poster %>
 <% photo = sharing.shareable%>
 
-<% render :layout => 'feed_delivery', :locals => {:delivery => delivery, :poster => user} do %>
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => user} do %>
 	<%= profile_link user %> <span> 分享了 <%= profile_link photo.poster, :class => "shine" %> 的照片</span>
   <p class="gray jl-con"><%= photo_link photo, :class=>'imgbox01', :size => :large %></p>
 	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null);", :class => "gray"%></p>

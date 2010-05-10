@@ -1,9 +1,9 @@
 <div class='multibox'>
-  <div class='title'><%= link_to '更多', game_players_url(@game) %><b>游戏玩家</b></div>
+  <div class='title'><%= link_to '更多', game_players_url(game) %><b>游戏玩家</b></div>
   <div class='photolist-box gamer-list'>
-    <% unless @players.blank? %>
+    <% unless players.blank? %>
       <ul class='collection s_clear'>
-      <% @players.each do |character| %>
+      <% players.each do |character| %>
         <li>
           <div class="middle"><div class="middle-center"><div class="center"><%= avatar character.user, :class => "imgbox01" %></div></div></div>
           <p><strong><%= profile_link character.user %></strong></p>

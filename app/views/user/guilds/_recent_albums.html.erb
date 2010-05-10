@@ -1,8 +1,8 @@
   <div class="multibox">
-    <div class="title"><%= link_to '更多', guild_album_url(@album, :format => 'html') %><b>照片</b></div>
+    <div class="title"><%= link_to '更多', guild_album_url(album, :format => 'html') %><b>照片</b></div>
     <div class="photolist-big-box">
       <ul class="collection s_clear">
-      <% @album.photos[0..4].each do |p| %>
+      <% photos.each do |p| %>
         <li>
           <div class="middle"><div class="middle-center"><div class="center"><%= photo_link p, :class => 'imgbox02' %></a></div></div></div>
         </li>
