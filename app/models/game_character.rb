@@ -1,4 +1,6 @@
 class GameCharacter < ActiveRecord::Base
+	
+	serialize :data
 
   def has_event?
     !Event.first(:conditions => {:character_id => id}).blank?

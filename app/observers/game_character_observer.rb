@@ -24,6 +24,13 @@ class GameCharacterObserver < ActiveRecord::Observer
     elsif !character.playing and character.playing_was
       character.deliver_feeds :data => {:type => 2}
     end
+		
+		# if it is wow or wow tw characters, verifying need to be operated again
+		g1 = Game.find_by_name("魔兽世界")
+		g2 = Game.find_by_name("魔兽世界（台服）")
+		if (character.game_id == g1.id or character.game_id == g2.id) and !character.data.nil?
+			character.data = nil
+		end
   end
 
   def after_destroy character
