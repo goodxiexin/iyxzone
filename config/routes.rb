@@ -86,8 +86,6 @@ ActionController::Routing::Routes.draw do |map|
 
 		users.resources :tasks
 		
-		users.resources	:tasks
-
     users.resources :applications
 
     users.resources :links

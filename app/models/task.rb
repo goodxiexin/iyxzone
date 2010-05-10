@@ -1,12 +1,15 @@
 
 class Task < ActiveRecord::Base
 	module TaskResource
-		TASKRESOURCE = ["blog", "album", "photo", "friend", "character"] | ["poll", "event", "guild"]
 		INVISIBLE = 1
 		REGULAR = 2
 		EVERYDAY = 3
 		REWARDRESOURCE = ["gold"]
 		CATAGORY_SET = [1,2,3]
+		USER_COUNTER = ["characters", "games","game_attentions", "sharings", "notices", "notifications", "friends", "photos", "statuses", "friend_requests","guild_requests", "event_requests", "guild_invitations", "event_invitations", "poll_invitations", "poke_deliveries", "albums", "blogs", "videos","guilds", "participated_guilds", "polls", "participated_polls"]
+#TODO: merge USER_COUNTER & TASKRESOURCE
+		TASKRESOURCE = ["blog", "album", "photo", "friend", "character"] | ["poll", "event", "guild"] | USER_COUNTER | ["poke"]
+
 		
 		@key_in_TASKRESOURCE = Proc.new {|k,v| k.to_s.humanize.split(' ').any?{|x| TASKRESOURCE.include?(x.downcase)}}
 	end
@@ -26,8 +29,13 @@ class Task < ActiveRecord::Base
 	validate	:reward_pattern
 	validates_inclusion_of :catagory, :in => CATAGORY_SET
 
+#TODO: may optimized
+	def get_user_task user_id
+		UserTask.find(:user_id => user_id, :task_id => id)
+	end
 
-	def can_be_select_by? user
+#TODO
+	def can_be_select_by? user_id
 		true	
 	end
 

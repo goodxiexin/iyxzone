@@ -1,16 +1,41 @@
 class User::TasksController < ApplicationController
 
-#/user/tasks
+#/tasks
 	def index
 		@alltasks 		= Task.find(:all)
-		@visibleTask 	= @alltasks.collect &:is_visible?
+		@visibleTask 	= @alltasks.select &:is_visible?
 		@myTask				= UserTask.find_all_by_user_id(current_user.id, :include => :task)
-		@doneTask			= @myTask.collect 	&:is_done?		
+		@doneTask			= @myTask.select 	&:is_done?		
 	end
 
-# /user/tasks/id
+# /tasks/id
 	def show
-		@current_task = Task.find_by_id(:id)
+		@current_task = Task.find_by_id(params[:id])
+		@current_user_task ||= @current_task.get_user_task current_user.id
+	end
+
+# /tasks/id/edit
+	def edit
+		@current_task = Task.find_by_id(params[:id])
+		if current_user
+			if @current_task.can_be_select_by? current_user
+				#@user_task = UserTask.find(:user_id => current_user.id, :task_id => @current_task.id)
+				@user_task = UserTask.find(:first, :conditions => ["user_id =? AND task_id =?",current_user.id,  @current_task.id])
+				if @user_task
+					flash[:notice] = "你已经领取了该任务，赶快完成吧！" 
+				else
+					@user_task = UserTask.new(:user_id => current_user.id, :task_id => @current_task.id)
+					@user_task.init_achievement(current_user.id)
+					@user_task.starts_at = DateTime.now
+					@user_task.save
+				end
+			else
+				flash[:notice] = "你还没达到做该任务的条件！"
+			end
+		else
+			flash[:error] = "请重新登录！"
+		end
+		redirect_to tasks_url
 	end
 end
 

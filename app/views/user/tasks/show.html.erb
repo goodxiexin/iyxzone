@@ -1,12 +1,18 @@
 任务描述:
 <br />
 <ul>
-	<%= content_tag :li, "id: %{@current_task.id}" %>
-	<%= content_tag :li, "prerequirement: %{@current_task.prerequirement}" %>
-	<%= content_tag :li, "title: %{@current_task.description[:title]" %>
+	<%= content_tag :li, "id: #{@current_task.id}" %>
+	<%= content_tag :li, "prerequisite: #{@current_task.prerequisite}" %>
+	<%= content_tag :li, "requirement: #{@current_task.requirement}" %>
+	<%= content_tag :li, "title: #{@current_task.description[:title]}" %>
 	<% @current_task.description[:image].each do |img| %>
 		<%= content_tag :li, image_tag(img) %>
 	<% end %>
 </ul>
-
-<%= link_to("做这个任务！", edit_user_task_path(@current_task) ) if @current_task.can_be_select_by? current_user %>
+<% if current_user_task %>
+	<% if @current_task.can_be_select_by? current_user.id %>
+		<%= content_tag :h1, link_to("做这个任务！", edit_task_path(@current_task) )  %>
+	<% else %>
+		<%= content_tag :h1, "未达到领取任务的资格" %>
+	<% end %>
+<%= %>

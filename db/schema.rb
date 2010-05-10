@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100428031910) do
+ActiveRecord::Schema.define(:version => 20100506052501) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20100428031910) do
     t.integer  "comments_count", :default => 0
     t.datetime "uploaded_at"
     t.datetime "created_at"
+    t.integer  "verified"
   end
 
   add_index "albums", ["owner_id"], :name => "index_albums_on_owner_id"
@@ -636,6 +637,16 @@ ActiveRecord::Schema.define(:version => 20100428031910) do
 
   create_table "regions", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "reports", :force => true do |t|
+    t.integer  "reportable_id"
+    t.string   "reportable_type"
+    t.string   "content"
+    t.integer  "poster_id"
+    t.string   "category"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "role_users", :force => true do |t|
