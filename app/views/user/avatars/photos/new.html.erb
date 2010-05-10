@@ -1,27 +1,10 @@
-<p class="z-h s_clear">
-  <strong class="left">更改头像</strong>
-  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
-</p>
-
-<div class='z-con'>
-<% form_for :photo, :url => avatars_url(:at => params[:at]), :html => {:multipart => true, :target => 'upload_frame', :onsubmit=> "Iyxzone.disableButton($(new_photo_submit_btn),'请等待..');"} do |f| %>
-<div class='content'>
-  <div class="rows s_clear">
-    支持png, gif, jpg, 最大4MB
-  </div>
-  <div class="rows s_clear">
-    <div class="fldvalue">
+<% facebox_tag '更改头像' do %>
+  <% rows_form_for :photo, :url => avatars_url(:at => params[:at]), :html => {:multipart => true, :target => 'upload_frame', :onsubmit=> "Iyxzone.disableButton($('new_photo_submit_btn'), '请等待..');"} do |f| %>
+    <div class='content'>
+      <%= f.span '支持png, gif, jpg, 最大4MB' %>
       <%= f.file_field 'uploaded_data' %>
     </div>
-  </div>
-</div>
-<div class="z-submit s_clear space">
-  <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit" id='new_photo_submit_btn'>上传</button></span></span>
-    <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
-  </td></tr></table>
-</div>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'new_photo_submit_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+  <% end %>
 <% end %>
-
 <iframe id='upload_frame' name='upload_frame' style='width:1px;height:1px;border:0px' src="about:blank"></iframe>
-</div>

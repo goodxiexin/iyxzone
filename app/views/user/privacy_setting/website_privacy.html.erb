@@ -1,24 +1,8 @@
-
-<p class="z-h s_clear">
-  <strong class="left">隐私设置</strong>
-  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
-</p>
-
-<div class='z-con'>
-<% form_remote_for :setting, :url => privacy_setting_url(@setting, :format => 'js'), :method => :put do |f| %>
-<div class='formcontent'>
-  <div class="rows s_clear">
-    <div class="fldid"><label for="name">你想让谁看到：个人网页</label></div>
-    <div class="fldvalue"> 
-      <%= privacy_select_tag :setting, :website %>
+<% facebox_tag '隐私设置' do %>
+  <% rows_form_remote_for :setting, :url => privacy_setting_url(@setting, :format => 'js'), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($('website_privacy_btn'), '请等待..')"} do |f| %>
+    <div class='formcontent'>
+      <%= f.select 'website', privacy_options, {}, :label => '想让谁看到', :class => "selector selector02" %>
     </div>
-  </div>
-</div>
-<div class="z-submit s_clear space">
-   <div class="buttons">
-      <span class="button"><span><button type="submit">完成</button></span></span>
-      <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
-    </div>
-</div>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'website_privacy_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+  <% end %>
 <% end %>
-</div>

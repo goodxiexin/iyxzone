@@ -13,6 +13,6 @@
         <% end %>
       <% end %>
     </div>
-    <%= f.z_submit '完成' => {:type => 'submit', :id => 'album_confirm_destroy_btn'}, '取消' => {:onclick => "facebox.close();", :type => 'button', :style => 'gray'} %>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'album_confirm_destroy_btn'}, :cancel => {:text => '取消', :onclick => "facebox.close();"} %>
   <% end %>
 <% end %>

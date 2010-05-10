@@ -75,6 +75,10 @@ module ApplicationHelper
     select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]], eval("@#{object}.privilege")), opts 
   end
 
+  def privacy_options
+    [['所有人', 1],  ['好友及玩相同游戏的朋友', 2], ['好友', 3]]
+  end
+
   def privacy_select_tag obj, field
     select_tag "#{obj}[#{field}]", options_for_select([['所有人', 1],  ['好友及玩相同游戏的朋友', 2], ['好友', 3]], eval("@#{obj}.#{field}"))
   end

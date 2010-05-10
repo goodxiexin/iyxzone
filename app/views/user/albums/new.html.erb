@@ -7,6 +7,6 @@
       <%= f.collection_select :game_id, current_user.games, :id, :name, {:prompt => '---'}, :label => '游戏分类', :class => 'selector selector02' %>
       <%= f.select :privilege, privilege_options, {}, :label => '谁可以浏览', :class => 'selector selector02' %>
     </div>
-    <%= f.z_submit '完成' => {:type => 'submit', :id => 'new_album_submit'}, '取消' => {:style => 'gray', :onclick => 'facebox.close();'} %>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'new_album_submit'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
   <% end %>
 <% end %>
