@@ -3,9 +3,9 @@
 <% end %>
 
 <% canvas_tag do %>
-    <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}活动"} %>
+    <%= render :partial => 'user/events/event_header', :locals => {:event => @event, :text => "#{@event.title}活动"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'tab' %>
+      <%= render :partial => 'tab', :locals => {:event => @event} %>
       <div class='friend-box'>
         <div class='appcontent01'>
           <div class='friend-invite-head'>
@@ -17,11 +17,11 @@
           <div class='friend-list'>
             <div class='friend-list-body s_clear'>
 	          <% if params[:type].to_i == 2 %>
-              <%= render :partial => 'invitee_list', :object => @participations %>
+              <%= render :partial => 'invitee_list', :locals => {:invitee_list => @participations, :event => @event} %>
 	          <% elsif params[:type].to_i == 3 %>
-              <%= render :partial => 'request_list', :object => @participations %>
+              <%= render :partial => 'request_list', :locals => {:request_list => @participations, :event => @event} %>
 	          <% else %>
-              <%= render :partial => 'participation_list', :object => @participations %>
+              <%= render :partial => 'participation_list', :locals => {:participation_list => @participations, :event => @event} %>
 	          <% end %>
             </div>
           </div>

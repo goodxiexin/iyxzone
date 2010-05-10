@@ -7,11 +7,11 @@
 <% content_for :html_keywords, "#{@game.name}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% canvas_tag do %>
-    <%= render :partial => 'user/games/game_header', :locals => {:text => "#{@game.name}的角色"} %>
+    <%= render :partial => 'user/games/game_header', :locals => {:game => @game, :text => "#{@game.name}的角色"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'tab' %>
+      <%= render :partial => 'tab', :locals => {:game => @game} %>
       <div class="friend-box">
-        <%= render :partial => 'search_panel', :locals => {:search_type => 'character'} %>
+        <%= render :partial => 'search_panel', :locals => {:search_type => 'character', :game => @game} %>
 				<div class="box02 appcontent01">
           <div class="piclist-rows cmt-space">
             <table cellspacing='0' cellpadding='0'>

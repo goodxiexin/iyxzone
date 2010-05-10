@@ -1,7 +1,7 @@
 <% canvas_tag do %>
-    <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}的照片"} %>
+    <%= render :partial => 'user/events/event_header', :locals => {:event => @event, :text => "#{@event.title}的照片"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'user/events/albums/tab', :locals => {:user => @user} %>
+      <%= render :partial => 'user/events/albums/tab', :locals => {:user => @user, :event => @event, :album => @album} %>
       <div class="box02 appcontent02">
         <%= render :partial => 'photo_path', :locals => {:event => @event} %>
         <%= swfupload_head %>

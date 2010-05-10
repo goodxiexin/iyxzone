@@ -7,9 +7,9 @@
 <% end %>
 
 <% canvas_tag do %>
-    <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}活动邀请"} %>
+    <%= render :partial => 'user/events/event_header', :locals => {:event => @event, :text => "#{@event.title}活动邀请"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'user/events/participations/tab' %>
+      <%= render :partial => 'user/events/participations/tab', :locals => {:event => @event} %>
       <div class="friend-box">
         <div class="appcontent01">
           <div class="path-box">

@@ -11,7 +11,7 @@
 <% content_for :html_keywords, "#{@guild.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% canvas_tag do %>
-    <%= render :partial => "user/guilds/guild_header", :locals => {:text => "#{@guild.name}的照片"} %>
+    <%= render :partial => "user/guilds/guild_header", :locals => {:text => "#{@guild.name}的照片", :guild => @guild} %>
     <div class="box02 canvas_int space">
       <%= render :partial => 'user/guilds/albums/tab', :locals => {:guild => @guild, :album => @album} %>
       <div class="pic-box">

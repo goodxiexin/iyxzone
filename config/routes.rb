@@ -66,15 +66,9 @@ ActionController::Routing::Routes.draw do |map|
     
     admin.resources :polls, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
     
-    admin.resources :sharings, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
-    
-    admin.resources :tags, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
-
     admin.resources :albums, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}   
  
     admin.resources :photos, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
-    
-    admin.resources :photo_tags, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
 
     admin.resources :applications
 

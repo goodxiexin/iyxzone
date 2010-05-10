@@ -1,7 +1,7 @@
     <div class="friend-head space s_clear">
-      <span class="left"><%= game_image @game.name, :size => :medium, :class => 'imgbox01' %></span>
+      <span class="left"><%= game_image game.name, :size => :medium, :class => 'imgbox01' %></span>
       <p class="left">
         <strong><%= text %></strong><br />
-        <%= link_to '游戏主页', game_url(@game), :class=>'red'%>
+        <%= link_to '游戏主页', game_url(game), :class=>'red'%>
       </p>
     </div>

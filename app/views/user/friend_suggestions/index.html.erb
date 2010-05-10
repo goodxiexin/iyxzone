@@ -18,7 +18,7 @@
           <%= render :partial => 'search_by_email_msn' %>
 				</div>
         <% unless @friend_suggestions.blank? %>
-          <%= render :partial => 'friend_suggestion_box' %>
+          <%= render :partial => 'friend_suggestion_box', :locals => {:friend_suggestions => @friend_suggestions} %>
         <% end %>
 				<% @comrade_suggestions.each do |server_id, suggestions| %>
 					<% unless suggestions.count == 0 %>

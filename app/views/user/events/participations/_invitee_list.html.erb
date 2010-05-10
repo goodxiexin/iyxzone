@@ -1,6 +1,6 @@
 <% if invitee_list.count == 0 %>
-  <% if @event.poster == current_user %>
-    <div class='tip'>还没有人被邀请，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
+  <% if event.poster == current_user %>
+    <div class='tip'>还没有人被邀请，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(event) %></div>
   <% else %>
     <div class='tip'>还没有人被邀请参加这个活动</div>
   <% end %>

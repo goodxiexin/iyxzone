@@ -3,9 +3,9 @@
 <% content_for :html_keywords, "#{@event.title}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% canvas_tag do %>
-    <%= render :partial => 'user/events/event_header', :locals => {:text => "#{@event.title}的照片"} %>
+    <%= render :partial => 'user/events/event_header', :locals => {:event => @event, :text => "#{@event.title}的照片"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'user/events/albums/tab', :locals => {:user => @user} %>
+      <%= render :partial => 'user/events/albums/tab', :locals => {:user => @user, :album => @album, :event => @event} %>
       <div class="photo-box">
         <%= render :partial => 'photo_path', :locals => {:event => @event} %>
         <% form_tag update_multiple_event_photos_url(:album_id => @album.id), :method => :put, :onsubmit => "Iyxzone.disableButton($(edit_multiple_event_photos_btn),'请等待..');" do %>

@@ -7,7 +7,7 @@
 <% content_for :html_keywords, "#{@guild.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% canvas_tag do %>
-    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{@guild.name}会员管理"} %>
+    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{@guild.name}会员管理", :guild => @guild} %>
     <div class="box02 canvas_int space">
       <div class="rows s_clear"></div>
       <%= render :partial => 'tab', :locals => {:guild => @guild} %>
@@ -29,11 +29,11 @@
           <div class="friend-list">
             <div class="friend-list-body s_clear">
             <% if params[:type].to_i == 0 %>
-              <%= render :partial => 'members', :locals => {:memberships => @memberships} %>
+              <%= render :partial => 'members', :locals => {:memberships => @memberships, :guild => @guild} %>
             <% elsif params[:type].to_i == 1 %>
-              <%= render :partial => 'invitees', :locals => {:memberships => @memberships} %>
+              <%= render :partial => 'invitees', :locals => {:memberships => @memberships, :guild => @guild} %>
             <% elsif params[:type].to_i == 2 %>
-              <%= render :partial => 'requestors', :locals => {:memberships => @memberships} %>
+              <%= render :partial => 'requestors', :locals => {:memberships => @memberships, :guild => @guild} %>
 						<% end %>
             </div>
           </div>

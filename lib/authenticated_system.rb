@@ -108,9 +108,9 @@ protected
             redirect_to login_path
           end
         end
-        format.any do
-          request_http_basic_authentication 'Web Password'
-        end
+        #format.any do
+        #  request_http_basic_authentication 'Web Password'
+        #end
       end
     end
 

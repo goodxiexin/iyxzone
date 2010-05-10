@@ -12,7 +12,7 @@
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab' %>
 			<div class='friend-box'>
-        <%= render :partial => 'search_panel', :locals => {:search_type => 'character'} %>
+        <%= render :partial => 'search_panel', :locals => {:search_type => 'character', :games => @games, :areas => @areas, :servers => @servers} %>
         <div class="box02 appcontent01">
           <div class="piclist-rows cmt-space">
             <table cellspacing='0' cellpadding='0'>

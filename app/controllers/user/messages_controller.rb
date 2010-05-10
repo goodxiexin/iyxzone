@@ -3,7 +3,7 @@ class User::MessagesController < UserBaseController
   def index
     @messages = current_user.messages_with(@friend).paginate :page => params[:page], :per_page => 10
     @remote = {:update => "chat-history-#{@friend.id}", :url => {:action => 'index', :friend_id => @friend.id}}
-    render :partial => 'history' # 由于不会javascript下的分页，所以只能这样了
+    render :partial => 'history', :locals => {:messages => @messages, :remote => @remote} # 由于不会javascript下的分页，所以只能这样了
   end
 
   def read

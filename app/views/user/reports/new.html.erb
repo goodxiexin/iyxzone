@@ -4,8 +4,8 @@
     <%= hidden_field_tag "reportable_type", params[:reportable_type] %>
     <%= hidden_field_tag "reportable_id", params[:reportable_id] %>
     <div class='formcontent'>
-      <%= f.text_area 'content', :label => '描述' %>
-      <%= f.collection_select :category , Report::CATEGORY, 'to_s', "to_s", {:prompt => '---'}, :label => '分类', :class => 'selector selector02' %>
+      <%= f.text_area 'content', :label => '内容描述' %>
+      <%= f.collection_select :category , Report::CATEGORY, 'to_s', "to_s", {:prompt => '---'}, :label => '内容分类', :class => 'selector selector02' %>
     </div>
     <%= f.z_submit :submit => {:text => '完成', :id => 'report_submit_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
   <% end %>
