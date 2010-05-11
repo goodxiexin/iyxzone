@@ -1757,7 +1757,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
         } */
         this.ne.selectedInstance.insertContent("<img src='" + url +"' />");
         this.ne.selectedInstance.elm.focus();
-        return false; // 如果没有，在IE6下会触发onbeforeunload
+      //  return false; // 如果没有，在IE6下会触发onbeforeunload
       }.closure(this));
       a.appendTo(div);
     }

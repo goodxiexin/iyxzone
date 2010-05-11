@@ -6,6 +6,7 @@ Iyxzone.Blog = {
 
 
 Object.extend(Iyxzone.Blog.Builder, {
+  exitFlag: true,
 
   saved: false, 
 
@@ -17,6 +18,12 @@ Object.extend(Iyxzone.Blog.Builder, {
 
   contentChanged: function(){
     return (this.lastContent != this.editor.nicInstances[0].getContent());
+  },
+
+  setExitFlag: function(val) {
+    if (val == null)
+      val = false;
+    this.exitFlag = val;
   },
 
   validate: function(){
@@ -66,6 +73,7 @@ Object.extend(Iyxzone.Blog.Builder, {
         method: 'post',
         parameters: this.parameters
       });
+      this.setExitFlag();
     }else{
       Iyxzone.enableButtonThree(button, '发布');
     }
@@ -79,6 +87,7 @@ Object.extend(Iyxzone.Blog.Builder, {
         method: 'post',
         parameters: this.parameters
       });
+      this.setExitFlag();
     }else{
       Iyxzone.enableButtonThree(button, '保存为草稿');
     }
@@ -92,6 +101,7 @@ Object.extend(Iyxzone.Blog.Builder, {
         method: 'put',
         parameters: this.parameters
       });
+      this.setExitFlag();
     }else{
       Iyxzone.enableButtonThree(button, '修改');
     }
@@ -114,6 +124,7 @@ Object.extend(Iyxzone.Blog.Builder, {
           this.saved = true;
         }.bind(this)
       });
+      this.setExitFlag();
     }else{
       Iyxzone.enableButtonThree(button, '保存为草稿');
     }
@@ -128,12 +139,12 @@ Object.extend(Iyxzone.Blog.Builder, {
     // set last content and beforeunload
     this.lastContent = $(textAreaID).value;
     window.onbeforeunload = function(){ 
-      if(Iyxzone.Blog.Builder.contentChanged()){
+      if(this.exitFlag && Iyxzone.Blog.Builder.contentChanged()){
         return "你还没保存，你确定要离开?";
       }else{
-        return null;
+      //  return null;
       }
-    };
+    }.bind(this);
 
     // set tagger
     this.tagBuilder = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton);
