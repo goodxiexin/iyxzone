@@ -30,7 +30,7 @@
               <span id='event_guild_selector'>所属公会: <%= guild_link @event.guild %></span>
             <% end %>
           <% end %>
-          <%= f.collection_select :character_id, [@event.poster_character], :id, :name, {:prompt => '---'}, :label => '游戏角色', :disabled => true %>
+          <%= f.collection_select :character_id, [@event.poster_character], :id, :name_with_game_and_server, {:prompt => '---'}, :label => '游戏角色', :disabled => true %>
           <%= f.calendar_date_select :start_time, :label => '开始时间' %>
           <%= f.calendar_date_select :end_time, :label => '结束时间' %>
           <%= f.text_area :description, :label => '任务描述' %>

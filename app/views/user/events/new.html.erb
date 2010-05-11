@@ -25,7 +25,7 @@
               <%= check_box_tag 'is_guild_event', 1, false, :onchange => "Iyxzone.Event.Builder.checkGuild(this)" %>
               <span id='event_guild_selector' style="display:none">所属公会<%= collection_select :event, :guild_id, current_user.privileged_guilds, :id, :name, {:prompt => '---'}, {:onchange => "Iyxzone.Event.Builder.guildOnChange(this.value)"} %></span>
             <% end %>
-            <%= f.collection_select :character_id, current_user.characters, :id, :name, {:prompt => '---'}, :label => '游戏角色', :class => "selector selector02" %> 
+            <%= f.collection_select :character_id, current_user.characters, :id, :name_with_game_and_server, {:prompt => '---'}, :label => '游戏角色', :class => "selector selector02" %> 
 					<% else %>
             <%= hidden_field_tag 'event[guild_id]', @guild.id %>
             <% f.rows :label => '工会活动' do %>

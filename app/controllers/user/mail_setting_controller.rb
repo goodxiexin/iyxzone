@@ -7,8 +7,8 @@ class User::MailSettingController < UserBaseController
 
   def update
     if @setting.update_attributes(params[:setting])
-      flash.now[:notice] = "设置保存成功"
-      render :action => 'edit'
+      flash[:notice] = "设置保存成功"
+      redirect_to :action => 'edit'
     else
 			flash[:notice] = "设置保存失败"
       render :action => 'edit'

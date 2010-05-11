@@ -1,4 +1,6 @@
 class GameCharacter < ActiveRecord::Base
+	
+	serialize :data
 
   def has_event?
     !Event.first(:conditions => {:character_id => id}).blank?
@@ -11,6 +13,10 @@ class GameCharacter < ActiveRecord::Base
   def is_locked?
     has_event? or has_guild?
   end
+
+	def name_with_game_and_server
+		"#{name}(#{game.name}-#{server.name})"
+	end
 
   acts_as_random
 

@@ -46,7 +46,7 @@ class User::FriendsController < UserBaseController
     @friends = current_user.friends.search(params[:key])
     @friends = @friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
     @remote = {:update => 'friends', :url => {:action => 'search', :key => params[:key]}}
-    render :partial => 'friends', :locals => {:friends => @friends, :owner => current_user, :remote => @remote}
+    render :partial => 'friends', :locals => {:friends => @friends, :remote => @remote}
   end
 
 protected

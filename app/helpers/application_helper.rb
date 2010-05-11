@@ -71,32 +71,16 @@ module ApplicationHelper
     [['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]]
   end
  
-  def privilege_select_tag object, opts={}
-    select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]], eval("@#{object}.privilege")), opts 
-  end
-
   def privacy_options
     [['所有人', 1],  ['好友及玩相同游戏的朋友', 2], ['好友', 3]]
   end
 
-  def privacy_select_tag obj, field
-    select_tag "#{obj}[#{field}]", options_for_select([['所有人', 1],  ['好友及玩相同游戏的朋友', 2], ['好友', 3]], eval("@#{obj}.#{field}"))
-  end
-
-  def friend_privacy_select_tag obj, field
-    select_tag "#{obj}[#{field}]", options_for_select([['所有人', 1],  ['玩相同游戏的朋友', 2]], eval("@#{obj}.#{field}"))
-  end
-
-  def poll_privilege_select_tag object
-    select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友', 2]], eval("@#{object}.privilege"))
+  def friend_privacy_options
+    [['所有人', 1],  ['玩相同游戏的朋友', 2]]
   end
 
   def event_privilege_options
     [['所有人', 1], ['好友', 2]]
-  end
-
-  def event_privilege_select_tag object
-    poll_privilege_select_tag object
   end
 
   def get_subject(user)
@@ -459,6 +443,11 @@ module ApplicationHelper
 
   def rows_form_for(*args, &block)
     options = args.extract_options!.merge(:builder => RowsFormBuilder)
+    form_for(*(args + [options]), &block)
+  end
+
+  def config_form_for(*args, &block)
+    options = args.extract_options!.merge(:builder => ConfigFormBuilder)
     form_for(*(args + [options]), &block)
   end
 

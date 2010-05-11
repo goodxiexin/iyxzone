@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :help, :collection => {:about_us => :get, :app_info => :get, :contact_info => :get, :privacy_info => :get}
 
-  map.root :controller => 'user/home', :action => 'show' 
+  map.root :controller => 'user/home', :action => 'show', :format => 'html' 
 
   map.signup '/signup', :controller => 'users', :action => 'new'
 
