@@ -737,8 +737,10 @@ ActiveRecord::Schema.define(:version => 20100506052501) do
     t.text     "reward"
     t.text     "description"
     t.integer  "catagory",     :default => 1
-    t.datetime "starts_at",    :default => '2010-05-07 12:54:01'
+    t.datetime "starts_at",    :default => '2010-05-11 13:42:42'
     t.datetime "expires_at"
+    t.integer  "duration"
+    t.integer  "state"
   end
 
   create_table "topics", :force => true do |t|
@@ -760,6 +762,7 @@ ActiveRecord::Schema.define(:version => 20100506052501) do
     t.datetime "starts_at"
     t.datetime "done_at"
     t.text     "achievement"
+    t.text     "goal"
     t.datetime "expires_at"
   end
 

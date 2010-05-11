@@ -31,7 +31,7 @@ class Task < ActiveRecord::Base
 
 #TODO: may optimized
 	def get_user_task user_id
-		UserTask.find(:user_id => user_id, :task_id => id)
+		UserTask.first(:conditions => {:user_id => user_id, :task_id => id} )
 	end
 
 #TODO
