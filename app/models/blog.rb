@@ -1,6 +1,8 @@
 class Blog < ActiveRecord::Base
 
-  named_scope :by, lambda {|user| {:conditions => {:poster_id => user.id} } }
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids, :draft => false}}}
+
+  named_scope :prefetch, lambda {|opts| {:include => opts}}
 
   named_scope :for, lambda {|relationship|
     if relationship == 'owner'
@@ -20,9 +22,9 @@ class Blog < ActiveRecord::Base
 
   has_many :images, :class_name => 'BlogImage', :dependent => :delete_all
 
-  named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4 AND verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
+  named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
 
-  named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4 AND verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
+  named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
   
   needs_verification :sensitive_columns => [:content, :title]
   

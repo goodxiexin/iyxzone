@@ -99,6 +99,10 @@ class User < ActiveRecord::Base
 
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
+  def friend_ids
+    friendships.map(&:friend_id)
+  end
+
   def has_friend? user
     user_id = (user.is_a? Integer)? user : user.id
 		!friendships.find_by_friend_id(user_id).blank? 
@@ -191,11 +195,11 @@ class User < ActiveRecord::Base
   # blogs
   with_options :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id do |user|
     
-    user.has_many :blogs, :conditions => {:draft => false, :verified => [0, 1]}
+    user.has_many :blogs, :conditions => {:draft => false}
 
-    user.has_many :drafts, :class_name => 'Blog', :conditions => {:draft => true, :verified => [0,1]}
+    user.has_many :drafts, :class_name => 'Blog', :conditions => {:draft => true}
 
-    user.has_many :blogs_and_drafts, :class_name => 'Blog', :conditions => {:verified => [0,1]}
+    user.has_many :blogs_and_drafts, :class_name => 'Blog'
   
   end
 
@@ -210,10 +214,6 @@ class User < ActiveRecord::Base
     when 'stranger'
       blogs_count1    
     end
-  end
-
-  def friend_blogs
-    Blog.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = blogs.poster_id", :conditions => "privilege != 4 AND draft != 1 AND verified IN (0,1)", :order => 'created_at desc', :include => [{:poster => [:avatar, :profile]}, :share])
   end
 
   # videos
@@ -398,7 +398,7 @@ class User < ActiveRecord::Base
 	# tags
 	has_many :friend_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
-	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4 AND draft != 1 AND verified IN (0,1)"
+	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4 AND draft != 1"
 
 	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4 AND verified IN (0,1)"
 
