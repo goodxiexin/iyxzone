@@ -8,12 +8,12 @@
     </div>
     <div class='jl-list-con'>
       <div class="home-daily s_clear space">
-        <% if picture_news %>
+        <% if rich_news.news_type == 'picture' %>
           <div class="rich">
             <%= link_to (image_tag picture_news.pictures.first.public_filename, :height => 100, :width => 160), news_url(picture_news) %>
             <span><%= news_link picture_news %></span>
           </div>
-        <% elsif video_news %>
+        <% else %>
           <div class="rich">
             <%= link_to (image_tag picture_news.pictures.first.public_filename, :height => 100, :width => 160), news_url(video_news) %>
             <span><%= news_link video_news %></span>

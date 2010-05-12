@@ -20,7 +20,7 @@
             <%= render :partial => 'feed_category' %>
             <div class='feed-wrap'>
               <% if !@news_list.blank? or !@picture_news.blank?%>
-                <%= render :partial => 'daily_news', :locals => {:news_list => @news_list, :picture_news => @picture_news, :video_news => @video_news} %>
+                <%= render :partial => 'daily_news', :locals => {:news_list => @news_list, :rich_news => @rich_news} %>
               <% end %>
               <% if current_user.friends_count == 0 %>
                 <%= render :partial => 'welcome_info', :locals => {:friend_suggestions => @friend_suggestions} %>

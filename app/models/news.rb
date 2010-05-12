@@ -33,7 +33,13 @@ class News < ActiveRecord::Base
     news = self.all(:conditions => ['created_at > ? and created_at < ?', Time.now.beginning_of_day, Time.now.end_of_day], :order => 'created_at DESC', :limit => 4)
     picture_news = news.select {|n| n.news_type == 'picture'}.first
     video_news = news.select {|n| n.news_type == 'video'}.first
-    [news - [picture_news, video_news], picture_news, video_news]
+    if picture_news
+      [news - [picture_news], picture_news]
+    elsif video_news
+      [news - [video_news], video_news]
+    else
+      [news, nil]
+    end
   end
 
 end

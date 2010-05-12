@@ -18,7 +18,7 @@ class User::HomeController < UserBaseController
     
     @notices = current_user.notices.unread.all(:limit => 10, :include => [:producer])
 
-    @news_list, @picture_news, @video_news = News.daily
+    @news_list, @rich_news = News.daily
   end
 
   def feeds
