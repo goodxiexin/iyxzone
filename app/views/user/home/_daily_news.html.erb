@@ -11,13 +11,13 @@
         <% if rich_news %>
           <% if rich_news.news_type == 'picture' %>
           <div class="rich">
-            <%= link_to (image_tag picture_news.pictures.first.public_filename, :height => 100, :width => 160), news_url(picture_news) %>
-            <span><%= news_link picture_news %></span>
+            <%= link_to (image_tag rich_news.pictures.first.public_filename, :height => 100, :width => 160), news_url(rich_news) %>
+            <span><%= news_link rich_news %></span>
           </div>
           <% else %>
           <div class="rich">
-            <%= link_to (image_tag picture_news.pictures.first.public_filename, :height => 100, :width => 160), news_url(video_news) %>
-            <span><%= news_link video_news %></span>
+            <%= link_to (image_tag rich_news.thumbnail_url, :height => 100, :width => 160), news_url(rich_news) %>
+            <span><%= news_link rich_news %></span>
           </div>
           <% end %>
         <% end %>          
