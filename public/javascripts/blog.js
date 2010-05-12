@@ -48,7 +48,6 @@ Object.extend(Iyxzone.Blog.Builder, {
     this.parameters = $(form).serialize();
     var newTags = this.tagBuilder.getNewTags();
     var delTags = this.tagBuilder.getDelTags();
-alert(newTags);
     for(var i=0;i<newTags.length;i++){
       this.parameters += "&blog[new_friend_tags][]=" + newTags[i];
     }

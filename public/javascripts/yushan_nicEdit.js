@@ -1203,11 +1203,12 @@ var nicEditorSelect = bkClass.extend({
 });
 
 var nicEditorFontSizeSelect = nicEditorSelect.extend({
-sel : {2 : '10pt', 3 : '12pt', 4 : '14pt', 5 : '18pt', 6 : '24pt', 7 : '36pt'},
+  sel : {2 : '10pt', 3 : '12pt', 4 : '14pt', 5 : '18pt', 6 : '24pt', 7 : '36pt'},
+  
 	init : function() {
 		this.setDisplay('大小');
 		for(itm in this.sel) {
-			this.add(itm,'<font size="'+itm+'">'+this.sel[itm]+'</font>');
+			this.add(itm,'<font size="'+itm+'" style="line-height:' + itm * 10 + 'px">'+this.sel[itm]+'</font>');
 		}		
 	}
 });
@@ -1631,8 +1632,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 			alert("你必须插入一个图片的链接地址");
 			return false;
 		}
-    /*
-		if(!this.im) {
+		/*if(!this.im) {
 			var tmp = 'javascript:nicImTemp();';
 			this.ne.nicCommand("insertImage",tmp);
 			this.im = this.findElm('IMG','src',tmp);
@@ -1643,7 +1643,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 	//		,	alt : this.inputs['alt'].value,
 	//			align : this.inputs['align'].value
 			});
-		} */
+		}*/
     this.ne.selectedInstance.insertContent("<img src='" + src +"' />");
 	},
 
@@ -1746,7 +1746,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
       a.addEvent('click', function(e){
         var url = bkLib.eventTarget(e).getAttribute('src');
         this.removePane();
-       /* if(!this.im){
+        /*if(!this.im){
           var tmp = 'javascript: void(0);';
           this.ne.nicCommand("insertImage", tmp);
           this.im = this.findElm('IMG','src',tmp);
@@ -1754,7 +1754,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
         if(this.im){
           this.im.setAttributes( {src: url});
           this.ne.nicCommand("Unselect",this.im);
-        } */
+        }*/
         this.ne.selectedInstance.insertContent("<img src='" + url +"' />");
         this.ne.selectedInstance.elm.focus();
         return false; // 如果没有，在IE6下会触发onbeforeunload
