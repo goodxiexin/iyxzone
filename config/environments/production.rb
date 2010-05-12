@@ -1,6 +1,7 @@
 # Settings specified here will take precedence over those in config/environment.rb
 SITE_URL = "http://www.17gaming.com/"
 SITE_MAIL = "system@17gaming.com"
+SESSION_DURATION = 1.hour
 
 # The production environment is meant for finished, "live" apps.
 # Code is not reloaded between requests
