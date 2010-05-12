@@ -80,7 +80,7 @@ module UserAuthentication
     end
     
     def remember_me
-      remember_me_for 2.weeks
+      remember_me_for REMEMBER_DURATION
     end
 
     def remember_me_for time
