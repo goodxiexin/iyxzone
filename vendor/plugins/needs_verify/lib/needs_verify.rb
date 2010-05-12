@@ -21,6 +21,8 @@ module NeedsVerify
       # 举报
       has_many :reports, :as => 'reportable'
 
+      named_scope :nonblocked, :conditions => {:verified => [0,1]}, :order => "created_at DESC"
+
       named_scope :unverified, :conditions => {:verified => 0}, :order => "created_at DESC"
 
       named_scope :accepted, :conditions => {:verified => 1}, :order => "created_at DESC"
