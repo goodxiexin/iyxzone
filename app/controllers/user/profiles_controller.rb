@@ -4,9 +4,9 @@ class User::ProfilesController < UserBaseController
 
   increment_viewing 'profile', 'id', :only => [:show]
 
-	FirstFetchSize = 5
+	FirstFetchSize = 10
 
-	FetchSize = 5
+	FetchSize = 10
 
   def show
     @relationship = @user.relationship_with current_user

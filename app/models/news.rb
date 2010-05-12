@@ -1,4 +1,14 @@
 class News < ActiveRecord::Base
+
+  def self.daily 
+    news = self.all(:limit => 4)#conditions => ['created_at > ? and created_at < ?', Time.now.beginning_of_day, Time.now.end_of_day], :order => 'created_at DESC', :limit => 5)
+    picture_news = news.select {|n| n.news_type == 'picture'}.first
+    [news - [picture_news], picture_news]
+  end
+
+  named_scope :limit, lambda {|size| {:limit => size}}
+
+  named_scope :today, :conditions => ['created_at > ? and created_at < ?', Time.now.beginning_of_day, Time.now.end_of_day], :order => 'created_at DESC'
   
   has_many :pictures, :class_name => 'NewsPicture' # only valid for picture news
 

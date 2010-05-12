@@ -587,8 +587,9 @@ a.msg-btn{background-position:-118px -186px}
 .im-bar{width:159px;color:#666}
 .im-bar .r-m{background-position:0 -53px;padding:15px 10px}
 	.im-title{line-height:20px}
+	.im-title strong{width:70px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 		.im-state{background-position:0 -27px;width:30px;height:18px;position:relative;z-index:2}
-		.im-state .selector01 .drop-wrap {width:55px;}
+		.im-state .selector01 .drop-wrap {width:55px;left:-100%;}
 		.im-state .selector01 dl dd a{padding:0}
 		.im-state .selector01 dd a:hover{background:#f8fef5;color:#25700d;}
 		.im-online,.im-busy,.im-leave,.im-hide{width:18px;height:18px;display:inline-block;vertical-align:middle}

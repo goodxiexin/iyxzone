@@ -2,11 +2,7 @@
   <div class='multibox'>
     <div class='title'><b>新鲜事</b></div>
     <div class="feed-wrap" id='feed_list'>
-      <% group_deliveries(feed_deliveries).each do |time, deliveries| %> 
-        <% deliveries.each do |f| %>
-          <%= render :partial => "user/home/#{f.feed_item.originator.class.base_class.name.underscore}_feed_delivery", :object => f, :locals => {:with_comments => false}%>
-        <% end %>
-      <% end %>
+      <%= render :partial => 'group_deliveries', :locals => {:feed_deliveries => feed_deliveries} %>
     </div>
     <div class="s_clear"></div>
       <div class="round04 round_r_t jl-read-more space s_clear">
