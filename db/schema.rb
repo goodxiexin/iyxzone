@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100512053511) do
+ActiveRecord::Schema.define(:version => 20100512071036) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -751,8 +751,6 @@ ActiveRecord::Schema.define(:version => 20100512053511) do
     t.string   "gender",                                   :default => "male"
     t.string   "crypted_password",           :limit => 40
     t.string   "salt",                       :limit => 40
-    t.string   "remember_token"
-    t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.datetime "activated_at"
     t.string   "password_reset_code"
