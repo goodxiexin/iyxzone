@@ -6,8 +6,9 @@
 <meta name="description" content="<%= (html_description = yield :html_description) ? html_description : '16Gaming.com (一起游戏网络)愿做网络游戏玩家的精神家园。在这里，您能找到曾经一起战斗的游戏网友，结交到新的游戏战友，并一起分享，一起成长，一起快乐。' %>">
 <meta name="keywords" content="<%= (html_keywords = yield :html_keywords) ? html_keywords : '17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区' %>">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+<link rel="SHORTCUT ICON" href="/favicon.ico" type="image/x-icon" />
   <%= stylesheet_link_tag 'common' %>
+  <%= stylesheet_link_tag 'home' %>
   <%= stylesheet_link_tag 'welcome' %>
   <%= javascript_include_tag :defaults %>
 	<%= javascript_include_tag 'swfobject' %>
@@ -27,101 +28,94 @@
 	</script>
 </head>
 
-<body class="body_bg01">
+<body>
 	<div class="welcome-box">
 		<div id="navbar">
-			<div id='navwrap'>
-				<div id='navmid'>
+			<div id="navwrap">
+				<div id="navmid">
 					<a href="#" class="logo-top logo-v2 png" title="一起游戏"></a>
 					<p class="top_link right">
-					<%= link_to_function "设为主页", "Iyxzone.addToHomepage()" %> |
-					<%= link_to_function "加入收藏", "Iyxzone.addToBookmark()" %> |
-					<%= link_to '关于我们', about_us_help_url %>
+						<%= link_to_function "设为主页", "Iyxzone.addToHomepage()" %> |
+						<%= link_to_function "加入收藏", "Iyxzone.addToBookmark()" %> |
+						<%= link_to '关于我们', about_us_help_url %>
 					</p>
 				</div>
 			</div>
-    </div>
-    <div class="welcome">
-			<div class="login-box">
-        <div class="r-m">
-					<% flash.each do |key, msg| %>
-						<div class="<%=key%>-msg" id="notice_<%=key%>">
-							<span class="icon-<%= key %>"></span>
-							<%= msg %>
-						</div>
-						<script type="text/javascript">
-							setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
-						</script>
-					<% end %>
-        <% form_tag sessions_url do %>
-					<div class="rows">
-						<div class="fldid"><%= label_tag 'email', '电子邮箱：' %></div>
-            <div class="fldvalue">
-						  <div class="textfield"><%= text_field_tag 'email', nil %></div>
-            </div>
-          </div>
-          <div class="rows">
-						<div class="fldid"><%= label_tag 'password', '密码：' %></div>
-            <div class="fldvalue">
-							<div class="textfield"><%= password_field_tag 'password', nil %></div>
-            </div>
-            <%= link_to '忘记密码？', forgot_password_url %>
-          </div>
-          <div class="rows">
-						<div class="fldid">&nbsp;</div>
-            <div class="fldis"><%= check_box_tag 'remember_me', 1, true %><%= label_tag 'auto', '下次自动登录', :class => "blue" %></div>
-          </div>
-          <div class="btn-rows">
-						<div class="fldid">&nbsp;</div>
-            <div class="fldvalue"><%= submit_tag '', :class => "loginbtn png" %></div>
-          </div>
-				<% end %>
-        <div class="sperator"></div>
-        <div class="rows">
-					<div class="fldid">&nbsp;</div>
-          <div class="fldvalue"><span class="red">网络游戏玩家的聚集地，就差你了！</span></div>
-        </div>
-        <div class="btn-rows">
-					<div class="fldid">&nbsp;</div>
-          <div class="fldvalue"><%= link_to '', signup_url, :class => 'registbtn png' %></div>
-        </div>
-        <div class="sperator"></div>
-        <div class="site-info">          
-          <h2>为了一起游戏网更美好，我们一直在努力</h2><br/>
-					<div><span class="time">04月22日</span><strong>魔兽争霸3视频解说达人<a href='http://www.17gaming.com/profiles/44'>xiaoy</a>入住</strong></div>
-					<div><span class="time">04月22日</span><strong>我们正式的悄悄的上线</strong></div>
-					<div><span class="time">04月19日</span><strong>加入667个游戏资料</strong></div>
-        </div>
-      </div>
-      <span class="r-b"></span>
-    </div>
-
-            <div class="right">
-            	<div class="slogon-box">
-                    <p><img src="images/welcome/logo-index.png" alt="一起游戏" /></p>
-										<p><%= link_to '<img src="images/welcome/reg-btn.png" alt="马上加入一起游戏"/>', signup_url, :title=>'注册一起游戏网帐号', :alt=>"马上加入一起游戏"%></p>
-                    <div class="slogon">
-                    <p>一起游戏网(17gaming)是让网络游戏玩家分享游戏心情，共享心得体验,重拾昔日情意的社交平台。</p>
-                    <p>我们期待您的加入，与我们共建网络游戏玩家的精神家园。</p>
-                    </div>
+		</div>
+    <div class="welcome-banner">
+        <div class="login-box formcontent">
+					<% form_tag sessions_url, :id => "login" do %>
+              <div class="rows s_clear">
+									<div class="fldid"><strong>邮箱：</strong></div>
+									<div class="fldvalue">
+											<div class="textfield"><%= text_field_tag 'email', nil %></div>
+									</div>
                 </div>
-                <p class="later">
-					<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="618" height="252" id="~hero" align="middle">
-						<param name="allowScriptAccess" value="sameDomain" />
-						<param name="movie" value="swf/~hero.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#ffffff" /><embed src="swf/~hero.swf" quality="high" bgcolor="#ffffff" width="618" height="252" name="~hero" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
-
-					</object>
-				</p>
-            </div>
+              <div class="rows s_clear">
+									<div class="fldid"><strong>密码：</strong></div>
+									<div class="fldvalue">
+										<div class="textfield"><%= password_field_tag 'password', nil %></div>
+									</div>
+									<div class="fldcb">
+											<%= link_to '忘记密码？', forgot_password_url %>
+									</div>
+							</div>
+							<div class="rows s_clear">
+									<div class="fldid">&nbsp;</div>
+									<div class="fldvalue">
+											<%= check_box_tag 'remember_me', 1, true %><%= label_tag 'auto', '下次自动登录' %>
+									</div>
+									<div class="fldcb">
+											<a href="javascript:void(0)" class="login-btn" title="登陆" onclick="$('login').submit()" /></a>
+									</div>
+							</div>  
+							<div class="rows s_clear">
+									<div class="fldid">&nbsp;</div>
+									<div class="fldvalue">
+										<%= link_to '', signup_url, :class => 'reg-btn', :title=>"马上注册" %>
+									</div>
+							</div>  
+							<% end %>
         </div>
-
-<div id="footer">
-<%= copyright %>
-<%= link_to image_tag("110.gif"), "http://sh.cyberpolice.cn/"%>
+    </div>
+    <div class="welcome-intro s_clear">
+    	<ul>
+    	  <li class="item-1">
+          	<div class="con">
+              <h2>交友</h2>
+              <p>用最便捷的方式找到昔日的玩伴和现在的战斗伙伴，并以虚拟身份保持联系。</p>
+           </div>
+          </li>
+    	  <li class="item-2">
+          	<div class="con">
+              <h2>游戏</h2>
+              <p>建立自己的游戏库，分享游戏的心得体会，也留下那些快逝去的游戏回忆。</p>
+           </div>
+          </li>
+    	  <li class="item-3">
+          	<div class="con">
+              <h2>公会</h2>
+              <p>创立或找到那个真正属于你的公会，最快的了解身边会员的动态。</p>
+           </div>
+          </li>
+    	</ul>
+    </div>
 </div>
 
+<div class="footer-shine s_clear">
+	<div class="logo"><img src="images/welcome/footer-logo.png" alt="" /></div>
+    <div class="con">
+        <div class="link">
+					<%= link_to '关于我们', about_us_help_url %> | 
+					<%= link_to '应用介绍', app_info_help_url %> | 
+					<%= link_to '联系方式', contact_info_help_url %> | 
+					<%= link_to '隐私说明', privacy_info_help_url %>
+				</div>
+        <div class="copyright"><span class="w-l">Copyright © 2010-2010 MingZen. All Rights Reserved</span><span>鸣禅公司 版权所有</span></div>
+    </div>
+    <div class="cyberpolice"><a href="http://sh.cyberpolice.cn/"><img src="images/110.gif?1273208676" alt="110"></a></div>
+    <div class="company-logo"></div>
+    <div class="r-c"></div>
+</div>
 </body>
-
 </html>
-
-
