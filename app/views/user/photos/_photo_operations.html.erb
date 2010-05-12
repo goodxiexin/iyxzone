@@ -1,17 +1,23 @@
+                  <% class_name = photo.class.name.underscore %>
                   <div class="photo-op">
-                    <% if @relationship == 'owner' or @relationship == 'friend' %>
+                    <% if taggable %>
                       <span class="photo-op-mark"></span>
                       <%= link_to_function "圈人", "tagger.start()" %> | 
                     <% end %>
-                    <% if @user == current_user %>
+                    <% if editable %>
                       <span class="photo-op-edit"></span>
-                      <%= facebox_link '编辑', edit_personal_photo_url(@photo, :at => 'photo') %> | 
-                      <span class="photo-op-del"></span>
-                      <%= facebox_confirm '删除', personal_photo_url(@photo), {:method => :delete, :msg => '你确定要删除吗?'} %> |
+                      <%= facebox_link '编辑', eval("edit_#{class_name}_url(photo, :at => 'photo')") %> |
                     <% end %>
-                    <span class="photo-op-share" ></span>
-                    <%= facebox_link "分享", new_sharing_url(:url => personal_photo_url(@photo)), :width => 450 %> |
-                    <span class="photo-op-praise" ></span>
-                    <%= text_dig_link @photo %>
+                    <% if deleteable %> 
+                      <span class="photo-op-del"></span>
+                      <%= facebox_confirm '删除', eval("#{class_name}_url(photo)"), {:method => :delete, :msg => '你确定要删除吗?'} %> |
+                    <% end %>
+                    <% if shareable %>
+                      <span class="photo-op-share" ></span>
+                      <%= facebox_link "分享", new_sharing_url(:url => eval("#{class_name}_url(photo)")), :width => 450 %> |
+                    <% end %>
+                    <% if diggable %>
+                      <span class="photo-op-praise" ></span>
+                      <%= text_dig_link photo %>
+                    <% end %>
                   </div>
-

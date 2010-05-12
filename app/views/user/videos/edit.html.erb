@@ -6,51 +6,26 @@
 <% content_for :html_description, "#{current_user.login} - 编辑视频 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <h1 class="app-video">视频</h1>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
-      <div class="appcontent01">
-				<div class="cons-form formcontent">
-          <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
-          <% form_for @video, :html => {:onsubmit => "Iyxzone.Video.Builder.update($('submit_btn'), this); return false;"} do |f| %>
-            <div class="rows s_clear">
-		    			<div class="fldid"><%= f.label "视频标题：" %></div>
-			    		<div class="fldvalue"><div class='textfield'><%= f.text_field 'title' %></div></div>
-  				  </div>
-				    <div class="rows s_clear">
-					    <div class="fldid"><%= f.label '连接地址：' %></div>
-					    <div class="fldvalue"><%= f.text_field 'video_url',:disabled => true, :id => 'video_url' %></div>
-				    </div>
-				    <div class="rows s_clear">
-      				<div class="fldid"><%= f.label '视频简介：' %></div>
-			      	<div class="fldvalue"><%= f.text_area 'description' %></div>
-		    		</div>
-		    		<div class="rows s_clear">
-				    	<div class='fldid'><%= f.label "游戏类别:" %></div>
-              <div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :class=>"selector selector02" %></div>
-    				</div>
-		    		<div class="rows s_clear">
-				    	<div class='fldid'><%= f.label "浏览权限:"%></div>
-              <div class='fldvalue'><%= privilege_select_tag(:video, :class=> "selector selector02") %></div>
-    				</div>
-				    <div class='rows s_clear'>
-    					<div class="fldid">添加相关好友：</div>
-		    			<div class='fldvalue'>
-                <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video} %>
-    					</div>
-		    		</div>
-            <div class='rows s_clear'>
-							<div class='fldid'>&nbsp;</div>
-              <div class='fldvalue'><span class='button03'><span><button type='submit' id='submit_btn' class='confirm-button'>更新</button></span></span></div>
-            </div>
-          <% end %>
-        </div>
+<% canvas_tag do %>
+  <h1 class="app-video">视频</h1>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
+    <div class="appcontent01">
+			<div class="cons-form formcontent">
+        <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
+        <% rows_form_for @video, :html => {:onsubmit => "Iyxzone.Video.Builder.update($('submit_btn'), this); return false;"} do |f| %>
+          <%= f.text_field 'title', :label => '视频标题' %>
+          <%= f.text_field 'video_url', :label => '连接地址', :id => 'video_url', :disabled => true %>
+          <%= f.text_area 'description', :label => '视频连接' %>
+          <%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :label => '游戏类别', :class => "selector selector02" %>
+          <%= f.select 'privilege', privilege_options, {}, :label => '浏览权限', :class => "selector selector02" %>
+          <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video, :title => '点名相关好友'} %>
+          <%= f.submit '保存' => {:id => 'submit_btn', :type => 'submit'} %>
+        <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>
 
 <% onload_javascript_tag do %>
   Iyxzone.Video.Builder.init(10, <%= @tag_infos %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');

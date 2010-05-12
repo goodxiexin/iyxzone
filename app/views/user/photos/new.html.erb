@@ -2,21 +2,19 @@
 <% content_for :html_description, "#{current_user.login} - 上传照片 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <h1 class="app-photo">照片</h1>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'user/albums/tab', :locals => {:user => current_user, :hover => 1} %>
-      <div class="box02 appcontent02">
-        <div class='path-box'>
-          <label><%= album_link @album %></label>
-          <span>上传照片</span>
-        </div>
-        <%= swfupload_head %>
-        <div class='photo-upload-box'>
-          <%= swfupload :controller => 'user/photos', :action => 'create', :album_id => @album.id %>
-        </div>
+<% canvas_tag do %>
+  <h1 class="app-photo">照片</h1>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'user/albums/tab', :locals => {:user => current_user, :hover => 1} %>
+    <div class="box02 appcontent02">
+      <div class='path-box'>
+        <label><%= album_link @album %></label>
+        <span>上传照片</span>
+      </div>
+      <%= swfupload_head %>
+      <div class='photo-upload-box'>
+        <%= swfupload :controller => 'user/photos', :action => 'create', :album_id => @album.id %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

@@ -1,0 +1,22 @@
+<div class="feed-list feed-share">
+  <%= icon_dig_link share %>
+  <div class="feed-header">
+    <div class="right">
+      <%= ftime share.created_at %><br/>
+      首次分享人：<%= avatar shareable.first_sharer, :with => '27px', :height => '27px' %>
+      <%= profile_link shareable.first_sharer %>
+    </div>
+    <%= yield %>
+    <div class="feeds">
+      <%= link_to_function "评论(#{ sharing.comments_count })", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %>
+      <% if sharing.poster != current_user %>
+        | <%= facebox_link "我也分享", new_sharing_url(:url => eval("#{shareable.class.name.underscore}_url(shareable)")), :width => 450 %><span>(<%= share.sharings_count %>)</span>
+        | <%= link_to "更多分享", shares_url(:uid => sharing.poster.id) %>
+      <% end %>
+    </div>
+  </div>
+  <div id="sharing_comment_box_<%= sharing.id %>" style="display: none">
+    <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => sharing, :recipient => sharing.poster} %>
+  </div>
+</div>
+

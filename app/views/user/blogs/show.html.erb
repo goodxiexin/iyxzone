@@ -1,25 +1,21 @@
-<% content_for :html_title, "#{@user.login} - #{@blog.title} - 17Gaming.com" %>
-<% content_for :html_description, "#{@user.login}的#{@blog.title} - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-	  <% if @user == current_user %>
-      <h1 class="app-log">日志</h1>
-	  <% else %>
-      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的日志"} %>
-	  <% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:hover => 1, :user => current_user} %>
-      <%= render :partial => 'blog_path' %>
-      <div class='detail-blog'>
-        <%= render :partial => 'blog_head' %>
-        <div class='con'>
-          <%= @blog.content %>
-        </div>
-        <%= render :partial => 'blog_foot' %>
-        <%= render :partial => 'blog_func' %>
+<% canvas_tag do %>
+	<% if @user == current_user %>
+    <h1 class="app-log">日志</h1>
+	<% else %>
+    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的日志"} %>
+	<% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:hover => 1, :user => @user} %>
+    <%= render :partial => 'blog_path', :locals => {:count => @count, :next_blog => @next, :prev_blog => @prev} %>
+    <div class='detail-blog'>
+      <%= render :partial => 'blog_head', :locals => {:user => @user, :blog => @blog} %>
+      <div class='con'>
+        <%= @blog.content %>
       </div>
+      <%= render :partial => 'blog_foot', :locals => {:blog => @blog} %>
+      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @blog, :commentable => true, :viewable => true, :diggable => true, :comment_opts => {:commentable => @blog, :recipient => @blog.poster}, :reply_to => @reply_to} %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

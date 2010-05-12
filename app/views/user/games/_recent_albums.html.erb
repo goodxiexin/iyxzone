@@ -1,8 +1,8 @@
 <div class="multibox">
-  <div class="title"><%= link_to '更多', game_albums_url(@game) %><b>相关相册</b></div>
+  <div class="title"><%= link_to '更多', game_albums_url(game) %><b>相关相册</b></div>
   <div class="piclist s_clear">
-  <% unless @albums.blank? %> 
-    <% @albums.each do |album| %>
+  <% unless albums.blank? %> 
+    <% albums.each do |album| %>
         <div class="picitem jl-picitem">
           <div class="picbox01">
             <a class="btn" href="#"></a>
@@ -21,7 +21,7 @@
       </div>  
     <% end %> 
   <% else %>
-    <% if @has_game %>
+    <% if has_game %>
     <div class='space'>还没照片赶紧去<%= link_to '弄一个', personal_albums_url(:uid => current_user.id)%>，马上就能上游戏主页</div>
     <% else %>
     <div class='space'>还没有任何相关的相册</div>

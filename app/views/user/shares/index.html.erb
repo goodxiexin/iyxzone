@@ -2,39 +2,37 @@
   <%= javascript_include_merged :share %>
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-	  <% if @user==current_user %>
-      <h1 class="app-share">分享</h1>
-	  <% else %>
-      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的分享"} %>
-	  <% end %>
-    <%= render :partial => 'new_link_sharing' %>
-    <div class="box02 canvas_int rows">
-      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 2} %>
-      <div class="feed-box01">
-        <%= render :partial => 'category', :locals => {:user => @user, :url_func => "shares_url"} %>
-        <div class="feed-img-list rows">
-        <% if @sharings.total_entries != 0 %>
-          <% @sharings.each do |sharing| %>
-            <%= render :partial => "#{sharing.share.shareable_type.underscore}_share", :locals => {:share => sharing.share, :sharing => sharing, :is_mine => (@user == current_user)} %>
-          <% end %>
-          <%= will_paginate @sharings %>
-        <% else %>
-          <% if @user == current_user %>
-            <div class='tip'>你啥都没分享，怎么能这样呢？！
-						<br/><br/>观看以下视频对这项功能进行进一步的了解，随时点击了解详情都可以观看此视频<br/><br/>
-						<%= application_show %>
-						</div>
-          <% else %>
-            <div class='tip'><%= get_subject @user %>都没分享，真是一个没情趣的人 </div>
-          <% end %>
+<% canvas_tag do %>
+	<% if @user==current_user %>
+    <h1 class="app-share">分享</h1>
+	<% else %>
+    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的分享"} %>
+	<% end %>
+  <%= render :partial => 'new_link_sharing' %>
+  <div class="box02 canvas_int rows">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 2} %>
+    <div class="feed-box01">
+      <%= render :partial => 'category', :locals => {:user => @user, :url_func => "shares_url"} %>
+      <div class="feed-img-list rows">
+      <% if @sharings.total_entries != 0 %>
+        <% @sharings.each do |sharing| %>
+          <%= render :partial => "#{sharing.share.shareable_type.underscore}_share", :locals => {:share => sharing.share, :sharing => sharing, :is_mine => (@user == current_user)} %>
         <% end %>
-        </div>
+        <%= will_paginate @sharings %>
+      <% else %>
+        <% if @user == current_user %>
+          <div class='tip'>你啥都没分享，怎么能这样呢？！
+					  <br/><br/>观看以下视频对这项功能进行进一步的了解，随时点击了解详情都可以观看此视频<br/><br/>
+						<%= application_show %>
+					</div>
+        <% else %>
+          <div class='tip'><%= get_subject @user %>都没分享，真是一个没情趣的人 </div>
+        <% end %>
+      <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>
 
 <% if !@reply_to.blank? and !@sharing.blank? %>
   <% onload_javascript_tag do %>

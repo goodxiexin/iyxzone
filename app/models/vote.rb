@@ -44,11 +44,9 @@ protected
     return if answer_ids.blank? or poll.blank?
     if poll.max_multiple < answer_ids.count
       errors.add(:answer_ids, "选太多了")
-    else
-      poll.answers.find(answer_ids)
+    elsif !poll.has_answers? answer_ids
+      errors.add(:answer_ids, "选项不存在")
     end
-  rescue
-    errors.add(:answer_ids, "选项不存在")
   end
 
 end

@@ -1,0 +1,24 @@
+<% facebox_tag "#{@name}设置" do %>
+<% form_remote_for :setting, :url => application_setting_url(@setting), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($('#{@type}_config_btn'),'请等待..');"} do |f| %>
+<div class='formcontent'>
+  <div class="rows s_clear">
+    <div class="fldid"><%= f.check_box "recv_#{@type}_feed" %></div>
+    <div class="fldvalue">
+      <label for="name">看到别人的新鲜事</label>
+    </div>
+  </div>
+  <div class="rows s_clear">
+    <div class="fldid"><%= f.check_box "emit_#{@type}_feed" %></div>
+    <div class="fldvalue">
+      <label for="des">让别人看到我的新鲜事</label>
+    </div>
+  </div>
+</div>
+<div class="z-submit s_clear space">
+  <table class="center" cellpadding="0"><tr><td>
+    <span class="button"><span><button type="submit" id="#{@type}_config_btn">完成</button></span></span>
+    <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
+  </td></tr></table>
+</div>
+<% end %>
+<% end %>

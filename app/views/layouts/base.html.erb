@@ -15,6 +15,7 @@
     <%= javascript_include_tag "juggernaut/juggernaut" %>
     <%= javascript_include_tag "juggernaut/swfobject" %>
     <%= yield :javascript_include %>
+    <% if RAILS_ENV == 'production' %> 
 		<script type="text/javascript">
 
 			var _gaq = _gaq || [];
@@ -28,6 +29,7 @@
 			})();
 
 		</script>
+    <% end %>
   </head>
 
   <%= yield :body %>

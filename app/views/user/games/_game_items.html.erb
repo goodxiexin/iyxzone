@@ -20,9 +20,5 @@
   <% end %>
 </table>
 
-<% if @remote %>
-  <%= remote_will_paginate game_items, :remote => @remote %>
-<% else %>
-  <%= will_paginate game_items %>
-<% end %>
+<%= will_paginate game_items %>
 

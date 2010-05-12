@@ -4,15 +4,7 @@
 <% poster = album.poster %>
 <% type = photos.first.class.name.underscore %>
 
-<div class="feed-list-box">
-  <div class="feed-list">
-    <div class="img left">
-      <%= avatar poster, :class => 'imgbox01' %>
-    </div>
-    <div class="jl-list-con jl-cutline">
-  		<% if delivery.is_deleteable_by? current_user %>
-	  		<%= link_to_remote '', :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => 'icon-active'} %>
-		  <% end %>
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => poster} do %>
       <%= profile_link poster %> 上传了 <%= photos.count %> 张照片 到相册 <%= album_link album, :class => "shine" %>
       <% if photos.count != 0 %>
       <div class="s_clear" id="roll-photo">
@@ -39,9 +31,7 @@
         <%= ftime delivery.created_at %> - <%= link_to_function "评论", "Iyxzone.Comment.showForm('#{album.class.name.underscore}', #{album.id}, null, #{album.poster_id})" %>
       </span> 
       <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => album, :recipient => album.poster} %>
-    </div>
-  </div>
-</div>
+<% end %>
 
 <% if photos.count > 3 %>
 <% photo_ids = array_or_string_for_javascript photos.map(&:id) %>

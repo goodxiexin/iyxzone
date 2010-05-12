@@ -20,10 +20,11 @@ namespace :users do
 		g = Game.find_by_name("魔兽世界")
 		characters = GameCharacter.find(:all, :conditions => {:game_id => g.id, :data => nil})
 		characters.each do |char|
-			puts "verify game character #{char.name} .."
 			enc_url = URI.escape('http://cn.wowarmory.com/character-sheet.xml?r='+char.server.name+'&n='+char.name)
-			unless checking_info(enc_url).nil?
-				if checking_info(enc_url)
+      puts "verify game character #{char.name} .. #{enc_url}"
+      passed = checking_info enc_url
+			unless passed.nil?
+				if passed
 					char.update_attributes(:data => {"verify" => true, "url" => enc_url})
 					char.user.notifications.create(:data => "您的 #{char.name} 通过了验证，可以点击角色名称访问其英雄榜", :category => Notification::Promotion)
 				else
@@ -42,10 +43,11 @@ namespace :users do
 			cArea = Iconv.iconv("gb2312", "utf8", char.server.name)
 			cArea = Iconv.iconv("big5", "gb2312", cArea.first)
 			cArea = Iconv.iconv("utf8", "big5", cArea.first)
-			puts "verify game character #{char.name} .."
 			enc_url = URI.escape('http://tw.wowarmory.com/character-sheet.xml?r='+cArea.first+'&cn='+char.name)
-			unless checking_info(enc_url).nil?
-				if checking_info(enc_url)
+      puts "verify game character #{char.name} .. #{enc_url}"
+      passed = checking_info enc_url
+			unless passed.nil?
+				if passed
 					char.update_attributes(:data => {"verify" => true, "url" => enc_url})
 					char.user.notifications.create(:data => "您的 #{char.name} 通过了验证，可以点击角色名称访问其英雄榜", :category => Notification::Promotion)
 				else
@@ -57,40 +59,16 @@ namespace :users do
   end
 
   def checking_info(enc_url)
-    url_object = open_url(enc_url)
-		unless url_object == false
-			parsed_url = parse_url(url_object)
-			charName = parsed_url.search("//div[@class='charNameHeader']").inner_html
-			if charName==''
-				return false
-			else
-				return true
-			end
-		else
-			return nil
-		end
-  end
-
-  def open_url(url)
-    url_object = nil
-    begin
-      url_object = open(url)
-    rescue
-      puts "Unable to open url: " + url
-			return false
-    end
-    return url_object
-  end
-
-  def parse_url(url_object)
-    doc = nil
-    begin
-      doc = Hpricot(url_object)
-    rescue
-      puts 'Could not parse url: ' + url_object.base_uri.to_s
-    end
-    puts 'Crawling url ' + url_object.base_uri.to_s
-    return doc
+    url = open(enc_url)
+		doc = Hpricot(url)
+    char_name = doc.search("//div[@class='charNameHeader']").inner_html
+    !char_name.blank?
+  rescue OpenURI::HTTPError
+    puts "Unable to open url: " + url
+    return nil
+  rescue
+    puts 'unknown error'
+    return nil
   end
 
 end

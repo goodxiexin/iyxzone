@@ -1,7 +1,7 @@
 <div class="multibox">
-  <div class="title"><%= link_to '更多', game_blogs_url(@game) %><b>相关日志</b></div>
-  <% unless @blogs.blank? %>
-  <% @blogs.each do |blog| %>
+  <div class="title"><%= link_to '更多', game_blogs_url(game) %><b>相关日志</b></div>
+  <% unless blogs.blank? %>
+  <% blogs.each do |blog| %>
     <div class="diary-box">
       <div class="diary-header">
         <p><%= blog_link blog %> <%= ftime blog.created_at %> <%= blog.digs_count %>人顶了</p>
@@ -10,7 +10,7 @@
     </div>
   <% end %>
   <% else %>
-    <% if @has_game %>
+    <% if has_game %>
     <div class='space'>还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>,马上就能上游戏主页</div>
     <% else %>
     <div class='space'>还没任何相关的日志</div>

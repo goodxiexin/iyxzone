@@ -1,27 +1,27 @@
       <div class="tab tab01">
         <div class="icon">
-          <%= link_to "邀请更多人", new_event_invitation_url(@event) %>
+          <%= link_to "邀请更多人", new_event_invitation_url(event) %>
         </div>
         <ul>
-        <% if params[:type].to_i == 0 %>
-          <li class='hover'><span><%= link_to "一定去的人", event_participations_url(@event, :type => 0) %></span></li>
+        <% if params[:type] == '0' %>
+          <li class='hover'><span><%= link_to "一定去的人", event_participations_url(event, :type => 0) %></span></li>
         <% else %>
-          <li><span><%= link_to "一定去的人", event_participations_url(@event, :type => 0) %></span></li>
+          <li><span><%= link_to "一定去的人", event_participations_url(event, :type => 0) %></span></li>
         <% end %>
-        <% if params[:type].to_i == 1 %>
-          <li class='hover'><span><%= link_to "可能去的人", event_participations_url(@event, :type => 1) %></span></li>
+        <% if params[:type] == '1' %>
+          <li class='hover'><span><%= link_to "可能去的人", event_participations_url(event, :type => 1) %></span></li>
         <% else %>
-          <li><span><%= link_to "可能去的人", event_participations_url(@event, :type => 1) %></span></li>
+          <li><span><%= link_to "可能去的人", event_participations_url(event, :type => 1) %></span></li>
         <% end %>
-        <% if params[:type].to_i == 2 %>
-          <li class='hover'><span><%= link_to "受邀请的人", event_participations_url(@event, :type => 2) %></span></li>
+        <% if params[:type] == '2' %>
+          <li class='hover'><span><%= link_to "受邀请的人", event_participations_url(event, :type => 2) %></span></li>
         <% else %>
-          <li><span><%= link_to "受邀请的人", event_participations_url(@event, :type => 2) %></span></li>
+          <li><span><%= link_to "受邀请的人", event_participations_url(event, :type => 2) %></span></li>
         <% end %>
-        <% if params[:type].to_i == 3 %>
-          <li class='hover'><span><%= link_to "请求加入的人", event_participations_url(@event, :type => 3) %></span></li>
+        <% if params[:type] == '3' %>
+          <li class='hover'><span><%= link_to "请求加入的人", event_participations_url(event, :type => 3) %></span></li>
         <% else %>
-          <li><span><%= link_to "请求加入的人", event_participations_url(@event, :type => 3) %></span></li>
+          <li><span><%= link_to "请求加入的人", event_participations_url(event, :type => 3) %></span></li>
         <% end %>
         </ul>
       </div>

@@ -1,64 +1,19 @@
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @guild.album, :class => 'imgbox01', :width => 50, :height => 50 %></span>
-      <p class="left">
-        <strong><%= @guild.name %></strong><br />
-        <%= guild_link @guild, :class => 'red' %>的主页
-      </p>
-    </div>
+<% canvas_tag do %>
+    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}的论坛"} %>
     <div class="box02 canvas_int rows s_clear space">
-      <div class="tab tab01">
-        <div class="right">
-          <%= link_to "发布新话题", new_forum_topic_url(@forum) %>
-          <%= link_to "返回论坛首页", forum_topics_url(@forum) %>
-        </div>
-        <ul>
-          <li class='hover'><span><%= link_to "话题区", forum_topics_url(@forum) %></span></li>
-        </ul>
-      </div>
+      <%= render :partial => 'tab', :locals => {:forum => @forum} %>
       <div class="forum s_clear">
         <div class="col-left">
-          <h2>论坛公告</h2>
-          <div class="msg">不要进行人身攻击，不要骚扰他人，并请大家举报此类恶劣行为。违者一律删除并视情况严重性作封ID处理。
-    说明：每个人和每个人的观点不一样，有些人是真心需要帮助的，请大家以诚相待，给需要帮助的人良好的意见和建议，切勿误导他人、嘲笑他人和攻击他人，尤其不要在帖子里面发生口水战，如果有此现象发生，请在此投诉，斑竹会处理此事的 。尤其不要在帖子里面发生口水战，如果有此现象发生，请在此投诉，斑竹会处理此事的 。  </div>
-          <div class="hot-post">
-            <h4>【其他公会论坛热帖集合】</h4>
-            <ul>
-              <% Topic.hot("forum_id != #{@forum.id}").each do |t| %>
-              <li><%= link_to "【#{t.forum.guild.name}】#{t.subject}", forum_topic_url(t.forum, t) %><br/><a href="javascript:void(0)"><%= "#{forum_topic_url(t.forum, t)}" %></a></li>
-              <% end %>
-            </ul>
-          </div>
+          <%= render :partial => 'public_board' %>
+          <% unless @hot_topics.blank? %>
+            <%= render :partial => 'hot_topics', :object => @hot_topics %>
+          <% end %>
           <h2 class="s_clear"><span class="left">精华区</span></h2>
           <div class="posts digest">
-            <table cellpadding="0" cellspacing="3" border="0" width="100%">
-              <tr>
-                <th class="tl">话题</th>
-                <th>浏览</th>
-                <th>回复</th>
-                <th class="tl">作者</th>
-                <th class="tr">时间</th>
-                <% if @guild.president == current_user %>
-                <th>操作</th>
-                <% end %>
-              </tr>
-              <% @top_topics.each do |t| %>
-              <tr class="jl-cutline" id='topic_<%= t.id %>'>
-                <td class="title"><div><%= topic_link t  %></div></td>
-                <td><%= t.viewings_count %></td>
-                <td><%= t.posts_count %></td>
-                <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %></div></td>
-                <td class="tr"><%= ftime t.created_at %></td>
-                <% if @guild.president == current_user %>
-                <td><%= link_to '', toggle_forum_topic_url(@forum, t, :top => 0, :at => 'index'), :class => 'icon-down', :method => :put %><%= facebox_confirm '', forum_topic_url(@forum, t, :at => 'index'), {:msg => '你确定要删除这个话题吗？', :method => :delete}, {:class => 'icon-active'} %></td>
-                <% end %>
-              </tr>
-              <% end %>
-            </table>
+            <%= render :partial => 'top_topics', :locals => {:top_topics => @top_topics, :forum => @forum, :guild => @guild} %>
+            <%= will_paginate @top_topics %>
           </div>
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>

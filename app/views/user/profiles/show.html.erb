@@ -14,26 +14,32 @@
 <% end %>
 
 <% content_for :left do %>
-  <%= render :partial => 'user/profiles/avatar' %>
-	<%= render :partial => 'user/profiles/operations' %>
-	<%= render :partial => 'user/profiles/menu' %>
+  <% mc_avatar do %>
+    <%= avatar_image @user, :size => :large, :width => '100px', :height => '112px' %>
+  <% end %>
+	<%= render :partial => 'user/profiles/operations', :locals => {:profile => @profile, :user => @user, :relationship => @relationship} %>
+	<%= render :partial => 'user/profiles/menu', :locals => {:profile => @profile, :user => @user, :relationship => @relationship} %>
 <% end %>
 
 <% content_for :right do %>
-  <%= render :partial => 'user/profiles/character_infos' %>
-  <%= render :partial => 'user/profiles/tag_panel' %>
-  <%= render :partial => 'user/profiles/recent_visitors' %>
-  <% unless @user == current_user %>
-    <%= render :partial => 'user/profiles/common_friends' %>
+  <%= render :partial => 'user/profiles/character_infos', :locals => {:characters => @characters} %>
+  <%= render :partial => 'user/profiles/tag_panel', :locals => {:user => @user, :profile => @profile} %>
+  <% unless @viewings.blank? %>
+    <%= render :partial => 'user/profiles/recent_visitors', :locals => {:viewings => @viewings, :profile => @profile} %>
   <% end %>
-  <%= render :partial => 'user/profiles/friends' %>
+  <% unless @common_friends.blank? %>
+    <%= render :partial => 'user/profiles/common_friends', :locals => {:friends => @common_friends, :user => @user} %>
+  <% end %>
+  <% unless @friends.blank? %>
+    <%= render :partial => 'user/profiles/friends', :locals => {:friends => @friends, :user => @user} %>
+  <% end %>
 <% end %>
 
 <div class="box02 canvas_con">
-  <%= render :partial => 'user/profiles/about_me' %>
-  <%= render :partial => 'user/profiles/recent_albums' %>
-  <%= render :partial => 'user/profiles/recent_blogs' %>
-  <%= render :partial => 'user/profiles/feed_deliveries' %>
+  <%= render :partial => 'user/profiles/about_me', :locals => {:user => @user, :profile => @profile} %>
+  <%= render :partial => 'user/profiles/recent_albums', :locals => {:user => @user, :profile => @profile, :albums => @albums} %>
+  <%= render :partial => 'user/profiles/recent_blogs', :locals => {:user => @user, :profile => @profile, :blogs => @blogs} %>
+  <%= render :partial => 'user/profiles/feed_list', :locals => {:profile => @profile, :feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
   <% if @profile.is_commentable_by? current_user %>
     <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>
   <% else %>

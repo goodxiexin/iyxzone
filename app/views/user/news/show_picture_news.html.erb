@@ -5,30 +5,33 @@
 <% content_for :html_title, "拾闻 - 17Gaming.com" %>
 <% content_for :html_description, "拾闻 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
-<% @picture = @news.pictures.first %>
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <h1 class="app-news">拾闻</h1>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab' %>
-      <div class="pic-box">
-        <div class="img-container-main s_clear">
-          <div class="img-container-wrap">
-            <div class="img-container">
-              <%= render :partial => 'picture_news_path' %>
-              <div class="img-main">
-                <div class="imgwrap box05">
-                  <%= render :partial => 'picture_news_operations' %>
-                  <p id='picture'></p>
-                  <%= render :partial => 'picture_news_desc' %>
-								</div>
+<% @pictures = @news.pictures %>
+<% @first_picture = @pictures.first %>
+
+<% canvas_tag do %>
+  <h1 class="app-news">拾闻</h1>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab' %>
+    <div class="pic-box">
+      <div class="img-container-main s_clear">
+        <div class="img-container-wrap">
+          <div class="img-container">
+            <%= render :partial => 'picture_news_path', :locals => {:news => @news} %>
+            <div class="img-main">
+              <div class="imgwrap box05">
+                <%= render :partial => 'picture_news_operations', :locals => {:news => @news} %>
+                <p id='picture'></p>
+                <div class="pic-desc s_clear">
+                  <h4 class="box06" id='notation'><%= simple_format h @first_picture.notation %></h4>
+                  <div class="rows"></div> 
+                </div>
 							</div>
 						</div>
 					</div>
-          <%= render :partial => 'slide' %>
-        </div>
+				</div>
+        <%= render :partial => 'slide', :locals => {:pictures => @pictures, :first_picture => @first_picture} %>
       </div>
-      <%= render :partial => 'news_func' %>
     </div>
-  </div></div>
-</div></div></div></div>
+    <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @news, :commentable => true, :viewable => true, :diggable => true, :comment_opts => {:commentable => @news, :recipient => nil}, :reply_to => @reply_to} %> 
+  </div>
+<% end %>

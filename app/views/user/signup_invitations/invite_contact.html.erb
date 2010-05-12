@@ -2,16 +2,14 @@
   <%= javascript_include_tag "contacts_grabber" %>
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <h1 class="app-friend">好友</h1>
     <div class="box02 canvas_int space">
       <div class="formcontent invite-select" id='contacts'>
         <h2>正在获取联系人<%= image_tag 'loading.gif' %></h2>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>
 
 <!-- 为了安全，不显示password，只显示用户名，然后password存在session里 -->
 <%= javascript_tag "Iyxzone.ContactsGrabber.grabUnregisteredContacts('#{@type}', '#{@user_name}', '#{form_authenticity_token}')" %>

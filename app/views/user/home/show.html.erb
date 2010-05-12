@@ -8,22 +8,37 @@
 <% end %>
 
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-	<div class="round_m"><div class="round_body canvas_wrap s_clear">
-		<div class="canvas_m">
-			<div class="canvas_c">
-				<div class="box02 canvas_con">
+  <div class="round_m"><div class="round_body canvas_wrap s_clear">
+	  <div class="canvas_m">
+		  <div class="canvas_c">
+  			<div class="box02 canvas_con">
           <%= render :partial => 'home_status' %>
           <div class="feed-message-box s_clear" id='my_notices'>
-						<%= render :partial => 'user/notices/notices', :object => @notices %>
+			  		<%= render :partial => 'user/notices/notices', :object => @notices %>
           </div>
-          <%= render :partial => 'home_feeds' %>
+          <div class="feed-box rows">
+            <%= render :partial => 'feed_category' %>
+            <div class='feed-wrap'>
+              <% if current_user.friends_count == 0 %>
+                <%= render :partial => 'welcome_info', :locals => {:friend_suggestions => @friend_suggestions} %>
+              <% else %>
+                <%= render :partial => 'feed_list', :locals => {:feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
+              <% end %>
+            </div>
+          </div>
         </div>
-			</div>
-		</div>
+  		</div>
+  	</div>
     <div id="rightsidebar" class="canvas_r">
-      <%= render :partial => 'requests_invitations_pokes' %>
-      <%= render :partial => 'recent_visitors' %>
-      <%= render :partial => 'friend_suggestions' %>
+      <% if current_user.requests_count != 0 or current_user.invitations_count != 0 or current_user.poke_deliveries_count != 0 %> 
+        <%= render :partial => 'requests_invitations_pokes' %>
+      <% end %>
+      <% if current_user.profile.viewings_count != 0 %> 
+        <%= render :partial => 'recent_visitors', :locals => {:viewings => @viewings} %>
+      <% end %>
+      <% if !@friend_suggestions.blank? %>
+        <%= render :partial => 'friend_suggestions', :locals => {:friend_suggestions => @friend_suggestions} %>
+      <% end %>
     </div>
-	</div></div>
+  </div></div>
 </div></div></div></div>

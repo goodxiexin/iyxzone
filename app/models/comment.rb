@@ -42,7 +42,7 @@ protected
 
   def commentable_is_valid
     return if commentable_id.blank? or commentable_type.blank?
-    commentable = commentable_type.camelize.constantize.find(:first, :conditions => {:id => commentable_id})
+    
     if commentable.blank?
       errors.add(:commentable_id, "不存在")
     elsif commentable.respond_to? :verified and commentable.verified == 2

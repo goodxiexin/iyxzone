@@ -17,6 +17,8 @@ class User::ProfilesController < UserBaseController
       @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2]
     end
 
+    @friends = @user.friends.sort_by{rand}[0..2]
+
 		@blogs = @user.blogs.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
 		@albums = @user.active_albums.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
 		

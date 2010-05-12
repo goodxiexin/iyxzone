@@ -2,34 +2,27 @@
 <% content_for :html_description, "#{@user.login}的头像相册 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-	  <% if @user == current_user %>
-      <h1 class="app-photo">照片</h1>
-	  <% else %>
-      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的头像相册"} %>
-	  <% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'user/albums/tab', :locals => {:user => @user, :hover => 1} %>
-      <div class="pic-box">
-        <%= render :partial => 'album_path' %>
-        <% if @photos.total_entries != 0 %>
-          <%= render :partial => 'user/albums/album_table' %>
-        <% else %>
-					<% if @user == current_user %>
-					  <div class='tip'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'album') %>吧</div>
-					<% else %>
-					  <div class='tip'>还没有图片</div>
-					<% end %>
-        <% end %>
-        <%= render :partial => 'user/albums/album_desc' %>
-        <%= render :partial => 'user/albums/album_func' %>
-      </div>
+<% canvas_tag do %>
+	<% if @user == current_user %>
+    <h1 class="app-photo">照片</h1>
+	<% else %>
+    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的头像相册"} %>
+	<% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'user/albums/tab', :locals => {:user => @user, :hover => 1} %>
+    <div class="pic-box">
+      <%= render :partial => 'album_path', :locals => {:user => @user, :album => @album} %>
+      <% if @photos.total_entries != 0 %>
+        <%= render :partial => 'user/albums/album_table', :locals => {:album => @album, :photos => @photos} %>
+      <% else %>
+				<% if @user == current_user %>
+					<div class='tip'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'album') %>吧</div>
+				<% else %>
+					<div class='tip'>还没有图片</div>
+				<% end %>
+      <% end %>
+      <%= render :partial => 'user/albums/album_desc', :locals => {:user => @user, :album => @album} %>
+      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @album, :commentable => true, :diggable => false, :viewable => false, :comment_opts => {:commentable => @album, :recipient => @album.poster}, :reply_to => @reply_to} %>
     </div>
-  </div></div>
-</div></div></div></div>
-
-<% unless @reply_to.blank? %>
-<%= onload_javascript_tag "Iyxzone.Comment.set('avatar_album', #{@album.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+  </div>
 <% end %>
-

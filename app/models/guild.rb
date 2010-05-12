@@ -110,43 +110,43 @@ class Guild < ActiveRecord::Base
 	end
 
   def has_member? user
-    !memberships.find(:first, :conditions => {:user_id => user.id, :status => [3,4,5]}).blank? 
+    memberships.exists? :user_id => user.id, :status => [3,4,5]
   end
 
   def has_character? character
-    !memberships.find(:first, :conditions => {:character_id => character.id, :status => [3,4,5]}).blank?
+    memberships.exists? :character_id => character.id, :status => [3,4,5]
   end
 
   def all_memberships_for user
-    memberships.find(:all, :conditions => {:user_id => user.id})
+    memberships.all(:conditions => {:user_id => user.id})
   end
 
   def memberships_for user
-    memberships.find(:all, :conditions => {:user_id => user.id, :status => [3, 4, 5]})
+    memberships.all(:conditions => {:user_id => user.id, :status => [3, 4, 5]})
   end
 
   def requests_for user
-    requests.find(:all, :conditions => {:user_id => user.id})
+    requests.all(:conditions => {:user_id => user.id})
   end
 
   def invitations_for user
-    invitations.find(:all, :conditions => {:user_id => user.id})
+    invitations.all(:conditions => {:user_id => user.id})
   end
 
   def all_characters_for user
-    all_characters.find(:all, :conditions => {:user_id => user.id})
+    all_characters.all(:conditions => {:user_id => user.id})
   end
 
   def characters_for user
-    characters.find(:all, :conditions => {:user_id => user.id})
+    characters.all(:conditions => {:user_id => user.id})
   end
 
   def request_characters_for user
-    request_characters.find(:all, :conditions => {:user_id => user.id})
+    request_characters.all(:conditions => {:user_id => user.id})
   end
 
   def invite_characters_for user
-    invite_characters.find(:all, :conditions => {:user_id => user.id})
+    invite_characters.all(:conditions => {:user_id => user.id})
   end
 
   def role_for user

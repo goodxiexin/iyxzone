@@ -8,14 +8,6 @@ class SessionsController < ApplicationController
     end
   end
 
-	def chose
-		if cookies[:auth_token].nil?
-			redirect_to login_url
-		else
-			redirect_to :controller => 'user/home', :action => 'show'
-		end
-	end
-
   def create
     @user = User.find_by_email(params[:email])
     if !@user.nil? and !@user.active?

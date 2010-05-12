@@ -15,10 +15,10 @@
           <div class='info member s_clear'>
             <h4><%= profile_link participant, :class => 'blk' %></h4>
             <span class='red nowrap'><%= character.name %></span><br/>
-            <% if @event.poster == current_user %>
+            <% if event.poster == current_user %>
               <span class='blk op' id='event_request_option_<%= request.id %>'>
-              <%= link_to_remote '接受', :url => accept_event_request_url(@event, request, :at => 'event'), :method => 'put', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %> |
-              <%= link_to_remote '拒绝', :url => decline_event_request_url(@event, request, :at => 'event'), :method => 'delete', :class => 'gray', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %>
+              <%= link_to_remote '接受', :url => accept_event_request_url(event, request, :at => 'event'), :method => 'put', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %> |
+              <%= link_to_remote '拒绝', :url => decline_event_request_url(event, request, :at => 'event'), :method => 'delete', :class => 'gray', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %>
               </span>
             <% end %>
           </div>

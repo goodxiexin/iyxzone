@@ -17,7 +17,7 @@ Object.extend(Iyxzone.Video.Builder, {
       error('标题不能为空');
       return false;
     }
-    if($('video_url').value == ''){
+    if($('video_video_url').value == ''){
       error('url不能为空');
       return false;
     }

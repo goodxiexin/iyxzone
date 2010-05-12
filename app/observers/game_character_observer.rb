@@ -17,6 +17,17 @@ class GameCharacterObserver < ActiveRecord::Observer
 		character.deliver_feeds :data => {:type => 0}
 	end
 
+  def before_update character
+    # if it is wow or wow tw characters, verifying need to be operated again
+    if character.name_changed?
+      g1 = Game.find_by_name("魔兽世界")
+      g2 = Game.find_by_name("魔兽世界（台服）")
+      if (character.game_id == g1.id or character.game_id == g2.id) and !character.data.nil?
+        character.data = nil
+      end
+    end  
+  end
+
   def after_update character
     # issue feeds
     if character.playing and !character.playing_was
@@ -24,13 +35,6 @@ class GameCharacterObserver < ActiveRecord::Observer
     elsif !character.playing and character.playing_was
       character.deliver_feeds :data => {:type => 2}
     end
-		
-		# if it is wow or wow tw characters, verifying need to be operated again
-		g1 = Game.find_by_name("魔兽世界")
-		g2 = Game.find_by_name("魔兽世界（台服）")
-		if (character.game_id == g1.id or character.game_id == g2.id) and !character.data.nil?
-			character.data = nil
-		end
   end
 
   def after_destroy character

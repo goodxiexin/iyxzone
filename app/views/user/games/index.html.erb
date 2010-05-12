@@ -8,6 +8,7 @@
 
 <% subject = get_subject @user %>
 
+<% canvas_tag do %>
 <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
   <div class="round_m"><div class="round_body">
 	  <% if @user == current_user %>
@@ -22,5 +23,4 @@
 		    <%= render :partial => 'game_items', :object => @games %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>
