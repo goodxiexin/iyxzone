@@ -16,14 +16,20 @@
 		<%= content_tag :h1, "未达到领取任务的资格" %>
 	<% end %>
 <% else %>
-	<% if @current_user_task.is_done? %>
-		<%= content_tag :h1, "已经完成该任务" %>
+	<% if @current_user_task.is_expired? %>
+		<%= content_tag :h1, "该任务已经过期,可以重新领取" %>
+		<% @current_user_task.destroy %>
+		<%= content_tag :h1, link_to("做这个任务！", edit_task_path(@current_task) )  %>
 	<% else %>
-		<% if @current_user_task.is_achieved? %>
-<!-- TODO link_to put --!>
-			<%= content_tag :h1, link_to("领取奖励", task_path(), :method => :put) %>
+		<% if @current_user_task.is_done? %>
+			<%= content_tag :h1, "已经完成该任务" %>
 		<% else %>
-			<%= content_tag :h1, "任务还没有完成,继续努力吧" %>
-		<% end %>
-	<% end %> 
+			<% if @current_user_task.is_achieved? %>
+	<!-- TODO link_to put --!>
+				<%= content_tag :h1, link_to("领取奖励", task_path(), :method => :put) %>
+			<% else %>
+				<%= content_tag :h1, "任务还没有完成,继续努力吧" %>
+			<% end %>
+		<% end %> 
+	<% end %>
 <% end %>

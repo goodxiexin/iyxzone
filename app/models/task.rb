@@ -9,7 +9,7 @@ class Task < ActiveRecord::Base
 #TODO: maybe more resources in  TASKRESOURCE other than USER_COUNTER
 		TASKRESOURCE =  USER_COUNTER 
 
-		@key_in_TASKRESOURCE = Proc.new {|k,v| TASKRESOURCE.include?(key.sub(/_count/).downcase}
+		@key_in_TASKRESOURCE = Proc.new {|k,v| TASKRESOURCE.include?(key.sub(/_count/).downcase)}
 	end
 
 	include TaskResource
@@ -27,9 +27,19 @@ class Task < ActiveRecord::Base
 	validate	:reward_pattern
 	validates_inclusion_of :catagory, :in => CATAGORY_SET
 
+	def get_user_task_tip	user_id
+		current_user_task = get_user_task user_id
+		if current_user_task
+			return current_user_task.show_notification
+		end
+		return []
+	end
+
 #TODO: may optimized
 	def get_user_task user_id
-		UserTask.first(:conditions => {:user_id => user_id, :task_id => id} )
+		ut = UserTask.first(:conditions => {:user_id => user_id, :task_id => id} )
+		logger.error ut.inspect
+		ut
 	end
 
 #TODO

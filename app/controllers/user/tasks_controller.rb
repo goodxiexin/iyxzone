@@ -25,8 +25,7 @@ class User::TasksController < ApplicationController
 					flash[:notice] = "你已经领取了该任务，赶快完成吧！" 
 				else
 					@user_task = UserTask.new(:user_id => current_user.id, :task_id => @current_task.id)
-					@user_task.init_achievement_and_goal(current_user.id)
-					@user_task.starts_at = DateTime.now
+					@user_task.init_user_task(current_user.id)
 					@user_task.save
 				end
 			else
