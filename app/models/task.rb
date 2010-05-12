@@ -1,4 +1,3 @@
-
 class Task < ActiveRecord::Base
 	module TaskResource
 		INVISIBLE = 1
@@ -7,11 +6,10 @@ class Task < ActiveRecord::Base
 		REWARDRESOURCE = ["gold"]
 		CATAGORY_SET = [1,2,3]
 		USER_COUNTER = ["characters", "games","game_attentions", "sharings", "notices", "notifications", "friends", "photos", "statuses", "friend_requests","guild_requests", "event_requests", "guild_invitations", "event_invitations", "poll_invitations", "poke_deliveries", "albums", "blogs", "videos","guilds", "participated_guilds", "polls", "participated_polls"]
-#TODO: merge USER_COUNTER & TASKRESOURCE
-		TASKRESOURCE = ["blog", "album", "photo", "friend", "character"] | ["poll", "event", "guild"] | USER_COUNTER | ["poke"]
+#TODO: maybe more resources in  TASKRESOURCE other than USER_COUNTER
+		TASKRESOURCE =  USER_COUNTER 
 
-		
-		@key_in_TASKRESOURCE = Proc.new {|k,v| k.to_s.humanize.split(' ').any?{|x| TASKRESOURCE.include?(x.downcase)}}
+		@key_in_TASKRESOURCE = Proc.new {|k,v| TASKRESOURCE.include?(key.sub(/_count/).downcase}
 	end
 
 	include TaskResource
@@ -36,7 +34,10 @@ class Task < ActiveRecord::Base
 
 #TODO
 	def can_be_select_by? user_id
-		true	
+		#if pretask in UserTask.get_all_user_task user_id and
+		# current not in 
+		# and userinfo satisfied
+		return true
 	end
 
 	#奖励现在只能是gold
