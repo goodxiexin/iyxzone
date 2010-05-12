@@ -13,7 +13,12 @@
             <%= link_to (image_tag picture_news.pictures.first.public_filename, :height => 100, :width => 160), news_url(picture_news) %>
             <span><%= news_link picture_news %></span>
           </div>
-        <% end %>
+        <% elsif video_news %>
+          <div class="rich">
+            <%= link_to (image_tag picture_news.pictures.first.public_filename, :height => 100, :width => 160), news_url(video_news) %>
+            <span><%= news_link video_news %></span>
+          </div>
+        <% end %>          
         <div class="list">
           <ul>
             <% news_list.each_with_index do |news, idx| %>
