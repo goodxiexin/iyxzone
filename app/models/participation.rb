@@ -1,5 +1,7 @@
 class Participation < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => "participations.participant_id IN (#{user_ids.join(',')}) AND participations.status IN (3,4,5)"}}
+
   belongs_to :participant, :class_name => 'User'
 
   belongs_to :character, :class_name => 'GameCharacter'

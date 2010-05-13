@@ -2,7 +2,7 @@ class User::EventsController < UserBaseController
 
   layout 'app'
 
-  PER_PAGE = PER_PAGE
+  PER_PAGE = 10
 
   PREFETCH = [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}]
 
@@ -27,7 +27,7 @@ class User::EventsController < UserBaseController
   end
 
   def friends
-    @events = current_user.friend_events.paginate :page => params[:page], :per_page => PER_PAGE
+    @events = Event.nonblocked.prefetch(PREFETCH).match(:id => Participation.by(current_user.friend_ids).map(&:event_id).uniq).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def show
