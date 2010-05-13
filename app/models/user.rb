@@ -81,13 +81,9 @@ class User < ActiveRecord::Base
   end
 
 	# status
-  has_many :statuses, :foreign_key => 'poster_id', :conditions => {:verified => [0,1]}, :order => 'created_at DESC', :dependent => :destroy
+  has_many :statuses, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
-	has_one :latest_status, :foreign_key => 'poster_id', :conditions => {:verified => [0,1]}, :class_name => 'Status', :order => 'created_at DESC'
-
-  def friend_statuses
-    Status.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = statuses.poster_id", :conditions => {:verified => [0,1]}, :order => 'created_at desc', :include => [{:first_comment => [:commentable, {:poster => :profile}]}, {:last_comment => [:commentable, {:poster => :profile}]}, {:poster => :profile}])
-  end
+	has_one :latest_status, :foreign_key => 'poster_id', :class_name => 'Status', :order => 'created_at DESC'
 
   # friend
 	has_many :all_friendships, :class_name => 'Friendship', :dependent => :destroy
@@ -165,18 +161,14 @@ class User < ActiveRecord::Base
 
   has_one :avatar_album, :foreign_key => 'owner_id', :dependent => :destroy
 
-  has_many :albums, :class_name => 'PersonalAlbum', :conditions => {:verified => [0,1]}, :foreign_key => 'owner_id', :order => 'created_at DESC', :dependent => :destroy
+  has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'created_at DESC', :dependent => :destroy
 
   # 活跃的相册，就是有上传过东西的相册
-  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum') AND verified IN (0,1)"
-
-  def friend_albums
-    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = albums.poster_id", :conditions => "privilege != 4 AND photos_count != 0 AND verified IN (0,1)", :order => 'uploaded_at desc', :include => [{:poster => :profile}, :poster, :cover])
-  end
+  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
   def albums_count relationship='owner'
     # dont forget avatar album which is not accessible to none-friend
-    avatar_album_count = (self.avatar_album.verified == 2) ? 0 : 1
+    avatar_album_count = self.avatar_album.rejected? ? 0 : 1
     if relationship == 'owner'
       avatar_album_count + albums_count1 + albums_count2 + albums_count3 + albums_count4
     elsif relationship == 'friend'
@@ -217,7 +209,7 @@ class User < ActiveRecord::Base
   end
 
   # videos
-  has_many :videos, :conditions => {:verified => [0,1]}, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
+  has_many :videos, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
 
   def videos_count relationship='owner'
     case relationship
@@ -232,10 +224,11 @@ class User < ActiveRecord::Base
     end  
   end
 
+=begin
   def friend_videos
     Video.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = videos.poster_id", :conditions => "privilege != 4 AND verified IN (0,1)", :order => 'created_at desc', :include => [{:poster => :profile}, :share])
   end
-
+=end
   # events
   has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy
 
@@ -270,6 +263,9 @@ class User < ActiveRecord::Base
 
   # sharings
   has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
+
+  # alias for sharings
+  has_many :all_sharings, :foreign_key => 'poster_id', :order => 'created_at DESC', :class_name => 'Sharing'
 
   with_options :class_name => 'Sharing', :foreign_key => 'poster_id', :order => 'created_at DESC' do |user|
     
@@ -329,21 +325,21 @@ class User < ActiveRecord::Base
   # polls
   has_many :votes, :foreign_key => 'voter_id', :dependent => :destroy
 
-  has_many :polls, :foreign_key => 'poster_id', :conditions => {:verified => [0,1]}, :order => 'created_at DESC', :dependent => :destroy
+  has_many :polls, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
-  has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id} AND verified IN (0,1)'
+  has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
 
   def friend_votes_for poll
     Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = votes.voter_id", :conditions => {:poll_id => poll.id})
   end
-
+=begin
   def friend_polls
     poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = votes.voter_id", :limit => 20).map(&:poll_id).uniq
     participated = Poll.find(poll_ids, :conditions => {:verified => [0,1]}, :include => [{:poster => :profile}, :answers])
     posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = polls.poster_id", :conditions => {:verified => [0,1]}, :order => 'created_at desc', :include => [{:poster => :profile}, :answers], :limit => 20)
     (participated + posted - polls).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
   end
-
+=end
 	# guilds
 	has_many :memberships, :dependent => :destroy
 
@@ -400,11 +396,11 @@ class User < ActiveRecord::Base
 
 	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4 AND draft != 1"
 
-	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4 AND verified IN (0,1)"
+	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4"# AND verified IN (0,1)"
 
 	has_many :photo_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
-	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4 AND verified IN (0,1)"
+	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4"
 
 	# feeds
 	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'

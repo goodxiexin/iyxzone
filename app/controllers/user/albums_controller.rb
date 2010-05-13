@@ -4,36 +4,35 @@ class User::AlbumsController < UserBaseController
 
   PER_PAGE = 10
 
+  PREFETCH = [{:poster => :profile}, :poster, :cover]
+
   def index
     @relationship = @user.relationship_with current_user
-    @privilege = get_privilege_cond @relationship
-    @albums = @user.albums.all(:conditions => @privilege)
-    @albums.push(@user.avatar_album) if @user.avatar_album.verified != 2
-    @albums = @albums.paginate :page => params[:page], :per_page => PER_PAGE
+    @albums = @user.albums.for(@relationship).concat(@user.avatar_album.rejected? ? []: [@user.avatar_album]).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 	def recent
-    @albums = Album.recent.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :poster, :cover]
+    @albums = Album.recent.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def friends
-    @albums = current_user.friend_albums.paginate :page => params[:page], :per_page => PER_PAGE
+    @albums = PersonalAlbum.by(current_user.friend_ids).nonblocked.for('friend').not_empty.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def select
-    @albums = current_user.albums
+    @albums = current_user.albums.nonblocked
   end
 
   def show
     respond_to do |format|
       format.html {
         @user = @album.poster
-        @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
+        @photos = @album.photos.nonblocked.paginate :page => params[:page], :per_page => 12 
         @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
         render :action => 'show'
       }
       format.json {
-        @photos = @album.photos
+        @photos = @album.photos.nonblocked
         @json = @photos.map {|p| p.public_filename}
         render :json => @json
       }
@@ -86,7 +85,7 @@ class User::AlbumsController < UserBaseController
 
   def destroy
     if params[:migration] and params[:migration].to_i == 1 and params[:migrate_to]
-      new_album = current_user.albums.find(params[:migrate_to])
+      new_album = current_user.albums.nonblocked.find(params[:migrate_to])
       Photo.update_all("album_id = #{new_album.id}, privilege = #{new_album.privilege}", {:album_id => @album.id})
       new_album.update_attribute(:photos_count, new_album.photos_count + @album.photos_count)
     end

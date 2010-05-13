@@ -18,6 +18,18 @@ module Model
       include InstanceMethods
 
       extend SingletonMethods
+
+      named_scope :for, lambda {|relationship|
+        if relationship == 'owner'
+          {:conditions => {:privilege => [1,2,3,4]}}
+        elsif relationship == 'friend'
+          {:conditions => {:privilege => [1,2,3]}}
+        elsif relationship == 'same_game'
+          {:conditions => {:privilege => [1,2]}}
+        else
+          {:conditions => {:privilege => 1}}
+        end
+      }
     
     end
 

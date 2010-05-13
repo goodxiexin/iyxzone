@@ -1,5 +1,7 @@
 class Vote < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:voter_id => user_ids}}}
+
 	serialize :answer_ids, Array
 
   belongs_to :voter, :class_name => 'User'
@@ -44,7 +46,7 @@ protected
     return if answer_ids.blank? or poll.blank?
     if poll.max_multiple < answer_ids.count
       errors.add(:answer_ids, "选太多了")
-    elsif !poll.has_answers? answer_ids
+    elsif !poll.has_answers?(answer_ids)
       errors.add(:answer_ids, "选项不存在")
     end
   end

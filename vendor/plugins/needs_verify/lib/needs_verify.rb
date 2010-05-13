@@ -51,6 +51,10 @@ module NeedsVerify
 
   module InstanceMethods
 
+    def rejected?
+      self.verified == 2
+    end
+
     def needs_verify
       self.verified = 0
       self.save

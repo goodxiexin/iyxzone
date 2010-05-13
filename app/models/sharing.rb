@@ -1,5 +1,9 @@
 class Sharing < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
+
+  named_scope :in, lambda {|type| type == 'all' ? {}:{:conditions => {:shareable_type => type}}} 
+
   belongs_to :poster, :class_name => 'User'
 
   belongs_to :share

@@ -2,31 +2,38 @@ class User::PollsController < UserBaseController
 
   layout 'app'
 
+  PER_PAGE = 10
+  PREFETCH = [{:poster => :profile}, :answers]
+
   def index
-    @polls = @user.polls.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :answers]
+    @polls = @user.polls.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 	def hot
-    @polls = Poll.hot.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :answers]
+    @polls = Poll.hot.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
 	end
 
   def recent
-    @polls = Poll.recent.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :answers]
+    @polls = Poll.recent.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
 	end
 
   def participated
-    @polls = @user.participated_polls.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :answers]
+    @polls = @user.participated_polls.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def friends
-    @polls = current_user.friend_polls.paginate :page => params[:page], :per_page => 10
+    # polls that your friends participated in
+    @participated = Poll.nonblocked.prefetch(PREFETCH).find(Vote.by(current_user.friend_ids).map(&:poll_id).uniq)
+    # polls that your friend posted
+    @posted = Poll.by(current_user.friend_ids).nonblocked.prefetch(PREFETCH)
+    @polls = (@participated + @posted).uniq.sort{|p1,p2| p1.created_at <=> p2.created_at}.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def show
     @random_polls = Poll.random :limit => 5, :except => [@poll]
     @user = @poll.poster
     @vote = @poll.votes.find_by_voter_id(current_user.id)
-    @vote_feeds = current_user.friend_votes_for @poll
+    @vote_feeds = @poll.votes.by(current_user.friend_ids)#current_user.friend_votes_for @poll
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 
@@ -35,7 +42,8 @@ class User::PollsController < UserBaseController
   end
 
   def create
-    @poll = Poll.new((params[:poll] || {}).merge({:poster_id => current_user.id}))
+    @poll = current_user.polls.build(params[:poll] || {})
+
     if @poll.save
       redirect_to poll_url(@poll)
     else
@@ -52,7 +60,7 @@ class User::PollsController < UserBaseController
   end
 
   def update
-    if @poll.update_attributes((params[:poll] || {}).merge({:poster_id => current_user.id}))
+    if @poll.update_attributes(params[:poll] || {})
       render :update do |page|
         page << "facebox.close();"
       end

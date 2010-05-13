@@ -1,5 +1,9 @@
 class Video < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
+
+  named_scope :prefetch, lambda {|opts| {:include => opts}}
+
   belongs_to :poster, :class_name => 'User'
 
   belongs_to :game

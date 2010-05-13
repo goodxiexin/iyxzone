@@ -6,7 +6,7 @@ class User::Polls::VotesController < UserBaseController
     if @vote.save
       redirect_to poll_url(@poll)
 		else
-			flash[:error] = "保存的时候发生错误"
+			flash[:error] = "#{@vote.errors.on(:answer_ids)}: #{@vote.errors.on(:poll_id)}"#保存的时候发生错误"
 			redirect_to poll_url(@poll)
 		end
   end

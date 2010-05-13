@@ -8,7 +8,7 @@ class Photo < ActiveRecord::Base
 
 	has_many :relative_users, :through => :tags, :source => 'tagged_user'
 
-	named_scope :hot, :conditions => ["parent_id IS NULL and created_at > ? and privilege != 4 and verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
+	named_scope :hot, :conditions => ["parent_id IS NULL and created_at > ? and privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
 
   needs_verification :sensitive_columns => [:notation]
 

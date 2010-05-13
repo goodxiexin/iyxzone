@@ -2,15 +2,17 @@ class User::PhotosController < UserBaseController
 
   layout 'app'
 
+  PREFETCH = [:album, {:poster => :profile}]
+
 	def hot
-    @photos = Photo.hot.paginate :page => params[:page], :per_page => 10, :conditions => "privilege != 4", :include => [:album, {:poster => :profile}]
+    @photos = Photo.hot.nonblocked.prefetch([:album, {:poster => :profile}]).paginate :page => params[:page], :per_page => 10
   end
 
   def relative
     @infos = []
     @user.photo_tags.all(:include => [:photo, {:poster => :profile}]).group_by(&:photo_id).map do |photo_id, tags|
-      photo = tags.first.photo
-      if !photo.is_owner_privilege?
+      photo = Photo.nonblocked.find_by_id(photo_id)
+      if !photo.blank? and !photo.is_owner_privilege?
         @infos << {:photo => photo, :posters => tags.map(&:poster).uniq}
       end
     end
@@ -36,7 +38,7 @@ class User::PhotosController < UserBaseController
 	end
 
   def record_upload
-    @photos = @album.photos.find(params[:ids] || [])
+    @photos = @album.photos.nonblocked.find(params[:ids] || [])
 		@album.record_upload current_user, @photos
     render :update do |page|
       page.redirect_to edit_multiple_personal_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
@@ -78,13 +80,13 @@ class User::PhotosController < UserBaseController
   end
 
   def edit_multiple
-    @photos = @album.photos.find(params[:ids] || [])
+    @photos = @album.photos.nonblocked.find(params[:ids] || [])
   end
 
   def update_multiple
-    params[:photos].each do |id, attributes|
-      photo = @album.photos.find(id)
-      photo.update_attributes(attributes)
+    @photos = @album.photos.nonblocked.find(params[:photos].keys)
+    @photos.each do |photo|
+      photo.update_attributes(params[:photos]["#{photo.id}"])
     end
     @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
     redirect_to personal_album_url(@album) 

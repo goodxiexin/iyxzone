@@ -2,27 +2,31 @@ class User::VideosController < UserBaseController
 
   layout 'app'
 
+  PER_PAGE = 10
+
+  PREFETCH = [{:poster => :profile}, :share]
+
   def index
     @relationship = @user.relationship_with current_user
-    @privilege = get_privilege_cond @relationship
+    #@privilege = get_privilege_cond @relationship
     @count = @user.videos_count @relationship
-    @videos = @user.videos.paginate :page => params[:page], :per_page => 10, :conditions => @privilege, :include => [{:poster => :profile}, :share]
+    @videos = @user.videos.nonblocked.for(@relationship).prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 	def hot
-    @videos = Video.hot.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
+    @videos = Video.hot.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def recent
-    @videos = Video.recent.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
+    @videos = Video.recent.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def relative
-    @videos = @user.relative_videos.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
+    @videos = @user.relative_videos.nonblocked.for('friend').prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def friends
-    @videos = current_user.friend_videos.paginate :page => params[:page], :per_page => 10
+    @videos = Video.by(current_user.friend_ids).nonblocked.for('friend').prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def new
@@ -30,7 +34,7 @@ class User::VideosController < UserBaseController
   end
 
   def create
-		@video = Video.new((params[:video] || {}).merge({:poster_id => current_user.id}))
+		@video = current_user.videos.build(params[:video] || {})
     
     if @video.save
       redirect_to video_url(@video)
@@ -53,7 +57,7 @@ class User::VideosController < UserBaseController
   end
 
   def update
-    if @video.update_attributes((params[:video] || {}).merge({:poster_id => current_user.id}))
+    if @video.update_attributes(params[:video] || {})
 		  redirect_to video_url(@video)
     else
       render :action => 'edit'
