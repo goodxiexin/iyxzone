@@ -2,30 +2,32 @@ class User::EventsController < UserBaseController
 
   layout 'app'
 
+  PER_PAGE = PER_PAGE
+
+  PREFETCH = [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}]
+
   def index
-    @events = @user.events.paginate :page => params[:page], :per_page => 10, :include => [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}] 
+    @events = @user.events.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 	def hot
-    cond = user_game_conds
-    @events = Event.hot.find(:all, :conditions => cond, :include => [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}]).paginate :page => params[:page], :per_page => 10
+    @events = Event.hot.nonblocked.prefetch(PREFETCH).match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def recent
-    cond = user_game_conds
-    @events = Event.recent.all(:conditions => cond, :include => [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}]).paginate :page => params[:page], :per_page => 10
+    @events = Event.recent.nonblocked.prefetch(PREFETCH).match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE
 	end
 
   def upcoming
-    @events = @user.upcoming_events.paginate :page => params[:page], :per_page => 10, :include => [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}]
+    @events = @user.upcoming_events.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def participated
-    @events = @user.participated_events.paginate :page => params[:page], :per_page => 10, :include => [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}] 
+    @events = @user.participated_events.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def friends
-    @events = current_user.friend_events.paginate :page => params[:page], :per_page => 10
+    @events = current_user.friend_events.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def show
@@ -36,12 +38,12 @@ class User::EventsController < UserBaseController
 
     @user = @event.poster
     @album = @event.album
-    @photos = @album.latest_photos
+    @photos = @album.latest_photos.nonblocked
 
 		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @participations = @event.participations_for current_user
 
-    @messages = @event.comments.paginate :page => params[:page], :per_page => 10, :include => [:commentable, {:poster => :profile}]
+    @messages = @event.comments.paginate :page => params[:page], :per_page => PER_PAGE, :include => [:commentable, {:poster => :profile}]
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @event.id, :wall_type => 'event'}}
 
 		render :action => 'show', :layout => 'app2'
@@ -55,8 +57,7 @@ class User::EventsController < UserBaseController
   end
 
   def create
-    event_opts = (params[:event] || {}).merge({:poster_id => current_user.id})
-    @event = Event.new(event_opts)
+    @event = current_user.events.build(params[:event] || {})
     if @event.save
       redirect_to new_event_invitation_url(@event)
     else
@@ -73,8 +74,7 @@ class User::EventsController < UserBaseController
   end
 
   def update
-    event_opts = (params[:event] || {}).merge({:poster_id => current_user.id})
-    if @event.update_attributes(event_opts)
+    if @event.update_attributes(params[:event] || {})
       redirect_to event_url(@event)
     else
       render :action => 'edit'
@@ -99,13 +99,13 @@ class User::EventsController < UserBaseController
   def search
     case params[:type].to_i
     when 0
-      @events = current_user.upcoming_events.search(params[:key]).paginate :page => params[:page], :per_page => 10
+      @events = current_user.upcoming_events.nonblocked.search(params[:key]).paginate :page => params[:page], :per_page => PER_PAGE
     when 1
-      @events = Event.hot.search(params[:key]).paginate :page => params[:page], :per_page => 10
+      @events = Event.hot.nonblocked.search(params[:key]).paginate :page => params[:page], :per_page => PER_PAGE
     when 2
-      @events = Event.recent.search(params[:key]).paginate :page => params[:page], :per_page => 10
+      @events = Event.recent.nonblocked.search(params[:key]).paginate :page => params[:page], :per_page => PER_PAGE
     when 3
-      @events = current_user.past_events.search(params[:key]).paginate :page => params[:page], :per_page => 10
+      @events = current_user.past_events.nonblocked.search(params[:key]).paginate :page => params[:page], :per_page => PER_PAGE
     end
     @remote = {:update => 'events', :url => {:action => 'search', :controller => 'user/events', :type => params[:type], :key => params[:key]}}
     render :partial => 'user/event/events', :object => @events
@@ -115,7 +115,7 @@ protected
 
   def setup
     if ['new'].include? params[:action]
-      @guild = current_user.privileged_guilds.find(params[:guild_id]) if !params[:guild_id].blank?
+      @guild = current_user.privileged_guilds.nonblocked.find(params[:guild_id]) if !params[:guild_id].blank?
     elsif ['show'].include? params[:action]
       @event = Event.find(params[:id], :include => [:game, :game_server, :game_area, {:comments => [{:poster => :profile}]}, :guild])
       require_verified @event

@@ -1,5 +1,11 @@
 class Event < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
+
+  named_scope :match, lambda {|cond| {:conditions => cond}}
+
+  named_scope :prefetch, lambda {|opts| {:include => opts}}
+
   has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id', :dependent => :destroy
 
   belongs_to :poster, :class_name => 'User'

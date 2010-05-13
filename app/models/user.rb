@@ -232,25 +232,18 @@ class User < ActiveRecord::Base
   # events
   has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy
 
-  has_many :v_events, :class_name => 'Event', :foreign_key => 'poster_id'
-
-  has_many :events, :foreign_key => 'poster_id', :order => 'start_time DESC', :conditions => ["end_time >= ? AND verified IN (0,1)", Time.now.to_s(:db)], :dependent => :destroy
+  has_many :events, :foreign_key => 'poster_id', :order => 'start_time DESC', :conditions => ["end_time >= ?", Time.now.to_s(:db)], :dependent => :destroy
 
 	with_options :order =>  'created_at DESC', :through => :participations, :source => :event, :uniq => true do |user|
 
-		user.has_many :all_events, :conditions => "participations.status IN (3,4,5) AND verified IN (0,1)"
+		user.has_many :all_events, :conditions => "participations.status IN (3,4,5)"
 
     # 不包括我发起的，这样的都在events里
-		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ? AND participations.status IN (3,4,5) AND verified IN (0,1)', Time.now.to_s(:db)]
+		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ? AND participations.status IN (3,4,5)', Time.now.to_s(:db)]
 
-		user.has_many :participated_events, :conditions => ["events.end_time < ? AND participations.status IN (3,4,5) AND verified IN (0,1)", Time.now.to_s(:db)]
+		user.has_many :participated_events, :conditions => ["events.end_time < ? AND participations.status IN (3,4,5)", Time.now.to_s(:db)]
 
 	end
-
-  def friend_events
-    event_ids = Participation.find(:all, :select => :event_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1").map(&:event_id).uniq
-    Event.find(event_ids, :conditions => {:verified => [0,1]}, :include => [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}])
-  end
 
 	def common_events_with user
 		events & user.events
@@ -329,17 +322,6 @@ class User < ActiveRecord::Base
 
   has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
 
-  def friend_votes_for poll
-    Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = votes.voter_id", :conditions => {:poll_id => poll.id})
-  end
-=begin
-  def friend_polls
-    poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = votes.voter_id", :limit => 20).map(&:poll_id).uniq
-    participated = Poll.find(poll_ids, :conditions => {:verified => [0,1]}, :include => [{:poster => :profile}, :answers])
-    posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = polls.poster_id", :conditions => {:verified => [0,1]}, :order => 'created_at desc', :include => [{:poster => :profile}, :answers], :limit => 20)
-    (participated + posted - polls).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
-  end
-=end
 	# guilds
 	has_many :memberships, :dependent => :destroy
 
@@ -349,11 +331,11 @@ class User < ActiveRecord::Base
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC', :uniq => true do |user|
 
-    user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5) AND verified IN (0,1)"
+    user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"
 
-    user.has_many :privileged_guilds, :conditions => "memberships.status IN (3,4) AND verified IN (0,1)"
+    user.has_many :privileged_guilds, :conditions => "memberships.status IN (3,4)"
 
-		user.has_many :participated_guilds, :conditions => "memberships.status IN (4,5) AND verified IN (0,1)"
+		user.has_many :participated_guilds, :conditions => "memberships.status IN (4,5)"
 
 	end
 
@@ -371,7 +353,7 @@ class User < ActiveRecord::Base
 	end
 
 	# invitation and requests
-	has_many :event_requests, :through => :v_events, :source => :requests
+	has_many :event_requests, :through => :events, :source => :requests
 
 	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => 0}, :dependent => :destroy
 

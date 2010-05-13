@@ -22,9 +22,7 @@ class User::PollsController < UserBaseController
   end
 
   def friends
-    # polls that your friends participated in
-    @participated = Poll.nonblocked.prefetch(PREFETCH).find(Vote.by(current_user.friend_ids).map(&:poll_id).uniq)
-    # polls that your friend posted
+    @participated = Poll.nonblocked.all(:conditions => {:id => Vote.by(current_user.friend_ids).map(&:poll_id).uniq})
     @posted = Poll.by(current_user.friend_ids).nonblocked.prefetch(PREFETCH)
     @polls = (@participated + @posted).uniq.sort{|p1,p2| p1.created_at <=> p2.created_at}.paginate :page => params[:page], :per_page => PER_PAGE
   end
