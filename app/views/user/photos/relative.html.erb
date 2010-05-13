@@ -9,7 +9,7 @@
     <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的相册"} %> 
   <% end %>
   <div class='box02 canvas_int'>
-    <%= render :partial => 'user/albums/tab', :locals => {:user => @user, :hover => 3} %>
+    <%= render :partial => 'user/albums/tab', :locals => {:user => @user, :hover => 2} %>
     <div class="pic-box">
       <div class="path-box">
         <p><span>共 <%= @infos.total_entries %> 张照片</span></p>
