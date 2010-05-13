@@ -1,21 +1,21 @@
-<div class='multibox'>
-  <div class='title'><b>新鲜事</b></div>
-  <% unless feed_deliveries.blank? %>
-  <div class='feed-box'>
-    <div class="home-wrap">
-      <div id ='feed_list'>
-        <%= render :partial => 'group_deliveries', :locals => {:feed_deliveries => feed_deliveries} %>
-      </div>
-      <div class="s_clear"></div>
-        <div class="round04 round_r_t jl-read-more space s_clear">
-          <div class="round_l_t">
-            <div class="round_r_b">
-              <div class="round_l_b">
-                <div class="round_m">
-                  <div class="round_body" id="more_feed">
-                    <% if feed_deliveries.size < first_fetch_size %>
-                      <div class='jl-more'>没有更多了...</div>
-                    <% else %>
+  <div class='multibox'>
+    <div class='title'><b>新鲜事</b></div>
+    <% unless feed_deliveries.blank? %>
+    <div class='feed-box'>
+      <div class="home-wrap">
+        <div id ='feed_list'>
+          <%= render :partial => 'group_deliveries', :locals => {:feed_deliveries => feed_deliveries} %>
+        </div>
+        <div class="s_clear"></div>
+          <div class="round04 round_r_t jl-read-more space s_clear">
+            <div class="round_l_t">
+              <div class="round_r_b">
+                <div class="round_l_b">
+                  <div class="round_m">
+                    <div class="round_body" id="more_feed">
+                      <% if feed_deliveries.size < first_fetch_size %>
+                        <div class='jl-more'>没有更多了...</div>
+                      <% else %>
                       <%= link_to_function "更多新鲜事", "Iyxzone.Profile.Feeder.moreFeeds(#{profile.id});", :class => "jl-more"%>
                     <% end %>
                   </div>

@@ -22,8 +22,8 @@
                   <% end %>
                   <div class='buttons home-dialog'>
                   <span class='left' id='latest_status'>
-                    <% unless current_user.latest_status.nil? %>
-                      <%= time_ago_in_chinese current_user.latest_status.created_at %> : <%= current_user.latest_status.content %>
+                    <% unless status.nil? %>
+                      <%= time_ago_in_chinese stauts.created_at %> : <%= status.content %>
                     <% end %>
                   </span>
                     <span class="right"><%= emotion_link 'status_content', :class => 'icon-face' %></span>

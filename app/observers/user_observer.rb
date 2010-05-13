@@ -6,7 +6,7 @@ class UserObserver < ActiveRecord::Observer
   def before_create user
     user.mail_setting = MailSetting.default
     user.privacy_setting = PrivacySetting.default
-    user.application_setting = PrivacySetting.default
+    user.application_setting = ApplicationSetting.default
   end
  
 	def after_create user

@@ -10,31 +10,18 @@ class User::ProfilesController < UserBaseController
 
   def show
     @relationship = @user.relationship_with current_user
-    @cond = get_privilege_cond @relationship
-    @setting = @user.privacy_setting
-
-    if @user != current_user
-      @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2]
-    end
-
+    @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2] if @relationship != 'owner'
     @friends = @user.friends.sort_by{rand}[0..2]
-
-		@blogs = @user.blogs.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
-		@albums = @user.active_albums.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
-		
-    @feed_deliveries = @profile.feed_deliveries.all(:limit => FirstFetchSize, :order => 'created_at DESC', :include => [{:feed_item => :originator}])
+		@blogs = @user.blogs.for(@relationship).limit(3) #find(:all, :conditions => @cond, :offset => 0, :limit => 3)
+		@albums = @user.active_albums.for(@relationship).limit(3) #find(:all, :conditions => @cond, :offset => 0, :limit => 3)
+    @feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).order('created_at DESC').prefetch([{:feed_item => :originator}])
 		@first_fetch_size = FirstFetchSize
-		
     @skin = @profile.skin
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-
-    @viewings = @profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
-
-    @characters = @user.characters.all(:include => [:game])
-
-    # wall messages
-    @messages = @profile.comments.paginate :page => params[:page], :per_page => 10
-    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
+    @viewings = @profile.viewings.limit(6).prefetch([{:viewer => :profile}])
+    @characters = @user.characters.prefetch([:game])
+    @messages = @profile.comments.nonblocked.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'Profile'}}
 	end
 
   def edit
@@ -71,7 +58,7 @@ class User::ProfilesController < UserBaseController
   end
 
 	def more_feeds
-		@feed_deliveries = @profile.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize, :order => 'created_at DESC')
+		@feed_deliveries = @profile.feed_deliveries.offset(FirstFetchSize + FetchSize * params[:idx].to_i).limit(FetchSize).order('created_at DESC')
 		@fetch_size = FetchSize
 	end
 
