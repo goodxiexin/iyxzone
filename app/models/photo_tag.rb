@@ -45,7 +45,7 @@ protected
     photo = Photo.find(:first, :conditions => {:id => photo_id})
     if photo.blank?
       errors.add(:photo_id, "照片不存在")
-    elsif photo.verified == 2 or photo.album.verified == 2
+    elsif photo.rejected? or photo.album.rejected?
       errors.add(:photo_id, "已经被和谐了")
     elsif !photo.is_taggable_by? poster
       errors.add(:photo_id, '没有权限标记')

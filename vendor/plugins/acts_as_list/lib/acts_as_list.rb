@@ -16,64 +16,39 @@ module ActsAsList
 
 			include ActsAsList::InstanceMethods
 
-      named_scope :next, lambda {|current|
-        order_name = self.list_opts[:order] 
-        if current.next.blank? and self.list_opts[:circular]
-          {:limit => 1, :order => "#{order_name} ASC"}
-        else
-          {:conditions => current.next_cond, :limit => 1, :order => "#{order_name} ASC"}
-        end
-      }
+      named_scope :next, lambda {|current| current.next_cond}
 
-      named_scope :prev, lambda {|current| 
-        order_name = self.list_opts[:order]
-        if current.prev.blank? and self.list_opts[:circular]
-          {:limit => 1, :order => "#{order_name} DESC"}
-        else
-          {:conditions => current.prev_cond, :limit => 1, :order => "#{order_name} DESC"}
-        end
-      }
+      named_scope :prev, lambda {|current| current.prev_cond}
 		end
 
 	end
 
 	module SingletonMethods
+
+    def next current
+    puts current.next_cond
+      self.first(current.next_cond)
+    end
+
+    def prev current
+      self.first(current.prev_cond)
+    end
+
 	end
 
 	module InstanceMethods
 
-    def list_cond
-      opts = self.class.list_opts
-      scope = opts[:scope]
-      cond = opts[:conditions]
-      
-      if scope
-        scope_value = send(scope)
-        if cond
-          "(#{scope} = #{scope_value}) AND (#{self.class.send(:sanitize_sql_for_conditions, cond)})"
-        else
-          "(#{scope} = #{scope_value})"
-        end
-      else
-        if cond
-          "(#{self.class.send(:sanitize_sql_for_conditions, cond)})"
-        else
-          ""
-        end
-      end
-    end
-
     def next_cond
       order_name = self.class.list_opts[:order]
       order = send(order_name)
-      cond_sql = list_cond
-      if cond_sql.blank?
-        cond_sql = ["#{order_name} > ?", order]
+      conditions = list_cond
+      if conditions.blank?
+        {:conditions => ["#{order_name} > ?", order], :limit => 1, :order => "#{order_name} ASC"}
       else
-        cond_sql = ["#{cond_sql} AND #{order_name} > ?", order]
+        {:conditions => ["#{conditions} AND #{order_name} > ?", order], :limit => 1, :order => "#{order_name} ASC"}
       end    
     end
-
+=begin
 		def next my_cond={}
       order_name = self.class.list_opts[:order]
       cond_sql = next_cond
@@ -90,18 +65,18 @@ module ActsAsList
 
       @next_in_list
 		end
-
+=end
     def prev_cond
       order_name = self.class.list_opts[:order]
       order = send(order_name)
-      cond_sql = list_cond
-      if list_cond.blank?
-        cond_sql = ["#{order_name} < ?", order]
+      conditions = list_cond
+      if conditions.blank?
+        {:conditions => ["#{order_name} < ?", order], :limit => 1, :order => "#{order_name} DESC"}
       else
-        cond_sql = ["#{cond_sql} AND #{order_name} < ?", order]
+        {:conditions => ["#{conditions} AND #{order_name} < ?", order], :limit => 1, :order => "#{order_name} DESC"}
       end
     end
-
+=begin
 		def prev my_cond={}
       order_name = self.class.list_opts[:order]
       cond_sql = prev_cond
@@ -139,8 +114,32 @@ module ActsAsList
         cond_sql = "#{cond_sql} AND (#{my_cond_sql})"
       end
       @last_in_list ||= self.class.find(:first, :conditions => cond_sql, :order => "#{order_name} DESC")
-    end    
-	
+    end
+=end
+
+  protected
+
+    def list_cond
+      opts = self.class.list_opts
+      scope = opts[:scope]
+      cond = opts[:conditions]
+      
+      if scope
+        scope_value = send(scope)
+        if cond
+          "(#{scope} = #{scope_value}) AND (#{self.class.send(:sanitize_sql_for_conditions, cond)})"
+        else
+          "(#{scope} = #{scope_value})"
+        end
+      else
+        if cond
+          "(#{self.class.send(:sanitize_sql_for_conditions, cond)})"
+        else
+          ""
+        end
+      end
+    end
+
 	end
 
 end

@@ -4,6 +4,7 @@ class User::StatusesController < UserBaseController
 
   PER_PAGE = 10
 
+  # TODO: prefetch fails T_T
   PREFETCH = [{:first_comment => [:commentable, :poster]}, {:last_comment => [:commentable, :poster]}, {:poster => :profile}]
 
   def index
@@ -13,11 +14,11 @@ class User::StatusesController < UserBaseController
       params[:page] = @user.statuses.index(@status) / PER_PAGE + 1 if @status
     end
 
-    @statuses = @user.statuses.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @statuses = @user.statuses.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def friends
-    @statuses = Status.by(current_user.friend_ids).nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @statuses = Status.by(current_user.friend_ids).nonblocked.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def create

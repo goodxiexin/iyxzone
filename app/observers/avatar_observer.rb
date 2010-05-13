@@ -9,7 +9,7 @@ class AvatarObserver < ActiveRecord::Observer
     return unless avatar.thumbnail.blank?
 
     # verify
-    avatar.verified = 0 # 总是需要验证的
+    avatar.needs_verify # 总是需要验证的
 
     # inherit some attributes from album
     album = avatar.album
@@ -40,7 +40,7 @@ class AvatarObserver < ActiveRecord::Observer
     return unless avatar.thumbnail.blank?
  
     if avatar.sensitive_columns_changed? or avatar.sensitive?
-      avatar.verified = 0
+      avatar.needs_verify
     end
   end
  
@@ -48,7 +48,7 @@ class AvatarObserver < ActiveRecord::Observer
     return unless avatar.thumbnail.blank?
 
     # verify
-    if avatar.recently_verified_from_unverified
+    if avatar.recently_recovered
       avatar.poster.raw_increment :photos_count
       avatar.album.raw_increment :photos_count
     elsif avatar.recently_unverified
@@ -72,7 +72,7 @@ class AvatarObserver < ActiveRecord::Observer
     return unless avatar.thumbnail.blank?
 
     # decrement counter
-    if avatar.verified != 2
+    if !avatar.rejected?
       avatar.album.raw_decrement :photos_count
       avatar.poster.raw_decrement :photos_count
     end

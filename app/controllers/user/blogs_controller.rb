@@ -27,14 +27,13 @@ class User::BlogsController < UserBaseController
   end
 
   def friends
-    # blog written by current_user.friend_ids, and viewable for friend, prefetching some associations
     @blogs = Blog.by(current_user.friend_ids).nonblocked.for('friend').prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def show
     @relationship = @user.relationship_with current_user
-    @next = Blog.nonblocked.for(@relationship).next @blog
-    @prev = Blog.nonblocked.for(@relationship).prev @blog
+    #@next = Blog.nonblocked.for(@relationship).next @blog
+    #@prev = Blog.nonblocked.for(@relationship).prev @blog
     @count = @user.blogs_count @relationship
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end

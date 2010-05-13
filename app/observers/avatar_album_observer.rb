@@ -2,7 +2,7 @@ class AvatarAlbumObserver < ActiveRecord::Observer
 
   def before_create album
     # verify
-    #album.verified = 1
+    album.needs_verify
 
     # inherit some attributes from album
 		album.title = "头像相册"
@@ -14,20 +14,20 @@ class AvatarAlbumObserver < ActiveRecord::Observer
 
   def before_update album
     if album.sensitive_columns_changed? and album.sensitive?
-      album.verified = 0
+      album.needs_verify
     end
   end
 
   def after_update album
-    if album.recently_verified_from_unverified
-      Photo.update_all("verified = 1", {:album_id => album.id})
+    if album.recently_recovered
+      Photo.verify_all(:album_id => album.id)#update_all("verified = 1", {:album_id => album.id})
       avatar = album.poster.avatar
       avatar.deliver_feeds if !avatar.blank?
     elsif album.recently_unverified
       album.photos.each do |photo|
         photo.destroy_feeds
       end
-      Photo.update_all("verified = 2", {:album_id => album.id})
+      Photo.unverify_all(:album_id => album.id)#update_all("verified = 2", {:album_id => album.id})
     end
   end
 

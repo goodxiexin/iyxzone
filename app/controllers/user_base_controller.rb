@@ -46,13 +46,9 @@ protected
   end
 
   def require_verified resource
-    if resource.verified == 2 and !is_admin
+    if resource.rejected? and !is_admin
       respond_to do |format|
-        format.js { 
-          render :update do |page|
-            page << "tip('该资源已经被和谐')"
-          end
-        }
+        format.js { render_js_error '该资源已经被和谐' } 
         format.html { render_not_found }
       end
     end 

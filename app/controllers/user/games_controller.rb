@@ -33,30 +33,21 @@ class User::GamesController < UserBaseController
 
   def show
     @game = Game.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, :tags])
-
-    @events = @game.events.all(:order => 'confirmed_count DESC', :limit => 5, :include => [{:album => :cover}])
-
-    @guilds = @game.guilds.all(:order => '(veterans_count + members_count) DESC', :limit => 5, :include => [{:album => :cover}, {:president => :profile}])
-
-    @albums = @game.albums.all(:limit => 3, :include => [:cover]) 
-
-    @blogs = @game.blogs.all(:limit => 3, :include => [{:poster => :profile}])
-
+    @events = @game.events.nonblocked.prefetch([{:album => :cover}]).people_order.limit(4)
+    @guilds = @game.guilds.nonblocked.prefetch([{:album => :cover}, {:president => :profile}]).people_order.limit(4)
+    @albums = @game.albums.nonblocked.for('friend').prefetch([:cover]).limit(3)
+    @blogs = @game.blogs.nonblocked.for('friend').prefetch([{:poster => :profile}])
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-		
-		if current_user.has_game? @game
-      servers = current_user.servers.all(:conditions => {:game_id => @game.id})
+		@has_game = current_user.has_game? @game
+    if @has_game
+      servers = current_user.servers.match(:game_id => @game.id)
       @comrades = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:server_id => servers.map(&:id)}, :include => [{:user => :profile}])
 		end
 		@players = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:game_id => @game.id}, :include => [{:user => :profile}])
-    
     @attention = @game.attentions.find_by_user_id(current_user.id)
-
-    @messages = @game.comments.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :commentable]
+    @messages = @game.comments.nonblocked.prefetch([{:poster => :profile}, :commentable]).paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @game.id, :wall_type => 'game'}}
-
-    @has_game = current_user.has_game? @game
-    @feed_deliveries = @game.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
+    @feed_deliveries = @game.feed_deliveries.limit(FirstFetchSize).order('created_at DESC')
 		@first_fetch_size = FirstFetchSize
   end
 

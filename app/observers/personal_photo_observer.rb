@@ -4,7 +4,7 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank?
  
     # verify?
-    photo.verified = 0 # 总是需要验证的
+    photo.needs_verify # 总是需要验证的
 
     # inherit some attributes from album 
     album = photo.album
@@ -24,7 +24,7 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank?
  
     if photo.sensitive_columns_changed? and photo.sensitive?
-      photo.verified = 0
+      photo.needs_verify
     end
   end
  
@@ -32,7 +32,7 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank?
    
     # verify
-    if photo.recently_verified_from_unverified
+    if photo.recently_recovered
       photo.album.raw_decrement :photos_count
     elsif photo.recently_unverified
       photo.album.raw_increment :photos_count
@@ -65,7 +65,7 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank? 
 
     # decrement counter
-    if photo.verified != 2
+    if !photo.rejected?
       photo.album.raw_decrement :photos_count
     end
 

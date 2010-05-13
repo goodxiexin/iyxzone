@@ -3,7 +3,7 @@ require 'app/mailer/comment_mailer'
 class CommentObserver < ActiveRecord::Observer
 
   def before_create comment
-    comment.verified = comment.sensitive? ? 0 : 1
+    comment.auto_verify
   end
 
   def after_create comment
@@ -276,7 +276,7 @@ class CommentObserver < ActiveRecord::Observer
     if comment.recently_unverified
       # 如果有相关的notice怎么办, 现在就忽略他
       comment.commentable.raw_decrement :comments_count
-    elsif comment.recently_verified_from_unverified
+    elsif comment.recently_recovered
       comment.commentable.raw_increment :comments_count
     end
   end

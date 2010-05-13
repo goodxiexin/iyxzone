@@ -29,7 +29,7 @@ class Blog < ActiveRecord::Base
                     :default_title => lambda {|blog| blog.title}, 
                     :create_conditions => lambda {|user, blog| blog.privilege != 4}
 
-  acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false, :verified => [0,1]}
+  acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 
   acts_as_privileged_resources :owner_field => :poster # 指明资源的拥有者的域是poster
 

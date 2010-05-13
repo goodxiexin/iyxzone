@@ -1,10 +1,8 @@
 class Guild < ActiveRecord::Base
 
+  named_scope :people_order, :order => '(members_count + veterans_count) DESC'
+
   named_scope :by, lambda {|user_ids| {:conditions => {:president_id => user_ids}}}
-
-  named_scope :match, lambda {|cond| {:conditions => cond}}
-
-  named_scope :prefetch, lambda {|opts| {:include => opts}}
   
   belongs_to :president, :class_name => 'User'
 

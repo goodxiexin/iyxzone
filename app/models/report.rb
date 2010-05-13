@@ -29,8 +29,9 @@ protected
   end
 
   def set_verified_flag
-    if reportable.verified != 2
+    if reportable.rejected?
       reportable.needs_verify
+      reportable.save
     end
   end
 
