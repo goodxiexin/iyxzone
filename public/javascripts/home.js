@@ -66,46 +66,26 @@ Object.extend(Iyxzone.Home.Feeder, {
     
     for(var i=0;i < feedCategories.length;i++)
       feedCategories[i].className = '';
-    if(type == null){
-      feedCategories[0].className = 'hover';
-    }else{
-      feedCategories[type+1].className = 'hover';
-    }
+    feedCategories[type].className = 'hover';
     
     this.idx = 0;
     this.type = type;
     $('feed_list').innerHTML = '';
     this.loading($('more_feed'));
     
-    if(type != null){
-      new Ajax.Request('/home/feeds?type=' + type, {method: 'get'});
-    }else{
-      new Ajax.Request('/home/feeds', {method: 'get'});
-    }
+    new Ajax.Request('/home/feeds?type=' + type, {method: 'get'});
   },
 
   moreFeeds: function(){
-    if(this.type != null){
-      new Ajax.Request('/home/more_feeds?type=' + this.type + '&idx=' + this.idx, {
-        method: 'get',
-        onLoading: function(){
-          this.loading($('more_feed'));
-        }.bind(this),
-        onSuccess: function(transport){
-          this.idx++;
-        }.bind(this)
-      });
-    }else{
-      new Ajax.Request('/home/more_feeds?idx=' + this.idx, {
-        method: 'get',
-        onLoading: function(){
-          this.loading($('more_feed'));
-        }.bind(this),
-        onSuccess: function(transport){
-          this.idx++;
-        }.bind(this)
-      });
-    }
+    new Ajax.Request('/home/more_feeds?type=' + this.type + '&idx=' + this.idx, {
+      method: 'get',
+      onLoading: function(){
+        this.loading($('more_feed'));
+      }.bind(this),
+      onSuccess: function(transport){
+        this.idx++;
+      }.bind(this)
+    });
   }
 
 });
