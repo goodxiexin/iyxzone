@@ -53,7 +53,7 @@
 					<% end %>
     <div class="welcome-banner">
         <div class="login-box formcontent">
-					<% form_tag sessions_url, :id => "login" do %>
+					<% form_tag sessions_url do %>
               <div class="rows s_clear">
 									<div class="fldid"><strong>邮箱：</strong></div>
 									<div class="fldvalue">
@@ -75,7 +75,7 @@
 											<%= check_box_tag 'remember_me', 1, true %><%= label_tag 'auto', '下次自动登录' %>
 									</div>
 									<div class="fldcb">
-											<a href="javascript:void(0)" class="login-btn" title="登陆" onclick="$('login').submit()" /></a>
+											 <input class='login-btn' id='loginBtn' title="登录" name="commit" type="submit" value="" onmouseover="$('loginBtn').writeAttribute('class', 'login-btn-hover');" onmouseout="$('loginBtn').writeAttribute('class','login-btn')"/>
 									</div>
 							</div>  
 							<div class="rows s_clear">
