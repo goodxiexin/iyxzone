@@ -1,5 +1,7 @@
 class Membership < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => "memberships.user_id IN (#{user_ids.join(',')}) and memberships.status IN (3,4,5)"}}
+
   belongs_to :user
 
   belongs_to :character, :class_name => 'GameCharacter'

@@ -224,11 +224,6 @@ class User < ActiveRecord::Base
     end  
   end
 
-=begin
-  def friend_videos
-    Video.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = videos.poster_id", :conditions => "privilege != 4 AND verified IN (0,1)", :order => 'created_at desc', :include => [{:poster => :profile}, :share])
-  end
-=end
   # events
   has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy
 
@@ -325,9 +320,7 @@ class User < ActiveRecord::Base
 	# guilds
 	has_many :memberships, :dependent => :destroy
 
-  has_many :v_guilds, :class_name => 'Guild', :foreign_key => 'president_id'
-
-  has_many :guilds, :conditions => {:verified => [0,1]}, :foreign_key => 'president_id', :dependent => :destroy
+  has_many :guilds, :foreign_key => 'president_id', :dependent => :destroy
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC', :uniq => true do |user|
 
@@ -338,17 +331,8 @@ class User < ActiveRecord::Base
 		user.has_many :participated_guilds, :conditions => "memberships.status IN (4,5)"
 
 	end
-
-  def friend_memberships
-    Membership.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = memberships.user_id", :conditions => "memberships.status != 0 AND memberships.status != 1") 
-  end
-
-  def friend_guilds
-    guild_ids = Membership.find(:all, :select => :guild_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = memberships.user_id", :conditions => "memberships.status != 0 AND memberships.status != 1").map(&:guild_id).uniq
-    Guild.find(guild_ids, :order => 'created_at desc', :conditions => {:verified => [0,1]}, :include => [{:album => :cover}, :forum, {:president => :profile}, {:game_server => [:area, :game]}])
-  end
-
-	def common_guilds_with user
+	
+  def common_guilds_with user
     all_guilds & user.all_guilds
 	end
 
@@ -359,7 +343,7 @@ class User < ActiveRecord::Base
 
 	has_many :poll_invitations, :dependent => :destroy
 
-	has_many :guild_requests, :through => :v_guilds, :source => :requests 
+	has_many :guild_requests, :through => :guilds, :source => :requests 
 
 	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => 0}, :dependent => :destroy
 
@@ -378,7 +362,7 @@ class User < ActiveRecord::Base
 
 	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4 AND draft != 1"
 
-	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4"# AND verified IN (0,1)"
+	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4"
 
 	has_many :photo_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 

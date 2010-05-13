@@ -6,26 +6,28 @@ class User::GuildsController < UserBaseController
 	
 	FetchSize = 5
 
+  PER_PAGE = 10
+
+  PREFETCH = [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]
+
   def index
-    @guilds = @user.guilds.paginate :page => params[:page], :per_page => 10, :include => [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]
+    @guilds = @user.guilds.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 	def participated
-    @guilds = @user.participated_guilds.paginate :page => params[:page], :per_page => 10, :include => [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]
+    @guilds = @user.participated_guilds.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
 	end
 
 	def hot
-    cond = user_game_conds
-    @guilds = Guild.hot.find(:all, :conditions => cond, :include => [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]).paginate :page => params[:page], :per_page => 10	
+    @guilds = Guild.hot.nonblocked.prefetch(PREFETCH).match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def recent
-    cond = user_game_conds
-    @guilds = Guild.recent.find(:all, :conditions => cond, :include => [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]).paginate :page => params[:page], :per_page => 10
+    @guilds = Guild.recent.nonblocked.prefetch(PREFETCH).match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE
 	end
 
   def friends
-    @guilds = current_user.friend_guilds.paginate :page => params[:page], :per_page => 10
+    @guilds = Guild.nonblocked.prefetch(PREFETCH).match(:id => Membership.by(current_user.friend_ids).map(&:guild_id).uniq).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def show
@@ -56,8 +58,7 @@ class User::GuildsController < UserBaseController
   end
 
   def create
-    guild_params = (params[:guild] || {}).merge({:president_id => current_user.id})
-    @guild = Guild.new(guild_params)
+    @guild = current_user.guilds.build(params[:guild] || {})
     if @guild.save
       redirect_to new_guild_invitation_url(@guild)
     else
@@ -88,7 +89,6 @@ class User::GuildsController < UserBaseController
   end
 
 	def more_feeds
-    @guild = Guild.find(params[:id])
 		@feed_deliveries = @guild.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize)
 		@fetch_size = FetchSize
   end
@@ -96,9 +96,9 @@ class User::GuildsController < UserBaseController
   def search
     case params[:type].to_i
     when 1
-      @guilds = Guild.hot.search(params[:key]).paginate :page => params[:page], :per_page => 5
+      @guilds = Guild.hot.nonblocked.search(params[:key]).paginate :page => params[:page], :per_page => PER_PAGE
     when 2
-      @guilds = Guild.recent.search(params[:key]).paginate :page => params[:page], :per_page => 5
+      @guilds = Guild.recent.nonblocked.search(params[:key]).paginate :page => params[:page], :per_page => PER_PAGE
     end
     @remote = {:update => 'guilds', :url => {:action => 'search', :controller => 'user/guilds', :type => params[:type], :key => params[:key]}}
     render :partial => 'user/guilds/guilds', :object => @guilds
@@ -110,7 +110,7 @@ protected
     if ['index', 'participated'].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
-    elsif ['show'].include? params[:action]
+    elsif ['show', 'more_feeds'].include? params[:action]
       @guild = Guild.find(params[:id], :include => [:forum, :game, {:president => :profile}])
       require_verified @guild
     elsif ['edit_rules', 'update', 'destroy'].include? params[:action]
