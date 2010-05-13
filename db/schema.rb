@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100506052501) do
+ActiveRecord::Schema.define(:version => 20100513022245) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -737,7 +737,7 @@ ActiveRecord::Schema.define(:version => 20100506052501) do
     t.text     "reward"
     t.text     "description"
     t.integer  "catagory",     :default => 1
-    t.datetime "starts_at",    :default => '2010-05-11 13:42:42'
+    t.datetime "starts_at",    :default => '2010-05-13 11:32:52'
     t.datetime "expires_at"
     t.integer  "duration"
     t.integer  "state"

@@ -10,7 +10,7 @@ class UserTask < ActiveRecord::Base
 
 	validates_presence_of	:user_id
 	validates_presence_of :task_id
-	validate	:achievement_pattern
+	validate	:goal_pattern
 
 	def show_notification
 		notification = []
@@ -38,7 +38,7 @@ class UserTask < ActiveRecord::Base
 	def init_user_task user_id
 		init_achievement_and_goal user_id
 		self.starts_at = DateTime.now
-		self.expires_at = (task.starts_at.since(task.duration) > task.expires_at) ? task.expires_at : task.starts_at.since(task.duration)
+		self.expires_at = (self.starts_at.since(task.duration) > task.expires_at) ? task.expires_at : self.starts_at.since(task.duration)
 	end
 
 	def init_achievement_and_goal user_id
@@ -47,7 +47,7 @@ class UserTask < ActiveRecord::Base
 		#achievement = {}
 		goal = {}
 		task.requirement.each do |key, value|
-			if m = /(.*)_newly_add$/.match(key)
+			if m = /(.*)_add$/.match(key)
 				#achievement[m[1]] = user.send( m[1] + "_count" )
 				max_item = user.send( m[1] + "_count" ) + value
 				goal[m[1]] =  goal[ m[1] ] ?  max(max_item, goal[m[1]]) : max_item
@@ -62,12 +62,11 @@ class UserTask < ActiveRecord::Base
 		#self.achievement = achievement
 		self.goal = goal
 	end
-#TODO: has droped
-	def achievement_pattern
+	#def achievement_pattern
 		#errors.add(:achievement, "当前任务状态格式错误") unless achievement.all?(&@key_in_TASKRESOURCE)
-	end
+	#end
 	def goal_pattern
-		#errors.add(:goal, "当前任务状态格式错误") unless goal.all?(&@key_in_TASKRESOURCE)
+		errors.add(:goal, "当前任务状态格式错误") unless goal.all?(&@key_in_TASKRESOURCE)
 	end
 
 	def is_doing?
@@ -84,6 +83,11 @@ class UserTask < ActiveRecord::Base
 
 	def is_done?
 		return true if task.is_visible? && done_at
+	end
+	
+#TODO: if redo_able?
+	def redo_able?
+		false
 	end
 
 
