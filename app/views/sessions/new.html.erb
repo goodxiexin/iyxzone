@@ -29,6 +29,15 @@
 				</div>
 			</div>
 		</div>
+					<% flash.each do |key, msg| %>
+						<div class="<%=key%>-msg" id="notice_<%=key%>">
+							<span class="icon-<%= key %>"></span>
+							<%= msg %>
+						</div>
+						<script type="text/javascript">
+							setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
+						</script>
+					<% end %>
     <div class="welcome-banner">
         <div class="login-box formcontent">
 					<% form_tag sessions_url, :id => "login" do %>
