@@ -15,7 +15,7 @@
 	<% if params[:guild_id].blank? %>
 		<h1 class="app-ploy">活动</h1>
 	<% else %>
-		<%= render :partial => 'user/guilds/guild_header', :locals => {:text => "工会活动"} %>
+		<%= render :partial => 'user/guilds/guild_header', :locals => {:text => "工会活动", :guild => @guild} %>
   <% end %>
   <div class="box02 canvas_int space">
     <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
