@@ -12,7 +12,7 @@
   <div class="box02 canvas_int space">
     <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>   
     <div class="vote-box">
-      <%= render :partial => 'index_nav', :locals => {:user => @ueser, :hover => 0} %>
+      <%= render :partial => 'index_nav', :locals => {:user => @user, :hover => 0} %>
       <% if @user.polls_count != 0 %>
         <table class="vote-table" cellpadding="0"> 
           <%= render :partial => 'poll_item', :collection => @polls %>

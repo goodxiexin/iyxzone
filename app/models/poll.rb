@@ -80,7 +80,7 @@ class Poll < ActiveRecord::Base
   end
 
   def has_answers? answer_ids
-    (answers.map(&:id) & answer_ids) == answer_ids
+    answers.all(:conditions => {:id => answer_ids}).count == answer_ids.count
   end
 
 protected
