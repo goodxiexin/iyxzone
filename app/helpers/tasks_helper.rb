@@ -1,7 +1,24 @@
 module TasksHelper
-	def show_state
-
+#TODO: can move to TaskModel
+	def show_task_state_of_user current_task, current_user
+		case current_task.check_state(current_user.id)
+		when Task::CANDO then
+			"可以领取"
+		when Task::CANNOTDO then
+			"没达到要求或是任务没有开放"
+		when Task::DONE then
+			"已完成"
+		when Task::EXPIRED then
+			"任务超时"
+		when Task::ACHIEVED then
+			"领奖去"
+		when Task::DOING then
+			"还未完成，继续努力"
+		else
+			logger.error "不会到这里的……"
+		end
 	end
+
 	def show_prerequisite 
 		show_prerequisite_user_info +	show_prerequisite_pretask
 	end
@@ -56,7 +73,6 @@ module TasksHelper
 	end
 
 	def test_self
-			logger.error "---"*20
 		logger.error  self.class
 	end
 
