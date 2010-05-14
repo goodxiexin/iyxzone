@@ -2,6 +2,8 @@ class UsersController < ApplicationController
 
   #before_filter :allow_only_admin_invitation
 
+  require_logout :only => [:new, :create]
+
   def new
     @user = User.new
     render :action => 'new', :layout => 'root'

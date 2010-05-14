@@ -2,7 +2,7 @@ class AvatarAlbumObserver < ActiveRecord::Observer
 
   def before_create album
     # verify
-#    album.verified = album.sensitive? ? 0 : 1
+    album.verified = 1# album.sensitive? ? 0 : 1
 
     # inherit some attributes from album
 		album.title = "头像相册"

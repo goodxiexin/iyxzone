@@ -3,7 +3,7 @@
 <% end %>
 
 <% canvas_tag do %>
-    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}的论坛"} %>
+    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}的论坛", :guild => @guild} %>
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab', :locals => {:forum => @forum} %>
       <div class='appcontent01'>

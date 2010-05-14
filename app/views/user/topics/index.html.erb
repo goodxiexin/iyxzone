@@ -1,5 +1,5 @@
 <% canvas_tag do %>
-    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}"} %>
+    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}", :guild => @guild} %>
     <div class="box02 canvas_int rows s_clear space">
       <%= render :partial => 'tab', :locals => {:forum => @forum} %>
       <div class="forum s_clear">

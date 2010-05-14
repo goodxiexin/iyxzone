@@ -1,5 +1,5 @@
 class News < ActiveRecord::Base
-  
+
   has_many :pictures, :class_name => 'NewsPicture' # only valid for picture news
 
   belongs_to :game
@@ -28,5 +28,18 @@ class News < ActiveRecord::Base
   validates_size_of :title, :within => 1..300, :too_long => "最长300个字节", :too_short => "最短1个字节" 
 
   validates_presence_of :news_type, :message => "不能为空"
+
+  def self.daily 
+    news = self.all(:conditions => ['created_at > ? and created_at < ?', Time.now.beginning_of_day, Time.now.end_of_day], :order => 'created_at DESC', :limit => 4)
+    picture_news = news.select {|n| n.news_type == 'picture'}.first
+    video_news = news.select {|n| n.news_type == 'video'}.first
+    if picture_news
+      [news - [picture_news], picture_news]
+    elsif video_news
+      [news - [video_news], video_news]
+    else
+      [news, nil]
+    end
+  end
 
 end

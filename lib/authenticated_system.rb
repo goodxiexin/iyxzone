@@ -7,7 +7,7 @@ module AuthenticatedSystem
   
     recipient.extend(AuthenticatedSystem::ClassMethods)
 
-    recipient.send :helper_method, :current_user, :is_admin, :current_profile, :logged_in?
+    recipient.send :helper_method, :current_user, :is_admin, :logged_in?
 
   end
  
@@ -24,7 +24,7 @@ module AuthenticatedSystem
   end
 
   module InstanceMethods
- 
+
   protected
 
     def logged_in?
@@ -32,12 +32,12 @@ module AuthenticatedSystem
     end
 
     def current_user
-      @current_user ||= (login_from_session || login_from_basic_auth || login_from_cookie) unless @current_user == false
+      @current_user ||= (login_from_session) unless @current_user == false
     end
 
     def is_admin
       return @is_admin unless @is_admin.nil?
-      @is_admin = @current_user.has_role?('admin')
+      @is_admin = current_user.has_role?('admin')
       @is_admin 
     end
 
@@ -46,36 +46,49 @@ module AuthenticatedSystem
       @current_user = new_user || false
     end
 
-    def authorized?
-      logged_in?
-    end
-
     def login_required
-      authorized? || access_denied
+      if logged_in?
+        if current_user.remember_me_untils < Time.now
+          reset_session
+          login_denied
+        else
+          current_user.remember_me_for SESSION_DURATION
+        end
+      else
+        login_denied
+      end
     end
 
     def logout_required
-      !logged_in? || access_denied# 如果没有怎么办
+      if logged_in?
+        if current_user.remember_me_untils > Time.now
+          logout_denied
+        else
+          reset_session
+        end
+      end
     end
 
-    def access_denied
+    def login_denied
       respond_to do |format|
         format.html do
-          store_location
+          session[:return_to] = request.request_uri
           if params[:at] == 'outside'
             redirect_to login_path(:at => 'outside')
           else
             redirect_to login_path
           end
         end
-        format.any do
-          request_http_basic_authentication 'Web Password'
-        end
       end
     end
 
-    def store_location
-      session[:return_to] = request.request_uri
+    def logout_denied
+      flash[:error] = '只有登出才能进行此操作'
+      if request.env["HTTP_REFERER"]
+        redirect_to :back
+      else
+        render :template => "/errors/logout_required", :status => 404, :layout => false
+      end
     end
 
     def redirect_back_or_default(default)
@@ -85,20 +98,6 @@ module AuthenticatedSystem
 
     def login_from_session
       self.current_user = User.find_by_id(session[:user_id]) if session[:user_id]
-    end
-
-    def login_from_basic_auth
-      authenticate_with_http_basic do |username, password|
-        self.current_user = User.authenticate(username, password)
-      end
-    end
-
-    def login_from_cookie
-      user = cookies[:auth_token] && User.find_by_remember_token(cookies[:auth_token])
-      if user && user.remember_token?
-        cookies[:auth_token] = { :value => user.remember_token, :expires => user.remember_token_expires_at }
-        self.current_user = user
-      end
     end
 
   end

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100507064327) do
+ActiveRecord::Schema.define(:version => 20100512071036) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -751,8 +751,6 @@ ActiveRecord::Schema.define(:version => 20100507064327) do
     t.string   "gender",                                   :default => "male"
     t.string   "crypted_password",           :limit => 40
     t.string   "salt",                       :limit => 40
-    t.string   "remember_token"
-    t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.datetime "activated_at"
     t.string   "password_reset_code"
@@ -764,9 +762,9 @@ ActiveRecord::Schema.define(:version => 20100507064327) do
     t.integer  "avatar_id"
     t.string   "pinyin"
     t.datetime "last_seen_at"
-    t.integer  "privacy_setting",            :limit => 8,  :default => 123076522
-    t.integer  "mail_setting",               :limit => 8,  :default => 562949953421311
-    t.integer  "application_setting",        :limit => 8,  :default => 262143
+    t.integer  "privacy_setting",            :limit => 8,  :default => 0
+    t.integer  "mail_setting",               :limit => 8,  :default => 0
+    t.integer  "application_setting",        :limit => 8,  :default => 0
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
     t.integer  "game_attentions_count",                    :default => 0
@@ -804,6 +802,7 @@ ActiveRecord::Schema.define(:version => 20100507064327) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "remember_me_untils"
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"

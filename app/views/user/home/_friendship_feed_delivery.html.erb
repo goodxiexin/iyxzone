@@ -9,7 +9,7 @@
 	<% friend = friendship.user %>
 <% end %>
 
-<%= render :layout => 'user/home/small_feed_delivery', :locals => {:delivery => delivery, :poster => user} do %>
+<% render :layout => 'user/home/small_feed_delivery', :locals => {:delivery => delivery, :poster => user} do %>
 	<%= profile_link user %> 和 <%= profile_link friend , :class => "shine" %> 成为了好朋友 <%= ftime delivery.created_at %>
 	<span class="gray"><%= ftime delivery.created_at %></span>
 <% end %>

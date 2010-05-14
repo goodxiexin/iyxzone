@@ -9,7 +9,7 @@ class User::HomeController < UserBaseController
   FeedCategory = ['status', 'blog', 'all_album_related', 'video', 'sharing']
 
   def show
-    @feed_deliveries = current_user.feed_deliveries.all(:limit => FirstFetchSize, :order => "created_at DESC", :include => [{:feed_item => :originator}])
+    @feed_deliveries = current_user.feed_deliveries.all(:limit => FirstFetchSize, :order => "created_at DESC")
     @first_fetch_size = FirstFetchSize
   
     @viewings = current_user.profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
@@ -18,7 +18,7 @@ class User::HomeController < UserBaseController
     
     @notices = current_user.notices.unread.all(:limit => 10, :include => [:producer])
 
-    @news_list = News.all(:conditions => ["created_at > ? and created_at < ?", 1.day.ago.beginning_of_day, Time.now], :limit => 4, :order => 'created_at DESC')
+    @news_list, @rich_news = News.daily
   end
 
   def feeds
