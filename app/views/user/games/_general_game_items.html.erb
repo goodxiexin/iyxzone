@@ -1,0 +1,59 @@
+<div class="mainConWrap clear">
+					<div class="gameHot piclist-rows">
+						<table cellspacing="1" cellpadding="0" class="table01 gameList">
+								<tbody>
+								<% game_items.each do |game| %>
+								<tr>
+									<td>
+										<div class="imgwrap">
+												<%= game_image game.name, :class => 'game-m' %>
+										</div>
+										<div class="data">
+											<p><strong><%= game_link game %></strong></p>
+											<p><%= game.description%></p>
+											<div>
+												<ul>
+													<li>玩家打分：<strong><%= game.average_rating %></strong></li>
+													<li>玩家关注：<strong><%= game.attentions_count %></strong></li>
+													<li>已有玩家：<strong><%= game.characters_count%></strong></li>
+													<li>新增玩家：<strong><%= game.last_week_characters_count %></strong></li>
+												</ul>
+											</div>
+										</div>
+									</td>
+									<td>
+											<div><a class="concern-btn02" href="#">添加关注</a></div>
+											<div class="space"><a class="addGameRoleBtn" href="#" title="增加该游戏角色"></a></div>
+									</td>
+								</tr>
+								<% end %>
+							</tbody>
+							</table>
+					</div>  
+</div>
+
+
+
+<table class="table01" cellpadding="0" cellspacing="1">
+  <tr>
+    <td>
+      <div class="imgwrap">
+				<%= game_image game.name, :class => 'game-m' %>
+      </div>
+      <div class="data">
+        <p><%= label_tag '', '名称：' %><span><%= game_link game %></span></p>
+        <p><%= label_tag '', '打分：' %><span><%= game.average_rating %></span></p>
+				<p><%= label_tag '', '新增：' %><span><%= game.last_week_characters_count %></span></p>
+        <div id='game_<%= game.id %>_rating_form'>
+        <% if game.is_rateable_by? current_user %>
+          <%= render :partial => 'user/ratings/new', :locals => {:rateable => game} %>
+        <% end %>
+        </div>
+      </div>
+    </td>
+  </tr>
+  <% end %>
+</table>
+
+<%= will_paginate game_items %>
+
