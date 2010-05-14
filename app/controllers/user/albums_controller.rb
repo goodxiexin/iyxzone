@@ -12,11 +12,11 @@ class User::AlbumsController < UserBaseController
   end
 
 	def recent
-    @albums = Album.recent.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @albums = Album.recent.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
-    @albums = PersonalAlbum.by(current_user.friend_ids).nonblocked.for('friend').not_empty.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @albums = PersonalAlbum.by(current_user.friend_ids).nonblocked.for('friend').not_empty.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def select
@@ -32,9 +32,7 @@ class User::AlbumsController < UserBaseController
         render :action => 'show'
       }
       format.json {
-        @photos = @album.photos.nonblocked
-        @json = @photos.map {|p| p.public_filename}
-        render :json => @json
+        render :json => @album.photos.nonblocked.map {|p| p.public_filename}
       }
     end
   end
@@ -71,10 +69,12 @@ class User::AlbumsController < UserBaseController
 			end
     else
       respond_to do |format|
-        format.html { render :update do |page|
-          page << "Iyxzone.enableButton($('edit_album_submit'), '完成');"
-          page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
-        end }
+        format.html { 
+          render :update do |page|
+            page << "Iyxzone.enableButton($('edit_album_submit'), '完成');"
+            page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
+          end 
+        }
       end
     end
   end 
@@ -84,10 +84,8 @@ class User::AlbumsController < UserBaseController
   end
 
   def destroy
-    if params[:migration] and params[:migration].to_i == 1 and params[:migrate_to]
-      new_album = current_user.albums.nonblocked.find(params[:migrate_to])
-      Photo.update_all("album_id = #{new_album.id}, privilege = #{new_album.privilege}", {:album_id => @album.id})
-      new_album.update_attribute(:photos_count, new_album.photos_count + @album.photos_count)
+    if params[:migration].to_i == 1
+      Photo.migrate(:from => @album, :to => current_user.albums.nonblocked.find(params[:migrate_to]))
     end
     
     if @album.destroy
@@ -95,9 +93,7 @@ class User::AlbumsController < UserBaseController
 			  page.redirect_to personal_albums_url(:uid => current_user.id)  
 		  end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error '发生错误'
     end
 	end
 

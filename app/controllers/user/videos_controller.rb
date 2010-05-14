@@ -8,25 +8,24 @@ class User::VideosController < UserBaseController
 
   def index
     @relationship = @user.relationship_with current_user
-    #@privilege = get_privilege_cond @relationship
     @count = @user.videos_count @relationship
-    @videos = @user.videos.nonblocked.for(@relationship).prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @videos = @user.videos.nonblocked.for(@relationship).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
 	def hot
-    @videos = Video.hot.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @videos = Video.hot.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def recent
-    @videos = Video.recent.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @videos = Video.recent.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def relative
-    @videos = @user.relative_videos.nonblocked.for('friend').prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @videos = @user.relative_videos.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
-    @videos = Video.by(current_user.friend_ids).nonblocked.for('friend').prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @videos = Video.by(current_user.friend_ids).nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def new
@@ -46,8 +45,8 @@ class User::VideosController < UserBaseController
   def show
     @relationship = @user.relationship_with current_user
     @privilege = get_privilege_cond @relationship
-    @next = @video.next @privilege
-    @prev = @video.prev @privilege
+    #@next = @video.next @privilege
+    #@prev = @video.prev @privilege
     @count = @user.videos_count @relationship
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
@@ -70,9 +69,7 @@ class User::VideosController < UserBaseController
 				page.redirect_to videos_url(:uid => current_user.id)
 			end
 		else
-			render :update do |page|
-				page << "error('删除的时候发生错误');"
-			end
+			render_js_error '删除的时候发生错误'
 		end
   end
 

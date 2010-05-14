@@ -2,16 +2,14 @@ class User::PhotosController < UserBaseController
 
   layout 'app'
 
-  PREFETCH = [:album, {:poster => :profile}]
-
 	def hot
-    @photos = Photo.hot.nonblocked.prefetch([:album, {:poster => :profile}]).paginate :page => params[:page], :per_page => 10
+    @photos = Photo.hot.nonblocked.paginate :page => params[:page], :per_page => 10
   end
 
   def relative
     @infos = []
     @user.photo_tags.all(:include => [:photo, {:poster => :profile}]).group_by(&:photo_id).map do |photo_id, tags|
-      photo = Photo.nonblocked.find_by_id(photo_id)
+      photo = Photo.nonblocked.find(photo_id)
       if !photo.blank? and !photo.is_owner_privilege?
         @infos << {:photo => photo, :posters => tags.map(&:poster).uniq}
       end
@@ -52,29 +50,35 @@ class User::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.html { render :update do |page|
-					if @album.id != @photo.album_id
-            if params[:at] == 'album'
-						  page.redirect_to personal_album_url(@album)
-            elsif params[:at] == 'photo'
-              page.redirect_to personal_photo_url(@photo)
+				format.html { 
+          render :update do |page|
+  					if @album.id != @photo.album_id
+              if params[:at] == 'album'
+		  				  page.redirect_to personal_album_url(@album)
+              elsif params[:at] == 'photo'
+                page.redirect_to personal_photo_url(@photo)
+              end
+  					else
+              if params[:at] == 'album'
+		  				  page << "facebox.close();"
+              elsif params[:at] == 'photo'
+                page.redirect_to personal_photo_url(@photo)
+					    end
             end
-					else
-            if params[:at] == 'album'
-						  page << "facebox.close();"
-            elsif params[:at] == 'photo'
-              page.redirect_to personal_photo_url(@photo)
-					  end
-          end
-				end }
-				format.json { render :json => @photo }
+				  end 
+        }
+				format.json { 
+          render :json => @photo 
+        }
 			end 
     else
       respond_to do |format|
-        format.html { render :update do |page|
-          page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
-          page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题无法保存', :message => nil %>"
-        end }
+        format.html { 
+          render :update do |page|
+            page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
+            page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题无法保存', :message => nil %>"
+          end 
+        }
       end
     end
   end
@@ -98,9 +102,7 @@ class User::PhotosController < UserBaseController
         page.redirect_to personal_album_url(@album)
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error '发生错误'
     end
   end
 

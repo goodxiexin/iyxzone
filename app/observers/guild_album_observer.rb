@@ -2,7 +2,7 @@ class GuildAlbumObserver < ActiveRecord::Observer
 
   def before_create album
     # verify
-    album.verified = album.sensitive? ? 0 : 1
+    album.auto_verify
 
     # inherit some attributes from guild
     guild = album.guild
@@ -13,16 +13,15 @@ class GuildAlbumObserver < ActiveRecord::Observer
   end
 
   def before_update album
-    if album.sensitive_columns_changed? and album.sensitive?
-      album.verified = 0
-    end 
+    album.auto_verify
   end
 
   def after_update album
-    if album.recently_verified_from_unverified
-      Photo.update_all("verified = 1", {:album_id => album.id})
+    if album.recently_recovered
+      Photo.verify_all(:album_id => album.id)
+      # feed 就不恢复了，也没法恢复
     elsif album.recently_unverified
-      Photo.update_all("verified = 2", {:album_id => album.id})
+      Photo.unverify_all(:album_id => album.id)
       album.destroy_feeds
     end
   end

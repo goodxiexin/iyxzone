@@ -33,4 +33,12 @@ class Photo < ActiveRecord::Base
 
   attr_accessor :cover
 
+  def self.migrate opts={}
+    from = opts[:from]
+    to = opts[:to]
+    return if from.nil? or to.nil?
+    Photo.update_all("album_id = #{to.id}, privilege = #{to.privilege}", {:album_id => from.id})
+    to.update_attribute(:photos_count, to.photos_count + from.photos_count)
+  end
+
 end

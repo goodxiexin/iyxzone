@@ -22,10 +22,8 @@ class PersonalPhotoObserver < ActiveRecord::Observer
 
   def before_update photo
     return unless photo.thumbnail.blank?
- 
-    if photo.sensitive_columns_changed? and photo.sensitive?
-      photo.needs_verify
-    end
+
+    photo.auto_verify 
   end
  
   def after_update photo
@@ -33,9 +31,9 @@ class PersonalPhotoObserver < ActiveRecord::Observer
    
     # verify
     if photo.recently_recovered
-      photo.album.raw_decrement :photos_count
-    elsif photo.recently_unverified
       photo.album.raw_increment :photos_count
+    elsif photo.recently_unverified
+      photo.album.raw_decrement :photos_count
     end
 
     # change cover 
@@ -47,9 +45,7 @@ class PersonalPhotoObserver < ActiveRecord::Observer
       to.raw_increment :photos_count
       if photo.cover
         to.update_attribute(:cover_id, photo.id)
-        if from.cover_id == photo.id
-          from.update_attribute(:cover_id, nil)
-        end
+        from.update_attribute(:cover_id, nil) if from.cover_id == photo.id
       end
     else
       # if photo is not moved anywhere

@@ -1,14 +1,12 @@
 class Blog < ActiveRecord::Base
 
-  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids, :draft => false}}}
-
-  named_scope :prefetch, lambda {|opts| {:include => opts}}
-
   belongs_to :game
 
 	belongs_to :poster, :class_name => 'User'
 
   has_many :images, :class_name => 'BlogImage', :dependent => :delete_all
+
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids, :draft => false}}}
 
   named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
 
@@ -23,11 +21,11 @@ class Blog < ActiveRecord::Base
 
 	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.is_owner_privilege? or blog.poster == user}
 
-  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed == 1}}
+  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed?}}
   
   acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
                     :default_title => lambda {|blog| blog.title}, 
-                    :create_conditions => lambda {|user, blog| blog.privilege != 4}
+                    :create_conditions => lambda {|user, blog| !blog.is_owner_privilege?}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 

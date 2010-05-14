@@ -4,7 +4,7 @@ class GuildObserver < ActiveRecord::Observer
 
   def before_create guild
     # verify
-    guild.verified = guild.sensitive? ? 0 : 1
+    guild.auto_verify
 
     # inherit some attributes from character
     c = guild.president_character
@@ -39,10 +39,8 @@ class GuildObserver < ActiveRecord::Observer
   end
 
   def before_update guild
-    # verify 
-    if guild.sensitive_columns_changed? and guild.sensitive?
-      guild.verified = 0
-    end
+    # verify
+    guild.auto_verify 
   end
 
   def after_update guild
@@ -50,12 +48,12 @@ class GuildObserver < ActiveRecord::Observer
       User.update_all("participated_guilds_count = participated_guilds_count - 1", {:id => (guild.people - [guild.president]).map(&:id)})
       guild.president.raw_decrement :guilds_count
       guild.destroy_feeds # membership的feed就不删了，反正他们本来就没评论
-      guild.album.unverify
-    elsif guild.recently_verified_from_unverified
+      guild.album.unverify # 会在album的observer里unverify所有照片
+    elsif guild.recently_recovered
       User.update_all("participated_guilds_count = participated_guilds_count + 1", {:id => (guild.people - [guild.president]).map(&:id)})
       guild.president.raw_increment :guilds_count
       guild.deliver_feeds 
-      guild.album.verify
+      guild.album.verify # 会在album的observer里verify所有照片
     end
   end
 
@@ -64,25 +62,21 @@ class GuildObserver < ActiveRecord::Observer
     guild.president.raw_decrement :guild_requests_count, guild.requests_count
 
     # modify invitations count
-    guild.invitations.each do |invitation|
-      invitation.user.raw_decrement :guild_invitations_count
-    end
+    guild.invitations.each { |invitation| invitation.user.raw_decrement :guild_invitations_count }
 
     # send notifications
-    if guild.verified != 2
+    if !guild.rejected?
       (guild.people - [guild.president]).each do|p|
         p.notifications.create(:category => Notification::GuildCancel, :data => "工会 #{guild.name} 取消了")
-        GuildMailer.deliver_guild_cancel guild, p if p.mail_setting.cancel_guild == 1
+        GuildMailer.deliver_guild_cancel guild, p if p.mail_setting.cancel_guild?
       end
     end
 
     # destroy all memberships
     # 如果memberships的dependent是destroy，很有可能在这个before_destroy之前，他就被删除了，那上面的guild.people是空的，就没法发通知了
-    guild.memberships.each do |m|
-      m.destroy_feeds
-    end
+    guild.memberships.each { |m| m.destroy_feeds }
 
-    if guild.verified != 2
+    if !guild.rejected?
       User.update_all("participated_guilds_count = participated_guilds_count - 1", {:id => guild.memberships.map(&:user_id)})
       guild.president.raw_decrement :guilds_count
     end

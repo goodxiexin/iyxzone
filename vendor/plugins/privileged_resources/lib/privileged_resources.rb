@@ -89,6 +89,10 @@ module Model
         privilege == 4
       end
 
+      def was_owner_privilege?
+        privilege_was == 4
+      end
+
       def is_public_privilege?
         privilege == 1
       end        

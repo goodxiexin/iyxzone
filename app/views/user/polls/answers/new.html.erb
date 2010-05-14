@@ -1,5 +1,5 @@
 <% facebox_tag '增加选项' do %>
-  <% rows_form_remote_tag :url => poll_answers_url(@poll), :html=> {:onsubmit=> "Iyxzone.disableButton($(new_poll_answer_btn),'请等待..');"}do %>
+  <% form_remote_tag :url => poll_answers_url(@poll), :html=> {:onsubmit=> "Iyxzone.disableButton($(new_poll_answer_btn),'请等待..');"} do %>
     <div class='formcontent'>
       <div class='content'>
         <div id='poll_answers'>
@@ -14,6 +14,11 @@
         </div>
       </div>
     </div>
-    <%= f.z_submit :submit => {:text => '完成', :id => 'new_poll_answer_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+    <div class='z-submit s_clear space'>
+      <table class='center' cellpadding='0'><tr><td>
+        <span class='button'><span><button type='submit' id='new_poll_answer_btn'>完成</button></span></span>
+        <span class='button button-gray'><span><button type='reset' onclick='facebox.close();'>取消</button></span></span>
+      </td></tr></table>
+    </div>
   <% end %>
 <% end %>

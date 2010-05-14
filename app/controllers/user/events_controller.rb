@@ -7,65 +7,57 @@ class User::EventsController < UserBaseController
   PREFETCH = [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}]
 
   def index
-    @events = @user.events.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @events = @user.events.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
 	def hot
-    @events = Event.hot.nonblocked.prefetch(PREFETCH).match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE
+    @events = Event.hot.nonblocked.match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def recent
-    @events = Event.recent.nonblocked.prefetch(PREFETCH).match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE
+    @events = Event.recent.nonblocked.match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
 	end
 
   def upcoming
-    @events = @user.upcoming_events.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @events = @user.upcoming_events.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def participated
-    @events = @user.participated_events.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @events = @user.participated_events.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
-    @events = Event.nonblocked.prefetch(PREFETCH).match(:id => Participation.by(current_user.friend_ids).map(&:event_id).uniq).paginate :page => params[:page], :per_page => PER_PAGE
+    @events = Event.nonblocked.match(:id => Participation.by(current_user.friend_ids).map(&:event_id).uniq).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def show
-    @maybe_characters = @event.maybe_characters.find(:all, :limit => 6, :include => [{:user => :profile}])
-    @invite_characters = @event.invite_characters.find(:all, :limit => 6, :include => [{:user => :profile}])
-    @request_characters = @event.request_characters.find(:all, :limit => 6, :include => [{:user => :profile}])		
-    @confirmed_characters = @event.confirmed_characters.find(:all, :limit => 6, :include => [{:user => :profile}])
-
+    @maybe_characters = @event.maybe_characters.limit(6).prefetch([{:user => :profile}])
+    @invite_characters = @event.invite_characters.limit(6).prefetch([{:user => :profile}])
+    @request_characters = @event.request_characters.limit(6).prefetch([{:user => :profile}])
+    @confirmed_characters = @event.confirmed_characters.limit(6).prefetch([{:user => :profile}])
     @user = @event.poster
     @album = @event.album
     @photos = @album.latest_photos.nonblocked
-
 		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    @participations = @event.participations_for current_user
-
-    @messages = @event.comments.paginate :page => params[:page], :per_page => PER_PAGE, :include => [:commentable, {:poster => :profile}]
+    @participations = @event.participations.by(current_user.id)
+    @messages = @event.comments.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => [:commentable, {:poster => :profile}]
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @event.id, :wall_type => 'event'}}
-
 		render :action => 'show', :layout => 'app2'
   end
 
   def new
     @event = Event.new
-    unless @guild.blank?
-			@characters = @guild.characters.find(:all, :conditions => "game_characters.user_id = #{current_user.id} AND (memberships.status = 3 OR memberships.status = 4)")
-		end
+    @characters = @guild.privileged_characters.by(current_user.id) if !@guild.blank?
   end
 
   def create
     @event = current_user.events.build(params[:event] || {})
+
     if @event.save
       redirect_to new_event_invitation_url(@event)
     else
-      if @event.is_guild_event?
-        render :action => 'new', :guild_id => @event.guild_id
-      else
-        render :action => 'new'
-      end
+      # guild_id可能是nil
+      render :action => 'new', :guild_id => @event.guild_id
     end
   end
 
@@ -87,9 +79,7 @@ class User::EventsController < UserBaseController
         page.redirect_to events_url(:uid => current_user.id)
       end
     else
-      render :update do |page|
-        page << "error('发生错误, 可能该活动已经过期了');"
-      end
+      render_js_error
     end
   end  
 

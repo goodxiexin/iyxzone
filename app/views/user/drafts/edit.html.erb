@@ -19,7 +19,7 @@
           <%= f.collection_select 'game_id', current_user.games, :id, :name, {}, :label => '游戏类别', :class => "selector selector02" %>
           <%= f.select 'privilege', privilege_options, {}, :label => '浏览权限', :class => "selector selector02" %>
           <%= render :partial => 'user/friend_tags/control_panel', :locals => {:title => '点名相关好友'} %>
-          <%= f.submit '发布' => {:onclick => "Iyxzone.Blog.Builder.updateBlog(this, #{@blog.id}, $('blog_form'));"}, '保存为草稿' => {:onclick => "Iyxzone.Blog.Builder.updateDraft(this, #{@blog.id}, $('blog_form'));" %> 
+          <%= f.submit '发布' => {:onclick => "Iyxzone.Blog.Builder.updateBlog(this, #{@blog.id}, $('blog_form'));"}, '保存为草稿' => {:onclick => "Iyxzone.Blog.Builder.updateDraft(this, #{@blog.id}, $('blog_form'));"} %> 
         <% end %>
         </div>
       </div>

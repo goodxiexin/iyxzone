@@ -11,23 +11,23 @@ class User::BlogsController < UserBaseController
   def index
     @relationship = @user.relationship_with current_user
     @count = @user.blogs_count @relationship
-    @blogs = @user.blogs.nonblocked.for(@relationship).prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @blogs = @user.blogs.nonblocked.for(@relationship).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
 	def hot
-    @blogs = Blog.hot.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @blogs = Blog.hot.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def recent
-    @blogs = Blog.recent.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @blogs = Blog.recent.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def relative
-    @blogs = @user.relative_blogs.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @blogs = @user.relative_blogs.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
-    @blogs = Blog.by(current_user.friend_ids).nonblocked.for('friend').prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @blogs = Blog.by(current_user.friend_ids).nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def show
@@ -78,9 +78,7 @@ class User::BlogsController < UserBaseController
 				page.redirect_to blogs_url(:uid => current_user.id)
 			end
 		else
-			render :update do |page|
-				page << "error('删除的时候发生错误');"
-			end
+      render_js_error '删除的时候发生错误'
 		end
   end
 

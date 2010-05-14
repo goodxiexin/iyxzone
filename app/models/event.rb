@@ -42,7 +42,7 @@ class Event < ActiveRecord::Base
 
 		event.has_many :maybe_participants, :through => :maybe_participations
 
-		event.has_many :participants, :through => :participations, :conditions => "participations.status = 3 or participations.status = 4"
+		event.has_many :participants, :through => :participations, :conditions => "participations.status IN (3,4)"
 
 	end
 
@@ -54,9 +54,9 @@ class Event < ActiveRecord::Base
 
     event.has_many :confirmed_characters, :through => :confirmed_participations
 
-      event.has_many :maybe_characters, :through => :maybe_participations
+    event.has_many :maybe_characters, :through => :maybe_participations
 
-    event.has_many :characters, :through => :participations, :conditions => "participations.status = 3 or participations.status = 4"
+    event.has_many :characters, :through => :participations, :conditions => "participations.status IN (3,4)"
 
     event.has_many :all_characters, :through => :participations
 
@@ -69,7 +69,7 @@ class Event < ActiveRecord::Base
                       :create_conditions => lambda {|user, event| event.has_participant?(user)},
                       :view_conditions => lambda { true } # this means anyone can view
 
-	acts_as_resource_feeds :recipients => lambda {|event| [event.poster.profile, event.game] + event.poster.guilds + event.poster.friends.find_all {|f| f.application_setting.recv_event_feed == 1} }
+	acts_as_resource_feeds :recipients => lambda {|event| [event.poster.profile, event.game] + event.poster.guilds + event.poster.friends.find_all {|f| f.application_setting.recv_event_feed?} }
 
 	searcher_column :title
 
@@ -89,40 +89,12 @@ class Event < ActiveRecord::Base
     participations.exists? :status => [3,4], :participant_id => user.id
   end
 
-  def has_character? character
-    participations.exists? :status => [3,4], :character_id => character.id
-  end
-
-  def participations_for user
-    participations.all(:conditions => {:participant_id => user.id})
-  end
-
-  def confirmed_and_maybe_participations_for user
-    participation.all(:conditions => {:status => [Participation::Confirmed, Participation::Maybe], :participant_id => user.id})
-  end
-
-  def requests_for user
-    requests.all(:conditions => {:participant_id => user.id})
-  end
-
-  def invitations_for user
-    invitations.all(:conditions => {:participant_id => user.id})
-  end
-
   def characters_for user
     all_characters.all(:conditions => {:user_id => user.id})  
   end
 
   def confirmed_and_maybe_characters_for user
     characters.all(:conditions => {:user_id => user.id})
-  end
-
-  def request_characters_for user
-    request_characters.all(:conditions => {:user_id => user.id})
-  end
-
-  def invite_characters_for user
-    invite_characters.all(:conditions => {:user_id => user.id})
   end
 
   def is_guild_event?

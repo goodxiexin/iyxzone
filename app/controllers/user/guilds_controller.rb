@@ -11,45 +11,38 @@ class User::GuildsController < UserBaseController
   PREFETCH = [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]
 
   def index
-    @guilds = @user.guilds.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @guilds = @user.guilds.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
 	def participated
-    @guilds = @user.participated_guilds.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @guilds = @user.participated_guilds.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
 	end
 
 	def hot
-    @guilds = Guild.hot.nonblocked.prefetch(PREFETCH).match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE
+    @guilds = Guild.hot.nonblocked.match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def recent
-    @guilds = Guild.recent.nonblocked.prefetch(PREFETCH).match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE
+    @guilds = Guild.recent.nonblocked.match(user_game_conds).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
 	end
 
   def friends
-    @guilds = Guild.nonblocked.prefetch(PREFETCH).match(:id => Membership.by(current_user.friend_ids).map(&:guild_id).uniq).paginate :page => params[:page], :per_page => PER_PAGE
+    @guilds = Guild.nonblocked.match(:id => Membership.by(current_user.friend_ids).map(&:guild_id).uniq).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def show
-    @guild_characters = @guild.characters.all(:include => [{:user => :profile}], :limit => 6) 
-
-    @hot_topics = @guild.forum.hot_topics.all(:include => [:forum], :limit => 6)
-
-    @events = @guild.events.all(:include => [{:album => :cover}], :order => "confirmed_count DESC", :limit => 4)
-
+    @guild_characters = @guild.characters.limit(6).prefetch([{:user => :profile}])
+    @hot_topics = @guild.forum.hot_topics.limit(6).prefetch([{:include => [:forum]}])
+    @events = @guild.events.people_order.limit(4).prefetch([{:album => :cover}])
     @memberships = @guild.all_memberships_for current_user
     @role = @guild.role_for current_user
-
     @album = @guild.album
-    @photos = @album.latest_photos
+    @photos = @album.latest_photos.nonblocked
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-
-		@feed_deliveries = @guild.feed_deliveries.find(:all, :limit => FetchSize, :order => "created_at DESC")
+		@feed_deliveries = @guild.feed_deliveries.limit(FirstFetchSize).order('created_at DESC')
 		@first_fetch_size = FirstFetchSize
-
-		@messages = @guild.comments.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :commentable]
+		@messages = @guild.comments.nonblocked.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :commentable]
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @guild.id, :wall_type => 'guild'}}
-
     render :action => 'show', :layout => 'app2'
 	end
 
@@ -59,6 +52,7 @@ class User::GuildsController < UserBaseController
 
   def create
     @guild = current_user.guilds.build(params[:guild] || {})
+    
     if @guild.save
       redirect_to new_guild_invitation_url(@guild)
     else
@@ -82,14 +76,12 @@ class User::GuildsController < UserBaseController
         page.redirect_to guilds_url(:uid => current_user.id)
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end 
   end
 
 	def more_feeds
-		@feed_deliveries = @guild.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize)
+		@feed_deliveries = @guild.feed_deliveries.offset(FirstFetchSize + FetchSize * params[:idx].to_i).limit(FetchSize)
 		@fetch_size = FetchSize
   end
 

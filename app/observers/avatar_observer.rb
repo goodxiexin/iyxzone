@@ -27,21 +27,18 @@ class AvatarObserver < ActiveRecord::Observer
     avatar.poster.update_attributes(:avatar_id => avatar.id) 
 
     # increment counter
-    avatar.poster.raw_increment :photos_count
     avatar.album.raw_increment :photos_count
 
     # issue avatar feeds if necessary 
-    if avatar.album.poster.application_setting.emit_photo_feed == 1
+    if avatar.poster.application_setting.emit_photo_feed?
 		  avatar.deliver_feeds
     end
 	end
 
   def before_update avatar
     return unless avatar.thumbnail.blank?
- 
-    if avatar.sensitive_columns_changed? or avatar.sensitive?
-      avatar.needs_verify
-    end
+
+    avatar.auto_verify 
   end
  
   def after_update avatar
@@ -49,10 +46,9 @@ class AvatarObserver < ActiveRecord::Observer
 
     # verify
     if avatar.recently_recovered
-      avatar.poster.raw_increment :photos_count
       avatar.album.raw_increment :photos_count
+      # 就不恢复了，因为头像可能已经是别的了
     elsif avatar.recently_unverified
-      avatar.poster.raw_decrement :photos_count
       avatar.album.raw_decrement :photos_count
       avatar.destroy_feeds
     end
@@ -74,7 +70,6 @@ class AvatarObserver < ActiveRecord::Observer
     # decrement counter
     if !avatar.rejected?
       avatar.album.raw_decrement :photos_count
-      avatar.poster.raw_decrement :photos_count
     end
   end   
 

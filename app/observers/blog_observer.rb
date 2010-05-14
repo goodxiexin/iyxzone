@@ -15,7 +15,7 @@ class BlogObserver < ActiveRecord::Observer
     end
 
     # issue feeds
-    if !blog.draft and blog.poster.application_setting.emit_blog_feed == 1 and !blog.is_owner_privilege?
+    if !blog.draft and blog.poster.application_setting.emit_blog_feed? and !blog.is_owner_privilege?
       blog.deliver_feeds
     end
   end
@@ -59,26 +59,26 @@ class BlogObserver < ActiveRecord::Observer
     return if blog.draft
 
     # issue feeds if necessary
-    if (blog.draft_was and blog.privilege != 4) or (blog.privilege_was == 4 and blog.privilege != 4)
-      if blog.poster.application_setting.emit_blog_feed == 1
+    if (blog.draft_was and !blog.is_owner_privilege?) or (blog.was_owner_privilege? and !blog.is_owner_privilege?)
+      if blog.poster.application_setting.emit_blog_feed?
         blog.deliver_feeds
       end
     end
 
     # destroy feeds if necessary
-    if blog.privilege_was != 4 and blog.privilege == 4
+    if blog.was_owner_privilege? and blog.is_owner_privilege?
       blog.destroy_feeds      
     end 
   end
 
 	def after_destroy blog
     # 如果验证没通过，计数器都不需要修改
-    return if blog.verified == 2
-    
-    if blog.draft
-      blog.poster.raw_decrement "drafts_count"
-    else
-      blog.poster.raw_decrement "blogs_count#{blog.privilege}"
+    if !blog.rejected?    
+      if blog.draft
+        blog.poster.raw_decrement "drafts_count"
+      else
+        blog.poster.raw_decrement "blogs_count#{blog.privilege}"
+      end
     end
 	end
 	

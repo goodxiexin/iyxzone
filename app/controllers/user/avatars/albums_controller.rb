@@ -10,9 +10,7 @@ class User::Avatars::AlbumsController < UserBaseController
         render :action => 'show'
       }
       format.json {
-        @photos = @album.photos.nonblocked
-        @json = @photos.map {|p| p.public_filename}
-        render :json => @json
+        render :json => @album.photos.nonblocked.map{|p| p.public_filename}
       }
     end
   end

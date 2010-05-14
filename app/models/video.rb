@@ -1,12 +1,10 @@
 class Video < ActiveRecord::Base
 
-  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
-
-  named_scope :prefetch, lambda {|opts| {:include => opts}}
-
   belongs_to :poster, :class_name => 'User'
 
   belongs_to :game
+
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
 
   named_scope :hot, :conditions => ["created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC, created_at DESC'
 
@@ -19,17 +17,17 @@ class Video < ActiveRecord::Base
 
   acts_as_shareable :path_reg => /\/videos\/([\d]+)/,
                     :default_title => lambda {|video| video.title}, 
-                    :create_conditions => lambda {|user, video| video.privilege != 4}
+                    :create_conditions => lambda {|user, video| !video.is_owner_privilege?}
 
-	acts_as_diggable :create_conditions => lambda {|user, video| video.privilege != 4 or video.poster == user}
+	acts_as_diggable :create_conditions => lambda {|user, video| !video.is_owner_privilege? or video.poster == user}
 
-  acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:verified => [0,1]}
+  acts_as_list :order => 'created_at', :scope => 'poster_id'
  
   acts_as_privileged_resources :owner_field => :poster
 
 	acts_as_video
 
-	acts_as_resource_feeds :recipients => lambda {|video| [video.poster.profile, video.game] + video.poster.guilds + video.poster.friends.find_all {|f| f.application_setting.recv_video_feed == 1} }
+	acts_as_resource_feeds :recipients => lambda {|video| [video.poster.profile, video.game] + video.poster.guilds + video.poster.friends.find_all {|f| f.application_setting.recv_video_feed?} }
 
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, video, comment| user == video.poster || user == comment.poster},  

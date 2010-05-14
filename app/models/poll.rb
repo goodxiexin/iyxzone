@@ -1,9 +1,5 @@
 class Poll < ActiveRecord::Base
 
-  named_scope :prefetch, lambda {|opts| {:include => opts}}
-
-  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
-
   belongs_to :poster, :class_name => 'User'
 
   belongs_to :game
@@ -18,6 +14,8 @@ class Poll < ActiveRecord::Base
 
   has_many :invitees, :through => :invitations, :source => 'user'
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
+
   named_scope :hot, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Time.now.to_s(:db)], :order => "voters_count DESC, created_at DESC"
 
   named_scope :recent, :conditions => ["created_at > ? AND ((no_deadline = 0 AND deadline > ?) OR no_deadline = 1)", 2.weeks.ago.to_s(:db), Date.today.to_s(:db)], :order => 'created_at DESC'
@@ -31,7 +29,7 @@ class Poll < ActiveRecord::Base
 	acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, poll, comment| poll.poster == user || comment.poster == user}
 
-  acts_as_resource_feeds :recipients => lambda {|poll| [poll.poster.profile, poll.name] + poll.poster.guilds + poll.poster.friends.find_all {|f| f.application_setting.recv_poll_feed == 1 } }
+  acts_as_resource_feeds :recipients => lambda {|poll| [poll.poster.profile, poll.name] + poll.poster.guilds + poll.poster.friends.find_all {|f| f.application_setting.recv_poll_feed? } }
 
   acts_as_random
   

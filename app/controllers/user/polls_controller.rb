@@ -3,27 +3,28 @@ class User::PollsController < UserBaseController
   layout 'app'
 
   PER_PAGE = 10
+
   PREFETCH = [{:poster => :profile}, :answers]
 
   def index
-    @polls = @user.polls.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @polls = @user.polls.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
 	def hot
-    @polls = Poll.hot.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @polls = Poll.hot.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
 	end
 
   def recent
-    @polls = Poll.recent.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @polls = Poll.recent.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
 	end
 
   def participated
-    @polls = @user.participated_polls.nonblocked.prefetch(PREFETCH).paginate :page => params[:page], :per_page => PER_PAGE
+    @polls = @user.participated_polls.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
-    @participated = Poll.nonblocked.all(:conditions => {:id => Vote.by(current_user.friend_ids).map(&:poll_id).uniq})
-    @posted = Poll.by(current_user.friend_ids).nonblocked.prefetch(PREFETCH)
+    @participated = Poll.nonblocked.prefetch(PREFETCH).limit(PER_PAGE).match(:id => Vote.by(current_user.friend_ids).map(&:poll_id).uniq)
+    @posted = Poll.by(current_user.friend_ids).nonblocked.prefetch(PREFETCH).limit(PER_PAGE)
     @polls = (@participated + @posted).uniq.sort{|p1,p2| p1.created_at <=> p2.created_at}.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
@@ -76,9 +77,7 @@ class User::PollsController < UserBaseController
         page.redirect_to polls_url(:uid => current_user.id)
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error '发生错误'
     end
   end
 

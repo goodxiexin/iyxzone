@@ -28,9 +28,7 @@ class EventPhotoObserver < ActiveRecord::Observer
   def before_update photo 
     return unless photo.thumbnail.blank?
     
-    if photo.sensitive_columns_changed? and photo.sensitive?
-      photo.needs_verify
-    end
+    photo.auto_verify
   end
 
   def after_update photo
@@ -55,7 +53,7 @@ class EventPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank?
 
     # decrement counter
-    if photo.verified != 2
+    if !photo.rejected?
       photo.album.raw_decrement :photos_count
     end
 

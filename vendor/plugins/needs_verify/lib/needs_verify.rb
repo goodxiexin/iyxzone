@@ -55,11 +55,11 @@ module NeedsVerify
   module SingletonMethods
 
     def verify_all opts
-      self.update_all("verify = 1", opts)
+      self.update_all("verified = 1", opts)
     end
 
-    def unverify_all
-      self.update_all("verify = 2", opts)
+    def unverify_all opts
+      self.update_all("verified = 2", opts)
     end
 
   end
@@ -68,6 +68,10 @@ module NeedsVerify
 
     def rejected?
       self.verified == 2
+    end
+
+    def needs_no_verify
+      self.verified = 1
     end
 
     def needs_verify

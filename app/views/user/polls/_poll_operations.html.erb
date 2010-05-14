@@ -1,7 +1,7 @@
           <div class="vote-op left">
             <span class="vote-op-add"></span><%= facebox_link '增加侯选项', new_poll_answer_url(poll) %>
             <% unless poll.no_deadline %>
-            <span class='vote-op-time'></span><%= facebox_link '修改截至时间', edit_poll_url(poll, :type => 0) %>
+            <span class='vote-op-time'></span><%= facebox_link '修改截至时间', edit_poll_url(poll, :type => 0), :width => 400 %>
             <% end %>
             <span class='vote-op-edit'></span><%= facebox_link '修改选项说明', edit_poll_url(poll, :type => 1) %>
             <span class="vote-op-invite"></span><%= link_to '邀请更多人', new_poll_invitation_url(poll) %>

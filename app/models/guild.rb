@@ -54,7 +54,9 @@ class Guild < ActiveRecord::Base
     
     guild.has_many :members, :conditions => "memberships.status = 5"
 
-    guild.has_many :people, :conditions => "memberships.status =3 or memberships.status = 4 or memberships.status = 5"
+    guild.has_many :privileged_people, :conditions => "memberships.status IN (3,4)"
+
+    guild.has_many :people, :conditions => "memberships.status IN (3,4,5)"
 
 	end
 
@@ -68,7 +70,9 @@ class Guild < ActiveRecord::Base
 
     guild.has_many :member_characters, :conditions => "memberships.status = 5"
 
-    guild.has_many :characters, :conditions => "memberships.status = 3 or memberships.status = 4 or memberships.status = 5" 
+    guild.has_many :privileged_characters, :conditions => "memberships.status IN (3,4)"
+
+    guild.has_many :characters, :conditions => "memberships.status IN (3,4,5)"
 
     guild.has_many :all_characters
 
@@ -117,12 +121,8 @@ class Guild < ActiveRecord::Base
     memberships.exists? :user_id => user.id, :status => [3,4,5]
   end
 
-  def has_character? character
-    memberships.exists? :character_id => character.id, :status => [3,4,5]
-  end
-
   def all_memberships_for user
-    memberships.all(:conditions => {:user_id => user.id})
+    memberships.by(user.id)
   end
 
   def memberships_for user
@@ -154,7 +154,7 @@ class Guild < ActiveRecord::Base
   end
 
   def role_for user
-    memberships.find(:first, :conditions => {:user_id => user.id, :status => [3,4,5]}, :order => 'status ASC') 
+    memberships.by(user.id).match(:status => [3,4,5]).order('status ASC').first
   end
 
   def requestable_characters_for user

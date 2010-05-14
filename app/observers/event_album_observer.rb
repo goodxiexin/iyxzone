@@ -2,7 +2,7 @@ class EventAlbumObserver < ActiveRecord::Observer
 
   def before_create album
     # verify
-    album.needs_verify if album.sensitive?
+    album.auto_verify
 
     # inherit some attributes from album
     event = album.event
@@ -13,14 +13,13 @@ class EventAlbumObserver < ActiveRecord::Observer
   end
 
   def before_update album
-    if album.sensitive_columns_changed? and album.sensitive?
-      album.needs_verify
-    end
+    album.auto_verify
   end
 
   def after_update album
-    if album.recently_verified_from_unverified
+    if album.recently_recovered
       Photo.verify_all(:album_id => album.id)
+      # feed 就不恢复了
     elsif album.recently_unverified
       Photo.unverify_all(:album_id => album.id)
       album.destroy_feeds
