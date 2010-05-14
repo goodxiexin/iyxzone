@@ -3,7 +3,7 @@
   <% rows_form_remote_for :photo, :url => avatar_url(@photo, :at => params[:at]), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');" } do |f| %>
     <div class='formcontent'>
       <%= f.text_area 'notation', :label => '照片描述' %>
-      <%= f.collection_select :photo, :album_id, [@album], :id, :title, {}, :label => '所属相册' %>
+      <%= f.collection_select :album_id, [@album], :id, :title, {}, :label => '所属相册' %>
     </div>
     <%= f.z_submit :submit => {:text => '完成', :id => 'edit_photo_submit'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
   <% end %>

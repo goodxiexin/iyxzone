@@ -1320,6 +1320,10 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
 	
 	submit : function(e) {
 		var url = this.url;
+    if(!url.match(/^http\:\/\//)){
+      url = 'http://' + url;
+    }
+
     var scheme = this.scheme;
 
 		if(url == "http://" || url == "") {
