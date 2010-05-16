@@ -24,13 +24,15 @@ class Event < ActiveRecord::Base
 
   has_many :participations # 没有dependent, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
 
+  has_many :invitations, :class_name => 'Participation', :conditions => {:status => Participation::Invitation}
+  
+  has_many :requests, :class_name => 'Participation', :conditions => {:status => Participation::Request}
+
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
 
   has_many :maybe_participations, :class_name => 'Participation', :conditions => {:status => Participation::Maybe}
 
-  has_many :invitations, :class_name => 'Participation', :conditions => {:status => Participation::Invitation}
-  
-  has_many :requests, :class_name => 'Participation', :conditions => {:status => Participation::Request}
+  has_many :confirmed_and_maybe_participations, :class_name => 'Participation', :conditions => {:status => [Participation::Maybe, Participation::Confirmed]}
 
 	with_options :source => 'participant', :uniq => true do |event|
 
@@ -42,7 +44,7 @@ class Event < ActiveRecord::Base
 
 		event.has_many :maybe_participants, :through => :maybe_participations
 
-		event.has_many :participants, :through => :participations, :conditions => "participations.status IN (3,4)"
+		event.has_many :participants, :through => :confirmed_and_maybe_participations
 
 	end
 
@@ -56,7 +58,7 @@ class Event < ActiveRecord::Base
 
     event.has_many :maybe_characters, :through => :maybe_participations
 
-    event.has_many :characters, :through => :participations, :conditions => "participations.status IN (3,4)"
+    event.has_many :characters, :through => :confirmed_and_maybe_participations
 
     event.has_many :all_characters, :through => :participations
 
@@ -86,23 +88,11 @@ class Event < ActiveRecord::Base
   end
 
   def has_participant? user
-    participations.exists? :status => [3,4], :participant_id => user.id
-  end
-
-  def characters_for user
-    all_characters.all(:conditions => {:user_id => user.id})  
-  end
-
-  def confirmed_and_maybe_characters_for user
-    characters.all(:conditions => {:user_id => user.id})
+    confirmed_and_maybe_participations.exists? :participant_id => user.id
   end
 
   def is_guild_event?
     !guild_id.nil?
-  end
-
-  def was_guild_event?
-    !guild_id_was.nil?
   end
 
   def time_changed?
@@ -110,7 +100,11 @@ class Event < ActiveRecord::Base
   end
 
   def requestable_characters_for user
-    user.characters.find(:all, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) - characters_for(user)
+    user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - self.all_characters.by(user.id)
+  end
+
+  def participantable_by? user
+    poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
   end
 
   def is_requestable_by? user
@@ -121,7 +115,7 @@ class Event < ActiveRecord::Base
       return 1 if guild.has_member?(user)
       return -2
     else
-      return 1 if poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
+      return 1 if participantable_by?(user)
       return 0
     end
   end
@@ -176,7 +170,7 @@ protected
 
   def guild_is_valid
     return if guild_id.blank?
-    guild = Guild.find(:first, :conditions => {:id => guild_id})
+    
     if guild.blank?
       errors.add(:guild_id, "不存在")
     elsif poster_id
@@ -187,7 +181,6 @@ protected
 
   def character_is_valid
     return if character_id.blank?
-    character = GameCharacter.find(:first, :conditions => {:id => character_id})
     errors.add(:character_id, "不存在") if character.blank?
     return if poster_id.blank?
     errors.add(:character_id, "不是拥有者") if character.user_id != poster_id
