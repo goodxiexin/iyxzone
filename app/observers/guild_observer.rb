@@ -33,7 +33,7 @@ class GuildObserver < ActiveRecord::Observer
     guild.president.raw_increment :guilds_count
 
     # issue feeds if necessary
-    if guild.president.application_setting.emit_guild_feed == 1 
+    if guild.president.application_setting.emit_guild_feed?
       guild.deliver_feeds
     end
   end

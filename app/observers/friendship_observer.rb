@@ -36,7 +36,7 @@ class FriendshipObserver < ActiveRecord::Observer
         friendship.deliver_feeds :recipients => recipients, :data => {:friend => friendship.friend_id}
     
         # deliver mail
-        FriendshipMailer.deliver_confirm(friendship.user, friendship.friend) if friendship.user.mail_setting.confirm_friend == 1
+        FriendshipMailer.deliver_confirm(friendship.user, friendship.friend) if friendship.user.mail_setting.confirm_friend?
       end
     end
 	end

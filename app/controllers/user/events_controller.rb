@@ -27,7 +27,8 @@ class User::EventsController < UserBaseController
   end
 
   def friends
-    @events = Event.nonblocked.match(:id => Participation.by(current_user.friend_ids).map(&:event_id).uniq).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @event_ids = Participation.authorized.by(current_user.friend_ids).map(&:event_id).uniq
+    @events = Event.nonblocked.match(:id => @event_ids).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def show
@@ -39,7 +40,7 @@ class User::EventsController < UserBaseController
     @album = @event.album
     @photos = @album.latest_photos.nonblocked
 		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    @participations = @event.participations.by(current_user.id)
+    @participations = @event.participations.prefetch([:character]).by(current_user.id)
     @messages = @event.comments.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => [:commentable, {:poster => :profile}]
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @event.id, :wall_type => 'event'}}
 		render :action => 'show', :layout => 'app2'
@@ -47,7 +48,7 @@ class User::EventsController < UserBaseController
 
   def new
     @event = Event.new
-    @characters = @guild.privileged_characters.by(current_user.id) if !@guild.blank?
+    @characters = @guild.president_and_veteran_characters.by(current_user.id) if !@guild.blank?
   end
 
   def create
@@ -122,9 +123,10 @@ protected
 
   def require_event_not_expired event
     if event.expired?
-      render :update do |page|
-        page << "tip('该活动已经过期了，无法删除');"
-      end 
+      respond_to do |format|
+        format.js   { render_js_tip '该活动已经过期'}
+        format.html { render_not_found }
+      end
     end
   end
   

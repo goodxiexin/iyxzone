@@ -1,9 +1,5 @@
 class Event < ActiveRecord::Base
 
-  named_scope :people_order, :order => '(confirmed_count + maybe_count) DESC'
-
-  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
-
   has_one :album, :class_name => 'EventAlbum', :foreign_key => 'owner_id', :dependent => :destroy
 
   belongs_to :poster, :class_name => 'User'
@@ -21,6 +17,10 @@ class Event < ActiveRecord::Base
 	named_scope :hot, :conditions => ["end_time > ? AND verified IN (0,1)", Time.now], :order => 'confirmed_count DESC'
 	
 	named_scope :recent, :conditions => ["end_time > ? AND verified IN (0,1)", Time.now], :order => 'start_time DESC'
+
+  named_scope :people_order, :order => '(confirmed_count + maybe_count) DESC'
+
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
 
   has_many :participations # 没有dependent, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
 
@@ -83,6 +83,10 @@ class Event < ActiveRecord::Base
     end_time < Time.now
   end
 
+  def is_guild_event?
+    !guild_id.nil?
+  end
+
   def participants_count
     confirmed_count + maybe_count
   end
@@ -91,33 +95,16 @@ class Event < ActiveRecord::Base
     confirmed_and_maybe_participations.exists? :participant_id => user.id
   end
 
-  def is_guild_event?
-    !guild_id.nil?
-  end
-
-  def time_changed?
-    start_time_changed? || end_time_changed?
+  def participation_for user, character
+    participations.match(:participant_id => user.id, :character_id => character.id).first
   end
 
   def requestable_characters_for user
     user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - self.all_characters.by(user.id)
   end
 
-  def participantable_by? user
-    poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
-  end
-
   def is_requestable_by? user
-    return -3 if expired? 
-    return -1 if requestable_characters_for(user).blank? 
-
-    if is_guild_event?
-      return 1 if guild.has_member?(user)
-      return -2
-    else
-      return 1 if participantable_by?(user)
-      return 0
-    end
+    poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
   end
 
   def invitees= character_ids
@@ -173,17 +160,16 @@ protected
     
     if guild.blank?
       errors.add(:guild_id, "不存在")
-    elsif poster_id
-      role = guild.role_for(poster)
-      errors.add(:guild_id, "没有权限") if role == Membership::President or role == Membership::Veteran
+    else
+      errors.add(:guild_id, "没有权限") unless (guild.has_veteran?(poster) or guild.president == poster)
     end
   end
 
   def character_is_valid
     return if character_id.blank?
-    errors.add(:character_id, "不存在") if character.blank?
+    errors.add(:character_id, "不存在") if poster_character.blank?
     return if poster_id.blank?
-    errors.add(:character_id, "不是拥有者") if character.user_id != poster_id
+    errors.add(:character_id, "不是拥有者") if poster_character.user_id != poster_id
   end
 
   def event_is_not_expired

@@ -60,11 +60,7 @@ class User::AlbumsController < UserBaseController
   def update
     if @album.update_attributes(params[:album] || {})
 			respond_to do |format|
-        format.html {    
-					render :update do |page|
-						page << "tip('成功');"
-					end
-				}
+        format.html { render_js_tip '成功' }    
         format.json { render :json => @album }
 			end
     else

@@ -30,4 +30,10 @@ protected
     end
   end
 
+  def render_js_tip message=''
+    render :update do |page|
+      page << "tip('#{message}');"
+    end
+  end
+
 end

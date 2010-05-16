@@ -135,17 +135,6 @@ class User < ActiveRecord::Base
 
 	has_many :servers, :through => :characters, :uniq => true
 
-  def friend_characters opts={}
-    game_cond = ActiveRecord::Base.send(:sanitize_sql_hash_for_conditions, opts, "game_characters")
-    game_cond = "AND #{game_cond}" unless game_cond.blank?
-    GameCharacter.find(:all, :joins => "INNER JOIN friendships on friendships.user_id = #{id} AND friendships.status = 1 AND friendships.friend_id = game_characters.user_id #{game_cond}")
-  end
-
-  def friend_games
-    game_ids = GameCharacter.find(:all, :select => :game_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = game_characters.user_id").map(&:game_id).uniq
-    Game.find(game_ids, :order => 'pinyin ASC')
-  end
-
 	def interested_in_game? game
     !game_attentions.find_by_game_id(game.id).nil?
   end

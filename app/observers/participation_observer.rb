@@ -11,7 +11,6 @@ class ParticipationObserver < ActiveRecord::Observer
 	end
 
 	def after_create participation
-=begin
 		event = participation.event
 		participant = participation.participant
 
@@ -26,13 +25,10 @@ class ParticipationObserver < ActiveRecord::Observer
     elsif participation.is_confirmed?
       event.raw_increment :confirmed_count
 		end
-=end
-    participation.status.after_create	
 	end
 
 
 	def after_update participation
-=begin
     # update user's counter and event's counter
 		event = participation.event
 		participant = participation.participant
@@ -70,7 +66,6 @@ class ParticipationObserver < ActiveRecord::Observer
     if (participation.recently_accept_invitation or participation.recently_accept_request) and participant.application_setting.emit_event_feed?
       participation.deliver_feeds
     end
-=end
     
 	end
 	

@@ -2,17 +2,12 @@ class User::Events::ParticipationsController < UserBaseController
 
   layout 'app'
 
+  PREFETCH = [:character, {:participant => :profile}]
+
+  Category = [:confirmed_participations, :maybe_participations, :invitations, :requests]
+
   def index
-    case params[:type].to_i
-    when 0
-      @participations = @event.confirmed_participations.all(:include => [:character, {:participant => :profile}])
-    when 1
-      @participations = @event.maybe_participations.all(:include => [:character, {:participant => :profile}])
-		when 2
-			@participations = @event.invitations.all(:include => [:character, {:participant => :profile}])
-		when 3
-			@participations = @event.requests.all(:include => [:character, {:participant => :profile}])
-    end
+    @participations = eval("@event.#{Category[params[:type].to_i]}").prefetch(PREFETCH)
   end
 
   def edit
@@ -21,9 +16,7 @@ class User::Events::ParticipationsController < UserBaseController
 
   def update
     unless @participation.change_status params[:status]
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
@@ -33,9 +26,7 @@ class User::Events::ParticipationsController < UserBaseController
         page << "$('participation_#{@participation.id}').remove();"
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end 
   end
 

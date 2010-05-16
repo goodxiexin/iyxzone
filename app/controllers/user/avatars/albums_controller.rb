@@ -20,6 +20,8 @@ class User::Avatars::AlbumsController < UserBaseController
       respond_to do |format|
         format.json { render :json => @album }
       end  
+    else
+      render_js_error
     end
   end
 

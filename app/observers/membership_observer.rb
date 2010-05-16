@@ -43,7 +43,7 @@ class MembershipObserver < ActiveRecord::Observer
 
     # 这个只能在before_udpate里做
     if membership.recently_accept_request or membership.recently_accept_invitation
-      user.raw_increment :participated_guilds_count unless guild.has_member? user
+      user.raw_increment :participated_guilds_count unless guild.has_people?(user)
     end
   end
 
@@ -113,7 +113,7 @@ class MembershipObserver < ActiveRecord::Observer
       end
 		elsif membership.is_authorized?
 			# user is evicted
-			user.raw_decrement :participated_guilds_count unless guild.has_member? user
+			user.raw_decrement :participated_guilds_count unless guild.has_people?(user)
 			guild.raw_decrement field(membership.status)
       if membership.recently_evicted
 		    user.notifications.create(

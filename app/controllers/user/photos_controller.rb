@@ -102,7 +102,7 @@ class User::PhotosController < UserBaseController
         page.redirect_to personal_album_url(@album)
       end
     else
-      render_js_error '发生错误'
+      render_js_error
     end
   end
 

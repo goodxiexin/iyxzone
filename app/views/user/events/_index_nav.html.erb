@@ -1,8 +1,8 @@
       <div class="nav-link">
         <ul class="s_clear">
-          <li <% if hover==0 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}发起的(#{user.events.count})</span>", events_url(:uid => user.id) %></li>
-          <li <% if hover==1 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}要参加的(#{user.upcoming_events.count})</span>", upcoming_events_url(:uid => user.id) %></li>
-          <li <% if hover==2 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}参加过的(#{user.participated_events.count})</span>", participated_events_url(:uid => user.id) %></li>
+          <li <% if hover==0 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}发起的(#{user.events.nonblocked.count})</span>", events_url(:uid => user.id) %></li>
+          <li <% if hover==1 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}要参加的(#{user.upcoming_events.nonblocked.count})</span>", upcoming_events_url(:uid => user.id) %></li>
+          <li <% if hover==2 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}参加过的(#{user.participated_events.nonblocked.count})</span>", participated_events_url(:uid => user.id) %></li>
         </ul>
       </div>
 

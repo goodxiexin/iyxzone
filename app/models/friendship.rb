@@ -10,19 +10,19 @@ class Friendship < ActiveRecord::Base
 	Friend	= 1
 
   def is_request?
-    status == Friendship::Request
+    status == Request
   end
 
   def was_request?
-    status_was == Friendship::Request
+    status_was == Request
   end
 
   def is_friend?
-    status == Friendship::Friend
+    status == Friend
   end
 
   def was_friend?
-    status_was == Friendship::Friend
+    status_was == Friend
   end
 
   def reverse
@@ -41,8 +41,8 @@ class Friendship < ActiveRecord::Base
       # 检查我是否也有加他为好友的请求, 有就删除
       reverse_request = self.reverse
       reverse_request.destroy if reverse_request
-      self.update_attributes(:status => Friendship::Friend)
-      Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friendship::Friend)
+      self.update_attributes(:status => Friend)
+      Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friend)
     end
   end
 
@@ -80,12 +80,6 @@ protected
     return if user.blank? or friend.blank?
     friendship = user.all_friendships.find_by_friend_id(friend_id)
     if friendship.blank?
-# 现在改为任何人都能加为好友
-=begin
-      unless friend.is_friendable_by? user
-        errors.add(:friend_id, "不能加为好友")
-      end
-=end
     else
       if friendship.is_request?
         errors.add(:friend_id, "不能重复向同一个人发送请求")

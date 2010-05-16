@@ -13,6 +13,7 @@ class GuildPhotoObserver < ActiveRecord::Observer
 
     # inherit some attributes from album
     album = photo.album
+    photo.poster_id = album.poster_id
     photo.privilege = album.privilege
     photo.game_id = album.game_id
   end

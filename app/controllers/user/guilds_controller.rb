@@ -27,14 +27,15 @@ class User::GuildsController < UserBaseController
 	end
 
   def friends
-    @guilds = Guild.nonblocked.match(:id => Membership.by(current_user.friend_ids).map(&:guild_id).uniq).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @guild_ids = Membership.authorized.by(current_user.friend_ids).map(&:guild_id).uniq
+    @guilds = Guild.nonblocked.match(:id => @guild_ids).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def show
     @guild_characters = @guild.characters.limit(6).prefetch([{:user => :profile}])
     @hot_topics = @guild.forum.hot_topics.limit(6).prefetch([{:include => [:forum]}])
     @events = @guild.events.people_order.limit(4).prefetch([{:album => :cover}])
-    @memberships = @guild.all_memberships_for current_user
+    @memberships = @guild.memberships.prefetch([:character]).by(current_user.id)
     @role = @guild.role_for current_user
     @album = @guild.album
     @photos = @album.latest_photos.nonblocked

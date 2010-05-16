@@ -12,8 +12,8 @@ class User::ProfilesController < UserBaseController
     @relationship = @user.relationship_with current_user
     @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2] if @relationship != 'owner'
     @friends = @user.friends.sort_by{rand}[0..2]
-		@blogs = @user.blogs.for(@relationship).limit(3) #find(:all, :conditions => @cond, :offset => 0, :limit => 3)
-		@albums = @user.active_albums.for(@relationship).limit(3) #find(:all, :conditions => @cond, :offset => 0, :limit => 3)
+		@blogs = @user.blogs.for(@relationship).limit(3)
+		@albums = @user.active_albums.for(@relationship).limit(3)
     @feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).order('created_at DESC').prefetch([{:feed_item => :originator}])
 		@first_fetch_size = FirstFetchSize
     @skin = @profile.skin

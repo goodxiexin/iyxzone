@@ -15,25 +15,19 @@ class User::Events::RequestsController < UserBaseController
     @request = @event.requests.build (params[:request] || {}).merge({:participant_id => current_user.id})
     
     unless @request.save
-      render :update do |page|
-        page << "error('发生错误，可能活动已经过期了');"
-      end
+      render_js_error '发生错误，可能活动已经过期了'
     end
   end
 
   def accept
     unless @request.accept_request
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
   def decline
     unless @request.decline_request
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
