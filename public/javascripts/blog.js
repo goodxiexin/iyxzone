@@ -137,16 +137,5 @@ Object.extend(Iyxzone.Blog.Builder, {
 
     // set tagger
     this.tagBuilder = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton);
-
-    document.onkeydown = function(e) {
-      if (!e)
-        e = window.event;
-      if (e.keyCode == 8) {
-        if (document.selection && document.selection.type == "Control") {
-          document.selection.clear();
-          return false;
-        }
-      }
-    }; 
   }
 });
