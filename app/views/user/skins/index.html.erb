@@ -1,5 +1,4 @@
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <h1 class="home-decoration">主页装扮</h1>
     <div class="box02 canvas_int space">
       <div class="theme-list">
@@ -7,7 +6,7 @@
         <ul class="s_clear">
         <% @skins.each do |skin| %>
             <li>
-							<%= skin_image_tag skin, :size => "110x120" %><br/>
+							<%= skin_image_tag skin %><br/>
 							<strong> <%= skin.name %> </strong><br />
 							<%= link_to "预览" , skin_url(skin)%>|<%= link_to "启用" , skin_url(skin), :method => :put%>
 						</li>
@@ -18,8 +17,4 @@
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
-
-
-
+<% end %>
