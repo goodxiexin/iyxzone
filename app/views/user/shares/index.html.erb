@@ -3,11 +3,7 @@
 <% end %>
 
 <% canvas_tag do %>
-	<% if @user==current_user %>
-    <h1 class="app-share">分享</h1>
-	<% else %>
-    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的分享"} %>
-	<% end %>
+  <h1 class="app-share">分享</h1>
   <%= render :partial => 'new_link_sharing' %>
   <div class="box02 canvas_int rows">
     <%= render :partial => 'tab', :locals => {:user => @user, :hover => 2} %>

@@ -29,7 +29,7 @@
                 <%= link_to_remote "<strong><span id='dig_sharing_#{@share.id}'>#{@share.digs_count}</span></strong>", :url => digs_url("dig[diggable_type]" => 'Share', "dig[diggable_id]" => @share.id, :at => 'sharing'), :html => {:class => 'praise'} %>
               </li>
               <li>
-                <%= facebox_link "我也分享", new_sharing_url(:shareable_type => 'Link', :shareable_id => @link.id) %>(<%= @link.sharings_count %>)
+                <%= facebox_link "我也分享", new_sharing_url(:url => link_url(@link)) %>(<%= @link.sharings_count %>)
               </li>
               <li style="_margin-top:6px">
                 <span>首次分享人：</span><%= avatar_image @link.first_sharer, :width => 27, :height => 27 %> <%= profile_link @link.first_sharer %></a>
