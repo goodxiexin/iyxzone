@@ -12,8 +12,9 @@ class User::PostsController < UserBaseController
       params[:page] = @topic.posts.index(@post) / 20 + 1
     end
     @posts = @topic.posts.paginate :page => params[:page], :per_page => 20
-    #@next = @topic.next :top => @topic.top
-    #@prev = @topic.prev :top => @topic.top
+    @cond = {:top => @topic.top}
+    @next = @topic.next @cond
+    @prev = @topic.prev @cond
   end
 
   def create
@@ -27,9 +28,10 @@ class User::PostsController < UserBaseController
   end
 
   def destroy
-    @post.destroy
-    render :update do |page|
-      page << "$('post_#{@post.id}').remove();alert('成功')"
+    if @post.destroy
+      render_js_code  "$('post_#{@post.id}').remove();alert('成功')"
+    else
+      render_js_error
     end 
   end
 

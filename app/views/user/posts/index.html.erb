@@ -17,6 +17,8 @@
               <%= render :partial => 'post', :locals => {:post => p, :topic => @topic, :forum => @forum} %>
             <% end %>
             <div class="forum-pager">
+              <%= link_to '<< 上一个话题', forum_topic_posts_url(@forum, @prev) %> |
+              <%= link_to "下一个话题 >>", forum_topic_posts_url(@forum, @next) %>
               <%= link_to_function "返回话题顶部", "window.scrollTo(0,0);" %>
               <%= will_paginate @posts %>
             </div>

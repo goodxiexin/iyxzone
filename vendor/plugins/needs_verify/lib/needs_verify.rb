@@ -62,6 +62,10 @@ module NeedsVerify
       self.update_all("verified = 2", opts)
     end
 
+    def nonblocked_cond
+      {:verified => [0,1]}
+    end
+
   end
 
   module InstanceMethods

@@ -43,8 +43,9 @@ class User::VideosController < UserBaseController
   end
 
   def show
-    #@next = @video.next @privilege
-    #@prev = @video.prev @privilege
+    @cond = Video.privilege_cond(@relationship).merge Video.nonblocked_cond
+    @next = @video.next @cond
+    @prev = @video.prev @cond
     @count = @user.videos_count @relationship
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end

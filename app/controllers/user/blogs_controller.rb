@@ -31,8 +31,9 @@ class User::BlogsController < UserBaseController
   end
 
   def show
-    #@next = Blog.nonblocked.for(@relationship).next @blog
-    #@prev = Blog.nonblocked.for(@relationship).prev @blog
+    @cond = Blog.nonblocked_cond.merge Blog.privilege_cond(@relationship)
+    @next = @blog.next @cond
+    @prev = @blog.prev @cond
     @count = @user.blogs_count @relationship
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end

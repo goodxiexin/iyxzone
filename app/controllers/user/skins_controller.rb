@@ -11,6 +11,8 @@ class User::SkinsController < UserBaseController
 		@profile = @user.profile
     @setting = @user.privacy_setting
     @skin = Skin.find(params[:id])
+    @prev = @skin.prev
+    @next = @skin.next
 
     @friends = @user.friends.sort_by{rand}[0..2]
 

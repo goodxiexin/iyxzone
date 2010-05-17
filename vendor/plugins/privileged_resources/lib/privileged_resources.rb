@@ -19,17 +19,7 @@ module Model
 
       extend SingletonMethods
 
-      named_scope :for, lambda {|relationship|
-        if relationship == 'owner'
-          {:conditions => {:privilege => [1,2,3,4]}}
-        elsif relationship == 'friend'
-          {:conditions => {:privilege => [1,2,3]}}
-        elsif relationship == 'same_game'
-          {:conditions => {:privilege => [1,2]}}
-        else
-          {:conditions => {:privilege => 1}}
-        end
-      }
+      named_scope :for, lambda {|relationship| {:conditions => privilege_cond(relationship)}}
 
       validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个"  
     
@@ -38,6 +28,18 @@ module Model
   end
 
 	module SingletonMethods
+
+    def privilege_cond relationship
+      if relationship == 'owner'
+        {:privilege => [1,2,3,4]}
+      elsif relationship == 'friend'
+        {:privilege => [1,2,3]}
+      elsif relationship == 'same_game'
+        {:privilege => [1,2]}
+      else
+        {:privilege => 1}
+      end
+    end
 
 	end
   
