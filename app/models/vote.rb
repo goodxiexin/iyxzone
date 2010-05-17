@@ -1,12 +1,14 @@
 class Vote < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:voter_id => user_ids}}}
+
 	serialize :answer_ids, Array
 
   belongs_to :voter, :class_name => 'User'
 
   belongs_to :poll#, :counter_cache => :voters_count
 
-	acts_as_resource_feeds :recipients => lambda {|vote| [vote.voter.profile, vote.poll.game] + vote.voter.guilds + vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed == 1} }
+	acts_as_resource_feeds :recipients => lambda {|vote| [vote.voter.profile, vote.poll.game] + vote.voter.guilds + vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed?} }
 
 	def answers
 		PollAnswer.find(answer_ids)
@@ -44,11 +46,9 @@ protected
     return if answer_ids.blank? or poll.blank?
     if poll.max_multiple < answer_ids.count
       errors.add(:answer_ids, "选太多了")
-    else
-      poll.answers.find(answer_ids)
+    elsif !poll.has_answers?(answer_ids)
+      errors.add(:answer_ids, "选项不存在")
     end
-  rescue
-    errors.add(:answer_ids, "选项不存在")
   end
 
 end

@@ -1,23 +1,23 @@
 <div class='avatarbox'>
 <dl class='menu-op'>
   <dt>操作</dt>
-  <% if @role.blank? %>
-    <dd><%= link_to '逛逛论坛', forum_topics_url(@guild.forum) %></dd>
-    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [@guild.president_id]) %></dd>
-  <% elsif @role.is_president? %>
-    <dd><%= facebox_confirm '放所有人鸽子', guild_url(@guild), {:msg => '你确定要取消这次工会吗?', :method => :delete} %></dd>
-    <dd><%= link_to '邀请更多人', new_guild_invitation_url(@guild) %></dd>
-    <dd><%= link_to '创建活动', new_event_url(:guild_id => @guild.id) %></dd>
-    <dd><%= link_to '人事任命', guild_memberships_url(@guild) %></dd>
-    <dd><%= link_to '上传图片', new_guild_photo_url(:album_id => @guild.album.id) %></dd>
-    <dd><%= link_to '逛逛论坛', forum_topics_url(@guild.forum) %></dd>
-  <% elsif @role.is_veteran? %>
-		<dd><%= link_to '创建活动', new_event_url(:guild_id => @guild.id) %></dd>
-    <dd><%= link_to '逛逛论坛', forum_topics_url(@guild.forum) %></dd>
-    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [@guild.president_id]) %></dd>
-  <% elsif @role.is_member? %>
-    <dd><%= link_to '逛逛论坛', forum_topics_url(@guild.forum) %></dd>
-    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [@guild.president_id]) %></dd>
+  <% if role.blank? %>
+    <dd><%= link_to '逛逛论坛', forum_topics_url(guild.forum) %></dd>
+    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></dd>
+  <% elsif role.is_president? %>
+    <dd><%= facebox_confirm '放所有人鸽子', guild_url(guild), {:msg => '你确定要取消这次工会吗?', :method => :delete} %></dd>
+    <dd><%= link_to '邀请更多人', new_guild_invitation_url(guild) %></dd>
+    <dd><%= link_to '创建活动', new_event_url(:guild_id => guild.id) %></dd>
+    <dd><%= link_to '人事任命', guild_memberships_url(guild) %></dd>
+    <dd><%= link_to '上传图片', new_guild_photo_url(:album_id => guild.album.id) %></dd>
+    <dd><%= link_to '逛逛论坛', forum_topics_url(guild.forum) %></dd>
+  <% elsif role.is_veteran? %>
+		<dd><%= link_to '创建活动', new_event_url(:guild_id => guild.id) %></dd>
+    <dd><%= link_to '逛逛论坛', forum_topics_url(guild.forum) %></dd>
+    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></dd>
+  <% elsif role.is_member? %>
+    <dd><%= link_to '逛逛论坛', forum_topics_url(guild.forum) %></dd>
+    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></dd>
   <% end %>
 </dl>
 </div>

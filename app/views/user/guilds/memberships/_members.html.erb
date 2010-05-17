@@ -16,7 +16,7 @@
         <h4><%= profile_link user, :class => 'blk' %></h4>
         <span class='red nowrap'><%= character.name %></span><br/>
         <div class='selector01'>
-          <% if @user == current_user %>
+          <% if guild.president == current_user %>
           <span><%= link_to_function "#{membership.to_s}", "Iyxzone.Guild.MemberManager.toggleRoleList(#{membership.id}, #{membership.status}, event, $(this).up())", :id => "member_status_#{membership.id}", :class => 'green' %></span>
           <% else %>
           <span><%= membership.to_s %></span>

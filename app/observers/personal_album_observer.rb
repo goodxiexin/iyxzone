@@ -1,11 +1,8 @@
-#
-# 个人的相册是有权限设置的，如果相册的权限改变，所有相片的权限也改变
-#
 class PersonalAlbumObserver < ActiveRecord::Observer
 
   def before_create album
     # verify?
-    album.verified = album.sensitive? ? 0 : 1
+    album.auto_verify
 
     # inherit some attributes from owner
     album.poster_id = album.owner_id
@@ -16,19 +13,19 @@ class PersonalAlbumObserver < ActiveRecord::Observer
   end
 
   def before_update album
-    if album.sensitive_columns_changed? and album.sensitive?
-      album.verified = 0
-    end
+    album.auto_verify
   end
   
   def after_update album
-    if album.recently_verified_from_unverified
+    if album.recently_recovered
       album.poster.raw_increment "albums_count#{album.privilege}"
-      Photo.update_all("verified = 1", {:album_id => album.id})
+      Photo.verify_all(:album_id => album.id)
+      Album.update_all("photos_count = #{album.photos.count}", {:id => album.id})
       # 没法恢复新鲜事，因为根部没记录照片是分几次，怎么上传的
     elsif album.recently_unverified
       album.poster.raw_decrement "albums_count#{album.privilege}"
-      Photo.update_all("verified = 2", {:album_id => album.id})
+      Photo.unverify_all(:album_id => album.id)
+      Album.update_all("photos_count = 0", {:id => album.id})
       album.destroy_feeds 
     end
 
@@ -41,7 +38,7 @@ class PersonalAlbumObserver < ActiveRecord::Observer
   end
 
   def before_destroy album
-    if album.verified != 2
+    if !album.rejected?
       album.poster.raw_decrement "albums_count#{album.privilege}"
     end
   end

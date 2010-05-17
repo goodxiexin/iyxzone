@@ -2,25 +2,10 @@
   <%= javascript_include_merged :forum %>
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <div class="friend-head space s_clear">
-      <span class="left"><%= album_cover_image @guild.album, :class => 'imgbox01', :width => 50, :height => 50 %></span>
-      <p class="left">
-        <strong><%= h @guild.name %></strong><br/>
-        <%= guild_link @guild, :class => 'red' %>的主页
-      </p>
-    </div>
+<% canvas_tag do %>
+    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}的论坛", :guild => @guild} %>
     <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <div class="right">
-          <%= link_to "发布新话题", new_forum_topic_url(@forum) %>
-          <%= link_to "返回论坛首页", forum_topics_url(@forum) %>
-        </div>
-        <ul>
-          <li span='hover'><span><%= link_to "话题区", forum_topics_url(@forum) %></span></li>
-        </ul>
-      </div>
+      <%= render :partial => 'tab', :locals => {:forum => @forum} %>
       <div class='appcontent01'>
         <div id='errors'></div>
         <div class="cons-form formcontent">
@@ -41,8 +26,7 @@
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>
 
 <% onload_javascript_tag do %>
   Iyxzone.Forum.Topic.init(<%= @albums %>, 'topic_content', '<%= form_authenticity_token %>');

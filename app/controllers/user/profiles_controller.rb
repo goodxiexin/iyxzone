@@ -4,37 +4,26 @@ class User::ProfilesController < UserBaseController
 
   increment_viewing 'profile', 'id', :only => [:show]
 
-	FirstFetchSize = 5
+	FirstFetchSize = 10
 
-	FetchSize = 5
+	FetchSize = 10
 
   def show
-    @relationship = @user.relationship_with current_user
-    @cond = get_privilege_cond @relationship
-    @setting = @user.privacy_setting
-
-    if @user != current_user
-      @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2]
-    end
-
-		@blogs = @user.blogs.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
-		@albums = @user.active_albums.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
-		
-    @feed_deliveries = @profile.feed_deliveries.all(:limit => FirstFetchSize, :order => 'created_at DESC', :include => [{:feed_item => :originator}])
+    @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2] if @relationship != 'owner'
+    @friends = @user.friends.sort_by{rand}[0..2]
+		@blogs = @user.blogs.for(@relationship).limit(3)
+		@albums = @user.active_albums.for(@relationship).limit(3)
+    @feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).order('created_at DESC').prefetch([{:feed_item => :originator}])
 		@first_fetch_size = FirstFetchSize
-		
     @skin = @profile.skin
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-
-    @viewings = @profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
-
-    # wall messages
-    @messages = @profile.comments.paginate :page => params[:page], :per_page => 10
-    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
+    @viewings = @profile.viewings.limit(6).prefetch([{:viewer => :profile}])
+    @characters = @user.characters.prefetch([:game])
+    @messages = @profile.comments.nonblocked.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'Profile'}}
 	end
 
   def edit
-    @relationship = @user.relationship_with current_user
     @setting = @user.privacy_setting
     case params[:type].to_i
     when 0
@@ -54,11 +43,11 @@ class User::ProfilesController < UserBaseController
 				format.html {
 					case params[:type].to_i
 					when 1
-					  render :partial => 'basic_info', :locals => {:profile => @profile}
+					  render :partial => 'basic_info', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship}
 					when 2
-					  render :partial => 'contact_info', :locals => {:profile => @profile, :setting => @profile.user.privacy_setting}
+					  render :partial => 'contact_info', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship}
           when 3
-            render :partial => 'characters', :locals => {:profile => @profile}
+            render :partial => 'characters', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship}
 					end
 				}
 				format.json { render :json => @profile.to_json }
@@ -67,7 +56,7 @@ class User::ProfilesController < UserBaseController
   end
 
 	def more_feeds
-		@feed_deliveries = @profile.feed_deliveries.find(:all, :offset => FirstFetchSize + FetchSize * params[:idx].to_i, :limit => FetchSize, :order => 'created_at DESC')
+		@feed_deliveries = @profile.feed_deliveries.offset(FirstFetchSize + FetchSize * params[:idx].to_i).limit(FetchSize).order('created_at DESC')
 		@fetch_size = FetchSize
 	end
 
@@ -77,15 +66,19 @@ protected
 		if ["more_feeds", "show", "edit"].include? params[:action]
 			@profile = Profile.find(params[:id])
 			@user = @profile.user
-      require_adequate_privilege @profile
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @profile, @relationship
     elsif ["update"].include? params[:action]
       @profile = Profile.find(params[:id])
       require_owner @profile.user
+      @user = @profile.user
+      @setting = @user.privacy_setting
+      @relationship = @user.relationship_with current_user
     end
   end
 
-  def require_adequate_privilege profile
-    profile.available_for?(current_user) || render_add_friend(profile.user)
+  def require_adequate_privilege profile, relationship
+    profile.available_for?(relationship) || render_add_friend(profile.user)
   end
   
 end

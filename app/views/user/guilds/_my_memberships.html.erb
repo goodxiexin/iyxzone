@@ -7,7 +7,7 @@
       <th class="name name02">游戏角色名称</th>
       <th class="level level02">角色情况</th>
     </tr>
-      <% @memberships.group_by(&:status).each do |status, memberships| %>
+      <% memberships.group_by(&:status).each do |status, memberships| %>
         <% memberships.each do |m| %>
           <% if status == Membership::President %>
             <tr><td><%= m.character.name %></td><td>会长</td></tr>
@@ -16,7 +16,7 @@
           <% elsif status == Membership::Member %>
             <tr><td><%= m.character.name %></td><td>会员</td></tr>
           <% elsif status == Membership::Invitation %>
-            <tr><td><%= m.character.name %></td><td>邀请[<%= facebox_link "回复", edit_guild_invitation_url(@guild, m) %>]</td></tr>
+            <tr><td><%= m.character.name %></td><td>邀请[<%= facebox_link "回复", edit_guild_invitation_url(guild, m) %>]</td></tr>
           <% elsif status == Membership::Request %>
             <tr><td><%= m.character.name %></td><td>请求[等待]</td></tr>
           <% end %>

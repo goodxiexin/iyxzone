@@ -41,18 +41,14 @@ protected
     relationship == 'friend' || relationship == 'owner' || render_add_friend(owner)
   end
 
-  def require_adequate_privilege resource
-    resource.available_for?(current_user) || render_privilege_denied(resource)
+  def require_adequate_privilege resource, relationship
+    resource.available_for?(relationship) || render_privilege_denied(resource)
   end
 
   def require_verified resource
-    if resource.verified == 2 and !is_admin
+    if resource.rejected? and !is_admin
       respond_to do |format|
-        format.js { 
-          render :update do |page|
-            page << "tip('该资源已经被和谐')"
-          end
-        }
+        format.js { render_js_error '该资源已经被和谐' } 
         format.html { render_not_found }
       end
     end 
@@ -80,18 +76,6 @@ protected
       "/images/default_medium.png"
     else
       user.avatar.public_filename(:medium)
-    end
-  end
-
-  def get_privilege_cond relationship
-    if relationship == 'owner'
-      {:privilege => [1,2,3,4]}
-    elsif relationship == 'friend'
-      {:privilege => [1,2,3]}
-    elsif relationship == 'same_game'
-      {:privilege => [1,2]}
-    else
-      {:privilege => 1}
     end
   end
 

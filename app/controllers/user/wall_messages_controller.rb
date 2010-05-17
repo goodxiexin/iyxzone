@@ -3,17 +3,13 @@ class User::WallMessagesController < UserBaseController
   def create
     @message = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
     unless @message.save
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
   def destroy
     if @message.destroy
-      render :update do |page|
-        page << "facebox.close();Effect.BlindUp($('comment_#{@message.id}'));"
-      end
+      render_js_code "facebox.close();Effect.BlindUp($('comment_#{@message.id}'));"
     else
       render_js_error
     end

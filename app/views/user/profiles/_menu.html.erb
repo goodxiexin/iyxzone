@@ -1,15 +1,15 @@
 <div class='profile-list menu-icon-list'>
-<% subject = get_subject(@user) %>
+<% subject = get_subject(user) %>
 <ul>
-	<li><span class='icon-data'></span><%= link_to "#{subject}的档案", edit_profile_url(@profile) %></li>
-  <li><span class='icon-state'></span><%= link_to "#{subject}的状态", statuses_url(:uid => @user.id) %><span>(<%= @user.statuses_count %>)</span></li>
-  <li><span class='icon-share'></span><%= link_to "#{subject}的分享", shares_url(:uid => @user.id) %><span>(<%= @user.sharings_count%>)</span></li>
-  <li><span class='icon-blog'></span><%= link_to "#{subject}的日志", blogs_url(:uid => @user.id) %><span>(<%= @user.blogs_count @relationship %>)</span></li>
-  <li><span class='icon-photo'></span><%= link_to "#{subject}的相册", personal_albums_url(:uid => @user.id) %><span>(<%= @user.albums_count @relationship%>)</span></li>
-  <li><span class='icon-video'></span><%= link_to "#{subject}的视频", videos_url(:uid => @user.id) %><span>(<%= @user.videos_count @relationship %>)</span></li>
-  <li><span class='icon-vote'></span><%= link_to "#{subject}的投票", polls_url(:uid => @user.id) %><span>(<%= @user.polls_count%>)</span></li>
-  <li><span class='icon-act'></span><%= link_to "#{subject}的活动", events_url(:uid => @user.id) %><span>(<%= @user.events.count%>)</span></li>
-  <li><span class='icon-cons'></span><%= link_to "#{subject}的公会", guilds_url(:uid => @user.id) %><span>(<%= @user.guilds_count%>)</span></li>
-  <li><span class='icon-game'></span><%= link_to "#{subject}的游戏", games_url(:uid => @user.id) %><span>(<%= @user.games_count %>)</span></li>
+	<li><span class='icon-data'></span><%= link_to "#{subject}的档案", edit_profile_url(profile) %></li>
+  <li><span class='icon-state'></span><%= link_to "#{subject}的状态", statuses_url(:uid => user.id) %><span>(<%= user.statuses_count %>)</span></li>
+  <li><span class='icon-share'></span><%= link_to "#{subject}的分享", shares_url(:uid => user.id) %><span>(<%= user.sharings_count%>)</span></li>
+  <li><span class='icon-blog'></span><%= link_to "#{subject}的日志", blogs_url(:uid => user.id) %><span>(<%= user.blogs_count relationship %>)</span></li>
+  <li><span class='icon-photo'></span><%= link_to "#{subject}的相册", personal_albums_url(:uid => user.id) %><span>(<%= user.albums_count relationship%>)</span></li>
+  <li><span class='icon-video'></span><%= link_to "#{subject}的视频", videos_url(:uid => user.id) %><span>(<%= user.videos_count relationship %>)</span></li>
+  <li><span class='icon-vote'></span><%= link_to "#{subject}的投票", polls_url(:uid => user.id) %><span>(<%= user.polls_count%>)</span></li>
+  <li><span class='icon-act'></span><%= link_to "#{subject}的活动", events_url(:uid => user.id) %><span>(<%= user.events.count%>)</span></li>
+  <li><span class='icon-cons'></span><%= link_to "#{subject}的公会", guilds_url(:uid => user.id) %><span>(<%= user.guilds_count%>)</span></li>
+  <li><span class='icon-game'></span><%= link_to "#{subject}的游戏", games_url(:uid => user.id) %><span>(<%= user.games_count %>)</span></li>
 </ul>
 </div>

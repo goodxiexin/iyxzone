@@ -32,13 +32,9 @@ class Admin::NewsController < AdminBaseController
 
   def destroy
     if @news.destroy
-      render :update do |page|
-        page << "$('news_#{@news.id}').remove();"
-      end
+      render_js_code "$('news_#{@news.id}').remove();"
     else
-      render :update do |page|
-        page << "error('删除新闻出错')"
-      end
+      render_js_error
     end
   end
 

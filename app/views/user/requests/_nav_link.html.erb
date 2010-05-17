@@ -1,0 +1,24 @@
+<div class='nav-link'>
+          <ul class='s_clear'>
+            <% if params[:type].blank? %>
+              <li class='hover'><%= link_to "<span>所有请求</span>", requests_url %></li>
+            <% else %>
+              <li><%= link_to "<span>所有请求</span>", requests_url %></li>
+            <% end %>
+            <% if params[:type].to_i == 1 %>
+              <li class='hover'><%= link_to "<span>好友请求</span>", requests_url(:type => 1) %></li>
+            <% else %>
+              <li><%= link_to "<span>好友请求</span>", requests_url(:type => 1) %></li>
+            <% end %>
+            <% if params[:type].to_i == 2 %>
+              <li class='hover'><%= link_to "<span>活动请求</span>", requests_url(:type => 2) %></li>
+            <% else %>
+              <li><%= link_to "<span>活动请求</span>", requests_url(:type => 2) %></li>
+            <% end %>
+            <% if params[:type].to_i == 3 %>
+              <li class='hover'><%= link_to "<span>公会请求</span>", requests_url(:type => 3) %></li>
+            <% else %>
+              <li><%= link_to "<span>公会请求</span>", requests_url(:type => 3) %></li>
+            <% end %>
+          </ul>
+        </div>

@@ -6,7 +6,7 @@ class PokeDeliveryObserver < ActiveRecord::Observer
     delivery.recipient.raw_increment :poke_deliveries_count
 
     # deliver email if necessary
-    PokeMailer.deliver_poke delivery if delivery.recipient.mail_setting.poke_me == 1
+    PokeMailer.deliver_poke delivery if delivery.recipient.mail_setting.poke_me?
   end
 
   def after_destroy delivery

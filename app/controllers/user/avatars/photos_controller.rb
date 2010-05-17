@@ -42,22 +42,28 @@ class User::Avatars::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.html { render :update do |page|
-					page << "facebox.close();"
-          if params[:at] == 'set_cover'
-            page.redirect_to avatar_album_url(@album)
-          elsif params[:at] == 'photo'
-            page.redirect_to avatar_url(@photo)
-          end
-				end }
-				format.json { render :json => @photo }
+				format.html { 
+          render :update do |page|
+					  page << "facebox.close();"
+            if params[:at] == 'set_cover'
+              page.redirect_to avatar_album_url(@album)
+            elsif params[:at] == 'photo'
+              page.redirect_to avatar_url(@photo)
+            end
+				  end 
+        }
+				format.json { 
+          render :json => @photo 
+        }
 			end
     else
       respond_to do |format|
-        format.html { render :update do |page|
-          page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
-          page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题没法保存', :message => nil %>"
-        end }
+        format.html { 
+          render :update do |page|
+            page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
+            page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题没法保存', :message => nil %>"
+          end 
+        }
       end
     end
   end
@@ -68,9 +74,7 @@ class User::Avatars::PhotosController < UserBaseController
         page.redirect_to avatar_album_url(@album)
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error '发生错误'
     end
   end
 

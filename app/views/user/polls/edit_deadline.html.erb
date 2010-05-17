@@ -1,24 +1,9 @@
-<p class="z-h s_clear">
-  <strong class="left">修改截至时间</strong>
-  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
-</p>
-
-<div class='z-con'>
-<div id='errors'></div>
-<% form_remote_for :poll, :url => poll_url(@poll), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_poll_deadline_btn),'请等待..');"} do |f| %>
-<div class='formcontent'>
-  <div class="rows s_clear">
-    <div class="fldid"><label for="name">截至时间：</label></div>
-    <div class="fldvalue" style="width: 170px">
-      <%= calendar_date_select :poll, :deadline %>
+<% facebox_tag '修改截至时间' do %>
+  <div id='errors'></div>
+  <% rows_form_remote_for :poll, :url => poll_url(@poll), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_poll_deadline_btn),'请等待..');"} do |f| %>
+    <div class='formcontent'>
+      <%= f.calendar_date_select :deadline, :label => '截至时间' %>
     </div>
-  </div>
-</div>
-<div class="z-submit s_clear space">
-	<table class="center" cellpadding="0"><tr><td>
-		<span class="button"><span><button type="submit" id='edit_poll_deadline_btn'>完成</button></span></span>
-    <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
-  </td></tr></table>
-</div>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'edit_poll_deadline_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+  <% end %>
 <% end %>
-</div>

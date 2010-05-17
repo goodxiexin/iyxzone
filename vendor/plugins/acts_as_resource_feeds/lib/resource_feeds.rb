@@ -11,6 +11,9 @@ module ResourceFeeds
     
       has_many :feed_deliveries, :as => 'recipient', :dependent => :delete_all
 
+      # alias for feed_deliveries
+      has_many :all_feed_deliveries, :as => 'recipient', :class_name => 'FeedDelivery'
+
       cattr_accessor :feed_recipient_opts
 
       self.feed_recipient_opts = opts

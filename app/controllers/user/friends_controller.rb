@@ -9,7 +9,7 @@ class User::FriendsController < UserBaseController
     when 0
       @friends = current_user.friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC', :include => :profile
     when 1
-      @friends = current_user.friends.find_all {|f| f.games.include?(@game) }.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
+      @friends = current_user.friends.find_all {|f| f.has_game?(@game) }.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
     when 2
       @friends = current_user.friends.find_all {|f| f.all_guilds.include?(@guild) }.paginate :page => params[:page], :per_page => 12, :order => 'created_at DESC'
     end
@@ -36,9 +36,7 @@ class User::FriendsController < UserBaseController
         page << "tip('删除成功');$('friend_#{params[:id]}').remove();"
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
@@ -46,7 +44,7 @@ class User::FriendsController < UserBaseController
     @friends = current_user.friends.search(params[:key])
     @friends = @friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
     @remote = {:update => 'friends', :url => {:action => 'search', :key => params[:key]}}
-    render :partial => 'friends', :locals => {:friends => @friends, :owner => current_user, :remote => @remote}
+    render :partial => 'friends', :locals => {:friends => @friends, :remote => @remote}
   end
 
 protected

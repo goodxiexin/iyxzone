@@ -17,13 +17,9 @@ class User::Polls::InvitationsController < UserBaseController
 
 	def destroy
 		if @invitation.destroy
-		  render :update do |page|
-			  page.redirect_to poll_url @invitation.poll
-		  end
+      redirect_js poll_url(@invitation.poll)
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
 	end
 

@@ -23,7 +23,6 @@ protected
 	def rateable_is_valid
     return if rateable_id.blank? or rateable_type.blank? or user_id.blank?
     
-    rateable = rateable_type.camelize.constantize.find(rateable_id)
 		if rateable.blank?
       errors.add(:rateable, '不存在')
     elsif rateable.rated_by? user

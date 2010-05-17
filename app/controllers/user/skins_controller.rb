@@ -10,21 +10,26 @@ class User::SkinsController < UserBaseController
 		@user = current_user
 		@profile = @user.profile
     @setting = @user.privacy_setting
+    @skin = Skin.find(params[:id])
+
+    @friends = @user.friends.sort_by{rand}[0..2]
 
     @blogs = @user.blogs.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
     @albums = @user.active_albums.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
- 
-    @feed_deliveries = @profile.feed_deliveries.find(:all, :limit => FirstFetchSize, :order => 'created_at DESC')
-		@first_fetch_size = FirstFetchSize
-	
-    @skin = Skin.find(params[:id])
+    
+    @feed_deliveries = @profile.feed_deliveries.all(:limit => FirstFetchSize, :order => 'created_at DESC', :include => [{:feed_item => :originator}])
+    @first_fetch_size = FirstFetchSize
+    
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 
-    @viewings = @profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6) 
-	
+    @viewings = @profile.viewings.all(:include => [{:viewer => :profile}], :limit => 6)
+
+    @characters = @user.characters.all(:include => [:game])
+
+    # wall messages
     @messages = @profile.comments.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'profile'}}
-    
+
 		render :template => 'user/profiles/show', :layout =>'skins'
 	end
 

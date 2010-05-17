@@ -2,7 +2,11 @@ class PollAnswerObserver < ActiveRecord::Observer
 
   def after_create answer
     # verify
-    answer.poll.needs_verify if answer.sensitive?
+    if answer.sensitive?
+      poll = answer.poll
+      poll.needs_verify
+      poll.save
+    end
   end
 
 end

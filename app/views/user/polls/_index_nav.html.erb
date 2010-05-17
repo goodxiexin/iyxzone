@@ -1,0 +1,7 @@
+      <div class="nav-link">
+        <ul class="s_clear">
+          <li <% if hover==0 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}发起的投票(#{user.polls_count})</span>", polls_url(:uid => user.id) %></li>
+          <li <% if hover==1 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}参与的投票(#{user.participated_polls_count})</span>", participated_polls_url(:uid => user.id) %></li>
+        </ul>
+      </div>
+

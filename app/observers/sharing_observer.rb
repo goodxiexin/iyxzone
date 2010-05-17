@@ -14,7 +14,7 @@ class SharingObserver < ActiveRecord::Observer
     poster.raw_increment :sharings_count
 
     # issue feeds if necessary
-    if poster.application_setting.emit_sharing_feed == 1
+    if poster.application_setting.emit_sharing_feed?
       sharing.deliver_feeds :data => {:type => share.shareable_type}
     end
   end

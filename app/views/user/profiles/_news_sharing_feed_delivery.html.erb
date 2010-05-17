@@ -2,16 +2,8 @@
 <% sharing = delivery.feed_item.originator %>
 <% news = sharing.shareable %>
 
-<div class='feed-list-box'>
-  <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
-	  <div class="feed-icon icon-news"></div>
-	  <div class='jl-list-con jl-cutline'>
-      <% if delivery.is_deleteable_by? current_user %>
-        <%= link_to_remote '', :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => 'icon-active'} %>
-      <% end %>
-      <p><%= profile_link sharing.poster%> 分享了新闻 <%= news_link news, :class => 'shine'%></p>
-      <p class='gray'><%= ftime delivery.created_at %><%= link_to_function '评论', "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id})" %></p>
-	    <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => sharing, :recipient => sharing.poster} %>
-	  </div>
-  </div>
-</div>
+<% render :layout => 'user/profiles/feed_delivery', :locals => {:icon_type => 'icon-news', :delivery => delivery} do %>
+  <p><%= profile_link sharing.poster%> 分享了新闻 <%= news_link news, :class => 'shine'%></p>
+  <p class='gray'><%= ftime delivery.created_at %><%= link_to_function '评论', "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id})" %></p>
+	<%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => sharing, :recipient => sharing.poster} %>
+<% end %>

@@ -239,7 +239,7 @@ input.gobtn,input.loginbtn,input.registbtn{display:inline-block;border:0;}
 .textfield{/*padding:0 5px;*/height:24px;line-height:24px;border:1px #bdd6ad solid;background:#fff;/*background:url(../images/skin/tf01.png) no-repeat;*/}
 .textfield input{margin:3px 0 0;width:100%;height:16px;color:#7E7F80;border:0;background:none}
 /*日历*/
-.calendar-field input{padding:0 5px;width:100px;height:24px;line-height:24px;border:1px #bdd6ad solid;color:#7E7F80;background:#fff;margin-right:3px}
+.calendar-field input{padding:0 5px;width:200px;height:24px;line-height:24px;border:1px #bdd6ad solid;color:#7E7F80;background:#fff;margin-right:3px}
 .calendar-field img{vertical-align:middle}
 
 .textarea{border:1px #E7F0E0 solid;background:#fff;width:350px;height:65px;}
@@ -587,8 +587,9 @@ a.msg-btn{background-position:-118px -186px}
 .im-bar{width:159px;color:#666}
 .im-bar .r-m{background-position:0 -53px;padding:15px 10px}
 	.im-title{line-height:20px}
+	.im-title strong{width:70px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 		.im-state{background-position:0 -27px;width:30px;height:18px;position:relative;z-index:2}
-		.im-state .selector01 .drop-wrap {width:55px;}
+		.im-state .selector01 .drop-wrap {width:55px;left:-100%;}
 		.im-state .selector01 dl dd a{padding:0}
 		.im-state .selector01 dd a:hover{background:#f8fef5;color:#25700d;}
 		.im-online,.im-busy,.im-leave,.im-hide{width:18px;height:18px;display:inline-block;vertical-align:middle}

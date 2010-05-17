@@ -1,6 +1,6 @@
 <table cellpadding="0">
-  <% unless @users.blank? %>
-  <% @users.each do |user| %>
+  <% unless users.blank? %>
+  <% users.each do |user| %>
   <tr id='user_<%= user.id %>'>
     <td><div><%= profile_link user %></div></td>
     <td><%= user.email %></td>
@@ -35,4 +35,4 @@
     <div class='gray'>没有这样的用户</div>
   <% end %>
 </table>
-<%= will_paginate @users, :renderer => "RemoteLinkRenderer", :remote => @remote %>
+<%= will_paginate users, :renderer => "RemoteLinkRenderer", :remote => remote %>

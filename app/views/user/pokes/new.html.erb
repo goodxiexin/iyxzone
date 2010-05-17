@@ -1,31 +1,22 @@
-<%= javascript_tag "$('facebox').setStyle({overflow: 'hidden', width: '450px', position: 'absolute', top: '150px', left: '380px'});" %>
-
-<p class="z-h">向<%= @recipient.login %>打招呼</p>
-
-<% form_remote_for :delivery, :url => pokes_url do |f| %>
-<%= hidden_field_tag 'delivery[recipient_id]', @recipient.id %>
-<div class="z-con">
-  <div class="face-hello space">
-    <div class="avatar">
-      <%= avatar @recipient, :class => 'imgbox01' %>
-    </div>
-    <div class="content">
-      <div><%= profile_link @recipient %> 下次登录后将会收到通知。</div>
-      <h2 class="space">选择动作</h2>
-      <ul>
-        <% Poke.all.each do |p| %>
-          <li><%= radio_button_tag 'delivery[poke_id]', p.id %><span class="<%= p.span_class %>"></span><%= p.name %></li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-  <div class="rows">
-    <div class="z-submit s_clear space">
-      <div class="buttons">
-        <span class="button"><span><button type="submit">确定</button></span></span>
-        <span class="button button-gray"><span><button type="reset" onclick="facebox.close()">取消</button></span></span>
+<% facebox_tag "向#{@recipient.login}打招呼" do %>
+  <% rows_form_remote_for :delivery, :url => pokes_url, :html => {:method => :post, :onsubmit => "Iyxzone.disableButton($('new_poke_btn'), '请等待..');"} do |f| %>
+    <%= hidden_field_tag 'delivery[recipient_id]', @recipient.id %>
+    <div class="face-hello space">
+      <div class="avatar">
+        <%= avatar @recipient, :class => 'imgbox01' %>
+      </div>
+      <div class="content">
+        <div><%= profile_link @recipient %> 下次登录后将会收到通知。</div>
+        <h2 class="space">选择动作</h2>
+        <ul>
+          <% Poke.all.each do |p| %>
+            <li><%= radio_button_tag 'delivery[poke_id]', p.id %><span class="<%= p.span_class %>"></span><%= p.name %></li>
+          <% end %>
+        </ul>
       </div>
     </div>
-  </div>
-</div>
+    <div class="rows">
+      <%= f.z_submit :submit => {:text => '完成', :id => 'new_poke_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+    </div>
+  <% end %>
 <% end %>

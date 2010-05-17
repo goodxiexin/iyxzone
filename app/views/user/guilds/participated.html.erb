@@ -2,12 +2,11 @@
 <% content_for :html_description, "#{current_user.login} - 参加的公会 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <% if @user==current_user %>
       <h1 class="app-cons">公会</h1>
     <% else %>
-      <%= render :partial => 'guild_header', :locals => {:text => "#{@user.login}的工会"} %>
+      <%= render :partial => 'guild_header', :locals => {:text => "#{@user.login}的工会", :guild => @guild} %>
     <% end %>
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>
@@ -23,5 +22,4 @@
         <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>

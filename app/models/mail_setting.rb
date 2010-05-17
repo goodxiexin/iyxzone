@@ -10,5 +10,11 @@ class MailSetting
   # TODO: 没用上的有，mail_me, birthday, change_name_of_guild, poll_summary_change
   # 虽然用位数组存储效率以及查询效率较高，但是删除一个，以及增加一个选项有点麻烦
   # 不过好在这个改动也不频繁
+
+  self.setting_opts[:attributes].each do |attribute|
+    define_method("#{attribute}?") do
+      eval("#{attribute}") == 1
+    end
+  end  
  
 end

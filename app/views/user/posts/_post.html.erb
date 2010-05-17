@@ -1,0 +1,24 @@
+            <div class="feed-list s_clear" id='post_<%= post.id %>'>
+              <div class="avatar">
+                <%= avatar_image post.poster, :class => 'imgbox01', :size => 'large', :width => 76, :heigth => 85 %><br />
+                <%= link_to "<span class='icon-home'></span>个人主页", profile_url(post.poster.profile), :popup => true %>
+                <% unless current_user.has_friend? post.poster %>
+                <%= facebox_link "<span class='icon-invitation'></span>加为好友", new_friend_request_url(:friend_id => post.poster_id) %>
+                <% end %>
+                <%= link_to "<span class='icon-read'></span>发站内信", new_mail_url(:recipient_ids => [post.poster_id]) %>
+              </div>
+              <div class="feed-header jl-cutline">
+                <span class="right"><%= post.floor %>楼</span>
+                <h3><%= link_to "<b class='red'>#{h post.poster.login}</b>", profile_url(post.poster.profile) %> <%= ftime post.created_at %></h3>
+              </div>
+              <div class="bd jl-cutline">
+                <p><%= post.content %></p>
+              </div>
+              <div class="ft">
+                <%= link_to_function "回复", "Iyxzone.Forum.Post.reply(#{post.floor}, '#{post.poster.login}', #{post.poster_id});" %>
+                <% if guild.president == current_user %>
+                  | <%= facebox_confirm '删除', forum_topic_post_url(forum, topic, post, :at => 'show'), {:msg => "你确定要删除这个回复吗？", :method => :delete} %>
+                <% end %>
+              </div>
+            </div>
+

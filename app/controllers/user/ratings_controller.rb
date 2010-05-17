@@ -9,9 +9,7 @@ class User::RatingsController < UserBaseController
         page.replace_html "#{@rateable.class.name.underscore}_#{@rateable.id}_rating_form", :partial => 'show', :locals => {:rateable => @rateable}
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 

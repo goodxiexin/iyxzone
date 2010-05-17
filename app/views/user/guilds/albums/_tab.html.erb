@@ -1,12 +1,12 @@
       <div class="tab tab01">
         <div class="right">
-          <% if @guild.president == current_user %>
-            <%= link_to "上传照片", new_guild_photo_url(:album_id => @album.id) %>
+          <% if guild.president == current_user %>
+            <%= link_to "上传照片", new_guild_photo_url(:album_id => album.id) %>
           <% end %>
         </div>
         <ul>
           <li><span><%= link_to "热门照片", hot_personal_photos_url(:uid => current_user.id) %></span></li>
-          <li class='hover'><span><%= link_to "#{h @guild.name}的相册", guild_album_url(@album, :format => 'html') %></span></li>
+          <li class='hover'><span><%= link_to "#{h guild.name}的相册", guild_album_url(album, :format => 'html') %></span></li>
         </ul>       
       </div>
 

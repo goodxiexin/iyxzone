@@ -6,13 +6,12 @@
 <% content_for :html_description, "#{@game.name}游戏玩家 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@game.name}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-	<div class="round_m"><div class="round_body">
-    <%= render :partial => 'user/games/game_header', :locals => {:text => "#{@game.name}的玩家"} %>
+<% canvas_tag do %>
+    <%= render :partial => 'user/games/game_header', :locals => {:game => @game, :text => "#{@game.name}的玩家"} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'tab' %>
+      <%= render :partial => 'tab', :locals => {:game => @game} %>
 			<div class="friend-box">
-        <%= render :partial => 'search_panel', :locals => {:search_type => 'user'} %>
+        <%= render :partial => 'search_panel', :locals => {:search_type => 'user', :game => @game} %>
 				<div class="box02 appcontent01">
           <div class="piclist-rows cmt-space">
             <table cellspacing='0' cellpadding='0'>
@@ -30,6 +29,4 @@
         </div>
       </div>
     </div>
-	</div></div>
-</div></div></div></div>
-
+<% end %>

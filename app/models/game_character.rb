@@ -1,5 +1,9 @@
 class GameCharacter < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:user_id => user_ids}}}
+	
+	serialize :data
+
   def has_event?
     !Event.first(:conditions => {:character_id => id}).blank?
   end
@@ -11,6 +15,10 @@ class GameCharacter < ActiveRecord::Base
   def is_locked?
     has_event? or has_guild?
   end
+
+	def name_with_game_and_server
+		"#{name}(#{game.name}-#{server.name})"
+	end
 
   acts_as_random
 

@@ -1,18 +1,22 @@
 class Membership < ActiveRecord::Base
 
+  Invitation      = 0
+  Request         = 1
+  President       = 2
+  Veteran         = 3
+  Member          = 4
+
+  named_scope :by, lambda {|user_ids| {:conditions => {:user_id => user_ids}}}
+
+  named_scope :authorized, :conditions => {:status => [President, Veteran, Member]}
+
   belongs_to :user
 
   belongs_to :character, :class_name => 'GameCharacter'
 
   belongs_to :guild
 
-	acts_as_resource_feeds :recipients => lambda {|membership| [membership.user.profile, membership.character.game] + membership.user.friends.find_all{|f| f.application_setting.recv_guild_feed == 1} - [membership.guild.president] }
-
-	Invitation			= 0
-	Request         = 1
-	President				= 3
-	Veteran					= 4
-	Member					= 5
+	acts_as_resource_feeds :recipients => lambda {|membership| [membership.user.profile, membership.character.game] + membership.user.friends.find_all{|f| f.application_setting.recv_guild_feed?} - [membership.guild.president] }
 
   # user_id, guild_id, character_id 不能被修改
   attr_readonly :user_id, :guild_id, :character_id
@@ -44,43 +48,43 @@ class Membership < ActiveRecord::Base
   end
 
   def is_invitation?
-    status == Membership::Invitation
+    status == Invitation
   end
 
   def was_invitation?
-    status_was == Membership::Invitation
+    status_was == Invitation
   end
 
   def is_request?
-    status == Membership::Request
+    status == Request
   end
 
   def was_request?
-    status_was == Membership::Request
+    status_was == Request
   end
 
   def is_president?
-    status == Membership::President
+    status == President
   end
 
   def was_president?
-    status_was == Membership::President
+    status_was == President
   end
 
   def is_veteran?
-    status == Membership::Veteran
+    status == Veteran
   end
 
   def is_member?
-    status == Membership::Member
+    status == Member
   end
 
   def is_authorized?
-    status == Membership::Member or status == Membership::Veteran
+    status == Member or status == Veteran
   end
 
   def was_authorized?
-    status_was == Membership::Member or status_was == Membership::Veteran
+    status_was == Member or status_was == Veteran
   end  
 
   attr_accessor :recently_change_role
@@ -146,10 +150,10 @@ protected
 
   def character_is_valid
     return if character_id.blank?
-    c = GameCharacter.find(:first, :conditions => {:id => character_id, :user_id => user_id})
-    if c.blank?
+    
+    if character.blank?
       errors.add(:character_id, "不存在")
-    elsif guild and (c.game_id != guild.game_id or c.area_id != guild.game_area_id or c.server_id != guild.game_server_id)
+    elsif guild and (character.game_id != guild.game_id or character.area_id != guild.game_area_id or character.server_id != guild.game_server_id)
       errors.add(:character_id, "不属于相应服务器")
     end
   end
@@ -157,7 +161,7 @@ protected
   def user_is_valid
     return if character.blank? or user.blank? or guild.blank?
  
-    membership = guild.memberships.find_by_user_id_and_character_id(user_id, character_id)
+    membership = guild.membership_for user, character
     
     if membership.blank?
       if is_invitation?

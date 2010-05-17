@@ -6,13 +6,12 @@
 <% content_for :html_description, "#{current_user.login} - 用户名搜索 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-	<div class="round_m"><div class="round_body">
-		<h1 class="app-friend">好友</h1>
+<% canvas_tag do %>
+	  <h1 class="app-friend">好友</h1>
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab' %>
 			<div class='friend-box'>
-        <%= render :partial => 'search_panel', :locals => {:search_type => 'user'} %>
+        <%= render :partial => 'search_panel', :locals => {:search_type => 'user', :games => @games, :areas => @areas, :servers => @servers} %>
         <div class="box02 appcontent01">
 					<div class='piclist-rows cmt-space'>
             <table cellspacing='0' cellpadding='0'>
@@ -32,8 +31,7 @@
         </div>
       </div>
     </div>
-	</div></div>
-</div></div></div></div>
+<% end %>
 
 <%= onload_javascript_tag "
   Iyxzone.Game.infos = #{game_infos};

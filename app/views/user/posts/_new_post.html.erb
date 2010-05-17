@@ -1,0 +1,19 @@
+              <div class="forum-cmt" id='new_post'>
+                <h2>回复话题</h2>
+                <% form_for :post, :url => forum_topic_posts_url(forum, topic), :html => {:onsubmit => "Iyxzone.Forum.Post.save($('post_submit_btn'), this); return false;" } do |f| %>
+                <%= hidden_field_tag 'post[recipient_id]', topic.poster_id %>
+                <div class="formcontent">
+                  <div class="rows s_clear">
+                    <div class="fldvalue"><%= f.text_area 'content', :style =>"width: 700px" %></div>
+                  </div>
+                  <div class="rows s_clear">
+                    <div class="fldvalue">
+                      <div class="left">
+                        <span class="button03"><span><button type="submit" id='post_submit_btn'>发布</button></span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% end %>
+              </div>
+

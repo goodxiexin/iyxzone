@@ -20,7 +20,7 @@ module ActsAsAbstract
       include ActsAsAbstract::InstanceMethods
 
       extend ActsAsAbstract::SingletonMethods 
-    
+
     end
 
   end

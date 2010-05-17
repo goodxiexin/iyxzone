@@ -10,76 +10,41 @@
 <% end %>
 
 <%= error_messages_for :event, :header_message => "遇到以下问题无法保存", :message => nil %>
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-		<% if params[:guild_id].blank? %>
-			<h1 class="app-ploy">活动</h1>
-		<% else %>
-		  <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "工会活动"} %>
-    <% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
-      <div class="appcontent01">
-        <h3>新建活动</h3>
-        <div class="cons-form formcontent">
-          <% form_for @event, :html => {:onsubmit => "Iyxzone.Event.Builder.update(#{@event.id}, this, $('submit_btn')); return false;"} do |f| %>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">活动标题：</label></div>
-              <div class="fldvalue">
-                <div class="textfield"><%= f.text_field :title %></div>
-              </div>
-            </div>
-						<% if @event.is_guild_event? %>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">公会活动：</label></div>
-              <div class="fldvalue">
-                <span id='event_guild_selector'>
-                  所属公会: <%= guild_link @event.guild %>
-                  <%= hidden_field_tag 'event[guild_id]', @event.guild_id %>
-                </span>
-              </div>
-            </div>
+
+<% canvas_tag do %>
+	<% if params[:guild_id].blank? %>
+		<h1 class="app-ploy">活动</h1>
+	<% else %>
+		<%= render :partial => 'user/guilds/guild_header', :locals => {:text => "工会活动", :guild => @guild} %>
+  <% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
+    <div class="appcontent01">
+      <h3>新建活动</h3>
+      <div class="cons-form formcontent">
+        <% rows_form_for @event, :html => {:onsubmit => "Iyxzone.Event.Builder.update(#{@event.id}, this, $('submit_btn')); return false;"} do |f| %>
+          <%= f.text_field :title, :label => '活动标题' %>
+					<% if @event.is_guild_event? %>
+            <%= hidden_field_tag 'event[guild_id]', @event.guild_id %>
+            <% f.rows :label => '工会活动' do %>
+              <span id='event_guild_selector'>所属公会: <%= guild_link @event.guild %></span>
             <% end %>
-            <div class='rows s_clear'>
-              <div class='fldid'><label for='name'>游戏角色：</label></div>
-              <div class='fldvalue'>
-                <%= collection_select :event, :character_id, [@event.poster_character], :id, :name, {:prompt => '---'}, :disabled => true %>
-              </div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">开始时间：</label></div>
-              <div class="fldvalue"><%= calendar_date_select :event, :start_time %></div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">结束时间：</label></div>
-              <div class="fldvalue"><%= calendar_date_select :event, :end_time %></div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">任务描述：</label></div>
-              <div class="fldvalue"><%= f.text_area :description %></div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">谁可以加入：</label></div>
-              <div class="fldvalue">
-                <% if !@event.is_guild_event? %>
-                  <%= event_privilege_select_tag :event %>
-                <% else %>
-                  公会成员才能加入
-                <% end %>
-              </div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid">&nbsp;</div>
-              <div class="fldvalue">
-                <span class="button"><span><button type='submit' id='submit_btn'>提交</button></span></span>
-              </div>
-            </div>
           <% end %>
-        </div>
+          <%= f.collection_select :character_id, [@event.poster_character], :id, :name_with_game_and_server, {:prompt => '---'}, :label => '游戏角色', :disabled => true %>
+          <%= f.calendar_date_select :start_time, :label => '开始时间' %>
+          <%= f.calendar_date_select :end_time, :label => '结束时间' %>
+          <%= f.text_area :description, :label => '任务描述' %>
+          <% if !@event.is_guild_event? %>
+            <%= f.select 'privilege', event_privilege_options, {}, :label => '谁可以加入', :class => "selector selector02" %>
+          <% else %>
+            <%= f.span '工会的人才能加入', :label => '谁可以加入' %>
+          <% end %>
+          <%= f.submit '提交' => {:type => 'submit', :id => 'submit_btn'} %>
+        <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>
 
 <% if params[:guild_id].blank? %>
   <% onload_javascript_tag do %>
