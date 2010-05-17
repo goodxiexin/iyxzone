@@ -44,7 +44,7 @@
 <% end %>
 
 <% onload_javascript_tag do %>
-  Iyxzone.Forum.Post.init(<%= @albums %>, 'post_content', '<%= form_authenticity_token %>');
+  Iyxzone.Forum.Post.init(<%= album_infos %>, 'post_content', '<%= form_authenticity_token %>');
   <% if !@post.blank? %>
     Iyxzone.Forum.Post.reply(<%= @post.floor %>, '<%= @post.poster.login %>', <%= @post.poster_id %>);
   <% end %>

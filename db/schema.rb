@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100517121608) do
+ActiveRecord::Schema.define(:version => 20100517160420) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -805,6 +805,7 @@ ActiveRecord::Schema.define(:version => 20100517121608) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "remember_me_untils"
+    t.string   "remember_code"
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"

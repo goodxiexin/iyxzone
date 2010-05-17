@@ -37,10 +37,6 @@ class PostObserver < ActiveRecord::Observer
     end  
   end
 
-  def before_update post
-    post.auto_verify
-  end
-
   def after_update post
     if post.recently_unverified
       post.topic.raw_decrement :posts_count
@@ -52,8 +48,10 @@ class PostObserver < ActiveRecord::Observer
   end
 
   def after_destroy post
-    post.forum.raw_decrement :posts_count
-    post.topic.raw_decrement :posts_count
+    if !post.rejected?
+      post.forum.raw_decrement :posts_count
+      post.topic.raw_decrement :posts_count
+    end
   end
 
 end

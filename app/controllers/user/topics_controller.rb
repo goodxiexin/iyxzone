@@ -15,7 +15,6 @@ class User::TopicsController < UserBaseController
   end
 
   def new
-    @albums = current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
   end
 
   def create

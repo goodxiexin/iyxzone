@@ -30,19 +30,15 @@ class SessionsController < ApplicationController
         render :action => 'new'
       end
     else
-      if params[:remember_me] == "1"
-        current_user.remember_me
-      else
-        current_user.remember_me_for SESSION_DURATION
-      end
+      remember_me_in_cookie if params[:remember_me] == "1"
       flash[:notice] = "欢迎来到一起游戏网！"
       redirect_back_or_default(home_url)
     end
   end
 
   def destroy
-    self.current_user.forget_me if logged_in?
-    #cookies.delete :auth_token
+    #self.current_user.forget_me if logged_in?
+    cookies.delete :auth_token
     reset_session
     flash[:notice] = "成功登出"
     redirect_to login_url

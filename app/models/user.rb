@@ -71,8 +71,7 @@ class User < ActiveRecord::Base
 	has_many :poke_deliveries, :foreign_key => 'recipient_id', :order => 'created_at DESC'
 
   def is_pokeable_by? user
-    p = privacy_setting.poke
-    p == 1 || has_friend?(user) || (p == 3 and has_same_game_with?(user))
+    privacy_setting.poke? self.relationship_with(user)
   end
 
 	# status
@@ -84,7 +83,7 @@ class User < ActiveRecord::Base
     # 定义这个完全是为了删除方便
   has_many :friend_friendships, :class_name => 'Friendship', :foreign_key => 'friend_id', :dependent => :destroy
 
-  has_many :friendships, :conditions => {:status => 1}
+  has_many :friendships, :conditions => {:status => Friendship::Friend}
 
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
 
@@ -98,7 +97,7 @@ class User < ActiveRecord::Base
   end
 
   def wait_for? user
-		all_friendships.find_by_friend_id_and_status(user.id, 0) 
+		all_friendships.find_by_friend_id_and_status(user.id, Friendship::Request) 
   end
 
 	def common_friends_with user
@@ -202,18 +201,17 @@ class User < ActiveRecord::Base
   end
 
   # events
-  has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy
+  has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy, :conditions => {:status => [Participation::Confirmed, Participation::Maybe]}
 
   has_many :events, :foreign_key => 'poster_id', :order => 'start_time DESC', :conditions => ["end_time >= ?", Time.now.to_s(:db)], :dependent => :destroy
 
 	with_options :order =>  'created_at DESC', :through => :participations, :source => :event, :uniq => true do |user|
 
-		user.has_many :all_events, :conditions => "participations.status IN (3,4,5)"
+		user.has_many :all_events
 
-    # 不包括我发起的，这样的都在events里
-		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ? AND participations.status IN (3,4,5)', Time.now.to_s(:db)]
+		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ?', Time.now.to_s(:db)]
 
-		user.has_many :participated_events, :conditions => ["events.end_time < ? AND participations.status IN (3,4,5)", Time.now.to_s(:db)]
+		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
 
 	end
 
@@ -282,11 +280,6 @@ class User < ActiveRecord::Base
 
   end
 
-  def friend_sharings type=nil
-    cond = type.nil? ? {} : {:shareable_type => type}
-    Sharing.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = sharings.poster_id", :conditions => cond, :order => 'created_at desc')
-  end
-
   # polls
   has_many :votes, :foreign_key => 'voter_id', :dependent => :destroy
 
@@ -295,17 +288,17 @@ class User < ActiveRecord::Base
   has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
 
 	# guilds
-	has_many :memberships, :dependent => :destroy
+	has_many :memberships, :dependent => :destroy, :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
 
   has_many :guilds, :foreign_key => 'president_id', :dependent => :destroy
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC', :uniq => true do |user|
 
-    user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5)"
+    user.has_many :all_guilds
 
-    user.has_many :privileged_guilds, :conditions => "memberships.status IN (3,4)"
+    user.has_many :privileged_guilds, :conditions => "memberships.status IN (#{Membership::President},#{Membership::Veteran})"
 
-		user.has_many :participated_guilds, :conditions => "memberships.status IN (4,5)"
+		user.has_many :participated_guilds, :conditions => "memberships.status IN (#{Membership::Veteran}, #{Membership::Member})"
 
 	end
 	
@@ -316,15 +309,15 @@ class User < ActiveRecord::Base
 	# invitation and requests
 	has_many :event_requests, :through => :events, :source => :requests
 
-	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => 0}, :dependent => :destroy
+	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => Participation::Invitation}, :dependent => :destroy
 
 	has_many :poll_invitations, :dependent => :destroy
 
 	has_many :guild_requests, :through => :guilds, :source => :requests 
 
-	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => 0}, :dependent => :destroy
+	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => Membership::Invitation}, :dependent => :destroy
 
-	has_many :friend_requests, :class_name => 'Friendship', :foreign_key => 'friend_id', :conditions => {:status => 0}
+	has_many :friend_requests, :class_name => 'Friendship', :foreign_key => 'friend_id', :conditions => {:status => Friendship::Request}
 
   def invitations_count
     guild_invitations_count + event_invitations_count + poll_invitations_count

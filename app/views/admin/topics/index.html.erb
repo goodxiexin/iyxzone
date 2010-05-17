@@ -9,7 +9,7 @@
           <li <% if params[:type].to_i == 2 %>class="hover"<% end %>><span><%= link_to "屏蔽话题", admin_topics_url(:type => 2) %></span></li>
         </ul>
         <div class='right'>
-          <%= render :partial => 'admin/verify/category', :locals => {:selected => 0} %>
+          <%= render :partial => 'admin/verify/category', :locals => {:selected => 9} %>
         </div>
       </div>
       <div class="feed-box01">

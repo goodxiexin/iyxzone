@@ -5,13 +5,21 @@ class User::SignupInvitationsController < UserBaseController
   def index
   end
 
+  # 把这些写到cache里而不是session里，因为session storage是cookie，所以密码这样放是不安全的
   def add_friend
-    session[:email_authentication] = {:type => params[:type], :user_name => params[:user_name], :password => params[:password]}
+    Rails.cache.write "import-contacts-#{current_user.id}", {:user_name => params[:user_name], :type => params[:type], :password => params[:password]}
   end
 
   def invite_contact
-    @type = session[:email_authentication][:type]
-    @user_name = session[:email_authentication][:user_name]
+    @email_info = Rails.cache.read "import-contacts-#{current_user.id}"
+    
+    if !@email_info.blank?
+      @type = @email_info[:type]
+      @user_name = @email_info[:user_name]
+    else
+      flash[:error] = '发生错误，可能是连接失败，请重新输入'
+      redirect_to :action => :index
+    end
   end
 
   def create

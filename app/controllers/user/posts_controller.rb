@@ -11,7 +11,6 @@ class User::PostsController < UserBaseController
       @post = Post.find(params[:post_id])
       params[:page] = @topic.posts.index(@post) / PER_PAGE + 1
     end
-    @albums = current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
     @random_topics = Topic.random :limit => 5, :except => [@topic], :conditions => {:forum_id => @forum.id}
     @posts = @topic.posts.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE
     @cond = {:top => @topic.top}.merge Topic.nonblocked_cond

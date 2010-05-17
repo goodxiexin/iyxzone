@@ -8,10 +8,6 @@ class TopicObserver < ActiveRecord::Observer
     topic.forum.raw_increment :topics_count
   end
 
-  def before_update topic
-    topic.auto_verify
-  end
-
   def after_update topic
     if topic.recently_unverified
       topic.forum.raw_decrement :topics_count
@@ -27,7 +23,9 @@ class TopicObserver < ActiveRecord::Observer
   end
 
   def after_destroy topic
-    topic.forum.raw_decrement :topics_count
+    if !topic.rejected?
+      topic.forum.raw_decrement :topics_count
+    end
   end
 
 end
