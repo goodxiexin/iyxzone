@@ -35,7 +35,7 @@ class Game < ActiveRecord::Base
 	acts_as_taggable :delete_conditions => lambda {|game, user| user.is_admin? },
                    :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 10.days.ago }
   
-	acts_as_rateable :create_conditions => lambda {|rating, game, user| (rating.nil? || rating.created_at < 10.days.ago) and user.games.include?(game) }
+	acts_as_rateable :create_conditions => lambda {|rating, game, user| (rating.nil? || rating.created_at < 10.days.ago) and user.has_game?(game) }
 
 	acts_as_commentable :order => 'created_at DESC', :recipient_required => false
 

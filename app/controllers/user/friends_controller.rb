@@ -9,7 +9,7 @@ class User::FriendsController < UserBaseController
     when 0
       @friends = current_user.friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC', :include => :profile
     when 1
-      @friends = current_user.friends.find_all {|f| f.games.include?(@game) }.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
+      @friends = current_user.friends.find_all {|f| f.has_game?(@game) }.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
     when 2
       @friends = current_user.friends.find_all {|f| f.all_guilds.include?(@guild) }.paginate :page => params[:page], :per_page => 12, :order => 'created_at DESC'
     end
