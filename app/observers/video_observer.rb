@@ -1,7 +1,7 @@
 class VideoObserver < ActiveRecord::Observer
 
   def before_create video
-    video.verified = video.sensitive? ? 0 : 1
+    video.auto_verify
   end
 
 	def after_create video
@@ -9,15 +9,13 @@ class VideoObserver < ActiveRecord::Observer
     video.poster.raw_increment "videos_count#{video.privilege}"
     
     # emit feed if necessary
-    if (video.poster.application_setting.emit_video_feed == 1) and !video.is_owner_privilege?
+    if video.poster.application_setting.emit_video_feed? and !video.is_owner_privilege?
 		  video.deliver_feeds
     end
 	end
 
   def before_update video
-    if video.sensitive_columns_changed? and video.sensitive?
-      video.verified = 0
-    end 
+    video.auto_verify
   end
 
   def after_update video
@@ -37,20 +35,20 @@ class VideoObserver < ActiveRecord::Observer
     end
 
     # issue feeds if necessary
-    if video.privilege != 4 and video.privilege_was == 4
-      if video.poster.application_setting.emit_video_feed == 1
+    if !video.is_owner_privilege? and video.was_owner_privilege?
+      if video.poster.application_setting.emit_video_feed?
         video.deliver_feeds
       end
     end
 
     # destroy feeds if necessary
-    if video.privilege == 4 and video.privilege_was != 4
+    if video.is_owner_privilege? and !video.was_owner_privilege?
       video.destroy_feeds
     end
   end
 
   def after_destroy video
-    if video.verified != 2
+    if !video.rejected?
       video.poster.raw_decrement "videos_count#{video.privilege}"
     end
   end

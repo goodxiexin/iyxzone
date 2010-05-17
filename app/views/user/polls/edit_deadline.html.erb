@@ -2,7 +2,7 @@
   <div id='errors'></div>
   <% rows_form_remote_for :poll, :url => poll_url(@poll), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_poll_deadline_btn),'请等待..');"} do |f| %>
     <div class='formcontent'>
-      <%= f.calender_date_select :deadline, :label => '截至时间' %>
+      <%= f.calendar_date_select :deadline, :label => '截至时间' %>
     </div>
     <%= f.z_submit :submit => {:text => '完成', :id => 'edit_poll_deadline_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
   <% end %>

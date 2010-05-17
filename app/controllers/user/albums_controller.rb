@@ -4,38 +4,35 @@ class User::AlbumsController < UserBaseController
 
   PER_PAGE = 10
 
+  PREFETCH = [{:poster => :profile}, :poster, :cover]
+
   def index
     @relationship = @user.relationship_with current_user
-    @privilege = get_privilege_cond @relationship
-    @albums = @user.albums.all(:conditions => @privilege)
-    @albums.push(@user.avatar_album) if @user.avatar_album.verified != 2
-    @albums = @albums.paginate :page => params[:page], :per_page => PER_PAGE
+    @albums = @user.albums.for(@relationship).concat(@user.avatar_album.rejected? ? []: [@user.avatar_album]).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 	def recent
-    @albums = Album.recent.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :poster, :cover]
+    @albums = Album.recent.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
-    @albums = current_user.friend_albums.paginate :page => params[:page], :per_page => PER_PAGE
+    @albums = PersonalAlbum.by(current_user.friend_ids).nonblocked.for('friend').not_empty.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def select
-    @albums = current_user.albums
+    @albums = current_user.albums.nonblocked
   end
 
   def show
     respond_to do |format|
       format.html {
         @user = @album.poster
-        @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
+        @photos = @album.photos.nonblocked.paginate :page => params[:page], :per_page => 12 
         @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
         render :action => 'show'
       }
       format.json {
-        @photos = @album.photos
-        @json = @photos.map {|p| p.public_filename}
-        render :json => @json
+        render :json => @album.photos.nonblocked.map {|p| p.public_filename}
       }
     end
   end
@@ -63,19 +60,17 @@ class User::AlbumsController < UserBaseController
   def update
     if @album.update_attributes(params[:album] || {})
 			respond_to do |format|
-        format.html {    
-					render :update do |page|
-						page << "tip('成功');"
-					end
-				}
+        format.html { render_js_tip '成功' }    
         format.json { render :json => @album }
 			end
     else
       respond_to do |format|
-        format.html { render :update do |page|
-          page << "Iyxzone.enableButton($('edit_album_submit'), '完成');"
-          page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
-        end }
+        format.html { 
+          render :update do |page|
+            page << "Iyxzone.enableButton($('edit_album_submit'), '完成');"
+            page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
+          end 
+        }
       end
     end
   end 
@@ -85,10 +80,8 @@ class User::AlbumsController < UserBaseController
   end
 
   def destroy
-    if params[:migration] and params[:migration].to_i == 1 and params[:migrate_to]
-      new_album = current_user.albums.find(params[:migrate_to])
-      Photo.update_all("album_id = #{new_album.id}, privilege = #{new_album.privilege}", {:album_id => @album.id})
-      new_album.update_attribute(:photos_count, new_album.photos_count + @album.photos_count)
+    if params[:migration].to_i == 1
+      Photo.migrate(:from => @album, :to => current_user.albums.nonblocked.find(params[:migrate_to]))
     end
     
     if @album.destroy
@@ -96,9 +89,7 @@ class User::AlbumsController < UserBaseController
 			  page.redirect_to personal_albums_url(:uid => current_user.id)  
 		  end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error '发生错误'
     end
 	end
 
@@ -111,7 +102,7 @@ protected
     elsif ["show"].include? params[:action]
       @album = PersonalAlbum.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}])
       require_verified @album
-      require_adequate_privilege @album
+      require_adequate_privilege @album, @album.poster.relationship_with(current_user)
     elsif ["edit", "update", "confirm_destroy", "destroy"].include? params[:action]
       @album = PersonalAlbum.find(params[:id])
       require_verified @album

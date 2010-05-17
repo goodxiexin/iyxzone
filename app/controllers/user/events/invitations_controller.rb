@@ -6,7 +6,7 @@ class User::Events::InvitationsController < UserBaseController
     if @guild
       @characters = @guild.characters - @event.all_characters
     else
-      @characters = current_user.friend_characters(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id) - @event.all_characters
+      @characters = GameCharacter.by(current_user.friend_ids).match(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id) - @event.all_characters
     end
   end
 
@@ -25,17 +25,13 @@ class User::Events::InvitationsController < UserBaseController
 
   def accept
     unless @invitation.accept_invitation params[:status]
-      render :update do |page|
-        page << "error('发生错误')"
-      end
+      render_js_error
     end
   end
 
   def decline
     unless @invitation.decline_invitation
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end  
   end
 

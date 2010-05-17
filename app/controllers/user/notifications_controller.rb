@@ -8,7 +8,7 @@ class User::NotificationsController < UserBaseController
   end
 
 	def first_five
-		@notifications = current_user.notifications.unread.find(:all, :limit => 5)
+		@notifications = current_user.notifications.unread.limit(5)
 		Notification.read @notifications, current_user
     render :action => 'first_five', :layout => false
 	end
@@ -19,16 +19,13 @@ class User::NotificationsController < UserBaseController
 			  page << "$('notification_#{@notification.id}').remove();"
 		  end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
   def destroy_all
     Notification.delete_all(:user_id => current_user.id)
-    current_user.update_attribute(:notifications_count, 0)
-    current_user.update_attribute(:unread_notifications_count, 0)
+    current_user.update_attributes(:notifications_count => 0, :unread_notifications_count => 0)
     flash[:notice] = '删除成功'
     render :update do |page|
       page.redirect_to notifications_url

@@ -14,19 +14,25 @@ class Event < ActiveRecord::Base
 
   belongs_to :guild
 
-	named_scope :hot, :conditions => ["end_time > ? AND verified IN (0,1)", Time.now], :order => 'confirmed_count DESC'
+	named_scope :hot, :conditions => ["end_time > ?", Time.now], :order => 'confirmed_count DESC'
 	
-	named_scope :recent, :conditions => ["end_time > ? AND verified IN (0,1)", Time.now], :order => 'start_time DESC'
+	named_scope :recent, :conditions => ["end_time > ?", Time.now], :order => 'start_time DESC'
+
+  named_scope :people_order, :order => '(confirmed_count + maybe_count) DESC'
+
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
 
   has_many :participations # 没有dependent, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
+
+  has_many :invitations, :class_name => 'Participation', :conditions => {:status => Participation::Invitation}
+  
+  has_many :requests, :class_name => 'Participation', :conditions => {:status => Participation::Request}
 
   has_many :confirmed_participations, :class_name => 'Participation', :conditions => {:status => Participation::Confirmed}
 
   has_many :maybe_participations, :class_name => 'Participation', :conditions => {:status => Participation::Maybe}
 
-  has_many :invitations, :class_name => 'Participation', :conditions => {:status => Participation::Invitation}
-  
-  has_many :requests, :class_name => 'Participation', :conditions => {:status => Participation::Request}
+  has_many :confirmed_and_maybe_participations, :class_name => 'Participation', :conditions => {:status => [Participation::Maybe, Participation::Confirmed]}
 
 	with_options :source => 'participant', :uniq => true do |event|
 
@@ -38,7 +44,7 @@ class Event < ActiveRecord::Base
 
 		event.has_many :maybe_participants, :through => :maybe_participations
 
-		event.has_many :participants, :through => :participations, :conditions => "participations.status = 3 or participations.status = 4"
+		event.has_many :participants, :through => :confirmed_and_maybe_participations
 
 	end
 
@@ -50,9 +56,9 @@ class Event < ActiveRecord::Base
 
     event.has_many :confirmed_characters, :through => :confirmed_participations
 
-      event.has_many :maybe_characters, :through => :maybe_participations
+    event.has_many :maybe_characters, :through => :maybe_participations
 
-    event.has_many :characters, :through => :participations, :conditions => "participations.status = 3 or participations.status = 4"
+    event.has_many :characters, :through => :confirmed_and_maybe_participations
 
     event.has_many :all_characters, :through => :participations
 
@@ -65,7 +71,7 @@ class Event < ActiveRecord::Base
                       :create_conditions => lambda {|user, event| event.has_participant?(user)},
                       :view_conditions => lambda { true } # this means anyone can view
 
-	acts_as_resource_feeds :recipients => lambda {|event| [event.poster.profile, event.game] + event.poster.guilds + event.poster.friends.find_all {|f| f.application_setting.recv_event_feed == 1} }
+	acts_as_resource_feeds :recipients => lambda {|event| [event.poster.profile, event.game] + event.poster.guilds + event.poster.friends.find_all {|f| f.application_setting.recv_event_feed?} }
 
 	searcher_column :title
 
@@ -77,77 +83,28 @@ class Event < ActiveRecord::Base
     end_time < Time.now
   end
 
+  def is_guild_event?
+    !guild_id.nil?
+  end
+
   def participants_count
     confirmed_count + maybe_count
   end
 
   def has_participant? user
-    participations.exists? :status => [3,4], :participant_id => user.id
+    confirmed_and_maybe_participations.exists? :participant_id => user.id
   end
 
-  def has_character? character
-    participations.exists? :status => [3,4], :character_id => character.id
-  end
-
-  def participations_for user
-    participations.all(:conditions => {:participant_id => user.id})
-  end
-
-  def confirmed_and_maybe_participations_for user
-    participation.all(:conditions => {:status => [Participation::Confirmed, Participation::Maybe], :participant_id => user.id})
-  end
-
-  def requests_for user
-    requests.all(:conditions => {:participant_id => user.id})
-  end
-
-  def invitations_for user
-    invitations.all(:conditions => {:participant_id => user.id})
-  end
-
-  def characters_for user
-    all_characters.all(:conditions => {:user_id => user.id})  
-  end
-
-  def confirmed_and_maybe_characters_for user
-    characters.all(:conditions => {:user_id => user.id})
-  end
-
-  def request_characters_for user
-    request_characters.all(:conditions => {:user_id => user.id})
-  end
-
-  def invite_characters_for user
-    invite_characters.all(:conditions => {:user_id => user.id})
-  end
-
-  def is_guild_event?
-    !guild_id.nil?
-  end
-
-  def was_guild_event?
-    !guild_id_was.nil?
-  end
-
-  def time_changed?
-    start_time_changed? || end_time_changed?
+  def participation_for user, character
+    participations.match(:participant_id => user.id, :character_id => character.id).first
   end
 
   def requestable_characters_for user
-    user.characters.find(:all, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) - characters_for(user)
+    user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - self.all_characters.by(user.id)
   end
 
   def is_requestable_by? user
-    return -3 if expired? 
-    return -1 if requestable_characters_for(user).blank? 
-
-    if is_guild_event?
-      return 1 if guild.has_member?(user)
-      return -2
-    else
-      return 1 if poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
-      return 0
-    end
+    poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
   end
 
   def invitees= character_ids
@@ -200,21 +157,19 @@ protected
 
   def guild_is_valid
     return if guild_id.blank?
-    guild = Guild.find(:first, :conditions => {:id => guild_id})
+    
     if guild.blank?
       errors.add(:guild_id, "不存在")
-    elsif poster_id
-      role = guild.role_for(poster)
-      errors.add(:guild_id, "没有权限") if role == Membership::President or role == Membership::Veteran
+    else
+      errors.add(:guild_id, "没有权限") unless (guild.has_veteran?(poster) or guild.president == poster)
     end
   end
 
   def character_is_valid
     return if character_id.blank?
-    character = GameCharacter.find(:first, :conditions => {:id => character_id})
-    errors.add(:character_id, "不存在") if character.blank?
+    errors.add(:character_id, "不存在") if poster_character.blank?
     return if poster_id.blank?
-    errors.add(:character_id, "不是拥有者") if character.user_id != poster_id
+    errors.add(:character_id, "不是拥有者") if poster_character.user_id != poster_id
   end
 
   def event_is_not_expired

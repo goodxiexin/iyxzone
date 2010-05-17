@@ -5,7 +5,7 @@ class GuildPhoto < Photo
   validates_as_attachment
 
   acts_as_photo_taggable :delete_conditions => lambda {|user, photo, album| album.poster == user},
-                         :create_conditions => lambda {|user, photo, album| album.guild.has_member?(user) }
+                         :create_conditions => lambda {|user, photo, album| album.guild.has_people?(user) }
 
   acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, photo, comment| photo.album.poster == user || comment.poster == user}
@@ -29,12 +29,10 @@ protected
   def album_is_valid
     return if album_id.blank? or poster_id.blank?
 
-    album = GuildAlbum.find_by_id(album_id)
     if album.blank?
       errors.add(:album_id, "不存在")
-    else
-      role = album.guild.role_for poster
-      errors.add(:poster_id, "不是该工会的长老或者会长") if role.blank? or role == Membership::Member
+    elsif !album.guild.has_veteran?(poster) and album.guild.president != poster
+      errors.add(:poster_id, "不是该工会的长老或者会长")
     end
   end 
 

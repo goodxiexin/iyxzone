@@ -10,9 +10,7 @@ class User::Polls::AnswersController < UserBaseController
         page.redirect_to poll_url(@poll)
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 

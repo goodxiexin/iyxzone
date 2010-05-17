@@ -4,7 +4,7 @@ class User::Games::BlogsController < UserBaseController
 
   def index
     @game = Game.find(params[:game_id])
-    @blogs = @game.blogs.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}]
+    @blogs = @game.blogs.nonblocked.for('friend').prefetch([{:poster => :profile}]).paginate :page => params[:page], :per_page => 10
   end
 
 end

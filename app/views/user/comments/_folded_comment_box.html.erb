@@ -2,11 +2,11 @@
 <% type = commentable.class.to_s.underscore %>
 <div id='<%= type %>_comments_<%= commentable.id %>'>
   <% if commentable.comments_count >= 3 %>
-		<%= render :partial => "user/comments/comment", :object => commentable.first_comment %>
+		<%= render :partial => "user/comments/comment", :object => commentable.comments.nonblocked.first %>
     <div class="box04 comment-box">
       <%= link_to_function "显示更多", "Iyxzone.Comment.more('#{type}', #{commentable.id}, this);" %>共<%=commentable.comments_count%>条评论
     </div>
-		<%= render :partial => "user/comments/comment", :object => commentable.last_comment %>
+		<%= render :partial => "user/comments/comment", :object => commentable.comments.nonblocked.last %>
 	<% else %>
 		<%= render :partial => "user/comments/comment", :collection => commentable.comments %>
 	<% end %>

@@ -2,14 +2,10 @@ class User::Guilds::MembershipsController < UserBaseController
 
   layout 'app'
 
+  Category = [:member_and_veteran_memberships, :invitations, :requests]
+
   def index
-		if params[:type].to_i == 0
-			@memberships = @guild.memberships.find(:all, :conditions => {:status => [Membership::Veteran, Membership::Member]}, :include => [:character, {:user => :profile}])
-    elsif params[:type].to_i == 1
-      @memberships = @guild.invitations.all(:include => [:character, {:user => :profile}])
-    elsif params[:type].to_i == 2
-			@memberships = @guild.requests.all(:include => [:character, {:user => :profile}])
-		end
+		@memberships = eval("@guild.#{Category[params[:type].to_i]}").prefetch([:character, {:user => :profile}])
   end
 
   def edit
@@ -20,14 +16,10 @@ class User::Guilds::MembershipsController < UserBaseController
     if @membership.change_role params[:status]
       render :update do |page|
         page << "facebox.close();"
-        if @membership.recently_change_role
-          page << "$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
-        end
+        page << "$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
       end
     else
-      render :update do |page|
-        page << "$('error').innerHTML = '错误'"
-      end
+      render_js_error 
     end 
   end
 
@@ -37,11 +29,10 @@ class User::Guilds::MembershipsController < UserBaseController
         page << "$('membership_#{@membership.id}').remove();"
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
+
 protected
 
   def setup

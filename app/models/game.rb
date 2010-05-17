@@ -8,13 +8,13 @@ class Game < ActiveRecord::Base
 
   has_many :races, :class_name => 'GameRace'
 
-	has_many :events, :conditions => {:verified => [0,1]}, :order => 'confirmed_count DESC'
+	has_many :events, :order => 'confirmed_count DESC'
 
-	has_many :guilds, :conditions => {:verified => [0,1]}, :order => '(members_count + veterans_count + 1) DESC'
+	has_many :guilds, :order => '(members_count + veterans_count + 1) DESC'
 
-	has_many :albums, :class_name => 'Album', :order => "uploaded_at DESC", :conditions => ["photos_count != ? AND privilege IN (1,2,3)", 0]
+	has_many :albums, :class_name => 'Album', :order => "uploaded_at DESC", :conditions => "photos_count != 0"
 
-	has_many :blogs, :order => 'created_at DESC', :conditions => {:privilege => [1,2,3]}
+	has_many :blogs, :order => 'created_at DESC'
 
 	has_many :characters, :class_name => 'GameCharacter'
 

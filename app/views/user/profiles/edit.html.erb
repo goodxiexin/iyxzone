@@ -16,13 +16,13 @@
     <div class="archives-box">
       <%= render :partial => 'profile_completeness', :locals => {:user => @user, :profile => @profile} %>
       <div id='basic_info_frame'>
-        <%= render :partial => 'basic_info', :locals => {:profile => @profile} %>
+        <%= render :partial => 'basic_info', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship} %>
       </div>
       <div id='contact_info_frame'>
-        <%= render :partial => 'contact_info', :locals => {:profile => @profile, :setting => @profile.user.privacy_setting} %>
+        <%= render :partial => 'contact_info', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship} %>
       </div>
       <div id='character_frame'>
-        <%= render :partial => 'characters', :locals => {:profile => @profile } %>
+        <%= render :partial => 'characters', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship } %>
       </div>
     </div>
   </div>

@@ -1,5 +1,19 @@
 class News < ActiveRecord::Base
 
+  named_scope :type, lambda {|name|
+    if name == 'all'
+      {}
+    elsif name == 'picture'
+      {:conditions => {:news_type => 'picture'}}
+    elsif name == 'video'
+      {:conditions => {:news_type => 'video'}}
+    elsif name == 'text'
+      {:conditions => {:news_type => 'text'}}
+    end
+  }
+
+  named_scope :within, lambda {|from, to| {:conditions => ["created_at > ? AND created_at < ?", from, to]}}
+
   has_many :pictures, :class_name => 'NewsPicture' # only valid for picture news
 
   belongs_to :game

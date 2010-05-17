@@ -2,51 +2,45 @@ require 'app/mailer/poll_mailer'
 
 class PollObserver < ActiveRecord::Observer
 
-  def after_create poll
-    # verify
-    # 如果是投票的选项是sensitive的，那是在poll_answer的after_create里判断的
-    poll.verified = poll.sensitive? ? 0 : 1
+  def before_create poll
+    poll.auto_verify
+  end
 
+  def after_create poll
     # increment user's counter
     poll.poster.raw_increment :polls_count
 
     # issue feeds if necessary
-    if poll.poster.application_setting.emit_poll_feed == 1
+    if poll.poster.application_setting.emit_poll_feed?
       poll.deliver_feeds
     end
   end
 
-  def before_update poll 
-    if poll.sensitive_columns_changed? and poll.sensitive?
-      poll.verified = 0
-    end
+  def before_update poll
+    poll.auto_verify 
   end
  
   def after_update poll
-    if poll.recently_verified_from_unverified
+    if poll.recently_recovered
       poll.poster.raw_increment :polls_count
       User.update_all("participated_polls_count = participated_polls_count + 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
-      # 和他相关的投票呢？还恢复吗？
       poll.deliver_feeds
     elsif poll.recently_unverified
       poll.poster.raw_decrement :polls_count
       User.update_all("participated_polls_count = participated_polls_count - 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
-      # 和他相关的投票就不删feed了，因为反正没有评论，dig啥的
       poll.destroy_feeds
     end
   end
  
   def before_destroy poll
     # decrement counter
-    if poll.verified != 2
+    if !poll.rejected?
       poll.poster.raw_decrement :polls_count
       User.update_all("participated_polls_count = participated_polls_count - 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
     end
 
     # delete all votes
-    poll.votes.each do |vote|
-      vote.destroy_feeds
-    end
+    poll.votes.each { |vote| vote.destroy_feeds }
     Vote.delete_all(:poll_id => poll.id)
 
     # decrement invitees' poll_invitations_count
