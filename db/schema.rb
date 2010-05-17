@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100512071036) do
+ActiveRecord::Schema.define(:version => 20100517121608) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -604,6 +604,7 @@ ActiveRecord::Schema.define(:version => 20100512071036) do
     t.integer  "floor"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",     :default => 0
   end
 
   create_table "profiles", :force => true do |t|
@@ -743,6 +744,7 @@ ActiveRecord::Schema.define(:version => 20100512071036) do
     t.boolean  "top",              :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "verified",         :default => 0
   end
 
   create_table "users", :force => true do |t|

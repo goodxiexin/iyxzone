@@ -2,22 +2,25 @@ class User::TopicsController < UserBaseController
 
   layout 'app'
 
+  PER_PAGE = 20
+
   def index
     @hot_topics = Topic.hot.nonblocked.match("forum_id != #{@forum.id}")
-    @top_topics = @forum.top_topics.nonblocked.limit(5)
-    @topics = @forum.normal_topics.nonblocked.paginate :page => params[:page], :per_page => 20
+    @top_topics = @forum.topics.top.nonblocked.limit(5)
+    @topics = @forum.topics.normal.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def top
-    @top_topics = @forum.top_topics.nonblocked.paginate :page => params[:page], :per_page => 20
+    @top_topics = @forum.topics.top.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def new
-    @albums = current_user.all_albums.nonblocked.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
+    @albums = current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
   end
 
   def create
     @topic = @forum.topics.build(params[:topic].merge({:poster_id => current_user.id}))
+    
     if @topic.save
       redirect_to forum_topic_posts_url(@forum, @topic)
     else
@@ -40,13 +43,14 @@ class User::TopicsController < UserBaseController
   end
 
   def destroy
-    @topic.destroy
-    render :update do |page|
+    if @topic.destroy
       if params[:at] == 'index'
-        page << "$('topic_#{@topic.id}').remove(); tip('成功')"
+        render_js_code "$('topic_#{@topic.id}').remove(); tip('成功')"
       elsif params[:at] == 'show'
-        page.redirect_to forum_topics_url(@forum)
+        redirect_js forum_topics_url(@forum)
       end
+    else
+      render_js_error
     end
   end
 

@@ -1,0 +1,22 @@
+<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+  <div class="round_m"><div class="round_body">
+    <h1 class="app-log">帖子</h1>
+    <div class="box02 canvas_int">
+      <div class="tab tab01">
+        <ul>
+          <li <% if params[:type].to_i == 0 %>class="hover"<% end %>><span><%= link_to "待审核帖子", admin_posts_url(:type => 0) %></span></li>
+          <li <% if params[:type].to_i == 1 %>class="hover"<% end %>><span><%= link_to "通过帖子", admin_posts_url(:type => 1) %></span></li>
+          <li <% if params[:type].to_i == 2 %>class="hover"<% end %>><span><%= link_to "屏蔽帖子", admin_posts_url(:type => 2) %></span></li>
+        </ul>
+        <div class='right'>
+          <%= render :partial => 'admin/verify/category', :locals => {:selected => 0} %>
+        </div>
+      </div>
+      <div class="feed-box01">
+        <div class='gray'>共<%= @posts.total_entries %>篇</div>
+        <%= render :partial => 'post_item', :collection => @posts %>
+        <%= will_paginate @posts %>
+      </div>
+    </div>
+  </div></div>
+</div></div></div></div>

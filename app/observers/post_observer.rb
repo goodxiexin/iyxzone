@@ -5,7 +5,7 @@ class PostObserver < ActiveRecord::Observer
   # TODO: 并发的时候肯定有问题，应该从mysql的层次解决这个问题
   def before_create post
     # veirfy
-    post.auto_veirfy
+    post.auto_verify
 
     topic = post.topic
     latest_post = topic.posts.find(:first, :order => 'floor DESC')

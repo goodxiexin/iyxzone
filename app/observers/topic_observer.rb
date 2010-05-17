@@ -22,7 +22,7 @@ class TopicObserver < ActiveRecord::Observer
       topic.forum.raw_increment :topics_count
       topic.forum.raw_increment :posts_count, topic.posts_count
       Topic.update_all("posts_count = #{topic.posts.count}", {:id => topic.id})
-      Post.unverify_all(:topic_id => topic.id)
+      Post.verify_all(:topic_id => topic.id)
     end
   end
 
