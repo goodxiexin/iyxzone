@@ -48,7 +48,7 @@ module AuthenticatedSystem
 
     def login_required
       if logged_in?
-        if current_user.remember_me_untils < Time.now
+        if current_user.remember_me_untils.blank? or current_user.remember_me_untils < Time.now
           reset_session
           login_denied
         else
