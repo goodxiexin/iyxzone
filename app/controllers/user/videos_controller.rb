@@ -43,7 +43,6 @@ class User::VideosController < UserBaseController
   end
 
   def show
-    @privilege = get_privilege_cond @relationship
     #@next = @video.next @privilege
     #@prev = @video.prev @privilege
     @count = @user.videos_count @relationship

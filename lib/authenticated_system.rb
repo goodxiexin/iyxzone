@@ -48,13 +48,16 @@ module AuthenticatedSystem
 
     def login_required
       if logged_in?
+        logger.error "remember_me_untils: #{current_user.remember_me_untils}"
         if current_user.remember_me_untils.blank? or current_user.remember_me_untils < Time.now
+          logger.error "not logged in"
           reset_session
           login_denied
         else
           current_user.remember_me_for SESSION_DURATION
         end
       else
+        logger.error "not logged in"
         login_denied
       end
     end

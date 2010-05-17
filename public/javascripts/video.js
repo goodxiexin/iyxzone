@@ -3,8 +3,7 @@ Iyxzone.Video = {
   author: ['高侠鸿'],
   Builder: {},
   play: function(videoID, videoLink){
-//     $('video_' + videoID).innerHTML = videoLink;
-     $('video_' + videoID).update( videoLink);
+     $('video_' + videoID).update(videoLink);
   }
 };
 
