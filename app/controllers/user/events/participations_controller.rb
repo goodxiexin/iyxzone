@@ -22,9 +22,7 @@ class User::Events::ParticipationsController < UserBaseController
 
   def destroy
     if @participation.evict
-      render :update do |page|
-        page << "$('participation_#{@participation.id}').remove();"
-      end
+      render_js_code "$('participation_#{@participation.id}').remove();"
     else
       render_js_error
     end 
@@ -52,9 +50,7 @@ protected
 
   def require_not_event_poster participation
     if participation.participant == participation.event.poster
-      render :update do |page|
-        page << "error('不能删除自己');"
-      end
+      render_js_error "error('不能删除自己');"
     end
   end
 

@@ -13,11 +13,11 @@ class User::VideosController < UserBaseController
   end
 
 	def hot
-    @videos = Video.hot.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @videos = Video.hot.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def recent
-    @videos = Video.recent.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @videos = Video.recent.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def relative
@@ -43,7 +43,6 @@ class User::VideosController < UserBaseController
   end
 
   def show
-    @relationship = @user.relationship_with current_user
     @privilege = get_privilege_cond @relationship
     #@next = @video.next @privilege
     #@prev = @video.prev @privilege
@@ -83,7 +82,8 @@ protected
       @video = Video.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, {:tags => :tagged_user}, {:poster => :profile}])
       require_verified @video
       @user = @video.poster
-      require_adequate_privilege @video
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @video, @relationship
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @video = Video.find(params[:id])
       require_verified @video

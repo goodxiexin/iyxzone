@@ -24,6 +24,18 @@ protected
     render :template => "/errors/500", :status => 500, :layout => false
   end
 
+  def redirect_js url
+    render :update do |page|
+      page.redirect_to url
+    end
+  end
+
+  def render_js_code code
+    render :update do |page|
+      page << code
+    end
+  end
+
   def render_js_error message="发生错误"
     render :update do |page|
       page << "error('#{message}');"

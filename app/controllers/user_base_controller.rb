@@ -13,7 +13,7 @@ protected
   end
   
   def set_last_seen_at
-    #current_user.update_attribute(:last_seen_at, Time.now)
+    current_user.update_attribute(:last_seen_at, Time.now)
   end
 
   def setup
@@ -41,8 +41,8 @@ protected
     relationship == 'friend' || relationship == 'owner' || render_add_friend(owner)
   end
 
-  def require_adequate_privilege resource
-    resource.available_for?(current_user) || render_privilege_denied(resource)
+  def require_adequate_privilege resource, relationship
+    resource.available_for?(relationship) || render_privilege_denied(resource)
   end
 
   def require_verified resource
@@ -76,18 +76,6 @@ protected
       "/images/default_medium.png"
     else
       user.avatar.public_filename(:medium)
-    end
-  end
-
-  def get_privilege_cond relationship
-    if relationship == 'owner'
-      {:privilege => [1,2,3,4]}
-    elsif relationship == 'friend'
-      {:privilege => [1,2,3]}
-    elsif relationship == 'same_game'
-      {:privilege => [1,2]}
-    else
-      {:privilege => 1}
     end
   end
 

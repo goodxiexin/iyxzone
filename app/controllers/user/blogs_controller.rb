@@ -15,15 +15,15 @@ class User::BlogsController < UserBaseController
   end
 
 	def hot
-    @blogs = Blog.hot.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @blogs = Blog.hot.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def recent
-    @blogs = Blog.recent.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @blogs = Blog.recent.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def relative
-    @blogs = @user.relative_blogs.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @blogs = @user.relative_blogs.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
@@ -31,7 +31,6 @@ class User::BlogsController < UserBaseController
   end
 
   def show
-    @relationship = @user.relationship_with current_user
     #@next = Blog.nonblocked.for(@relationship).next @blog
     #@prev = Blog.nonblocked.for(@relationship).prev @blog
     @count = @user.blogs_count @relationship
@@ -93,7 +92,8 @@ protected
       require_not_draft @blog
       require_verified @blog
       @user = @blog.poster
-      require_adequate_privilege @blog
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @blog, @relationship
     elsif ['edit', 'destroy', 'update'].include? params[:action]
       @blog = Blog.find(params[:id])
       require_not_draft @blog

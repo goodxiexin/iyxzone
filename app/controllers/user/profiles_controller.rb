@@ -9,7 +9,6 @@ class User::ProfilesController < UserBaseController
 	FetchSize = 10
 
   def show
-    @relationship = @user.relationship_with current_user
     @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2] if @relationship != 'owner'
     @friends = @user.friends.sort_by{rand}[0..2]
 		@blogs = @user.blogs.for(@relationship).limit(3)
@@ -25,7 +24,6 @@ class User::ProfilesController < UserBaseController
 	end
 
   def edit
-    @relationship = @user.relationship_with current_user
     @setting = @user.privacy_setting
     case params[:type].to_i
     when 0
@@ -45,11 +43,11 @@ class User::ProfilesController < UserBaseController
 				format.html {
 					case params[:type].to_i
 					when 1
-					  render :partial => 'basic_info', :locals => {:profile => @profile}
+					  render :partial => 'basic_info', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship}
 					when 2
-					  render :partial => 'contact_info', :locals => {:profile => @profile, :setting => @profile.user.privacy_setting}
+					  render :partial => 'contact_info', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship}
           when 3
-            render :partial => 'characters', :locals => {:profile => @profile}
+            render :partial => 'characters', :locals => {:profile => @profile, :setting => @setting, :relationship => @relationship}
 					end
 				}
 				format.json { render :json => @profile.to_json }
@@ -68,15 +66,19 @@ protected
 		if ["more_feeds", "show", "edit"].include? params[:action]
 			@profile = Profile.find(params[:id])
 			@user = @profile.user
-      require_adequate_privilege @profile
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @profile, @relationship
     elsif ["update"].include? params[:action]
       @profile = Profile.find(params[:id])
       require_owner @profile.user
+      @user = @profile.user
+      @setting = @user.privacy_setting
+      @relationship = @user.relationship_with current_user
     end
   end
 
-  def require_adequate_privilege profile
-    profile.available_for?(current_user) || render_add_friend(profile.user)
+  def require_adequate_privilege profile, relationship
+    profile.available_for?(relationship) || render_add_friend(profile.user)
   end
   
 end

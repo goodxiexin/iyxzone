@@ -2,20 +2,18 @@ class User::TagsController < UserBaseController
 
 	def create
     unless @taggable.add_tag current_user, params[:tag_name]
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
 	end
 
 	def destroy
     @tag = Tag.find(params[:id])
-		if @taggable.destroy_tag @tag.name 
-			render :update do |page|
-        page << "$('tag_#{@tag.id}').remove();"
-        #page << "tip('成功删除');"
-			end
-		end
+		
+    if @taggable.destroy_tag @tag.name 
+			render_js_code "$('tag_#{@tag.id}').remove();"
+		else
+      render_js_error
+    end
 	end
 
   def auto_complete_for_game_tags

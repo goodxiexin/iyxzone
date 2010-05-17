@@ -3,7 +3,7 @@ class User::PhotosController < UserBaseController
   layout 'app'
 
 	def hot
-    @photos = Photo.hot.nonblocked.paginate :page => params[:page], :per_page => 10
+    @photos = Photo.hot.nonblocked.for('friend').paginate :page => params[:page], :per_page => 10
   end
 
   def relative
@@ -22,7 +22,6 @@ class User::PhotosController < UserBaseController
 
   def show
     @user = @photo.poster
-    @relationship = @user.relationship_with current_user
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
   end
@@ -113,7 +112,8 @@ protected
       @photo = PersonalPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
       require_verified @photo
       @album = @photo.album
-      require_adequate_privilege @album
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @album, @relationship
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
       @album = PersonalAlbum.find(params[:album_id])
       require_verified @album

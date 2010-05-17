@@ -58,9 +58,7 @@ class User::MailsController < UserBaseController
         page << "$('mail_content').value = '';"
       end
     else
-      render :update do |page|
-        page << "error('错误，请稍后重试');"
-      end
+      render_js_error
     end
   end
 

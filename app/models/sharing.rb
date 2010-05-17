@@ -11,7 +11,7 @@ class Sharing < ActiveRecord::Base
   acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, sharing, comment| user == comment.poster || user == sharing.poster}
 
-  acts_as_resource_feeds :recipients => lambda {|sharing| [sharing.poster.profile] + sharing.poster.guilds + sharing.poster.friends.find_all {|f| f.application_setting.recv_sharing_feed == 1} }
+  acts_as_resource_feeds :recipients => lambda {|sharing| [sharing.poster.profile] + sharing.poster.guilds + sharing.poster.friends.find_all {|f| f.application_setting.recv_sharing_feed?} }
 
   attr_protected :shareable_type
 

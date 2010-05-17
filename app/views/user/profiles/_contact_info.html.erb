@@ -7,30 +7,18 @@
   </h3>
   <div class="formcontent con con2">
     <div class="item space">
-    <% if setting.email? relationship %>
-      <div class="rows s_clear">
-        <div class="fldid"><label>邮件：</label></div>
-        <div class="fldvalue"><%= profile.user.email %></div>
-      </div>
-    <% end %>
-    <% if setting.qq? relationship %>
-      <div class="rows s_clear">
-        <div class="fldid"><label>QQ号码：</label></div>
-        <div class="fldvalue"><%= profile.qq %></div>
-      </div>
-    <% end %>
-    <% if setting.phone? relationship %>
-      <div class="rows s_clear">
-        <div class="fldid"><label>电话：</label></div>
-        <div class="fldvalue"><%= profile.phone %></div>
-      </div>
-    <% end %>
-    <% if setting.website? relationship %>
-      <div class="rows s_clear">
-        <div class="fldid"><label>个人网页：</label></div>
-        <div class="fldvalue"><%= profile.website %></div>
-      </div>
-    <% end %>
+      <% if setting.email? relationship %>
+        <% rows_s_clear '邮件: ' do %><%= profile.user.email %><% end %>
+      <% end %>
+      <% if setting.qq? relationship %>
+        <% rows_s_clear 'QQ号码: ' do %><%= profile.qq %><% end %>
+      <% end %>
+      <% if setting.phone? relationship %>
+        <% rows_s_clear '电话: ' do %><%= profile.phone %><% end %>
+      <% end %>
+      <% if setting.website? relationship %>
+        <% rows_s_clear '个人网页: ' do %><%= profile.website %><% end %>
+      <% end %>
     </div>
   </div>
 </div>

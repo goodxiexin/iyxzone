@@ -35,11 +35,11 @@ class Profile < ActiveRecord::Base
 
   acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, profile, comment| profile.user == user},
-                      :view_conditions => lambda {|user, profile| profile.user.privacy_setting.wall? (user.relationship_with profile.user)}
-                      :create_conditions => lambda {|user, profile| profile.user.privacy_setting.leave_wall_message? (user.relationship_with profile.user)},
+                      :view_conditions => lambda {|user, profile| profile.user.privacy_setting.wall?(user.relationship_with profile.user)},
+                      :create_conditions => lambda {|user, profile| profile.user.privacy_setting.leave_wall_message?(user.relationship_with profile.user)}
 
-  def available_for? viewer
-    user.privacy_setting.profile?
+  def available_for? relationship
+    user.privacy_setting.profile? relationship
   end
 
   def basic_info_changed?

@@ -452,6 +452,11 @@ module ApplicationHelper
     form_for(*(args + [options]), &block)
   end
 
+  def rows_form_tag(*args, &block)
+    options = args.extract_options!.merge(:builder => RowsFormBuilder)
+    form_tag(*(args + [options]), &block)  
+  end
+
   def config_form_for(*args, &block)
     options = args.extract_options!.merge(:builder => ConfigFormBuilder)
     form_for(*(args + [options]), &block)

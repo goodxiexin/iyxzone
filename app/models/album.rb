@@ -6,7 +6,7 @@ class Album < ActiveRecord::Base
 
   belongs_to :game
 
-  named_scope :recent, :conditions => "photos_count != 0 AND privilege != 4", :order => 'uploaded_at DESC'
+  named_scope :recent, :conditions => "photos_count != 0", :order => 'uploaded_at DESC'
 
   needs_verification :sensitive_columns => [:title, :description]
 
@@ -14,7 +14,7 @@ class Album < ActiveRecord::Base
 
   acts_as_shareable :path_reg => [/\/personal_albums\/([\d]+)/, /\/event_albums\/([\d]+)/, /\/guild_albums\/([\d]+)/, /\/avatar_albums\/([\d]+)/],
                     :default_title => lambda {|album| album.title}, 
-                    :create_conditions => lambda {|user, album| album.privilege != 4}
+                    :create_conditions => lambda {|user, album| !album.is_owner_privilege?}
 
   acts_as_resource_feeds
 

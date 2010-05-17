@@ -1,30 +1,22 @@
-<div class="edit-toggle space">
-  <h3 class="s_clear">
-    <strong class="left">基本信息</strong>
+<% content_tag :div, :class => 'edit-toggle space' do %>
+  <% content_tag :h3, :class => "s_clear" do %>
+    <% content_tag :strong, :class => "left" do %>基本信息<% end %>
     <% if profile.user == current_user %>
       <%= link_to_function '<span class="icon-active icon-active-edit w-l"></span>编辑', "Iyxzone.Profile.Editor.editBasicInfo(#{profile.id})", :class => 'right red' %>
     <% end %>
-  </h3>
-  <div class="formcontent con con2">
-  <% if setting.basic_info? relationship %>
-    <div class="item space">
-      <div class="rows s_clear">
-        <div class="fldid"><label>昵称：</label></div>
-        <div class="fldvalue"><%= h profile.login %></div>
-      </div>
-      <div class="rows s_clear">
-        <div class="fldid"><label>性别：</label></div>
-        <div class="fldvalue"><%= gender profile.user %></div>
-      </div>
-      <div class="rows s_clear">
-        <div class="fldid"><label>生日：</label></div>
-        <div class="fldvalue"><%= ftime2 profile.birthday %></div>
-      </div>
-      <div class="rows s_clear">
-        <div class="fldid"><label>地址：</label></div>
-        <div class="fldvalue"><%= profile.region.name unless profile.region.nil?%> <%= profile.city.name unless profile.city.nil?%> <%= profile.district.name unless profile.district.nil? %></div>
-      </div>
-    </div>
   <% end %>
-  </div>
-</div>
+  <% content_tag :div, :class => "formcontent con con2" do %>
+    <% if setting.basic_info? relationship %>
+      <% content_tag :div, :class => "item space" do %>
+        <% rows_s_clear '昵称: ' do %><%= h profile.login %><% end %>
+        <% rows_s_clear '性别: ' do %><%= gender profile.user %><% end %>
+        <% rows_s_clear '生日: ' do %><%= ftime2 profile.birthday %><% end %>
+        <% rows_s_clear '地址: ' do %>
+          <%= profile.region.name unless profile.region.nil?%> 
+          <%= profile.city.name unless profile.city.nil?%> 
+          <%= profile.district.name unless profile.district.nil? %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

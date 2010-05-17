@@ -49,11 +49,6 @@ class User < ActiveRecord::Base
     mails.find_all {|m| !m.read_by_recipient}
   end
 
-  def is_mailable_by? user
-    p = privacy_setting.mail
-    p == 1 || has_friend?(user) || (p == 2 and has_same_game_with?(user))
-  end
-
   def interested_in_game? game
 		!game_attentions.find_by_game_id(game.id).nil?
   end
@@ -113,11 +108,6 @@ class User < ActiveRecord::Base
 		  friends & user.friends
     end
 	end
-
-  def is_friendable_by? user
-    p = privacy_setting.add_me_as_friend
-    p == 1 || (p == 2 and has_same_game_with?(user))
-  end
 
   # settings
 	has_setting :application_setting
@@ -347,13 +337,13 @@ class User < ActiveRecord::Base
 	# tags
 	has_many :friend_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
-	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4 AND draft != 1"
+	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "draft != 1"
 
-	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4"
+	has_many :relative_videos, :through => :friend_tags, :source => 'video'
 
 	has_many :photo_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
-	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4"
+	has_many :relative_photos, :through => :photo_tags, :source => 'photo'
 
 	# feeds
 	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'

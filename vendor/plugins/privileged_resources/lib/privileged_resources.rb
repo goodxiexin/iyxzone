@@ -30,6 +30,8 @@ module Model
           {:conditions => {:privilege => 1}}
         end
       }
+
+      validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个"  
     
     end
 
@@ -37,43 +39,6 @@ module Model
 
 	module SingletonMethods
 
-		def viewable relationship, opts={}
-      conditions = opts.delete(:conditions) || {}
-			if conditions.is_a? Hash
-				case relationship
-				when 'owner'
-				when 'friend'
-					conditions.merge!({:privilege => [1,2,3]})
-				when 'same_game'
-					conditions.merge!({:privilege => [1,2]})
-				when 'stranger'
-					conditions.merge!({:privilege => 1})
-				end
-			elsif conditions.is_a? Array
-				case relationship
-				when 'owner'
-				when 'friend'
-					condtions[0] = "(" + conditions[0] + ")" + " AND privilege IN (1,2,3)"
-				when 'same_game'
-					condtions[0] = "(" + conditions[0] + ")" + " AND privilege IN (1,2)"
-				when 'stranger'
-					condtions[0] = "(" + conditions[0] + ")" + " AND privilege IN (1)"
-				end
-			elsif conditions.is_a? String
-        case relationship
-        when 'owner'
-        when 'friend'
-          condtions = "(" + conditions + ")" + " AND privilege IN (1,2,3)"
-        when 'same_game'
-          condtions = "(" + conditions + ")" + " AND privilege IN (1,2)"
-        when 'stranger'
-          condtions = "(" + conditions + ")" + " AND privilege IN (1)"
-				end
-			end
-			opts.merge!({:conditions => conditions})
-			find(:all, opts)
-		end
-		
 	end
   
 	module InstanceMethods
@@ -93,23 +58,8 @@ module Model
         privilege_was == 4
       end
 
-      def is_public_privilege?
-        privilege == 1
-      end        
-        
-      def is_friend_privilege?
-        privilege == 3
-      end
-
-      def is_friend_or_same_game_privilege?
-        privilege == 2
-      end
-
-      def available_for? user
-        (resource_owner == user) || 
-        (is_public_privilege?) || 
-        (is_friend_privilege? and (resource_owner.has_friend? user or resource_owner.wait_for? user)) || 
-        (is_friend_or_same_game_privilege? and (resource_owner.has_friend? user or resource_owner.has_same_game_with? user)) || false        
+      def available_for? relationship
+        relationship == 'owner' || privilege == 1 || relationship == 'friend' || (privilege == 3 and relationship == 'same_game')
       end
 
   end

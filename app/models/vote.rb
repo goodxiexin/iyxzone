@@ -8,7 +8,7 @@ class Vote < ActiveRecord::Base
 
   belongs_to :poll#, :counter_cache => :voters_count
 
-	acts_as_resource_feeds :recipients => lambda {|vote| [vote.voter.profile, vote.poll.game] + vote.voter.guilds + vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed == 1} }
+	acts_as_resource_feeds :recipients => lambda {|vote| [vote.voter.profile, vote.poll.game] + vote.voter.guilds + vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed?} }
 
 	def answers
 		PollAnswer.find(answer_ids)

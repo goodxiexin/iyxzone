@@ -8,9 +8,9 @@ class Blog < ActiveRecord::Base
 
   named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids, :draft => false}}}
 
-  named_scope :hot, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
+  named_scope :hot, :conditions => ["draft = 0 AND created_at > ?", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
 
-  named_scope :recent, :conditions => ["draft = 0 AND created_at > ? AND privilege != 4", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
+  named_scope :recent, :conditions => ["draft = 0 AND created_at > ?", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
   
   needs_verification :sensitive_columns => [:content, :title]
   
@@ -49,8 +49,6 @@ class Blog < ActiveRecord::Base
   validates_presence_of :content, :message => "不能为空" 
 
   validates_size_of :content, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1个字节", :allow_nil => true
-
-  validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个"  
 
   validates_presence_of :game_id, :message => "不能为空", :on => :create
 

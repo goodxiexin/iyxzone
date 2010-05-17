@@ -23,9 +23,7 @@ class User::MessagesController < UserBaseController
       end
       render :json => @info 
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 

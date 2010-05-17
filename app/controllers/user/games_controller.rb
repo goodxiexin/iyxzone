@@ -35,7 +35,6 @@ class User::GamesController < UserBaseController
   end
 
   def show
-logger.error 'show'
     @game = Game.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, :tags])
     @events = @game.events.nonblocked.prefetch([{:album => :cover}]).people_order.limit(4)
     @guilds = @game.guilds.nonblocked.prefetch([{:album => :cover}, {:president => :profile}]).people_order.limit(4)

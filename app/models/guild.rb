@@ -105,7 +105,7 @@ class Guild < ActiveRecord::Base
                             :personal_album => 'PersonalAlbum'
                           }
 
-	acts_as_resource_feeds :recipients => lambda {|guild| [guild.president.profile, guild.game] + guild.president.friends.find_all {|f| f.application_setting.recv_guild_feed == 1} }
+	acts_as_resource_feeds :recipients => lambda {|guild| [guild.president.profile, guild.game] + guild.president.friends.find_all {|f| f.application_setting.recv_guild_feed?} }
 
 	acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, guild, comment| guild.president == user}, 
