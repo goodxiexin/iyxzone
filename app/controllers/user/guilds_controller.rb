@@ -33,7 +33,7 @@ class User::GuildsController < UserBaseController
 
   def show
     @guild_characters = @guild.characters.limit(6).prefetch([{:user => :profile}])
-    @hot_topics = @guild.forum.hot_topics.limit(6).prefetch([{:include => [:forum]}])
+    @hot_topics = @guild.forum.hot_topics.limit(6).prefetch([:forum])
     @events = @guild.events.people_order.limit(4).prefetch([{:album => :cover}])
     @memberships = @guild.memberships.prefetch([:character]).by(current_user.id)
     @role = @guild.role_for current_user

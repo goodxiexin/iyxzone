@@ -12,8 +12,8 @@ class User::PostsController < UserBaseController
       params[:page] = @topic.posts.index(@post) / 20 + 1
     end
     @posts = @topic.posts.paginate :page => params[:page], :per_page => 20
-    @next = @topic.next :top => @topic.top
-    @prev = @topic.prev :top => @topic.top
+    #@next = @topic.next :top => @topic.top
+    #@prev = @topic.prev :top => @topic.top
   end
 
   def create

@@ -345,6 +345,7 @@ var nicEditor = bkClass.extend({
 		}
 		nicEditors.editors.push(this);
 		bkLib.addEvent(document.body,'mousedown', this.selectCheck.closureListener(this) );
+
     document.onkeydown = function(e) {
       if (!e)
         e = window.event;

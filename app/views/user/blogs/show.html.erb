@@ -12,7 +12,7 @@
     <%= render :partial => 'blog_path', :locals => {:count => @count, :next_blog => @next, :prev_blog => @prev} %>
     <div class='detail-blog'>
       <%= render :partial => 'blog_head', :locals => {:user => @user, :blog => @blog} %>
-      <div class='con'>
+      <div class='con' style='line-height: 1.5'>
         <%= @blog.content %>
       </div>
       <%= render :partial => 'blog_foot', :locals => {:blog => @blog} %>

@@ -16,7 +16,7 @@
               </div>
               <div class="ft">
                 <%= link_to_function "回复", "Iyxzone.Forum.Post.reply(#{post.floor}, '#{post.poster.login}', #{post.poster_id});" %>
-                <% if guild.president == current_user %>
+                <% if forum.guild.president == current_user %>
                   | <%= facebox_confirm '删除', forum_topic_post_url(forum, topic, post, :at => 'show'), {:msg => "你确定要删除这个回复吗？", :method => :delete} %>
                 <% end %>
               </div>
