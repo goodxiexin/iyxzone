@@ -5,7 +5,7 @@ Iyxzone.Blog = {
 };
 
 
-Object.extend(Iyxzone.Blog.Builder, {
+Object.extend(Iyxzone.Blog.Builder, {  
 
   saved: false, 
 
@@ -138,5 +138,4 @@ Object.extend(Iyxzone.Blog.Builder, {
     // set tagger
     this.tagBuilder = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton);
   }
-
 });
