@@ -5,14 +5,14 @@ class User::PostsController < UserBaseController
   increment_viewing 'topic', 'topic_id', :only => [:index]
 
   def index
-    @albums = current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
+    @albums = current_user.all_albums.nonblocked.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
     @random_topics = Topic.random :limit => 5, :except => [@topic], :conditions => {:forum_id => @forum.id}
     if !params[:post_id].blank?
       @post = Post.find(params[:post_id])
       params[:page] = @topic.posts.index(@post) / 20 + 1
     end
-    @posts = @topic.posts.paginate :page => params[:page], :per_page => 20
-    @cond = {:top => @topic.top}
+    @posts = @topic.posts.nonblocked.paginate :page => params[:page], :per_page => 20
+    @cond = {:top => @topic.top}.merge Topic.nonblocked_cond
     @next = @topic.next @cond
     @prev = @topic.prev @cond
   end

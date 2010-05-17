@@ -10,6 +10,8 @@ class Topic < ActiveRecord::Base
 
   acts_as_random
 
+  needs_verification :sensitive_columns => [:content, :subject]
+
   acts_as_shareable :default_title => lambda {|topic| topic.subject}, :path_reg => /\/forums\/[\d]+\/topics\/([\d]+)\/posts/
 
   acts_as_list :order => 'created_at', :scope => 'forum_id'

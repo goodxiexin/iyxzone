@@ -41,7 +41,6 @@ module ActsAsList
       my_cond_sql = self.class.send(:sanitize_sql_for_conditions, my_cond)
       next_sql = merge_sql ["#{order_name} > ?", order], list_sql
       next_sql = merge_sql next_sql, my_cond_sql
-      
       next_in_list = self.class.first(:conditions => next_sql, :order => "#{order_name} ASC")
 
       if next_in_list.nil? and self.class.list_opts[:circular]
@@ -62,7 +61,7 @@ module ActsAsList
       prev_in_list = self.class.first(:conditions => prev_sql, :order => "#{order_name} DESC")
 
       if prev_in_list.nil? and self.class.list_opts[:circular]
-        prev_in_list = self.class.first(:conditions => "#{list_sql} AND #{my_cond_sql}", :order => "#{order_name} DESC")
+        prev_in_list = self.class.first(:conditions => [list_sql, my_cond_sql].reject{|sql| sql.blank?}.join(' AND '), :order => "#{order_name} DESC")
       end
 
       prev_in_list
