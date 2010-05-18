@@ -36,10 +36,10 @@
 								<li>&nbsp;</li>
 								<% GameCharacter.find(:all, :conditions => ["user_id = ? and game_id = ?", user.id, game.id]).each do |c| %>
 									<% if c.data.nil? %>
-										<li class="roleInfo"><strong><%= c.name %></strong><span>1区, 达纳斯</span></li>
+										<li class="roleInfo"><strong><%= c.name-%></strong><span><% unless c.game.no_areas %><%= c.area.name -%><% end %>, <% unless c.game.no_servers %> <%= c.server.name -%><% end %></span></li>
 									<% else %>
 										<% unless c.data["verify"] %>
-											<li class="roleInfo"><strong><%= c.name %></strong><span>1区, 达纳斯</span></li>
+											<li class="roleInfo"><strong><%= c.name-%></strong><span><% unless c.game.no_areas %><%= c.area.name -%><% end %>, <% unless c.game.no_servers %> <%= c.server.name -%><% end %></span></li>
 										<% else %>
 											<li class="roleInfo"><strong><%= link_to c.name, c.data["url"], :popup => 'true' %></strong><span><% unless c.game.no_areas %><%= c.area.name -%><% end %>, <% unless c.game.no_servers %> <%= c.server.name -%><% end %></span></li>
 										<% end %>

@@ -14,10 +14,12 @@ class User::GamesController < UserBaseController
   end
 
   def friends
-    @game_ids = GameCharacter.by(current_user.friend_ids).map(&:game_id).uniq
-    @games = Game.find(@game_ids).paginate :page => params[:page], :per_page => PER_PAGE
+		@game_chars = GameCharacter.by(current_user.friend_ids).group_by(&:game_id).to_a.paginate :page => params[:page], :per_page => PER_PAGE
+		@game_ratings = Rating.by(current_user.friend_ids).match(:rateable_type => "Game").group_by(&:rateable_id)
+		@game_tags = Tagging.by(current_user.friend_ids).match(:taggable_type => "Game").group_by(&:taggable_id)
     render :action => "friends", :layout => "app"
   end
+
 
   #
   # sexy 和 hot 的区别是

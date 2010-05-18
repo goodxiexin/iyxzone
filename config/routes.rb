@@ -96,7 +96,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :pokes, :collection => {:destroy_all => :delete}
 
-    users.resources :characters
+    users.resources :characters, :collection => {:friend_players => :get}
 
     users.resources :visitor_records
 

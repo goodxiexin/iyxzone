@@ -15,6 +15,13 @@ class User::CharactersController < UserBaseController
     render :json => @character.to_json(:include => [:user => {:only => [:name]}])
   end
 
+	def friend_players
+		@game = Game.find(params[:gid])
+		@user_ids = @game.characters.by(current_user.friend_ids).map(&:user_id)		
+		@users = User.find(@user_ids).paginate :page => params[:page], :per_page => 9
+    @remote = {:update => 'game_friend_players', :url => {:action => 'friend_players', :gid => @game.id}}
+	end
+
   def index
     if @guild.blank?
       @characters = current_user.characters
