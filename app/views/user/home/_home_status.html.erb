@@ -13,7 +13,7 @@
                   <% form_remote_for :status, :html => {:onsubmit => "Iyxzone.Status.Builder.save($('status_submit_btn'), this); return false;", :class => "formcontent s_clear"} do |f| %>
                   <%= hidden_field_tag 'home', 1 %>
                   <div class="fldvalue">
-                    <div id="mcStatus" class="textfield02"><%= f.text_area :content %></div>
+                    <div id="mcStatus" class="textfield02"><%= text_area_tag 'status[content]' %></div>
                     <%= javascript_tag "new Iyxzone.limitedTextField($('status_content'), 140, null, true);" %>
                   </div>
                   <div class="fldbtn jl-fldbtn">
