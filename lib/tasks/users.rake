@@ -1,7 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'open-uri'
-require 'hpricot'
+#require 'hpricot'
 require "iconv"
 
 namespace :users do
