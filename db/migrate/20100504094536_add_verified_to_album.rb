@@ -4,5 +4,6 @@ class AddVerifiedToAlbum < ActiveRecord::Migration
   end
 
   def self.down
+		remove_column :albums, :verified
   end
 end
