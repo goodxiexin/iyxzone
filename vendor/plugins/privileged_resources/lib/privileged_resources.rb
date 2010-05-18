@@ -26,7 +26,7 @@ module Model
 
       named_scope :for, lambda {|relationship| {:conditions => privilege_cond(relationship)}}
 
-      validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个"  
+      validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个", :if => opts[:validate_on]  
     
     end
 

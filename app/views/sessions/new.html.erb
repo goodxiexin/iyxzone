@@ -2,8 +2,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title><%= (html_title = yield :html_title) ? html_title : '登录页面' %> - 17Gaming.com</title>
-<meta name="description" content="<%= (html_description = yield :html_description) ? html_description : '17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。在这里，您能找到曾经一起战斗的游戏网友，结交到新的游戏战友，并一起分享，一起成长，一起快乐。' %>">
+<title><%= (html_title = yield :html_title) ? html_title : '欢迎您' %> - 一起游戏网</title>
+<meta name="description" content="<%= (html_description = yield :html_description) ? html_description : '一起游戏网(17Gaming.com)愿做网络游戏玩家的精神家园。在这里，您能找到曾经一起战斗的游戏网友，结交到新的游戏战友，并一起分享，一起成长，一起快乐。' %>">
 <meta name="keywords" content="<%= (html_keywords = yield :html_keywords) ? html_keywords : '17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区' %>">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="SHORTCUT ICON" href="/favicon.ico" type="image/x-icon" />
@@ -20,7 +20,7 @@
 		<div id="navbar">
 			<div id="navwrap">
 				<div id="navmid">
-					<a href="#" class="logo-top logo-v2 png" title="一起游戏"></a>
+					<a href="http://www.17gaming.com/" class="logo-top png" title="一起游戏网">一起游戏网</a>
 					<p class="top_link right">
 						<%= link_to_function "设为主页", "Iyxzone.addToHomepage()" %> |
 						<%= link_to_function "加入收藏", "Iyxzone.addToBookmark()" %> |
@@ -39,6 +39,7 @@
 						</script>
 					<% end %>
     <div class="welcome-banner">
+				<div class="welcome-text">没有一辈子的游戏，但有一辈子的朋友。加入一起游戏网（www.17gaming.com）共建网络游戏玩家的精神家园。</div>
         <div class="login-box formcontent">
 					<% form_tag sessions_url do %>
               <div class="rows s_clear">
@@ -110,7 +111,7 @@
         <div class="copyright"><span class="w-l">Copyright © 2010-2010 MingZen. All Rights Reserved</span><span>鸣禅公司 版权所有</span></div>
     </div>
     <div class="cyberpolice"><a href="http://sh.cyberpolice.cn/"><img src="images/110.gif?1273208676" alt="110"></a></div>
-    <div class="company-logo"></div>
+		<div class="company-logo">一起游戏网</div>
     <div class="r-c"></div>
 </div>
 </body>

@@ -12,7 +12,7 @@ class Photo < ActiveRecord::Base
 
   needs_verification :sensitive_columns => [:notation]
 
-	acts_as_privileged_resources :owner_field => :poster
+	acts_as_privileged_resources :owner_field => :poster, :validate_on => "parent.nil?"
 
 	acts_as_resource_feeds :recipients => lambda {|photo| photo.album.poster.friends.find_all{|f| f.application_setting.recv_photo_feed?}}
 
