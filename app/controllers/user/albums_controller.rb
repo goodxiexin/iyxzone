@@ -8,7 +8,7 @@ class User::AlbumsController < UserBaseController
 
   def index
     @relationship = @user.relationship_with current_user
-    @albums = @user.albums.for(@relationship).concat(@user.avatar_album.rejected? ? []: [@user.avatar_album]).paginate :page => params[:page], :per_page => PER_PAGE
+    @albums = @user.albums.for(@relationship).nonblocked.concat(@user.avatar_album.rejected? ? []: [@user.avatar_album]).paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 	def recent
