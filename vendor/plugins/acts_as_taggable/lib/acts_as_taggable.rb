@@ -74,7 +74,7 @@ module Taggable
 			new_tag_names = @tag_list - tags.map(&:name)
 			new_tag_names.each do |tag_name|
 				#tag = Tag.find_or_create(:name => tag_name, :taggable_type => self.class.to_s)
-				tagging = Tagging.new(:taggable_type => self.class.to_s, :taggable_id => id, :tag_name => tag_name) #tag.taggings.build(:taggable_type => self.class.to_s, :taggable_id => id)
+				tagging = Tagging.new(:taggable_type => self.class.to_s, :taggable_id => id, :tag_name => tag_name)
 				tagging.save_with_validation(false)
 			end
 		end
@@ -95,7 +95,7 @@ module Taggable
 		end
 
     def is_taggable_by? user
-      tagging = taggings.find_by_poster_id user.id  
+      tagging = taggings.by(user.id).order('created_at DESC').first
       proc = self.class.taggable_opts[:create_conditions] || lambda { true }
       proc.call tagging, self, user
     end

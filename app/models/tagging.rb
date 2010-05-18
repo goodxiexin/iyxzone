@@ -1,12 +1,13 @@
 class Tagging < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
+
 	belongs_to :taggable, :polymorphic => true
 
 	belongs_to :tag
 
 	belongs_to :poster, :class_name => 'User'
 
-  # virtual attribute
   attr_accessor :tag_name
 
   # 所有属性都只能在创建的时候赋值
@@ -19,9 +20,9 @@ class Tagging < ActiveRecord::Base
 
   validate_on_create :taggable_is_valid
 
-  validates_presence_of :tag_name, :message => "不能为空"
+  validates_presence_of :tag_name, :message => "不能为空", :on => :create
 
-  validates_size_of :tag_name, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
+  validates_size_of :tag_name, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节", :on => :create
 
 protected
 
