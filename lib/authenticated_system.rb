@@ -86,8 +86,8 @@ module AuthenticatedSystem
     end
 
     def login_from_cookie
-      user = cookies[:auth_token] && User.find_by_invite_code(cookies[:auth_token])
-      if user and user.invite_code
+      user = cookies[:auth_token] && User.find_by_remember_code(cookies[:auth_token])
+      if user and user.remember_code
         self.current_user = user
         remember_me_in_cookie
         self.current_user
@@ -95,7 +95,7 @@ module AuthenticatedSystem
     end
 
     def remember_me_in_cookie
-      cookies[:auth_token] = {:value => current_user.invite_code, :expires => REMEMBER_DURATION.from_now}
+      cookies[:auth_token] = {:value => current_user.remember_code, :expires => REMEMBER_DURATION.from_now}
     end
 
   end
