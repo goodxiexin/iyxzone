@@ -43,6 +43,7 @@ class User::VideosController < UserBaseController
   end
 
   def show
+    @random_videos = Video.by(@user.id).for(@relationship).nonblocked.random :limit => 5, :except => [@video]
     @cond = Video.privilege_cond(@relationship).merge Video.nonblocked_cond
     @next = @video.next @cond
     @prev = @video.prev @cond

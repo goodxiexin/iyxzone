@@ -11,6 +11,8 @@ class Video < ActiveRecord::Base
   named_scope :recent, :conditions => ["created_at > ?", 2.weeks.ago.to_s(:db)], :order => 'created_at DESC'
 
   needs_verification :sensitive_columns => [:title, :description] 
+
+  acts_as_random
  
   acts_as_friend_taggable :delete_conditions => lambda {|user, video| video.poster == user },
                           :create_conditions => lambda {|user, video| video.poster == user }

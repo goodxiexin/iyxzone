@@ -25,7 +25,10 @@
       <%= render :partial => 'poll_head', :locals => {:poll => @poll} %>
       <%= render :partial => 'poll_form', :locals => {:poll => @poll, :vote => @vote} %>
       <%= render :partial => 'vote_details', :locals => {:poll => @poll, :vote => @vote, :vote_feeds => @vote_feeds} %>
-      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @poll, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @poll, :recipient => @poll.poster}, :reply_to => @reply_to} %>
+      <div class='page-foot s_clear'>
+        <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @poll, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @poll, :recipient => @poll.poster}, :reply_to => @reply_to} %>
+        <%= render :partial => 'user/resources/randoms', :locals => {:title => '随便看看', :randoms => @random_poss} %>
+      </div>
     </div>
   </div>
 <% end %>

@@ -22,7 +22,10 @@
 				<% end %>
       <% end %>
       <%= render :partial => 'user/albums/album_desc', :locals => {:user => @user, :album => @album} %>
-      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @album, :commentable => true, :diggable => false, :viewable => false, :comment_opts => {:commentable => @album, :recipient => @album.poster}, :reply_to => @reply_to} %>
+      <div class='page-foot s_clear'>
+        <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @album, :commentable => true, :diggable => false, :viewable => false, :comment_opts => {:commentable => @album, :recipient => @album.poster}, :reply_to => @reply_to} %>
+        <%= render :partial => 'user/resources/randoms', :locals => {:title => "#{get_subject @user}的其他相册", :randoms => @random_albums} %>
+      </div>
     </div>
   </div>
 <% end %>

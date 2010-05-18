@@ -1,10 +1,10 @@
 body{font-size:12px;font-family:Arial,Simsun,"宋体",Helvetica;color:#0a3100;height:100%}
-body,div,form,img,ul,li,p,pre,button,dd,dt,dl{margin:0; padding:0;border:0;}
+body,div,form,img,ul,ol,li,p,pre,button,dd,dt,dl{margin:0; padding:0;border:0;}
 table{border:0;border-collapse:collapse;border-spacing:0;}
 h1,h2,h3,h4,h5,h6,fieldset{margin:0; padding:0;}
 
 
-ul {list-style:none;}
+ul,ol{list-style:none;}
 input{font-size:12px;vertical-align:middle}
 textarea{font-size:12px;overflow:auto;color:#7E7F80;border:1px solid #bdd6ad}
 select{color:#7E7F80;}
@@ -51,9 +51,9 @@ a:active {text-decoration: none;}
 
 .left{float:left;}
 .right{float:right;}
-.s_clear:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
-.s_clear{zoom:1;}
-.rows,.buttons{clear:both;}
+.fix:after,.s_clear:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.fix,.s_clear{zoom:1;}
+.clear,.rows,.buttons{clear:both;}
 
 .blk{display:block}
 .nowrap,.member-name,.role-name{overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;display:inline-block;}
@@ -258,10 +258,11 @@ a.button-gray,a.button-gray:hover{font-weight:normal;color:#666}
 .button-gray span{background-position:0 -25px;}
 .button-gray span button,.button-gray span a{font-weight:normal;color:#666}
 
-.attention-btn,.love-btn,.share-btn,.concern-btn{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:83px;height:20px;line-height:20px;text-align:center;text-indent:25px;color:#508119}
+.attention-btn,.love-btn,.share-btn,.concern-btn,.concern-btn02{background:url(../images/skin/skin2010.png) no-repeat;display:inline-block;width:83px;height:20px;line-height:20px;text-align:center;text-indent:25px;color:#508119}
 .attention-btn{background-position:-117px -267px;}
 .love-btn,.share-btn{background-position:-117px -288px;}
 .concern-btn{background-position:0 -448px}
+.concern-btn02{background-position:-83px -716px;width:117px;display:block}
 
 .icon-active{display:inline-block;width:8px;height:8px;line-height:normal;font-size:1px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -1156px;}
 .icon-active-del{background-position:0 -1182px;}
@@ -275,7 +276,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 
 /*顶部导航条*/
-.logo-top{width:150px;height:40px;display:block;position:absolute;left:5px;top:5px;cursor:pointer;background:url(../images/skin/logo.png) no-repeat;}
+.logo-top{width:150px;height:40px;display:block;position:absolute;left:5px;top:5px;cursor:pointer;background:url(../images/skin/logo.png) no-repeat;font:0/0 sans-serif;text-indent:-9999px;*text-indent:0;overflow:hidden}
 
 #navbar{padding-left:9px;height:42px;background-image:url(../images/skin/navbar01.gif);background-repeat:no-repeat;}
 #navbar #navwrap{padding-right:9px;height:100%;background-image:url(../images/skin/navbar01.gif);background-repeat:no-repeat;background-position:right -45px;}
@@ -379,7 +380,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 .round_m{margin-right:-6px;padding:0 6px;border-left:1px #BBD2AA solid;border-right:1px #BBD2AA solid;background:#F8FCF6;word-wrap:break-word;word-break:normal;}
 .round_m .round_body{width:100%;/*overflow:hidden好友管理弹出框显示*/}
-.app-log,.app-video,.app-photo,.app-status,.app-ploy,.app-vote,.app-cons,.app-game,.app-vgame,.app-friend,.app-lock,.app-setting,.app-gift,.app-archives,.app-news,.app-share,.app-notice,.app-error{background:url(../images/icons/app-icons.png) no-repeat}
+.app-log,.app-video,.app-photo,.app-status,.app-ploy,.app-vote,.app-cons,.app-game,.app-vgame,.app-friend,.app-lock,.app-setting,.app-gift,.app-archives,.app-news,.app-share,.app-notice,.app-error,.app-task{background:url(../images/icons/app-icons.png) no-repeat}
 .app-log{background-position:0 0;}
 .app-video{background-position:0 -50px;}
 .app-photo{background-position:0 -100px;}
@@ -398,6 +399,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 .app-share{background-position:0 -729px;}
 .app-notice{background-position:0 -780px;}
 .app-error{background-position:0 -838px;}
+.app-task{background-position:0 -893px;}
 
 .round02,.round02 .round_l_t,.round02 .round_l_b,.round02 .round_r_b{background-image:url(../images/skin/roundBoxbg02.gif);}
 .round02 .round_m{border-left:1px #E7F0E0 solid;border-right:1px #E7F0E0 solid;background:#F8FCF6;}

@@ -8,13 +8,16 @@
       <%= render :partial => 'tab' %>
       <div class="detail-blog">
         <%= render :partial => 'news_header', :locals => {:news => @news} %>
-        <div class="con"><%= @news.data %></div>
+        <div class="con" style='line-height: 1.5'><%= @news.data %></div>
         <div class="detail-blog-foot s_clear">
           <h2 class="gray">相关游戏：<%= game_link @news.game %></h2>
           <% if !@news.origin_address.nil? %>
             <h2 class="gray">本帖转自：<%= link_to @news.origin_address, @news.origin_address %></h2>
           <% end %>
-          <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @news, :commentable => true, :viewable => true, :diggable => true, :comment_opts => {:commentable => @news, :recipient => nil}, :reply_to => @reply_to} %> 
+        </div>
+        <div class='page-foot s_clear'>
+          <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @news, :commentable => true, :viewable => true, :diggable => true, :comment_opts => {:commentable => @news, :recipient => nil}, :reply_to => @reply_to} %>
+          <%= render :partial => 'user/resources/randoms', :locals => {:title => '随便看看', :randoms => @random_news} %> 
         </div>
       </div>
     </div>

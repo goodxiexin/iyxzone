@@ -161,13 +161,6 @@ module ApplicationHelper
     dig_html
   end
 
-  def dig_count_html diggable
-    "<div class=\"box04 cmt-tips\">
-      <span class=\"arrow-tip03\"></span>
-      <div><span class=\"photo-op-praise\"></span>有#{diggable.digs_count}人觉得比较赞</div>
-    </div>"
-  end
-
   def blog_content blog, opts={}
     if blog.content_abstract.length > opts[:length]
       (truncate blog.content_abstract, opts) + (link_to '查看全文 >>', blog_url(blog))

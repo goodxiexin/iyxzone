@@ -29,7 +29,7 @@ class User::PollsController < UserBaseController
   end
 
   def show
-    @random_polls = Poll.random :limit => 5, :except => [@poll]
+    @random_polls = Poll.nonblocked.random :limit => 5, :except => [@poll]
     @user = @poll.poster
     @vote = @poll.votes.find_by_voter_id(current_user.id)
     @vote_feeds = @poll.votes.by(current_user.friend_ids)#current_user.friend_votes_for @poll

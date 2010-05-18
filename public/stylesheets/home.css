@@ -3,10 +3,6 @@ a{color:#25700D;}
 a:hover{color:#D63200;}
 
 
-.main .page-foot{margin:10px 0 0;}
-.main .page-foot .feed-list{width:400px;float:left}
-.main .page-foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
-.prompt-list-box{padding-right:12px;float:right;width:300px;}
 
 #header,#page,#footer{margin:0 auto;width:940px;clear:both;}
 #page{margin-top:6px;}
@@ -256,7 +252,7 @@ a:hover{color:#D63200;}
 .piclist-rows table .imgwrap img{width:100px;height:100px;}
 .piclist-rows table .data{margin-left:125px;_margin-left:122px;line-height:21px;}
 .piclist-rows table .data h3,.piclist-rows table .data span,.piclist-rows table .data .link a{color:#25700D}
-.piclist-rows table .data a{color:#D63200}
+/*.piclist-rows table .data a{color:#D63200}*/
 .piclist-rows table .data a:hover{text-decoration:underline}
 
 /*各种图片尺寸定义*/
@@ -569,8 +565,6 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .vote-form .fldid{width:117px;}
 .vote-form .textfield{width:300px;}
 
-.prompt-list-box h5{padding-left:12px;font-size:14px;height:20px;line-height:20px;margin-bottom:4px;overflow:hidden}
-.prompt-list-box .list-box{padding:7px 11px;}
 
 .photo-upload-box{padding:20px 0;}
 .photo-upload-box h4{line-height:17px;margin-bottom:9px;}
@@ -621,7 +615,13 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 
 
 /*Created By Jolly 20100111*/
-.foot-func{margin:5px 0 0;padding:0 15px;width:380px}
+.main .page-foot{margin:10px 0 0;}
+.main .page-foot .feed-list{width:400px;margin-top:4px;*margin-top:2px;clear:both}
+.main .page-foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
+.prompt-list-box{float:right;width:300px;}
+.prompt-list-box h5{padding-left:10px;font-size:14px;line-height:28px;}
+.prompt-list-box .list-box{padding:7px 11px;}
+.foot-func{margin:5px 0 0;padding:0 15px;width:400px;float:left}
 
 /*导航栏搜索框*/
 .nav-search{border:1px #6b9c42 solid;background:url(../images/skin/skin2010.png) no-repeat 0 -471px;}
@@ -818,7 +818,7 @@ a.impress-btn-8,a.impress-8:hover{background-position:0 -574px;color:#fff;}
 .i-show02 a{display:block;float:left;}
 .i-show02 a strong,.i-show02 a span{display:block;height:19px;line-height:19px;text-align:center;cursor:pointer;word-break:keep-all;white-space:nowrap}
 .i-show02 a:hover,.i-show02 a:hover span{background:url(../images/skin/btn2010.png) no-repeat}
-.i-show02 a:hover{color:#fff;}
+.i-show02 a:hover strong{color:#fff;}
 .i-show02 a strong{float:left;padding-left:6px;font-weight:400}
 .i-show02 a span{width:6px;float:left}
 a.i-s-0:hover{background-position:0 -150px;}
@@ -1109,9 +1109,6 @@ h1.app-share{float:left}
 .archives-box .edit .con .icon-active{margin:8px 0 0 5px}
 .archives-box .edit .con .textfield{width:190px}
 .archives-box .edit .con2 .textfield{width:120px}
-/*.archives-box .edit .con2 .selector{width:100px;margin-left:5px}
-.archives-box .edit .con2 .selector input{width:60px;}
-*/
 .archives-box .edit .con p.foot{border-bottom:1px solid #9ace5f;line-height:30px;margin:0 20px}
 
 
@@ -1223,10 +1220,6 @@ h1.app-share{float:left}
 .pager-simple .last{background-position:-17px -130px;cursor:default}
 
 /*论坛*/
-/*.forum .col-left{width:590px;float:left;}
-.forum .col-right{width:150px;float:right;}
-.forum .col-right .photolist-box li{margin:5px}
-*/
 .forum h2{background:#f8f8f8;border-top:1px solid #c2e29d;padding:5px;font-weight:700;margin-bottom:10px}
 .forum h2 a{font-weight:400;font-size:12px}
 .forum h2 .op{float:right;}
@@ -1285,3 +1278,35 @@ h1.app-share{float:left}
 .info-content .sub-con{border:1px dashed #ccc;margin:10px;padding:10px;font-size:12px;line-height:22px}
 .info-content p{text-indent:2em;margin:3px 0}
 .info-foot span{margin:0 8px}
+
+/*v2 start 100513*/
+/*btn*/
+.addGameRoleBtn{background:url(../images/skin/skin2010.png) no-repeat -83px -737px;width:117px;height:22px;display:inline-block}
+.mainConHead{border-bottom:1px solid #bdd6ad;padding:5px 15px;margin-bottom:10px}
+
+/*热门游戏*/
+.gameList .data p a{color:#d63200}
+.gameList .data ul{margin-top:10px;}
+.gameList .data ul li{float:left;height:24px;width:200px;margin:5px 5px 0 0;font-weight:700}
+.gameList .data ul li span.thin{font-weight:400;color:#333}
+.gameList .data ul li span.thin a{text-decoration:underline}
+.gameList .data ul li strong,.gameList .data ul a{color:#25700d}
+/*我的游戏*/
+.gameList .data .score strong{color:#25700d}
+.gameMine .gameList .data ul li{width:220px;}
+.gameMine .gameList .data ul li.guildInfo,.gameMine .gameList .data ul li.gameImpress{width:350px;}
+.gameList .data .roleInfo strong,.gameList .data .roleInfo span,.gameList .data .guildInfo{line-height:22px;overflow:hidden;}
+.gameList .data .roleInfo strong,.gameList .data .roleInfo span{display:block;width:110px;height:24px;float:left}
+.gameList .data .roleInfo span{width:100px;margin-left:10px}
+/*好友的游戏*/
+.gameImpressFriend h4,.gameImpressFriend .i-show02{float:left}
+.gameFriend .data .i-show02 a:hover{text-decoration:none}
+.gameList .data .photolist-box{_width:98%}
+.gameList .data .photolist-box ul li{height:auto;width:70px;margin:5px}
+.gameList .data .photolist-box ul li a{color:#666;font-weight:400}
+.gameList .data span.shine{color:#F08E0C}
+.gameFriend .more{text-align:right;}
+.gameFriend .data .more a{color:#25700d;text-decoration:underline}
+
+/*任务*/
+.taskItem{background:url(../images/skin/task_wrap.gif) no-repeat;width:362px;height:143px;}

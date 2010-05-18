@@ -31,6 +31,7 @@ class User::BlogsController < UserBaseController
   end
 
   def show
+    @random_blogs = Blog.by(@user.id).for(@relationship).nonblocked.random :limit => 5, :except => [@blog]
     @cond = Blog.nonblocked_cond.merge Blog.privilege_cond(@relationship)
     @next = @blog.next @cond
     @prev = @blog.prev @cond

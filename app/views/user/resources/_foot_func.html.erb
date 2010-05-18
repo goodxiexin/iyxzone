@@ -1,6 +1,6 @@
-<div class="page-foot s_clear">
   <div class="foot-func s_clear">
-    <div class='left'>
+    <div class='fix'>
+      <div class='left'>
       <% if commentable %>
         <span class="w-l red">评论(<%= resource.comments_count %>)</span><span class="w-l">|</span>
       <% end %>
@@ -10,20 +10,21 @@
       <% if diggable %>
         <span class="photo-op-praise" ></span><%= text_dig_link resource, :class => 'red' %>
       <% end %>
+      </div>
+      <div class='right'>
+        <span class='w-l red'><%= report_link resource %></span>
+      </div>
     </div>
-    <div class='right'>
-      <span class='w-l red'><%= report_link resource %></span>
-    </div>
-  </div>
-  <div class="s_clear rows">
     <div class="feed-list">
       <% if diggable %>
-        <%= dig_count_html resource %>
+        <div class="box04 cmt-tips">
+          <span class="arrow-tip03"></span>
+          <div><span class="photo-op-praise"></span>有<%= resource.digs_count %>人觉得比较赞</div>
+        </div>
       <% end %>
       <%= render :partial => 'user/comments/comment_box', :locals => comment_opts %>
     </div>
   </div>
-</div>
 
 <% unless reply_to.blank? %>
 <%= onload_javascript_tag "Iyxzone.Comment.set('#{resource.class.name.underscore}', #{resource.id}, '#{reply_to.login}', #{reply_to.id});" %>

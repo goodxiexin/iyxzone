@@ -26,7 +26,7 @@ class User::AlbumsController < UserBaseController
   def show
     respond_to do |format|
       format.html {
-        @user = @album.poster
+        @random_albums = PersonalAlbum.by(@user.id).for(@relationship).nonblocked.random :limit => 5, :except => [@album]
         @photos = @album.photos.nonblocked.paginate :page => params[:page], :per_page => 12 
         @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
         render :action => 'show'
@@ -102,7 +102,9 @@ protected
     elsif ["show"].include? params[:action]
       @album = PersonalAlbum.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}])
       require_verified @album
-      require_adequate_privilege @album, @album.poster.relationship_with(current_user)
+      @user = @album.poster
+      @relationship = @user.relationship_with(current_user)
+      require_adequate_privilege @album, @relationship
     elsif ["edit", "update", "confirm_destroy", "destroy"].include? params[:action]
       @album = PersonalAlbum.find(params[:id])
       require_verified @album

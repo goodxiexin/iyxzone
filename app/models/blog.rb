@@ -13,6 +13,8 @@ class Blog < ActiveRecord::Base
   named_scope :recent, :conditions => ["draft = 0 AND created_at > ?", 2.weeks.ago.to_s(:db)], :order => "created_at DESC"
   
   needs_verification :sensitive_columns => [:content, :title]
+
+  acts_as_random
   
   acts_as_friend_taggable :delete_conditions => lambda {|user, blog| blog.poster == user},
                           :create_conditions => lambda {|user, blog| blog.poster == user}
