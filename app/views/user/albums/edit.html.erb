@@ -1,12 +1,12 @@
 <% facebox_tag '编辑相册' do %>
-  <div id='error'></div>
+  <%= content_tag :div, '', :id => 'errors' %>
   <% rows_form_remote_for :album, :url => personal_album_url(@album), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_album_submit),'请等待..');"} do |f| %>
-    <div class='formcontent'>
+    <% content_tag :div, :class => 'formcontent' do %>
       <%= f.text_field 'title', :label => '相册名称' %>
       <%= f.text_area 'description', :label => '相册描述'  %>
       <%= f.collection_select :game_id, current_user.games, :id, :name, {:prompt => '---'}, :label => '游戏分类', :class => 'selector selector02' %>
       <%= f.select :privilege, privilege_options, {}, :label => '谁可以浏览', :class => 'selector selector02' %>
-    </div>
+    <% end %>
     <%= f.z_submit :submit => {:text => '完成', :id => 'edit_album_submit'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
   <% end %>
 <% end %>
