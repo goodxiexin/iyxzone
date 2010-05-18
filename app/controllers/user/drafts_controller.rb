@@ -7,7 +7,7 @@ class User::DraftsController < UserBaseController
   end
 
   def create
-    @blog = Blog.new((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => true}))
+    @blog = current_user.drafts.build(params[:blog] || {})
     
     if @blog.save
       render :update do |page|
@@ -26,7 +26,7 @@ class User::DraftsController < UserBaseController
   end
 
   def update
-    if @blog.update_attributes((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => true}))
+    if @blog.update_attributes(params[:blog] || {})
       render :json => {:draft_id => @blog.id, :tags => @blog.tags.map{|t| {:id => t.id, :friend_login => t.tagged_user.login, :friend_id => t.tagged_user_id}}}
     else
       render :update do |page|
@@ -41,9 +41,7 @@ class User::DraftsController < UserBaseController
         page.redirect_to drafts_url
       end
     else
-      render :update do |page|
-        page << "error('删除的时候发生错误');"
-      end
+      render_js_error '删除的时候发生错误'
     end
   end
 

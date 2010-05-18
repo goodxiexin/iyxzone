@@ -3,8 +3,7 @@ Iyxzone.Video = {
   author: ['高侠鸿'],
   Builder: {},
   play: function(videoID, videoLink){
-//     $('video_' + videoID).innerHTML = videoLink;
-     $('video_' + videoID).update( videoLink);
+     $('video_' + videoID).update(videoLink);
   }
 };
 
@@ -17,7 +16,7 @@ Object.extend(Iyxzone.Video.Builder, {
       error('标题不能为空');
       return false;
     }
-    if($('video_url').value == ''){
+    if($('video_video_url').value == ''){
       error('url不能为空');
       return false;
     }

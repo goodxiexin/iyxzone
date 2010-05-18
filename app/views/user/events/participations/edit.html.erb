@@ -1,21 +1,11 @@
-<p class="z-h s_clear">
-  <strong class="left">更新状态</strong>
-  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
-</p>
-
-<div class='z-con'>
-<% form_remote_for :participation, :url => event_participation_url(@event, @participation, :at => 'event'), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(edit_participation_btn),'请等待..');"} do |f| %>
-<div class='formcontent'>
-  <div class="rows s_clear">
-    <%= radio_button_tag 'status', 3 %><%= label_tag '', '肯定去' %><br/>
-    <%= radio_button_tag 'status', 4 %><%= label_tag '', '可能去' %><br/>
-  </div>
-</div>
-<div class="z-submit s_clear space">
-  <table class="center" cellpadding="0"><tr><td>
-    <span class="button"><span><button type="submit" id='edit_participation_btn'>完成</button></span></span>
-    <span class="button button-gray"><span><button type="button" onclick="facebox.close();">取消</button></span></span>
-  </td></tr></table>
-</div>
+<% facebox_tag '更新状态' do %>
+  <% rows_form_remote_for :participation, :url => event_participation_url(@event, @participation, :at => 'event'), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(edit_participation_btn),'请等待..');"} do |f| %>
+    <div class='formcontent'>
+      <% f.rows do %>
+        <%= radio_button_tag 'status', 3 %><%= label_tag '', '肯定去' %><br/>
+        <%= radio_button_tag 'status', 4 %><%= label_tag '', '可能去' %><br/>
+      <% end %>
+    </div>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'edit_participation_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+  <% end %>
 <% end %>
-</div>

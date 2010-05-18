@@ -44,5 +44,5 @@ production:
   database: dayday3_production
   pool: 5
   username: root
-  password: root
+  password: 20041065
   socket: /var/run/mysqld/mysqld.sock

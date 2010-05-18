@@ -8,13 +8,20 @@
       <th class='id'>玩家昵称</th>
       <th class='level'>等级</th>
     </tr>
-    <% @user.characters.each do |c| %>
+    <% characters.each do |c| %>
     <tr>
       <td class='name'><%= game_link c.game %></td>
-      <td class='id'><%= c.name %></td>
+			<% if c.data.nil? %>
+				<td class='id'><%= c.name %></td>
+			<% else %>
+				<% unless c.data["verify"] %>
+					<td class='id'><%= c.name %></td>
+				<% else %>
+					<td class='id'><%= link_to c.name, c.data["url"], :popup => 'true' %></td>
+				<% end %>
+			<% end %>
       <td class='level'><%= c.level %></td>
     </tr>
     <% end %>
   </table>
 </div>
-

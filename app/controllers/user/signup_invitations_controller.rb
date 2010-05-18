@@ -15,18 +15,12 @@ class User::SignupInvitationsController < UserBaseController
   end
 
   def create
-    @invitation = SignupInvitation.new(:sender_id => current_user.id, :recipient_email => params[:email])
+    @invitation = current_user.signup_invitations.build(:recipient_email => params[:email])
     
     if @invitation.save
-      render :update do |page|
-        page << "Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');"
-        page << "$('email_invite').innerHTML = '发送成功';"
-      end
+      render_js_tip '发送成功'
     else
-      render :update do |page|
-        page << "Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');"
-        page << "$('email_invite').innerHTML = '发生错误';"
-      end
+      render_js_error
     end
   end
 

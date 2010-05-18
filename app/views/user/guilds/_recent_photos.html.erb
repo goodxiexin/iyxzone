@@ -1,0 +1,20 @@
+  <div class="multibox">
+    <div class="title"><%= link_to '更多', guild_album_url(album, :format => 'html') %><b>照片</b></div>
+    <div class="photolist-big-box">
+      <% unless photos.blank? %>
+      <ul class="collection s_clear">
+      <% photos.each do |p| %>
+        <li>
+          <div class="middle"><div class="middle-center"><div class="center"><%= photo_link p, :class => 'imgbox02' %></a></div></div></div>
+        </li>
+      <% end %>
+      </ul>
+      <% else %>
+        <% if album.poster == current_user %>
+          <div class='space'>还没更新照片赶紧去<%= link_to '弄一个', new_guild_photo_url(:album_id => album.id) %>吧</div>
+        <% else %>
+          <div class='space'>该工会还没更新照片</div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>

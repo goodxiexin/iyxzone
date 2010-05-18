@@ -10,33 +10,37 @@
 <% content_for :html_description, "#{@guild.name}的照片 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@guild.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <%= render :partial => "user/guilds/guild_header", :locals => {:text => "#{@guild.name}的照片"} %>
+<% canvas_tag do %>
+    <%= render :partial => "user/guilds/guild_header", :locals => {:text => "#{@guild.name}的照片", :guild => @guild} %>
     <div class="box02 canvas_int space">
-      <%= render :partial => 'user/guilds/albums/tab' %>
+      <%= render :partial => 'user/guilds/albums/tab', :locals => {:guild => @guild, :album => @album} %>
       <div class="pic-box">
         <div class="img-container-main s_clear">
           <div class="img-container-wrap">
             <div class="img-container">
-              <%= render :partial => 'photo_path' %>
+              <%= render :partial => 'photo_path', :locals => {:guild => @guild, :album => @album} %>
               <div class="img-main">
                 <div class="imgwrap box05">
-                  <%= render:partial => 'photo_operations' %>
+                  <%= render:partial => 'user/photos/photo_operations', :locals => {:photo => @photo,
+                    :taggable => (@role and (@role.is_authorized? or @role.is_president?)),
+                    :editable => @role.is_president?,
+                    :deleteable => @role.is_president?,
+                    :shareable => true,
+                    :diggable => true
+                  }  %>
                   <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>
-                  <%= render :partial => 'user/photos/photo_desc' %>
+                  <%= render :partial => 'user/photos/photo_desc', :locals => {:photo => @photo, :user => @user} %>
                 </div>
               </div>
             </div>
           </div>
-          <%= render :partial => 'shared/photo_slide', :locals => {:album => @album, :photo => @photo} %>
+          <%= render :partial => 'user/photos/photo_slide', :locals => {:album => @album, :photo => @photo} %>
         </div>
       </div>
-      <%= render :partial => 'user/photos/photo_func' %>
+      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @photo, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @photo, :recipient => @photo.poster}, :reply_to => @reply_to} %>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>
 
-<% if @membership and (@membership.is_authorized? or @membership.is_president?) %>
+<% if @role and (@role.is_authorized? or @role.is_president?) %>
 <%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @guild.people - [current_user]} %>
 <% end %>

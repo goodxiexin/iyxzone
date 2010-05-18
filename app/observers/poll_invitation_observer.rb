@@ -7,7 +7,7 @@ class PollInvitationObserver < ActiveRecord::Observer
     invitation.poll.raw_increment :invitees_count
 
     # send email
-		PollMailer.deliver_invitation invitation.poll, invitation.user if invitation.user.mail_setting.invite_me_to_poll == 1
+		PollMailer.deliver_invitation invitation.poll, invitation.user if invitation.user.mail_setting.invite_me_to_poll?
 	end
 
   def after_destroy invitation

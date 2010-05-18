@@ -2,27 +2,30 @@ class User::VideosController < UserBaseController
 
   layout 'app'
 
+  PER_PAGE = 10
+
+  PREFETCH = [{:poster => :profile}, :share]
+
   def index
     @relationship = @user.relationship_with current_user
-    @privilege = get_privilege_cond @relationship
     @count = @user.videos_count @relationship
-    @videos = @user.videos.paginate :page => params[:page], :per_page => 10, :conditions => @privilege, :include => [{:poster => :profile}, :share]
+    @videos = @user.videos.nonblocked.for(@relationship).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
 	def hot
-    @videos = Video.hot.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
+    @videos = Video.hot.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def recent
-    @videos = Video.recent.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
+    @videos = Video.recent.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def relative
-    @videos = @user.relative_videos.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
+    @videos = @user.relative_videos.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
-    @videos = current_user.friend_videos.paginate :page => params[:page], :per_page => 10
+    @videos = Video.by(current_user.friend_ids).nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def new
@@ -30,7 +33,7 @@ class User::VideosController < UserBaseController
   end
 
   def create
-		@video = Video.new((params[:video] || {}).merge({:poster_id => current_user.id}))
+		@video = current_user.videos.build(params[:video] || {})
     
     if @video.save
       redirect_to video_url(@video)
@@ -40,10 +43,8 @@ class User::VideosController < UserBaseController
   end
 
   def show
-    @relationship = @user.relationship_with current_user
-    @privilege = get_privilege_cond @relationship
-    @next = @video.next @privilege
-    @prev = @video.prev @privilege
+    #@next = @video.next @privilege
+    #@prev = @video.prev @privilege
     @count = @user.videos_count @relationship
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
@@ -53,7 +54,7 @@ class User::VideosController < UserBaseController
   end
 
   def update
-    if @video.update_attributes((params[:video] || {}).merge({:poster_id => current_user.id}))
+    if @video.update_attributes(params[:video] || {})
 		  redirect_to video_url(@video)
     else
       render :action => 'edit'
@@ -66,9 +67,7 @@ class User::VideosController < UserBaseController
 				page.redirect_to videos_url(:uid => current_user.id)
 			end
 		else
-			render :update do |page|
-				page << "error('删除的时候发生错误');"
-			end
+			render_js_error '删除的时候发生错误'
 		end
   end
 
@@ -82,7 +81,8 @@ protected
       @video = Video.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, {:tags => :tagged_user}, {:poster => :profile}])
       require_verified @video
       @user = @video.poster
-      require_adequate_privilege @video
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @video, @relationship
     elsif ['edit', 'update', 'destroy'].include? params[:action]
       @video = Video.find(params[:id])
       require_verified @video

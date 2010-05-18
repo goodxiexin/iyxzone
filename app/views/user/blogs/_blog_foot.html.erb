@@ -1,9 +1,9 @@
         <div class="detail-blog-foot">
           <p class=" jl-cutline"></p>
-          <% if @blog.tags.size == 0 %>
+          <% if blog.tags.size == 0 %>
             <p>这篇日志跟任何人都无关</p>
           <% else %>
-            <p>这篇日志有关的人: <%= @blog.tags.map { |t| profile_link t.tagged_user, :class => 'red' }.join(',') %></p>
+            <p>这篇日志有关的人: <%= blog.tags.map { |t| profile_link t.tagged_user, :class => 'red' }.join(',') %></p>
           <% end %>
         </div>
 

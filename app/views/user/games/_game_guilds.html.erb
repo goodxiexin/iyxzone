@@ -1,11 +1,11 @@
 <div class="multibox">
   <div class="title">
-    <%= link_to '更多', game_guilds_url(@game) %>
+    <%= link_to '更多', game_guilds_url(game) %>
     <b>公会</b>
   </div>
   <div class="piclist-rows">
 	<table class="small" cellpadding="0">
-    <% @guilds.each do |guild| %>
+    <% guilds.each do |guild| %>
       <tr>
         <td>
           <div class="imgwrap">

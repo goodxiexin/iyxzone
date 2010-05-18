@@ -6,19 +6,17 @@
 <% content_for :html_description, "#{current_user.login} - 好友状态 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-		<h1 class="app-status">状态</h1>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
-      <% if @statuses.blank? %>
-        <div class='gray'>你的好友最近都中了沉默</div>
-      <% else %>
+<% canvas_tag do %>
+	<h1 class="app-status">状态</h1>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
+    <% if @statuses.blank? %>
+      <div class='gray'>你的好友最近都中了沉默</div>
+    <% else %>
       <div class="piclist-rows">
         <%= render :partial => 'status', :collection => @statuses %>
       </div>
       <%= will_paginate @statuses %>
-      <% end %>
-    </div>
-  </div></div>
-</div></div></div></div>
+    <% end %>
+  </div>
+<% end %>

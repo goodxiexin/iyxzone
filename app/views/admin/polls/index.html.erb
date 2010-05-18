@@ -12,9 +12,11 @@
           <%= render :partial => 'admin/verify/category', :locals => {:selected => 8} %>
         </div>
       </div>
-      <div class="feed-box01">
+      <div class="vote-box">
         <div class='gray'>共<%= @polls.total_entries %>篇</div>
-        <%= render :partial => 'poll_item', :collection => @polls %>
+        <table class='vote-table' cellpadding='0'>
+          <%= render :partial => 'poll_item', :collection => @polls %>
+        </table>
         <%= will_paginate @polls %>
       </div>
     </div>

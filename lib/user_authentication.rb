@@ -78,29 +78,20 @@ module UserAuthentication
     def authenticated?(password)
       crypted_password == encrypt(password)
     end
-
-    def remember_token?
-      remember_token_expires_at && Time.now.utc < remember_token_expires_at
-    end
-
-    # These create and unset the fields required for remembering users between browser closes
+    
     def remember_me
-      remember_me_for 2.weeks
+      remember_me_for REMEMBER_DURATION
     end
 
-    def remember_me_for(time)
-      remember_me_until time.from_now.utc
+    def remember_me_for time
+      if self.remember_me_untils.blank? or (time.from_now > self.remember_me_untils)
+        self.remember_me_untils = time.from_now
+        save(false)
+      end
     end
-
-    def remember_me_until(time)
-      self.remember_token_expires_at = time
-      self.remember_token = encrypt("#{email}--#{remember_token_expires_at}")
-      save(false)
-    end
-
+    
     def forget_me
-      self.remember_token_expires_at = nil
-      self.remember_token = nil
+      self.remember_me_untils = nil
       save(false)
     end
 
@@ -158,10 +149,6 @@ protected
 
     def make_password_reset_code
       self.password_reset_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-    end
-
-    def set_invitation_limit
-      self.invitation_limit = 5
     end
 
     def make_invite_code

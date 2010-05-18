@@ -60,11 +60,11 @@ Object.extend(Iyxzone.Guild.MemberManager, {
       }.bind(this));
       veteran.observe('click', function(event){
         Event.stop(event);
-        this.changeRole(4);
+        this.changeRole(3);
       }.bind(this));
       member.observe('click', function(event){
         Event.stop(event);
-        this.changeRole(5);
+        this.changeRole(4);
       }.bind(this));
   },
 

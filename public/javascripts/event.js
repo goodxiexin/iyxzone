@@ -75,8 +75,12 @@ Object.extend(Iyxzone.Event.Builder, {
     var currentTimeJS = new Date().getTime();
     var startTimeJS = Date.parseFormattedString(startTime.value);
     var endTimeJS = Date.parseFormattedString(endTime.value);
-    if(startTimeJS < currentTimeJS){
+    if(onCreate && startTimeJS < currentTimeJS){
       error('开始时间不能比现在早');
+      return false;
+    }
+    if(endTimeJS <= currentTimeJS){
+      error('结束时间不能比现在早');
       return false;
     }
     if(endTimeJS <= startTimeJS){
@@ -129,19 +133,16 @@ Object.extend(Iyxzone.Event.Builder, {
       this.userCharactersHTML = $('event_character_id').innerHTML;
       $('event_guild_selector').show();
       $('event_guild_id').value = '';
-//      $('event_character_id').innerHTML = "<option value=''>---</option>";
       $('event_character_id').update( "<option value=''>---</option>");
     }else{
       $('event_guild_id').value = '';
       $('event_guild_selector').hide();
-//      $('event_character_id').innerHTML = this.userCharactersHTML;
       $('event_character_id').update( this.userCharactersHTML);
     }
   },
 
   guildOnChange: function(guildID){
     if(guildID == ''){
-//      $('event_character_id').innerHTML = "<option value=''>---</option>";
       $('event_character_id').update( "<option value=''>---</option>");
       return;
     }
@@ -151,7 +152,6 @@ Object.extend(Iyxzone.Event.Builder, {
       onSuccess: function(transport){
         var characters = transport.responseText.evalJSON();
         var selector = new Element('select');
-//        $('event_character_id').innerHTML = "<option value=''>---</option>";
         $('event_character_id').update( "<option value=''>---</option>");
         for(var i=0;i <characters.length;i++){
           var option = new Element('option', {value: characters[i].game_character.id}).update(characters[i].game_character.name);

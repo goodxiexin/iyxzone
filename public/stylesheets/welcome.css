@@ -9,43 +9,35 @@
 .welcome-box #navbar #navwrap #navmid{background:#73bd21 url(../images/welcome/top-bg.png) no-repeat 400px 0;}
 
 .logo-v2{background:url(../images/skin/logo-v2.png) no-repeat;top:0}
-.login-box .logo,.regist-box .logo{padding:0 0 0 101px;height:66px;line-height:66px;background:url(../images/welcome/welcome_title.png) no-repeat 0 0;color:#BF3A00}
-.login-box .logo-mail,.regist-box .logo-mail{background:url(../images/welcome/welcome_title.png) no-repeat 0 -80px}
-
-.login-box .rows,.regist-box .rows{height:26px;line-height:26px;overflow:hidden}
-.login-box .btn-rows,.regist-box .btn-rows{height:36px;overflow:hidden}
-.login-box label,.regist-box label{font-size:14px;font-weight:bold;line-height:27px}
-.login-box label.simple,.regist-box label.simple{font-size:12px;font-weight:normal}
 
 .welcome-box{width:972px;margin:0 auto;}
 .welcome-box02{width:950px;margin:0 auto;}
-.welcome{margin-top:25px;overflow:hidden}
-.welcome .login-box{float:left;width:336px;background:url(../images/welcome/loginBg01.png) no-repeat 0 0;}
-.welcome .login-box .r-m{margin:70px 7px 0 15px}
-.welcome .login-box .r-b{width:336px;height:80px;display:block;background:url(../images/welcome/loginBg01-b.png) no-repeat 0 bottom}
-.site-info{height:150px;font-size:12px;line-height:22px;width:260px;margin:0 auto}
-.site-info h2{font-weight:700;font-size:12px;margin-bottom:3px}
-.site-info .time{color:#888;margin-right:10px;float:left}
-.site-info strong{color:#888;float:left;font-weight:400;display:block;width:180px}
+.welcome-banner{margin-top:25px;background:url(../images/welcome/banner.jpg) no-repeat;width:970px;height:315px;position:relative}
+.login-box{width:280px;height:230px;position:absolute;right:5px;top:50px;*top:55px;color:#fff;padding-top:20px}
+.login-box .rows{margin-top:10px}
+.login-box .fldid{width:50px}
+.login-box .textfield{width:150px;border-color:#238204}
+.login-box .fldcb{line-height:20px}
+.login-box a{color:#fff;}
+.login-box .login-btn,.login-box .login-btn-hover,.login-box .reg-btn{background:url(../images/welcome/sign-btn.png) no-repeat;display:block}
+.login-box .login-btn,.login-box .login-btn-hover{width:66px;height:24px;border:0;cursor:pointer}
+.login-box .login-btn-hover{background-position:0 -26px;}
+.login-box .reg-btn{width:149px;height:35px;background-position:0 -52px;}
+.login-box .reg-btn:hover{background-position:0 -91px;}
+.welcome-intro li{width:317px;height:271px;float:left;margin:10px 2px;position:relative}
+.welcome-intro li.item-1{background:url(../images/welcome/intro_01.png) no-repeat;}
+.welcome-intro li.item-2{background:url(../images/welcome/intro_02.png) no-repeat;}
+.welcome-intro li.item-3{background:url(../images/welcome/intro_03.png) no-repeat;}
+.welcome-intro li .con{position:absolute;bottom:5px;width:230px;margin-left:40px;line-height:18px}
+.welcome-intro li h2{font-size:16px;font-weight:700;color:#238204;margin-bottom:2px}
 
-.welcome .right{margin-top:3px;width:620px;}
-.welcome .right p.later{margin-top:17px;border:1px solid #acd296}
-.welcome .slogon-box{text-align:center;border:1px solid #acd296;background:#fff;padding-top:15px;}
-.slogon{background:url(../images/welcome/slogon-bg.png) no-repeat;width:465px;height:120px;padding-top:30px;*padding-top:40px;margin:0 auto}
-.slogon p{margin:8px 30px;font-size:14px;line-height:24px;color:#006d9a;text-align:left}
-
-.login-box .logo{margin-left:3px;}
-.login-box .rows,.login-box .btn-rows{padding:8px 0;}
-.login-box .sperator{margin:12px 15px 12px 3px;}
-
-.login-box .fldid{float:left;width:75px;text-align:right;overflow:hidden}
-.login-box .fldvalue,.login-box .fldis{float:left;}
-.login-box .fldis input{float:left;margin:7px 5px 0 5px;_margin:6px 0 0;height:14px;display:block;}
-* +html .login-box .fldis input{margin-top:6px;}
-
-.login-box .textfield{width:160px}
-.login-box a.pass{margin-left:3px;_margin:0;}
-.login-box .gobtn{margin:3px 0 0 10px;_margin-left:7px;}
+.footer-shine{width:970px;height:69px;margin:20px auto;background:url(../images/welcome/footer-bg.png) no-repeat;position:relative}
+.footer-shine .logo{position:absolute;top:10px;left:20px}
+.footer-shine .con{text-align:center;line-height:24px;padding-top:10px}
+.footer-shine .con a{color:#333}
+.footer-shine .company-logo{width:51px;height:51px;position:absolute;top:-15px;right:45px;background:url(../images/welcome/company-logo.png) no-repeat;}
+.footer-shine .cyberpolice{position:absolute;top:15px;right:130px;}
+.footer-shine .r-c{width:10px;height:69px;background:url(../images/welcome/footer-bg.png) no-repeat right 0;position:absolute;top:0;right:0}
 
 .regist-box .t{background:url(../images/welcome/registBg01.png) no-repeat;}
 .regist-box{width:672px;margin:13px auto 0;color:#7E7F80;background:url(../images/welcome/regist02.png) repeat-y}

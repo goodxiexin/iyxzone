@@ -6,8 +6,7 @@
   <%= javascript_include_merged :game %>
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
 		<h1 class="app-game">游戏</h1>
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 0} %>
@@ -16,5 +15,4 @@
         <%= render :partial => 'game_items', :object => @games %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>

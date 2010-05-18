@@ -32,7 +32,8 @@ class SessionsController < ApplicationController
     else
       if params[:remember_me] == "1"
         current_user.remember_me
-        cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
+      else
+        current_user.remember_me_for SESSION_DURATION
       end
       flash[:notice] = "欢迎来到一起游戏网！"
       redirect_back_or_default(home_url)
@@ -41,7 +42,7 @@ class SessionsController < ApplicationController
 
   def destroy
     self.current_user.forget_me if logged_in?
-    cookies.delete :auth_token
+    #cookies.delete :auth_token
     reset_session
     flash[:notice] = "成功登出"
     redirect_to login_url

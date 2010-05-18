@@ -1,0 +1,27 @@
+    <div class='welcome-once'>
+      <h2>欢迎您来到一起游戏网</h2>
+      <p>在这里没有学习生活，没有工作体会，只有玩家在游戏中的点点滴滴。希望我们享受游戏，享受生活，一起开心，快乐。</p>
+      <p>以下是我们的第一个宣传篇: 10年网游，让我们在一起，希望您喜欢</p>
+    </div>
+    <div class='home-video space'>
+      <embed src="http://player.youku.com/player.php/sid/XMTY2MjYwMzQ0/v.swf" quality="high" width="480" height="400" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash"></embed>
+    </div>
+    <div class="home-avatar-list space">
+      <% unless friend_suggestions.empty? %>
+      <div class='title'>您好像还没有任何好友，我们觉得以下用户可能是您的好友或者很可能跟您成为朋友</div>
+      <div class="d6-list s_clear">
+        <ul>
+          <% friend_suggestions.each do |f| %>
+            <% f = f.suggested_friend %>
+            <li>
+              <%= avatar f, :size => :medium, :class => "imgbox01" %>
+              <p><%= link_to "<strong>#{h f.login}</strong>", profile_url(f.profile) %><br/><%= facebox_link "<span class='icon-friend02'></span>加为好友", new_friend_request_url(:friend_id => f.id), :class => "red" %></p>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <% else %>
+      <div class='title'>您现在应该还没有好友，也很难为您推荐好友，很可能是我们没发现与您玩一个游戏的玩家，这都怪我们的用户还不够多。也许您可以帮我们<%= link_to "邀请", signup_invitations_url %>您的好友来我们网站。多谢了。</div>
+      <% end %>
+    </div>
+

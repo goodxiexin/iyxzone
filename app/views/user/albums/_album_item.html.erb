@@ -10,7 +10,7 @@
       <h4><%= album_link album %>共<span><%= album.photos_count %></span>张</h4>
       <p><%= ftime2 album.created_at %>更新</p>
       <ul>
-        <% album.latest_photos.each do |p| %>
+        <% album.latest_photos.nonblocked.each do |p| %>
           <li><%= photo_link p, :class => 'imgbox01', :width => '50px', :height => '50px' %></li>
         <% end %>
       </ul>

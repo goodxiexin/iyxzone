@@ -17,10 +17,9 @@ protected
   def diggable_is_valid
     return if diggable_id.blank? or diggable_type.blank?
 
-    diggable = diggable_type.constantize.find(:first, :conditions => {:id => diggable_id})
     if diggable.blank?
       errors.add(:diggable_id, "不存在")
-    elsif diggable.respond_to? :verified and diggable.verified == 2
+    elsif diggable.respond_to? :rejected? and diggable.rejected?
       errors.add(:diggable_id, "已经被和谐了")
     elsif diggable.digged_by? poster
       errors.add(:diggable_id, '已经挖过了')

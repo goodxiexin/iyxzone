@@ -14,14 +14,10 @@ class User::PokesController < UserBaseController
   def create
     @delivery = PokeDelivery.new((params[:delivery] || {}).merge({:sender_id => current_user.id}))
 
-    if @delivery.save 
-      render :update do |page|
-        page << "tip('发送成功');"
-      end
+    if @delivery.save
+      render_js_tip '发送成功' 
     else
-      render :update do |page|
-        page << "error('你不能给他打招呼');" 
-      end
+      render_js_error '你没有权限'
     end
   end
 
@@ -31,9 +27,7 @@ class User::PokesController < UserBaseController
         page << "$('poke_delivery_#{@delivery.id}').remove();"
       end
     else
-      render :update do |page|
-        page << "error('删除错误，稍后再试');"
-      end
+      render_js_error
     end
   end
 

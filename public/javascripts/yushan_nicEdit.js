@@ -298,8 +298,8 @@ var nicEditorConfig = bkClass.extend({
 		'hr' : {name : __('水平线'), command : 'insertHorizontalRule', noActive : true}
 	},
 	iconsPath : '/images/nicEditor/nicEditorIcons.gif',
-	buttonList : ['undo', 'redo', 'bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','image','link','forecolor','bgcolor'],
-	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"emotion":26, "undo": 27, "redo": 28}
+	buttonList : ['undo', 'redo', 'bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','emotion','image','video','link','forecolor','bgcolor'],
+	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25,"emotion":26, "video":20, "undo": 27, "redo": 28}
 	
 });
 /* END CONFIG */
@@ -604,7 +604,40 @@ var nicEditorInstance = bkClass.extend({
 	
 	nicCommand : function(cmd,args) {
 		document.execCommand(cmd,false,args);
-	}		
+	},
+
+  /**
+   * 插入标签内容, 仿照tinyMCE
+   * by liyushan
+   */
+  insertContent : function (content) {
+    var range = this.getRng();
+    var doc = window.document;
+    if (range.insertNode) {
+      content += "<span id='__caret'>_</span>";
+      if (range.startContainer == doc && range.endContainer == doc) {
+        doc.body.innerHTML = content;
+      }
+      else {
+        range.deleteContents();
+        range.insertNode(this.getRng().createContextualFragment(content));
+      }
+      temp = document.getElementById('__caret');
+      range = doc.createRange();
+      range.setStartBefore(temp);
+      range.setEndBefore(temp);
+     // this.getSel().removeAllRanges();
+      this.selRng(range, this.getSel());
+      temp.parentNode.removeChild(temp);  
+    }
+    else {
+      if (range.item) {
+        doc.execCommand('Delete', false, null);
+        range = this.getRng();
+      }
+      range.pasteHTML(content);
+    }
+  }
 });
 
 var nicEditorIFrameInstance = nicEditorInstance.extend({
@@ -1170,11 +1203,12 @@ var nicEditorSelect = bkClass.extend({
 });
 
 var nicEditorFontSizeSelect = nicEditorSelect.extend({
-sel : {2 : '10pt', 3 : '12pt', 4 : '14pt', 5 : '18pt', 6 : '24pt', 7 : '36pt'},
+  sel : {2 : '10pt', 3 : '12pt', 4 : '14pt', 5 : '18pt', 6 : '24pt', 7 : '36pt'},
+  
 	init : function() {
 		this.setDisplay('大小');
 		for(itm in this.sel) {
-			this.add(itm,'<font size="'+itm+'">'+this.sel[itm]+'</font>');
+			this.add(itm,'<font size="'+itm+'" style="line-height:' + itm * 10 + 'px">'+this.sel[itm]+'</font>');
 		}		
 	}
 });
@@ -1280,11 +1314,16 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
     }.closure(this));
     $BK('nicEdit-link-cancel').addEvent('click', function(){
       this.removePane();
+      this.ne.selectedInstance.elm.focus();
     }.closure(this));
   },
 	
 	submit : function(e) {
 		var url = this.url;
+    if(!url.match(/^http\:\/\//)){
+      url = 'http://' + url;
+    }
+
     var scheme = this.scheme;
 
 		if(url == "http://" || url == "") {
@@ -1572,6 +1611,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
         this.src = $BK('image_url_field').value;
         this.removePane(); // 必须先removePane(), 然后selElm().parentTag('IMG')才能找到正确的tag
         this.submit();
+        this.ne.selectedInstance.elm.focus();
       }else if(this.currentTab == 'local_image'){
         $BK('upload_image_form').submit();
       }else if(this.currentTab == 'album_image'){
@@ -1581,10 +1621,12 @@ var nicImageButton = nicEditorAdvancedButton.extend({
           this.submit();
         }
         this.selectedPhotos = [];
+        this.ne.selectedInstance.elm.focus();
       }
     }.closure(this));
     $BK('image_cancel').addEvent('click', function(){
       this.removePane();
+      this.ne.selectedInstance.elm.focus();
     }.closure(this));
 	},
 	
@@ -1594,8 +1636,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 			alert("你必须插入一个图片的链接地址");
 			return false;
 		}
-
-		if(!this.im) {
+		/*if(!this.im) {
 			var tmp = 'javascript:nicImTemp();';
 			this.ne.nicCommand("insertImage",tmp);
 			this.im = this.findElm('IMG','src',tmp);
@@ -1606,7 +1647,8 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 	//		,	alt : this.inputs['alt'].value,
 	//			align : this.inputs['align'].value
 			});
-		}
+		}*/
+    this.ne.selectedInstance.insertContent("<img src='" + src +"' />");
 	},
 
   // 这个函数是服务器那边调用的，可以告诉这里什么时候上传结束
@@ -1625,6 +1667,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
         });
       }
       this.removePane();
+      this.ne.selectedInstance.elm.focus();
     } 
   }
 
@@ -1707,7 +1750,7 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
       a.addEvent('click', function(e){
         var url = bkLib.eventTarget(e).getAttribute('src');
         this.removePane();
-        if(!this.im){
+        /*if(!this.im){
           var tmp = 'javascript: void(0);';
           this.ne.nicCommand("insertImage", tmp);
           this.im = this.findElm('IMG','src',tmp);
@@ -1715,7 +1758,9 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
         if(this.im){
           this.im.setAttributes( {src: url});
           this.ne.nicCommand("Unselect",this.im);
-        }
+        }*/
+        this.ne.selectedInstance.insertContent("<img src='" + url +"' />");
+        this.ne.selectedInstance.elm.focus();
         return false; // 如果没有，在IE6下会触发onbeforeunload
       }.closure(this));
       a.appendTo(div);
@@ -1750,3 +1795,207 @@ var nicEmotionButton = nicEditorAdvancedButton.extend({
 });
 
 nicEditors.registerPlugin(nicPlugin,nicEmotionOptions);
+
+/**
+ * video button
+ */
+var nicVideoOptions = {
+	buttons : {
+		'video' : {name : '添加视频', type : 'nicVideoButton'} 
+	}
+	
+};
+
+var nicVideoButton = nicEditorAdvancedButton.extend({
+
+  paneHTML : "<div class='z-box'><div class='z-t'> \
+        <span class='l'><strong></strong></span> \
+        <span class='r'></span> \
+        </div> \
+        <div class='z-m rows s_clear'> \
+            <div class='box01 s_clear'> \
+                <p class='z-h'>插入视频</p> \
+                <div class='z-con'> \
+                    <div class='content'> \
+                    		<div class='tab tab01'> \
+                            <ul> \
+                                <li class='hover'><span><a href='javascript: void(0)' id='url_image_tab'>视频</a></span></li> \
+                 			      </ul> \
+                        </div> \
+                      	<div class='formcontent' id='url_image_frame'>	 \
+                          <div class='rows s_clear'> \
+                              <div class='fldid'><label>连接地址：</label></div> \
+                              <div class='fldvalue'> \
+                                <div style='width: 150px;' class='textfield'><input type='text' size='30' value='' id='video_url_field' /></div> \
+                              </div> \
+                          </div> \
+                      </div> \
+                    </div> \
+                    <div class='rows'></div> \
+                        <div class='z-submit s_clear space'> \
+                            <div class='buttons'> \
+                                 <span class='button'><span><button type='submit' id='video_submit_btn'>插入</button></span></span> \
+                                 <span class='button button-gray'><span><button type='reset' id='video_cancel'>取消</button></span></span> \
+                            </div> \
+                    </div> \
+                </div> \
+            </div> \
+            <div class='bg'></div> \
+        </div> \
+        <div class='z-b'> \
+        <span class='l'><strong></strong></span> \
+        <span class='r'></span> \
+        </div> \
+    </div></div>",
+
+  videoPic : '/images/nicEditor/video.gif',
+
+  formats : ['.swf','.avi','.wmv','.rmvb'],
+
+  addPane : function() {
+    var scroll = document.viewport.getScrollOffsets();
+    var height = document.viewport.getHeight();
+    var width = document.viewport.getWidth();
+
+    this.pane.contain.setStyle({'width' : '450px', 'overflow' : '', 'position' : 'absolute', 'top' : (height/3 + scroll.top) + 'px', 'left' : (width/2 - 225) + 'px', 'z-index' : '9999'});
+    this.pane.pane.setStyle({'width':'450px', 'border' : 'none', 'padding' : '0px'});
+    this.pane.close.remove();
+    this.pane.close = null;
+
+    this.pane.setContent(this.paneHTML);
+    
+    $BK('video_submit_btn').addEvent('click', function(){
+      this.src = $BK('video_url_field').value;
+      this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+   //   this.submit();
+      this.removePane();
+      this.submit();
+      this.ne.selectedInstance.elm.focus();
+    }.closure(this));
+    $BK('video_cancel').addEvent('click', function(){
+      this.removePane();
+      this.ne.selectedInstance.elm.focus();
+    }.closure(this));
+
+  },
+
+  submit : function() {
+    var src = this.src; 
+    var picUrl = this.videoPic; //待插入图片的地址
+    var img_class_name = 'video-img';
+
+		if(src == "" || src == "http://") {
+			alert("你必须插入一个视频的链接地址");
+			return false;
+		}
+    var end = this.checkValid(src);
+    if (end == "") {
+      src = this.parseURL(src);
+      if (src == "") {
+        alert('无法识别的资源格式');
+        return false;
+      }
+    //  alert(src);
+    }
+/*
+		if(!this.im) {
+			var tmp = 'javascript:nicImTemp();';
+			this.ne.nicCommand("insertImage",tmp);
+			this.im = this.findElm('IMG','src',tmp);
+		}
+		if(this.im) {
+			this.im.setAttributes({
+				src : picUrl,
+				alt : src
+			});
+      this.im.setStyle({'className':img_class_name});
+		} */
+    this.ne.selectedInstance.insertContent("<img src='" + picUrl + "' alt='"  + src + "' class='" + img_class_name + "' />");
+  },
+
+  checkValid : function(src) {
+    var src_tmp = src.toLowerCase();
+    for (var i = 0; i < this.formats.length; i++)
+      if (src_tmp.endsWith(this.formats[i]))
+        return this.formats[i];
+    var tudou_flash = new RegExp('[http\\:\\/\\/]?www\\.tudou\\.com\\/[l|v]\\/.*');//土豆网视频不是以.swf结尾
+    if (tudou_flash.test(src))
+      return this.formats[0];
+    return "";
+  },
+
+  parseURL : function(src){
+    var youku = new RegExp('[http\\:\\/\\/]?v\\.youku\\.com\\/v\\_show\\/id\\_.*\\.html');
+    var swfURL = "";
+
+    if (youku.test(src)) {
+      var begin = src.indexOf('id_');
+      swfURL = "http://player.youku.com/player.php/sid/" + src.substring(begin+3, src.length-5) + '/v.swf';
+      return swfURL;
+    }
+    var youku_list = new RegExp('[http\\:\\/\\/]?v\\.youku\\.com\\/v\\_playlist\\/f.*o[0-9]+p[0-9]+\\.html');
+    if (youku_list.test(src)) {
+      var begin = src.indexOf('st/');
+      var obloc = src.lastIndexOf('o');
+      var ptloc = src.lastIndexOf('p');
+      
+      var ob = src.substring(obloc + 1, ptloc);
+      var pt = src.substring(ptloc + 1, src.length - 5);
+
+      swfURL = "http://player.youku.com/player.php/Type/Folder/Fid/" + src.substring(begin+4, src.lastIndexOf('o')) + '/Ob/' + ob + '/Pt/' + pt + '/';
+      return swfURL;
+    }
+
+    var tudou_1 = new RegExp('[http\\:\\/\\/]?[www\\.]tudou\\.com\\/programs\\/view\\/.*');
+    if (tudou_1.test(src)) {
+      var begin = src.indexOf('ew') + 3;
+      swfURL = "http://www.tudou.com/v/" + src.substring(begin);
+      return swfURL;
+    }
+    
+    var tudou_2 = new RegExp('[http\\:\\/\\/]?[www\\.]tudou\\.com\\/playlist\\/playindex\\.do\\?lid\\=.*\\&iid\\=.*');
+    if (tudou_2.test(src)) {
+      var begin = src.indexOf('iid=');
+      var end = src.indexOf('&cid');
+      if (end < 0)
+        end = src.length;
+      swfURL = "http://www.tudou.com/player/skin/plu.swf?" + src.substring(begin, end);
+      return swfURL;
+    }
+    
+    var tudou_3 = new RegExp('[http\\:\\/\\/]?[www\\.]?tudou\\.com\\/playlist\\/playindex\\.do\\?lid\\=.*');
+    if (tudou_3.test(src)) {
+      var begin = src.indexOf('lid=') + 4;
+      swfURL = "http://www.tudou.com/l/" + src.substring(begin);
+      return swfURL;
+    }
+    
+    var ku6_1 = new RegExp('[http\\:\\/\\/]?v\\.ku6\\.com\\/[special|film]?\\/?.*show.*\\/.*');
+    if (ku6_1.test(src)) {
+      var begin  = src.lastIndexOf('/') + 1;
+      var end = src.indexOf('.html');
+      swfURL = "http://player.ku6.com/refer/" + src.substring(begin, end) +"/v.swf";
+      return swfURL;
+    }
+    
+    var v56_1 = new RegExp('[http\\:\\/\\/]?[www\\.]?56\\.com\\/.*\\/v\\_.*\\.html');
+    if (v56_1.test(src)) {
+      var begin = src.indexOf('v_');
+      var end = src.indexOf('.html');
+      swfURL = "http://player.56.com/" + src.substring(begin,end) + ".swf";
+      return swfURL;
+    }
+    
+    var v56_2 = new RegExp('[http\\:\\/\\/]?[www\\.]?56\\.com\\/.*vid.*\\.html');
+    if (v56_2.test(src)) {
+      var begin = src.indexOf('vid') + 4;
+      var end = src.indexOf('.html');
+      swfURL = "http://player.56.com/v_" + src.substring(begin,end) + ".swf";
+      return swfURL;
+    }
+    return "";
+  }
+
+});
+
+nicEditors.registerPlugin(nicPlugin,nicVideoOptions);

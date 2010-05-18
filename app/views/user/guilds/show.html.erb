@@ -7,27 +7,33 @@
 <% end %>
 
 <% content_for :left do %>
-  <%= render :partial => 'guild_avatar' %>
+  <% mc_avatar do %>
+    <%= album_cover @album %>
+  <% end %> 
   <div class='info-list'>
-    <%= render :partial => 'guild_info' %>
-    <%= render :partial => 'guild_menu' %>  
-    <%= render :partial => 'guild_request' %>
+    <%= render :partial => 'guild_info', :locals => {:guild => @guild} %>
+    <%= render :partial => 'guild_menu', :locals => {:guild => @guild, :role => @role} %>  
+    <%= render :partial => 'guild_request', :locals => {:guild => @guild} %>
   </div>
 <% end %>
 
 <% content_for :right do %>
-  <% if !@memberships.blank? %>
-    <%= render :partial => 'my_memberships' %>
+  <% unless @memberships.blank? %>
+    <%= render :partial => 'my_memberships', :locals => {:memberships => @memberships, :guild => @guild} %>
   <% end %>
-	<%= render :partial => 'guild_topics' %>
-	<%= render :partial => 'guild_events' %>
+  <% unless @hot_topics.blank? %>
+	  <%= render :partial => 'guild_topics', :locals => {:hot_topics => @hot_topics, :guild => @guild} %>
+  <% end %>
+  <% unless @events.blank? %>
+	  <%= render :partial => 'guild_events', :locals => {:events => @events, :guild => @guild} %>
+  <% end %>
 <% end %>
 
 <div class="box02 canvas_con">
-  <%= render :partial => "guild_desc" %> 
-  <%= render :partial => "recent_albums" %>
-  <%= render :partial => "guild_members" %>
-  <%= render :partial => "guild_feeds" %>
+  <%= render :partial => "guild_desc", :locals => {:guild => @guild} %> 
+  <%= render :partial => "recent_photos", :locals => {:album => @album, :photos => @photos} %>
+  <%= render :partial => "guild_members", :locals => {:guild_characters => @guild_characters, :guild => @guild} %>
+  <%= render :partial => "guild_feeds", :locals => {:guild => @guild, :feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
   <% if @role and (@role.is_president? or @role.is_authorized?) %>
     <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @guild, :recipient => @guild.president, :with_comments => false} %>
   <% else %>

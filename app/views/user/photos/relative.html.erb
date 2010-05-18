@@ -2,20 +2,19 @@
 <% content_for :html_description, "#{@user.login}的相关照片 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <% if @user == current_user %>
-      <h1 class="app-photo">照片</h1>
-    <% else %>
-      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的相册"} %> 
-    <% end %>
-    <div class='box02 canvas_int'>
-      <%= render :partial => 'user/albums/tab', :locals => {:user => @user, :hover => 3} %>
-      <div class="pic-box">
-        <div class="path-box">
-          <p><span>共 <%= @infos.total_entries %> 张照片</span></p>
-        </div>
-        <table class="photo-edit-list photo-mark-list">
+<% canvas_tag do %>
+  <% if @user == current_user %>
+    <h1 class="app-photo">照片</h1>
+  <% else %>
+    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的相册"} %> 
+  <% end %>
+  <div class='box02 canvas_int'>
+    <%= render :partial => 'user/albums/tab', :locals => {:user => @user, :hover => 2} %>
+    <div class="pic-box">
+      <div class="path-box">
+        <p><span>共 <%= @infos.total_entries %> 张照片</span></p>
+      </div>
+      <table class="photo-edit-list photo-mark-list">
           <% i = 0 %>
           <% @infos.each do |info| %>
             <% photo = info[:photo] %>
@@ -29,9 +28,8 @@
               </tr><% i =0 %>
             <% end %>
           <% end %>
-        </table>
-        <%= will_paginate @infos %>
-      </div>
+      </table>
+      <%= will_paginate @infos %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

@@ -6,47 +6,25 @@
   <%= javascript_include_merged :blog %> 
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <h1 class="app-log">日志</h1>
     <div class="box02 canvas_int space">
       <%= render :partial => 'user/blogs/tab', :locals => {:user => current_user, :hover => 1} %>
       <div class='appcontent01'>
         <div id='errors'></div>
         <div class="cons-form formcontent">
-				<% form_for :blog, :html => {:onsubmit => "return false", :id => 'blog_form'} do |f| %>
-			    <div class='rows s_clear'>
-				    <div class='fldid'><%= f.label "日志标题：" %></div>
-				    <div class='fldvalue'><div class='textfield'><%= f.text_field 'title' %></div></div>
-			    </div>
-			    <div class='rows s_clear'>
-				    <%= f.text_area 'content', :style =>"width: 700px; height: 300px;" %>
-			    </div>
-			    <div class='rows s_clear'>
-				    <div class='fldid'><%= f.label "日志类别: " %></div><div class='fldvalue'><%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'} %></div>
-			    </div>
-			    <div class='rows s_clear'>
-				    <div class='fldid'><%= f.label "浏览权限: "%></div><div class='fldvalue'><%= privilege_select_tag(:blog) %></div>
-			    </div>
-          <div class='rows s_clear'>
-            <div class='fldid'><%= f.label "点名相关好友" %></div>
-            <div class='fldvalue'>
-              <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @blog} %>
-            </div>
-          </div>
-          <div class='rows s_clear'>
-		        <div class='fldid'>&nbsp;</div>
-		        <div class='fldvalue'>
-              <span class="button03"><span><%= button_to_function "发布", "Iyxzone.Blog.Builder.updateBlog(this, #{@blog.id}, $('blog_form'));", :class => "confirm-button" %></span></span>
-              <span class="button03"><span><%= button_to_function "保存为草稿", "Iyxzone.Blog.Builder.updateDraft(this, #{@blog.id}, $('blog_form'));", :class => "confirm-button" %></span></span>
-            </div>
-		      </div>
+				<% rows_form_for :blog, :html => {:onsubmit => "return false", :id => 'blog_form'} do |f| %>
+          <%= f.text_field 'title', :label => '日志标题' %>
+				  <%= f.text_area 'content', :style =>"width: 700px; height: 300px;" %>
+          <%= f.collection_select 'game_id', current_user.games, :id, :name, {}, :label => '游戏类别', :class => "selector selector02" %>
+          <%= f.select 'privilege', privilege_options, {}, :label => '浏览权限', :class => "selector selector02" %>
+          <%= render :partial => 'user/friend_tags/control_panel', :locals => {:title => '点名相关好友'} %>
+          <%= f.submit '发布' => {:onclick => "Iyxzone.Blog.Builder.updateBlog(this, #{@blog.id}, $('blog_form'));"}, '保存为草稿' => {:onclick => "Iyxzone.Blog.Builder.updateDraft(this, #{@blog.id}, $('blog_form'));"} %> 
         <% end %>
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>
 
 <% onload_javascript_tag do %>
   Iyxzone.Blog.Builder.init('blog_content', '<%= form_authenticity_token %>', <%= album_infos %>, 10, <%= @tag_infos %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');

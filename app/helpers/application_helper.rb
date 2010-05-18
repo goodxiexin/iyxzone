@@ -2,7 +2,7 @@
 module ApplicationHelper
 
   def avatar_path user, size="medium"
-    if user.avatar.blank? || user.avatar.verified == 2
+    if user.avatar.blank? || user.avatar.rejected?
       "default_#{user.gender}_#{size}.png"
     else
       user.avatar.public_filename(size)
@@ -11,7 +11,7 @@ module ApplicationHelper
 
   def avatar_image(user, opts={})
     size = opts.delete(:size) || "medium"
-    if user.avatar.blank? || user.avatar.verified == 2
+    if user.avatar.blank? || user.avatar.rejected?
       image_tag "default_#{user.gender}_#{size}.png", opts
     else
       image_tag user.avatar.public_filename(size), opts
@@ -32,7 +32,7 @@ module ApplicationHelper
   def avatar(user, img_opts={}, a_opts={})
 		size = img_opts.delete(:size) || "medium"
     a_opts.merge!({:popup => true})
-    if user.avatar.blank? || user.avatar.verified == 2
+    if user.avatar.blank? || user.avatar.rejected?
       link_to image_tag("default_#{user.gender}_#{size}.png", img_opts), profile_url(user.profile), a_opts
     else
       link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
@@ -66,25 +66,21 @@ module ApplicationHelper
   def gender_select_tag obj
     select_tag "#{obj.class.to_s.underscore}[gender]", options_for_select([['男', 'male'], ['女', 'female']], obj.gender) 
   end
-  
-  def privilege_select_tag object, opts={}
-    select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]], eval("@#{object}.privilege")), opts 
+ 
+  def privilege_options
+    [['所有人', 1], ['好友及玩相同游戏的朋友', 2], ['好友', 3], ['自己', 4]]
+  end
+ 
+  def privacy_options
+    [['所有人', 1],  ['好友及玩相同游戏的朋友', 2], ['好友', 3]]
   end
 
-  def privacy_select_tag obj, field
-    select_tag "#{obj}[#{field}]", options_for_select([['所有人', 1],  ['好友及玩相同游戏的朋友', 2], ['好友', 3]], eval("@#{obj}.#{field}"))
+  def friend_privacy_options
+    [['所有人', 1],  ['玩相同游戏的朋友', 2]]
   end
 
-  def friend_privacy_select_tag obj, field
-    select_tag "#{obj}[#{field}]", options_for_select([['所有人', 1],  ['玩相同游戏的朋友', 2]], eval("@#{obj}.#{field}"))
-  end
-
-  def poll_privilege_select_tag object
-    select_tag "#{object}[privilege]", options_for_select([['所有人', 1], ['好友', 2]], eval("@#{object}.privilege"))
-  end
-
-  def event_privilege_select_tag object
-    poll_privilege_select_tag object
+  def event_privilege_options
+    [['所有人', 1], ['好友', 2]]
   end
 
   def get_subject(user)
@@ -101,7 +97,7 @@ module ApplicationHelper
 
   def album_cover_image album, opts={}
     size = opts.delete(:size) || 'large'
-    if album.verified == 2 || album.photos_count == 0
+    if album.rejected? || album.photos_count == 0
 			if album.is_a? GuildAlbum
 				image_tag "default_guild_#{size}.png", opts
 			elsif album.is_a? EventAlbum
@@ -110,14 +106,17 @@ module ApplicationHelper
 				image_tag "default_cover_#{size}.png", opts
 			end
     else
-      cover = album.cover.nil? ? album.photos.first : album.cover
+      cover = album.cover
+      if cover.nil? or cover.rejected?
+        cover = album.photos.nonblocked.first
+      end
       image_tag cover.public_filename(size), opts
     end
   end
 
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'large'
-    if album.verified == 2 || album.photos_count == 0
+    if album.rejected? || album.photos_count == 0
 			if album.is_a? GuildAlbum
 				link_to image_tag("default_guild_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			elsif album.is_a? EventAlbum
@@ -126,7 +125,10 @@ module ApplicationHelper
 				link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			end
     else
-      cover = album.cover.nil? ? album.photos.first : album.cover
+      cover = album.cover
+      if cover.nil? or cover.rejected? 
+        cover = album.photos.nonblocked.first
+      end
       link_to image_tag(cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
   end
@@ -196,7 +198,8 @@ module ApplicationHelper
 
 	def video_thumbnail video, opts={}
     temping = video.thumbnail_url.blank? ? "/images/photo/video01.png" : video.thumbnail_url
-		image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"}.merge(opts)
+		#image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html.gsub('"','\"')}'+'>');"}.merge(opts)
+		image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}>');"}.merge(opts)
 	end
 
   def video_thumbnail_link video, opts={}
@@ -434,6 +437,43 @@ module ApplicationHelper
 
   def report_link reportable
     facebox_link "举报", new_report_url(:reportable_id => reportable.id, :reportable_type => reportable.type)
+  end
+
+  def canvas_tag opts={}, &block
+    body_class = opts[:with_sidebar].blank? ? 'canvas_body' : 'canvas_body canvas_wrap s_clear'
+    concat "<div id='canvas' class='round_r_t'><div class='round_l_t'><div class='round_r_b'><div class='round_l_b'><div class='round_m'><div class='#{body_class}'>" + capture(&block) + "</div></div></div></div></div></div>"
+  end
+
+  def facebox_tag title, &block
+    concat "<p class='z-h s_clear'><strong class='left'>#{title}</strong>#{link_to_function '', "facebox.close();", :class => "icon2-close right"}</p><div class='z-con'>#{capture(&block)}</div>"
+  end
+
+  def rows_form_for(*args, &block)
+    options = args.extract_options!.merge(:builder => RowsFormBuilder)
+    form_for(*(args + [options]), &block)
+  end
+
+  def rows_form_tag(*args, &block)
+    options = args.extract_options!.merge(:builder => RowsFormBuilder)
+    form_tag(*(args + [options]), &block)  
+  end
+
+  def config_form_for(*args, &block)
+    options = args.extract_options!.merge(:builder => ConfigFormBuilder)
+    form_for(*(args + [options]), &block)
+  end
+
+  def rows_form_remote_for(*args, &block)
+    options = args.extract_options!.merge(:builder => RowsFormBuilder)
+    form_remote_for(*(args + [options]), &block)
+  end
+
+  def rows_s_clear title, opts={}, &block
+    concat "<div class='rows s_clear'><div class='fldid'>#{title}</div><div class='fldvalue'>#{capture(&block)}</div></div>"
+  end
+
+  def mc_avatar opts={}, &block
+    concat "<div class='mcAvatar'><div class='picwrap'><div class='middle'><div class='middle-center'><div class='center' id='avatar'>#{capture(&block)}</div></div></div></div></div>"
   end
 
 end

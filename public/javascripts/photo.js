@@ -776,6 +776,8 @@ Iyxzone.Photo.Slide3 = Class.create({
     this.thumbnails = [];
     this.ids = [];
     this.notations = [];
+    this.widths = [];
+    this.heights =[];
     this.currentID = currentID; // 当前照片的id
     this.mappings = new Hash(); // photo id => image object
     this.thumbnailMappings = new Hash();
@@ -787,6 +789,8 @@ Iyxzone.Photo.Slide3 = Class.create({
       this.urls.push(info.url);
       this.thumbnails.push(info.thumbnail_url);
       this.notations.push(info.notation);
+      this.widths.push(info.width);
+      this.heights.push(info.height);
     }
  
     this.upOffset = 0;
@@ -813,9 +817,7 @@ Iyxzone.Photo.Slide3 = Class.create({
       }
     }
 
-    // bind events to photo
     this.updatePhotoInfo(this.idPos);
-
     this.setBtnEvents();
     this.changeBtn();
   },
@@ -890,30 +892,47 @@ Iyxzone.Photo.Slide3 = Class.create({
     this.frames[idx].innerHTML = "<a href='javascript:void(0)'><img src='" + this.blankImage.src + "' class='imgbox01'/></a>";
   },
 
-  getThumbnail: function(idx){
+  cacheThumbnail: function(idx){
     var img = this.thumbnailMappings.get(this.ids[idx]);
     if(!img){
       img = new Image();
       img.src = this.thumbnails[idx];
       this.thumbnailMappings.set(this.ids[idx], img);
     }
+  },
+
+  getThumbnailElement: function(idx){
+    var url = this.thumbnails[idx];
+    
+    // cache thumbnail
+    this.cacheThumbnail(url);
+
+    // build thumbnail img tag
+    var img = new Element('img', {'src' : url});
+    img.setStyle({'width': '50px', 'height': '50px'});
+    img.addClassName('imgbox01');
     return img;
   },
 
-  getPicture: function(idx){
+  cacheImage: function(idx){
     var img = this.mappings.get(this.ids[idx]);
     if(!img){
       img = new Image();
       img.src = this.urls[idx];
       this.mappings.set(this.ids[idx], img);
     }
-    return img;
   },
 
-  getImageElement: function(img){
-    var el = new Element('img', {src: img.src});
-    var width = img.width;
-    var height = img.height;
+  getImageElement: function(idx){
+    var url = this.urls[idx];
+
+    // cache image
+    this.cacheImage(idx);
+
+    // construct img tag
+    var el = new Element('img', {src: url});
+    var width = this.widths[idx];
+    var height = this.heights[idx];
     if(width < 500){
       el.setStyle({"width": width, "height": height});
     }else{
@@ -925,8 +944,7 @@ Iyxzone.Photo.Slide3 = Class.create({
   },
 
   updatePhotoInfo: function(index){
-    var picture = this.getPicture(index);
-    var img = this.getImageElement(picture);
+    var img = this.getImageElement(index);
     $('picture').update('');
     $('picture').appendChild(img);
       
@@ -940,7 +958,7 @@ Iyxzone.Photo.Slide3 = Class.create({
   },
 
   scrollUp: function(offset){
-    if(this.downOffset != 0 || this.upOffset != 0){
+    if(this.downOffset != 0 || this.upOffset != 0 || this.idPos == this.ids.length - 1){
       return;
     }
 
@@ -953,7 +971,7 @@ Iyxzone.Photo.Slide3 = Class.create({
   },
 
   scrollDown: function(offset){
-    if(this.downOffset != 0 || this.upOffset != 0){
+    if(this.downOffset != 0 || this.upOffset != 0 || this.idPos == 0){
       return;
     }
 
@@ -966,16 +984,16 @@ Iyxzone.Photo.Slide3 = Class.create({
   },
 
   loadImage: function(idx, photoIdx){
+    // load thumbnail
     this.frames[idx].innerHTML = "<img src='" + this.loadingImage.src + "'/>";
-    var thumbnail = this.getThumbnail(photoIdx);
-    var picture = this.getPicture(photoIdx);
-    
-    var img = new Element('img', {src: thumbnail.src});
-    img.setStyle({width: '50px', height: '50px'});
-    img.addClassName('imgbox01');
-    
+   
+    // set thumbnail 
+    var img = this.getThumbnailElement(photoIdx);
     var a = new Element('a', {href: 'javascript:void(0)', index: photoIdx});
     a.appendChild(img);
+    this.frames[idx].update(a);
+
+    // set thumbnail events
     a.observe('click', function(e){
       var index = parseInt(e.target.up('a').readAttribute('index'));
       var idPos = this.idPos;
@@ -987,7 +1005,6 @@ Iyxzone.Photo.Slide3 = Class.create({
         this.scrollUp(index - idPos);
       }
     }.bind(this));
-    this.frames[idx].update(a);
   },
 
   startScrollDown: function(){

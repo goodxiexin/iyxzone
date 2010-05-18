@@ -6,23 +6,11 @@
 <% content_for :html_description, "#{@guild.name}的邀请 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@guild.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <%= render :partial => "user/guilds/guild_header", :locals => {:text => "会员邀请"} %>
+<% canvas_tag do %>
+    <%= render :partial => "user/guilds/guild_header", :locals => {:text => "会员邀请", :guild => @guild} %>
     <div class="box02 canvas_int space">
       <div class="rows s_clear"></div>
-      <div class="tab tab01">
-        <div class="icon">
-        <% if @user == current_user %>
-          <%= link_to "邀请新会员", new_guild_invitation_url(@guild), :class => "icon-add-table" %>
-        <% end %>
-        </div>
-        <ul>
-          <li><span><%= link_to "所有会员", guild_memberships_url(@guild, :type => 0) %></span></li>
-          <li><span><%= link_to "被邀请", guild_memberships_url(@guild, :type => 1) %></span></li>
-          <li><span><%= link_to "请求加入", guild_memberships_url(@guild, :type => 2) %></span></li>
-        </ul>
-      </div>
+      <%= render :partial => 'user/guilds/memberships/tab', :locals => {:guild => @guild} %>
       <div class="friend-box">
         <div class="appcontent01">
           <div class="friend-invite-head">
@@ -35,7 +23,7 @@
           <% if @characters.blank? %>
               你的好友没有可以参加该公会的游戏角色
           <% else %>
-            <div id='invitations'><%= render :partial => 'characters' %></div>
+            <div id='invitations'><%= render :partial => 'characters', :object => @characters %></div>
             <div class="rows s_clear">
               <span class="button"><span><%= button_to_function '确定', "Iyxzone.Invitation.Builder.submit(this, $('invitation_form'))" %></span></span>
             </div>
@@ -44,7 +32,7 @@
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>
+
 <% form_tag guild_invitations_url(@guild), :id => 'invitation_form' do %>
 <% end %>

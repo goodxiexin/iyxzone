@@ -1,0 +1,35 @@
+<div class="feed-list-box">
+  <h4><span>每日拾闻</span></h4>
+</div>
+<div class="feed-list-box">
+  <div class='feed-list'>
+    <div class='img left'>
+      <div class='imgbox01'><%= image_tag 'news_icon.png', :width => 50, :height => 50 %></div>
+    </div>
+    <div class='jl-list-con'>
+      <div class="home-daily s_clear space">
+        <% if rich_news %>
+          <% if rich_news.news_type == 'picture' %>
+          <div class="rich">
+            <%= link_to (image_tag rich_news.pictures.first.public_filename, :height => 100, :width => 160), news_url(rich_news) %>
+            <span><%= news_link rich_news %></span>
+          </div>
+          <% else %>
+          <div class="rich">
+            <%= link_to (image_tag rich_news.thumbnail_url, :height => 100, :width => 160), news_url(rich_news) %>
+            <span><%= news_link rich_news %></span>
+          </div>
+          <% end %>
+        <% end %>          
+        <div class="list">
+          <ul>
+            <% news_list.each_with_index do |news, idx| %>
+              <li class="jl-cutline"><%= news_link news %></li>
+            <% end %>
+            <li><%= link_to "更多拾闻>>", news_index_url %></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

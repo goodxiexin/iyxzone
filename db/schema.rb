@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100513022245) do
+ActiveRecord::Schema.define(:version => 20100518060948) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(:version => 20100513022245) do
     t.boolean  "playing",       :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "data"
   end
 
   add_index "game_characters", ["name", "pinyin"], :name => "index_game_characters_on_name_and_pinyin"
@@ -432,13 +433,13 @@ ActiveRecord::Schema.define(:version => 20100513022245) do
     t.text     "data_abstract"
     t.string   "video_url"
     t.string   "thumbnail_url"
-    t.string   "embed_html"
     t.integer  "comments_count", :default => 0
     t.integer  "viewings_count", :default => 0
     t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "embed_html"
   end
 
   create_table "news_pictures", :force => true do |t|
@@ -772,8 +773,6 @@ ActiveRecord::Schema.define(:version => 20100513022245) do
     t.string   "gender",                                   :default => "male"
     t.string   "crypted_password",           :limit => 40
     t.string   "salt",                       :limit => 40
-    t.string   "remember_token"
-    t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.datetime "activated_at"
     t.string   "password_reset_code"
@@ -825,6 +824,7 @@ ActiveRecord::Schema.define(:version => 20100513022245) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "remember_me_untils"
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"
@@ -835,7 +835,6 @@ ActiveRecord::Schema.define(:version => 20100513022245) do
     t.string   "title"
     t.text     "description"
     t.string   "video_url"
-    t.string   "embed_html"
     t.string   "thumbnail_url"
     t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
@@ -844,6 +843,7 @@ ActiveRecord::Schema.define(:version => 20100513022245) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",       :default => 0
+    t.text     "embed_html"
   end
 
   add_index "videos", ["poster_id"], :name => "index_videos_on_poster_id"

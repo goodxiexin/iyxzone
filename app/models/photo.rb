@@ -8,19 +8,19 @@ class Photo < ActiveRecord::Base
 
 	has_many :relative_users, :through => :tags, :source => 'tagged_user'
 
-	named_scope :hot, :conditions => ["parent_id IS NULL and created_at > ? and privilege != 4 and verified IN (0,1)", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
+	named_scope :hot, :conditions => ["parent_id IS NULL and created_at > ?", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
 
   needs_verification :sensitive_columns => [:notation]
 
 	acts_as_privileged_resources :owner_field => :poster
 
-	acts_as_resource_feeds :recipients => lambda {|photo| photo.album.poster.friends.find_all{|f| f.application_setting.recv_photo_feed == 1}}
+	acts_as_resource_feeds :recipients => lambda {|photo| photo.album.poster.friends.find_all{|f| f.application_setting.recv_photo_feed?}}
 
   acts_as_shareable :path_reg => [/\/personal_photos\/([\d]+)/, /\/event_photos\/([\d]+)/, /\/guild_photos\/([\d]+)/, /\/avatars\/([\d]+)/],
                     :default_title => lambda {|photo| "相册#{photo.album.title}的照片"},
-                    :create_conditions => lambda {|user, photo| photo.privilege != 4 }
+                    :create_conditions => lambda {|user, photo| !photo.is_owner_privilege?}
 
-  acts_as_diggable :create_conditions => lambda {|user, photo| (photo.type != 'PersonalPhoto' and photo.type != 'Avatar') or photo.privilege != 4}
+  acts_as_diggable :create_conditions => lambda {|user, photo| (photo.type != 'PersonalPhoto' and photo.type != 'Avatar') or !photo.is_owner_privilege?}
 
   def is_cover?
     album.cover_id == id
@@ -32,5 +32,13 @@ class Photo < ActiveRecord::Base
   end
 
   attr_accessor :cover
+
+  def self.migrate opts={}
+    from = opts[:from]
+    to = opts[:to]
+    return if from.nil? or to.nil?
+    Photo.update_all("album_id = #{to.id}, privilege = #{to.privilege}", {:album_id => from.id})
+    to.update_attribute(:photos_count, to.photos_count + from.photos_count)
+  end
 
 end

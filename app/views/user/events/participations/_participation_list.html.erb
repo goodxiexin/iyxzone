@@ -1,6 +1,6 @@
 <% if participation_list.count == 0 %>
-  <% if @event.poster == current_user %>
-    <div class='tip'>还没有成员...囧，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(@event) %></div>
+  <% if event.poster == current_user %>
+    <div class='tip'>还没有成员...囧，赶紧去<%= link_to '邀请你的好友', new_event_invitation_url(event) %></div>
   <% else %>
     <div class='tip'>还没有成员...囧</div>
   <% end %>
@@ -11,8 +11,8 @@
       <% character = participation.character %>
       <li class='bg' id='<%= "participation_#{participation.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
         <div class='card'>
-          <% if current_user == @event.poster and participant != current_user %>
-            <%= facebox_confirm '', event_participation_url(@event, participation), {:method => :delete, :msg => '你确定要删除吗?'}, :class=>'icon-active right' %>
+          <% if current_user == event.poster and participant != current_user %>
+            <%= facebox_confirm '', event_participation_url(event, participation), {:method => :delete, :msg => '你确定要删除吗?'}, :class=>'icon-active right' %>
           <% end %>
           <div class='img'>
             <div class='middle'><div class='middle-center'><div class='center'>

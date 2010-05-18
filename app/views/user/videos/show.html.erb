@@ -4,25 +4,23 @@
 
 <% subject = get_subject @user %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-	  <% if @user==current_user %>
-      <h1 class="app-video">视频</h1>
-	  <% else %>
-	    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的视频"} %>
-    <% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>
-      <div class='detail-video'>
-        <%= render :partial => 'video_path' %>
-        <%= render :partial => 'video_head' %>
-        <div class='con'>
-          <%= @video.embed_html %>
-		      <p class='space20'><%= simple_format h @video.description %></p>
-        </div>
-        <%= render :partial => 'video_foot' %>
-        <%= render :partial => 'video_func' %>
+<% canvas_tag do %>
+	<% if @user==current_user %>
+    <h1 class="app-video">视频</h1>
+	<% else %>
+	  <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的视频"} %>
+  <% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>
+    <div class='detail-video'>
+      <%= render :partial => 'video_path', :locals => {:count => @count, :next_video => @next, :prev_video => @prev} %>
+      <%= render :partial => 'video_head', :locals => {:user => @user, :video => @video} %>
+      <div class='con'>
+        <%= @video.embed_html %>
+		    <p class='space20'><%= simple_format h @video.description %></p>
       </div>
+      <%= render :partial => 'video_foot', :locals => {:video => @video} %>
+      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @video, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @video, :recipient => @video.poster}, :reply_to => @reply_tm} %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>

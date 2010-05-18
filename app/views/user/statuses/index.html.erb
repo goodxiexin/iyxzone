@@ -6,35 +6,33 @@
 <% content_for :html_description, "#{@user.login}的状态 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-		<% if @user == current_user %>
-			<h1 class="app-status">状态</h1>
-		<% else %>
-      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的状态"} %>
-		<% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 0} %>
-      <% if @user == current_user %>
-        <%= render :partial => 'status_input' %>
+<% canvas_tag do %>
+	<% if @user == current_user %>
+		<h1 class="app-status">状态</h1>
+	<% else %>
+    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的状态"} %>
+	<% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 0} %>
+    <% if @user == current_user %>
+      <%= render :partial => 'status_input' %>
+    <% end %>
+    <div id='info'></div>
+    <div class="feed-box01 list-v2">
+      <% if current_user == @user %>
+        <div class="list-v2-head">以下是您所发布过的所有状态</div>
+      <% else %>
+        <div class='list-v2-head'>以下是<%= @user.login %>所发布的所有状态</div>
       <% end %>
-      <div id='info'></div>
-      <div class="feed-box01 list-v2">
-        <% if current_user == @user %>
-          <div class="list-v2-head">以下是您所发布过的所有状态</div>
-        <% else %>
-          <div class='list-v2-head'>以下是<%= @user.login %>所发布的所有状态</div>
+      <div id='statuses'>
+        <% @statuses.each do |status| %>
+          <%= render :partial => 'status', :object => status %>
         <% end %>
-        <div id='statuses'>
-          <% @statuses.each do |status| %>
-            <%= render :partial => 'status', :object => status %>
-          <% end %>
-        </div>
-        <%= will_paginate @statuses %>
       </div>
+      <%= will_paginate @statuses %>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>
 
 <% if !@reply_to.blank? and !@status.blank? %>
   <%= onload_javascript_tag "Iyxzone.Comment.set('status', #{@status.id}, '#{@reply_to.login}', #{@reply_to.id});" %>

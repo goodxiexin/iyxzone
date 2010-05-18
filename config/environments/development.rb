@@ -2,6 +2,10 @@
 SITE_URL = "http://localhost:3000"
 SITE_MAIL = "system@17gaming.com"
 
+# session options
+REMEMBER_DURATION = 2.weeks
+SESSION_DURATION = 30.seconds#minutes
+
 # In the development environment your application's code is reloaded on
 # every request.  This slows down response time but is perfect for development
 # since you don't have to restart the webserver when you make code changes.

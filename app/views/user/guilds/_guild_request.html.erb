@@ -2,8 +2,8 @@
 <dl class='menu-op'>
   <dt>请求加入</dt>
 </dl>
-<% if @guild.is_requestable_by? current_user %>
-  <div class='tip'>你有游戏角色可以加入这个公会里，是否 <%= facebox_link '加入', new_guild_request_url(@guild), :class => 'red' %></div>
+<% if guild.requestable_characters_for(current_user).blank? %>
+  <div class='tip'>你有游戏角色可以加入这个公会里，是否 <%= facebox_link '加入', new_guild_request_url(guild), :class => 'red' %></div>
 <% else %>
   <div class='tip'>你已经没有在该游戏、服务器的游戏角色，无法加入该公会</div>
 <% end %>

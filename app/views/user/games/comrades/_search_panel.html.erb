@@ -1,6 +1,6 @@
         <div class="box04 friend-one-search">
           <h2>搜索同服玩家</h2>
-          <% form_tag search_game_comrades_url(@game), :class => "formcontent", :id => 'user_form', :style => "#{search_type == 'user' ? '':'display:none'}", :onsubmit => "Iyxzone.Search.searchUsers($('game_username_search_btn')); return false;" do %>
+          <% form_tag search_game_comrades_url(game), :class => "formcontent", :id => 'user_form', :style => "#{search_type == 'user' ? '':'display:none'}", :onsubmit => "Iyxzone.Search.searchUsers($('game_username_search_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key', params[:key] || '用户名查找', :onclick => "$(this).clear();" %></div>
@@ -9,7 +9,7 @@
               <div class='link'><%= link_to_function '按游戏角色查找', "Iyxzone.Search.showCharacterForm()" %></div>
             </div>
           <% end %>
-          <% form_tag character_search_game_comrades_url(@game), :class => "formcontent", :id => 'character_form', :style => "#{search_type == 'character' ? '':'display:none'}", :onsubmit => "Iyxzone.Search.searchCharacters($('game_charactername_search_btn')); return false;" do %>
+          <% form_tag character_search_game_comrades_url(game), :class => "formcontent", :id => 'character_form', :style => "#{search_type == 'character' ? '':'display:none'}", :onsubmit => "Iyxzone.Search.searchCharacters($('game_charactername_search_btn')); return false;" do %>
             <div class="rows s_clear">
               <div class="fldvalue">
                 <div class="textfield"><%= text_field_tag 'key','游戏角色查找', :onclick => "$(this).clear();" %></div>

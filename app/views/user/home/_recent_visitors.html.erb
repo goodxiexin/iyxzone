@@ -1,4 +1,3 @@
-      <% if current_user.profile.viewings_count != 0 %> 
       <div class="multibox">
         <div class="title">
           <%= facebox_link "更多", profile_viewings_url(current_user.profile) %>
@@ -15,5 +14,3 @@
           </ul>
         </div>
       </div>
-      <% end %>
-

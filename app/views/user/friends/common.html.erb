@@ -2,26 +2,19 @@
 <% content_for :html_description, "与#{@user.login}的共同好友 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的好友"} %>
-    <div class="box02 canvas_int space">
-      <div class="tab tab01">
-        <ul>
-          <li><span><%= link_to "#{@user.login}的好友", other_friends_url(:uid => @user.id) %></span></li>
-          <li class='hover'><span><%= link_to '共同好友', common_friends_url(:uid => @user.id) %></span></li>
-        </ul>
-			</div>
-      <div class="friend-box">
-        <div class="appcontent01">
-          <div class='d6-head'>
-            <strong class='gray'>有<%= @friends.total_entries %>个共同好友</strong>
-          </div>
-          <div class="d6-list s_clear">
-						<%= render :partial => 'friends2', :locals => {:friends => @friends} %>
-          </div>
+<% canvas_tag do %>
+  <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的好友"} %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'other_tab', :locals => {:user => @user, :hover => 1} %>
+    <div class="friend-box">
+      <div class="appcontent01">
+        <div class='d6-head'>
+          <strong class='gray'>有<%= @friends.total_entries %>个共同好友</strong>
+        </div>
+        <div class="d6-list s_clear">
+					<%= render :partial => 'friends2', :locals => {:friends => @friends} %>
         </div>
       </div>
     </div>
-	</div></div>
-</div></div></div></div>
+  </div>
+<% end %>

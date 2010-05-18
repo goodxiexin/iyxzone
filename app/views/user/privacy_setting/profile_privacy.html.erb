@@ -3,111 +3,39 @@
 <% content_for :html_description, "#{current_user.login} - 个人主页设置 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <h1 class="app-lock">隐私设置</h1>
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab', :locals => {:hover => 0} %>
       <div class="box02 appcontent04">
         <div class="path-box"></div>
         <div class="privacy-form formcontent">
-          <% form_for :setting, :url => privacy_setting_url(:type => 0, :format => 'html'), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(profile_privacy_submit_btn),'请等待..');"} do |f| %>
+          <% config_form_for :setting, :url => privacy_setting_url(:type => 0, :format => 'html'), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(profile_privacy_submit_btn),'请等待..');"} do |f| %>
             <div class="form-group">
               <h3>谁可以浏览你的个人主页？</h3>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="myhome">个人主页</label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  <%= privacy_select_tag :setting, :personal %>
-                </div>
-              </div>
+              <%= f.select :personal, privacy_options, {}, :label => '个人主页' %>
             </div>
             <div class="form-group">
               <h3>谁可以看到你的个人档案？</h3>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="info"><b>基本信息</b></label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  <%= privacy_select_tag :setting, :basic_info %>
-                </div>
-              </div>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="info"><b>角色信息</b></label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  <%= privacy_select_tag :setting, :character_info %>
-                </div>
-              </div>
-              <div class="rows s_clear">        
-                <div class="fldid"><label for="info"><b>留言版</b></label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  <%= privacy_select_tag :setting, :wall %>
-                </div>
-              </div>
+              <%= f.select :basic_info, privacy_options, {}, :label => '基本信息' %>
+              <%= f.select :character_info, privacy_options, {}, :label => '角色信息' %>
+              <%= f.select :wall, privacy_options, {}, :label => '留言版' %>
             </div>
             <div class='form-group'>
-              <div class="rows s_clear">
-                <div class="fldid"><b>联系信息</b></div>
-              </div>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="address">qq</label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  <%= privacy_select_tag :setting, :qq %>
-                </div>
-              </div>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="address">邮件地址</label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  <%= privacy_select_tag :setting, :email %>
-                </div>
-              </div>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="address">手机</label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  <%= privacy_select_tag :setting, :phone %>
-                </div>
-              </div>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="address">个人网站</label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  <%= privacy_select_tag :setting, :website %>
-                </div>
-              </div>
+              <h3>谁可以看到你的联系信息？</h3>
+              <%= f.select :qq, privacy_options, {}, :label => 'QQ' %>
+              <%= f.select :email, privacy_options, {}, :label => '邮件地址' %>
+              <%= f.select :phone, privacy_options, {}, :label => '手机' %>
+              <%= f.select :website, privacy_options, {}, :label => '个人网站' %>
             </div> 
             <div class="form-group">
               <h3>个人主页上的应用</h3>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="myhome">日志</label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  相关浏览权限需要在每个日志中单独设置
-                </div>
-              </div>
-              <div class="rows s_clear">
-                <div class="fldid"><label for="myhome">相册</label></div>
-                <div class="fldstatus fldstatus-lock"></div>
-                <div class="fldvalue">
-                  相关浏览权限需要在每个相册中单独设置
-                </div>
-              </div>
+              <%= f.span '相关浏览权限需要在每个日志中单独设置', :label => '日志' %>
+              <%= f.span '相关浏览权限需要在每个相册中单独设置', :label => '相册' %>
             </div>
-            <div class="buttons s_clear">
-              <div class="fldid">&nbsp;</div>
-              <div class="fldstatus fldstatus-none"></div>
-              <div class="fldvalue">
-                <span class="button"><span><button type="submit" id='profile_privacy_submit_btn'>保存修改</button></span></span>
-                <%= link_to '<span>取消</span>', privacy_setting_url, :class => 'button button-gray'%>
-              </div>
-            </div>
+            <%= f.submit :submit => {:text => '保存修改', :id => 'profile_privacy_submit_btn'}, :cancel => {:text => '取消', :onclick => "history.back()"} %>
           <% end %>
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
-
+<% end %>

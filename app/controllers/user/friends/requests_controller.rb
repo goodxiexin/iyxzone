@@ -21,13 +21,9 @@ class User::Friends::RequestsController < UserBaseController
   def create
     @request = Friendship.new((params[:request] || {}).merge({:user_id => current_user.id, :status => 0}))
     if @request.save
-      render :update do |page|
-        page << "tip('成功，请耐心等待回复');"
-      end
+      render_js_tip '成功，请耐心等待回复'
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end  
   end
 
@@ -41,27 +37,17 @@ class User::Friends::RequestsController < UserBaseController
 
 	def accept
 		if @request.accept
-			render :update do |page|
-        page << "$('friend_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>添加好友成功！</strong>';"
-        page << "setTimeout(\"new Effect.Fade('friend_request_#{@request.id}')\", 2000);"
-			end
+      render_js_code "$('friend_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>添加好友成功！</strong>';setTimeout(\"new Effect.Fade('friend_request_#{@request.id}')\", 2000);"
 		else
-      render :update do |page|
-        page << "error('发生错误')"
-      end
+      render_js_error
     end		
 	end
 
 	def decline
 		if @request.decline
-		  render :update do |page|
-        page << "$('friend_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>拒绝请求成功！</strong>';"
-        page << "setTimeout(\"new Effect.Fade('friend_request_#{@request.id}')\", 2000);"
-		  end
+		  render_js_code "$('friend_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>拒绝请求成功！</strong>';setTimeout(\"new Effect.Fade('friend_request_#{@request.id}')\", 2000);"
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end 
 	end
 

@@ -6,93 +6,48 @@
   <%= javascript_include_merged :event %>
 <% end %>
 
-<%= error_messages_for :event, :header_message => '以下原因导致没法保存', :message => nil %>
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-		<% if params[:guild_id].blank? %>
-			<h1 class="app-ploy">活动</h1>
-		<% else %>
-      <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "工会活动"} %>
-		<% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
-      <div class="appcontent01">
-        <h3>新建活动</h3>
-        <div class="cons-form formcontent">
-          <% form_for @event, :html => {:onsubmit => "Iyxzone.Event.Builder.save($(this), $('submit_btn')); return false;"} do |f| %>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">活动标题：</label></div>
-              <div class="fldvalue">
-                <div class="textfield"><%= f.text_field :title %></div>
-              </div>
-            </div>
-						<% if params[:guild_id].blank? %>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">公会活动：</label></div>
-              <div class="fldvalue">
-                <%= check_box_tag 'is_guild_event', 1, false, :onchange => "Iyxzone.Event.Builder.checkGuild(this)" %>
-                <span id='event_guild_selector' style="display:none">
-                  所属公会
-                  <%= collection_select :event, :guild_id, current_user.privileged_guilds, :id, :name, {:prompt => '---'}, {:onchange => "Iyxzone.Event.Builder.guildOnChange(this.value)"} %>
-                </span>
-              </div>
-            </div>
-            <div class='rows s_clear'>
-              <div class='fldid'><label for='name'>游戏角色：</label></div>
-              <div class='fldvalue'>
-                <%= collection_select :event, :character_id, current_user.characters, :id, :name, {:prompt => '---'} %>
-              </div>
-            </div>
-						<% else %>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">公会活动：</label></div>
-              <div class="fldvalue">
-                <%= check_box_tag 'is_guild_event', 1, true, :disabled => true %>
-                <span id='event_guild_selector'>
-                  所属公会: <%= @guild.name%>
-                  <%= hidden_field_tag 'event[guild_id]', @guild.id %>
-                </span>
-              </div>
-            </div>
-            <div class='rows s_clear'>
-              <div class='fldid'><label for='name'>游戏角色：</label></div>
-              <div class='fldvalue'>
-                <%= collection_select :event, :character_id, @characters, :id, :name, {:prompt => '---'} %>
-              </div>
-            </div>
-						<% end %>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">开始时间：</label></div>
-              <div class="fldvalue"><%= calendar_date_select :event, :start_time %></div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">结束时间：</label></div>
-              <div class="fldvalue"><%= calendar_date_select :event, :end_time %></div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">任务描述：</label></div>
-              <div class="fldvalue"><%= f.text_area :description %></div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">谁可以加入：</label></div>
-              <% if params[:guild_id].blank? %>
-              <div class="fldvalue"><%= event_privilege_select_tag :event %></div>
-              <% else %>
-              <div class="fldvalue">公会的人才能加入</div>
-              <% end %>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid">&nbsp;</div>
-              <div class="fldvalue">
-                <span class="button"><span><button type='submit' id='submit_btn'>提交</button></span></span>
-              </div>
-            </div>
+<% canvas_tag do %>
+	<% if params[:guild_id].blank? %>
+		<h1 class="app-ploy">活动</h1>
+	<% else %>
+    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "工会活动", :guild => @guild} %>
+	<% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
+    <div class="appcontent01">
+      <h3>新建活动</h3>
+      <div class="cons-form formcontent">
+        <%= error_messages_for :event, :header_message => '以下原因导致没法保存', :message => nil %>
+        <% rows_form_for @event, :html => {:onsubmit => "Iyxzone.Event.Builder.save($(this), $('submit_btn')); return false;"} do |f| %>
+          <%= f.text_field 'title', :label => '活动标题' %>
+					<% if params[:guild_id].blank? %>
+            <% f.rows :label => '工会活动' do %>
+              <%= check_box_tag 'is_guild_event', 1, false, :onchange => "Iyxzone.Event.Builder.checkGuild(this)" %>
+              <span id='event_guild_selector' style="display:none">所属公会<%= collection_select :event, :guild_id, current_user.privileged_guilds.nonblocked, :id, :name, {:prompt => '---'}, {:onchange => "Iyxzone.Event.Builder.guildOnChange(this.value)"} %></span>
+            <% end %>
+            <%= f.collection_select :character_id, current_user.characters, :id, :name_with_game_and_server, {:prompt => '---'}, :label => '游戏角色', :class => "selector selector02" %> 
+					<% else %>
+            <%= hidden_field_tag 'event[guild_id]', @guild.id %>
+            <% f.rows :label => '工会活动' do %>
+              <%= check_box_tag 'is_guild_event', 1, true, :disabled => true %>
+              <span id='event_guild_selector'>所属公会: <%= @guild.name%></span>
+            <% end %>
+            <%= f.collection_select :character_id, @characters, :id, :name, {:prompt => '---'}, :label => '游戏角色', :class => "selector selector02"%>
+					<% end %>
+          <%= f.calendar_date_select 'start_time', :label => '开始时间' %>
+          <%= f.calendar_date_select 'end_time', :label => '结束时间' %>
+          <%= f.text_area 'description', :label => '任务描述' %>
+          <% if params[:guild_id].blank? %>
+            <%= f.select 'privilege', event_privilege_options, {}, :label => '谁可以加入', :class => "selector selector02" %>
+          <% else %>
+            <%= f.span '工会的人才能加入', :label => '谁可以加入' %>
           <% end %>
-        </div>
+          <%= f.submit '提交' => {:type => 'submit', :id => 'submit_btn'} %>
+        <% end %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+  </div>
+<% end %>
 
 <% if params[:guild_id].blank? %>
   <% onload_javascript_tag do %>

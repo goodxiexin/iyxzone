@@ -4,7 +4,9 @@
 
 <% content_for :body do %>
 <body>
+  <% cache("navbar-#{current_user.id}-#{current_user.unread_notifications_count}-#{current_user.unread_recv_mails.count}") do %>
   <%= render :partial => 'layouts/navbar' %>
+  <% end %>
   <div class='banner'>
     <div class='con'></div>
     <div class='foot'></div>

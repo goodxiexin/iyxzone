@@ -1,12 +1,12 @@
         <div class="path-box">
           <p class="left"><label>
-            <% if @user == current_user %>
+            <% if user == current_user %>
               <%= link_to "我的相册", personal_albums_url(:uid => current_user.id) %>
             <% else %>
-              <%= @user.login %>的相册
+              <%= user.login %>的相册
             <% end %>
           </label>
-          <span><%= album_link @album %></span><span>照片</span></p>
-          <%= facebox_link '分享', new_sharing_url(:url => personal_album_url(@album)), :width => 450, :class => 'right love-btn' %>
+          <span><%= album_link album %></span><span>照片</span></p>
+          <%= facebox_link '分享', new_sharing_url(:url => personal_album_url(album)), :width => 450, :class => 'right love-btn' %>
         </div>
 

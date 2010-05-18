@@ -1,7 +1,7 @@
 class StatusObserver < ActiveRecord::Observer
 
   def before_create status
-    status.verified = status.sensitive? ? 0 : 1
+    status.auto_verify
   end
 
   def after_create status
@@ -13,13 +13,11 @@ class StatusObserver < ActiveRecord::Observer
 	end
 
   def before_update status
-    if status.sensitive_columns_changed? and status.sensitive?
-      status.verified = 0
-    end  
+    status.auto_verify
   end
 
   def after_update status
-    if status.recently_verified_from_unverified
+    if status.recently_recovered
       status.poster.raw_increment :statuses_count
       status.deliver_feeds  
     elsif status.recently_unverified
@@ -29,7 +27,7 @@ class StatusObserver < ActiveRecord::Observer
   end
 
   def after_destroy status
-    if status.verified != 2
+    if !status.rejected?
       status.poster.raw_decrement :statuses_count
     end
   end

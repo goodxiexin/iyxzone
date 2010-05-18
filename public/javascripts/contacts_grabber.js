@@ -117,15 +117,12 @@ Object.extend(Iyxzone.ContactsGrabber, {
   },
 
   checkEmailInvitation: function(form){
-    Iyxzone.disableButton($('email_invitation_btn'),'请等待..');
     var value = form.getInputs('text')[0].value;
     if(value == ''){
       error('请输入邮箱');
-      Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');
       return false;
     }else if(!value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
       error('非法的邮箱地址');
-      Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');
       return false;
     }
     return true;

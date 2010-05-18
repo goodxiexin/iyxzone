@@ -2,23 +2,20 @@
 <% content_for :html_description, "拾闻 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"<div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <h1 class="app-news">拾闻</h1>
     <div class="box02 canvas_int space20">
       <%= render :partial => 'tab' %>
       <div class="detail-blog">
-        <%= render :partial => 'news_header' %>
+        <%= render :partial => 'news_header', :locals => {:news => @news} %>
         <div class="con"><%= @news.data %></div>
         <div class="detail-blog-foot s_clear">
           <h2 class="gray">相关游戏：<%= game_link @news.game %></h2>
           <% if !@news.origin_address.nil? %>
             <h2 class="gray">本帖转自：<%= link_to @news.origin_address, @news.origin_address %></h2>
           <% end %>
-          <%= render :partial => 'news_func' %>
+          <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @news, :commentable => true, :viewable => true, :diggable => true, :comment_opts => {:commentable => @news, :recipient => nil}, :reply_to => @reply_to} %> 
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
-
+<% end %>

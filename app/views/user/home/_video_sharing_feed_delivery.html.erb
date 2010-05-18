@@ -2,17 +2,9 @@
 <% sharing = delivery.feed_item.originator %>
 <% video = sharing.shareable %>
 
-<div class="feed-list-box">
-  <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
-	  <div class="img left"><div class="imgbox01"><%= avatar sharing.poster %></div></div>
-    <% if delivery.is_deleteable_by? current_user %>
-      <%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %>
-    <% end %>
-    <div class="jl-list-con jl-cutline">
-      <%= profile_link sharing.poster %> 分享了 <%= profile_link video.poster %> 的视频 <%= video_link video, :class => "shine"%>
-      <p class="gray jl-con s_clear" id='video_<%= video.id %>'> <%= video_thumbnail video, :class=>'imgbox01' %></p>
-		  <p class="gray"><%= ftime video.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id})", :class => "gray" %></p>
-	    <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => sharing, :recipient => sharing.poster} %>
-	  </div>
-  </div>
-</div>
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => sharing.poster} do %>
+  <%= profile_link sharing.poster %> 分享了 <%= profile_link video.poster %> 的视频 <%= video_link video, :class => "shine"%>
+  <p class="gray jl-con s_clear" id='video_<%= video.id %>'> <%= video_thumbnail video, :class=>'imgbox01' %></p>
+	<p class="gray"><%= ftime video.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id})", :class => "gray" %></p>
+	<%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => sharing, :recipient => sharing.poster} %>
+<% end %>

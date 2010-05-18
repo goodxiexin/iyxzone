@@ -4,7 +4,7 @@ class User::Games::EventsController < UserBaseController
 
   def index
     @game = Game.find(params[:game_id])
-    @events = @game.events.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, {:album => :cover}, {:game_server => [:area, :game]}]
+    @events = @game.events.nonblocked.prefetch([{:poster => :profile}, {:album => :cover}, {:game_server => [:area, :game]}]).paginate :page => params[:page], :per_page => 10
   end
 
 end

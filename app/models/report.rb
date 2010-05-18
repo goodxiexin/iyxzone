@@ -22,15 +22,16 @@ protected
 
   def reportable_is_valid
     return if reportable_id.blank? or reportable_type.blank?
-    reportable = reportable_type.camelize.constantize.find(:first, :conditions => {:id => reportable_id})
+    
     if reportable.blank?
       errors.add(:reportable_id, "不存在")
     end
   end
 
   def set_verified_flag
-    if reportable.verified != 2
+    if reportable.rejected?
       reportable.needs_verify
+      reportable.save
     end
   end
 

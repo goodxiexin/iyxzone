@@ -1,26 +1,6 @@
 <% topic = share.shareable %>
-<% first_sharer = topic.first_sharer %>
-<% poster = sharing.poster %>
-<div class="feed-list feed-share">
-  <%= icon_dig_link share %>
-  <div class="feed-header">
-    <div class="right">
-      <%= ftime share.created_at %><br/>
-      首次分享人：<%= avatar first_sharer, :with => '27px', :height => '27px' %>
-      <%= profile_link first_sharer%>
-    </div>
-    <h3>公会<%= topic.forum.guild.name %>的话题了：<%= topic_link topic, :popup => true %></h3>
-    <%= sharing_reason sharing %>
-    <div class="feeds">
-      <%= link_to_function "评论(#{sharing.comments_count})", "Iyxzone.Comment.toggleBox('sharing', #{sharing.id}, #{sharing.comments_count})" %> 
-      <% if !is_mine %>
-        | <%= facebox_link "我也分享", new_sharing_url(:url => forum_topic_posts_url(topic.forum, topic)), :width => 450 %><span>(<%= topic.sharings_count %>)</span>
-        | <%= link_to "更多分享", shares_url(:uid => poster.id) %>
-      <% end %>
-    </div>
-  </div>
-  <div id="sharing_comment_box_<%= sharing.id %>" style="display: none">
-    <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => sharing, :recipient => poster} %>
-  </div>
-</div>
 
+<% render :layout => 'share_item', :locals => {:sharing => sharing, :share => share, :shareable => topic} do %>
+  <h3>公会<%= topic.forum.guild.name %>的话题了：<%= topic_link topic, :popup => true %></h3>
+  <%= sharing_reason sharing %>
+<% end %>

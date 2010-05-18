@@ -2,27 +2,18 @@ class User::ApplicationSettingController < UserBaseController
 
 	layout 'app'
 
+  ConfigType = ['blog', 'video', 'photo', 'poll','event', 'guild', 'sharing']
+  
+  ConfigName = ['日志', '视频', '照片', '投票', '活动', '工会', '分享']
+
 	def show
 	  @applications = Application.all
   end
 
 	def edit
-		case params[:type].to_i 
-		when 0
-			render :action => 'blog_config', :layout => false
-		when 1
-			render :action => 'video_config', :layout => false
-		when 2
-			render :action => 'photo_config', :layout => false
-		when 3
-			render :action => 'poll_config', :layout => false
-		when 4
-			render :action => 'event_config', :layout => false
-		when 5
-			render :action => 'guild_config', :layout => false
-    when 6
-      render :action => 'sharing_config', :layout => false
-		end	
+    @type = ConfigType[params[:type].to_i]
+    @name = ConfigName[params[:type].to_i]
+    render :action => 'edit', :layout => false
 	end
 
 	def update

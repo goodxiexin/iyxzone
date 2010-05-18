@@ -1,15 +1,8 @@
 <% delivery = guild_feed_delivery %>
 <% guild = delivery.feed_item.originator %>
-<div class="feed-list-box">
-<div class='feed-list' id='feed_delivery_<%= delivery.id %>'>
-	<div class="img left">
-		<div class="imgbox01"><%= avatar guild.president %></div>
-	</div>
-  <div class="jl-list-con jl-cutline">
-    <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html => {:class => "icon-active"} %><% end %> 
-    <%= profile_link guild.president %> 创建了公会 <%= guild_link guild, :class => "shine" %> 
-	  <p class='gray jl-con'><strong>游戏分类：<%= guild.game.name %></strong></p>
-	  <p class="gray"><%= ftime delivery.created_at %></p>
-	</div>
-</div>
-</div>
+
+<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => guild.president} do %>
+  <%= profile_link guild.president %> 创建了公会 <%= guild_link guild, :class => "shine" %> 
+	<p class='gray jl-con'><strong>游戏分类：<%= guild.game.name %></strong></p>
+	<p class="gray"><%= ftime delivery.created_at %></p>
+<% end %>

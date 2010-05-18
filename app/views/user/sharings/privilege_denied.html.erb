@@ -1,8 +1,3 @@
-<p class="z-h s_clear">
-  <strong class="left">提示</strong>
-  <%= link_to_function '', "facebox.close();", :class => "icon2-close right" %>
-</p>
-
-<div class='z-con'>
+<% facebox_tag '提示' do %>
   <div class='tip'>无法分享，可能是因为该资源的权限为“只有自己能看”</div>
-</div>
+<% end %>

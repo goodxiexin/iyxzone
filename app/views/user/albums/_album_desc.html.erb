@@ -1,14 +1,14 @@
         <div class="pic-desc">
-          <% if @user == current_user %>
-            <h4 class="box06"> <%= in_place_text_area @album, :description, '点击添加相册描述', :param_name => 'album[description]' %> </h4>
+          <% if user == current_user %>
+            <h4 class="box06"> <%= in_place_text_area album, :description, '点击添加相册描述', :param_name => 'album[description]' %> </h4>
           <% else %>
-            <h4 class="box06"> <%= simple_format h @album.description %></h4>
+            <h4 class="box06"> <%= simple_format h album.description %></h4>
           <% end %>
           <p class="gray">
-            <% unless @album.uploaded_at.blank? %>
-              <span class="time-update"><%= ftime @album.uploaded_at %>更新</span><br/>
+            <% unless album.uploaded_at.blank? %>
+              <span class="time-update"><%= ftime album.uploaded_at %>更新</span><br/>
             <% end %>
-            <span class="time-create"><%= ftime @album.created_at %>创建</span>
+            <span class="time-create"><%= ftime album.created_at %>创建</span>
           </p>
         </div>
 

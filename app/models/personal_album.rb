@@ -1,13 +1,17 @@
 class PersonalAlbum < Album
 
-  belongs_to :cover, :class_name => 'PersonalPhoto', :conditions => {:verified => [0,1]}
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
+
+  named_scope :not_empty, :conditions => "photos_count != 0"
+
+  belongs_to :cover, :class_name => 'PersonalPhoto'
 
   belongs_to :user, :foreign_key => 'owner_id'
 
   # 由于每张图片还得删除评论，圈人等等，所以还是用destroy比较方便
-  has_many :photos, :class_name => 'PersonalPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :order => 'created_at desc', :dependent => :destroy
+  has_many :photos, :class_name => 'PersonalPhoto', :foreign_key => 'album_id', :order => 'created_at desc', :dependent => :destroy
 
-  has_many :latest_photos, :class_name => 'PersonalPhoto', :conditions => {:verified => [0,1]}, :foreign_key => 'album_id', :limit => 3, :order => "created_at DESC"
+  has_many :latest_photos, :class_name => 'PersonalPhoto', :foreign_key => 'album_id', :limit => 3, :order => "created_at DESC"
 
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}, 
@@ -32,12 +36,10 @@ class PersonalAlbum < Album
 	def record_upload user, photos
     if !photos.blank?
       update_attribute('uploaded_at', Time.now)
-    end
-	  if user.application_setting.emit_photo_feed == 1 and privilege != 4
-      recipients = []
-			recipients.concat user.friends.find_all{|f| f.application_setting.recv_photo_feed == 1}
-			deliver_feeds :recipients => recipients, :data => {:ids => photos.map(&:id)}
-      update_attribute('uploaded_at', Time.now)
+	    if user.application_setting.emit_photo_feed? and !self.is_owner_privilege?
+        recipients = [].concat user.friends.find_all{|f| f.application_setting.recv_photo_feed?}
+		  	deliver_feeds :recipients => recipients, :data => {:ids => photos.map(&:id)}
+      end
     end
 	end	
 

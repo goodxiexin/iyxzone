@@ -21,12 +21,7 @@
 			<h3>写站内信</h3>
       <div class="inbox-form formcontent">
 			<% form_for :mail, :url => mails_url, :html => {:onsubmit => "Iyxzone.Mail.Builder.deliver(this, $('submit_btn')); return false;"}  do |f| %>
-				<div class="rows s_clear">
-					<div class="fldid"><%= f.label '收件人：' %></div>
-          <div class="fldvalue">
-            <%= render :partial => 'user/friend_tags/control_panel' %>
-          </div>
-        </div>
+        <%= render :partial => 'user/friend_tags/control_panel', :locals => {:title => '收件人：'}  %>
         <div class='drop-menu' id='recipients_list' style="display:none"></div>
         <div class="rows s_clear">
 					<div class="fldid"><%= f.label '标题：' %></div>

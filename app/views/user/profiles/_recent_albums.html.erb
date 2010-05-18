@@ -1,8 +1,8 @@
 <div class="multibox">
-  <div class="title"><%=link_to '全部相册', personal_albums_url(:uid => @user.id) %><b>最近照片</b></div>
+  <div class="title"><%=link_to '全部相册', personal_albums_url(:uid => user.id) %><b>最近照片</b></div>
   <div class="piclist s_clear">
-  <% unless @albums.blank? %>
-    <% @albums.each do |album| %>
+  <% unless albums.blank? %>
+    <% albums.each do |album| %>
         <div class="picitem jl-picitem">
           <div class="picbox01">
             <div class="picwrap">
@@ -20,8 +20,8 @@
       </div>  
     <% end %> 
   <% else %>
-    <% if @user==current_user %>
-      <div class='space'>还没更新照片赶紧去<%= link_to '弄一个', personal_albums_url(:uid => @user.id)%>吧</div>
+    <% if user==current_user %>
+      <div class='space'>还没更新照片赶紧去<%= link_to '弄一个', personal_albums_url(:uid => user.id)%>吧</div>
     <% else %>
       <div class='space'>这家伙没更新照片</div>
     <% end %>

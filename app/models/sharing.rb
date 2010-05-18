@@ -1,5 +1,9 @@
 class Sharing < ActiveRecord::Base
 
+  named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
+
+  named_scope :in, lambda {|type| type == 'all' ? {}:{:conditions => {:shareable_type => type}}} 
+
   belongs_to :poster, :class_name => 'User'
 
   belongs_to :share
@@ -7,7 +11,7 @@ class Sharing < ActiveRecord::Base
   acts_as_commentable :order => 'created_at ASC', 
                       :delete_conditions => lambda {|user, sharing, comment| user == comment.poster || user == sharing.poster}
 
-  acts_as_resource_feeds :recipients => lambda {|sharing| [sharing.poster.profile] + sharing.poster.guilds + sharing.poster.friends.find_all {|f| f.application_setting.recv_sharing_feed == 1} }
+  acts_as_resource_feeds :recipients => lambda {|sharing| [sharing.poster.profile] + sharing.poster.guilds + sharing.poster.friends.find_all {|f| f.application_setting.recv_sharing_feed?} }
 
   attr_protected :shareable_type
 
@@ -34,7 +38,7 @@ protected
     shareable = share.shareable
     if shareable.shared_by? poster
       errors.add(:share_id, '已经分享过了')
-    elsif shareable.respond_to? :verified and shareable.verified == 2
+    elsif shareable.respond_to? :rejected? and shareable.rejected?
       errors.add(:share_id, '已经被和谐了，没法再分享')
     elsif !shareable.is_shareable_by? poster
       errors.add(:share_id, '没有权限分享')

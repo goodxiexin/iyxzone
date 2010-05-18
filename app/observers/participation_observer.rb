@@ -13,18 +13,18 @@ class ParticipationObserver < ActiveRecord::Observer
 	def after_create participation
 		event = participation.event
 		participant = participation.participant
-		
+
     if participation.is_invitation?
 			participant.raw_increment :event_invitations_count
 			event.raw_increment :invitations_count	
-			EventMailer.deliver_invitation event, participation if participant.mail_setting.invite_me_to_event == 1
+			EventMailer.deliver_invitation event, participation if participant.mail_setting.invite_me_to_event?
 		elsif participation.is_request?
 			event.poster.raw_increment :event_requests_count
 			event.raw_increment :requests_count
-			EventMailer.deliver_request event, participation if event.poster.mail_setting.request_to_attend_my_event == 1
+			EventMailer.deliver_request event, participation if event.poster.mail_setting.request_to_attend_my_event?
     elsif participation.is_confirmed?
       event.raw_increment :confirmed_count
-		end	
+		end
 	end
 
 
@@ -63,9 +63,10 @@ class ParticipationObserver < ActiveRecord::Observer
 		end
 
     # issue feeds if necessary
-    if participant.application_setting.emit_event_feed == 1
+    if (participation.recently_accept_invitation or participation.recently_accept_request) and participant.application_setting.emit_event_feed?
       participation.deliver_feeds
     end
+    
 	end
 	
   def after_destroy participation
