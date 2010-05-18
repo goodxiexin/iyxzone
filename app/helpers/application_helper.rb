@@ -198,7 +198,8 @@ module ApplicationHelper
 
 	def video_thumbnail video, opts={}
     temping = video.thumbnail_url.blank? ? "/images/photo/video01.png" : video.thumbnail_url
-		image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"}.merge(opts)
+		#image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html.gsub('"','\"')}'+'>');"}.merge(opts)
+		image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}>');"}.merge(opts)
 	end
 
   def video_thumbnail_link video, opts={}
