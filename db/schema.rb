@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100517160420) do
+ActiveRecord::Schema.define(:version => 20100518060948) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20100517160420) do
     t.integer  "comments_count", :default => 0
     t.datetime "uploaded_at"
     t.datetime "created_at"
+    t.integer  "verified"
   end
 
   add_index "albums", ["owner_id"], :name => "index_albums_on_owner_id"
@@ -432,13 +433,13 @@ ActiveRecord::Schema.define(:version => 20100517160420) do
     t.text     "data_abstract"
     t.string   "video_url"
     t.string   "thumbnail_url"
-    t.string   "embed_html"
     t.integer  "comments_count", :default => 0
     t.integer  "viewings_count", :default => 0
     t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "embed_html"
   end
 
   create_table "news_pictures", :force => true do |t|
@@ -640,6 +641,16 @@ ActiveRecord::Schema.define(:version => 20100517160420) do
     t.string "name"
   end
 
+  create_table "reports", :force => true do |t|
+    t.integer  "reportable_id"
+    t.string   "reportable_type"
+    t.string   "content"
+    t.integer  "poster_id"
+    t.string   "category"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "role_users", :force => true do |t|
     t.integer "role_id"
     t.integer "user_id"
@@ -722,16 +733,6 @@ ActiveRecord::Schema.define(:version => 20100517160420) do
     t.integer  "verified",       :default => 0
   end
 
-  create_table "tasks", :force => true do |t|
-    t.text     "prerequisite"
-    t.text     "requirement"
-    t.text     "reward"
-    t.text     "description"
-    t.integer  "catagory",     :default => 1
-    t.datetime "starts_at",    :default => '2010-05-06 16:46:59'
-    t.datetime "expires_at"
-  end
-
   create_table "topics", :force => true do |t|
     t.integer  "forum_id"
     t.integer  "poster_id"
@@ -744,15 +745,6 @@ ActiveRecord::Schema.define(:version => 20100517160420) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",         :default => 0
-  end
-
-  create_table "user_tasks", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "task_id"
-    t.datetime "starts_at"
-    t.datetime "done_at"
-    t.text     "achievement"
-    t.datetime "expires_at"
   end
 
   create_table "users", :force => true do |t|
@@ -824,7 +816,6 @@ ActiveRecord::Schema.define(:version => 20100517160420) do
     t.string   "title"
     t.text     "description"
     t.string   "video_url"
-    t.string   "embed_html"
     t.string   "thumbnail_url"
     t.integer  "digs_count",     :default => 0
     t.integer  "comments_count", :default => 0
@@ -833,6 +824,7 @@ ActiveRecord::Schema.define(:version => 20100517160420) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",       :default => 0
+    t.text     "embed_html"
   end
 
   add_index "videos", ["poster_id"], :name => "index_videos_on_poster_id"
