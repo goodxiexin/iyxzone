@@ -1,6 +1,11 @@
 # PrivilegedResource
 module PrivilegedResource
 
+  PUBLIC = 1
+  FRIEND_OR_SAME_GAME = 2
+  FRIEND = 3
+  OWNER = 4
+
 module Model
 
   def self.included(base)

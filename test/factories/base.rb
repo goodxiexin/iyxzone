@@ -4,17 +4,14 @@ Factory.define :user do |u|
   u.email {|u| "#{u.login}@gmail.com"}
 end
 
-Factory.define :friendship do |f|
-  f.status 1
-end
-
-Factory.define :friend_request, :parent => 'friendship' do |f|
-  f.status 0 
+Factory.define :game_character do |character|
+  character.sequence(:name) {|n| "character-#{n}"}
+  character.level 2
 end
 
 Factory.define :game do |g|
   g.sequence(:name) {|n| "game-#{n}"}
-  g.description {|g| "description of #{g.name}"}
+  g.description     {|g| "description of #{g.name}"}
 end
 
 Factory.define :game_server do |s|
@@ -37,16 +34,3 @@ Factory.define :game_character do |c|
   c.sequence(:name) {|n| "character-#{n}"}
   c.level 100
 end
-
-Factory.define :blog do |b|
-  b.sequence(:title) {|n| "blog-#{n}"}
-  b.content {|b| "cotent of #{b.title}"}
-  b.privilege 1
-  b.draft false
-end
-
-Factory.define :draft, :parent => 'blog' do |d|
-  d.privilege 1
-  d.draft true
-end
-
