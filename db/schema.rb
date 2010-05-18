@@ -733,6 +733,18 @@ ActiveRecord::Schema.define(:version => 20100518060948) do
     t.integer  "verified",       :default => 0
   end
 
+  create_table "tasks", :force => true do |t|
+    t.text     "prerequisite"
+    t.text     "requirement"
+    t.text     "reward"
+    t.text     "description"
+    t.integer  "catagory",     :default => 1
+    t.datetime "starts_at",    :default => '2010-05-18 21:46:13'
+    t.datetime "expires_at"
+    t.integer  "duration"
+    t.integer  "state"
+  end
+
   create_table "topics", :force => true do |t|
     t.integer  "forum_id"
     t.integer  "poster_id"
@@ -745,6 +757,16 @@ ActiveRecord::Schema.define(:version => 20100518060948) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",         :default => 0
+  end
+
+  create_table "user_tasks", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "task_id"
+    t.datetime "starts_at"
+    t.datetime "done_at"
+    t.text     "achievement"
+    t.text     "goal"
+    t.datetime "expires_at"
   end
 
   create_table "users", :force => true do |t|

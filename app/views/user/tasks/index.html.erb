@@ -1,20 +1,19 @@
-<table>
+<%= flash[:notice] %>
+<ul>
 	<% @visibleTask.each do |task| %>
-		<tr>
-			<th> id: <%= task.id %></th>
-			<th> prerequisite: <%= task.prerequisite %> </th>
-			<th> requirement: <%= task.requirement %> </th>
-			<th> description: <%= task.description %> </th>
-			<th> title?: <%= task.description[:title] %> </th>
-			<th> reward: <%= task.reward %> </th>
-			<th> 开始时间: <%= task.starts_at %> </th>
-			<th> 结束时间: <%= task.expires_at %> </th>
-			<th> <%= link_to "详细信息", task_path(task) %> </th> 
-		</tr>
+			<li> id: <%= task.id %></li>
+			<li> title: <%= task.description[:title] %> </li>
+			<li> prerequisite: <%= task.prerequisite %> </li>
+			<li> requirement: <%= task.requirement %> </li>
+			<li> description: <%= task.description %> </li>
+			<li> reward: <%= task.reward %> </li>
+			<%= task.get_user_task_tip(current_user.id).inject("") {|sum, tip| sum + content_tag(:li, tip) } %>
+			<li> 开始时间: <%= task.starts_at %> </li>
+			<li> 结束时间: <%= task.expires_at %> </li>
+			<%= content_tag :li, show_task_state_of_user(task,current_user) %>
+			<li> <%= link_to "详细信息", task_path(task) %> </li> 
 	<% end %>
-</table>
+</>
 
 <h1> <%= @alltasks.first.description[:title] %> </h1>
 <%= image_tag @alltasks.first.description[:thumbnail] %>
-<h1> <%= @alltasks.last.description[:title] %> </h1>
-<%= image_tag @alltasks.last.description[:thumbnail] %>

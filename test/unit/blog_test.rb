@@ -3,208 +3,176 @@ require 'test_helper'
 class BlogTest < ActiveSupport::TestCase
 
   def setup
-    @user       = Factory.create :user
-    @game       = Factory.create :game
-    @area       = Factory.create :game_area, :game_id => @game.id
-    @server     = Factory.create :game_server, :game_id => @game.id, :area_id => @area.id
-    @race       = Factory.create :game_race, :game_id => @game.id
-    @profession = Factory.create :game_profession, :game_id => @game.id
-    @character  = Factory.create :game_character, :user_id => @user.id, :game_id => @game.id, :area_id => @area.id, :server_id => @server.id, :race_id => @race.id, :profession_id => @profession.id  
-    @friend     = Factory.create :user
-    @sensitive  = "政府"
-    Factory.create :friendship, :user_id => @user.id, :friend_id => @friend.id
-    Factory.create :friendship, :user_id => @friend.id, :friend_id => @user.id
+    @user = UserFactory.create
+    @character = GameCharacterFactory.create :user_id => @user.id
+    @game = @character.game
+    @friend = UserFactory.create
+    FriendFactory.create @user, @friend
   end
 
-  test "日志标题包含敏感词" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => @sensitive,
-      :content  => '牛比'
-    })
-    
-    assert_equal blog.verified, 0 
-    assert_equal blog.poster.blogs_count1, 1
-  end
-  
-  test "日志内容包含敏感词" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => 'zhengfu',
-      :content  => @sensitive
-    })
-
-    assert_equal blog.verified, 0 
-    assert_equal blog.poster.blogs_count1, 1
-  end
-
-  test "日志标题和内容不包含敏感词" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => 'sb',
-      :content  => 'sb'
-    })
-
-    assert_equal blog.verified, 1 
-    assert_equal blog.poster.blogs_count1, 1
-  end
-
-  test "屏蔽某篇待审核的日志" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => @sensitive,
-      :content  => @sensitive
-    })
-
-    assert_equal blog.verified, 0 
-    assert_equal blog.poster.blogs_count1, 1
-  
-    blog.unverify
-    blog.reload
-
-    assert_equal blog.verified, 2
-    assert_equal blog.poster.blogs_count1, 0
-  end
-
-  test "将审核通过的日志变为审核不通过" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => 'sb',
-      :content  => 'sb'
-    })
-
-    assert_equal blog.verified, 1 
-    assert_equal blog.poster.blogs_count1, 1
-
-    blog.unverify
-    blog.reload
-
-    assert_equal blog.verified, 2
-    assert_equal blog.poster.blogs_count1, 0
-  end
-
-  test "将审核不通过的日志变成审核通过" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => @sensitive,
-      :content  => @sensitive
-    })
-
-    assert_equal blog.verified, 0 
-    assert_equal blog.poster.blogs_count1, 1
-  
-    blog.unverify
-    blog.reload
-
-    assert_equal blog.verified, 2
-    assert_equal blog.poster.blogs_count1, 0
-
-    blog.verify
-    blog.reload
-
-    assert_equal blog.verified, 1
-    assert_equal blog.poster.blogs_count1, 1    
-  end
-
-  test "删除审核通过的日志" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => 'sb',
-      :content  => 'sb'
-    })
-
-    assert_equal blog.verified, 1 
-    assert_equal blog.poster.blogs_count1, 1
-  
-    blog.destroy
+  test "blog counter" do
+    # create blog with different privileges
+    @blog = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id, 
+      :game_id => @game.id,
+      :draft => 0,
+      :privilege => PrivilegedResource::PUBLIC)
     @user.reload
+    assert_equal @user.blogs_count1, 1
 
+    @blog = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id, 
+      :game_id => @game.id,
+      :draft => 0,
+      :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME)
+    @user.reload 
+    assert_equal @user.blogs_count2, 1
+
+    @blog = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id, 
+      :game_id => @game.id,
+      :draft => 0,
+      :privilege => PrivilegedResource::FRIEND)
+    @user.reload
+    assert_equal @user.blogs_count3, 1
+
+    @blog = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id, 
+      :game_id => @game.id,
+      :draft => 0,
+      :privilege => PrivilegedResource::OWNER)
+    @user.reload
+    assert_equal @user.blogs_count4, 1
+
+    @draft = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 1,
+      :privilege => PrivilegedResource::PUBLIC)
+    @user.reload
+    assert_equal @user.blogs_count1, 1 # 没有变化
+    assert_equal @user.drafts_count, 1
+    @draft.update_attributes(:draft => 0)
+    @user.reload
+    assert_equal @user.blogs_count1, 2
+    assert_equal @user.drafts_count, 0
+
+    @draft = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 1,
+      :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME)
+    @user.reload
+    assert_equal @user.blogs_count2, 1 # 没有变化
+    assert_equal @user.drafts_count, 1
+    @draft.update_attributes(:draft => 0)
+    @user.reload
+    assert_equal @user.blogs_count2, 2
+    assert_equal @user.drafts_count, 0
+
+    @draft = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 1,
+      :privilege => PrivilegedResource::FRIEND)
+    @user.reload
+    assert_equal @user.blogs_count3, 1 # 没有变化
+    assert_equal @user.drafts_count, 1
+    @draft.update_attributes(:draft => 0)
+    @user.reload
+    assert_equal @user.blogs_count3, 2
+    assert_equal @user.drafts_count, 0
+
+    @draft = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 1,
+      :privilege => PrivilegedResource::OWNER)
+    @user.reload
+    assert_equal @user.blogs_count4, 1 # 没有变化
+    assert_equal @user.drafts_count, 1
+    @draft.update_attributes(:draft => 0)
+    @user.reload
+    assert_equal @user.blogs_count4, 2
+    assert_equal @user.drafts_count, 0
+  end
+
+  test "decrement counter" do 
+    @b1 = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 0,
+      :privilege => PrivilegedResource::PUBLIC)
+    @b2 = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 0,
+      :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME)
+    @b3 = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 0,
+      :privilege => PrivilegedResource::FRIEND)
+    @b4 = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 0,
+      :privilege => PrivilegedResource::OWNER)
+    @draft = Blog.create(
+      :title => 'title',
+      :content => 'content',
+      :poster_id => @user.id,
+      :game_id => @game.id,
+      :draft => 1,
+      :privilege => PrivilegedResource::FRIEND)
+
+    @user.reload
+    assert_equal @user.blogs_count1, 1
+    assert_equal @user.blogs_count2, 1
+    assert_equal @user.blogs_count3, 1
+    assert_equal @user.blogs_count4, 1
+    assert_equal @user.drafts_count, 1
+
+    @b1.destroy
+    @user.reload
     assert_equal @user.blogs_count1, 0
-  end
-
-  test "删除审核不通过的日志" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => @sensitive,
-      :content  => @sensitive
-    })
-
-    assert_equal blog.verified, 0 
-    assert_equal blog.poster.blogs_count1, 1
-  
-    blog.unverify
-    blog.reload
-
-    assert_equal blog.verified, 2
-    assert_equal blog.poster.blogs_count1, 0
-
-    blog.destroy
+    @b2.destroy
     @user.reload
-
-    assert_equal @user.blogs_count1, 0
-  end
-
-  test "我的日志列表中不包括审核不通过的日志" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => @sensitive,
-      :content  => @sensitive
-    })
-
-    assert_equal blog.verified, 0 
-    assert_equal blog.poster.blogs_count1, 1
-  
-    blog.unverify
+    assert_equal @user.blogs_count2, 0
+    @b3.destroy
     @user.reload
+    assert_equal @user.blogs_count3, 0
+    @b4.destroy
+    @user.reload
+    assert_equal @user.blogs_count4, 0
+    @draft.destroy
+    @user.reload
+    assert_equal @user.drafts_count, 0
 
-    assert @user.blogs_count1, 0
-    assert @user.blogs.blank?
-  end
-
-  test "好友日志不包括审核不通过的日志" do
-    assert @friend.has_friend? @user    
-
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => @sensitive,
-      :content  => @sensitive
-    })
-
-    assert_equal blog.verified, 0 
-    assert_equal @friend.friend_blogs, [blog] 
-
-    blog.unverify
-    @friend.reload
-
-    assert @friend.friend_blogs.blank?
-  end
-
-  test "相关日志不包括审核不通过的日志" do
-    blog = Blog.create({
-      :poster_id  => @user.id,
-      :game_id  => @game.id,
-      :title    => @sensitive,
-      :content  => @sensitive,
-      :friend_tags => [@friend.id]
-    })
-
-    assert_equal blog.verified, 0
-    assert_equal @friend.relative_blogs, [blog] 
-
-    blog.unverify
-    @friend.reload
-
-    assert @friend.relative_blogs.blank?
   end
 
 end
