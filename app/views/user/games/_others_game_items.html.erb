@@ -1,24 +1,36 @@
-<table class="table01" cellpadding="0" cellspacing="1">
-  <% game_items.each do |game| %>
-  <tr>
-    <td>
-      <div class="imgwrap">
-				<%= game_image game.name, :class => 'game-m' %>
-      </div>
-      <div class="data">
-        <p><%= label_tag '', '名称：' %><span><%= game_link game %></span></p>
-        <p><%= label_tag '', '打分：' %><span><%= game.average_rating %></span></p>
-				<p><%= label_tag '', '新增：' %><span><%= game.last_week_characters_count %></span></p>
-        <div id='game_<%= game.id %>_rating_form'>
-        <% if game.is_rateable_by? current_user %>
-          <%= render :partial => 'user/ratings/new', :locals => {:rateable => game} %>
-        <% end %>
-        </div>
-      </div>
-    </td>
-  </tr>
-  <% end %>
-</table>
+<div class="mainConWrap clear">
+  <div class="gameFriend piclist-rows">
+		<table class="table01" cellpadding="0" cellspacing="1">
+			<% other_game_items.each do |game| %>
+			<tr>
+				<td>
+					<div class="imgwrap">
+						<%= game_image game.name, :class => 'game-m' %>
+					</div>
+					<div class="data">
+						<p><%= game_link game %></p>
+            <p>共有 <span class="shine">20个</span> 好友在玩该游戏</p>
+              <div class="photolist-box">
+                <ul class="collection s_clear">
+									<li>
+                    <div class="middle"><div class="middle-center"><div class="center"><a href="#"><img alt="" src="images/photo/photo11.png" class="imgbox01"></a></div></div></div>
+										<p><a href="#">小甲壳虫小甲壳虫</a></p>
+									</li>
 
-<%= will_paginate game_items %>
 
+						<p><%= label_tag '', '打分：' %><span><%= game.average_rating %></span></p>
+						<p><%= label_tag '', '新增：' %><span><%= game.last_week_characters_count %></span></p>
+						<div id='game_<%= game.id %>_rating_form'>
+						<% if game.is_rateable_by? current_user %>
+							<%= render :partial => 'user/ratings/new', :locals => {:rateable => game} %>
+						<% end %>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<% end %>
+		</table>
+
+		<%= will_paginate other_game_items %>
+	</div>
+</div>

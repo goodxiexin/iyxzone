@@ -35,10 +35,19 @@ class RowsFormBuilder < ActionView::Helpers::FormBuilder
   def text_field field, *args
     options = args.last.is_a?(Hash) ? args.pop : {}
     label_text = options.delete(:label)
+    info_id = options.delete(:info)
     if label_text
-      "<div class='rows s_clear'><div class='fldid'>#{label_text}: </div><div class='fldvalue'><div class='textfield'>#{super}</div></div></div>"
+			if info_id
+				"<div class='rows s_clear'><div class='fldid'>#{label_text}: </div><div class='fldvalue'><div class='textfield'>#{super}</div></div><span id='#{info_id}' class='red'></span></div>"
+			else
+				"<div class='rows s_clear'><div class='fldid'>#{label_text}: </div><div class='fldvalue'><div class='textfield'>#{super}</div></div></div>"
+			end
     else
-      "<div class='rows s_clear'><div class='fldvalue'><div class='textfield'>#{super}</div></div></div>"
+			if info_id
+				"<div class='rows s_clear'><div class='fldvalue'><div class='textfield'>#{super}</div></div><span id='#{info_id}' class='red'></span></div>"
+			else
+				"<div class='rows s_clear'><div class='fldvalue'><div class='textfield'>#{super}</div></div></div>"
+			end
     end
   end
 
@@ -79,10 +88,19 @@ class RowsFormBuilder < ActionView::Helpers::FormBuilder
     define_method(name) do |field, *args|
       options = args.last.is_a?(Hash) ? args.pop : {}
       label_text = options.delete(:label)
+      info_id = options.delete(:info)
       if label_text
-        "<div class='rows s_clear'><div class='fldid'>#{label_text}: </div><div class='fldvalue'>#{super}</div></div>"
+				if info_id
+					"<div class='rows s_clear'><div class='fldid'>#{label_text}: </div><div class='fldvalue'>#{super}</div><span id='#{info_id}' class='red'></span></div>"
+				else
+					"<div class='rows s_clear'><div class='fldid'>#{label_text}: </div><div class='fldvalue'>#{super}</div></div>"
+				end
       else
-        "<div class='rows s_clear'><div class='fldvalue'>#{super}</div></div>"
+				if info_id
+					"<div class='rows s_clear'><div class='fldvalue'>#{super}</div><span id='#{info_id}' class='red'></span></div>"
+				else
+					"<div class='rows s_clear'><div class='fldvalue'>#{super}</div></div>"
+				end
       end
     end
   end

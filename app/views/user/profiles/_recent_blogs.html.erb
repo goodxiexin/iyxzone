@@ -1,6 +1,7 @@
 <div class="multibox">
-  <div class="title"><b>最近日志</b>
+  <div class="title">
     <%= link_to "全部日志", blogs_url(:uid => user.id) %>
+		<b>最近日志</b>
   </div>
   <% unless blogs.blank? %>
   <% blogs.each do |blog| %>

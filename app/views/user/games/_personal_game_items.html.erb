@@ -1,24 +1,65 @@
-<table class="table01" cellpadding="0" cellspacing="1">
-  <% game_items.each do |game| %>
-  <tr>
-    <td>
-      <div class="imgwrap">
-				<%= game_image game.name, :class => 'game-m' %>
-      </div>
-      <div class="data">
-        <p><%= label_tag '', '名称：' %><span><%= game_link game %></span></p>
-        <p><%= label_tag '', '打分：' %><span><%= game.average_rating %></span></p>
-				<p><%= label_tag '', '新增：' %><span><%= game.last_week_characters_count %></span></p>
-        <div id='game_<%= game.id %>_rating_form'>
-        <% if game.is_rateable_by? current_user %>
-          <%= render :partial => 'user/ratings/new', :locals => {:rateable => game} %>
-        <% end %>
-        </div>
-      </div>
-    </td>
-  </tr>
-  <% end %>
-</table>
+<div class="mainConWrap clear">
+	<div class="gameMine piclist-rows">
+		<table class="table01 gameList" cellpadding="0" cellspacing="1">
+			<tbody>
+				<% subject = get_subject(user) %>
+				<% personal_game_items.each do |game| %>
+				<tr>
+					<td>
+						<div class="imgwrap">
+							<%= game_image game.name, :class => 'game-m' %>
+						</div>
+						<div class="data">
+							<p><%= game_link game %></p>
+							<ul class='fix'>
+								<% if game.rated_by? user %>
+									<% rating = game.find_rating_by_user user %>
+									<li class='score'><%=subject-%>的打分：<span class='star-<%=rating.rating-%> w-l'></span><strong><%= rating.rating %></strong></li>
+								<% else %>
+									<% if user == current_user %>
+										<li class='score'><%=subject-%>的打分：<span class='thin'>快去<strong><%= link_to '游戏主页', game_url(game) %></strong>打分吧</span></li>
+									<% else %>
+										<li class='score'><%=subject-%>的打分：<span class='thin'><%=subject -%>还没有打分</span></li>
+									<% end %>
+								<% end %>
+								<% if game.tagged_by? user %>
+									<%tg = game.taggings.find_by_poster_id user.id%>
+									<li class="gameImpress"><%=subject-%>对游戏的印象：<strong><%=tg.tag.name-%></strong></li>
+								<% else %>
+									<% if user == current_user %>
+										<li class='gameImpress'><%=subject-%>对游戏的印象：<span class='thin'>你还没添加，快去<strong><%= link_to '游戏主页', game_url(game) %></strong>添加吧</span></li>
+									<% else %>
+										<li class='gameImpress'><%=subject-%>对游戏的印象：<span class='thin'><%=subject-%>还没给出这个游戏的印象</span></li>
+									<% end %>
+								<% end %>
+								<li><%=subject-%>的游戏角色：</li>
+								<li>&nbsp;</li>
+								<% GameCharacter.find(:all, :conditions => ["user_id = ? and game_id = ?", user.id, game.id]).each do |c| %>
+									<% if c.data.nil? %>
+										<li class="roleInfo"><strong><%= c.name %></strong><span>1区, 达纳斯</span></li>
+									<% else %>
+										<% unless c.data["verify"] %>
+											<li class="roleInfo"><strong><%= c.name %></strong><span>1区, 达纳斯</span></li>
+										<% else %>
+											<li class="roleInfo"><strong><%= link_to c.name, c.data["url"], :popup => 'true' %></strong><span><% unless c.game.no_areas %><%= c.area.name -%><% end %>, <% unless c.game.no_servers %> <%= c.server.name -%><% end %></span></li>
+										<% end %>
+									<% end %>
+									<% if c.has_guild? %>
+										<% guild = Guild.first(:conditions => {:character_id => c.id})%>
+										<li class="guildInfo">该角色所在的公会：<strong><%=guild_link guild%></strong></li>
+									<% else %>
+										<li class="guildInfo">该角色还没有加入公会，去公会频道找个公会吧</li>
+									<% end %>
+								<% end %>
+              </ul>
 
-<%= will_paginate game_items %>
+						</div>
+					</td>
+				</tr>
+				<% end %>
+			</tbody>
+		</table>
 
+		<%= will_paginate personal_game_items %>
+	</div>
+</div>

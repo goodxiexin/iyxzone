@@ -276,7 +276,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 
 /*顶部导航条*/
-.logo-top{width:150px;height:40px;display:block;position:absolute;left:5px;top:5px;cursor:pointer;background:url(../images/skin/logo.png) no-repeat;}
+.logo-top{width:150px;height:40px;display:block;position:absolute;left:5px;top:5px;cursor:pointer;background:url(../images/skin/logo.png) no-repeat;font:0/0 sans-serif;text-indent:-9999px;*text-indent:0;overflow:hidden}
 
 #navbar{padding-left:9px;height:42px;background-image:url(../images/skin/navbar01.gif);background-repeat:no-repeat;}
 #navbar #navwrap{padding-right:9px;height:100%;background-image:url(../images/skin/navbar01.gif);background-repeat:no-repeat;background-position:right -45px;}
