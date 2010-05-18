@@ -2,8 +2,6 @@ class UsersController < ApplicationController
 
   #before_filter :allow_only_admin_invitation
 
-  require_logout :only => [:new, :create]
-
   def new
     @user = User.new
     render :action => 'new', :layout => 'root'
@@ -24,13 +22,9 @@ class UsersController < ApplicationController
       UserMailer.deliver_signup_notification @user, params[:invite_token]
       # create characters
       @user.profile.update_attributes(params[:profile]) # TODO
-      render :update do |page|
-        page.redirect_to "/activation_mail_sent?email=#{@email}&show=0&invite_token=#{params[:invite_token]}"
-      end
+      redirect_js "/activation_mail_sent?email=#{@email}&show=0&invite_token=#{params[:invite_token]}"
     else
-      render :update do |page|
-        page << "error('发生错误，稍后再试');"
-      end
+      render_js_error
     end
 	end
 
@@ -77,9 +71,7 @@ class UsersController < ApplicationController
         page << "$('account_status').innerHTML = '激活邮件已经重新发送到了#{@user.email}';"
       end
     else
-      render :update do |page|
-        page << "error('错误');"
-      end
+      render_js_error
     end
   end
 

@@ -6,34 +6,35 @@ class User::BlogsController < UserBaseController
 
   PER_PAGE = 10
 
+  PREFETCH = [{:poster => :profile}, :share]
+
   def index
     @relationship = @user.relationship_with current_user
-    @privilege = get_privilege_cond @relationship
     @count = @user.blogs_count @relationship
-    @blogs = @user.blogs.paginate :page => params[:page], :per_page => PER_PAGE, :conditions => @privilege, :include => [{:poster => :profile}, :share]
+    @blogs = @user.blogs.nonblocked.for(@relationship).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
 	def hot
-    @blogs = Blog.hot.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :share]
+    @blogs = Blog.hot.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def recent
-    @blogs = Blog.recent.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :share]
+    @blogs = Blog.recent.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def relative
-    @blogs = @user.relative_blogs.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :share]
+    @blogs = @user.relative_blogs.nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def friends
-    @blogs = current_user.friend_blogs.paginate :page => params[:page], :per_page => 10
+    @blogs = Blog.by(current_user.friend_ids).nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def show
-    @relationship = @user.relationship_with current_user
-    @privilege = get_privilege_cond @relationship
-    @next = @blog.next @privilege
-    @prev = @blog.prev @privilege
+    @random_blogs = Blog.by(@user.id).for(@relationship).nonblocked.random :limit => 5, :except => [@blog]
+    @cond = Blog.nonblocked_cond.merge Blog.privilege_cond(@relationship)
+    @next = @blog.next @cond
+    @prev = @blog.prev @cond
     @count = @user.blogs_count @relationship
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
@@ -43,7 +44,7 @@ class User::BlogsController < UserBaseController
   end
 
   def create
-    @blog = Blog.new((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => false}))
+    @blog = current_user.blogs.build(params[:blog] || {})
     
     if @blog.save
       render :update do |page|
@@ -61,7 +62,7 @@ class User::BlogsController < UserBaseController
   end
 
   def update
-    if @blog.update_attributes((params[:blog] || {}).merge({:poster_id => current_user.id, :draft => false}))
+    if @blog.update_attributes(params[:blog] || {})
       render :update do |page|
         page.redirect_to blog_url(@blog)
       end
@@ -78,9 +79,7 @@ class User::BlogsController < UserBaseController
 				page.redirect_to blogs_url(:uid => current_user.id)
 			end
 		else
-			render :update do |page|
-				page << "error('删除的时候发生错误');"
-			end
+      render_js_error '删除的时候发生错误'
 		end
   end
 
@@ -92,14 +91,21 @@ protected
       require_friend_or_owner @user
     elsif ['show'].include? params[:action]
       @blog = Blog.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, {:tags => :tagged_user}, {:poster => :profile}])
+      require_not_draft @blog
       require_verified @blog
       @user = @blog.poster
-      require_adequate_privilege @blog
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @blog, @relationship
     elsif ['edit', 'destroy', 'update'].include? params[:action]
       @blog = Blog.find(params[:id])
+      require_not_draft @blog
       require_verified @blog
       require_owner @blog.poster
     end
+  end
+
+  def require_not_draft blog
+    !blog.draft || render_not_found
   end
 
 end

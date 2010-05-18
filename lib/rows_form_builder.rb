@@ -61,7 +61,7 @@ class RowsFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def z_submit options
-    submit_opts = options.delete(:submit)
+    submit_opts = options.delete(:submit).merge({:type => 'submit'})
     submit_html = 
       if submit_opts.blank?
         ''

@@ -3,10 +3,6 @@ a{color:#25700D;}
 a:hover{color:#D63200;}
 
 
-.main .page-foot{margin:10px 0 0;}
-.main .page-foot .feed-list{width:400px;float:left}
-.main .page-foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
-.prompt-list-box{padding-right:12px;float:right;width:300px;}
 
 #header,#page,#footer{margin:0 auto;width:940px;clear:both;}
 #page{margin-top:6px;}
@@ -569,8 +565,6 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .vote-form .fldid{width:117px;}
 .vote-form .textfield{width:300px;}
 
-.prompt-list-box h5{padding-left:12px;font-size:14px;height:20px;line-height:20px;margin-bottom:4px;overflow:hidden}
-.prompt-list-box .list-box{padding:7px 11px;}
 
 .photo-upload-box{padding:20px 0;}
 .photo-upload-box h4{line-height:17px;margin-bottom:9px;}
@@ -621,7 +615,13 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 
 
 /*Created By Jolly 20100111*/
-.foot-func{margin:5px 0 0;padding:0 15px;width:380px}
+.main .page-foot{margin:10px 0 0;}
+.main .page-foot .feed-list{width:400px;margin-top:4px;*margin-top:2px;clear:both}
+.main .page-foot .feed-list h4{padding-left:5px;line-height:21px;color:#D63200}
+.prompt-list-box{float:right;width:300px;}
+.prompt-list-box h5{padding-left:10px;font-size:14px;line-height:28px;}
+.prompt-list-box .list-box{padding:7px 11px;}
+.foot-func{margin:5px 0 0;padding:0 15px;width:400px;float:left}
 
 /*导航栏搜索框*/
 .nav-search{border:1px #6b9c42 solid;background:url(../images/skin/skin2010.png) no-repeat 0 -471px;}
@@ -1282,6 +1282,8 @@ h1.app-share{float:left}
 /*v2 start 100513*/
 /*btn*/
 .addGameRoleBtn{background:url(../images/skin/skin2010.png) no-repeat -83px -737px;width:117px;height:22px;display:inline-block}
+.mainConHead{border-bottom:1px solid #bdd6ad;padding:5px 15px;margin-bottom:10px}
+
 /*热门游戏*/
 .gameList .data p a{color:#d63200}
 .gameList .data ul{margin-top:10px;}
@@ -1305,3 +1307,6 @@ h1.app-share{float:left}
 .gameList .data span.shine{color:#F08E0C}
 .gameFriend .more{text-align:right;}
 .gameFriend .data .more a{color:#25700d;text-decoration:underline}
+
+/*任务*/
+.taskItem{background:url(../images/skin/task_wrap.gif) no-repeat;width:362px;height:143px;}

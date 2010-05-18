@@ -41,7 +41,10 @@
         <%= render :partial => 'user/photos/photo_slide', :locals => {:album => @album, :photo => @photo} %>
       </div>
     </div>
-    <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @photo, :commentable => true, :viewable => false, :diggable => true, :comment_opts => {:commentable => @photo, :recipient => @photo.poster}, :reply_to => @reply_to} %>
+    <div class='page-foot s_clear'>
+      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @photo, :commentable => true, :viewable => false, :diggable => true, :comment_opts => {:commentable => @photo, :recipient => @photo.poster}, :reply_to => @reply_to} %>
+      <%= render :partial => 'user/resources/randoms', :locals => {:title => "#{get_subject @user}的其他相册", :randoms => @random_albums} %>
+    </div>
   </div>
 <% end %>
 

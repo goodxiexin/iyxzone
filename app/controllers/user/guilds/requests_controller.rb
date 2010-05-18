@@ -3,37 +3,31 @@ class User::Guilds::RequestsController < UserBaseController
   layout 'app'
 
   def new
-    @request_characters = @guild.request_characters_for current_user
-    @invite_characters = @guild.invite_characters_for current_user
-    @guild_characters = @guild.characters_for current_user
-    @user_characters = current_user.characters.find(:all, :conditions => {:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id})
+    @request_characters = @guild.request_characters.by(current_user.id)
+    @invite_characters = @guild.invite_characters.by(current_user.id)
+    @guild_characters = @guild.characters.by(current_user.id)
+    @user_characters = current_user.characters.match(:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id)
     @characters = @user_characters - @request_characters - @invite_characters - @guild_characters
     render :action => 'new', :layout => false
   end
 
   def create
-    request_params = (params[:request] || {}).merge({:user_id => current_user.id})
-    @request = @guild.requests.build request_params
+    @request = @guild.requests.build (params[:request] || {}).merge({:user_id => current_user.id})
+    
     unless @request.save
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
   def accept
     unless @request.accept_request
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 
   def decline
     unless @request.decline_request
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end
   end
 

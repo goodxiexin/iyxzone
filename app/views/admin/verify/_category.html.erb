@@ -8,6 +8,8 @@
   <option value=6 <% if selected==6 %>selected='selected'<% end %>>工会</option>
   <option value=7 <% if selected==7 %>selected='selected'<% end %>>活动</option>
   <option value=8 <% if selected==8 %>selected='selected'<% end %>>投票</option>
+  <option value=9 <% if selected==9 %>selected='selected'<% end %>>话题</option>
+  <option value=10 <% if selected==10 %>selected='selected'<% end %>>帖子</option>
 </select>
 
 <% javascript_tag do %>
@@ -30,5 +32,9 @@
       window.location.href = '/admin/events';
     else if(idx==8)
       window.location.href = '/admin/polls';
+    else if(idx==9)
+      window.location.href = '/admin/topics';
+    else
+      window.location.href ='/admin/posts';
   }
 <% end %>

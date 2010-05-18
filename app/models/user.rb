@@ -49,11 +49,6 @@ class User < ActiveRecord::Base
     mails.find_all {|m| !m.read_by_recipient}
   end
 
-  def is_mailable_by? user
-    p = privacy_setting.mail
-    p == 1 || has_friend?(user) || (p == 2 and has_same_game_with?(user))
-  end
-
   def interested_in_game? game
 		!game_attentions.find_by_game_id(game.id).nil?
   end
@@ -76,18 +71,11 @@ class User < ActiveRecord::Base
 	has_many :poke_deliveries, :foreign_key => 'recipient_id', :order => 'created_at DESC'
 
   def is_pokeable_by? user
-    p = privacy_setting.poke
-    p == 1 || has_friend?(user) || (p == 3 and has_same_game_with?(user))
+    privacy_setting.poke? self.relationship_with(user)
   end
 
 	# status
-  has_many :statuses, :foreign_key => 'poster_id', :conditions => {:verified => [0,1]}, :order => 'created_at DESC', :dependent => :destroy
-
-	has_one :latest_status, :foreign_key => 'poster_id', :conditions => {:verified => [0,1]}, :class_name => 'Status', :order => 'created_at DESC'
-
-  def friend_statuses
-    Status.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = statuses.poster_id", :conditions => {:verified => [0,1]}, :order => 'created_at desc', :include => [{:first_comment => [:commentable, {:poster => :profile}]}, {:last_comment => [:commentable, {:poster => :profile}]}, {:poster => :profile}])
-  end
+  has_many :statuses, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
   # friend
 	has_many :all_friendships, :class_name => 'Friendship', :dependent => :destroy
@@ -95,9 +83,13 @@ class User < ActiveRecord::Base
     # 定义这个完全是为了删除方便
   has_many :friend_friendships, :class_name => 'Friendship', :foreign_key => 'friend_id', :dependent => :destroy
 
-  has_many :friendships, :conditions => {:status => 1}
+  has_many :friendships, :conditions => {:status => Friendship::Friend}
 
 	has_many :friends, :through => :friendships, :source => 'friend', :order => 'pinyin ASC'
+
+  def friend_ids
+    friendships.map(&:friend_id)
+  end
 
   def has_friend? user
     user_id = (user.is_a? Integer)? user : user.id
@@ -105,7 +97,7 @@ class User < ActiveRecord::Base
   end
 
   def wait_for? user
-		all_friendships.find_by_friend_id_and_status(user.id, 0) 
+		all_friendships.find_by_friend_id_and_status(user.id, Friendship::Request) 
   end
 
 	def common_friends_with user
@@ -115,11 +107,6 @@ class User < ActiveRecord::Base
 		  friends & user.friends
     end
 	end
-
-  def is_friendable_by? user
-    p = privacy_setting.add_me_as_friend
-    p == 1 || (p == 2 and has_same_game_with?(user))
-  end
 
   # settings
 	has_setting :application_setting
@@ -137,17 +124,6 @@ class User < ActiveRecord::Base
 
 	has_many :servers, :through => :characters, :uniq => true
 
-  def friend_characters opts={}
-    game_cond = ActiveRecord::Base.send(:sanitize_sql_hash_for_conditions, opts, "game_characters")
-    game_cond = "AND #{game_cond}" unless game_cond.blank?
-    GameCharacter.find(:all, :joins => "INNER JOIN friendships on friendships.user_id = #{id} AND friendships.status = 1 AND friendships.friend_id = game_characters.user_id #{game_cond}")
-  end
-
-  def friend_games
-    game_ids = GameCharacter.find(:all, :select => :game_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = game_characters.user_id").map(&:game_id).uniq
-    Game.find(game_ids, :order => 'pinyin ASC')
-  end
-
 	def interested_in_game? game
     !game_attentions.find_by_game_id(game.id).nil?
   end
@@ -161,18 +137,14 @@ class User < ActiveRecord::Base
 
   has_one :avatar_album, :foreign_key => 'owner_id', :dependent => :destroy
 
-  has_many :albums, :class_name => 'PersonalAlbum', :conditions => {:verified => [0,1]}, :foreign_key => 'owner_id', :order => 'created_at DESC', :dependent => :destroy
+  has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'created_at DESC', :dependent => :destroy
 
   # 活跃的相册，就是有上传过东西的相册
-  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "uploaded_at IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum') AND verified IN (0,1)"
-
-  def friend_albums
-    PersonalAlbum.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = albums.poster_id", :conditions => "privilege != 4 AND photos_count != 0 AND verified IN (0,1)", :order => 'uploaded_at desc', :include => [{:poster => :profile}, :poster, :cover])
-  end
+  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "photos_count IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
   def albums_count relationship='owner'
     # dont forget avatar album which is not accessible to none-friend
-    avatar_album_count = (self.avatar_album.verified == 2) ? 0 : 1
+    avatar_album_count = self.avatar_album.rejected? ? 0 : 1
     if relationship == 'owner'
       avatar_album_count + albums_count1 + albums_count2 + albums_count3 + albums_count4
     elsif relationship == 'friend'
@@ -191,11 +163,11 @@ class User < ActiveRecord::Base
   # blogs
   with_options :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id do |user|
     
-    user.has_many :blogs, :conditions => {:draft => false, :verified => [0, 1]}
+    user.has_many :blogs, :conditions => {:draft => false}
 
-    user.has_many :drafts, :class_name => 'Blog', :conditions => {:draft => true, :verified => [0,1]}
+    user.has_many :drafts, :class_name => 'Blog', :conditions => {:draft => true}
 
-    user.has_many :blogs_and_drafts, :class_name => 'Blog', :conditions => {:verified => [0,1]}
+    user.has_many :blogs_and_drafts, :class_name => 'Blog'
   
   end
 
@@ -212,12 +184,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def friend_blogs
-    Blog.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = blogs.poster_id", :conditions => "privilege != 4 AND draft != 1 AND verified IN (0,1)", :order => 'created_at desc', :include => [{:poster => [:avatar, :profile]}, :share])
-  end
-
   # videos
-  has_many :videos, :conditions => {:verified => [0,1]}, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
+  has_many :videos, :order => 'created_at DESC', :dependent => :destroy, :foreign_key => :poster_id
 
   def videos_count relationship='owner'
     case relationship
@@ -232,32 +200,20 @@ class User < ActiveRecord::Base
     end  
   end
 
-  def friend_videos
-    Video.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = videos.poster_id", :conditions => "privilege != 4 AND verified IN (0,1)", :order => 'created_at desc', :include => [{:poster => :profile}, :share])
-  end
-
   # events
-  has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy
+  has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy, :conditions => {:status => [Participation::Confirmed, Participation::Maybe]}
 
-  has_many :v_events, :class_name => 'Event', :foreign_key => 'poster_id'
-
-  has_many :events, :foreign_key => 'poster_id', :order => 'start_time DESC', :conditions => ["end_time >= ? AND verified IN (0,1)", Time.now.to_s(:db)], :dependent => :destroy
+  has_many :events, :foreign_key => 'poster_id', :order => 'start_time DESC', :conditions => ["end_time >= ?", Time.now.to_s(:db)], :dependent => :destroy
 
 	with_options :order =>  'created_at DESC', :through => :participations, :source => :event, :uniq => true do |user|
 
-		user.has_many :all_events, :conditions => "participations.status IN (3,4,5) AND verified IN (0,1)"
+		user.has_many :all_events
 
-    # 不包括我发起的，这样的都在events里
-		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ? AND participations.status IN (3,4,5) AND verified IN (0,1)', Time.now.to_s(:db)]
+		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ?', Time.now.to_s(:db)]
 
-		user.has_many :participated_events, :conditions => ["events.end_time < ? AND participations.status IN (3,4,5) AND verified IN (0,1)", Time.now.to_s(:db)]
+		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
 
 	end
-
-  def friend_events
-    event_ids = Participation.find(:all, :select => :event_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = participations.participant_id", :conditions => "participations.status != 0 AND participations.status != 1").map(&:event_id).uniq
-    Event.find(event_ids, :conditions => {:verified => [0,1]}, :include => [:guild, {:poster => :profile}, {:game_server => [:game, :area]}, {:album => :cover}])
-  end
 
 	def common_events_with user
 		events & user.events
@@ -270,6 +226,9 @@ class User < ActiveRecord::Base
 
   # sharings
   has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
+
+  # alias for sharings
+  has_many :all_sharings, :foreign_key => 'poster_id', :order => 'created_at DESC', :class_name => 'Sharing'
 
   with_options :class_name => 'Sharing', :foreign_key => 'poster_id', :order => 'created_at DESC' do |user|
     
@@ -321,71 +280,44 @@ class User < ActiveRecord::Base
 
   end
 
-  def friend_sharings type=nil
-    cond = type.nil? ? {} : {:shareable_type => type}
-    Sharing.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = sharings.poster_id", :conditions => cond, :order => 'created_at desc')
-  end
-
   # polls
   has_many :votes, :foreign_key => 'voter_id', :dependent => :destroy
 
-  has_many :polls, :foreign_key => 'poster_id', :conditions => {:verified => [0,1]}, :order => 'created_at DESC', :dependent => :destroy
+  has_many :polls, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
-  has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id} AND verified IN (0,1)'
-
-  def friend_votes_for poll
-    Vote.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = votes.voter_id", :conditions => {:poll_id => poll.id})
-  end
-
-  def friend_polls
-    poll_ids = Vote.find(:all, :select => :poll_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = votes.voter_id", :limit => 20).map(&:poll_id).uniq
-    participated = Poll.find(poll_ids, :conditions => {:verified => [0,1]}, :include => [{:poster => :profile}, :answers])
-    posted = Poll.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = polls.poster_id", :conditions => {:verified => [0,1]}, :order => 'created_at desc', :include => [{:poster => :profile}, :answers], :limit => 20)
-    (participated + posted - polls).uniq.sort {|p1, p2| p2.created_at <=> p1.created_at }
-  end
+  has_many :participated_polls, :through => :votes, :uniq => true, :source => 'poll', :order => 'created_at DESC', :conditions => 'poster_id != #{id}'
 
 	# guilds
-	has_many :memberships, :dependent => :destroy
+	has_many :memberships, :dependent => :destroy, :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
 
-  has_many :v_guilds, :class_name => 'Guild', :foreign_key => 'president_id'
-
-  has_many :guilds, :conditions => {:verified => [0,1]}, :foreign_key => 'president_id', :dependent => :destroy
+  has_many :guilds, :foreign_key => 'president_id', :dependent => :destroy
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC', :uniq => true do |user|
 
-    user.has_many :all_guilds, :conditions => "memberships.status IN (3,4,5) AND verified IN (0,1)"
+    user.has_many :all_guilds
 
-    user.has_many :privileged_guilds, :conditions => "memberships.status IN (3,4) AND verified IN (0,1)"
+    user.has_many :privileged_guilds, :conditions => "memberships.status IN (#{Membership::President},#{Membership::Veteran})"
 
-		user.has_many :participated_guilds, :conditions => "memberships.status IN (4,5) AND verified IN (0,1)"
+		user.has_many :participated_guilds, :conditions => "memberships.status IN (#{Membership::Veteran}, #{Membership::Member})"
 
 	end
-
-  def friend_memberships
-    Membership.find(:all, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = memberships.user_id", :conditions => "memberships.status != 0 AND memberships.status != 1") 
-  end
-
-  def friend_guilds
-    guild_ids = Membership.find(:all, :select => :guild_id, :joins => "inner join friendships on friendships.user_id = #{id} and friendships.status = 1 and friendships.friend_id = memberships.user_id", :conditions => "memberships.status != 0 AND memberships.status != 1").map(&:guild_id).uniq
-    Guild.find(guild_ids, :order => 'created_at desc', :conditions => {:verified => [0,1]}, :include => [{:album => :cover}, :forum, {:president => :profile}, {:game_server => [:area, :game]}])
-  end
-
-	def common_guilds_with user
+	
+  def common_guilds_with user
     all_guilds & user.all_guilds
 	end
 
 	# invitation and requests
-	has_many :event_requests, :through => :v_events, :source => :requests
+	has_many :event_requests, :through => :events, :source => :requests
 
-	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => 0}, :dependent => :destroy
+	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => Participation::Invitation}, :dependent => :destroy
 
 	has_many :poll_invitations, :dependent => :destroy
 
-	has_many :guild_requests, :through => :v_guilds, :source => :requests 
+	has_many :guild_requests, :through => :guilds, :source => :requests 
 
-	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => 0}, :dependent => :destroy
+	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => Membership::Invitation}, :dependent => :destroy
 
-	has_many :friend_requests, :class_name => 'Friendship', :foreign_key => 'friend_id', :conditions => {:status => 0}
+	has_many :friend_requests, :class_name => 'Friendship', :foreign_key => 'friend_id', :conditions => {:status => Friendship::Request}
 
   def invitations_count
     guild_invitations_count + event_invitations_count + poll_invitations_count
@@ -398,13 +330,13 @@ class User < ActiveRecord::Base
 	# tags
 	has_many :friend_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
-	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "privilege != 4 AND draft != 1 AND verified IN (0,1)"
+	has_many :relative_blogs, :through => :friend_tags, :source => 'blog', :conditions => "draft != 1"
 
-	has_many :relative_videos, :through => :friend_tags, :source => 'video', :conditions => "privilege != 4 AND verified IN (0,1)"
+	has_many :relative_videos, :through => :friend_tags, :source => 'video'
 
 	has_many :photo_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
-	has_many :relative_photos, :through => :photo_tags, :source => 'photo', :conditions => "privilege != 4 AND verified IN (0,1)"
+	has_many :relative_photos, :through => :photo_tags, :source => 'photo'
 
 	# feeds
 	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'

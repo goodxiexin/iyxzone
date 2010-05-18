@@ -59,9 +59,7 @@ class User::SharingsController < UserBaseController
         end
       end       
     else
-      render :update do |page|
-        page << "error('发生错误, 该资源可能已经被和谐了');"
-      end
+      render_js_error '发生错误, 该资源可能已经被和谐了'
     end 
   end
 

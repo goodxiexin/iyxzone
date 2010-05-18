@@ -4,17 +4,13 @@ class User::CommentsController < UserBaseController
     @comment = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
 
     unless @comment.save
-      render :update do |page|
-        page << "error('评论由于某些问题而无法保存');"
-      end
+      render_js_error "error('评论由于某些问题而无法保存');"
     end
   end
 
   def destroy
     if @comment.destroy
-      render :update do |page|
-        page << "facebox.close();Effect.BlindUp($('comment_#{@comment.id}'));"
-      end
+      render_js_code "facebox.close();Effect.BlindUp($('comment_#{@comment.id}'));"
     else
       render_js_error
     end

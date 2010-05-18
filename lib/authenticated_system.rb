@@ -32,7 +32,7 @@ module AuthenticatedSystem
     end
 
     def current_user
-      @current_user ||= (login_from_session) unless @current_user == false
+      @current_user ||= (login_from_session || login_from_cookie) unless @current_user == false
     end
 
     def is_admin
@@ -47,26 +47,11 @@ module AuthenticatedSystem
     end
 
     def login_required
-      if logged_in?
-        if current_user.remember_me_untils < Time.now
-          reset_session
-          login_denied
-        else
-          current_user.remember_me_for SESSION_DURATION
-        end
-      else
-        login_denied
-      end
+      logged_in? || login_denied
     end
 
     def logout_required
-      if logged_in?
-        if current_user.remember_me_untils > Time.now
-          logout_denied
-        else
-          reset_session
-        end
-      end
+      !logged_in? || logout_denied
     end
 
     def login_denied
@@ -98,6 +83,19 @@ module AuthenticatedSystem
 
     def login_from_session
       self.current_user = User.find_by_id(session[:user_id]) if session[:user_id]
+    end
+
+    def login_from_cookie
+      user = cookies[:auth_token] && User.find_by_remember_code(cookies[:auth_token])
+      if user and user.remember_code
+        self.current_user = user
+        remember_me_in_cookie
+        self.current_user
+      end
+    end
+
+    def remember_me_in_cookie
+      cookies[:auth_token] = {:value => current_user.remember_code, :expires => REMEMBER_DURATION.from_now}
     end
 
   end

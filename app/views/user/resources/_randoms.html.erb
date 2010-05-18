@@ -1,0 +1,10 @@
+<div class="prompt-list-box">
+  <h5><%= title %></h5>
+  <div class="list-box box04">
+    <ul class="lister02">
+      <% randoms.each do |random| %>
+        <li><%= eval("#{random.class.base_class.name.underscore}_link random") %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

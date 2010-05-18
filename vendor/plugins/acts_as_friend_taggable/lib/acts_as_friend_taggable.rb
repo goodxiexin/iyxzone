@@ -28,12 +28,6 @@ module FriendTaggable
 
   module SingletonMethods
 
-		def relative_to user_id, game_id=nil
-			conditions = friend_taggable_opts[:conditions] || {}
-			conditions.merge!({:game_id => game_id}) unless game_id.nil?
-			find(:all, :joins => "INNER JOIN friend_tags ON friend_tags.taggable_id = #{self.name.underscore.pluralize}.id AND friend_tags.taggable_type = '#{self.name}' AND friend_tags.friend_id = #{user_id}", :conditions => conditions, :order => 'created_at DESC')
-		end	
-
   end
 
   module InstanceMethods

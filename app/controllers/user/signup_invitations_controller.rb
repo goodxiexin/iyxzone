@@ -5,28 +5,30 @@ class User::SignupInvitationsController < UserBaseController
   def index
   end
 
+  # 把这些写到cache里而不是session里，因为session storage是cookie，所以密码这样放是不安全的
   def add_friend
-    session[:email_authentication] = {:type => params[:type], :user_name => params[:user_name], :password => params[:password]}
+    Rails.cache.write "import-contacts-#{current_user.id}", {:user_name => params[:user_name], :type => params[:type], :password => params[:password]}
   end
 
   def invite_contact
-    @type = session[:email_authentication][:type]
-    @user_name = session[:email_authentication][:user_name]
+    @email_info = Rails.cache.read "import-contacts-#{current_user.id}"
+    
+    if !@email_info.blank?
+      @type = @email_info[:type]
+      @user_name = @email_info[:user_name]
+    else
+      flash[:error] = '发生错误，可能是连接失败，请重新输入'
+      redirect_to :action => :index
+    end
   end
 
   def create
-    @invitation = SignupInvitation.new(:sender_id => current_user.id, :recipient_email => params[:email])
+    @invitation = current_user.signup_invitations.build(:recipient_email => params[:email])
     
     if @invitation.save
-      render :update do |page|
-        page << "Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');"
-        page << "$('email_invite').innerHTML = '发送成功';"
-      end
+      render_js_tip '发送成功'
     else
-      render :update do |page|
-        page << "Iyxzone.enableButton($('email_invitation_btn'),'发送邀请');"
-        page << "$('email_invite').innerHTML = '发生错误';"
-      end
+      render_js_error
     end
   end
 

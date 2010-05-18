@@ -2,7 +2,7 @@
 module ApplicationHelper
 
   def avatar_path user, size="medium"
-    if user.avatar.blank? || user.avatar.verified == 2
+    if user.avatar.blank? || user.avatar.rejected?
       "default_#{user.gender}_#{size}.png"
     else
       user.avatar.public_filename(size)
@@ -11,7 +11,7 @@ module ApplicationHelper
 
   def avatar_image(user, opts={})
     size = opts.delete(:size) || "medium"
-    if user.avatar.blank? || user.avatar.verified == 2
+    if user.avatar.blank? || user.avatar.rejected?
       image_tag "default_#{user.gender}_#{size}.png", opts
     else
       image_tag user.avatar.public_filename(size), opts
@@ -32,7 +32,7 @@ module ApplicationHelper
   def avatar(user, img_opts={}, a_opts={})
 		size = img_opts.delete(:size) || "medium"
     a_opts.merge!({:popup => true})
-    if user.avatar.blank? || user.avatar.verified == 2
+    if user.avatar.blank? || user.avatar.rejected?
       link_to image_tag("default_#{user.gender}_#{size}.png", img_opts), profile_url(user.profile), a_opts
     else
       link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
@@ -97,7 +97,7 @@ module ApplicationHelper
 
   def album_cover_image album, opts={}
     size = opts.delete(:size) || 'large'
-    if album.verified == 2 || album.photos_count == 0
+    if album.rejected? || album.photos_count == 0
 			if album.is_a? GuildAlbum
 				image_tag "default_guild_#{size}.png", opts
 			elsif album.is_a? EventAlbum
@@ -106,14 +106,17 @@ module ApplicationHelper
 				image_tag "default_cover_#{size}.png", opts
 			end
     else
-      cover = album.cover.nil? ? album.photos.first : album.cover
+      cover = album.cover
+      if cover.nil? or cover.rejected?
+        cover = album.photos.nonblocked.first
+      end
       image_tag cover.public_filename(size), opts
     end
   end
 
   def album_cover(album, opts={})
 		size = opts.delete(:size) || 'large'
-    if album.verified == 2 || album.photos_count == 0
+    if album.rejected? || album.photos_count == 0
 			if album.is_a? GuildAlbum
 				link_to image_tag("default_guild_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			elsif album.is_a? EventAlbum
@@ -122,7 +125,10 @@ module ApplicationHelper
 				link_to image_tag("default_cover_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
 			end
     else
-      cover = album.cover.nil? ? album.photos.first : album.cover
+      cover = album.cover
+      if cover.nil? or cover.rejected? 
+        cover = album.photos.nonblocked.first
+      end
       link_to image_tag(cover.public_filename(size), opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")
     end
   end
@@ -153,13 +159,6 @@ module ApplicationHelper
     dig_html = link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable, :at => 'show'), :html => {:id => "digging_#{diggable.class.to_s.underscore}_#{diggable.id}"}.merge(html_opts), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
     #dig_html += "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}' class='gray'>#{diggable.digs_count}</span>人赞过)"
     dig_html
-  end
-
-  def dig_count_html diggable
-    "<div class=\"box04 cmt-tips\">
-      <span class=\"arrow-tip03\"></span>
-      <div><span class=\"photo-op-praise\"></span>有#{diggable.digs_count}人觉得比较赞</div>
-    </div>"
   end
 
   def blog_content blog, opts={}
@@ -444,6 +443,11 @@ module ApplicationHelper
   def rows_form_for(*args, &block)
     options = args.extract_options!.merge(:builder => RowsFormBuilder)
     form_for(*(args + [options]), &block)
+  end
+
+  def rows_form_tag(*args, &block)
+    options = args.extract_options!.merge(:builder => RowsFormBuilder)
+    form_tag(*(args + [options]), &block)  
   end
 
   def config_form_for(*args, &block)

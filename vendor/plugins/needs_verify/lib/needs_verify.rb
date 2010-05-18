@@ -21,6 +21,8 @@ module NeedsVerify
       # 举报
       has_many :reports, :as => 'reportable'
 
+      named_scope :nonblocked, :conditions => {:verified => [0,1]}, :order => "created_at DESC"
+
       named_scope :unverified, :conditions => {:verified => 0}, :order => "created_at DESC"
 
       named_scope :accepted, :conditions => {:verified => 1}, :order => "created_at DESC"
@@ -33,7 +35,14 @@ module NeedsVerify
     
       self.verify_opts = opts
 
-      attr_accessor :recently_verified, :recently_verified_from_unverified, :recently_unverified
+      # verified from 0 to 1
+      attr_accessor :recently_verified
+
+      # verified from 2 to 1
+      attr_accessor :recently_recovered
+
+      # verified from 0/1 to 2
+      attr_accessor :recently_unverified
 
       include InstanceMethods
 
@@ -45,19 +54,51 @@ module NeedsVerify
 
   module SingletonMethods
 
+    def verify_all opts
+      self.update_all("verified = 1", opts)
+    end
+
+    def unverify_all opts
+      self.update_all("verified = 2", opts)
+    end
+
+    def nonblocked_cond
+      {:verified => [0,1]}
+    end
+
   end
 
   module InstanceMethods
 
+    def rejected?
+      self.verified == 2
+    end
+
+    def needs_no_verify
+      self.verified = 1
+    end
+
     def needs_verify
       self.verified = 0
-      self.save
+    end
+
+    # 在before_create或者before_update里进行自动检查
+    # 如果不包含敏感词就通过
+    # 如果包括就需要检查
+    def auto_verify
+      if self.new_record?
+        self.verified = self.sensitive? ? 0 : 1
+      else
+        if self.sensitive? and self.sensitive_columns_changed?
+          self.verified = 0
+        end
+      end
     end
 
     def verify
       if self.verified != 1
         if self.verified == 2
-          self.recently_verified_from_unverified = true
+          self.recently_recovered = true
         else
           self.recently_verified = true
         end

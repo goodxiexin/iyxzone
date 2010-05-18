@@ -18,7 +18,9 @@
           <% end %>
         <% end %>
         <%= render :partial => 'user/albums/album_desc', :locals => {:user => @user, :album => @album} %>
-        <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @album, :commentable => true, :viewable => false, :diggable => false, :comment_opts => {:commentable => @album, :recipient => @user}, :reply_to => @reply_to} %>
+        <div class='page-foot s_clear'>
+          <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @album, :commentable => true, :viewable => false, :diggable => false, :comment_opts => {:commentable => @album, :recipient => @user}, :reply_to => @reply_to} %>
+        </div>
       </div>
     </div>
 <% end %>

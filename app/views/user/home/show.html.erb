@@ -7,12 +7,11 @@
   <%= javascript_include_tag 'sound' %>
 <% end %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body canvas_wrap s_clear">
+<% canvas_tag :with_sidebar => true do %>
 	  <div class="canvas_m">
 		  <div class="canvas_c">
   			<div class="box02 canvas_con">
-          <%= render :partial => 'home_status' %>
+          <%= render :partial => 'home_status', :locals => {:status => @status} %>
           <div class="feed-message-box s_clear" id='my_notices'>
 			  		<%= render :partial => 'user/notices/notices', :object => @notices %>
           </div>
@@ -32,7 +31,7 @@
         </div>
   		</div>
   	</div>
-    <div id="rightsidebar" class="canvas_r">
+    <% content_tag :div, :id => "rightsidebar", :class => "canvas_r" do %>
       <% if current_user.requests_count != 0 or current_user.invitations_count != 0 or current_user.poke_deliveries_count != 0 %> 
         <%= render :partial => 'requests_invitations_pokes' %>
       <% end %>
@@ -42,6 +41,5 @@
       <% if !@friend_suggestions.blank? %>
         <%= render :partial => 'friend_suggestions', :locals => {:friend_suggestions => @friend_suggestions} %>
       <% end %>
-    </div>
-  </div></div>
-</div></div></div></div>
+    <% end %>
+<% end %>

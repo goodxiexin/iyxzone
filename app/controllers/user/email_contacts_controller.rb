@@ -7,24 +7,35 @@ class User::EmailContactsController < UserBaseController
   rescue_from Contacts::ConnectionError, :with => :render_connection_error
 
   def unregistered
-    # read it from session??
-    @contacts = get_contacts 
-    parse_contacts
-    render :update do |page|
-      page.replace_html 'contacts', :partial => 'unregistered'
+    get_contacts
+
+    if @contacts.blank?
+      flash[:error] = '连接超时，请稍后再试'
+      redirect_to signup_invitations_url
+    else 
+      parse_contacts
+      render :update do |page|
+        page.replace_html 'contacts', :partial => 'unregistered'
+      end
     end
   end
 
   def not_friend
-    @contacts = get_contacts
-    parse_contacts
-    if @not_friend_contacts.size != 0
-      render :update do |page|
-        page.replace_html 'contacts', :partial => 'not_friend'
-      end
+    get_contacts
+
+    if @contacts.blank?
+      flash[:error] = '连接超时，请稍后再试'
+      redirect_to signup_invitations_url
     else
-      render :update do |page|
-        page.redirect_to :controller => 'user/signup_invitations', :action => 'invite_contact'
+      parse_contacts
+      if @not_friend_contacts.size != 0
+        render :update do |page|
+          page.replace_html 'contacts', :partial => 'not_friend'
+        end
+      else
+        render :update do |page|
+          page.redirect_to :controller => 'user/signup_invitations', :action => 'invite_contact'
+        end
       end
     end
   end
@@ -32,9 +43,15 @@ class User::EmailContactsController < UserBaseController
 protected
 
   def get_contacts
-    Rails.cache.fetch "#{params[:type]}_#{params[:user_name]}_contacts" do
-      Contacts.new(params[:type], params[:user_name], session[:email_authentication][:password]).contacts
-    end
+    @email_info = Rails.cache.read "import-contacts-#{current_user.id}"
+    if !@email_info.blank?
+      if @email_info[:contacts].blank?
+        @contacts = Contacts.new(@email_info[:type], @email_info[:user_name], @email_info[:password]).contacts
+        Rails.cache.write "import-contacts-#{current_user.id}", @email_info.merge({:contacts => @contacts})
+      else
+        @contacts = @email_info[:contacts]
+      end
+    end    
   end
 
   def render_not_supported e

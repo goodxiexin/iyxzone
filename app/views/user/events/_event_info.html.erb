@@ -1,30 +1,19 @@
   <div class='formComposer'>
     <div class="formcontent">
-      <% rows_s_clear '<strong>名称</strong>: ' do %>
-        <span class='shine'><strong><%= h event.title %></strong></span>
-      <% end %>
+      <% rows_s_clear '<strong>名称</strong>: ' do %><span class='shine'><strong><%= h event.title %></strong></span><% end %>
       <% if event.is_guild_event? %>
-        <% rows_s_clear '<strong>工会</strong>: ' do %>
-          <span class='shine'><strong><%= guild_link event.guild %></strong></span>
-        <% end %>
+        <% rows_s_clear '<strong>工会</strong>: ' do %><span class='shine'><strong><%= guild_link event.guild %></strong></span><% end %>
       <% end %>
-      <% rows_s_clear '游戏: ' do %>      
-        <%= event.game.name %>
-      <% end %>
+      <% rows_s_clear '游戏: ' do %><%= event.game.name %><% end %>
       <% unless event.game.no_areas %>
-        <% rows_s_clear '游戏服务区: ' do %>
-          <%= event.game_area.name %>
-        <% end %>
+        <% rows_s_clear '游戏服务区: ' do %><%= event.game_area.name %><% end %>
       <% end %>
-      <% rows_s_clear '游戏服务区: ' do %>
-        <%= event.game_server.name %>
-      <%end %>
+      <% rows_s_clear '游戏服务区: ' do %><%= event.game_server.name %><%end %>
       <% rows_s_clear '时间: ' do %>
         从 <span class='shine'><%= ftime event.start_time %></span> 到 <span class='shine'><%= ftime event.end_time %></span>
       <% end %>
     </div>
   </div>
-
   <div class="multibox">
     <div class="title"><b>描述</b></div>
     <div class="feed-box">

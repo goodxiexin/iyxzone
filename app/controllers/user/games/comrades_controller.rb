@@ -2,26 +2,25 @@ class User::Games::ComradesController < UserBaseController
 
 	layout 'app'
 
+  PER_PAGE = 20
+
+  PREFETCH = [{:user => :profile}, :server]
+
 	def index
-		@comrades = []
-    servers = current_user.servers.all(:conditions => { :game_id => @game.id})
-		@comrades = GameCharacter.paginate :page => params[:page], :per_page => 20, :conditions => {:server_id => servers.map(&:id)}, :include => [{:user => :profile}, :server]
+    @servers = current_user.servers.match(:game_id => @game.id)
+		@comrades = GameCharacter.match(:server_id => @servers.map(&:id)).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
 	end
 
 	def search
-		@comrades = []
-		servers = current_user.servers.all(:conditions=> { :game_id => @game.id})
-    @comrades = GameCharacter.all :conditions => {:server_id => servers.map(&:id)}
+		@servers = current_user.servers.match(:game_id => @game.id)
+    @comrades = GameCharacter.match(:server_id => @servers.map(&:id))
     @characters = User.search(params[:key]).map {|user| user.characters}.flatten
-		@comrades = @characters & @comrades
-    @comrades = @comrades.paginate :page => params[:page], :per_page => 20 
+		@comrades = (@characters & @comrades).paginate :page => params[:page], :per_page => PER_PAGE
 	end
 
 	def character_search
-		@comrades = []
-    servers = current_user.servers.all(:conditions => {:game_id => @game.id})
-    @comrades = GameCharacter.search(params[:key], :conditions => {:server_id => servers.map(&:id)}, :include => [{:user => :profile}, :server])
-    @comrades = @comrades.paginate :page => params[:page], :per_page => 20 
+    @servers = current_user.servers.match(:game_id => @game.id)
+    @comrades = GameCharacter.match(:server_id => @servers.map(&:id)).search(params[:key]).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
 	end
 
 protected

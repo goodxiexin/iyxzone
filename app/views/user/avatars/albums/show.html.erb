@@ -16,13 +16,16 @@
         <%= render :partial => 'user/albums/album_table', :locals => {:album => @album, :photos => @photos} %>
       <% else %>
 				<% if @user == current_user %>
-					<div class='tip'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'album') %>吧</div>
+					<div class='tip'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'album'), :width => 400 %>吧</div>
 				<% else %>
 					<div class='tip'>还没有图片</div>
 				<% end %>
       <% end %>
       <%= render :partial => 'user/albums/album_desc', :locals => {:user => @user, :album => @album} %>
-      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @album, :commentable => true, :diggable => false, :viewable => false, :comment_opts => {:commentable => @album, :recipient => @album.poster}, :reply_to => @reply_to} %>
+      <div class='page-foot s_clear'>
+        <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @album, :commentable => true, :diggable => false, :viewable => false, :comment_opts => {:commentable => @album, :recipient => @album.poster}, :reply_to => @reply_to} %>
+        <%= render :partial => 'user/resources/randoms', :locals => {:title => "#{get_subject @user}的其他相册", :randoms => @random_albums} %>
+      </div>
     </div>
   </div>
 <% end %>

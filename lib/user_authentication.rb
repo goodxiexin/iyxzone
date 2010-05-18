@@ -14,6 +14,7 @@ module UserAuthentication
       # callbacks
       before_save :encrypt_password
       before_create :make_activation_code
+      before_create :make_remember_code
       before_create :make_invite_code
       before_create :make_qq_invite_code
       before_create :make_msn_invite_code
@@ -79,22 +80,6 @@ module UserAuthentication
       crypted_password == encrypt(password)
     end
     
-    def remember_me
-      remember_me_for REMEMBER_DURATION
-    end
-
-    def remember_me_for time
-      if self.remember_me_untils.blank? or (time.from_now > self.remember_me_untils)
-        self.remember_me_untils = time.from_now
-        save(false)
-      end
-    end
-    
-    def forget_me
-      self.remember_me_untils = nil
-      save(false)
-    end
-
     def forgot_password
       @forgotten_password = true
       self.make_password_reset_code
@@ -145,6 +130,10 @@ protected
 
     def make_activation_code
       self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+    end
+
+    def make_remember_code
+      self.remember_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )    
     end
 
     def make_password_reset_code

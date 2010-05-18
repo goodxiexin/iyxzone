@@ -4,6 +4,9 @@ class PostObserver < ActiveRecord::Observer
 
   # TODO: 并发的时候肯定有问题，应该从mysql的层次解决这个问题
   def before_create post
+    # veirfy
+    post.auto_verify
+
     topic = post.topic
     latest_post = topic.posts.find(:first, :order => 'floor DESC')
     if latest_post.nil?
@@ -25,18 +28,30 @@ class PostObserver < ActiveRecord::Observer
 
     if poster != owner
       post.notices.create(:user_id => owner.id, :data => "comment")
-      GuildMailer.deliver_reply_post post, owner if owner.mail_setting.reply_my_post == 1
+      GuildMailer.deliver_reply_post post, owner if owner.mail_setting.reply_my_post?
     end
 
     if recipient != poster and recipient != owner
       post.notices.create(:user_id => recipient.id, :data => "reply")
-      GuildMailer.deliver_reply_post post, recipient if recipient.mail_setting.reply_my_post == 1
+      GuildMailer.deliver_reply_post post, recipient if recipient.mail_setting.reply_my_post?
+    end  
+  end
+
+  def after_update post
+    if post.recently_unverified
+      post.topic.raw_decrement :posts_count
+      post.forum.raw_decrement :posts_count
+    elsif post.recently_recovered
+      post.topic.raw_increment :posts_count
+      post.forum.raw_increment :posts_count
     end  
   end
 
   def after_destroy post
-    post.forum.raw_decrement :posts_count
-    post.topic.raw_decrement :posts_count
+    if !post.rejected?
+      post.forum.raw_decrement :posts_count
+      post.topic.raw_decrement :posts_count
+    end
   end
 
 end

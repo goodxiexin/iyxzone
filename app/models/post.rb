@@ -10,6 +10,8 @@ class Post < ActiveRecord::Base
 
   has_many :notices, :as => 'producer', :dependent => :destroy
 
+  needs_verification :sensitive_columns => [:content] 
+
   validates_presence_of :poster_id, :message => "没有发布者"
 
   validates_presence_of :forum_id, :message => "没有论坛"

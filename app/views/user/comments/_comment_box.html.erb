@@ -1,6 +1,6 @@
 <% type = commentable.class.to_s.underscore %>
 <div id='<%= type %>_comments_<%= commentable.id %>'>
-	<% commentable.comments.each do |c| %>
+	<% commentable.comments.nonblocked.each do |c| %>
     <%= render :partial => 'user/comments/comment', :object => c %>
   <% end %>
 </div>

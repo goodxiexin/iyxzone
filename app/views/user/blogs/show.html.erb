@@ -12,11 +12,14 @@
     <%= render :partial => 'blog_path', :locals => {:count => @count, :next_blog => @next, :prev_blog => @prev} %>
     <div class='detail-blog'>
       <%= render :partial => 'blog_head', :locals => {:user => @user, :blog => @blog} %>
-      <div class='con'>
+      <div class='con' style='line-height: 1.5'>
         <%= @blog.content %>
       </div>
       <%= render :partial => 'blog_foot', :locals => {:blog => @blog} %>
-      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @blog, :commentable => true, :viewable => true, :diggable => true, :comment_opts => {:commentable => @blog, :recipient => @blog.poster}, :reply_to => @reply_to} %>
+      <div class='page-foot s_clear'>
+        <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @blog, :commentable => true, :viewable => true, :diggable => true, :comment_opts => {:commentable => @blog, :recipient => @blog.poster}, :reply_to => @reply_to} %>
+        <%= render :partial => 'user/resources/randoms', :locals => {:title => "#{get_subject @user}的其他日志", :randoms => @random_blogs} %>
+      </div>
     </div>
   </div>
 <% end %>

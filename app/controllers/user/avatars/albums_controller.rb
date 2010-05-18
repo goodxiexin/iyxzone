@@ -5,14 +5,13 @@ class User::Avatars::AlbumsController < UserBaseController
   def show
     respond_to do |format|
       format.html {
-        @photos = @album.photos.paginate :page => params[:page], :per_page => 12 
+        @random_albums = PersonalAlbum.by(@user.id).for('friend').nonblocked.random :limit => 5
+        @photos = @album.photos.nonblocked.paginate :page => params[:page], :per_page => 12 
         @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
         render :action => 'show'
       }
       format.json {
-        @photos = @album.photos
-        @json = @photos.map {|p| p.public_filename}
-        render :json => @json
+        render :json => @album.photos.nonblocked.map{|p| p.public_filename}
       }
     end
   end
@@ -22,6 +21,8 @@ class User::Avatars::AlbumsController < UserBaseController
       respond_to do |format|
         format.json { render :json => @album }
       end  
+    else
+      render_js_error
     end
   end
 
@@ -32,7 +33,8 @@ protected
       @album = AvatarAlbum.find(params[:id])
       require_verified @album
       @user = @album.poster
-      require_friend_or_owner @user
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @album, @relationship
     elsif ["update"].include? params[:action]
       @album = AvatarAlbum.find(params[:id])
       require_verified @album

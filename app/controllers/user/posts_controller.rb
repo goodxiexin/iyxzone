@@ -4,20 +4,23 @@ class User::PostsController < UserBaseController
 
   increment_viewing 'topic', 'topic_id', :only => [:index]
 
+  PER_PAGE = 20
+
   def index
-    @albums = current_user.all_albums.map {|a| {:id => a.id, :title => a.title, :type => a.class.name.underscore}}.to_json
-    @random_topics = Topic.random :limit => 5, :except => [@topic], :conditions => {:forum_id => @forum.id}
     if !params[:post_id].blank?
       @post = Post.find(params[:post_id])
-      params[:page] = @topic.posts.index(@post) / 20 + 1
+      params[:page] = @topic.posts.index(@post) / PER_PAGE + 1
     end
-    @posts = @topic.posts.paginate :page => params[:page], :per_page => 20
-    @next = @topic.next :top => @topic.top
-    @prev = @topic.prev :top => @topic.top
+    @random_topics = Topic.random :limit => 5, :except => [@topic], :conditions => {:forum_id => @forum.id}
+    @posts = @topic.posts.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE
+    @cond = {:top => @topic.top}.merge Topic.nonblocked_cond
+    @next = @topic.next @cond
+    @prev = @topic.prev @cond
   end
 
   def create
     @post = @topic.posts.build(params[:post].merge({:poster_id => current_user.id, :forum_id => @forum.id}))
+
     if @post.save
       redirect_to forum_topic_posts_url(@forum, @topic, :page => (@topic.posts_count + 1)/20 + 1)     
     else
@@ -27,9 +30,10 @@ class User::PostsController < UserBaseController
   end
 
   def destroy
-    @post.destroy
-    render :update do |page|
-      page << "$('post_#{@post.id}').remove();alert('成功')"
+    if @post.destroy
+      render_js_code  "$('post_#{@post.id}').remove();alert('成功')"
+    else
+      render_js_error
     end 
   end
 

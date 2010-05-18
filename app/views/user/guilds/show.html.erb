@@ -31,9 +31,7 @@
 
 <div class="box02 canvas_con">
   <%= render :partial => "guild_desc", :locals => {:guild => @guild} %> 
-  <% unless @photos.blank? %>
-    <%= render :partial => "recent_albums", :locals => {:album => @album, :photos => @photos} %>
-  <% end %>
+  <%= render :partial => "recent_photos", :locals => {:album => @album, :photos => @photos} %>
   <%= render :partial => "guild_members", :locals => {:guild_characters => @guild_characters, :guild => @guild} %>
   <%= render :partial => "guild_feeds", :locals => {:guild => @guild, :feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
   <% if @role and (@role.is_president? or @role.is_authorized?) %>

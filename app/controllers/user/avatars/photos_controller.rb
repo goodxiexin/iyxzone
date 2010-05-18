@@ -3,7 +3,7 @@ class User::Avatars::PhotosController < UserBaseController
   layout 'app'
 
   def show
-    @relationship = @user.relationship_with current_user
+    @random_albums = PersonalAlbum.by(@user.id).for('friend').nonblocked.random :limit => 5
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
   end
@@ -42,22 +42,28 @@ class User::Avatars::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.html { render :update do |page|
-					page << "facebox.close();"
-          if params[:at] == 'set_cover'
-            page.redirect_to avatar_album_url(@album)
-          elsif params[:at] == 'photo'
-            page.redirect_to avatar_url(@photo)
-          end
-				end }
-				format.json { render :json => @photo }
+				format.html { 
+          render :update do |page|
+					  page << "facebox.close();"
+            if params[:at] == 'set_cover'
+              page.redirect_to avatar_album_url(@album)
+            elsif params[:at] == 'photo'
+              page.redirect_to avatar_url(@photo)
+            end
+				  end 
+        }
+				format.json { 
+          render :json => @photo 
+        }
 			end
     else
       respond_to do |format|
-        format.html { render :update do |page|
-          page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
-          page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题没法保存', :message => nil %>"
-        end }
+        format.html { 
+          render :update do |page|
+            page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
+            page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题没法保存', :message => nil %>"
+          end 
+        }
       end
     end
   end
@@ -68,9 +74,7 @@ class User::Avatars::PhotosController < UserBaseController
         page.redirect_to avatar_album_url(@album)
       end
     else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error '发生错误'
     end
   end
 
@@ -82,7 +86,8 @@ protected
       require_verified @photo
       @album = @photo.album
       @user = @album.poster
-      require_friend_or_owner @user
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @album, @relationship
     elsif ['edit', 'update', 'destroy', 'update_notation'].include? params[:action]
       @album = current_user.avatar_album
       @photo = @album.photos.find(params[:id])

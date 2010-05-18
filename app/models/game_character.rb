@@ -1,4 +1,6 @@
 class GameCharacter < ActiveRecord::Base
+
+  named_scope :by, lambda {|user_ids| {:conditions => {:user_id => user_ids}}}
 	
 	serialize :data
 

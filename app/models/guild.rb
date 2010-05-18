@@ -1,5 +1,5 @@
 class Guild < ActiveRecord::Base
-  
+
   belongs_to :president, :class_name => 'User'
 
   belongs_to :president_character, :class_name => 'GameCharacter', :foreign_key => 'character_id'
@@ -10,16 +10,20 @@ class Guild < ActiveRecord::Base
 
   belongs_to :game_area
 
-  named_scope :hot, :conditions => {:verified => [0,1]}, :order => '(members_count + veterans_count + 1) DESC'
+  named_scope :hot, :order => '(members_count + veterans_count + 1) DESC'
 
-  named_scope :recent, :conditions => {:verified => [0,1]}, :order => 'created_at DESC'
+  named_scope :recent, :order => 'created_at DESC'
+
+  named_scope :people_order, :order => '(members_count + veterans_count) DESC'
+
+  named_scope :by, lambda {|user_ids| {:conditions => {:president_id => user_ids}}}
 
   has_one :forum, :dependent => :destroy
 
   has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
   
-  has_many :events, :conditions => {:verified => [0,1]}, :dependent => :destroy
-
+  has_many :events, :dependent => :destroy
+=begin
   has_many :gears, :dependent => :delete_all
 
   has_many :bosses, :dependent => :delete_all
@@ -33,40 +37,58 @@ class Guild < ActiveRecord::Base
   has_one :absence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 0}
 
   has_one :presence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 1}
-
+=end
   has_many :memberships
 
-  has_many :invitations, :class_name => 'Membership', :conditions => {:status => 0}
+  has_many :invitations, :class_name => 'Membership', :conditions => {:status => Membership::Invitation}
 
-  has_many :requests, :class_name => 'Membership', :conditions => {:status => 1}
+  has_many :requests, :class_name => 'Membership', :conditions => {:status => Membership::Request}
 
-	with_options :through => :memberships, :source => 'user', :uniq => true do |guild|
+  has_many :veteran_memberships, :class_name => 'Membership', :conditions => {:status => Membership::Veteran}
 
-    guild.has_many :invitees, :conditions => "memberships.status = 0"
+  has_many :member_memberships, :class_name => 'Membership', :conditions => {:status => Membership::Member}
 
-		guild.has_many :requestors, :conditions => "memberships.status = 1"
+  has_many :member_and_veteran_memberships, :class_name => 'Membership', :conditions => {:status => [Membership::Veteran, Membership::Member]}
 
-		guild.has_many :veterans, :conditions => "memberships.status = 4"
+  has_many :president_and_veteran_memberships, :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran]}
+
+  has_many :people_memberships, :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
+
+	with_options :source => 'user', :uniq => true do |guild|
+
+    guild.has_many :invitees, :through => :invitations
+
+		guild.has_many :requestors, :through => :requests
+
+		guild.has_many :veterans, :through => :veteran_memberships
     
-    guild.has_many :members, :conditions => "memberships.status = 5"
+    guild.has_many :members, :through => :member_memberships
 
-    guild.has_many :people, :conditions => "memberships.status =3 or memberships.status = 4 or memberships.status = 5"
+    guild.has_many :members_and_veterans, :through => :member_and_veteran_memberships
+
+    guild.has_many :president_and_veterans, :through => :president_and_veteran_memberships
+
+    guild.has_many :people, :through => :people_memberships
 
 	end
 
-  with_options :through => :memberships, :source => 'character' do |guild|
+  with_options :source => 'character' do |guild|
 
-    guild.has_many :invite_characters, :conditions => "memberships.status = 0"
+    guild.has_many :invite_characters, :through => :invitations
 
-    guild.has_many :request_characters, :conditions => "memberships.status = 1"
+    guild.has_many :request_characters, :through => :requests
 
-    guild.has_many :veteran_characters, :conditions => "memberships.status = 4"
+    guild.has_many :veteran_characters, :through => :veteran_memberships
 
-    guild.has_many :member_characters, :conditions => "memberships.status = 5"
+    guild.has_many :member_characters, :through => :member_memberships
 
-    guild.has_many :characters, :conditions => "memberships.status = 3 or memberships.status = 4 or memberships.status = 5" 
+    guild.has_many :member_and_veteran_characters, :through => :member_and_veteran_memberships
 
-    guild.has_many :all_characters
+    guild.has_many :president_and_veteran_characters, :through => :president_and_veteran_memberships
+
+    guild.has_many :characters, :through => :people_memberships
+
+    guild.has_many :all_characters, :through => :memberships
 
   end
 
@@ -83,11 +105,11 @@ class Guild < ActiveRecord::Base
                             :personal_album => 'PersonalAlbum'
                           }
 
-	acts_as_resource_feeds :recipients => lambda {|guild| [guild.president.profile, guild.game] + guild.president.friends.find_all {|f| f.application_setting.recv_guild_feed == 1} }
+	acts_as_resource_feeds :recipients => lambda {|guild| [guild.president.profile, guild.game] + guild.president.friends.find_all {|f| f.application_setting.recv_guild_feed?} }
 
 	acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, guild, comment| guild.president == user}, 
-                      :create_conditions => lambda {|user, guild| guild.has_member?(user)},
+                      :create_conditions => lambda {|user, guild| guild.has_people?(user)},
                       :view_conditions => lambda { true } # anyone can view
 
 	searcher_column :name
@@ -109,57 +131,26 @@ class Guild < ActiveRecord::Base
 		veterans_count + members_count + 1
 	end
 
-  def has_member? user
-    memberships.exists? :user_id => user.id, :status => [3,4,5]
+  def has_people? user
+    people_memberships.exists? :user_id => user.id
   end
 
-  def has_character? character
-    memberships.exists? :character_id => character.id, :status => [3,4,5]
+  def has_veteran? user
+    veteran_memberships.exists? :user_id => user.id
   end
 
-  def all_memberships_for user
-    memberships.all(:conditions => {:user_id => user.id})
-  end
-
-  def memberships_for user
-    memberships.all(:conditions => {:user_id => user.id, :status => [3, 4, 5]})
-  end
-
-  def requests_for user
-    requests.all(:conditions => {:user_id => user.id})
-  end
-
-  def invitations_for user
-    invitations.all(:conditions => {:user_id => user.id})
-  end
-
-  def all_characters_for user
-    all_characters.all(:conditions => {:user_id => user.id})
-  end
-
-  def characters_for user
-    characters.all(:conditions => {:user_id => user.id})
-  end
-
-  def request_characters_for user
-    request_characters.all(:conditions => {:user_id => user.id})
-  end
-
-  def invite_characters_for user
-    invite_characters.all(:conditions => {:user_id => user.id})
-  end
-
+  # 一个玩家可能有多个游戏角色在这个工会里
   def role_for user
-    memberships.find(:first, :conditions => {:user_id => user.id, :status => [3,4,5]}, :order => 'status ASC') 
+    people_memberships.by(user.id).order('status ASC').first
+  end
+
+  def membership_for user, character
+    memberships.match(:user_id => user.id, :character_id => character.id).first
   end
 
   def requestable_characters_for user
     user.characters.find(:all, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) -  
     all_characters.find(:all, :conditions => "memberships.user_id = #{user.id}")
-  end
-
-  def is_requestable_by? user
-    !requestable_characters_for(user).blank?
   end
 
   def invitees= character_ids
@@ -169,7 +160,7 @@ class Guild < ActiveRecord::Base
       invitations.build(:character_id => character.id, :user_id => character.user_id)
     end 
   end
-
+=begin
   after_save :save_rules
 
   def new_rules= rule_attrs
@@ -280,15 +271,14 @@ class Guild < ActiveRecord::Base
     end
     @del_gears_ids = nil
   end
-
+=end
 protected
 
   def character_is_valid
     return if character_id.blank?
-    character = GameCharacter.find(:first, :conditions => {:id => character_id})
-    errors.add(:character_id, "不存在") if character.blank?
+    errors.add(:character_id, "不存在") if president_character.blank?
     return if president_id.blank?
-    errors.add(:character_id, "不是拥有者") if character.user_id != president_id
+    errors.add(:character_id, "不是拥有者") if president_character.user_id != president_id
   end
 
 end

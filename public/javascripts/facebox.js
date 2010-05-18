@@ -85,7 +85,7 @@ var Facebox = Class.create({
 	},
 
 	set_content: function(data){
-		this.content.update( data);
+		this.content.update(data);
     		
 		if(!this.facebox.visible()) 
 			new Effect.Appear(this.facebox, {'duration': 0.3});

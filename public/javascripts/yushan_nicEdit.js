@@ -345,6 +345,17 @@ var nicEditor = bkClass.extend({
 		}
 		nicEditors.editors.push(this);
 		bkLib.addEvent(document.body,'mousedown', this.selectCheck.closureListener(this) );
+
+    document.onkeydown = function(e) {
+      if (!e)
+        e = window.event;
+      if (e.keyCode == 8) {
+        if (document.selection && document.selection.type == "Control") {
+          document.selection.clear();
+          return false;
+        }
+      }
+    };
 	},
 	
 	panelInstance : function(e,o) {
@@ -483,6 +494,7 @@ var nicEditorInstance = bkClass.extend({
 		this.instanceDoc = document.defaultView;
 		this.elm.addEvent('mousedown',this.selected.closureListener(this)).addEvent('keypress',this.keyDown.closureListener(this)).addEvent('focus',this.selected.closure(this)).addEvent('blur',this.blur.closure(this)).addEvent('keyup',this.selected.closure(this));
 		this.ne.fireEvent('add',this);
+     
 	},
 	
 	remove : function() {
@@ -1320,6 +1332,10 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
 	
 	submit : function(e) {
 		var url = this.url;
+    if(!url.match(/^http\:\/\//)){
+      url = 'http://' + url;
+    }
+
     var scheme = this.scheme;
 
 		if(url == "http://" || url == "") {

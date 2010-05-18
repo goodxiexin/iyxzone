@@ -20,7 +20,10 @@
 		    <p class='space20'><%= simple_format h @video.description %></p>
       </div>
       <%= render :partial => 'video_foot', :locals => {:video => @video} %>
-      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @video, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @video, :recipient => @video.poster}, :reply_to => @reply_tm} %>
+      <div class='page-foot s_clear'>
+        <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @video, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @video, :recipient => @video.poster}, :reply_to => @reply_to} %>
+        <%= render :partial => 'user/resources/randoms', :locals => {:title => "#{get_subject @user}的其他视频", :randoms => @random_videos} %>
+      </div>
     </div>
   </div>
 <% end %>

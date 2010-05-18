@@ -29,11 +29,10 @@ protected
   def album_is_valid
     return if album_id.blank? or poster_id.blank?
 
-    album = EventAlbum.find_by_id(album_id)
     if album.blank?
       errors.add(:album_id, "不存在")
-    elsif !album.event.has_participant? poster
-      errors.add(:album_id, "没有参加该活动") 
+    elsif album.poster != poster
+      errors.add(:album_id, "没有权力上传")
     end 
   end
 

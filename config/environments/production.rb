@@ -3,7 +3,6 @@ SITE_URL = "http://www.17gaming.com/"
 SITE_MAIL = "system@17gaming.com"
 
 # session options
-SESSION_DURATION = 1.hour
 REMEMBER_DURATION = 2.months
 
 # The production environment is meant for finished, "live" apps.

@@ -14,7 +14,7 @@ module Shareable
       include Shareable::InstanceMethods
 
       extend Shareable::SingletonMethods
-
+      
       # register this resource with share class
       ::Share.register(self.name, opts.delete(:path_reg) || /\/[^\/]+\/([\d]+)/)
 

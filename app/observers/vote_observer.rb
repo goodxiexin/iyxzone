@@ -15,7 +15,7 @@ class VoteObserver < ActiveRecord::Observer
 	  vote.poll.raw_increment :voters_count
 
     # issue feeds if necessary
-    if vote.voter.application_setting.emit_poll_feed == 1
+    if vote.voter.application_setting.emit_poll_feed?
       vote.deliver_feeds
     end
   end

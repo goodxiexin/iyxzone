@@ -52,23 +52,27 @@ ActionController::Routing::Routes.draw do |map|
 
     admin.resources :users, :member => {:enable => :put, :disable => :put, :activate => :put}, :collection => {:search => :get}
 
-    admin.resources :blogs, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
+    admin.resources :blogs, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :videos, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
+    admin.resources :videos, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :statuses, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
+    admin.resources :statuses, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :comments, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
+    admin.resources :comments, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :events, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
+    admin.resources :events, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :guilds, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
+    admin.resources :guilds, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :polls, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
+    admin.resources :polls, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :albums, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}   
+    admin.resources :albums, :member => {:verify => :put, :unverify => :put }
  
-    admin.resources :photos, :member => {:verify => :put, :unverify => :put }, :collection => {:search => :get, :accept => :get, :reject => :get}
+    admin.resources :photos, :member => {:verify => :put, :unverify => :put }
+
+    admin.resources :topics, :member => {:verify => :put, :unverify => :put }
+
+    admin.resources :posts, :member => {:verify => :put, :unverify => :put}
 
     admin.resources :applications
 

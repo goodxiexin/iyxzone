@@ -22,9 +22,9 @@
               <div class="img-main">
                 <div class="imgwrap box05">
                   <%= render:partial => 'user/photos/photo_operations', :locals => {:photo => @photo,
-                    :taggable => (@membership and (@membership.is_authorized? or @membership.is_president?)),
-                    :editable => (@guild.president == current_user),
-                    :deleteable => (@guild.president == current_user),
+                    :taggable => (@role and (@role.is_authorized? or @role.is_president?)),
+                    :editable => @role.is_president?,
+                    :deleteable => @role.is_president?,
                     :shareable => true,
                     :diggable => true
                   }  %>
@@ -37,10 +37,12 @@
           <%= render :partial => 'user/photos/photo_slide', :locals => {:album => @album, :photo => @photo} %>
         </div>
       </div>
-      <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @photo, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @photo, :recipient => @photo.poster}, :reply_to => @reply_to} %>
+      <div class='page-foot s_clear'>
+        <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @photo, :commentable => true, :diggable => true, :viewable => false, :comment_opts => {:commentable => @photo, :recipient => @photo.poster}, :reply_to => @reply_to} %>
+      </div>
     </div>
 <% end %>
 
-<% if @membership and (@membership.is_authorized? or @membership.is_president?) %>
+<% if @role and (@role.is_authorized? or @role.is_president?) %>
 <%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @guild.people - [current_user]} %>
 <% end %>

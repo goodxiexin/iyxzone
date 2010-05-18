@@ -1,6 +1,6 @@
 <% delivery = album_feed_delivery %>
 <% album = delivery.feed_item.originator %>
-<% photos = album.photos.find(:all, :conditions => {:id => delivery.feed_item.data[:ids], :verified => [0,1]}) %>
+<% photos = album.photos.nonblocked.match(:id => delivery.feed_item.data[:ids]) %>
 <% poster = album.poster %>
 <% type = photos.first.class.name.underscore %>
 
