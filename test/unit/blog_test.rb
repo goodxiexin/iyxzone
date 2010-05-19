@@ -14,6 +14,9 @@ class BlogTest < ActiveSupport::TestCase
     FriendFactory.create @user, @friend2
     FriendFactory.create @user, @friend3
     FriendFactory.create @user, @friend4
+    @stranger = UserFactory.create
+    @same_game_user = UserFactory.create
+    GameCharacterFactory.create :game_id => @game.id, :user_id => @same_game_user.id
   end
 
   #
@@ -91,24 +94,190 @@ class BlogTest < ActiveSupport::TestCase
   # add/delete relative users
   #
   test "case4" do
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id] 
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
+    @blog.reload 
+    assert_equal @blog.tags_count, 2
     assert_equal @blog.relative_users, [@friend1, @friend2]
 
-    @tag = @blog.tags.find_by_tagged_user_id(@friend2.id)
-    @blog.update_attributes(:del_friend_tags => [@tag.id])
+    @blog.update_attributes(:del_friend_tags => [@friend2.id])
     @blog.reload
+    assert_equal @blog.tags_count, 1
     assert_equal @blog.relative_users, [@friend1] 
 
     @blog.update_attributes(:new_friend_tags => [@friend3.id])
     @blog.reload
+    assert_equal @blog.tags_count, 2
     assert_equal @blog.relative_users, [@friend1, @friend3] 
 
-    @tag = @blog.tags.find_by_tagged_user_id(@friend1.id)
-    @blog.update_attributes(:del_friend_tags => [@tag.id], :new_friend_tags => [@friend4.id])
+    @blog.update_attributes(:del_friend_tags => [@friend1.id], :new_friend_tags => [@friend4.id])
     @blog.reload
+    assert_equal @blog.tags_count, 2
     assert_equal @blog.relative_users, [@friend3, @friend4] 
   end 
 
-  
+  #
+  # case 5
+  # create a blog, some one view the blog
+  #
+  test "case5" do
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
+    assert_equal @blog.digs_count, 0
+
+    @blog.viewed_by @user
+    @blog.reload
+    assert_equal @blog.viewings_count, 1
+
+    @blog.viewed_by @friend1
+    @blog.reload
+    assert_equal @blog.viewings_count, 2
+
+    @blog.viewed_by @stranger
+    @blog.reload
+    assert_equal @blog.viewings_count, 3
+
+    @blog.viewed_by @same_game_user
+    @blog.reload
+    assert_equal @blog.viewings_count, 4
+  end
+
+  #
+  # case 6
+  # create a public blog, everyone can dig it only once
+  # then create a friend-or-same-game-viewable blog, try digging
+  # then create a friend-viewable blog, try digging
+  # then create a owner-viewable blog, try digging
+  #
+  test "case6" do
+    # 创建public日志
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    assert_equal @blog.digs_count, 0
+ 
+    assert @blog.dug_by(@user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    assert !@blog.dug_by(@user) 
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    
+    assert @blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+    assert !@blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+    
+    assert @blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 3
+    assert !@blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 3
+
+    assert @blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 4
+    assert !@blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 4
+
+    # 创建friend or same game日志
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    @blog.reload
+    assert_equal @blog.digs_count, 0
+
+    assert @blog.dug_by(@user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    assert !@blog.dug_by(@user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    
+    assert @blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+    assert !@blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+   puts "privilege: #{@blog.privilege}, relationship: #{@user.relationship_with @same_game_user}, available: #{@blog.available_for? @same_game_user}"
+    assert @blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 3
+    assert !@blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 3
+
+    assert !@blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 3
+    assert !@blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 3
+
+    # 创建friend日志
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
+    @blog.reload
+    assert_equal @blog.digs_count, 0
+
+    assert @blog.dug_by(@user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    assert !@blog.dug_by(@user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+
+    assert @blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+    assert !@blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+
+    assert !@blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+    assert !@blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+
+    assert !@blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+    assert !@blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 2
+
+    # 创建owner日志
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
+    @blog.reload
+    assert_equal @blog.digs_count, 0
+
+    assert @blog.dug_by(@user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    assert !@blog.dug_by(@user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+
+    assert !@blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    assert !@blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+
+    assert !@blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    assert !@blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+
+    assert !@blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+    assert !@blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 1
+  end 
  
 end

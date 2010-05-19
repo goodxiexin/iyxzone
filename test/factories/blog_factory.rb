@@ -3,7 +3,7 @@ class BlogFactory
   def self.create cond={}
     # create poster
     poster = Factory.create :user
-    
+
     # create character
     game        = Factory.create :game
     area        = Factory.create :game_area, :game_id => game.id
@@ -20,7 +20,6 @@ class BlogFactory
     }
 
     # create blog
-    # 之所有这么做，是因为，数据校验太复杂了，他会检查你是否有该游戏
     Factory.create :blog, {:poster_id => poster.id, :game_id => character.game_id, :draft => 0}.merge(cond)
   end
 

@@ -66,7 +66,7 @@ module Model
       end
 
       def available_for? relationship
-        relationship == 'owner' || privilege == 1 || relationship == 'friend' || (privilege == 3 and relationship == 'same_game')
+        relationship == 'owner' || privilege == 1 || (privilege != 4 and relationship == 'friend') || (privilege == 2 and relationship == 'same_game')
       end
 
   end

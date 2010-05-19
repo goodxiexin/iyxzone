@@ -86,5 +86,3 @@ end
 end
 
 ActiveRecord::Base.send(:include, Viewable::Model)
-
-ActionController::Base.send(:include, Viewable::Controller)

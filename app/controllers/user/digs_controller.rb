@@ -1,26 +1,12 @@
 class User::DigsController < UserBaseController
 
   def create
-    @dig = Dig.new((params[:dig] || {}).merge(:poster_id => current_user.id))
+    @diggable = params[:diggable_type].constantize.find(params[:diggable_id])
     
-    if @dig.save
-      @diggable = @dig.diggable
-      render :update do |page|
-        if params[:at] == 'sharing'
-          page << "$('dig_sharing_#{@diggable.id}').update( \"<a class='praise' href='javascript:void(0)'><strong><span>#{@diggable.digs_count}</span></strong></a>\");"
-        elsif params[:at] == 'show'
-          page << "notice('成功');"
-          page << "Element.replace($('digging_#{@diggable.class.name.underscore}_#{@diggable.id}'), '<a href=\"javascript:void(0)\">赞</a>')" 
-       else
-          page << "$('dig_#{@diggable.class.name.underscore}_#{@diggable.id}').addClassName('dug');"
-				  page << "$('dig_#{@diggable.class.name.underscore}_#{@diggable.id}').update(#{@diggable.digs_count})"
-				  page << "Element.replace($('digging_#{@diggable.class.name.underscore}_#{@diggable.id}'), '<a href=\"javascript:void(0)\">赞</a>')"
-        end 
-      end
+    if @diggable.dug_by current_user
+      @diggable.reload # reload is mandatory, otherwise digs_count is not uptodate
     else
-      render :update do |page|
-        page << "tip('#{@dig.errors.on(:diggable_id)}');"
-      end
+      render_js_error
     end
   end
 

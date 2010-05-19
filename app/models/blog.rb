@@ -20,7 +20,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_viewable
 
-	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.is_owner_privilege? or blog.poster == user}
+	acts_as_diggable :create_conditions => lambda {|user, blog| blog.available_for? user.relationship_with(blog.poster)}
 
   acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed?}}
   

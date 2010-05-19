@@ -146,19 +146,21 @@ module ApplicationHelper
   def icon_dig_link diggable
 		dig_html = "<div class='evaluate'>"
 		if diggable.digged_by? current_user
-		  dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}' class='dug'>#{diggable.digs_count}</span><a href='javascript: void(0)'>赞</a>"
+		  dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}' class='dug'>#{diggable.digs_count}</span><a href='javascript: void(0)' onclick='tip(\'你已经赞过了\')'>赞</a>"
 		else
 			dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>"
-		  dig_html += link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable), :html => {:id => "digging_#{diggable.class.name.underscore}_#{diggable.id}"}, :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
+		  dig_html += link_to_remote '赞', :url => digs_url("diggable_type" => diggable.class.base_class.to_s, "diggable_id" => diggable), :html => {:id => "digging_#{diggable.class.name.underscore}_#{diggable.id}"}, :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
 		end
 		dig_html += "</div>"
     dig_html
   end
 
   def text_dig_link diggable, html_opts={}
-    dig_html = link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable, :at => 'show'), :html => {:id => "digging_#{diggable.class.to_s.underscore}_#{diggable.id}"}.merge(html_opts), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
-    #dig_html += "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}' class='gray'>#{diggable.digs_count}</span>人赞过)"
-    dig_html
+    if diggable.digged_by? current_user
+      link_to_function '赞', "tip('你已经赞过了');"
+    else
+      link_to_remote '赞', :url => digs_url(:diggable_type => diggable.class.base_class.to_s, :diggable_id => diggable.id, :at => 'show'), :html => {:id => "digging_#{diggable.class.to_s.underscore}_#{diggable.id}"}.merge(html_opts), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
+    end
   end
 
   def blog_content blog, opts={}

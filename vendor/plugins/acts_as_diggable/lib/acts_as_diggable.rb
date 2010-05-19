@@ -26,6 +26,11 @@ module Diggable
 
   module InstanceMethods
 
+    def dug_by user
+      dig = digs.build(:poster_id => user.id)
+      dig.save
+    end
+
 		def digged_by? user
 			!digs.find_by_poster_id(user.id).nil?
 		end

@@ -21,7 +21,7 @@ class User::PhotosController < UserBaseController
   end
 
   def show
-    @user = @photo.poster
+    @random_albums = PersonalAlbum.by(@user.id).for(@relationship).nonblocked.random :limit => 5, :except => [@album]
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @tags = @photo.tags.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:tagged_user => {:only => [:login, :id]}, :poster => {:only => [:login, :id]}}
   end
@@ -112,6 +112,7 @@ protected
       @photo = PersonalPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
       require_verified @photo
       @album = @photo.album
+      @user = @album.poster
       @relationship = @user.relationship_with current_user
       require_adequate_privilege @album, @relationship
     elsif ['new', 'create', 'record_upload', 'edit_multiple', 'update_multiple'].include? params[:action]
