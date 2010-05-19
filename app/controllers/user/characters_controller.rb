@@ -1,19 +1,11 @@
 class User::CharactersController < UserBaseController
 
 	def new
-		if params[:gid].nil?
-			@games = Game.all(:order => 'pinyin ASC')
-      @areas = {}
-      @servers = {}
-      @races = {}
-      @professions = {}
-		else
-			@games = [Game.find(params[:gid])]
-      @areas = @game.areas
-      @serves = {}
-      @races = @game.races
-      @professions = @game.professions
-		end
+    @game = Game.find(params[:gid])
+		@games = [@game]
+    @areas = @game.areas
+    @races = @game.races
+    @professions = @game.professions
 	  @character = GameCharacter.new
   end
 
@@ -47,7 +39,6 @@ class User::CharactersController < UserBaseController
       render_js_code "facebox.close()"
     else
 		  render :update do |page|
-				page << "Iyxzone.enableButton($('new_character_submit'),'完成');"
 				page.replace_html 'errors', :inline =>"<%= error_messages_for :character, :header_message => '遇到以下问题无法保存', :message => nil %>"
 			end
 		end

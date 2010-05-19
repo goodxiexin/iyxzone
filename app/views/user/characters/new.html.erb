@@ -1,16 +1,16 @@
 <% facebox_tag '新增游戏角色' do %>
-  <% content_tag :div, '', :id => 'errors' %>
-  <% rows_form_remote_for :character, :url => characters_url, :html => {:onsubmit=> "Iyxzone.disableButton($(new_character_submit),'请等待..');"} do |f| %>
+  <div id='errors'></div>
+  <% rows_form_remote_for :character, :url => characters_url, :loading => "Iyxzone.disableButton($('new_character_submit'), '请等待');", :complete => "Iyxzone.enableButton($('new_character_submit'), '完成');" do |f| %>
     <% content_tag :div, :class => 'formcontent' do %>
-      <%= f.text_field 'name', :label => '角色昵称', :info => 'character_name_id_error' %>
-      <%= f.text_field 'level', :label => '等级', :info => 'character_level_id_error' %>
-			<%= f.collection_select :game_id, @games, :id, :name, {:prompt => '---'}, :label => '游戏', :info => 'character_game_id_error', :class => 'selector selector02' %>
-			<%= f.collection_select :area_id, {}, :id, :name, {:prompt => '---'}, :label => '服务区', :info => 'character_area_id_error', :class => 'selector selector02' %>
-			<%= f.collection_select :server_id, {}, :id, :name, {:prompt => '---'}, :label => '服务器', :info => 'character_server_id_error', :class => 'selector selector02' %>
-			<%= f.collection_select :race_id, {}, :id, :name, {:prompt => '---'}, :label => '种族', :info => 'character_race_id_error', :class => 'selector selector02' %>
-			<%= f.collection_select :profession_id, {}, :id, :name, {:prompt => '---'}, :label => '职业', :info => 'character_profession_id_error', :class => 'selector selector02' %>
+      <%= f.text_field 'name', :label => '角色昵称' %>
+      <%= f.text_field 'level', :label => '等级' %>
+			<%= f.collection_select :game_id, @games, :id, :name, {}, :label => '游戏', :class => 'selector selector02' %>
+			<%= f.collection_select :area_id, @areas, :id, :name, {:prompt => '---'}, :label => '服务区', :class => 'selector selector02' %>
+			<%= f.collection_select :server_id, [], :id, :name, {:prompt => '---'}, :label => '服务器', :class => 'selector selector02' %>
+			<%= f.collection_select :race_id, @races, :id, :name, {:prompt => '---'}, :label => '种族', :class => 'selector selector02' %>
+			<%= f.collection_select :profession_id, @professions, :id, :name, {:prompt => '---'}, :label => '职业', :class => 'selector selector02' %>
     <% end %>
     <%= f.z_submit :submit => {:text => '完成', :id => 'new_character_submit'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
   <% end %>
-	<%= javascript_tag "Iyxzone.Game.infos = #{game_infos}; new Iyxzone.Game.PinyinSelector('character_game_id','character_game_id_error','character_area_id','character_area_id_error','character_server_id','character_server_id_error','character_race_id','character_race_id_error','character_profession_id','character_profession_id_error', null, {})" %>
+	<%= javascript_tag "new Iyxzone.Game.Selector('character_game_id', null,'character_area_id', null,'character_server_id', null,'character_race_id', null,'character_profession_id', null, null, {})" %>
 <% end %>
