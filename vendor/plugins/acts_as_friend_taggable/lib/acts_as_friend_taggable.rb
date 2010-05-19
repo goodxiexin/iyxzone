@@ -57,7 +57,7 @@ module FriendTaggable
 
     def save_friend_tags
       unless @del_tagged_user_ids.blank?
-        @del_tagged_user_ids.each { |id| tags.find(id).destroy }
+        @del_tagged_user_ids.each { |id| tags.match(:tagged_user_id => id).first.destroy }
         @del_tagged_user_ids = nil
       end
 

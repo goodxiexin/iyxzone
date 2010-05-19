@@ -34,7 +34,6 @@ class User::CharactersController < UserBaseController
 	def create
 		@character = current_user.characters.build(params[:character] || {})
 
-		#hack do not know how to pass game id when collection select disabled
     if @character.save
       render_js_code "facebox.close()"
     else

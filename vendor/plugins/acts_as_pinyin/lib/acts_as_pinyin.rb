@@ -4,7 +4,7 @@ require 'rubygems'
 module Pinyin
 
   def acts_as_pinyin options={}
-    define_method("before_create") do
+    define_method("before_save") do
       options.each do |column, pinyin_column|
         str = eval("self.#{column}")
         pinyin = ""

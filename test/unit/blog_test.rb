@@ -20,7 +20,7 @@ class BlogTest < ActiveSupport::TestCase
   # case 1:
   # create a blog, edit the blog and finally destroy it
   #
-  test "create a blog" do
+  test "case1" do
     # 创建一个博客
     blog = BlogFactory.create :privilege => PrivilegedResource::PUBLIC
     user = blog.poster(true)
@@ -54,7 +54,7 @@ class BlogTest < ActiveSupport::TestCase
   # case 2:
   # create a draft, edit draft and then publish it
   #
-  test "create a draft and then publish it" do
+  test "case2" do
     # 创建博客  
     draft = DraftFactory.create :privilege => PrivilegedResource::PUBLIC
     user = draft.poster(true)
@@ -86,20 +86,29 @@ class BlogTest < ActiveSupport::TestCase
     assert_equal user.blogs_count1, 0
   end
 
+  #
+  # case 4
+  # add/delete relative users
+  #
   test "case4" do
     @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id] 
     assert_equal @blog.relative_users, [@friend1, @friend2]
 
     @tag = @blog.tags.find_by_tagged_user_id(@friend2.id)
     @blog.update_attributes(:del_friend_tags => [@tag.id])
+    @blog.reload
     assert_equal @blog.relative_users, [@friend1] 
 
     @blog.update_attributes(:new_friend_tags => [@friend3.id])
+    @blog.reload
     assert_equal @blog.relative_users, [@friend1, @friend3] 
 
     @tag = @blog.tags.find_by_tagged_user_id(@friend1.id)
     @blog.update_attributes(:del_friend_tags => [@tag.id], :new_friend_tags => [@friend4.id])
+    @blog.reload
     assert_equal @blog.relative_users, [@friend3, @friend4] 
   end 
+
+  
  
 end
