@@ -14,8 +14,7 @@ class Video < ActiveRecord::Base
 
   acts_as_random
  
-  acts_as_friend_taggable :delete_conditions => lambda {|user, video| video.poster == user },
-                          :create_conditions => lambda {|user, video| video.poster == user }
+  acts_as_friend_taggable 
 
   acts_as_shareable :path_reg => /\/videos\/([\d]+)/,
                     :default_title => lambda {|video| video.title}, 

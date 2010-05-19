@@ -34,3 +34,8 @@ Factory.define :game_character do |c|
   c.sequence(:name) {|n| "character-#{n}"}
   c.level 100
 end
+
+Factory.define :blog do |b|
+  b.sequence(:title) {|n| "title-#{n}"}
+  b.sequence(:content) {|n| "content-#{n}"}
+end

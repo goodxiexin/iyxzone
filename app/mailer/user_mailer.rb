@@ -50,7 +50,7 @@ protected
   
   def setup_email user
     recipients	user.email
-		from				"17gaming" + '<' + SITE_MAIL + '>'
+		from				SITE_MAIL
     sent_on			Time.now
   end
 

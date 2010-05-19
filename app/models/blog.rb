@@ -16,8 +16,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_random
   
-  acts_as_friend_taggable :delete_conditions => lambda {|user, blog| blog.poster == user},
-                          :create_conditions => lambda {|user, blog| blog.poster == user}
+  acts_as_friend_taggable 
 
   acts_as_viewable :create_conditions => lambda {|user, blog| blog.poster != user}
 

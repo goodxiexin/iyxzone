@@ -6,173 +6,100 @@ class BlogTest < ActiveSupport::TestCase
     @user = UserFactory.create
     @character = GameCharacterFactory.create :user_id => @user.id
     @game = @character.game
-    @friend = UserFactory.create
-    FriendFactory.create @user, @friend
+    @friend1 = UserFactory.create
+    @friend2 = UserFactory.create
+    @friend3 = UserFactory.create
+    @friend4 = UserFactory.create
+    FriendFactory.create @user, @friend1
+    FriendFactory.create @user, @friend2
+    FriendFactory.create @user, @friend3
+    FriendFactory.create @user, @friend4
   end
 
-  test "blog counter" do
-    # create blog with different privileges
-    @blog = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id, 
-      :game_id => @game.id,
-      :draft => 0,
-      :privilege => PrivilegedResource::PUBLIC)
-    @user.reload
-    assert_equal @user.blogs_count1, 1
+  #
+  # case 1:
+  # create a blog, edit the blog and finally destroy it
+  #
+  test "create a blog" do
+    # 创建一个博客
+    blog = BlogFactory.create :privilege => PrivilegedResource::PUBLIC
+    user = blog.poster(true)
+    assert_equal user.blogs_count1, 1
+    
+    # 更新博客，修改权限
+    blog.update_attributes(:privilege => PrivilegedResource::FRIEND_OR_SAME_GAME)
+    user.reload
+    assert_equal user.blogs_count1, 0
+    assert_equal user.blogs_count2, 1
 
-    @blog = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id, 
-      :game_id => @game.id,
-      :draft => 0,
-      :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME)
-    @user.reload 
-    assert_equal @user.blogs_count2, 1
+    # 更新博客，修改title
+    blog.update_attributes(:title => '')
+    assert_not_nil blog.errors.on(:title)
+    blog.update_attributes(:title => 'new title')
+    assert_nil blog.errors.on(:title)
 
-    @blog = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id, 
-      :game_id => @game.id,
-      :draft => 0,
-      :privilege => PrivilegedResource::FRIEND)
-    @user.reload
-    assert_equal @user.blogs_count3, 1
+    # 更新博客，修改content
+    blog.update_attributes(:content => '')
+    assert_not_nil blog.errors.on(:content)
+    blog.update_attributes(:content => 'new content')
+    assert_nil blog.errors.on(:content)
 
-    @blog = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id, 
-      :game_id => @game.id,
-      :draft => 0,
-      :privilege => PrivilegedResource::OWNER)
-    @user.reload
-    assert_equal @user.blogs_count4, 1
-
-    @draft = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 1,
-      :privilege => PrivilegedResource::PUBLIC)
-    @user.reload
-    assert_equal @user.blogs_count1, 1 # 没有变化
-    assert_equal @user.drafts_count, 1
-    @draft.update_attributes(:draft => 0)
-    @user.reload
-    assert_equal @user.blogs_count1, 2
-    assert_equal @user.drafts_count, 0
-
-    @draft = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 1,
-      :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME)
-    @user.reload
-    assert_equal @user.blogs_count2, 1 # 没有变化
-    assert_equal @user.drafts_count, 1
-    @draft.update_attributes(:draft => 0)
-    @user.reload
-    assert_equal @user.blogs_count2, 2
-    assert_equal @user.drafts_count, 0
-
-    @draft = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 1,
-      :privilege => PrivilegedResource::FRIEND)
-    @user.reload
-    assert_equal @user.blogs_count3, 1 # 没有变化
-    assert_equal @user.drafts_count, 1
-    @draft.update_attributes(:draft => 0)
-    @user.reload
-    assert_equal @user.blogs_count3, 2
-    assert_equal @user.drafts_count, 0
-
-    @draft = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 1,
-      :privilege => PrivilegedResource::OWNER)
-    @user.reload
-    assert_equal @user.blogs_count4, 1 # 没有变化
-    assert_equal @user.drafts_count, 1
-    @draft.update_attributes(:draft => 0)
-    @user.reload
-    assert_equal @user.blogs_count4, 2
-    assert_equal @user.drafts_count, 0
+    # 删除博客
+    blog.destroy
+    user.reload
+    assert_equal user.blogs_count2, 0
   end
 
-  test "decrement counter" do 
-    @b1 = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 0,
-      :privilege => PrivilegedResource::PUBLIC)
-    @b2 = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 0,
-      :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME)
-    @b3 = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 0,
-      :privilege => PrivilegedResource::FRIEND)
-    @b4 = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 0,
-      :privilege => PrivilegedResource::OWNER)
-    @draft = Blog.create(
-      :title => 'title',
-      :content => 'content',
-      :poster_id => @user.id,
-      :game_id => @game.id,
-      :draft => 1,
-      :privilege => PrivilegedResource::FRIEND)
+  # 
+  # case 2:
+  # create a draft, edit draft and then publish it
+  #
+  test "create a draft and then publish it" do
+    # 创建博客  
+    draft = DraftFactory.create :privilege => PrivilegedResource::PUBLIC
+    user = draft.poster(true)
+    assert_equal user.drafts_count, 1
+    assert_equal user.blogs_count1, 0    
 
-    @user.reload
-    assert_equal @user.blogs_count1, 1
-    assert_equal @user.blogs_count2, 1
-    assert_equal @user.blogs_count3, 1
-    assert_equal @user.blogs_count4, 1
-    assert_equal @user.drafts_count, 1
+    # 发布
+    draft.update_attributes(:draft => 0)
+    user.reload
+    assert_equal user.drafts_count, 0
+    assert_equal user.blogs_count1, 1
+  end
+ 
+  #
+  # case 3:
+  # create a draft and then destroy it
+  #
+  test "case3" do
+    # 创建博客  
+    draft = DraftFactory.create :privilege => PrivilegedResource::PUBLIC
+    user = draft.poster(true)
+    assert_equal user.drafts_count, 1
+    assert_equal user.blogs_count1, 0
 
-    @b1.destroy
-    @user.reload
-    assert_equal @user.blogs_count1, 0
-    @b2.destroy
-    @user.reload
-    assert_equal @user.blogs_count2, 0
-    @b3.destroy
-    @user.reload
-    assert_equal @user.blogs_count3, 0
-    @b4.destroy
-    @user.reload
-    assert_equal @user.blogs_count4, 0
-    @draft.destroy
-    @user.reload
-    assert_equal @user.drafts_count, 0
-
+    # 删除
+    draft.destroy
+    user.reload
+    assert_equal user.drafts_count, 0
+    assert_equal user.blogs_count1, 0
   end
 
+  test "case4" do
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id] 
+    assert_equal @blog.relative_users, [@friend1, @friend2]
+
+    @tag = @blog.tags.find_by_tagged_user_id(@friend2.id)
+    @blog.update_attributes(:del_friend_tags => [@tag.id])
+    assert_equal @blog.relative_users, [@friend1] 
+
+    @blog.update_attributes(:new_friend_tags => [@friend3.id])
+    assert_equal @blog.relative_users, [@friend1, @friend3] 
+
+    @tag = @blog.tags.find_by_tagged_user_id(@friend1.id)
+    @blog.update_attributes(:del_friend_tags => [@tag.id], :new_friend_tags => [@friend4.id])
+    assert_equal @blog.relative_users, [@friend3, @friend4] 
+  end 
+ 
 end
