@@ -39,3 +39,8 @@ Factory.define :blog do |b|
   b.sequence(:title) {|n| "title-#{n}"}
   b.sequence(:content) {|n| "content-#{n}"}
 end
+
+Factory.define :guild do |g|
+  g.sequence(:name) {|n| "name-#{n}"}
+  g.sequence(:description) {|n| "description-#{n}"}
+end

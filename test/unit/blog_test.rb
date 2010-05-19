@@ -16,7 +16,8 @@ class BlogTest < ActiveSupport::TestCase
     FriendFactory.create @user, @friend4
     @stranger = UserFactory.create
     @same_game_user = UserFactory.create
-    GameCharacterFactory.create :game_id => @game.id, :user_id => @same_game_user.id
+    @character2 = GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @same_game_user.id
+    @guild1 = GuildFactory.create :character_id => @character.id, :president_id => @user.id
   end
 
   #
@@ -198,7 +199,6 @@ class BlogTest < ActiveSupport::TestCase
     assert !@blog.dug_by(@friend1)
     @blog.reload
     assert_equal @blog.digs_count, 2
-   puts "privilege: #{@blog.privilege}, relationship: #{@user.relationship_with @same_game_user}, available: #{@blog.available_for? @same_game_user}"
     assert @blog.dug_by(@same_game_user)
     @blog.reload
     assert_equal @blog.digs_count, 3
@@ -279,5 +279,40 @@ class BlogTest < ActiveSupport::TestCase
     @blog.reload
     assert_equal @blog.digs_count, 1
   end 
+
+  #
+  # case 7
+  # create a blog, poster's friends and guilds will receive the feed
+  #
+  test "case7" do
+    @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    assert @friend1.recv_feed? @blog1
+    assert @guild1.recv_feed? @blog1
+
+    @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    assert @friend1.recv_feed? @blog2
+    assert @guild1.recv_feed? @blog2
+
+    @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
+    assert @friend1.recv_feed? @blog3
+    assert @guild1.recv_feed? @blog3
+
+    @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
+    assert @friend1.recv_feed?(@blog4)
+    assert @guild1.recv_feed?(@blog4)
+
+    @blog4.update_attributes(:privilege => PrivilegedResource::PUBLIC)
+    assert @friend1.recv_feed?(@blog4)
+    assert @guild1.recv_feed?(@blog4)
+
+    @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    assert !@friend1.recv_feed?(@draft)
+    assert !@guild1.recv_feed?(@draft)
+
+    @draft.update_attributes(:draft => 0)
+    assert @friend1.recv_feed?(@draft)
+    assert @guild1.recv_feed?(@draft)
+ 
+  end
  
 end

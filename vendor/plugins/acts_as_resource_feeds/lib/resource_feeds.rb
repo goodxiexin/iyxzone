@@ -51,6 +51,10 @@ module ResourceFeeds
         proc.call user, self
       end
 
+      def recv_feed? resource
+        feed_deliveries.select {|f| f.feed_item.originator == resource}
+      end
+
     end
 
   end

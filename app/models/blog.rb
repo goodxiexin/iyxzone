@@ -22,7 +22,7 @@ class Blog < ActiveRecord::Base
 
 	acts_as_diggable :create_conditions => lambda {|user, blog| blog.available_for? user.relationship_with(blog.poster)}
 
-  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed?}}
+  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.all_guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed?}}
   
   acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
                     :default_title => lambda {|blog| blog.title}, 
