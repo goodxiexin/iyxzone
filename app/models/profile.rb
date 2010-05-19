@@ -10,7 +10,7 @@ class Profile < ActiveRecord::Base
 
 	belongs_to :district
 
-  acts_as_viewable :create_conditions => lambda {|user, profile| profile.user != user}
+  acts_as_viewable
 
   acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, :path_reg => /\/profiles\/([\d]+)/
   
