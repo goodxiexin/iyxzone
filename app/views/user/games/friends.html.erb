@@ -7,7 +7,11 @@
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 2} %>
 	    <div class="piclist-rows">
-		    <%= render :partial => 'others_game_items', :locals => {:game_ratings=>@game_ratings, :game_tags => @game_tags}, :object => @game_chars %>
+        <div class="mainConWrap clear">
+          <div class="gameFriend piclist-rows">
+		        <%= render :partial => 'others_game_items', :locals => {:game_items => @game_items} %>
+          </div>
+        </div>
       </div>
     </div>
 <% end %>

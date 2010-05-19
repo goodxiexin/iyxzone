@@ -29,10 +29,10 @@ module Rateable
 
 	module InstanceMethods
 
-		def find_rating_by_user user
-			ratings.find_by_user_id(user.id)
-		end
- 
+    def average_rating_by user_ids
+      ratings.by(user_ids).average(:rating)
+    end
+
 		def rated_by? user
 			!ratings.find_by_user_id(user.id).nil?
 		end 

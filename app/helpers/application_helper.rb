@@ -20,7 +20,7 @@ module ApplicationHelper
 
 	def game_image(game_name, opts={})
     size = opts.delete(:size)
-		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.gif")
+		if File.exist? "public/images/gamepic/#{game_name}.gif"
       file_name = size.blank? ? "#{game_name}.gif" : "#{game_name}_#{size}.gif"
 			image_tag "/images/gamepic/#{file_name}", opts
 		else
@@ -202,6 +202,14 @@ module ApplicationHelper
 
   def game_link game, opts={}
     link_to h(game.name), game_url(game), opts
+  end
+
+  def character_link character, opts={}
+    if character.data.nil? or !character.data[:verify]
+      h character.name
+    else
+      link_to h(character.name), character.data[:url], {:popup => 'true'}.merge(opts)
+    end
   end
 
   def event_link event, opts={}

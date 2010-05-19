@@ -17,7 +17,11 @@
       <div class="piclist-rows">
         <%= render :partial => 'index_nav', :locals => {:user => @user, :hover => 1} %>
         <% if !@games.blank? %>
-		      <%= render :partial => 'general_game_items', :object => @games %>
+          <div class="mainConWrap clear">
+            <div class="gameHot piclist-rows">
+		          <%= render :partial => 'general_game_items', :locals => {:games => @games} %>
+            </div>
+          </div>
         <% else %>
           <div class='tip'>你还没关注任何游戏，快去<%= link_to "游戏推荐", game_suggestions_url %>看看 </div>
         <% end %>

@@ -9,14 +9,18 @@
 <% subject = get_subject @user %>
 
 <% canvas_tag do %>
-	  <% if @user == current_user %>
-      <h1 class="app-game">游戏</h1>
-	  <% else %>
-      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的游戏"} %>
-    <% end %>
-    <div class="box02 canvas_int space">
-      <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>
-      <%= render :partial => 'index_nav', :locals => {:user => @user, :hover => 0} %>
-		  <%= render :partial => 'personal_game_items', :locals => {:user => @user}, :object => @games %>
+	<% if @user == current_user %>
+    <h1 class="app-game">游戏</h1>
+	<% else %>
+    <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的游戏"} %>
+  <% end %>
+  <div class="box02 canvas_int space">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>
+    <%= render :partial => 'index_nav', :locals => {:user => @user, :hover => 0} %>
+    <div class="mainConWrap clear">
+      <div class="gameMine piclist-rows">
+        <%= render :partial => 'personal_game_items', :locals => {:user => @user, :game_items => @game_items} %>
+      </div>
     </div>
+  </div>
 <% end %>

@@ -24,16 +24,10 @@ class User::GameSuggestionsController < UserBaseController
     end
     @games = Game.find(@ids)
     @games = @games.select(&:relative_new?) if params[:new_game] == 'true'
-=begin
-    原来的做法，需要一个很复杂的sql语句
-    @tagged_games = Game.find_tagged_with(params[:selected_tags])
-    @tagged_games = @tagged_games.select(&:relative_new?) if params[:new_game] == 'true'
-    @games = @tagged_games #self.game_suggestion unless @tagged_games.empty?
-=end
     @remote = {:update => 'game_suggestion_area', :url => {:action => 'game_tags', :selected_tags => params[:selected_tags]}}
     render :partial => "games", :object => @games.paginate(:page => params[:page], :per_page => 20)
   end
-
+=begin
   def game_suggestion
     # giving scores to each game that user has played before
     tag_score = {}
@@ -79,5 +73,6 @@ class User::GameSuggestionsController < UserBaseController
     end
     return @games
   end
-
+=end
 end
+

@@ -4,22 +4,6 @@ class GameCharacter < ActiveRecord::Base
 	
 	serialize :data
 
-  def has_event?
-    !Event.first(:conditions => {:character_id => id}).blank?
-  end
-
-  def has_guild?
-    !Guild.first(:conditions => {:character_id => id}).blank?
-  end
-
-  def is_locked?
-    has_event? or has_guild?
-  end
-
-	def name_with_game_and_server
-		"#{name}(#{game.name}-#{server.name})"
-	end
-
   acts_as_random
 
   acts_as_pinyin :name => 'pinyin'
@@ -40,6 +24,12 @@ class GameCharacter < ActiveRecord::Base
 
 	belongs_to :guild
 
+  has_many :memberships, :foreign_key => 'character_id'
+
+  has_many :people_memberships, :foreign_key => 'character_id', :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
+
+  has_many :guilds, :through => :people_memberships
+
 	acts_as_resource_feeds :recipients => lambda {|character| [character.user.profile, character.game] + character.user.friends}
 
   attr_readonly :game_id, :area_id, :server_id, :race_id, :profession_id
@@ -59,6 +49,23 @@ class GameCharacter < ActiveRecord::Base
   validate_on_create :race_is_valid
   
   validate_on_create :profession_is_valid
+
+  def has_event?
+    !Event.first(:conditions => {:character_id => id}).blank?
+  end
+
+  def has_guild?
+    !people_memberships.blank?
+    #!Guild.first(:conditions => {:character_id => id}).blank?
+  end
+
+  def is_locked?
+    has_event? or has_guild?
+  end
+
+  def name_with_game_and_server
+    "#{name}(#{game.name}-#{server.name})"
+  end
 
 protected
 

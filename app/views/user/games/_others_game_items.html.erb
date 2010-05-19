@@ -1,12 +1,5 @@
-<div class="mainConWrap clear">
-  <div class="gameFriend piclist-rows">
-		<table class="table01" cellpadding="0" cellspacing="1">
-			<% others_game_items.each {|pair| %>
-			<% game_id = pair[0] %>
-			<% chars = pair[1] %>
-			<% game = Game.find(game_id) %>
-			<% uids = chars.map(&:user_id).uniq %>
-			<% users = User.find(uids) %>
+  <table class="table01" cellpadding="0" cellspacing="1">
+		<% game_items.each do |game, characters, average_rating, tags, users| %>
 			<tr>
 				<td>
 					<div class="imgwrap">
@@ -14,47 +7,41 @@
 					</div>
 					<div class="data">
 						<p><%= game_link game %></p>
-            <p>共有 <span class="shine"><%=users.length -%>个</span> 好友在玩该游戏</p>
-              <div class="photolist-box">
-                <ul class="collection s_clear">
-									<% users.each { |user| %>
-										<li>
-											<div class="middle"><div class="middle-center"><div class="center"><%= avatar user%></div></div></div>
-											<p><%= profile_link user%></p>
-										</li>
-									<% } %>
-								</ul>
-							</div>
-							<% if users.length > 7 %>
-								<div class="more"><%= facebox_link "更多", friend_players_characters_url(:gid => game.id)%></div>
-							<% end %>
-              <div class="score">好友的打分：
-							<% grts = game_ratings[game_id] %>
-							<% if grts.nil? %>
-								您的好友们都没给这个游戏打分
-							<% else %>
-								<% average_rating = grts.map(&:rating).inject(0){|sum, n| sum+=n}/grts.size%>
-								<span class="star-<%=average_rating.round-%> w-l"></span><strong><%= average_rating -%></strong></div>
-							<% end %>
-              <div class="gameImpressFriend"><h4>好友对游戏的印象：</h4>
-								<% if game_tags[game_id].nil?%>
-									您的好友还没写下这游戏的印象
-								<% else %>
-									<div class="i-show02 s_clear">
-									<% gtids = game_tags[game_id].map(&:tag_id).uniq %>
-									<% gtags = Tag.find(gtids) %>
-									<% gtags.each {|tag| %>
-										<a href="javascript:avoid(0)" class="i-s-<%=rand(7)%>"><strong><%=tag.name -%></strong><span></span></a>
-									<% } %>
-									</div>
+            <p>共有 <span class="shine"><%= users.length -%>个</span> 好友在玩该游戏</p>
+            <div class="photolist-box">
+              <ul class="collection s_clear">
+								<% users.each do |user| %>
+									<li>
+										<div class="middle"><div class="middle-center"><div class="center"><%= avatar user, :class => 'imgbox01'%></div></div></div>
+										<p><%= profile_link user%></p>
+									</li>
 								<% end %>
-							</div>
+							</ul>
+						</div>
+						<% if users.length > 7 %>
+							<div class="more"><%= facebox_link "更多", friend_players_characters_url(:gid => game.id)%></div>
+						<% end %>
+            <div class="score">
+              好友的打分：
+							<% if average_rating.nil? %>
+							  您的好友们都没给这个游戏打分
+						  <% else %>
+							  <span class="star-<%=average_rating.round-%> w-l"></span><strong><%= "%.1f" % average_rating -%></strong>
+						  <% end %>
+            </div>
+            <div class="gameImpressFriend">
+              <h4>好友对游戏的印象：</h4>
+							<% if tags.blank?%>
+								您的好友还没写下这游戏的印象
+							<% else %>
+								<div class="i-show02 s_clear">
+                  <%= tags.map{|t| "<a href='javascript:void(0)' class='i-s-#{rand(7)}'><strong>#{t.name}</strong><span></span></a>"}.join %>
+								</div>
+							<% end %>
+						</div>
 					</div>
 				</td>
 			</tr>
-			<% } %>
-		</table>
-
-		<%= will_paginate others_game_items %>
-	</div>
-</div>
+		<% end %>
+	</table>
+	<%= will_paginate game_items %>

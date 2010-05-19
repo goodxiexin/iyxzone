@@ -1,8 +1,6 @@
-<div class="mainConWrap clear">
-					<div class="gameHot piclist-rows">
 						<table cellspacing="1" cellpadding="0" class="table01 gameList">
 								<tbody>
-								<% general_game_items.each do |game| %>
+								<% games.each do |game| %>
 								<tr>
 									<td>
 										<div class="imgwrap">
@@ -13,7 +11,7 @@
 											<p><%= game.description%></p>
 											<div>
 												<ul>
-													<li>玩家打分：<strong><%= game.average_rating %></strong></li>
+													<li>玩家打分：<strong><%= "%.1f" % game.average_rating %></strong></li>
 													<li>玩家关注：<strong><%= game.attentions_count %></strong></li>
 													<li>已有玩家：<strong><%= game.characters_count%></strong></li>
 													<li>新增玩家：<strong><%= game.last_week_characters_count %></strong></li>
@@ -29,6 +27,4 @@
 								<% end %>
 							</tbody>
 							</table>
-						<%= will_paginate general_game_items %>
-					</div>  
-</div>
+						<%= will_paginate games %>

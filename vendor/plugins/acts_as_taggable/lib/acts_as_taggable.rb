@@ -85,6 +85,10 @@ module Taggable
 		end
     # END
 
+    def tags_by user_ids
+      taggings.prefetch(:tag).by(user_ids).map(&:tag)
+    end
+
     def add_tag user, name
       Tagging.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id, :tag_name => name)
     end

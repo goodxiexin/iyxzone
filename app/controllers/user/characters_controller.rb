@@ -2,10 +2,17 @@ class User::CharactersController < UserBaseController
 
 	def new
 		if params[:gid].nil?
-			@game = nil
-			@games = Game.find(:all, :order => 'pinyin ASC')
+			@games = Game.all(:order => 'pinyin ASC')
+      @areas = {}
+      @servers = {}
+      @races = {}
+      @professions = {}
 		else
-			@game = Game.find(params[:gid])
+			@games = [Game.find(params[:gid])]
+      @areas = @game.areas
+      @serves = {}
+      @races = @game.races
+      @professions = @game.professions
 		end
 	  @character = GameCharacter.new
   end
@@ -23,9 +30,10 @@ class User::CharactersController < UserBaseController
 	end
 
   def index
-    if @guild.blank?
+    if params[:guild_id].blank? #@guild.blank?
       @characters = current_user.characters
     else
+      # TODO, hide 3,4
       @characters = GameCharacter.all(:joins => "inner join memberships on memberships.status IN (3,4) and memberships.character_id = game_characters.id and memberships.guild_id = #{@guild.id}")
     end
     render :json => @characters, :only => [:id, :name]  
@@ -35,10 +43,9 @@ class User::CharactersController < UserBaseController
 		@character = current_user.characters.build(params[:character] || {})
 
 		#hack do not know how to pass game id when collection select disabled
-		if @character.game_id.nil?
-			@character.game_id = @character.area.game_id
-		end
-		unless @character.save
+    if @character.save
+      render_js_code "facebox.close()"
+    else
 		  render :update do |page|
 				page << "Iyxzone.enableButton($('new_character_submit'),'完成');"
 				page.replace_html 'errors', :inline =>"<%= error_messages_for :character, :header_message => '遇到以下问题无法保存', :message => nil %>"
