@@ -2,10 +2,7 @@ class Task < ActiveRecord::Base
 
 	module TaskResource
 		CANDO, CANNOTDO, DONE, EXPIRED, ACHIEVED, DOING  = 1,2,3,4,5,6
-
-		INVISIBLE = 1
-		REGULAR = 2
-		EVERYDAY = 3
+		INVISIBLE,REGULAR,EVERYDAY = 1,2,3
 		REWARDRESOURCE = ["gold"]
 		CATAGORY_SET = [1,2,3]
 		USER_COUNTER = ["characters", "games","game_attentions", "sharings", "notices", "notifications", "friends", "photos", "statuses", "friend_requests","guild_requests", "event_requests", "guild_invitations", "event_invitations", "poll_invitations", "poke_deliveries", "albums", "blogs", "videos","guilds", "participated_guilds", "polls", "participated_polls"]
@@ -14,19 +11,7 @@ class Task < ActiveRecord::Base
 
 		@@key_in_TASKRESOURCE = Proc.new {|k,v| TASKRESOURCE.include?(@@get_key_in_TASKRESOURCE.call(k))}
 		@@get_key_in_TASKRESOURCE = Proc.new {|k| k.sub(/_count/,'').sub(/_morethan/, '').sub(/_add/,'').downcase}
-		class ComparerTaskUser
-			attr_reader :task, :user
-			def initialize(t, u)
-				@task = t
-				@user = u
-			end
-		
-			def compare_req_with_user_counter(req ,num)
-				current_info_count = @user.send(req+"_count") 
-				#puts "#{req}_count\t User: #{current_info_count}, Prerequisite :#{num}"
-				return current_info_count >= num
-			end
-		end
+
 	end
 
 	include TaskResource
@@ -48,8 +33,9 @@ class Task < ActiveRecord::Base
 		current_user_task = get_user_task user_id
 		if current_user_task
 			return current_user_task.show_notification
-		end
-		return []
+		else
+      return []
+    end
 	end
 
 #TODO: may optimized
@@ -57,44 +43,30 @@ class Task < ActiveRecord::Base
 		ut = UserTask.first(:conditions => {:user_id => user_id, :task_id => id} )
 	end
 
+  def pretask_satisfy? uts
+    done_task_ids = (uts.select { |t| t.is_done?}).map{|t| t.task_id}
+    pretask_ids = self.prerequisite[:pretask] ||= []
+    pretask_ids.all?{ |p| done_task_ids.include? p }
+  end
+
+
 #for UserTask instance has been created: set redo_satisfied = true
 	def can_be_select_by? user_id, redo_satisfied=false
-	logger.error "In can_be_select: Task.id:#{self.id} User.id:#{user_id}"
 #condition 1, time
 		task_property_satisfied = is_visible? && is_started? && !is_expired?
-
-#condition 2,3 UserTask structure
 		all_user_tasks = UserTask.find_all_by_user_id(user_id)
-		current_user_tasks = all_user_tasks.select{|cut| cut.task_id == self.id}
-#already select
-#in fact its size is 0 or 1
+#condition 2: current_user_task 是否能重做
+    current_user_tasks = all_user_tasks.select{|cut| cut.task_id == self.id}
 		redo_satisfied ||= current_user_tasks.all?{|t| t.redo_able?}
-#condition 3, prerequisite[:pretask]
-		done_task_ids = (all_user_tasks.select{|t| t.is_done?}).map{|t| t.task_id}
-		pretask_ids = self.prerequisite[:pretask] ||= []
-		logger.error "done_task_ids: #{done_task_ids}"
-		logger.error "pretask_ids: #{pretask_ids}"
-		
-		pretask_satisfied = pretask_ids.all?{ |p| done_task_ids.include? p }
-		
-#now condition last: userinfo
-		cmp = ComparerTaskUser.new(self, User.find(:first, :conditions => {:id => user_id}))
-		userinfo = self.prerequisite[:userinfo] ||= {}
-		user_info_satisfied = userinfo.all? do |req, num|
-			result = false
-			if @@key_in_TASKRESOURCE.call(req,num)
-				result = cmp.compare_req_with_user_counter(@@get_key_in_TASKRESOURCE.call(req), num)
-			end
-			result
-		end
-		logger.error "task #{id}\t user: #{user_id}"
-		logger.error "task_property_satisfied:#{task_property_satisfied}\n\
+#condition 3: prerequisite[:pretask]
+		pretask_satisfied = pretask_satsify? all_user_task
+#condition 4: userinfo
+    judge = ResourceJudge.new(self, User.find(:first, :condition => {:id => user_id}))
+		user_info_satisfied = judge.prerequistite_user_info_satisfy?
+		logger.error "\ntask_property_satisfied:#{task_property_satisfied}\n\
 						redo_satisfied: #{redo_satisfied}\n\
 						pretask_satisfied: #{pretask_satisfied}\n\
 						user_info_satisfied: #{user_info_satisfied}"
-
-		
-		
 		return  task_property_satisfied &&
 						redo_satisfied &&
 						pretask_satisfied &&
@@ -143,7 +115,7 @@ class Task < ActiveRecord::Base
 		  prerequisite[:userinfo].is_a?(Hash) &&	
 			 prerequisite[:userinfo].all?(&@key_in_TASKRESOURCE) )
 
-		errors.add(:prerequisite, "前置任务不对") unless !prerequisite[:pretask] || 
+		errors.add(:prerequisite, "前置任务还不存在") unless !prerequisite[:pretask] || 
 		(prerequisite[:pretask] && 
 		  prerequisite[:pretask].is_a?(Array) && 
 		 	 prerequisite[:pretask].all?{|x| exist_taskids.include? x} )

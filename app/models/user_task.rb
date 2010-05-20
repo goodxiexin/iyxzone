@@ -29,42 +29,21 @@ class UserTask < ActiveRecord::Base
 	end
 
 	def is_achieved?
-		goal.all? do |key,value|
-			logger.error key+"_count"
-			self.user.send(key+"_count") >= value
-		end
+		gj = GoalJudge.new(self, self.user)
+    gj.goal_satisfy?
 	end
+  
 
-	def init_user_task user_id
-		init_achievement_and_goal user_id
-		self.starts_at = DateTime.now
-		self.expires_at = (self.starts_at.since(task.duration) > task.expires_at) ? task.expires_at : self.starts_at.since(task.duration)
-	end
+
 
 	def init_achievement_and_goal user_id
 		user = User.find(user_id)
 		#"albums", "blogs","videos" counters are virtual attributes which are not save in DB
 		#achievement = {}
 		goal = {}
-		task.requirement.each do |key, value|
-			if m = /(.*)_add$/.match(key)
-				#achievement[m[1]] = user.send( m[1] + "_count" )
-				goal_of_add = user.send( m[1] + "_count" ) + value
-				goal[m[1]] =  goal[ m[1] ] ?  goal_of_add > goal[ m[1]] ? goal_of_add: goal[m[1]] : goal_of_add
-			elsif m = /(.*)_morethan$/.match(key)
-				#achievement[m[1]] = user.send( m[1] + "_count" )
-				goal[m[1]] =  goal[ m[1] ] ?  value > goal[ m[1]] ? value : goal[m[1]]  : value
-			else
-				logger.error "unexpected requirement item: #{key}"
-			end
-		end
-		
-		#self.achievement = achievement
-		self.goal = goal
+	
 	end
-	#def achievement_pattern
-		#errors.add(:achievement, "当前任务状态格式错误") unless achievement.all?(&@key_in_TASKRESOURCE)
-	#end
+
 	def goal_pattern
 		errors.add(:goal, "当前任务状态格式错误") unless goal.all?(&@@key_in_TASKRESOURCE)
 	end

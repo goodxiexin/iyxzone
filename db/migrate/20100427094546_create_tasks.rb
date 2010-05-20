@@ -5,7 +5,7 @@ class CreateTasks < ActiveRecord::Migration
 			t.text	:requirement
 			t.text	:reward
 			t.text	:description
-			t.integer	:catagory, :default => 1		#everyday, single 
+			t.integer	:catagory, :default => 2		#everyday, single 
 														#should only belongs to 1
 			t.datetime	:starts_at, :default => DateTime.now
 			t.datetime	:expires_at
