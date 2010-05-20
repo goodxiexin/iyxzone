@@ -506,7 +506,34 @@ class BlogTest < ActiveSupport::TestCase
   # comment blog
   #
   test "case9" do
-    # TODO    
+    # TODO
+    @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
+    @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
+
+    @comment1 = @blog1.comments.create :poster_id => @user.id, :content => 'a'
+    assert @comment1
+    @comment2 = @blog1.comments.create :poster_id => @friend1.id, :content => 'a'
+    assert @comment2
+    @comment3 = @blog1.comments.create :poster_id => @same_game.id, :content => 'a'
+    assert @comment3
+    @comment4 = @blog1.comments.create :poster_id => @stranger.id, :content => 'a'
+    assert @comment4
+    @blog1.reload
+    assert_equal @blog1.comments_count, 4
+
+    @comment1 = @blog2.comments.create :poster_id => @user.id, :content => 'a'
+    assert @comment1
+    @comment2 = @blog2.comments.create :poster_id => @friend1.id, :content => 'a'
+    assert @comment2
+    @comment3 = @blog2.comments.create :poster_id => @same_game.id, :content => 'a'
+    assert @comment3
+    @comment4 = @blog2.comments.create :poster_id => @stranger.id, :content => 'a'
+    assert @comment4.nil?
+    @blog2.reload
+    assert_equal @blog2.comments_count, 3
+        
   end
 
   #
