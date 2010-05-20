@@ -12,7 +12,7 @@ class Album < ActiveRecord::Base
 
   acts_as_random
 
-  acts_as_privileged_resources :owner_field => :poster
+  acts_as_privileged_resources :owner_field => :poster, :validate_on => "false"
 
   acts_as_shareable :path_reg => [/\/personal_albums\/([\d]+)/, /\/event_albums\/([\d]+)/, /\/guild_albums\/([\d]+)/, /\/avatar_albums\/([\d]+)/],
                     :default_title => lambda {|album| album.title}, 

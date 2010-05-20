@@ -24,9 +24,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.all_guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed?}}
   
-  acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
-                    :default_title => lambda {|blog| blog.title}, 
-                    :create_conditions => lambda {|user, blog| !blog.is_owner_privilege?}
+  acts_as_shareable :path_reg => /\/blogs\/([\d]+)/, :default_title => lambda {|blog| blog.title}, :create_conditions => lambda {|user, blog| !blog.is_owner_privilege?}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 

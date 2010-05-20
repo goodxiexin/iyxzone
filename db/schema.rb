@@ -520,7 +520,7 @@ ActiveRecord::Schema.define(:version => 20100518060948) do
     t.integer  "album_id"
     t.integer  "game_id"
     t.integer  "poster_id"
-    t.integer  "privilege"
+    t.integer  "privilege",      :default => 1
     t.text     "notation"
     t.integer  "parent_id"
     t.string   "content_type"

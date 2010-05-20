@@ -31,7 +31,11 @@ class User::PhotosController < UserBaseController
     
     if @photo.save
 			render :text => @photo.id	
-		end
+		else
+      @photo.errors.each do |e|
+        logger.error e
+      end
+    end
 	end
 
   def record_upload

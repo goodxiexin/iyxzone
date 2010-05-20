@@ -3,9 +3,12 @@ require 'test_helper'
 class BlogTest < ActiveSupport::TestCase
 
   def setup
+    # create a user with game character
     @user = UserFactory.create
     @character = GameCharacterFactory.create :user_id => @user.id
     @game = @character.game
+  
+    # create 4 friends
     @friend1 = UserFactory.create
     @friend2 = UserFactory.create
     @friend3 = UserFactory.create
@@ -14,10 +17,18 @@ class BlogTest < ActiveSupport::TestCase
     FriendFactory.create @user, @friend2
     FriendFactory.create @user, @friend3
     FriendFactory.create @user, @friend4
+    
+    # create stranger
     @stranger = UserFactory.create
+
+    # create same-game-user
     @same_game_user = UserFactory.create
     @character2 = GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @same_game_user.id
+    
+    # create 2 guilds
     @guild1 = GuildFactory.create :character_id => @character.id, :president_id => @user.id
+    @guild2 = GuildFactory.create :character_id => @character2.id, :president_id => @same_game_user.id
+    
   end
 
   #

@@ -16,14 +16,10 @@ class GuildObserver < ActiveRecord::Observer
   def after_create guild
     # create album,forum and moderator_forum
     guild.create_album
-    forum = guild.create_forum(:name => "工会#{guild.name}的论坛", :description => "工会#{guild.name}的论坛")
+    guild.create_forum(:name => "工会#{guild.name}的论坛", :description => "工会#{guild.name}的论坛")
    
     # create membership
-    guild.memberships.build(
-      :user_id => guild.president_id, 
-      :character_id => guild.character_id, 
-      :status => Membership::President
-    ).save_with_validation(false)
+    guild.memberships.create(:user_id => guild.president_id, :character_id => guild.character_id, :status => Membership::President)
  
     # create absence rule and presence rule
     GuildRule.new(:guild_id => guild.id, :reason => "无故缺席", :outcome => -5, :rule_type => 0).save_with_validation(false)

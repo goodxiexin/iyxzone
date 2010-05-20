@@ -12,7 +12,7 @@ class Photo < ActiveRecord::Base
 
   needs_verification :sensitive_columns => [:notation]
 
-	acts_as_privileged_resources :owner_field => :poster, :validate_on => "parent.nil?"
+	acts_as_privileged_resources :owner_field => :poster, :validate_on => "false"
 
 	acts_as_resource_feeds :recipients => lambda {|photo| photo.album.poster.friends.find_all{|f| f.application_setting.recv_photo_feed?}}
 
@@ -20,7 +20,7 @@ class Photo < ActiveRecord::Base
                     :default_title => lambda {|photo| "相册#{photo.album.title}的照片"},
                     :create_conditions => lambda {|user, photo| !photo.is_owner_privilege?}
 
-  acts_as_diggable :create_conditions => lambda {|user, photo| (photo.type != 'PersonalPhoto' and photo.type != 'Avatar') or !photo.is_owner_privilege?}
+  acts_as_diggable :create_conditions => lambda {|user, photo| !photo.is_owner_privilege?}
 
   def is_cover?
     album.cover_id == id

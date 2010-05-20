@@ -20,7 +20,7 @@ class Video < ActiveRecord::Base
                     :default_title => lambda {|video| video.title}, 
                     :create_conditions => lambda {|user, video| !video.is_owner_privilege?}
 
-	acts_as_diggable :create_conditions => lambda {|user, video| !video.is_owner_privilege? or video.poster == user}
+	acts_as_diggable :create_conditions => lambda {|user, video| video.available_for? video.poster.relationship_with(user)}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id'
  

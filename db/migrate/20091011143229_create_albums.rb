@@ -6,7 +6,7 @@ class CreateAlbums < ActiveRecord::Migration
       t.integer :owner_id # can be event, guild, user o
       t.integer :game_id
       t.integer :photos_count, :default => 0
-      t.integer :privilege, :default => 1
+      t.integer :privilege, :default => PrivilegedResource::PUBLIC
       t.integer :cover_id
       t.string :title
       t.text :description

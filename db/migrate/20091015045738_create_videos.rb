@@ -13,7 +13,7 @@ class CreateVideos < ActiveRecord::Migration
       t.integer :digs_count, :default => 0
       t.integer :comments_count, :default => 0
       t.integer :tags_count, :default => 0
-      t.integer :privilege, :default => 1
+      t.integer :privilege, :default => PrivilegedResource::PUBLIC
       t.timestamps
     end
   end

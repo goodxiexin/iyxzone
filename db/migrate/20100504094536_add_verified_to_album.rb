@@ -1,6 +1,6 @@
 class AddVerifiedToAlbum < ActiveRecord::Migration
   def self.up
-    add_column :albums, :verified, :integer
+    add_column :albums, :verified, :integer, :default => 0
   end
 
   def self.down
