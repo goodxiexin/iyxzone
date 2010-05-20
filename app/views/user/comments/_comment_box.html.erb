@@ -13,8 +13,8 @@
 	<div class="img"><%= avatar current_user, :size => :small %></div>
 	<div class="cmt-con">
     <% form_remote_for :comment, :html => {:id => "#{type}_comment_form_#{commentable.id}"} do |f| %>
-      <%= hidden_field_tag 'comment[commentable_id]', commentable.id %>
-      <%= hidden_field_tag 'comment[commentable_type]', commentable.class.base_class.name %>
+      <%= hidden_field_tag 'commentable_id', commentable.id %>
+      <%= hidden_field_tag 'commentable_type', commentable.class.base_class.name %>
 			<%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id, :id => "#{type}_comment_recipient_#{commentable.id}" %>
       <%= f.text_area 'content', :class=>'textarea', :id => "#{type}_comment_content_#{commentable.id}"%>
       <div class="submit s_clear">

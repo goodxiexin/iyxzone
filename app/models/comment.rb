@@ -45,8 +45,6 @@ protected
     
     if commentable.blank?
       errors.add(:commentable_id, "不存在")
-    elsif commentable.respond_to? :rejected? and commentable.rejected?
-      errors.add(:commentable_id, "已经被和谐了")
     elsif !poster_id.blank? and !commentable.is_commentable_by? poster
       errors.add(:commentable_id, "没有权限")
     end

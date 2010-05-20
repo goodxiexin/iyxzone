@@ -10,7 +10,7 @@
             <p>共有 <span class="shine"><%= users.length -%>个</span> 好友在玩该游戏</p>
             <div class="photolist-box">
               <ul class="collection s_clear">
-								<% users.each do |user| %>
+								<% users[0..6].each do |user| %>
 									<li>
 										<div class="middle"><div class="middle-center"><div class="center"><%= avatar user, :class => 'imgbox01'%></div></div></div>
 										<p><%= profile_link user%></p>

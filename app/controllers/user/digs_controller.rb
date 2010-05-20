@@ -12,7 +12,7 @@ protected
 
   def setup
     @diggable = params[:diggable_type].constantize.find(params[:diggable_id])
-    require_verified @diggable if @diggable.respond_to?(:verified)
+    require_verified @diggable if @diggable.respond_to?(:rejected?)
   end  
 
 end
