@@ -35,10 +35,15 @@ module Model
 			!viewings.find_by_user_id(user.id).nil?
 		end
 
+    def is_viewable_by? user
+      proc = self.viewable_opts[:create_conditions] || lambda { true }
+      proc.call self, user
+    end
+
     def viewed_by user
       viewing = viewings.first(:conditions => {:user_id => user.id})
       if viewing.blank?
-        viewings.create(:user_id => user.id)
+        viewings.create(:user_id => user.id) if is_viewable_by?(user)
       else
         viewing.update_attribute(:viewed_at, Time.now) 
       end
