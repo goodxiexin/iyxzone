@@ -1,4 +1,4 @@
-# ActsAsResourceFeeds
+# /ActsAsResourceFeeds
 module ResourceFeeds
 
 	def self.included base
@@ -52,7 +52,7 @@ module ResourceFeeds
       end
 
       def recv_feed? resource
-        feed_deliveries.select {|f| f.feed_item.originator == resource}
+        feed_deliveries.select {|f| f.feed_item.originator == resource}.count != 0
       end
 
     end

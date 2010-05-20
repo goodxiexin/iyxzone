@@ -36,13 +36,13 @@ module NeedsVerify
       self.verify_opts = opts
 
       # verified from 0 to 1
-      attr_accessor :recently_verified
+      attr_accessor :recently_accepted
 
       # verified from 2 to 1
       attr_accessor :recently_recovered
 
       # verified from 0/1 to 2
-      attr_accessor :recently_unverified
+      attr_accessor :recently_rejected
 
       include InstanceMethods
 
@@ -74,12 +74,24 @@ module NeedsVerify
       self.verified == 2
     end
 
+    def accepted?
+      self.verified == 1
+    end
+
+    def unverified?
+      self.verified == 0
+    end
+
     def needs_no_verify
       self.verified = 1
     end
 
     def needs_verify
       self.verified = 0
+    end
+
+    def needs_verify?
+      self.verified == 0
     end
 
     # 在before_create或者before_update里进行自动检查
@@ -100,7 +112,7 @@ module NeedsVerify
         if self.verified == 2
           self.recently_recovered = true
         else
-          self.recently_verified = true
+          self.recently_accepted = true
         end
         self.verified = 1
         save
@@ -110,7 +122,7 @@ module NeedsVerify
     def unverify
       if self.verified == 0 or self.verified == 1
         self.verified = 2
-        self.recently_unverified = true
+        self.recently_rejected = true
         save
       end
     end

@@ -35,7 +35,7 @@ protected
 
   def sharing_is_valid
     return if share.blank? or poster.blank?
-    shareable = share.shareable
+    
     if shareable.shared_by? poster
       errors.add(:share_id, '已经分享过了')
     elsif shareable.respond_to? :rejected? and shareable.rejected?

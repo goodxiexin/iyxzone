@@ -40,7 +40,7 @@ class GuildObserver < ActiveRecord::Observer
   end
 
   def after_update guild
-    if guild.recently_unverified
+    if guild.recently_rejected
       User.update_all("participated_guilds_count = participated_guilds_count - 1", {:id => (guild.people - [guild.president]).map(&:id)})
       guild.president.raw_decrement :guilds_count
       guild.destroy_feeds # membership的feed就不删了，反正他们本来就没评论

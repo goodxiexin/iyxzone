@@ -34,7 +34,7 @@ class BlogObserver < ActiveRecord::Observer
         blog.poster.raw_increment "blogs_count#{blog.privilege}"
       end
       blog.deliver_feeds
-    elsif blog.recently_unverified
+    elsif blog.recently_rejected
       if blog.draft
         blog.poster.raw_decrement "drafts_count"
       else
@@ -66,7 +66,7 @@ class BlogObserver < ActiveRecord::Observer
     end
 
     # destroy feeds if necessary
-    if blog.was_owner_privilege? and blog.is_owner_privilege?
+    if !blog.was_owner_privilege? and blog.is_owner_privilege?
       blog.destroy_feeds      
     end 
   end

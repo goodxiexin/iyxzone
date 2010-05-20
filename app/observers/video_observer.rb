@@ -20,10 +20,10 @@ class VideoObserver < ActiveRecord::Observer
 
   def after_update video
     # change counter if verified changes
-    if video.recently_unverified
+    if video.recently_rejected
       video.poster.raw_decrement "videos_count#{video.privilege}"
       video.destroy_feeds
-    elsif video.recently_verified_from_unverified
+    elsif video.recently_recovered
       video.poster.raw_increment "videos_count#{video.privilege}"
       video.deliver_feeds
     end

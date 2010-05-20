@@ -28,7 +28,7 @@ class BlogTest < ActiveSupport::TestCase
     # create 2 guilds
     @guild1 = GuildFactory.create :character_id => @character.id, :president_id => @user.id
     @guild2 = GuildFactory.create :character_id => @character2.id, :president_id => @same_game_user.id
-    
+    @guild2.memberships.create :user_id => @user.id, :character_id => @character.id, :status => Membership::Member    
   end
 
   #
@@ -107,7 +107,7 @@ class BlogTest < ActiveSupport::TestCase
   #
   test "case4" do
     @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
-    @blog.reload 
+    @blog.reload
     assert_equal @blog.tags_count, 2
     assert_equal @blog.relative_users, [@friend1, @friend2]
 
@@ -129,7 +129,7 @@ class BlogTest < ActiveSupport::TestCase
 
   #
   # case 5
-  # create a blog, some one view the blog
+  # view blog
   #
   test "case5" do
     @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
@@ -154,10 +154,7 @@ class BlogTest < ActiveSupport::TestCase
 
   #
   # case 6
-  # create a public blog, everyone can dig it only once
-  # then create a friend-or-same-game-viewable blog, try digging
-  # then create a friend-viewable blog, try digging
-  # then create a owner-viewable blog, try digging
+  # dig blog
   #
   test "case6" do
     # 创建public日志
@@ -293,37 +290,301 @@ class BlogTest < ActiveSupport::TestCase
 
   #
   # case 7
-  # create a blog, poster's friends and guilds will receive the feed
+  # feeds about blog
   #
   test "case7" do
     @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
     assert @friend1.recv_feed? @blog1
     assert @guild1.recv_feed? @blog1
+    assert @guild2.recv_feed? @blog1
+
+    @blog1.update_attributes :privilege => PrivilegedResource::OWNER
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
+    assert !@friend1.recv_feed?(@blog1)
+    assert !@guild1.recv_feed?(@blog1)
+    assert !@guild2.recv_feed?(@blog1)    
 
     @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
     assert @friend1.recv_feed? @blog2
     assert @guild1.recv_feed? @blog2
+    assert @guild2.recv_feed? @blog2
 
     @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
-    assert @friend1.recv_feed? @blog3
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
+    assert @friend1.recv_feed?(@blog3)
     assert @guild1.recv_feed? @blog3
+    assert @guild2.recv_feed? @blog3
 
     @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
-    assert @friend1.recv_feed?(@blog4)
-    assert @guild1.recv_feed?(@blog4)
-
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
+    assert !@friend1.recv_feed?(@blog4)
+    assert !@guild1.recv_feed?(@blog4)
+    assert !@guild2.recv_feed?(@blog4)
+  
     @blog4.update_attributes(:privilege => PrivilegedResource::PUBLIC)
-    assert @friend1.recv_feed?(@blog4)
-    assert @guild1.recv_feed?(@blog4)
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
+    assert @friend1.recv_feed? @blog4
+    assert @guild1.recv_feed? @blog4
+    assert @guild2.recv_feed? @blog4    
+  
+    @draft1 = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
+    assert !@friend1.recv_feed?(@draft1)
+    assert !@guild1.recv_feed?(@draft1)
+    assert !@guild2.recv_feed?(@draft1)
+ 
+    @draft1.update_attributes(:privilege => PrivilegedResource::FRIEND)
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
+    assert !@friend1.recv_feed?(@draft1)
+    assert !@guild1.recv_feed?(@draft1)
+    assert !@guild2.recv_feed?(@draft1)
+ 
+    @draft1.update_attributes(:draft => 0, :privilege => PrivilegedResource::OWNER)
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
+    assert !@friend1.recv_feed?(@draft1)
+    assert !@guild1.recv_feed?(@draft1)
+    assert !@guild2.recv_feed?(@draft1)
+
+    @draft2 = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    @draft2.update_attributes(:draft => 0)
+    @friend1.reload
+    @guild1.reload
+    @guild2.reload
+    assert @friend1.recv_feed?(@draft2)
+    assert @guild1.recv_feed?(@draft2)
+    assert @guild2.recv_feed?(@draft2)
+  end
+
+  #
+  # case 8
+  # test share case
+  #
+  test "case8" do
+    t = 'share title'
+    r = 'share reason'
+
+    @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    
+    assert @blog1.share_by(@user, t, r)
+    @blog1.reload
+    assert_equal @blog1.sharings_count, 1
+    assert !@blog1.share_by(@user, t, r)
+    @blog1.reload
+    assert_equal @blog1.sharings_count, 1
+    
+    assert @blog1.share_by(@friend1, t, r)
+    @blog1.reload
+    assert_equal @blog1.sharings_count, 2
+    assert !@blog1.share_by(@friend1, t, r)
+    @blog1.reload
+    assert_equal @blog1.sharings_count, 2
+    
+    assert @blog1.share_by(@same_game_user, t, r)
+    @blog1.reload
+    assert_equal @blog1.sharings_count, 3
+    assert !@blog1.share_by(@same_game_user, t, r)
+    @blog1.reload
+    assert_equal @blog1.sharings_count, 3
+    
+    assert @blog1.share_by(@stranger, t, r)
+    @blog1.reload
+    assert_equal @blog1.sharings_count, 4
+    assert !@blog1.share_by(@stranger, t, r)
+    @blog1.reload
+    assert_equal @blog1.sharings_count, 4
+
+    @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    
+    assert @blog2.share_by(@user, t, r)
+    @blog2.reload
+    assert_equal @blog2.sharings_count, 1
+    assert !@blog2.share_by(@user, t, r)
+    @blog2.reload
+    assert_equal @blog2.sharings_count, 1
+
+    assert @blog2.share_by(@friend1, t, r)
+    @blog2.reload
+    assert_equal @blog2.sharings_count, 2
+    assert !@blog2.share_by(@friend1, t, r)
+    @blog2.reload
+    assert_equal @blog2.sharings_count, 2
+
+    assert @blog2.share_by(@same_game_user, t, r)
+    @blog2.reload
+    assert_equal @blog2.sharings_count, 3
+    assert !@blog2.share_by(@same_game_user, t, r)
+    @blog2.reload
+    assert_equal @blog2.sharings_count, 3
+
+    assert !@blog2.share_by(@stranger, t, r)
+    @blog2.reload
+    assert_equal @blog2.sharings_count, 3
+  
+    @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
+    
+    assert @blog3.share_by(@user, t, r)
+    @blog3.reload
+    assert_equal @blog3.sharings_count, 1
+    assert !@blog3.share_by(@user, t, r)
+    @blog3.reload
+    assert_equal @blog3.sharings_count, 1
+
+    assert @blog3.share_by(@friend1, t, r)
+    @blog3.reload
+    assert_equal @blog3.sharings_count, 2
+    assert !@blog3.share_by(@friend1, t, r)
+    @blog3.reload
+    assert_equal @blog3.sharings_count, 2
+
+    assert !@blog3.share_by(@same_game_user, t, r)
+    @blog3.reload
+    assert_equal @blog3.sharings_count, 2
+
+    assert !@blog3.share_by(@stranger, t, r)
+    @blog3.reload
+    assert_equal @blog3.sharings_count, 2
+
+    @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
+    
+    assert @blog4.share_by(@user, t, r)
+    @blog4.reload
+    assert_equal @blog4.sharings_count, 1
+    assert !@blog4.share_by(@user, t, r)
+    @blog4.reload
+    assert_equal @blog4.sharings_count, 1
+
+    assert !@blog4.share_by(@friend1, t, r)
+    @blog4.reload
+    assert_equal @blog4.sharings_count, 1
+
+    assert !@blog4.share_by(@same_game_user, t, r)
+    @blog4.reload
+    assert_equal @blog4.sharings_count, 1
+
+    assert !@blog4.share_by(@stranger, t, r)
+    @blog4.reload
+    assert_equal @blog4.sharings_count, 1
 
     @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
-    assert !@friend1.recv_feed?(@draft)
-    assert !@guild1.recv_feed?(@draft)
+    
+    assert !@draft.share_by(@user, t, r)
+    @draft.reload
+    assert_equal @draft.sharings_count, 0
 
-    @draft.update_attributes(:draft => 0)
-    assert @friend1.recv_feed?(@draft)
-    assert @guild1.recv_feed?(@draft)
- 
+    assert !@draft.share_by(@friend1, t, r)
+    @draft.reload
+    assert_equal @draft.sharings_count, 0
+
+    assert !@draft.share_by(@same_game_user, t, r)
+    @draft.reload
+    assert_equal @draft.sharings_count, 0
+
+    assert !@draft.share_by(@stranger, t, r)
+    @draft.reload
+    assert_equal @draft.sharings_count, 0
   end
+
+  #
+  # case 9
+  # comment blog
+  #
+  test "case9" do
+    # TODO    
+  end
+
+  #
+  # case 10
+  # relative blogs
+  #
+  test "case10" do
+    @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 1.day.ago, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id]
+    @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 2.days.ago, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
+    @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 3.days.ago, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
+    @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 4.days.ago, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend1.id]
+    @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 3.days.ago, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
+
+    # blog index
+    @blogs = @user.blogs.for('owner')
+    assert_equal @blogs, [@blog1, @blog2, @blog3, @blog4]
+
+    @blogs = @user.blogs.for('friend')
+    assert_equal @blogs, [@blog1, @blog2, @blog3]
+
+    @blogs = @user.blogs.for('same_game')
+    assert_equal @blogs, [@blog1, @blog2]
+
+    @blogs = @user.blogs.for('stranger')
+    assert_equal @blogs, [@blog1]
+
+    # friend blogs
+    @blogs = Blog.by(@friend1.friend_ids)
+    assert_equal @blogs, [@blog1, @blog2, @blog3, @blog4]
+    
+    @blogs = Blog.by(@friend1.friend_ids).for('friend')
+    assert_equal @blogs, [@blog1, @blog2, @blog3]
+
+    # relative blogs
+    @blogs = @friend1.relative_blogs
+    assert_equal @blogs, [@blog1, @blog2, @blog3, @blog4]
+
+    @blogs = @friend1.relative_blogs.for('friend')
+    assert_equal @blogs, [@blog1, @blog2, @blog3]
+  end
+
+  #
+  # case 11
+  # sensitive blogs
+  #
+  test "case11" do
+    @sensitive = "政府"
+    
+    @blog = BlogFactory.create :title => '和谐', :poster_id => @user.id, :game_id => @game.id
+    @user.reload
+    @friend1.reload
+    assert @blog.accepted? # 自动通过了应该
+    assert @friend1.recv_feed? @blog
+    assert_equal @user.blogs_count, 1
+
+    @blog.update_attributes(:title => @sensitive)
+    assert @blog.needs_verify? # 需要再验证了
+
+    # 验证通过
+    @blog.verify
+    @user.reload
+    @friend1.reload
+    assert_equal @user.blogs_count, 1
+    assert @friend1.recv_feed? @blog
+
+    # 又让他不通过
+    @blog.unverify
+    @user.reload
+    @friend1.reload
+    assert_equal @user.blogs_count, 0
+    assert !@friend1.recv_feed?(@blog)
+ 
+    # 又让他通过
+    @blog.verify
+    @user.reload
+    @friend1.reload
+    assert_equal @user.blogs_count, 1
+    assert @friend1.recv_feed? @blog    
+  end 
  
 end
