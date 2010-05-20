@@ -12,7 +12,8 @@ class User::NewsController < UserBaseController
 
   def index
     @i = params[:type].to_i
-    @news_list = News.type(Category[@i]).within(TimeRange[@i+1], TimeRange[@i]).order('created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
+    @j = params[:time].to_i
+    @news_list = News.type(Category[@i]).within(TimeRange[@j+1], TimeRange[@j]).order('created_at DESC').paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def show
