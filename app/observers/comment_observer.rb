@@ -9,6 +9,9 @@ class CommentObserver < ActiveRecord::Observer
   def after_create comment
     # increment counter
     comment.commentable.raw_increment :comments_count
+
+    # check tasks
+    comment.poster.user_tasks.each {|t| t.notify_create comment}
     
     # issue mail and notification
     eval("after_#{comment.commentable_type.underscore}_comment_create(comment)")

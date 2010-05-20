@@ -1,15 +1,18 @@
 require 'test_helper'
 
 class TaskTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-	@@i = 0
-  test "the truth" do
-    assert true
+
+  def setup
+    @user = UserFactory.create
+    @friend = UserFactory.create
+    FriendFactory.create @user, @friend
+    @character = GameCharacterFactory.create :user_id => @user.id
+    @character2 = GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @friend.id
+    @game = @character.game
   end
 
-	test "01" +"simple task create" do
-		puts check_exist_id.inspect	
-		t1 = Task.new(
+	test "simple task" do
+		t = Task.create(
 			:prerequisite	=> {},
 			:requirement	=> {},
 			:description	=> {:title => "测试任务1", :thumbnail => "default_event_large.png",
@@ -21,119 +24,129 @@ class TaskTest < ActiveSupport::TestCase
 			:catagory	=> 2
 #			:state	=> 1
 			)
-		assert(t1.valid?)
-		t1.save
+    assert t.prerequisites.blank?
 	end
 
-	test "02" +"prerequisite userinfo task create" do
-		t2 = Task.new(
-			:prerequisite	=> {:userinfo => {"participated_polls_morethan" => 1} },
-			:requirement	=> {},
-			:description	=> {:title => "测试任务2", :thumbnail => "default_event_large.png",
-												:text => "这仍然是一个很无聊的测试任务", :image => ["default_event_large.png"]},
-			:reward				=> {"gold" => 1},
-			:starts_at 		=> DateTime.now,
-			:expires_at		=> DateTime.now+10,
-			:duration			=> 1000,
-			:catagory	=> 2
-#			:state	=> 1
-			)
-		assert(t2.valid?)
-		t2.save
-	end
+  test "simple task with only one prerequisite" do 
+    t = Task.create(
+      :prerequisite => {:blog_more_than => 2},
+      :requirement  => {},
+      :description  => {:title => "测试任务1", :thumbnail => "default_event_large.png",
+                        :text => "这是一个很无聊的测试任务", :image => ["default_event_large.png"]},
+      :reward       => {"gold" => 1},
+      :starts_at    => DateTime.now,
+      :expires_at   => DateTime.now+10,
+      :duration     => 1000,
+      :catagory => 2
+#     :state  => 1
+      )
 
-	test "03" +"prerequisite pretask task create" do
-		puts check_exist_id.inspect	
-		t3 = Task.new(
-			:prerequisite	=> {:pretask => [2] },
-			:requirement	=> {},
-			:description	=> {:title => "测试任务3", :thumbnail => "default_event_large.png",
-												:text => "这仍然是一个很无聊的测试任务", :image => ["default_event_large.png"]},
-			:reward				=> {"gold" => 1},
-			:starts_at 		=> DateTime.now,
-			:expires_at		=> DateTime.now+10,
-			:duration			=> 1000,
-			:catagory	=> 2
-#			:state	=> 1
-			)
-		t3.valid?
-		puts t3.errors.inspect
-		assert(t3.valid?)
-		t3.save
-	end
+    assert_equal t.prerequisites.count, 1
+    p = t.prerequisites.first
+    assert p.is_a? BlogMoreThanPrerequisite
 
-	test "04" + "prerequisite pretask and userinfo task create" do
-		t4 = Task.new(
-			:prerequisite	=> {:userinfo => {"blogs_morethan" => 1, "participated_polls_morethan" => 1}, :pretask => [1,2] },
-			:requirement	=> {},
-			:description	=> {:title => "测试任务4", :thumbnail => "default_event_large.png",
-												:text => "这仍然是一个很无聊的测试任务", :image => ["default_event_large.png"]},
-			:reward				=> {"gold" => 1},
-			:starts_at 		=> DateTime.now,
-			:expires_at		=> DateTime.now+10,
-			:duration			=> 1000,
-			:catagory	=> 2
-#			:state	=> 1
-			)
-		assert(t4.valid?)
-		t4.save
-	end
-	test "05" + "prerequisite requirement task create" do
-		t5 = Task.new(
-			:prerequisite	=> {:userinfo => {"blogs_morethan" => 1, "participated_polls_morethan" => 1}, :pretask => [1,2] },
-			:requirement	=> {"blogs_morethan" => 1, "albums_add" => 2},
-			:description	=> {:title => "测试任务5", :thumbnail => "default_event_large.png",
-												:text => "这仍然是一个很无聊的测试任务", :image => ["default_event_large.png"]},
-			:reward				=> {"gold" => 1},
-			:starts_at 		=> DateTime.now,
-			:expires_at		=> DateTime.now+10,
-			:duration			=> 1000,
-			:catagory	=> 2
-#			:state	=> 1
-			)
-		assert(t5.valid?)
-		t5.save
-	end
-	def setup
-			dyc = User.new
-			dyc.login = "dyc"
-			dyc.password = "123123"
-			dyc.password_confirmation = "123123"
-			dyc.email = "silentdai@gmail.com"
-			dyc.save(false)
-			dyc.activate
-			role = Role.create(:name => 'dyc')
-    	RoleUser.create(:role_id => role.id, :user_id => dyc.id)
-		t1 = Task.new(
-			:prerequisite	=> {:userinfo => {"blogs_morethan" => 1}},
-			:requirement	=> {"blogs_morethan" => 3},
-			:description	=> {:title => "测试任务1", :thumbnail => "default_event_large.png",
-												:text => "这是一个很无聊的测试任务", :image => ["default_event_large.png"]},
-			:reward				=> {"gold" => 1},
-			:starts_at 		=> DateTime.now,
-			:expires_at		=> DateTime.now+10000,
-			:duration			=> 10000,
-			:catagory	=> 2
-#			:state	=> 1
-			)
-		t1.save
+    assert !t.is_selectable_by?(@user)
 
-		t2 = Task.new(
-			:prerequisite	=> {:userinfo => {"blogs_morethan" => 2, "participated_polls_morethan" => 1 }, :pretask => [t1.id]},
-			:requirement	=> {"blogs_morethan" => 3, "blogs_add" => 2},
-			:description	=> {:title => "测试任务1", :thumbnail => "default_event_large.png",
-												:text => "这是一个很无聊的测试任务", :image => ["default_event_large.png"]},
-			:reward				=> {"gold" => 1},
-			:starts_at 		=> DateTime.now,
-			:expires_at		=> DateTime.now+10000,
-			:duration			=> 1000,
-			:catagory	=> 2
-#			:state	=> 1
-			)
-		t2.save
-	end
+    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
+    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
+    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
 
-	def check_exist_id
-		Task.all.collect {|x| x.id}
-	end
+    @user.reload
+    assert t.is_selectable_by?(@user)
+  end
+
+  #
+  # simple task 1
+  # 创建2个博客
+  #
+  test "simple task 1" do 
+    t = Task.create(
+      :prerequisite => {},
+      :requirement  => {:blog_more_than => 2},
+      :description  => {:title => "测试任务1", :thumbnail => "default_event_large.png",
+                        :text => "这是一个很无聊的测试任务", :image => ["default_event_large.png"]},
+      :reward       => {"gold" => 1},
+      :starts_at    => DateTime.now,
+      :expires_at   => DateTime.now+10,
+      :duration     => 1000,
+      :catagory => 2
+#     :state  => 1
+      )
+
+    assert_equal t.requirements.count, 1
+    r = t.requirements.first
+    assert r.is_a? BlogMoreThanRequirement
+
+    @user_task = UserTask.create :user_id => @user.id, :task_id => t.id
+    assert @user_task
+    assert_equal @user_task.achievement[:blogs_count], 0
+
+    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
+    @user_task.reload
+    assert_equal @user_task.achievement[:blogs_count], 1
+    assert !@user_task.is_done?
+
+    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
+    @user_task.reload
+    assert_equal @user_task.achievement[:blogs_count], 2
+    assert !@user_task.is_done?
+
+    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
+    @user_task.reload
+    assert_equal @user_task.achievement[:blogs_count], 3
+    assert @user_task.is_done3?
+  end
+
+
+  #
+  # simple task 2
+  # 评论10篇别人的不同的资源
+  #
+  test "simple task 2" do
+    t = Task.create(
+      :prerequisite => {},
+      :requirement  => {:comment_different_blogs => 2},
+      :description  => {:title => "测试任务1", :thumbnail => "default_event_large.png",
+                        :text => "这是一个很无聊的测试任务", :image => ["default_event_large.png"]},
+      :reward       => {"gold" => 1},
+      :starts_at    => DateTime.now,
+      :expires_at   => DateTime.now+10,
+      :duration     => 1000,
+      :catagory => 2
+#     :state  => 1
+      )
+
+    assert_equal t.requirements.count, 1
+    r = t.requirements.first
+    assert r.is_a? CommentDifferentBlogsRequirement
+
+    @user_task = UserTask.create :user_id => @user.id, :task_id => t.id
+    @user_task.reload
+    assert @user_task
+    assert_equal @user_task.achievement[:comment_blogs], []
+
+    @blog1 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id
+    @comment = @blog1.comments.create :poster_id => @user.id, :content => 'comment blog1', :recipient_id => @friend.id
+    @user_task.reload
+    assert_equal @user_task.achievement[:comment_blogs], [@blog1.id]
+    assert !@user_task.is_done?
+
+    @blog2 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id
+    @blog2.comments.create :poster_id => @user.id, :content => 'comment blog2', :recipient_id => @friend.id
+    @user_task.reload
+    assert_equal @user_task.achievement[:comment_blogs], [@blog1.id, @blog2.id]
+    assert !@user_task.is_done?
+
+    @blog2.comments.create :poster_id => @user.id, :content => 'comment blog2', :recipient_id => @friend.id
+    @user_task.reload
+    assert_equal @user_task.achievement[:comment_blogs], [@blog1.id, @blog2.id]
+    assert !@user_task.is_done?
+
+    @blog3 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id
+    @blog3.comments.create :poster_id => @user.id, :content => 'comment blog3', :recipient_id => @friend.id
+    @user_task.reload
+    assert_equal @user_task.achievement[:comment_blogs], [@blog1.id, @blog2.id, @blog3.id]
+    assert @user_task.is_done?    
+  end
+
 end
