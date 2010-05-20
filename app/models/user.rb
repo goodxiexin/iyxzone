@@ -2,6 +2,8 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  has_one :subdomain
+
   acts_as_random 
 
   acts_as_pinyin :login => "pinyin"

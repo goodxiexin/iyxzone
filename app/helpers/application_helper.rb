@@ -40,7 +40,11 @@ module ApplicationHelper
   end
 
   def profile_link(user, opts={})
-    link_to user.login, profile_url(user.profile), opts
+    if user.subdomain.blank?
+      link_to user.login, profile_url(user.profile), opts
+    else
+      link_to user.login, "/#{user.subdomain.name}", opts
+    end
   end
 
   def validation_image

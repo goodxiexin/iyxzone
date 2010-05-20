@@ -63,7 +63,18 @@ class User::ProfilesController < UserBaseController
 protected
 
   def setup
-		if ["more_feeds", "show", "edit"].include? params[:action]
+    if ["show"].include? params[:action]
+      if params[:subdomain]
+        @subdomain = Subdomain.find_by_name(params[:subdomain])
+        @user = @subdomain.user
+        @profile = @user.profile
+      else
+        @profile = Profile.find(params[:id])
+        @user = @profile.user
+      end
+      @relationship = @user.relationship_with current_user
+      require_adequate_privilege @profile, @relationship
+		elsif ["more_feeds", "edit"].include? params[:action]
 			@profile = Profile.find(params[:id])
 			@user = @profile.user
       @relationship = @user.relationship_with current_user
