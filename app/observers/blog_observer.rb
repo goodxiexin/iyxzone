@@ -14,6 +14,12 @@ class BlogObserver < ActiveRecord::Observer
       blog.poster.raw_increment "blogs_count#{blog.privilege}"
     end
 
+    # check tasks
+    # 不管该博客是什么权限的，只要不是草稿就可以
+    if !blog.draft
+      blog.poster.user_tasks.each { |t| t.notify_create blog }
+    end
+
     # issue feeds
     if !blog.draft and blog.poster.application_setting.emit_blog_feed? and !blog.is_owner_privilege?
       blog.deliver_feeds
@@ -55,10 +61,14 @@ class BlogObserver < ActiveRecord::Observer
         blog.poster.raw_increment "blogs_count#{blog.privilege}"
       end
     end
-    
-    return if blog.draft
+
+    # check tasks
+    if blog.draft_was and !blog.draft
+      blog.poster.user_tasks.each { |t| t.notify_create blog }
+    end
 
     # issue feeds if necessary
+    return if blog.draft
     if (blog.draft_was and !blog.is_owner_privilege?) or (blog.was_owner_privilege? and !blog.is_owner_privilege?)
       if blog.poster.application_setting.emit_blog_feed?
         blog.deliver_feeds
