@@ -26,9 +26,15 @@ class GameCharacter < ActiveRecord::Base
 
   has_many :memberships, :foreign_key => 'character_id'
 
-  has_many :people_memberships, :foreign_key => 'character_id', :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
+  has_many :president_or_veteran_or_member_memberships, :foreign_key => 'character_id', :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
 
   has_many :guilds, :through => :people_memberships
+
+  has_many :participations, :foreign_key => 'character_id'
+
+  has_many :confirmed_or_maybe_participations, :foreign_key => 'character_id', :class_name => 'Participation', :conditions => {:status => [Participation::Confirmed, Participation::Maybe]}
+
+  has_many :events, :through => :confirmed_or_maybe_participations
 
 	acts_as_resource_feeds :recipients => lambda {|character| [character.user.profile, character.game] + character.user.friends}
 
@@ -51,16 +57,15 @@ class GameCharacter < ActiveRecord::Base
   validate_on_create :profession_is_valid
 
   def has_event?
-    !Event.first(:conditions => {:character_id => id}).blank?
+    !confirmed_or_maybe_participations.blank?
   end
 
   def has_guild?
-    !people_memberships.blank?
-    #!Guild.first(:conditions => {:character_id => id}).blank?
+    !president_or_veteran_or_member_memberships.blank?
   end
 
   def is_locked?
-    has_event? or has_guild?
+    !memberships.blank? or !participations.blank?
   end
 
   def name_with_game_and_server

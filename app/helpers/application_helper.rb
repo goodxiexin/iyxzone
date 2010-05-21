@@ -39,8 +39,6 @@ module ApplicationHelper
     end
   end
 
-# uncomment this if subdomain bug is fixed
-=begin
   def profile_url profile
     if profile.user.subdomain.blank?
       "/profiles/#{profile.id}" 
@@ -48,7 +46,7 @@ module ApplicationHelper
       "/#{profile.user.subdomain.name}"
     end
   end
-=end
+  
   def profile_link(user, opts={})
     link_to user.login, profile_url(user.profile), opts
   end

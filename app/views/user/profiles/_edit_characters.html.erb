@@ -72,7 +72,7 @@
             <% end %>
             <p class='foot s_clear'>
               <% if character.is_locked? %>
-                <%= facebox_tip "无法删除游戏角色", "无法删除该游戏角色，因为该角色可能是某活动的组织者或者是某工会的会长。请先删除活动或工会，然后才能删除该角色", :class => 'right red' %>
+                <%= facebox_tip "无法删除游戏角色", "无法删除该游戏角色，因为该角色可能已经参加了某活动者或者某工会长。请先退出这些活动、工会，然后才能删除该角色", :class => 'right red' %>
               <% else %>
                 <%= link_to_function "删除角色", "Iyxzone.Profile.Editor.removeCharacter(#{character.id}, 0, this)", :class => 'right red', :href => "javascript:void(0);" %>
               <% end %>

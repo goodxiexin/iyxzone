@@ -2,7 +2,7 @@ class User::ProfilesController < UserBaseController
 
   layout 'app2'
 
-  increment_viewing 'profile', 'id', :only => [:show]
+  increment_viewing 'profile', :only => [:show]
 
 	FirstFetchSize = 10
 
@@ -89,7 +89,7 @@ protected
   end
 
   def require_adequate_privilege profile, relationship
-    profile.available_for?(relationship) || render_add_friend(profile.user)
+    profile.available_for?(relationship) || is_admin || render_add_friend(profile.user)
   end
   
 end

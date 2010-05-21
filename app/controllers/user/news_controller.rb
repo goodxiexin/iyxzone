@@ -2,7 +2,7 @@ class User::NewsController < UserBaseController
 
   layout 'app'
 
-  increment_viewing 'news', 'id', :only => [:show]
+  increment_viewing 'news', :only => [:show]
 
   PER_PAGE = 10
 
