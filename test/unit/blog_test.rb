@@ -30,7 +30,7 @@ class BlogTest < ActiveSupport::TestCase
     @guild2 = GuildFactory.create :character_id => @character2.id, :president_id => @same_game_user.id
     @guild2.memberships.create :user_id => @user.id, :character_id => @character.id, :status => Membership::Member    
   end
-
+=begin
   #
   # case 1:
   # create a blog, edit the blog and finally destroy it
@@ -500,7 +500,7 @@ class BlogTest < ActiveSupport::TestCase
     @draft.reload
     assert_equal @draft.sharings_count, 0
   end
-
+=end
   #
   # case 9
   # comment blog
@@ -512,30 +512,52 @@ class BlogTest < ActiveSupport::TestCase
     @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
     @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
 
-    @comment1 = @blog1.comments.create :poster_id => @user.id, :content => 'a'
+    @comment1 = @blog1.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
     assert @comment1
-    @comment2 = @blog1.comments.create :poster_id => @friend1.id, :content => 'a'
+    @comment2 = @blog1.comments.create :poster_id => @friend1.id, :recipient_id => @user.id, :content => 'a'
     assert @comment2
-    @comment3 = @blog1.comments.create :poster_id => @same_game.id, :content => 'a'
+    @comment3 = @blog1.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
     assert @comment3
-    @comment4 = @blog1.comments.create :poster_id => @stranger.id, :content => 'a'
+    @comment4 = @blog1.comments.create :poster_id => @stranger.id, :recipient_id => @user.id, :content => 'a'
     assert @comment4
     @blog1.reload
     assert_equal @blog1.comments_count, 4
 
-    @comment1 = @blog2.comments.create :poster_id => @user.id, :content => 'a'
+    @comment1 = @blog2.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
     assert @comment1
-    @comment2 = @blog2.comments.create :poster_id => @friend1.id, :content => 'a'
+    @comment2 = @blog2.comments.create :poster_id => @friend1.id, :recipient_id => @user.id, :content => 'a'
     assert @comment2
-    @comment3 = @blog2.comments.create :poster_id => @same_game.id, :content => 'a'
+    @comment3 = @blog2.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
     assert @comment3
-    @comment4 = @blog2.comments.create :poster_id => @stranger.id, :content => 'a'
-    assert @comment4.nil?
+    @comment4 = @blog2.comments.create :poster_id => @stranger.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment4.id.nil?
     @blog2.reload
     assert_equal @blog2.comments_count, 3
+
+    @comment1 = @blog3.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment1
+    @comment2 = @blog3.comments.create :poster_id => @friend1.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment2
+    @comment3 = @blog3.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment3.id.nil?
+    @comment4 = @blog3.comments.create :poster_id => @stranger.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment4.id.nil?
+    @blog3.reload
+    assert_equal @blog3.comments_count, 2
+
+    @comment1 = @blog4.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment1
+    @comment2 = @blog4.comments.create :poster_id => @friend1.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment2.id.nil?
+    @comment3 = @blog4.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment3.id.nil?
+    @comment4 = @blog4.comments.create :poster_id => @stranger.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment4.id.nil?
+    @blog4.reload
+    assert_equal @blog4.comments_count, 1
         
   end
-
+=begin
   #
   # case 10
   # relative blogs
@@ -574,7 +596,7 @@ class BlogTest < ActiveSupport::TestCase
     @blogs = @friend1.relative_blogs.for('friend')
     assert_equal @blogs, [@blog1, @blog2, @blog3]
   end
-
+  
   #
   # case 11
   # sensitive blogs
@@ -613,5 +635,5 @@ class BlogTest < ActiveSupport::TestCase
     assert_equal @user.blogs_count, 1
     assert @friend1.recv_feed? @blog    
   end 
- 
+=end 
 end
