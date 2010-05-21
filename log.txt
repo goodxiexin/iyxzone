@@ -1,0 +1,54 @@
+Processing UsersController#new (for 222.184.76.90 at 2010-05-21 14:24:43) [GET]
+  Parameters: {"invite_token"=>"19e22edda3d3b8ea5ed6178ac7b816b0d7111480"}
+Rendering template within layouts/root
+Rendering users/new
+Completed in 98ms (View: 96, DB: 1) | 200 OK [http://www.17gaming.com/signup?invite_token=19e22edda3d3b8ea5ed6178ac7b816b0d7111480]
+
+
+Processing GamesController#show to json (for 123.152.18.251 at 2010-05-21 14:24:44) [GET]
+  Parameters: {"id"=>"57"}
+games
+Completed in 29ms (View: 0, DB: 1) | 200 OK [http://www.17gaming.com/game_details/57.json]
+
+
+Processing User::NewsController#show (for 112.64.173.187 at 2010-05-21 14:24:44) [GET]
+  Parameters: {"id"=>"41"}
+Rendering template within layouts/app
+Rendering user/news/show_video_news
+Completed in 414ms (View: 352, DB: 30) | 200 OK [http://www.17gaming.com/news/41]
+
+
+Processing User::SearchController#user (for 202.91.180.152 at 2010-05-21 14:24:47) [GET]
+  Parameters: {"authenticity_token"=>"+Vzkt2PJdxK24jvNCD6c1a3uCKildJnpKmJZgdsk8ys=", "key"=>"esportsæµ·\346\266\233"}
+Rendering template within layouts/app
+Rendering user/search/user
+Completed in 397ms (View: 343, DB: 28) | 200 OK [http://www.17gaming.com/search_users?authenticity_token=%2BVzkt2PJdxK24jvNCD6c1a3uCKildJnpKmJZgdsk8ys%3D&key=esports%E6%B5%B7%E6%B6%9B]
+
+
+Processing RegisterController#invite (for 125.77.120.8 at 2010-05-21 14:24:49) [GET]
+  Parameters: {"token"=>"19e22edda3d3b8ea5ed6178ac7b816b0d7111480"}
+Rendering register/invite
+Completed in 96ms (View: 11, DB: 35) | 200 OK [http://www.17gaming.com/invite?token=19e22edda3d3b8ea5ed6178ac7b816b0d7111480]
+
+
+Processing RegisterController#validates_email_uniqueness (for 218.25.172.55 at 2010-05-21 14:24:49) [GET]
+  Parameters: {"email"=>"61585414@qq.com"}
+Completed in 14ms (View: 0, DB: 13) | 200 OK [http://www.17gaming.com/register/validates_email_uniqueness?email=61585414%40qq.com]
+
+Processing UsersController#create (for 123.152.18.251 at 2010-05-21 14:25:14) [POST]
+  Parameters: {"profile"=>{"new_characters"=>{"1"=>{"race_id"=>"", "name"=>"0oå<8e><8c>æ°§o0", "profession_id"=>"324", "server_id"=>"4098", "area_id"=>"863", "level"=>"145", "playing"=>"0", "game_id"=>"57"}}}, "agree_contact"=>"1", "authenticity_token"=>"z+4t0TbtTYOrLvay+/45sZxLVh8G1UP+p+CGd9ZGTjo=", "invite_token"=>"", "user"=>{"password_confirmation"=>"czy8867456", "gender"=>"male", "password"=>"czy8867456", "login"=>"chen", "email"=>"575147344@qq.com"}}
+Sent mail to 575147344@qq.com
+Completed in 269ms (View: 1, DB: 26) | 200 OK [http://www.17gaming.com/users/]
+
+
+Processing UsersController#activation_mail_sent (for 123.152.18.251 at 2010-05-21 14:25:15) [GET]
+  Parameters: {"invite_token"=>"", "show"=>"0", "email"=>"575147344@qq.com"}
+Rendering template within layouts/root
+Rendering users/success
+Completed in 20ms (View: 5, DB: 13) | 200 OK [http://www.17gaming.com/activation_mail_sent?email=575147344@qq.com&show=0&invite_token=]
+
+
+Processing UsersController#create (for 123.152.18.251 at 2010-05-21 14:25:15) [POST]
+  Parameters: {"profile"=>{"new_characters"=>{"1"=>{"race_id"=>"", "name"=>"0oå<8e><8c>æ°§o0", "profession_id"=>"324", "server_id"=>"4098", "area_id"=>"863", "level"=>"145", "playing"=>"0", "game_id"=>"57"}}}, "agree_contact"=>"1", "authenticity_token"=>"z+4t0TbtTYOrLvay+/45sZxLVh8G1UP+p+CGd9ZGTjo=", "invite_token"=>"", "user"=>{"password_confirmation"=>"czy8867456", "gender"=>"male", "password"=>"czy8867456", "login"=>"chen", "email"=>"gaoxh04@gmail.com"}}
+Completed in 20ms (View: 5, DB: 13) | 200 OK [http://www.17gaming.com/activation_mail_sent?email=575147344@qq.com&show=0&invite_token=]
+

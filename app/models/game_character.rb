@@ -86,7 +86,7 @@ protected
   def server_is_valid
     return if game.blank?
     if game.no_servers
-      errors.add(:server_id, "该游戏没有服务器")
+      errors.add(:server_id, "该游戏没有服务器") unless server_id.blank?
     else
       if game.no_areas
         errors.add(:server_id, "该服务器不存在") unless GameServer.exists? :game_id => game_id, :id => server_id

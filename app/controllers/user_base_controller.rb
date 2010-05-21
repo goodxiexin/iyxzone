@@ -21,28 +21,28 @@ protected
   end
 
   def require_owner owner
-    owner == current_user || render_not_found
+    owner == current_user || is_admin || render_not_found
   end
 
   def require_none_owner owner
-    owner != current_user || render_not_found
+    owner != current_user || is_admin || render_not_found
   end
 
   def require_friend owner
-    owner.relationship_with(current_user) == 'friend' || render_add_friend(owner)
+    owner.relationship_with(current_user) == 'friend' || is_admin || render_add_friend(owner)
   end
 
   def require_none_friend owner
-    owner.relationship_with(current_user) != 'friend' || render_not_found
+    owner.relationship_with(current_user) != 'friend' || is_admin || render_not_found
   end
 
   def require_friend_or_owner owner
     relationship = owner.relationship_with current_user
-    relationship == 'friend' || relationship == 'owner' || render_add_friend(owner)
+    relationship == 'friend' || relationship == 'owner' || is_admin || render_add_friend(owner)
   end
 
   def require_adequate_privilege resource, relationship
-    resource.available_for?(relationship) || render_privilege_denied(resource)
+    resource.available_for?(relationship) || is_amdin || render_privilege_denied(resource)
   end
 
   def require_verified resource
