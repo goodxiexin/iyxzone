@@ -48,9 +48,14 @@ class TaskTest < ActiveSupport::TestCase
     assert !t.is_selectable_by?(@user)
 
     BlogFactory.create :poster_id => @user.id, :game_id => @game.id
-    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
-    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
+    @user.reload
+    assert !t.is_selectable_by?(@user)
 
+    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
+    @user.reload
+    assert !t.is_selectable_by?(@user)
+
+    BlogFactory.create :poster_id => @user.id, :game_id => @game.id
     @user.reload
     assert t.is_selectable_by?(@user)
   end
