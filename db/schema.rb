@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100518060948) do
+ActiveRecord::Schema.define(:version => 20100520155931) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -520,7 +520,7 @@ ActiveRecord::Schema.define(:version => 20100518060948) do
     t.integer  "album_id"
     t.integer  "game_id"
     t.integer  "poster_id"
-    t.integer  "privilege",      :default => 1
+    t.integer  "privilege"
     t.text     "notation"
     t.integer  "parent_id"
     t.string   "content_type"
@@ -711,6 +711,11 @@ ActiveRecord::Schema.define(:version => 20100518060948) do
   end
 
   add_index "statuses", ["poster_id"], :name => "index_statuses_on_poster_id"
+
+  create_table "subdomains", :force => true do |t|
+    t.integer "user_id"
+    t.string  "name"
+  end
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"

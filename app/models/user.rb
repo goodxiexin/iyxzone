@@ -3,6 +3,8 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
 
   has_many :user_tasks
+  
+  has_one :subdomain
 
   acts_as_random 
 
