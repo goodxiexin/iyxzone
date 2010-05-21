@@ -44,7 +44,7 @@ class News < ActiveRecord::Base
   validates_presence_of :news_type, :message => "不能为空"
 
   def self.daily 
-    news = self.all(:conditions => ['created_at > ? and created_at < ?', Time.now.beginning_of_day, Time.now.end_of_day], :order => 'created_at DESC', :limit => 4)
+    news = self.all(:conditions => ['created_at > ?', 1.days.ago], :order => 'created_at DESC', :limit => 4)
     picture_news = news.select {|n| n.news_type == 'picture'}.first
     video_news = news.select {|n| n.news_type == 'video'}.first
     if picture_news

@@ -149,8 +149,7 @@ class Guild < ActiveRecord::Base
   end
 
   def requestable_characters_for user
-    user.characters.find(:all, :conditions => {:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id}) -  
-    all_characters.find(:all, :conditions => "memberships.user_id = #{user.id}")
+    user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - all_characters.find(:all, :conditions => "memberships.user_id = #{user.id}")
   end
 
   def invitees= character_ids
