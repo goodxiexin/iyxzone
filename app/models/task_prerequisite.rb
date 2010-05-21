@@ -15,6 +15,18 @@ class TaskPrerequisite
 
 end
 
+class PretasksPrerequisite < TaskPrerequisite
+
+  def satisfy? user
+    (user.user_tasks.select{|t| t.is_done?}.map(&:task_id) & val) == val
+  end
+
+  def valid
+    val.is_a? Array
+  end
+
+end
+
 class BlogMoreThanPrerequisite < TaskPrerequisite
 
   def satisfy? user

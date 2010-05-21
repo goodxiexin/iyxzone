@@ -26,6 +26,8 @@ protected
 
     if task.blank?
       errors.add(:task_id, "不存在")
+    elsif task.selected_by?(user)
+      errors.add(:task_id, "重复选择")
     elsif !task.is_selectable_by?(user)
       errors.add(:task_id, "不能选择")
     end

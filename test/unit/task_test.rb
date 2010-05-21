@@ -94,7 +94,7 @@ class TaskTest < ActiveSupport::TestCase
     BlogFactory.create :poster_id => @user.id, :game_id => @game.id
     @user_task.reload
     assert_equal @user_task.achievement[:blogs_count], 3
-    assert @user_task.is_done3?
+    assert @user_task.is_done?
   end
 
 
@@ -147,6 +147,50 @@ class TaskTest < ActiveSupport::TestCase
     @user_task.reload
     assert_equal @user_task.achievement[:comment_blogs], [@blog1.id, @blog2.id, @blog3.id]
     assert @user_task.is_done?    
+  end
+
+  test "prerequisite: some pretasks" do
+    pre = Task.create(
+      :prerequisite => {},
+      :requirement  => {:comment_different_blogs => 2},
+      :description  => {:title => "测试任务1", :thumbnail => "default_event_large.png",
+                        :text => "这是一个很无聊的测试任务", :image => ["default_event_large.png"]},
+      :reward       => {"gold" => 1},
+      :starts_at    => DateTime.now,
+      :expires_at   => DateTime.now+10,
+      :duration     => 1000,
+      :catagory => 2
+#     :state  => 1
+      )
+    t = Task.create(
+      :prerequisite => {:pretasks => [pre.id]},
+      :requirement => {:comment_different_blogs => 10},
+      :description  => {:title => "测试任务1", :thumbnail => "default_event_large.png",
+                        :text => "这是一个很无聊的测试任务", :image => ["default_event_large.png"]},
+      :reward       => {"gold" => 1},
+      :starts_at    => DateTime.now,
+      :expires_at   => DateTime.now+10,
+      :duration     => 1000,
+      :catagory => 2
+    )
+
+    t.reload
+    assert !t.prerequisites.blank?
+    assert t.prerequisites.first.is_a?(PretasksPrerequisite)
+    assert !t.is_selectable_by?(@user)
+
+    @user_task = UserTask.create :user_id => @user.id, :task_id => pre.id
+    @blog1 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id
+    @comment = @blog1.comments.create :poster_id => @user.id, :content => 'comment blog1', :recipient_id => @friend.id
+    @blog2 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id
+    @blog2.comments.create :poster_id => @user.id, :content => 'comment blog2', :recipient_id => @friend.id
+    @blog3 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id
+    @blog3.comments.create :poster_id => @user.id, :content => 'comment blog3', :recipient_id => @friend.id
+
+    @user_task.reload
+    assert @user_task.is_done?
+    @user.reload
+    assert t.is_selectable_by?(@user)
   end
 
 end

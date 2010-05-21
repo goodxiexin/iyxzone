@@ -1,5 +1,9 @@
 class Task < ActiveRecord::Base
 
+  EVERYDAY = 0
+  INVISIBLE = 1
+  REGULAR = 2  
+
 	serialize :prerequisite, Hash
 	
   serialize	:requirement,	Hash
@@ -24,6 +28,10 @@ class Task < ActiveRecord::Base
 
   def requirements
     requirement.map{|key, value| "#{key}_requirement".camelize.constantize.new(value)}
+  end
+
+  def selected_by? user
+    user_tasks.exists? :user_id => user.id
   end
 
 	def is_everyday?
