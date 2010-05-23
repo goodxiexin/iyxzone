@@ -62,7 +62,6 @@ module WillPaginate
       # All other options (+conditions+, +order+, ...) are forwarded to +find+
       # and +count+ calls.
       def paginate(*args)
-        puts "in finder"
         options = args.pop
         page, per_page, total_entries = wp_parse_options(options)
         finder = (options[:finder] || 'find').to_s
