@@ -1,21 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>17gaming</title>
-</head>
-
 <body>
 
 <div style="width:600px;font-size:12px;font:Tahoma, Geneva, sans-serif">
-	<div><img src="images/head.png" alt="17gaming" border="0" /></div>
+	<div><img src="<%=SITE_URL%>/images/mails/head.png" alt="17gaming" border="0" /></div>
     
-    <div style="float:left;width:120px;padding-top:10px"><img src="images/smile_face.jpg" border="0" /></div>
+    <div style="float:left;width:120px;padding-top:10px"><img src="<%=SITE_URL%>/images/smile_face.jpg" border="0" /></div>
     <div style="line-height:22px;padding:10px 0;float:left;width:320px">
-        <div style="font-size:18px;font-weight:700;line-height:35px;color:#db5903">*****，您好</div>
-        <div style="line-height:22px;color:#333">我们注意到您已经有一周时间未登陆17gaming(一起游戏网)，一起游戏网新增了好多功能，新的会员，精彩不容错过！</div>
+        <div style="font-size:18px;font-weight:700;line-height:35px;color:#db5903"><%=@user.login%>，您好</div>
+        <div style="line-height:22px;color:#333">我们注意到您已经有一周时间未登陆一起游戏网（17gaming.com），一起游戏网新增了好多功能，新的会员，精彩不容错过！</div>
     </div>
-    <div style="float:left;width:120px;padding:40px 0 0 10px"><a href="#" target="_blank"><img src="images/login.png" alt="立刻登陆" border="0" /></a></div>
+    <div style="float:left;width:120px;padding:40px 0 0 10px"><a href='<%=@url%>' target="_blank"><img src="<%=SITE_URL%>/images/login.png" alt="立刻登陆" border="0" /></a></div>
 	<table width="100%" border="0" cellspacing="5" cellpadding="0">
       <tr>
         <td style="text-align:center;width:150px"><a href="#" target="_blank"><img src="images/t001.jpg" alt="xxxxx" border="0" /></a></td>
@@ -56,4 +50,3 @@
 
 
 </body>
-</html>

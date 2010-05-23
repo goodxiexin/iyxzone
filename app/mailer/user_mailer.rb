@@ -4,7 +4,7 @@ class UserMailer < ActionMailer::Base
 
   def long_time_no_seen user
     setup_email user
-    subject     "17Gaming(一起游戏网) - 你已经一周以上没有上线了"
+    subject     "17Gaming(一起游戏网) - 我们希望你再来看看！"
     body        :user => user, :url => "#{SITE_URL}/home"
   end
 
