@@ -90,7 +90,13 @@ module Taggable
     end
 
     def add_tag user, name
-      Tagging.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id, :tag_name => name)
+      tag = Tag.find_or_create(:name => name, :taggable_type => self.class.to_s)
+
+      if tag.id.nil?
+        false
+      else
+        Tagging.create(:taggable_type => self.class.to_s, :taggable_id => id, :poster_id => user.id, :tag_id => tag.id)
+      end
     end
 
 		def tagged_by? user

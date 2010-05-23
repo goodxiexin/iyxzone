@@ -2,7 +2,7 @@ class User::TagsController < UserBaseController
 
 	def create
     unless @taggable.add_tag current_user, params[:tag_name]
-      render_js_error
+      render_js_error "发生错误，内容最长10个字符"
     end
 	end
 

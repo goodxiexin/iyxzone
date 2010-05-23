@@ -20,7 +20,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_viewable
 
-	acts_as_diggable :create_conditions => lambda {|user, blog| blog.available_for? user.relationship_with(blog.poster)}
+	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
 
   acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.all_guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed?}}
   
@@ -30,9 +30,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_privileged_resources :owner_field => :poster
 
-  acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster || user.is_admin?},
-                      :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
+  acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster}, :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
 
   acts_as_abstract :columns => [:content]
 
@@ -61,7 +59,7 @@ protected
     return if game_id.blank?
     errors.add('game_id', "不存在") unless Game.exists?(game_id)
     return if poster_id.blank?
-    errors.add('game_id', "该用户没有这个游戏") unless poster.characters.map(&:game_id).include?(game_id)
+    errors.add('game_id', "该用户没有这个游戏") unless poster.has_game?(game_id)
   end
 
   def update_blog_images
@@ -70,7 +68,6 @@ protected
     doc.xpath("//img[starts-with(@src, '/blog_images/')]").each do |l|
       l[:src] =~ /\/blog_images\/([\d]+)\/([\d]+)\//
       id = (10000 * $1.to_i + $2.to_i)
-      puts "id: #{id}"
       ids << id
     end
     BlogImage.update_all({:blog_id => self.id, :updated_at => self.updated_at}, {:id => ids})

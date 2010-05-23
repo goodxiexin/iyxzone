@@ -16,9 +16,7 @@ class Video < ActiveRecord::Base
  
   acts_as_friend_taggable 
 
-  acts_as_shareable :path_reg => /\/videos\/([\d]+)/,
-                    :default_title => lambda {|video| video.title}, 
-                    :create_conditions => lambda {|user, video| !video.is_owner_privilege?}
+  acts_as_shareable :path_reg => /\/videos\/([\d]+)/, :default_title => lambda {|video| video.title}, :create_conditions => lambda {|user, video| video.available_for?(video.poster.relationship_with(user))}
 
 	acts_as_diggable :create_conditions => lambda {|user, video| video.available_for? video.poster.relationship_with(user)}
 
@@ -28,11 +26,9 @@ class Video < ActiveRecord::Base
 
 	acts_as_video
 
-	acts_as_resource_feeds :recipients => lambda {|video| [video.poster.profile, video.game] + video.poster.guilds + video.poster.friends.find_all {|f| f.application_setting.recv_video_feed?} }
+	acts_as_resource_feeds :recipients => lambda {|video| [video.poster.profile, video.game] + video.poster.all_guilds + video.poster.friends.find_all {|f| f.application_setting.recv_video_feed?} }
 
-  acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, video, comment| user == video.poster || user == comment.poster},  
-                      :create_conditions => lambda {|user, video| video.available_for? user }
+  acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, video, comment| user == video.poster || user == comment.poster}, :create_conditions => lambda {|user, video| video.available_for? user.relationship_with(video.poster) }
 
   # video url 和 game_id 还有 poster_id 一经创建无法修改
   attr_readonly :video_url, :game_id, :poster_id
@@ -57,7 +53,7 @@ protected
     return if game_id.blank?
     errors.add('game_id', "不存在") unless Game.exists?(game_id)
     return if poster_id.blank? or !errors.blank?
-    errors.add('game_id', "该用户没有这个游戏") unless poster.characters.map(&:game_id).include?(game_id)
+    errors.add('game_id', "该用户没有这个游戏") unless poster.has_game?(game_id)
   end
 
 end

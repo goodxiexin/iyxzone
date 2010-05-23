@@ -40,6 +40,11 @@ Factory.define :blog do |b|
   b.sequence(:content) {|n| "content-#{n}"}
 end
 
+Factory.define :video do |v|
+  v.sequence(:title) {|n| "title-#{n}"}
+  v.sequence(:description) {|n| "description-#{n}"}
+end
+
 Factory.define :guild do |g|
   g.sequence(:name) {|n| "name-#{n}"}
   g.sequence(:description) {|n| "description-#{n}"}

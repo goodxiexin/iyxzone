@@ -10,7 +10,7 @@ class PhotoTag < ActiveRecord::Base
   
   attr_readonly :poster_id, :tagged_user_id, :photo_id
 
-  needs_verification
+  #needs_verification
 
   validates_presence_of :poster_id, :message => "不能为空"
 

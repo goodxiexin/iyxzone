@@ -1,13 +1,12 @@
 class Tag < ActiveRecord::Base
 
-  # 理论上我们指挥删除那些taggings_count = 0的tag
 	has_many :taggings, :dependent => :delete_all
 
 	named_scope :game_tags, :conditions => {:taggable_type => 'Game'}
 
 	named_scope :profile_tags, :conditions => {:taggable_type => 'Profile'}
 
-  needs_verification 
+  #needs_verification 
  
   acts_as_pinyin :name => "pinyin"
 
@@ -17,7 +16,7 @@ class Tag < ActiveRecord::Base
 
   validates_presence_of :name, :message => "不能为空"
 
-  validates_size_of :name, :within => 1..100, :too_short => "最短1个字节", :too_long => "最长100个字节"
+  validates_size_of :name, :within => 1..30, :too_short => "最短1个字节", :too_long => "最长30个字节"
 
   validates_presence_of :taggable_type, :message => "不能为空"
 

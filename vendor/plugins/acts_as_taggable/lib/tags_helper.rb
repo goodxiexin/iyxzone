@@ -2,7 +2,7 @@ module TagsHelper
 
 	def tag_cloud(taggable, classes)
 		return if taggable.nil?
-		tag_infos = taggable.taggings.group_by(&:tag)
+		tag_infos = taggable.taggings.group_by(&:tag).sort{rand}[0..14]
 		tags = tag_infos.map {|tag, taggings| tag}
 		tagging_counts = tag_infos.map {|tag, taggings| taggings.count}
 		max_count = tagging_counts.max

@@ -30,7 +30,7 @@ class BlogTest < ActiveSupport::TestCase
     @guild2 = GuildFactory.create :character_id => @character2.id, :president_id => @same_game_user.id
     @guild2.memberships.create :user_id => @user.id, :character_id => @character.id, :status => Membership::Member    
   end
-=begin
+  
   #
   # case 1:
   # create a blog, edit the blog and finally destroy it
@@ -133,7 +133,7 @@ class BlogTest < ActiveSupport::TestCase
   #
   test "case5" do
     @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
-    assert_equal @blog.digs_count, 0
+    assert_equal @blog.viewings_count, 0
 
     @blog.viewed_by @user
     @blog.reload
@@ -286,6 +286,24 @@ class BlogTest < ActiveSupport::TestCase
     assert !@blog.dug_by(@stranger)
     @blog.reload
     assert_equal @blog.digs_count, 1
+  
+    # 创建owner日志
+    @blog = DraftFactory.create :poster_id => @user.id, :game_id => @game.id
+    @blog.reload
+    assert_equal @blog.digs_count, 0
+
+    assert !@blog.dug_by(@user)
+    @blog.reload
+    assert_equal @blog.digs_count, 0
+    assert !@blog.dug_by(@friend1)
+    @blog.reload
+    assert_equal @blog.digs_count, 0
+    assert !@blog.dug_by(@same_game_user)
+    @blog.reload
+    assert_equal @blog.digs_count, 0
+    assert !@blog.dug_by(@stranger)
+    @blog.reload
+    assert_equal @blog.digs_count, 0
   end 
 
   #
@@ -500,7 +518,7 @@ class BlogTest < ActiveSupport::TestCase
     @draft.reload
     assert_equal @draft.sharings_count, 0
   end
-=end
+  
   #
   # case 9
   # comment blog
@@ -557,7 +575,7 @@ class BlogTest < ActiveSupport::TestCase
     assert_equal @blog4.comments_count, 1
         
   end
-=begin
+  
   #
   # case 10
   # relative blogs
@@ -635,5 +653,5 @@ class BlogTest < ActiveSupport::TestCase
     assert_equal @user.blogs_count, 1
     assert @friend1.recv_feed? @blog    
   end 
-=end 
+
 end
