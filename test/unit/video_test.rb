@@ -7,6 +7,7 @@ class VideoTest < ActiveSupport::TestCase
     @user = UserFactory.create
     @character = GameCharacterFactory.create :user_id => @user.id
     @game = @character.game
+    @profile = @user.profile
   
     # create 4 friends
     @friend1 = UserFactory.create
@@ -227,7 +228,296 @@ class VideoTest < ActiveSupport::TestCase
   end
 
   #
-  # case6
+  # case5
+  # video feeds
   #
+  test "case5" do
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html'
+    @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload
+    assert @friend1.recv_feed?(@video)
+    assert @guild1.recv_feed?(@video)
+    assert @guild2.recv_feed?(@video)
+    assert @game.recv_feed?(@video)
+    assert @profile.recv_feed?(@video)
+
+    @video.update_attributes(:privilege => PrivilegedResource::OWNER)
+    @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload
+    assert !@friend1.recv_feed?(@video)
+    assert !@guild1.recv_feed?(@video)
+    assert !@guild2.recv_feed?(@video)
+    assert !@game.recv_feed?(@video)
+    assert !@profile.recv_feed?(@video)
+    
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::OWNER
+    @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload
+    assert !@friend1.recv_feed?(@video)
+    assert !@guild1.recv_feed?(@video)
+    assert !@guild2.recv_feed?(@video)
+    assert !@game.recv_feed?(@video)
+    assert !@profile.recv_feed?(@video)
+  
+    @video.update_attributes(:privilege => PrivilegedResource::PUBLIC)
+    @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload
+    assert @friend1.recv_feed?(@video)
+    assert @guild1.recv_feed?(@video)
+    assert @guild2.recv_feed?(@video)
+    assert @game.recv_feed?(@video)
+    assert @profile.recv_feed?(@video)
+  end
+
+  #
+  # case6
+  # share video
+  #
+  test "case6" do
+    t = 'share title'
+    r = 'share reason'
+
+    @video1 = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html'
+
+    assert @video1.share_by(@user, t, r)
+    @video1.reload
+    assert_equal @video1.sharings_count, 1
+    assert !@video1.share_by(@user, t, r)
+    @video1.reload
+    assert_equal @video1.sharings_count, 1
+
+    assert @video1.share_by(@friend1, t, r)
+    @video1.reload
+    assert_equal @video1.sharings_count, 2
+    assert !@video1.share_by(@friend1, t, r)
+    @video1.reload
+    assert_equal @video1.sharings_count, 2
+
+    assert @video1.share_by(@same_game_user, t, r)
+    @video1.reload
+    assert_equal @video1.sharings_count, 3
+    assert !@video1.share_by(@same_game_user, t, r)
+    @video1.reload
+    assert_equal @video1.sharings_count, 3
+
+    assert @video1.share_by(@stranger, t, r)
+    @video1.reload
+    assert_equal @video1.sharings_count, 4
+    assert !@video1.share_by(@stranger, t, r)
+    @video1.reload
+    assert_equal @video1.sharings_count, 4
+
+    assert_equal @video1.first_sharer, @user
+
+    @video2 = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+
+    assert @video2.share_by(@user, t, r)
+    @video2.reload
+    assert_equal @video2.sharings_count, 1
+    assert !@video2.share_by(@user, t, r)
+    @video2.reload
+    assert_equal @video2.sharings_count, 1
+
+    assert @video2.share_by(@friend1, t, r)
+    @video2.reload
+    assert_equal @video2.sharings_count, 2
+    assert !@video2.share_by(@friend1, t, r)
+    @video2.reload
+    assert_equal @video2.sharings_count, 2
+
+    assert @video2.share_by(@same_game_user, t, r)
+    @video2.reload
+    assert_equal @video2.sharings_count, 3
+    assert !@video2.share_by(@same_game_user, t, r)
+    @video2.reload
+    assert_equal @video2.sharings_count, 3
+
+    assert !@video2.share_by(@stranger, t, r)
+    @video2.reload
+    assert_equal @video2.sharings_count, 3
+
+    assert_equal @video2.first_sharer, @user
+
+    @video3 = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::FRIEND
+
+    assert @video3.share_by(@user, t, r)
+    @video3.reload
+    assert_equal @video3.sharings_count, 1
+    assert !@video3.share_by(@user, t, r)
+    @video3.reload
+    assert_equal @video3.sharings_count, 1
+
+    assert @video3.share_by(@friend1, t, r)
+    @video3.reload
+    assert_equal @video3.sharings_count, 2
+    assert !@video3.share_by(@friend1, t, r)
+    @video3.reload
+    assert_equal @video3.sharings_count, 2
+
+    assert !@video3.share_by(@same_game_user, t, r)
+    @video3.reload
+    assert_equal @video3.sharings_count, 2
+
+    assert !@video3.share_by(@stranger, t, r)
+    @video3.reload
+    assert_equal @video3.sharings_count, 2
+
+    assert_equal @video3.first_sharer, @user
+
+    @video4 = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::OWNER
+
+    assert @video4.share_by(@user, t, r)
+    @video4.reload
+    assert_equal @video4.sharings_count, 1
+    assert !@video4.share_by(@user, t, r)
+    @video4.reload
+    assert_equal @video4.sharings_count, 1
+
+    assert !@video4.share_by(@friend1, t, r)
+    @video4.reload
+    assert_equal @video4.sharings_count, 1
+
+    assert !@video4.share_by(@same_game_user, t, r)
+    @video4.reload
+    assert_equal @video4.sharings_count, 1
+
+    assert !@video4.share_by(@stranger, t, r)
+    @video4.reload
+    assert_equal @video4.sharings_count, 1
+
+    assert_equal @video3.first_sharer, @user
+  end
+
+  #
+  # case 7
+  # sensitive video
+  #
+  test "case7" do
+    @sensitive = '政府'
+
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html'
+    @video.reload and @user.reload
+    assert @video.accepted?
+    assert_equal @user.videos_count, 1
+
+    @video.update_attributes(:description => @sensitive)
+    @video.reload and @user.reload
+    assert @video.unverified?
+    assert_equal @user.videos_count, 1
+    
+    @video.unverify
+    @video.reload and @user.reload
+    assert @video.rejected?
+    assert_equal @user.videos_count, 0
+
+    @video.destroy
+    @user.reload
+    assert_equal @user.videos_count, 0
+
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :title => @sensitive
+    @video.reload and @user.reload
+    assert @video.unverified?
+    assert_equal @user.videos_count, 1
+
+    @video.verify
+    @video.reload and @user.reload
+    assert @video.accepted?
+    assert_equal @user.videos_count, 1
+  end
+
+  #
+  # case 8
+  # comment video
+  #
+  test "case8" do
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::PUBLIC
+    
+    @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 1
+    @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 2
+    @comment = @video.comments.create :poster_id => @same_game_user.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 3
+    @comment = @video.comments.create :poster_id => @stranger.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 4
+
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    
+    @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 1
+    @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 2
+    @comment = @video.comments.create :poster_id => @same_game_user.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 3
+    @comment = @video.comments.create :poster_id => @stranger.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert @comment.id.nil?
+    assert_equal @video.comments_count, 3
+
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::FRIEND
+    
+    @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 1
+    @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 2
+    @comment = @video.comments.create :poster_id => @same_game_user.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert @comment.id.nil?
+    assert_equal @video.comments_count, 2
+    @comment = @video.comments.create :poster_id => @stranger.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert @comment.id.nil?
+    assert_equal @video.comments_count, 2
+
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::OWNER
+    
+    @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert !@comment.id.nil?
+    assert_equal @video.comments_count, 1
+    @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert @comment.id.nil?
+    assert_equal @video.comments_count, 1
+    @comment = @video.comments.create :poster_id => @same_game_user.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert @comment.id.nil?
+    assert_equal @video.comments_count, 1
+    @comment = @video.comments.create :poster_id => @stranger.id, :content => 'comment', :recipient_id => @user.id
+    @video.reload
+    assert @comment.id.nil?
+    assert_equal @video.comments_count, 1
+  end
+
+  #
+  # case9
+  # relative videos
+  #
+  test "case9" do
+    # acts_as_privileged_resource在blog_test.rb里已经测过了
+  end
+
+  #
+  # case10
+  # 各种类型的url
+  #
+  test "case10" do
+    # YOUKU
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :video_url => 'http://v.youku.com/v_show/id_XMTYwMDU2NTI4.html', :privilege => PrivilegedResource::PUBLIC
+  end
 
 end

@@ -1,7 +1,5 @@
 class Album < ActiveRecord::Base
 
-  named_scope :prefetch, lambda {|opts| {:include => opts}}
-
 	belongs_to :poster, :class_name => 'User'
 
   belongs_to :game
