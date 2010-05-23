@@ -1,6 +1,11 @@
 # PrivilegedResource
 module PrivilegedResource
 
+  PUBLIC = 1
+  FRIEND_OR_SAME_GAME = 2
+  FRIEND = 3
+  OWNER = 4
+
 module Model
 
   def self.included(base)
@@ -21,7 +26,7 @@ module Model
 
       named_scope :for, lambda {|relationship| {:conditions => privilege_cond(relationship)}}
 
-      validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个"  
+      validates_inclusion_of :privilege, :in => [1, 2, 3, 4], :message => "只能是1,2,3,4中的一个", :if => opts[:validate_on]  
     
     end
 
@@ -61,7 +66,7 @@ module Model
       end
 
       def available_for? relationship
-        relationship == 'owner' || privilege == 1 || relationship == 'friend' || (privilege == 3 and relationship == 'same_game')
+        relationship == 'owner' || privilege == 1 || (privilege != 4 and relationship == 'friend') || (privilege == 2 and relationship == 'same_game')
       end
 
   end

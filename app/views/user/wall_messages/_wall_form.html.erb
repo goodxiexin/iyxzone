@@ -8,8 +8,8 @@
   <h3><label for="book">留言板</label>(共<%= wall.comments_count %>条留言)</h3>
   <div class="formcontent s_clear">
     <% form_for :comment, :html => {:onsubmit => "Iyxzone.WallMessage.save('#{type}', #{wall.id}, $('submit_btn'), this); return false;"} do |f| %>
-      <%= hidden_field_tag 'comment[commentable_type]', wall.class.name %>
-      <%= hidden_field_tag 'comment[commentable_id]', wall.id %>
+      <%= hidden_field_tag 'wall_type', wall.class.name %>
+      <%= hidden_field_tag 'wall_id', wall.id %>
       <%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id %>
       <div class="rows">
         <div class="textarea-wrap"><div class="textarea-wide">

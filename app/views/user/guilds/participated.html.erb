@@ -6,7 +6,7 @@
     <% if @user==current_user %>
       <h1 class="app-cons">公会</h1>
     <% else %>
-      <%= render :partial => 'guild_header', :locals => {:text => "#{@user.login}的工会", :guild => @guild} %>
+      <%= render :partial => 'user/profiles/profile_header', :locals => {:text => "#{@user.login}的工会"} %>
     <% end %>
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>

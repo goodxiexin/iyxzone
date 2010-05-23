@@ -2,7 +2,7 @@ class User::BlogsController < UserBaseController
 
   layout 'app'
 
-  increment_viewing 'blog', 'id', :only => [:show]
+  increment_viewing 'blog', :only => [:show]
 
   PER_PAGE = 10
 

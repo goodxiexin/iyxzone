@@ -1,4 +1,4 @@
-# ActsAsResourceFeeds
+# /ActsAsResourceFeeds
 module ResourceFeeds
 
 	def self.included base
@@ -49,6 +49,10 @@ module ResourceFeeds
       def is_feed_deleteable_by? user, feed_delivery
         proc = self.class.feed_recipient_opts[:delete_conditions] || lambda { false }
         proc.call user, self
+      end
+
+      def recv_feed? resource
+        feed_deliveries.select {|f| f.feed_item.originator == resource}.count != 0
       end
 
     end

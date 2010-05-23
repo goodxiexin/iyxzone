@@ -1,6 +1,6 @@
 class User::GamesController < UserBaseController
 
-  layout 'app2'
+  layout 'app'
 
   FirstFetchSize = 5
   
@@ -9,15 +9,31 @@ class User::GamesController < UserBaseController
   PER_PAGE = 10 
 
   def index
-    @games = @user.games.paginate :page => params[:page], :per_page => PER_PAGE
-    render :action => "index", :layout => "app"      
+    @game_characters = @user.characters.group_by(&:game_id)
+    @game_ratings = Rating.by(@user.id).match(:rateable_type => 'Game').group_by(&:rateable_id)
+    @game_taggings = Tagging.by(@user.id).match(:taggable_type => 'Game').group_by(&:taggable_id)
+    @game_items = @game_characters.map do |game_id, characters|
+      game = Game.find(game_id)
+      ratings = @game_ratings[game_id]
+      average_rating = ratings.blank? ? nil : ratings.map(&:rating).inject(0.0){|sum, el| sum + el } / ratings.size
+      taggings = @game_taggings[game_id]
+      tags = taggings.blank? ? [] : taggings.map(&:tag)
+      [game, characters, average_rating, tags]
+    end.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def friends
-		@game_chars = GameCharacter.by(current_user.friend_ids).group_by(&:game_id).to_a.paginate :page => params[:page], :per_page => PER_PAGE
-		@game_ratings = Rating.by(current_user.friend_ids).match(:rateable_type => "Game").group_by(&:rateable_id)
-		@game_tags = Tagging.by(current_user.friend_ids).match(:taggable_type => "Game").group_by(&:taggable_id)
-    render :action => "friends", :layout => "app"
+    @game_characters = GameCharacter.by(current_user.friend_ids).group_by(&:game_id)
+    @game_ratings = Rating.by(current_user.friend_ids).match(:rateable_type => 'Game').group_by(&:rateable_id)
+    @game_taggings = Tagging.by(current_user.friend_ids).match(:taggable_type => 'Game').group_by(&:taggable_id)
+    @game_items = @game_characters.map do |game_id, characters|
+      game = Game.find(game_id)
+      ratings = @game_ratings[game_id]
+      average_rating = ratings.blank? ? nil : ratings.map(&:rating).inject(0.0){|sum, el| sum + el } / ratings.size
+      taggings = @game_taggings[game_id]
+      tags = taggings.blank? ? [] : taggings.map(&:tag)
+      [game, characters, average_rating, tags, characters.map(&:user).uniq]
+    end.paginate :page => params[:page], :per_page => PER_PAGE 
   end
 
 
@@ -28,12 +44,10 @@ class User::GamesController < UserBaseController
   # 
   def sexy
     @games = Game.sexy.paginate :page => params[:page], :per_page => PER_PAGE
-    render :action => "sexy", :layout => "app"
   end
 
   def interested
     @games = current_user.interested_games.paginate :page => params[:page], :per_page => PER_PAGE
-    render :action => 'interested', :layout => 'app'
   end
 
   def show
@@ -54,16 +68,15 @@ class User::GamesController < UserBaseController
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @game.id, :wall_type => 'game'}}
     @feed_deliveries = @game.feed_deliveries.limit(FirstFetchSize).order('created_at DESC')
 		@first_fetch_size = FirstFetchSize
+    render :action => 'show', :layout => 'app2'
   end
 
   def hot
     @games = Game.hot.paginate :page => params[:page], :per_page => PER_PAGE
-    render :action => 'hot', :layout => 'app'
   end
 
   def beta
     @games = Game.beta.paginate :page => params[:page], :per_page => PER_PAGE
-    render :action => 'beta', :layout => 'app'
   end
 
   def more_feeds

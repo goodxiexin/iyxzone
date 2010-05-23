@@ -21,7 +21,7 @@ class AvatarAlbumObserver < ActiveRecord::Observer
       Photo.verify_all(:album_id => album.id)
       Album.update_all("photos_count = #{album.photos.count}", {:id => album.id})
       # 相册里的照片的feed和share就没法恢复了
-    elsif album.recently_unverified
+    elsif album.recently_rejected
       album.photos.each { |photo| photo.destroy_feeds }
       Photo.unverify_all(:album_id => album.id)
       Album.update_all("photos_count = 0", {:id => album.id})

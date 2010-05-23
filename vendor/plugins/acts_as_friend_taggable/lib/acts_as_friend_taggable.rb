@@ -52,22 +52,12 @@ module FriendTaggable
       user_id = (user.is_a? Integer)? user : user.id
       tags.find_by_tagged_user_id(user_id)
     end
-
-    def is_taggable_by? user
-      proc = self.class.friend_taggable_opts[:create_conditions] || lambda { true }
-      proc.call user, self  
-    end
-
-    def is_tag_deleteable_by? user, tag
-      proc = self.class.friend_taggable_opts[:delete_conditions] || lambda { true }
-      proc.call user, self
-    end
-
+  
   protected
 
     def save_friend_tags
       unless @del_tagged_user_ids.blank?
-        @del_tagged_user_ids.each { |id| tags.find(id).destroy }
+        @del_tagged_user_ids.each { |id| tags.match(:tagged_user_id => id).first.destroy }
         @del_tagged_user_ids = nil
       end
 

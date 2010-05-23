@@ -8,7 +8,7 @@ class CreatePhotos < ActiveRecord::Migration
       t.integer :album_id
 			t.integer :game_id
       t.integer :poster_id
-      t.integer :privilege # inherit privilege from its album
+      t.integer :privilege, :default => PrivilegedResource::PUBLIC # inherit privilege from its album
 			t.text :notation
 
       # attachment_fu fields

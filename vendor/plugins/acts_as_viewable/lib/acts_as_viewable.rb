@@ -35,15 +35,15 @@ module Model
 			!viewings.find_by_user_id(user.id).nil?
 		end
 
-    def is_viewing_createable_by? user
-      proc = self.class.viewable_opts[:create_conditions] || lambda { true }
-      proc.call user, self
+    def is_viewable_by? user
+      proc = self.viewable_opts[:create_conditions] || lambda { true }
+      proc.call self, user
     end
 
     def viewed_by user
       viewing = viewings.first(:conditions => {:user_id => user.id})
       if viewing.blank?
-        viewings.create(:user_id => user.id) if self.is_viewing_createable_by? user
+        viewings.create(:user_id => user.id) if is_viewable_by?(user)
       else
         viewing.update_attribute(:viewed_at, Time.now) 
       end
@@ -64,9 +64,9 @@ module Controller
  
   module ClassMethods
 
-    def increment_viewing(model_name, through, opts)
+    def increment_viewing variable_name, opts
       cattr_accessor :viewing_opts
-      self.viewing_opts = {:model_name => model_name, :through => through, :filter_opts => opts}
+      self.viewing_opts = {:variable_name => variable_name, :filter_opts => opts}
       after_filter :create_or_update_viewing, opts
     end
 
@@ -76,10 +76,7 @@ module Controller
    
     def create_or_update_viewing
       opts = self.class.viewing_opts
-      model_name = opts[:model_name]
-      klass = model_name.camelize.constantize
-      through = opts[:through]
-      viewable = klass.find(params["#{through}"])
+      viewable = eval("@#{opts[:variable_name]}")
       viewable.viewed_by current_user
     end
  
@@ -91,5 +88,3 @@ end
 end
 
 ActiveRecord::Base.send(:include, Viewable::Model)
-
-ActionController::Base.send(:include, Viewable::Controller)

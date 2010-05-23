@@ -20,7 +20,7 @@ class StatusObserver < ActiveRecord::Observer
     if status.recently_recovered
       status.poster.raw_increment :statuses_count
       status.deliver_feeds  
-    elsif status.recently_unverified
+    elsif status.recently_rejected
       status.poster.raw_decrement :statuses_count
       status.destroy_feeds
     end

@@ -15,9 +15,7 @@ class User::NotificationsController < UserBaseController
 
   def destroy
     if @notification.destroy
-      render :update do |page|
-			  page << "$('notification_#{@notification.id}').remove();"
-		  end
+      render_js_code "$('notification_#{@notification.id}').remove();"
     else
       render_js_error
     end

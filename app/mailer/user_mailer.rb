@@ -46,11 +46,17 @@ class UserMailer < ActionMailer::Base
     body				:user => user
   end
 
+  def mail user, title, text
+    setup_email user
+    subject     "17Gaming(一起游戏网) - #{title}"
+    body        :user => user, :text => text    
+  end
+
 protected
   
   def setup_email user
     recipients	user.email
-		from				"17gaming" + '<' + SITE_MAIL + '>'
+		from				SITE_MAIL
     sent_on			Time.now
   end
 

@@ -1,11 +1,29 @@
 class GameCharacterFactory
 
-  def self.build arg={}
-      Factory.build :game_character, arg
-  end
+  def self.create cond={}
+    if cond[:game_id].blank?
+      game        = Factory.create :game
+      area        = Factory.create :game_area, :game_id => game.id
+      server      = Factory.create :game_server, :game_id => game.id, :area_id => area.id
+      profession  = Factory.create :game_profession, :game_id => game.id
+      race        = Factory.create :game_race, :game_id => game.id
+    else
+      game        = Game.find(cond[:game_id])
+      area        = game.areas.first
+      server      = game.no_areas ? game.servers.first : game.areas.first.servers.first
+      profession  = game.professions.first
+      race        = game.races.first
+    end
+       
+    cond = {
+      :game_id        => game.id,
+      :area_id        => area.id,
+      :server_id      => server.id,
+      :profession_id  => profession.id,
+      :race_id        => race.id
+    }.merge(cond)
 
-  def self.create arg={}
-      Factory.create :game_character, arg
+    Factory.create :game_character, cond 
   end
 
 end

@@ -14,14 +14,13 @@ class Video < ActiveRecord::Base
 
   acts_as_random
  
-  acts_as_friend_taggable :delete_conditions => lambda {|user, video| video.poster == user },
-                          :create_conditions => lambda {|user, video| video.poster == user }
+  acts_as_friend_taggable 
 
   acts_as_shareable :path_reg => /\/videos\/([\d]+)/,
                     :default_title => lambda {|video| video.title}, 
                     :create_conditions => lambda {|user, video| !video.is_owner_privilege?}
 
-	acts_as_diggable :create_conditions => lambda {|user, video| !video.is_owner_privilege? or video.poster == user}
+	acts_as_diggable :create_conditions => lambda {|user, video| video.available_for? video.poster.relationship_with(user)}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id'
  

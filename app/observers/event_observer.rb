@@ -42,7 +42,7 @@ class EventObserver < ActiveRecord::Observer
     if event.recently_recovered
       event.deliver_feeds
       event.album.verify # 会在album的observer把所有图片都verify
-    elsif event.recently_unverified
+    elsif event.recently_rejected
       event.destroy_feeds # participation的feed就不删了，反正他们本来就没评论
       event.album.unverify # 会在album的observer里把所有图片都unverify
     end

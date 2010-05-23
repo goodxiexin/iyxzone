@@ -10,9 +10,13 @@ class ApplicationController < ActionController::Base
 
   include RoleRequirementSystem
 
+  include Viewable::Controller
+
   rescue_from ActiveRecord::RecordNotFound, ActionController::RoutingError, :with => :render_not_found
 
-  #rescue_from RuntimeError, :with => :render_error
+  if RAILS_ENV == 'production'
+    rescue_from RuntimeError, :with => :render_error
+  end
 
 protected
 

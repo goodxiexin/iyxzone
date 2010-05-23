@@ -27,8 +27,6 @@ protected
     
 		if rateable.blank?
       errors.add(:rateable, '不存在')
-    elsif rateable.rated_by? user
-			errors.add(:rateable, '已经打分过了')
 		elsif !rateable.is_rateable_by? user
       errors.add(:rateable, '没有打分的权力')
     end

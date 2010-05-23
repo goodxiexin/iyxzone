@@ -2,7 +2,7 @@ class User::PostsController < UserBaseController
 
   layout 'app'
 
-  increment_viewing 'topic', 'topic_id', :only => [:index]
+  increment_viewing 'topic', :only => [:index]
 
   PER_PAGE = 20
 

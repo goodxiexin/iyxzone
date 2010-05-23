@@ -20,7 +20,7 @@ module ApplicationHelper
 
 	def game_image(game_name, opts={})
     size = opts.delete(:size)
-		if FileTest.exist?(RAILS_ROOT + "/public/images/gamepic/#{game_name}.gif")
+		if File.exist? "public/images/gamepic/#{game_name}.gif"
       file_name = size.blank? ? "#{game_name}.gif" : "#{game_name}_#{size}.gif"
 			image_tag "/images/gamepic/#{file_name}", opts
 		else
@@ -39,6 +39,14 @@ module ApplicationHelper
     end
   end
 
+  def profile_url profile
+    if profile.user.subdomain.blank?
+      "/profiles/#{profile.id}" 
+    else
+      "/#{profile.user.subdomain.name}"
+    end
+  end
+  
   def profile_link(user, opts={})
     link_to user.login, profile_url(user.profile), opts
   end
@@ -146,19 +154,21 @@ module ApplicationHelper
   def icon_dig_link diggable
 		dig_html = "<div class='evaluate'>"
 		if diggable.digged_by? current_user
-		  dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}' class='dug'>#{diggable.digs_count}</span><a href='javascript: void(0)'>赞</a>"
+		  dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}' class='dug'>#{diggable.digs_count}</span><a href='javascript: void(0)' onclick='tip(\'你已经赞过了\')'>赞</a>"
 		else
 			dig_html += "<span id='dig_#{diggable.class.name.underscore}_#{diggable.id}'>#{diggable.digs_count}</span>"
-		  dig_html += link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable), :html => {:id => "digging_#{diggable.class.name.underscore}_#{diggable.id}"}, :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
+		  dig_html += link_to_remote '赞', :url => digs_url("diggable_type" => diggable.class.base_class.to_s, "diggable_id" => diggable), :html => {:id => "digging_#{diggable.class.name.underscore}_#{diggable.id}"}, :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
 		end
 		dig_html += "</div>"
     dig_html
   end
 
   def text_dig_link diggable, html_opts={}
-    dig_html = link_to_remote '赞', :url => digs_url("dig[diggable_type]" => diggable.class.base_class.to_s, "dig[diggable_id]" => diggable, :at => 'show'), :html => {:id => "digging_#{diggable.class.to_s.underscore}_#{diggable.id}"}.merge(html_opts), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
-    #dig_html += "(<span id='dig_#{diggable.class.to_s.underscore}_#{diggable.id}' class='gray'>#{diggable.digs_count}</span>人赞过)"
-    dig_html
+    if diggable.digged_by? current_user
+      link_to_function '赞', "tip('你已经赞过了');"
+    else
+      link_to_remote '赞', :url => digs_url(:diggable_type => diggable.class.base_class.to_s, :diggable_id => diggable.id, :at => 'show'), :html => {:id => "digging_#{diggable.class.to_s.underscore}_#{diggable.id}"}.merge(html_opts), :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')"
+    end
   end
 
   def blog_content blog, opts={}
@@ -191,7 +201,8 @@ module ApplicationHelper
 
 	def video_thumbnail video, opts={}
     temping = video.thumbnail_url.blank? ? "/images/photo/video01.png" : video.thumbnail_url
-		image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}');"}.merge(opts)
+		#image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html.gsub('"','\"')}'+'>');"}.merge(opts)
+		image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}>');"}.merge(opts)
 	end
 
   def video_thumbnail_link video, opts={}
@@ -201,6 +212,14 @@ module ApplicationHelper
 
   def game_link game, opts={}
     link_to h(game.name), game_url(game), opts
+  end
+
+  def character_link character, opts={}
+    if character.data.nil? or !character.data[:verify]
+      h character.name
+    else
+      link_to h(character.name), character.data[:url], {:popup => 'true'}.merge(opts)
+    end
   end
 
   def event_link event, opts={}

@@ -168,7 +168,6 @@ protected
         errors.add(:user_id, '不能邀请非好友') if !guild.president.has_friend?(user_id)
       elsif is_request?
       elsif is_authorized? or is_president?
-        errors.add(:user_id, '不能直接创建') unless guild.president_id == user_id
       end
     else
       if membership.is_invitation?

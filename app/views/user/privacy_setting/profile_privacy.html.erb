@@ -13,7 +13,7 @@
           <% config_form_for :setting, :url => privacy_setting_url(:type => 0, :format => 'html'), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(profile_privacy_submit_btn),'请等待..');"} do |f| %>
             <div class="form-group">
               <h3>谁可以浏览你的个人主页？</h3>
-              <%= f.select :personal, privacy_options, {}, :label => '个人主页' %>
+              <%= f.select :profile, privacy_options, {}, :label => '个人主页' %>
             </div>
             <div class="form-group">
               <h3>谁可以看到你的个人档案？</h3>

@@ -215,7 +215,7 @@ Object.extend(Iyxzone.Register, {
       valid = false;
     }
 
-    if(game && game.servers_count != 0 && serverID == ''){
+    if(game && serverID == ''){
       this.error(serverDiv, "请选择服务器");
       valid = false;
     }

@@ -16,13 +16,13 @@ class Notification < ActiveRecord::Base
 
   def self.read notifications, user
     return if notifications.blank?
-    Notification.update_all("notifications.read = 1", {:id => notifications.map(&:id), :user_id => user.id})
     user.raw_decrement :unread_notifications_count, notifications.count
+    Notification.update_all("notifications.read = 1", {:id => notifications.map(&:id), :user_id => user.id})
   end
 
   def self.read_all user
-    Notification.update_all("notifications.read = 1", {:user_id => user.id})
     user.update_attribute(:unread_notifications_count, 0)
+    Notification.update_all("notifications.read = 1", {:user_id => user.id})
   end
 
 end

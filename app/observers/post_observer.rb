@@ -38,7 +38,7 @@ class PostObserver < ActiveRecord::Observer
   end
 
   def after_update post
-    if post.recently_unverified
+    if post.recently_rejected
       post.topic.raw_decrement :posts_count
       post.forum.raw_decrement :posts_count
     elsif post.recently_recovered

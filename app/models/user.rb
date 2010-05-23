@@ -2,6 +2,10 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  has_many :user_tasks
+  
+  has_one :subdomain
+
   acts_as_random 
 
   acts_as_pinyin :login => "pinyin"
@@ -66,6 +70,11 @@ class User < ActiveRecord::Base
 	has_many :notifications, :order => 'created_at DESC', :dependent => :destroy
 
 	has_many :notices, :order => 'created_at DESC', :dependent => :destroy # comment, tag notices
+
+  # this method is only used for test
+  def recv_notice? producer
+    !notices.select {|n| n.producer == producer}.blank?
+  end
 
 	# pokes
 	has_many :poke_deliveries, :foreign_key => 'recipient_id', :order => 'created_at DESC'

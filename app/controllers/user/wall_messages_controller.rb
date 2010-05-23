@@ -1,7 +1,8 @@
 class User::WallMessagesController < UserBaseController
 
   def create
-    @message = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
+    @message = @wall.comments.build((params[:comment] || {}).merge({:poster_id => current_user.id}))
+    
     unless @message.save
       render_js_error
     end
@@ -24,9 +25,10 @@ class User::WallMessagesController < UserBaseController
 protected
 
   def setup
-    if ['index'].include? params[:action]
+    if ['index', 'create'].include? params[:action]
       @wall = params[:wall_type].camelize.constantize.find(params[:wall_id])
-      require_view_privilege @wall
+      require_verified @wall if @wall.respond_to?(:rejected?)
+      require_view_privilege @wall if params[:action] == 'index'
     elsif ['destroy'].include? params[:action]
       @message = Comment.find(params[:id])
       require_delete_privilege @message

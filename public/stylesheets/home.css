@@ -1280,23 +1280,38 @@ h1.app-share{float:left}
 .info-foot span{margin:0 8px}
 
 /*v2 start 100513*/
-/*btn*/
-.addGameRoleBtn{background:url(../images/skin/skin2010.png) no-repeat -83px -737px;width:117px;height:22px;display:inline-block}
-.mainConHead{border-bottom:1px solid #bdd6ad;padding:5px 15px;margin-bottom:10px}
+/*icon*/
+.i{background:url(../images/skin/skin2010.png) no-repeat;}
+span.i,a.i{width:16px;height:16px;margin-right:3px;display:-moz-inline-stack;display:inline-block;_display:inline;overflow:hidden;outline:none;font:0/0 sans-serif;text-indent:-99999px;*text-indent:0;zoom:1;vertical-align:middle}
 
-/*热门游戏*/
+.iClose02{background-position:-22px -23px;}
+
+/*btn*/
+.sBtn,.sBtn span{background:url(../images/skin/btn2010.png) no-repeat}
+span.sBtn{background-position:right -122px;display:inline-block;padding-right:10px;margin:0 2px}
+span.sBtn span{background-position:0 -122px;display:block;padding-left:10px}
+span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_width:0;white-space:nowrap;overflow:visible;border:0;cursor:pointer;background:none;color:#fff;margin:0 -10px;padding:0 15px;font-size:12px;font-weight:700;text-decoration:none}
+
+.addGameRoleBtn{background:url(../images/skin/skin2010.png) no-repeat -83px -737px;width:117px;height:22px;display:inline-block}
+.mainConTitle{border-bottom:1px solid #bdd6ad;padding:5px 15px;margin-bottom:10px}
+
+/*****游戏*****/
 .gameList .data p a{color:#d63200}
 .gameList .data ul{margin-top:10px;}
 .gameList .data ul li{float:left;height:24px;width:200px;margin:5px 5px 0 0;font-weight:700}
 .gameList .data ul li span.thin{font-weight:400;color:#333}
 .gameList .data ul li span.thin a{text-decoration:underline}
-.gameList .data ul li strong,.gameList .data ul a{color:#25700d}
-/*我的游戏*/
 .gameList .data .score strong{color:#25700d}
+/*热门游戏*/
+.gameHot .data ul li strong{color:#25700d}
+/*我的游戏*/
 .gameMine .gameList .data ul li{width:220px;}
 .gameMine .gameList .data ul li.guildInfo,.gameMine .gameList .data ul li.gameImpress{width:350px;}
+.gameMine .data li.gameImpress label{float:left}
+.gameMine .data .i-show02{width:220px;float:left}
+.gameMine .data .i-show02 a:hover,.gameMine .data .i-show02 a:hover strong{text-decoration:none;color:#fff}
 .gameList .data .roleInfo strong,.gameList .data .roleInfo span,.gameList .data .guildInfo{line-height:22px;overflow:hidden;}
-.gameList .data .roleInfo strong,.gameList .data .roleInfo span{display:block;width:110px;height:24px;float:left}
+.gameList .data .roleInfo strong,.gameList .data .roleInfo span{color:#25700d;display:block;width:110px;height:24px;float:left}
 .gameList .data .roleInfo span{width:100px;margin-left:10px}
 /*好友的游戏*/
 .gameImpressFriend h4,.gameImpressFriend .i-show02{float:left}
@@ -1309,4 +1324,20 @@ h1.app-share{float:left}
 .gameFriend .data .more a{color:#25700d;text-decoration:underline}
 
 /*任务*/
-.taskItem{background:url(../images/skin/task_wrap.gif) no-repeat;width:362px;height:143px;}
+.taskItem{background:url(../images/skin/task_wrap.gif) no-repeat;width:362px;height:143px;float:left;margin:5px;_margin:5px 3px;position:relative}
+.taskCard{padding:10px 10px 10px 70px;}
+.taskCard .avatar{position:absolute;top:10px;left:10px}
+.taskCard .taskCon{width:100%}
+.taskCard .taskCon h4{font-size:14px;font-weight:bold;color:#ef8d0e}
+.taskCard ul li{margin:8px 0}
+.taskCard ul li.op{text-align:right}
+/*任务详情lightbox*/
+.taskDetailWrap{background:url(../images/skin/task-bg.png) no-repeat;_background:url(../images/skin/task-bg.gif) no-repeat;width:462px;height:526px;}
+.taskDetail{padding:100px 200px 50px 45px;}
+.taskDetail .option{position:absolute;top:10px;right:10px}
+.taskDetail .taskCon{width:100%;}
+.taskDetail .gameLogo{position:absolute;top:120px;right:72px}
+.taskDetail h4{margin-top:30px}
+.taskDetail .txt{line-height:20px}
+.taskDetail .taskDetailFoot{position:absolute;bottom:110px;left:45px;width:350px}
+.taskDetail .taskDetailFoot a{color:#d73300;text-decoration:underline}

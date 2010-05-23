@@ -4,22 +4,6 @@ class GameCharacter < ActiveRecord::Base
 	
 	serialize :data
 
-  def has_event?
-    !Event.first(:conditions => {:character_id => id}).blank?
-  end
-
-  def has_guild?
-    !Guild.first(:conditions => {:character_id => id}).blank?
-  end
-
-  def is_locked?
-    has_event? or has_guild?
-  end
-
-	def name_with_game_and_server
-		"#{name}(#{game.name}-#{server.name})"
-	end
-
   acts_as_random
 
   acts_as_pinyin :name => 'pinyin'
@@ -39,6 +23,18 @@ class GameCharacter < ActiveRecord::Base
   belongs_to :profession, :class_name => 'GameProfession'
 
 	belongs_to :guild
+
+  has_many :memberships, :foreign_key => 'character_id'
+
+  has_many :president_or_veteran_or_member_memberships, :foreign_key => 'character_id', :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
+
+  has_many :guilds, :through => :people_memberships
+
+  has_many :participations, :foreign_key => 'character_id'
+
+  has_many :confirmed_or_maybe_participations, :foreign_key => 'character_id', :class_name => 'Participation', :conditions => {:status => [Participation::Confirmed, Participation::Maybe]}
+
+  has_many :events, :through => :confirmed_or_maybe_participations
 
 	acts_as_resource_feeds :recipients => lambda {|character| [character.user.profile, character.game] + character.user.friends}
 
@@ -60,6 +56,22 @@ class GameCharacter < ActiveRecord::Base
   
   validate_on_create :profession_is_valid
 
+  def has_event?
+    !confirmed_or_maybe_participations.blank?
+  end
+
+  def has_guild?
+    !president_or_veteran_or_member_memberships.blank?
+  end
+
+  def is_locked?
+    !memberships.blank? or !participations.blank?
+  end
+
+  def name_with_game_and_server
+    "#{name}(#{game.name}-#{server.name})"
+  end
+
 protected
 
   def game_is_valid
@@ -79,7 +91,7 @@ protected
   def server_is_valid
     return if game.blank?
     if game.no_servers
-      errors.add(:server_id, "该游戏没有服务器")
+      errors.add(:server_id, "该游戏没有服务器") unless server_id.blank?
     else
       if game.no_areas
         errors.add(:server_id, "该服务器不存在") unless GameServer.exists? :game_id => game_id, :id => server_id

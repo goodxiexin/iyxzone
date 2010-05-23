@@ -6,8 +6,7 @@
 <% content_for :html_description, "#{current_user.login} - 新建公会 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
+<% canvas_tag do %>
     <h1 class="app-cons">公会</h1>
     <div class="box02 canvas_int space">
       <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
@@ -15,34 +14,13 @@
         <h3>新建公会</h3>
         <%= error_messages_for :guild, :header_message => '以下原因导致没法保存', :message => nil %>
         <div class="cons-form formcontent">
-          <% form_for @guild, :html => {:onsubmit => "Iyxzone.Guild.Builder.save(this, $('submit_btn')); return false;"} do |f| %>  
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">公会名字：</label></div>
-              <div class="fldvalue">
-                <div class="textfield"><%= f.text_field :name %></div>
-              </div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">会长游戏角色：</label></div>
-              <div class="fldvalue">
-                <%= collection_select :guild, :character_id, current_user.characters, :id, :name_with_game_and_server, {:prompt => '---'} %>
-              </div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid"><label for="name">公会描述：</label></div>
-              <div class="fldvalue">
-                <%= f.text_area :description %>
-              </div>
-            </div>
-            <div class="rows s_clear">
-              <div class="fldid">&nbsp;</div>
-              <div class="fldvalue">
-                <span class="button"><span><button type='submit' id='submit_btn'>提交</button></span></span>
-              </div>
-            </div>
+          <% rows_form_for @guild, :html => {:onsubmit => "Iyxzone.Guild.Builder.save(this, $('submit_btn')); return false;"} do |f| %>  
+            <%= f.text_field :name, :label => '公会名字' %>
+            <%= f.collection_select :character_id, current_user.characters, :id, :name_with_game_and_server, {:prompt => '---'}, :class => 'selector selector02', :label => "会长游戏角色" %>
+            <%= f.text_area :description, :label => '公会描述' %>
+            <%= f.submit '提交' => {:type => 'submit', :id => 'submit_btn'} %>
           <% end %>
         </div>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
+<% end %>

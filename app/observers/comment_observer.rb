@@ -9,6 +9,9 @@ class CommentObserver < ActiveRecord::Observer
   def after_create comment
     # increment counter
     comment.commentable.raw_increment :comments_count
+
+    # check tasks
+    comment.poster.user_tasks.each {|t| t.notify_create comment}
     
     # issue mail and notification
     eval("after_#{comment.commentable_type.underscore}_comment_create(comment)")
@@ -273,7 +276,7 @@ class CommentObserver < ActiveRecord::Observer
   end
 
   def after_update comment
-    if comment.recently_unverified
+    if comment.recently_rejected
       # 如果有相关的notice怎么办, 现在就忽略他
       comment.commentable.raw_decrement :comments_count
     elsif comment.recently_recovered

@@ -39,14 +39,14 @@ module Shareable
       share && !share.sharings.find_by_poster_id(user.id).blank?
     end
 
-    def share_by user, title, reason
+    def share_by user, title='', reason=''
       # find or create a share
       share = Share.find_or_create(:shareable_type => self.class.base_class.name, :shareable_id => self.id)
       sharing = share.sharings.build(:poster_id => user.id, :title => title, :reason => reason)
       if sharing.save
         true 
       else
-        share.destroy
+        share.destroy if share.sharings_count == 0
         false
       end
     end

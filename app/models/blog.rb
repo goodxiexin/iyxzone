@@ -16,26 +16,23 @@ class Blog < ActiveRecord::Base
 
   acts_as_random
   
-  acts_as_friend_taggable :delete_conditions => lambda {|user, blog| blog.poster == user},
-                          :create_conditions => lambda {|user, blog| blog.poster == user}
+  acts_as_friend_taggable 
 
-  acts_as_viewable :create_conditions => lambda {|user, blog| blog.poster != user}
+  acts_as_viewable
 
-	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.is_owner_privilege? or blog.poster == user}
+	acts_as_diggable :create_conditions => lambda {|user, blog| blog.available_for? user.relationship_with(blog.poster)}
 
-  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed?}}
+  acts_as_resource_feeds :recipients => lambda {|blog| blog.poster.all_guilds + blog.poster.friends.find_all {|f| f.application_setting.recv_blog_feed?}}
   
-  acts_as_shareable :path_reg => /\/blogs\/([\d]+)/,
-                    :default_title => lambda {|blog| blog.title}, 
-                    :create_conditions => lambda {|user, blog| !blog.is_owner_privilege?}
+  acts_as_shareable :path_reg => /\/blogs\/([\d]+)/, :default_title => lambda {|blog| blog.title}, :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(blog.poster.relationship_with(user))}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 
-  acts_as_privileged_resources :owner_field => :poster # 指明资源的拥有者的域是poster
+  acts_as_privileged_resources :owner_field => :poster
 
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster || user.is_admin?},
-                      :create_conditions => lambda {|user, blog| blog.available_for? user}
+                      :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
 
   acts_as_abstract :columns => [:content]
 

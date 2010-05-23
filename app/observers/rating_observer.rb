@@ -1,6 +1,6 @@
 class RatingObserver < ActiveRecord::Observer
 
-  def after_save rating
+  def after_create rating
     # reset average
     rateable = rating.rateable
     rateable.update_attribute('average_rating', rateable.ratings.average(:rating))  

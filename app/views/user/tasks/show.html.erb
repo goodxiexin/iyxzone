@@ -1,0 +1,35 @@
+任务描述:
+<br />
+<ul>
+	<%= content_tag :li, "id: #{@current_task.id}" %>
+	<%= show_prerequisite %>
+	<%= content_tag :li, "requirement: #{@current_task.requirement}" %>
+	<%= content_tag :li, "title: #{@current_task.description[:title]}" %>
+	<% @current_task.description[:image].each do |img| %>
+		<%= content_tag :li, image_tag(img) %>
+	<% end %>
+</ul>
+
+<% unless @current_user_task %>
+	<% if @current_task.can_be_select_by? current_user.id %>
+		<%= content_tag :h1, link_to("做这个任务！", edit_task_path(@current_task) )  %>
+	<% else %>
+		<%= content_tag :h1, "未达到领取任务的资格" %>
+	<% end %>
+<% else %>
+	<% if @current_user_task.is_expired? %>
+		<%= content_tag :h1, "该任务已经过期,可以" + link_to("重新领取", edit_task_path(@current_task) ) %>
+		<% @current_user_task.destroy %>
+	<% else %>
+		<% if @current_user_task.is_done? %>
+			<%= content_tag :h1, "已经完成该任务" %>
+		<% else %>
+			<% if @current_user_task.is_achieved? %>
+	<!-- TODO link_to put --!>
+				<%= content_tag :h1, link_to("领取奖励", task_path(), :method => :put) %>
+			<% else %>
+				<%= content_tag :h1, "任务还没有完成,继续努力吧" %>
+			<% end %>
+		<% end %> 
+	<% end %>
+<% end %>

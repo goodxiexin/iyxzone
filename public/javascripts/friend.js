@@ -175,7 +175,7 @@ Iyxzone.Friend.Tagger = Class.create({
  
   initialize: function(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
     this.max = max;
-    this.tags = new Hash(); // friendID => [tagIDs, div]
+    this.tags = new Hash(); // friendID => div //[tagIDs, div]
     this.newTags = new Hash(); // friendID => div
     this.delTags = new Array();
     this.toggleButton = $(toggleButton);
@@ -196,7 +196,7 @@ Iyxzone.Friend.Tagger = Class.create({
     for(var i=0;i<tagInfos.length;i++){
       var info = tagInfos[i];
       var el = this.taggedUserList.add(info.friend_id, info.friend_name);
-      this.tags.set(info.friend_id, [info.tag_id, el]);
+      this.tags.set(info.friend_id, el);
     }
 
     var inputs = $$('input');
@@ -227,10 +227,10 @@ Iyxzone.Friend.Tagger = Class.create({
 
       for(var i=0;i<inputs.length;i++){
         if(inputs[i].type == 'checkbox' && inputs[i].checked){
-          checked.set(inputs[i].value, {id: inputs[i].value, login: inputs[i].readAttribute('login')});//, profileID: inputs[i].readAttribute('profile_id')});
+          checked.set(inputs[i].value, {id: inputs[i].value, login: inputs[i].readAttribute('login')});
         }
       }
-
+      
       this.tags.keys().each(function(key){
         if(!checked.keys().include(key)){
           delTags.push(key);
@@ -242,7 +242,7 @@ Iyxzone.Friend.Tagger = Class.create({
           delTags.push(key);
         }
       }.bind(this));
-
+      
       this.removeTags(delTags);
 
       var tagIDs = this.tags.keys();
@@ -254,7 +254,7 @@ Iyxzone.Friend.Tagger = Class.create({
           newTags.push(input);
         }
       }.bind(this));
-      
+      alert("new: " + newTags);
       this.addTags(newTags);
 
       this.toggleFriends();
@@ -301,7 +301,7 @@ Iyxzone.Friend.Tagger = Class.create({
     
     if(tagInfo){
       // remove exsiting tag
-      this.delTags.push(tagInfo[0]);
+      this.delTags.push(friendID);
     }else{
       // remove new tag
       this.newTags.unset(friendID);
@@ -322,8 +322,8 @@ Iyxzone.Friend.Tagger = Class.create({
       var tagInfo = this.tags.unset(friendID);
       if(tagInfo){
         // remove exsiting tag
-        this.delTags.push(tagInfo[0]);
-        tagInfo[1].remove();
+        this.delTags.push(friendID);
+        tagInfo.remove();
       }else{
         // remove new tag
         var div = this.newTags.unset(friendID);
@@ -425,13 +425,7 @@ Iyxzone.Friend.Tagger = Class.create({
   reset: function(tagInfos){
     // move new tags to tags
     this.newTags.each(function(pair){
-      var friendID = pair.key;
-      var div = pair.value;
-      for(var i = 0; i < tagInfos.length; i++){
-        if(tagInfos[i].friend_id == friendID){
-          this.tags.set(friendID, [tagInfos[i].id, div])
-        }
-      }
+      this.tags.set(pair.key, pair.value);
     }.bind(this));
 
     // reset del tags

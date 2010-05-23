@@ -1,10 +1,10 @@
 class User::CommentsController < UserBaseController
 
   def create
-    @comment = Comment.new((params[:comment] || {}).merge({:poster_id => current_user.id}))
+    @comment = @commentable.comments.build((params[:comment] || {}).merge({:poster_id => current_user.id}))
 
     unless @comment.save
-      render_js_error "error('评论由于某些问题而无法保存');"
+      render_js_error '评论由于某些问题而无法保存'
     end
   end
 
@@ -24,9 +24,10 @@ class User::CommentsController < UserBaseController
 protected
 
   def setup
-    if ['index'].include? params[:action]
+    if ['index', 'create'].include? params[:action]
       @commentable = params[:commentable_type].camelize.constantize.find(params[:commentable_id])
-      require_view_privilege @commentable
+      require_verified @commentable if @commentable.respond_to?(:rejected?)
+      require_view_privilege @commentable if params[:action] == 'index'
     elsif ['destroy'].include? params[:action]
       @comment = Comment.find(params[:id])
       require_delete_privilege @comment
