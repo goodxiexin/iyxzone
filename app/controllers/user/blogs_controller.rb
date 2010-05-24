@@ -44,13 +44,18 @@ class User::BlogsController < UserBaseController
   end
 
   def create
+    puts "create"
     @blog = current_user.blogs.build(params[:blog] || {})
     
     if @blog.save
+      puts "success"
       render :update do |page|
         page.redirect_to blog_url(@blog)
       end
     else
+      @blog.errors.each do |e|
+        puts e
+      end
       render :update do |page|
         page.replace_html 'errors', :inline => "<%= error_messages_for :blog, :header_message => '遇到以下问题无法保存', :message => nil %>"
       end

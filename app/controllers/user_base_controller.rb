@@ -42,7 +42,7 @@ protected
   end
 
   def require_adequate_privilege resource, relationship
-    resource.available_for?(relationship) || is_amdin || render_privilege_denied(resource)
+    resource.available_for?(relationship) || is_admin || render_privilege_denied(resource)
   end
 
   def require_verified resource

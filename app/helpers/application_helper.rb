@@ -447,7 +447,7 @@ module ApplicationHelper
   end
 
   def report_link reportable
-    facebox_link "举报", new_report_url(:reportable_id => reportable.id, :reportable_type => reportable.type)
+    facebox_link "举报", new_report_url(:reportable_id => reportable.id, :reportable_type => reportable.class.name)
   end
 
   def canvas_tag opts={}, &block
