@@ -743,8 +743,8 @@ ActiveRecord::Schema.define(:version => 20100520155931) do
     t.text     "requirement"
     t.text     "reward"
     t.text     "description"
-    t.integer  "catagory",     :default => 1
-    t.datetime "starts_at",    :default => '2010-05-18 21:46:13'
+    t.integer  "catagory",     :default => 2
+    t.datetime "starts_at",    :default => '2010-05-24 15:16:43'
     t.datetime "expires_at"
     t.integer  "duration"
     t.integer  "state"
