@@ -380,7 +380,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 .round_m{margin-right:-6px;padding:0 6px;border-left:1px #BBD2AA solid;border-right:1px #BBD2AA solid;background:#F8FCF6;word-wrap:break-word;word-break:normal;}
 .round_m .round_body{width:100%;/*overflow:hidden好友管理弹出框显示*/}
-.app-log,.app-video,.app-photo,.app-status,.app-ploy,.app-vote,.app-cons,.app-game,.app-vgame,.app-friend,.app-lock,.app-setting,.app-gift,.app-archives,.app-news,.app-share,.app-notice,.app-error,.app-task{background:url(../images/icons/app-icons.png) no-repeat}
+.app-log,.app-video,.app-photo,.app-status,.app-ploy,.app-vote,.app-cons,.app-game,.app-vgame,.app-friend,.app-lock,.app-setting,.app-gift,.app-archives,.app-news,.app-share,.app-notice,.app-error,.app-task,.home-decoration{background:url(../images/icons/app-icons.png) no-repeat}
 .app-log{background-position:0 0;}
 .app-video{background-position:0 -50px;}
 .app-photo{background-position:0 -100px;}
@@ -400,6 +400,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 .app-notice{background-position:0 -780px;}
 .app-error{background-position:0 -838px;}
 .app-task{background-position:0 -893px;}
+.home-decoration{background-position:0 -952px;}
 
 .round02,.round02 .round_l_t,.round02 .round_l_b,.round02 .round_r_b{background-image:url(../images/skin/roundBoxbg02.gif);}
 .round02 .round_m{border-left:1px #E7F0E0 solid;border-right:1px #E7F0E0 solid;background:#F8FCF6;}
@@ -512,7 +513,6 @@ a.jl-more{display:inline-block;padding-left:25px;height:15px;line-height:15px;ba
 
 /*按钮*/
 .btn-v2{width:45px;height:20px;line-height:20px;text-align:center;cursor:pointer;background:url(../images/skin/skin2010.png) no-repeat -59px -69px;color:#fff;vertical-align:middle}
-/*.button05{cursor:pointer;height:39px;width:75px;text-align:center;background:url(../images/skin/btns05.png) no-repeat;border:0}*/
 a.friend-btn,a.msg-btn{background:url(../images/skin/skin2010.png) no-repeat;width:82px;height:21px;display:inline-block}
 a.friend-btn{background-position:-118px -164px}
 a.msg-btn{background-position:-118px -186px}
@@ -658,6 +658,7 @@ div.tip{color:#999;padding:10px 25px}
 /*遮罩层*/
 .mask-layer{position:fixed;_position:absolute;top:0;left:0;z-index:999;width:100%;height:100%;background:transparent;}
 .mask-layer iframe{width:100%;height:100%;border:0;filter:mask();}
+.mask-gray{-moz-opacity:0.3;opacity:.30;filter:alpha(opacity=30);background:#999}
 .mask-wrap{position:relative;width:100%;height:100%;}
 .mask-iframe,iframe.mask-iframe{position:absolute;width:100%;height:100%;border:0;top:0;left:0;z-index:-1;filter:mask();}
 .mask-iframe iframe{width:100%;height:100%;border:0;}

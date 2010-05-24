@@ -1,0 +1,53 @@
+﻿body{background:#5a1316;color:#999}
+a.gray:link,a.gray:visited,a.gray:active,.multibox .data-table a{color:#999}
+a,.menu-icon-list li a span{color:#999}
+.piclist .jl-picitem a{color:#a05c00}
+.textarea,textarea{background:#6f1f1e;border-color:#392521}
+
+#header{width:100%;background:url(/images/themes/dnf/top_bg.png) repeat-x;height:40px;}
+.logo-top{background-image:url(/images/themes/dnf/logo.png);top:0}
+#navbar{width:950px;margin:0 auto;background:none}
+#navbar a{color:#666}
+#navbar #navwrap {background:none}
+#navbar #navwrap #navmid{background:none}
+#navbar #navsearch .textfield{border-color:#355c1b;background:#fff}
+#navbar #navsearch .gobtn {background:url(/images/themes/dnf/go.png) no-repeat;height:20px}
+#navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
+ 
+#leftsidebar .avatarbox {border-bottom:1px solid #3f0d10;}
+#leftsidebar .avatarbox a {color:#999}
+.s-dialog a{color:#a05c00}
+.banner{width:100%;background:url(/images/themes/dnf/banner_bg.png) repeat-x;}
+.banner .con{width:1024px;height:273px;margin:0 auto;background:url(/images/themes/dnf/banner.jpg) no-repeat 0 -23px;}
+.banner .foot{background:url(/images/themes/dnf/top_bd.png) repeat-x;height:20px;width:950px;margin:0 auto}
+.round_l_t, .round_r_t, .round_l_b, .round_r_b, .round_title_l_t, .round_title_r_t {background-image:none;}
+.round_m{background:transparent;border:0}
+.round_l_b{padding:0}
+.round02 .round_l_b,.round04 .round_l_b{padding:0 0 6px}
+.box02 {background:none;border:0}
+.box04 {background:#6f342e;border:0;}
+#page{background:#5a1316 url(/images/themes/dnf/page_bg.jpg) no-repeat center bottom;width:100%}
+#canvas{width:950px;margin:0 auto;padding-bottom:80px}
+#canvas .tipbar {background:#771b1f;border-color:#3b0d0f}
+#canvas .canvas_con .multibox .title,#rightsidebar .multibox .title{background:url(/images/themes/dnf/title_bg.png) no-repeat;height:32px;line-height:32px;border:0;padding:0 10px;color:#5b161a}
+#canvas #rightsidebar .multibox .title{background:url(/images/themes/dnf/title_bg02.png) no-repeat;}
+.multibox .title a{color:#a05c00}
+.bookbox h3{color:#8c8c8c}
+
+.jl-cutline{background:url(/images/themes/dnf/dotline.png) repeat-x center bottom;}
+.arrow-dialog {background:url(/images/themes/dnf/roundBoxbg03.png) no-repeat;}
+.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/dnf/roundBoxbg02.png);}
+.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/dnf/roundBoxbg04.png);}
+.round02 .round_m {background:#5c1417;border-left:1px solid #3b0d0f;border-right:1px solid #3b0d0f;margin:0 -6px 0 0;color:#a05c00}
+.round04 .round_m {background:#6f1f1e;border-left:1px solid #161615;border-right:1px solid #161615;margin:0 -6px 0 0}
+.feed-list-box h4 {background:url(/images/themes/dnf/date-cutline.png) repeat-x;}
+.feed-list-box h4 span{background:#62171b}
+a.jl-more {background:url(/images/themes/dnf/arr-more.gif) no-repeat;color:#bf580c}
+.jl-my-gold .green {color:#df6505;}
+.button,.button span {background-image:url(/images/themes/dnf/btns01.png);}
+.button span button{color:#9b9b9a}
+.bookbox .textarea-wrap .textarea-wide textarea {background:url(/images/themes/dnf/textarea_bg.jpg) no-repeat right -70px;border:1px solid #000}
+.multibox .diary-box {border-bottom:1px dashed #4d4d4d;}
+.feed-img-list {border-top:1px dashed #8b615f;}
+#footer{width:100%;background:#95372c;padding:30px 0;line-height:22px}
+

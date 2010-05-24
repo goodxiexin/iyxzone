@@ -1,0 +1,60 @@
+
+<body>
+
+<div style="width:600px;font-size:12px;font:Tahoma, Geneva, sans-serif">
+	<div><img src="<%=SITE_URL%>/images/mails/head.png" alt="17gaming" /></div>
+    <div style="float:left;width:210px">
+    	<div style="padding:10px 0 0 15px">
+			<% if @user.avatar.blank? %>
+				<img src=<%= "#{SITE_URL}/images/default_large.png" %> width='100px' height='112px' />
+			<% else %>
+        <img src=<%= "#{SITE_URL}/#{@user.avatar.public_filename("large")}" %> width='100px' height='112px' />
+			<% end %>
+			</div>
+        <div style="padding:10px 0;">
+        	<ul style="padding:0;margin:0;text-align:center">
+					<% @user.friends[0..5].each { |friend| %>
+                <li style="float:left;width:65px;list-style:none;padding:0;margin:0">
+								<% if friend.avatar.blank? %>
+									<img src=<%= "#{SITE_URL}/images/default_medium.png" %> style="padding:3px;border:1px solid #e7f7e7" />
+								<% else %>
+									<img src=<%= "#{SITE_URL}/#{friend.avatar.public_filename("medium")}" %> style="padding:3px;border:1px solid #e7f7e7" />
+								<% end %>
+								<br /><%=friend.login%>
+								</li>
+					<% } %>
+          </ul>
+        </div>
+    </div>
+    <div style="float:right;width:390px;">
+    <div style="line-height:22px;padding:10px 0">
+        <div style="font-size:18px;font-weight:700;line-height:35px">Hi 我是<%= @user.login %>，邀请你来17gaming.com</div>
+        <div style="line-height:22px;">一起游戏网(17gaming)是让网络游戏玩家分享游戏心情，共享心得体验,重拾昔日情意的社交平台。</div>
+    </div>
+    <div style="border-bottom:1px solid #e7f0e0;padding:5px 0;font-weight:700">我的游戏资料</div>
+	<table width="100%" border="0" cellspacing="5" cellpadding="0">
+  <tr>
+    <th style="color:#ee960f;width:100px;font-size:12px;text-align:center">游戏名称</th>
+    <th style="color:#ee960f;width:150px;font-size:12px;text-align:center">昵称</th>
+    <th style="color:#ee960f;font-size:12px;text-align:center">等级</th>
+  </tr>
+	<% @user.characters[0..1].each{ |character|%>
+    <td><div style="white-space:nowrap;overflow:hidden;width:100px;text-align:center;font-size:12px;line-height:22px"><%= character.game.name %></div></td>
+    <td><div style="white-space:nowrap;overflow:hidden;width:100px;text-align:center;font-size:12px;line-height:22px"><%= character.name %></div></td>
+    <td style="text-align:center"><%= character.level%></td>
+	<% } %>
+  <tr>
+</table>
+	<div style="padding-top:10px"><a href="<%= @url %>" title="立即注册并加为好友 "><img src="<%=SITE_URL%>/images/mails/register.png" alt="立即注册并加为好友" border="0" /></a></div>
+    <br />
+    <div style="line-height:22px">你也可以通过下面的连接找到我：<br />
+    <%=link_to "#{@url}", @url, :style => "color:#25700d"%>
+    <p style="color:#999;line-height:22px">（如果上面不是链接形式，请将地址手工粘贴到浏览器地址栏再访问）</p>
+    </div>
+    </div>
+    <div style="clear:both;">&nbsp;</div>
+    <div style="background-color:#73bd21;color:#fff;padding:5px;text-align:center">Copyright©2009-2010 17gaming.com.All Rights Reserved 一起游戏网</a> 版权所有 </div>
+</div>
+
+
+</body>

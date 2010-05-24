@@ -1,0 +1,65 @@
+﻿body{background:#0e8bd9;color:#999}
+a.gray:link,a.gray:visited,a.gray:active,.home-wrap .feed-list-box a.gray,.multibox .data-table a{color:#5c5c5c}
+a,.menu-icon-list li a span{color:#5c5c5c}
+.home-wrap .feed-list-box a,.feed-box .feed-img-list .feed-list a{color:#a05c00}
+.shine, a.shine:link, a.shine:visited, a.shine:active {color:#a05c00;}
+.piclist .jl-picitem a{color:#a05c00}
+.box02 {background:none;border:0}
+.box04 {background:#62cbde;border:0;}
+.textarea,textarea{background:#62cbde;border:1px solid #00739c;color:#333}
+.word-box{color:#333}
+.comment-box,.cmt-box{background:#26acd1;}
+.feed-list .word-box span,.feed-list .cmt-box span {color:#333;}
+
+#header{width:100%;background:url(/images/themes/popkart/top_bg.png) repeat-x;height:40px;}
+.logo-top{background-image:url(/images/themes/popkart/logo.png);top:0}
+#navbar{width:950px;margin:0 auto;background:none}
+#navbar a{color:#666}
+#navbar #navwrap {background:none}
+#navbar #navwrap #navmid{background:none}
+#navbar #navsearch .textfield{border-color:#355c1b;background:#fff}
+#navbar #navsearch .gobtn {background:url(/images/themes/popkart/go.png) no-repeat;height:20px}
+#navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
+
+#leftsidebar .avatarbox {border-bottom:1px solid #03739b;}
+#leftsidebar .avatarbox a {color:#5c5c5c}
+.s-dialog a{color:#a05c00}
+.banner{width:100%;padding-left:1px !important;*padding-left:0 !important;_padding-left:0;padding-left:0\0 !important}
+@media screen and (-webkit-min-device-pixel-ratio:0) { /* 针对chrome、safari */
+.banner{padding-left:0 !important}
+}
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) {/* opera */
+.banner{padding-left:0 !important}
+}
+
+.banner .con{width:100%;height:175px;margin:0 auto;background:url(/images/themes/popkart/banner.jpg) no-repeat center 0}
+.round_l_t, .round_r_t, .round_l_b, .round_r_b, .round_title_l_t, .round_title_r_t {background-image:none;}
+.round_m{background:transparent;border:0}
+.round_l_b{padding:0}
+.round02 .round_l_b,.round04 .round_l_b{padding:0 0 6px}
+#page{width:950px;background:#fff url(/images/themes/popkart/page_bg.jpg) no-repeat right bottom;margin:0 auto;padding:6px 0 50px 0} 
+#canvas .tipbar {background:#26acd1;border-color:#00739c;color:#103e4f}
+#canvas .canvas_con .multibox .title,#rightsidebar .multibox .title{background:url(/images/themes/popkart/title_bg.png) no-repeat;height:32px;line-height:32px;border:0;padding:0 10px;color:#103e4f}
+#canvas #rightsidebar .multibox .title{background:url(/images/themes/popkart/title_bg02.png) no-repeat;}
+.multibox .title a{color:#103e4f}
+.bookbox h3{background:url(/images/themes/popkart/title_bg.png) no-repeat;height:32px;line-height:32px;border:0;padding:0 10px;color:#103e4f}
+
+.jl-cutline{background:url(/images/themes/popkart/dotline.png) repeat-x center bottom;}
+.arrow-dialog {background:url(/images/themes/popkart/roundBoxbg03.png) no-repeat;}
+.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/popkart/roundBoxbg02.png);}
+.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/popkart/roundBoxbg04.png);}
+.round02 .round_m {background:#62cbde;border-left:1px solid #1e8eb0;border-right:1px solid #1e8eb0;margin:0 -6px 0 0;color:#333}
+.round04 .round_m {background:#62cbde;border-left:1px solid #1e8eb0;border-right:1px solid #1e8eb0;margin:0 -6px 0 0}
+.feed-list-box h4 {background:url(/images/themes/popkart/date-cutline.png) repeat-x;}
+.feed-list-box h4 span{background:#fefdf6}
+a.jl-more {background:url(/images/themes/popkart/arr-more.png) no-repeat;color:#a05c00}
+.jl-my-gold .green {color:#df6505;}
+.button,.button span {background-image:url(/images/themes/popkart/btns01.png);}
+.button span button{color:#103e4f}
+.button-gray span button{color:#666}
+.bookbox .textarea-wrap .textarea-wide textarea {background:url(/images/themes/popkart/textarea_bg.jpg) right -70px;border:1px solid #00739c}
+.multibox .diary-box {border-bottom:1px dashed #dcddd0;}
+.multibox .jl-data-table th {color:#a05c00;}
+.feed-img-list {border-top:1px dashed #dcddd0;}
+#footer{background:url(/images/themes/popkart/bottom_bd.png) repeat-x;width:100%;padding:30px 0;line-height:22px;color:#0b6491}
+#footer a{color:#0b6491}
