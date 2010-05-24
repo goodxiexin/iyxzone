@@ -1,8 +1,0 @@
-#mysql database only
-
-mysql:
-	:adapter: mysql
-	:host: localhost
-	:username: root
-	:password: root
-	:database: pre_yaml_parse_test
