@@ -2,13 +2,9 @@ class Status < ActiveRecord::Base
 
   named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
 
-  named_scope :prefetch, lambda {|opts| {:include => opts}}
-
   belongs_to :poster, :class_name => 'User'
 
-	acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, status, comment| status.poster == user || comment.poster == user},
-                      :create_conditions => lambda {|user, status| status.poster == user || status.poster.has_friend?(user)}
+	acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, status, comment| status.poster == user || comment.poster == user}, :create_conditions => lambda {|user, status| status.poster == user || status.poster.has_friend?(user)}
 
   # 下面这3个要注意顺序
   escape_html :sanitize => :content

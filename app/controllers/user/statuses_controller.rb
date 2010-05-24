@@ -29,9 +29,7 @@ class User::StatusesController < UserBaseController
 
   def destroy
     if @status.destroy
-      render :update do |page|
-        page << "facebox.close();$('status_#{@status.id}').remove();"
-      end
+      render_js_code "facebox.close();$('status_#{@status.id}').remove();"
     else
       render_js_error '发生错误'
     end
@@ -44,6 +42,7 @@ protected
       @user = User.find(params[:uid])
       require_friend_or_owner @user      
     elsif ["destroy"].include? params[:action]
+puts "destroy"
       @status = Status.find(params[:id])
       require_owner @status.poster
     end

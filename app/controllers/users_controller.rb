@@ -50,6 +50,8 @@ class UsersController < ApplicationController
         current_user.create_comrade_suggestions s
       end
       flash[:notice] = "激活成功"
+    else
+      flash[:error] = "不正确的激活码"
     end
     redirect_back_or_default('/login')
   end
