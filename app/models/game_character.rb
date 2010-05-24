@@ -28,7 +28,7 @@ class GameCharacter < ActiveRecord::Base
 
   has_many :president_or_veteran_or_member_memberships, :foreign_key => 'character_id', :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
 
-  has_many :guilds, :through => :people_memberships
+  has_many :guilds, :through => :president_or_veteran_or_member_memberships
 
   has_many :participations, :foreign_key => 'character_id'
 

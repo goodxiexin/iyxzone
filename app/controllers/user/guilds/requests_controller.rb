@@ -12,7 +12,7 @@ class User::Guilds::RequestsController < UserBaseController
   end
 
   def create
-    @request = @guild.requests.build (params[:request] || {}).merge({:user_id => current_user.id})
+    @request = @guild.requests.build((params[:request] || {}).merge({:user_id => current_user.id}))
     
     unless @request.save
       render_js_error

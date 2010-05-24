@@ -6,11 +6,16 @@
       <%= f.text_field 'level', :label => '等级' %>
 			<%= f.collection_select :game_id, @games, :id, :name, {}, :label => '游戏', :class => 'selector selector02' %>
 			<%= f.collection_select :area_id, @areas, :id, :name, {:prompt => '---'}, :label => '服务区', :class => 'selector selector02' %>
-			<%= f.collection_select :server_id, [], :id, :name, {:prompt => '---'}, :label => '服务器', :class => 'selector selector02' %>
+			<%= f.collection_select :server_id, @servers, :id, :name, {:prompt => '---'}, :label => '服务器', :class => 'selector selector02' %>
 			<%= f.collection_select :race_id, @races, :id, :name, {:prompt => '---'}, :label => '种族', :class => 'selector selector02' %>
 			<%= f.collection_select :profession_id, @professions, :id, :name, {:prompt => '---'}, :label => '职业', :class => 'selector selector02' %>
     <% end %>
     <%= f.z_submit :submit => {:text => '完成', :id => 'new_character_submit'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
   <% end %>
+<% end %>
+
+<% if !@games.blank? %>
 	<%= javascript_tag "new Iyxzone.Game.Selector('character_game_id', null,'character_area_id', null,'character_server_id', null,'character_race_id', null,'character_profession_id', null, null, {})" %>
+<% else %>
+  <%= javascript_tag "Iyxzone.Game.infos = #{game_infos};Iyxzone.Game.initPinyinSelector('character_game_id', null,'character_area_id', null,'character_server_id', null,'character_race_id', null,'character_profession_id', null, null, {})" %> 
 <% end %>

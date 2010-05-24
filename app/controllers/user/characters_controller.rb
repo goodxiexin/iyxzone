@@ -1,11 +1,20 @@
 class User::CharactersController < UserBaseController
 
 	def new
-    @game = Game.find(params[:gid])
-		@games = [@game]
-    @areas = @game.areas
-    @races = @game.races
-    @professions = @game.professions
+    if params[:gid]
+      @game = Game.find(params[:gid])
+		  @games = [@game]
+      @areas = @game.areas
+      @servers = @game.no_areas ? @game.servers : []
+      @races = @game.races
+      @professions = @game.professions
+    else
+      @games = []
+      @areas = []
+      @servers = []
+      @races = []
+      @professions = []
+    end
 	  @character = GameCharacter.new
   end
 

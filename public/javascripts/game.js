@@ -13,7 +13,6 @@ Iyxzone.Game = {
 
   Feeder: {},
 
-  // 相当于一个factory方法，返回一个 pinyin selector， 这样避免在每个pinyin selector里保存游戏信息，浪费
   initPinyinSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options){
     if(Iyxzone.Game.infos == null){
       alert('错误');

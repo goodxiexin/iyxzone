@@ -1,7 +1,6 @@
 class User::Games::AttentionsController < UserBaseController
 
   def create
-    @game = Game.find(params[:game_id])
     @attention = @game.attentions.build(:user_id => current_user.id)
 
     unless @attention.save
@@ -15,6 +14,12 @@ class User::Games::AttentionsController < UserBaseController
     unless @attention.destroy
       render_js_error
     end
+  end
+
+protected
+
+  def setup
+    @game = Game.find(params[:game_id])
   end
 
 end
