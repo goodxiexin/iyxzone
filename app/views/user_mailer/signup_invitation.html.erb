@@ -45,10 +45,10 @@
 	<% } %>
   <tr>
 </table>
-	<div style="padding-top:10px"><a href="<%= @url %>" title="立即注册并加为好友 "><img src="<%=SITE_URL%>/images/mails/register.png" alt="立即注册并加为好友" border="0" /></a></div>
+	<div style="padding-top:10px"><a href="<%= @url %>" title="立即注册并加为好友 " target='_blank'><img src="<%=SITE_URL%>/images/mails/register.png" alt="立即注册并加为好友" border="0" /></a></div>
     <br />
     <div style="line-height:22px">你也可以通过下面的连接找到我：<br />
-    <%=link_to "#{@url}", @url, :style => "color:#25700d"%>
+    <%=link_to "#{@url}", @url, :popup => true, :style => "color:#25700d"%>
     <p style="color:#999;line-height:22px">（如果上面不是链接形式，请将地址手工粘贴到浏览器地址栏再访问）</p>
     </div>
     </div>

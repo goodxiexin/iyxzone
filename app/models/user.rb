@@ -419,4 +419,6 @@ class User < ActiveRecord::Base
 
   include FriendSuggestor
 
+  named_scope :hot, :conditions => ["created_at > ?", 1.weeks.ago.to_s(:db)], :order => "friends_count DESC, created_at DESC"
+
 end
