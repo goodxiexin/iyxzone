@@ -20,6 +20,7 @@ class UserObserver < ActiveRecord::Observer
       # deliver mail
       UserMailer.deliver_activation user
 
+      # add friend if necessary
       token = user.invitee_code
       if token
         invitor = SignupInvitation.find_sender(token) || User.find_by_invite_code(token) || User.find_by_qq_invite_code(token) || User.find_by_msn_invite_code(token)
