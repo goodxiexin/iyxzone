@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100520155931) do
+ActiveRecord::Schema.define(:version => 20100524093256) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(:version => 20100520155931) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",                             :default => 0
+    t.string   "type"
+    t.string   "orig_link"
   end
 
   add_index "blogs", ["poster_id"], :name => "index_blogs_on_poster_id"
@@ -864,6 +866,13 @@ ActiveRecord::Schema.define(:version => 20100520155931) do
   end
 
   add_index "viewings", ["viewable_id", "viewable_type"], :name => "index_viewings_on_viewable_id_and_viewable_type"
+
+  create_table "vip_skins", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "skin_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "votes", :force => true do |t|
     t.text     "answer_ids"
