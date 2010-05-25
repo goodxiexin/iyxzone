@@ -2,6 +2,8 @@ class UserMailer < ActionMailer::Base
 
   layout 'mail', :only => [:activation, :forgot_password, :reset_password]
 
+  add_template_helper MailerHelper
+
   def long_time_no_seen user, hot_users, games, photos, polls, news
     setup_email user
     subject     "17Gaming(一起游戏网) - 我们希望你再来看看！"

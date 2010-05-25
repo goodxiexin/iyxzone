@@ -60,13 +60,13 @@ class LoginFlowTest < ActionController::IntegrationTest
     # activate with invalid code
     post "/activate", {:activation_code => "invalid#{user.activation_code}"}
     assert_redirected_to login_url
-    #assert_not_nil flash[:error]
+    assert_not_nil flash[:error]
     user.reload
     assert !user.active?
 
     post "/activate", {:activation_code => user.activation_code}
     assert_redirected_to login_url
-    #assert_not_nil flash[:notice]
+    assert_not_nil flash[:notice]
     user.reload
     assert user.active?
 
