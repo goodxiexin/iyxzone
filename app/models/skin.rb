@@ -8,6 +8,7 @@ class Skin < ActiveRecord::Base
 
   acts_as_list :order => 'id'
 
+  named_scope :for_all 
   def default?
     name == 'default'
   end
