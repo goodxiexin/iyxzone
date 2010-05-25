@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100524093256) do
+ActiveRecord::Schema.define(:version => 20100525063750) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20100524093256) do
     t.integer  "comments_count", :default => 0
     t.datetime "uploaded_at"
     t.datetime "created_at"
-    t.integer  "verified"
+    t.integer  "verified",       :default => 0
   end
 
   add_index "albums", ["owner_id"], :name => "index_albums_on_owner_id"
@@ -522,7 +522,7 @@ ActiveRecord::Schema.define(:version => 20100524093256) do
     t.integer  "album_id"
     t.integer  "game_id"
     t.integer  "poster_id"
-    t.integer  "privilege"
+    t.integer  "privilege",      :default => 1
     t.text     "notation"
     t.integer  "parent_id"
     t.string   "content_type"
@@ -696,11 +696,14 @@ ActiveRecord::Schema.define(:version => 20100524093256) do
   end
 
   create_table "skins", :force => true do |t|
-    t.string   "name",                              :null => false
-    t.string   "css",                               :null => false
-    t.string   "thumbnail",  :default => "missing"
+    t.string   "name",                               :null => false
+    t.string   "css",                                :null => false
+    t.string   "thumbnail",   :default => "missing"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "category"
+    t.integer  "privilege",   :default => 0
+    t.text     "access_list"
   end
 
   create_table "statuses", :force => true do |t|
@@ -745,8 +748,8 @@ ActiveRecord::Schema.define(:version => 20100524093256) do
     t.text     "requirement"
     t.text     "reward"
     t.text     "description"
-    t.integer  "catagory",     :default => 1
-    t.datetime "starts_at",    :default => '2010-05-18 21:46:13'
+    t.integer  "catagory",     :default => 2
+    t.datetime "starts_at",    :default => '2010-05-25 15:19:46'
     t.datetime "expires_at"
     t.integer  "duration"
     t.integer  "state"
@@ -782,6 +785,8 @@ ActiveRecord::Schema.define(:version => 20100524093256) do
     t.string   "gender",                                   :default => "male"
     t.string   "crypted_password",           :limit => 40
     t.string   "salt",                       :limit => 40
+    t.string   "remember_code"
+    t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.datetime "activated_at"
     t.string   "password_reset_code"
@@ -833,8 +838,6 @@ ActiveRecord::Schema.define(:version => 20100524093256) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "remember_me_untils"
-    t.string   "remember_code"
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"
@@ -866,13 +869,6 @@ ActiveRecord::Schema.define(:version => 20100524093256) do
   end
 
   add_index "viewings", ["viewable_id", "viewable_type"], :name => "index_viewings_on_viewable_id_and_viewable_type"
-
-  create_table "vip_skins", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "skin_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "votes", :force => true do |t|
     t.text     "answer_ids"

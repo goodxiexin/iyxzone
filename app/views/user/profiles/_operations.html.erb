@@ -3,7 +3,7 @@
 <ul class='op s_clear'>
 <% if relationship == 'owner' %>
 	<li><%= facebox_link "<span class='i-avatar'></span>修改头像", new_avatar_url(:at => 'profile'), :width => 400 %></li>
-	<li><%= link_to "<span class='i-theme'></span>主页装扮", skin_url(user.profile.skin_id) %></li>
+	<li><%= link_to "<span class='i-theme'></span>主页装扮", skins_url %></li>
 <% elsif relationship == 'friend' %>
   <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>
   <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %></li>

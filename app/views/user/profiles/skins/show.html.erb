@@ -1,0 +1,29 @@
+<% content_for :theme_header do %>
+  <div>
+    <%= link_to "装扮中心<span></span>", skins_url, :class => "w-xl"%>
+    <%= link_to "关闭<span></span>", profile_url(@user.profile)%>
+  </div>
+<% end %>
+
+<% content_for :theme_preview do %>
+  <%= link_to "", skin_url(@prev), :class => "btn roll-l" -%>
+  <ul>
+    <li><%= skin_image_tag @prev, :size=>"190x96" -%></li>
+    <li class="focus">
+      <%= skin_image_tag @skin, :size=>"190x96", :class=>"left w-l" -%>
+      <div class="op">
+        <strong>当前预览</strong><br /><span>装扮名称：<%= @skin.name -%></span>
+        <p class="space">
+          <% form_for(@skin) do |f| %>
+            <span class="button w-l"><span><button name="act" type="submit" value ="apply">应用</button> </span></span>
+          <% end %>
+          <span class="button button-gray"><span><button onclick= <%= "'location.href=\"#{profile_url(current_user.profile)}\"'"-%> type="submit">取消</button> </span></span>
+        </p>
+      </div>
+    </li>
+    <li><%= skin_image_tag @next, :size=>"190x96" %></li>
+  </ul>
+  <%= link_to "", skin_url(@next), :class => "btn roll-r" -%>
+<% end %>
+
+<%= render :file => 'user/profiles/show' %>
