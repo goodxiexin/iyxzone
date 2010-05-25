@@ -11,5 +11,8 @@ class Skin < ActiveRecord::Base
   def default?
     name == 'default'
   end
+
+  def public?
+  end
   
 end

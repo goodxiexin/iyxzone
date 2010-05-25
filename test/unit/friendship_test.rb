@@ -8,7 +8,7 @@ class FriendshipTest < ActiveSupport::TestCase
   end
 
   test "user send request to user2" do
-  
+     
   end
 
 end
