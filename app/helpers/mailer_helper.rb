@@ -1,7 +1,7 @@
 module MailerHelper
 
   def image_tag src, opts
-    "<img src=\"#{SITE_URL}/images/#{src}\" #{opts.map{|k,v| "#{k}=\"#{v}\""}.join(' ')} />"
+    "<img src=\"#{SITE_URL}/#{src}\" #{opts.map{|k,v| "#{k}=\"#{v}\""}.join(' ')} />"
   end
 
   def td_header text
