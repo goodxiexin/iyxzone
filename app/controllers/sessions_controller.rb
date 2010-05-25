@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_by_email(params[:email])
     if !@user.nil? and !@user.active?
-      redirect_to :controller => 'users', :action => 'activation_mail_sent', :email => @user.email, :show => 1
+      redirect_to :controller => 'users', :action => 'activation_mail_sent', :email => @user.email
       return
     end
     self.current_user = User.authenticate(params[:email], params[:password])

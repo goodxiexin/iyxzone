@@ -37,19 +37,13 @@ class Friendship < ActiveRecord::Base
 
   def accept
     if status == Request
-      #self.recently_accepted = true
+      self.recently_accepted = true
       # 检查我是否也有加他为好友的请求, 有就删除
       reverse_request = self.reverse
-
       if reverse_request
         reverse_request.destroy
       end
-      
-
       self.update_attributes(:status => Friend)
-      friendship.friend.raw_decrement :friend_requests_count
-      friendship.user.raw_increment :friends_count
-
       Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friend)
     end
   end

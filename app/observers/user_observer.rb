@@ -10,17 +10,35 @@ class UserObserver < ActiveRecord::Observer
   end
  
 	def after_create user
-    # TODO: 自从合了小样的代码，下面这句话就挂了
-    #user.create_profile
     Profile.create(:user_id => user.id, :login => user.login, :gender => user.gender)
     user.create_avatar_album
-    #UserMailer.deliver_signup_notification user
+    UserMailer.deliver_signup_notification user
   end
-
+  
   def after_save user
-    #UserMailer.deliver_activation user if user.recently_activated?
-    UserMailer.deliver_forgot_password user if user.recently_forgot_password?
-    UserMailer.deliver_reset_password user if user.recently_reset_password?
+    if user.recently_activated?
+      # deliver mail
+      UserMailer.deliver_activation user
+
+      token = user.invitee_code
+      if token
+        invitor = SignupInvitation.find_sender(token) || User.find_by_invite_code(token) || User.find_by_qq_invite_code(token) || User.find_by_msn_invite_code(token)
+        if !invitor.blank?
+          user.friendships.create(:friend_id => invitor.id)
+          invitor.friendships.create(:friend_id => user.id)
+        end
+      end
+
+      # create suggestions
+      user.create_friend_suggestions
+      user.servers.each do |s|
+        user.create_comrade_suggestions s
+      end
+    elsif user.recently_forgot_password?
+      UserMailer.deliver_forgot_password user
+    elsif user.recently_reset_password?
+      UserMailer.deliver_reset_password user
+    end
   end
 
 end

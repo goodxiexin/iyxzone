@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100525063750) do
+ActiveRecord::Schema.define(:version => 20100525144149) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -838,6 +838,7 @@ ActiveRecord::Schema.define(:version => 20100525063750) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "invitee_code"
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"

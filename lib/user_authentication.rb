@@ -115,7 +115,7 @@ module UserAuthentication
       self.invitation = BetaInvitation.find_by_token(token)
     end
 
-      # Encrypts the password with the user salt
+    # Encrypts the password with the user salt
     def encrypt(password)
       self.class.encrypt(password, salt)
     end
