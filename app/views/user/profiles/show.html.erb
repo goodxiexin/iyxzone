@@ -4,7 +4,7 @@
 
 <% if !@skin.default? %>
 <% content_for :stylesheet_link do %>
-  <%= stylesheet_link_tag "themes/#{@skin.name}/#{@skin.css}" %>
+  <%= stylesheet_link_tag "themes/#{@skin.directory}/#{@skin.css}" %>
 <% end %>
 <% end %>
 

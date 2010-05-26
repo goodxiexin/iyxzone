@@ -26,11 +26,6 @@ Factory.define :game_profession do |p|
   p.sequence(:name) {|n| "profession-#{n}"}
 end
 
-Factory.define :game_character do |c|
-  c.sequence(:name) {|n| "character-#{n}"}
-  c.level 100
-end
-
 Factory.define :blog do |b|
   b.sequence(:title) {|n| "title-#{n}"}
   b.sequence(:content) {|n| "content-#{n}"}

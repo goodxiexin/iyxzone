@@ -1,0 +1,66 @@
+﻿body{background:url(/images/themes/xy3/body_bg.jpg);color:#999}
+a.gray:link,a.gray:visited,a.gray:active,.home-wrap .feed-list-box a.gray{color:#666}
+a,.menu-icon-list li a span{color:#003d2a}
+.home-wrap .feed-list-box a,.feed-box .feed-img-list .feed-list a{color:#a05c00}
+.gray,.multibox .diary-box .diary-header,.feed-img-list .feed-list, .home-wrap .feed-box .feed-img-list .feed-list{color:#666;}
+.shine, a.shine:link, a.shine:visited, a.shine:active {color:#a05c00;}
+.piclist .jl-picitem a{color:#a05c00}
+.box02 {background:#f6f6f6;border:0}
+.box04 {background:#0e4357;border:0;}
+.textarea,textarea{background:#adc8ba;border:1px solid #1a4755;color:#293d33}
+.word-box{color:#666}
+.comment-box,.cmt-box,.word-box{background:#a4bfb3;}
+.feed-list .word-box span,.feed-list .cmt-box span {color:#666;}
+
+#header{width:100%;background:url(/images/themes/xy3/top_bg.png) repeat-x;height:40px;}
+.logo-top{background-image:url(/images/themes/xy3/logo.png);top:0}
+#navbar{width:950px;margin:0 auto;background:none}
+#navbar a{color:#666}
+#navbar #navwrap {background:none}
+#navbar #navwrap #navmid{background:none}
+#navbar #navsearch .textfield{border-color:#355c1b;background:#fff}
+#navbar #navsearch .gobtn {background:url(/images/themes/xy3/go.png) no-repeat;height:20px}
+#navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
+
+#leftsidebar .avatarbox {border-bottom:1px solid #003d2a;}
+#leftsidebar .avatarbox a {color:#003d2a}
+.s-dialog a{color:#799eaa}
+
+.banner{width:100%;}
+.banner .con{width:100%;height:335px;margin:0 auto;background:url(/images/themes/xy3/banner.jpg) no-repeat center 0;margin-left:-1px\0}
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) {/* opera */
+.banner .con{margin-left:-1px}
+}
+.round_l_t, .round_r_t, .round_l_b, .round_r_b, .round_title_l_t, .round_title_r_t {background-image:none;}
+.round_m{background:transparent;border:0}
+.round_l_b{padding:0}
+.round02 .round_l_b,.round04 .round_l_b{padding:0 0 6px}
+#page{width:1020px;background:url(/images/themes/xy3/page_bg.jpg) repeat-y center top;margin-top:0} 
+#canvas{width:940px;margin:0 auto;background:url(/images/themes/xy3/canvas_bg.jpg) no-repeat bottom;padding:0 0 50px 0;} 
+#canvas .tipbar {background:#a4bfb3;border-color:#293d33;color:#293d33}
+#canvas .canvas_con .multibox .title,#rightsidebar .multibox .title{background:url(/images/themes/xy3/title_bg.png) no-repeat;height:38px;line-height:38px;border:0;padding:0 10px;color:#003d2a}
+.bookbox h3{background:url(/images/themes/xy3/title_bg.png) no-repeat;height:38px;line-height:38px;border:0;padding:0 10px;color:#003d2a}
+#canvas #rightsidebar .multibox .title{background:url(/images/themes/xy3/title_bg02.png) no-repeat;}
+.multibox .title a{color:#003d2a}
+
+.jl-cutline{background:url(/images/themes/xy3/dotline.png) repeat-x center bottom;}
+.arrow-dialog {background:url(/images/themes/xy3/roundBoxbg03.png) no-repeat;}
+.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/xy3/roundBoxbg02.png);}
+.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/xy3/roundBoxbg04.png);}
+.round02 .round_m {background:#d9e4df;border-left:1px solid #293d33;border-right:1px solid #293d33;margin:0 -6px 0 0;color:#a05c00}
+.round04 .round_m {background:#a4bfb3;border-left:1px solid #293d33;border-right:1px solid #293d33;margin:0 -6px 0 0}
+.feed-list-box h4 {background:url(/images/themes/xy3/date-cutline.png) repeat-x}
+.feed-list-box h4 span{background:#f6f6f6}
+a.jl-more {background:url(/images/themes/xy3/arr-more.png) no-repeat;color:#a05c00}
+.jl-my-gold{color:#003d2a}
+.jl-my-gold .green {color:#df6505;}
+.button,.button span {background-image:url(/images/themes/xy3/btns01.png);}
+.button span button{color:#003d2a}
+.button-gray span button{color:#666}
+.bookbox .textarea-wrap .textarea-wide textarea {background:url(/images/themes/xy3/textarea_bg.jpg) no-repeat;border:1px solid #0f0f0e;color:#999}
+.multibox .diary-box {border-bottom:1px dashed #ccc;}
+.multibox .jl-data-table th {color:#a05c00;}
+.multibox .data-table a,.multibox .data-table td{color:#003d2a}
+.feed-img-list {border-top:1px dashed #dcddd0;}
+#footer{width:100%;background:url(/images/themes/xy3/foot_bg.jpg) no-repeat center top;padding:30px 0;line-height:22px;color:#333}
+#footer a{color:#333}
