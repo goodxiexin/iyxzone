@@ -9,7 +9,7 @@ ActionMailer::Base.smtp_settings = {
   :enable_starttls_auto => true,
   :domain => "gmail.com",
   :authentication => :plain,
-  :user_name => "gaoxh04",
-  :password => "20041065"
+  :user_name => "xiexinwang",
+  :password => "JJK78ytx"
 }
 ActionMailer::Base.delivery_method = :activerecord

@@ -40,7 +40,7 @@
 								<% end %>
                   <td class= "<%=index%>"align="center" width="33%">
 									<% if hot_user.avatar.blank? %>
-                    <a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><%= image_tag "/images/default_medium.png", :width=>"50", :height=>"50", :border=>"0"%>
+                    <a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><%= image_tag "/images/default_#{hot_user.gender}_medium.png", :width=>"50", :height=>"50", :border=>"0"%>
 									<% else %>
 										<a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><%= image_tag "#{hot_user.avatar.public_filename("medium")}", :width=>"50", :height=>"50", :border=>"0" %>
 									<% end %>
@@ -60,7 +60,7 @@
       <tr>
 				<% @games.each do |game| %>
         <td align="center">
-					<% if File.exist? "/images/gamepic/#{game.name}.gif" %>
+					<% if File.exist? "public/images/gamepic/#{game.name}.gif" %>
 						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><%= image_tag "/images/gamepic/#{game.name}.gif", :alt=>"#{game.name}", :style=>"border:1px solid #aaa;padding:4px" %></a>
 					<% else %>
 						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><%= image_tag "/images/gamepic/default.gif", :alt=>"#{game.name}", :style=>"border:1px solid #aaa;padding:4px" %></a>

@@ -16,7 +16,7 @@
 					<% @user.friends[0..5].each { |friend| %>
                 <li style="float:left;width:65px;list-style:none;padding:0;margin:0">
 								<% if friend.avatar.blank? %>
-									<img src=<%= "#{SITE_URL}/images/default_medium.png" %> style="padding:3px;border:1px solid #e7f7e7" />
+									<img src=<%= "#{SITE_URL}/images/default_#{friend.gender}_medium.png" %> style="padding:3px;border:1px solid #e7f7e7" />
 								<% else %>
 									<img src=<%= "#{SITE_URL}/#{friend.avatar.public_filename("medium")}" %> style="padding:3px;border:1px solid #e7f7e7" />
 								<% end %>
