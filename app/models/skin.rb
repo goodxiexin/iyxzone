@@ -9,7 +9,7 @@ class Skin < ActiveRecord::Base
 
   named_scope :for_all 
   def default?
-    name == 'default'
+    name == '默认'
   end
 
   def is_public?
