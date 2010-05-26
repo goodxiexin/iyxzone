@@ -1,5 +1,0 @@
-:subscription_url:  http://localhost:3000/juggernaut/subscription
-:allowed_ips: 
-  - 127.0.0.1
-:logout_url: http://localhost:3000/juggernaut/logout
-:port: 5001

@@ -4,11 +4,6 @@ Factory.define :user do |u|
   u.email {|u| "#{u.login}@gmail.com"}
 end
 
-Factory.define :game_character do |character|
-  character.sequence(:name) {|n| "character-#{n}"}
-  character.level 2
-end
-
 Factory.define :game do |g|
   g.sequence(:name) {|n| "game-#{n}"}
   g.description     {|g| "description of #{g.name}"}
@@ -43,4 +38,10 @@ end
 Factory.define :guild do |g|
   g.sequence(:name) {|n| "name-#{n}"}
   g.sequence(:description) {|n| "description-#{n}"}
+end
+
+Factory.define :skin do |s|
+  s.sequence(:name) {|n| "skin-#{n}"}
+  s.sequence(:css) {|n| "css-#{n}"}
+  s.sequence(:thumbnail) {|n| "thumbnail-#{n}"}
 end

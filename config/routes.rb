@@ -118,7 +118,7 @@ ActionController::Routing::Routes.draw do |map|
 
     end
 
-		users.resources :skins, :only=> [:index, :show, :update]
+    users.resources :skins, :controller => 'profiles/skins'
 
     users.resources :mails, :collection => {:read_multiple => :put, :unread_multiple => :put, :destroy_multiple => :delete}, :member => {:reply => :post}
 

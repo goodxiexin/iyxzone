@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string	:gender, :default => 'male'
       t.string	:crypted_password,	:limit => 40
       t.string	:salt,			:limit => 40
-      t.string	:remember_token
+      t.string	:remember_code
       t.datetime	:remember_token_expires_at
       t.string	:activation_code
       t.datetime	:activated_at

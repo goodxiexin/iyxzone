@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100525065805) do
+ActiveRecord::Schema.define(:version => 20100525144149) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -704,11 +704,14 @@ ActiveRecord::Schema.define(:version => 20100525065805) do
   end
 
   create_table "skins", :force => true do |t|
-    t.string   "name",                              :null => false
-    t.string   "css",                               :null => false
-    t.string   "thumbnail",  :default => "missing"
+    t.string   "name",                               :null => false
+    t.string   "css",                                :null => false
+    t.string   "thumbnail",   :default => "missing"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "category"
+    t.integer  "privilege",   :default => 0
+    t.text     "access_list"
   end
 
   create_table "statuses", :force => true do |t|
@@ -754,7 +757,7 @@ ActiveRecord::Schema.define(:version => 20100525065805) do
     t.text     "reward"
     t.text     "description"
     t.integer  "catagory",     :default => 1
-    t.datetime "starts_at",    :default => '2010-05-11 13:42:42'
+    t.datetime "starts_at",    :default => '2010-05-19 17:49:53'
     t.datetime "expires_at"
     t.integer  "duration"
     t.integer  "state"
@@ -801,9 +804,9 @@ ActiveRecord::Schema.define(:version => 20100525065805) do
     t.integer  "avatar_id"
     t.string   "pinyin"
     t.datetime "last_seen_at"
-    t.integer  "privacy_setting",            :limit => 8,  :default => 0
-    t.integer  "mail_setting",               :limit => 8,  :default => 0
-    t.integer  "application_setting",        :limit => 8,  :default => 0
+    t.integer  "privacy_setting",            :limit => 8,  :default => 123076522
+    t.integer  "mail_setting",               :limit => 8,  :default => 562949953421311
+    t.integer  "application_setting",        :limit => 8,  :default => 262143
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
     t.integer  "game_attentions_count",                    :default => 0
@@ -843,6 +846,7 @@ ActiveRecord::Schema.define(:version => 20100525065805) do
     t.datetime "updated_at"
     t.datetime "remember_me_untils"
     t.string   "remember_code"
+    t.string   "invitee_code"
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"
@@ -874,13 +878,6 @@ ActiveRecord::Schema.define(:version => 20100525065805) do
   end
 
   add_index "viewings", ["viewable_id", "viewable_type"], :name => "index_viewings_on_viewable_id_and_viewable_type"
-
-  create_table "vip_skins", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "skin_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "votes", :force => true do |t|
     t.text     "answer_ids"

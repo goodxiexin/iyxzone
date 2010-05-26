@@ -346,7 +346,7 @@ module ApplicationHelper
   end
 
   def skin_image_tag skin, img_opts={}
-    link_to (image_tag "themes/#{skin.name}/#{skin.thumbnail}", {:alt => skin.name}.merge(img_opts)), skin_url(skin)
+    link_to (image_tag "images/themes/#{skin.name}/#{skin.thumbnail}", {:alt => skin.name}.merge(img_opts)), skin_url(skin)
   end
 
   # this function might be broken if rails gets updated
@@ -447,7 +447,7 @@ module ApplicationHelper
   end
 
   def report_link reportable
-    facebox_link "举报", new_report_url(:reportable_id => reportable.id, :reportable_type => reportable.type)
+    facebox_link "举报", new_report_url(:reportable_id => reportable.id, :reportable_type => reportable.class.name)
   end
 
   def canvas_tag opts={}, &block

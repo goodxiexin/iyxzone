@@ -14,9 +14,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, ActionController::RoutingError, :with => :render_not_found
 
-  if RAILS_ENV == 'production'
-    rescue_from RuntimeError, :with => :render_error
-  end
+  rescue_from RuntimeError, :with => :render_error
 
 protected
 

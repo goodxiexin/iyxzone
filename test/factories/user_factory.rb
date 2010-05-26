@@ -1,7 +1,9 @@
 class UserFactory
 
   def self.create cond={}
-    Factory.create :user, cond
+    user = Factory.create :user, cond
+    user.activate
+    user
   end
 
 end

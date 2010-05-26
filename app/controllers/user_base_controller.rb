@@ -42,7 +42,7 @@ protected
   end
 
   def require_adequate_privilege resource, relationship
-    resource.available_for?(relationship) || is_amdin || render_privilege_denied(resource)
+    resource.available_for?(relationship) || is_admin || render_privilege_denied(resource)
   end
 
   def require_verified resource
@@ -56,7 +56,7 @@ protected
 
   def render_privilege_denied resource
     if resource.is_owner_privilege? #自己
-      render_not_enough_privilege
+      render_not_found #enough_privilege
     else
       render_add_friend resource.resource_owner
     end

@@ -1,16 +1,10 @@
 <div class="regist-box">
   <div class="regist-content">
-    <% if params[:show].to_i == 0 %>
     <div class="logo logo-mail png">
-      <div class="status" id='account_status'>邮件已发送到<%= @user.email %></div>
+      <div class="status" id='account_status'>激活邮件已经发送到<%= @user.email %></div>
     </div>
-    <% end %>
     <div class="help">
-      <% if params[:show].to_i == 0 %>
-      <h1>注册成功，请立即激活帐户</h1>
-      <% elsif params[:show].to_i == 1 %>
       <h1>你还没激活帐号，请立即激活帐号</h1>
-      <% end %>
     </div>
     <div class="sperator-wrap">
       <div class="sperator-main s_clear">
@@ -32,7 +26,7 @@
     <div class="answer-box">
       <h3>未收到激活邮件？</h3>
       <ul class="lister01">
-        <li>在垃圾邮件目录里找找，或<%= link_to_remote "重发激活邮件", :url => "/resend_activation_mail?email=#{@user.email}&invite_token=#{params[:invite_token]}", :html => {:class => 'red'} %></li>
+        <li>在垃圾邮件目录里找找，或<%= link_to_remote "重发激活邮件", :url => "/resend_activation_mail?email=#{@user.email}", :html => {:class => 'red'} %></li>
       </ul>
     </div>
   </div>

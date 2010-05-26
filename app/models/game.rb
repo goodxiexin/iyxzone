@@ -30,6 +30,8 @@ class Game < ActiveRecord::Base
 
 	named_scope :beta, :conditions => ["sale_date > ?", Time.now.to_s(:db)], :order => 'sale_date DESC'
   
+  named_scope :recent, :conditions => ["created_at > ?", 1.weeks.ago.to_s(:db)], :order => "characters_count DESC, created_at DESC"
+
   acts_as_shareable :default_title => lambda {|game| game.name }, :path_reg => /\/games\/([\d]+)/
 
 	acts_as_taggable :delete_conditions => lambda {|game, user| user.is_admin? },

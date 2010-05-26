@@ -14,6 +14,8 @@ class News < ActiveRecord::Base
 
   named_scope :within, lambda {|from, to| {:conditions => ["created_at > ? AND created_at < ?", from, to]}}
 
+  named_scope :hot, :conditions => ["created_at > ?", 1.weeks.ago.to_s(:db)], :order => "viewings_count DESC, created_at DESC"
+
   has_many :pictures, :class_name => 'NewsPicture' # only valid for picture news
 
   belongs_to :game
