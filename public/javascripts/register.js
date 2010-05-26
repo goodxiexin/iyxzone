@@ -319,8 +319,11 @@ Object.extend(Iyxzone.Register, {
       method: 'post',
       parameters: $(form).serialize(),
 			onloading: function(){
-				Iyxzone.disableButton(button, '等待中..');
-			}
+				Iyxzone.disableButton(button, '');
+			},
+      onComplete: function(){
+        Iyxzone.enableButton(button, '');
+      }
     }); 
   }
 

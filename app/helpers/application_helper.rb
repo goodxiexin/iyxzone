@@ -346,7 +346,7 @@ module ApplicationHelper
   end
 
   def skin_image_tag skin, img_opts={}
-    link_to (image_tag "themes/#{skin.name}/#{skin.thumbnail}", {:alt => skin.name}.merge(img_opts)), skin_url(skin)
+    link_to (image_tag "images/themes/#{skin.name}/#{skin.thumbnail}", {:alt => skin.name}.merge(img_opts)), skin_url(skin)
   end
 
   # this function might be broken if rails gets updated

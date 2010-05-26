@@ -49,7 +49,8 @@ module UserAuthentication
   
     # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
     def authenticate(email, password)
-      u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
+      u = find :first, :conditions => ['email = ?', email]
+      #u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
       u && u.authenticated?(password) ? u : nil
     end
 
@@ -115,7 +116,7 @@ module UserAuthentication
       self.invitation = BetaInvitation.find_by_token(token)
     end
 
-      # Encrypts the password with the user salt
+    # Encrypts the password with the user salt
     def encrypt(password)
       self.class.encrypt(password, salt)
     end

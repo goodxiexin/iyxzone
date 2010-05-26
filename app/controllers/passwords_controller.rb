@@ -7,6 +7,7 @@ class PasswordsController < ApplicationController
 
   def create
     @user = User.find_by_email(params[:email])
+
     if @user.nil?
       flash.now[:error] = "该邮箱没有注册我们网站"
       render :action => 'new'

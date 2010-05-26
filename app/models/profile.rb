@@ -2,7 +2,7 @@ class Profile < ActiveRecord::Base
 
   belongs_to :user
 
-	belongs_to :skin
+  belongs_to :skin
 
 	belongs_to :region
 
@@ -37,6 +37,12 @@ class Profile < ActiveRecord::Base
                       :delete_conditions => lambda {|user, profile, comment| profile.user == user},
                       :view_conditions => lambda {|user, profile| profile.user.privacy_setting.wall?(user.relationship_with profile.user)},
                       :create_conditions => lambda {|user, profile| profile.user.privacy_setting.leave_wall_message?(user.relationship_with profile.user)}
+
+  validate :skin_is_accessible
+
+  def accessible_skins
+    Skin.for('Profile').select {|skin| skin.accessible_for?(self)}
+  end
 
   def available_for? relationship
     user.privacy_setting.profile? relationship
@@ -154,6 +160,10 @@ protected
   def district_is_valid
     return if city.blank? or district_id.blank?
     errors.add(:district_id, "不存在") unless District.exists? :city_id => city_id, :id => district_id
+  end
+
+  def skin_is_accessible
+    !skin.blank? and skin.accessible_for?(self)
   end
 
 end

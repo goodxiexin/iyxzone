@@ -4,75 +4,80 @@ class LoginFlowTest < ActionController::IntegrationTest
 
   def setup
     @user = UserFactory.create
+    @invitor = UserFactory.create
     @game = GameFactory.create
+    @gid = @game.id
+    @aid = @game.areas.first.id
+    @sid = @game.servers.first.id
+    @rid = @game.races.first.id
+    @pid = @game.professions.first.id
   end
 
   test "login" do
     get "/login"
     assert_template "sessions/new"
 
-    post "/sessions", {:email => @user.email, :password => "#{@user.password}invalid"}
+    # 错误密码登录 
+    post "/sessions", {:email => @user.email, :password => "invalid"}
     assert_template "sessions/new"
+    assert_not_nil flash[:error]
 
-    post "/sessions", {:email => "invalid#{@user.email}", :password => @user.password}
+    # 错误用户名登录
+    post "/sessions", {:email => "invalid", :password => @user.password}
     assert_template "sessions/new"
+    assert_not_nil flash[:error]
 
+    # 正确用户名密码登录
     post "/sessions", {:email => @user.email, :password => @user.password}
     assert_redirected_to home_url
+    assert_equal session[:user_id], @user.id
+
+    # 如果用户还没激活
+    @user.activation_code = 'a'
+    @user.save
+    post "/sessions", {:email => @user.email, :password => @user.password}
+    assert_redirected_to activation_mail_sent_url(:email => @user.email)
+    assert session[:user_id].nil?
+    
+    #session[:user_id] = nil
+    #get '/home'
+    #assert_redirected_to login_url
   end
+
+=begin 
+  test "login and remember me" do
+    get "/login"
+    assert_template "sessions/new"
   
-  test "signup" do
-    get "/signup"
-    assert_template "users/new"
-
-    # first create an account
-    gid = @game.id
-    aid = @game.areas.first.id
-    sid = @game.servers.first.id
-    rid = @game.races.first.id
-    pid = @game.professions.first.id
-
-    assert_difference "User.count" do
-      post "/users", {:agree_contact => 1, :user => {:login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :gender => 'male', :password => '111111', :password_confirmation => '111111'}, :profile => {:new_characters => {"1" => {:race_id => rid, :profession_id => pid, :area_id => aid, :server_id => sid, :game_id => gid, :name => 'character1', :level => 11}}}}
-    end
-
-    user = User.find_by_email('gaoxh04@gmail.com')
-    assert !user.active?
-
-    # ask for resending activation email, repeatedly
-    assert_difference "Email.count" do
-      post "/resend_activation_mail", {:email => 'gaoxh04@gmail.com'}
-    end
-
-    assert_difference "Email.count" do
-      post "/resend_activation_mail", {:email => 'gaoxh04@gmail.com'}
-    end
-
-    # try to login
-    post "/sessions/create", {:email => 'gaoxh04@gmail.com', :password => '111111'}
-    assert_redirected_to activation_mail_sent_url(:email => 'gaoxh04@gmail.com', :show => 1)
-
-    # ask for resending
-    assert_difference "Email.count" do
-      post "/resend_activation_mail", {:email => 'gaoxh04@gmail.com'}
-    end
-
-    # activate with invalid code
-    post "/activate", {:activation_code => "invalid#{user.activation_code}"}
-    assert_redirected_to login_url
-    assert_not_nil flash[:error]
-    user.reload
-    assert !user.active?
-
-    post "/activate", {:activation_code => user.activation_code}
-    assert_redirected_to login_url
-    assert_not_nil flash[:notice]
-    user.reload
-    assert user.active?
-
-    # then login
-    post "/sessions/create", {:email => 'gaoxh04@gmail.com', :password => '111111'}
+    # 登录并记住我
+    post "/sessions", {:email => @user.email, :password => @user.password, :remember_me => 1}
     assert_redirected_to home_url
+    assert_equal session[:user_id], @user.id
+    assert_equal cookies[:auth_token], @user.remember_code
+    assert_equal cookies[:auth_token].expires_at, 2.weeks.from_now
+    
+    sleep 3  
+
+    # 这个是用来模拟已经结束了本次session
+    get "/home", {}
+    assert_template 'user/home/show'
+    assert_equal cookies[:auth_token].value, @user.remember_code
+    assert_equal cookies[:auth_token].expires_at, 2.weeks.from_now # 从当前开始再续2周
+    assert_equal session[:user_id], @user.id
+  end
+=end
+
+  test "logout" do
+    post "/sessions", {:email => @user.email, :password => @user.password}
+    assert_redirected_to home_url
+    #assert !cookies[:auth_token].nil?
+    assert !session[:user_id].nil?
+
+    # 登出
+    get '/logout'
+    assert_redirected_to login_url
+    #assert cookies[:auth_token].nil?
+    assert session[:user_id].nil?
   end
 
 end

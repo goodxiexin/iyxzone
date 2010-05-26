@@ -126,7 +126,9 @@ a:hover{color:#D63200;}
 .feed-message-box li{padding-left:22px;height:30px;line-height:30px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -73px;color:#000;overflow:hidden}
 .feed-message-box .feed-message{height:29px;line-height:29px;border-bottom:1px #E7F0E0 solid;overflow:hidden}
 .feed-message-box .feed-message a.icon-active{float:right;_display:inline-block;margin:10px 8px 0 0;}
-
+/*.feed-message-box .feed-message .time{float:right;margin-right:10px}
+.feed-message-box .feed-message .con{float:left;width:330px;overflow:hidden;}
+*/
 .feed-box{line-height:24px;word-spacing:5px;}
 .feed-box .tab{margin-bottom:20px;padding:0 16px;position:relative}
 
@@ -1146,9 +1148,9 @@ h1.app-share{float:left}
 /*装扮个人主页*/
 .theme-list h2{color:#d63200;font-weight:700;font-size:14px;border-bottom:1px solid #abd0a9;padding-bottom:10px}
 .theme-list ul{margin:10px 0}
-.theme-list ul li{float:left;margin:10px 35px 10px 25px;text-align:center;}
+.theme-list ul li{float:left;margin:10px 20px;_margin:10px 18px;text-align:center;}
 .theme-list ul li strong{color:#d63200;line-height:22px}
-.theme-list ul li img,.theme-preview li img{background:url(../images/skin/theme-list-bg.png) no-repeat right bottom;padding:5px}
+.theme-list ul li img,.theme-preview li img{background:url(../images/skin/theme-list-bg.png) no-repeat right bottom;padding:5px;}
 
 .theme-head{width:100%;background:#fff;padding-bottom:10px;border-top:5px solid #75bc20;border-bottom:1px solid #ccc;}
 .theme-head .wrap{width:950px;margin:0 auto;position:relative;}

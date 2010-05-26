@@ -10,16 +10,10 @@ class UserMailer < ActionMailer::Base
     body        :user => user, :hot_users => hot_users, :games => games, :photos => photos, :polls => polls, :news => news, :url => "#{SITE_URL}/home"
   end
 
-  def signup_notification user, token
-    setup_email	user
-    subject			"17Gaming(一起游戏网) - 激活您的帐号"
-		charset			"utf-8"
-		content_type	"text/html"
-    if token.blank?
-      body			:user => user, :url => "#{SITE_URL}/activate/#{user.activation_code}"
-    else
-      body      :user => user, :url => "#{SITE_URL}/activate/#{user.activation_code}?invite_token=#{token}"
-    end
+  def signup_notification user
+    setup_email	  user
+    subject			  "17Gaming(一起游戏网) - 激活您的帐号"
+    body			    :user => user, :url => "#{SITE_URL}/activate/#{user.activation_code}"
   end
 
   def signup_invitation invitation

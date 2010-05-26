@@ -4,7 +4,7 @@ class FriendshipObserver < ActiveRecord::Observer
 
 	def after_create friendship
 		if friendship.is_request? 
-			FriendshipMailer.deliver_request(friendship.user, friendship.friend) if friendship.friend.mail_setting.request_to_be_friend == 1
+			FriendshipMailer.deliver_request(friendship.user, friendship.friend) if friendship.friend.mail_setting.request_to_be_friend?
 			friendship.friend.raw_increment :friend_requests_count
 		elsif friendship.is_friend?
       friendship.user.raw_increment :friends_count      
