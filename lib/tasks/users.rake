@@ -8,12 +8,12 @@ namespace :users do
 
   desc "提示那些很久没上线的人"
   task :send_long_time_no_seen => :environment do 
-    users = User.find(:all, :conditions => ["last_seen_at <= ?", 1.week.ago.to_s(:db)])
+    users = User.find(:all, :conditions => ["last_seen_at <= ?", 1.year.ago.to_s(:db)])
     polls = Poll.hot.nonblocked.limit(3)
 		news = News.hot.limit(3)
 		photos = Photo.hot.limit(4)
 		hot_users = User.hot.limit(6)
-		games = Game.recent.limit(3)
+		games = Game.recent.limit(4)
     puts "send mail to #{users.map(&:id).join(',')}"
     users.each do |user|
       UserMailer.deliver_long_time_no_seen user, hot_users, games, photos, polls, news
@@ -25,6 +25,8 @@ namespace :users do
 		g = Game.find_by_name("魔兽世界")
 		characters = GameCharacter.find(:all, :conditions => {:game_id => g.id, :data => nil})
 		characters.each do |char|
+			puts char.server.name
+			puts char.name
 			enc_url = URI.escape('http://cn.wowarmory.com/character-sheet.xml?r='+char.server.name+'&n='+char.name)
       puts "verify game character #{char.name} .. #{enc_url}"
       passed = checking_info enc_url
@@ -48,6 +50,8 @@ namespace :users do
 			cArea = Iconv.iconv("gb2312", "utf8", char.server.name)
 			cArea = Iconv.iconv("big5", "gb2312", cArea.first)
 			cArea = Iconv.iconv("utf8", "big5", cArea.first)
+			puts cArea.first
+			puts char.name
 			enc_url = URI.escape('http://tw.wowarmory.com/character-sheet.xml?r='+cArea.first+'&cn='+char.name)
       puts "verify game character #{char.name} .. #{enc_url}"
       passed = checking_info enc_url

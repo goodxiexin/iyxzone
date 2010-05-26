@@ -12,29 +12,27 @@
           <div><img src="<%= SITE_URL%>/images/mails/new_func.png" width="275" height="43" alt="新功能" /></div>
         	<table border="0" cellspacing="5" cellpadding="0">
         	  <tr>
-                  <td><a href="#" style="color:#333;text-decoration:none;font-size:12px;width:260px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;display:block">05月18日 游戏库的显示更改</a></td>
-              </tr>
+              <td><%= td_header "05月18日 游戏库的显示更改" %></td>
+            </tr>
         	  <tr>
-                  <td><a href="#" style="color:#333;text-decoration:none;font-size:12px;width:260px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;display:block">05月19日  更改了日志的显示，并可插入视频</a></td>
-              </tr>
+							<td><%= td_header "05月19日  更改了日志的显示，并可以插入视频"%></td>
+            </tr>
         	  <tr>
-                  <td><a href="#" style="color:#333;text-decoration:none;font-size:12px;width:260px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;display:block">05月20日  DOTA视频解说海涛入入住</a></td>
-              </tr>
+							<td><%= td_header "05月20日  DOTA视频解说海涛入入住"%></td>
+            </tr>
         	  <tr>
-                  <td><a href="#" style="color:#333;text-decoration:none;font-size:12px;width:260px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;display:block">05月21日  修改了ie6下的一些错误</a></td>
-              </tr>
+							<td><%= td_header "05月24日 增加了5种皮肤"%></td>
+            </tr>
         	  <tr>
-                  <td>
-                  </td>
-              </tr>
+              <td></td>
+            </tr>
         	  <tr>
-                  <td>
-                  </td>
-              </tr>
+              <td></td>
+            </tr>
             </table>
         </td>
       	<td valign="top" style="padding-left:10px">
-              <div><img src="<%= SITE_URL %>/images/mails/new_user.png" width="275" height="43" alt="新用户" /></div>
+          <div><%= image_tag "/images/mails/new_user.png", :width => "275", :height => "43", :alt => "新用户" %></div>
         	<table border="0" cellspacing="5" cellpadding="0" align="center">
 							<% @hot_users.each_with_index do |hot_user, index|%>
 								<% if index%3 == 0 %>
@@ -42,9 +40,9 @@
 								<% end %>
                   <td class= "<%=index%>"align="center" width="33%">
 									<% if hot_user.avatar.blank? %>
-                    <a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><img src=<%= "#{SITE_URL}/images/default_medium.png" %> width="50" height="50" border="0" />
+                    <a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><%= image_tag "/images/default_medium.png", :width=>"50", :height=>"50", :border=>"0"%>
 									<% else %>
-										<a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><img src=<%= "#{SITE_URL}/#{hot_user.avatar.public_filename("medium")}" %> width="50" height="50" border="0" />
+										<a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><%= image_tag "#{hot_user.avatar.public_filename("medium")}", :width=>"50", :height=>"50", :border=>"0" %>
 									<% end %>
                     <div style="width:80px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;color:#333;font-size:12px"><%= hot_user.login%></div></a>
                   </td>
@@ -57,33 +55,29 @@
         </tr>
      </table>
 		 <% unless @games.empty? %>
-    <div><img src="<%=SITE_URL%>/images/mails/new_game.png" width="587" height="46" alt="新游戏" border="0" /></div>
+    <div><%= image_tag "/images/mails/new_game.png", :width=>"587", :height=>"46", :alt=>"新游戏", :border=>"0" %></div>
     <table width="100%" border="0" cellspacing="10" cellpadding="0">
       <tr>
 				<% @games.each do |game| %>
         <td align="center">
-					<% if File.exist? "#{SITE_URL}/images/gamepic/#{game_name}.gif" %>
-						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><img src="<%=SITE_URL%>/images/gamepic/<%=game_name%>.gif" alt="<%= game.name%>" style="border:1px solid #aaa;padding:4px" /></a>
+					<% if File.exist? "/images/gamepic/#{game.name}.gif" %>
+						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><%= image_tag "/images/gamepic/#{game.name}.gif", :alt=>"#{game.name}", :style=>"border:1px solid #aaa;padding:4px" %></a>
 					<% else %>
-						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><img src="<%=SITE_URL%>/images/gamepic/default.gif" alt="<%= game.name%>" style="border:1px solid #aaa;padding:4px" /></a>
+						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><%= image_tag "/images/gamepic/default.gif", :alt=>"#{game.name}", :style=>"border:1px solid #aaa;padding:4px" %></a>
 					<% end %>
 					<br/>
-          <a href="<%=SITE_URL%>/games/<%= game.id%>" style="line-height:24px;font-size:14px;color:#db5903;font-weight:700;text-decoration:none" target='_blank'><%= game.login%></a>
+          <%= link_to "#{game.name}", "games/#{game.id}", :style=>"line-height:24px;font-size:14px;color:#db5903;font-weight:700;text-decoration:none"%>
         </td>
 				<% end %>
 			</tr>
      </table>        
 		 <% end %>
-    <div><img src="<%= SITE_URL %>/images/mails/new_pic.png" width="587" height="46" alt="热门图片" border="0" /></div>
+    <div><%= image_tag "/images/mails/new_pic.png", :width=>"587", :height=>"46", :alt=>"热门图片", :border=>"0" %></div>
     <table width="100%" border="0" cellspacing="10" cellpadding="0">
       <tr>
 				<% @photos.each do |photo| %>
         <td align="center" valign="bottom">
-					<% if photo.class.name == 'PersonalPhoto' %>
-						<img src="<%=SITE_URL%>/personal_photos/<%= photo.id%>" alt="" style="border:1px solid #aaa;padding:4px" />
-					<% else %>
-						<img src="<%=SITE_URL%>/avatars/<%= photo.id%>" alt="" style="border:1px solid #aaa;padding:4px" />
-					<% end %>
+					<%= image_tag "#{photo.public_filename('large')}", :alt=>"", :style=>"border:1px solid #aaa;padding:4px" %>
         </td>
 				<% end %>
 			</tr>
@@ -91,21 +85,21 @@
      <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
       	<td valign="top">
-              <div><img src="<%=SITE_URL%>/images/mails/new_poll.png" width="276" height="43" alt="热门投票" /></div>
+          <div><%=image_tag "/images/mails/new_poll.png", :width=>"276", :height=>"43", :alt=>"热门投票" %></div>
         	<table border="0" cellspacing="5" cellpadding="0">
 					<% @polls.each do |poll| %>
         	  <tr>
-                  <td><a href="<%=SITE_URL%>/polls/<%=poll.id%>" style="color:#333;text-decoration:none;font-size:12px;display:block;width:260px;height:20px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;" target='_blank'><img src="<%=SITE_URL%>/images/mails/icon01.png" width="17" height="18" border="0" align="absmiddle" hspace="5" /><%= poll.name %></a></td>
+                <td><a href="<%=SITE_URL%>/polls/<%=poll.id%>" style="color:#333;text-decoration:none;font-size:12px;display:block;width:260px;height:20px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;" target='_blank'><%=image_tag "/images/mails/icon01.png", :width=>"17", :height=>"18", :border=>"0", :align=>"absmiddle", :hspace=>"5" %><%= poll.name %></a></td>
               </tr>
 						<% end %>
             </table>
         </td>
       	<td valign="top" style="padding-left:10px">
-              <div><img src="<%=SITE_URL%>/images/mails/new_article.png" width="276" height="43" alt="最热新闻" /></div>
+              <div><%= image_tag "/images/mails/new_article.png", :width=>"276", :height=>"43", :alt=>"最热新闻" %></div>
         	<table border="0" cellspacing="5" cellpadding="0">
 					<% @news.each do |onenews| %>
         	  <tr>
-                  <td><a href="<%=SITE_URL%>/news/<%=onenews.id%>" style="color:#333;text-decoration:none;font-size:12px;display:block;width:260px;height:20px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;" target='_blank'><img src="<%=SITE_URL%>/images/mails/icon02.png" width="17" height="18" border="0" align="absmiddle" hspace="5" /><%=onenews.title%></a></td>
+                  <td><a href="<%=SITE_URL%>/news/<%=onenews.id%>" style="color:#333;text-decoration:none;font-size:12px;display:block;width:260px;height:20px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;" target='_blank'><%=image_tag "/images/mails/icon02.png", :width=>"17", :height=>"18", :border=>"0", :align=>"absmiddle", :hspace=>"5" %><%=onenews.title%></a></td>
               </tr>
 						<% end %>
            	</table>
