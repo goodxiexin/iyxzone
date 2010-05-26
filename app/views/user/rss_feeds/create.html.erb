@@ -1,0 +1,8 @@
+<% form_tag new_rss_feed_path, :method => :get do %>
+<% @rss.items.each_with_index do |item, i| %>
+  <%= check_box_tag  "item[]", i %>
+  <%= label_tag item.title %>
+<% end %>
+<%= submit_tag "加入我的日志" %>
+<% end %>
+

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100524093256) do
+ActiveRecord::Schema.define(:version => 20100525065805) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -662,6 +662,14 @@ ActiveRecord::Schema.define(:version => 20100524093256) do
 
   create_table "roles", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "rss_feeds", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "link"
+    t.datetime "last_update"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "shares", :force => true do |t|
