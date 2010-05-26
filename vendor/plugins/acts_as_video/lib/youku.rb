@@ -1,11 +1,8 @@
 class Youku
 	
-	# http://v.youku.com/v_show/id_XMTUzMzE4OTAw.html	
-	# 
-	YOUKU_SINGLE	= /http:\/\/v\.youku\.com\/v_show\/id_[\w]*\=?\.htm[l]?/
-	# http://v.youku.com/v_playlist/f3921377o1p0.html 
-	# <embed src="http://player.youku.com/player.php/Type/Folder/Fid/3921377/Ob/1/Pt/0/sid/XMTQyNzQ3MzY=/v.swf" quality="high" width="480" height="400" align="middle" allowScriptAccess="allways" mode="transparent" type="application/x-shockwave-flash"></embed>
-	YOUKU_ALBUM		= /http:\/\/v\.youku\.com\/v_playlist\/[\w]*\.htm[l]?/
+	YOUKU_SINGLE	= /http:\/\/v\.youku\.com\/v_show\/id_([\w]*)\=?\.htm[l]?/
+	
+  YOUKU_ALBUM		= /http:\/\/v\.youku\.com\/v_playlist\/f(.*)o([0-9]+)p([0-9]+)\.htm[l]?/
 
 	include HTTParty
 
@@ -13,18 +10,22 @@ class Youku
 
 	base_uri 'v.youku.com/player/getPlayList'
 
-	def self.identify_url(videourl)
-		puts YOUKU_SINGLE
-		if YOUKU_SINGLE.match(videourl)
+	def self.identify_url video_url
+		if YOUKU_SINGLE.match(video_url)
 			return true
-		end
+		elsif YOUKU_ALBUM.match(video_url)
+      return true
+    end
 	end
 
 	
 	def initialize(obj)
-		@video_id = obj.video_url.split('id_').last.split('.').first
-		@embed_url = "http://player.youku.com/player.php/sid/"+ @video_id +"/v.swf"
-		@response  = self.class.get("/VideoIDS/#{@video_id}")
+    if YOUKU_SINGLE.match obj.video_url
+      @embed_url = "http://player.youku.com/player.php/sid/#{$1}/v.swf"
+      @response  = self.class.get("/VideoIDS/#{$1}")
+    elsif YOUKU_ALBUM.match obj.video_url
+      @embed_url = "http://www.youku.com/player.php/Type/Folder/Fid/#{$1}/Ob/#{$2}/Pt/#{$3}"
+    end
 	end
 
 	def thumbnail_url

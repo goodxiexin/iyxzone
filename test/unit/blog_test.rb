@@ -125,6 +125,10 @@ class BlogTest < ActiveSupport::TestCase
     @blog.reload
     assert_equal @blog.tags_count, 2
     assert_equal @blog.relative_users, [@friend3, @friend4] 
+    
+    assert_no_difference "FriendTag.count" do
+      @blog.update_attributes(:new_friend_tags => [@stranger.id, @same_game_user.id])
+    end
   end 
 
   #
