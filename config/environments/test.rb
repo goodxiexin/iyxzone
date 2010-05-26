@@ -2,6 +2,8 @@
 SITE_URL = "http://localhost:3000"
 SITE_MAIL = "gaoxh04@gmail.com"
 
+REMEMBER_DURATION = 2.weeks 
+
 # The test environment is used exclusively to run your application's
 # test suite.  You never need to work with it otherwise.  Remember that
 # your test database is "scratch space" for the test suite and is wiped

@@ -12,8 +12,14 @@ class UsersController < ApplicationController
     @user.email = @email.downcase
     @user.invitee_code = params[:invite_token] # 谁邀请来的
 
-    if @user.save && @user.profile.update_attributes(params[:profile]) # TODO
-      redirect_js "/activation_mail_sent?email=#{@email}"
+    if @user.save
+      @user.profile.update_attributes(params[:profile])
+      if @user.characters.count == 0
+        @user.destroy
+        render_js_error "没有游戏角色"
+      else
+        redirect_js "/activation_mail_sent?email=#{@email}"
+      end
     else
       render_js_error
     end

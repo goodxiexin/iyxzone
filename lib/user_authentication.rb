@@ -49,7 +49,8 @@ module UserAuthentication
   
     # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
     def authenticate(email, password)
-      u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
+      u = find :first, :conditions => ['email = ?', email]
+      #u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
       u && u.authenticated?(password) ? u : nil
     end
 
