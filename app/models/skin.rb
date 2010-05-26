@@ -7,7 +7,6 @@ class Skin < ActiveRecord::Base
 
   serialize :access_list, Array
 
-  named_scope :for_all 
   def default?
     name == '默认'
   end

@@ -37,7 +37,7 @@ class User::Profiles::SkinsController < UserBaseController
   end
 
   def index
-    @skins = current_user.profile.accessible_skins.paginate :page => params[:page], :per_page => 8
+    @skins = current_user.profile.accessible_skins.paginate :page => params[:page], :per_page => 9
     render :layout => 'app'
   end
 
