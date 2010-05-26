@@ -62,7 +62,7 @@
       <tr>
 				<% @games.each do |game| %>
         <td align="center">
-					<% if File.exist? "#{SITE_URL}/images/gamepic/#{game_name}.gif" %>
+					<% if File.exist? "images/gamepic/#{game_name}.gif" %>
 						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><img src="<%=SITE_URL%>/images/gamepic/<%=game_name%>.gif" alt="<%= game.name%>" style="border:1px solid #aaa;padding:4px" /></a>
 					<% else %>
 						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><img src="<%=SITE_URL%>/images/gamepic/default.gif" alt="<%= game.name%>" style="border:1px solid #aaa;padding:4px" /></a>

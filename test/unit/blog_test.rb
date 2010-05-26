@@ -277,128 +277,42 @@ class BlogTest < ActiveSupport::TestCase
   # test share case
   #
   test "case8" do
-    t = 'share title'
-    r = 'share reason'
+    @blog = BlogFactory.create
+
+    type, id = Share.get_type_and_id "/blogs/#{@blog.id}"
+
+    assert_equal type, 'Blog'
+    assert_equal id.to_i, @blog.id
 
     @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
-    
-    assert @blog1.share_by(@user, t, r)
-    @blog1.reload
-    assert_equal @blog1.sharings_count, 1
-    assert !@blog1.share_by(@user, t, r)
-    @blog1.reload
-    assert_equal @blog1.sharings_count, 1
-    
-    assert @blog1.share_by(@friend1, t, r)
-    @blog1.reload
-    assert_equal @blog1.sharings_count, 2
-    assert !@blog1.share_by(@friend1, t, r)
-    @blog1.reload
-    assert_equal @blog1.sharings_count, 2
-    
-    assert @blog1.share_by(@same_game_user, t, r)
-    @blog1.reload
-    assert_equal @blog1.sharings_count, 3
-    assert !@blog1.share_by(@same_game_user, t, r)
-    @blog1.reload
-    assert_equal @blog1.sharings_count, 3
-    
-    assert @blog1.share_by(@stranger, t, r)
-    @blog1.reload
-    assert_equal @blog1.sharings_count, 4
-    assert !@blog1.share_by(@stranger, t, r)
-    @blog1.reload
-    assert_equal @blog1.sharings_count, 4
+    assert @blog1.is_shareable_by?(@user)
+    assert @blog1.is_shareable_by?(@friend1)
+    assert @blog1.is_shareable_by?(@same_game_user)
+    assert @blog1.is_shareable_by?(@stranger)
 
     @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
-    
-    assert @blog2.share_by(@user, t, r)
-    @blog2.reload
-    assert_equal @blog2.sharings_count, 1
-    assert !@blog2.share_by(@user, t, r)
-    @blog2.reload
-    assert_equal @blog2.sharings_count, 1
+    assert @blog2.is_shareable_by?(@user)
+    assert @blog2.is_shareable_by?(@friend1)
+    assert @blog2.is_shareable_by?(@same_game_user)
+    assert !@blog2.is_shareable_by?(@stranger)    
 
-    assert @blog2.share_by(@friend1, t, r)
-    @blog2.reload
-    assert_equal @blog2.sharings_count, 2
-    assert !@blog2.share_by(@friend1, t, r)
-    @blog2.reload
-    assert_equal @blog2.sharings_count, 2
-
-    assert @blog2.share_by(@same_game_user, t, r)
-    @blog2.reload
-    assert_equal @blog2.sharings_count, 3
-    assert !@blog2.share_by(@same_game_user, t, r)
-    @blog2.reload
-    assert_equal @blog2.sharings_count, 3
-
-    assert !@blog2.share_by(@stranger, t, r)
-    @blog2.reload
-    assert_equal @blog2.sharings_count, 3
-  
     @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
-    
-    assert @blog3.share_by(@user, t, r)
-    @blog3.reload
-    assert_equal @blog3.sharings_count, 1
-    assert !@blog3.share_by(@user, t, r)
-    @blog3.reload
-    assert_equal @blog3.sharings_count, 1
-
-    assert @blog3.share_by(@friend1, t, r)
-    @blog3.reload
-    assert_equal @blog3.sharings_count, 2
-    assert !@blog3.share_by(@friend1, t, r)
-    @blog3.reload
-    assert_equal @blog3.sharings_count, 2
-
-    assert !@blog3.share_by(@same_game_user, t, r)
-    @blog3.reload
-    assert_equal @blog3.sharings_count, 2
-
-    assert !@blog3.share_by(@stranger, t, r)
-    @blog3.reload
-    assert_equal @blog3.sharings_count, 2
+    assert @blog3.is_shareable_by?(@user)
+    assert @blog3.is_shareable_by?(@friend1)
+    assert !@blog3.is_shareable_by?(@same_game_user)
+    assert !@blog3.is_shareable_by?(@stranger)    
 
     @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
-    
-    assert @blog4.share_by(@user, t, r)
-    @blog4.reload
-    assert_equal @blog4.sharings_count, 1
-    assert !@blog4.share_by(@user, t, r)
-    @blog4.reload
-    assert_equal @blog4.sharings_count, 1
+    assert @blog4.is_shareable_by?(@user)
+    assert !@blog4.is_shareable_by?(@friend1)
+    assert !@blog4.is_shareable_by?(@same_game_user)
+    assert !@blog4.is_shareable_by?(@stranger)    
 
-    assert !@blog4.share_by(@friend1, t, r)
-    @blog4.reload
-    assert_equal @blog4.sharings_count, 1
-
-    assert !@blog4.share_by(@same_game_user, t, r)
-    @blog4.reload
-    assert_equal @blog4.sharings_count, 1
-
-    assert !@blog4.share_by(@stranger, t, r)
-    @blog4.reload
-    assert_equal @blog4.sharings_count, 1
-
-    @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
-    
-    assert !@draft.share_by(@user, t, r)
-    @draft.reload
-    assert_equal @draft.sharings_count, 0
-
-    assert !@draft.share_by(@friend1, t, r)
-    @draft.reload
-    assert_equal @draft.sharings_count, 0
-
-    assert !@draft.share_by(@same_game_user, t, r)
-    @draft.reload
-    assert_equal @draft.sharings_count, 0
-
-    assert !@draft.share_by(@stranger, t, r)
-    @draft.reload
-    assert_equal @draft.sharings_count, 0
+    @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
+    assert !@draft.is_shareable_by?(@user)
+    assert !@draft.is_shareable_by?(@friend)
+    assert !@draft.is_shareable_by?(@same_game_user)
+    assert !@draft.is_shareable_by?(@stranger)       
   end
   
   #
@@ -412,63 +326,63 @@ class BlogTest < ActiveSupport::TestCase
     assert @blog.is_commentable_by?(@user)
     assert @blog.is_commentable_by?(@friend1)
     assert @blog.is_commentable_by?(@same_game_user)
-    assert @blog.is_commentable_by?(@owner)
+    assert @blog.is_commentable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
-    @comment = @blog.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    @comment = @blog.comments.create :poster_id => @friend1.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert @comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert @comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @stranger.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
-    assert @comment.is_deleteable_by?(@owner)
+    assert @comment.is_deleteable_by?(@stranger)
 
     @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
 
     assert @blog.is_commentable_by?(@user)
     assert @blog.is_commentable_by?(@friend1)
     assert @blog.is_commentable_by?(@same_game_user)
-    assert !@blog.is_commentable_by?(@owner)
+    assert !@blog.is_commentable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
-    @comment = @blog.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    @comment = @blog.comments.create :poster_id => @friend1.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert @comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert @comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @stranger.id, :recipient_id => @user.id, :content => 'a'
     assert @comment.id.nil?
@@ -478,21 +392,21 @@ class BlogTest < ActiveSupport::TestCase
     assert @blog.is_commentable_by?(@user)
     assert @blog.is_commentable_by?(@friend1)
     assert !@blog.is_commentable_by?(@same_game_user)
-    assert !@blog.is_commentable_by?(@owner)
+    assert !@blog.is_commentable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
-    @comment = @blog.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    @comment = @blog.comments.create :poster_id => @friend1.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert @comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
     assert @comment.id.nil?
@@ -503,18 +417,18 @@ class BlogTest < ActiveSupport::TestCase
     @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
 
     assert @blog.is_commentable_by?(@user)
-    assert @blog.is_commentable_by?(@friend1)
+    assert !@blog.is_commentable_by?(@friend1)
     assert !@blog.is_commentable_by?(@same_game_user)
-    assert !@blog.is_commentable_by?(@owner)
+    assert !@blog.is_commentable_by?(@stranger)
 
     @comment = @blog.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@owner)
+    assert !@comment.is_deleteable_by?(@stranger)
 
-    @comment = @blog.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    @comment = @blog.comments.create :poster_id => @friend1.id, :recipient_id => @user.id, :content => 'a'
     assert @comment.id.nil?
 
     @comment = @blog.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'

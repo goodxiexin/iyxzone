@@ -8,6 +8,6 @@
       <%= profile_link comment.poster %> <span><%= ftime comment.created_at %> -</span> 
       <%= link_to_function '回复', "Iyxzone.Comment.showForm('#{comment.commentable.class.name.underscore}', #{comment.commentable_id}, '#{comment.poster.login}', #{comment.poster_id})" %>
     </p>
-    <%= simple_format comment.content %>
+    <%= comment.content %>
   </div>
 </div>

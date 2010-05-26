@@ -47,7 +47,7 @@ class User::GamesController < UserBaseController
   end
 
   def interested
-    @games = current_user.interested_games.paginate :page => params[:page], :per_page => PER_PAGE
+    @games = @user.interested_games.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def show
