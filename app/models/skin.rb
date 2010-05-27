@@ -8,7 +8,7 @@ class Skin < ActiveRecord::Base
   serialize :access_list, Array
 
   def default?
-    name == 'default'
+    name == '默认'
   end
 
   def is_public?

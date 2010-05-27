@@ -8,7 +8,7 @@
       <div class="box-v2 space20">
         <div class="t s_clear"><strong class="get-pws"></strong><span></span></div>
           <div class="m rows">
-            <% form_tag url_for(:controller => 'passwords', :action => 'update'), :method => :put, :onsubmit => "Iyxzone.Password.reset($('submit_btn'), this); return false;" do |f| -%>
+            <% form_tag url_for(:controller => 'passwords', :action => 'update'), :method => :put, :onsubmit => "Iyxzone.Password.reset($('submit_btn'), this); return false;" do %>
               <%= hidden_field_tag 'password_reset_code', params[:password_reset_code] %>
               <div class="form-con" style="padding-left:40px">
                     <div class="rows s_clear">

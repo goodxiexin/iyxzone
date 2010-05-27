@@ -1,7 +1,3 @@
-#
-# 其实就是把一群大便代码日到这里，让user减肥下
-# 这一群代码是关于注册／激活／密码／校验的
-#
 module UserAuthentication
 
   def self.included(recipient)
@@ -37,7 +33,15 @@ module UserAuthentication
 
       validates_format_of :email, :with => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, :message => "邮件格式不对"
 
-      validate_on_create :email_is_unique
+      validates_uniqueness_of :email, :message => "邮件已经被注册了"
+
+      validates_presence_of :password, :message => "不能为空", :if => :require_password?
+
+      validates_size_of :password, :within => 6..20, :too_long => "最长20个字符", :too_short => "最短6个字符", :if => :require_password?
+
+      validates_presence_of :password_confirmation, :message => "没有确认密码", :if => :require_password?
+
+      validates_confirmation_of :password, :message => "2次密码不一致", :if => :require_password?
 
     end
 
@@ -47,14 +51,11 @@ module UserAuthentication
 
   module ClassMethods
   
-    # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
     def authenticate(email, password)
       u = find :first, :conditions => ['email = ?', email]
-      #u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email]
       u && u.authenticated?(password) ? u : nil
     end
 
-    # Encrypts some data with the salt.
     def encrypt(password, salt)
       Digest::SHA1.hexdigest("--#{salt}--#{password}--")
     end
@@ -64,16 +65,14 @@ module UserAuthentication
 
   module InstanceMethods
 
-    # Activates the user in the database.
     def activate
-      @activated = true
+      @action = :activated
       self.activated_at = Time.now.utc
       self.activation_code = nil
       save(false)
     end
 
     def active?
-      # the existence of an activation code means they have not activated yet
       activation_code.nil?
     end
 
@@ -82,38 +81,48 @@ module UserAuthentication
     end
     
     def forgot_password
-      @forgotten_password = true
+      @action = :forgotten_password
       self.make_password_reset_code
+      self.save
     end
 
-    def reset_password
-      update_attribute(:password_reset_code, nil)
-      @reset_password = true
+    def reset_password password, password_confirmation
+      self.password = password
+      self.password_confirmation = password_confirmation
+      @action = :changing_password
+      if self.save
+        #@changing_password = false
+        @action = :reset_password
+        self.password_reset_code = nil
+        self.save
+      else
+        #@changing_password = false
+        false
+      end
+    end
+
+    def require_password?
+      crypted_password.blank? || recently_changing_password?
     end
 
     def has_role?(name)
       self.roles.find_by_name(name) ? true : false
     end
 
-    # Returns true if the user has just been activated.
+    def recently_changing_password?
+      @action == :changing_password
+    end
+
     def recently_activated?
-      @activated
+      @action == :activated
     end
 
     def recently_forgot_password?
-      @forgotten_password
+      @action == :forgotten_password
     end
 
     def recently_reset_password?
-      @reset_password
-    end
-
-    def invitation_token
-      invitation.token if invitation
-    end
-
-    def invitation_token=(token)
-      self.invitation = BetaInvitation.find_by_token(token)
+      @action == :reset_password
     end
 
     # Encrypts the password with the user salt
@@ -122,7 +131,7 @@ module UserAuthentication
     end
 
 protected
-  
+
     def encrypt_password
       return if password.blank?
       self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
@@ -151,13 +160,6 @@ protected
 
     def make_msn_invite_code
       self.msn_invite_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-    end
-
-    def email_is_unique
-      return if email.blank?
-      if !User.find_by_email(email.downcase).blank?
-        errors.add(:email, "邮件已经被注册了")
-      end
     end
 
   end

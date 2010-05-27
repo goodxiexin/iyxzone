@@ -1,128 +1,184 @@
-# == Schema Information
-#
-# Table name: users
-#
-#  id                        :integer(4)      not null, primary key
-#  login                     :string(255)
-#  email                     :string(255)
-#  crypted_password          :string(40)
-#  salt                      :string(40)
-#  remember_token            :string(255)
-#  remember_token_expires_at :datetime
-#  activation_code           :string(255)
-#  activated_at              :datetime
-#  password_reset_code       :string(255)
-#  enabled                   :boolean(1)
-#  created_at                :datetime
-#  updated_at                :datetime
-#
+require 'test_helper'
 
-require File.dirname(__FILE__) + '/../test_helper'
+class UserTest < ActiveSupport::TestCase
 
-class UserTest < Test::Unit::TestCase
-  # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead.
-  # Then, you can remove it from this and the functional test.
-  include AuthenticatedTestHelper
-  fixtures :users
-
-  def test_should_create_user
-    assert_difference 'User.count' do
-      user = create_user
-      assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
+  test "简单的创建用户" do
+    assert_difference "Email.count" do
+      create_user :login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
     end
-  end
 
-  def test_should_initialize_activation_code_upon_creation
-    user = create_user
-    user.reload
+    user = User.last
+    assert_not_nil user
+    assert user.authenticated?('111111')
+    assert_not_nil user.invite_code
+    assert_not_nil user.qq_invite_code
+    assert_not_nil user.msn_invite_code
+    assert_not_nil user.remember_code
     assert_not_nil user.activation_code
   end
 
-  def test_should_require_login
-    assert_no_difference 'User.count' do
-      u = create_user(:login => nil)
-      assert u.errors.on(:login)
+  test "各类参数创建用户" do
+    create_user :login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+
+    # 非法的邮箱无法创建
+    user = create_user :login => 'gaoxh04', :email => 'gaoxh04', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:email)
+
+    # 相同邮箱的无法再创建
+    user = create_user :login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:email)
+
+    # 非法的用户名无法创建
+    user = create_user :login => '', :email => 'gaoxh05@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:login)
+    user = create_user :login => '1', :email => 'gaoxh05@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:login)
+    user = create_user :login => '1' * 1000, :email => 'gaoxh05@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:login)
+
+    # 没有性别无法创建
+    user = create_user :login => '1', :email => 'gaoxh06@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => ''
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:gender)
+    user = create_user :login => '1', :email => 'gaoxh06@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'gmail'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:gender)
+
+    # 密码不对不能创建
+    user = create_user :login => '1', :email => 'gaoxh07@gmail.com', :password => '', :password_confirmation => '', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:password)
+    user = create_user :login => '1', :email => 'gaoxh07@gmail.com', :password => 'a', :password_confirmation => 'a', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:password)
+    user = create_user :login => '1', :email => 'gaoxh07@gmail.com', :password => 'abcdef', :password_confirmation => '', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:password_confirmation)
+    user = create_user :login => '1', :email => 'gaoxh07@gmail.com', :password => '111111', :password_confirmation => '222222', :gender => 'male'
+    assert user.id.nil?
+    assert_not_nil user.errors.on(:password)
+  end
+
+  test "测试激活码" do
+    user = create_user :login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+
+    # 激活码生成了
+    assert_not_nil user.activation_code
+    assert !user.active?
+
+    # 激活
+    assert_difference "Email.count" do
+      user.activate
     end
+
+    # 激活码没了
+    user.reload
+    assert_nil user.activation_code
+    assert user.active?
   end
 
-  def test_should_require_password
-    assert_no_difference 'User.count' do
-      u = create_user(:password => nil)
-      assert u.errors.on(:password)
+  test "别人邀请然后你注册激活" do
+    invitor = create_user :login => 'gaoxh', :email => 'gaoxh@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+
+    # 万能邀请邀请来的
+    user = create_user :login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    user.invitee_code = invitor.invite_code
+    user.save
+    user.activate
+    user.reload and invitor.reload
+    assert user.has_friend?(invitor)
+    assert invitor.has_friend?(user)
+
+    # qq邀请来的
+    user = create_user :login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    user.invitee_code = invitor.invite_code
+    user.save
+    user.activate
+    user.reload and invitor.reload
+    assert user.has_friend?(invitor)
+    assert invitor.has_friend?(user)
+
+    # msn邀请来的
+    user = create_user :login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    user.invitee_code = invitor.invite_code
+    user.save
+    user.activate
+    user.reload and invitor.reload
+    assert user.has_friend?(invitor)
+    assert invitor.has_friend?(user)
+  end
+
+  test "测试忘记密码" do
+    user = create_user :login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :password => '111111', :password_confirmation => '111111', :gender => 'male'
+    assert_nil user.password_reset_code
+
+    user.activate
+    user.reload
+    assert_nil user.activation_code
+    assert user.active?
+
+    # 忘记密码了？
+    assert_difference "Email.count" do
+      user.forgot_password
     end
-  end
 
-  def test_should_require_password_confirmation
-    assert_no_difference 'User.count' do
-      u = create_user(:password_confirmation => nil)
-      assert u.errors.on(:password_confirmation)
+    # 修改密码
+    # 如果新密码有问题，不会创建，而且没有邮件
+    assert_no_difference "Email.count" do
+      user.reset_password '', ''
     end
-  end
 
-  def test_should_require_email
-    assert_no_difference 'User.count' do
-      u = create_user(:email => nil)
-      assert u.errors.on(:email)
+    user.reload
+    assert_not_nil user.password_reset_code
+    assert user.authenticated?('111111')
+
+    assert_no_difference "Email.count" do
+      user.reset_password 'aa', 'aa'
     end
-  end
 
-  def test_should_reset_password
-    users(:quentin).update_attributes(:password => 'new password', :password_confirmation => 'new password')
-    assert_equal users(:quentin), User.authenticate('quentin', 'new password')
-  end
+    user.reload
+    assert_not_nil user.password_reset_code
+    assert user.authenticated?('111111')
 
-  def test_should_not_rehash_password
-    users(:quentin).update_attributes(:login => 'quentin2')
-    assert_equal users(:quentin), User.authenticate('quentin2', 'test')
-  end
+    assert_no_difference "Email.count" do
+      user.reset_password 'abcdefg', ''
+    end
 
-  def test_should_authenticate_user
-    assert_equal users(:quentin), User.authenticate('quentin', 'test')
-  end
+    user.reload
+    assert_not_nil user.password_reset_code
+    assert user.authenticated?('111111')
 
-  def test_should_set_remember_token
-    users(:quentin).remember_me
-    assert_not_nil users(:quentin).remember_token
-    assert_not_nil users(:quentin).remember_token_expires_at
-  end
+    assert_no_difference "Email.count" do
+      user.reset_password 'abcdefg', 'gfedcba'
+    end
 
-  def test_should_unset_remember_token
-    users(:quentin).remember_me
-    assert_not_nil users(:quentin).remember_token
-    users(:quentin).forget_me
-    assert_nil users(:quentin).remember_token
-  end
+    user.reload
+    assert_not_nil user.password_reset_code
+    assert user.authenticated?('111111')
+    
+    # 最后正确的修改密码
+    assert_difference "Email.count" do
+      user.reset_password '20041065', '20041065'
+    end
 
-  def test_should_remember_me_for_one_week
-    before = 1.week.from_now.utc
-    users(:quentin).remember_me_for 1.week
-    after = 1.week.from_now.utc
-    assert_not_nil users(:quentin).remember_token
-    assert_not_nil users(:quentin).remember_token_expires_at
-    assert users(:quentin).remember_token_expires_at.between?(before, after)
-  end
-
-  def test_should_remember_me_until_one_week
-    time = 1.week.from_now.utc
-    users(:quentin).remember_me_until time
-    assert_not_nil users(:quentin).remember_token
-    assert_not_nil users(:quentin).remember_token_expires_at
-    assert_equal users(:quentin).remember_token_expires_at, time
-  end
-
-  def test_should_remember_me_default_two_weeks
-    before = 2.weeks.from_now.utc
-    users(:quentin).remember_me
-    after = 2.weeks.from_now.utc
-    assert_not_nil users(:quentin).remember_token
-    assert_not_nil users(:quentin).remember_token_expires_at
-    assert users(:quentin).remember_token_expires_at.between?(before, after)
+    user.reload
+    assert_nil user.password_reset_code
+    assert user.authenticated?('20041065')
   end
 
 protected
-  def create_user(options = {})
-    record = User.new({ :login => 'quire', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
-    record.save
-    record
+
+  def create_user opts
+    email = opts.delete(:email)
+    user = User.new(opts)
+    user.email = email
+    user.save
+    user
   end
+
 end

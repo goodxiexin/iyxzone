@@ -2,6 +2,9 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  has_one :rss_feed
+
+
   has_many :user_tasks
   
   has_one :subdomain
@@ -70,6 +73,9 @@ class User < ActiveRecord::Base
 	has_many :notifications, :order => 'created_at DESC', :dependent => :destroy
 
 	has_many :notices, :order => 'created_at DESC', :dependent => :destroy # comment, tag notices
+
+
+  validates_associated :rss_feed
 
   # this method is only used for test
   def recv_notice? producer
