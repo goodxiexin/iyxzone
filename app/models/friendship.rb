@@ -26,23 +26,21 @@ class Friendship < ActiveRecord::Base
   end
 
   def reverse
-    Friendship.find(:first, :conditions => {:user_id => friend_id, :friend_id => user_id, :status => status})
+    Friendship.match(:user_id => friend_id, :friend_id => user_id, :status => status).first
   end
 
-  attr_accessor :recently_accepted
+  def recently_declined?
+    @action == :recently_declined
+  end
 
-  attr_accessor :recently_declined
-
-  attr_accessor :recently_destroyed
+  def recently_cancelled?
+    @action == :recently_cancelled
+  end
 
   def accept
     if status == Request
-      self.recently_accepted = true
-      # 检查我是否也有加他为好友的请求, 有就删除
-      reverse_request = self.reverse
-      if reverse_request
-        reverse_request.destroy
-      end
+      reverse_request = self.reverse # 是否双方都发送了请求
+      reverse_request.destroy if reverse_request
       self.update_attributes(:status => Friend)
       Friendship.create(:user_id => friend_id, :friend_id => user_id, :status => Friend)
     end
@@ -50,19 +48,18 @@ class Friendship < ActiveRecord::Base
 
   def decline
     if status == Request
-      self.recently_declined = true
+      # 拒绝请求也是删除，但是这个删除要和一般的删除（比如accept里的）区分开来
+      @action = :recently_declined
       self.destroy
     end
   end
 
   def cancel
     if status == Friend
-      self.recently_destroyed = true
+      @action = :recently_cancelled
       self.destroy
       reverse_friendship = self.reverse
-      if reverse_friendship
-        reverse_friendship.destroy
-      end
+      reverse_friendship.destroy if reverse_friendship
     end
   end
 
