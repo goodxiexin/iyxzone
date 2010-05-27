@@ -51,6 +51,14 @@ module ApplicationHelper
     link_to user.login, profile_url(user.profile), opts
   end
 
+	def tag_format_name (tag_name, css_class)
+		unless tag_name.gsub(/[^\Wa-zA-Z_\d]/, ' ').length >11
+			"<span class='#{css_class}'>#{ tag_name }</span>"
+		else
+			"<span class='#{css_class} tagWrap'>#{tag_name }</span>"
+		end
+	end
+
   def validation_image
     "<img src='/application/new_validation_image' onclick='alert(\"begin\");this.src=\"/application/new_validation_image\";alert(\"done\");' />"
   end
