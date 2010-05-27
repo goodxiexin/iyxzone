@@ -790,6 +790,12 @@ a.impress-6,a.i-s-6{color:#c37e32;}
 a.impress-7,a.i-s-7{color:#4b9dbc;}
 a.impress-8,a.i-s-8{color:#e06c34;}
 
+.impress-show a,.impress-show a:hover{font-weight:700;height:28px;line-height:27px;float:left;display:block;padding:0 5px;text-align:center;word-break:keep-all;white-space:nowrap}
+.impress-show a:hover{background:url(../images/skin/btn2010.png) repeat-x 0 0;}
+.impress-show a b.icon2-close{background-position:0 -752px;visibility:hidden;display:inline-block;margin:-1px 0 0 0;_margin:5px 0 0 0;}
+.impress-show a:hover b.icon2-close{visibility:visible;background-color:transparent;cursor:pointer}
+.tagWrap{width:170px;_width:163px;display:inline-block;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;vertical-align:middle}/*12个中文字截断*/
+
 a.impress-0{font-size:14px}
 a.impress-1{font-size:12px}
 a.impress-2{font-size:14px}
@@ -800,7 +806,11 @@ a.impress-6{font-size:12px}
 a.impress-7{font-size:12px}
 a.impress-8{font-size:14px}
 
-.impress-show a:hover,a.impress-btn-0,a.impress-btn-1,a.impress-btn-2,a.impress-btn-3,a.impress-btn-4,a.impress-btn-5,a.impress-btn-6,a.impress-btn-7,a.impress-btn-8{float:left;display:block;height:28px;line-height:27px;padding:0 16px;background:url(../images/skin/btn2010.png) repeat-x 0 0;overflow:hidden;text-align:center;cursor:pointer;color:#fff;word-break:keep-all;white-space:nowrap}
+.impress-add a,.impress-show a{margin:0 1px 1px 0;}
+.impress-add a:hover{color:#fff;}
+
+a.impress-btn-0,a.impress-btn-1,a.impress-btn-2,a.impress-btn-3,a.impress-btn-4,a.impress-btn-5,a.impress-btn-6,a.impress-btn-7,a.impress-btn-8{float:left;display:block;height:28px;line-height:27px;padding:0 16px;background:url(../images/skin/btn2010.png) repeat-x 0 0;text-align:center;cursor:pointer;color:#fff;word-break:keep-all;white-space:nowrap}
+
 a.impress-btn-0,a.impress-0:hover{background-position:0 -334px;color:#fff;}
 a.impress-btn-1,a.impress-1:hover{background-position:0 -364px;color:#fff;}
 a.impress-btn-2,a.impress-2:hover{background-position:0 -394px;color:#fff;}
@@ -811,11 +821,6 @@ a.impress-btn-6,a.impress-6:hover{background-position:0 -514px;color:#fff;}
 a.impress-btn-7,a.impress-7:hover{background-position:0 -544px;color:#fff;}
 a.impress-btn-8,a.impress-8:hover{background-position:0 -574px;color:#fff;}
 
-.impress-add a,.impress-show a{margin:0 1px 1px 0;}
-.impress-add a:hover{color:#fff;}
-.impress-show a,.impress-show a:hover{font-weight:700;height:28px;line-height:27px;float:left;display:block;padding:0 5px;overflow:hidden;text-align:center;word-break:keep-all;white-space:nowrap}
-.impress-show a b.icon2-close{background-position:0 -752px;visibility:hidden;display:inline-block;margin:-1px 0 0 0;_margin:5px 0 0 0}
-.impress-show a:hover b.icon2-close{ visibility:visible;background-color:transparent}
 
 .i-show02 a{display:block;float:left;}
 .i-show02 a strong,.i-show02 a span{display:block;height:19px;line-height:19px;text-align:center;cursor:pointer;word-break:keep-all;white-space:nowrap}
