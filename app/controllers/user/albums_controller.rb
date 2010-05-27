@@ -103,7 +103,7 @@ protected
       @album = PersonalAlbum.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}])
       require_verified @album
       @user = @album.poster
-      @relationship = @user.relationship_with(current_user)
+      @relationship = @user.relationship_with current_user
       require_adequate_privilege @album, @relationship
     elsif ["edit", "update", "confirm_destroy", "destroy"].include? params[:action]
       @album = PersonalAlbum.find(params[:id])

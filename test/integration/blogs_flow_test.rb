@@ -244,7 +244,12 @@ class BlogsFlowTest < ActionController::IntegrationTest
     @user_sess.delete "/blogs/#{@blog1.id}"
     @user.reload
     assert_equal @user.blogs_count1, 0
+
     @user_sess.delete "/blogs/#{@blog5.id}"
+    @user_sess.assert_template 'errors/404'
+
+    @blog1.unverify
+    @user_sess.delete "/blogs/#{@blog1.id}"
     @user_sess.assert_template 'errors/404'
   end
 

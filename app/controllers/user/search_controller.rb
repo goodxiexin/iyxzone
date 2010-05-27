@@ -2,10 +2,12 @@ class User::SearchController < UserBaseController
 
   layout 'app'
 
+  PER_PAGE = 20
+
   def user
     @key = params[:key]
     @games = Game.find(:all, :order => 'pinyin ASC')
-    @users = User.search(@key).paginate :page => params[:page], :per_page => 20, :include => [:profile, {:characters => [{:server => [:area, :game]}]}] 
+    @users = User.search(@key).paginate :page => params[:page], :per_page => PER_PAGE, :include => [:profile, {:characters => [{:server => [:area, :game]}]}] 
   end
 
   def character

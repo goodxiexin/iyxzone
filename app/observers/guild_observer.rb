@@ -8,6 +8,7 @@ class GuildObserver < ActiveRecord::Observer
 
     # inherit some attributes from character
     c = guild.president_character
+    guild.president_id = c.user_id
     guild.game_id = c.game_id
     guild.game_server_id = c.server_id
     guild.game_area_id = c.area_id

@@ -496,7 +496,7 @@ class BlogTest < ActiveSupport::TestCase
     assert_equal @user.blogs_count, 1
 
     @blog.update_attributes(:title => @sensitive)
-    assert @blog.needs_verify? # 需要再验证了
+    assert @blog.unverified?
 
     # 验证通过
     @blog.verify

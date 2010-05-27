@@ -17,6 +17,8 @@ class GameCharacterFactory
 
     if cond[:user_id].blank?
       user = Factory.create :user
+    else
+      user = User.find(cond[:user_id])
     end
        
     cond = {

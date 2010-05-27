@@ -29,15 +29,15 @@ protected
   end
 
   def require_friend owner
-    owner.relationship_with(current_user) == 'friend' || is_admin || render_add_friend(owner)
+    current_user.relationship_with(owner) == 'friend' || is_admin || render_add_friend(owner)
   end
 
   def require_none_friend owner
-    owner.relationship_with(current_user) != 'friend' || is_admin || render_not_found
+    current_user.relationship_with(owner) != 'friend' || is_admin || render_not_found
   end
 
   def require_friend_or_owner owner
-    relationship = owner.relationship_with current_user
+    relationship = current_user.relationship_with(owner)
     relationship == 'friend' || relationship == 'owner' || is_admin || render_add_friend(owner)
   end
 

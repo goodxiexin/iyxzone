@@ -9,12 +9,12 @@ class TopicObserver < ActiveRecord::Observer
   end
 
   def after_update topic
-    if topic.recently_rejected
+    if topic.recently_rejected?
       topic.forum.raw_decrement :topics_count
       topic.forum.raw_decrement :posts_count, topic.posts_count
       Topic.update_all("posts_count = 0", {:id => topic.id})
       Post.unverify_all(:topic_id => topic.id)
-    elsif topic.recently_recovered
+    elsif topic.recently_recovered?
       topic.forum.raw_increment :topics_count
       topic.forum.raw_increment :posts_count, topic.posts_count
       Topic.update_all("posts_count = #{topic.posts.count}", {:id => topic.id})

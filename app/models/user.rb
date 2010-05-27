@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
 	has_many :poke_deliveries, :foreign_key => 'recipient_id', :order => 'created_at DESC'
 
   def is_pokeable_by? user
-    privacy_setting.poke? self.relationship_with(user)
+    privacy_setting.poke? user.relationship_with(self)
   end
 
 	# status
@@ -400,7 +400,7 @@ class User < ActiveRecord::Base
   def relationship_with user
     if self == user
       'owner'
-    elsif has_friend?(user) or wait_for?(user)
+    elsif has_friend?(user) or user.wait_for?(self)
       'friend'
     elsif has_same_game_with? user
       'same_game'

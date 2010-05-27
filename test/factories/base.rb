@@ -46,6 +46,15 @@ Factory.define :guild do |g|
   g.sequence(:description) {|n| "description-#{n}"}
 end
 
+Factory.define :topic do |t|
+  t.sequence(:subject) {|n| "subject-#{n}"}
+  t.sequence(:content) {|n| "content-#{n}"}
+end
+
+Factory.define :post do |p|
+  p.sequence(:content) {|n| "content-#{n}"}
+end
+
 Factory.define :skin do |s|
   s.sequence(:name) {|n| "skin-#{n}"}
   s.sequence(:css) {|n| "css-#{n}"}

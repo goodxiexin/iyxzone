@@ -26,12 +26,11 @@ protected
 	def setup
 		if ["create"].include? params[:action]
 			@topic = Topic.find(params[:topic_id])
-      @forum = @topic.forum
-      @guild = @forum.guild
+      require_verified @topic
 		elsif ["destroy"].include? params[:action]
 			@post = Post.find(params[:id])
-      @guild = @post.topic.forum.guild
-      @guild.president == current_user || render_not_found
+      require_verified @post
+      require_owner @post.forum.guild.president
 		end
 	end
 

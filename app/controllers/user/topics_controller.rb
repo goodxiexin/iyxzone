@@ -44,6 +44,8 @@ class User::TopicsController < UserBaseController
     if @topic.toggle_top
       if params[:at] == 'index'
         redirect_to topics_url(:forum_id => @forum) 
+      elsif params[:at] == 'top_index'
+        redirect_to top_topics_url(:forum_id => @forum)
       elsif params[:at] == 'forum_show'
         redirect_to forum_url(@forum)
       elsif params[:at] == 'show'
@@ -58,7 +60,7 @@ class User::TopicsController < UserBaseController
 
   def destroy
     if @topic.destroy
-      if params[:at] == 'index'
+      if params[:at] == 'index' or params[:at] == 'top_index'
         render_js_code "$('topic_#{@topic.id}').remove(); tip('成功')"
       elsif params[:at] == 'forum_show'
         redirect_js forum_url(@forum)
@@ -76,13 +78,15 @@ protected
 		if ["index", "new", "create", "top"].include? params[:action]
 			@forum = Forum.find(params[:forum_id])
       @guild = @forum.guild 
-		elsif ["show", "toggle", "destroy"].include? params[:action]
-			@topic = Topic.find(params[:id])
+		elsif ["show"].include? params[:action]
+      @topic = Topic.find(params[:id])
       @forum = @topic.forum
       @guild = @forum.guild
-      if params[:action] != 'show'
-        @guild.president == current_user || render_not_found
-      end
+      require_verified @topic
+    elsif ["toggle", "destroy"].include? params[:action]
+			@topic = Topic.find(params[:id])
+      require_verified @topic
+      require_owner @topic.forum.guild.president
 		end
 	end
 

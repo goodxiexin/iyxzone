@@ -8,4 +8,4 @@ require 'test/factories/video_factory'
 require 'test/factories/friend_factory'
 require 'test/factories/guild_factory'
 require 'test/factories/skin_factory'
-
+require 'test/factories/topic_factory'

@@ -54,6 +54,9 @@ class StatusFlowTest < ActionController::IntegrationTest
     @user_sess.get "/statuses?uid=#{@user.id}"
     @user_sess.assert_template 'user/statuses/index'
     assert_equal @user_sess.assigns(:statuses), [@status2]
+
+    @user_sess.get "/statuses?uid=3333"
+    @user_sess.assert_template 'errors/404'
   end
 
   test "POST create" do
