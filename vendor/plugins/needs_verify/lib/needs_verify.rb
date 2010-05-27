@@ -35,15 +35,6 @@ module NeedsVerify
     
       self.verify_opts = opts
 
-      # verified from 0 to 1
-      attr_accessor :recently_accepted
-
-      # verified from 2 to 1
-      attr_accessor :recently_recovered
-
-      # verified from 0/1 to 2
-      attr_accessor :recently_rejected
-
       include InstanceMethods
 
       extend SingletonMethods
@@ -90,8 +81,16 @@ module NeedsVerify
       self.verified = 0
     end
 
-    def needs_verify?
-      self.verified == 0
+    def recently_recovered?
+      @verify_action == :recently_recovered
+    end
+
+    def recently_accepted?
+      @verify_action == :recently_accepted
+    end
+
+    def recently_rejected?
+      @verify_action == :recently_rejected
     end
 
     # 在before_create或者before_update里进行自动检查
@@ -110,9 +109,9 @@ module NeedsVerify
     def verify
       if self.verified != 1
         if self.verified == 2
-          self.recently_recovered = true
+          @verify_action = :recently_recovered
         else
-          self.recently_accepted = true
+          @verify_action = :recently_accepted
         end
         self.verified = 1
         save
@@ -122,7 +121,7 @@ module NeedsVerify
     def unverify
       if self.verified == 0 or self.verified == 1
         self.verified = 2
-        self.recently_rejected = true
+        @verify_action = :recently_rejected
         save
       end
     end

@@ -17,12 +17,12 @@ class PersonalAlbumObserver < ActiveRecord::Observer
   end
   
   def after_update album
-    if album.recently_recovered
+    if album.recently_recovered?
       album.poster.raw_increment "albums_count#{album.privilege}"
       Photo.verify_all(:album_id => album.id)
       Album.update_all("photos_count = #{album.photos.count}", {:id => album.id})
       # 没法恢复新鲜事，因为根部没记录照片是分几次，怎么上传的
-    elsif album.recently_rejected
+    elsif album.recently_rejected?
       album.poster.raw_decrement "albums_count#{album.privilege}"
       Photo.unverify_all(:album_id => album.id)
       Album.update_all("photos_count = 0", {:id => album.id})

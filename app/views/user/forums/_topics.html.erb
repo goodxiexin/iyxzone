@@ -20,7 +20,7 @@
                 <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %><%= profile_link t.poster %></div></td>
                 <td class="tr"><%= ftime t.created_at %></td>
                 <% if guild.president == current_user %>
-                <td><%= link_to '', toggle_topic_url(t, :top => 1, :at => 'forum_show'), :class => "icon-up", :method => :put %><%= facebox_confirm '', topic_url(t, :at => 'forum_show'), {:msg => '你确定要删除这个话题吗？', :method => :delete}, {:class => "icon-active"} %></td>
+                <td><%= link_to '', toggle_topic_url(t, :at => 'forum_show'), :class => "icon-up", :method => :put %><%= facebox_confirm '', topic_url(t, :at => 'forum_show'), {:msg => '你确定要删除这个话题吗？', :method => :delete}, {:class => "icon-active"} %></td>
                 <% end %>
               </tr>
               <% end %>

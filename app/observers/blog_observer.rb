@@ -33,14 +33,14 @@ class BlogObserver < ActiveRecord::Observer
   def after_update blog
     # 如果验证不通过，那需要减少计数器
     # 如果验证由不通过变成通过，那需要增加计数器
-    if blog.recently_recovered
+    if blog.recently_recovered?
       if blog.draft
         blog.poster.raw_increment "drafts_count"
       else
         blog.poster.raw_increment "blogs_count#{blog.privilege}"
       end
       blog.deliver_feeds
-    elsif blog.recently_rejected
+    elsif blog.recently_rejected?
       if blog.draft
         blog.poster.raw_decrement "drafts_count"
       else

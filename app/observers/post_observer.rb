@@ -2,18 +2,12 @@ require 'app/mailer/guild_mailer'
 
 class PostObserver < ActiveRecord::Observer
 
-  # TODO: 并发的时候肯定有问题，应该从mysql的层次解决这个问题
   def before_create post
     # veirfy
     post.auto_verify
 
-    topic = post.topic
-    latest_post = topic.posts.find(:first, :order => 'floor DESC')
-    if latest_post.nil?
-      post.floor = 1
-    else
-      post.floor = latest_post.floor + 1
-    end
+    post.forum_id = post.topic.forum_id
+    post.floor = post.topic.latest_floor
   end
 
   def after_create post
@@ -38,10 +32,10 @@ class PostObserver < ActiveRecord::Observer
   end
 
   def after_update post
-    if post.recently_rejected
+    if post.recently_rejected?
       post.topic.raw_decrement :posts_count
       post.forum.raw_decrement :posts_count
-    elsif post.recently_recovered
+    elsif post.recently_recovered?
       post.topic.raw_increment :posts_count
       post.forum.raw_increment :posts_count
     end  

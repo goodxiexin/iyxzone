@@ -32,4 +32,13 @@ class Topic < ActiveRecord::Base
 
   validates_size_of :content, :within => 1..8000, :too_long => "最长2000个字符", :too_short => "最短1个字符"
 
+  def toggle_top
+    update_attributes(:top => !self.top)
+  end
+
+  def latest_floor
+    post = posts.floor_order.first
+    post.nil? ? 1 : (post.floor + 1)
+  end
+
 end

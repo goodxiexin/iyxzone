@@ -3,7 +3,7 @@ class User::PostsController < UserBaseController
   layout 'app'
 
   def create
-    @post = @topic.posts.build(params[:post].merge({:poster_id => current_user.id, :forum_id => @forum.id}))
+    @post = @topic.posts.build(params[:post].merge({:poster_id => current_user.id}))
 
     if @post.save
       redirect_to topic_url(@topic, :page => (@topic.posts_count + 1)/20 + 1)     

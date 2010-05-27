@@ -17,11 +17,11 @@ class EventAlbumObserver < ActiveRecord::Observer
   end
 
   def after_update album
-    if album.recently_recovered
+    if album.recently_recovered?
       Photo.verify_all(:album_id => album.id)
       Album.update_all("photos_count = #{album.photos.count}", {:id => album.id})
       # feed 就不恢复了
-    elsif album.recently_rejected
+    elsif album.recently_rejected?
       Photo.unverify_all(:album_id => album.id)
       Album.update_all("photos_count = 0", {:id => album.id})
       album.destroy_feeds

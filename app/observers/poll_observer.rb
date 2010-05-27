@@ -21,11 +21,11 @@ class PollObserver < ActiveRecord::Observer
   end
  
   def after_update poll
-    if poll.recently_recovered
+    if poll.recently_recovered?
       poll.poster.raw_increment :polls_count
       User.update_all("participated_polls_count = participated_polls_count + 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
       poll.deliver_feeds
-    elsif poll.recently_rejected
+    elsif poll.recently_rejected?
       poll.poster.raw_decrement :polls_count
       User.update_all("participated_polls_count = participated_polls_count - 1", {:id => (poll.voters - [poll.poster]).map(&:id)})
       poll.destroy_feeds

@@ -1,5 +1,7 @@
 class Post < ActiveRecord::Base
 
+  named_scope :floor_order, :order => "floors DESC"
+
   belongs_to :poster, :class_name => 'User'
 
   belongs_to :recipient, :class_name => 'User'
@@ -13,8 +15,6 @@ class Post < ActiveRecord::Base
   needs_verification :sensitive_columns => [:content] 
 
   validates_presence_of :poster_id, :message => "没有发布者"
-
-  validates_presence_of :forum_id, :message => "没有论坛"
 
   validates_presence_of :topic_id, :message => "没有话题"
   

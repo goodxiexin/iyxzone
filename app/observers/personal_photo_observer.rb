@@ -30,9 +30,9 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     return unless photo.thumbnail.blank?
    
     # verify
-    if photo.recently_recovered
+    if photo.recently_recovered?
       photo.album.raw_increment :photos_count
-    elsif photo.recently_rejected
+    elsif photo.recently_rejected?
       photo.album.raw_decrement :photos_count
     end
 

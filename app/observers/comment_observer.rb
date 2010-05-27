@@ -276,10 +276,10 @@ class CommentObserver < ActiveRecord::Observer
   end
 
   def after_update comment
-    if comment.recently_rejected
+    if comment.recently_rejected?
       # 如果有相关的notice怎么办, 现在就忽略他
       comment.commentable.raw_decrement :comments_count
-    elsif comment.recently_recovered
+    elsif comment.recently_recovered?
       comment.commentable.raw_increment :comments_count
     end
   end

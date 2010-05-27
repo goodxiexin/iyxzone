@@ -45,10 +45,10 @@ class AvatarObserver < ActiveRecord::Observer
     return unless avatar.thumbnail.blank?
 
     # verify
-    if avatar.recently_recovered
+    if avatar.recently_recovered?
       avatar.album.raw_increment :photos_count
       # 就不恢复了，因为头像可能已经是别的了
-    elsif avatar.recently_rejected
+    elsif avatar.recently_rejected?
       avatar.album.raw_decrement :photos_count
       avatar.destroy_feeds
     end

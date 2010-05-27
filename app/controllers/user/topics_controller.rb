@@ -41,7 +41,7 @@ class User::TopicsController < UserBaseController
   end
 
   def toggle
-    if @topic.update_attribute('top', params[:top].to_i)
+    if @topic.toggle_top
       if params[:at] == 'index'
         redirect_to topics_url(:forum_id => @forum) 
       elsif params[:at] == 'forum_show'
