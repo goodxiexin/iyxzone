@@ -1,6 +1,6 @@
               <div class="forum-cmt" id='new_post'>
                 <h2>回复话题</h2>
-                <% form_for :post, :url => forum_topic_posts_url(forum, topic), :html => {:onsubmit => "Iyxzone.Forum.Post.save($('post_submit_btn'), this); return false;" } do |f| %>
+                <% form_for :post, :url => posts_url(:topic_id => topic.id), :html => {:onsubmit => "Iyxzone.Forum.Post.save($('post_submit_btn'), this); return false;" } do |f| %>
                 <%= hidden_field_tag 'post[recipient_id]', topic.poster_id %>
                 <div class="formcontent">
                   <div class="rows s_clear">

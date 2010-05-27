@@ -239,7 +239,7 @@ module ApplicationHelper
 	end
 
 	def topic_link topic, opts={}
-		link_to (truncate h(topic.subject), :length => 40), forum_topic_posts_url(topic.forum, topic), opts
+		link_to (truncate h(topic.subject), :length => 40), topic_url(topic), opts
 	end
 
 	def mail_link mail

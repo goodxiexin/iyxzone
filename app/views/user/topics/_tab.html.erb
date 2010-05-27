@@ -1,9 +1,9 @@
       <div class="tab tab01">
         <div class='right'>
-          <%= link_to "发布新话题", new_forum_topic_url(forum) %>
-          <%= link_to "返回论坛首页", forum_topics_url(forum) %>
+          <%= link_to "发布新话题", new_topic_url(:forum_id => forum.id) %>
+          <%= link_to "返回论坛首页", forum_url(forum) %>
         </div>
         <ul>
-          <li class='hover'><span><%= link_to "话题区", forum_topics_url(forum) %></span></li>
+          <li class='hover'><span><%= link_to "话题区", topics_url(:forum_id => forum.id) %></span></li>
         </ul>
       </div>

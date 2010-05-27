@@ -1,23 +1,19 @@
 <% canvas_tag do %>
-    <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}", :guild => @guild} %>
-    <div class="box02 canvas_int rows s_clear space">
-      <%= render :partial => 'tab', :locals => {:forum => @forum} %>
-      <div class="forum s_clear">
-        <div class="col-left">
-          <%= render :partial => 'public_board' %>
-          <% unless @hot_topics.blank? %>
-            <%= render :partial => 'hot_topics', :object => @hot_topics %>
-          <% end %>
-          <h2 class="s_clear"><span class="left">精华区</span><%= link_to '更多', top_forum_topics_url(@forum), :class => 'right' %></h2>
-          <div class="posts digest">
-            <%= render :partial => 'top_topics', :locals => {:top_topics => @top_topics, :forum => @forum, :guild => @guild} %>
-          </div>
-          <h2>论坛话题区<span>（共<%= @forum.topics_count %>条）</span></h2>
-          <div class="posts">
-            <%= render :partial => 'topics', :locals => {:topics => @topics, :forum => @forum, :guild => @guild} %>
-            <%= will_paginate @topics %>
-          </div>
+  <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}", :guild => @guild} %>
+  <div class="box02 canvas_int rows s_clear space">
+    <%= render :partial => 'tab', :locals => {:forum => @forum} %>
+    <div class="forum s_clear">
+      <div class="col-left">
+        <h2 class="s_clear"><span class="left">精华区</span><%= link_to '更多', top_topics_url(:forum_id => @forum), :class => 'right' %></h2>
+        <div class="posts digest">
+          <%= render :partial => 'top_topics', :locals => {:top_topics => @top_topics, :forum => @forum, :guild => @guild} %>
+        </div>
+        <h2 class="s_clear"><span class="left">论坛话题区</span></h2>
+        <div class="posts">
+          <%= render :partial => 'topics', :locals => {:topics => @topics, :forum => @forum, :guild => @guild} %>
+          <%= will_paginate @topics %>
         </div>
       </div>
     </div>
+  </div>
 <% end %>

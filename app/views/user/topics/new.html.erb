@@ -9,7 +9,7 @@
       <div class='appcontent01'>
         <div id='errors'></div>
         <div class="cons-form formcontent">
-        <% form_for :topic, :url => forum_topics_url(@forum), :html => {:onsubmit => "Iyxzone.Forum.Topic.save($('topic_submit_btn'), this); return false"} do |f| %>
+        <% form_for :topic, :url => topics_url(:forum_id => @forum), :html => {:onsubmit => "Iyxzone.Forum.Topic.save($('topic_submit_btn'), this); return false"} do |f| %>
           <div class='rows s_clear'>
             <div class='fldid'><%= f.label "标题：" %></div>
             <div class='fldvalue'><div class='textfield'><%= f.text_field 'subject' %></div></div>

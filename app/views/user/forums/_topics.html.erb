@@ -1,6 +1,6 @@
             <table cellpadding="0" cellspacing="3" border="0" width="100%">
-              <% if top_topics.blank? %>
-              <tr><td><strong class='gray'>没有任何精华帖子</strong></td></tr>
+              <% if topics.blank? %>
+                <tr><td><strong class='gray'>这个论坛很冷清，还没有帖子</strong></td></tr>
               <% else %>
               <tr>
                 <th class="tl">话题</th>
@@ -12,17 +12,18 @@
                 <th>操作</th>
                 <% end %>
               </tr>
-              <% top_topics.each do |t| %>
+              <% topics.each do |t| %>
               <tr class="jl-cutline" id='topic_<%= t.id %>'>
-                <td class="title"><div><%= topic_link t  %></div></td>
+                <td class="title"><div><%= topic_link t %></div></td>
                 <td><%= t.viewings_count %></td>
                 <td><%= t.posts_count %></td>
-                <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %></div></td>
+                <td class="author"><div><%= avatar_image t.poster, :width => 27, :height => 27 %><%= profile_link t.poster %></div></td>
                 <td class="tr"><%= ftime t.created_at %></td>
                 <% if guild.president == current_user %>
-                <td><%= link_to '', toggle_topic_url(t, :top => 0, :at => 'index'), :class => 'icon-down', :method => :put %><%= facebox_confirm '', topic_url(t, :at => 'index'), {:msg => '你确定要删除这个话题吗？', :method => :delete}, {:class => 'icon-active'} %></td>
+                <td><%= link_to '', toggle_topic_url(t, :top => 1, :at => 'forum_show'), :class => "icon-up", :method => :put %><%= facebox_confirm '', topic_url(t, :at => 'forum_show'), {:msg => '你确定要删除这个话题吗？', :method => :delete}, {:class => "icon-active"} %></td>
                 <% end %>
               </tr>
               <% end %>
               <% end %>
             </table>
+

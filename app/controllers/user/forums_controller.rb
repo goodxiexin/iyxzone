@@ -2,8 +2,12 @@ class User::ForumsController < UserBaseController
 
   layout 'app'
 
-  def index
-    @forums = Forum.all
+  def show
+    @forum = Forum.find(params[:id])
+    @guild = @forum.guild
+    @hot_topics = Topic.hot.nonblocked.match("forum_id != #{@forum.id}")
+    @top_topics = @forum.topics.top.nonblocked.limit(5)
+    @topics = @forum.topics.normal.nonblocked.limit(10) #paginate :page => params[:page], :per_page => PER_PAGE
   end
 
 end

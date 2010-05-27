@@ -1,0 +1,15 @@
+          <h2 class='s_clear'>
+            <span class='left'>标题： <%= h topic.subject %></span>
+            <div class='op'>
+            <% if guild.president == current_user %>
+              <% if !topic.top %>
+                <%= link_to "<span class='icon-up'></span>置顶", toggle_topic_url(topic, :top => 1, :at => 'show'), :method => :put %>
+              <% else %>
+                <%= link_to "<span class='icon-down'></span>取消置顶", toggle_topic_url(topic, :top => 0, :at => 'show'), :method => :put %>
+              <% end %>
+              <%= facebox_confirm "<span class='icon-active'></span>删除", topic_url(topic, :at => 'show'), {:msg => "你确定要删除这个话题吗？", :method => :delete} %>
+            <% end %>
+            <%= facebox_link '分享', new_sharing_url(:url => topic_url(topic)), :width => 450, :class => 'share-btn' %>
+            </div>
+          </h2>
+
