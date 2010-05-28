@@ -3,7 +3,7 @@
 	还没有玩家对这个进行评价
 <% else %>
 <% tag_cloud game, %w(css1 css2 css3 css4) do |tag, css_class| %>
-	<a class="impress-<%=rand(4)%>"><span id='tag_<%= tag.id %>' class=<%= css_class %>><%= tag.name %></span></a>
+	<a href="javascript:void(0)" class="impress-<%=rand(4)%>"><%=tag_format_name(tag.name, css_class) %></a>
 <% end %>
 <% end %>
 </div>
