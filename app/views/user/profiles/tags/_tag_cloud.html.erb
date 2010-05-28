@@ -4,9 +4,9 @@
 <% else %>
 	<% tag_cloud profile, %w(css1 css2 css3 css4) do |tag, css_class| %>
 		<% if @user == current_user %>
-			<a href="javascript:void(0)" class="impress-<%=rand(4)%>" id='tag_<%= tag.id %>'><%= tag_format_name(tag.name, css_class) %><b class='icon2-close' onclick="Iyxzone.Profile.Tag.deleteTag(<%=profile.id%>, <%=tag.id%>, '<%= form_authenticity_token%>')"></b></a>
+			<a href="javascript:void(0)" class="impress-<%=rand(4)%>" id='tag_<%= tag.id %>'><span class=<%= css_class %>><%= tag.name %></span><b class='icon2-close' onclick="Iyxzone.Profile.Tag.deleteTag(<%=profile.id%>, <%=tag.id%>, '<%= form_authenticity_token%>')"></b></a>
 		<% else %>
-			<a href="javascript:void(0)" class="impress-<%=rand(4)%>"><%= tag_format_name(tag.name, css_class) %></a>
+			<a href="javascript:void(0)" class="impress-<%=rand(4)%>"><span class=<%= css_class %>><%= tag.name %></span></a>
 		<% end %>
 	<% end %>
 <% end %>
