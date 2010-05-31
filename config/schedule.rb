@@ -22,6 +22,10 @@
 # 输出到tmp/cron_log
 set :output, "#{RAILS_ROOT}/tmp/cron_log"
 
+every 1.day, :at => '4:00am' do
+  rake "utils:backup_mysql"
+end
+
 every 1.day, :at => '0:00am' do
   rake "events:send_approaching_notification"
 end
@@ -33,6 +37,10 @@ end
 
 every 2.weeks, :at => '2:00am' do
   rake "tags:delete_unused_tags"
+end
+
+every 2.weeks, :at => '4:30am' do
+  rake "utils:backup_s3"
 end
 
 every :monday, :at => '3:00am' do
@@ -58,4 +66,4 @@ end
 every :thursday, :at => '5:00am' do
   rake "suggestions:create_friend_suggestions"
   rake "suggestions:create_comrade_suggestions"
-end 
+end

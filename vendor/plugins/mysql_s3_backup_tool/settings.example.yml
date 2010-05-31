@@ -1,0 +1,17 @@
+# The backup will be put in S3://BUCKET/FOLDER/FILENAME-TIMESTAMP.sql.gz
+ bucket: apporama
+ folder: dumps
+ filename: apporama
+
+ AWS_ACCESS_KEY_ID: XYZ
+ AWS_SECRET_ACCESS_KEY: 123
+
+ email: joe_blow@gmail.com
+# email: first@email.com,second@joe.com,third@fred.com
+ email_from: mister_backups@admin.org
+
+ smtp_server: localhost
+
+ mysql_database: some-database
+ mysql_user: root
+ mysql_password: shit5TORM

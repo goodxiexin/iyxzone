@@ -82,6 +82,9 @@ class BlogsFlowTest < ActionController::IntegrationTest
 
   test "GET index" do
     # 不同的人看index
+    @user_sess.get "/blogs?uid=invalid"
+    @user_sess.assert_template 'errors/404'
+    
     @user_sess.get "/blogs?uid=#{@user.id}"
     @user_sess.assert_template 'user/blogs/index'
     assert_equal @user_sess.assigns(:blogs), [@blog1, @blog2, @blog3, @blog4]
@@ -105,6 +108,9 @@ class BlogsFlowTest < ActionController::IntegrationTest
 
   test "GET relative" do
     # 不同的人看relative
+    @user_sess.get "/blogs/relative?uid=invalid"
+    @user_sess.assert_template 'errors/404'
+
     @user_sess.get "/blogs/relative?uid=#{@user.id}"
     @user_sess.assert_template 'user/blogs/relative'
     assert_equal @user_sess.assigns(:blogs), [@blog5, @blog6, @blog7]
@@ -127,6 +133,9 @@ class BlogsFlowTest < ActionController::IntegrationTest
 
   test "GET show" do
     # 自己看不同权限的日志
+    @user_sess.get "/blogs/invalid"
+    @user_sess.assert_template "errors/404"
+
     @user_sess.get "/blogs/#{@blog1.id}"
     @user_sess.assert_template "user/blogs/show"
     assert_equal @user_sess.assigns(:blog), @blog1
@@ -237,6 +246,11 @@ class BlogsFlowTest < ActionController::IntegrationTest
     @user_sess.assert_template "errors/404"
     @user_sess.put "/blogs/#{@blog5.id}", {:blog => {:title => 'new title'}}
     @user_sess.assert_template 'errors/404'
+  
+    @user_sess.get "/blogs/invalid/edit" 
+    @user_sess.assert_template "errors/404"
+    @user_sess.put "/blogs/invalid", {:blog => {:title => 'new title'}}
+    @user_sess.assert_template 'errors/404'
   end
 
   test "DELETE destroy" do
@@ -246,6 +260,9 @@ class BlogsFlowTest < ActionController::IntegrationTest
     assert_equal @user.blogs_count1, 0
 
     @user_sess.delete "/blogs/#{@blog5.id}"
+    @user_sess.assert_template 'errors/404'
+
+    @user_sess.delete "/blogs/invalid"
     @user_sess.assert_template 'errors/404'
 
     @blog1.unverify

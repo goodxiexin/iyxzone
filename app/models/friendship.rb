@@ -78,13 +78,14 @@ protected
   def friend_is_valid
     return if user.blank? or friend.blank?
     friendship = user.all_friendships.find_by_friend_id(friend_id)
-    if friendship.blank?
+
+    if user == friend
+      errors.add(:friend_id, "不能加自己")
+    elsif friendship.blank?
+    elsif friendship.is_request?
+      errors.add(:friend_id, "不能重复向同一个人发送请求")
     else
-      if friendship.is_request?
-        errors.add(:friend_id, "不能重复向同一个人发送请求")
-      else
-        errors.add(:friend_id, "已经是好友了")
-      end
+      errors.add(:friend_id, "已经是好友了")
     end
   end
 

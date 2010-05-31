@@ -5,6 +5,7 @@ class User::FriendsController < UserBaseController
   def index
     @game = Game.find(params[:game_id]) unless params[:game_id].nil?
     @guild = Guild.find(params[:guild_id]) unless params[:guild_id].nil?
+
     case params[:term].to_i
     when 0
       @friends = current_user.friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC', :include => :profile
@@ -20,21 +21,17 @@ class User::FriendsController < UserBaseController
     render :action => 'new', :layout => 'app2'
   end
 
-  # other people's friends list
   def other
     @friends = @user.friends.paginate :page => params[:page], :per_page => 18, :include => [:profile]
   end
 
-  # common friends with ...
   def common
     @friends = @user.common_friends_with(current_user).paginate :page => params[:page], :per_page => 18, :include => [:profile]
   end
 
   def destroy
     if @friendship.cancel
-      render :update do |page|
-        page << "tip('删除成功');$('friend_#{params[:id]}').remove();"
-      end
+      render_js_code "tip('删除成功');$('friend_#{params[:id]}').remove();"
     else
       render_js_error
     end
@@ -42,7 +39,7 @@ class User::FriendsController < UserBaseController
 
   def search
     @friends = current_user.friends.search(params[:key])
-    @friends = @friends.paginate :page => params[:page], :per_page => 12, :order => 'login ASC'
+    @friends = @friends.paginate :page => params[:page], :per_page => 12, :order => 'pinyin ASC'
     @remote = {:update => 'friends', :url => {:action => 'search', :key => params[:key]}}
     render :partial => 'friends', :locals => {:friends => @friends, :remote => @remote}
   end
@@ -52,6 +49,7 @@ protected
   def setup
     if ["destroy"].include? params[:action]
       @friendship = current_user.friendships.find_by_friend_id(params[:id])
+      !@friendship.blank? || render_not_found
     elsif ["new"].include? params[:action]
       @user = User.find(params[:uid])
       @profile = @user.profile

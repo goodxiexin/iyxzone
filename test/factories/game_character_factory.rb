@@ -33,5 +33,12 @@ class GameCharacterFactory
     Factory.create :game_character, cond 
   end
 
+  def self.clone character
+    attrs = character.attributes
+    attrs.delete(:id)
+    attrs.delete(:name)
+    Factory.create :game_character, attrs
+  end
+
 end
 

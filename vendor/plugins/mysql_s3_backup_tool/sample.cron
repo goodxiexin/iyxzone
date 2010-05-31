@@ -1,0 +1,3 @@
+#!/bin/bash
+ruby /etc/mysql_backup/mysql_tools.rb backup > /dev/null
+exit 0

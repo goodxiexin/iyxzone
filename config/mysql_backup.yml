@@ -1,0 +1,8 @@
+databases: [dayday3_development, dayday3_production]
+user: root
+password: 20041065
+host: localhost
+dir: /tmp/mysql_backup
+keep: 5
+mysqldump:
+  options: -Q -c -C --add-drop-table --add-locks --quick --lock-tables

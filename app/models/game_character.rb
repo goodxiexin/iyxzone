@@ -72,6 +72,10 @@ class GameCharacter < ActiveRecord::Base
     "#{name}(#{game.name}-#{server.name})"
   end
 
+  def game_info
+    {:game_id => game_id, :area_id => area_id, :server_id => server_id, :race_id => race_id, :profession_id => profession_id}
+  end
+
 protected
 
   def game_is_valid

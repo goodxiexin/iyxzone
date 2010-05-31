@@ -2,24 +2,22 @@ class User::Friends::RequestsController < UserBaseController
 
 	def new
 	  @recipient = User.find(params[:friend_id])
-
-    if @recipient == current_user
-      render :text => "<p class='z-h s_clear'><strong class='left'>提示</strong><a onclick='facebox.close();' class='icon2-close right'></a></p><div class='z-con'><p>不能发送好友请求给自己</p></div>"
-      return
-    end
-      
     @friendship = current_user.all_friendships.find_by_friend_id(@recipient.id)
-    if @friendship.blank?
+    
+    if @recipient == current_user
+      render :action => "not_myself"
+    elsif @friendship.blank?
       render :action => 'new'
     elsif @friendship.is_request?
-      render :text => "<p class='z-h s_clear'><strong class='left'>提示</strong><a onclick='facebox.close();' class='icon2-close right'></a></p><div class='z-con'><p>你已经发送好友请求了</p></div>"
+      render :action => "already_sent"
     elsif @friendship.is_friend?
-      render :text => "<p class='z-h s_clear'><strong class='left'>提示</strong><a onclick='facebox.close();' class='icon2-close right'></a></p><div class='z-con'><p>你们已经是好友了</p></div>"
+      render :action => "already_friend"
     end
   end
 
   def create
-    @request = Friendship.new((params[:request] || {}).merge({:user_id => current_user.id, :status => 0}))
+    @request = Friendship.new((params[:request] || {}).merge({:user_id => current_user.id, :status => Friendship::Request}))
+
     if @request.save
       render_js_tip '成功，请耐心等待回复'
     else

@@ -19,6 +19,7 @@ after "deploy:update_code", "deploy:update_crontab"
 after "deploy:update_code", "deploy:update_database_config"
 after "deploy:update_code", "deploy:update_mail_config"
 after "deploy:update_code", "deploy:update_juggernaut_config"
+after "deploy:update_code", "deploy:update_backup_config"
 after "deploy:update_code", "deploy:add_timestamps_to_css"
 after "deploy:update_code", "deploy:pack_js"
 
@@ -120,6 +121,27 @@ ActionMailer::Base.delivery_method = :activerecord
     put mail_config, "#{release_path}/config/initializers/mail.rb"
   end
    
+  desc "update mysql/s3 backup configuration"
+  task :update_backup_config, :roles => :app do
+    local_backup_config = <<-CMD
+databases: [dayday3_production]
+user: root
+password: 20041065
+host: localhost
+dir: /tmp/mysql_backup
+keep: 30
+mysqldump:
+  options: -Q -c -C --add-drop-table --add-locks --quick --lock-tables
+    CMD
+    put local_backup_config, "#{release_path}/config/mysql_backup.yml"
+    s3_backup_config = <<-CMD
+databases: [one_seven_gaming_production]
+access_key_id: AKIAJB7XNJOQSFWA4WQA
+secret_access_key: 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
+    CMD
+    put s3_backup_config, "#{release_path}/config/s3_backup.yml"
+  end
+
   desc "update juggernaut configuration"
   task :update_juggernaut_config, :roles => :app do
     juggernaut_config = <<-CMD
