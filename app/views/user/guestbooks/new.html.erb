@@ -1,11 +1,11 @@
 <% facebox_tag '汇报错误' do %>
   <div id='error'></div>
   <% rows_form_remote_for :guestbook, :url => guestbooks_url, :loading => "Iyxzone.disableButton($('button2'), '谢谢您的参与'); Iyxzone.disableButton($('button1'), '谢谢您的参与');", :html => {:method => :post} do |f| %>
-    <%= hidden_field_tag 'guestbook[priority]', 1, :id => 'priority_field' %>
+    <%= hidden_field_tag 'guestbook[priority]', Guestbook::Urgent, :id => 'priority_field' %>
     <div class='formcontent'>
       <%= f.text_area 'description', :label => '错误描述' %>
       <%= f.collection_select :catagory , @error_elements, 'to_s', "to_s", {:prompt => '---'}, :label => '错误分类', :class => 'selector selector02' %>
     </div>
-    <%= f.z_submit :submit => [{:text => '这错误难以忍受', :id => 'button2', :onclick => "$('priority_field').value=2"}, {:text => '这错误让人不爽', :id => 'button1', :onclick => "$('priority_field').value=1"}] %>
+    <%= f.z_submit :submit => [{:text => '这错误难以忍受', :id => 'button2', :onclick => "$('priority_field').value=#{Guestbook::Urgent}"}, {:text => '这错误让人不爽', :id => 'button1', :onclick => "$('priority_field').value=#{Guestbook::Justsoso}"}] %>
   <% end %>
 <% end %>

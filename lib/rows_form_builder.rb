@@ -61,14 +61,14 @@ class RowsFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def z_submit options
-    submit_opts = (options.delete(:submit) || {}).merge({:type => 'submit'})
+    submit_opts = options.delete(:submit)
     submit_html = 
       if submit_opts.blank?
         ''
       elsif submit_opts.is_a? Hash
         "<span class='button'><span>#{@template.content_tag :button, submit_opts.delete(:text), submit_opts}</span></span>"
       elsif submit_opts.is_a? Array
-        submit_opts.map{|opts| "<span class='button'><span>#{@template.content_tag :button, opts.delete(:text), opts}</span></span>"}.join
+        submit_opts.map{|opts| "<span class='button'><span>#{@template.content_tag :button, opts.delete(:text), opts.merge({:type => 'submit'})}</span></span>"}.join
       end
 
     cancel_opts = options.delete(:cancel)

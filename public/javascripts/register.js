@@ -295,6 +295,8 @@ Object.extend(Iyxzone.Register, {
   },
 
   submit: function(button, form){
+    button.disabled = true;
+
     var valid = true;
     valid &= this.validateCharacters();
     valid &= this.validateLogin();
@@ -319,10 +321,9 @@ Object.extend(Iyxzone.Register, {
       method: 'post',
       parameters: $(form).serialize(),
 			onloading: function(){
-				Iyxzone.disableButton(button, '');
 			},
       onComplete: function(){
-        Iyxzone.enableButton(button, '');
+        button.writeAttribute('disabled', 'disabled');
       }
     }); 
   }

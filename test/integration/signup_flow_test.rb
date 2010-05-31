@@ -24,6 +24,12 @@ class LoginFlowTest < ActionController::IntegrationTest
 
     assert_equal User.last.characters_count, 1
 
+    # 正确的参数, 但是邮箱已经被注册
+    assert_no_difference "User.count" do
+      post "/users", {:agree_contact => 1, :user => {:login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :gender => 'male', :password => '111111', :password_confirmation => '111111'}, :profile => {:new_characters => {"1" => {:race_id => @rid, :profession_id => @pid, :area_id => @aid, :server_id => @sid, :game_id => @gid, :name => 'character1', :level => 11}}}}
+    end
+
+
     # 错误的游戏角色信息创建用户
     assert_no_difference "User.count" do
       post "/users", {:agree_contact => 1, :user => {:login => 'gaoxh04', :email => 'gaoxh05@gmail.com', :gender => 'male', :password => '111111', :password_confirmation => '111111'}, :profile => {:new_characters => {"1" => {:race_id => @rid, :profession_id => @pid, :area_id => @aid, :server_id => nil, :game_id => @gid, :name => 'character1', :level => 11}}}}

@@ -60,3 +60,9 @@ Factory.define :skin do |s|
   s.sequence(:css) {|n| "css-#{n}"}
   s.sequence(:thumbnail) {|n| "thumbnail-#{n}"}
 end
+
+Factory.define :guestbook do |g|
+  g.sequence(:description) {|n| "guestbook-#{n}"}
+  g.priority Guestbook::Urgent
+  g.catagory '日志'
+end

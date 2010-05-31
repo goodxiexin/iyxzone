@@ -668,11 +668,12 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 .feed-list-box h4 span{background:#fff;line-height:19px;color:#999;padding:0 10px}
 .feed-list .s-img{margin:0 0 0 28px;_margin:0 0 0 14px}
 
+.jl-list-con #roll-photo{*width:450px;*position:relative;*margin-right:-50px}
 #roll-photo .roll-photo-list{float:left;width:408px;margin:0 3px;*width:382px;*margin:0 10px;overflow:hidden;word-wrap:normal;white-space:nowrap;word-break:keep-all;position:relative}
 #roll-photo .roll-photo-list span{position:relative;top:0;white-space:nowrap}
 #roll-photo .roll-photo-list a{margin:0 13px;}
 #roll-photo a img{width:100px;}
-.roll-left,.roll-right{float:left;background:url(../images/skin/skin2010.png) no-repeat -102px -446px;width:22px;height:22px;display:block;margin-top:55px}
+.roll-left,.roll-right{float:left;background:url(../images/skin/skin2010.png) no-repeat -102px -446px;width:22px;height:22px;display:block;margin-top:55px;cursor:pointer}
 .roll-right{background-position:-124px -446px}
 
 .jl-read-more{text-align:center;margin:10px 0;font-weight:700}
@@ -794,7 +795,6 @@ a.impress-8,a.i-s-8{color:#e06c34;}
 .impress-show a:hover{background:url(../images/skin/btn2010.png) repeat-x 0 0;}
 .impress-show a b.icon2-close{background-position:0 -752px;visibility:hidden;display:inline-block;margin:-1px 0 0 0;_margin:5px 0 0 0;}
 .impress-show a:hover b.icon2-close{visibility:visible;background-color:transparent;cursor:pointer}
-.tagWrap{width:170px;_width:163px;display:inline-block;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;vertical-align:middle}/*12个中文字截断*/
 
 a.impress-0{font-size:14px}
 a.impress-1{font-size:12px}
@@ -979,6 +979,25 @@ dl.menu-op dd a{color:#333}
 .list-v2 .feed-list .feed-header p{color:#333;}
 .list-v2 .feed-list .feeds{border:none;}
 .list-v2 .feed-list .feed-header .icon-active{margin-left:20px}
+
+/*日志*/
+a.blogImportBtn,.tab01 .right a.blogImportBtn,.tab01 .right a.blogImportBtn:hover{background:url(../images/skin/skin2010.png) no-repeat -123px -760px;width:77px;height:25px;line-height:25px;display:inline-block;color:#fff;font-weight:700;text-decoration:none;text-align:center;position:relative}
+
+.blogImport h2{border-bottom:1px solid #bdd6ad;padding-bottom:10px;}
+.blogImport h2 strong{color:#d63200;font-size:14px;}
+.blogImport h2 a{font-size:12px;color:#d63200;}
+.blogImport h3{font-size:14px}
+.blogImport .step-1{padding:20px 100px;line-height:20px}
+.blogImport .step-1 p{margin:10px 0}
+.blogImport .step-1 .fldid{width:3em;word-wrap:normal;}
+.blogImport .step-1 .textfield{width:300px}
+
+.blogImport .step-2 .func{background:#f2fee5;border-bottom:1px solid #e7f0e1;padding:5px}
+.blogImport .step-2 .func table td{padding:5px 3px;color:#d63200}
+.blogImport .step-2 .list{height:300px;overflow-y:auto;overflow-x:hidden;}
+.blogImport .step-2 .list table{margin-left:5px}
+.blogImport .step-2 .list table td{padding:10px 3px}
+.blogImport .step-2 .list table td .title{width:260px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 
 /*视频 日志详细页面*/
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 15px}

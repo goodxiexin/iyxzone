@@ -9,11 +9,8 @@ class Admin::GuestbooksController < AdminBaseController
   end
 
   def update
-    if @guestbook.reply_to_poster params[:guestbook][:reply]
-      render :update do |page|
-        page << "var a = new Element('a', {href: 'javascript:void(0)'}).update('已经回复了');a.observe('click', function(e){facebox.set_width(350);tip('回复内容:<br/>#{@guestbook.reply}');});$('guestbook_#{@guestbook.id}').childElements()[2].update(a);"
-        page << "facebox.close();"
-      end
+    if @guestbook.set_reply params[:guestbook][:reply]
+      render_js_code "var a = new Element('a', {href: 'javascript:void(0)'}).update('已经回复了');a.observe('click', function(e){facebox.set_width(350);tip('回复内容:<br/>#{@guestbook.reply}');});$('guestbook_#{@guestbook.id}').childElements()[2].update(a);facebox.close();"
     else
       render_js_error
     end    
@@ -21,9 +18,7 @@ class Admin::GuestbooksController < AdminBaseController
 
   def destroy
     if @guestbook.destroy
-      render :update do |page|
-        page << "$('guestbook_#{@guestbook.id}').remove();"
-      end
+      render_js_code "$('guestbook_#{@guestbook.id}').remove();"
     else
       render_js_error
     end
