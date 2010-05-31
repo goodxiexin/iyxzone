@@ -26,6 +26,10 @@ every 1.day, :at => '4:00am' do
   rake "utils:backup_local"
 end
 
+every 2.weeks, :at => '4:30am' do
+  rake "utils:backup_s3"
+end
+
 every 1.day, :at => '0:00am' do
   rake "events:send_approaching_notification"
 end
@@ -37,10 +41,6 @@ end
 
 every 2.weeks, :at => '2:00am' do
   rake "tags:delete_unused_tags"
-end
-
-every 2.weeks, :at => '4:30am' do
-  rake "utils:backup_s3"
 end
 
 every :monday, :at => '3:00am' do

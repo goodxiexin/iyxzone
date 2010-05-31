@@ -2,10 +2,30 @@ require 'pty'
 require 'expect'
 require 'aws/s3'
 
+def exec_as user_name, &block
+  `su #{user_name}`
+  yield
+  `exit`
+end
+
 namespace :utils do
 
   desc "重启所有rails需要的程序"
-  task :restart_rails_application => :environment do
+  task :restart => :environment do
+    exec_as "root" do
+      # restart mysql
+      `service mysqld restart`
+      # restart httpd
+      `service httpd restart`
+      # synchronize time
+      `ntpdate 0.centos.pool.ntp.org`
+      # start memcached
+      `memcached -m 256 -u deployer`
+    end
+    exec_as "deployer" do
+      # juggernaut
+      `juggernaut -c juggernaut.yml -P tmp/pids/juggernaut.yml -l log/juggernaut.log -d`
+    end
   end
 
   desc "备份mysql到本地硬盘"
@@ -15,6 +35,8 @@ namespace :utils do
     databases = options['databases']
 
     databases.each do |database|
+
+    # synchronize time
       if backup.store database
         puts "successfully backup: #{database}"
       else
