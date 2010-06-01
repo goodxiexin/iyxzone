@@ -19,6 +19,7 @@ class User::GuestbooksController < UserBaseController
 protected
 
 	def get_default
+    @ref = request.env['HTTP_REFERER']
 		@uri = URI.parse(request.env['HTTP_REFERER'])
 		@path = @uri.path
 		case @path
