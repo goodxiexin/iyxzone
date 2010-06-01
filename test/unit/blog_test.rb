@@ -517,7 +517,7 @@ class BlogTest < ActiveSupport::TestCase
     @user.reload
     @friend1.reload
     assert_equal @user.blogs_count, 1
-    assert @friend1.recv_feed? @blog    
+    assert @friend1.recv_feed?(@blog)    
   end 
 
 end

@@ -99,9 +99,11 @@ module NeedsVerify
     def auto_verify
       if self.new_record?
         self.verified = self.sensitive? ? 0 : 1
+        @verify_action = nil
       else
         if self.sensitive? and self.sensitive_columns_changed?
           self.verified = 0
+          @verify_action = nil
         end
       end
     end

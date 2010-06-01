@@ -5,17 +5,24 @@
 #
 class VoteObserver < ActiveRecord::Observer
 
+  def before_create vote
+    vote.answer_ids = vote.answer_ids.uniq
+  end
+
 	def after_create vote
+    voter = vote.voter
+    poll = vote.poll
+
     # increment voter's counter, answer's counter and poll's counter
-		vote.voter.raw_increment(:participated_polls_count) if vote.poll.poster != vote.voter
+		voter.raw_increment(:participated_polls_count) if poll.poster != voter
 		vote.answers.each do |answer|
 			answer.raw_increment :votes_count
 		end
-		vote.poll.raw_increment :votes_count, vote.answers.count 
-	  vote.poll.raw_increment :voters_count
+		poll.raw_increment :votes_count, vote.answers.count 
+	  poll.raw_increment :voters_count
 
     # issue feeds if necessary
-    if vote.voter.application_setting.emit_poll_feed?
+    if voter.application_setting.emit_poll_feed?
       vote.deliver_feeds
     end
   end

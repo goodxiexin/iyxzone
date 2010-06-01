@@ -25,14 +25,14 @@ class User::PollsController < UserBaseController
   def friends
     @participated = Poll.nonblocked.prefetch(PREFETCH).limit(PER_PAGE).match(:id => Vote.by(current_user.friend_ids).map(&:poll_id).uniq)
     @posted = Poll.by(current_user.friend_ids).nonblocked.prefetch(PREFETCH).limit(PER_PAGE)
-    @polls = (@participated + @posted).uniq.sort{|p1,p2| p1.created_at <=> p2.created_at}.paginate :page => params[:page], :per_page => PER_PAGE
+    @polls = (@participated + @posted).uniq.sort{|p1,p2| p2.created_at <=> p1.created_at}.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
   def show
     @random_polls = Poll.nonblocked.random :limit => 5, :except => [@poll]
     @user = @poll.poster
     @vote = @poll.votes.find_by_voter_id(current_user.id)
-    @vote_feeds = @poll.votes.by(current_user.friend_ids)#current_user.friend_votes_for @poll
+    @vote_feeds = @poll.votes.by(current_user.friend_ids)
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
   end
 

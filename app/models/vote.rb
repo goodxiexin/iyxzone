@@ -8,7 +8,7 @@ class Vote < ActiveRecord::Base
 
   belongs_to :poll#, :counter_cache => :voters_count
 
-	acts_as_resource_feeds :recipients => lambda {|vote| [vote.voter.profile, vote.poll.game] + vote.voter.guilds + vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed?} }
+	acts_as_resource_feeds :recipients => lambda {|vote| [vote.voter.profile, vote.poll.game] + vote.voter.all_guilds + vote.voter.friends.find_all{|f| f.application_setting.recv_poll_feed?} }
 
 	def answers
 		PollAnswer.find(answer_ids)
@@ -33,7 +33,7 @@ protected
     poll = Poll.find(:first, :conditions => {:id => poll_id})
     if poll.blank?
       errors.add(:poll_id, "不存在")
-    elsif poll.past
+    elsif poll.expired?
       errors.add(:poll_id, "已经过期")
     elsif !poll.is_votable_by? voter
       errors.add(:poll_id, "没有权限")
@@ -44,9 +44,9 @@ protected
 
   def answers_are_valid
     return if answer_ids.blank? or poll.blank?
-    if poll.max_multiple < answer_ids.count
+    if poll.max_multiple < answer_ids.uniq.count
       errors.add(:answer_ids, "选太多了")
-    elsif !poll.has_answers?(answer_ids)
+    elsif !poll.has_answers?(answer_ids.uniq)
       errors.add(:answer_ids, "选项不存在")
     end
   end

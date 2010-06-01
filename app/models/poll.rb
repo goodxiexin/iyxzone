@@ -26,10 +26,9 @@ class Poll < ActiveRecord::Base
 
   acts_as_shareable :default_title => lambda {|poll| poll.name}, :path_reg => /\/polls\/([\d]+)/
   
-	acts_as_commentable :order => 'created_at ASC', 
-                      :delete_conditions => lambda {|user, poll, comment| poll.poster == user || comment.poster == user}
+	acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, poll, comment| poll.poster == user || comment.poster == user}
 
-  acts_as_resource_feeds :recipients => lambda {|poll| [poll.poster.profile, poll.name] + poll.poster.guilds + poll.poster.friends.find_all {|f| f.application_setting.recv_poll_feed? } }
+  acts_as_resource_feeds :recipients => lambda {|poll| [poll.poster.profile, poll.game] + poll.poster.all_guilds + poll.poster.friends.find_all {|f| f.application_setting.recv_poll_feed? } }
 
   acts_as_random
   
@@ -39,11 +38,11 @@ class Poll < ActiveRecord::Base
 
   validates_presence_of :name, :message => "不能为空"
 
-  validates_size_of :name, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
+  validates_size_of :name, :within => 1..100, :too_long => "最长100个字符", :too_short => "最短1个字符"
 
-  validates_size_of :description, :within => 0..5000, :too_long => "最长5000个字节", :allow_nil => true
+  validates_size_of :description, :within => 0..1000, :too_long => "最长1000个字符", :allow_blank => true
 
-  validates_size_of :explanation, :within => 0..5000, :too_long => "最长5000个字节", :allow_nil => true
+  validates_size_of :explanation, :within => 0..1000, :too_long => "最长1000个字符", :allow_blank => true
 
   validates_presence_of :game_id, :message => "不能为空", :on => :create
 
@@ -53,16 +52,18 @@ class Poll < ActiveRecord::Base
 
   validate_on_create :deadline_is_valid
 
-  def past
+  validate_on_create :answer_exists
+
+  def expired?
     !self.no_deadline and self.deadline < Time.now.to_date
   end
 
   def is_votable_by? user
-    user == poster || privilege == 1 || (privilege == 2 and poster.friends.include? user)
+    user == poster || privilege == 1 || (privilege == 2 and poster.has_friend? user)
   end
 
   def answers= answer_attributes
-    @answer_attributes = answer_attributes.find_all {|a| !a[:description].blank?}
+    @answer_attributes = answer_attributes.blank? ? nil : answer_attributes.find_all {|a| !a[:description].blank?}
   end
 
   after_save :save_answers
@@ -97,6 +98,10 @@ protected
   def deadline_is_valid 
     return if no_deadline or deadline.blank?
     errors.add(:deadline, "截止时间不能比现在早") if deadline <= Time.now.to_date
+  end
+
+  def answer_exists
+    errors.add(:answers_count, "没有选项") if @answer_attributes.blank?
   end
 
 end

@@ -65,6 +65,14 @@ module Model
         privilege_was == 4
       end
 
+      def is_public_privilege?
+        privilege == 1
+      end
+
+      def was_public_privilege?
+        privilege_was == 1
+      end
+
       def available_for? relationship
         relationship == 'owner' || privilege == 1 || (privilege != 4 and relationship == 'friend') || (privilege == 2 and relationship == 'same_game')
       end

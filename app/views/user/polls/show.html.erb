@@ -15,7 +15,7 @@
   <div class="box02 canvas_int space">
     <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>   
     <div class="vote-box">
-      <% if !@poll.past and @user == current_user %>
+      <% if !@poll.expired? and @user == current_user %>
         <%= render :partial => 'poll_operations', :locals => {:poll => @poll} %>
       <% else %>
         <%= render :partial => 'poll_path', :locals => {:user => @user} %>

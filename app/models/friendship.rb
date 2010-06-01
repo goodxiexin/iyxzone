@@ -82,9 +82,14 @@ protected
     if user == friend
       errors.add(:friend_id, "不能加自己")
     elsif friendship.blank?
+      fanship = user.fanships.find_by_fan_id(friend_id)
+      idolship = user.idolships.find_by_idol_id(friend_id)
+      if !fanship.blank? or !idolship.blank?
+        errors.add(:friend_id, "已经是粉丝了")
+      end
     elsif friendship.is_request?
       errors.add(:friend_id, "不能重复向同一个人发送请求")
-    else
+    elsif friendship.is_friend?
       errors.add(:friend_id, "已经是好友了")
     end
   end

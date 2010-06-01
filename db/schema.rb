@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100526061331) do
+ActiveRecord::Schema.define(:version => 20100601055424) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -168,6 +168,11 @@ ActiveRecord::Schema.define(:version => 20100526061331) do
   end
 
   add_index "events", ["poster_id"], :name => "index_events_on_poster_id"
+
+  create_table "fanships", :force => true do |t|
+    t.integer "fan_id"
+    t.integer "idol_id"
+  end
 
   create_table "feed_deliveries", :force => true do |t|
     t.integer  "recipient_id"
@@ -848,6 +853,8 @@ ActiveRecord::Schema.define(:version => 20100526061331) do
     t.datetime "remember_me_untils"
     t.string   "remember_code"
     t.string   "invitee_code"
+    t.integer  "fans_count",                               :default => 0
+    t.boolean  "is_idol",                                  :default => false
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"

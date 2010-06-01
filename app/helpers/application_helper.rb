@@ -22,10 +22,10 @@ module ApplicationHelper
     size = opts.delete(:size)
 		if File.exist? "public/images/gamepic/#{game_name}.gif"
       file_name = size.blank? ? "#{game_name}.gif" : "#{game_name}_#{size}.gif"
-			image_tag "/images/gamepic/#{file_name}", opts
+			image_tag "gamepic/#{file_name}", opts
 		else
       file_name = size.blank? ? "default.gif" : "default_medium.gif"
-			image_tag "/images/gamepic/#{file_name}", opts
+			image_tag "gamepic/#{file_name}", opts
 		end
 	end
 
@@ -200,13 +200,13 @@ module ApplicationHelper
 	end
 
 	def video_thumbnail video, opts={}
-    temping = video.thumbnail_url.blank? ? "/images/photo/video01.png" : video.thumbnail_url
+    temping = video.thumbnail_url.blank? ? "photo/video01.png" : video.thumbnail_url
 		#image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html.gsub('"','\"')}'+'>');"}.merge(opts)
 		image_tag temping, {:size => "120x90", :onclick => "Iyxzone.Video.play(#{video.id}, '#{video.embed_html}>');"}.merge(opts)
 	end
 
   def video_thumbnail_link video, opts={}
-    temping = video.thumbnail_url.blank? ? "/images/photo/video01.png" : video.thumbnail_url
+    temping = video.thumbnail_url.blank? ? "photo/video01.png" : video.thumbnail_url
     link_to (image_tag temping, :size => "120x90", :class => "imgbox01"), video_url(video), opts
   end
 
