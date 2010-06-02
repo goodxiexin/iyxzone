@@ -29,7 +29,6 @@ Iyxzone.Poll = {
 Object.extend(Iyxzone.Poll.Builder, {
 
   validate: function(){
-    return true;
     var game_id = $('poll_game_id');
     if(game_id.value == ''){
       error('游戏类别不能为空');
@@ -57,7 +56,7 @@ Object.extend(Iyxzone.Poll.Builder, {
       error('权限不能为空');
       return false;
     }
-
+    
     var cnt = this.countAnswers(false);
     if(cnt < 2){
       error('至少要有2个选项');

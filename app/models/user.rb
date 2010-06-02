@@ -411,7 +411,7 @@ class User < ActiveRecord::Base
   def relationship_with user
     if self == user
       'owner'
-    elsif has_friend?(user) or user.wait_for?(self)
+    elsif has_friend?(user) or user.wait_for?(self) or user.has_fan?(self)
       'friend'
     elsif has_same_game_with? user
       'same_game'

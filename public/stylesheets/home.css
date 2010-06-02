@@ -1311,6 +1311,10 @@ h1.app-share{float:left}
 span.i,a.i{width:16px;height:16px;margin-right:3px;display:-moz-inline-stack;display:inline-block;_display:inline;overflow:hidden;outline:none;font:0/0 sans-serif;text-indent:-99999px;*text-indent:0;zoom:1;vertical-align:middle}
 
 .iClose02{background-position:-22px -23px;}
+.iMedal{background-position:-44px -24px;}
+.iFollow{background-position:-78px -24px;}
+.iNoFollow{background-position:-60px -24px;}
+
 
 /*btn*/
 .sBtn,.sBtn span{background:url(../images/skin/btn2010.png) no-repeat}
@@ -1367,3 +1371,17 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .taskDetail .txt{line-height:20px}
 .taskDetail .taskDetailFoot{position:absolute;bottom:110px;left:45px;width:350px}
 .taskDetail .taskDetailFoot a{color:#d73300;text-decoration:underline}
+
+/*名人大牌档*/
+.followBtn{margin:10px 0 0 42px !important;*margin:10px 0 0 30px !important;}
+.followBtn button{font-weight:700;}
+.starMember .starItem{margin:10px 0;background:#f8fcf6;border:1px solid #ebebeb;padding:10px 10px 10px 90px;}
+.starMember .starItem .starAvatar{margin-left:-80px;float:left;_display:inline;}
+.starMember .starItem .starAvatar .con{background:url(../images/skin/skin2010.png) no-repeat 0 -644px;width:68px;height:68px;display:table-cell;vertical-align:middle;text-align:center;*display: block;*font-size:65px;*font-family:Arial;}
+.starMember .starItem .starCon{width:100%;float:left;position:relative}
+.starMember .starItem .starCon h3 a{font-size:14px;color:#d63000;}
+.starMember .starItem .starCon .intro{line-height:22px;margin:10px 180px 0 0;}
+
+.starMember .starItem .starFans{position:absolute;right:0;top:5px;text-align:right;color:#666;}
+.starMember .starItem .starFans .op{margin-top:10px}
+.starMember .starItem .starFans .op a{color:#d63000}

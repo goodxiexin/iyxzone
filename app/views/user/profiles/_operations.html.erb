@@ -1,22 +1,25 @@
 <div class='avatarbox'>
-<% subject = get_subject user %>
-<ul class='op s_clear'>
-<% if relationship == 'owner' %>
-	<li><%= facebox_link "<span class='i-avatar'></span>修改头像", new_avatar_url(:at => 'profile'), :width => 400 %></li>
-	<li><%= link_to "<span class='i-theme'></span>主页装扮", skins_url %></li>
-<% elsif relationship == 'friend' %>
-  <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>
-  <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %></li>
-  <li><%= facebox_link "<span class='i-hello'></span>打个招呼", new_poke_url(:recipient_id => user.id), :width => 450 %></li>
-  <li><%= facebox_link "<span class='i-avatar'></span>分享用户", new_sharing_url(:url => profile_url(profile)), :width => 450 %></li>
-<% else %>
-  <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>
-  <% if profile.is_commentable_by? current_user %>
-		<li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %></li>
-  <% end %>
-	<li><%= facebox_link "<span class='i-hello'></span>打个招呼", new_poke_url(:recipient_id => user.id), :width => 450 %></li>
-  <li><%= facebox_link "<span class='i-friend'></span>加为好友", new_friend_request_url(:friend_id => user.id) %></li>
-  <li><%= facebox_link "<span class='i-avatar'></span>分享用户", new_sharing_url(:url => profile_url(profile)), :width => 450 %></li>
-<% end %>
-</ul>
+  <% subject = get_subject user %>
+  <ul class='op s_clear'>
+    <% if relationship == 'owner' %>
+	    <li><%= facebox_link "<span class='i-avatar'></span>修改头像", new_avatar_url(:at => 'profile'), :width => 400 %></li>
+	    <li><%= link_to "<span class='i-theme'></span>主页装扮", skins_url %></li>
+    <% elsif relationship == 'friend' %>
+      <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>
+      <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %></li>
+      <li><%= facebox_link "<span class='i-hello'></span>打个招呼", new_poke_url(:recipient_id => user.id), :width => 450 %></li>
+      <li><%= facebox_link "<span class='i-avatar'></span>分享用户", new_sharing_url(:url => profile_url(profile)), :width => 450 %></li>
+    <% else %>
+      <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>
+      <% if profile.is_commentable_by? current_user %>
+		    <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %></li>
+      <% end %>
+	    <li><%= facebox_link "<span class='i-hello'></span>打个招呼", new_poke_url(:recipient_id => user.id), :width => 450 %></li>
+      <li><%= facebox_link "<span class='i-friend'></span>加为好友", new_friend_request_url(:friend_id => user.id) %></li>
+      <li><%= facebox_link "<span class='i-avatar'></span>分享用户", new_sharing_url(:url => profile_url(profile)), :width => 450 %></li>
+    <% end %>
+    <% if user.is_idol and user.has_fan? current_user %>
+      <li><%= facebox_confirm "<span class='i iNoFollow'></span>不做粉丝", unfollow_idol_url(user, :at => 'profile_show'), {:msg => "你确定要不做 #{@user.login} 的粉丝吗？这样就看不见 #{@user.login} 的新鲜事了~", :method => :delete} %></li>
+    <% end %>
+  </ul>
 </div>

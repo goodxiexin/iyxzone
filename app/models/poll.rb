@@ -10,7 +10,7 @@ class Poll < ActiveRecord::Base
 
   has_many :voters, :through => :votes
 
-	has_many :invitations, :class_name => 'PollInvitation', :order => 'created_at DESC' # 不写:dependent => :destroy, 手动来删，提高效率
+	has_many :invitations, :class_name => 'PollInvitation', :order => 'created_at DESC'
 
   has_many :invitees, :through => :invitations, :source => 'user'
 
@@ -28,7 +28,11 @@ class Poll < ActiveRecord::Base
   
 	acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, poll, comment| poll.poster == user || comment.poster == user}
 
-  acts_as_resource_feeds :recipients => lambda {|poll| [poll.poster.profile, poll.game] + poll.poster.all_guilds + poll.poster.friends.find_all {|f| f.application_setting.recv_poll_feed? } }
+  acts_as_resource_feeds :recipients => lambda {|poll| 
+    poster = poll.poster
+    friends = poster.friends.find_all {|f| f.application_setting.recv_poll_feed? }
+    [poster.profile, poll.game] + poster.all_guilds + friends + (poster.is_idol ? poster.fans : [])
+  }
 
   acts_as_random
   
@@ -62,6 +66,18 @@ class Poll < ActiveRecord::Base
     user == poster || privilege == 1 || (privilege == 2 and poster.has_friend? user)
   end
 
+  def voted_by? user
+    voters.include? user
+  end
+
+  def has_invited? user
+    !invitations.find_by_user_id(user.is_a?(Integer) ? user : user.id).blank?
+  end
+
+  def has_answers? answer_ids
+    answers.all(:conditions => {:id => answer_ids}).count == answer_ids.count
+  end
+
   def answers= answer_attributes
     @answer_attributes = answer_attributes.blank? ? nil : answer_attributes.find_all {|a| !a[:description].blank?}
   end
@@ -82,17 +98,13 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  def has_answers? answer_ids
-    answers.all(:conditions => {:id => answer_ids}).count == answer_ids.count
-  end
-
 protected
 
   def game_is_valid
     return if game_id.blank?
     errors.add('game_id', "不存在") unless Game.exists?(game_id)
     return if poster_id.blank?
-    errors.add('game_id', "该用户没有这个游戏") unless poster.characters.map(&:game_id).include?(game_id)
+    errors.add('game_id', "该用户没有这个游戏") unless poster.has_game?(game_id)
   end
 
   def deadline_is_valid 

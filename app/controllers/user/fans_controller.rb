@@ -1,34 +1,19 @@
 class User::FansController < UserBaseController
 
-  def create
-    @fanship = current_user.idolships.build(params[:fanship] || {})
+  layout 'app'
 
-    if @fanship.save
-      render_js_code "alert('succ');"
-    else
-      render_js_error @fanship.errors.on(:idol_id)
-    end
+  def index
+    @user = User.find(params[:uid])
+    @fans = @user.fans.paginate :page => params[:page], :per_page => 18
   end
 
   def destroy
+    @fanship = current_user.fanships.find_by_fan_id(params[:id])
     if @fanship.destroy
-      render_js_code "alert('succ');"
+      render_js_code "$('fan_#{@fanship.fan_id}').remove();"
     else
       render_js_error
-    end 
-  end
-
-protected
-
-  def setup
-    if ['destroy'].include? params[:action]
-      @fanship = Fanship.find(params[:id])
-      require_delete_privilege @fanship
     end
-  end
-
-  def reqiure_delete_privilege fanship
-    fanship.fan_id == current_user.id || fanship.idol_id = current_user.id || render_not_found
   end
 
 end

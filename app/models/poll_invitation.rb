@@ -14,7 +14,7 @@ protected
 
   def user_is_valid
     return if user_id.blank? or poll.blank?
-    if !poll.invitations.find_by_user_id(user_id).blank?
+    if poll.has_invited? user_id
       errors.add(:user_id, '已经邀请过了')
     elsif !poll.poster.has_friend? user_id
       errors.add(:user_id, '邀请的不是好友')

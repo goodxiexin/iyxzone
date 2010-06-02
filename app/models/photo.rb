@@ -14,7 +14,10 @@ class Photo < ActiveRecord::Base
 
 	acts_as_privileged_resources :owner_field => :poster, :validate_on => "false"
 
-	acts_as_resource_feeds :recipients => lambda {|photo| photo.album.poster.friends.find_all{|f| f.application_setting.recv_photo_feed?}}
+	acts_as_resource_feeds :recipients => lambda {|photo| 
+    poster = photo.album.poster
+    poster.friends.find_all{|f| f.application_setting.recv_photo_feed?} + (poster.is_idol ? poster.fans : [])
+  }
 
   acts_as_shareable :path_reg => [/\/personal_photos\/([\d]+)/, /\/event_photos\/([\d]+)/, /\/guild_photos\/([\d]+)/, /\/avatars\/([\d]+)/],
                     :default_title => lambda {|photo| "相册#{photo.album.title}的照片"},

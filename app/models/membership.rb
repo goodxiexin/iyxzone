@@ -16,7 +16,12 @@ class Membership < ActiveRecord::Base
 
   belongs_to :guild
 
-	acts_as_resource_feeds :recipients => lambda {|membership| [membership.user.profile, membership.character.game] + membership.user.friends.find_all{|f| f.application_setting.recv_guild_feed?} - [membership.guild.president] }
+	acts_as_resource_feeds :recipients => lambda {|membership| 
+    user = membership.user
+    guild = membership.guild 
+    friends = membership.user.friends.find_all{|f| f.application_setting.recv_guild_feed?}
+    [user.profile, guild.game] + friends + (user.is_idol ? user.fans : []) - [guild.president] 
+  }
 
   # user_id, guild_id, character_id 不能被修改
   attr_readonly :user_id, :guild_id, :character_id

@@ -2,6 +2,9 @@
         <ul>
           <li <% if hover==0%>class='hover'<% end %>><span><%= link_to "#{user.login}的好友", other_friends_url(:uid => user.id) %></span></li>
           <li <% if hover==1%>class='hover'<% end %>><span><%= link_to '共同好友', common_friends_url(:uid => user.id) %></span></li>
+          <% if user.is_idol %>
+            <li <% if hover==2 %>class='hover'<% end %></span><%= link_to '粉丝团', fans_url(:uid => user.id) %></span></li>
+          <% end %>
         </ul>
       </div>
 

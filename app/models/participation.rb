@@ -17,12 +17,10 @@ class Participation < ActiveRecord::Base
 
 	acts_as_resource_feeds :recipients => lambda {|participation|
     participant = participation.participant
-    character = participation.character
     event = participation.event
-    recipients = [participant.profile, character.game]
-    recipients.concat [event.guild] if event.is_guild_event?
-    recipients.concat participant.friends.find_all {|f| f.application_setting.recv_event_feed?} 
-    recipients - [event.poster]
+    friends = participant.friends.find_all {|f| f.application_setting.recv_event_feed?} 
+    fans = participant.is_idol ? participant.fans : []
+    [participant.profile, event.game] + (event.is_guild_event? ? [event.guild] : []) + friends + fans - [event.poster]
   }
 
   def is_invitation?

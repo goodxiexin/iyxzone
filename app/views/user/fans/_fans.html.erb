@@ -1,0 +1,26 @@
+<ul class='friend-man s_clear'>
+<% fans.each do |f| %>
+  <li id='fan_<%= f.id %>' class='bg'>
+    <div class="card">
+      <% if current_user == idol %>
+        <%= facebox_confirm '', fan_url(f), {:method => :delete, :msg => "你确定要把他剔除粉丝团吗?"}, :class => "icon-active right" %>
+      <% end %> 
+      <div class="img">
+        <div class="middle"><div class="middle-center"><div class="center">
+          <%= avatar f, :class => 'imgbox01' %>
+        </div></div></div>
+      </div>
+      <div class="info member s_clear">
+        <h4><%= profile_link f %></h4>
+      </div>
+    </div>
+  </li>
+<% end %>
+</ul>
+
+<% if remote %>
+  <%= remote_will_paginate fans, :remote => remote %>
+<% else %>
+  <%= will_paginate fans %>
+<% end %>
+
