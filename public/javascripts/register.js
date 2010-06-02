@@ -77,6 +77,8 @@ Object.extend(Iyxzone.Register, {
         onSuccess: function(transport){
           if(transport.responseText == 'yes'){
             this.pass('email_info');
+          }else if (transport.responseText == 'domain_error') {
+            this.error('email_info', '该邮箱域名不存在');
           }else{
             this.error('email_info', '该邮箱已被注册');
           }

@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20100526061331) do
     t.integer  "comments_count", :default => 0
     t.datetime "uploaded_at"
     t.datetime "created_at"
-    t.integer  "verified"
+    t.integer  "verified",       :default => 0
   end
 
   add_index "albums", ["owner_id"], :name => "index_albums_on_owner_id"
@@ -522,7 +522,7 @@ ActiveRecord::Schema.define(:version => 20100526061331) do
     t.integer  "album_id"
     t.integer  "game_id"
     t.integer  "poster_id"
-    t.integer  "privilege"
+    t.integer  "privilege",      :default => 1
     t.text     "notation"
     t.integer  "parent_id"
     t.string   "content_type"
@@ -757,8 +757,8 @@ ActiveRecord::Schema.define(:version => 20100526061331) do
     t.text     "requirement"
     t.text     "reward"
     t.text     "description"
-    t.integer  "catagory",     :default => 1
-    t.datetime "starts_at",    :default => '2010-05-19 17:49:53'
+    t.integer  "catagory",     :default => 2
+    t.datetime "starts_at",    :default => '2010-05-31 21:36:31'
     t.datetime "expires_at"
     t.integer  "duration"
     t.integer  "state"
@@ -794,6 +794,8 @@ ActiveRecord::Schema.define(:version => 20100526061331) do
     t.string   "gender",                                   :default => "male"
     t.string   "crypted_password",           :limit => 40
     t.string   "salt",                       :limit => 40
+    t.string   "remember_code"
+    t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.datetime "activated_at"
     t.string   "password_reset_code"
@@ -805,9 +807,9 @@ ActiveRecord::Schema.define(:version => 20100526061331) do
     t.integer  "avatar_id"
     t.string   "pinyin"
     t.datetime "last_seen_at"
-    t.integer  "privacy_setting",            :limit => 8,  :default => 123076522
-    t.integer  "mail_setting",               :limit => 8,  :default => 562949953421311
-    t.integer  "application_setting",        :limit => 8,  :default => 262143
+    t.integer  "privacy_setting",            :limit => 8,  :default => 0
+    t.integer  "mail_setting",               :limit => 8,  :default => 0
+    t.integer  "application_setting",        :limit => 8,  :default => 0
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
     t.integer  "game_attentions_count",                    :default => 0
@@ -845,8 +847,6 @@ ActiveRecord::Schema.define(:version => 20100526061331) do
     t.integer  "poke_deliveries_count",                    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "remember_me_untils"
-    t.string   "remember_code"
     t.string   "invitee_code"
   end
 
