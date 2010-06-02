@@ -3,7 +3,7 @@
     <table width="100%" border="0" cellspacing="10" cellpadding="0">
       <tr>
         <td><img src="<%=SITE_URL%>/images/mails/t2.png" width="190" height="142" alt="一起游戏网" /></td>
-        <td style="font-size:12px;line-height:22px;color:#333"><strong style="color:#dc5e04;font-size:14px"> <%=@user.login%>，您好！</strong><br />我们注意到您已经有一周时间未登陆<strong style="color:#dc5e04">一起游戏网(17gaming)</strong>，一起游戏网新增了好多功能，新的会员，精彩不容错过！<br /><a href="<%=SITE_URL%>" target='_blank'><img src="<%=SITE_URL%>/images/mails/login.png" width="130" height="27" border="0" alt="立刻登陆" /></a></td>
+        <td style="font-size:12px;line-height:22px;color:#333"><strong style="color:#dc5e04;font-size:14px"> <%=@user.login%>，您好！</strong><br />我们注意到您已经有一周时间未登陆<strong style="color:#dc5e04">一起游戏网(17gaming)</strong>，一起游戏网新增了好多功能，新的会员，精彩不容错过！<br /><a href="<%=SITE_URL%>?utm_source=mailSite&utm_medium=email&utm_term=revive&utm_content=loginLink&utm_campaign=weekReminder" target='_blank'><img src="<%=SITE_URL%>/images/mails/login.png" width="130" height="27" border="0" alt="立刻登陆" /></a></td>
       </tr>
     </table>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -12,16 +12,14 @@
           <div><img src="<%= SITE_URL%>/images/mails/new_func.png" width="275" height="43" alt="新功能" /></div>
         	<table border="0" cellspacing="5" cellpadding="0">
         	  <tr>
-              <td><%= td_header "05月18日 游戏库的显示更改" %></td>
             </tr>
         	  <tr>
-							<td><%= td_header "05月19日  更改了日志的显示，并可以插入视频"%></td>
             </tr>
         	  <tr>
-							<td><%= td_header "05月20日  DOTA视频解说海涛入入住"%></td>
+							<td><%= td_header "06月2日	可以看大家的状态了"%></td>
             </tr>
         	  <tr>
-							<td><%= td_header "05月24日 增加了5种皮肤"%></td>
+							<td><%= td_header "06月1日 战胜了邪恶的黑客"%></td>
             </tr>
         	  <tr>
               <td></td>
@@ -40,9 +38,9 @@
 								<% end %>
                   <td class= "<%=index%>"align="center" width="33%">
 									<% if hot_user.avatar.blank? %>
-                    <a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><%= image_tag "/images/default_#{hot_user.gender}_medium.png", :width=>"50", :height=>"50", :border=>"0"%>
+                    <a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>?utm_source=mailSite&utm_medium=email&utm_term=revive&utm_content=newMemberLink&utm_campaign=weekReminder" style="text-decoration:none;" target='_blank'><%= image_tag "/images/default_#{hot_user.gender}_medium.png", :width=>"50", :height=>"50", :border=>"0"%>
 									<% else %>
-										<a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>" style="text-decoration:none;" target='_blank'><%= image_tag "#{hot_user.avatar.public_filename("medium")}", :width=>"50", :height=>"50", :border=>"0" %>
+										<a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>?utm_source=mailSite&utm_medium=email&utm_term=revive&utm_content=newMemberLink&utm_campaign=weekReminder" style="text-decoration:none;" target='_blank'><%= image_tag "#{hot_user.avatar.public_filename("medium")}", :width=>"50", :height=>"50", :border=>"0" %>
 									<% end %>
                     <div style="width:80px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;color:#333;font-size:12px"><%= hot_user.login%></div></a>
                   </td>
@@ -61,9 +59,9 @@
 				<% @games.each do |game| %>
         <td align="center">
 					<% if File.exist? "public/images/gamepic/#{game.name}.gif" %>
-						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><%= image_tag "/images/gamepic/#{game.name}.gif", :alt=>"#{game.name}", :style=>"border:1px solid #aaa;padding:4px" %></a>
+						<a href="<%=SITE_URL%>/games/<%= game.id%>?utm_source=mailSite&utm_medium=email&utm_term=revive&utm_content=newGameLink&utm_campaign=weekReminder" target='_blank'><%= image_tag "/images/gamepic/#{game.name}.gif", :alt=>"#{game.name}", :style=>"border:1px solid #aaa;padding:4px" %></a>
 					<% else %>
-						<a href="<%=SITE_URL%>/games/<%= game.id%>" target='_blank'><%= image_tag "/images/gamepic/default.gif", :alt=>"#{game.name}", :style=>"border:1px solid #aaa;padding:4px" %></a>
+						<a href="<%=SITE_URL%>/games/<%= game.id%>?utm_source=mailSite&utm_medium=email&utm_term=revive&utm_content=newGameLink&utm_campaign=weekReminder" target='_blank'><%= image_tag "/images/gamepic/default.gif", :alt=>"#{game.name}", :style=>"border:1px solid #aaa;padding:4px" %></a>
 					<% end %>
 					<br/>
           <%= link_to "#{game.name}", "games/#{game.id}", :style=>"line-height:24px;font-size:14px;color:#db5903;font-weight:700;text-decoration:none"%>
@@ -89,7 +87,7 @@
         	<table border="0" cellspacing="5" cellpadding="0">
 					<% @polls.each do |poll| %>
         	  <tr>
-                <td><a href="<%=SITE_URL%>/polls/<%=poll.id%>" style="color:#333;text-decoration:none;font-size:12px;display:block;width:260px;height:20px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;" target='_blank'><%=image_tag "/images/mails/icon01.png", :width=>"17", :height=>"18", :border=>"0", :align=>"absmiddle", :hspace=>"5" %><%= poll.name %></a></td>
+                <td><a href="<%=SITE_URL%>/polls/<%=poll.id%>?utm_source=mailSite&utm_medium=email&utm_term=revive&utm_content=hotPollLink&utm_campaign=weekReminder" style="color:#333;text-decoration:none;font-size:12px;display:block;width:260px;height:20px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;" target='_blank'><%=image_tag "/images/mails/icon01.png", :width=>"17", :height=>"18", :border=>"0", :align=>"absmiddle", :hspace=>"5" %><%= poll.name %></a></td>
               </tr>
 						<% end %>
             </table>
@@ -99,7 +97,7 @@
         	<table border="0" cellspacing="5" cellpadding="0">
 					<% @news.each do |onenews| %>
         	  <tr>
-                  <td><a href="<%=SITE_URL%>/news/<%=onenews.id%>" style="color:#333;text-decoration:none;font-size:12px;display:block;width:260px;height:20px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;" target='_blank'><%=image_tag "/images/mails/icon02.png", :width=>"17", :height=>"18", :border=>"0", :align=>"absmiddle", :hspace=>"5" %><%=onenews.title%></a></td>
+                  <td><a href="<%=SITE_URL%>/news/<%=onenews.id%>?utm_source=mailSite&utm_medium=email&utm_term=revive&utm_content=hotNewsLink&utm_campaign=weekReminder" style="color:#333;text-decoration:none;font-size:12px;display:block;width:260px;height:20px;line-height:20px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;" target='_blank'><%=image_tag "/images/mails/icon02.png", :width=>"17", :height=>"18", :border=>"0", :align=>"absmiddle", :hspace=>"5" %><%=onenews.title%></a></td>
               </tr>
 						<% end %>
            	</table>

@@ -1,3 +1,4 @@
+<% content_for :html_title, "#{@topic.poster.login}的话题 - #{@topic.subject} " %>
 <% content_for :javascript_include do %>
   <%= javascript_include_merged :forum %>
 <% end %>
