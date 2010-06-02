@@ -79,7 +79,7 @@ Object.extend(Iyxzone.Register, {
             this.pass('email_info');
           }else if (transport.responseText == 'domain_error') {
             this.error('email_info', '该邮箱域名不存在');
-          }else{
+          }else if (transport.responseText == 'no'){
             this.error('email_info', '该邮箱已被注册');
           }
         }.bind(this)

@@ -7,12 +7,10 @@ class RegisterController < ApplicationController
   end
 
   def validates_email_uniqueness
-    if valid_domain?(params[:email].downcase)
-      if User.find_by_email(params[:email].downcase)
-        render :text => 'no'
-      else
-        render :text => 'yes'
-      end
+    if User.find_by_email params[:email].downcase
+      render :text => 'no'
+    elsif valid_domain? params[:email].downcase
+      render :text => 'yes'
     else
       render :text => 'domain_error'
     end
@@ -29,12 +27,12 @@ class RegisterController < ApplicationController
     end
   end
 
-  EMAIL_PATTERN = /(\S+)@(\S+)/
-  SERVER_TIMEOUT = 3
+protected
+
   def valid_domain?(email)
-    domain = email.match(EMAIL_PATTERN)[2]
+    domain = email.match(/(\S+)@(\S+)/)[2]
     dns = Resolv::DNS.new
-    Timeout::timeout(SERVER_TIMEOUT) do
+    Timeout::timeout(3) do
       mx_records = dns.getresources(domain, Resolv::DNS::Resource::IN::MX)
       mx_records.sort_by {|mx| mx.preference}.each do |mx|
         a_records = dns.getresources(mx.exchange.to_s, Resolv::DNS::Resource::IN::A)
