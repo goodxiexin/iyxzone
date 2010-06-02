@@ -12,10 +12,6 @@ class PollTest < ActiveSupport::TestCase
     @character2 = GameCharacterFactory.create @character1.game_info.merge({:user_id => @friend.id})
     @game = @character1.game
 
-    @guild1 = GuildFactory.create :character_id => @character1.id
-    @guild2 = GuildFactory.create :character_id => @character2.id
-    @guild2.member_memberships.create :user_id => @user.id, :character_id => @character1.id
-
     @sensitive = '政府'
   end
 
@@ -311,6 +307,15 @@ class PollTest < ActiveSupport::TestCase
   # poll feed and vote feed
   #
   test "case7" do
+    @guild1 = GuildFactory.create :character_id => @character1.id
+    @guild2 = GuildFactory.create :character_id => @character2.id
+    @guild2.member_memberships.create :user_id => @user.id, :character_id => @character1.id
+
+    @user.is_idol = true
+    @user.save
+    @fan = UserFactory.create
+    Fanship.create :fan_id => @fan.id, :idol_id => @user.id
+
     @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}], :max_multiple => 2
  
     assert @friend.recv_feed?(@poll)
@@ -318,43 +323,49 @@ class PollTest < ActiveSupport::TestCase
     assert @user.profile.recv_feed?(@poll)
     assert @guild1.recv_feed?(@poll)
     assert @guild2.recv_feed?(@poll)
+    assert @fan.recv_feed?(@poll)
 
     @vote = @poll.votes.create :voter_id => @user.id, :answer_ids => [@poll.answers.first.id]
 
-    @friend.reload and @game.reload and @user.reload and @guild1.reload and @guild2.reload    
+    @friend.reload and @game.reload and @user.reload and @guild1.reload and @guild2.reload and @fan.reload   
     assert @friend.recv_feed?(@vote)
     assert @game.recv_feed?(@vote)
     assert @user.profile.recv_feed?(@vote)
     assert @guild1.recv_feed?(@vote)
     assert @guild2.recv_feed?(@vote)
+    assert @fan.recv_feed?(@vote)
 
     @poll.unverify
 
-    @friend.reload and @game.reload and @user.reload and @guild1.reload and @guild2.reload
+    @friend.reload and @game.reload and @user.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert !@friend.recv_feed?(@poll)
     assert !@game.recv_feed?(@poll)
     assert !@user.profile.recv_feed?(@poll)
     assert !@guild1.recv_feed?(@poll)
     assert !@guild2.recv_feed?(@poll)
+    assert !@fan.recv_feed?(@poll)
     assert @friend.recv_feed?(@vote)
     assert @game.recv_feed?(@vote)
     assert @user.profile.recv_feed?(@vote)
     assert @guild1.recv_feed?(@vote)
     assert @guild2.recv_feed?(@vote)
-  
+    assert @fan.recv_feed?(@vote)  
+
     @poll.verify
 
-    @friend.reload and @game.reload and @user.reload and @guild1.reload and @guild2.reload
+    @friend.reload and @game.reload and @user.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert @friend.recv_feed?(@poll)
     assert @game.recv_feed?(@poll)
     assert @user.profile.recv_feed?(@poll)
     assert @guild1.recv_feed?(@poll)
     assert @guild2.recv_feed?(@poll)
+    assert @fan.recv_feed?(@poll)
     assert @friend.recv_feed?(@vote)
     assert @game.recv_feed?(@vote)
     assert @user.profile.recv_feed?(@vote)
     assert @guild1.recv_feed?(@vote)
     assert @guild2.recv_feed?(@vote)
+    assert @fan.recv_feed?(@vote)
   end
 
   #

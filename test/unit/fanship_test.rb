@@ -17,13 +17,15 @@ class FanshipTest < ActiveSupport::TestCase
       @fanship = Fanship.create :fan_id => @user1.id, :idol_id => @idol1.id
     end
     @idol1.reload
-    assert @idol1.fans_count, 1
+    assert_equal @idol1.fans_count, 1
+    assert @idol1.has_fan? @user1
   
     assert_difference "Fanship.count", -1 do
       @fanship.destroy
     end
     @idol1.reload
     assert_equal @idol1.fans_count, 0
+    assert !@idol1.has_fan?(@user1)
   end
 
   test "create fanship" do
