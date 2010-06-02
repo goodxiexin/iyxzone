@@ -1,3 +1,4 @@
+<% content_for :html_title, "#{@guild.name}的论坛" %>
 <% canvas_tag do %>
     <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}", :guild => @guild} %>
     <div class="box02 canvas_int rows s_clear space">

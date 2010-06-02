@@ -1,7 +1,11 @@
 <% if RAILS_ENV != 'test' %>
-<% content_for :javascript_include do %>
-  <%= juggernaut :client_id => current_user.id %>
+	<% content_for :javascript_include do %>
+		<%= juggernaut :client_id => current_user.id %>
+	<% end %>
 <% end %>
+
+<% if RAILS_ENV == 'production' %> 
+	<% content_for :ga_include, "_gaq.push(['_setCustomVar', '1','memberID','#{current_user.id}','1']);" %>
 <% end %>
 
 <% content_for :body do %>
