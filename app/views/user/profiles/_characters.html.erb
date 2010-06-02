@@ -6,7 +6,7 @@
     <% end %>
   </h3>
   <div class="formcontent con con2">
-    <% if setting.character_info? relationship %>
+    <% if profile.characters_viewable? relationship %>
     <div class="item space">
     <% profile.user.characters.each do |c| %>
       <div class="rows s_clear">

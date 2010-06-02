@@ -6,7 +6,7 @@
     <% end %>
   <% end %>
   <% content_tag :div, :class => "formcontent con con2" do %>
-    <% if setting.basic_info? relationship %>
+    <% if profile.basic_info_viewable? relationship %>
       <% content_tag :div, :class => "item space" do %>
         <% rows_s_clear '昵称: ' do %><%= h profile.login %><% end %>
         <% rows_s_clear '性别: ' do %><%= gender profile.user %><% end %>

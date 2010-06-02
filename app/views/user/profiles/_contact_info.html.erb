@@ -7,16 +7,16 @@
   </h3>
   <div class="formcontent con con2">
     <div class="item space">
-      <% if setting.email? relationship %>
+      <% if profile.email_viewable? relationship %>
         <% rows_s_clear '邮件: ' do %><%= profile.user.email %><% end %>
       <% end %>
-      <% if setting.qq? relationship %>
+      <% if profile.qq_viewable? relationship %>
         <% rows_s_clear 'QQ号码: ' do %><%= profile.qq %><% end %>
       <% end %>
-      <% if setting.phone? relationship %>
+      <% if profile.phone_viewable? relationship %>
         <% rows_s_clear '电话: ' do %><%= profile.phone %><% end %>
       <% end %>
-      <% if setting.website? relationship %>
+      <% if profile.website_viewable? relationship %>
         <% rows_s_clear '个人网页: ' do %><%= profile.website %><% end %>
       <% end %>
     </div>

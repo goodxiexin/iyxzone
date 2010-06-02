@@ -8,10 +8,14 @@ class User < ActiveRecord::Base
 
   has_many :idolships, :foreign_key => :fan_id, :class_name => 'Fanship'
 
-  has_many :idols, :through => :star_fanships, :source => :idol
+  has_many :idols, :through => :idolships, :source => :idol
 
   def has_fan? fan
     fanships.map(&:fan_id).include? (fan.is_a?(Integer) ? fan : fan.id)
+  end
+
+  def has_idol? idol
+    idolships.map(&:idol_id).include? (idol.is_a?(Integer) ? idol : idol.id)
   end
 
   has_one :rss_feed
@@ -411,7 +415,7 @@ class User < ActiveRecord::Base
   def relationship_with user
     if self == user
       'owner'
-    elsif has_friend?(user) or user.wait_for?(self) or user.has_fan?(self)
+    elsif has_friend?(user) or user.wait_for?(self) or user.has_fan?(self) or self.has_fan?(user)
       'friend'
     elsif has_same_game_with? user
       'same_game'

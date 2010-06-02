@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100602043553) do
+ActiveRecord::Schema.define(:version => 20100602135200) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -856,6 +856,7 @@ ActiveRecord::Schema.define(:version => 20100602043553) do
     t.integer  "fans_count",                               :default => 0
     t.boolean  "is_idol",                                  :default => false
     t.text     "idol_description"
+    t.integer  "idols_count",                              :default => 0
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"
