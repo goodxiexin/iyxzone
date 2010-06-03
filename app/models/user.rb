@@ -2,11 +2,11 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
-  has_many :fanships, :foreign_key => :idol_id
+  has_many :fanships, :foreign_key => :idol_id, :dependent => :destroy
 
   has_many :fans, :through => :fanships, :source => :fan
 
-  has_many :idolships, :foreign_key => :fan_id, :class_name => 'Fanship'
+  has_many :idolships, :foreign_key => :fan_id, :class_name => 'Fanship', :dependent => :destroy
 
   has_many :idols, :through => :idolships, :source => :idol
 
