@@ -14,7 +14,7 @@
 													<li>玩家打分：<strong><%= "%.1f" % game.average_rating %></strong></li>
 													<li>玩家关注：<strong><%= game.attentions_count %></strong></li>
 													<li>已有玩家：<strong><%= game.characters_count%></strong></li>
-													<li>新增玩家：<strong><%= game.last_week_characters_count %></strong></li>
+													<li>新增玩家：<strong><%= game.characters_count - game.last_week_characters_count %></strong></li>
 												</ul>
 											</div>
 										</div>

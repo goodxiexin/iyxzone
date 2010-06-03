@@ -8,7 +8,7 @@ namespace :users do
 
   desc "提示那些很久没上线的人"
   task :send_long_time_no_seen => :environment do 
-    users = User.find(:all, :conditions => ["last_seen_at <= ?", 1.week.ago.to_s(:db)])
+    users = User.find(:all, :conditions => ["last_seen_at <= ?", 1.year.ago.to_s(:db)])
     polls = Poll.hot.nonblocked.limit(3)
 		news = News.hot.limit(3)
 		photos = Photo.hot.limit(4)
