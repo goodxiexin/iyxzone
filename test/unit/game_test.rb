@@ -75,15 +75,126 @@ class GameTest < ActiveSupport::TestCase
 	end
 
 	test "打分" do
-	end
+		# 玩了游戏的给这个游戏打分
+		rating1 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
+		@game.reload
+		assert_equal @game.ratings_count, 1
+		assert_equal @game.average_rating, 5
 
-	test "评论" do
+		# 没玩游戏的给这个游戏打分
+		rating2 = Rating.create(:user_id => @user2.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
+		@game.reload
+		assert_equal @game.ratings_count, 1
+
+		# 玩了游戏的立刻再次打分
+		rating3 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
+		@game.reload
+		assert_equal @game.ratings_count, 1
+		
+		# 玩了这个游戏的在9天后打分
+		rating1.created_at = 9.days.ago
+		rating1.save
+		rating4 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
+		@game.reload
+		assert_equal @game.ratings_count, 1
+
+		# 玩了这个游戏的在10天后打分
+		rating1.created_at = 10.days.ago
+		rating1.save
+		rating4 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 4)
+		@game.reload
+		assert_equal @game.ratings_count, 2
+		assert_equal @game.average_rating, 4.5
+
+		# 另一个用户给这个游戏打分
+		new_character = GameCharacterFactory.create :user_id => @user2.id, :game_id => @game.id
+		rating5 = Rating.create(:user_id => @user2.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 3)
+		@game.reload
+		assert_equal @game.ratings_count, 3
+		assert_equal @game.average_rating, 4
 	end
 
 	test "标签" do
+		# 玩游戏的写标签
+		tag1 = Tag.create(:name => "好玩", :taggable_type => 'Game')
+		tagging1 = Tagging.create(:tag_id => tag1.id, :poster_id => @user1.id, :taggable_id => @game.id, :taggable_type => 'Game')
+		@game.reload
+		assert_equal @game.taggings.count, 1
+
+		# 不玩这个游戏的写标签
+		tagging2 = Tagging.create(:tag_id => tag1.id, :poster_id => @user2.id, :taggable_id => @game.id, :taggable_type => 'Game')
+		@game.reload
+		assert_equal @game.taggings.count, 2
+
+		# 立刻再写一次标签
+		tagging3 = Tagging.create(:tag_id => tag1.id, :poster_id => @user2.id, :taggable_id => @game.id, :taggable_type => 'Game')
+		@game.reload
+		assert_equal @game.taggings.count, 2
+
+		# 9天后写标签
+		tagging1.created_at = 9.days.ago
+		tagging1.save
+		tagging4 = Tagging.create(:tag_id => tag1.id, :poster_id => @user1.id, :taggable_id => @game.id, :taggable_type => 'Game')
+		@game.reload
+		assert_equal @game.taggings.count, 2
+
+		# 10天后写标签
+		tagging1.created_at = 10.days.ago
+		tagging1.save
+		tagging5 = Tagging.create(:tag_id => tag1.id, :poster_id => @user1.id, :taggable_id => @game.id, :taggable_type => 'Game')
+		@game.reload
+		assert_equal @game.taggings.count, 3
 	end
 
 	test "留言" do
+		# 玩家用户留言
+		comment1 = Comment.create(:poster_id => @user1.id, :commentable_id => @game.id, :commentable_type => 'Game', :content => 'haloha')
+		@game.reload
+		assert_equal @game.comments_count, 1
+
+		# 非玩家用户留言
+		comment2 = Comment.create(:poster_id => @user2.id, :commentable_id => @game.id, :commentable_type => 'Game', :content => '哈咯哈')
+		@game.reload
+		assert_equal @game.comments_count, 2
+
+		# 删除留言
+		comment1.destroy
+		@game.reload
+		assert_equal @game.comments_count, 1
+
+		comment2.destroy
+		@game.reload
+		assert_equal @game.comments_count, 0
+
+	end
+
+	test "分享" do
+		# 游戏分享的基本测试
+    type, id = Share.get_type_and_id "/games/#{@game.id}"
+
+    assert_equal type, 'Game'
+    assert_equal id.to_i, @game.id
+
+		# 玩家分享
+		share1 = Share.create(:shareable_id => @game.id, :shareable_type => 'Game')
+		sharing1 = Sharing.create(:title => @game.name, :reason => "好", :shareable_type => 'Game', :share_id => share1.id, :poster_id => @user1.id )
+		@game.reload
+		assert_equal @game.sharings.count, 1
+
+		# 非玩家分享
+		sharing2 = Sharing.create(:title => @game.name, :reason => "好", :shareable_type => 'Game', :share_id => share1.id, :poster_id => @user2.id )
+		@game.reload
+		assert_equal @game.sharings.count, 2
+		
+		# 删除分享
+		sharing1.destroy
+		@game.reload
+		assert_equal @game.sharings.count, 1
+
+		sharing2.destroy
+		@game.reload
+		assert_equal @game.sharings.count, 0
+
 	end
 
   # 以下为非用户才能进行的操作
