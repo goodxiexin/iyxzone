@@ -8,10 +8,13 @@ class Sharing < ActiveRecord::Base
 
   belongs_to :share
 
-  acts_as_commentable :order => 'created_at ASC', 
-                      :delete_conditions => lambda {|user, sharing, comment| user == comment.poster || user == sharing.poster}
+  acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, sharing, comment| user == comment.poster || user == sharing.poster}
 
-  acts_as_resource_feeds :recipients => lambda {|sharing| [sharing.poster.profile] + sharing.poster.guilds + sharing.poster.friends.find_all {|f| f.application_setting.recv_sharing_feed?} }
+  acts_as_resource_feeds :recipients => lambda {|sharing| 
+    poster = sharing.poster
+    friends = poster.friends.find_all {|f| f.application_setting.recv_sharing_feed?}
+    [poster.profile] + poster.all_guilds + friends + (poster.is_idol ? poster.fans : [])
+  }
 
   attr_protected :shareable_type
 

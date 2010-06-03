@@ -19,45 +19,46 @@ class User::GuestbooksController < UserBaseController
 protected
 
 	def get_default
+    @ref = request.env['HTTP_REFERER']
 		@uri = URI.parse(request.env['HTTP_REFERER'])
 		@path = @uri.path
 		case @path
 		when /blog/
-			return "日志" 
+			 "日志" 
 		when /video/
-			return "视频"
+			 "视频"
 		when /album/
-			return "照片"
+			 "照片"
 		when /status/
-			return "状态"
+			 "状态"
 		when /event/
-			return "活动"
+			 "活动"
 		when /poll/
-			return "投票"
+			 "投票"
 		when /guild/
-			return "公会"
+			 "公会"
 		when /sharing/
-			return "分享"
+			 "分享"
 		when /games/
-			return "游戏"
+			 "游戏"
 		when /game_suggestion/
-			return "推荐游戏"
+			 "推荐游戏"
 		when /news/
-			return "拾闻"
+			 "拾闻"
 		when /home/
-			return "首页"
+			 "首页"
 		when /profile/
-			return "个人主页"
+			 "个人主页"
 		when /friend/
-			return "好友"
+			 "好友"
 		when /mail/
-			return "站内信"
+			 "站内信"
 		when /invitation/
-			return "邀请"
+			 "邀请"
 		when /setting/
-			return "设置"
+			 "设置"
 		else
-			return "其它"
+			 "其它"
 		end
 	end
 

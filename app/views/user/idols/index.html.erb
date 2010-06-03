@@ -1,0 +1,12 @@
+<% canvas_tag do%> 
+  <h1 class="app-friend">好友</h1>
+  <div class="box02 canvas_int">
+    <%= render :partial => 'user/friends/tab', :locals => {:hover => 3} %> 
+    <div class="mainConWrap clear">
+      <div class="starMember">
+        <%= render :partial => 'idol', :collection => @idols %>
+      </div>
+      <%= will_paginate @idols %>
+    </div>
+  </div>
+<% end %>

@@ -77,7 +77,9 @@ Object.extend(Iyxzone.Register, {
         onSuccess: function(transport){
           if(transport.responseText == 'yes'){
             this.pass('email_info');
-          }else{
+          }else if (transport.responseText == 'domain_error') {
+            this.error('email_info', '该邮箱域名不存在');
+          }else if (transport.responseText == 'no'){
             this.error('email_info', '该邮箱已被注册');
           }
         }.bind(this)
@@ -295,6 +297,8 @@ Object.extend(Iyxzone.Register, {
   },
 
   submit: function(button, form){
+    button.disabled = true;
+
     var valid = true;
     valid &= this.validateCharacters();
     valid &= this.validateLogin();
@@ -319,10 +323,9 @@ Object.extend(Iyxzone.Register, {
       method: 'post',
       parameters: $(form).serialize(),
 			onloading: function(){
-				Iyxzone.disableButton(button, '');
 			},
       onComplete: function(){
-        Iyxzone.enableButton(button, '');
+        button.writeAttribute('disabled', 'disabled');
       }
     }); 
   }

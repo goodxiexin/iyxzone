@@ -21,7 +21,7 @@
               <% if !@news_list.blank? or !@picture_news.blank?%>
                 <%= render :partial => 'daily_news', :locals => {:news_list => @news_list, :rich_news => @rich_news} %>
               <% end %>
-              <% if current_user.friends_count == 0 %>
+              <% if current_user.friends_count == 0 and current_user.idols_count == 0 %>
                 <%= render :partial => 'welcome_info', :locals => {:friend_suggestions => @friend_suggestions} %>
               <% else %>
                 <%= render :partial => 'feed_list', :locals => {:feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>

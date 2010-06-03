@@ -21,8 +21,8 @@ class Skin < ActiveRecord::Base
 
   validates_uniqueness_of :name, :message => "已经存在了"
 
-  validates_inclusion_of :privilege, :in => [PUBLIC, PRIVATE]
+#  validates_inclusion_of :privilege, :in => [PUBLIC, PRIVATE]
 
-  validates_inclusion_of :category, :in => ['Profile']
+#  validates_inclusion_of :category, :in => ['Profile']
 
 end

@@ -20,7 +20,7 @@ class VideoFactory
     }
 
     # create blog
-    Factory.create :video, {:poster_id => poster.id, :game_id => character.game_id}.merge(cond)
+    Factory.create :video, {:video_url => 'http://v.youku.com/v_show/id_XMTY3NDE5Nzg4.html', :poster_id => poster.id, :game_id => character.game_id}.merge(cond)
   end
 
 end

@@ -24,11 +24,6 @@ class BlogTest < ActiveSupport::TestCase
     # create same-game-user
     @same_game_user = UserFactory.create
     @character2 = GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @same_game_user.id
-    
-    # create 2 guilds
-    @guild1 = GuildFactory.create :character_id => @character.id, :president_id => @user.id
-    @guild2 = GuildFactory.create :character_id => @character2.id, :president_id => @same_game_user.id
-    @guild2.memberships.create :user_id => @user.id, :character_id => @character.id, :status => Membership::Member    
   end
   
   #
@@ -197,83 +192,85 @@ class BlogTest < ActiveSupport::TestCase
   # feeds about blog
   #
   test "case7" do
+    # create 2 guilds first
+    @guild1 = GuildFactory.create :character_id => @character.id, :president_id => @user.id
+    @guild2 = GuildFactory.create :character_id => @character2.id, :president_id => @same_game_user.id
+    @guild2.memberships.create :user_id => @user.id, :character_id => @character.id, :status => Membership::Member    
+
+    # let @user be a super star
+    @user.is_idol = true
+    @user.save
+    @fan = UserFactory.create
+    @fanship = Fanship.create :fan_id => @fan.id, :idol_id => @user.id
+
     @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
     assert @friend1.recv_feed? @blog1
     assert @guild1.recv_feed? @blog1
     assert @guild2.recv_feed? @blog1
+    assert @fan.recv_feed? @blog1
 
     @blog1.update_attributes :privilege => PrivilegedResource::OWNER
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert !@friend1.recv_feed?(@blog1)
     assert !@guild1.recv_feed?(@blog1)
     assert !@guild2.recv_feed?(@blog1)    
+    assert !@fan.recv_feed?(@blog1)
 
     @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert @friend1.recv_feed? @blog2
     assert @guild1.recv_feed? @blog2
     assert @guild2.recv_feed? @blog2
+    assert @fan.recv_feed? @blog2
+
+    @blog2.unverify
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
+    assert !@friend1.recv_feed?(@blog1)
+    assert !@guild1.recv_feed?(@blog1)
+    assert !@guild2.recv_feed?(@blog1)    
+    assert !@fan.recv_feed?(@blog1)
+
+    @blog2.verify
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
+    assert @friend1.recv_feed? @blog2
+    assert @guild1.recv_feed? @blog2
+    assert @guild2.recv_feed? @blog2
+    assert @fan.recv_feed? @blog2
 
     @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
-    assert @friend1.recv_feed?(@blog3)
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
+    assert @friend1.recv_feed? @blog3
     assert @guild1.recv_feed? @blog3
     assert @guild2.recv_feed? @blog3
+    assert @fan.recv_feed? @blog3
 
     @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert !@friend1.recv_feed?(@blog4)
     assert !@guild1.recv_feed?(@blog4)
     assert !@guild2.recv_feed?(@blog4)
-  
+    assert !@fan.recv_feed?(@blog4)
+
     @blog4.update_attributes(:privilege => PrivilegedResource::PUBLIC)
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert @friend1.recv_feed? @blog4
     assert @guild1.recv_feed? @blog4
     assert @guild2.recv_feed? @blog4    
-  
-    @draft1 = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
-    assert !@friend1.recv_feed?(@draft1)
-    assert !@guild1.recv_feed?(@draft1)
-    assert !@guild2.recv_feed?(@draft1)
- 
-    @draft1.update_attributes(:privilege => PrivilegedResource::FRIEND)
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
-    assert !@friend1.recv_feed?(@draft1)
-    assert !@guild1.recv_feed?(@draft1)
-    assert !@guild2.recv_feed?(@draft1)
- 
-    @draft1.update_attributes(:draft => 0, :privilege => PrivilegedResource::OWNER)
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
-    assert !@friend1.recv_feed?(@draft1)
-    assert !@guild1.recv_feed?(@draft1)
-    assert !@guild2.recv_feed?(@draft1)
+    assert @fan.recv_feed? @blog4
 
-    @draft2 = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
-    @draft2.update_attributes(:draft => 0)
-    @friend1.reload
-    @guild1.reload
-    @guild2.reload
-    assert @friend1.recv_feed?(@draft2)
-    assert @guild1.recv_feed?(@draft2)
-    assert @guild2.recv_feed?(@draft2)
+    @draft1 = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
+    assert !@friend1.recv_feed?(@draft1)
+    assert !@guild1.recv_feed?(@draft1)
+    assert !@guild2.recv_feed?(@draft1)
+    assert !@fan.recv_feed?(@draft1)
+
+    @draft1.update_attributes(:privilege => PrivilegedResource::FRIEND)
+    @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
+    assert !@friend1.recv_feed?(@draft1)
+    assert !@guild1.recv_feed?(@draft1)
+    assert !@guild2.recv_feed?(@draft1)
+    assert !@fan.recv_feed?(@draft1)
   end
 
   #
@@ -492,7 +489,6 @@ class BlogTest < ActiveSupport::TestCase
     @user.reload
     @friend1.reload
     assert @blog.accepted? # 自动通过了应该
-    assert @friend1.recv_feed? @blog
     assert_equal @user.blogs_count, 1
 
     @blog.update_attributes(:title => @sensitive)
@@ -503,21 +499,18 @@ class BlogTest < ActiveSupport::TestCase
     @user.reload
     @friend1.reload
     assert_equal @user.blogs_count, 1
-    assert @friend1.recv_feed? @blog
 
     # 又让他不通过
     @blog.unverify
     @user.reload
     @friend1.reload
     assert_equal @user.blogs_count, 0
-    assert !@friend1.recv_feed?(@blog)
  
     # 又让他通过
     @blog.verify
     @user.reload
     @friend1.reload
     assert_equal @user.blogs_count, 1
-    assert @friend1.recv_feed? @blog    
   end 
 
 end

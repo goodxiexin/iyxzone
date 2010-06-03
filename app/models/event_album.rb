@@ -18,8 +18,7 @@ class EventAlbum < Album
     if !photos.blank?
       update_attribute('uploaded_at', Time.now)
 	    if user.application_setting.emit_photo_feed?
-        recipients = user.friends.find_all {|f| f.application_setting.recv_photo_feed?}
-			  recipients.concat event.participants.find_all {|p| (p != user) and p.application_setting.recv_photo_feed?}
+        recipients = (user.is_idol ? user.fans : []) + user.friends.find_all {|f| f.application_setting.recv_photo_feed?} + event.participants.find_all {|p| (p != user) and p.application_setting.recv_photo_feed?}
 			  deliver_feeds :recipients => recipients.uniq, :data => {:ids => photos.map(&:id)}
       end
     end

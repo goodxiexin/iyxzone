@@ -66,12 +66,13 @@ class Event < ActiveRecord::Base
 
   needs_verification :sensitive_columns => [:title, :description]
 
-  acts_as_commentable :order => 'created_at DESC',
-                      :delete_conditions => lambda {|user, event, comment| event.poster == user}, 
-                      :create_conditions => lambda {|user, event| event.has_participant?(user)},
-                      :view_conditions => lambda { true } # this means anyone can view
+  acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, event, comment| event.poster == user}, :create_conditions => lambda {|user, event| event.has_participant?(user)}, :view_conditions => lambda { true }
 
-	acts_as_resource_feeds :recipients => lambda {|event| [event.poster.profile, event.game] + event.poster.guilds + event.poster.friends.find_all {|f| f.application_setting.recv_event_feed?} }
+	acts_as_resource_feeds :recipients => lambda {|event| 
+    poster = event.poster
+    friends = poster.friends.find_all {|f| f.application_setting.recv_event_feed?}
+    [poster.profile, event.game] + poster.all_guilds + friends + (poster.is_idol ? poster.fans : [])
+  }
 
 	searcher_column :title
 

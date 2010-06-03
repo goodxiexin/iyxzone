@@ -17,6 +17,9 @@
   <% mc_avatar do %>
     <%= avatar_image @user, :size => :large, :width => '100px', :height => '112px' %>
   <% end %>
+  <% if @user != current_user and @user.is_idol and !@user.has_fan?(current_user) %>
+    <%= render :partial => 'follow_idol', :locals => {:user => @user} %>
+  <% end %>
 	<%= render :partial => 'user/profiles/operations', :locals => {:profile => @profile, :user => @user, :relationship => @relationship} %>
 	<%= render :partial => 'user/profiles/menu', :locals => {:profile => @profile, :user => @user, :relationship => @relationship} %>
 <% end %>
@@ -32,6 +35,9 @@
   <% end %>
   <% unless @friends.blank? %>
     <%= render :partial => 'user/profiles/friends', :locals => {:friends => @friends, :user => @user} %>
+  <% end %>
+  <% if @user.is_idol and !@fans.blank? %>
+    <%= render :partial => 'user/profiles/fans', :locals => {:fans => @fans, :user => @user} %>
   <% end %>
 <% end %>
 

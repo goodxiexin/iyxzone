@@ -82,6 +82,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
 
+    users.resources :fans
+
+    users.resources :idols, :member => {:follow => :post, :unfollow => :delete}
+
 		users.resources :rss_feeds
 		
 		users.resources :tasks

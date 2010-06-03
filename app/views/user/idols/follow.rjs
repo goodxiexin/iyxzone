@@ -1,0 +1,6 @@
+if params[:at] == 'idol_list'
+  page.replace_html "idol_#{@fanship.idol_id}_op", :partial => 'unfollow', :locals => {:idol => @fanship.idol}
+  page << "facebox.watchClickEvents();"
+elsif params[:at] == 'profile_show'
+  page.redirect_to profile_url(@fanship.idol.profile)
+end

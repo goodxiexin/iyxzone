@@ -14,29 +14,13 @@ class Profile < ActiveRecord::Base
 
   acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, :path_reg => /\/profiles\/([\d]+)/
   
-  acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user},
-                         :categories => {
-														:status => 'Status',
-                            :video => 'Video',
-                            :poll => 'Poll',
-                            :vote => 'Vote',
-                            :event => 'Event',
-                            :participation => 'Participation',
-                            :guild => 'Guild',
-                            :membership => 'Membership',
-														:friendship => 'Friendship',
-                            :sharing => 'Sharing'
-													}
+  acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user}
 
-	acts_as_resource_feeds :recipients => lambda {|profile| [profile] + profile.user.friends}
+	acts_as_resource_feeds :recipients => lambda {|profile| [profile] + profile.user.friends + (profile.user.is_idol ? profile.user.fans : [])}
 
-  acts_as_taggable :delete_conditions => lambda {|profile, user| profile.user == user},
-                   :create_conditions => lambda {|tagging, profile, user| (tagging.nil? || tagging.created_at < 10.days.ago) and (profile.user.has_friend? user)}
+  acts_as_taggable :delete_conditions => lambda {|profile, user| profile.user == user}, :create_conditions => lambda {|tagging, profile, user| (tagging.nil? || tagging.created_at < 10.days.ago) and user.relationship_with(profile.user) == 'friend'}
 
-  acts_as_commentable :order => 'created_at DESC',
-                      :delete_conditions => lambda {|user, profile, comment| profile.user == user},
-                      :view_conditions => lambda {|user, profile| profile.user.privacy_setting.wall?(user.relationship_with profile.user)},
-                      :create_conditions => lambda {|user, profile| profile.user.privacy_setting.leave_wall_message?(user.relationship_with profile.user)}
+  acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, profile, comment| profile.user == user}, :view_conditions => lambda {|user, profile| profile.user.is_idol or profile.user.privacy_setting.wall?(user.relationship_with profile.user)}, :create_conditions => lambda {|user, profile| profile.user.privacy_setting.leave_wall_message?(user.relationship_with profile.user)}
 
   validate :skin_is_accessible
 
@@ -45,7 +29,31 @@ class Profile < ActiveRecord::Base
   end
 
   def available_for? relationship
-    user.privacy_setting.profile? relationship
+    user.is_idol or user.privacy_setting.profile?(relationship)
+  end
+
+  def basic_info_viewable? relationship
+    user.is_idol or user.privacy_setting.basic_info?(relationship)
+  end
+
+  def email_viewable? relationship
+    user.is_idol or user.privacy_setting.email?(relationship)
+  end
+
+  def phone_viewable? relationship
+    user.is_idol or user.privacy_setting.phone?(relationship)
+  end
+
+  def qq_viewable? relationship
+    user.is_idol or user.privacy_setting.qq?(relationship)
+  end
+
+  def website_viewable? relationship
+    user.is_idol or user.privacy_setting.website?(relationship)
+  end
+
+  def characters_viewable? relationship
+    user.is_idol or user.privacy_setting.character_info?(relationship)
   end
 
   def basic_info_changed?
@@ -83,7 +91,6 @@ class Profile < ActiveRecord::Base
       end
     end
     @existing_characters_attrs = nil
-    # 我对这个很不满意，为了敷衍编辑档案那里，但是招不到更好的办法了   
     unless @del_characters_ids.blank?
       @del_characters_ids.each do |id|
         character = user.characters.find(id)

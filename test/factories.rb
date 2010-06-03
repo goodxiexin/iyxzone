@@ -9,3 +9,6 @@ require 'test/factories/friend_factory'
 require 'test/factories/guild_factory'
 require 'test/factories/skin_factory'
 require 'test/factories/topic_factory'
+require 'test/factories/guestbook_factory'
+require 'test/factories/admin_factory'
+

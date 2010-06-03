@@ -8,10 +8,19 @@
                       <% characters.each do |character| %>
                         <p><%= server_location character.server %>的<%= character.name %></p>
                       <% end %>
-                      <p class="space">
-                        <% unless current_user == user %>
-                          <%= facebox_link '', new_friend_request_url(:friend_id => user.id), :class => "friend-btn w-l" %>
-                          <%= link_to '', new_mail_url(:recipient_ids => [user.id]), :class => "msg-btn" %>
+                      <p class="space" id='idol_<%= user.id %>_op'>
+                        <% if current_user != user %>
+                          <% if user.is_idol %>
+                            <% if user.has_fan? current_user %>
+                              <%= render :partial => 'user/idols/unfollow', :locals => {:idol => user} %> 
+                            <% else %>
+                              <%= render :partial => 'user/idols/follow', :locals => {:idol => user} %>
+                            <% end %>
+                          <% else %>
+                            <% if !user.has_friend?(current_user)%>
+                              <%= facebox_link '', new_friend_request_url(:friend_id => user.id), :class => "friend-btn w-l" %>
+                            <% end %>
+                          <% end %>
                         <% end %>
                       </p>
                     </div>
