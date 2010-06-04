@@ -76,95 +76,56 @@ class GameTest < ActiveSupport::TestCase
 
 	test "打分" do
 		# 玩了游戏的给这个游戏打分
-		rating1 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
-		@game.reload
-		assert_equal @game.ratings_count, 1
-		assert_equal @game.average_rating, 5
+		assert @game.is_rateable_by? @user1
 
 		# 没玩游戏的给这个游戏打分
-		rating2 = Rating.create(:user_id => @user2.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
-		@game.reload
-		assert_equal @game.ratings_count, 1
+		assert !@game.is_rateable_by?(@user2)
 
 		# 玩了游戏的立刻再次打分
-		rating3 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
-		@game.reload
-		assert_equal @game.ratings_count, 1
+		rating1 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
+		assert !@game.is_rateable_by?(@user1)
 		
 		# 玩了这个游戏的在9天后打分
 		rating1.created_at = 9.days.ago
 		rating1.save
-		rating4 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 5)
-		@game.reload
-		assert_equal @game.ratings_count, 1
+		assert !@game.is_rateable_by?(@user1)
 
 		# 玩了这个游戏的在10天后打分
 		rating1.created_at = 10.days.ago
 		rating1.save
-		rating4 = Rating.create(:user_id => @user1.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 4)
-		@game.reload
-		assert_equal @game.ratings_count, 2
-		assert_equal @game.average_rating, 4.5
+		assert @game.is_rateable_by? @user1
 
-		# 另一个用户给这个游戏打分
-		new_character = GameCharacterFactory.create :user_id => @user2.id, :game_id => @game.id
-		rating5 = Rating.create(:user_id => @user2.id, :rateable_id => @game.id, :rateable_type => 'Game', :rating => 3)
-		@game.reload
-		assert_equal @game.ratings_count, 3
-		assert_equal @game.average_rating, 4
 	end
 
 	test "标签" do
 		# 玩游戏的写标签
-		tag1 = Tag.create(:name => "好玩", :taggable_type => 'Game')
-		tagging1 = Tagging.create(:tag_id => tag1.id, :poster_id => @user1.id, :taggable_id => @game.id, :taggable_type => 'Game')
-		@game.reload
-		assert_equal @game.taggings.count, 1
+		assert @game.is_taggable_by? @user1
 
 		# 不玩这个游戏的写标签
-		tagging2 = Tagging.create(:tag_id => tag1.id, :poster_id => @user2.id, :taggable_id => @game.id, :taggable_type => 'Game')
-		@game.reload
-		assert_equal @game.taggings.count, 2
+		assert @game.is_taggable_by?(@user2)
 
 		# 立刻再写一次标签
-		tagging3 = Tagging.create(:tag_id => tag1.id, :poster_id => @user2.id, :taggable_id => @game.id, :taggable_type => 'Game')
-		@game.reload
-		assert_equal @game.taggings.count, 2
+		tag1 = Tag.create(:name => "好玩", :taggable_type => 'Game')
+		tagging1 = Tagging.create(:tag_id => tag1.id, :poster_id => @user1.id, :taggable_id => @game.id, :taggable_type => 'Game')
+		assert !@game.is_taggable_by?(@user1)
 
 		# 9天后写标签
 		tagging1.created_at = 9.days.ago
 		tagging1.save
-		tagging4 = Tagging.create(:tag_id => tag1.id, :poster_id => @user1.id, :taggable_id => @game.id, :taggable_type => 'Game')
-		@game.reload
-		assert_equal @game.taggings.count, 2
+		assert !@game.is_taggable_by?(@user1)
 
 		# 10天后写标签
 		tagging1.created_at = 10.days.ago
 		tagging1.save
-		tagging5 = Tagging.create(:tag_id => tag1.id, :poster_id => @user1.id, :taggable_id => @game.id, :taggable_type => 'Game')
-		@game.reload
-		assert_equal @game.taggings.count, 3
+		assert @game.is_taggable_by?(@user1)
 	end
 
 	test "留言" do
 		# 玩家用户留言
-		comment1 = Comment.create(:poster_id => @user1.id, :commentable_id => @game.id, :commentable_type => 'Game', :content => 'haloha')
-		@game.reload
-		assert_equal @game.comments_count, 1
+		assert @game.is_commentable_by?(@user1)
 
 		# 非玩家用户留言
-		comment2 = Comment.create(:poster_id => @user2.id, :commentable_id => @game.id, :commentable_type => 'Game', :content => '哈咯哈')
-		@game.reload
-		assert_equal @game.comments_count, 2
-
-		# 删除留言
-		comment1.destroy
-		@game.reload
-		assert_equal @game.comments_count, 1
-
-		comment2.destroy
-		@game.reload
-		assert_equal @game.comments_count, 0
+		assert @game.is_commentable_by?(@user2)
 
 	end
 
@@ -176,38 +137,76 @@ class GameTest < ActiveSupport::TestCase
     assert_equal id.to_i, @game.id
 
 		# 玩家分享
-		share1 = Share.create(:shareable_id => @game.id, :shareable_type => 'Game')
-		sharing1 = Sharing.create(:title => @game.name, :reason => "好", :shareable_type => 'Game', :share_id => share1.id, :poster_id => @user1.id )
-		@game.reload
-		assert_equal @game.sharings.count, 1
+		assert @game.is_shareable_by? @user1
 
 		# 非玩家分享
-		sharing2 = Sharing.create(:title => @game.name, :reason => "好", :shareable_type => 'Game', :share_id => share1.id, :poster_id => @user2.id )
-		@game.reload
-		assert_equal @game.sharings.count, 2
+		assert @game.is_shareable_by? @user2
 		
-		# 删除分享
-		sharing1.destroy
-		@game.reload
-		assert_equal @game.sharings.count, 1
-
-		sharing2.destroy
-		@game.reload
-		assert_equal @game.sharings.count, 0
-
 	end
 
   # 以下为非用户才能进行的操作
   test "加入服务区" do
+		#初始值
+		assert_equal @game.areas_count, 1
+		assert !@game.no_areas
+
+		# 增加服务区
+		area = GameArea.create(:name => 'halo', :game_id => @game.id)
+		@game.reload
+		assert_equal @game.areas_count, 2
+
+		# 删除服务区
+		area.destroy
+		@game.reload
+		assert_equal @game.areas_count, 1
   end
 
   test "加入服务器" do
+		# 初始值
+		assert_equal @game.servers_count, 1
+		assert !@game.no_servers
+
+		# 增加服务器(目前不能确保server的area_id的正确性)
+		server = GameServer.create(:name => 'jj', :game_id => @game.id, :area_id => @game.areas.first.id)
+		@game.reload
+		assert_equal @game.servers_count, 2
+		
+		# 删除服务器
+		server.destroy
+		@game.reload
+		assert_equal @game.servers_count, 1
   end
 
   test "加入职业" do
+		# 初始值
+		assert_equal @game.professions_count, 1
+		assert !@game.no_professions
+
+		# 增加服务区
+		profession = GameProfession.create(:name => 'halo', :game_id => @game.id)
+		@game.reload
+		assert_equal @game.professions_count, 2
+
+		# 删除服务区
+		profession.destroy
+		@game.reload
+		assert_equal @game.professions_count, 1
   end
 
   test "加入种族" do
+		# 初始值
+		assert_equal @game.races_count, 1
+		assert !@game.no_races
+
+		# 增加服务区
+		race = GameRace.create(:name => 'halo', :game_id => @game.id)
+		@game.reload
+		assert_equal @game.races_count, 2
+
+		# 删除服务区
+		race.destroy
+		@game.reload
+		assert_equal @game.races_count, 1
   end
 
 end
