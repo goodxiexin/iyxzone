@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class GuestbookTest < ActionController::IntegrationTest
+class GuestbookFlowTest < ActionController::IntegrationTest
 
   def setup
     @user = UserFactory.create

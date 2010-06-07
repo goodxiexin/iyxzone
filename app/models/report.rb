@@ -6,9 +6,7 @@ class Report < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User' 
 
-  validates_presence_of :content, :message => "不能为空"
-
-  validates_size_of :content, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节", :if => "content"
+  validates_size_of :content, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节", :allow_blank => true
 
   validates_presence_of :reportable_id, :reportable_type, :message => "不能为空"
 
@@ -21,18 +19,16 @@ class Report < ActiveRecord::Base
 protected
 
   def reportable_is_valid
-    return if reportable_id.blank? or reportable_type.blank?
-    
     if reportable.blank?
       errors.add(:reportable_id, "不存在")
+    elsif reportable.rejected?
+      errors.add(:reportable_id, "已经被和谐了")
     end
   end
 
   def set_verified_flag
-    if reportable.rejected?
-      reportable.needs_verify
-      reportable.save
-    end
+    reportable.needs_verify
+    reportable.save
   end
 
 end

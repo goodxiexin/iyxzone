@@ -1,37 +1,34 @@
-        <table class="photo-edit-list">
-        <% k = photos.size/4 %>
-        <% 0.upto(k) { |i| %>
-        <% if k == i%>
-          <% n = photos.size % 4 - 1 %>
-        <% else %>
-          <% n = 3 %>
-        <% end %>
-        <% j = i*4 %>
-        <tr>
-        <% photos[j..j+n].each do |p| %>                         
-          <td valign="bottom" width=25%>
-            <%= photo_link p, :class => 'imgbox02' %>
+<table class="photo-edit-list">
+  <% k = photos.size/4 %>
+  <% 0.upto(k) { |i| %>
+    <% if k == i%>
+      <% n = photos.size % 4 - 1 %>
+    <% else %>
+      <% n = 3 %>
+    <% end %>
+    <% j = i*4 %>
+    <tr>
+      <% photos[j..j+n].each do |p| %>                         
+        <td valign="bottom" width=25%>
+          <%= photo_link p, :class => 'imgbox02' %>
+        </td>
+      <% end %>
+      <% if n < 3 %>
+        <td valign="bottom" width=25%></td>
+        <td valign="bottom" width=25%></td>
+      <% end %>
+    </tr>
+    <% if album.poster == current_user %>
+      <tr>
+        <% photos[j..j+n].each do |photo| %>
+          <td>
+          <%= facebox_link "", eval("edit_#{photo.class.name.underscore}_url(photo, :at => 'album')"), :class => "icon-active icon-active-edit" %>
+          <%= facebox_confirm '', eval("#{photo.class.name.underscore}_url(photo)"), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %>
           </td>
         <% end %>
-        <% if n < 3 %>
-          <% n.upto(2){ %>
-            <td valign="bottom" width=25%></td>
-          <% } %>
-        <% end %>
-        </tr>
-        <% if album.poster == current_user %>
-          <tr>
-          <% photos[j..j+n].each do |p| %>                         
-            <td><%= facebox_link "", eval("edit_#{p.class.name.underscore}_url(p, :at => 'album')"), :class => "icon-active icon-active-edit" %><%= facebox_confirm '', eval("#{p.class.name.underscore}_url(p)"), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %></td>
-          <% end %>
-          <% if n < 3 %>
-            <% n.upto(2){ %>
-              <td></td>
-            <% } %>
-          <% end %>
-          </tr>
-        <% end %>
-        <% } %>
-        <%= will_paginate photos %>
-        </table>
-
+        <td></td></td></td>
+      </tr>
+    <% end %>
+  <% } %>
+  <%= will_paginate photos %>
+</table>

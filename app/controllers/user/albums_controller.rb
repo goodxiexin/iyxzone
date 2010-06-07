@@ -48,7 +48,7 @@ class User::AlbumsController < UserBaseController
     unless @album.save
       render :update do |page|
         page << "Iyxzone.enableButton($('new_album_submit'),'完成');"
-        page.replace_html 'errors', :inline =>"<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
+        page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
       end
     end
   end

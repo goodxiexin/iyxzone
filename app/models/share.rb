@@ -9,18 +9,18 @@ class Share < ActiveRecord::Base
   has_one :first_sharer, :source => :poster, :through => :sharings, :order => "sharings.created_at ASC"
 
   named_scope :hot, lambda { |type|
-    if type == 'all'
+    if type.to_s == 'all'
       { :conditions => ["created_at > ?", 2.weeks.ago.to_s(:db)], :order => 'digs_count DESC, created_at DESC' }
     else 
-      { :conditions => ["created_at > ? AND shareable_type = ?", 2.weeks.ago.to_s(:db), type], :order => 'digs_count DESC' }
+      { :conditions => ["created_at > ? AND shareable_type = ?", 2.weeks.ago.to_s(:db), type.to_s], :order => 'digs_count DESC' }
     end
   }
 
   named_scope :recent, lambda { |type|
-    if type == 'all'
+    if type.to_s == 'all'
       { :conditions => ["created_at > ?", 2.weeks.ago.to_s(:db)], :order => 'created_at DESC' }
     else 
-      { :conditions => ["created_at > ? AND shareable_type = ?", 2.weeks.ago.to_s(:db), type], :order => 'created_at DESC' }
+      { :conditions => ["created_at > ? AND shareable_type = ?", 2.weeks.ago.to_s(:db), type.to_s], :order => 'created_at DESC' }
     end
   }
 

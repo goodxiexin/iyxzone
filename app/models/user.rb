@@ -89,6 +89,9 @@ class User < ActiveRecord::Base
 
 	has_many :notices, :order => 'created_at DESC', :dependent => :destroy # comment, tag notices
 
+  def recv_notice? producer
+    notices.map(&:producer).include? producer
+  end
 
   validates_associated :rss_feed
 

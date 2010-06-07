@@ -67,8 +67,13 @@ protected
     if ["show"].include? params[:action]
       if params[:subdomain]
         @subdomain = Subdomain.find_by_name(params[:subdomain])
-        @user = @subdomain.user
-        @profile = @user.profile
+        if @subdomain.blank?
+          render_not_found
+          return
+        else
+          @user = @subdomain.user
+          @profile = @user.profile
+        end
       else
         @profile = Profile.find(params[:id])
         @user = @profile.user

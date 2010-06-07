@@ -70,8 +70,8 @@ a,.menu-icon-list li a span,.photolist-box li{color:#333}
               </div>
               <p>一起游戏网(17gaming)是让网络游戏玩家分享游戏心情，共享心得体验,重拾昔日情意的社交平台。</p>
               <p>我们期待您的加入，与我们共建网络游戏玩家的精神家园。</p>
-              <div class="go-reg">
-                <%= link_to "", signup_url(:invite_token => params[:token]), :class => 'btn' %><br/>
+              <div class="go-reg space20" style='width: 250px; margin: 20px auto'>
+                <span class='button04'><span><button onclick="window.location.href = '<%= signup_url(:invite_token => params[:token]) %>'"><b>注册并成为<%= @as_fan ? "粉丝" : "好友" %></b></button></span></span>
               </div>
             </div>
           </div>
@@ -98,11 +98,15 @@ a,.menu-icon-list li a span,.photolist-box li{color:#333}
           </div>
           <div class="multibox">
             <div class="title">
-              <b>我的 <%= @friends.count %> 位好友</b>
+              <% if !@as_fan %>
+                <b>我的好友</b>
+              <% else %>
+                <b>我的粉丝团</b>
+              <% end %>
             </div>
             <div class="photolist-box">
               <ul class="collection s_clear">
-                <% @friends.each do |f| %>
+                <% @people.each do |f| %>
                   <li>
                     <div class="middle"><div class="middle-center"><div class="center"><%= avatar_image f, :class => "imgbox01" %></div></div></div>
                     <p><%= f.login %></p>

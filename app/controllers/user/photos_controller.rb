@@ -101,9 +101,7 @@ class User::PhotosController < UserBaseController
 
   def destroy
     if @photo.destroy
-      render :update do |page|
-        page.redirect_to personal_album_url(@album)
-      end
+      redirect_js personal_album_url(@album)
     else
       render_js_error
     end

@@ -40,15 +40,11 @@ class Blog < ActiveRecord::Base
   # poster_id 和 game_id 一经创建无法修改
   attr_readonly :poster_id, :game_id
 
-  validates_presence_of :title, :message => "不能为空"
-
-  validates_size_of :title, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节", :allow_nil => true
+  validates_size_of :title, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
 
   validates_presence_of :poster_id, :message => "不能为空", :on => :create
 
-  validates_presence_of :content, :message => "不能为空" 
-
-  validates_size_of :content, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1个字节", :allow_nil => true
+  validates_size_of :content, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1个字节"
 
   validates_presence_of :game_id, :message => "不能为空", :on => :create
 

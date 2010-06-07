@@ -8,11 +8,7 @@ class EventAlbum < Album
 
   has_many :latest_photos, :class_name => 'EventPhoto', :foreign_key => 'album_id', :limit => 5, :order => "created_at DESC"
 
-  acts_as_commentable :order => 'created_at ASC', 
-                      :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}
-
-  # 这些属性都是系统创建的，不需要检查
-  attr_readonly :game_id, :poster_id, :owner_id, :privilege
+  attr_readonly :game_id, :privilege
 
 	def record_upload user, photos
     if !photos.blank?

@@ -7,34 +7,13 @@ class PersonalPhoto < Photo
   acts_as_photo_taggable :delete_conditions => lambda {|user, photo, album| album.poster == user },
                          :create_conditions => lambda {|user, photo, album| user == photo.poster || (!photo.is_owner_privilege? and album.poster.has_friend?(user)) || false}
 
-  acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, photo, comment| photo.poster == user || comment.poster == user}, 
-                      :create_conditions => lambda {|user, photo| photo.available_for? user }
-
-  attr_readonly :poster_id, :game_id
-
-  validates_presence_of :album_id, :if => "thumbnail.blank?"
-
-  validate_on_update :album_is_valid
-
-  validates_size_of :notation, :within => 0..1000, :too_long => "最多1000个字节", :allow_nil => true
-
-  # game_id, poster_id 和 privilege 都是继承相册的权限，且不能改变，因此不需要校验
-
-  def partitioned_path(*args)
-    dir = (attachment_path_id / 10000).to_s
-    sub_dir = (attachment_path_id % 10000).to_s
-    [dir, sub_dir] + args
-  end
-
-protected
-
-  def album_is_valid
-    return unless album_id_changed?
-
-    album = PersonalAlbum.find_by_id(album_id)
-    errors.add(:album_id, "不存在") if album.blank?
-    errors.add(:album_id, "不是拥有者") if album.owner_id != poster_id
+  def self.migrate opts={}
+    from = opts[:from]
+    to = opts[:to]
+    return if from.nil? or to.nil?
+    Photo.update_all("album_id = #{to.id}, privilege = #{to.privilege}", {:album_id => from.id})
+    to.update_attribute(:photos_count, to.photos_count + from.photos_count)
+    from.update_attribute(:photos_count, 0)
   end
 
 end

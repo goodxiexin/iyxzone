@@ -2,6 +2,7 @@ class User::PhotoTagsController < UserBaseController
 
   def create
     @tag = PhotoTag.new((params[:tag] || {}).merge({:poster_id => current_user.id}))
+    
     if @tag.save
 			render :text => (@tag.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:poster => {:only => [:login, :id]}, :tagged_user => {:only => [:login, :id]}})
 		else
@@ -11,9 +12,7 @@ class User::PhotoTagsController < UserBaseController
 
   def destroy
     if @tag.destroy
-			render :update do |page|
-        page << "facebox.close();"
-      end
+      render_js_code "facebox.close();"
     else
       render_js_error
     end

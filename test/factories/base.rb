@@ -66,3 +66,32 @@ Factory.define :guestbook do |g|
   g.priority Guestbook::Urgent
   g.catagory '日志'
 end
+
+Factory.define :application do |a|
+  a.sequence(:name) {|n| "application-#{n}"}
+  a.sequence(:about) {|n| "about application-#{n}"}
+end
+
+Factory.define :poke do |p|
+  p.sequence(:name) {|n| "poke-#{n}"}
+  p.span_class 'i-f i-f-hug'
+  p.content_html '<div></div>'
+end
+
+Factory.define :personal_album do |a|
+  a.sequence(:title) {|n| "title-#{n}"}
+  a.sequence(:description) {|n| "description-#{n}"}
+  a.privilege PrivilegedResource::PUBLIC
+end
+
+Factory.define :photo do |p|
+  p.sequence(:notation) {|n| "notation-#{n}"}
+end
+
+Factory.define :photo_tag do |t|
+  t.x 0
+  t.y 0
+  t.width 100
+  t.height 100
+  t.content 'photo tag content'
+end

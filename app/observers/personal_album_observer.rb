@@ -21,7 +21,6 @@ class PersonalAlbumObserver < ActiveRecord::Observer
       album.poster.raw_increment "albums_count#{album.privilege}"
       Photo.verify_all(:album_id => album.id)
       Album.update_all("photos_count = #{album.photos.count}", {:id => album.id})
-      # 没法恢复新鲜事，因为根部没记录照片是分几次，怎么上传的
     elsif album.recently_rejected?
       album.poster.raw_decrement "albums_count#{album.privilege}"
       Photo.unverify_all(:album_id => album.id)
@@ -34,6 +33,10 @@ class PersonalAlbumObserver < ActiveRecord::Observer
       album.poster.raw_decrement "albums_count#{album.privilege_was}"
       # 这样的好处不仅在于一条sql，还让所有的该相册中的被屏蔽的照片也更新了，这样下次这些被屏蔽的照片恢复的时候，privilege还是和album保持一致
       PersonalPhoto.update_all("privilege = #{album.privilege}", {:album_id => album.id})
+    end
+
+    if album.game_id_changed?
+      PersonalPhoto.update_all("game_id = #{album.game_id}", {:album_id =>album.id})
     end
   end
 

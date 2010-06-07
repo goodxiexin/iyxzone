@@ -23,10 +23,14 @@ class UserObserver < ActiveRecord::Observer
       # add friend if necessary
       token = user.invitee_code
       if token
-        invitor = SignupInvitation.find_sender(token) || User.find_by_invite_code(token) || User.find_by_qq_invite_code(token) || User.find_by_msn_invite_code(token)
+        invitor = SignupInvitation.find_sender(token) || User.find_by_invite_code(token) || User.find_by_invite_fan_code(token) || User.find_by_qq_invite_code(token) || User.find_by_msn_invite_code(token)
         if !invitor.blank?
-          user.friendships.create(:friend_id => invitor.id)
-          invitor.friendships.create(:friend_id => user.id)
+          if token == invitor.invite_fan_code
+            Fanship.create :fan_id => user.id, :idol_id => invitor.id
+          else
+            user.friendships.create(:friend_id => invitor.id)
+            invitor.friendships.create(:friend_id => user.id)
+          end
         end
       end
 

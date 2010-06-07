@@ -37,9 +37,9 @@ class Video < ActiveRecord::Base
   # video url 和 game_id 还有 poster_id 一经创建无法修改
   attr_readonly :video_url, :game_id, :poster_id
 
-  validates_presence_of :title, :message => "不能为空"
+  #validates_presence_of :title, :message => "不能为空"
 
-  validates_size_of :title, :within => 1..100, :too_long => "标题最长100个字符", :too_short => "标题最短100个字符", :if => 'title'
+  validates_size_of :title, :within => 1..100, :too_long => "标题最长100个字符", :too_short => "标题最短100个字符"#, :if => 'title'
 
   validates_size_of :description, :maximum => 1000, :too_long => "介绍最长1000个字符", :allow_blank => true
 

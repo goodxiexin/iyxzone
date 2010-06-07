@@ -12,6 +12,7 @@ module UserAuthentication
       before_create :make_activation_code
       before_create :make_remember_code
       before_create :make_invite_code
+      before_create :make_invite_fan_code
       before_create :make_qq_invite_code
       before_create :make_msn_invite_code
     
@@ -130,13 +131,13 @@ module UserAuthentication
       self.class.encrypt(password, salt)
     end
 
-protected
-
     def encrypt_password
       return if password.blank?
       self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
       self.crypted_password = encrypt(password)
     end
+
+  protected
 
     def make_activation_code
       self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
@@ -153,6 +154,10 @@ protected
     def make_invite_code
       self.invite_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
     end   
+
+    def make_invite_fan_code
+      self.invite_fan_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join ) if is_idol
+    end
 
     def make_qq_invite_code
       self.qq_invite_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )

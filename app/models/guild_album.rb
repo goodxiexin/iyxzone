@@ -8,10 +8,7 @@ class GuildAlbum < Album
 
   has_many :latest_photos, :class_name => 'GuildPhoto', :foreign_key => 'album_id', :limit => 5, :order => "created_at DESC"
 
-  acts_as_commentable :order => 'created_at ASC', 
-                      :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}
-
-  attr_readonly :owner_id, :poster_id, :game_id, :privilege
+  attr_readonly :game_id, :privilege
 
   def record_upload user, photos
     if !photos.blank?

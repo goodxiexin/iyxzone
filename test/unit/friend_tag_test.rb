@@ -2,106 +2,61 @@ require 'test_helper'
 
 class FriendTagTest < ActiveSupport::TestCase
 
-  # 测试 validate
-  test "没有发布者" do
-    t = FriendTag.create(:poster_id => nil)
-    assert_equal t.errors.on_base, "没有发布者"
-  end
-
-  test "没有被标记的人" do
-    t = FriendTag.create(:tagged_user_id => nil, :poster_id => 2)
-    assert_equal t.errors.on_base, "没有被标记的人"
-  end
-
-  test "被标记的人不是好友或本人" do
-    t = FriendTag.create(:tagged_user_id => 4, :poster_id => 2)
-    assert_equal t.errors.on_base, "被标记的不是好友或本人"
-  end
-
-  test "没有资源" do
-    t = FriendTag.create(:taggable_id => nil, :tagged_user_id => 1, :poster_id => 2)
-    assert_equal t.errors.on_base, "没有被标记的资源"
+  def setup
+    # create a user with game character
+    @user = UserFactory.create :is_idol => true
+    @character = GameCharacterFactory.create :user_id => @user.id
+    @game = @character.game
   
-    t = FriendTag.create(:taggable_id => 1, :taggable_type => nil, :tagged_user_id => 1, :poster_id => 2)
-    assert_equal t.errors.on_base, "没有被标记的资源"
+    # create 4 friends
+    @friend1 = UserFactory.create
+    @friend2 = UserFactory.create
+    @friend3 = UserFactory.create
+    @friend4 = UserFactory.create
+    FriendFactory.create @user, @friend1
+    FriendFactory.create @user, @friend2
+    FriendFactory.create @user, @friend3
+    FriendFactory.create @user, @friend4
+
+    # create stranger
+    @stranger = UserFactory.create
+
+    # create same-game-user
+    @same_game_user = UserFactory.create
+    @character2 = GameCharacterFactory.create @character.game_info.merge({:user_id => @same_game_user.id})
+
+    # create fan and idol
+    @fan = UserFactory.create
+    @idol = UserFactory.create :is_idol => true
+    Fanship.create :fan_id => @fan.id, :idol_id => @user.id
+    Fanship.create :fan_id => @user.id, :idol_id => @idol.id
   end
 
-  test "资源不存在" do
-    t = FriendTag.create(:taggable_id => 2323, :taggable_type => 'Blog', :tagged_user_id => 1, :poster_id => 2)
-    assert_equal t.errors.on_base, "被标记的资源不存在"
+  test "create/delete friend tags" do
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
+    @blog.reload
+    assert_equal @blog.tags_count, 2
+    assert_equal @blog.relative_users, [@friend1, @friend2]
+
+    @blog.update_attributes(:del_friend_tags => [@friend2.id])
+    @blog.reload
+    assert_equal @blog.tags_count, 1
+    assert_equal @blog.relative_users, [@friend1] 
+
+    @blog.update_attributes(:new_friend_tags => [@friend3.id])
+    @blog.reload
+    assert_equal @blog.tags_count, 2
+    assert_equal @blog.relative_users, [@friend1, @friend3] 
+
+    @blog.update_attributes(:del_friend_tags => [@friend1.id], :new_friend_tags => [@friend4.id])
+    @blog.reload
+    assert_equal @blog.tags_count, 2
+    assert_equal @blog.relative_users, [@friend3, @friend4] 
+    
+    assert_no_difference "FriendTag.count" do
+      @blog.update_attributes(:new_friend_tags => [@stranger.id, @same_game_user.id, @fan.id, @idol.id])
+    end
   end
 
-  test "没有权限标记" do
-    setup_blog
-
-    t = FriendTag.create(:taggable_id => @b1.id, :taggable_type => 'Blog', :tagged_user_id => 1, :poster_id => 3)
-    assert_equal t.errors.on_base, "没有权限标记"
-  end
-
-  test "不能重复标记" do
-    setup_blog
-
-    FriendTag.create(:taggable_id => @b1.id, :taggable_type => 'Blog', :tagged_user_id => 1, :poster_id => 2)
-    t = FriendTag.create(:taggable_id => @b1.id, :taggable_type => 'Blog', :tagged_user_id => 1, :poster_id => 2)
-    assert_equal t.errors.on_base, "已经标记过了"
-  end 
-
-  # 标记 日志
-  test "本人标记日志" do
-    setup_blog
-
-    t = FriendTag.create(:taggable_id => @b1.id, :taggable_type => 'Blog', :tagged_user_id => 1, :poster_id => 2)
-    @b1.reload
-    assert_equal @b1.tags_count, 1
-
-    t.destroy
-    @b1.reload
-    assert_equal @b1.tags_count, 0
-  end
-
-  test "别人标记日志" do
-    setup_blog
-
-    t = FriendTag.create(:taggable_id => @b1.id, :taggable_type => 'Blog', :tagged_user_id => 1, :poster_id => 3)
-    @b1.reload
-    assert_equal @b1.tags_count, 0
-  end
-
-  # 标记 视频
-  test "本人标记视频" do
-    setup_video
-
-    t = FriendTag.create(:taggable_id => @v1.id, :taggable_type => 'Video', :tagged_user_id => 1, :poster_id => 2)
-    @v1.reload
-    assert_equal @v1.tags_count, 1
-
-    t.destroy
-    @v1.reload
-    assert_equal @v1.tags_count, 0
-  end
-
-  test "别人标记视频" do
-    setup_video
-
-    t = FriendTag.create(:taggable_id => @v1.id, :taggable_type => 'Video', :tagged_user_id => 1, :poster_id => 3)
-    @v1.reload
-    assert_equal @v1.tags_count, 0
-  end  
-
-protected
-
-  def setup_blog
-    @b1 = Blog.create({:game_id => 1, :poster_id => 2, :draft => false, :title => 'blog title', :content => 'blog content', :privilege => 1})
-    @b2 = Blog.create({:game_id => 1, :poster_id => 2, :draft => false, :title => 'blog title', :content => 'blog content', :privilege => 2})
-    @b3 = Blog.create({:game_id => 1, :poster_id => 2, :draft => false, :title => 'blog title', :content => 'blog content', :privilege => 3})
-    @b4 = Blog.create({:game_id => 1, :poster_id => 2, :draft => false, :title => 'blog title', :content => 'blog content', :privilege => 4})
-  end
-
-  def setup_video
-    @v1 = Video.create({:game_id => 1, :poster_id => 2, :title => 't', :privilege => 1, :video_url => "http://v.youku.com/v_show/id_XMTE2OTE5ODA0.htmli"})
-    @v2 = Video.create({:game_id => 1, :poster_id => 2, :title => 't', :privilege => 2, :video_url => "http://v.youku.com/v_show/id_XMTE2OTE5ODA0.htmli"})
-    @v3 = Video.create({:game_id => 1, :poster_id => 2, :title => 't', :privilege => 3, :video_url => "http://v.youku.com/v_show/id_XMTE2OTE5ODA0.htmli"})
-    @v4 = Video.create({:game_id => 1, :poster_id => 2, :title => 't', :privilege => 4, :video_url => "http://v.youku.com/v_show/id_XMTE2OTE5ODA0.htmli"})
-  end
 
 end

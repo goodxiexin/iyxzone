@@ -8,6 +8,7 @@ class User::PokesController < UserBaseController
 
   def new
     @recipient = User.find(params[:recipient_id])
+    @pokes = Poke.all
     render :action => 'new', :layout => false
   end
 
@@ -23,19 +24,18 @@ class User::PokesController < UserBaseController
 
   def destroy
     if @delivery.destroy
-      render :update do |page|
-        page << "$('poke_delivery_#{@delivery.id}').remove();"
-      end
+      render_js_code "$('poke_delivery_#{@delivery.id}').remove();"
     else
       render_js_error
     end
   end
 
   def destroy_all
-		PokeDelivery.destroy_all(:recipient_id => current_user.id)
-    render :update do |page|
+		if PokeDelivery.delete_all_for current_user
       flash[:notice] = "删除成功"
-      page.redirect_to pokes_url
+      redirect_js pokes_url
+    else
+      render_js_error
     end
   end
 

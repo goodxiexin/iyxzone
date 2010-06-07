@@ -9,7 +9,7 @@
         <div><%= profile_link @recipient %> 下次登录后将会收到通知。</div>
         <h2 class="space">选择动作</h2>
         <ul>
-          <% Poke.all.each do |p| %>
+          <% @pokes.each do |p| %>
             <li><%= radio_button_tag 'delivery[poke_id]', p.id %><span class="<%= p.span_class %>"></span><%= p.name %></li>
           <% end %>
         </ul>

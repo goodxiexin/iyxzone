@@ -46,6 +46,8 @@ class GameCharacter < ActiveRecord::Base
 
   validates_presence_of :name, :message => "不能为空"
 
+  validates_presence_of :game_id, :message => "不能为空"
+
   validate_on_create :game_is_valid
 
   validate_on_create :area_is_valid

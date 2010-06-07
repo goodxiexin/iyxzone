@@ -272,6 +272,8 @@ module ApplicationHelper
 	end
 
 	def server_location server
+    return if server.nil?
+
     if server.game.no_areas
 			"#{game_link server.game}, #{server.name}"
 		else
@@ -485,6 +487,25 @@ module ApplicationHelper
 
   def mc_avatar opts={}, &block
     concat "<div class='mcAvatar'><div class='picwrap'><div class='middle'><div class='middle-center'><div class='center' id='avatar'>#{capture(&block)}</div></div></div></div></div>"
+  end
+
+  def application_icon_class application
+    case application.name
+    when '日志'
+      'app-log'
+    when '视频'
+      'app-video'
+    when '照片'
+      'app-photo'
+    when '投票'
+      'app-vote'
+    when '活动'
+      'app-ploy'
+    when '工会'
+      'app-cons'
+    when '分享'
+      'app-share'
+    end
   end
 
 end
