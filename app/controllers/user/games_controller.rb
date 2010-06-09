@@ -23,7 +23,7 @@ class User::GamesController < UserBaseController
   end
 
   def friends
-    @game_characters = GameCharacter.by(current_user.friend_ids).group_by(&:game_id)
+    @game_characters = GameCharacter.by(current_user.friend_ids).group_by(&:game_id).sort{|a, b| b.second.length <=> a.second.length}
     @game_ratings = Rating.by(current_user.friend_ids).match(:rateable_type => 'Game').group_by(&:rateable_id)
     @game_taggings = Tagging.by(current_user.friend_ids).match(:taggable_type => 'Game').group_by(&:taggable_id)
     @game_items = @game_characters.map do |game_id, characters|

@@ -1,9 +1,69 @@
 # FriendSuggestor
 module FriendSuggestor
+	require 'matrix'
 
 	FRIEND_SUGGESTION_SET_SIZE = 100
 
 	COMRADE_SUGGESTION_SET_SIZE = 50
+
+	def new_collect_friends
+		friend_suggestions = {} # (user_id, frequency) pair
+		friend_suggestions.default = 0
+
+		# get current user score vector
+		c_friend_array = Array.new(User.last.id + 1, 0)
+		c_guild_array = Array.new(Guild.last.id + 1, 0)
+		c_event_array = Array.new(Event.last.id + 1, 0)
+		c_game_array = Array.new(Game.last.id + 1, 0)
+
+		friends.each do |f|
+			c_friend_array[f.id] = 2
+		end
+		all_guilds.each do |g|
+			c_guild_array[g.id] = 3
+		end
+		all_events.each do |e|
+			c_event_array[e.id] = 3
+		end
+		games.each do |ga|
+			c_game_array[ga.id] = 1
+		end
+		c_user_array = [c_friend_array, c_guild_array, c_event_array, c_game_array].flatten
+		c_user_vector = Vector.elements(c_user_array)
+
+		User.all.each_with_index do |u, index|
+			if u != self and !self.has_friend?(u)	and !self.wait_for?(u) and !u.wait_for?(self)
+				# construct user score vector
+				friend_array = Array.new(User.last.id + 1, 0)
+				guild_array = Array.new(Guild.last.id + 1, 0)
+				event_array = Array.new(Event.last.id + 1, 0)
+				game_array = Array.new(Game.last.id + 1, 0)
+				u.friends.each do |f|
+					friend_array[f.id] = 2
+				end
+				u.all_guilds.each do |g|
+					guild_array[g.id] = 3
+				end
+				u.all_events.each do |e|
+					event_array[e.id] = 3
+				end
+				u.games.each do |ga|
+					game_array[ga.id] = 1
+				end
+				user_array = [friend_array, guild_array, event_array, game_array].flatten
+				user_vector = Vector.elements(user_array)
+				score = c_user_vector.inner_product user_vector
+				friend_suggestions[u.id] += score
+				# get highest friend_suggestions_set_size for every friend_suggestions_set_size times
+				#if index%FRIEND_SUGGESTION_SET_SIZE == (FRIEND_SUGGESTION_SET_SIZE - 1)
+				#	friend_suggestions = friend_suggestions.sort{|a, b| b[1] <=> a[1]}[0..(FRIEND_SUGGESTION_SET_SIZE - 1)]
+				#end
+			end
+		end
+
+		friend_suggestions.sort{|a, b| b[1] <=> a[1]}[0..(FRIEND_SUGGESTION_SET_SIZE - 1)].map{|info| info[0]}
+
+	end
 
 	def collect_friends
 		friend_suggestions = {} # (user_id, frequency) pair
@@ -77,7 +137,7 @@ module FriendSuggestor
 
 		# construct new suggestions and insert into database
 		values = []
-		collect_friends.each {|friend_id| values << "(NULL,#{id},#{friend_id})" }
+		new_collect_friends.each {|friend_id| values << "(NULL,#{id},#{friend_id})" }
 
     # this is almost impossible
     return friend_suggestions if values.blank?
@@ -87,6 +147,60 @@ module FriendSuggestor
 		ActiveRecord::Base.connection.execute(sql)
 	end 
 	
+	def new_collect_comrades server
+		comrade_suggestions = {}
+		comrade_suggestions.default =	0	
+    candidates = server.users
+
+		# get current user score vector
+		c_friend_array = Array.new(User.last.id + 1, 0)
+		c_guild_array = Array.new(Guild.last.id + 1, 0)
+		c_event_array = Array.new(Event.last.id + 1, 0)
+		c_game_array = Array.new(Game.last.id + 1, 0)
+
+		friends.each do |f|
+			c_friend_array[f.id] = 2
+		end
+		all_guilds.each do |g|
+			c_guild_array[g.id] = 3
+		end
+		all_events.each do |e|
+			c_event_array[e.id] = 3
+		end
+		games.each do |ga|
+			c_game_array[ga.id] = 1
+		end
+		c_user_array = [c_friend_array, c_guild_array, c_event_array, c_game_array].flatten
+		c_user_vector = Vector.elements(c_user_array)
+
+		candidates.each do |u|
+			if u != self and !self.has_friend?(u)	and !self.wait_for?(u) and !u.wait_for?(self)
+				# construct user score vector
+				friend_array = Array.new(User.last.id + 1, 0)
+				guild_array = Array.new(Guild.last.id + 1, 0)
+				event_array = Array.new(Event.last.id + 1, 0)
+				game_array = Array.new(Game.last.id + 1, 0)
+				u.friends.each do |f|
+					friend_array[f.id] = 2
+				end
+				u.all_guilds.each do |g|
+					guild_array[g.id] = 3
+				end
+				u.all_events.each do |e|
+					event_array[e.id] = 3
+				end
+				u.games.each do |ga|
+					game_array[ga.id] = 1
+				end
+				user_array = [friend_array, guild_array, event_array, game_array].flatten
+				user_vector = Vector.elements(user_array)
+				score = c_user_vector.inner_product user_vector
+				comrade_suggestions[u.id] += score
+			end
+		end
+		comrade_suggestions.sort{|a,b| b[1] <=> a[1]}[0..(COMRADE_SUGGESTION_SET_SIZE - 1)].map{|info| info[0]}
+	end
+
   # this function is expensive, so we should invoke it occasionally	
 	def collect_comrades server
 		comrade_suggestions = {}
@@ -130,7 +244,7 @@ module FriendSuggestor
 
 	  # construct new suggestions and insert into database
 	  values = []
-	  collect_comrades(server).each do |friend_id|
+	  new_collect_comrades(server).each do |friend_id|
   		if server.game.no_areas
 	  		values << "(NULL, #{id}, #{friend_id}, #{server.game_id}, NULL, #{server.id})"
 		  else
