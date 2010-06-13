@@ -3,16 +3,16 @@ class User::Events::RequestsController < UserBaseController
   layout 'app'
 
   def new
-    @request_characters = @event.request_characters.by(current_user.id)
-    @invite_characters = @event.invite_characters.by(current_user.id)
-    @confirmed_and_maybe_characters = @event.characters.by(current_user)
-    @user_characters = current_user.characters.match(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id)
-    @characters = @user_characters - @request_characters - @invite_characters - @confirmed_and_maybe_characters
-    render :action => 'new', :layout => false
+    if @event.is_requestable_by? current_user
+      @characters = @event.requestable_characters_for current_user
+      render :action => 'new', :layout => false
+    else
+      render :template => 'errors/404'
+    end
   end
 
   def create
-    @request = @event.requests.build (params[:request] || {}).merge({:participant_id => current_user.id})
+    @request = @event.requests.build((params[:request] || {}).merge({:participant_id => current_user.id}))
     
     unless @request.save
       render_js_error '发生错误，可能活动已经过期了'
@@ -40,6 +40,7 @@ protected
       @user = @event.poster
     elsif ['accept', 'decline'].include? params[:action]
       @event = Event.find(params[:event_id])
+      require_verified @event
       require_owner @event.poster
       @request = @event.requests.find(params[:id])
     end

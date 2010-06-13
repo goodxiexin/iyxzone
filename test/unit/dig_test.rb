@@ -13,6 +13,7 @@ class DigTest < ActiveSupport::TestCase
     # create 4 friends
     @friend = UserFactory.create
     FriendFactory.create @user, @friend
+    @user.reload and @friend.reload
   end
 
   test "counter" do

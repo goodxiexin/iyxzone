@@ -44,7 +44,7 @@ class PersonalPhotoObserver < ActiveRecord::Observer
       to = poster.albums.find(photo.album_id)
       from.raw_decrement :photos_count
       to.raw_increment :photos_count
-      from.update_attribute(:cover_id, nil) if from.cover == photo
+#      from.update_attributes(:cover_id => nil) if from.cover == photo
     end
   end
 

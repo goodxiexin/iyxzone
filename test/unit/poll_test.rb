@@ -6,6 +6,8 @@ class PollTest < ActiveSupport::TestCase
     @user = UserFactory.create
     @friend = UserFactory.create
     FriendFactory.create @user, @friend
+    [@user, @friend].each {|f| f.reload}
+
     @stranger = UserFactory.create
 
     @character1 = GameCharacterFactory.create :user_id => @user.id

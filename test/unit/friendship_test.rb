@@ -7,6 +7,16 @@ class FriendshipTest < ActiveSupport::TestCase
     @user2 = UserFactory.create
   end
 
+  test "association" do
+    FriendFactory.create @user1, @user2
+    @user1.reload and @user2.reload
+ 
+    assert_equal @user1.friend_ids, [@user2.id]
+    assert @user1.friends.include? @user2
+    assert_equal @user2.friend_ids, [@user1.id]
+    assert @user2.friends.include? @user1
+  end
+  
   #
   # case1
   # user1 请求加 user2 为好友，但不能重复发送
@@ -109,5 +119,5 @@ class FriendshipTest < ActiveSupport::TestCase
     assert_equal @user1.friend_requests_count, 0
     assert_equal @user2.friend_requests_count, 0
   end
- 
+
 end

@@ -29,19 +29,15 @@
       </dl>
     </div>
     <div class='avatarbox'>
-      <% if event.is_guild_event? %>
-        <% if event.guild.has_people? current_user %>
-          <div class='tip'>发送 <%= facebox_link '请求', new_event_request_url(event) %> 加入该活动？</div>
+      <% if event.is_requestable_by?(current_user) %>
+        <% if event.requestable_characters_for(current_user).blank? %>
+          <div class='tip'>你已经没有在该游戏、服务器的游戏角色，无法加入该活动</div>
         <% else %>
-          <div class='tip'>该活动是工会的活动，你没有在该工会的游戏角色，不能加入该活动</div>
+          <div class='tip'>发送 <%= facebox_link '请求', new_event_request_url(event) %> 加入该活动？</div>
         <% end %>
       <% else %>
-        <% if event.is_requestable_by? current_user %>
-          <% if event.requestable_characters_for(current_user).blank? %>
-            <div class='tip'>你已经没有在该游戏、服务器的游戏角色，无法加入该活动</div>
-          <% else %>
-            <div class='tip'>发送 <%= facebox_link '请求', new_event_request_url(event) %> 加入该活动？</div>
-          <% end %>
+        <% if event.is_guild_event? %>
+          <div class='tip'>该活动是工会活动，只有工会会员才能参加, 去工会 <%= guild_link event.guild %> 看看</div>
         <% else %>
           <div class='tip'>只有<%= get_subject event.poster %>的好友可以参加，<%= facebox_link "加#{get_subject event.poster}为好友", new_friend_request_url(:friend_id => user.id), :class => 'red' %></div> 
         <% end %>

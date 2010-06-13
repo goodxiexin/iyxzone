@@ -10,6 +10,7 @@ class PhotoTagTest < ActiveSupport::TestCase
     @friend2 = UserFactory.create
     FriendFactory.create @user, @friend1
     FriendFactory.create @user, @friend2
+    [@user, @friend1, @friend2].each {|f| f.reload}
   end
 
   test "tags count" do

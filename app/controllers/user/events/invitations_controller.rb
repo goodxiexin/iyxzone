@@ -3,15 +3,13 @@ class User::Events::InvitationsController < UserBaseController
   layout 'app'
 
   def new
-    if @guild
-      @characters = @guild.characters - @event.all_characters
-    else
-      @characters = GameCharacter.by(current_user.friend_ids).match(:game_id => @event.game_id, :area_id => @event.game_area_id, :server_id => @event.game_server_id) - @event.all_characters
-    end
+    @characters = @event.inviteable_characters
   end
 
   def create
-    if @event.update_attributes(:invitees => params[:values])
+    @characters = GameCharacter.find(params[:values])
+
+    if @event.invite @characters
       redirect_to event_url(@event)
     else
 			flash[:error] = '邀请出错'
@@ -46,6 +44,7 @@ protected
     elsif ['edit', 'accept', 'decline'].include? params[:action]
       @invitation = Participation.find(params[:id])
       @event = @invitation.event
+      require_verified @event
       require_owner @invitation.participant
     end
   end

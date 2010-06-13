@@ -12,9 +12,10 @@ class AvatarAlbum < Album
 
   # override set_cover method
   def set_cover avatar
-    if cover_id != avatar.id
-      update_attributes(:cover_id => avatar.id)
-      poster.update_attributes(:avatar_id => avatar.id)
+    avatar_id = avatar.nil? ? nil : avatar.id
+    if cover_id != avatar_id
+      update_attributes(:cover_id => avatar_id)
+      poster.update_attributes(:avatar_id => avatar_id)
     end
   end
 

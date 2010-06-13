@@ -23,21 +23,7 @@ class Guild < ActiveRecord::Base
   has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
   
   has_many :events, :dependent => :destroy
-=begin
-  has_many :gears, :dependent => :delete_all
-
-  has_many :bosses, :dependent => :delete_all
-
-  has_many :rules, :class_name => 'GuildRule', :dependent => :delete_all
-
-  has_many :basic_rules, :class_name => 'GuildRule', :conditions => {:rule_type => 2}
-
-  has_many :attendance_rules, :class_name => 'GuildRule', :conditions => {:rule_type => [0, 1]}
-
-  has_one :absence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 0}
-
-  has_one :presence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 1}
-=end
+  
   has_many :memberships
 
   has_many :invitations, :class_name => 'Membership', :conditions => {:status => Membership::Invitation}
@@ -152,6 +138,10 @@ class Guild < ActiveRecord::Base
     memberships.match(:user_id => user.id, :character_id => character.id).first
   end
 
+  def can_create_event? character
+    president_and_veteran_characters.include?(character)
+  end
+
   def requestable_characters_for user
     user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - all_characters.find(:all, :conditions => "memberships.user_id = #{user.id}")
   end
@@ -163,7 +153,22 @@ class Guild < ActiveRecord::Base
       invitations.build(:character_id => character.id, :user_id => character.user_id)
     end 
   end
+
 =begin
+  has_many :gears, :dependent => :delete_all
+
+  has_many :bosses, :dependent => :delete_all
+
+  has_many :rules, :class_name => 'GuildRule', :dependent => :delete_all
+
+  has_many :basic_rules, :class_name => 'GuildRule', :conditions => {:rule_type => 2}
+
+  has_many :attendance_rules, :class_name => 'GuildRule', :conditions => {:rule_type => [0, 1]}
+
+  has_one :absence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 0}
+
+  has_one :presence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 1}
+
   after_save :save_rules
 
   def new_rules= rule_attrs

@@ -1,175 +1,267 @@
 require 'test_helper'
 
+#
+# TODO: upcoming
+#
+
 class EventTest < ActiveSupport::TestCase
-  
+
   def setup
-    @user = User.find(1)
-    @params = {:game_id => 1, :game_area_id => 1 , :game_server_id => 1, :poster_id => @user.id, :title => 'event title', :start_time => 2.days.from_now.to_s(:db), :end_time => 3.days.from_now.to_s(:db), :privilege => 1, :description => 'event description'} 
-    @g = Guild.create({:game_id => 1, :game_area_id => 1, :game_server_id => 1, :name => 'name', :description => 'description', :president_id => 1, :character_id => 1})
-    @user.reload
-  end
+    @user = UserFactory.create_idol
+    @idol = UserFactory.create_idol
+    @fan = UserFactory.create
+    @friend = UserFactory.create
+    @stranger = UserFactory.create
+    @user_character = GameCharacterFactory.create :user_id => @user.id
+    @friend_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @friend.id})
+    @stranger_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @stranger.id})    
+    
+    FriendFactory.create @user, @friend
+    Fanship.create :fan_id => @fan.id, :idol_id => @user.id
+    Fanship.create :fan_id => @user.id, :idol_id => @idol.id    
+    [@user, @friend, @fan, @idol].each {|f| f.reload}
 
-  # 测试 aGpp/observer/event.rb
-  test "创建事件会同时创建一个相册" do
-    e = Event.create(@params)
-    e.reload
-
-    assert_equal e.confirmed_count, 1
-    assert_not_nil e.album
-  end
-
-  # 测试validate
-  test "没有标题" do
-    e = Event.create(@params.merge({:title => nil}))
-    assert_equal e.errors.on_base, '标题不能为空'
-  end
-
-  test "没有描述" do
-    e = Event.create(@params.merge({:description => nil}))
-    assert_equal e.errors.on_base, '描述不能为空'
-  end
-
-  test "开始时间为空" do
-    e = Event.create(@params.merge({:start_time => nil}))
-    assert_equal e.errors.on_base, '开始时间不能为空'
-  end
-
-  test "结束时间为空" do
-    e = Event.create(@params.merge({:end_time => nil}))
-    assert_equal e.errors.on_base, '结束时间不能为空'
-  end
-
-  test "结束时间比开始时间早" do
-    e = Event.create(@params.merge({:end_time => 1.days.from_now.to_s(:db)}))
-    assert_equal e.errors.on_base, '结束时间不能比开始时间早'
-  end
-
-  test "开始时间比现在早" do
-    e = Event.create(@params.merge({:start_time => 1.days.ago.to_s(:db)}))
-    assert_equal e.errors.on_base, '开始时间不能比现在早'
-  end
-
-  # validate_on_create
-  test "没有游戏" do
-    e = Event.create(@params.merge({:game_id => nil}))
-    assert_equal e.errors.on_base, '游戏类别不能为空'
-  end
-
-  test "没有服务器" do
-    e = Event.create(@params.merge({:game_server_id => nil}))
-    assert_equal e.errors.on_base, '游戏服务器不能为空'
-  end
-
-  test "没有服务区" do
-    e = Event.create(@params.merge({:game_area_id => nil}))
-    assert_equal e.errors.on_base, '游戏服务区不能为空'
-  end
-
-  test "游戏不存在" do
-    e = Event.create(@params.merge({:game_id => 22}))
-    assert_equal e.errors.on_base, '游戏不存在'
-  end
-
-  test "对于没有服务区的游戏，游戏服务区应该为空，但是服务器不能为空，且应该存在" do
-    e = Event.create(@params.merge({:game_id => 2, :game_area_id => 1, :game_server_id => 4}))
-    assert_equal e.errors.on_base, '游戏服务区应该为空'
-
-    e = Event.create(@params.merge({:game_id => 2, :game_area_id => nil, :game_server_id => nil}))
-    assert_equal e.errors.on_base, '游戏服务器不能为空'
-
-    e = Event.create(@params.merge({:game_id => 2, :game_area_id => nil, :game_server_id => 1}))
-    assert_equal e.errors.on_base, '游戏服务器不存在或者不属于该游戏'
-  end
-
-  test "对于有服务区的游戏，游戏服务区不能为空，服务器不能为空，且应该存在" do
-    e = Event.create(@params.merge({:game_id => 1, :game_area_id => nil, :game_server_id => 2}))
-    assert_equal e.errors.on_base, '游戏服务区不能为空'
-
-    e = Event.create(@params.merge({:game_id => 1, :game_area_id => 1, :game_server_id => nil}))
-    assert_equal e.errors.on_base, '游戏服务器不能为空'
-
-    e = Event.create(@params.merge({:game_id => 1, :game_area_id => 1, :game_server_id => 4}))
-    assert_equal e.errors.on_base, '游戏服务器不存在或者不属于该区域'
+    @sensitive = "政府"
   end
   
-  test "工会不存在" do
-    e = Event.create(@params.merge({:guild_id => 213}))
-    assert_equal e.errors.on_base, "工会不存在"
+  test "create normal event" do
+    assert_difference "Event.count" do
+      @event = Event.create :character_id => @user_character.id, :start_time => 1.days.from_now, :end_time => 2.days.from_now, :title => 't', :description => 'd'
+    end
+
+    assert_not_nil @event.album
+    assert @event.has_participant?(@user)    
+    assert_equal @event.poster, @user
+    assert_equal @event.poster_character, @user_character
+    assert !@event.is_guild_event?
+    assert_nil @event.guild
+    assert_equal @event.game_id, @user_character.game_id
+    assert_equal @event.game_server_id, @user_character.server_id
+    assert_equal @event.game_area_id, @user_character.area_id
   end
 
-  test "工会存在，会自动赋值" do
-    e = Event.create(@params.merge({:guild_id => @g.id}))
-    assert_equal e.game_id, @g.game_id
-    assert_equal e.game_server_id, @g.game_server_id
-    assert_equal e.game_area_id, @g.game_area_id
+  test "fail to create normal event" do
+    assert_no_difference "Event.count" do
+      @event = Event.create :character_id => nil, :start_time => 1.days.from_now, :end_time => 2.days.from_now, :title => 't', :description => 'd'
+    end
+    assert_not_nil @event.errors.on(:character_id) 
+  
+    assert_no_difference "Event.count" do
+      @event = Event.create :character_id => @user_character.id, :privilege => nil, :start_time => 1.days.from_now, :end_time => 2.days.from_now, :title => 't', :description => 'd'
+    end
+    assert_not_nil @event.errors.on(:privilege) 
+
+    assert_no_difference "Event.count" do
+      @event = Event.create :character_id => @user_character.id, :start_time => 1.days.ago, :end_time => 2.days.from_now, :title => 't', :description => 'd'
+    end
+    assert_not_nil @event.errors.on(:start_time) 
+
+    assert_no_difference "Event.count" do
+      @event = Event.create :character_id => @user_character.id, :start_time => 3.days.from_now, :end_time => 2.days.from_now, :title => 't', :description => 'd'
+    end
+    assert_not_nil @event.errors.on(:end_time)
   end
 
-  # validate_on_update
-  test "不能修改poster_id" do
-    e1 = Event.create(@params)
-    e2 = Event.create(@params.merge({:guild_id => @g.id}))
-
-    e1.update_attributes(:poster_id => 123) 
-    assert_equal e1.errors.on_base, '不能修改poster_id'
-    e2.update_attributes(:poster_id => 123)
-    assert_equal e2.errors.on_base, '不能修改poster_id'
-  end
-
-  test "不能修改game_id, game_area_id, game_server_id" do
-    e1 = Event.create(@params)
-    e2 = Event.create(@params.merge({:guild_id => @g.id}))
-
-    e1.update_attributes(:game_id => 123) 
-    assert_equal e1.errors.on_base, '不能修改game_id'
-    e2.update_attributes(:game_id => 123)
-    assert_equal e2.errors.on_base, '不能修改game_id'    
-
-    e1.reload
-    e2.reload
-
-    e1.update_attributes(:game_area_id => 123)  
-    assert_equal e1.errors.on_base, '不能修改game_area_id'
-    e2.update_attributes(:game_area_id => 123)
-    assert_equal e2.errors.on_base, '不能修改game_area_id' 
- 
-    e1.reload
-    e2.reload
-
-    e1.update_attributes(:game_server_id => 123)  
-    assert_equal e1.errors.on_base, '不能修改game_server_id'
-    e2.update_attributes(:game_server_id => 123)
-    assert_equal e2.errors.on_base, '不能修改game_server_id'
-  end
-
-  test "不能修改guild_id" do
-    e = Event.create(@params.merge({:guild_id => @g.id}))
+  test "create guild event" do
+    @guild = GuildFactory.create :character_id => @user_character.id
     
-    e.update_attributes(:guild_id => 123)
-    assert_equal e.errors.on_base, "不能修改guild_id"
+    assert_difference "Event.count" do
+      @event = Event.create :character_id => @user_character.id, :start_time => 1.days.from_now, :end_time => 2.days.from_now, :title => 't', :description => 'd', :guild_id => @guild.id
+    end
+
+    assert_not_nil @event.album
+    assert @event.has_participant?(@user)
+    assert_equal @event.poster, @user
+    assert @event.is_guild_event?
+    assert_equal @event.guild, @guild
+    assert_equal @event.game_id, @user_character.game_id
+    assert_equal @event.game_server_id, @user_character.server_id
+    assert_equal @event.game_area_id, @user_character.area_id
+  end 
+  
+  test "fail to create guild event" do
+    @guild1 = GuildFactory.create :character_id => @friend_character.id
+    @guild2 = GuildFactory.create :character_id => @stranger_character.id
+    @guild1.member_memberships.create :user_id => @user.id, :character_id => @user_character.id
+    @user_character2 = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @user.id})
+    @guild2.veteran_memberships.create :user_id => @user.id, :character_id => @user_character2.id
+
+    assert_no_difference "Event.count" do
+      @event = Event.create :character_id => @user_character.id, :start_time => 1.days.ago, :end_time => 2.days.from_now, :title => 't', :description => 'd', :guild_id => 'invalid'
+    end
+  
+    assert_no_difference "Event.count" do
+      @event = Event.create :character_id => @user_character.id, :start_time => 1.days.ago, :end_time => 2.days.from_now, :title => 't', :description => 'd', :guild_id => @guild1.id
+    end
+
+    assert_no_difference "Event.count" do
+      @event = Event.create :character_id => @user_character2.id, :start_time => 1.days.from_now, :end_time => 2.days.from_now, :title => 't', :description => 'd', :guild_id => @guild1.id
+    end
+
+    assert_difference "Event.count" do
+      @event = Event.create :character_id => @user_character2.id, :start_time => 1.days.from_now, :end_time => 2.days.from_now, :title => 't', :description => 'd', :guild_id => @guild2.id
+    end
   end
 
-  # 取消活动
-  test "取消活动" do
-    e = Event.create(@params.merge({:guild_id => @g.id})) 
-    p1 = create_participant :event_id => e.id, :participant_id => 2, :character_id => 3, :status => 5
-    p2 = create_participant :event_id => e.id, :participant_id => 2, :character_id => 4, :status => 5
+=begin
+  test "upcoming, participated, index" do
+    @event1 = EventFactory.create :character_id => @user_character.id
+    @event2 = EventFactory.create :character_id => @friend_character.id, :start_time => 1.seconds.from_now, :end_time => 3.seconds.from_now
+    @event3 = EventFactory.create :character_id => @stranger_character.id, :start_time => 4.seconds.from_now, :end_time => 6.seconds.from_now
 
-    # 取消活动
-    e.set_destroyed
-    e.destroy
+    # @user participates in event2 and event3
+    assert_difference "Participation.count", 2 do
+      @event2.participations.create :participant_id => @user.id, :character_id => @user_character.id, :status => Participation::Confirmed
+      @event3.participations.create :participant_id => @user.id, :character_id => @user_character.id, :status => Participation::Maybe
+    end
     @user.reload
-    assert_equal @user.events_count, 0
-    assert_equal User.find(2).upcoming_events_count, 0
-    assert_not_nil Email.find(:all, :conditions => {:to => User.find(2).email}).count, 2
-  end
+    assert_equal @user.upcoming_events, [@event2, @event3]
+    assert_equal @user.participated_events, []
+    sleep 2
+    puts "upcoming: #{@user.upcoming_events.map(&:id)}"
+    assert @event2.started?
+    assert !@event2.expired?
+    @user.reload
+    assert_equal @user.upcoming_events, [@event2, @event3]
+    assert_equal @user.participated_events, []
 
-protected
+    sleep 3
+    puts "upcoming: #{@user.upcoming_events.map(&:id)}"
+    assert @event2.expired?
+    assert @event3.started?
+    assert !@event3.expired?
+    @user.reload
+    assert_equal @user.upcoming_events, [@event3]
+    assert_equal @user.participated_events, [@event2]
 
-  def create_participant opts
-    create_opts = opts.merge({:status => 1})
-    p = Participation.create(create_opts)
-    p.update_attributes(:status => 4)
-    return p
+    sleep 2
+    puts "upcoming: #{@user.upcoming_events.map(&:id)}"
+    assert @event3.expired?
+    @user.reload
+    assert_equal @user.upcoming_events, []
+    assert_equal @user.participated_events, [@event3, @event2]
   end
+=end 
+  test "edit/update event" do
+    @event = EventFactory.create :character_id => @user_character.id
     
+    assert @event.update_attributes(:title => 'new event title')
+    assert @event.update_attributes(:start_time => 10.days.from_now, :end_time => 12.days.from_now)
+    assert !@event.update_attributes(:end_time => 9.days.from_now)
+    assert @event.update_attributes(:start_time => 1.days.ago, :end_time => 1.days.from_now)
+    assert !@event.update_attributes(:start_time => Time.now, :end_time => 1.seconds.ago)
+  end
+
+  test "change time of event" do
+    @event = EventFactory.create :character_id => @user_character.id
+    @event.maybe_participations.create :participant_id => @friend.id, :character_id => @friend_character.id
+ 
+    assert_difference ["Notification.count", "Email.count"], 2 do 
+      @event.update_attributes(:start_time => 10.minutes.from_now)
+    end
+  end
+
+  test "delete event" do
+  end
+ 
+  test "comment event" do
+    @event = EventFactory.create :character_id => @user_character.id
+
+    assert @event.is_commentable_by?(@user)
+    assert !@event.is_commentable_by?(@friend)
+    assert !@event.is_commentable_by?(@stranger)
+  
+    @event.confirmed_participations.create :participant_id => @friend.id, :character_id => @friend_character.id
+    assert @event.is_commentable_by?(@friend)
+
+    @comment = @event.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend)
+    assert !@comment.is_deleteable_by?(@stranger)
+
+    @comment = @event.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend)
+    assert !@comment.is_deleteable_by?(@stranger)
+  end
+
+  test "comment notice" do
+    @event = EventFactory.create :character_id => @user_character.id
+    @event.confirmed_participations.create :participant_id => @friend.id, :character_id => @friend_character.id
+    @event.confirmed_participations.create :participant_id => @stranger.id, :character_id => @stranger_character.id
+
+    assert_no_difference "Notice.count" do
+      @comment = @event.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
+    end
+ 
+    assert_difference "Notice.count" do
+      @comment = @event.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    end
+    @user.reload
+    assert @user.recv_notice?(@comment)
+
+    assert_difference "Notice.count", 2 do
+      @comment = @event.comments.create :poster_id => @stranger.id, :recipient_id => @friend.id, :content => 'a'
+    end
+    @user.reload and @friend.reload
+    assert @friend.recv_notice?(@comment)
+    assert @user.recv_notice?(@comment)
+  end
+
+  test "event feed" do
+    @guild = GuildFactory.create :character_id => @friend_character.id
+    @guild.memberships.create :user_id => @user.id, :character_id => @friend_character.id, :status => Membership::Member
+    @game = @guild.game
+    @profile = @user.profile
+    
+    @event = EventFactory.create :character_id => @user_character.id
+
+    [@game, @profile, @guild, @friend, @fan, @idol].each {|t| t.reload}
+    assert @profile.recv_feed?(@event)
+    assert @game.recv_feed?(@event)
+    assert @guild.recv_feed?(@event)
+    assert @friend.recv_feed?(@event)
+    assert @fan.recv_feed?(@event)
+    assert !@idol.recv_feed?(@event)
+  
+    @event.unverify
+    [@game, @profile, @guild, @friend, @fan, @idol].each {|t| t.reload}
+    assert !@profile.recv_feed?(@event)
+    assert !@game.recv_feed?(@event)
+    assert !@guild.recv_feed?(@event)
+    assert !@friend.recv_feed?(@event)
+    assert !@fan.recv_feed?(@event)
+    assert !@idol.recv_feed?(@event)
+
+    @event.verify
+    [@game, @profile, @guild, @friend, @fan, @idol].each {|t| t.reload}
+    assert !@profile.recv_feed?(@event)
+    assert !@game.recv_feed?(@event)
+    assert !@guild.recv_feed?(@event)
+    assert !@friend.recv_feed?(@event)
+    assert !@fan.recv_feed?(@event)
+    assert !@idol.recv_feed?(@event)
+  end
+  
+  test "sensitive event" do
+    @event = EventFactory.create :character_id => @user_character.id
+    assert @event.accepted? 
+    
+    @event = EventFactory.create :character_id => @user_character.id, :title => @sensitive
+    assert @event.unverified?
+
+    @event.verify
+    @event.update_attributes(:title => "#{@sensitive}sb")
+    @event.reload
+    assert @event.unverified?
+
+    @album = @event.album
+    @photo = PhotoFactory.create :album_id => @album.id, :type => 'EventPhoto'
+
+    @event.unverify
+    @album.reload and @photo.reload
+    assert @album.rejected?
+    assert @photo.rejected?
+  end
+
 end

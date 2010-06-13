@@ -31,7 +31,7 @@ protected
   def tagged_user_is_valid
     return if tagged_user.blank? or poster.blank? or photo.blank?
 
-    errors.add(:tagged_user_id, '没有权限标记') unless photo.is_taggable_by?(poster)
+    errors.add(:tagged_user_id, '你没有权限标记这个人') unless photo.tag_candidates_for(poster).include?(tagged_user)
   end
 
   def photo_is_valid 

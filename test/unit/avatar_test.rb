@@ -1,3 +1,6 @@
+#
+# set/unset cover
+#
 require 'test_helper'
 
 class AvatarTest < ActiveSupport::TestCase
@@ -15,6 +18,7 @@ class AvatarTest < ActiveSupport::TestCase
     @character2 = GameCharacterFactory.create @character1.game_info.merge({:user_id => @same_game_user.id})
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+    [@user, @friend, @fan, @idol].each {|f| f.reload}
 
     @album = @user.avatar_album
     @sensitive = "政府"
@@ -43,10 +47,15 @@ class AvatarTest < ActiveSupport::TestCase
     assert_equal @album.cover, @photo1
     assert_equal @user.avatar, @photo1
 
-    @photo2 = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar', :is_cover => true 
+    @photo2 = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar', :is_cover => 1 
     @album.reload and @user.reload
     assert_equal @album.cover, @photo2
     assert_equal @user.avatar, @photo2
+
+    @photo2.update_attributes :is_cover => 0
+    @album.reload and @user.reload
+    assert_nil @album.cover
+    assert_nil @user.avatar
 
     @photo1.update_attributes :is_cover => 1
     @album.reload and @user.reload
@@ -83,16 +92,19 @@ class AvatarTest < ActiveSupport::TestCase
     assert @fan.recv_feed?(@photo)
     assert !@idol.recv_feed?(@photo)
   end
-
+  
   test "tag avatar" do
     @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type =>'Avatar'
-
+    
     assert @photo.is_taggable_by?(@user)
     assert @photo.is_taggable_by?(@friend)
     assert !@photo.is_taggable_by?(@same_game_user)
     assert !@photo.is_taggable_by?(@stranger)
     assert !@photo.is_taggable_by?(@fan)
     assert !@photo.is_taggable_by?(@idol)
+    
+    assert_equal @photo.tag_candidates_for(@user), [@user, @friend]
+    assert_equal @photo.tag_candidates_for(@friend), [@friend, @user]    
 
     @tag = PhotoTagFactory.create :photo_id => @photo.id, :poster_id => @user.id, :tagged_user_id => @friend.id
     assert @tag.is_deleteable_by?(@user)
@@ -110,7 +122,7 @@ class AvatarTest < ActiveSupport::TestCase
     assert !@tag.is_deleteable_by?(@fan)
     assert !@tag.is_deleteable_by?(@idol)
   end
-
+  
   test "tag notice" do
     @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type =>'Avatar'
 
@@ -250,6 +262,5 @@ class AvatarTest < ActiveSupport::TestCase
       @photo2.destroy
     end
   end
-
   
 end

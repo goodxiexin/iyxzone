@@ -7,14 +7,7 @@ class User::PhotosController < UserBaseController
   end
 
   def relative
-    @infos = []
-    @user.photo_tags.all(:include => [:photo, {:poster => :profile}]).group_by(&:photo_id).map do |photo_id, tags|
-      photo = Photo.nonblocked.find(photo_id)
-      if !photo.blank? and !photo.is_owner_privilege?
-        @infos << {:photo => photo, :posters => tags.map(&:poster).uniq}
-      end
-    end
-    @infos = @infos.paginate :page => params[:page], :per_page => 12
+    @infos = current_user.relative_photo_infos.paginate :page => params[:page], :per_page => 12
   end
 
   def new
@@ -32,17 +25,16 @@ class User::PhotosController < UserBaseController
     if @photo.save
 			render :text => @photo.id	
 		else
-      @photo.errors.each do |e|
-        logger.error e
-      end
     end
 	end
 
   def record_upload
     @photos = @album.photos.nonblocked.find(params[:ids] || [])
-		@album.record_upload current_user, @photos
-    render :update do |page|
-      page.redirect_to edit_multiple_personal_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+
+		if @album.record_upload current_user, @photos
+      redirect_js edit_multiple_personal_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+    else
+      render_js_error
     end
   end 
 
@@ -91,7 +83,7 @@ class User::PhotosController < UserBaseController
   end
 
   def update_multiple
-    @photos = @album.photos.nonblocked.find(params[:photos].keys)
+    @photos = @album.photos.nonblocked.match(:id => params[:photos].keys)
     @photos.each do |photo|
       photo.update_attributes(params[:photos]["#{photo.id}"])
     end

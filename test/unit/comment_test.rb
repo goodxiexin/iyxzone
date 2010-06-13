@@ -21,6 +21,7 @@ class CommentTest < ActiveSupport::TestCase
     @same_game_user = UserFactory.create
     @character2 = GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @same_game_user.id
   
+    [@user, @friend].each {|f| f.reload}
     @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id
   end
 

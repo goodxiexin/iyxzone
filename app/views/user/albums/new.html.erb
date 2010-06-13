@@ -1,6 +1,6 @@
 <% facebox_tag '新建相册' do %>
   <%= content_tag :div, '', :id => 'errors'%>
-  <% rows_form_remote_for :album, :url => personal_albums_url(:at => params[:at]), :html => {:onsubmit => "Iyxzone.disableButton($('new_album_submit'),'请等待..')"} do |f| %>
+  <% rows_form_remote_for :album, :url => personal_albums_url(:at => params[:at]), :loading => "Iyxzone.disableButton($('new_album_submit'), '请等待..');", :complete => "Iyxzone.enableButton($('new_album_submit'), '完成');" do |f| %>
     <% content_tag :div, :class => 'formcontent' do %>
       <%= f.text_field 'title', :label => '相册名称' %>
       <%= f.text_area 'description', :label => '相册描述' %>

@@ -16,6 +16,7 @@ class PersonalAlbumTest < ActiveSupport::TestCase
     @character3 = GameCharacterFactory.create :user_id => @user.id
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+    [@user, @friend, @fan, @idol].each {|f| f.reload}
 
     @sensitive = "政府" 
   end

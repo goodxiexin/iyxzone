@@ -22,8 +22,8 @@
               </div>
             </div>
             <ul class="checkboxes rows s_clear" id='friend_items'>
-              <li info='<%= {:games => current_user.games.map(&:id)}.to_json %>'><span><%= check_box_tag '', current_user.id, false, :pinyin => current_user.pinyin, :login => "自己" %><%= "自己" %></span></li>
-              <% tagged_users.each do |f| %>
+              <li info='<%= {:games => current_user.games.map(&:id)}.to_json %>'><span><%= check_box_tag '', current_user.id, false, :pinyin => current_user.pinyin, :login => current_user.login %><%= '自己' %></span></li>
+              <% (photo.tag_candidates_for(current_user) - [current_user]).each do |f| %>
                 <li info='<%= {:games => f.games.map(&:id)}.to_json %>'><span><%= check_box_tag '', f.id, false, :pinyin => f.pinyin, :login => f.login %><%= f.login %></span></li>
               <% end %>
             </ul>

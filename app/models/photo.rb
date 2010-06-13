@@ -31,15 +31,41 @@ class Photo < ActiveRecord::Base
   end
 
   def is_cover= is_cover
-    @is_cover = is_cover #album.set_cover self if is_cover
+    @is_cover = (is_cover.to_i == 1) ? true : false
   end
 
-  after_save :set_album_cover
+  after_create :set_album_cover_on_create
 
-  def set_album_cover
+  def set_album_cover_on_create
+    return unless thumbnail.blank?
     if @is_cover
-      album.set_cover self
+      album.reload.set_cover self
     end
+    @is_cover = nil
+  end
+
+  after_update :set_album_cover_on_update
+
+  def set_album_cover_on_update
+    return unless thumbnail.blank?
+    if @is_cover
+      if album_id_changed?
+        from_album = Album.find(self.album_id_was)
+        to_album = Album.find(self.album_id)
+        from_album.set_cover nil if from_album.cover_id == self.id
+        to_album.set_cover self
+      else
+        album.set_cover self
+      end
+    else
+      if album_id_changed?
+        from_album = Album.find(self.album_id_was)
+        from_album.set_cover nil if from_album.cover_id == self.id
+      else
+        album.set_cover nil if album.cover_id == self.id
+      end
+    end
+    @is_cover = nil
   end
 
 	def swf_uploaded_data=(data)
@@ -57,14 +83,6 @@ class Photo < ActiveRecord::Base
 
   validates_presence_of :album_id, :if => "thumbnail.blank?", :on => :create
 
-  #validate_on_create :album_is_valid
-
-  attr_readonly :album_id, :poster_id, :game_id, :privilege
-
-protected
-
-  def album_is_valid
-    errors.add(:album_id, "不存在") if album.blank?
-  end
+  attr_readonly :poster_id, :game_id
 
 end

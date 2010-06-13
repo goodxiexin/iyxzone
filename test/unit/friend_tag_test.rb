@@ -17,6 +17,7 @@ class FriendTagTest < ActiveSupport::TestCase
     FriendFactory.create @user, @friend2
     FriendFactory.create @user, @friend3
     FriendFactory.create @user, @friend4
+    [@user, @friend1, @friend2, @friend3, @friend4].each {|f| f.reload}
 
     # create stranger
     @stranger = UserFactory.create
@@ -27,9 +28,10 @@ class FriendTagTest < ActiveSupport::TestCase
 
     # create fan and idol
     @fan = UserFactory.create
-    @idol = UserFactory.create :is_idol => true
+    @idol = UserFactory.create_idol
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+    [@fan, @idol, @user].reach {|f| f.reload}
   end
 
   test "create/delete friend tags" do

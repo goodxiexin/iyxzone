@@ -46,6 +46,14 @@ Factory.define :guild do |g|
   g.sequence(:description) {|n| "description-#{n}"}
 end
 
+Factory.define :event do |e|
+  e.sequence(:title) {|n| "title-#{n}"}
+  e.sequence(:description) {|n| "description-#{n}"}
+  e.privilege 1
+  e.sequence(:start_time) {|n| n.days.from_now}
+  e.sequence(:end_time) {|n| (n+1).days.from_now}
+end
+
 Factory.define :topic do |t|
   t.sequence(:subject) {|n| "subject-#{n}"}
   t.sequence(:content) {|n| "content-#{n}"}

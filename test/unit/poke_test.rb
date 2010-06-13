@@ -8,6 +8,7 @@ class PokeTest < ActiveSupport::TestCase
     @friend = UserFactory.create
     @stranger = UserFactory.create
     FriendFactory.create @user, @friend
+    [@user, @friend].each {|f| f.reload}
   end
 
   test "poke delivery counter" do

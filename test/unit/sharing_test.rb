@@ -24,6 +24,7 @@ class SharingTest < ActiveSupport::TestCase
     @same_game_user = UserFactory.create
     @character2 = GameCharacterFactory.create @character.game_info.merge({:user_id => @same_game_user.id})
     
+    [@user, @friend, @fan, @idol].each {|f| f.reload}
   end
 
   test "counter, first sharer" do

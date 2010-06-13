@@ -16,7 +16,7 @@ class User::AlbumsController < UserBaseController
   end
 
   def friends
-    @albums = PersonalAlbum.by(current_user.friend_ids).nonblocked.for('friend').not_empty.paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @albums = PersonalAlbum.by(current_user.friend_ids).nonblocked.for('friend').paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def select
@@ -47,7 +47,6 @@ class User::AlbumsController < UserBaseController
     
     unless @album.save
       render :update do |page|
-        page << "Iyxzone.enableButton($('new_album_submit'),'完成');"
         page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
       end
     end
@@ -67,7 +66,6 @@ class User::AlbumsController < UserBaseController
       respond_to do |format|
         format.html { 
           render :update do |page|
-            page << "Iyxzone.enableButton($('edit_album_submit'), '完成');"
             page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
           end 
         }
@@ -81,13 +79,11 @@ class User::AlbumsController < UserBaseController
 
   def destroy
     if params[:migration].to_i == 1
-      Photo.migrate(:from => @album, :to => current_user.albums.nonblocked.find(params[:migrate_to]))
+      PersonalPhoto.migrate(:from => @album, :to => current_user.albums.nonblocked.find(params[:migrate_to]))
     end
     
     if @album.destroy
-		  render :update do |page|
-			  page.redirect_to personal_albums_url(:uid => current_user.id)  
-		  end
+		  redirect_js personal_albums_url(:uid => current_user.id)
     else
       render_js_error '发生错误'
     end

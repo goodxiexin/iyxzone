@@ -7,9 +7,10 @@ class FanshipTest < ActiveSupport::TestCase
     @user2 = UserFactory.create
     @friend = UserFactory.create
     FriendFactory.create @user1, @friend
+    @user1.reload and @friend.reload
 
-    @idol1 = UserFactory.create :is_idol => true 
-    @idol2 = UserFactory.create :is_idol => true 
+    @idol1 = UserFactory.create_idol
+    @idol2 = UserFactory.create_idol
   end
 
   test "relationship" do

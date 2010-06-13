@@ -14,15 +14,15 @@ class Event < ActiveRecord::Base
 
   belongs_to :guild
 
-	named_scope :hot, :conditions => ["end_time > ?", Time.now], :order => 'confirmed_count DESC'
+	named_scope :hot, :conditions => ["end_time > ?", Time.now], :order => '(confirmed_count + maybe_count) DESC, created_at DESC'
 	
-	named_scope :recent, :conditions => ["end_time > ?", Time.now], :order => 'start_time DESC'
+	named_scope :recent, :conditions => ["end_time > ?", Time.now], :order => 'created_at DESC'
 
   named_scope :people_order, :order => '(confirmed_count + maybe_count) DESC'
 
   named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
 
-  has_many :participations # 没有dependent, 由于我们无法控制observer里的before_destroy先调用，还是destroy participation先调用
+  has_many :participations
 
   has_many :invitations, :class_name => 'Participation', :conditions => {:status => Participation::Invitation}
   
@@ -66,7 +66,10 @@ class Event < ActiveRecord::Base
 
   needs_verification :sensitive_columns => [:title, :description]
 
-  acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, event, comment| event.poster == user}, :create_conditions => lambda {|user, event| event.has_participant?(user)}, :view_conditions => lambda { true }
+  acts_as_commentable :order => 'created_at DESC', 
+                      :delete_conditions => lambda {|user, event, comment| event.poster == user}, 
+                      :create_conditions => lambda {|user, event| event.has_participant?(user)}, 
+                      :view_conditions => lambda { true }
 
 	acts_as_resource_feeds :recipients => lambda {|event| 
     poster = event.poster
@@ -80,8 +83,12 @@ class Event < ActiveRecord::Base
   # guild_id 不能改，如果存在的话
   attr_readonly :poster_id, :character_id, :game_server_id, :game_area_id, :game_id, :guild_id
 
+  def started?
+    start_time < Time.now && end_time > Time.now
+  end
+
   def expired?
-    end_time < Time.now
+    end_time <= Time.now
   end
 
   def is_guild_event?
@@ -100,29 +107,47 @@ class Event < ActiveRecord::Base
     participations.match(:participant_id => user.id, :character_id => character.id).first
   end
 
-  def requestable_characters_for user
-    user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - self.all_characters.by(user.id)
+  def inviteable_characters
+    if is_guild_event?
+      guild.characters - all_characters
+    else
+      GameCharacter.by(poster.friend_ids).match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - all_characters
+    end
   end
-
-  def is_requestable_by? user
-    poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
-  end
-
-  def invitees= character_ids
-    return if character_ids.blank?
-    character_ids.each do |character_id|
-      character = GameCharacter.find(character_id)
-      invitations.build(:character_id => character.id, :participant_id => character.user_id)
+  
+  def can_invite? user
+    if is_guild_event?
+      guild.has_people? user
+    else
+      poster.has_friend? user
     end
   end
 
-  validates_presence_of :poster_id, :message => "不能为空", :on => :create
+  def invite characters
+    return if characters.blank?
+    characters.to_a.each do |character|
+      invitations.build(:character_id => character.id, :participant_id => character.user_id)
+    end
+    save
+  end
 
-  validates_presence_of :title, :message => "不能为空"
+  def requestable_characters_for user
+    if is_guild_event?
+      guild.characters.by(user.id) - self.all_characters.by(user.id)
+    else
+      user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - self.all_characters.by(user.id)
+    end
+  end
+
+  def is_requestable_by? user
+    if is_guild_event?
+      guild.has_people? user
+    else
+      poster == user || privilege == 1 || (privilege == 2 and poster.has_friend? user)
+    end
+  end
 
   validates_size_of :title, :within => 1..100, :too_long => "最长100字节", :too_short => "最短1字节"
-
-  validates_presence_of :description, :message => "不能为空"
 
   validates_size_of :description, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1字节"
 
@@ -131,8 +156,6 @@ class Event < ActiveRecord::Base
   validate :time_is_valid
 
   validate_on_create :guild_is_valid
-
-  validates_presence_of :character_id, :message => "不能为空", :on => :create
 
   validate_on_create :character_is_valid
 
@@ -161,21 +184,19 @@ protected
     
     if guild.blank?
       errors.add(:guild_id, "不存在")
-    else
-      errors.add(:guild_id, "没有权限") unless (guild.has_veteran?(poster) or guild.president == poster)
+    elsif !guild.can_create_event?(poster_character)
+      errors.add(:guild_id, "没有权限")
     end
   end
 
   def character_is_valid
-    return if character_id.blank?
     errors.add(:character_id, "不存在") if poster_character.blank?
-    return if poster_id.blank?
-    errors.add(:character_id, "不是拥有者") if poster_character.user_id != poster_id
   end
 
   def event_is_not_expired
-    return if self.verified_changed?
-    errors.add(:event_id, "已经过期") if expired?
+    if start_time_changed? or end_time_changed?
+      errors.add(:event_id, "已经过期") if expired?
+    end
   end
 
 end

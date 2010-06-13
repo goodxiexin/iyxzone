@@ -7,17 +7,11 @@ class EventObserver < ActiveRecord::Observer
     event.auto_verify
 
     # inherit some attributes from character or guild
-    if event.is_guild_event?
-      g = event.guild
-      event.game_id = g.game_id
-      event.game_server_id = g.game_server_id
-      event.game_area_id = g.game_area_id
-    else
-      c = event.poster_character
-      event.game_id = c.game_id
-      event.game_server_id = c.server_id
-      event.game_area_id = c.area_id
-    end
+    character = event.poster_character
+    event.poster_id = character.user_id
+    event.game_id = character.game_id
+    event.game_server_id = character.server_id
+    event.game_area_id = character.area_id
   end
 
   def after_create event
@@ -40,7 +34,6 @@ class EventObserver < ActiveRecord::Observer
   def after_update event
     # verify
     if event.recently_recovered?
-      event.deliver_feeds
       event.album.verify # 会在album的observer把所有图片都verify
     elsif event.recently_rejected?
       event.destroy_feeds # participation的feed就不删了，反正他们本来就没评论

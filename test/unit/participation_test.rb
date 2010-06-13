@@ -2,357 +2,369 @@ require 'test_helper'
 
 class ParticipationTest < ActiveSupport::TestCase
 
-  fixtures :all
-
   def setup
-    @user = User.find(1)
-    @e1 = Event.create({:game_id => 1, :game_area_id => 1 , :game_server_id => 1, :poster_id => 1, :title => 'event title', :start_time => 2.days.from_now.to_s(:db), :end_time => 3.days.from_now.to_s(:db), :privilege => 1, :description => 'event description'})
-    @e2 = Event.create({:game_id => 1, :game_area_id => 1 , :game_server_id => 1, :poster_id => 1, :title => 'event title', :start_time => 2.days.from_now.to_s(:db), :end_time => 3.days.from_now.to_s(:db), :privilege => 2, :description => 'event description'})
-    @g = Guild.create({:game_id => 1, :game_area_id => 1, :game_server_id => 1, :name => 'name', :description => 'description', :president_id => 1, :character_id => 1})
-    @e3 = Event.create({:guild_id => @g.id, :character_id => 1, :poster_id => 1, :title => 'event title', :start_time => 2.days.from_now.to_s(:db), :end_time => 3.days.from_now.to_s(:db), :privilege => 1, :description => 'event description'})
-    reload
+    @user = UserFactory.create_idol
+    @idol = UserFactory.create_idol
+    @fan = UserFactory.create
+    @friend = UserFactory.create
+    @stranger = UserFactory.create
+    @user_character = GameCharacterFactory.create :user_id => @user.id
+    @friend_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @friend.id})
+    @stranger_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @stranger.id})    
+    
+    FriendFactory.create @user, @friend
+    Fanship.create :fan_id => @fan.id, :idol_id => @user.id
+    Fanship.create :fan_id => @user.id, :idol_id => @idol.id    
+    [@user, @friend, @fan, @idol].each {|f| f.reload}
+
+    @sensitive = "政府"
   end
 
-  # 测试计数器, app/observer/participation_observer.rb
-  test "创建活动后，活动的confirmed计数加1, 用户的计数器加1" do
-    assert_equal @e1.participations.count, 1
-    assert_equal @e1.participations.first.status, 3
-    assert_equal @e1.confirmed_count, 1
-    assert_equal @e2.confirmed_count, 1
-    assert_equal @e3.confirmed_count, 1
-    assert_equal @user.events_count, 3
-  end
+  test "send invitation, normal event" do
+    @event = EventFactory.create :character_id => @user_character.id
+
+    assert_no_difference "@event.reload.invitations_count" do
+      @event.invite [@friend_character, @stranger_character]
+    end
+    
+    assert_difference "@event.reload.invitations_count" do
+      assert_difference "@friend.reload.event_invitations_count" do
+        @event.invite [@friend_character]
+      end
+    end
+    assert_equal @event.invitees, [@friend]
   
-  test "请求参加活动后，活动的计数器加1，活动组织者的请求计数器加1" do
-    @e1.participations.create(:participant_id => 2, :character_id => 3, :status => 1)
-    reload
-    assert_equal @e1.poster.event_requests_count, 1
-    assert_equal @e1.requests_count, 1
+    # 非好友不能邀请
+    assert_no_difference "@event.reload.invitations_count" do
+      @event.invite [@stranger_character]
+    end
+   
+    # 已经请求加入的角色不能邀请
+    @request = @event.requests.create :participant_id => @stranger.id, :character_id => @stranger_character.id
+    assert_no_difference "@event.reload.invitations_count" do
+      @event.invite [@stranger_character]
+    end
+    @request.destroy
 
-    @e1.participations.create(:participant_id => 2, :character_id => 4, :status => 1)
-    reload
-    assert_equal @e1.poster.event_requests_count, 2
-    assert_equal @e1.requests_count, 2
+    # 已经邀请的角色不能邀请
+    @invitation = @event.invitations.create :participant_id => @stranger.id, :character_id => @stranger_character.id
+    assert_no_difference "@event.reload.invitations_count" do
+      @event.invite [@stranger_character]
+    end
+    @invitation.destroy
 
-    @e1.participations.create(:participant_id => 3, :character_id => 5, :status => 1)
-    reload
-    assert_equal @e1.poster.event_requests_count, 3
-    assert_equal @e1.requests_count, 3
+    # 已经加入的角色不能再邀请
+    @event.confirmed_participations.create :participant_id => @stranger.id, :character_id => @stranger_character.id
+    assert_no_difference "@event.reload.invitations_count" do
+      @event.invite [@stranger_character]
+    end    
   end
 
-  test "活动请求被活动组织者同意" do
-    p1 = @e1.participations.create(:participant_id => 2, :character_id => 3, :status => 1)
-    p2 = @e1.participations.create(:participant_id => 2, :character_id => 4, :status => 1)
-    p3 = @e1.participations.create(:participant_id => 3, :character_id => 5, :status => 1)
+  test "guild event" do
+    @guild = GuildFactory.create :character_id => @user_character.id 
+    @event = EventFactory.create :character_id => @user_character.id, :guild_id => @guild.id
 
-    # 先同意其中一个请求
-    p1.reload and p1.update_attributes(:status => 3) 
-    reload
-    assert_equal p1.status, 3
-    assert_equal @e1.requests_count, 2
-    assert_equal @e1.poster.event_requests_count, 2 
-    assert_equal User.find(2).upcoming_events_count, 1
+    assert_no_difference "@event.reload.invitations_count" do
+      @event.invite [@friend_character]
+    end
 
-    # 再同意一个
-    p2.reload and p2.update_attributes(:status => 3)
-    reload
-    assert_equal p2.status, 3
-    assert_equal @e1.requests_count, 1
-    assert_equal @e1.poster.event_requests_count, 1
-    assert_equal User.find(2).upcoming_events_count, 1
+    assert_no_difference "@event.reload.invitations_count" do
+      @event.invite [@stranger_character]
+    end
 
-    # 再同意一个
-    p3.reload and p3.update_attributes(:status => 3)
-    reload
-    assert_equal p3.status, 3
-    assert_equal @e1.requests_count, 0
-    assert_equal @e1.poster.event_requests_count, 0
-    assert_equal User.find(3).upcoming_events_count, 1
-  end
+    @guild.member_memberships.create :user_id => @friend.id, :character_id => @friend_character.id
 
-  test "活动请求被活动组织者拒绝" do
-    p1 = @e1.participations.create(:participant_id => 2, :character_id => 3, :status => 1)
-    p2 = @e1.participations.create(:participant_id => 2, :character_id => 4, :status => 1)
-    p3 = @e1.participations.create(:participant_id => 3, :character_id => 5, :status => 1)
+    assert_no_difference "@event.reload.invitations_count" do
+      @event.invite [@friend_character, @stranger_character]
+    end
 
-    # 先同意其中一个请求
-    p1.reload and p1.update_attributes(:status => 3)
-    reload
-    assert_equal p1.status, 3
-    assert_equal @e1.requests_count, 2
-    assert_equal @e1.poster.event_requests_count, 2
-    assert_equal User.find(2).upcoming_events_count, 1
+    assert_difference "@event.reload.invitations_count" do
+      @event.invite [@friend_character]
+    end
+    assert_equal @event.invitees, [@friend]
 
-    # 拒绝一个
-    p2.reload and p2.destroy
-    reload
-    assert_equal @e1.requests_count, 1
-    assert_equal @e1.poster.event_requests_count, 1
-    assert_equal User.find(2).upcoming_events_count, 1
-
-    # 再拒绝一个
-    p3.reload and p3.destroy
-    reload
-    assert_equal @e1.requests_count, 0
-    assert_equal @e1.poster.event_requests_count, 0
-    assert_equal User.find(3).upcoming_events_count, 0
-  end
-
-  test "活动组织者邀请好友" do
-    p1 = @e1.participations.create(:participant_id => 2, :character_id => 3, :status => 0)
-    reload
-    assert_equal @e1.invitations_count, 1
-    assert_equal p1.participant.event_invitations_count, 1
-
-    p2 = @e1.participations.create(:participant_id => 2, :character_id => 4, :status => 0)
-    reload
-    assert_equal @e1.invitations_count, 2
-    assert_equal p2.participant.event_invitations_count, 2
-
-    p3 = @e1.participations.create(:participant_id => 3, :character_id => 5, :status => 0)
-    reload
-    assert_equal @e1.invitations_count, 3
-    assert_equal p3.participant.event_invitations_count, 1
-  end
-
-  test "活动组织者的邀请被接受" do
-    p1 = @e1.participations.create(:participant_id => 2, :character_id => 3, :status => 0)
-    p2 = @e1.participations.create(:participant_id => 2, :character_id => 4, :status => 0)
-    p3 = @e1.participations.create(:participant_id => 3, :character_id => 5, :status => 0)
-
-    p1.reload and p1.update_attributes(:status => 3)
-    reload
-    assert_equal @e1.invitations_count, 2
-    assert_equal @e1.confirmed_count, 2
-    assert_equal @e1.maybe_count, 0
-    assert_equal p1.participant.event_invitations_count, 1
-    assert_equal p1.participant.upcoming_events_count, 1
-
-    p2.reload and p2.update_attributes(:status => 4)
-    reload
-    assert_equal @e1.invitations_count, 1
-    assert_equal @e1.confirmed_count, 2
-    assert_equal @e1.maybe_count, 1
-    assert_equal p2.participant.event_invitations_count, 0
-    assert_equal p2.participant.upcoming_events_count, 1
-
-    p3.reload and p3.update_attributes(:status => 3)
-    reload
-    assert_equal @e1.invitations_count, 0
-    assert_equal @e1.confirmed_count, 3
-    assert_equal @e1.maybe_count, 1
-    assert_equal p3.participant.event_invitations_count, 0
-    assert_equal p3.participant.upcoming_events_count, 1
-  end
-
-  test "活动组织者的邀请被拒绝" do
-    p1 = @e1.participations.create(:participant_id => 2, :character_id => 3, :status => 0)
-    p2 = @e1.participations.create(:participant_id => 2, :character_id => 4, :status => 0)
-    p3 = @e1.participations.create(:participant_id => 3, :character_id => 5, :status => 0)
-
-    p1.reload and p1.update_attributes(:status => 3)
-    reload
-    assert_equal @e1.invitations_count, 2
-    assert_equal @e1.confirmed_count, 2
-    assert_equal @e1.maybe_count, 0
-    assert_equal p1.participant.event_invitations_count, 1
-    assert_equal p1.participant.upcoming_events_count, 1
-
-    p2.reload and p2.destroy
-    reload
-    assert_equal @e1.invitations_count, 1
-    assert_equal @e1.confirmed_count, 2
-    assert_equal @e1.maybe_count, 0
-    assert_equal p2.participant.event_invitations_count, 0
-    assert_equal p2.participant.upcoming_events_count, 1
-
-    p3.reload and p3.destroy
-    reload
-    assert_equal @e1.invitations_count, 0
-    assert_equal @e1.confirmed_count, 2
-    assert_equal @e1.maybe_count, 0
-    assert_equal p3.participant.event_invitations_count, 0
-    assert_equal p3.participant.upcoming_events_count, 0
-  end
-
-  test "活动参与者修改状态" do
-    p = @e1.participations.find_by_participant_id(1)
-
-    # 变成可能去
-    p.update_attributes(:status => 4)
-    reload
-    assert_equal @e1.confirmed_count, 0
-    assert_equal @e1.maybe_count, 1
-
-    # 变成肯定去
-    p.update_attributes(:status => 3)
-    reload
-    assert_equal @e1.confirmed_count, 1
-    assert_equal @e1.maybe_count, 0
-  end
-
-  test "活动邀请由于过期被删除" do
-  end
-
-  test "活动请求由于过期被删除" do
-  end
-
-  # 测试validate
-  test "状态为空" do
-    p = Participation.create(:event_id => @e1.id, :participant_id => 2, :character_id => 3)
-    assert_equal p.errors.on_base, '状态不能为空'
-  end
-
-  test "状态不对" do
-    p = Participation.create(:event_id => @e1.id, :participant_id => 2, :character_id => 4, :status => 6)
-    assert_equal p.errors.on_base, '状态不对'
-  end
-
-  # 测试 validate_on_create
-  test "活动有问题" do
-    p = Participation.create(:participant_id => 2, :character_id => 3, :status => 0)
-    assert_equal p.errors.on_base, '活动不能为空'
+    @guild.member_memberships.create :user_id => @stranger.id, :character_id => @stranger_character.id
     
-    p = Participation.create(:participant_id => 2, :character_id => 3, :status => 0, :event_id => 123123)
-    assert_equal p.errors.on_base, '活动不存在'
+    assert_difference "@event.reload.invitations_count" do
+      @event.invite [@stranger_character]
+    end
+  
+    # 已经请求加入，已经邀请的，已经加入的无法再邀请，这些在上一个测试都测了
   end
 
-  test "游戏角色有问题" do
-    p = Participation.create(:event_id => @e1.id, :participant_id => 2, :character_id => nil, :status => 0)
-    assert_equal p.errors.on_base, "没有游戏角色"
-
-    p = Participation.create(:event_id => @e1.id, :participant_id => 2, :character_id => 123, :status => 0)
-    assert_equal p.errors.on_base, "游戏角色不存在"
-
-    p = Participation.create(:event_id => @e1.id, :participant_id => 4, :character_id => 8, :status => 0)
-    assert_equal p.errors.on_base, "游戏角色和活动不匹配"
+  test "decline invitation" do
+    @event = EventFactory.create :character_id => @user_character.id
+  
+    assert_difference "@event.reload.invitations_count" do
+      assert_difference "@friend.reload.event_invitations_count" do
+        @event.invite [@friend_character]
+      end
+    end
+    @invitation = @event.invitations.last
+  
+    assert_difference "Notification.count" do
+      assert_difference "@event.reload.invitations_count", -1 do
+        assert_no_difference "@event.confirmed_participations.count", "@event.maybe_participations.count" do 
+          @invitation.decline_invitation
+        end
+      end
+    end
   end
 
-  test "不能直接创建" do
-    p = Participation.create(:event_id => @e1.id, :participant_id => 2, :character_id => 3, :status => 3)
-    assert_equal p.errors.on_base, "不能直接创建"
+  test "accept invitation" do
+    @event = EventFactory.create :character_id => @user_character.id
+
+    assert_difference "@event.reload.invitations_count" do
+      assert_difference "@friend.reload.event_invitations_count" do
+        @event.invite [@friend_character]
+      end
+    end
+    @invitation = @event.invitations.last
+
+    assert_difference "Notification.count" do
+      assert_difference "@event.reload.invitations_count", -1 do
+        assert_difference "@event.confirmed_participations.count" do
+          @invitation.accept_invitation Participation::Confirmed
+        end
+      end
+    end
   end
 
-  test "邀请不是好友的人" do
-    p1 = @e1.invitations.create(:participant_id => 4, :character_id => 7)
-    p2 = @e1.invitations.create(:participant_id => 2, :character_id => 3)
-    p3 = @e1.invitations.create(:participant_id => 2, :character_id => 4)
+  test "send request, normal event, all can send" do
+    @event = EventFactory.create :character_id => @user_character.id
+    @sb = UserFactory.create
+    @sb_character = GameCharacterFactory.create :user_id => @sb.id
 
-    reload
-    assert_equal p1.errors.on_base, '不能邀请非好友'
-    assert_equal User.find(2).event_invitations_count, 2
-    assert_equal @e1.invitations_count, 2
+    # 没有相应的游戏角色
+    assert_no_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @sb_character.id, :participant_id => @sb.id
+    end
+
+    assert_difference "@event.reload.requests_count" do
+      assert_difference "@user.reload.event_requests_count" do
+        @event.requests.create :character_id => @stranger_character.id, :participant_id => @stranger.id
+      end
+    end
+
+    # 已经发送请求的
+    @request = @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id
+    assert_no_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id
+    end
+    @request.destroy
+
+    # 已经发送邀请的
+    @invitation = @event.invitations.create :character_id => @friend_character.id, :participant_id => @friend.id 
+    assert_no_difference "@event.reload.requests_count" do
+      @request = @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id 
+    end 
+    @invitation.destroy
+
+    # 已经参加的
+    @participation = @event.confirmed_participations.create :character_id => @friend_character.id, :participant_id => @friend.id 
+    assert_no_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id
+    end 
+    @participation.destroy
+
+    assert_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id
+    end 
   end
 
-  test "请求不能参加的活动" do
-    # 活动只对好友开放，但是请求者不是好友
-    p = @e2.requests.create(:participant_id => 4, :character_id => 7)
-    assert_equal p.errors.on_base, '权限不够'
+  test "send request, normal event, only friends can send" do
+    @event = EventFactory.create :character_id => @user_character.id, :privilege => 2
 
-    # 活动是工会的活动，请求者不是工会的人
-    p = @e3.requests.create(:participant_id => 2, :character_id => 3)
-    assert_equal p.errors.on_base, "权限不够" 
+    assert_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id
+    end
+
+    # 不是好友
+    assert_no_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @stranger_character.id, :participant_id => @stranger.id
+    end
   end
 
-  test "已经发送活动请求的，无法再发送活动请求" do
-    @e1.requests.create(:participant_id => 2, :character_id => 3)
-    p = @e1.requests.create(:participant_id => 2, :character_id => 3) 
+  test "send request, guild event, only members can send" do
+    @guild = GuildFactory.create :character_id => @user_character.id
+    @event = EventFactory.create :character_id => @user_character.id, :guild_id => @guild.id
 
-    reload
-    assert_equal p.errors.on_base, '已经发送请求了'
-    assert_equal @user.event_requests_count, 1
-    assert_equal @e1.requests_count, 1
+    assert_no_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id
+    end
+
+    @guild.member_memberships.create :character_id => @friend_character.id, :user_id => @friend.id
+    assert_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id
+    end
+
+    assert_no_difference "@event.reload.requests_count" do
+      @event.requests.create :character_id => @friend_character.id, :participant_id => @friend.id
+    end
   end
 
-  test "已经发送活动请求的，无法被邀请" do
-    @e1.requests.create(:participant_id => 2, :character_id => 3)
-    p = @e1.invitations.create(:participant_id => 2, :character_id => 3)
+  test "decline request" do
+    @event = EventFactory.create :character_id => @user_character.id
 
-    reload
-    assert_equal p.errors.on_base, '已经发送请求了'
-    assert_equal @user.event_requests_count, 1
-    assert_equal User.find(2).event_invitations_count, 0
-    assert_equal @e1.requests_count, 1
-    assert_equal @e1.invitations_count, 0
+    assert_difference "@event.reload.requests_count" do
+      assert_difference "@user.reload.event_requests_count" do
+        @request = @event.requests.create :character_id => @stranger_character.id, :participant_id => @stranger.id
+      end
+    end
+
+    assert_difference "Notification.count" do
+      assert_difference "@event.reload.requests_count", -1 do
+        assert_no_difference "@event.confirmed_participations.count", "@event.maybe_participations.count" do
+          @request.decline_request
+        end
+      end
+    end
   end
 
-  test "已经邀请的，无法再邀请" do
-    @e1.invitations.create(:participant_id => 2, :character_id => 3)
-    p = @e1.invitations.create(:participant_id => 2, :character_id => 3)
-    
-    reload
-    assert_equal p.errors.on_base, '已经被邀请了'
-    assert_equal User.find(2).event_invitations_count, 1
-    assert_equal @e1.invitations_count, 1
+  test "accept request" do
+    @event = EventFactory.create :character_id => @user_character.id
+
+    assert_difference "@event.reload.requests_count" do
+      assert_difference "@user.reload.event_requests_count" do
+        @request = @event.requests.create :character_id => @stranger_character.id, :participant_id => @stranger.id
+      end
+    end
+
+    assert_difference "Notification.count" do
+      assert_difference "@event.reload.requests_count", -1 do
+        assert_difference "@event.confirmed_participations.count" do
+          @request.accept_request
+        end
+      end
+    end
   end
 
-  test "已经被邀请的，无法发送活动请求" do
-    @e1.invitations.create(:participant_id => 2, :character_id => 3)
-    p = @e1.requests.create(:participant_id => 2, :character_id => 3)
+  test "participant counter" do
+    @event = EventFactory.create :character_id => @user_character.id
 
-    reload
-    assert_equal p.errors.on_base, '已经被邀请了'
-    assert_equal @user.event_requests_count, 0
-    assert_equal User.find(2).event_invitations_count, 1
-    assert_equal @e1.invitations_count, 1
-    assert_equal @e1.requests_count, 0
+    @p = @event.confirmed_participations.create :character_id => @friend_character.id, :participant_id => @friend.id
+    @q = @event.maybe_participations.create :character_id => @stranger_character.id, :participant_id => @stranger.id
+
+    @event.reload
+    assert_equal @event.confirmed_count, 2
+    assert_equal @event.maybe_count, 1
+
+    @p.destroy
+    @event.reload
+    assert_equal @event.confirmed_count, 1
+    assert_equal @event.maybe_count, 1
+
+    @q.destroy
+    @event.reload
+    assert_equal @event.confirmed_count, 1
+    assert_equal @event.maybe_count, 0
   end
 
-  test "已经参加活动的，无法再发送请求" do
-    puts "本来有: #{@e1.characters}"
-    p = @e1.requests.create(:participant_id => 1, :character_id => 1)
-    puts "现在有: #{@e1.participations.find_by_participant_id(1)}"
-    reload
-    #assert_equal p.errors.on_base, '已经参加了该活动'
-    assert_equal @user.events_count, 3
-    assert_equal @user.upcoming_events_count, 0
-    assert_equal @e1.requests_count, 0
+  test "participant change status" do
+    @event = EventFactory.create :character_id => @user_character.id
+    @p = @event.confirmed_participations.create :character_id => @friend_character.id, :participant_id => @friend.id
+
+    assert_difference "@user.reload.notifications_count" do
+      assert_difference "@event.reload.confirmed_participations.count", -1 do
+        assert_difference "@event.reload.maybe_participations.count" do
+          @p.change_status Participation::Maybe
+        end
+      end
+    end
+
+    assert_no_difference "@user.reload.notifications_count" do
+      assert_no_difference "@event.reload.confirmed_participations.count" do
+        assert_no_difference "@event.reload.maybe_participations.count" do
+          @p.change_status Participation::Maybe
+        end
+      end
+    end
+     
+    assert_difference "@user.reload.notifications_count" do
+      assert_difference "@event.reload.confirmed_participations.count" do
+        assert_difference "@event.reload.maybe_participations.count", -1 do
+          @p.change_status Participation::Confirmed
+        end
+      end
+    end
   end
 
-  test "已经参加活动的，无法被邀请" do
-    p = @e1.invitations.create(:participant_id => 1, :character_id => 1)
+  test "event poster evict particpant" do
+    @event = EventFactory.create :character_id => @user_character.id
 
-    reload
-    assert_equal p.errors.on_base, '已经参加了该活动'
-    assert_equal @user.events_count, 2
-    assert_equal @user.upcoming_events_count, 0
-    assert_equal @e1.invitations_count, 0
+    @p = @event.confirmed_participations.create :character_id => @friend_character.id, :participant_id => @friend.id
+    assert_difference "@friend.reload.notifications_count" do
+      assert_difference "@event.reload.confirmed_participations.count", -1 do
+        assert_no_difference "@event.reload.maybe_participations.count" do
+          @p.evict
+        end
+      end
+    end
+
+    @p = @event.maybe_participations.create :character_id => @friend_character.id, :participant_id => @friend.id
+    assert_difference "@friend.reload.notifications_count" do
+      assert_difference "@event.reload.maybe_participations.count", -1 do
+        assert_no_difference "@event.reload.confirmed_participations.count" do
+          @p.evict
+        end
+      end
+    end  
   end
 
-=begin
-   test "从请求变成邀请" do
-    p = Participation.create(:event_id => @e1.id, :participant_id => 2, :status => 1)
-    p.update_attributes(:status => 0)
-    assert_equal p.errors.on_base, '不能从请求变成邀请' 
+  test "accept request feed, normal event" do
+    @profile = @user.profile
+    @event = EventFactory.create :character_id => @stranger_character.id
+    @game = @event.game
+    @request = @event.requests.create :character_id => @user_character.id, :participant_id => @user.id
+    @request.accept_request
+
+    @friend.reload and @fan.reload and @idol.reload and @game.reload and @profile.reload
+    assert @friend.recv_feed?(@request)
+    assert @fan.recv_feed?(@request)
+    assert !@idol.recv_feed?(@request)
+    assert @profile.recv_feed?(@request)
+    assert @game.recv_feed?(@request)
   end
 
-  test "从participation变成请求" do
-    p = @e1.participations.find_by_participant_id(1)
-    p.update_attributes(:status => 1)
-    assert_equal p.errors.on_base, '不能从参加变成请求'
+  test "accept invitation feed, normal event" do
+    FriendFactory.create @stranger, @user
+    @profile = @user.profile
+    @event = EventFactory.create :character_id => @stranger_character.id
+    @game = @event.game
+    @invitation = @event.invitations.create :character_id => @user_character.id, :participant_id => @user.id
+    @invitation.accept_invitation Participation::Confirmed
+
+    @friend.reload and @fan.reload and @idol.reload and @game.reload and @profile.reload
+    assert @friend.recv_feed?(@invitation)
+    assert @fan.recv_feed?(@invitation)
+    assert !@idol.recv_feed?(@invitation)
+    assert @profile.recv_feed?(@invitation)
+    assert @game.recv_feed?(@invitation)
   end
 
-  test "从邀请变成请求" do
-    p = Participation.create(:event_id => @e1.id, :participant_id => 2, :status => 0)
-    p.update_attributes(:status => 1)
-    assert_equal p.errors.on_base, '不能从邀请变成请求'
-  end
+  test "participants list" do
+    @event = EventFactory.create :character_id => @user_character.id
+  
+    @p1 = @event.confirmed_participations.create :character_id => @friend_character.id, :participant_id => @friend.id
+    @p2 = @event.maybe_participations.create :character_id => @stranger_character.id, :participant_id => @stranger.id
 
-  test "从participation变成邀请" do
-    p = @e1.participations.find_by_participant_id(1)
-    p.update_attributes(:status => 0, :participant_id => 1)
-    assert_equal p.errors.on_base, '不能从参加变成邀请'
-  end
-=end
+    @event.reload
+    assert_equal @event.confirmed_participants, [@user, @friend]
+    assert_equal @event.maybe_participants, [@stranger]
 
-protected
+    @p2.change_status Participation::Confirmed
 
-  def reload
-    @user.reload
-    @e1.reload
-    @e2.reload
-    @e3.reload
-    @g.reload
+    @event.reload
+    assert_equal @event.confirmed_participants, [@user, @friend, @stranger]
+    assert_equal @event.maybe_participants, []
+
+    @p1.change_status Participation::Maybe
+    @p2.change_status Participation::Maybe
+
+    @event.reload
+    assert_equal @event.confirmed_participants, [@user]
+    assert_equal @event.maybe_participants, [@friend, @stranger]
   end
 
 end
+

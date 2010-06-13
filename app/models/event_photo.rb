@@ -5,8 +5,9 @@ class EventPhoto < Photo
   validates_as_attachment
   
   acts_as_photo_taggable :delete_conditions => lambda {|user, photo, album| album.poster == user },
-                         :create_conditions => lambda {|user, photo, album| album.event.has_participant? user}
-
+                         :create_conditions => lambda {|user, photo, album| album.event.has_participant? user},
+                         :candidates => lambda {|tagger, photo, album| album.event.participants}
+  
   attr_readonly :album_id, :privilege
 
 end

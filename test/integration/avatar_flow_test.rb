@@ -169,11 +169,6 @@ class AvatarFlowTest < ActionController::IntegrationTest
     @idol_sess.get "/avatars/#{@photo.id}"
     @idol_sess.assert_template 'user/avatars/photos/show'
     assert_equal @idol_sess.assigns(:photo), @photo
-  
-    @photo.unverify
-
-    @user_sess.get "/avatars/#{@photo.id}"
-    @user_sess.assert_template "errors/404"
   end
 
   test "PUT /avatars/:id" do
@@ -226,7 +221,7 @@ class AvatarFlowTest < ActionController::IntegrationTest
     @album.reload and @user.reload
     assert_equal @album.cover, @photo
     assert_equal @user.avatar, @photo 
-  
+ 
     @friend_sess.put "/avatars/#{@photo.id}", {:photo => {:is_cover => 1}}
     @friend_sess.assert_template 'errors/404'
 
@@ -276,8 +271,15 @@ class AvatarFlowTest < ActionController::IntegrationTest
   
 protected
 
+  module CustomDsl
+    def assert_not_found
+      assert_template "errors/404"
+    end
+  end
+
   def login user
     open_session do |session|
+      session.extend CustomDsl
       session.post "/sessions/create", :email => user.email, :password => user.password
       session.assert_redirected_to home_url
     end 

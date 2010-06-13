@@ -31,6 +31,8 @@ class VideoTest < ActiveSupport::TestCase
     @fan = UserFactory.create
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+
+    [@user, @friend1, @friend2, @friend3, @friend4, @fan, @idol].each {|f| f.reload}
   end
   
   test "create/update/destroy video" do

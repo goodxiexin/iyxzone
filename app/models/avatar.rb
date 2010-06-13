@@ -5,7 +5,8 @@ class Avatar < Photo
   validates_as_attachment
 
   acts_as_photo_taggable :delete_conditions => lambda {|user, photo, album| album.poster == user}, 
-                         :create_conditions => lambda {|user, photo, album| album.poster.has_friend?(user) || album.poster == user}
+                         :create_conditions => lambda {|user, photo, album| album.poster == user || album.poster.has_friend?(user)},
+                         :candidates => lambda {|tagger, photo, album| [tagger] + tagger.friends}
 
   acts_as_resource_feeds :recipients => lambda {|photo| 
     poster = photo.album.poster

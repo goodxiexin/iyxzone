@@ -35,9 +35,9 @@ protected
       @event = Event.find(params[:event_id])
       require_verified @event
     elsif ["edit", "update"].include? params[:action]
-      @participation = Participation.find(params[:id])
-      @event = @participation.event
+      @event = Event.find(params[:event_id])
       require_verified @event
+      @participation = @event.participations.find(params[:id])
       require_owner @participation.participant
     elsif ["destroy"].include? params[:action]
       @participation = Participation.find(params[:id])

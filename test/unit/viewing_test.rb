@@ -8,10 +8,13 @@ class ViewingTest < ActiveSupport::TestCase
     @stranger = UserFactory.create
     @friend = UserFactory.create
     FriendFactory.create @user, @friend
+    
     @fan = UserFactory.create
-    Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     @idol = UserFactory.create :is_idol => true
+    Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+  
+    [@user, @friend, @fan, @idol].each {|f| f.reload}
   end
 
   test "viewed by someone" do
