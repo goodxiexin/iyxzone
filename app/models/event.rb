@@ -103,10 +103,6 @@ class Event < ActiveRecord::Base
     confirmed_and_maybe_participations.exists? :participant_id => user.id
   end
 
-  def participation_for user, character
-    participations.match(:participant_id => user.id, :character_id => character.id).first
-  end
-
   def inviteable_characters
     if is_guild_event?
       guild.characters - all_characters

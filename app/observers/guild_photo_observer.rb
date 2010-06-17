@@ -41,20 +41,16 @@ class GuildPhotoObserver < ActiveRecord::Observer
       photo.album.raw_decrement :photos_count
     end
 
-    # change cover
-    if photo.cover
-      photo.album.update_attribute(:cover_id, photo.id) if photo.album.cover_id != photo.id
-    else
-      photo.album.update_attribute(:cover_id, nil) if photo.album.cover_id == photo.id
-    end
   end
   
   def after_destroy photo
     return unless photo.thumbnail.blank?
     
     # decrement counter
-    photo.album.raw_decrement :photos_count
-  
+    if !photo.rejected?
+      photo.album.raw_decrement :photos_count
+    end
+
     # check if the deleted photo is cover
     album = photo.album
     if album.cover_id == photo.id

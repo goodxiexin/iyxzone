@@ -23,25 +23,6 @@ class Membership < ActiveRecord::Base
     [user.profile, guild.game] + friends + (user.is_idol ? user.fans : []) - [guild.president] 
   }
 
-  # user_id, guild_id, character_id 不能被修改
-  attr_readonly :user_id, :guild_id, :character_id
-
-  validates_presence_of :user_id, :message => "不能为空", :on => :create
-
-  validates_presence_of :guild_id, :message => "不能为空", :on => :create
-
-  validates_presence_of :character_id, :message => "不能为空", :on => :create
-
-  validates_inclusion_of :status, :in => [Invitation, Request, President, Veteran, Member], :message => "只能是0,1,2,3,4"
-
-  validate_on_create :guild_is_valid
-
-  validate_on_create :character_is_valid
-
-  validate_on_create :user_is_valid
-
-  validate_on_update :status_is_valid
-
   def to_s
     if is_president?
       "会长"
@@ -92,110 +73,115 @@ class Membership < ActiveRecord::Base
     status_was == Member or status_was == Veteran
   end  
 
-  attr_accessor :recently_change_role
+  def recently_change_role?
+    @action == :recently_change_role
+  end
 
-  attr_accessor :recently_evicted
+  def recently_evicted?
+    @action == :recently_evicted
+  end
 
-  attr_accessor :recently_accept_invitation
+  def recently_accept_invitation?
+    @action == :recently_accept_invitation
+  end
 
-  attr_accessor :recently_decline_invitation
+  def recently_decline_invitation?
+    @action == :recently_decline_invitation
+  end
 
-  attr_accessor :recently_accept_request
+  def recently_accept_request?
+    @action == :recently_accept_request
+  end
 
-  attr_accessor :recently_decline_request
+  def recently_decline_request?
+    @action == :recently_decline_request
+  end
 
   def change_role status
     if self.status != status
-      self.recently_change_role = true
+      @action = :recently_change_role
       self.update_attributes(:status => status)
     end
   end
 
   def evict
     if self.is_authorized?
-      self.recently_evicted = true
+      @action = :recently_evicted
       self.destroy
     end
   end
 
   def accept_invitation
     if self.is_invitation?
-      self.recently_accept_invitation = true
+      @action = :recently_accept_invitation
       self.update_attributes(:status => Member)
     end
   end
 
   def decline_invitation
     if self.is_invitation?
-      self.recently_decline_invitation = true
+      @action = :recently_decline_invitation
       self.destroy
     end
   end
 
   def accept_request
     if self.is_request?
-      self.recently_accept_request = true
+      @action = :recently_accept_request
       self.update_attributes(:status => Member)
     end
   end
 
   def decline_request
     if self.is_request?
-      self.recently_decline_request = true
+      @action = :recently_decline_request
       self.destroy
     end
   end
 
+  # user_id, guild_id, character_id 不能被修改
+  attr_readonly :user_id, :guild_id, :character_id
+
+  validates_inclusion_of :status, :in => [Invitation, Request, President, Veteran, Member], :message => "只能是0,1,2,3,4"
+
+  validate_on_create :guild_is_valid
+
+  validate_on_create :character_is_valid
+
+  validate_on_create :user_is_valid
+
 protected
 
   def guild_is_valid
-    return if guild_id.blank?
-    errors.add(:guild_id, "工会不存在") unless Guild.exists? guild_id
+    errors.add(:guild_id, "工会不存在") if guild.blank? #Guild.exists? guild_id
   end
 
   def character_is_valid
-    return if character_id.blank?
-    
+    #return if character_id.blank?
     if character.blank?
       errors.add(:character_id, "不存在")
-    elsif guild and (character.game_id != guild.game_id or character.area_id != guild.game_area_id or character.server_id != guild.game_server_id)
-      errors.add(:character_id, "不属于相应服务器")
+    elsif user and !user.has_character?(character)
+      errors.add(:character_id, "不属于那个人")
+    end
+
+    return if guild.blank? or character.blank? or user.blank?
+   
+    if is_invitation?
+      errors.add(:character_id, "不能邀请") if !guild.inviteable_characters.include?(character)
+    elsif is_request?
+      errors.add(:character_id, "不能请求") if !guild.requestable_characters_for(user).include?(character)
     end
   end
   
   def user_is_valid
-    return if character.blank? or user.blank? or guild.blank?
- 
-    membership = guild.membership_for user, character
-    
-    if membership.blank?
+    if user.blank?
+      errors.add(:user_id, '不存在')
+    elsif guild
       if is_invitation?
-        errors.add(:user_id, '不能邀请非好友') if !guild.president.has_friend?(user_id)
+        errors.add(:user_id, "不是好友") if !guild.can_invite?(user)
       elsif is_request?
-      elsif is_authorized? or is_president?
+        errors.add(:user_id, "权限不够") if !guild.is_requestable_by?(user)
       end
-    else
-      if membership.is_invitation?
-        errors.add(:user_id, '已经被邀请了')
-      elsif membership.is_request?
-        errors.add(:user_id, '已经发送请求了')
-      elsif membership.is_authorized? or membership.is_president?
-        errors.add(:user_id, '已经加入了该工会')
-      end
-		end
-  end
-
-  def status_is_valid
-    return if status.blank? 
-    
-    if is_invitation?
-      errors.add(:status, '不能从请求变成邀请') if was_request?
-      errors.add(:status, '不能从参加变成邀请') if was_authorized? or was_president?
-    elsif is_request?
-      errors.add(:status, '不能从邀请变成请求') if was_invitation?
-      errors.add(:status, '不能从参加变成请求') if was_authorized? or was_president?
-    elsif is_president?
-      errors.add(:status, '不能变成会长')
     end
   end
 

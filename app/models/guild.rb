@@ -104,19 +104,6 @@ class Guild < ActiveRecord::Base
 
 	searcher_column :name
 
-  # game_id, president_id, character_id 不能改变
-  attr_readonly :game_id, :game_area_id, :game_server_id, :president_id, :character_id, :name
-
-  validates_presence_of :name, :message => "不能为空"
-
-  validates_size_of :name, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
-
-  validates_size_of :description, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节", :allow_nil => true
- 
-  validates_presence_of :character_id, :message => "不能为空", :on => :create
-
-  validate_on_create :character_is_valid
-
 	def people_count
 		veterans_count + members_count + 1
 	end
@@ -125,168 +112,54 @@ class Guild < ActiveRecord::Base
     people_memberships.exists? :user_id => user.id
   end
 
-  def has_veteran? user
-    veteran_memberships.exists? :user_id => user.id
-  end
-
   # 一个玩家可能有多个游戏角色在这个工会里
   def role_for user
     people_memberships.by(user.id).order('status ASC').first
-  end
-
-  def membership_for user, character
-    memberships.match(:user_id => user.id, :character_id => character.id).first
   end
 
   def can_create_event? character
     president_and_veteran_characters.include?(character)
   end
 
-  def requestable_characters_for user
-    user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - all_characters.find(:all, :conditions => "memberships.user_id = #{user.id}")
+  def inviteable_characters
+    GameCharacter.by(president.friend_ids).match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - all_characters
   end
 
-  def invitees= character_ids
-    return if character_ids.blank?
-    character_ids.each do |character_id|
-      character = GameCharacter.find(character_id)
+  def can_invite? user
+    president.has_friend? user
+  end
+
+  def invite characters
+    return if characters.blank?
+    characters.to_a.each do |character|
       invitations.build(:character_id => character.id, :user_id => character.user_id)
-    end 
-  end
-
-=begin
-  has_many :gears, :dependent => :delete_all
-
-  has_many :bosses, :dependent => :delete_all
-
-  has_many :rules, :class_name => 'GuildRule', :dependent => :delete_all
-
-  has_many :basic_rules, :class_name => 'GuildRule', :conditions => {:rule_type => 2}
-
-  has_many :attendance_rules, :class_name => 'GuildRule', :conditions => {:rule_type => [0, 1]}
-
-  has_one :absence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 0}
-
-  has_one :presence_rule, :class_name => 'GuildRule', :conditions => {:rule_type => 1}
-
-  after_save :save_rules
-
-  def new_rules= rule_attrs
-    @new_rules_attrs = rule_attrs
-  end
-
-  def existing_rules= rule_attrs
-    @existing_rules_attrs = rule_attrs
-  end
-
-  def del_rules= rule_ids
-    @del_rules_ids = rule_ids
-  end
-
-  def save_rules
-    unless @new_rules_attrs.blank?
-      @new_rules_attrs.each_value do |attrs|
-        basic_rules.create(attrs)
-      end
     end
-    @new_rules_attrs = nil
-    
-    unless @existing_rules_attrs.blank?
-      @existing_rules_attrs.each do |id, attrs|
-        rules.find(id).update_attributes(attrs)
-      end
-    end
-    @existing_rules_attrs = nil
-    
-    unless @del_rules_ids.blank?
-      @del_rules_ids.each do |id|
-        rules.find(id).destroy
-      end
-    end
-    @del_rules_ids = nil
+    save
   end
 
-  after_save :save_bosses
-
-  def new_bosses= boss_attrs
-    @new_bosses_attrs = boss_attrs
+  def requestable_characters_for user
+    user.characters.match(:game_id => game_id, :area_id => game_area_id, :server_id => game_server_id) - all_characters.by(user.id)
   end
 
-  def existing_bosses= boss_attrs
-    @existing_bosses_attrs = boss_attrs
+  def is_requestable_by? user
+    true
   end
 
-  def del_bosses= boss_ids
-    @del_bosses_ids = boss_ids
-  end
+  # game_id, president_id, character_id 不能改变
+  attr_readonly :game_id, :game_area_id, :game_server_id, :president_id, :character_id, :name
 
-  def save_bosses
-    unless @new_bosses_attrs.blank?
-      @new_bosses_attrs.each_value do |attrs|
-        bosses.create(attrs)
-      end
-    end
-    @new_bosses_attrs = nil
+  validates_presence_of :name, :message => "不能为空"
 
-    unless @existing_bosses_attrs.blank?
-      @existing_bosses_attrs.each do |id, attrs|
-        bosses.find(id).update_attributes(attrs)
-      end
-    end
-    @existing_bosses_attrs = nil
+  validates_size_of :name, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
 
-    unless @del_bosses_ids.blank?
-      @del_bosses_ids.each do |id|
-        bosses.find(id).destroy
-      end
-    end
-    @del_bosses_ids = nil
-  end
+  validates_size_of :description, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节"
 
-  after_save :save_gears
+  validate_on_create :character_is_valid
 
-  def new_gears= gear_attrs
-    @new_gears_attrs = gear_attrs
-  end
-
-  def existing_gears= gear_attrs
-    @existing_gears_attrs = gear_attrs
-  end
-
-  def del_gears= gear_ids
-    @del_gears_ids = gear_ids
-  end
-
-  def save_gears
-    unless @new_gears_attrs.blank?
-      @new_gears_attrs.each_value do |attrs|
-        gears.create(attrs)
-      end
-    end
-    @new_gears_attrs = nil
-
-    unless @existing_gears_attrs.blank?
-      @existing_gears_attrs.each do |id, attrs|
-        gears.find(id).update_attributes(attrs)
-      end
-    end
-    @existing_gears_attrs = nil
-
-    unless @del_gears_ids.blank?
-      @del_gears_ids.each do |id|
-        gears.find(id).destroy
-      end
-    end
-    @del_gears_ids = nil
-  end
-=end
 protected
 
   def character_is_valid
-    return if character_id.blank?
     errors.add(:character_id, "不存在") if president_character.blank?
-    return if president_id.blank?
-    errors.add(:character_id, "不是拥有者") if president_character.user_id != president_id
   end
 
 end

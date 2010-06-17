@@ -7,7 +7,8 @@ class User::Guilds::InvitationsController < UserBaseController
   end
 
   def create
-    if @guild.update_attributes(:invitees => params[:values])
+    @characters = GameCharacter.find params[:values]
+    if @guild.invite @characters #update_attributes(:invitees => params[:values])
       redirect_to guild_url(@guild)
     else
       render :action => 'new'

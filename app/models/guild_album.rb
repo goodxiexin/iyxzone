@@ -8,16 +8,15 @@ class GuildAlbum < Album
 
   has_many :latest_photos, :class_name => 'GuildPhoto', :foreign_key => 'album_id', :limit => 5, :order => "created_at DESC"
 
-  attr_readonly :game_id, :privilege
+  acts_as_resource_feeds :recipients => lambda {|album| 
+    poster = album.poster
+    guild = album.guild
+    friends = poster.friends.find_all {|f| f.application_setting.recv_photo_feed?}
+    fans = poster.is_idol ? poster.fans : []
+    people = guild.people.find_all {|p| p != poster and p.application_setting.recv_photo_feed?}
+    people + fans + friends
+  }
 
-  def record_upload user, photos
-    if !photos.blank?
-      update_attribute('uploaded_at', Time.now)
-      if user.application_setting.emit_photo_feed?
-        recipients = (user.is_idol ? user.fans : []) + user.friends.find_all {|f| f.application_setting.recv_photo_feed?} + guild.people.find_all {|p| p != user and p.application_setting.recv_photo_feed?}
-        deliver_feeds :recipients => recipients.uniq, :data => {:ids => photos.map(&:id)}
-      end
-    end
-  end
+  attr_readonly :game_id, :privilege
 
 end

@@ -23,8 +23,8 @@ class GuildObserver < ActiveRecord::Observer
     guild.memberships.create(:user_id => guild.president_id, :character_id => guild.character_id, :status => Membership::President)
  
     # create absence rule and presence rule
-    GuildRule.new(:guild_id => guild.id, :reason => "无故缺席", :outcome => -5, :rule_type => 0).save_with_validation(false)
-    GuildRule.new(:guild_id => guild.id, :reason => "准时出席", :outcome => 5, :rule_type => 1).save_with_validation(false)
+    # GuildRule.new(:guild_id => guild.id, :reason => "无故缺席", :outcome => -5, :rule_type => 0).save_with_validation(false)
+    # GuildRule.new(:guild_id => guild.id, :reason => "准时出席", :outcome => 5, :rule_type => 1).save_with_validation(false)
     
     # increment counter
     guild.president.raw_increment :guilds_count
@@ -49,7 +49,7 @@ class GuildObserver < ActiveRecord::Observer
     elsif guild.recently_recovered?
       User.update_all("participated_guilds_count = participated_guilds_count + 1", {:id => (guild.people - [guild.president]).map(&:id)})
       guild.president.raw_increment :guilds_count
-      guild.deliver_feeds 
+      # guild.deliver_feeds
       guild.album.verify # 会在album的observer里verify所有照片
     end
   end

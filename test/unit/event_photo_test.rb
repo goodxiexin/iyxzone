@@ -38,21 +38,20 @@ class EventPhotoTest < ActiveSupport::TestCase
     assert_nil @album.cover
 
     @photo1 = PhotoFactory.create :album_id => @album.id, :type => 'EventPhoto' 
-    @album.reload and @user.reload
+    @album.reload
     assert_nil @album.cover
-    assert_nil @user.avatar
 
     # two ways to set cover of album
     @album.set_cover @photo1
-    @album.reload and @user.reload
+    @album.reload
     assert_equal @album.cover, @photo1
 
     @photo2 = PhotoFactory.create :album_id => @album.id, :type => 'EventPhoto', :is_cover => 1 
-    @album.reload and @user.reload
+    @album.reload 
     assert_equal @album.cover, @photo2
 
     @photo2.update_attributes :is_cover => 0
-    @album.reload and @user.reload
+    @album.reload
     assert_nil @album.cover
   end
 
@@ -81,12 +80,12 @@ class EventPhotoTest < ActiveSupport::TestCase
   test "event photo feed" do
     @photo1 = PhotoFactory.create :album_id => @album.id, :type => 'EventPhoto'
     @photo2 = PhotoFactory.create :album_id => @album.id, :type => 'EventPhoto'
+    @p = @event.confirmed_participations.create :character_id => @character2.id, :participant_id => @same_game_user.id
     @album.record_upload @user, [@photo1, @photo2]
     
-    @p = @event.confirmed_participations.create :character_id => @character2.id, :participant_id => @same_game_user.id
     @friend.reload and @same_game_user.reload and @fan.reload and @idol.reload
     assert @friend.recv_feed?(@album)
-    #assert @same_game_user.recv_feed?(@album)
+    assert @same_game_user.recv_feed?(@album)
     assert @fan.recv_feed?(@album)
     assert !@idol.recv_feed?(@album)
   end
