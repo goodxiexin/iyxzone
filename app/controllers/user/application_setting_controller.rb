@@ -4,7 +4,7 @@ class User::ApplicationSettingController < UserBaseController
 
   ConfigType = ['blog', 'video', 'photo', 'poll','event', 'guild', 'sharing']
   
-  ConfigName = ['日志', '视频', '照片', '投票', '活动', '工会', '分享']
+  ConfigName = ['日志', '视频', '照片', '投票', '活动', '公会', '分享']
 
 	def show
 	  @applications = Application.all

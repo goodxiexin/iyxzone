@@ -13,12 +13,12 @@ class User::PrivacySettingController < UserBaseController
       render :action => "going_privacy"
     when 2
       render :action => "outside_privacy"
-    when 3
-      render :action => "qq_privacy", :layout => false
-    when 4
-      render :action => "phone_privacy", :layout => false
-    when 5
-      render :action => "website_privacy", :layout => false
+   # when 3
+   #   render :action => "qq_privacy", :layout => false
+   # when 4
+   #   render :action => "phone_privacy", :layout => false
+   # when 5
+   #   render :action => "website_privacy", :layout => false
     end
   end
 
