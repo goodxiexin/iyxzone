@@ -15,7 +15,7 @@ class FriendFlowTest < ActionController::IntegrationTest
     FriendFactory.create @user1, @friend2
     FriendFactory.create @user2, @friend3
     FriendFactory.create @user2, @friend4
-
+    
     # login
     @user1_sess = login @user1
     @user2_sess = login @user2
@@ -51,7 +51,7 @@ class FriendFlowTest < ActionController::IntegrationTest
     assert_equal @user1_sess.assigns(:friends), [@friend2]
 
     @user1_sess.get '/friends', {:term => 1, :game_id => 'invalid'}
-    @user1_sess.assert_template 'errors/404'
+    @user1_sess.assert_not_found
 
     # create guilds for them
     @guild1 = GuildFactory.create :character_id => @character1.id
@@ -73,7 +73,7 @@ class FriendFlowTest < ActionController::IntegrationTest
     assert_equal @user1_sess.assigns(:friends), [@friend2] 
 
     @user1_sess.get '/friends', {:term => 2, :guild_id => 'invalid'}
-    @user1_sess.assert_template 'errors/404'
+    @user1_sess.assert_not_found
   end
 
   test "GET /friends/other" do
@@ -86,10 +86,10 @@ class FriendFlowTest < ActionController::IntegrationTest
     assert_equal @user2_sess.assigns(:friends), [@friend1, @friend2]
 
     @user2_sess.get '/friends/other', {:uid => @user2.id}
-    @user2_sess.assert_template 'errors/404'
+    @user2_sess.assert_not_found
 
     @user2_sess.get '/friends/other', {:uid => 'invalid'}
-    @user2_sess.assert_template 'errors/404'
+    @user2_sess.assert_not_found
   end
 
   test "GET /friends/common" do
@@ -104,18 +104,18 @@ class FriendFlowTest < ActionController::IntegrationTest
     assert_equal @user1_sess.assigns(:friends), [@friend1]
 
     @user2_sess.get '/friends/common', {:uid => @user2.id}
-    @user2_sess.assert_template 'errors/404'
+    @user2_sess.assert_not_found
 
     @user2_sess.get '/friends/common', {:uid => 'invalid'}
-    @user2_sess.assert_template 'errors/404'
+    @user2_sess.assert_not_found
   end
 
   test "GET /friends/new" do
     @user1_sess.get '/friends/new', {:uid => 'invalid'}
-    @user1_sess.assert_template 'errors/404'
+    @user1_sess.assert_not_found
 
     @user1_sess.get '/friends/new', {:uid => @friend1.id}
-    @user1_sess.assert_template 'errors/404'
+    @user1_sess.assert_not_found
 
     @user1_sess.get '/friends/new', {:uid => @user2.id}
     @user1_sess.assert_template 'user/friends/new'
@@ -126,25 +126,16 @@ class FriendFlowTest < ActionController::IntegrationTest
     assert_no_difference "@user1.reload.friends_count" do
       @user1_sess.delete "/friends/invalid"
     end
-    @user1_sess.assert_template 'errors/404'
+    @user1_sess.assert_not_found
 
     assert_no_difference "@user1.reload.friends_count" do
       @user1_sess.delete "/friends/#{@user2.id}"
     end
-    @user1_sess.assert_template 'errors/404'
+    @user1_sess.assert_not_found
    
     assert_difference "@user1.reload.friends_count", -1 do
       @user1_sess.delete "/friends/#{@friend1.id}"
     end
   end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
 
 end

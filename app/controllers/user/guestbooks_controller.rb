@@ -19,9 +19,8 @@ class User::GuestbooksController < UserBaseController
 protected
 
 	def get_default
-    @ref = request.env['HTTP_REFERER']
 		@uri = URI.parse(request.env['HTTP_REFERER'])
-		@path = @uri.path
+		@path = @uri.path 
 		case @path
 		when /blog/
 			 "日志" 
@@ -60,6 +59,8 @@ protected
 		else
 			 "其它"
 		end
+  rescue URI::InvalidURIError
+    "其他"
 	end
 
 end

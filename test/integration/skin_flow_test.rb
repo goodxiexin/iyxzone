@@ -31,7 +31,7 @@ class SkinFlowTest < ActionController::IntegrationTest
 
     # inaccessible skin
     @user_sess.get "/skins/#{@skin2.id}"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @skin2.access_list = [@user.profile.id]
     @skin2.save
@@ -50,17 +50,8 @@ class SkinFlowTest < ActionController::IntegrationTest
 
     # set an inaccessible skin
     @user_sess.put "/skins/#{@skin3.id}"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
     assert_equal @user.profile.skin_id, @skin1.id
   end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
 
 end

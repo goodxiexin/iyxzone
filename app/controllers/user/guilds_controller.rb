@@ -28,7 +28,7 @@ class User::GuildsController < UserBaseController
 
   def friends
     @guild_ids = Membership.authorized.by(current_user.friend_ids).map(&:guild_id).uniq
-    @guilds = Guild.nonblocked.match(:id => @guild_ids).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @guilds = Guild.nonblocked.order('created_at DESC').match(:id => @guild_ids).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def show
@@ -73,9 +73,7 @@ class User::GuildsController < UserBaseController
 
   def destroy
     if @guild.destroy
-      render :update do |page|
-        page.redirect_to guilds_url(:uid => current_user.id)
-      end
+      redirect_js guilds_url(:uid => current_user.id)
     else
       render_js_error
     end 

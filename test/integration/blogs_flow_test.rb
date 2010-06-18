@@ -83,7 +83,7 @@ class BlogsFlowTest < ActionController::IntegrationTest
   test "GET index" do
     # 不同的人看index
     @user_sess.get "/blogs?uid=invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
     
     @user_sess.get "/blogs?uid=#{@user.id}"
     @user_sess.assert_template 'user/blogs/index'
@@ -109,7 +109,7 @@ class BlogsFlowTest < ActionController::IntegrationTest
   test "GET relative" do
     # 不同的人看relative
     @user_sess.get "/blogs/relative?uid=invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.get "/blogs/relative?uid=#{@user.id}"
     @user_sess.assert_template 'user/blogs/relative'
@@ -245,12 +245,12 @@ class BlogsFlowTest < ActionController::IntegrationTest
     @user_sess.get "/blogs/#{@blog5.id}/edit" 
     @user_sess.assert_template "errors/404"
     @user_sess.put "/blogs/#{@blog5.id}", {:blog => {:title => 'new title'}}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   
     @user_sess.get "/blogs/invalid/edit" 
     @user_sess.assert_template "errors/404"
     @user_sess.put "/blogs/invalid", {:blog => {:title => 'new title'}}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
 
   test "DELETE destroy" do
@@ -260,36 +260,14 @@ class BlogsFlowTest < ActionController::IntegrationTest
     assert_equal @user.blogs_count1, 0
 
     @user_sess.delete "/blogs/#{@blog5.id}"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.delete "/blogs/invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @blog1.unverify
     @user_sess.delete "/blogs/#{@blog1.id}"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
-
-private
- 
-  module CustomDsl 
-
-    def create_blog params
-      get "/blogs/new"
-      assert_equal path, "/blogs/new"
-      post "/blogs", {:blog => params}
-      blog = assigns(:blog)
-      blog
-    end  
-  
-  end  
-
-  def login user
-    open_session do |session|
-      session.extend CustomDsl 
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
 
 end

@@ -10,7 +10,7 @@ class Guild < ActiveRecord::Base
 
   belongs_to :game_area
 
-  named_scope :hot, :order => '(members_count + veterans_count + 1) DESC'
+  named_scope :hot, :order => '(members_count + veterans_count + 1) DESC, created_at DESC'
 
   named_scope :recent, :order => 'created_at DESC'
 
@@ -23,22 +23,25 @@ class Guild < ActiveRecord::Base
   has_one :album, :class_name => 'GuildAlbum', :foreign_key => 'owner_id', :dependent => :destroy
   
   has_many :events, :dependent => :destroy
-  
+
   has_many :memberships
 
-  has_many :invitations, :class_name => 'Membership', :conditions => {:status => Membership::Invitation}
+  with_options :class_name => 'Membership', :order => 'created_at DESC' do |guild|
+    
+    guild.has_many :invitations, :conditions => {:status => Membership::Invitation}
 
-  has_many :requests, :class_name => 'Membership', :conditions => {:status => Membership::Request}
+    guild.has_many :requests, :conditions => {:status => Membership::Request}
 
-  has_many :veteran_memberships, :class_name => 'Membership', :conditions => {:status => Membership::Veteran}
+    guild.has_many :veteran_memberships, :conditions => {:status => Membership::Veteran}
 
-  has_many :member_memberships, :class_name => 'Membership', :conditions => {:status => Membership::Member}
+    guild.has_many :member_memberships, :conditions => {:status => Membership::Member}
 
-  has_many :member_and_veteran_memberships, :class_name => 'Membership', :conditions => {:status => [Membership::Veteran, Membership::Member]}
+    guild.has_many :member_and_veteran_memberships, :conditions => {:status => [Membership::Veteran, Membership::Member]}
 
-  has_many :president_and_veteran_memberships, :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran]}
+    guild.has_many :president_and_veteran_memberships, :conditions => {:status => [Membership::President, Membership::Veteran]}
 
-  has_many :people_memberships, :class_name => 'Membership', :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
+    guild.has_many :people_memberships, :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
+  end
 
 	with_options :source => 'user', :uniq => true do |guild|
 
@@ -87,8 +90,7 @@ class Guild < ActiveRecord::Base
                             :poll => 'Poll',
                             :vote => 'Vote',
                             :event => 'Event',
-                            :participation => 'Participation',
-                            :personal_album => 'PersonalAlbum'
+                            :participation => 'Participation'
                           }
 
 	acts_as_resource_feeds :recipients => lambda {|guild| 

@@ -5,7 +5,6 @@ class User::Guilds::AlbumsController < UserBaseController
   def show
     respond_to do |format|
       format.html {
-        #@membership = @guild.memberships.find_by_user_id(current_user.id)
         @photos = @album.photos.nonblocked.paginate :page => params[:page], :per_page => 12 
         @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
         render :action => 'show'

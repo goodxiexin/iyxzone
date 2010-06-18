@@ -8,16 +8,9 @@ class User::Guilds::MembershipsController < UserBaseController
 		@memberships = eval("@guild.#{Category[params[:type].to_i]}").prefetch([:character, {:user => :profile}])
   end
 
-  def edit
-    render :action => 'edit', :layout => false  
-  end
-  
   def update
     if @membership.change_role params[:status]
-      render :update do |page|
-        page << "facebox.close();"
-        page << "$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
-      end
+      render_js_code "facebox.close();$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
     else
       render_js_error 
     end 
@@ -25,9 +18,7 @@ class User::Guilds::MembershipsController < UserBaseController
 
   def destroy
     if @membership.evict
-      render :update do |page|
-        page << "$('membership_#{@membership.id}').remove();"
-      end
+      render_js_code "$('membership_#{@membership.id}').remove();"
     else
       render_js_error
     end

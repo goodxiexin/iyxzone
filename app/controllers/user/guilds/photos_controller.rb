@@ -25,10 +25,12 @@ class User::Guilds::PhotosController < UserBaseController
 
   def record_upload
     @photos = @album.photos.nonblocked.find(params[:ids])
-		@album.record_upload current_user, @photos
-		render :update do |page|
-			page.redirect_to edit_multiple_guild_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
-		end
+		
+    if @album.record_upload current_user, @photos
+			redirect_js edit_multiple_guild_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+    else
+      render_js_error
+    end
   end 
 
   def edit
@@ -77,9 +79,7 @@ class User::Guilds::PhotosController < UserBaseController
 
   def destroy
     if @photo.destroy
-      render :update do |page|
-        page.redirect_to guild_album_url(@album)
-      end
+      redirect_js guild_album_url(@album)
     else
       render_js_error
     end

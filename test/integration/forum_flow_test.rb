@@ -78,7 +78,7 @@ class ForumFlowTest < ActionController::IntegrationTest
 
   test "DELETE /topics/:id" do
     @user_sess.delete "/topics/#{@topic1.id}", {:at => 'forum_show'}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     assert_difference "Topic.count", -1 do
       @president_sess.delete "/topics/#{@topic1.id}", {:at => 'forum_show'}
@@ -88,7 +88,7 @@ class ForumFlowTest < ActionController::IntegrationTest
     assert_no_difference "Topic.count" do
       @president_sess.delete "/topics/#{@topic2.id}", {:at => 'forum_show'}
     end
-    @president_sess.assert_template 'errors/404'
+    @president_sess.assert_not_found
   end
 
   test "POST /posts" do
@@ -144,7 +144,7 @@ class ForumFlowTest < ActionController::IntegrationTest
     assert_no_difference "Post.count" do
       @user_sess.delete "/posts/#{@post2.id}"
     end
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     assert_difference "Post.count", -1 do
       @president_sess.delete "/posts/#{@post2.id}"
@@ -154,16 +154,6 @@ class ForumFlowTest < ActionController::IntegrationTest
     assert_no_difference "Post.count" do
       @president_sess.delete "/posts/#{@post1.id}"
     end
-  end
-  
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end 
   end
 
 end

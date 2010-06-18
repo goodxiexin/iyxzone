@@ -103,3 +103,7 @@ Factory.define :photo_tag do |t|
   t.height 100
   t.content 'photo tag content'
 end
+
+Factory.define :status do |s|
+  s.sequence(:content) {|n| "content-#{n}"}
+end
