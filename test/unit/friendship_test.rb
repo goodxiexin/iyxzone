@@ -17,12 +17,7 @@ class FriendshipTest < ActiveSupport::TestCase
     assert @user2.friends.include? @user1
   end
   
-  #
-  # case1
-  # user1 请求加 user2 为好友，但不能重复发送
-  # 此时, user2 还可以给user1发送好友请求，但也不能重复发送
-  #
-  test "case1" do
+  test "create request" do
     assert_difference "Email.count" do
       @request = Friendship.create :user_id => @user1.id, :friend_id => @user2.id, :status => Friendship::Request
     end
@@ -48,11 +43,7 @@ class FriendshipTest < ActiveSupport::TestCase
     end
   end
 
-  #
-  # case2
-  # user1发送好友请求，user2先拒绝后接受
-  #
-  test "case2" do
+  test "accept/decline request" do
     assert_difference "Email.count" do
       @request = Friendship.create :user_id => @user1.id, :friend_id => @user2.id, :status => Friendship::Request
     end
@@ -85,12 +76,7 @@ class FriendshipTest < ActiveSupport::TestCase
     assert_equal @user2.friend_requests_count, 0
   end
  
-  #
-  # case3
-  # 2人互相发送好友请求，1方拒绝，另一个请求还在
-  # 如果1方接受，那另一方的请求会被删除
-  #
-  test "case3" do
+  test "biodirection request, then accept/decline" do
     @request1 = Friendship.create :user_id => @user1.id, :friend_id => @user2.id, :status => Friendship::Request
     @request2 = Friendship.create :user_id => @user2.id, :friend_id => @user1.id, :status => Friendship::Request
 

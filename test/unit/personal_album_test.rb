@@ -90,160 +90,47 @@ class PersonalAlbumTest < ActiveSupport::TestCase
       @album1.comments.create :poster_id => @user.id, :recipient_id => nil, :content => 'a'
     end
 
-    @comment = @album1.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-  
-    @comment = @album1.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert @comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album1.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert @comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album1.comments.create :poster_id => @stranger.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert @comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album1.comments.create :poster_id => @fan.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert @comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album1.comments.create :poster_id => @idol.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert @comment.is_deleteable_by?(@idol)
-
-    @album2 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    [@user, @friend, @same_game_user, @stranger, @fan, @idol].each do |u|
+      comment = @album1.comments.create :poster_id => u.id, :recipient_id => @user.id, :content => 'a'
+      assert comment.is_deleteable_by?(@user)
+      assert comment.is_deleteable_by?(u)
+      ([@friend, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end
+    end
     
-    assert @album2.is_commentable_by?(@user)
-    assert @album2.is_commentable_by?(@friend)
-    assert @album2.is_commentable_by?(@same_game_user)
-    assert !@album2.is_commentable_by?(@stranger)
-    assert @album2.is_commentable_by?(@fan)
-    assert @album2.is_commentable_by?(@idol)
+    @album2 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
 
-    @comment = @album2.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album2.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert @comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album2.comments.create :poster_id => @same_game_user.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert @comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album2.comments.create :poster_id => @fan.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert @comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album2.comments.create :poster_id => @idol.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert @comment.is_deleteable_by?(@idol)
+    [@user, @friend, @same_game_user, @fan, @idol].each do |u|
+      comment = @album1.comments.create :poster_id => u.id, :recipient_id => @user.id, :content => 'a'
+      assert comment.is_deleteable_by?(@user)
+      assert comment.is_deleteable_by?(u)
+      ([@friend, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end
+    end    
 
     @album3 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::FRIEND
     
-    assert @album3.is_commentable_by?(@user)
-    assert @album3.is_commentable_by?(@friend)
-    assert !@album3.is_commentable_by?(@same_game_user)
-    assert !@album3.is_commentable_by?(@stranger)
-    assert @album3.is_commentable_by?(@fan)
-    assert @album3.is_commentable_by?(@idol)
-
-    @comment = @album3.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album3.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert @comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album3.comments.create :poster_id => @fan.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert @comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @album3.comments.create :poster_id => @idol.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert @comment.is_deleteable_by?(@idol)
+    [@user, @friend, @fan, @idol].each do |u|
+      comment = @album1.comments.create :poster_id => u.id, :recipient_id => @user.id, :content => 'a'
+      assert comment.is_deleteable_by?(@user)
+      assert comment.is_deleteable_by?(u)
+      ([@friend, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end
+    end
 
     @album4 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::OWNER
-    
-    assert @album4.is_commentable_by?(@user)
-    assert !@album4.is_commentable_by?(@friend)
-    assert !@album4.is_commentable_by?(@same_game_user)
-    assert !@album4.is_commentable_by?(@stranger)
-    assert !@album4.is_commentable_by?(@fan)
-    assert !@album4.is_commentable_by?(@idol)
-
-    @comment = @album4.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
+  
+    [@user].each do |u|
+      comment = @album1.comments.create :poster_id => u.id, :recipient_id => @user.id, :content => 'a'
+      assert comment.is_deleteable_by?(@user)
+      assert comment.is_deleteable_by?(u)
+      ([@friend, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end
+    end  
   end
 
   test "comment notice" do

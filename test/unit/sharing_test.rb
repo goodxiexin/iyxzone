@@ -161,66 +161,16 @@ class SharingTest < ActiveSupport::TestCase
     assert @sharing.is_commentable_by? @stranger
     assert @sharing.is_commentable_by? @fan
     assert @sharing.is_commentable_by? @idol
-    
-    assert_difference "Comment.count" do
-      @comment = @sharing.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
-    end
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
 
-    assert_difference "Comment.count" do
-      @comment = @sharing.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    [@user, @friend, @same_game_user, @stranger, @fan, @idol].each do |u|
+      comment = @sharing.comments.create :poster_id => u.id, :recipient_id => @user.id, :content => 'a'
+      assert comment.is_deleteable_by?(@user)
+      assert comment.is_deleteable_by?(u)
+      ([@friend, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end  
     end
-    assert @comment.is_deleteable_by?(@user)
-    assert @comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
 
-    assert_difference "Comment.count" do
-      @comment = @sharing.comments.create :poster_id => @same_game_user.id, :recipient_id => @friend.id, :content => 'a'
-    end
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert @comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    assert_difference "Comment.count" do
-      @comment = @sharing.comments.create :poster_id => @stranger.id, :recipient_id => @same_game_user.id, :content => 'a'
-    end
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert @comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    assert_difference "Comment.count" do
-      @comment = @sharing.comments.create :poster_id => @fan.id, :recipient_id => @stranger.id, :content => 'a'
-    end
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert @comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    assert_difference "Comment.count" do
-      @comment = @sharing.comments.create :poster_id => @idol.id, :recipient_id => @fan.id, :content => 'a'
-    end
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert @comment.is_deleteable_by?(@idol)
   end
 
   test "comment notice" do

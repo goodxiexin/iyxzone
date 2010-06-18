@@ -11,11 +11,7 @@ class ForumTest < ActiveSupport::TestCase
     @sensitive = '政府'
   end
 
-  #
-  # case1
-  # create/destroy normal topics and top topics
-  #
-  test "case1" do
+  test "create/destroy normal topics and top topics" do
     @topic1 = TopicFactory.create :poster_id => @member.id, :forum_id => @forum.id, :created_at => 1.days.ago
     @forum.reload
     assert_equal @forum.topics_count, 1
@@ -33,10 +29,7 @@ class ForumTest < ActiveSupport::TestCase
     assert_equal @forum.topics_count, 0
   end
 
-  # 
-  # case2
-  # create topics, check next/prev/top/normal
-  test "case2" do
+  test "next/prev/top/normalcase2" do
     @topic1 = TopicFactory.create :poster_id => @member.id, :forum_id => @forum.id, :created_at => 1.days.ago
     @topic2 = TopicFactory.create :poster_id => @member.id, :forum_id => @forum.id, :created_at => 2.days.ago
     @topic3 = TopicFactory.create :poster_id => @member.id, :forum_id => @forum.id, :created_at => 3.days.ago
@@ -64,11 +57,7 @@ class ForumTest < ActiveSupport::TestCase
     assert_equal @topic6.prev(:top => 1), @topic4
   end
   
-  #
-  # case3
-  # toggle topic
-  # 
-  test "case3" do
+  test "toggle topic" do
     @topic = TopicFactory.create :poster_id => @member.id, :forum_id => @forum.id, :created_at => 1.days.ago
     @forum.reload
     assert_equal @forum.topics.normal, [@topic]
@@ -86,11 +75,7 @@ class ForumTest < ActiveSupport::TestCase
     assert @forum.topics.top.blank?
   end
 
-  #
-  # case4
-  # simply create/destroy posts of one topic
-  #
-  test "case4" do
+  test "create/destroy posts" do
     @topic = TopicFactory.create :poster_id => @member.id, :forum_id => @forum.id
     
     @post1 = PostFactory.create :poster_id => @member.id, :recipient_id => @member.id, :topic_id => @topic.id
@@ -118,11 +103,7 @@ class ForumTest < ActiveSupport::TestCase
     assert_equal @post3.floor, 2
   end
 
-  #
-  # case5
-  # sensitvie topic
-  #
-  test "case5" do
+  test "sensitive topic" do
     @topic1 = TopicFactory.create :poster_id => @member.id, :forum_id => @forum.id
     @forum.reload
     assert @topic1.accepted?
@@ -154,11 +135,7 @@ class ForumTest < ActiveSupport::TestCase
     assert_equal @forum.topics_count, 1
   end
 
-  #
-  # case 6
-  # sensitive topic and posts
-  #
-  test "case6" do
+  test "sensitive topic and posts" do
     @topic = TopicFactory.create :poster_id => @member.id, :forum_id => @forum.id
     @forum.reload
     assert @topic.accepted?

@@ -32,7 +32,7 @@ class ParticipationObserver < ActiveRecord::Observer
 		event = participation.event
 		participant = participation.participant
     character = participation.character
- 
+    
     if participation.was_invitation? and participation.is_authorized?
 			event.raw_decrement :invitations_count
       event.raw_increment field(participation.status)
@@ -43,7 +43,7 @@ class ParticipationObserver < ActiveRecord::Observer
           :data => "#{profile_link participant}接受了你的邀请: 同意让游戏角色 #{character.name} 加入活动#{event_link event}")
       end
 		elsif participation.was_request? and participation.is_authorized?
-			event.raw_decrement :requests_count
+      event.raw_decrement :requests_count
       event.raw_increment field(participation.status)
       event.poster.raw_decrement :event_requests_count
       if participation.recently_accept_request?
@@ -60,7 +60,7 @@ class ParticipationObserver < ActiveRecord::Observer
           :data => "#{profile_link participant} 的游戏角色 #{character.name} 改变了在活动 #{event_link event} 的状态：现在#{participation.to_s}")
       end
 		end
-
+    
     # issue feeds if necessary
     if (participation.recently_accept_invitation? or participation.recently_accept_request?) and participant.application_setting.emit_event_feed?
       participation.deliver_feeds

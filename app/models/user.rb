@@ -327,7 +327,7 @@ class User < ActiveRecord::Base
 	# guilds
 	has_many :memberships, :dependent => :destroy, :conditions => {:status => [Membership::President, Membership::Veteran, Membership::Member]}
 
-  has_many :guilds, :foreign_key => 'president_id', :dependent => :destroy
+  has_many :guilds, :foreign_key => 'president_id', :dependent => :destroy, :order => "created_at DESC"
 
 	with_options :through => :memberships, :source => :guild, :order => 'guilds.created_at DESC', :uniq => true do |user|
 

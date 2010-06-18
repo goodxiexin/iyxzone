@@ -19,7 +19,7 @@ class ParticipationTest < ActiveSupport::TestCase
 
     @sensitive = "政府"
   end
-
+  
   test "send invitation, normal event" do
     @event = EventFactory.create :character_id => @user_character.id
 
@@ -325,7 +325,25 @@ class ParticipationTest < ActiveSupport::TestCase
     assert @profile.recv_feed?(@request)
     assert @game.recv_feed?(@request)
   end
-
+  
+  test "accept request feed, guild event" do
+    @guild = GuildFactory.create :character_id => @stranger_character.id
+    @guild.member_memberships.create :user_id => @user.id, :character_id => @user_character.id
+    @profile = @user.profile
+    @event = EventFactory.create :character_id => @stranger_character.id, :guild_id => @guild.id
+    @game = @event.game
+    @request = @event.requests.create :character_id => @user_character.id, :participant_id => @user.id
+    @request.accept_request
+    
+    @friend.reload and @fan.reload and @idol.reload and @game.reload and @profile.reload and @guild.reload
+    assert @friend.recv_feed?(@request)
+    assert @fan.recv_feed?(@request)
+    assert !@idol.recv_feed?(@request)
+    assert @profile.recv_feed?(@request)
+    assert @game.recv_feed?(@request)
+    assert @guild.recv_feed?(@request)
+  end
+  
   test "accept invitation feed, normal event" do
     FriendFactory.create @stranger, @user
     @profile = @user.profile
@@ -340,6 +358,26 @@ class ParticipationTest < ActiveSupport::TestCase
     assert !@idol.recv_feed?(@invitation)
     assert @profile.recv_feed?(@invitation)
     assert @game.recv_feed?(@invitation)
+  end
+
+  test "accept invitation feed, guild event" do
+    @guild = GuildFactory.create :character_id => @stranger_character.id
+    @guild.member_memberships.create :user_id => @user.id, :character_id => @user_character.id
+    FriendFactory.create @stranger, @user
+    @profile = @user.profile
+    @event = EventFactory.create :character_id => @stranger_character.id, :guild_id => @guild.id 
+    assert @event.is_guild_event?
+    @game = @event.game
+    @invitation = @event.invitations.create :character_id => @user_character.id, :participant_id => @user.id
+    @invitation.accept_invitation Participation::Confirmed
+
+    @friend.reload and @fan.reload and @idol.reload and @game.reload and @profile.reload and @guild.reload
+    assert @friend.recv_feed?(@invitation)
+    assert @fan.recv_feed?(@invitation)
+    assert !@idol.recv_feed?(@invitation)
+    assert @profile.recv_feed?(@invitation)
+    assert @game.recv_feed?(@invitation)
+    assert @guild.recv_feed?(@invitation)
   end
 
   test "participants list" do

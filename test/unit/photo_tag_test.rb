@@ -19,7 +19,7 @@ class PhotoTagTest < ActiveSupport::TestCase
     end
     @photo.reload and @friend1.reload
     assert_equal @photo.tags_count, 1
-    assert_equal @friend1.recv_notice?(@tag1)
+    assert @friend1.recv_notice?(@tag1)
 
     assert_difference "@photo.reload.tags_count" do
       @tag2 = PhotoTagFactory.create :photo_id => @photo.id, :poster_id => @user.id, :tagged_user_id => @friend2.id

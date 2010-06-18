@@ -229,23 +229,24 @@ class GuildTest < ActiveSupport::TestCase
     @guild1 = GuildFactory.create :character_id => @character1.id
     @guild1.member_memberships.create :user_id => @friend.id, :character_id => @character2.id
     @guild1.veteran_memberships.create :user_id => @same_game_user.id, :character_id => @character3.id
+    sleep 1
     @guild2 = GuildFactory.create :character_id => @character1.id
     @guild2.veteran_memberships.create :user_id => @friend.id, :character_id => @character2.id
     @guild2.member_memberships.create :user_id => @same_game_user.id, :character_id => @character3.id
-
+    
     @user.reload
-    assert_equal @user.guilds, [@guild1, @guild2]
+    assert_equal @user.guilds, [@guild2, @guild1]
     assert_equal @user.participated_guilds, []
-    assert_equal @user.privileged_guilds, [@guild1, @guild2]
+    assert_equal @user.privileged_guilds, [@guild2, @guild1]
 
     @friend.reload
     assert_equal @friend.guilds, []
-    assert_equal @friend.participated_guilds, [@guild1, @guild2]
+    assert_equal @friend.participated_guilds, [@guild2, @guild1]
     assert_equal @friend.privileged_guilds, [@guild2]
 
     @same_game_user.reload
     assert_equal @same_game_user.guilds, []
-    assert_equal @same_game_user.participated_guilds, [@guild1, @guild2]
+    assert_equal @same_game_user.participated_guilds, [@guild2, @guild1]
     assert_equal @same_game_user.privileged_guilds, [@guild1] 
   end
 
