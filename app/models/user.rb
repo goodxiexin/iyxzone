@@ -2,11 +2,11 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
-  has_many :fanships, :foreign_key => :idol_id
+  has_many :fanships, :foreign_key => :idol_id, :dependent => :destroy
 
   has_many :fans, :through => :fanships, :source => :fan
 
-  has_many :idolships, :foreign_key => :fan_id, :class_name => 'Fanship'
+  has_many :idolships, :foreign_key => :fan_id, :class_name => 'Fanship', :dependent => :destroy
 
   has_many :idols, :through => :idolships, :source => :idol
 
@@ -89,6 +89,9 @@ class User < ActiveRecord::Base
 
 	has_many :notices, :order => 'created_at DESC', :dependent => :destroy # comment, tag notices
 
+  def recv_notice? producer
+    notices.map(&:producer).include? producer
+  end
 
   validates_associated :rss_feed
 
@@ -147,6 +150,10 @@ class User < ActiveRecord::Base
 
   # game
   has_many :characters, :class_name => 'GameCharacter', :dependent => :destroy
+
+  def has_character? character
+    characters.include? character
+  end
 
   has_many :currently_playing_game_characters, :class_name => 'GameCharacter', :conditions => { :playing => true }, :order => 'created_at DESC' 
 
@@ -233,19 +240,19 @@ class User < ActiveRecord::Base
   # events
   has_many :participations, :foreign_key => 'participant_id', :dependent => :destroy, :conditions => {:status => [Participation::Confirmed, Participation::Maybe]}
 
-  has_many :events, :foreign_key => 'poster_id', :order => 'start_time DESC', :conditions => ["end_time >= ?", Time.now.to_s(:db)], :dependent => :destroy
+  has_many :events, :foreign_key => 'poster_id', :order => 'created_at DESC'
 
-	with_options :order =>  'created_at DESC', :through => :participations, :source => :event, :uniq => true do |user|
+	with_options :through => :participations, :source => :event, :uniq => true do |user|
 
-		user.has_many :all_events
+		user.has_many :all_events, :order => 'created_at DESC'
 
-		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.start_time >= ?', Time.now.to_s(:db)]
+		user.has_many :upcoming_events, :conditions => ['events.poster_id != #{id} AND events.end_time > ?', Time.now.to_s(:db)], :order => 'start_time ASC'
 
-		user.has_many :participated_events, :conditions => ["events.end_time < ?", Time.now.to_s(:db)]
+		user.has_many :participated_events, :conditions => ["events.end_time <= ?", Time.now.to_s(:db)], :order => 'end_time DESC'
 
 	end
-
-	def common_events_with user
+	
+  def common_events_with user
 		events & user.events
 	end
 
@@ -367,6 +374,17 @@ class User < ActiveRecord::Base
 	has_many :photo_tags, :foreign_key => 'tagged_user_id', :dependent => :destroy
 
 	has_many :relative_photos, :through => :photo_tags, :source => 'photo'
+
+  def relative_photo_infos
+    infos = []
+    photo_tags.all(:include => [:photo, {:poster => :profile}]).group_by(&:photo_id).map do |photo_id, tags|
+      photo = Photo.nonblocked.find(photo_id)
+      if !photo.blank? and !photo.is_owner_privilege?
+        infos << {:photo => photo, :posters => tags.map(&:poster).uniq}
+      end
+    end
+    infos
+  end
 
 	# feeds
 	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'

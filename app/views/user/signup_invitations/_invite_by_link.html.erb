@@ -1,8 +1,22 @@
         <h4><%= link_to_function "通过快捷方式邀请", "this.up().next().toggle();this.up().next().next().toggle();" %></h4>
         <div class="invite-tip jl-cutline">复制邀请链接发给朋友，就可以邀请对方加入了，对方会直接加入你的好友。</div>
         <div class="invite-link jl-cutline" style="display:none">
+          <% if current_user.is_idol %>
           <div class="s_clear">
-            <div class="fldid"><label><span class="icon-link"></span>万能邀请链接</label></div>
+            <div class="fldid"><label><span class="icon-link"></span>万能邀请粉丝链接</label></div>
+            <div class="fldvalue">
+              <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.invite_fan_code), :enabled => false %></div>
+            </div>
+          </div>
+          <div class="s_clear space">
+            <div class="fldid">&nbsp;</div>
+            <div class="fldvalue">
+              请使用Ctrl+C或右键复制链接地址
+            </div>
+          </div>
+          <% end %>
+          <div class="s_clear">
+            <div class="fldid"><label><span class="icon-link"></span>万能邀请好友链接</label></div>
             <div class="fldvalue">
               <div class="textfield"><%= text_field_tag 'invite_code', invite_url(:token => current_user.invite_code), :enabled => false %></div>
             </div>

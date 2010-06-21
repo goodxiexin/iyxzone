@@ -4,23 +4,15 @@ class Avatar < Photo
 
   validates_as_attachment
 
-  acts_as_photo_taggable :delete_conditions => lambda {|user, photo, album| album.poster == user},
-                         :create_conditions => lambda {|user, photo, album| album.poster.has_friend?(user) || album.poster == user}
+  acts_as_photo_taggable :delete_conditions => lambda {|user, photo, album| album.poster == user}, 
+                         :create_conditions => lambda {|user, photo, album| album.poster == user || album.poster.has_friend?(user)},
+                         :candidates => lambda {|tagger, photo, album| [tagger] + tagger.friends}
 
-  acts_as_commentable :order => 'created_at ASC',
-                      :delete_conditions => lambda {|user, photo, comment| photo.poster == user || comment.poster == user}, 
-                      :create_conditions => lambda {|user, photo| (photo.poster == user) || (photo.poster.has_friend? user)} 
-
-  attr_readonly :poster_id, :album_id, :game_id, :privilege
-
-  validates_size_of :notation, :within => 0..1000, :too_long => "最多1000个字节", :allow_nil => true
-
-  # album_id, game_id, poster_id 和 privilege 都由系统赋值，且不能改变，因此不需要校验
-
-  def partitioned_path(*args)
-    dir = (attachment_path_id / 10000).to_s
-    sub_dir = (attachment_path_id % 10000).to_s
-    [dir, sub_dir] + args
-  end
+  acts_as_resource_feeds :recipients => lambda {|photo| 
+    poster = photo.album.poster
+    poster.friends.find_all{|f| f.application_setting.recv_photo_feed?} + (poster.is_idol ? poster.fans : [])
+  }
+  
+  attr_readonly :album_id, :privilege
 
 end

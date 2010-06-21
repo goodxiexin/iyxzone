@@ -4,7 +4,7 @@ class VideoTest < ActiveSupport::TestCase
 
   def setup
     # create a user with game character
-    @user = UserFactory.create
+    @user = UserFactory.create_idol
     @character = GameCharacterFactory.create :user_id => @user.id
     @game = @character.game
     @profile = @user.profile
@@ -24,21 +24,23 @@ class VideoTest < ActiveSupport::TestCase
 
     # create same-game-user
     @same_game_user = UserFactory.create
-    @character2 = GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @same_game_user.id
-    
+    @character2 = GameCharacterFactory.create @character.game_info.merge({:user_id => @same_game_user.id})
+
+    # create fan and idol
+    @idol = UserFactory.create_idol
+    @fan = UserFactory.create
+    Fanship.create :fan_id => @fan.id, :idol_id => @user.id
+    Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+
+    [@user, @friend1, @friend2, @friend3, @friend4, @fan, @idol].each {|f| f.reload}
   end
   
-  #
-  # case1
-  # 创建视频，然后更新，然后删除
-  #
-  test "case1" do
+  test "create/update/destroy video" do
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id
     assert !@video.nil?
-
+=begin
 # TODO
 # 为啥简单的更新不行呢
-=begin
     @video.update_attributes(:title => '')
     assert_not_nil @video.errors.on(:title)
 
@@ -49,11 +51,7 @@ class VideoTest < ActiveSupport::TestCase
     @video.destroy
   end
 
-  #
-  # case2
-  # 测试计数器
-  #
-  test "case2" do
+  test "counter" do
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id
     @user.reload
     assert_equal @user.videos_count1, 1
@@ -78,32 +76,54 @@ class VideoTest < ActiveSupport::TestCase
     assert_equal @user.videos_count4, 0
   end 
 
-  #
-  # case 3
-  # video tags, relative users
-  #
-  test "case3" do
-    # acts_as_friend_taggable在blog里面已经测过了
-  end
+  test "friend tag" do
+    assert_difference "Notice.count" do
+      VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id]
+    end
+    @tag = FriendTag.last
+    @friend1.reload
+    assert @friend1.recv_notice?(@tag)
 
-  #
-  # case 4
-  # dig video
-  #
-  test "case4" do
+    assert_difference "Notice.count" do
+      VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
+    end
+    @tag = FriendTag.last
+    @friend1.reload
+    assert @friend1.recv_notice?(@tag)
+
+    assert_difference "Notice.count" do
+      VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
+    end
+    @tag = FriendTag.last
+    @friend1.reload
+    assert @friend1.recv_notice?(@tag)
+
+    assert_no_difference "Notice.count" do
+      VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend1.id]
+    end
+    @tag = FriendTag.last
+    @friend1.reload
+    assert !@friend1.recv_notice?(@tag)
+  end
+  
+  test "dig video" do
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
     @video.reload
     assert @video.is_diggable_by?(@user)
     assert @video.is_diggable_by?(@friend1)
     assert @video.is_diggable_by?(@same_game_user)
     assert @video.is_diggable_by?(@stranger)
-  
+    assert @video.is_diggable_by?(@fan)
+    assert @video.is_diggable_by?(@idol) 
+ 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
     @video.reload
     assert @video.is_diggable_by?(@user)
     assert @video.is_diggable_by?(@friend1)
     assert @video.is_diggable_by?(@same_game_user)
     assert !@video.is_diggable_by?(@stranger)
+    assert @video.is_diggable_by?(@fan)
+    assert @video.is_diggable_by?(@idol) 
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
     @video.reload
@@ -111,6 +131,8 @@ class VideoTest < ActiveSupport::TestCase
     assert @video.is_diggable_by?(@friend1)
     assert !@video.is_diggable_by?(@same_game_user)
     assert !@video.is_diggable_by?(@stranger)
+    assert @video.is_diggable_by?(@fan)
+    assert @video.is_diggable_by?(@idol) 
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
     @video.reload
@@ -118,13 +140,11 @@ class VideoTest < ActiveSupport::TestCase
     assert !@video.is_diggable_by?(@friend1)
     assert !@video.is_diggable_by?(@same_game_user)
     assert !@video.is_diggable_by?(@stranger)  
+    assert !@video.is_diggable_by?(@fan)
+    assert !@video.is_diggable_by?(@idol) 
   end
 
-  #
-  # case5
-  # video feeds
-  #
-  test "case5" do
+  test "video feed" do
     @guild1 = GuildFactory.create :character_id => @character.id, :president_id => @user.id
     @guild2 = GuildFactory.create :character_id => @character2.id, :president_id => @same_game_user.id
     @guild2.memberships.create :user_id => @user.id, :character_id => @character.id, :status => Membership::Member    
@@ -142,6 +162,7 @@ class VideoTest < ActiveSupport::TestCase
     assert @game.recv_feed?(@video)
     assert @profile.recv_feed?(@video)
     assert @fan.recv_feed?(@video)
+    assert !@idol.recv_feed?(@video)
 
     @video.update_attributes(:privilege => PrivilegedResource::OWNER)
     @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload and @fan.reload
@@ -151,6 +172,7 @@ class VideoTest < ActiveSupport::TestCase
     assert !@game.recv_feed?(@video)
     assert !@profile.recv_feed?(@video)
     assert !@fan.recv_feed?(@video)
+    assert !@idol.recv_feed?(@video)
     
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
     @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload and @fan.reload
@@ -160,6 +182,7 @@ class VideoTest < ActiveSupport::TestCase
     assert !@game.recv_feed?(@video)
     assert !@profile.recv_feed?(@video)
     assert !@fan.recv_feed?(@video)  
+    assert !@idol.recv_feed?(@video)
 
     @video.update_attributes(:privilege => PrivilegedResource::PUBLIC)
     @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload and @fan.reload
@@ -169,6 +192,7 @@ class VideoTest < ActiveSupport::TestCase
     assert @game.recv_feed?(@video)
     assert @profile.recv_feed?(@video)
     assert @fan.recv_feed?(@video)
+    assert !@idol.recv_feed?(@video)
 
     @video.unverify
     @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload and @fan.reload
@@ -178,6 +202,7 @@ class VideoTest < ActiveSupport::TestCase
     assert !@game.recv_feed?(@video)
     assert !@profile.recv_feed?(@video)
     assert !@fan.recv_feed?(@video)  
+    assert !@idol.recv_feed?(@video)
 
     @video.verify
     @friend1.reload and @game.reload and @profile.reload and @guild1.reload and @guild2.reload and @fan.reload
@@ -187,43 +212,44 @@ class VideoTest < ActiveSupport::TestCase
     assert @game.recv_feed?(@video)
     assert @profile.recv_feed?(@video)
     assert @fan.recv_feed?(@video)
+    assert !@idol.recv_feed?(@video)
   end
 
-  #
-  # case6
-  # share video
-  #
-  test "case6" do
+  test "share video" do
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id
     assert @video.is_shareable_by?(@user)
     assert @video.is_shareable_by?(@friend1)
     assert @video.is_shareable_by?(@same_game_user)
     assert @video.is_shareable_by?(@stranger)
+    assert @video.is_shareable_by?(@fan)
+    assert @video.is_shareable_by?(@idol)
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
     assert @video.is_shareable_by?(@user)
     assert @video.is_shareable_by?(@friend1)
     assert @video.is_shareable_by?(@same_game_user)
     assert !@video.is_shareable_by?(@stranger)
+    assert @video.is_shareable_by?(@fan)
+    assert @video.is_shareable_by?(@idol)
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
     assert @video.is_shareable_by?(@user)
     assert @video.is_shareable_by?(@friend1)
     assert !@video.is_shareable_by?(@same_game_user)
     assert !@video.is_shareable_by?(@stranger)
+    assert @video.is_shareable_by?(@fan)
+    assert @video.is_shareable_by?(@idol)
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
     assert @video.is_shareable_by?(@user)
     assert !@video.is_shareable_by?(@friend1)
     assert !@video.is_shareable_by?(@same_game_user)
     assert !@video.is_shareable_by?(@stranger)
+    assert !@video.is_shareable_by?(@fan)
+    assert !@video.is_shareable_by?(@idol)
   end
 
-  #
-  # case 7
-  # sensitive video
-  #
-  test "case7" do
+  test "sensitive video" do
     @sensitive = '政府'
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id
@@ -256,24 +282,28 @@ class VideoTest < ActiveSupport::TestCase
     assert_equal @user.videos_count, 1
   end
 
-  #
-  # case 8
-  # comment video
-  #
-  test "case8" do
+  test "comment video" do
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
 
     assert @video.is_commentable_by?(@user)
     assert @video.is_commentable_by?(@friend1)
     assert @video.is_commentable_by?(@same_game_user)
     assert @video.is_commentable_by?(@stranger)
-    
+    assert @video.is_commentable_by?(@fan)
+    assert @video.is_commentable_by?(@idol)   
+
+    assert_no_difference "Comment.count" do
+      @video.comments.create :poster_id => @user.id, :recipient_id => nil, :content => 'a'
+    end
+ 
     @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
     assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
 
     @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
@@ -281,6 +311,8 @@ class VideoTest < ActiveSupport::TestCase
     assert @comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
     assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
 
     @comment = @video.comments.create :poster_id => @same_game_user.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
@@ -288,6 +320,8 @@ class VideoTest < ActiveSupport::TestCase
     assert !@comment.is_deleteable_by?(@friend1)
     assert @comment.is_deleteable_by?(@same_game_user)
     assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
 
     @comment = @video.comments.create :poster_id => @stranger.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
@@ -295,6 +329,26 @@ class VideoTest < ActiveSupport::TestCase
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
     assert @comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
+
+    @comment = @video.comments.create :poster_id => @fan.id, :content => 'comment', :recipient_id => @user.id
+    assert !@comment.id.nil?
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend1)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert @comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
+
+    @comment = @video.comments.create :poster_id => @idol.id, :content => 'comment', :recipient_id => @user.id
+    assert !@comment.id.nil?
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend1)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert @comment.is_deleteable_by?(@idol)
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
 
@@ -302,6 +356,8 @@ class VideoTest < ActiveSupport::TestCase
     assert @video.is_commentable_by?(@friend1)
     assert @video.is_commentable_by?(@same_game_user)
     assert !@video.is_commentable_by?(@stranger)
+    assert @video.is_commentable_by?(@fan)
+    assert @video.is_commentable_by?(@idol)
     
     @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
@@ -309,6 +365,8 @@ class VideoTest < ActiveSupport::TestCase
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
     assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
 
     @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
@@ -316,6 +374,8 @@ class VideoTest < ActiveSupport::TestCase
     assert @comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
     assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
 
     @comment = @video.comments.create :poster_id => @same_game_user.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
@@ -323,6 +383,26 @@ class VideoTest < ActiveSupport::TestCase
     assert !@comment.is_deleteable_by?(@friend1)
     assert @comment.is_deleteable_by?(@same_game_user)
     assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
+
+    @comment = @video.comments.create :poster_id => @fan.id, :content => 'comment', :recipient_id => @user.id
+    assert !@comment.id.nil?
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend1)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert @comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
+
+    @comment = @video.comments.create :poster_id => @idol.id, :content => 'comment', :recipient_id => @user.id
+    assert !@comment.id.nil?
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend1)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert @comment.is_deleteable_by?(@idol)
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
 
@@ -330,13 +410,17 @@ class VideoTest < ActiveSupport::TestCase
     assert @video.is_commentable_by?(@friend1)
     assert !@video.is_commentable_by?(@same_game_user)
     assert !@video.is_commentable_by?(@stranger)
-    
+    assert @video.is_commentable_by?(@fan)
+    assert @video.is_commentable_by?(@idol)
+ 
     @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
     assert @comment.is_deleteable_by?(@user)
     assert !@comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
     assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
 
     @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
@@ -344,13 +428,35 @@ class VideoTest < ActiveSupport::TestCase
     assert @comment.is_deleteable_by?(@friend1)
     assert !@comment.is_deleteable_by?(@same_game_user)
     assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
 
-    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
+    @comment = @video.comments.create :poster_id => @fan.id, :content => 'comment', :recipient_id => @user.id
+    assert !@comment.id.nil?
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend1)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert @comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
+
+    @comment = @video.comments.create :poster_id => @idol.id, :content => 'comment', :recipient_id => @user.id
+    assert !@comment.id.nil?
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend1)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert @comment.is_deleteable_by?(@idol)
+
+    @video = videofactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => privilegedresource::owner
 
     assert @video.is_commentable_by?(@user)
     assert !@video.is_commentable_by?(@friend1)
     assert !@video.is_commentable_by?(@same_game_user)
     assert !@video.is_commentable_by?(@stranger)
+    assert !@video.is_commentable_by?(@fan)
+    assert !@video.is_commentable_by?(@idol)
     
     @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
     assert !@comment.id.nil?
@@ -360,12 +466,78 @@ class VideoTest < ActiveSupport::TestCase
     assert !@comment.is_deleteable_by?(@stranger)
   end
 
-  #
-  # case9
-  # relative videos
-  #
-  test "case9" do
-    # acts_as_privileged_resource在blog_test.rb里已经测过了
+  test "comment notice" do
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :new_friend_tags => [@friend1.id, @friend2.id]
+    
+    assert_difference "Notice.count", 2 do
+      @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
+    end
+    @user.reload and @friend1.reload and @friend2.reload
+    assert !@user.recv_notice?(@comment)
+    assert @friend1.recv_notice?(@comment)
+    assert @friend2.recv_notice?(@comment)
+
+    assert_difference "Notice.count", 2 do
+      @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
+    end
+    @user.reload and @friend1.reload and @friend2.reload
+    assert @user.recv_notice?(@comment)
+    assert !@friend1.recv_notice?(@comment)
+    assert @friend2.recv_notice?(@comment)
+
+    assert_difference "Notice.count", 3 do
+      @comment = @video.comments.create :poster_id => @fan.id, :content => 'comment', :recipient_id => @friend1.id
+    end
+    @user.reload and @friend1.reload and @friend2.reload
+    assert @user.recv_notice?(@comment)
+    assert @friend1.recv_notice?(@comment)
+    assert @friend2.recv_notice?(@comment)
+
+    assert_difference "Notice.count", 3 do
+      @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @fan.id
+    end
+    @user.reload and @friend1.reload and @friend2.reload and @fan.reload
+    assert !@user.recv_notice?(@comment)
+    assert @fan.recv_notice?(@comment)
+    assert @friend1.recv_notice?(@comment)
+    assert @friend2.recv_notice?(@comment)
+  end
+  
+  test "relative video" do
+    # acts_as_privileged_resource在video_test.rb里已经测过了
+    @video1 = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 1.day.ago, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id]
+    @video2 = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 2.days.ago, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
+    @video3 = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 3.days.ago, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
+    @video4 = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 4.days.ago, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend1.id]
+    @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 3.days.ago, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
+
+    # video index
+    @videos = @user.videos.for('owner')
+    assert_equal @videos, [@video1, @video2, @video3, @video4]
+
+    @videos = @user.videos.for('friend')
+    assert_equal @videos, [@video1, @video2, @video3]
+
+    @videos = @user.videos.for('same_game')
+    assert_equal @videos, [@video1, @video2]
+
+    @videos = @user.videos.for('stranger')
+    assert_equal @videos, [@video1]
+
+    # friend videos
+    @videos = Video.by(@friend1.friend_ids)
+    assert_equal @videos, [@video1, @video2, @video3, @video4]
+    
+    @videos = Video.by(@friend1.friend_ids).for('friend')
+    assert_equal @videos, [@video1, @video2, @video3]
+
+    # relative videos
+    @videos = @friend1.relative_videos
+    assert_equal @videos, [@video1, @video2, @video3, @video4]
+
+    @videos = @friend1.relative_videos.for('friend')
+    assert_equal @videos, [@video1, @video2, @video3]
+
   end
   
   #

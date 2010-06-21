@@ -28,7 +28,7 @@ class PersonalPhotoObserver < ActiveRecord::Observer
  
   def after_update photo
     return unless photo.thumbnail.blank?
-   
+
     # verify
     if photo.recently_recovered?
       photo.album.raw_increment :photos_count
@@ -39,21 +39,12 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     # change cover 
     if photo.album_id_changed?
       # if photo is moved to another album, change counter and change cover if necessary
-      from = PersonalAlbum.find(photo.album_id_was)
-      to = PersonalAlbum.find(photo.album_id)
+      poster = photo.album.poster
+      from = poster.albums.find(photo.album_id_was)
+      to = poster.albums.find(photo.album_id)
       from.raw_decrement :photos_count
       to.raw_increment :photos_count
-      if photo.cover
-        to.update_attribute(:cover_id, photo.id)
-        from.update_attribute(:cover_id, nil) if from.cover_id == photo.id
-      end
-    else
-      # if photo is not moved anywhere
-      if photo.cover
-        photo.album.update_attribute(:cover_id, photo.id) if photo.album.cover_id != photo.id
-      else
-        photo.album.update_attribute(:cover_id, nil) if photo.album.cover_id == photo.id
-      end
+#      from.update_attributes(:cover_id => nil) if from.cover == photo
     end
   end
 
@@ -66,9 +57,8 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     end
 
     # check if the deleted photo is cover
-    album = photo.album
-    if album.cover_id == photo.id
-      album.update_attribute('cover_id', nil)
+    if photo.is_cover?
+      photo.album.update_attribute('cover_id', nil)
     end
   end
 

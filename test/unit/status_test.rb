@@ -8,8 +8,11 @@ class StatusTest < ActiveSupport::TestCase
     @game = @character.game
     @friend = UserFactory.create
     FriendFactory.create @user, @friend
+    [@user, @friend].each {|f| f.reload}    
+
     @same_game_user = UserFactory.create
     GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @same_game_user.id
+
     @stranger = UserFactory.create
     @profile = @user.profile
     @sensitive = '政府'

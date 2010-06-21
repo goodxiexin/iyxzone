@@ -17,12 +17,13 @@ class RegisterController < ApplicationController
   end
 
   def invite
-    @sender = SignupInvitation.find_sender(params[:token]) || User.find_by_invite_code(params[:token]) || User.find_by_qq_invite_code(params[:token]) || User.find_by_msn_invite_code(params[:token])
+    @sender = SignupInvitation.find_sender(params[:token]) || User.find_by_invite_fan_code(params[:token]) || User.find_by_invite_code(params[:token]) || User.find_by_qq_invite_code(params[:token]) || User.find_by_msn_invite_code(params[:token])
 
     if @sender.blank?
       render_not_found
     else
-      @friends = @sender.friends[0..11]
+      @as_fan = @sender.invite_fan_code == params[:token]
+      @people = @as_fan ? @sender.fans[0..11] : @sender.friends[0..11]
       render :action => 'invite'  
     end
   end

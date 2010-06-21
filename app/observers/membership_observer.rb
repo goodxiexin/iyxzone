@@ -42,7 +42,7 @@ class MembershipObserver < ActiveRecord::Observer
     character = membership.character
 
     # 这个只能在before_udpate里做
-    if membership.recently_accept_request or membership.recently_accept_invitation
+    if membership.recently_accept_request? or membership.recently_accept_invitation?
       user.raw_increment :participated_guilds_count unless guild.has_people?(user)
     end
   end
@@ -57,7 +57,7 @@ class MembershipObserver < ActiveRecord::Observer
 			guild.raw_decrement :invitations_count
       guild.raw_increment field(membership.status)
       user.raw_decrement :guild_invitations_count
-      if membership.recently_accept_invitation
+      if membership.recently_accept_invitation?
 			  guild.president.notifications.create(
           :category => Notification::Membership,
           :data => "#{profile_link user}接受了你的邀请: 让游戏角色 #{membership.character.name} 参加工会 #{guild_link guild}")
@@ -66,7 +66,7 @@ class MembershipObserver < ActiveRecord::Observer
 			guild.raw_decrement :requests_count
       guild.raw_increment field(membership.status)
       guild.president.raw_decrement :guild_requests_count
-      if membership.recently_accept_request
+      if membership.recently_accept_request?
 			  user.notifications.create(
           :category => Notification::Membership,
           :data => "#{profile_link guild.president}同意了你的请求: 让游戏角色 #{membership.character.name} 加入工会 #{guild_link guild} ")
@@ -75,7 +75,7 @@ class MembershipObserver < ActiveRecord::Observer
 			# promotion
 			guild.raw_decrement field(membership.status_was)
       guild.raw_increment field(membership.status)
-      if membership.recently_change_role
+      if membership.recently_change_role?
 			  user.notifications.create(
           :category => Notification::Promotion,
           :data => "你的游戏角色 #{membership.character.name} 在工会#{guild_link guild}里的职务更改为#{membership.to_s}")
@@ -84,7 +84,7 @@ class MembershipObserver < ActiveRecord::Observer
 		end
 
     # issue feeds if necessary
-    if (membership.recently_accept_request or membership.recently_accept_invitation) and user.application_setting.emit_guild_feed?
+    if (membership.recently_accept_request? or membership.recently_accept_invitation?) and user.application_setting.emit_guild_feed?
       membership.deliver_feeds
     end
 	end
@@ -97,7 +97,7 @@ class MembershipObserver < ActiveRecord::Observer
 			# invitation declined
 			user.raw_decrement :guild_invitations_count
 			guild.raw_decrement :invitations_count
-      if membership.recently_decline_invitation
+      if membership.recently_decline_invitation?
 			  guild.president.notifications.create(
           :category => Notification::Membership,
           :data => "#{profile_link user} 拒绝了你的邀请: 不让你的游戏角色 #{ membership.character.name } 参加工会#{guild_link guild}")
@@ -106,7 +106,7 @@ class MembershipObserver < ActiveRecord::Observer
 			# request declined
 			guild.president.raw_decrement :guild_requests_count
 			guild.raw_decrement :requests_count
-      if membership.recently_decline_request
+      if membership.recently_decline_request?
 			  user.notifications.create(
           :category => Notification::Membership,
           :data => "#{profile_link guild.president} 拒绝了你的请求: 不让你的游戏角色 #{ membership.character.name } 加入工会#{guild_link guild}")
@@ -115,7 +115,7 @@ class MembershipObserver < ActiveRecord::Observer
 			# user is evicted
 			user.raw_decrement :participated_guilds_count unless guild.has_people?(user)
 			guild.raw_decrement field(membership.status)
-      if membership.recently_evicted
+      if membership.recently_evicted?
 		    user.notifications.create(
           :category => Notification::Membership,
           :data => "你的游戏角色 #{membership.character.name} 被剔除出了工会#{guild_link guild}")

@@ -21,12 +21,7 @@ class AvatarObserver < ActiveRecord::Observer
 	def after_create avatar
     return unless avatar.thumbnail.blank?
 
-		# set cover
-		avatar.album.update_attributes(:cover_id => avatar.id)
     avatar.album.update_attributes(:uploaded_at => Time.now)
-    avatar.poster.update_attributes(:avatar_id => avatar.id) 
-
-    # increment counter
     avatar.album.raw_increment :photos_count
 
     # issue avatar feeds if necessary 
@@ -51,16 +46,6 @@ class AvatarObserver < ActiveRecord::Observer
     elsif avatar.recently_rejected?
       avatar.album.raw_decrement :photos_count
       avatar.destroy_feeds
-    end
-
-    # change cover if necessary
-    if avatar.cover
-      if avatar.album.cover_id != avatar.id
-        avatar.album.update_attribute('cover_id', avatar.id)
-        avatar.poster.update_attribute('avatar_id', avatar.id)
-      end
-    else
-      # 不存在这种情况, 必须有一个头像
     end
   end 
  

@@ -28,7 +28,7 @@ class User::EventsController < UserBaseController
 
   def friends
     @event_ids = Participation.authorized.by(current_user.friend_ids).map(&:event_id).uniq
-    @events = Event.nonblocked.match(:id => @event_ids).paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
+    @events = Event.nonblocked.match(:id => @event_ids).order("created_at DESC").paginate :page => params[:page], :per_page => PER_PAGE, :include => PREFETCH
   end
 
   def show
@@ -57,7 +57,6 @@ class User::EventsController < UserBaseController
     if @event.save
       redirect_to new_event_invitation_url(@event)
     else
-      # guild_id可能是nil
       render :action => 'new', :guild_id => @event.guild_id
     end
   end
@@ -76,9 +75,7 @@ class User::EventsController < UserBaseController
 
   def destroy
     if @event.destroy
-      render :update do |page|
-        page.redirect_to events_url(:uid => current_user.id)
-      end
+      redirect_js events_url(:uid => current_user.id)
     else
       render_js_error
     end

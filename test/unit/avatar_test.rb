@@ -1,81 +1,266 @@
+#
+# set/unset cover
+#
 require 'test_helper'
-require 'action_controller'
-require 'action_controller/test_process.rb'
 
 class AvatarTest < ActiveSupport::TestCase
-  
-  fixtures :all
 
   def setup
-    @user = User.find(1)
+    @user = UserFactory.create_idol
+    @friend = UserFactory.create
+    @stranger = UserFactory.create
+    @same_game_user = UserFactory.create
+    @fan = UserFactory.create
+    @idol = UserFactory.create_idol
+
+    FriendFactory.create @user, @friend
+    @character1 = GameCharacterFactory.create :user_id => @user.id
+    @character2 = GameCharacterFactory.create @character1.game_info.merge({:user_id => @same_game_user.id})
+    Fanship.create :fan_id => @fan.id, :idol_id => @user.id
+    Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+    [@user, @friend, @fan, @idol].each {|f| f.reload}
+
     @album = @user.avatar_album
+    @sensitive = "政府"
   end
 
-  # 照片计数器
-  test "相册的照片计数器，用户的照片计数器" do
-    @photo1 = save_photo 'public/images/default_guild.jpg'
-    @album.reload
-    @user.reload
-    assert_equal @album.photos_count, 1
-    assert_equal @user.photos_count, 1
-    @photo2 = save_photo 'public/images/castle.jpg'
-    @album.reload
-    @user.reload
-    assert_equal @album.photos_count, 2
-    assert_equal @user.photos_count, 2
-    @photo1.destroy
-    @album.reload
-    @user.reload
-    assert_equal @album.photos_count, 1
-    assert_equal @user.photos_count, 1
-    @photo2.destroy
-    @album.reload
-    @user.reload
-    assert_equal @album.photos_count, 0
-    assert_equal @user.photos_count, 0
-  end
-
-  # 测试属性继承
-  test "头像会继承一些属性" do
-    @photo = save_photo 'public/images/castle.jpg'
-    assert_nil @photo.game_id
-    assert_equal @photo.poster_id, @album.poster_id
+  test "avatar should inherit some attributes from album" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar' 
+    
     assert_equal @photo.privilege, @album.privilege
+    assert_equal @photo.poster_id, @album.poster_id
+    assert_equal @photo.game_id, @album.game_id
   end
 
-  # 头像
-  test "删除当前头像" do
-    @photo = save_photo 'public/images/castle.jpg'
-    @album.set_cover @photo
+  test "create avatar and set it as cover" do
+    assert_nil @album.cover
+    assert_nil @user.avatar   
+
+    @photo1 = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar' 
+    @album.reload and @user.reload
+    assert_nil @album.cover
+    assert_nil @user.avatar
+
+    # two ways to set cover of album
+    @album.set_cover @photo1
+    @album.reload and @user.reload
+    assert_equal @album.cover, @photo1
+    assert_equal @user.avatar, @photo1
+
+    @photo2 = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar', :is_cover => 1 
+    @album.reload and @user.reload
+    assert_equal @album.cover, @photo2
+    assert_equal @user.avatar, @photo2
+
+    @photo2.update_attributes :is_cover => 0
+    @album.reload and @user.reload
+    assert_nil @album.cover
+    assert_nil @user.avatar
+
+    @photo1.update_attributes :is_cover => 1
+    @album.reload and @user.reload
+    assert_equal @album.cover, @photo1
+    assert_equal @user.avatar, @photo1
+  end
+
+  test "sensitive avatar" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
+    @album.reload
+    assert @photo.unverified?
+    assert_equal @album.photos_count, 1
+
+    @photo.verify
+    @album.reload
+    assert_equal @album.photos_count, 1
+   
+    @photo.update_attributes(:notation => @sensitive)
+    assert @photo.unverified?
+
+    @photo.unverify
+    @album.reload
+    assert_equal @album.photos_count, 0
+
     @photo.destroy
     @album.reload
-    @photo.reload
-    assert_not_nil @photo     # 无法删除 
+    assert_equal @album.photos_count, 0
   end
 
-  test "设置另一个头像为当前头像" do
-    @photo = save_photo 'public/images/castle.jpg' 
-    @album.set_cover @photo
+  test "avatar feed" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
+    @friend.reload and @fan.reload and @idol.reload
+    assert @friend.recv_feed?(@photo)
+    assert @fan.recv_feed?(@photo)
+    assert !@idol.recv_feed?(@photo)
+  end
+  
+  test "tag avatar" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type =>'Avatar'
+    
+    assert @photo.is_taggable_by?(@user)
+    assert @photo.is_taggable_by?(@friend)
+    assert !@photo.is_taggable_by?(@same_game_user)
+    assert !@photo.is_taggable_by?(@stranger)
+    assert !@photo.is_taggable_by?(@fan)
+    assert !@photo.is_taggable_by?(@idol)
+    
+    assert_equal @photo.tag_candidates_for(@user), [@user, @friend]
+    assert_equal @photo.tag_candidates_for(@friend), [@friend, @user]    
 
-    @album.reload
+    @tag = PhotoTagFactory.create :photo_id => @photo.id, :poster_id => @user.id, :tagged_user_id => @friend.id
+    assert @tag.is_deleteable_by?(@user)
+    assert !@tag.is_deleteable_by?(@friend)
+    assert !@tag.is_deleteable_by?(@same_game_user)
+    assert !@tag.is_deleteable_by?(@stranger)
+    assert !@tag.is_deleteable_by?(@fan)
+    assert !@tag.is_deleteable_by?(@idol)
+
+    @tag = PhotoTagFactory.create :photo_id => @photo.id, :poster_id => @friend.id, :tagged_user_id => @friend.id
+    assert @tag.is_deleteable_by?(@user)
+    assert !@tag.is_deleteable_by?(@friend)
+    assert !@tag.is_deleteable_by?(@same_game_user)
+    assert !@tag.is_deleteable_by?(@stranger)
+    assert !@tag.is_deleteable_by?(@fan)
+    assert !@tag.is_deleteable_by?(@idol)
+  end
+  
+  test "tag notice" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type =>'Avatar'
+
+    @tag = PhotoTagFactory.create :photo_id => @photo.id, :poster_id => @user.id, :tagged_user_id => @friend.id
+    @friend.reload
+    assert @friend.recv_notice?(@tag) 
+
+    @friend2 = UserFactory.create
+    FriendFactory.create @user, @friend2
+    FriendFactory.create @friend, @friend2
+
+    @tag = PhotoTagFactory.create :photo_id => @photo.id, :poster_id => @friend2.id, :tagged_user_id => @friend.id
+    @friend.reload and @user.reload
+    assert @friend.recv_notice?(@tag) 
+    assert @user.recv_notice?(@tag)
+  end
+
+  test "comment avatar" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
+  
+    assert @photo.is_commentable_by?(@user)
+    assert @photo.is_commentable_by?(@friend)
+    assert !@photo.is_commentable_by?(@same_game_user)
+    assert !@photo.is_commentable_by?(@stranger)
+    assert @photo.is_commentable_by?(@fan)
+    assert @photo.is_commentable_by?(@idol)
+
+    @comment = @photo.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
+
+    @comment = @photo.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    assert @comment.is_deleteable_by?(@user)
+    assert @comment.is_deleteable_by?(@friend)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
+
+    @comment = @photo.comments.create :poster_id => @fan.id, :recipient_id => @friend.id, :content => 'a'
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert @comment.is_deleteable_by?(@fan)
+    assert !@comment.is_deleteable_by?(@idol)
+
+    @comment = @photo.comments.create :poster_id => @idol.id, :recipient_id => @fan.id, :content => 'a'
+    assert @comment.is_deleteable_by?(@user)
+    assert !@comment.is_deleteable_by?(@friend)
+    assert !@comment.is_deleteable_by?(@same_game_user)
+    assert !@comment.is_deleteable_by?(@stranger)
+    assert !@comment.is_deleteable_by?(@fan)
+    assert @comment.is_deleteable_by?(@idol)
+  end
+
+  test "comment notice" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
+
+    assert_no_difference "Notice.count" do
+      @comment = @photo.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
+    end
+
+    assert_difference "Notice.count" do
+      @comment = @photo.comments.create :poster_id => @friend.id, :recipient_id => @user.id, :content => 'a'
+    end
     @user.reload
-    assert_equal @album.cover_id, @photo.id
-    assert_equal @user.avatar_id, @photo.id
+    assert @user.recv_notice?(@comment)
+
+    assert_difference "Notice.count" do
+      @comment = @photo.comments.create :poster_id => @friend.id, :recipient_id => @friend.id, :content => 'a'
+    end
+    @user.reload
+    assert @user.recv_notice?(@comment)
+
+    assert_difference "Notice.count", 2 do
+      @comment = @photo.comments.create :poster_id => @fan.id, :recipient_id => @friend.id, :content => 'a'
+    end
+    @user.reload and @friend.reload
+    assert @user.recv_notice?(@comment)
+    assert @friend.recv_notice?(@comment)
   end
 
-  # 测试validate
-  test "没有相册" do
-    path = 'public/images/castle.jpg'
-    mimetype = `file -ib #{path}`.gsub(/\n/,"")
-    @photo = Avatar.create(:uploaded_data => ActionController::TestUploadedFile.new(path, mimetype))
-    assert_equal @photo.errors.on_base, '没有相册'
-  end 
+  test "dig avatar" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
 
-protected
+    assert @photo.is_diggable_by?(@user)
+    assert @photo.is_diggable_by?(@friend)
+    assert !@photo.is_diggable_by?(@same_game_user)
+    assert !@photo.is_diggable_by?(@stranger)
+    assert @photo.is_diggable_by?(@fan)
+    assert @photo.is_diggable_by?(@idol)
+  end
 
-  def save_photo path
-    mimetype = `file -ib #{path}`.gsub(/\n/,"")
-    Avatar.create(:album_id => @album.id, :uploaded_data => ActionController::TestUploadedFile.new(path, mimetype))
+  test "share avatar" do
+    @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
+
+    @type, @id = Share.get_type_and_id("/avatars/#{@photo.id}")
+    assert_equal @id.to_i, @photo.id
+    assert_equal @type, 'Photo'
+
+    assert @photo.is_shareable_by?(@user)
+    assert @photo.is_shareable_by?(@friend)
+    assert !@photo.is_shareable_by?(@same_game_user)
+    assert !@photo.is_shareable_by?(@stranger)
+    assert @photo.is_shareable_by?(@fan)
+    assert @photo.is_shareable_by?(@idol)
+  end
+
+  test "album photos_count" do
+    assert_difference "@album.reload.photos_count" do
+      @photo1 = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
+    end
+
+    assert_difference "@album.reload.photos_count" do
+      @photo2 = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
+    end
+
+    assert_difference "@album.reload.photos_count", -1 do
+      @photo1.destroy
+    end
+
+    assert_difference "@album.reload.photos_count", -1 do
+      @photo2.unverify
+    end
+
+    assert_difference "@album.reload.photos_count" do
+      @photo2.verify
+    end
+
+    @photo2.unverify
+    assert_no_difference "@album.reload.photos_count" do
+      @photo2.destroy
+    end
   end
   
 end

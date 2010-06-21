@@ -46,6 +46,14 @@ Factory.define :guild do |g|
   g.sequence(:description) {|n| "description-#{n}"}
 end
 
+Factory.define :event do |e|
+  e.sequence(:title) {|n| "title-#{n}"}
+  e.sequence(:description) {|n| "description-#{n}"}
+  e.privilege 1
+  e.sequence(:start_time) {|n| n.days.from_now}
+  e.sequence(:end_time) {|n| (n+1).days.from_now}
+end
+
 Factory.define :topic do |t|
   t.sequence(:subject) {|n| "subject-#{n}"}
   t.sequence(:content) {|n| "content-#{n}"}
@@ -65,4 +73,33 @@ Factory.define :guestbook do |g|
   g.sequence(:description) {|n| "guestbook-#{n}"}
   g.priority Guestbook::Urgent
   g.catagory '日志'
+end
+
+Factory.define :application do |a|
+  a.sequence(:name) {|n| "application-#{n}"}
+  a.sequence(:about) {|n| "about application-#{n}"}
+end
+
+Factory.define :poke do |p|
+  p.sequence(:name) {|n| "poke-#{n}"}
+  p.span_class 'i-f i-f-hug'
+  p.content_html '<div></div>'
+end
+
+Factory.define :personal_album do |a|
+  a.sequence(:title) {|n| "title-#{n}"}
+  a.sequence(:description) {|n| "description-#{n}"}
+  a.privilege PrivilegedResource::PUBLIC
+end
+
+Factory.define :photo do |p|
+  p.sequence(:notation) {|n| "notation-#{n}"}
+end
+
+Factory.define :photo_tag do |t|
+  t.x 0
+  t.y 0
+  t.width 100
+  t.height 100
+  t.content 'photo tag content'
 end

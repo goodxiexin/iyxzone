@@ -13,15 +13,7 @@ class DigTest < ActiveSupport::TestCase
     # create 4 friends
     @friend = UserFactory.create
     FriendFactory.create @user, @friend
-    
-    # create stranger
-    @stranger = UserFactory.create
-
-    # create same-game-user
-    @same_game_user = UserFactory.create
-    @character2 = GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @same_game_user.id
-  
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id
+    @user.reload and @friend.reload
   end
 
   test "counter" do
@@ -32,14 +24,6 @@ class DigTest < ActiveSupport::TestCase
     assert @blog.dug_by(@friend)
     @blog.reload
     assert_equal @blog.digs_count, 2
-
-    assert @blog.dug_by(@same_game_user)
-    @blog.reload
-    assert_equal @blog.digs_count, 3
-
-    assert @blog.dug_by(@stranger)
-    @blog.reload
-    assert_equal @blog.digs_count, 4
   end
 
   test "dig repeatedly" do

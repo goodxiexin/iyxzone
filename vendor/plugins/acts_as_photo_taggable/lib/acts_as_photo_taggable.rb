@@ -40,6 +40,11 @@ module PhotoTaggable
       proc.call user, self, self.album 
     end
 
+    def tag_candidates_for user
+      proc = self.class.photo_taggable_opts[:candidates] || lambda { [] }
+      proc.call user, self, self.album
+    end
+
   end
 
 end

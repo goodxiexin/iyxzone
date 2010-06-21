@@ -4,7 +4,7 @@ class LoginFlowTest < ActionController::IntegrationTest
 
   def setup
     @user = UserFactory.create
-    @invitor = UserFactory.create
+    @invitor = UserFactory.create_idol
     @game = GameFactory.create
     @gid = @game.id
     @aid = @game.areas.first.id
@@ -179,6 +179,33 @@ class LoginFlowTest < ActionController::IntegrationTest
     @invitor.reload
     assert user.has_friend?(@invitor)
     assert @invitor.has_friend?(user)
+  end
+
+  test "别人发粉丝邀请码" do
+    get "/invite?token=#{@invitor.invite_fan_code}"
+    assert_template 'register/invite'
+    assert_equal assigns(:sender), @invitor
+
+    # 用该邀请码注册
+    get "/signup", {:invite_token => @invitor.invite_fan_code}
+    assert_template 'users/new'
+
+    assert_difference "User.count" do
+      post "/users", {:invite_token => @invitor.invite_fan_code, :user => {:login => 'gaoxh04', :email => 'gaoxh04@gmail.com', :gender => 'male', :password => '111111', :password_confirmation => '111111'}, :profile => {:new_characters => {"1" => {:race_id => @rid, :profession_id => @pid, :area_id => @aid, :server_id => @sid, :game_id => @gid, :name => 'character1', :level => 11}}}}
+    end
+
+    # 还没激活，所以还不是粉丝
+    user = User.last
+    @invitor.reload
+    assert !@invitor.has_fan?(user)
+    assert user.invitee_code, @invitor.invite_code
+    
+    # 激活，自动添加了好友
+    post "/activate/#{user.activation_code}"
+    assert_redirected_to login_url
+    
+    user.reload and @invitor.reload
+    assert @invitor.has_fan?(user)
   end
 
   test "别人发qq邀请" do

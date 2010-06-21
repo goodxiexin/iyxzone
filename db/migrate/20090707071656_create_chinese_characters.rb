@@ -4,12 +4,7 @@ class CreateChineseCharacters < ActiveRecord::Migration
       t.string :utf8_code
       t.string :pinyin
     end
-    File.open('pinyin.txt') do |f|
-      while str = f.gets
-        str.match(/\$pinyintable\['(.*?)'\] = '(.*?)';/)
-        ChineseCharacter.create(:utf8_code => $1, :pinyin => $2)
-      end
-    end
+    Pinyin::init_db
   end
 
   def self.down

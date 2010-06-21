@@ -2,7 +2,7 @@ class PokeDelivery < ActiveRecord::Base
 
 	belongs_to :sender, :class_name => 'User'
 
-	belongs_to :recipient, :class_name => 'User', :counter_cache => :poke_deliveries_count
+	belongs_to :recipient, :class_name => 'User'
 
 	belongs_to :poke
 
@@ -16,21 +16,16 @@ class PokeDelivery < ActiveRecord::Base
 
   validate_on_create :poke_is_valid
 
-  #validate_on_create :recipient_is_valid
+  def self.delete_all_for user
+    self.delete_all :recipient_id => user.id
+    user.poke_deliveries_count = 0
+    user.save
+  end
 
 protected
 
   def poke_is_valid
-    if poke.nil?
-      errors.add(:poke_id, '不存在')
-    end
-  end
-
-  def recipient_is_valid
-    return if recipient.blank? or sender.blank?
-    unless recipient.is_pokeable_by? sender
-      errors.add(:recipient_id, "没有权限")
-    end
+    errors.add(:poke_id, '不存在') if poke.nil?
   end
 
 end

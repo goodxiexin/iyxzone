@@ -5,15 +5,6 @@
         <% if @characters.blank? %>
           <div class='tip'>你所有的游戏角色都已经在这个活动了，或者被邀请，或者已经发送请求了</div>
         <% else %>
-          <% if !@request_characters.blank? %>
-            <div class='tip'>你的 <%= @request_characters.map(&:name).join(', ') %> 已经请求加入了这个活动</div>
-          <% end %>
-          <% if !@invite_characters.blank? %>
-            <div class='tip'>你的 <%= @invite_characters.map(&:name).join(', ') %> 已经被邀请加入这个活动了</div>
-          <% end %>
-          <% if !@confirmed_and_maybe_characters.blank? %>
-            <div class='tip'>你的 <%= @confirmed_and_maybe_characters.map(&:name).join(', ') %> 已经加入这个活动了</div>
-          <% end %>
           <div class='tip'>你还可以选择 <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %> 加入这个活动? </div>
         <% end %>
       </div>

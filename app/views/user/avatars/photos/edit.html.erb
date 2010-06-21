@@ -1,6 +1,6 @@
 <% facebox_tag '编辑照片' do %>
   <div id='errors'></div>
-  <% rows_form_remote_for :photo, :url => avatar_url(@photo, :at => params[:at]), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');" } do |f| %>
+  <% rows_form_remote_for :photo, :url => avatar_url(@photo, :at => params[:at]), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(edit_photo_submit),'请等待..');" } do |f| %>
     <div class='formcontent'>
       <%= f.text_area 'notation', :label => '照片描述' %>
       <%= f.collection_select :album_id, [@album], :id, :title, {}, :label => '所属相册' %>

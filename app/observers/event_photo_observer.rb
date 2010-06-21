@@ -40,13 +40,14 @@ class EventPhotoObserver < ActiveRecord::Observer
     elsif photo.recently_rejected?
       photo.album.raw_decrement :photos_count
     end
-
+=begin
     # change cover if necessary 
     if photo.cover
       photo.album.update_attribute(:cover_id, photo.id) if photo.album.cover_id != photo.id
     else
       photo.album.update_attribute(:cover_id, nil) if photo.album.cover_id == photo.id
     end
+=end
   end
   
   def after_destroy photo

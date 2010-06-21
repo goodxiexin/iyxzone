@@ -18,7 +18,8 @@ class User::Avatars::PhotosController < UserBaseController
 
   def create
     @photo = @album.photos.build(params[:photo])
-    if @photo.save
+
+    if @photo.save && @album.set_cover(@photo)
 			responds_to_parent do
         render :update do |page|
           page << "facebox.close()"
@@ -42,7 +43,7 @@ class User::Avatars::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.html { 
+				format.html {
           render :update do |page|
 					  page << "facebox.close();"
             if params[:at] == 'set_cover'
@@ -70,9 +71,7 @@ class User::Avatars::PhotosController < UserBaseController
 
   def destroy
     if @photo.destroy
-      render :update do |page|
-        page.redirect_to avatar_album_url(@album)
-      end
+      redirect_js avatar_album_url(@album)
     else
       render_js_error '发生错误'
     end

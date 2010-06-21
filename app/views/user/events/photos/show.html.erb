@@ -43,6 +43,6 @@
     </div>
 <% end %>
 
-<% if @participation and @participation.is_authorized? %>
-<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user, :tagged_users => @event.participants.all(:include => :games) - [current_user]} %>
+<% if @photo.is_taggable_by?(@user) %>
+<%= render :partial => 'user/photo_tags/control_panel', :locals => {:photo => @photo, :tags => @tags, :user => @user} %>
 <% end %>

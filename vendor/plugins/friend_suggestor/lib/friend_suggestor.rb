@@ -106,7 +106,7 @@ module FriendSuggestor
 		end
 
     # radom picked users
-    User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :except => friends.to_a.concat([self]), :conditions => "activated_at IS NOT NULL").each do |u|
+    User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :except => friends + [self], :conditions => "activated_at IS NOT NULL").each do |u|
       friend_suggestions[u.id] += 1 # 加1分
     end
 
@@ -208,7 +208,7 @@ module FriendSuggestor
     candidates = server.users
 
 		candidates.each do |u|
-			if u != self and !self.has_friend?(u)	and !self.wait_for?(u) and !u.wait_for?(self)
+			if u != self and !self.has_friend?(u)	and !self.has_fan?(u) and !u.has_fan?(self) and !self.wait_for?(u) and !u.wait_for?(self)
 				comrade_suggestions[u.id] += 20 * u.common_friends_with(self).count
 				comrade_suggestions[u.id] += 10 * u.common_events_with(self).count
 				comrade_suggestions[u.id] += 10 * u.common_guilds_with(self).count

@@ -2,37 +2,22 @@
 <% content_for :html_description, "#{@application.name}的关于 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@application.name}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
-<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-  <div class="round_m"><div class="round_body">
-    <h1 class="<%= @application.icon_class %>"><%= @application.name %></h1>
-    <div class="box02 canvas_int space20">
-      <div class="detail-blog">
-        <div class="detail-blog-head jl-cutline s_clear">
-          <p class="left">
-            <strong><%= @application.name %></strong>
-          </p>
-        </div>
-        <div class="con">
-          <%= @application.about %>
-        </div>
-        <div class="detail-blog-foot s_clear">
-          <p class=" jl-cutline"></p>
-        </div>
-        <div class='page-foot s_clear'>
-          <div class='foot-func'>
-            <span class='w-l red'>评论(<%= @application.comments_count %>)</span>
-          </div>
-          <div class='s_clear rows'>
-            <div class='feed-list'>
-              <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @application, :recipient => nil} %>
-            </div>
-          </div>
-        </div>
+<% canvas_tag do %>
+  <h1 class="<%= application_icon_class @application %>"><%= @application.name %></h1>
+  <div class="box02 canvas_int space20">
+    <div class="detail-blog">
+      <div class="detail-blog-head jl-cutline s_clear">
+        <p class="left"><strong><%= @application.name %></strong></p>
+      </div>
+      <div class="con">
+        <%= @application.about %>
+      </div>
+      <div class="detail-blog-foot s_clear">
+        <p class=" jl-cutline"></p>
+      </div>
+      <div class='page-foot s_clear'>
+        <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @application, :commentable => true, :viewable => false, :diggable => false, :comment_opts => {:commentable => @application, :recipient => nil}, :reply_to => @reply_to} %>
       </div>
     </div>
-  </div></div>
-</div></div></div></div>
-
-<% unless @reply_to.blank? %>
-<%= onload_javascript_tag "Iyxzone.Comment.set('application', #{@application.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+  </div>
 <% end %>

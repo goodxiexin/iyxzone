@@ -5,35 +5,9 @@ class GuildPhoto < Photo
   validates_as_attachment
 
   acts_as_photo_taggable :delete_conditions => lambda {|user, photo, album| album.poster == user},
-                         :create_conditions => lambda {|user, photo, album| album.guild.has_people?(user) }
+                         :create_conditions => lambda {|user, photo, album| album.guild.has_people?(user) },
+                         :candidates => lambda {|tagger, photo, album| album.guild.people}
 
-  acts_as_commentable :order => 'created_at ASC', 
-                      :delete_conditions => lambda {|user, photo, comment| photo.album.poster == user || comment.poster == user}
-
-  attr_readonly :album_id, :poster_id, :game_id, :privilege
-
-  validates_presence_of :album_id, :if => "thumbnail.blank?", :on => :create
-
-  validate_on_create :album_is_valid
-
-  validates_size_of :notation, :within => 0..1000, :too_long => "最多1000个字节", :allow_nil => true
-
-  def partitioned_path(*args)
-    dir = (attachment_path_id / 10000).to_s
-    sub_dir = (attachment_path_id % 10000).to_s
-    [dir, sub_dir] + args
-  end
-
-protected
-
-  def album_is_valid
-    return if album_id.blank? or poster_id.blank?
-
-    if album.blank?
-      errors.add(:album_id, "不存在")
-    elsif !album.guild.has_veteran?(poster) and album.guild.president != poster
-      errors.add(:poster_id, "不是该工会的长老或者会长")
-    end
-  end 
+  attr_readonly :album_id, :privilege
 
 end

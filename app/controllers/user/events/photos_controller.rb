@@ -22,9 +22,11 @@ class User::Events::PhotosController < UserBaseController
 
 	def record_upload
     @photos = @album.photos.nonblocked.find(params[:ids])
-		@album.record_upload current_user, @photos
-		render :update do |page|
-			page.redirect_to edit_multiple_event_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+
+    if @album.record_upload current_user, @photos
+			redirect_js edit_multiple_event_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+    else
+      render_js_error
     end
 	end
 
@@ -74,9 +76,7 @@ class User::Events::PhotosController < UserBaseController
 
   def destroy
     if @photo.destroy
-      render :update do |page|
-        page.redirect_to event_album_url(@album)
-      end
+      redirect_js event_album(@album)
     else
       render_js_error
     end
