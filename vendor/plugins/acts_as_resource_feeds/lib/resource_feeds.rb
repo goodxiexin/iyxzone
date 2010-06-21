@@ -9,10 +9,10 @@ module ResourceFeeds
 
     def acts_as_feed_recipient opts={}
     
-      has_many :feed_deliveries, :as => 'recipient', :dependent => :delete_all
+      has_many :feed_deliveries, :as => 'recipient', :dependent => :delete_all, :order => 'created_at DESC'
 
       # alias for feed_deliveries
-      has_many :all_feed_deliveries, :as => 'recipient', :class_name => 'FeedDelivery'
+      has_many :all_feed_deliveries, :as => 'recipient', :class_name => 'FeedDelivery', :order => 'created_at DESC'
 
       cattr_accessor :feed_recipient_opts
 
