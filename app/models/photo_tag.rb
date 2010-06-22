@@ -6,8 +6,8 @@ class PhotoTag < ActiveRecord::Base
 
   belongs_to :photo
 
-	has_many :notices, :as => 'producer', :dependent => :destroy
-  
+  produce_notices :relative => lambda {|tag| tag.photo_id}
+
   attr_readonly :poster_id, :tagged_user_id, :photo_id
 
   #needs_verification

@@ -61,6 +61,12 @@ class GuildObserver < ActiveRecord::Observer
     # modify invitations count
     guild.invitations.each { |invitation| invitation.user.raw_decrement :guild_invitations_count }
 
+    # modify guilds count
+    if !guild.rejected?
+      User.update_all("participated_guilds_count = participated_guilds_count - 1", {:id => guild.memberships.map(&:user_id)})
+      guild.president.raw_decrement :guilds_count
+    end
+
     # send notifications
     if !guild.rejected?
       (guild.people - [guild.president]).each do|p|
@@ -70,14 +76,7 @@ class GuildObserver < ActiveRecord::Observer
     end
 
     # destroy all memberships
-    # 如果memberships的dependent是destroy，很有可能在这个before_destroy之前，他就被删除了，那上面的guild.people是空的，就没法发通知了
     guild.memberships.each { |m| m.destroy_feeds }
-
-    if !guild.rejected?
-      User.update_all("participated_guilds_count = participated_guilds_count - 1", {:id => guild.memberships.map(&:user_id)})
-      guild.president.raw_decrement :guilds_count
-    end
-
     Membership.delete_all(:guild_id => guild.id)
   end
   

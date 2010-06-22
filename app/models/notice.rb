@@ -8,27 +8,25 @@ class Notice < ActiveRecord::Base
 
 	named_scope :unread, :conditions => {:read => false}
 
-	def has_same_source_with? notice
-		return false if producer_type != notice.producer_type
-		if producer_type == 'Comment'
-			(producer.commentable_id == notice.producer.commentable_id) and (producer.commentable_type == notice.producer.commentable_type)
-		elsif producer_type == 'FriendTag'
-			(producer.taggable_id == notice.producer.taggable_id) and (producer.taggable_type == notice.producer.taggable_type)
-		elsif producer_type == 'PhotoTag'
-			(producer.photo_id == notice.producer.photo_id)
-    elsif producer_type == 'Post'
-      (producer.id == notice.producer_id)
-		end
-	end
-
   # 把所有same source的通知都标记为以读
   def read_by user, single=false
     if single
       update_attribute('read', '1')
     else
-      notices = user.notices.unread.find_all {|n| self.has_same_source_with? n}
+      notices = user.notices.unread.find_all {|n| self.relative_to? n}
       Notice.update_all("notices.read = 1", {:user_id => user.id, :id => notices.map(&:id)})
       user.raw_decrement :unread_notices_count, notices.count
+    end
+  end
+
+protected
+
+  def relative_to? notice
+    if self.producer_type != notice.producer_type
+      false
+    else
+      proc = self.producer.class.notice_opts[:relative] || lambda {}
+      proc.call(self.producer) == proc.call(notice.producer)
     end
   end
   

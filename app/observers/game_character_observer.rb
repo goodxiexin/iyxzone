@@ -22,7 +22,7 @@ class GameCharacterObserver < ActiveRecord::Observer
     if character.name_changed?
       g1 = Game.find_by_name("魔兽世界")
       g2 = Game.find_by_name("魔兽世界（台服）")
-      if (character.game_id == g1.id or character.game_id == g2.id) and !character.data.nil?
+      if g1 and g2 and (character.game_id == g1.id or character.game_id == g2.id) and !character.data.nil?
         character.data = nil
       end
     end  

@@ -6,7 +6,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :commentable, :polymorphic => true
 
-	has_many :notices, :as => 'producer', :dependent => :destroy
+  produce_notices :relative => lambda {|comment| [comment.commentable_id, comment.commentable_type]}
 
   needs_verification :sensitive_columns => [:content]
 

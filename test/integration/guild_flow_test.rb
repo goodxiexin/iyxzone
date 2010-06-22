@@ -12,6 +12,7 @@ class GuildFlowTest < ActionController::IntegrationTest
     @user_character = GameCharacterFactory.create :user_id => @user.id
     @friend_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @friend.id})
     @same_game_user_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @same_game_user.id})
+    @fan_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @fan.id})
     @game = @user_character.game
 
     FriendFactory.create @user, @friend
@@ -239,10 +240,20 @@ class GuildFlowTest < ActionController::IntegrationTest
     @guild.reload
     assert_equal @guild.game_id, @game_id
   end
+=end
 
   test "DELETE /guilds/:id" do
     @guild = GuildFactory.create :character_id => @user_character.id
-  
+    @new_friend = UserFactory.create
+    FriendFactory.create @new_friend, @user
+    @new_friend_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @new_friend.id})
+ 
+    @guild.member_memberships.create :user_id => @friend.id, :character_id => @friend_character.id
+    @guild.veteran_memberships.create :user_id => @same_game_user.id, :character_id => @same_game_user_character.id
+
+    @guild.requests.create :user_id => @fan.id, :character_id => @fan_character.id
+    @guild.invitations.create :user_id => @new_friend.id, :character_id => @new_friend_character.id
+
     [@friend_sess, @stranger_sess, @same_game_user_sess, @fan_sess, @idol_sess].each do |sess|
       sess.delete "/guilds/#{@guild.id}"
       sess.assert_not_found
@@ -251,11 +262,22 @@ class GuildFlowTest < ActionController::IntegrationTest
     @user_sess.delete "/guilds/invalid"
     @user_sess.assert_not_found
 
+    @guild.unverify
+    @user_sess.delete "/guilds/#{@guild.id}"
+    @user_sess.assert_not_found
+    @guild.verify
+
     assert_difference "Guild.count", -1 do
-      @user_sess.delete "/guilds/#{@guild.id}"
+      assert_difference ["@friend.reload.participated_guilds_count", "@same_game_user.reload.participated_guilds_count"], -1 do
+        assert_difference ["@friend.reload.notifications_count", "@same_game_user.reload.notifications_count"], 1 do
+          assert_difference ["@user.reload.guild_requests_count", "@new_friend.reload.guild_invitations_count"], -1 do
+            @user_sess.delete "/guilds/#{@guild.id}"
+          end
+        end
+      end
     end
   end
-=end
+  
   test "get /guilds/:id" do
     @guild = GuildFactory.create :character_id => @user_character.id
     @guild.member_memberships.create :user_id => @friend.id, :character_id => @friend_character.id

@@ -12,6 +12,7 @@ class EventFlowTest < ActionController::IntegrationTest
     @user_character = GameCharacterFactory.create :user_id => @user.id
     @friend_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @friend.id})
     @same_game_user_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @same_game_user.id})
+    @fan_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @fan.id})
 
     FriendFactory.create @user, @friend
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
@@ -47,13 +48,14 @@ class EventFlowTest < ActionController::IntegrationTest
     @event2.confirmed_participations.create :participant_id => @same_game_user.id, :character_id => @same_game_user_character.id
     @event3.confirmed_participations.create :participant_id => @friend.id, :character_id => @friend_character.id
 
-    [@user_sess, @friend_sess, @same_game_user_sess].each do |sess|
+    [@user_sess, @friend_sess, @same_game_user_sess, @fan_sess].each do |sess|
       sess.get "/events/hot"
       sess.assert_template "user/events/hot"
       assert_equal sess.assigns(:events), [@event2, @event1, @event3, @event4]
     end
 
-    [@stranger_sess, @fan_sess, @idol_sess].each do |sess|
+    # 只能看到和自己游戏有关的活动
+    [@stranger_sess, @idol_sess].each do |sess|
       sess.get "/events/hot"
       sess.assert_template "user/events/hot"
       assert_equal sess.assigns(:events), []
@@ -87,20 +89,21 @@ class EventFlowTest < ActionController::IntegrationTest
     sleep 1
     @event4 = EventFactory.create :character_id => @user_character.id, :privilege => 2
   
-    [@user_sess, @friend_sess, @same_game_user_sess].each do |sess|
+    [@user_sess, @friend_sess, @same_game_user_sess, @fan_sess].each do |sess|
       sess.get "/events/recent"
       sess.assert_template "user/events/recent"
       assert_equal sess.assigns(:events), [@event4, @event3, @event2, @event1]
     end
 
-    [@stranger_sess, @fan_sess, @idol_sess].each do |sess|
+    # 只能看到和自己游戏有关的活动
+    [@stranger_sess, @idol_sess].each do |sess|
       sess.get "/events/recent"
       sess.assert_template "user/events/recent"
       assert_equal sess.assigns(:events), []
     end
 
     @event4.unverify
-    [@user_sess, @friend_sess, @same_game_user_sess].each do |sess|
+    [@user_sess, @friend_sess, @same_game_user_sess, @fan_sess].each do |sess|
       sess.get "/events/recent"
       sess.assert_template "user/events/recent"
       assert_equal sess.assigns(:events), [@event3, @event2, @event1]
@@ -333,15 +336,31 @@ class EventFlowTest < ActionController::IntegrationTest
 
   test "DELETE /events/:id" do
     @event = EventFactory.create :character_id => @user_character.id
+    @new_friend = UserFactory.create
+    FriendFactory.create @new_friend, @user
+    @new_friend_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @new_friend.id})
+
     @event.confirmed_participations.create :character_id => @friend_character.id, :participant_id => @friend.id
+    @event.maybe_participations.create :character_id => @same_game_user_character.id, :participant_id => @same_game_user.id
+    @event.requests.create :participant_id => @fan.id, :character_id => @fan_character.id
+    @event.invitations.create :participant_id => @new_friend.id, :character_id => @new_friend_character.id
 
     [@friend_sess, @same_game_user_sess, @stranger_sess, @fan_sess, @idol_sess].each do |sess|
       sess.delete "/events/#{@event.id}"
       sess.assert_not_found
     end
 
+    @event.unverify
+    @user_sess.delete "/events/#{@event.id}"
+    @user_sess.assert_not_found
+    @event.verify
+
     assert_difference "Event.count", -1 do
-      @user_sess.delete "/events/#{@event.id}"
+      assert_difference ["@friend.reload.notifications_count", "@same_game_user.reload.notifications_count"], 1 do
+        assert_difference ["@user.reload.event_requests_count", "@new_friend.reload.event_invitations_count"], -1 do
+          @user_sess.delete "/events/#{@event.id}"
+        end
+      end
     end
 
     @user_sess.delete "/events/invalid"

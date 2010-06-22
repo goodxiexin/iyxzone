@@ -72,13 +72,13 @@ class Photo < ActiveRecord::Base
     data.content_type = MIME::Types.type_for(data.original_filename)
     self.uploaded_data = data
   end
-  
+=begin  
   def partitioned_path(*args)
     dir = (attachment_path_id / 10000).to_s
     sub_dir = (attachment_path_id % 10000).to_s
     [dir, sub_dir] + args
   end
-
+=end
   validates_size_of :notation, :maximum => 1000, :too_long => "最多1000个字符", :allow_blank => true
 
   validates_presence_of :album_id, :if => "thumbnail.blank?", :on => :create

@@ -14,7 +14,7 @@ class User::ProfilesController < UserBaseController
     @fans = @user.fans[0..8] if @user.is_idol
 		@blogs = @user.blogs.for(@relationship).limit(3)
 		@albums = @user.active_albums.for(@relationship).limit(3)
-    @feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).order('created_at DESC').prefetch([{:feed_item => :originator}])
+    @feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).order('created_at DESC').prefetch([{:feed_item => :originator}]).all
 		@first_fetch_size = FirstFetchSize
     @skin = @profile.skin
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
@@ -57,7 +57,7 @@ class User::ProfilesController < UserBaseController
   end
 
 	def more_feeds
-		@feed_deliveries = @profile.feed_deliveries.offset(FirstFetchSize + FetchSize * params[:idx].to_i).limit(FetchSize).order('created_at DESC')
+		@feed_deliveries = @profile.feed_deliveries.offset(FirstFetchSize + FetchSize * params[:idx].to_i).limit(FetchSize).order('created_at DESC').all
 		@fetch_size = FetchSize
 	end
 

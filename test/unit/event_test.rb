@@ -12,8 +12,10 @@ class EventTest < ActiveSupport::TestCase
     @fan = UserFactory.create
     @friend = UserFactory.create
     @stranger = UserFactory.create
+    @same_game_user = UserFactory.create
     @user_character = GameCharacterFactory.create :user_id => @user.id
     @friend_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @friend.id})
+    @same_game_user_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @same_game_user.id})
     @stranger_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @stranger.id})    
     
     FriendFactory.create @user, @friend
@@ -141,7 +143,8 @@ class EventTest < ActiveSupport::TestCase
     assert_equal @user.upcoming_events, []
     assert_equal @user.participated_events, [@event3, @event2]
   end
-=end 
+=end
+  
   test "edit/update event" do
     @event = EventFactory.create :character_id => @user_character.id
     
@@ -160,10 +163,42 @@ class EventTest < ActiveSupport::TestCase
       @event.update_attributes(:start_time => 10.minutes.from_now)
     end
   end
-
+  
   test "delete event" do
+    @event = EventFactory.create :character_id => @user_character.id
+    @new_friend = UserFactory.create
+    @new_friend_character = GameCharacterFactory.create @user_character.game_info.merge({:user_id => @new_friend.id})
+    FriendFactory.create @new_friend, @user
+
+    # create some partipants, invitatons and requests
+    assert_difference "@friend.reload.upcoming_events.count" do
+      @event.confirmed_participations.create :participant_id => @friend.id, :character_id => @friend_character.id
+    end
+    assert_difference "@same_game_user.reload.upcoming_events.count" do
+      @event.maybe_participations.create :participant_id => @same_game_user.id, :character_id => @same_game_user_character.id
+    end
+    assert_difference "@user.reload.event_requests_count" do
+      @event.requests.create :participant_id => @stranger.id, :character_id => @stranger_character.id
+    end
+    assert_difference "@new_friend.reload.event_invitations_count" do
+      @event.invitations.create :participant_id => @new_friend.id, :character_id => @new_friend_character.id
+    end
+
+    @event.reload
+
+    assert_difference "@friend.reload.notifications.count" do
+      assert_difference "@same_game_user.reload.notifications.count" do
+        assert_difference "@user.reload.event_requests_count", -1 do
+          assert_difference "@new_friend.reload.event_invitations_count", -1 do
+            assert_difference "Event.count", -1 do
+              @event.destroy
+            end
+          end
+        end
+      end
+    end
   end
- 
+  
   test "comment event" do
     @event = EventFactory.create :character_id => @user_character.id
 

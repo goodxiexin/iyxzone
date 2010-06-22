@@ -76,7 +76,7 @@ class Participation < ActiveRecord::Base
   end
 
   def change_status status
-    if self.status != status
+    if is_authorized? and self.status != status
       @action = :recently_change_status
       self.update_attributes(:status => status)
     end

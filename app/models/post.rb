@@ -10,7 +10,7 @@ class Post < ActiveRecord::Base
 
   belongs_to :topic
 
-  has_many :notices, :as => 'producer', :dependent => :destroy
+  produce_notices :relative => lambda {|post| post.topic_id}
 
   needs_verification :sensitive_columns => [:content] 
 

@@ -14,7 +14,7 @@ class FriendTag < ActiveRecord::Base
 
 	belongs_to :video, :foreign_key => 'taggable_id'
 
-	has_many :notices, :as => 'producer', :dependent => :destroy 
+  produce_notices :relative => lambda {|tag| [tag.taggable_id, tag.taggable_type]}
 
   attr_readonly :poster_id, :tagged_user_id, :taggable_id, :taggable_type
 

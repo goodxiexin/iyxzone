@@ -55,8 +55,10 @@ class EventObserver < ActiveRecord::Observer
     
     # modify invitations count
     # TODO: 用一句sql解决，但如果是这样，必须要知道event有几个character
-    event.invitations.each { |invitation| invitation.participant.raw_decrement :event_invitations_count }
-    
+    event.invitations.each do |invitation| 
+      invitation.participant.raw_decrement :event_invitations_count
+    end
+
     # send notifications
     if !event.rejected?
       (event.participants - [event.poster]).each do |p|

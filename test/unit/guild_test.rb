@@ -14,13 +14,14 @@ class GuildTest < ActiveSupport::TestCase
     @character1 = GameCharacterFactory.create :user_id => @user.id
     @character2 = GameCharacterFactory.create @character1.game_info.merge({:user_id => @friend.id})
     @character3 = GameCharacterFactory.create @character1.game_info.merge({:user_id => @same_game_user.id})
+    @character4 = GameCharacterFactory.create @character1.game_info.merge({:user_id => @fan.id})
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
     [@user, @friend, @fan, @idol].each {|f| f.reload}
  
     @sensitive = "政府"
   end
-  
+=begin  
   test "create guild" do
     assert_difference "Guild.count" do
       @guild = Guild.create :character_id => @character1.id, :name => 'guild', :description => 'd'
@@ -260,6 +261,32 @@ class GuildTest < ActiveSupport::TestCase
     @guild.verify
     @guild.update_attributes :description => @sensitive
     assert @guild.unverified?
+  end
+=end
+  test "delete guild" do
+    @new_friend = UserFactory.create
+    @new_friend_character = GameCharacterFactory.create @character1.game_info.merge({:user_id => @new_friend.id})
+    FriendFactory.create @new_friend, @user
+
+    # create some veterans and members and invitations and requests
+    @guild = GuildFactory.create :character_id => @character1.id
+    @guild.member_memberships.create :user_id => @friend.id, :character_id => @character2.id
+    @guild.veteran_memberships.create :user_id => @same_game_user.id, :character_id => @character3.id
+
+    @guild.invitations.create :user_id => @new_friend.id, :character_id => @new_friend_character.id
+    @guild.requests.create :user_id => @fan.id, :character_id => @character4.id
+
+    @guild.reload
+
+    assert_difference "Guild.count", -1 do
+      assert_difference ["@friend.reload.participated_guilds_count", "@same_game_user.reload.participated_guilds_count"], -1 do
+        assert_difference ["@new_friend.reload.guild_invitations_count", "@user.reload.guild_requests_count"], -1 do
+          assert_difference ["@friend.reload.notifications_count", "@same_game_user.reload.notifications_count"], 1 do
+            @guild.destroy
+          end
+        end
+      end
+    end
   end
    
 end

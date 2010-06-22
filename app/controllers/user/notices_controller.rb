@@ -6,13 +6,13 @@ class User::NoticesController < UserBaseController
 	end
 
 	def first_ten
-		@notices = current_user.notices.unread.limit(10)#find(:all, :limit => 10)
+		@notices = current_user.notices.unread.limit(10).all #find(:all, :limit => 10)
 		render :partial => 'notices', :object => @notices
 	end
 
 	def read
     @notice.read_by current_user, params[:single]
-		@notices = current_user.notices.unread.find(:all, :limit => 10)
+		@notices = current_user.notices.unread.limit(10).all #find(:all, :limit => 10)
 		render :partial => 'notices', :object => @notices
 	end
 

@@ -32,7 +32,7 @@ class ProfileTest < ActiveSupport::TestCase
 
     [@user, @friend, @same_game_user, @stranger, @idol, @fan].each {|u| u.reload}
   end
-
+  
   test "profile inherits some attributes from user" do
     assert_equal @profile.login, @user.login
     assert_equal @profile.gender, @user.gender
@@ -353,7 +353,7 @@ class ProfileTest < ActiveSupport::TestCase
       @profile.update_attributes(:phone => '12341234')
     end
   end
-
+  
   test "view basic info, contact info" do
     # normal user
     @user.privacy_setting.update_attributes(:basic_info => 1)
@@ -441,7 +441,37 @@ class ProfileTest < ActiveSupport::TestCase
         assert @idol_profile.available_for? u.relationship_with(@idol)
       end
     end
+  end
+  
+  test "update character" do
+    game_info = @user_character.game_info
 
+    assert_difference "@user.reload.characters_count" do
+      @profile.update_attributes(:new_characters => {"1" => game_info.merge({:name => 'a', :level => 100})})
+    end
+    @c1 = GameCharacter.last
+
+    assert_difference "@user.reload.characters_count", 2 do
+      @profile.update_attributes(:new_characters => {"1" => game_info.merge({:name => 'a', :level => 100}), "2" => game_info.merge({:name => 'a', :level => 200})})
+    end
+    @c2 = GameCharacter.all.reverse[1]
+    @c3 = GameCharacter.last
+  
+    @profile.update_attributes(:existing_characters => {@c1.id => {:name => 'c1'}, @c2.id => {:name => 'c2'}, @c3.id => {:name => 'c3'}})
+    assert_equal @c1.reload.name, 'c1'
+    assert_equal @c2.reload.name, 'c2'
+    assert_equal @c3.reload.name, 'c3'
+ 
+    assert_difference "@user.reload.characters_count", -1 do
+      @profile.update_attributes(:del_characters => [@c3.id])
+    end
+
+    assert_no_difference "@user.reload.characters_count" do
+      @profile.update_attributes(:del_characters => [@c2.id], :new_characters => {"1" => game_info.merge({:name => 'b', :level => 100})}, :existing_characters => {@c1.id => {:name => 'new c1'}})
+    end
+    assert_equal @c1.reload.name, 'new c1'
+
+    # TODO: if character is locked
   end
 
 end

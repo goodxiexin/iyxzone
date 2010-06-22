@@ -106,6 +106,7 @@ protected
       require_verified @guild
     elsif ['edit_rules', 'update', 'destroy'].include? params[:action]
       @guild = Guild.find(params[:id])
+      require_verified @guild
       require_owner @guild.president unless params[:action] == 'edit_rules'
     end
   end
