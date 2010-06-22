@@ -73,8 +73,9 @@ class Event < ActiveRecord::Base
 
 	acts_as_resource_feeds :recipients => lambda {|event| 
     poster = event.poster
+    fans = poster.is_idol ? poster.fans : []
     friends = poster.friends.find_all {|f| f.application_setting.recv_event_feed?}
-    [poster.profile, event.game] + poster.all_guilds + friends + (poster.is_idol ? poster.fans : [])
+    [poster.profile, event.game] + (event.is_guild_event? ? [event.guild] : []) + friends + fans
   }
 
 	searcher_column :title

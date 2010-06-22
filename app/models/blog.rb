@@ -27,13 +27,17 @@ class Blog < ActiveRecord::Base
     poster.all_guilds + poster.friends.find_all {|f| f.application_setting.recv_blog_feed?} + (poster.is_idol ? poster.fans : [])
   }
   
-  acts_as_shareable :path_reg => /\/blogs\/([\d]+)/, :default_title => lambda {|blog| blog.title}, :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
+  acts_as_shareable :path_reg => /\/blogs\/([\d]+)/, 
+                    :default_title => lambda {|blog| blog.title}, 
+                    :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
 
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}
 
   acts_as_privileged_resources :owner_field => :poster
 
-  acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster}, :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
+  acts_as_commentable :order => 'created_at ASC', 
+                      :delete_conditions => lambda {|user, blog, comment| user == blog.poster || user == comment.poster}, 
+                      :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
 
   acts_as_abstract :columns => [:content]
 
@@ -46,8 +50,6 @@ class Blog < ActiveRecord::Base
 
   validates_size_of :content, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1个字节"
 
-  validates_presence_of :game_id, :message => "不能为空", :on => :create
-
   validate_on_create :game_is_valid
 
   after_save :update_blog_images
@@ -55,10 +57,8 @@ class Blog < ActiveRecord::Base
 protected
 
   def game_is_valid
-    return if game_id.blank?
-    errors.add('game_id', "不存在") unless Game.exists?(game_id)
-    return if poster_id.blank?
-    errors.add('game_id', "该用户没有这个游戏") unless poster.has_game?(game_id)
+    errors.add('game_id', "不存在") if game.blank?
+    errors.add('game_id', "该用户没有这个游戏") if poster and !poster.has_game?(game)
   end
 
   def update_blog_images

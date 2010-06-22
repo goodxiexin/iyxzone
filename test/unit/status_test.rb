@@ -18,11 +18,7 @@ class StatusTest < ActiveSupport::TestCase
     @sensitive = '政府'
   end
 
-  #
-  # case1
-  # create a status and then destroy it
-  #
-  test "case1" do
+  test "create a status" do
     @status1 = Status.create :poster_id => @user.id, :content => 'status'
     @user.reload
     assert_equal @user.statuses_count, 1
@@ -37,11 +33,7 @@ class StatusTest < ActiveSupport::TestCase
     assert_equal @user.statuses_count, 1
   end
 
-  #
-  # case2
-  # status feed
-  #
-  test "case2" do
+  test "status feed" do
     @status = Status.create :poster_id => @user.id, :content => 'status'
     assert @friend.recv_feed?(@status)
     assert @profile.recv_feed?(@status) 
@@ -52,11 +44,7 @@ class StatusTest < ActiveSupport::TestCase
     assert !@profile.recv_feed?(@status)
   end
 
-  #
-  # case3
-  # comment status
-  #
-  test "case3" do
+  test "comment status" do
     @status = Status.create :poster_id => @user.id, :content => 'status'
     
     assert @status.is_commentable_by?(@user)
@@ -85,23 +73,15 @@ class StatusTest < ActiveSupport::TestCase
     assert @comment.id.nil?
   end
   
-  #
-  # case4
-  # friend statuses
-  #
-  test "case4" do
+  test "friend statuses" do
     @status1 = Status.create :poster_id => @user.id, :content => 'status', :created_at => 1.days.ago 
     @status2 = Status.create :poster_id => @user.id, :content => 'status', :created_at => 2.days.ago
     @status3 = Status.create :poster_id => @user.id, :content => 'status', :created_at => 3.days.ago
   
     assert_equal Status.by(@user.id).nonblocked, [@status1, @status2, @status3]
   end
-
-  #
-  # case5
-  # sensitive statuses
-  #
-  test "case5" do
+  
+  test "sensitive statuses" do
     @status = Status.create :poster_id => @user.id, :content => 'status' 
     assert @status.accepted?
 

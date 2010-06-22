@@ -27,7 +27,7 @@ class PollFlowTest < ActionController::IntegrationTest
   # Replace this with your real tests.
   test "GET /polls" do
     @user_sess.get '/polls', {:uid => 'invalid'}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.get '/polls', {:uid => @user.id}
     @user_sess.assert_template 'user/polls/index'
@@ -48,7 +48,7 @@ class PollFlowTest < ActionController::IntegrationTest
 
   test "GET /polls/participated" do
     @user_sess.get '/polls/participated', {:uid => 'invalid'}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.get '/polls/participated', {:uid => @user.id}
     @user_sess.assert_template 'user/polls/participated'
@@ -162,7 +162,7 @@ class PollFlowTest < ActionController::IntegrationTest
     @poll2.unverify
 
     @user_sess.get "/polls/#{@poll2.id}"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
 
   test "POST /polls" do
@@ -189,13 +189,13 @@ class PollFlowTest < ActionController::IntegrationTest
 
   test "PUT /polls/:id" do
     @friend_sess.get "/polls/#{@poll2.id}/edit"
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
     
     @friend_sess.put "/polls/#{@poll2.id}", {:poll => {:explanation => nil}}
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     @user_sess.get "/polls/invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.get "/polls/#{@poll2.id}/edit", {:type => 0}
     @user_sess.assert_template 'user/polls/edit_deadline'
@@ -216,10 +216,10 @@ class PollFlowTest < ActionController::IntegrationTest
     assert_no_difference "PollAnswer.count" do
       @friend_sess.post "/polls/#{@poll1.id}/answers", {:poll => {:answers => [{:description => 'new answer'}]}}
     end
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     @friend_sess.post "/polls/invalid/answers", {:poll => {:answers => [{:description => 'new answer'}]}}
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     assert_difference "@poll1.reload.answers_count" do
       @user_sess.post "/polls/#{@poll1.id}/answers", {:poll => {:answers => [{:description => 'new answer'}]}}
@@ -232,10 +232,10 @@ class PollFlowTest < ActionController::IntegrationTest
 
   test "DELETE /polls/:id" do
     @friend_sess.delete "/polls/#{@poll1.id}"
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     @friend_sess.delete "/polls/invalid"
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     assert_difference "Poll.count", -1 do
       @user_sess.delete "/polls/#{@poll1.id}"
@@ -244,7 +244,7 @@ class PollFlowTest < ActionController::IntegrationTest
     @poll2.unverify
     
     @user_sess.delete "/polls/#{@poll2.id}"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
 
   test "POST /polls/:id/votes" do
@@ -252,7 +252,7 @@ class PollFlowTest < ActionController::IntegrationTest
     assert_no_difference "Vote.count" do
       @user_sess.post "/polls/invalid/votes", {:votes => []}
     end
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     # 更本眉头
     assert_no_difference "Vote.count" do
@@ -295,15 +295,15 @@ class PollFlowTest < ActionController::IntegrationTest
     assert_no_difference "Vote.count" do
       @user_sess.post "/polls/#{@poll4.id}/votes", {:votes => [@poll4.answers.first.id]}
     end
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
 
   test "POST /polls/:id/invitations" do
     @friend_sess.get "/polls/#{@poll1.id}/invitations/new"
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     @friend_sess.get "/polls/invalid/invitations/new"
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     @user_sess.get "/polls/#{@poll1.id}/invitations/new"
     @user_sess.assert_template 'user/polls/invitations/new'
@@ -312,7 +312,7 @@ class PollFlowTest < ActionController::IntegrationTest
     @poll1.unverify
 
     @user_sess.get "/polls/#{@poll1.id}/invitations/new"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     assert_no_difference "PollInvitation.count" do
       @user_sess.post "/polls/#{@poll1.id}/invitations", {:values => [@friend.id]}
@@ -337,15 +337,6 @@ class PollFlowTest < ActionController::IntegrationTest
     assert_no_difference "PollInvitation.count" do
       @user_sess.post "/polls/#{@poll1.id}/invitations", {:values => []}
     end
-  end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end 
   end
 
 end

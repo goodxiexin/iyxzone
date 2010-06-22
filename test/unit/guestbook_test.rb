@@ -6,11 +6,7 @@ class GuestbookTest < ActiveSupport::TestCase
     @user = UserFactory.create
   end
   
-  #
-  # case1
-  # create guestbook
-  # 
-  test "case1" do
+  test "create guestbook" do
     assert_difference "Guestbook.count" do
       Guestbook.create :user_id => @user.id, :priority => Guestbook::Urgent, :description => 'guestbook', :catagory => '日志'
     end
@@ -24,11 +20,7 @@ class GuestbookTest < ActiveSupport::TestCase
     end
   end
 
-  #
-  # case2
-  # admin reply guestbook
-  #
-  test "case2" do
+  test "admin reply guestbook" do
     @guestbook = Guestbook.create :user_id => @user.id, :priority => Guestbook::Urgent, :description => 'guestbook', :catagory => '日志'
     assert_difference "Email.count" do
       @guestbook.set_reply 'haha'

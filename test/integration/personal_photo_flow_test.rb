@@ -58,7 +58,7 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     assert_equal @user_sess.assigns(:albums), [@album4, @album3, @album2, @album1, @album]
 
     @user_sess.get "/personal_albums", {:uid => 'invalid'}
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @album3.unverify
     @user_sess.get "/personal_albums", {:uid => @user.id}
@@ -115,7 +115,7 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     @photo2 = PhotoFactory.create :album_id => @album1.id, :type => 'PersonalPhoto'
 
     @user_sess.get "/personal_albums/invalid"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
    
     @user_sess.get "/personal_albums/#{@album1.id}"
     @user_sess.assert_template "user/albums/show"
@@ -145,7 +145,7 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
       sess.assert_template "user/albums/show"
       assert_equal sess.assigns(:album), @album3
       sess.get "/personal_albums/#{@album4.id}"
-      sess.assert_template "errors/404"
+      sess.assert_not_found
     end
 
     @photo2.verify
@@ -160,7 +160,7 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     @same_game_user_sess.get "/personal_albums/#{@album3.id}"
     @same_game_user_sess.assert_redirected_to new_friend_url(:uid => @user.id)
     @same_game_user_sess.get "/personal_albums/#{@album4.id}"
-    @same_game_user_sess.assert_template "errors/404"
+    @same_game_user_sess.assert_not_found
 
     @stranger_sess.get "/personal_albums/#{@album1.id}"
     @stranger_sess.assert_template "user/albums/show"
@@ -171,7 +171,7 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     @stranger_sess.get "/personal_albums/#{@album3.id}"
     @stranger_sess.assert_redirected_to new_friend_url(:uid => @user.id)
     @stranger_sess.get "/personal_albums/#{@album4.id}"
-    @stranger_sess.assert_template "errors/404"
+    @stranger_sess.assert_not_found
   end
 
   test "POST /personal_albums" do
@@ -191,13 +191,13 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     @album = PersonalAlbumFactory.create :owner_id => @user.id
 
     @user_sess.get "/personal_albums/invalid/edit"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @user_sess.get "/personal_albums/#{@album.id}/edit"
     @user_sess.assert_template "user/albums/edit"
 
     @friend_sess.get "/personal_albums/#{@album.id}/edit"
-    @friend_sess.assert_template "errors/404"
+    @friend_sess.assert_not_found
 
     @user_sess.put "/personal_albums/#{@album.id}", {:album => {:description => 'new'}}
     @album.reload
@@ -205,7 +205,7 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
 
     @album.unverify
     @user_sess.put "/personal_albums/#{@album.id}", {:album => {:description => 'new'}}
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @album.verify
 
@@ -241,15 +241,15 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     assert_equal @photo4.album, @album3
 
     @friend_sess.delete "/personal_albums/#{@album3.id}"
-    @friend_sess.assert_template "errors/404"
+    @friend_sess.assert_not_found
 
     @user_sess.delete "/personal_albums/invalid"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @album3.unverify
 
     @user_sess.delete "/personal_albums/#{@album3.id}"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
   end
   
   test "PUT /personal_photos/:id" do
@@ -259,10 +259,10 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     @photo2 = PhotoFactory.create :album_id => @album2.id, :type => 'PersonalPhoto'
 
     @user_sess.get "/personal_photos/invalid/edit"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @friend_sess.get "/personal_photos/#{@photo1.id}/edit"
-    @friend_sess.assert_template "errors/404"
+    @friend_sess.assert_not_found
 
     @user_sess.get "/personal_photos/#{@photo1.id}/edit"
     @user_sess.assert_template "user/photos/edit"
@@ -322,10 +322,10 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     @photo2 = PhotoFactory.create :album_id => @album2.id, :type => 'PersonalPhoto'
 
     @user_sess.delete "/personal_photos/invalid"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
   
     @friend_sess.delete "/personal_photos/#{@photo1.id}"
-    @friend_sess.assert_template "errors/404"
+    @friend_sess.assert_not_found
 
     @user_sess.delete "/personal_photos/#{@photo1.id}"
     @album1.reload
@@ -333,7 +333,7 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
   
     @photo2.unverify
     @user_sess.delete "/personal_photos/#{@photo1.id}"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
     @album2.reload
     assert_equal @album2.photos_count, 0     
   end
@@ -342,20 +342,20 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     @album = PersonalAlbumFactory.create :owner_id => @user.id
 
     @user_sess.get "/personal_photos/new", {:album_id => 'invalid'}
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @friend_sess.get "/personal_photos/new", {:album_id => @album.id}
-    @friend_sess.assert_template "errors/404"
+    @friend_sess.assert_not_found
 
     @user_sess.get "/personal_photos/new", {:album_id => @album.id}
     @user_sess.assert_template "user/photos/new"
     assert_equal @user_sess.assigns(:album), @album
 
     @friend_sess.post "/personal_photos", {:album_id => @album.id, :Filedata => image_data}
-    @friend_sess.assert_template "errors/404"
+    @friend_sess.assert_not_found
 
     @user_sess.post "/personal_photos", {:album_id => 'invalid', :Filedata => image_data}
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @user_sess.post "/personal_photos", {:album_id => @album.id, :Filedata => image_data}
     @album.reload
@@ -402,20 +402,20 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
     @photo3 = PhotoFactory.create :album_id => @album.id, :type => 'PersonalPhoto'
 
     @user_sess.get "/personal_photos/edit_multiple", {:album_id => @album.id, :ids => ['invalid', @photo2.id, @photo3.id]}
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @friend_sess.get "/personal_photos/edit_multiple", {:album_id => @album.id, :ids => [@photo1.id, @photo2.id, @photo3.id]}
-    @friend_sess.assert_template "errors/404"
+    @friend_sess.assert_not_found
 
     @user_sess.get "/personal_photos/edit_multiple", {:album_id => @album.id, :ids => [@photo1.id, @photo2.id, @photo3.id]}
     @user_sess.assert_template "user/photos/edit_multiple"
     assert_equal @user_sess.assigns(:photos), [@photo3, @photo2, @photo1]
 
     @user_sess.put "/personal_photos/update_multiple", {:album_id => 'invalid', :photos => {@photo1.id => {:notation => 'photo1'}}}
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @friend_sess.put "/personal_photos/update_multiple", {:album_id => @album.id, :photos => {@photo1.id => {:notation => 'photo1'}}}
-    @friend_sess.assert_template "errors/404"
+    @friend_sess.assert_not_found
 
     @user_sess.put "/personal_photos/update_multiple", {:album_id => @album.id, :cover_id => @photo2.id, :photos => {@photo1.id => {:notation => 'photo1'}, @photo2.id => {:notation => 'photo2'}, @photo3.id => {:notation => 'photo3'}}}
     @user_sess.assert_redirected_to personal_album_url(@album)
@@ -436,22 +436,7 @@ class PersonalPhotoFlowTest < ActionController::IntegrationTest
 
     @album.unverify
     @user_sess.put "/personal_photos/update_multiple", {:album_id => @album.id, :photos => {@photo1.id => {:notation => 'new photo1'}}}
-    @user_sess.assert_template "errors/404"
-  end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end
-
-  def image_data
-    path = 'public/images/blank.gif'
-    mimetype = `file -ib #{path}`.gsub(/\n/,"")
-    ActionController::TestUploadedFile.new(path, mimetype)
+    @user_sess.assert_not_found
   end
 
 end

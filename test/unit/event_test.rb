@@ -208,15 +208,42 @@ class EventTest < ActiveSupport::TestCase
     assert @user.recv_notice?(@comment)
   end
 
-  test "event feed" do
-    @guild = GuildFactory.create :character_id => @friend_character.id
-    @guild.memberships.create :user_id => @user.id, :character_id => @friend_character.id, :status => Membership::Member
-    @game = @guild.game
+  test "event feed, normal event" do
+    @game = @user_character.game
     @profile = @user.profile
-    
     @event = EventFactory.create :character_id => @user_character.id
 
-    [@game, @profile, @guild, @friend, @fan, @idol].each {|t| t.reload}
+    [@game, @profile, @friend, @fan, @idol].each {|t| t.reload}
+    assert @profile.recv_feed?(@event)
+    assert @game.recv_feed?(@event)
+    assert @friend.recv_feed?(@event)
+    assert @fan.recv_feed?(@event)
+    assert !@idol.recv_feed?(@event)
+  
+    @event.unverify
+    [@game, @profile, @friend, @fan, @idol].each {|t| t.reload}
+    assert !@profile.recv_feed?(@event)
+    assert !@game.recv_feed?(@event)
+    assert !@friend.recv_feed?(@event)
+    assert !@fan.recv_feed?(@event)
+    assert !@idol.recv_feed?(@event)
+
+    @event.verify
+    [@game, @profile, @friend, @fan, @idol].each {|t| t.reload}
+    assert !@profile.recv_feed?(@event)
+    assert !@game.recv_feed?(@event)
+    assert !@friend.recv_feed?(@event)
+    assert !@fan.recv_feed?(@event)
+    assert !@idol.recv_feed?(@event)
+  end
+  
+  test "event feed, guild event" do
+    @guild = GuildFactory.create :character_id => @user_character.id
+    @game = @guild.game
+    @profile = @user.profile
+    @event = EventFactory.create :character_id => @user_character.id, :guild_id => @guild.id
+
+    [@game, @profile, @friend, @fan, @idol].each {|t| t.reload}
     assert @profile.recv_feed?(@event)
     assert @game.recv_feed?(@event)
     assert @guild.recv_feed?(@event)
@@ -242,7 +269,7 @@ class EventTest < ActiveSupport::TestCase
     assert !@fan.recv_feed?(@event)
     assert !@idol.recv_feed?(@event)
   end
-  
+
   test "sensitive event" do
     @event = EventFactory.create :character_id => @user_character.id
     assert @event.accepted? 

@@ -17,11 +17,7 @@ class PollTest < ActiveSupport::TestCase
     @sensitive = '政府'
   end
 
-  #
-  # case0
-  # create/destroy poll
-  #
-  test "case0" do
+  test "create/destroy poll" do
     @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}]
     @user.reload
     assert_equal @user.polls_count, 1
@@ -40,13 +36,8 @@ class PollTest < ActiveSupport::TestCase
     assert_equal @user.polls_count, 0
     assert_equal @friend.participated_polls_count, 0
   end
-
-  #
-  # case1
-  # simply create a poll with no deadline and public privilege and maximum 1
-  # then vote
-  #
-  test "case1" do
+  
+  test "create a poll with no deadline" do
     assert_difference "Poll.count" do
       @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}]
     end
@@ -100,12 +91,7 @@ class PollTest < ActiveSupport::TestCase
     assert_equal @answer3.votes_count, 1
   end
 
-  #
-  # case2
-  # simply create a poll with deadline and public privilege and maximum 1
-  # then vote
-  #
-  test "case2" do
+  test "create a poll with deadline" do
     assert_difference "Poll.count" do
       @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 1, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}]
     end
@@ -149,12 +135,7 @@ class PollTest < ActiveSupport::TestCase
     end
   end
 
-  #
-  # case3
-  # simply create a poll with deadline and friend privilege and maximum 1
-  # then vote
-  #
-  test "case3" do
+  test "create a poll with friend privilege" do
     assert_difference "Poll.count" do
       @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}]
     end
@@ -198,12 +179,7 @@ class PollTest < ActiveSupport::TestCase
     end
   end
 
-  #
-  # case4
-  # simply create a poll with no deadline and public privilege and maximum 2
-  # then vote
-  #
-  test "case4" do
+  test "create a poll with multiple selection" do
     assert_difference "Poll.count" do
       @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}], :max_multiple => 2
     end
@@ -257,21 +233,13 @@ class PollTest < ActiveSupport::TestCase
     assert_equal @answer3.votes_count, 2
   end
 
-  #
-  # case5
-  # create poll without answers
-  #
-  test "case5" do
+  test "create poll without answers" do
     assert_no_difference "Poll.count" do
       @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => nil
     end    
   end
 
-  #
-  # case6
-  # user's polls list and participated polls list
-  #
-  test "case6" do
+  test "user's polls list and participated polls list" do
     @poll1 = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}], :max_multiple => 2
     sleep 1
     @poll2 = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}], :max_multiple => 2
@@ -304,11 +272,7 @@ class PollTest < ActiveSupport::TestCase
     assert_equal @friend.participated_polls_count, 2
   end
 
-  #
-  # case7
-  # poll feed and vote feed
-  #
-  test "case7" do
+  test "poll feed and vote feed" do
     @guild1 = GuildFactory.create :character_id => @character1.id
     @guild2 = GuildFactory.create :character_id => @character2.id
     @guild2.member_memberships.create :user_id => @user.id, :character_id => @character1.id
@@ -370,11 +334,7 @@ class PollTest < ActiveSupport::TestCase
     assert @fan.recv_feed?(@vote)
   end
 
-  #
-  # case8
-  # comment poll
-  #
-  test "case8" do
+  test "comment poll" do
     @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}], :max_multiple => 2
 
     assert @poll.is_commentable_by?(@user)
@@ -382,11 +342,7 @@ class PollTest < ActiveSupport::TestCase
     assert @poll.is_commentable_by?(@stranger)
   end
 
-  #
-  # case9
-  # dig poll
-  #
-  test "case9" do
+  test "dig poll" do
     @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}], :max_multiple => 2
 
     assert @poll.is_diggable_by?(@user)
@@ -394,11 +350,7 @@ class PollTest < ActiveSupport::TestCase
     assert @poll.is_diggable_by?(@stranger)
   end
 
-  #
-  # case10
-  # add answers
-  #
-  test "case10" do
+  test "add answers" do
     @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}], :max_multiple => 2
 
     @poll.update_attributes(:answers => [{:description => 'answer3'}, {:description => 'answer4'}])
@@ -406,11 +358,7 @@ class PollTest < ActiveSupport::TestCase
     assert_equal @poll.answers_count, 4
   end
 
-  #
-  # case11
-  # sensitive poll
-  #
-  test "case11" do
+  test "sensitive poll" do
     @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}], :max_multiple => 2
     
     assert_difference "Vote.count" do
@@ -448,11 +396,7 @@ class PollTest < ActiveSupport::TestCase
     assert_equal @friend.participated_polls_count, 0
   end
 
-  #
-  # case12
-  # invite some friends
-  #
-  test "case12" do
+  test "invite some friends" do
     @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}], :max_multiple => 2
 
     assert_difference "PollInvitation.count" do

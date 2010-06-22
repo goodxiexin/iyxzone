@@ -3,12 +3,12 @@ class User::Guilds::RequestsController < UserBaseController
   layout 'app'
 
   def new
-    @request_characters = @guild.request_characters.by(current_user.id)
-    @invite_characters = @guild.invite_characters.by(current_user.id)
-    @guild_characters = @guild.characters.by(current_user.id)
-    @user_characters = current_user.characters.match(:game_id => @guild.game_id, :area_id => @guild.game_area_id, :server_id => @guild.game_server_id)
-    @characters = @user_characters - @request_characters - @invite_characters - @guild_characters
-    render :action => 'new', :layout => false
+    if @guild.is_requestable_by? current_user
+      @characters = @guild.requestable_characters_for current_user
+      render :action => 'new', :layout => false
+    else
+      render_not_found
+    end
   end
 
   def create

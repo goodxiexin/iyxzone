@@ -357,20 +357,4 @@ class ParticipationFlowTest < ActionController::IntegrationTest
     end
   end
 
-protected
-
-  module CustomDsl
-    def assert_not_found
-      assert_template 'errors/404'
-    end
-  end
-
-  def login user
-    open_session do |session|
-      session.extend CustomDsl
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end
-
 end

@@ -36,7 +36,7 @@ class GuestbookFlowTest < ActionController::IntegrationTest
 
   test "PUT /admin/guestbooks" do
     @user_sess.get '/admin/guestbooks'
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
     
     @admin_sess.get '/admin/guestbooks'
     @admin_sess.assert_template 'admin/guestbooks/index'
@@ -46,20 +46,11 @@ class GuestbookFlowTest < ActionController::IntegrationTest
     assert_no_difference "Email.count" do
       @user_sess.put "/admin/guestbooks/#{@guestbook.id}", {:guestbook => {:reply => 'soso'}}
     end
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
  
     assert_difference "Email.count" do
       @admin_sess.put "/admin/guestbooks/#{@guestbook.id}", {:guestbook => {:reply => 'soso'}}
     end
   end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
 
 end

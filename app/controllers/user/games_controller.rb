@@ -9,6 +9,8 @@ class User::GamesController < UserBaseController
   PER_PAGE = 10 
 
   def index
+		@games = @user.games.paginate :page => params[:page], :per_page => PER_PAGE
+=begin
     @game_characters = @user.characters.group_by(&:game_id)
     @game_ratings = Rating.by(@user.id).match(:rateable_type => 'Game').group_by(&:rateable_id)
     @game_taggings = Tagging.by(@user.id).match(:taggable_type => 'Game').group_by(&:taggable_id)
@@ -20,9 +22,12 @@ class User::GamesController < UserBaseController
       tags = taggings.blank? ? [] : taggings.map(&:tag)
       [game, characters, average_rating, tags]
     end.paginate :page => params[:page], :per_page => PER_PAGE
+=end
   end
 
   def friends
+    @games = GameCharacter.by(@user.friend_ids).group_by(&:game_id).sort{|a, b| b.second.length <=> a.second.length}.map{|frist, second| second.first.game}.paginate :page => params[:page], :per_page => PER_PAGE
+=begin
     @game_characters = GameCharacter.by(current_user.friend_ids).group_by(&:game_id).sort{|a, b| b.second.length <=> a.second.length}
     @game_ratings = Rating.by(current_user.friend_ids).match(:rateable_type => 'Game').group_by(&:rateable_id)
     @game_taggings = Tagging.by(current_user.friend_ids).match(:taggable_type => 'Game').group_by(&:taggable_id)
@@ -34,6 +39,7 @@ class User::GamesController < UserBaseController
       tags = taggings.blank? ? [] : taggings.map(&:tag)
       [game, characters, average_rating, tags, characters.map(&:user).uniq]
     end.paginate :page => params[:page], :per_page => PER_PAGE 
+=end
   end
 
 
@@ -91,6 +97,8 @@ protected
     if ["index", "interested"].include? params[:action]
       @user = User.find(params[:uid])
       require_friend_or_owner @user
+    elsif ["friends", "hot", "sexy", "beta"].include? params[:action]
+			@user = current_user
     end
   end
 

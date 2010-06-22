@@ -1,5 +1,9 @@
   <table class="table01 gameList" cellpadding="0" cellspacing="1">
-		<% game_items.each do |game, characters, average_rating, tags, users| %>
+		<% games.each do |game| %>
+			<% users = game.characters.by(cuser.friend_ids).map(&:user)%>
+			<% users_id = users.map(&:id) %>
+			<% average_rating = game.average_rating_by users_id %>
+			<% tags = game.tags_by users_id %>
 			<tr>
 				<td>
 					<div class="imgwrap">
@@ -44,4 +48,4 @@
 			</tr>
 		<% end %>
 	</table>
-	<%= will_paginate game_items %>
+	<%= will_paginate games %>

@@ -14,6 +14,8 @@ class DigTest < ActiveSupport::TestCase
     @friend = UserFactory.create
     FriendFactory.create @user, @friend
     @user.reload and @friend.reload
+
+    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id
   end
 
   test "counter" do

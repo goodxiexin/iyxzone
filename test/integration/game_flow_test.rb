@@ -14,6 +14,10 @@ class GameFlowTest < ActionController::IntegrationTest
 		gs = GameServer.create(:name => 'server1', :area_id => ga.id, :game_id => @game.id)
 		gs.save
 
+		# create a idol
+    @idol = UserFactory.create_idol
+    @fanship = Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+    @user.reload and @idol.reload
 
     # create friends
     @diff_friend = UserFactory.create
@@ -39,11 +43,15 @@ class GameFlowTest < ActionController::IntegrationTest
 
     @comrade_stranger = UserFactory.create
     GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @comrade_stranger.id
+		
+		# a beta game
+    @game4 = GameFactory.create :sale_date => Date.today + 1.day
+		@game5 = GameFactory.create :sale_date => Date.today + 2.day
 
 		# game attention
 		GameAttention.create(:user_id => @user.id, :game_id => @game2.id)
 		GameAttention.create(:user_id => @diff_friend.id, :game_id => @game.id)
-		GameAttention.create(:user_id => @same_game_friend.id, :game_id => @game.id)
+		GameAttention.create(:user_id => @same_game_friend.id, :game_id => @game2.id)
 
     # login
     @user_sess = login @user
@@ -53,6 +61,7 @@ class GameFlowTest < ActionController::IntegrationTest
     @diff_stranger_sess = login @diff_stranger
     @same_game_stranger_sess = login @same_game_stranger
 		@comrade_stranger_sess = login @comrade_stranger
+		@idol_sess = login @idol
   
 	end
 
@@ -64,16 +73,24 @@ class GameFlowTest < ActionController::IntegrationTest
 		# self
 		@user_sess.get "/games?uid=#{@user.id}"
     @user_sess.assert_template 'user/games/index'
-    assert_equal @user_sess.assigns(:game_characters).first, [@game.id,[@character] ]
+    assert_equal @user_sess.assigns(:games), [@game]
 		
 		# friend
 		@user_sess.get "/games?uid=#{@diff_friend.id}"
     @user_sess.assert_template 'user/games/index'
-    assert_equal @user_sess.assigns(:game_characters).first, [@diff_friend_character.game.id,[@diff_friend_character] ]
+    assert_equal @user_sess.assigns(:games), [@game2]
 
 		# stranger
 		@user_sess.get "/games?uid=#{@diff_stranger.id}"
     @user_sess.assert_redirected_to new_friend_url(:uid => @diff_stranger.id)
+
+		# idol
+		@user_sess.get "/games?uid=#{@idol.id}"
+    @user_sess.assert_template 'user/games/index'
+
+		# fan
+		@idol_sess.get "/games?uid=#{@user.id}"
+    @idol_sess.assert_template 'user/games/index'
 	end
 
 	test "GET show" do
@@ -96,13 +113,13 @@ class GameFlowTest < ActionController::IntegrationTest
 	test "GET hot" do
 		@user_sess.get "/games/hot"
 		@user_sess.assert_template "user/games/hot"
-		assert_equal @user_sess.assigns(:games), [@game, @game2]
+		assert_equal @user_sess.assigns(:games), [@game2, @game]
 	end
 
 	test "GET sexy" do
 		@user_sess.get "/games/sexy"
 		@user_sess.assert_template "user/games/sexy"
-		assert_equal @user_sess.assigns(:games).first, @game
+		assert_equal @user_sess.assigns(:games), [@game, @game2, @game3, @game4, @game5]
 	end
 
 	test "GET interested" do
@@ -112,19 +129,36 @@ class GameFlowTest < ActionController::IntegrationTest
 
 		@user_sess.get "/games/interested?uid=#{@user.id}"
 		@user_sess.assert_template "user/games/interested"
-		assert_equal @user_sess.assigns(:games).first, @game2
+		assert_equal @user_sess.assigns(:games), [@game2]
+
+		# friend
+		@user_sess.get "/games/interested?uid=#{@diff_friend.id}"
+    @user_sess.assert_template 'user/games/interested'
+    assert_equal @user_sess.assigns(:games), [@game]
+
+		# stranger
+		@user_sess.get "/games/interested?uid=#{@diff_stranger.id}"
+    @user_sess.assert_redirected_to new_friend_url(:uid => @diff_stranger.id)
+
+		# idol
+		@user_sess.get "/games/interested?uid=#{@idol.id}"
+    @user_sess.assert_template 'user/games/interested'
+
+		# fan
+		@idol_sess.get "/games/interested?uid=#{@user.id}"
+    @idol_sess.assert_template 'user/games/interested'
 	end
 
 	test "GET beta" do
 		@user_sess.get "/games/beta"
 		@user_sess.assert_template "user/games/beta"
-		assert_equal @user_sess.assigns(:games), []
+		assert_equal @user_sess.assigns(:games), [@game4, @game5]
 	end
 
   test "GET friends" do
 		@user_sess.get "/games/friends"
 		@user_sess.assert_template "user/games/friends"
-		assert_equal @user_sess.assigns(:game_characters).first.first, @game.id 
+		assert_equal @user_sess.assigns(:games), [@game,@game2]
 	end
 
 private

@@ -46,20 +46,20 @@ class AvatarFlowTest < ActionController::IntegrationTest
 
     @album.unverify
     @user_sess.get "/avatars/new", {:at => 'profile'}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @album.verify
-    @user_sess.post "/avatars", {:at => 'profile', :photo => {:uploaded_data => uploaded_data}}
+    @user_sess.post "/avatars", {:at => 'profile', :photo => {:image_data => image_data}}
     @user.reload and @album.reload
     assert_equal @user.avatar, @user_sess.assigns(:photo)
     assert_equal @album.cover, @user_sess.assigns(:photo)
 
     @album.unverify
-    @user_sess.post "/avatars", {:at => 'profile', :photo => {:uploaded_data => uploaded_data}}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.post "/avatars", {:at => 'profile', :photo => {:image_data => image_data}}
+    @user_sess.assert_not_found
 
     @album.verify
-    @user_sess.post "/avatars", {:at => 'album', :photo => {:uploaded_data => uploaded_data}}
+    @user_sess.post "/avatars", {:at => 'album', :photo => {:image_data => image_data}}
     @user.reload and @album.reload
     assert_equal @user.avatar, @user_sess.assigns(:photo)
     assert_equal @album.cover, @user_sess.assigns(:photo)
@@ -72,7 +72,7 @@ class AvatarFlowTest < ActionController::IntegrationTest
     @album.set_cover @photo1
 
     @user_sess.get "/avatar_albums/invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @album.unverify
     @user_sess.get "/avatar_albums/#{@album.id}"
@@ -110,11 +110,11 @@ class AvatarFlowTest < ActionController::IntegrationTest
 
   test "PUT /avatar_albums/:id" do
     @user_sess.put "/avatar_albums/invalid", {:album => {:description => 'haha'}}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @album.unverify
     @user_sess.put "/avatar_albums/#{@album.id}", {:album => {:description => 'haha'}}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @album.verify
     @user_sess.put "/avatar_albums/#{@album.id}", {:album => {:description => 'haha'}}
@@ -122,30 +122,30 @@ class AvatarFlowTest < ActionController::IntegrationTest
     assert_equal @album.description, 'haha'
 
     @friend_sess.put "/avatar_albums/#{@album.id}", {:album => {:description => 'haha'}}
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     @same_game_user_sess.put "/avatar_albums/#{@album.id}", {:album => {:description => 'haha'}}
-    @same_game_user_sess.assert_template 'errors/404'
+    @same_game_user_sess.assert_not_found
 
     @stranger_sess.put "/avatar_albums/#{@album.id}", {:album => {:description => 'haha'}}
-    @stranger_sess.assert_template 'errors/404'
+    @stranger_sess.assert_not_found
 
     @fan_sess.put "/avatar_albums/#{@album.id}", {:album => {:description => 'haha'}}
-    @fan_sess.assert_template 'errors/404'
+    @fan_sess.assert_not_found
 
     @idol_sess.put "/avatar_albums/#{@album.id}", {:album => {:description => 'haha'}}
-    @idol_sess.assert_template 'errors/404'    
+    @idol_sess.assert_not_found    
   end
 
   test "GET /avatars/:id" do
     @photo = PhotoFactory.create :album_id => @album.id, :type => 'Avatar'
 
     @user_sess.get "/avatars/invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @photo.unverify
     @user_sess.get "/avatars/#{@photo.id}"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @photo.verify
     @user_sess.get "/avatars/#{@photo.id}"
@@ -189,19 +189,19 @@ class AvatarFlowTest < ActionController::IntegrationTest
     @user_sess.assert_template "errors/404"
 
     @friend_sess.get "/avatars/#{@photo.id}/edit"
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     @same_game_user_sess.get "/avatars/#{@photo.id}/edit"
-    @same_game_user_sess.assert_template 'errors/404'
+    @same_game_user_sess.assert_not_found
 
     @stranger_sess.get "/avatars/#{@photo.id}/edit"
-    @stranger_sess.assert_template 'errors/404'
+    @stranger_sess.assert_not_found
 
     @fan_sess.get "/avatars/#{@photo.id}/edit"
-    @fan_sess.assert_template 'errors/404'
+    @fan_sess.assert_not_found
 
     @idol_sess.get "/avatars/#{@photo.id}/edit"
-    @idol_sess.assert_template 'errors/404'
+    @idol_sess.assert_not_found
     
     # update
     @photo.unverify
@@ -223,19 +223,19 @@ class AvatarFlowTest < ActionController::IntegrationTest
     assert_equal @user.avatar, @photo 
  
     @friend_sess.put "/avatars/#{@photo.id}", {:photo => {:is_cover => 1}}
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
 
     @same_game_user_sess.put "/avatars/#{@photo.id}", {:photo => {:is_cover => 1}}
-    @same_game_user_sess.assert_template 'errors/404'
+    @same_game_user_sess.assert_not_found
 
     @stranger_sess.put "/avatars/#{@photo.id}", {:photo => {:is_cover => 1}}
-    @stranger_sess.assert_template 'errors/404'
+    @stranger_sess.assert_not_found
 
     @fan_sess.put "/avatars/#{@photo.id}", {:photo => {:is_cover => 1}}
-    @fan_sess.assert_template 'errors/404'
+    @fan_sess.assert_not_found
 
     @idol_sess.put "/avatars/#{@photo.id}", {:photo => {:is_cover => 1}}
-    @idol_sess.assert_template 'errors/404'
+    @idol_sess.assert_not_found
   end
 
   test "DELETE /avatars/:id" do
@@ -269,26 +269,4 @@ class AvatarFlowTest < ActionController::IntegrationTest
     assert @album.photos.blank?
   end
   
-protected
-
-  module CustomDsl
-    def assert_not_found
-      assert_template "errors/404"
-    end
-  end
-
-  def login user
-    open_session do |session|
-      session.extend CustomDsl
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end 
-  end
-
-  def uploaded_data
-    path = 'public/images/blank.gif'
-    mimetype = `file -ib #{path}`.gsub(/\n/,"")
-    ActionController::TestUploadedFile.new(path, mimetype)
-  end
-
 end

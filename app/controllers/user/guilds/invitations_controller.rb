@@ -8,6 +8,7 @@ class User::Guilds::InvitationsController < UserBaseController
 
   def create
     @characters = GameCharacter.find params[:values]
+
     if @guild.invite @characters #update_attributes(:invitees => params[:values])
       redirect_to guild_url(@guild)
     else
@@ -39,8 +40,8 @@ protected
       require_verified @guild
       require_owner @guild.president
     elsif ['edit', 'accept', 'decline'].include? params[:action]
-      @invitation = Membership.find(params[:id])
-      @guild = @invitation.guild
+      @guild = Guild.find(params[:guild_id])
+      @invitation = @guild.invitations.find(params[:id])
       require_owner @invitation.user
     end
   end

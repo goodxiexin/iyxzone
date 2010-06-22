@@ -20,16 +20,7 @@ class SubdomainFlowTest < ActionController::IntegrationTest
     assert_equal @idol_sess.assigns(:user), @idol
   
     @user_sess.get "/non_exist_subdoamin"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
 
 end

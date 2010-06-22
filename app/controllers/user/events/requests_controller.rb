@@ -7,7 +7,7 @@ class User::Events::RequestsController < UserBaseController
       @characters = @event.requestable_characters_for current_user
       render :action => 'new', :layout => false
     else
-      render :template => 'errors/404'
+      render_not_found
     end
   end
 

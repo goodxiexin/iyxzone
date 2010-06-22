@@ -79,10 +79,10 @@ class IdolFlowTest < ActionController::IntegrationTest
     @user2_sess.post "/idols/#{@idol1.id}/follow", {:at => 'idol_list'}
 
     @idol1_sess.get '/fans', {:uid => 'invalid'}
-    @idol1_sess.assert_template 'errors/404'
+    @idol1_sess.assert_not_found
 
     @idol1_sess.get '/fans', {:uid => @user1.id}
-    @idol1_sess.assert_template 'errors/404'
+    @idol1_sess.assert_not_found
 
     @idol1_sess.get '/fans', {:uid => @idol1.id}
     @idol1_sess.assert_template 'user/fans/index'
@@ -91,17 +91,17 @@ class IdolFlowTest < ActionController::IntegrationTest
     assert_no_difference "Fanship.count" do
       @idol1_sess.delete "/fans/invalid"
     end
-    @idol1_sess.assert_template 'errors/404'
+    @idol1_sess.assert_not_found
 
     assert_no_difference "Fanship.count" do
       @idol1_sess.delete "/fans/#{@idol2.id}"
     end
-    @idol1_sess.assert_template 'errors/404'
+    @idol1_sess.assert_not_found
 
     assert_no_difference "Fanship.count" do
       @idol2_sess.delete "/fans/#{@user1.id}"
     end
-    @idol2_sess.assert_template 'errors/404'
+    @idol2_sess.assert_not_found
 
     assert_difference "Fanship.count", -1 do
       @idol1_sess.delete "/fans/#{@user1.id}"
@@ -111,14 +111,5 @@ class IdolFlowTest < ActionController::IntegrationTest
       @idol1_sess.delete "/fans/#{@user2.id}"
     end
   end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
 
 end

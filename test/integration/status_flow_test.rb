@@ -27,12 +27,12 @@ class StatusFlowTest < ActionController::IntegrationTest
     @stranger_sess = login @stranger
  
     # create status
-    @status1 = @user_sess.create_status :content => 'status1'
+    @status1 = StatusFactory.create :poster_id => @user.id
     sleep 1
-    @status2 = @user_sess.create_status :content => 'status2'
-    @status3 = @friend_sess.create_status :content => 'status3'
+    @status2 = StatusFactory.create :poster_id => @user.id
+    @status3 = StatusFactory.create :poster_id => @friend.id
     sleep 1
-    @status4 = @friend_sess.create_status :content => 'status4'
+    @status4 = StatusFactory.create :poster_id => @friend.id
   end
 
   test "GET index" do
@@ -56,7 +56,7 @@ class StatusFlowTest < ActionController::IntegrationTest
     assert_equal @user_sess.assigns(:statuses), [@status2]
 
     @user_sess.get "/statuses?uid=3333"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
 
   test "POST create" do
@@ -76,25 +76,5 @@ class StatusFlowTest < ActionController::IntegrationTest
     @user.reload
     assert_equal @user.statuses_count, 1
   end
-
-private
- 
-  module CustomDsl 
-
-    def create_status params
-      post "/statuses", {:status => params}
-      assigns(:status)
-    end  
-  
-  end  
-
-  def login user
-    open_session do |session|
-      session.extend CustomDsl 
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
-
 
 end

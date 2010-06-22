@@ -16,10 +16,10 @@ class PokeFlowTest < ActionController::IntegrationTest
 
   test "GET /pokes/new" do
     @user_sess.get "/pokes/new"
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @user_sess.get "/pokes/new", {:recipient_id => 'invalid'}
-    @user_sess.assert_template "errors/404"
+    @user_sess.assert_not_found
 
     @user_sess.get "/pokes/new", {:recipient_id => @friend.id}
     @user_sess.assert_template "user/pokes/new"
@@ -60,12 +60,12 @@ class PokeFlowTest < ActionController::IntegrationTest
     assert_no_difference "PokeDelivery.count" do
       @user_sess.delete "/pokes/#{@delivery.id}"
     end
-    @user_sess.assert_template "errors/404" 
+    @user_sess.assert_not_found 
 
     assert_no_difference "PokeDelivery.count" do
       @friend_sess.delete "/pokes/invalid"
     end
-    @friend_sess.assert_template "errors/404" 
+    @friend_sess.assert_not_found 
 
     assert_difference "PokeDelivery.count", -1 do
       @friend_sess.delete "/pokes/#{@delivery.id}"
@@ -82,14 +82,5 @@ class PokeFlowTest < ActionController::IntegrationTest
     @friend.reload
     assert_equal @friend.poke_deliveries_count, 0
   end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end   
 
 end

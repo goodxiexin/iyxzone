@@ -13,13 +13,13 @@ class SkinTest < ActiveSupport::TestCase
 
   test "create skin with invalid parameters" do
     skin = Skin.create(:name => "default", :css => "home", :thumbnail => "default.png", :category => nil, :privilege => Skin::PUBLIC)
-    assert !skin.errors.on(:category).nil?
+    assert_not_nil skin.errors.on(:category)
 
     skin = Skin.create(:name => "default", :css => "home", :thumbnail => "default.png", :category => 'Profile', :privilege => nil)
-    assert !skin.errors.on(:privilege).nil? 
+    assert_not_nil skin.errors.on(:privilege)
  
     skin = Skin.create(:name => "default", :css => "home", :thumbnail => "default.png", :category => 'pp', :privilege => Skin::PUBLIC)
-    assert !skin.errors.on(:category).nil? 
+    assert_not_nil skin.errors.on(:category)
   end
 
   test "simply create a public skin" do

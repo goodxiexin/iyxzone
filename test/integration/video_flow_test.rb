@@ -64,22 +64,22 @@ class VideoFlowTest < ActionController::IntegrationTest
     assert_equal @video1.title, 'new title'
 
     @user_sess.get "/videos/invalid/edit"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.put "/videos/invalid", {:video => {:title => 'new title'}}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.get "/videos/#{@video5.id}/edit"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.put "/videos/#{@video5.id}", {:video => {:title => 'new title'}}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
 =end
 
   test "GET /videos" do
     @user_sess.get "/videos", {:uid => 'invalid'}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.get "/videos", {:uid => @user.id}
     @user_sess.assert_template 'user/videos/index'
@@ -108,7 +108,7 @@ class VideoFlowTest < ActionController::IntegrationTest
 
   test "GET /videos/relative" do
     @user_sess.get "/videos/relative", {:uid => 'invalid'}
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.get "/videos/relative", {:uid => @user.id}
     @user_sess.assert_template 'user/videos/relative'
@@ -180,7 +180,7 @@ class VideoFlowTest < ActionController::IntegrationTest
 
   test "GET /videos/:id/show" do
     @user_sess.get "/videos/invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @user_sess.get "/videos/#{@video1.id}"
     @user_sess.assert_template 'user/videos/show'
@@ -211,7 +211,7 @@ class VideoFlowTest < ActionController::IntegrationTest
     assert_equal @friend_sess.assigns(:video), @video3 
 
     @friend_sess.get "/videos/#{@video4.id}"
-    @friend_sess.assert_template 'errors/404'
+    @friend_sess.assert_not_found
     
     @same_game_user_sess.get "/videos/#{@video1.id}"
     @same_game_user_sess.assert_template 'user/videos/show'
@@ -225,7 +225,7 @@ class VideoFlowTest < ActionController::IntegrationTest
     @same_game_user_sess.assert_redirected_to new_friend_url(:uid => @user.id)
 
     @same_game_user_sess.get "/videos/#{@video4.id}"
-    @same_game_user_sess.assert_template 'errors/404'
+    @same_game_user_sess.assert_not_found
 
     @stranger_sess.get "/videos/#{@video1.id}"
     @stranger_sess.assert_template 'user/videos/show'
@@ -238,7 +238,7 @@ class VideoFlowTest < ActionController::IntegrationTest
     @stranger_sess.assert_redirected_to new_friend_url(:uid => @user.id)
 
     @stranger_sess.get "/videos/#{@video4.id}"
-    @stranger_sess.assert_template 'errors/404'
+    @stranger_sess.assert_not_found
   end
 
   test "DELETE /videos/:id" do
@@ -249,27 +249,18 @@ class VideoFlowTest < ActionController::IntegrationTest
     assert_no_difference "Video.count" do
       @user_sess.delete "/videos/invalid"
     end
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     assert_no_difference "Video.count" do
       @user_sess.delete "/videos/#{@video5.id}"
     end
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
 
     @video2.unverify
     assert_no_difference "Video.count" do
       @user_sess.delete "/videos/#{@video2.id}"
     end
-    @user_sess.assert_template 'errors/404'
+    @user_sess.assert_not_found
   end
-
-protected
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
 
 end

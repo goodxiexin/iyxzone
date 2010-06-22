@@ -295,61 +295,16 @@ class VideoTest < ActiveSupport::TestCase
     assert_no_difference "Comment.count" do
       @video.comments.create :poster_id => @user.id, :recipient_id => nil, :content => 'a'
     end
- 
-    @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
 
-    @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert @comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @same_game_user.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert @comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @stranger.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert @comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @fan.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert @comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @idol.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert @comment.is_deleteable_by?(@idol)
-
+    [@user, @friend1, @same_game_user, @stranger, @fan, @idol].each do |u|
+      comment = @video.comments.create :poster_id => u.id, :content => 'comment', :recipient_id => @user.id
+      assert comment.is_deleteable_by?(@user)
+      assert comment.is_deleteable_by?(u)
+      ([@friend1, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end
+    end 
+    
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
 
     assert @video.is_commentable_by?(@user)
@@ -359,50 +314,14 @@ class VideoTest < ActiveSupport::TestCase
     assert @video.is_commentable_by?(@fan)
     assert @video.is_commentable_by?(@idol)
     
-    @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert @comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @same_game_user.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert @comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @fan.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert @comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @idol.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert @comment.is_deleteable_by?(@idol)
+    [@user, @friend1, @same_game_user, @fan, @idol].each do |u|
+      comment = @video.comments.create :poster_id => u.id, :content => 'comment', :recipient_id => @user.id
+      assert comment.is_deleteable_by?(@user)
+      assert comment.is_deleteable_by?(u)
+      ([@friend1, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end
+    end 
 
     @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
 
@@ -413,43 +332,16 @@ class VideoTest < ActiveSupport::TestCase
     assert @video.is_commentable_by?(@fan)
     assert @video.is_commentable_by?(@idol)
  
-    @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
+    [@user, @friend1, @fan, @idol].each do |u|
+      comment = @video.comments.create :poster_id => u.id, :content => 'comment', :recipient_id => @user.id
+      assert comment.is_deleteable_by?(@user)
+      assert comment.is_deleteable_by?(u)
+      ([@friend1, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end
+    end
 
-    @comment = @video.comments.create :poster_id => @friend1.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert @comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @fan.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert @comment.is_deleteable_by?(@fan)
-    assert !@comment.is_deleteable_by?(@idol)
-
-    @comment = @video.comments.create :poster_id => @idol.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
-    assert !@comment.is_deleteable_by?(@fan)
-    assert @comment.is_deleteable_by?(@idol)
-
-    @video = videofactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => privilegedresource::owner
+    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
 
     assert @video.is_commentable_by?(@user)
     assert !@video.is_commentable_by?(@friend1)
@@ -457,13 +349,14 @@ class VideoTest < ActiveSupport::TestCase
     assert !@video.is_commentable_by?(@stranger)
     assert !@video.is_commentable_by?(@fan)
     assert !@video.is_commentable_by?(@idol)
-    
-    @comment = @video.comments.create :poster_id => @user.id, :content => 'comment', :recipient_id => @user.id
-    assert !@comment.id.nil?
-    assert @comment.is_deleteable_by?(@user)
-    assert !@comment.is_deleteable_by?(@friend1)
-    assert !@comment.is_deleteable_by?(@same_game_user)
-    assert !@comment.is_deleteable_by?(@stranger)
+  
+    [@user].each do |u|
+      comment = @video.comments.create :poster_id => u.id, :content => 'comment', :recipient_id => @user.id
+      assert comment.is_deleteable_by?(@user)
+      ([@friend1, @same_game_user, @stranger, @fan, @idol] - [u]).each do |f|
+        assert !comment.is_deleteable_by?(f)
+      end
+    end   
   end
 
   test "comment notice" do
