@@ -12,15 +12,21 @@ class Profile < ActiveRecord::Base
 
   acts_as_viewable :create_conditions => lambda {|profile, user| profile.user != user}
 
-  acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, :path_reg => /\/profiles\/([\d]+)/
+  acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, 
+                    :path_reg => /\/profiles\/([\d]+)/,
+                    :create_conditions => lambda {|user, profile| profile.available_for? user.relationship_with(profile.user)}
   
   acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user}
 
 	acts_as_resource_feeds :recipients => lambda {|profile| [profile] + profile.user.friends + (profile.user.is_idol ? profile.user.fans : [])}
 
-  acts_as_taggable :delete_conditions => lambda {|profile, user| profile.user == user}, :create_conditions => lambda {|tagging, profile, user| (tagging.nil? || tagging.created_at < 10.days.ago) and user.relationship_with(profile.user) == 'friend'}
+  acts_as_taggable :delete_conditions => lambda {|profile, user| profile.user == user}, 
+                   :create_conditions => lambda {|tagging, profile, user| (tagging.nil? || tagging.created_at < 10.days.ago) and user != profile.user and user.relationship_with(profile.user) == 'friend'}
 
-  acts_as_commentable :order => 'created_at DESC', :delete_conditions => lambda {|user, profile, comment| profile.user == user}, :view_conditions => lambda {|user, profile| profile.user.is_idol or profile.user.privacy_setting.wall?(user.relationship_with profile.user)}, :create_conditions => lambda {|user, profile| profile.user.privacy_setting.leave_wall_message?(user.relationship_with profile.user)}
+  acts_as_commentable :order => 'created_at DESC', 
+                      :delete_conditions => lambda {|user, profile, comment| profile.user == user}, 
+                      :view_conditions => lambda {|user, profile| profile.user.is_idol or profile.user.privacy_setting.wall?(user.relationship_with profile.user)}, 
+                      :create_conditions => lambda {|user, profile| profile.user.is_idol or profile.user.privacy_setting.leave_wall_message?(user.relationship_with profile.user)}
 
   validate :skin_is_accessible
 
@@ -115,11 +121,7 @@ class Profile < ActiveRecord::Base
   
   attr_readonly :user_id
 
-  validates_presence_of :login, :message => "不能为空"
-
   validates_size_of :login, :within => 2..100, :too_long => "最长100个字符", :too_short => "最短2个字符"
-
-  validates_presence_of :gender, :message => "不能为空"
 
   validates_inclusion_of :gender, :in => ['male', 'female'], :message => "只能是male或者female"
 
@@ -131,26 +133,24 @@ class Profile < ActiveRecord::Base
   
   validate :district_is_valid
 
-  validates_size_of :qq, :within => 4..15, :too_short => "最短4位", :too_long => "最长15位", :if => "!qq.blank?"
+  validates_size_of :qq, :within => 4..15, :too_short => "最短4位", :too_long => "最长15位", :allow_blank => true
 
-  validates_format_of :qq, :with => /\d+/, :message => "只能是数字", :if => "!qq.blank?"
+  validates_format_of :qq, :with => /\d+/, :message => "只能是数字", :allow_blank => true
 
-  validates_size_of :phone, :within => 7..15, :too_short => "最短7位", :too_long => "最长15位", :if => "!phone.blank?"
+  validates_size_of :phone, :within => 7..15, :too_short => "最短7位", :too_long => "最长15位", :allow_blank => true
 
-  validates_format_of :phone, :with => /\d+(-(\d+))*/, :message => "只能是数字或者-", :if => "!phone.blank?"
+  validates_format_of :phone, :with => /\d+(-(\d+))*/, :message => "只能是数字或者-", :allow_blank => true
 
-  validates_format_of :website, :with => /^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/, :message => "非法的url", :if => "!website.blank?"
+  validates_format_of :website, :with => /^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/, :message => "非法的url", :allow_blank => true
 
 protected
 
   def birthday_is_valid
     return if birthday.blank?
-    if birthday > Time.now
+    if birthday >= Time.now.beginning_of_day
       errors.add(:birthday, "生日比今天还晚")
-      return
     elsif birthday < 40.years.ago
       errors.add(:birthday, "你这么老了阿")
-      return
     end
   end
 
@@ -160,12 +160,12 @@ protected
   end
 
   def city_is_valid
-    return if region.blank? or city_id.blank?
+    return if city_id.blank?
     errors.add(:city_id, "不存在") unless City.exists? :region_id => region_id, :id => city_id
   end
 
   def district_is_valid
-    return if city.blank? or district_id.blank?
+    return if district_id.blank?
     errors.add(:district_id, "不存在") unless District.exists? :city_id => city_id, :id => district_id
   end
 

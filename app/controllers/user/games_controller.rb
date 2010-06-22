@@ -42,7 +42,6 @@ class User::GamesController < UserBaseController
 =end
   end
 
-
   #
   # sexy 和 hot 的区别是
   # sexy是按照过去一周这个游戏有多少游戏角色而定的

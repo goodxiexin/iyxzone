@@ -29,6 +29,7 @@ end
 Factory.define :game_character do |c|
   c.sequence(:name) {|n| "character-#{n}"}
   c.level 1
+  c.playing 1
 end
 
 Factory.define :blog do |b|
@@ -106,4 +107,16 @@ end
 
 Factory.define :status do |s|
   s.sequence(:content) {|n| "content-#{n}"}
+end
+
+Factory.define :region do |r|
+  r.sequence(:name) {|n| "region-#{n}"}
+end
+
+Factory.define :city do |c|
+  c.sequence(:name) {|n| "city-#{n}"}
+end
+
+Factory.define :district do |d|
+  d.sequence(:name) {|n| "district-#{n}"}
 end

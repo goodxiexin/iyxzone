@@ -25,7 +25,6 @@ class Notice < ActiveRecord::Base
   def read_by user, single=false
     if single
       update_attribute('read', '1')
-      user.raw_decrement :unread_notices_count, 1
     else
       notices = user.notices.unread.find_all {|n| self.has_same_source_with? n}
       Notice.update_all("notices.read = 1", {:user_id => user.id, :id => notices.map(&:id)})

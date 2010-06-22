@@ -48,6 +48,7 @@ class RatingTest < ActiveSupport::TestCase
 		assert_equal @game.ratings_count, 2
 		assert @game.rated_by?(@user1)
 		assert_equal @game.average_rating, 4.5
+		assert_equal @game.average_rating_by([@user.id,@user1.id]), 4.5
 
 		# 第一个人打第二次分
 		rating6.created_at = 11.days.ago

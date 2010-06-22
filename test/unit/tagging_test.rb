@@ -38,11 +38,15 @@ class TaggingTest < ActiveSupport::TestCase
   end
 
   # 标记(游戏)
-  test "标记计数器" do
+  test "标签相关方法" do
 		# 标记一次
 		@game.add_tag @user1, "hallo"
     @game.reload
+		
+		assert @game.tagged_by?(@user1)
+
 		tag = Tag.find_by_name("hallo")
+		assert_equal @game.tags_by(@user1.id), [tag]
     assert_equal tag.taggings_count, 1
     assert_equal @game.taggings.count, 1
 
@@ -50,8 +54,13 @@ class TaggingTest < ActiveSupport::TestCase
 		@game.add_tag @user2, "haliluya"
     @game.reload
 		@tag.reload
+
+		assert @game.tagged_by?(@user2)
+
     assert_equal @tag.taggings_count, 1
     assert_equal @game.taggings.count, 2
+
+		assert_equal @game.tags_by([@user1.id, @user2.id]), [tag, @tag]
 
 		@game.taggings.destroy_all
 		tag.reload
