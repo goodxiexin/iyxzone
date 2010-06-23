@@ -3,80 +3,130 @@ require 'test_helper'
 class NotificationTest < ActiveSupport::TestCase
 
   def setup
-    @user1 = User.find(1)
-    @user2 = User.find(2)
-    @user3 = User.find(3)
-    @user4 = User.find(4)
+    @user = UserFactory.create
+    @character = GameCharacterFactory.create :user_id => @user.id
+    @friend = UserFactory.create
+    @friend_character = GameCharacterFactory.create :game_id => @character.game_id, :user_id => @friend.id
+    @stranger = UserFactory.create
+    @stranger_character = GameCharacterFactory.create :game_id => @character.game_id, :user_id => @stranger.id
+
+    FriendFactory.create @user, @friend
+
+    @president = UserFactory.create
+    @president_character = GameCharacterFactory.create :game_id => @character.game_id, :user_id => @president.id
+		@guild = GuildFactory.create :character_id => @president_character.id
+
+  end
+#=begin
+  test "合法性" do
+    notification1 = Notification.create(:user_id => nil, :data => 'd', :category => 1)
+    assert !notification1.save
+
+    notification2 = Notification.create(:user_id => 2, :data => nil, :category => 1)
+    assert !notification2.save
+		
+    notification3 = Notification.create(:user_id => 2, :data => 'haha', :category => nil)
+    assert !notification3.save
+		
+    notification4 = Notification.create(:user_id => 2, :data => 'haha', :category => 1)
+    assert notification4.save
   end
 
-  test "没有接受者" do
-    n = Notification.create(:user_id => nil)
-    assert_equal n.errors.on_base, "没有接受者"
-  end
+  test "好友请求" do
+		# 拒绝好友请求
+		friendship2 = Friendship.create(:friend_id => @user.id, :user_id => @stranger.id, :status => 0)
+    assert_no_difference "@user.reload.notifications_count" do
+			assert_no_difference "@user.reload.unread_notifications_count" do
+				assert_difference "@stranger.reload.notifications_count" do
+					assert_difference "@stranger.reload.unread_notifications_count" do
+						friendship2.decline
+					end
+				end
+			end
+		end
 
-  test "没有内容" do
-    n = Notification.create(:user_id => 2, :data => nil)
-    assert_equal n.errors.on_base, "没有内容"
-  end
+		assert_equal @stranger.notifications.first.category, 0
 
-  test "接受好友请求" do
-    setup_friendship
+		assert_no_difference "@stranger.notifications_count" do
+			assert_difference "@stranger.unread_notifications_count", -1 do
+				Notification.read [@stranger.notifications.first], @stranger
+			end
+		end
 
-    @r.accept
-    @user4.reload  
-    assert_equal @user4.notifications_count, 1
-    assert_equal @user4.unread_notifications_count, 1
-    @user1.reload
-    assert_equal @user1.notifications_count, 0
-    assert_equal @user1.unread_notifications_count, 0
-  end
+		# 同意好友请求
+		friendship1 = Friendship.create(:friend_id => @user.id, :user_id => @stranger.id, :status => 0)
+    assert_no_difference "@user.reload.notifications_count" do
+			assert_no_difference "@user.reload.unread_notifications_count" do
+				assert_difference "@stranger.reload.notifications_count" do
+					assert_difference "@stranger.reload.unread_notifications_count" do
+						friendship1.accept
+					end
+				end
+			end
+		end
+		
+		assert_no_difference "@stranger.notifications_count" do
+			assert_difference "@stranger.reload.unread_notifications_count", -1 do
+				Notification.read_all @stranger
+			end
+		end
 
-  test "拒绝好友请求" do
-    setup_friendship
+		# 绝交
+    friendship3 = @user.friendships.find_by_friend_id(@friend.id)
 
-    @r.destroy
-    @user4.reload
-    assert_equal @user4.notifications_count, 1
-    assert_equal @user4.unread_notifications_count, 1
-    @user1.reload
-    assert_equal @user1.notifications_count, 0
-    assert_equal @user1.unread_notifications_count, 0
-  end
-
-  test "解除好友关系" do
-    setup_friendship
-
-    @f.cancel
-    @user2.reload
-    assert_equal @user2.notifications_count, 1
-    assert_equal @user2.unread_notifications_count, 1
-    @user1.reload
-    assert_equal @user1.notifications_count, 1
-    assert_equal @user1.unread_notifications_count, 1
+    assert_no_difference "@user.reload.notifications_count" do
+			assert_no_difference "@user.reload.unread_notifications_count" do
+				assert_difference "@friend.reload.notifications_count" do
+					assert_difference "@friend.reload.unread_notifications_count" do
+						friendship3.cancel
+					end
+				end
+			end
+		end
   end  
 
-  test "改动活动的时间，地点" do
-    setup_event
+	test "标记标签通知" do
+    assert_difference "@user.reload.notifications_count" do
+			assert_difference "@user.reload.unread_notifications_count" do
+				@user.profile.add_tag @friend, "2b"
+			end
+		end
+		assert_equal @user.notifications.first.category, 1
+	end
+#=end
+  test "活动通知" do
+    @event = EventFactory.create :character_id => @friend_character.id
 
-    @e.update_attributes(:game_id => 1, :game_area_id => 1, :game_server_id => 2)
-    @user4.reload
-    assert_equal @user4.notifications_count, 1
-    assert_equal @user4.unread_notifications_count, 1
+		participation = @event.maybe_participations.create :participant_id => @user.id, :character_id => @character.id
+		
+		# 某人改变了状态
+    assert_difference "@friend.reload.notifications_count" do
+			assert_difference "@friend.reload.unread_notifications_count" do
+				participation.change_status Participation::Confirmed
+			end
+		end
+		assert_equal @friend.notifications.first.category, 4
 
-    @e.update_attributes(:end_time => 4.days.from_now.to_s(:db))
-    @user4.reload
-    assert_equal @user4.notifications_count, 2
-    assert_equal @user4.unread_notifications_count, 2 
+		# 改变时间
+    assert_difference "@user.reload.notifications_count" do
+			assert_difference "@user.reload.unread_notifications_count" do
+				@event.update_attributes(:end_time => 9.days.from_now)
+			end
+		end
+		assert_equal @user.notifications.first.category, 3
+
+		# 取消活动
+    assert_difference "@user.reload.notifications_count" do
+			assert_difference "@user.reload.unread_notifications_count" do
+				@event.destroy
+			end
+		end
+		assert_equal @user.notifications.second.category, 2
+
+    #@e.update_attributes(:end_time => 4.days.from_now.to_s(:db))
   end
 
-  test "取消活动" do
-    setup_event
-
-    @e.destroy
-    @user4.reload
-    assert_equal @user4.notifications_count, 1
-    assert_equal @user4.unread_notifications_count, 1 
-  end
+=begin
 
   test "拒绝活动请求" do
     setup_event
@@ -161,26 +211,5 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal @user1.notifications_count, 1
     assert_equal @user1.unread_notifications_count, 1
   end
-
-protected
-
-  def setup_friendship
-    @r = Friendship.create(:friend_id => @user1.id, :user_id => @user4.id, :status => 0)    
-    @f = @user1.friendships.find_by_friend_id(@user2.id)
-  end
-
-  def setup_event
-    @e = Event.create({:game_id => 1, :game_area_id => 1 , :game_server_id => 1, :poster_id => 1, :title => 'event title', :start_time => 2.days.from_now.to_s(:db), :end_time => 3.days.from_now.to_s(:db), :privilege => 1, :description => 'event description'})
-    @i = Participation.create(:participant_id => 2, :status => 0, :event_id => @e.id)
-    @r = Participation.create(:participant_id => 3, :status => 1, :event_id => @e.id)
-    @p = Participation.create(:participant_id => 4, :status => 3, :event_id => @e.id)
-  end
-
-  def setup_guild
-    @g = Guild.create({:game_id => 1, :name => 'guild name', :description => 'guild description', :president_id => 1})
-    @i = Membership.create(:user_id => 2, :status => 0, :guild_id => @g.id)
-    @r = Membership.create(:user_id => 3, :status => 1, :guild_id => @g.id)
-    @m = Membership.create(:user_id => 4, :status => 5, :guild_id => @g.id)
-  end
-
+=end
 end

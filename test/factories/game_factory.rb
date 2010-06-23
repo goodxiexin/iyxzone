@@ -37,7 +37,7 @@ class GameFactory
       server = Factory.create :game_server, :game_id => game.id, :area_id => area.id
     end
 
-    game
+    game.reload
   end
 
 end

@@ -42,9 +42,11 @@ class GameCharacter < ActiveRecord::Base
 
   attr_readonly :game_id, :area_id, :server_id, :race_id, :profession_id
 
+  validates_presence_of :game_id, :message => "不能为空"
+
   validates_presence_of :user_id, :message => "不能为空"
 
-  validates_presence_of :level, :message => "不能为空"
+	validates_numericality_of :level, :only_integer => true, :message => "必须是整数" 
 
   validates_presence_of :name, :message => "不能为空"
 

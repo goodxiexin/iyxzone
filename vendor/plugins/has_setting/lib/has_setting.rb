@@ -84,11 +84,11 @@ module ActsAsSetting
       @instance.update_attribute("#{@name}", @value)
     end
 
-    def reload
-      @instance.reload
-      @value = @instance.read_attribute(@name)
-    end
-    
+		def reload
+			@instance.reload
+			@value = @instance.read_attribute(@name)
+		end
+
   end
   
 

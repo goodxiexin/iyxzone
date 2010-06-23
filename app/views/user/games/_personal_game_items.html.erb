@@ -1,7 +1,10 @@
   <table class="table01 gameList" cellpadding="0" cellspacing="1">
 	  <tbody>
 		  <% subject = get_subject(user) %>
-		  <% game_items.each do |game, characters, average_rating, tags| %>
+		  <% games.each do |game| %>
+			<% characters = game.characters.by user.id%>
+			<% average_rating = game.average_rating_by user.id %>
+			<% tags = game.tags_by user.id %>
 				<tr>
 					<td>
 						<div class="imgwrap">
@@ -49,4 +52,4 @@
 			<% end %>
 		</tbody>
 	</table>
-	<%= will_paginate game_items %>
+	<%= will_paginate games %>

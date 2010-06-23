@@ -14,6 +14,8 @@ class Notification < ActiveRecord::Base
   Promotion = 7 # 职务变动
   GuildCancel = 8 # 工会取消了
 
+  validates_presence_of :user_id, :data, :category, :on => :create
+
   def self.read notifications, user
     return if notifications.blank?
     user.raw_decrement :unread_notifications_count, notifications.count
