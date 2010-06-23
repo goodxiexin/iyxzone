@@ -17,7 +17,7 @@ class GuildObserver < ActiveRecord::Observer
   def after_create guild
     # create album,forum and moderator_forum
     guild.create_album
-    guild.create_forum(:name => "工会#{guild.name}的论坛", :description => "工会#{guild.name}的论坛")
+    guild.create_forum(:name => "公会#{guild.name}的论坛", :description => "公会#{guild.name}的论坛")
    
     # create membership
     guild.memberships.create(:user_id => guild.president_id, :character_id => guild.character_id, :status => Membership::President)
@@ -64,7 +64,7 @@ class GuildObserver < ActiveRecord::Observer
     # send notifications
     if !guild.rejected?
       (guild.people - [guild.president]).each do|p|
-        p.notifications.create(:category => Notification::GuildCancel, :data => "工会 #{guild.name} 取消了")
+        p.notifications.create(:category => Notification::GuildCancel, :data => "公会 #{guild.name} 取消了")
         GuildMailer.deliver_guild_cancel guild, p if p.mail_setting.cancel_guild?
       end
     end
