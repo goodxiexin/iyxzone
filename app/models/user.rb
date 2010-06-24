@@ -344,17 +344,17 @@ class User < ActiveRecord::Base
 	end
 
 	# invitation and requests
-	has_many :event_requests, :through => :events, :source => :requests
+	has_many :event_requests, :through => :events, :source => :requests, :order => "created_at DESC"
 
-	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => Participation::Invitation}, :dependent => :destroy
+	has_many :event_invitations, :class_name => 'Participation', :foreign_key => 'participant_id', :conditions => {:status => Participation::Invitation}, :order => 'created_at DESC'
 
-	has_many :poll_invitations, :dependent => :destroy
+	has_many :poll_invitations, :order => 'created_at DESC'
 
-	has_many :guild_requests, :through => :guilds, :source => :requests 
+	has_many :guild_requests, :through => :guilds, :source => :requests, :order => "created_at DESC"
 
-	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => Membership::Invitation}, :dependent => :destroy
+	has_many :guild_invitations, :class_name => 'Membership',:conditions => {:status => Membership::Invitation}, :order => "created_at DESC"
 
-	has_many :friend_requests, :class_name => 'Friendship', :foreign_key => 'friend_id', :conditions => {:status => Friendship::Request}
+	has_many :friend_requests, :class_name => 'Friendship', :foreign_key => 'friend_id', :conditions => {:status => Friendship::Request}, :order => "created_at DESC"
 
   def invitations_count
     guild_invitations_count + event_invitations_count + poll_invitations_count

@@ -41,7 +41,9 @@ class Admin::NewsController < AdminBaseController
 protected
 
   def setup
-    if ['edit','update', 'destroy'].include? params[:action]
+    if ['new'].include? params[:action]
+      render_not_found if !['text', 'picture', 'video'].include?(params[:type])
+    elsif ['edit','update', 'destroy'].include? params[:action]
       @news = News.find(params[:id])
     end
   end

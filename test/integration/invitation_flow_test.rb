@@ -11,20 +11,35 @@ class InvitationFlowTest < ActionController::IntegrationTest
 
     FriendFactory.create @user, @friend
 
-    @event = EventFactory.create :character_id => @friend_character.id
-    @event.invite [@character]
-		@invitation1 = @event.invitations.last
+    # 2 event invitations
+    @event1 = EventFactory.create :character_id => @friend_character.id
+    @event1.invite [@character]
+		@invitation1 = @event1.invitations.last
+    sleep 1
+    @event2 = EventFactory.create :character_id => @friend_character.id
+    @event2.invite [@character]
+    @invitation2 = @event2.invitations.last
+    sleep 1
 
+    # 2 guild invitations
+    @guild1 = GuildFactory.create :character_id => @friend_character.id
+    @guild1.invite [@character]
+    @invitation3 = @guild1.invitations.last
 		sleep 1
-    @guild = GuildFactory.create :character_id => @friend_character.id
-    @guild.invite [@character]
-    @invitation2 = @guild.invitations.last
+    @guild2 = GuildFactory.create :character_id => @friend_character.id
+    @guild2.invite [@character]
+    @invitation4 = @guild2.invitations.last
+    sleep 1
 
-		sleep 1
-    @poll = Poll.create :poster_id => @friend.id, :game_id => @character.game_id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}], :max_multiple => 2
-    @poll.update_attributes(:invitees => [@user.id])
-		@invitation3 = PollInvitation.last
-
+    # 2 poll invitations
+    @poll1 = Poll.create :poster_id => @friend.id, :game_id => @character.game_id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}], :max_multiple => 2
+    @poll1.invite [@user]
+		@invitation5 = PollInvitation.last
+    sleep 1
+    @poll2 = Poll.create :poster_id => @friend.id, :game_id => @character.game_id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}], :max_multiple => 2
+    @poll2.invite [@user]
+    @invitation6 = PollInvitation.last
+    
 		@user_sess = login @user
 		@friend_sess = login @friend
 	end
@@ -32,16 +47,16 @@ class InvitationFlowTest < ActionController::IntegrationTest
 	test "GET index" do
 		@user_sess.get "/invitations"
 		@user_sess.assert_template "user/invitations/index"
-		assert_equal @user_sess.assigns(:invitations), [@invitation1, @invitation2, @invitation3]
+		assert_equal @user_sess.assigns(:invitations), [@invitation6, @invitation5, @invitation4, @invitation3, @invitation2, @invitation1]
 
 		@user_sess.get "/invitations?type=1"
-		assert_equal @user_sess.assigns(:invitations), [@invitation3]
+		assert_equal @user_sess.assigns(:invitations), [@invitation6, @invitation5]
 
 		@user_sess.get "/invitations?type=2"
-		assert_equal @user_sess.assigns(:invitations), [@invitation1]
+		assert_equal @user_sess.assigns(:invitations), [@invitation2, @invitation1]
 
 		@user_sess.get "/invitations?type=3"
-		assert_equal @user_sess.assigns(:invitations), [@invitation2]
+		assert_equal @user_sess.assigns(:invitations), [@invitation4, @invitation3]
 
 	end
 

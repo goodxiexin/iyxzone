@@ -400,18 +400,17 @@ class PollTest < ActiveSupport::TestCase
     @poll = Poll.create :poster_id => @user.id, :game_id => @game.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}], :max_multiple => 2
 
     assert_difference "PollInvitation.count" do
-      @poll.update_attributes(:invitees => [@friend.id])
-    end
-
-    @friend.reload
-    assert_equal @friend.poll_invitations_count, 1
-
-    assert_no_difference "PollInvitation.count" do
-      @poll.update_attributes(:invitees => [@friend.id])
+      assert_difference "@friend.reload.poll_invitations_count" do
+        @poll.invite [@friend]
+      end
     end
 
     assert_no_difference "PollInvitation.count" do
-      @poll.update_attributes(:invitees => ['invalid', @stranger.id])
+      @poll.invite [@friend]
+    end
+
+    assert_no_difference "PollInvitation.count" do
+      @poll.invite [@stranger]
     end
   end
 

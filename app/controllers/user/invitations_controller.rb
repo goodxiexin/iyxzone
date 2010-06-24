@@ -10,7 +10,7 @@ class User::InvitationsController < UserBaseController
 			@invitations.concat current_user.event_invitations.prefetch([{:event => [{:poster => :profile}]}])
 			@invitations.concat current_user.poll_invitations.prefetch([{:poll => [{:poster => :profile}]}])
 			@invitations.concat current_user.guild_invitations.prefetch([{:guild => [{:president => :profile}]}])
-			@invitations = @invitations.sort{|a,b| a.created_at <=> b.created_at}.paginate :page => params[:page], :per_page => PER_PAGE
+			@invitations = @invitations.sort{|a,b| b.created_at <=> a.created_at}.paginate :page => params[:page], :per_page => PER_PAGE
 		elsif params[:type].to_i == 1
 			@invitations = current_user.poll_invitations.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poll => [{:poster => :profile}]}]
 		elsif params[:type].to_i == 2

@@ -18,6 +18,7 @@ class NotificationFlowTest < ActionController::IntegrationTest
 		assert_equal @user_sess.assigns(:notifications), [@notification1]
 
 		sleep 1
+
     @notification2 = Notification.create(:user_id => @user.id, :data => 'haha', :category => 2)
 		@user_sess.get "/notifications"
 		assert_equal @user_sess.assigns(:notifications), [@notification2, @notification1]
@@ -74,4 +75,5 @@ class NotificationFlowTest < ActionController::IntegrationTest
 		assert_equal @user.notifications_count, 0
 		assert_equal @user.unread_notifications_count, 0
 	end
+
 end

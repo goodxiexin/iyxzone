@@ -22,6 +22,12 @@ class Admin::NewsPicturesController < AdminBaseController
     redirect_to news_index_url
   end 
 
+  def edit
+  end
+
+  def update
+  end
+
 protected
 
   def setup

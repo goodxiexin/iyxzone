@@ -15,49 +15,39 @@ class NewsFlowTest < ActionController::IntegrationTest
 		@admin_sess = login @admin
     @user_sess = login @user
 
-		@news = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "haha", :data => "blabla"
-		@news.created_at = 1.hour.ago
-		@news.save
+		@news = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "haha", :data => "blabla", :created_at => 1.hour.ago
 
-		@news1 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "news1", :data => "blabla"
-		@news1.created_at = 1.day.ago
-		@news1.save
+		@news1 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "news1", :data => "blabla", :created_at => 1.day.ago
 
-		@news2 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "news2", :data => "blabla"
-		@news2.created_at = 2.days.ago
-		@news2.save
+		@news2 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "news2", :data => "blabla", :created_at => 2.days.ago
 
-		@news3 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "news3", :data => "blabla"
-		@news3.created_at = 3.days.ago
-		@news3.save
+		@news3 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "news3", :data => "blabla", :created_at => 3.days.ago
 
-		@news6 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "news6", :data => "blabla"
-		@news6.created_at = 2.weeks.ago
-		@news6.save
+		@news6 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "text", :title => "news6", :data => "blabla", :created_at => 2.weeks.ago
 
-		@news4 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "video", :title => "video news", :video_url => "http://v.youku.com/v_show/id_XMTgyMTA5NzUy.html", :data => "blabla"
-		@news4.created_at = 2.hour.ago
-		@news4.save
+		@news4 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "video", :title => "video news", :video_url => "http://v.youku.com/v_show/id_XMTgyMTA5NzUy.html", :data => "blabla", :created_at => 2.hours.ago
 
-		@news5 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "picture", :title => "haha", :data => "blabla"
-		@news5.created_at = 3.hours.ago
-		@news5.save
+		@news5 = News.create :game_id => @game.id, :poster_id => @admin.id, :news_type => "picture", :title => "haha", :data => "blabla", :created_at => 3.hours.ago
 	end
   
 	test "POST create" do
-    @user_sess.get "admin/news/new?type=text"
-    @user_sess.assert_template "errors/404"
+    @user_sess.get "admin/news/new", {:type => 'text'}
+    @user_sess.assert_not_found
 
-    @admin_sess.get "admin/news/new?type=invalid"
-    @admin_sess.assert_template "rescues/missing_template" # not 404?
+    @admin_sess.get "admin/news/new", {:type => 'invalid'}
+    @admin_sess.assert_not_found
 
-    @admin_sess.get "admin/news/new?type=text"
+    @admin_sess.get "admin/news/new", {:type => 'text'}
     @admin_sess.assert_template "admin/news/new_text_news"
 
-    @admin_sess.get "admin/news/new?type=picture"
+    # XIEXIN
+    # TODO
+    # 创建picture news, 包括上传图片，然后编辑图片
+
+    @admin_sess.get "admin/news/new", {:type => 'picture'}
     @admin_sess.assert_template "admin/news/new_picture_news"
 
-    @admin_sess.get "admin/news/new?type=video"
+    @admin_sess.get "admin/news/new", {:type => 'video'}
     @admin_sess.assert_template "admin/news/new_video_news"
 
     assert_no_difference "News.count" do
@@ -71,25 +61,25 @@ class NewsFlowTest < ActionController::IntegrationTest
 
 	test "GET edit & PUT update" do
 		@user_sess.get "/admin/news/#{@news.id}/edit"
-		@user_sess.assert_template "errors/404"
+		@user_sess.assert_not_found
 
 		@admin_sess.get "/admin/news/#{@news.id}/edit"
 		@admin_sess.assert_template "admin/news/edit"
 
 		@user_sess.put "/admin/news/invalid", {:news => {:title => "new t"}}
-		@user_sess.assert_template "errors/404"
+		@user_sess.assert_not_found
 
 		@admin_sess.put "/admin/news/#{@news.id}", {:news => {:title => "new t"}}
 		@news.reload
 		assert_equal @news.title, "new t"
 
 		@admin_sess.put "/admin/news/invalid", {:news => {:title => "new t"}}
-		@admin_sess.assert_template "errors/404"
+		@admin_sess.assert_not_found
 	end
 
 	test "admin index GET" do
 		@user_sess.get "/admin/news"
-		@user_sess.assert_template "errors/404"
+		@user_sess.assert_not_found
 
 		@admin_sess.get "/admin/news"
 		@admin_sess.assert_template "admin/news/index"
@@ -122,7 +112,7 @@ class NewsFlowTest < ActionController::IntegrationTest
 
 	test "user GET show" do	
 		@user_sess.get "/news/invalid"
-		@user_sess.assert_template "errors/404"
+		@user_sess.assert_not_found
 
 		@user_sess.get "/news/#{@news.id}"
 		@user_sess.assert_template "user/news/show"
@@ -131,7 +121,10 @@ class NewsFlowTest < ActionController::IntegrationTest
 
 	test "DELETE destroy" do
 		@user_sess.delete "admin/news/#{@news.id}"
-		@user_sess.assert_template "errors/404"
+		@user_sess.assert_not_found
+
+    @admin_sess.delete "admin/news/invalid"
+    @admin_sess.assert_not_found
 
     assert_difference "News.count",-1 do
 			@admin_sess.delete "admin/news/#{@news2.id}"

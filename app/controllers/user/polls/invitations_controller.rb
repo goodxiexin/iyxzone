@@ -7,7 +7,9 @@ class User::Polls::InvitationsController < UserBaseController
   end
 
   def create
-    if @poll.update_attributes(:invitees => params[:values])
+    @users = User.find(params[:values])
+
+    if @poll.invite @users
       redirect_to poll_url(@poll)
     else
       flash.now[:error] = '生成邀请出错'
