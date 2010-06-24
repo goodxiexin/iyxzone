@@ -17,6 +17,10 @@ namespace :utils do
       `service mysqld restart`
       # restart httpd
       `service httpd restart`
+      # restart postfix
+      `service postfix restart`
+      # restart impad
+      `service cyrus-imapd restart`
       # synchronize time
       `ntpdate 0.centos.pool.ntp.org`
       # start memcached
