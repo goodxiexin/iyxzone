@@ -34,7 +34,13 @@ module Technoweenie # :nodoc:
         # overrwrite this to do your own app-specific partitioning. 
         # you can thank Jamis Buck for this: http://www.37signals.com/svn/archives2/id_partitioning.php
         def partitioned_path(*args)
+          # 当id 大于 100000000 的时候，需要再处理，变成3层的
+          dir = (attachment_path_id / 10000).to_s
+          sub_dir = (attachment_path_id % 10000).to_s
+          [dir, sub_dir] + args
+=begin
           ("%08d" % attachment_path_id).scan(/..../) + args
+=end
         end
       
         # Gets the public path to the file

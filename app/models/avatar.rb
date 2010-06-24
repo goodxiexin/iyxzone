@@ -14,11 +14,5 @@ class Avatar < Photo
   }
   
   attr_readonly :album_id, :privilege
-  
-  def partitioned_path(*args)
-    dir = (attachment_path_id / 10000).to_s
-    sub_dir = (attachment_path_id % 10000).to_s
-    [dir, sub_dir] + args
-  end
 
 end
