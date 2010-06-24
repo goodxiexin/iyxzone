@@ -24,6 +24,7 @@ after "deploy:update_code", "deploy:add_timestamps_to_css"
 after "deploy:update_code", "deploy:pack_js"
 
 after "deploy:symlink", "assets:symlink"
+after "deploy:symlink", "assets:restore_gamepic"
 after "deploy:symlink", "deploy:chown_deployer"
 after "deploy:symlink", "deploy:clear_online_records"
 #after "deploy:symlink", "deploy:migrate"
@@ -90,7 +91,7 @@ test:
   adapter: mysql
   encoding: utf8
   reconnect: false
-  database: one_seven_gaming_test
+  database: one_seven_gaming_test找宿舍
   pool: 5
   username: root
   password: 20041065
@@ -124,7 +125,7 @@ ActionMailer::Base.delivery_method = :activerecord
   desc "update mysql/s3 backup configuration"
   task :update_backup_config, :roles => :app do
     local_backup_config = <<-CMD
-databases: [dayday3_production]
+databases: [one_seven_gaming_production]
 user: root
 password: 20041065
 host: localhost
@@ -179,6 +180,11 @@ namespace :assets do
       run "mkdir -p #{shared_path}/#{name} && rm -rf #{release_path}/public/#{name} && ln -nfs #{shared_path}/#{name} #{release_path}/public/#{name}"
     end
     deploy.chown_deployer
+  end
+
+  desc "copy game pics"
+  task :restore_gamepic, :roles => :app do
+    run "cp -r #{shared_path}/gamepic #{release_path}/public/images/gamepic"
   end
 
 end

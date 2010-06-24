@@ -68,14 +68,9 @@ protected
   end
 
   def update_blog_images
-    ids = []
-    doc = Nokogiri::HTML(self.content)
-    doc.xpath("//img[starts-with(@src, '/blog_images/')]").each do |l|
-      l[:src] =~ /\/blog_images\/([\d]+)\/([\d]+)\//
-      id = (10000 * $1.to_i + $2.to_i)
-      ids << id
-    end
-    BlogImage.update_all({:blog_id => self.id, :updated_at => self.updated_at}, {:id => ids})
+    ids = BlogImage.parse_images self
+    BlogImage.update_all({:blog_id => nil}, {:id => (images.map(&:id) - ids)})
+    BlogImage.update_all({:blog_id => self.id}, {:id => ids})
   end
 
 end
