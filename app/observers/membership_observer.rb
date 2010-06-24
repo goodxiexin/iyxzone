@@ -60,7 +60,7 @@ class MembershipObserver < ActiveRecord::Observer
       if membership.recently_accept_invitation?
 			  guild.president.notifications.create(
           :category => Notification::Membership,
-          :data => "#{profile_link user}接受了你的邀请: 让游戏角色 #{membership.character.name} 参加工会 #{guild_link guild}")
+          :data => "#{profile_link user}接受了你的邀请: 让游戏角色 #{membership.character.name} 参加公会 #{guild_link guild}")
       end
 		elsif membership.was_request? and membership.is_authorized?
 			guild.raw_decrement :requests_count
@@ -69,7 +69,7 @@ class MembershipObserver < ActiveRecord::Observer
       if membership.recently_accept_request?
 			  user.notifications.create(
           :category => Notification::Membership,
-          :data => "#{profile_link guild.president}同意了你的请求: 让游戏角色 #{membership.character.name} 加入工会 #{guild_link guild} ")
+          :data => "#{profile_link guild.president}同意了你的请求: 让游戏角色 #{membership.character.name} 加入公会 #{guild_link guild} ")
       end
 		elsif membership.was_authorized? and membership.is_authorized?
 			# promotion
@@ -78,7 +78,7 @@ class MembershipObserver < ActiveRecord::Observer
       if membership.recently_change_role?
 			  user.notifications.create(
           :category => Notification::Promotion,
-          :data => "你的游戏角色 #{membership.character.name} 在工会#{guild_link guild}里的职务更改为#{membership.to_s}")
+          :data => "你的游戏角色 #{membership.character.name} 在公会#{guild_link guild}里的职务更改为#{membership.to_s}")
         GuildMailer.deliver_promotion membership, membership.status_was if user.mail_setting.promotion_in_guild?
       end
 		end
@@ -100,7 +100,7 @@ class MembershipObserver < ActiveRecord::Observer
       if membership.recently_decline_invitation?
 			  guild.president.notifications.create(
           :category => Notification::Membership,
-          :data => "#{profile_link user} 拒绝了你的邀请: 不让你的游戏角色 #{ membership.character.name } 参加工会#{guild_link guild}")
+          :data => "#{profile_link user} 拒绝了你的邀请: 不让你的游戏角色 #{ membership.character.name } 参加公会#{guild_link guild}")
       end
 		elsif membership.is_request?
 			# request declined
@@ -109,7 +109,7 @@ class MembershipObserver < ActiveRecord::Observer
       if membership.recently_decline_request?
 			  user.notifications.create(
           :category => Notification::Membership,
-          :data => "#{profile_link guild.president} 拒绝了你的请求: 不让你的游戏角色 #{ membership.character.name } 加入工会#{guild_link guild}")
+          :data => "#{profile_link guild.president} 拒绝了你的请求: 不让你的游戏角色 #{ membership.character.name } 加入公会#{guild_link guild}")
       end
 		elsif membership.is_authorized?
 			# user is evicted
@@ -118,7 +118,7 @@ class MembershipObserver < ActiveRecord::Observer
       if membership.recently_evicted?
 		    user.notifications.create(
           :category => Notification::Membership,
-          :data => "你的游戏角色 #{membership.character.name} 被剔除出了工会#{guild_link guild}")
+          :data => "你的游戏角色 #{membership.character.name} 被剔除出了公会#{guild_link guild}")
       end
     end	
 	end

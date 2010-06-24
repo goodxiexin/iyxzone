@@ -11,24 +11,19 @@ class NotificationTest < ActiveSupport::TestCase
     @stranger_character = GameCharacterFactory.create :game_id => @character.game_id, :user_id => @stranger.id
 
     FriendFactory.create @user, @friend
-
-    @president = UserFactory.create
-    @president_character = GameCharacterFactory.create :game_id => @character.game_id, :user_id => @president.id
-		@guild = GuildFactory.create :character_id => @president_character.id
-
   end
-#=begin
+
   test "合法性" do
     notification1 = Notification.create(:user_id => nil, :data => 'd', :category => 1)
     assert !notification1.save
 
-    notification2 = Notification.create(:user_id => 2, :data => nil, :category => 1)
+    notification2 = Notification.create(:user_id => @user.id, :data => nil, :category => 1)
     assert !notification2.save
 		
-    notification3 = Notification.create(:user_id => 2, :data => 'haha', :category => nil)
+    notification3 = Notification.create(:user_id => @user.id, :data => 'haha', :category => nil)
     assert !notification3.save
 		
-    notification4 = Notification.create(:user_id => 2, :data => 'haha', :category => 1)
+    notification4 = Notification.create(:user_id => @user.id, :data => 'haha', :category => 1)
     assert notification4.save
   end
 
@@ -93,16 +88,45 @@ class NotificationTest < ActiveSupport::TestCase
 		end
 		assert_equal @user.notifications.first.category, 1
 	end
-#=end
+
   test "活动通知" do
     @event = EventFactory.create :character_id => @friend_character.id
 
-		participation = @event.maybe_participations.create :participant_id => @user.id, :character_id => @character.id
+    @event.invite [@character]
+		@invitation = @event.invitations.last
+
+    assert_difference "@friend.reload.notifications_count" do
+			assert_difference "@friend.reload.unread_notifications_count" do
+        @invitation.accept_invitation Participation::Confirmed
+			end
+		end
+		assert_equal @friend.notifications.first.category, 5
 		
+		# 拒绝请求
+		@request = @event.requests.create :participant_id => @stranger.id, :character_id => @stranger_character.id 
+
+    assert_difference "@stranger.reload.notifications_count" do
+			assert_difference "@stranger.reload.unread_notifications_count" do
+        @request.decline_request
+			end
+		end
+		assert_equal @stranger.notifications.first.category, 5
+		sleep 1
+
+		# 同意请求
+		@request = @event.requests.create :participant_id => @stranger.id, :character_id => @stranger_character.id 
+
+    assert_difference "@stranger.reload.notifications_count" do
+			assert_difference "@stranger.reload.unread_notifications_count" do
+        @request.accept_request
+			end
+		end
+		assert_equal @stranger.notifications.first.category, 5
+
 		# 某人改变了状态
     assert_difference "@friend.reload.notifications_count" do
 			assert_difference "@friend.reload.unread_notifications_count" do
-				participation.change_status Participation::Confirmed
+				@invitation.change_status Participation::Maybe
 			end
 		end
 		assert_equal @friend.notifications.first.category, 4
@@ -114,6 +138,7 @@ class NotificationTest < ActiveSupport::TestCase
 			end
 		end
 		assert_equal @user.notifications.first.category, 3
+		sleep 1
 
 		# 取消活动
     assert_difference "@user.reload.notifications_count" do
@@ -121,95 +146,72 @@ class NotificationTest < ActiveSupport::TestCase
 				@event.destroy
 			end
 		end
-		assert_equal @user.notifications.second.category, 2
+		assert_equal @user.notifications.first.category, 2
 
-    #@e.update_attributes(:end_time => 4.days.from_now.to_s(:db))
   end
 
-=begin
+	test "公会相关通知" do
+    @guild = GuildFactory.create :character_id => @friend_character.id
 
-  test "拒绝活动请求" do
-    setup_event
+    @guild.invite [@character]
+    @invitation = @guild.invitations.last
+		# 拒绝公会邀请
+    assert_difference "@friend.reload.notifications_count" do
+			assert_difference "@friend.reload.unread_notifications_count" do
+				@invitation.decline_invitation
+			end
+		end
+		assert_equal @friend.notifications.first.category, 6
+		sleep 1
 
-    @r.destroy
-    @user3.reload
-    assert_equal @user3.notifications_count, 1
-    assert_equal @user3.unread_notifications_count, 1
-    @user1.reload
-    assert_equal @user1.notifications_count, 0
-    assert_equal @user1.unread_notifications_count, 0
-  end
+    @guild.invite [@character]
+    @membership = @guild.invitations.last
+		# 同意公会邀请
+    assert_difference "@friend.reload.notifications_count" do
+			assert_difference "@friend.reload.unread_notifications_count" do
+				@membership.accept_invitation
+			end
+		end
+		assert_equal @friend.notifications.first.category, 6
 
-  test "接受活动请求" do
-    setup_event
+		# 拒绝请求
+		@request = @guild.requests.create :user_id => @stranger.id, :character_id => @stranger_character.id 
 
-    @r.accept
-    @user3.reload
-    assert_equal @user3.notifications_count, 1
-    assert_equal @user3.unread_notifications_count, 1
-    @user1.reload
-    assert_equal @user1.notifications_count, 0
-    assert_equal @user1.unread_notifications_count, 0
-  end
+    assert_difference "@stranger.reload.notifications_count" do
+			assert_difference "@stranger.reload.unread_notifications_count" do
+        @request.decline_request
+			end
+		end
+		assert_equal @stranger.notifications.first.category, 6
+		sleep 1
 
-  test "接受活动邀请" do
-    setup_event
+		# 同意请求
+		@request = @guild.requests.create :user_id => @stranger.id, :character_id => @stranger_character.id 
 
-    @i.update_attributes(:status => 4)
-    @user2.reload
-    assert_equal @user3.notifications_count, 0
-    assert_equal @user3.unread_notifications_count, 0
-    @user1.reload
-    assert_equal @user1.notifications_count, 1
-    assert_equal @user1.unread_notifications_count, 1
-  end
+    assert_difference "@stranger.reload.notifications_count" do
+			assert_difference "@stranger.reload.unread_notifications_count" do
+        @request.accept_request
+			end
+		end
+		assert_equal @stranger.notifications.first.category, 6
+		
+		# 换职位
+    assert_difference "@user.reload.notifications_count" do
+			assert_difference "@user.reload.unread_notifications_count" do
+        @membership.change_role Membership::Veteran
+			end
+		end
+		assert_equal @user.notifications.first.category, 7
+		sleep 1
 
-  test "拒绝工会请求" do
-    setup_guild
+		# 删除公会
+    assert_difference "@user.reload.notifications_count" do
+			assert_difference "@user.reload.unread_notifications_count" do
+        @guild.destroy
+			end
+		end
+		assert_equal @user.notifications.first.category, Notification::GuildCancel
 
-    @r.destroy
-    @user3.reload
-    assert_equal @user3.notifications_count, 1
-    assert_equal @user3.unread_notifications_count, 1
-    @user1.reload
-    assert_equal @user1.notifications_count, 0
-    assert_equal @user1.unread_notifications_count, 0
-  end
+	end
 
-  test "接受工会请求" do
-    setup_guild
-
-    @r.accept_request
-    @user3.reload
-    assert_equal @user3.notifications_count, 1
-    assert_equal @user3.unread_notifications_count, 1
-    @user1.reload
-    assert_equal @user1.notifications_count, 0
-    assert_equal @user1.unread_notifications_count, 0
-  end
-
-  test "接受工会邀请" do
-    setup_guild
-    
-    @i.accept_invitation
-    @user2.reload
-    assert_equal @user2.notifications_count, 0
-    assert_equal @user2.unread_notifications_count, 0
-    @user1.reload
-    assert_equal @user1.notifications_count, 1
-    assert_equal @user1.unread_notifications_count, 1
-  end
-
-  test "拒绝工会邀请" do
-    setup_guild
-
-    @i.destroy
-    @user2.reload
-    assert_equal @user2.notifications_count, 0
-    assert_equal @user2.unread_notifications_count, 0
-    @user1.reload
-    assert_equal @user1.notifications_count, 1
-    assert_equal @user1.unread_notifications_count, 1
-  end
-=end
 end
