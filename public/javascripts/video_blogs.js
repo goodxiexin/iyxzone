@@ -17,6 +17,7 @@ function replace_video() {
 			embed.setAttribute('type', 'application/x-shockwave-flash');
 		embed.setAttribute('allowScriptAccess', 'always');
 		embed.setAttribute('align', 'middle');
+    embed.setAttribute('wmode', 'transparent');
 		
 		element.parentNode.replaceChild(embed, element);
 	}

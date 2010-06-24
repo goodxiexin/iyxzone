@@ -306,26 +306,31 @@ Object.extend(Iyxzone.Register, {
     valid &= this.validatePassword();
     valid &= this.validatePasswordConfirmation();
     
-    if(!valid)
+    if(!valid){
+      button.disabled = '';
       return;
+    }
 
     if(!$('agree_contact').checked){
       tip("请查看协议");
+      button.disabled = '';
       return;
     }
 
     if(this.gameSelectors.keys().length == 0){
       tip("至少要有1个游戏角色");
-      return;
+      button.disabled = '';
+      return
     }
 
+    // 如果在发ajax请求的时候再屏蔽按钮貌似会来不及，可能用户可以连点2此
     new Ajax.Request('/users/', {
       method: 'post',
       parameters: $(form).serialize(),
 			onloading: function(){
 			},
       onComplete: function(){
-        button.writeAttribute('disabled', 'disabled');
+        button.disabled = '';
       }
     }); 
   }

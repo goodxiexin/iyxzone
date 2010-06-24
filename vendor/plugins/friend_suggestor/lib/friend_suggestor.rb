@@ -137,7 +137,7 @@ module FriendSuggestor
 
 		# construct new suggestions and insert into database
 		values = []
-		new_collect_friends.each {|friend_id| values << "(NULL,#{id},#{friend_id})" }
+		collect_friends.each {|friend_id| values << "(NULL,#{id},#{friend_id})" }
 
     # this is almost impossible
     return friend_suggestions if values.blank?
@@ -244,7 +244,7 @@ module FriendSuggestor
 
 	  # construct new suggestions and insert into database
 	  values = []
-	  new_collect_comrades(server).each do |friend_id|
+	  collect_comrades(server).each do |friend_id|
   		if server.game.no_areas
 	  		values << "(NULL, #{id}, #{friend_id}, #{server.game_id}, NULL, #{server.id})"
 		  else

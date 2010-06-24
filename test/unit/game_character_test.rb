@@ -19,85 +19,85 @@ class GameCharacterTest < ActiveSupport::TestCase
  
   test "合法性" do
 		# 用户id
-    gameCharacter1 = GameCharacter.create(:user_id => nil, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter1.save
+    game_character1 = GameCharacter.new(:user_id => nil, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character1.save
 
 		# 游戏
-    gameCharacter1 = GameCharacter.create(:user_id => @user.id, :game_id => nil, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter1.save
+    game_character1 = GameCharacter.new(:user_id => @user.id, :game_id => nil, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character1.save
 
-    gameCharacter2 = GameCharacter.create(:user_id => @user.id, :game_id => 20000, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter2.save
+    game_character2 = GameCharacter.new(:user_id => @user.id, :game_id => 20000, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character2.save
 
-    gameCharacter3 = GameCharacter.create(:user_id => @user.id, :game_id => 100, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter3.save
+    game_character3 = GameCharacter.new(:user_id => @user.id, :game_id => 100, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character3.save
 
 
 		# 没名字
-    gameCharacter1 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => nil, :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter1.save
+    game_character1 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => nil, :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character1.save
 
 		# 等级
-    gameCharacter1 = GameCharacter.create(:user_id => @user.id, :name => 'hahaer', :game_id => @game.id, :level => nil, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter1.save
+    game_character1 = GameCharacter.new(:user_id => @user.id, :name => 'hahaer', :game_id => @game.id, :level => nil, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character1.save
 
-    gameCharacter2 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 'hahaer', :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter2.save
+    game_character2 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 'hahaer', :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character2.save
 
 		# area_id
-    gameCharacter1 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => nil, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter1.save
+    game_character1 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => nil, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character1.save
 
-    gameCharacter8 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => 10, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter8.save
+    game_character8 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => 10, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character8.save
 
-    gameCharacter2 = GameCharacter.create(:user_id => @user.id, :game_id => @game1.id, :name => 'hahaer', :level => 70, :area_id => nil, :server_id => @game1.servers.first.id, :race_id => @game1.races.first.id, :profession_id => @game1.professions.first.id)
-    assert gameCharacter2.save
+    game_character2 = GameCharacter.new(:user_id => @user.id, :game_id => @game1.id, :name => 'hahaer', :level => 70, :area_id => nil, :server_id => @game1.servers.first.id, :race_id => @game1.races.first.id, :profession_id => @game1.professions.first.id)
+    assert game_character2.save
 		
 		# server
-    gameCharacter3 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => nil, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter3.save
+    game_character3 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => nil, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character3.save
 
-    gameCharacter9 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => nil, :server_id => 20, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-    assert !gameCharacter9.save
+    game_character9 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => nil, :server_id => 20, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+    assert !game_character9.save
 
 		# races
-    gameCharacter4 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => nil, :profession_id => @game.professions.first.id)
-    assert !gameCharacter4.save
+    game_character4 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => nil, :profession_id => @game.professions.first.id)
+    assert !game_character4.save
 
-    gameCharacter10 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => 10, :profession_id => @game.professions.first.id)
-    assert !gameCharacter10.save
+    game_character10 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => 10, :profession_id => @game.professions.first.id)
+    assert !game_character10.save
 
-    gameCharacter5 = GameCharacter.create(:user_id => @user.id, :game_id => @game2.id, :name => 'hahaer', :level => 70, :area_id => @game2.areas.first.id, :server_id => @game2.servers.first.id, :race_id => nil, :profession_id => @game2.professions.first.id)
-    assert gameCharacter5.save
+    game_character5 = GameCharacter.new(:user_id => @user.id, :game_id => @game2.id, :name => 'hahaer', :level => 70, :area_id => @game2.areas.first.id, :server_id => @game2.servers.first.id, :race_id => nil, :profession_id => @game2.professions.first.id)
+    assert game_character5.save
 
 		# professions
-    gameCharacter6 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => nil)
-    assert !gameCharacter6.save
+    game_character6 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => nil)
+    assert !game_character6.save
 
-    gameCharacter7 = GameCharacter.create(:user_id => @user.id, :game_id => @game2.id, :name => 'hahaer', :level => 70, :area_id => @game2.areas.first.id, :server_id => @game2.servers.first.id, :race_id => nil, :profession_id => nil)
-    assert !gameCharacter7.save
+    game_character7 = GameCharacter.new(:user_id => @user.id, :game_id => @game2.id, :name => 'hahaer', :level => 70, :area_id => @game2.areas.first.id, :server_id => @game2.servers.first.id, :race_id => nil, :profession_id => nil)
+    assert !game_character7.save
 
-    gameCharacter12 = GameCharacter.create(:user_id => @user.id, :game_id => @game3.id, :name => 'hahaer', :level => 70, :area_id => @game3.areas.first.id, :server_id => @game3.servers.first.id, :race_id => nil , :profession_id => nil)
-    assert gameCharacter12.save
+    game_character12 = GameCharacter.new(:user_id => @user.id, :game_id => @game3.id, :name => 'hahaer', :level => 70, :area_id => @game3.areas.first.id, :server_id => @game3.servers.first.id, :race_id => nil , :profession_id => nil)
+    assert game_character12.save
 
-    gameCharacter11 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => 20)
-    assert !gameCharacter11.save
+    game_character11 = GameCharacter.new(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => 20)
+    assert !game_character11.save
 
   end
  
   test "计数器" do
-    gameCharacter1 = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
-		@game.reload
-		@user.reload
-    assert_equal @game.characters_count, 1
-    assert_equal @user.characters_count, 1
-  
-    gameCharacter1.destroy
-		@game.reload
-		@user.reload
-    assert_equal @game.characters_count, 0
-    assert_equal @user.characters_count, 0
+    assert_difference "@game.reload.characters_count" do
+      assert_difference "@user.reload.characters_count" do
+        @character = GameCharacter.create(:user_id => @user.id, :game_id => @game.id, :name => 'hahaer', :level => 70, :area_id => @game.areas.first.id, :server_id => @game.servers.first.id, :race_id => @game.races.first.id, :profession_id => @game.professions.first.id)
+      end
+    end
+ 
+    assert_difference "@game.reload.characters_count", -1 do
+      assert_difference "@user.reload.characters_count", -1 do 
+        @character.destroy
+      end
+    end
   end  
 
 end

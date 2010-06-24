@@ -15,13 +15,11 @@ class MailSettingFlowTest < ActionController::IntegrationTest
 		@user_sess.assert_template "user/mail_setting/edit"
 	end
 
-private
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
+  # 
+  # XIEXIN
+  # TODO
+  # update
+  test "PUT /mail_setting" do
+  end
 
 end

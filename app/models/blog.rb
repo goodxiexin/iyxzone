@@ -54,6 +54,12 @@ class Blog < ActiveRecord::Base
 
   after_save :update_blog_images
 
+  def self.test_limit
+    with_scope :find => {:limit => 5} do
+      puts Blog.count
+    end
+  end
+
 protected
 
   def game_is_valid

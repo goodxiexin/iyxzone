@@ -18,13 +18,9 @@ class User::ApplicationSettingController < UserBaseController
 
 	def update
 		if @setting.update_attributes(params[:setting])
-			render :update do |page|
-				page << "facebox.close();"
-			end
+			render_js_code "facebox.close();"
 		else
-      render :update do |page|
-        page << "error('发生错误');"
-      end
+      render_js_error
     end	
 	end
 

@@ -9,12 +9,6 @@ class NewsPicture < ActiveRecord::Base
                                   
   validates_as_attachment
 
-  def partitioned_path(*args)
-    dir = (attachment_path_id / 10000).to_s
-    sub_dir = (attachment_path_id % 10000).to_s
-    [dir, sub_dir] + args
-  end
-
   def swf_uploaded_data=(data)
     data.content_type = MIME::Types.type_for(data.original_filename)
     self.uploaded_data = data

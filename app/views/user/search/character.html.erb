@@ -19,8 +19,8 @@
 								<tr><td><strong> 没有符合条件的用户 </strong></td></tr>
 							<% else %>
                 <tr><td><strong> 共有<%= @users.total_entries %>个符合条件的用户 </strong></td></tr>
-                <% @users.each do |user_id, characters| %>
-								  <%= render :partial => 'user_item', :locals => {:user => characters.first.user, :characters => characters} %>
+                <% @users.each do |user, characters| %>
+								  <%= render :partial => 'user_item', :locals => {:user => user, :characters => characters} %>
                 <% end %>
 							<% end %>
             </table>

@@ -22,18 +22,18 @@ class TaggingTest < ActiveSupport::TestCase
   end
 
   test "标签合法性" do
-    tagging2 = Tagging.create(:poster_id => nil, :taggable_type => 'Game', :taggable_id => 1, :tag_id => @tag.id)
+    tagging2 = Tagging.new(:poster_id => nil, :taggable_type => 'Game', :taggable_id => 1, :tag_id => @tag.id)
     assert !tagging2.save
 
 		# 没有被标记的资源
-    tagging3 = Tagging.create(:poster_id => @user1.id, :taggable_type => nil, :taggable_id => @game.id, :tag_id => @tag.id)
+    tagging3 = Tagging.new(:poster_id => @user1.id, :taggable_type => nil, :taggable_id => @game.id, :tag_id => @tag.id)
     assert !tagging3.save
 
-    tagging4 = Tagging.create(:poster_id => @user1.id, :taggable_type => 'Game', :taggable_id => nil, :tag_id => @tag.id)
+    tagging4 = Tagging.new(:poster_id => @user1.id, :taggable_type => 'Game', :taggable_id => nil, :tag_id => @tag.id)
     assert !tagging4.save
 
 		# 被标记的资源不存在
-    tagging5 = Tagging.create(:poster_id => @user1.id, :taggable_type => 'Game', :taggable_id => 12345, :tag_id => @tag.id)
+    tagging5 = Tagging.new(:poster_id => @user1.id, :taggable_type => 'Game', :taggable_id => 12345, :tag_id => @tag.id)
     assert !tagging5.save
   end
 
@@ -42,9 +42,7 @@ class TaggingTest < ActiveSupport::TestCase
 		# 标记一次
 		@game.add_tag @user1, "hallo"
     @game.reload
-		
 		assert @game.tagged_by?(@user1)
-
 		tag = Tag.find_by_name("hallo")
 		assert_equal @game.tags_by(@user1.id), [tag]
     assert_equal tag.taggings_count, 1
@@ -54,12 +52,9 @@ class TaggingTest < ActiveSupport::TestCase
 		@game.add_tag @user2, "haliluya"
     @game.reload
 		@tag.reload
-
 		assert @game.tagged_by?(@user2)
-
     assert_equal @tag.taggings_count, 1
     assert_equal @game.taggings.count, 2
-
 		assert_equal @game.tags_by([@user1.id, @user2.id]), [tag, @tag]
 
 		@game.taggings.destroy_all

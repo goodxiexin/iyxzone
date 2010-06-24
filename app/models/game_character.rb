@@ -42,15 +42,11 @@ class GameCharacter < ActiveRecord::Base
 
   attr_readonly :game_id, :area_id, :server_id, :race_id, :profession_id
 
-  validates_presence_of :game_id, :message => "不能为空"
-
-  validates_presence_of :user_id, :message => "不能为空"
+  validates_presence_of :user_id
 
 	validates_numericality_of :level, :only_integer => true, :message => "必须是整数" 
 
-  validates_presence_of :name, :message => "不能为空"
-
-  validates_presence_of :game_id, :message => "不能为空"
+  validates_size_of :name, :within => 1..100
 
   validate_on_create :game_is_valid
 
@@ -85,7 +81,6 @@ class GameCharacter < ActiveRecord::Base
 protected
 
   def game_is_valid
-    return if game_id.blank?
     errors.add(:game_id, "不存在") unless Game.exists? game_id
   end
 

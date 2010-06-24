@@ -22,7 +22,8 @@ class News < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User' # this must be an admin
 
-  acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, news, comment| user.has_role? 'admin'}, :recipient_required =>false
+  acts_as_commentable :order => 'created_at ASC', :recipient_required => false,
+                      :delete_conditions => lambda {|user, news, comment| user.is_admin? }
 
   acts_as_viewable
 
@@ -39,11 +40,9 @@ class News < ActiveRecord::Base
   # 大致检查下，其他的比如游戏是否存在，类型是否合法我们采取信任传来的参数，毕竟这个是由admin创建的
   validates_presence_of :game_id, :message => "不能为空"
 
-  validates_presence_of :title, :message => "不能为空"
-
   validates_size_of :title, :within => 1..300, :too_long => "最长300个字节", :too_short => "最短1个字节" 
 
-  validates_presence_of :news_type, :message => "不能为空"
+  validates_inclusion_of :news_type, :in => ['picture', 'video', 'text']
 
   def self.daily 
     news = self.all(:conditions => ['created_at > ?', 1.days.ago], :order => 'created_at DESC', :limit => 4)

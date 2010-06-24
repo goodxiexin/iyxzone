@@ -9,7 +9,7 @@
 	    <div class="piclist-rows">
         <div class="mainConWrap clear">
           <div class="gameFriend piclist-rows">
-		        <%= render :partial => 'others_game_items', :locals => {:cuser => @user, :games => @games} %>
+		        <%= render :partial => 'others_game_items', :locals => {:user => current_user, :games => @games} %>
           </div>
         </div>
       </div>

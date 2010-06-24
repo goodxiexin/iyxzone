@@ -43,17 +43,14 @@ class PokeTest < ActiveSupport::TestCase
   end
 
   test "delete all" do
-    assert_difference "PokeDelivery.count", 2 do
+    assert_difference "@friend.reload.poke_deliveries_count", 2 do
       PokeDelivery.create :poke_id => @poke.id, :sender_id => @user.id, :recipient_id => @friend.id
       PokeDelivery.create :poke_id => @poke.id, :sender_id => @user.id, :recipient_id => @friend.id
     end
 
-    assert_difference "PokeDelivery.count", -2 do
+    assert_difference "@friend.reload.poke_deliveries_count", -2 do
       PokeDelivery.delete_all_for @friend
     end
-    @friend.reload
-    # TODO: 咋回事
-    assert_equal @friend.poke_deliveries_count, 0
   end
 
 end

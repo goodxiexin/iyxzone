@@ -181,7 +181,7 @@ class PollFlowTest < ActionController::IntegrationTest
     @user_sess.assert_redirected_to poll_url(@user_sess.assigns(:poll))
 
     assert_difference "Poll.count" do
-      @user_sess.post "/polls", {:poll => {:name => "poll", :no_deadline => 0, :max_multiple => 1, :explanation => "", :deadline => "2010-06-24", :privilege => 1, :game_id => @game.id, :description => "", :answers => [{"description"=>"adsf"}, {"description"=>"asdf"}, {"description"=>"asdf"}, {"description"=>""}, {"description"=>""}, {"description"=>""}, {"description"=>"adsf"}, {"description"=>"adsf"}, {"description"=>""}, {"description"=>""}]}}
+      @user_sess.post "/polls", {:poll => {:name => "poll", :no_deadline => 0, :max_multiple => 1, :explanation => "", :deadline => "2100-06-24", :privilege => 1, :game_id => @game.id, :description => "", :answers => [{"description"=>"adsf"}, {"description"=>"asdf"}, {"description"=>"asdf"}, {"description"=>""}, {"description"=>""}, {"description"=>""}, {"description"=>"adsf"}, {"description"=>"adsf"}, {"description"=>""}, {"description"=>""}]}}
     end
     @user_sess.assert_redirected_to poll_url(@user_sess.assigns(:poll))
 

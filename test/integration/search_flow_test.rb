@@ -18,49 +18,54 @@ class SearchFlowTest < ActionController::IntegrationTest
 	end
 
 	test "GET user" do
-		@user1_sess.get "/search_users?key=feng"
+		@user1_sess.get "/search_users", {:key => "feng"}
 		@user1_sess.assert_template 'user/search/user'
 		assert_equal @user1_sess.assigns(:users), [@user1, @user2]
 
-		@user1_sess.get "/search_users?key=hehe"
+		@user1_sess.get "/search_users", {:key => "hehe"}
 		@user1_sess.assert_template 'user/search/user'
 		assert_equal @user1_sess.assigns(:users), []
 
-		@user1_sess.get "/search_users?key=风"
+		@user1_sess.get "/search_users", {:key => "风"}
 		@user1_sess.assert_template 'user/search/user'
 		assert_equal @user1_sess.assigns(:users), [@user1]
 
-		@user1_sess.get "/search_users?key=不要"
+		@user1_sess.get "/search_users", {:key => "不要"}
 		@user1_sess.assert_template 'user/search/user'
 		assert_equal @user1_sess.assigns(:users), []
 	end
 	
 	test "GET character" do
 
-		@user1_sess.get "/search_characters?key=feng&game_id=&area_id=&server_id="
+		@user1_sess.get "/search_characters", {:key => "feng", :game_id => nil, :area_id => nil, :server_id => nil}
 		@user1_sess.assert_template 'user/search/character'
-		assert_equal @user1_sess.assigns(:users), [[1,[@character1]],[3, [@character3]]]
+		assert_equal @user1_sesa.assigns(:users), [[@user1,[@character1]],[@user3, [@character3]]]
 
-		@user1_sess.get "/search_characters?key=feng&game_id=#{@character1.game.id}&area_id=#{@character1.area.id}&server_id=#{@character1.server.id}"
+		@user1_sess.get "/search_characters", {:key => "feng", :game_id => @character1.game_id, :area_id => @character1.area_id, :server_id => @character1.server_id}
 		@user1_sess.assert_template 'user/search/character'
-		assert_equal @user1_sess.assigns(:users), [[1,[@character1]]]
+		assert_equal @user1_sess.assigns(:users), [[@user1,[@character1]]]
 
-		@user1_sess.get "/search_characters?key=feng&game_id=#{@character2.game.id}&area_id=#{@character2.area.id}&server_id=#{@character2.server.id}"
-		@user1_sess.assert_template 'user/search/character'
-		assert_equal @user1_sess.assigns(:users), []
-
-		@user1_sess.get "/search_characters?key=hehe&game_id=&area_id=&server_id="
+		@user1_sess.get "/search_characters", {:key => "feng", :game_id => @character2.game_id, :area_id => @character2.area_id, :server_id => @character2.server_id}
 		@user1_sess.assert_template 'user/search/character'
 		assert_equal @user1_sess.assigns(:users), []
 
-		@user1_sess.get "/search_characters?key=风&game_id=&area_id=&server_id="
-		@user1_sess.assert_template 'user/search/character'
-		assert_equal @user1_sess.assigns(:users), [[1,[@character1]]]
-
-		@user1_sess.get "/search_characters?key=不要&game_id=&area_id=&server_id="
+		@user1_sess.get "/search_characters", {:key => 'hehe', :game_id => nil, :area_id => nil, :server_id => nil}
 		@user1_sess.assert_template 'user/search/character'
 		assert_equal @user1_sess.assigns(:users), []
 
+		@user1_sess.get "/search_characters", {:key => "风", :game_id => nil, :area_id => nil, :server_id => nil}
+		@user1_sess.assert_template 'user/search/character'
+		assert_equal @user1_sess.assigns(:users), [[@user1,[@character1]]]
+
+		@user1_sess.get "/search_characters", {:key => '不要', :game_id => nil, :area_id => nil, :server_id => nil}
+		@user1_sess.assert_template 'user/search/character'
+		assert_equal @user1_sess.assigns(:users), []
+
+    # 
+    # XIEXIN
+    # TODO
+    # game_id, area_id, server_id有些有，有些没有
+    # 比如只选择了game, 只选择了game, area等
 	end
 
 end

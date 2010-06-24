@@ -34,18 +34,22 @@ class SearchTest < ActiveSupport::TestCase
 	end
 
 	test "character搜索" do
-		# 英文搜索
-		users1 = GameCharacter.search("feng").group_by(&:user_id).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
-		assert_equal users1, [[1,[@character1]],[3, [@character3]]]
+    # XIEXIN 
+    # TODO
+    # 重写，还要包括服务器
 
-		users3 = GameCharacter.search("hehe").group_by(&:user_id).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
+		# 英文搜索
+		users1 = GameCharacter.search("feng").group_by(&:user).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
+		assert_equal users1, [[@user1, [@character1]],[@user3, [@character3]]]
+
+		users3 = GameCharacter.search("hehe").group_by(&:user).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
 		assert_equal users3, []
 
 		# 中文搜索
-		users2 = GameCharacter.search("风").group_by(&:user_id).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
-		assert_equal users2, [[1,[@character1]]]
+		users2 = GameCharacter.search("风").group_by(&:user).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
+		assert_equal users2, [[@user1, [@character1]]]
 
-		users4 = GameCharacter.search("不要").group_by(&:user_id).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
+		users4 = GameCharacter.search("不要").group_by(&:user).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
 		assert_equal users4, []
 	end
 end

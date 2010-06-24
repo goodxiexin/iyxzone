@@ -16,7 +16,7 @@ class GameFlowTest < ActionController::IntegrationTest
 
 		# create a idol
     @idol = UserFactory.create_idol
-    @fanship = Fanship.create :fan_id => @user.id, :idol_id => @idol.id
+    FanFactory.create @user, @idol
     @user.reload and @idol.reload
 
     # create friends
@@ -67,32 +67,37 @@ class GameFlowTest < ActionController::IntegrationTest
 
 	test "GET index" do
 		# invalid uid
-    @user_sess.get "/games?uid=invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.get "/games", {:uid => 'invalid'}
+    @user_sess.assert_not_found
 
 		# self
-		@user_sess.get "/games?uid=#{@user.id}"
+		@user_sess.get "/games", {:uid => @user.id}
     @user_sess.assert_template 'user/games/index'
     assert_equal @user_sess.assigns(:games), [@game]
 		
 		# friend
-		@user_sess.get "/games?uid=#{@diff_friend.id}"
+		@user_sess.get "/games", {:uid => @diff_friend.id}
     @user_sess.assert_template 'user/games/index'
     assert_equal @user_sess.assigns(:games), [@game2]
 
 		# stranger
-		@user_sess.get "/games?uid=#{@diff_stranger.id}"
+		@user_sess.get "/games", {:uid => @diff_stranger.id}
     @user_sess.assert_redirected_to new_friend_url(:uid => @diff_stranger.id)
 
 		# idol
-		@user_sess.get "/games?uid=#{@idol.id}"
+		@user_sess.get "/games", {:uid => @idol.id}
     @user_sess.assert_template 'user/games/index'
 
 		# fan
-		@idol_sess.get "/games?uid=#{@user.id}"
+		@idol_sess.get "/games", {:uid => @user.id}
     @idol_sess.assert_template 'user/games/index'
 	end
 
+  #
+  # XIEXIN
+  # TODO
+  # create some blogs/events/guilds/albums, and construct some feeds
+  #
 	test "GET show" do
 		# invalid uid
     @user_sess.get "/games/invalid"
@@ -124,28 +129,28 @@ class GameFlowTest < ActionController::IntegrationTest
 
 	test "GET interested" do
 		# invalid uid
-    @user_sess.get "/games/interested?uid=invalid"
-    @user_sess.assert_template 'errors/404'
+    @user_sess.get "/games/interested", {:uid => 'invalid'}
+    @user_sess.assert_not_found
 
-		@user_sess.get "/games/interested?uid=#{@user.id}"
+		@user_sess.get "/games/interested", {:uid => @user.id}
 		@user_sess.assert_template "user/games/interested"
 		assert_equal @user_sess.assigns(:games), [@game2]
 
 		# friend
-		@user_sess.get "/games/interested?uid=#{@diff_friend.id}"
+		@user_sess.get "/games/interested", {:uid => @diff_friend.id}
     @user_sess.assert_template 'user/games/interested'
     assert_equal @user_sess.assigns(:games), [@game]
 
 		# stranger
-		@user_sess.get "/games/interested?uid=#{@diff_stranger.id}"
+		@user_sess.get "/games/interested", {:uid => @diff_stranger.id}
     @user_sess.assert_redirected_to new_friend_url(:uid => @diff_stranger.id)
 
 		# idol
-		@user_sess.get "/games/interested?uid=#{@idol.id}"
+		@user_sess.get "/games/interested", {:uid => @idol.id}
     @user_sess.assert_template 'user/games/interested'
 
 		# fan
-		@idol_sess.get "/games/interested?uid=#{@user.id}"
+		@idol_sess.get "/games/interested", {:uid => @user.id}
     @idol_sess.assert_template 'user/games/interested'
 	end
 
@@ -161,12 +166,4 @@ class GameFlowTest < ActionController::IntegrationTest
 		assert_equal @user_sess.assigns(:games), [@game,@game2]
 	end
 
-private
-
-  def login user
-    open_session do |session|
-      session.post "/sessions/create", :email => user.email, :password => user.password
-      session.assert_redirected_to home_url
-    end  
-  end 
 end

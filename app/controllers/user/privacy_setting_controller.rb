@@ -13,24 +13,19 @@ class User::PrivacySettingController < UserBaseController
       render :action => "going_privacy"
     when 2
       render :action => "outside_privacy"
-   # when 3
-   #   render :action => "qq_privacy", :layout => false
-   # when 4
-   #   render :action => "phone_privacy", :layout => false
-   # when 5
-   #   render :action => "website_privacy", :layout => false
+    when 3
+      render :action => "qq_privacy", :layout => false
+    when 4
+      render :action => "phone_privacy", :layout => false
+    when 5
+      render :action => "website_privacy", :layout => false
     end
   end
 
   def update
     if @setting.update_attributes(params[:setting])
-			logger.error "format: #{params[:format]}"
 			respond_to do |format|
-        format.js {
-          render :update do |page|
-            page << "facebox.close();"
-          end
-        }
+        format.js { render_js_code "facebox.close();" }
         format.html {  
           flash[:notice] = "设置保存成功"
 			    case params[:type].to_i

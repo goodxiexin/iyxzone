@@ -35,11 +35,10 @@ class UserObserver < ActiveRecord::Observer
       end
 
       # create suggestions
-			if RAILS_ENV != 'test'
-				user.create_friend_suggestions
-				user.servers.each do |s|
-					user.create_comrade_suggestions s
-				end
+			user.create_friend_suggestions
+			user.servers.each do |s|
+        puts "server.id: #{s.id}"
+				user.create_comrade_suggestions s
 			end
     end
     

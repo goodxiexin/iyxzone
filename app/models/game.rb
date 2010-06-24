@@ -39,7 +39,8 @@ class Game < ActiveRecord::Base
   
 	acts_as_rateable :create_conditions => lambda {|rating, game, user| (rating.nil? || rating.created_at < 10.days.ago) and user.has_game?(game) }
 
-	acts_as_commentable :order => 'created_at DESC', :recipient_required => false
+	acts_as_commentable :order => 'created_at DESC', :recipient_required => false,
+                      :delete_conditions => lambda {|user, blog, comment| user.is_admin?}
 
   acts_as_pinyin :name => "pinyin" 
 

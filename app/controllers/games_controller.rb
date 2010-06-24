@@ -4,7 +4,7 @@
 #
 class GamesController < ApplicationController
 
-  #caches_page :show
+  caches_page :show
 
   def show
     logger.error 'games'

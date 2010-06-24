@@ -12,22 +12,22 @@ class RatingTest < ActiveSupport::TestCase
 
 	test "合法性" do
 		# 没有用户id
-		rating1 = Rating.create(:user_id => nil, :rating => 5, :rateable_id => @game.id, :rateable_type => 'Game')
+		rating1 = Rating.new(:user_id => nil, :rating => 5, :rateable_id => @game.id, :rateable_type => 'Game')
 		assert !rating1.save
 
 		# 没有rating
-		rating2 = Rating.create(:user_id => @user.id, :rating => nil, :rateable_id => @game.id, :rateable_type => 'Game')
+		rating2 = Rating.new(:user_id => @user.id, :rating => nil, :rateable_id => @game.id, :rateable_type => 'Game')
 		assert !rating2.save
 		
 		# ratable 信息不全
-		rating3 = Rating.create(:user_id => @user.id, :rating => 5, :rateable_id => nil, :rateable_type => 'Game')
+		rating3 = Rating.new(:user_id => @user.id, :rating => 5, :rateable_id => nil, :rateable_type => 'Game')
 		assert !rating3.save
 
-		rating4 = Rating.create(:user_id => @user.id, :rating => 5, :rateable_id => @game.id, :rateable_type => nil)
+		rating4 = Rating.new(:user_id => @user.id, :rating => 5, :rateable_id => @game.id, :rateable_type => nil)
 		assert !rating4.save
 		
 		# 信息齐全
-		rating5 = Rating.create(:user_id => @user.id, :rating => 5, :rateable_id => @game.id, :rateable_type => 'Game')
+		rating5 = Rating.new(:user_id => @user.id, :rating => 5, :rateable_id => @game.id, :rateable_type => 'Game')
 		assert rating5.save
 
 	end

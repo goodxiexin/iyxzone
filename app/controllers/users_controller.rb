@@ -14,7 +14,8 @@ class UsersController < ApplicationController
 
     if @user.save
       @user.profile.update_attributes(params[:profile])
-      if @user.characters.count == 0
+      logger.error @user.reload.characters_count
+      if @user.reload.characters_count == 0
         @user.destroy
         render_js_error "没有游戏角色"
       else

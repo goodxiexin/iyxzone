@@ -33,7 +33,7 @@ class User::SearchController < UserBaseController
 
     @key = params[:key]
     @games = Game.find(:all, :order => 'pinyin ASC')
-		@total_users = GameCharacter.match(cond).search(@key).group_by(&:user_id).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
+		@total_users = GameCharacter.match(cond).search(@key).group_by(&:user).select{|user, characters| user.active?}.to_a
     @users = @total_users.paginate :page => params[:page], :per_page => PER_PAGE
   end
 
