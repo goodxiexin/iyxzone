@@ -144,11 +144,11 @@ class Event < ActiveRecord::Base
     end
   end
 
-  validates_size_of :title, :within => 1..100, :too_long => "最长100字节", :too_short => "最短1字节"
+  validates_size_of :title, :within => 1..100
 
-  validates_size_of :description, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1字节"
+  validates_size_of :description, :within => 1..10000
 
-  validates_presence_of :start_time, :end_time, :message => "不能为空"
+  validates_presence_of :start_time, :end_time
 
   validate :time_is_valid
 
@@ -158,7 +158,7 @@ class Event < ActiveRecord::Base
 
   validate_on_update :event_is_not_expired
 
-  validates_inclusion_of :privilege, :message => "只能是1,2", :in => [1, 2]
+  validates_inclusion_of :privilege, :in => [1, 2]
  
 protected
 

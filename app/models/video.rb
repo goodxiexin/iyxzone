@@ -39,27 +39,24 @@ class Video < ActiveRecord::Base
   # video url 和 game_id 还有 poster_id 一经创建无法修改
   attr_readonly :video_url, :game_id, :poster_id
 
-  #validates_presence_of :title, :message => "不能为空"
+  validates_size_of :title, :within => 1..100
 
-  validates_size_of :title, :within => 1..100, :too_long => "标题最长100个字符", :too_short => "标题最短100个字符"#, :if => 'title'
+  validates_size_of :description, :maximum => 1000
 
-  validates_size_of :description, :maximum => 1000, :too_long => "介绍最长1000个字符", :allow_blank => true
+  validates_presence_of :poster_id
 
-  validates_presence_of :poster_id, :message => "不能为空"
-
-  validates_presence_of :video_url, :message => "不能为空"
-
-  validates_presence_of :game_id, :message => "不能为空"
+  validates_presence_of :video_url
 
   validate_on_create :game_is_valid
 
 protected
 
   def game_is_valid
-    return if game_id.blank?
-    errors.add('game_id', "不存在") unless Game.exists?(game_id)
-    return if poster_id.blank? or !errors.blank?
-    errors.add('game_id', "该用户没有这个游戏") unless poster.has_game?(game_id)
+    if game.blank?
+      errors.add('game_id', "不存在")
+    elsif poster and !poster.has_game?(game)
+      errors.add('game_id', "该用户没有这个游戏")
+    end
   end
 
 end

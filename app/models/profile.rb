@@ -121,9 +121,9 @@ class Profile < ActiveRecord::Base
   
   attr_readonly :user_id
 
-  validates_size_of :login, :within => 2..100, :too_long => "最长100个字符", :too_short => "最短2个字符"
+  validates_size_of :login, :within => 2..100
 
-  validates_inclusion_of :gender, :in => ['male', 'female'], :message => "只能是male或者female"
+  validates_inclusion_of :gender, :in => ['male', 'female']
 
   validate :birthday_is_valid
     
@@ -133,15 +133,15 @@ class Profile < ActiveRecord::Base
   
   validate :district_is_valid
 
-  validates_size_of :qq, :within => 4..15, :too_short => "最短4位", :too_long => "最长15位", :allow_blank => true
+  validates_size_of :qq, :within => 4..15, :allow_blank => true
 
-  validates_format_of :qq, :with => /\d+/, :message => "只能是数字", :allow_blank => true
+  validates_format_of :qq, :with => /\d+/, :allow_blank => true
 
-  validates_size_of :phone, :within => 7..15, :too_short => "最短7位", :too_long => "最长15位", :allow_blank => true
+  validates_size_of :phone, :within => 7..15, :allow_blank => true
 
-  validates_format_of :phone, :with => /\d+(-(\d+))*/, :message => "只能是数字或者-", :allow_blank => true
+  validates_format_of :phone, :with => /\d+(-(\d+))*/, :allow_blank => true
 
-  validates_format_of :website, :with => /^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/, :message => "非法的url", :allow_blank => true
+  validates_format_of :website, :with => /^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/, :allow_blank => true
 
 protected
 

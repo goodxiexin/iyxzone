@@ -19,7 +19,7 @@ class Skin < ActiveRecord::Base
     (skinnable.class.name == self.category) and (is_public? or (!access_list.blank? and access_list.include?(skinnable.id)))
   end
 
-  validates_uniqueness_of :name, :message => "已经存在了"
+  validates_uniqueness_of :name
 
   validates_inclusion_of :privilege, :in => [PUBLIC, PRIVATE]
 

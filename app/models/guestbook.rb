@@ -9,17 +9,14 @@ class Guestbook < ActiveRecord::Base
 
   validate_on_create :user_or_email_exists
 
-  validates_presence_of :description, :message => "不能为空"
+  validates_size_of :description, :within => 1..1000
 
-  validates_size_of :description, :within => 1..1000, :too_long => "最长1000个字符", :too_short => "最短1个字符", :allow_blank => true
+  validates_size_of :reply, :within => 1..1000, :allow_blank => true
 
-  validates_size_of :reply, :within => 1..1000, :too_long => "最长1000个字符", :too_short => "最短1个字符", :allow_blank => true
+  validates_inclusion_of :priority, :in => [Urgent, Justsoso]
 
-  validates_inclusion_of :priority, :in => [Urgent, Justsoso], :message => "只能是1或者2"
+  validates_inclusion_of :catagory, :in => ErrorElements
 
-  validates_inclusion_of :catagory, :in => ErrorElements, :message => "类型不对" 
-
-  # 不能让用户修改这2个域
   attr_protected :reply, :done_date
 
   def recently_set_reply?

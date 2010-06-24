@@ -44,7 +44,7 @@ class GameCharacter < ActiveRecord::Base
 
   validates_presence_of :user_id
 
-	validates_numericality_of :level, :only_integer => true, :message => "必须是整数" 
+	validates_numericality_of :level, :only_integer => true
 
   validates_size_of :name, :within => 1..100
 

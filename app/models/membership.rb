@@ -139,10 +139,9 @@ class Membership < ActiveRecord::Base
     end
   end
 
-  # user_id, guild_id, character_id 不能被修改
   attr_readonly :user_id, :guild_id, :character_id
 
-  validates_inclusion_of :status, :in => [Invitation, Request, President, Veteran, Member], :message => "只能是0,1,2,3,4"
+  validates_inclusion_of :status, :in => [Invitation, Request, President, Veteran, Member]
 
   validate_on_create :guild_is_valid
 

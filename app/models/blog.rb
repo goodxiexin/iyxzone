@@ -41,24 +41,17 @@ class Blog < ActiveRecord::Base
 
   acts_as_abstract :columns => [:content]
 
-  # poster_id 和 game_id 一经创建无法修改
   attr_readonly :poster_id, :game_id
 
-  validates_size_of :title, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
+  validates_size_of :title, :within => 1..100
 
-  validates_presence_of :poster_id, :message => "不能为空", :on => :create
+  validates_presence_of :poster_id, :on => :create
 
-  validates_size_of :content, :within => 1..10000, :too_long => "最长10000字节", :too_short => "最短1个字节"
+  validates_size_of :content, :within => 1..10000
 
   validate_on_create :game_is_valid
 
   after_save :update_blog_images
-
-  def self.test_limit
-    with_scope :find => {:limit => 5} do
-      puts Blog.count
-    end
-  end
 
 protected
 
