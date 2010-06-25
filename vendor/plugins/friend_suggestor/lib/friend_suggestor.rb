@@ -7,7 +7,8 @@ module FriendSuggestor
 	COMRADE_SUGGESTION_SET_SIZE = 50
 
 	def new_collect_friends
-		friend_suggestions = {} # (user_id, frequency) pair
+    s = Time.now
+    friend_suggestions = {} # (user_id, frequency) pair
 		friend_suggestions.default = 0
 
 		# get current user score vector
@@ -61,11 +62,15 @@ module FriendSuggestor
 			end
 		end
 
-		friend_suggestions.sort{|a, b| b[1] <=> a[1]}[0..(FRIEND_SUGGESTION_SET_SIZE - 1)].map{|info| info[0]}
+    e = Time.now
 
+    puts "#{e - s}"
+
+		friend_suggestions.sort{|a, b| b[1] <=> a[1]}[0..(FRIEND_SUGGESTION_SET_SIZE - 1)].map{|info| info[0]}
 	end
 
 	def collect_friends
+    s = Time.now
 		friend_suggestions = {} # (user_id, frequency) pair
 		friend_suggestions.default = 0
 
@@ -109,6 +114,10 @@ module FriendSuggestor
     User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :except => friends + [self], :conditions => "activated_at IS NOT NULL").each do |u|
       friend_suggestions[u.id] += 1 # 加1分
     end
+
+    e = Time.now
+
+    puts "#{e -s }"
 
     # sort by score and return first FRIEND_SUGGESTION_SET_SIZE 
     friend_suggestions.sort{|a, b| b[1] <=> a[1]}[0..(FRIEND_SUGGESTION_SET_SIZE - 1)].map{|info| info[0]}
