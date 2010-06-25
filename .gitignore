@@ -1,4 +1,3 @@
-.gitignore
 log/*
 config/database.yml
 config/juggernaut_hosts.yml
