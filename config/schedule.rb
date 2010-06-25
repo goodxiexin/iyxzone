@@ -23,11 +23,11 @@
 set :output, "#{RAILS_ROOT}/tmp/cron_log"
 
 every 1.day, :at => '4:00am' do
-  rake "utils:backup_local"
+  rake "backup:local"
 end
 
 every 2.weeks, :at => '4:30am' do
-  rake "utils:backup_s3"
+  rake "backup:s3"
 end
 
 every 1.day, :at => '0:00am' do
@@ -37,6 +37,10 @@ end
 every 1.day, :at => '4:00am' do
   rake "users:verify_wow_characters"
   rake "users:verify_wowtw_characters"
+end
+
+every 1.week, :at => '2:30am' do
+  rake "utils:tail_log"
 end
 
 every 2.weeks, :at => '2:00am' do
