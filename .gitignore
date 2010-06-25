@@ -1,11 +1,8 @@
 log/*
-<<<<<<< HEAD:.gitignore
 public/photos/*
 public/news_pictures/*
 public/blog_images/*
 public/images/gamepic
-=======
->>>>>>> 06e98c30b0c18083540eea0d48e0c56664f152fa:.gitignore
 config/database.yml
 config/juggernaut_hosts.yml
 juggernaut.yml
