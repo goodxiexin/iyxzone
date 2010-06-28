@@ -65,11 +65,11 @@ class Friendship < ActiveRecord::Base
 
   attr_readonly :user_id, :friend_id
 
-  validates_presence_of :user_id, :friend_id, :message => "不能为空", :on => :create
+  validates_presence_of :user_id, :friend_id, :on => :create
 
   validate_on_create :friend_is_valid
 
-  validates_inclusion_of :status, :in => [Request, Friend], :message => "只能是1,2"
+  validates_inclusion_of :status, :in => [Request, Friend]
 
   validate_on_update :status_is_valid
 

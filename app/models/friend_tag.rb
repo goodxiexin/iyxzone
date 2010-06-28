@@ -18,30 +18,25 @@ class FriendTag < ActiveRecord::Base
 
   attr_readonly :poster_id, :tagged_user_id, :taggable_id, :taggable_type
 
-  validates_presence_of :poster_id, :message => "不能为空"
-
-  validates_presence_of :taggable_id, :taggable_type, :message => "不能为空" 
+  validates_presence_of :poster_id
 
   validate_on_create :taggable_is_valid
-
-  validates_presence_of :tagged_user_id, :message => "不能为空"
 
   validate_on_create :tagged_user_is_valid
 
 protected
 
   def tagged_user_is_valid
-    return if tagged_user_id.blank? or poster_id.blank?
-    errors.add(:tagged_user_id, "不是好友") if !poster.has_friend?(tagged_user_id) and tagged_user_id != poster_id
+    if tagged_user.blank?
+      errors.add(:tagged_user, "不存在")
+    elsif tagged_user != poster and !poster.has_friend?(tagged_user)
+      errors.add(:tagged_user_id, "不是好友")
+    end
   end
 
   def taggable_is_valid
-    return if taggable_id.blank? or taggable_type.blank?
-
     if taggable.blank?
       errors.add(:taggable_id, "不存在")
-    elsif taggable.rejected?
-      errors.add(:taggable_id, "已经被和谐了")
     elsif taggable.has_tag? tagged_user_id
       errors.add(:tagged_user_id, '已经标记过了')
     end

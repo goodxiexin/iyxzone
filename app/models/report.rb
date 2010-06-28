@@ -6,13 +6,11 @@ class Report < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User' 
 
-  validates_size_of :content, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节", :allow_blank => true
-
-  validates_presence_of :reportable_id, :reportable_type, :message => "不能为空"
+  validates_size_of :content, :within => 1..10000, :allow_blank => true
 
   validate_on_create :reportable_is_valid
 
-  validates_inclusion_of :category, :in => CATEGORY, :message => "类型不对"
+  validates_inclusion_of :category, :in => CATEGORY
 
   after_create :set_verified_flag
   

@@ -1,8 +1,8 @@
-.gitignore
 log/*
 public/photos/*
 public/news_pictures/*
 public/blog_images/*
+public/images/gamepic
 config/database.yml
-juggernaut.yml
 config/juggernaut_hosts.yml
+juggernaut.yml

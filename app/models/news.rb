@@ -37,10 +37,9 @@ class News < ActiveRecord::Base
 
   acts_as_random
 
-  # 大致检查下，其他的比如游戏是否存在，类型是否合法我们采取信任传来的参数，毕竟这个是由admin创建的
-  validates_presence_of :game_id, :message => "不能为空"
+  validates_presence_of :game_id
 
-  validates_size_of :title, :within => 1..300, :too_long => "最长300个字节", :too_short => "最短1个字节" 
+  validates_size_of :title, :within => 1..300
 
   validates_inclusion_of :news_type, :in => ['picture', 'video', 'text']
 

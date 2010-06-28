@@ -68,23 +68,6 @@ class SharingTest < ActiveSupport::TestCase
     assert_equal @blog.first_sharer, @user
   end
 
-  test "share sensitive blog" do
-    r = 'reason'
-    t = 'title'
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id
-    @blog.unverify
-
-    assert_no_difference "Sharing.count" do
-      @blog.share_by(@user, r, t)
-    end
-    
-    @blog.verify
-
-    assert_difference "Sharing.count" do
-      @blog.share_by(@user, r, t)
-    end
-  end
-
   test "hot/recent/friends, category" do
     r = 'reason'
     t = 'title'

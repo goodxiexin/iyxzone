@@ -10,8 +10,8 @@ class Link < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :url, :message => "不能为空", :on => :create
+  validates_presence_of :url, :on => :create
 
-  validates_format_of :url, :with => /(http:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-%=&]+)?/, :on => :create, :message => '不是合法的url'
+  validates_format_of :url, :with => /(http:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-%=&]+)?/, :on => :create
 
 end

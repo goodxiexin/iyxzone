@@ -12,11 +12,11 @@ namespace :suggestions do
 
   desc "计算好友推荐"
   task :create_friend_suggestions => :environment do
-    User.all.each do |user|
-      if user.friend_suggestions.count < 50 
-        user.create_friend_suggestions
-        puts "#{user.id} - #{user.login}: generate #{user.friend_suggestions.count} suggestions"
-      end
+    puts Process.pid
+    User.all.select{|u| u.friend_suggestions.count < 50}.each_with_index do |user, i|
+      user.create_friend_suggestions
+      ram_usage = `pmap #{Process.pid} | tail -1`[10,40].strip
+      puts "#{user.id} - #{user.login}: generate #{user.friend_suggestions.count} suggestions, ram usage: #{ram_usage}MB"
     end
   end
 

@@ -39,6 +39,10 @@ class User::SharingsController < UserBaseController
       # in site url
       @shareable_type, @shareable_id = Share.get_type_and_id @path
       @shareable = @shareable_type.constantize.find(@shareable_id)
+      if @shareable.responds_to?(:rejected?) and @shareable.rejected?
+        render_not_found
+        return
+      end  
     else
       if Youku.identify_url(@my_url)
         video_params = (params[:video] || {}).merge({:title => params[:title], :description => params[:reason], :poster_id => current_user.id})

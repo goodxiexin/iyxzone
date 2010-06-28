@@ -8,11 +8,11 @@ class PokeDelivery < ActiveRecord::Base
 
   attr_readonly :sender_id, :recipient_id, :poke_id
 
-  validates_presence_of :sender_id, :message => "不能为空"
+  validates_presence_of :sender_id
 
-  validates_presence_of :recipient_id, :message => "不能为空"
+  validates_presence_of :recipient_id
 
-  validates_presence_of :poke_id, :message => "不能为空"
+  validates_presence_of :poke_id
 
   validate_on_create :poke_is_valid
 

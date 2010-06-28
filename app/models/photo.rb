@@ -36,6 +36,21 @@ class Photo < ActiveRecord::Base
 
   after_create :set_album_cover_on_create
 
+  after_update :set_album_cover_on_update
+
+	def swf_uploaded_data=(data)
+    data.content_type = MIME::Types.type_for(data.original_filename)
+    self.uploaded_data = data
+  end
+  
+  validates_size_of :notation, :maximum => 1000, :allow_blank => true
+
+  validates_presence_of :album_id, :if => "thumbnail.blank?", :on => :create
+
+  attr_readonly :poster_id, :game_id
+
+protected
+
   def set_album_cover_on_create
     return unless thumbnail.blank?
     if @is_cover
@@ -43,8 +58,6 @@ class Photo < ActiveRecord::Base
     end
     @is_cover = nil
   end
-
-  after_update :set_album_cover_on_update
 
   def set_album_cover_on_update
     return unless thumbnail.blank?
@@ -67,22 +80,5 @@ class Photo < ActiveRecord::Base
     end
     @is_cover = nil
   end
-
-	def swf_uploaded_data=(data)
-    data.content_type = MIME::Types.type_for(data.original_filename)
-    self.uploaded_data = data
-  end
-=begin  
-  def partitioned_path(*args)
-    dir = (attachment_path_id / 10000).to_s
-    sub_dir = (attachment_path_id % 10000).to_s
-    [dir, sub_dir] + args
-  end
-=end
-  validates_size_of :notation, :maximum => 1000, :too_long => "最多1000个字符", :allow_blank => true
-
-  validates_presence_of :album_id, :if => "thumbnail.blank?", :on => :create
-
-  attr_readonly :poster_id, :game_id
 
 end

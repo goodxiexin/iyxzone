@@ -150,11 +150,9 @@ class Guild < ActiveRecord::Base
   # game_id, president_id, character_id 不能改变
   attr_readonly :game_id, :game_area_id, :game_server_id, :president_id, :character_id, :name
 
-  validates_presence_of :name, :message => "不能为空"
+  validates_size_of :name, :within => 1..100
 
-  validates_size_of :name, :within => 1..100, :too_long => "最长100个字节", :too_short => "最短1个字节"
-
-  validates_size_of :description, :within => 1..10000, :too_long => "最长10000个字节", :too_short => "最短1个字节"
+  validates_size_of :description, :within => 1..10000
 
   validate_on_create :character_is_valid
 

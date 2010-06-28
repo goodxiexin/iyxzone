@@ -119,7 +119,7 @@ class Participation < ActiveRecord::Base
 
   attr_readonly :participant_id, :character_id, :event_id
 
-  validates_inclusion_of :status, :message => "只能是0,1,3,4", :in => [Invitation, Request, Confirmed, Maybe]
+  validates_inclusion_of :status, :in => [Invitation, Request, Confirmed, Maybe]
 
   validate_on_create :event_is_valid
 
