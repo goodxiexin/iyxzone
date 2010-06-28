@@ -5,6 +5,7 @@ class GameFlowTest < ActionController::IntegrationTest
 	def setup
     # create a user with game character
     @user = UserFactory.create
+
     @character = GameCharacterFactory.create :user_id => @user.id
     @game = @character.game
 
@@ -16,6 +17,7 @@ class GameFlowTest < ActionController::IntegrationTest
 
 		# create a idol
     @idol = UserFactory.create_idol
+    @idol_character = GameCharacterFactory.create @character.game_info.merge({:user_id => @idol.id})
     FanFactory.create @user, @idol
     @user.reload and @idol.reload
 
@@ -31,7 +33,7 @@ class GameFlowTest < ActionController::IntegrationTest
 
     @comrade_friend = UserFactory.create
     FriendFactory.create @user, @comrade_friend
-    GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @comrade_friend.id
+		@comrade_friend_character = GameCharacterFactory.create :game_id => @character.game_id, :area_id => @character.area_id, :server_id => @character.server_id, :race_id => @character.race_id, :profession_id => @character.profession_id, :user_id => @comrade_friend.id
 
     # create strangers
     @diff_stranger = UserFactory.create
@@ -64,7 +66,7 @@ class GameFlowTest < ActionController::IntegrationTest
 		@idol_sess = login @idol
   
 	end
-
+=begin
 	test "GET index" do
 		# invalid uid
     @user_sess.get "/games", {:uid => 'invalid'}
@@ -92,7 +94,7 @@ class GameFlowTest < ActionController::IntegrationTest
 		@idol_sess.get "/games", {:uid => @user.id}
     @idol_sess.assert_template 'user/games/index'
 	end
-
+=end
   #
   # XIEXIN
   # TODO
@@ -113,8 +115,80 @@ class GameFlowTest < ActionController::IntegrationTest
 		@diff_friend_sess.get "/games/#{@game.id}"
 		@diff_friend_sess.assert_template "user/games/show"
 		assert_nil @diff_friend_sess.assigns(:comrades)
-	end
 
+		# blogs
+    @blog1 = BlogFactory.create :poster_id => @comrade_stranger.id, :game_id => @game.id
+		sleep 1
+    @blog2 = BlogFactory.create :poster_id => @comrade_friend.id, :game_id => @game.id
+		sleep 1
+    @blog3 = BlogFactory.create :poster_id => @idol.id, :game_id => @game.id
+		@user_sess.get "/games/#{@game.id}"
+    assert_equal @user_sess.assigns(:blogs), [@blog3, @blog2, @blog1]
+
+    # video feed
+    @video = VideoFactory.create :poster_id => @comrade_friend.id, :game_id => @game.id
+    assert @game.reload.recv_feed?(@video)
+
+    @video1 = VideoFactory.create :poster_id => @idol.id, :game_id => @game.id
+    assert @game.reload.recv_feed?(@video1)
+
+		# personal album
+    @album = PersonalAlbumFactory.create :owner_id => @diff_friend.id, :game_id => @game2.id
+    @photo = PhotoFactory.create :album_id => @album.id, :type => 'PersonalPhoto'
+    @album.record_upload @diff_friend, [@photo]
+ 
+    @album1 = PersonalAlbumFactory.create :owner_id => @comrade_friend.id, :game_id => @game.id
+    @photo1 = PhotoFactory.create :album_id => @album1.id, :type => 'PersonalPhoto'
+    @album1.record_upload @comrade_friend, [@photo1]
+ 
+    @album2 = PersonalAlbumFactory.create :owner_id => @comrade_stranger.id, :game_id => @game.id
+    @photo2 = PhotoFactory.create :album_id => @album2.id, :type => 'PersonalPhoto'
+    @album2.record_upload @comrade_stranger, [@photo2]
+ 
+    @album3 = PersonalAlbumFactory.create :owner_id => @idol.id, :game_id => @game.id
+    @photo3 = PhotoFactory.create :album_id => @album3.id, :type => 'PersonalPhoto'
+    @album3.record_upload @idol, [@photo3]
+
+		@user_sess.get "/games/#{@game.id}"
+		@game.reload.albums.each{|a| puts a.title}
+    assert_equal @user_sess.assigns(:albums), [@album3, @album2, @album1]
+
+		# poll feed
+    @poll = Poll.create :poster_id => @comrade_friend.id, :game_id => @game.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}]
+    assert @game.reload.recv_feed?(@poll)
+
+    @poll1 = Poll.create :poster_id => @idol.id, :game_id => @game.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}]
+    assert @game.reload.recv_feed?(@poll1)
+
+		# vote feed
+    @vote = @poll.votes.create :answer_ids => [@poll.answers.first.id], :voter_id => @user.id
+    assert @game.reload.recv_feed?(@vote)
+
+    @vote1 = @poll.votes.create :answer_ids => [@poll.answers.first.id], :voter_id => @idol.id
+    assert @game.reload.recv_feed?(@vote1)
+
+		# event feed
+    @event = EventFactory.create :character_id => @comrade_friend_character.id
+    assert @game.reload.recv_feed?(@event)
+
+    @request = @event.requests.create :participant_id => @user.id, :character_id => @character.id
+    @request.accept_request
+    assert @game.reload.recv_feed?(@request)
+		
+    @event.confirmed_participations.create :participant_id => @idol.id, :character_id => @idol_character.id
+
+		sleep 1
+    @event1 = EventFactory.create :character_id => @idol_character.id
+    assert @game.reload.recv_feed?(@event1)
+ 
+    @event2 = EventFactory.create :character_id => @diff_friend_character.id
+    assert !@game.reload.recv_feed?(@event2)
+ 
+		@user_sess.get "/games/#{@game.id}"
+    assert_equal @user_sess.assigns(:events), [@event, @event1]
+
+	end
+=begin
 	test "GET hot" do
 		@user_sess.get "/games/hot"
 		@user_sess.assert_template "user/games/hot"
@@ -165,5 +239,5 @@ class GameFlowTest < ActionController::IntegrationTest
 		@user_sess.assert_template "user/games/friends"
 		assert_equal @user_sess.assigns(:games), [@game,@game2]
 	end
-
+=end
 end

@@ -87,6 +87,7 @@ module ActsAsSetting
 		def reload
 			@instance.reload
 			@value = @instance.read_attribute(@name)
+			self
 		end
 
   end
@@ -117,8 +118,25 @@ module HasSetting
 				instance_variable_get("@#{name}")
 			end
 
+			define_method("reload_with_#{name}_setting") do
+				instance_variable_set("@#{name}", nil)
+				eval("reload_without_#{name}_setting")
+			end
+
+			include HasSetting::InstanceMethods
+
+      extend HasSetting::SingletonMethods
+
+      alias_method_chain :reload, "#{name}_setting"
+
 		end
 
+	end
+
+	module InstanceMethods
+	end
+
+	module SingletonMethods
 	end
 
 end

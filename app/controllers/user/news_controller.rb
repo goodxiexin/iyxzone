@@ -8,7 +8,7 @@ class User::NewsController < UserBaseController
 
   Category = ['all', 'text', 'video', 'picture']
 
-  TimeRange = [Time.now, Time.now.beginning_of_day, 1.day.ago.beginning_of_day, Time.now.beginning_of_week, Time.now.beginning_of_year]
+  TimeRange = [Time.now, Time.now.beginning_of_day, 1.day.ago.beginning_of_day, 7.day.ago.beginning_of_day, 365.day.ago.beginning_of_day]
 
   def index
     @i = params[:type].to_i

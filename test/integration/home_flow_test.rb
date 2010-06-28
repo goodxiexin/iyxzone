@@ -46,7 +46,7 @@ class HomeFlowTest < ActionController::IntegrationTest
 
     # video feed
     @video = VideoFactory.create :poster_id => @idol.id, :game_id => @game.id
-    assert @user.reload.recv_feed?(@blog)
+    assert @user.reload.recv_feed?(@video)
  
     # video tag
     @video.update_attributes :new_friend_tags => [@user.id]

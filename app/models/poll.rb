@@ -109,10 +109,6 @@ protected
   end
 
   def deadline_is_valid 
-ll1 = Poll.create :poster_id => @friend.id, :game_id => @character.game_id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}], :max_multiple => 2
-    @poll1.invite [@user] #update_attributes(:invitees => [@user.id])
-    @invitation5 = PollInvitation.last
-
     return if no_deadline or deadline.blank?
     errors.add(:deadline, "截止时间不能比现在早") if deadline <= Time.now.to_date
   end
