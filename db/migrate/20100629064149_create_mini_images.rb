@@ -1,8 +1,7 @@
-class CreateMiniBlogImages < ActiveRecord::Migration
+class CreateMiniImages < ActiveRecord::Migration
   def self.up
-    create_table :mini_blog_images do |t|
+    create_table :mini_images do |t|
       t.integer :mini_blog_id
-      # attachment_fu fields
       t.integer :parent_id
       t.string :content_type
       t.string :filename
@@ -10,11 +9,10 @@ class CreateMiniBlogImages < ActiveRecord::Migration
       t.integer :size
       t.integer :width
       t.integer :height
-      t.timestamps
     end
   end
 
   def self.down
-    drop_table :mini_blog_images
+    drop_table :mini_images
   end
 end

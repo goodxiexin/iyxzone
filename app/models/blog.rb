@@ -24,7 +24,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_resource_feeds :recipients => lambda {|blog| 
     poster = blog.poster
-    [poster.profile] + poster.all_guilds + poster.friends.find_all {|f| f.application_setting.recv_blog_feed?} + (poster.is_idol ? poster.fans : [])
+    poster.all_guilds + poster.friends.find_all {|f| f.application_setting.recv_blog_feed?} + (poster.is_idol ? poster.fans : [])
   }
   
   acts_as_shareable :path_reg => /\/blogs\/([\d]+)/, 

@@ -2,6 +2,18 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  acts_as_attentionable
+
+  has_many :mini_blogs, :foreign_key => :poster_id, :order => 'created_at DESC', :as => :poster, :dependent => :destroy
+
+  def follows category=nil
+    attentions = Attention.match(:follower_id => id)
+    attentions.group_by(&:attentionable_type).map do |attentionable_type, attentions|
+      cond = {:poster_id => attentions.map(&:attentionable_id)}.merge(category.nil? ? {} : {:category => category})
+      MiniBlog.match(cond).all
+    end.flatten.uniq.sort {|a, b| b.created_at <=> a.created_at }
+  end
+
   has_many :fanships, :foreign_key => :idol_id, :dependent => :destroy
 
   has_many :fans, :through => :fanships, :source => :fan

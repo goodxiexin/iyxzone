@@ -1,0 +1,76 @@
+= all-your-base
+
+All your base provides arbitrary base conversion.
+ Build: http://runcoderun.com/GICodeWarrior/all-your-base
+ Gem: http://gemcutter.org/gems/all-your-base
+
+== Get it
+
+The latest release is available on gemcutter.
+ sudo gem install gemcutter
+ sudo gem tumble
+ sudo gem install all-your-base
+
+== Require it
+
+To use the generalized API:
+ require 'all_your_base'
+
+To use the simple Integer and String extensions:
+ require 'all_your_base/are/belong_to_us'
+
+== Use it
+
+All of the instance and class methods, including "new" accept an options hash.
+It can contain :charset, :radix, and :honor_negation.
+
+Instance Methods
+ @ayb = AllYourBase::Are.new
+ %w(foo bar muffin).map do |word|
+   "#{word} in base 10 is: #{@ayb.convert_to_base_10(word)}"
+ end
+ => foo in base 10 is: 253394
+ => bar in base 10 is: 227969
+ => muffin in base 10 is: 140676922357
+
+ %w(253394 227969 140676922357).map do |int|
+   "#{int} from base 10 is: #{@ayb.convert_from_base_10(int)}"
+ end
+ => 253394 from base 10 is: foo
+ => 227969 from base 10 is: bar
+ => 140676922357 from base 10 is: muffin
+
+Class Methods
+ AllYourBase::Are.convert_to_base_10("foo")
+ => 253394
+
+ AllYourBase::Are.convert_from_base_10(140676922357)
+ => "muffin"
+
+Fun Stuff!
+ "foo".from_base_78.to_base_32
+ => "7NEI"
+
+ 100011.from_base_3.to_base_11
+ => "205"
+
+ "foo".from_base_56.from_base_7.to_base_8.to_base_72
+ => "BAR"
+
+ "Zero".from_base_57.from_base_12.to_base_13.to_base_50
+ => "WIng"
+
+== Note on Patches/Pull Requests
+
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but
+  bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+== Copyright
+
+Copyright (c) 2009 Rusty Burchfield. See LICENSE for details.
