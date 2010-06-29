@@ -187,6 +187,18 @@ class GameFlowTest < ActionController::IntegrationTest
 		@user_sess.get "/games/#{@game.id}"
     assert_equal @user_sess.assigns(:events), [@event, @event1]
 
+		# guild feed
+    @guild = GuildFactory.create :character_id => @idol_character.id
+    assert @game.reload.recv_feed?(@guild)
+    @request = @guild.requests.create :user_id => @user.id, :character_id => @character.id
+    @request.accept_request
+    assert @game.reload.recv_feed?(@request)
+		
+    @guild1 = GuildFactory.create :character_id => @comrade_friend_character.id
+    assert @game.reload.recv_feed?(@guild1)
+
+		@user_sess.get "/games/#{@game.id}"
+    assert_equal @user_sess.assigns(:guilds), [@guild, @guild1]
 	end
 =begin
 	test "GET hot" do
