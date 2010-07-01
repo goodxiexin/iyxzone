@@ -1,0 +1,22 @@
+<% content_for :html_meta_info do %>
+	<meta http-equiv="refresh" content="10; URL=<%=SITE_URL%>/more_games" >
+<% end %>
+<% content_for :html_title, "一起游戏网注册成功" %>
+
+<div class="regist-box">
+        <div class="regist-content">
+        	<div class="actEx">
+            	
+                <div class="actExSuccess fix">
+                    <div class="icon"></div>
+                    <div class="con">
+                        <h2>欢迎回来，您已成功激活一起游戏网。</h2>
+                        <p class="gray">页面即将跳转，请继续完善你的注册信息...</p>
+                        <p>如果页面没有跳转，请点击 <%= link_to '下一步', more_games_url(), :class => 'red' %> 继续。</p>
+                    </div>
+               </div>
+                
+           </div>
+    </div>
+<div class="b">&nbsp;</div>    
+</div>

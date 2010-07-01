@@ -1,0 +1,46 @@
+<% content_for :html_title, "一起游戏网-增加游戏" %>
+
+<div class="regist-box">
+        <div class="regist-content">
+        	<div class="actEx">
+            	<div class="actExHead actExStep1">
+                	<h1 class="s1">1.完善其他游戏</h1>
+                	<h1 class="s2">2.找到游戏好友</h1>
+                	<h1 class="s3">3.上传头像</h1>
+                </div>
+                <div class="actExInfo">
+                    <p><strong>一起游戏网</strong> 是一个充满乐趣的大家庭，我们会帮助你熟悉和了解 <strong>一起游戏网</strong>，找到更多游戏中朋友，获得更多的乐趣。</p>
+                </div>
+               <div class="actExRole">
+               	<h2 class="actExTitle">你是否还玩其他的游戏？</h2>
+               	<p>为了更好的帮您寻找到昔日的游戏战友，请告诉我们更多你玩的游戏。</p>
+                <div class="actExCon fix">
+								<% for i in 0..2 %>	
+								<table>
+									<tr>
+										<% @games[i*4..i*4+3].each do |game|%>
+											<td class="gameImg"><%= game_image game.name, :class => 'game-m' %></td>
+										<% end %>
+									</tr>
+									<tr>
+										<% @games[i*4..i*4+3].each do |game|%>
+											<td><h3 class="gameName"><%= game.name%></h3></td>
+										<% end %>
+									</tr>
+									<tr>
+										<% @games[i*4..i*4+3].each do |game|%>
+											<td><%= facebox_link "", new_character_url(:gid => game.id), :class=>"addGameRoleBtn", :title=>"增加该游戏角色" %></td>
+										<% end %>
+									</tr>
+								</table>
+								<% end %>
+                </div>
+               </div>
+                <div class="actExFoot fix">
+										<%= link_to "<span>下一步</span>", more_friends_url, :class=>"button" %>
+                    <%= link_to '跳过', more_friends_url, :class => 'skip' %>
+                </div>
+           </div>
+    </div>
+<div class="b">&nbsp;</div>    
+</div>

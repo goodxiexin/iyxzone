@@ -28,6 +28,9 @@ class User::Avatars::PhotosController < UserBaseController
           elsif params[:at] == 'profile'
 						@album.reload
             page.replace_html 'avatar', album_cover(@album, :size => :large, :width => 100, :height => 112)
+          elsif params[:at] == 'first_time'
+						@album.reload
+            page.replace_html 'the_avatar_image', album_cover_image(@album, :size => :large)
           end
         end
       end

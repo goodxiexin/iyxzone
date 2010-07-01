@@ -28,6 +28,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate'
 
+  map.more_games '/more_games', :controller => 'users', :action => 'more_games'
+
+  map.more_friends '/more_friends', :controller => 'users', :action => 'more_friends'
+
+  map.upload_avatar '/upload_avatar', :controller => 'users', :action => 'upload_avatar'
+
   map.activation_mail_sent '/activation_mail_sent', :controller => 'users', :action => 'activation_mail_sent'
 
   map.resend_activation_mail '/resend_activation_mail', :controller => 'users', :action => 'resend_activation_mail'

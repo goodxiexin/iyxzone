@@ -1,0 +1,32 @@
+<% content_for :html_title, "一起游戏网-上传头像" %>
+
+<div class="regist-box">
+        <div class="regist-content">
+        	<div class="actEx">
+            	<div class="actExHead actExStep3">
+                	<h1 class="s1">1.完善其他游戏</h1>
+                	<h1 class="s2">2.找到游戏好友</h1>
+                	<h1 class="s3">3.上传头像</h1>
+                </div>
+                <div class="actExInfo">
+                    <p><strong>一起游戏网</strong> 是一个充满乐趣的大家庭，我们会帮助你熟悉和了解 <strong>一起游戏网</strong>，找到更多游戏中朋友，获得更多的乐趣。</p>
+                </div>
+                <!--好友-->
+               <div class="actExUpAvatar">
+               	<h2 class="actExTitle">上传个性头像，彰显独特魅力。</h2>
+                <div class="actExCon fix">
+                	<div class="avatar" id='the_avatar_image'><%= avatar_image current_user, :size => :large %></div>
+                    <div class="con">
+                        <p>你没必要上传一张生活照，在这里，你不需要证明自己是地球人，嘿嘿。</p>
+                        <div class="op"><%= facebox_link "<img src=\"images/skin/upload-img.png\" />", new_avatar_url(:at => 'first_time'), :width => 400 %></div>
+                    </div>
+                </div>
+               </div>
+                <div class="actExFoot fix">
+									<%= link_to "<span>完成</span>", home_url, :class=>"button" %>
+                  <%= link_to '跳过', home_url, :class => 'skip' %>
+                  </div>
+           </div>
+    </div>
+<div class="b">&nbsp;</div>    
+</div>
