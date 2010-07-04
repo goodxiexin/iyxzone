@@ -71,9 +71,9 @@ module FriendSuggestor
 
 	def collect_friends
     s = Time.now
-		friend_suggestions = {} # (user_id, frequency) pair
+    friend_suggestions = {} # (user_id, frequency) pair
 		friend_suggestions.default = 0
-
+=begin
     # friend's friends
     friends.each do |friend|
       friend.friends.each do |f|
@@ -102,14 +102,15 @@ module FriendSuggestor
 		end
 
 		# user within same game
-		games.each do |game|
+		# TODO
+    games.each do |game|
 			game.users.each do |u|
 				if u != self and !self.has_friend?(u)
 					friend_suggestions[u.id] += 3 # 相同游戏加3分
 				end
 			end
 		end
-
+=end
     # radom picked users
     User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :except => friends + [self], :conditions => "activated_at IS NOT NULL").each do |u|
       friend_suggestions[u.id] += 1 # 加1分
