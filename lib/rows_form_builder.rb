@@ -66,7 +66,7 @@ class RowsFormBuilder < ActionView::Helpers::FormBuilder
       if submit_opts.blank?
         ''
       elsif submit_opts.is_a? Hash
-        "<span class='button'><span>#{@template.content_tag :button, submit_opts.delete(:text), submit_opts}</span></span>"
+        "<span class='button'><span>#{@template.content_tag :button, submit_opts.delete(:text), submit_opts.merge({:type => 'submit'})}</span></span>"
       elsif submit_opts.is_a? Array
         submit_opts.map{|opts| "<span class='button'><span>#{@template.content_tag :button, opts.delete(:text), opts.merge({:type => 'submit'})}</span></span>"}.join
       end
