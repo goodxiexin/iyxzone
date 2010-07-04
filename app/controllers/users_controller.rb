@@ -31,12 +31,27 @@ class UsersController < ApplicationController
     
     if logged_in? && !current_user.active?
       current_user.activate
-      flash[:notice] = "激活成功"
+      render :action => 'activated', :layout => 'root'
     else
       flash[:error] = "不正确的激活码"
+			redirect_back_or_default('/login')
     end
-    redirect_back_or_default('/login')
   end
+
+  def more_games
+    @games = Game.sexy.limit(12)
+    render :action => 'more_games', :layout => 'root'
+	end
+
+  def more_friends
+		@friend_suggestions = FriendSuggestion.random(:limit => 30, :conditions => {:user_id => current_user.id}, :include => [{:suggested_friend => :profile}])
+		@idols = User.match(:is_idol => true).order("fans_count DESC")
+    render :action => 'more_friends', :layout => 'root'
+	end
+
+  def upload_avatar
+    render :action => 'upload_avatar', :layout => 'root'
+	end
 
   def activation_mail_sent
     @user = User.find_by_email(params[:email])

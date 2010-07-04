@@ -1,0 +1,48 @@
+<% content_for :html_title, "一起游戏网-添加好友" %>
+
+<div class="regist-box">
+        <div class="regist-content">
+        	<div class="actEx">
+            	<div class="actExHead actExStep2">
+                	<h1 class="s1">1.完善其他游戏</h1>
+                	<h1 class="s2">2.找到游戏好友</h1>
+                	<h1 class="s3">3.上传头像</h1>
+                </div>
+                <div class="actExInfo">
+                    <p><strong>一起游戏网</strong> 是一个充满乐趣的大家庭，我们会帮助你熟悉和了解 <strong>一起游戏网</strong>，找到更多游戏中朋友，获得更多的乐趣。</p>
+                </div>
+                <!--好友-->
+               <div class="actExFriend">
+               	<h2 class="actExTitle">把你认识的人都加为好友，随时关注好友动态。</h2>
+                <div class="actExCon fix">
+                	<div class="d6-list s_clear">
+                    <ul>
+											<% @friend_suggestions.each do |f| %>
+												<% f = f.suggested_friend %>
+												<li>
+													<%= avatar_image f, :size => :medium, :class => "imgbox01" %>
+													<strong><%=f.login%></strong><br />
+													<%= facebox_link '<span class="icon-friend02"></span>加为好友', new_friend_request_url(:friend_id => f.id), :class=>"red" %>
+												</li>
+											<% end %>
+										</ul>
+									</div>
+								</div>
+								</div>
+                <!--名人-->
+               <div class="actExFamous">
+               	<h2 class="actExTitle">关注游戏名人，立即获取游戏名人的最新动态。</h2>
+                <div class="actExCon fix">
+									<div class="starMember">
+										<%= render :partial => 'user/idols/idol', :collection => @idols %>
+									</div>
+                </div>
+							 </div>
+                <div class="actExFoot fix">
+										<%= link_to "<span>下一步</span>", upload_avatar_url, :class=>"button" %>
+                    <%= link_to '跳过', upload_avatar_url, :class => 'skip' %>
+                  </div>
+           </div>
+    </div>
+<div class="b">&nbsp;</div>    
+</div>

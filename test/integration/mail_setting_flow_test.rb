@@ -10,16 +10,12 @@ class MailSettingFlowTest < ActionController::IntegrationTest
     @user_sess = login @user
 	end
 
-	test "GET edit" do 
+	test "GET edit & PUT update" do 
 		@user_sess.get "/mail_setting/edit"
 		@user_sess.assert_template "user/mail_setting/edit"
-	end
 
-  # 
-  # XIEXIN
-  # TODO
-  # update
-  test "PUT /mail_setting" do
-  end
+		@user_sess.put "/mail_setting", {:setting => {:birthday => 1}}
+		assert_equal @user.reload.mail_setting.birthday, 1
+	end
 
 end

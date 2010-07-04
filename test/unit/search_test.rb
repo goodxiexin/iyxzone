@@ -34,22 +34,38 @@ class SearchTest < ActiveSupport::TestCase
 	end
 
 	test "character搜索" do
-    # XIEXIN 
-    # TODO
-    # 重写，还要包括服务器
 
 		# 英文搜索
-		users1 = GameCharacter.search("feng").group_by(&:user).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
-		assert_equal users1, [[@user1, [@character1]],[@user3, [@character3]]]
+		characters1 = GameCharacter.search("feng")
+		assert_equal characters1, [@character1, @character3]
 
-		users3 = GameCharacter.search("hehe").group_by(&:user).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
-		assert_equal users3, []
+		characters2 = GameCharacter.match({:game_id => @character1.game_id}).search("feng")
+		assert_equal characters2, [@character1]
+
+		characters8 = GameCharacter.match({:game_id => @character1.game_id, :area_id => @character2.area_id}).search("feng")
+		assert_equal characters8, []
+
+		characters9 = GameCharacter.match({:area_id => @character1.area_id}).search("feng")
+		assert_equal characters9, [@character1]
+
+		characters10 = GameCharacter.match({:server_id => @character1.server_id}).search("feng")
+		assert_equal characters10, [@character1]
+
+		characters3 = GameCharacter.match({:game_id => @character1.game_id, :area_id => @character1.area_id, :server_id => @character1.server_id}).search("feng")
+		assert_equal characters3, [@character1]
+
+		characters4 = GameCharacter.search("hehe")
+		assert_equal characters4, []
 
 		# 中文搜索
-		users2 = GameCharacter.search("风").group_by(&:user).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
-		assert_equal users2, [[@user1, [@character1]]]
+		characters5 = GameCharacter.search("风")
+		assert_equal characters5, [@character1]
 
-		users4 = GameCharacter.search("不要").group_by(&:user).select{|user_id, characters| User.activated.exists?(user_id)}.to_a
-		assert_equal users4, []
+		characters6 = GameCharacter.match({:game_id => @character2.game_id}).search("风")
+		assert_equal characters6, []
+
+
+		characters7 = GameCharacter.search("不要")
+		assert_equal characters7, []
 	end
 end

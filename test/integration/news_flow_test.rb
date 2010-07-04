@@ -40,10 +40,6 @@ class NewsFlowTest < ActionController::IntegrationTest
     @admin_sess.get "admin/news/new", {:type => 'text'}
     @admin_sess.assert_template "admin/news/new_text_news"
 
-    # XIEXIN
-    # TODO
-    # 创建picture news, 包括上传图片，然后编辑图片
-
     @admin_sess.get "admin/news/new", {:type => 'picture'}
     @admin_sess.assert_template "admin/news/new_picture_news"
 
@@ -57,6 +53,27 @@ class NewsFlowTest < ActionController::IntegrationTest
     assert_difference "News.count" do
       @admin_sess.post "/admin/news", {:news => {:title => 'hehe', :data => 'hehe', :game_id => @game.id, :news_type => "text"}}
     end
+
+    assert_difference "News.count" do
+      @admin_sess.post "/admin/news", {:news => {:title => 'pic', :data => 'hehe', :game_id => @game.id, :news_type => "picture"}}
+    end
+		pic_news = News.last
+    assert_difference "pic_news.reload.pictures.count" do
+			@admin_sess.post "/admin/news/#{pic_news.id}/pictures", {:Filedata => image_data}
+		end
+		pic1 = pic_news.pictures.last
+    assert_difference "pic_news.reload.pictures.count" do
+			@admin_sess.post "/admin/news/#{pic_news.id}/pictures", {:Filedata => image_data}
+		end
+		pic2 = pic_news.pictures.last
+
+    @admin_sess.get "admin/news/#{pic_news.id}/pictures/edit_multiple"
+    @admin_sess.assert_template "admin/news_pictures/edit_multiple"
+		assert_equal @admin_sess.assigns(:pictures), [pic1, pic2]
+
+    @admin_sess.put "admin/news/#{pic_news.id}/pictures/update_multiple", {:pictures => {pic1.id => {:notation => 'photo1'}, pic2.id => {:notation => 'photo2'}}}
+    @admin_sess.assert_redirected_to news_index_url
+
 	end
 
 	test "GET edit & PUT update" do
