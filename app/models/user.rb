@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   acts_as_attentionable
 
-  has_many :mini_blogs, :foreign_key => :poster_id, :order => 'created_at DESC', :as => :poster, :dependent => :destroy
+  has_many :mini_blogs, :order => 'created_at DESC', :as => :poster, :dependent => :destroy
 
   def follows category=nil
     attentions = Attention.match(:follower_id => id)

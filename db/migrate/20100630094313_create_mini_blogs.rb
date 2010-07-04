@@ -5,9 +5,11 @@ class CreateMiniBlogs < ActiveRecord::Migration
       t.string :poster_type
       t.integer :initiator_id
       t.string :initiator_type
+      t.string :content
+      t.text :nodes
       t.text :forwarder_ids
-      t.string :content # 140字以内
-      t.string :category
+      t.integer :images_count, :default => 0
+      t.integer :videos_count, :default => 0
       t.integer :comments_count, :default => 0
       t.integer :forwards_count, :default => 0
       t.timestamps

@@ -345,7 +345,7 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 .tab01 li.nobg a:hover{text-decoration:underline}
 
 .tab01 .right{word-spacing:10px;position:relative;z-index:10}
-.tab01 .right .icon-movie{margin:0 20px 0 0;_margin:8px 20px 0 0;_vertical-align:text-bottom}
+.tab01 .right .icon-movie{margin:0 15px 0 0;_margin:8px 15px 0 0;_vertical-align:text-bottom}
 .tab01 .right a,.tab01 .gray a:hover{color:#D63200}
 .tab01 .gray a{color:#7E7F80}
 .tab01 .right a:hover{text-decoration:underline}
@@ -410,6 +410,9 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 
 .round05,.round05 .round_l_t,.round05 .round_l_b,.round05 .round_r_b{background-image:url(../images/skin/roundBoxbg05.gif);}
 .round05 .round_m{border-left:1px #a6c49d solid;border-right:1px #a6c49d solid;background:#c4e7b9;}
+
+.round06,.round06 .round_l_t,.round06 .round_l_b,.round06 .round_r_b{background-image:url(../images/skin/roundBoxbg06.gif);}
+.round06 .round_m{background:#f4faf1;border:0}
 
 /*圆角*/
 
@@ -532,6 +535,12 @@ a.msg-btn{background-position:-118px -186px}
 .cmt-box .img{float:left;margin:0 0 4px 0}
 #navbar #navmain .drop-box .cmt-box .cmt-con{background:#F8FCF6;} 
 .cmt-box .cmt-con{float:left;margin-left:8px;*margin-left:3px;}
+@media screen and (-webkit-min-device-pixel-ratio:0) { /* chrome、safari */
+.cmt-box .cmt-con{margin-left:5px;}
+}
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) {/* opera */
+.cmt-box .cmt-con{margin-left:5px;}
+}
 .cmt-box .cmt-con .button03{float:right;}
 .cmt-box .cmt-con .button{float:right;}
 .cmt-box .cmt-con .submit{margin:5px 0 0 5px;}

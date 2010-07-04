@@ -722,8 +722,9 @@ a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:c
 .star-2{background-position:0 -253px;}
 .star-1{background-position:0 -264px;}
 
-/*个人主页相册*/
-.piclist .jl-picitem{width:135px;}
+/*主页相册*/
+.canvas_con .piclist .jl-picitem{padding:7px;width:150px;}
+
 .multibox .jl-data-table th{background:none;color:#ee960f;border:none;line-height:30px}
 
 /*相册页面*/
@@ -1314,6 +1315,12 @@ span.i,a.i{width:16px;height:16px;margin-right:3px;display:-moz-inline-stack;dis
 .iMedal{background-position:-44px -24px;}
 .iFollow{background-position:-78px -24px;}
 .iNoFollow{background-position:-60px -24px;}
+.iFace{background-position:0 -311px;}
+.iPic{background-position:-16px -311px;}
+.iVideo{background-position:0 -327px;}
+.iTopic{background-position:-16px -327px;}
+.iToggleUp{background-position:-96px -25px}
+
 
 
 /*btn*/
@@ -1324,6 +1331,45 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 
 .addGameRoleBtn{background:url(../images/skin/skin2010.png) no-repeat -83px -737px;width:117px;height:22px;display:inline-block}
 .mainConTitle{border-bottom:1px solid #bdd6ad;padding:5px 15px;margin-bottom:10px}
+
+/*激活后完善信息*/
+.actEx{width:90%;margin:0 auto;color:#333}
+
+.actExSuccess{padding-left:200px;margin:80px 0 200px 0}
+.actExSuccess .icon{float:left;margin-left:-120px;_display:inline;background:url(../images/mails/smile_face.jpg) no-repeat;width:93px;height:88px;overflow:hidden;}
+.actExSuccess .con{float:left;width:100%;}
+.actExSuccess .con h2{font-weight:700;color:#bf3a00}
+.actExSuccess .con p{margin:20px 0}
+
+.actExHead{background:url(../images/skin/act-extra-step.png) no-repeat;height:45px;width:549px;margin:0 auto;line-height:45px;color:#999}
+.actExStep2{background-position:0 -45px}
+.actExStep3{background-position:0 -90px}
+.actExHead h1{float:left;margin-left:35px;_display:inline}
+.actExHead h1.s2{margin-left:80px}
+.actExHead h1.s3{margin-left:100px}
+.actExStep1 h1.s1,.actExStep2 h1.s2,.actExStep3 h1.s3{color:#fff}
+.actEx h2.actExTitle{background:#e1fcc4;padding:8px 10px;font-size:12px;color:#333;font-weight:700;margin:15px 0}
+.actEx .actExCon{margin:20px 0 30px 0}
+
+.actExInfo h2{color:#bf3a00;text-align:center;font-weight:700;font-size:12px;margin:20px 0 10px 0}
+.actExInfo p,.actExRole p{line-height:22px;padding:0 1em}
+.actExInfo p strong{color:#217307}
+.actExRole .actExCon .item{float:left;margin:10px 12px;_margin:10px;text-align:center;width:117px;overflow:hidden}
+.actExRole .actExCon .item .gameImg{height:141px;width:100px;margin:0 auto;}
+.actExRole .actExCon .item .gameImg img{border:1px solid #666;}
+.actExRole .actExCon .item h3.gameName{color:#bf3a00;font-size:14px;margin:10px 0}
+.actExRole .actExCon .item h3.gameName a{color:#bf3a00;}
+.actExFoot span.button{margin-left:230px;display:inline-block}
+.actExFoot .skip{float:right;color:#db5903;}
+
+.actEx .d6-list{height:260px;max-height:260px;overflow-x:hidden;overflow-y:auto;border:1px solid #BBD2AA}
+.actEx .d6-list li{width:160px;margin:8px}
+.actEx .d6-list li strong{width:90px;}
+
+.actExUpAvatar .actExCon{padding-left:130px;}
+.actExUpAvatar .actExCon .avatar{float:left;margin-left:-120px;_display:inline;background:url(../images/skin/no-avatar.png) no-repeat;width:98px;height:110px;overflow:hidden;border:1px solid #bfd5af}
+.actExUpAvatar .actExCon .con{float:left;width:100%;line-height:22px;}
+.actExUpAvatar .actExCon .con .op{margin:10px 0 0 80px}
 
 /*****游戏*****/
 .gameList .data p a{color:#d63200}
@@ -1385,3 +1431,124 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .starMember .starItem .starFans{position:absolute;right:0;top:5px;text-align:right;color:#666;}
 .starMember .starItem .starFans .op{margin-top:10px}
 .starMember .starItem .starFans .op a{color:#d63000}
+
+/*mBlog*/
+.mBlogMain{width:100%;margin-right:-230px;float:left}
+.mBlogMainWrap{margin-right:230px}
+.mBlogExtra{width:220px;float:right}
+.mBlogTopic{border:1px solid #c9debc;background:#fff;padding:1px;position:relative;z-index:2;zoom:1}
+.mBlogTopic .topTitle{background:#fff url(../images/skin/mblog-post-title-bg.png) no-repeat 0 bottom;height:38px;line-height:38px;font-size:14px;padding-left:20px}
+.mBlogTopic .topTitle strong{color:#217308;}
+.mBlogTopic .topBg{background:url(../images/skin/mblog-post-bg.png) repeat-y;padding:20px;_height:120px;min-height:120px}
+.mBlogTopic .topWrap{padding:0 0 0 130px;}
+.mBlogTopic .topEditWrap{padding:0 0 0 80px;margin-top:10px}
+.mBlogTopic .topSubTitle{font-size:14px;margin-bottom:10px}
+.mBlogTopic .topImg{float:left;margin-left:-130px;_display:inline}
+.mBlogTopic .topEditWrap .topImg{float:left;margin-left:-80px;_display:inline}
+.mBlogTopic .topCon{float:left;width:100%;line-height:20px}
+.mBlogTopic .topCon .topFt{margin-top:15px;padding:0 20px 10px 0}
+.mBlogTopic .topCon .topFt .button04{float:right}
+.mBlogTopic .topEditWrap .topLog{background:url(../images/skin/dotline02.gif) repeat-x top;padding-top:10px}
+
+.mBlogEditor textarea{width:300px;height:60px;float:left;}
+.mBlogEditor .button03{float:left;margin:15px 0 0 10px}
+.mBlogEditor .ft li{float:left;margin:0 5px;padding:5px 0;position:relative}
+
+.mBlogEditZ{position:absolute;top:20px;left:0;}
+.trimBox{border-collapse:collapse;border-spacing:0;left:0;position:absolute;top:0;width:auto;}
+.trimBox td{margin:0;padding:0;}
+.trimBox td.arrUp,.trimBox td.t-l,.trimBox td.t-r,.trimBox td.b-l,.trimBox td.b-r{background:url(../images/skin/pop-up-img-corner.png) no-repeat;filter:alpha(opacity=60);opacity:0.6;font-size:0;line-height:0;}
+.trimBox td.t-c,.trimBox td.m-l,.trimBox td.m-r,.trimBox td.b-c{background:#000;filter:alpha(opacity=60);opacity:0.6;}
+.trimBox td.arrUp{background-position:10px bottom;height:7px;}
+.trimBox td.t-l {background-position:0 0;height:3px;width:3px;overflow:hidden}
+.trimBox td.t-c {height:3px;width:auto;}
+.trimBox td.t-r {background-position:0 -13px;height:3px;width:3px;overflow:hidden}
+.trimBox td.m-l {height:auto;width:3px;overflow:hidden}
+.trimBox td.m-r {height:auto;width:3px;overflow:hidden}
+.trimBox td.m-c {background:#fff}
+.trimBox td.b-l {background-position:0 -4px;height:3px;width:3px;overflow:hidden}
+.trimBox td.b-c {height:3px;width:auto;}
+.trimBox td.b-r {background-position:0 -8px;height:3px;width:3px;overflow:hidden}
+
+.mBlogEditV{position:absolute;top:26px;left:-140px;width:350px}
+.mBlogEditV .z-t{position:relative;z-index:2}
+.mBlogEditV .z-t .arrUp{background:url(../images/skin/skin2010.png) no-repeat -113px -26px;width:25px;height:13px;position:absolute;top:-2px;left:150px;z-index:3}
+.mBlogEditV .z-m{z-index:1}
+.mBlogEditV .z-m .box01{border:1px solid #7eb73c}
+.mBlogEditV .z-con{border-top:0;margin:15px;position:relative}
+.mBlogEditV .z-con .icon-active{position:absolute;right:-10px;top:-10px;_right:5px;}
+.mBlogEditV .z-con .textfield{display:block;float:left;width:220px;_width:210px}
+.mBlogEditV .z-con .button{margin-top:3px}
+
+/*我的微博*/
+.mBlogTopic .topMine{background:url(../images/skin/mblog-post-bg02.png) no-repeat;padding:20px;height:100px}
+.mBlogTopic .topMine .mBlogEditor textarea{width:330px}
+
+.mBlogTab{background:url(../images/skin/skin2010.png) repeat-x 0 -793px;margin-top:20px}
+.mBlogTab li,.mBlogTab li span{background:none}
+.mBlogPostHead{background:#f8f8f8;border-top:1px solid #c2e29d;padding:8px 5px;margin:10px 0}
+
+.mBlogMain .topicTag{color:#d82d01}
+.mBlogPostList .item{padding:0 0 10px 90px;_height:100px;min-height:100px;margin-bottom:15px}
+.mBlogPostList .item .round_body{padding:5px 0}
+.mBlogPostList .item .feedFunc{float:left;margin-left:-80px;_display:inline}
+.mBlogPostList .item .feedCon{float:left;width:100%;}
+.mBlogPostList .mConWrap{padding:1px;border:1px solid #ddd;width:98%;margin:0 auto}
+.mBlogPostList .mConWrap .mConBgT{background:#fff url(../images/skin/title-bg01.gif) repeat-x top;}
+.mBlogPostList .mConWrap .mConBgB{background:url(../images/skin/title-bg02.gif) repeat-x bottom;text-align:center;padding:10px;}
+.mBlogPostList .mConWrap .mCon{overflow:hidden;width:380px}
+.mBlogPostList .mConWrap .mCon img.zoomOut{width:380px}
+.mBlogPostList .mConWrap .mCon .mTrans{text-align:left;line-height:26px;}
+.mBlogPostList .mConWrap .mCon .mTrans .ft span{margin:0 5px;color:#999}
+.mBlogPostList .mConWrap .mCon .mTrans .ft a{color:#999}
+
+.mBlogPostList .item .feedCon .ft{margin-top:5px}
+.mBlogPostList .item .feedCon .ft span{margin:0 5px;color:#666}
+#canvas .mBlogPostList .item .s-dialog .round_body{line-height:22px}
+.mBlog .cmt-box{width:385px}
+
+.transIcon span,.transIcon a{background:url(../images/skin/skin2010.png) no-repeat;display:block;text-align:center;width:54px;}
+.transIcon span{background-position:0 -716px;color:#fff;font-size:14px;font-weight:700;height:53px;line-height:40px;}
+.transIcon a{background-position:-60px -210px;color:#217308;height:25px;line-height:25px;margin-top:3px;text-align:center}
+
+.mBlogExtra h2.title{font-size:12px;border-bottom:1px solid #ddd;padding:5px 0;font-weight:700;}
+.mBlogExtra .more{text-align:right;margin:10px 0}
+
+#canvas .mBlogExtra .round_m{padding:5px 15px}
+
+.xList{margin-top:5px}
+.xList li{background:url(../images/skin/dotline.gif) repeat-x bottom;padding:1px 0}
+.xList li a{line-height:14px;color:#333;display:block;padding:10px 5px;zoom:1}
+.xList li a:after,.xList li a:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+
+.xList li a:hover{background:#f1f9e1;}
+.xList li.selected a,.xList li.selected a:hover{background:#74bc20;}
+.xList li.selected span,.xList li.selected a{color:#fff}
+.xList li span{font-weight:700;color:#666;margin:0 8px 0 0;display:block;float:left;width:22px;text-align:center}
+.xList .first span,.xList .second span,.xList .third span{background:url(../images/skin/skin2010.png) no-repeat;height:14px;font-size:0;line-height:0;text-indent:-9999px;}
+.xList .first span{background-position:-142px 0;}
+.xList .second span{background-position:-142px -14px;}
+.xList .third span{background-position:-142px -28px;}
+
+.mBlogExtra .xList li a strong{display:block;float:left;font-weight:400;width:150px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
+
+.zoomIn{cursor:url(/images/skin/zoomIn.cur), auto;}
+.zoomOut{cursor:url(/images/skin/zoomOut.cur), auto;}
+
+/*我关注的*/
+.hotGameEx .xList li a{color:#217308}
+.hotGameEx .xList li.selected a{color:#fff}
+
+/*会员、角色等信息card*/
+.m-card{position:relative;padding:10px 10px 10px 80px;height:60px;}
+.m-card .m-avatar{position:absolute;left:10px;top:10px;}
+.m-card .m-op{position:absolute;right:3px;top:3px;z-index:2;visibility:hidden}
+.m-card .m-con{width:100%;position:relative;z-index:2;line-height:20px}
+.m-card .m-con h4{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.m-card .m-con .role-name{color:#BF3A00}
+
+.mBlogExtra .popMemberEx .list li{background:url(../images/skin/dotline.gif) repeat-x bottom;}
+.mBlogTrans .ft textarea{width:99%;padding:3px 0}
+.mBlogTrans .ft .icon-face{float:left;}
+.mBlogTrans .ft .tips{float:right;}
+

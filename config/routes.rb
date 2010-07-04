@@ -82,6 +82,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
 
+    users.resources :mini_blogs, :collection => {:hot => :get, :sexy => :get}
+
     users.resources :fans
 
     users.resources :idols, :member => {:follow => :post, :unfollow => :delete}

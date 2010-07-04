@@ -13,7 +13,7 @@
 .welcome-box{width:972px;margin:0 auto;}
 .welcome-box02{width:950px;margin:0 auto;}
 .welcome-banner{margin-top:25px;background:url(../images/welcome/banner.jpg) no-repeat;width:970px;height:315px;position:relative}
-.welcome-banner h1.welcome-text{height:0;font:0/0 sans-serif;overflow:hidden}
+.welcome-banner .welcome-text{height:0;font:0/0 sans-serif;overflow:hidden}
 .login-box{width:280px;height:230px;position:absolute;right:5px;top:50px;*top:55px;color:#fff;padding-top:20px}
 .login-box .rows{margin-top:10px}
 .login-box .fldid{width:50px}

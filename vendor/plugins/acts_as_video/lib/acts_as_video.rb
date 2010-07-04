@@ -45,7 +45,7 @@ module ActsAsVideo
           return false
 					#raise ActsAsVideo::NotRecognizedURL
 				else 
-					video = video_type.new(self)
+					video = video_type.new(video_url)
 					self.embed_html = video.embed_html
 					self.thumbnail_url = video.thumbnail_url
 				end

@@ -508,4 +508,14 @@ module ApplicationHelper
     end
   end
 
+  def mini_blog_content mini_blog
+    mini_blog.content.gsub(/#([^#]+)#/).each do |match|
+      "<a href='javascript:void(0)'>#{match}</a>"
+    end.gsub(/[^#.](http:\/\/17gaming.com\/links\/[\w]+)[^#.]/).each do |url|
+      "<a href='#{url}'>#{url}</a>"
+    end.gsub(/[^#.]@([\w]+)[^#.]/).each do |login|
+      "<a href='javascript:void(0)'>#{login}</a>"
+    end
+  end
+  
 end

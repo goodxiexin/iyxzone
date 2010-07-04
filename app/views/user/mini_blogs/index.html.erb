@@ -1,0 +1,100 @@
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'mini_blog' %>
+<% end %>
+
+<% canvas_tag do %>
+  <h1 class="app-status">微博</h1>
+  <div class="box02 canvas_int">
+    <div class="tab tab01">
+      <ul>
+        <li><span><a href="#">微博广场</a></span></li>
+        <li class="hover"><span><a href="#">我的微博</a></span></li>
+        <li><span><a href="#">我的关注</a></span></li>
+      </ul>
+    </div>
+    <div class="mainConWrap clear">
+      <div class="mBlog fix">
+        <div class="mBlogMain">
+          <div class="mBlogMainWrap">
+            <div class="mBlogTopic">
+              <div class="topTitle"><strong>有什么新鲜事想要告诉大家？</strong></div>
+              <div class="topBg fix">
+                <div class="topMine">
+                  <div class="mBlogEditor">
+                    <div class="bd fix">
+                      <textarea name="" id="mini_blog_text_area">#请在这里输入自定义话题#</textarea>
+                      <span class="button03"><span><button>发布</button></span></span>
+                    </div>
+                    <div class="ft fix">
+                      <ul>
+                        <li><%= link_to_function '<span class="i iFace"></span>表情', "Iyxzone.Emotion.Manager.toggleFaces(this, $('mini_blog_text_area'), event)" %></li>
+                        <li><%= link_to_function '<span class="i iPic"></span>图片</a>', "Iyxzone.MiniBlog.Builder.newImage()" %></li>
+                        <li><%= link_to_function '<span class="i iVideo"></span>视频</a>', "Iyxzone.MiniBlog.Builder.newVideo()" %></li>
+                        <li><%= link_to_function '<span class="i iTopic"></span>话题</a>', "Iyxzone.MiniBlog.Builder.newTopic()" %></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab tab01 mBlogTab">
+              <ul>
+                <li class="hover"><span><a href="#">我发布的</a></span></li>
+                <li><span><a href="#">我评论的</a></span></li>
+              </ul>
+            </div>
+            <div class="mBlogPostList">
+              <%= render :partial => 'mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
+            </div>
+          </div>
+        </div>
+        <div class="mBlogExtra">
+          <div class="round06 round_r_t popMemberEx">
+            <div class="round_l_t">
+              <div class="round_r_b">
+                <div class="round_l_b">
+                  <div class="round_m">
+                    <div class="round_body">
+                      <h2 class="title">名人排行榜</h2>
+                      <ul class="list">
+                        <li>
+                          <div class="m-card">
+                            <div class="m-avatar"><a href="#" title=""><img class="imgbox01" src="images/photo/photo11.png"></a></div>
+                            <div class="m-con">
+                              <h4><a href="#" title="" class="member-name">好友名称好友名称好友名称好友名称</a></h4>
+                              <div class="red">魔兽世界</div>
+                              <div><a href="#" class="red"><span class="i iFollow"></span>成为粉丝</a></div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                      <div class="more">
+                        <a href="#" class="red">更多游戏名人>></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="round06 round_r_t hotTopicEx space">
+            <div class="round_l_t">
+              <div class="round_r_b">
+                <div class="round_l_b">
+                  <div class="round_m">
+                    <div class="round_body">
+                      <h2 class="title">热门话题</h2>
+                      <ul class="xList">
+                        <li class="first"><a href="#"><span>01</span><strong>南非世界杯南非世界杯南非世界杯</strong></a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

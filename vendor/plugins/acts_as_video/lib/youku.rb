@@ -19,18 +19,18 @@ class Youku
 	end
 
 	
-	def initialize(obj)
-    if YOUKU_SINGLE.match obj.video_url
+	def initialize video_url
+    if YOUKU_SINGLE.match video_url
       @embed_url = "http://player.youku.com/player.php/sid/#{$1}/v.swf"
       @response  = self.class.get("/VideoIDS/#{$1}")
-    elsif YOUKU_ALBUM.match obj.video_url
+    elsif YOUKU_ALBUM.match video_url
       @embed_url = "http://www.youku.com/player.php/Type/Folder/Fid/#{$1}/Ob/#{$2}/Pt/#{$3}"
     end
 	end
 
 	def thumbnail_url
-		if @response
-			@response["data"][0]["logo"] 
+		unless @response.nil?
+      @response["data"][0]["logo"] 
 		else
 			"/images/videoThumb/youku.png"
 		end

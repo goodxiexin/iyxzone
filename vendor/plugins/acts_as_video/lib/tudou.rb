@@ -26,13 +26,13 @@ class Tudou
 		end
 	end
 
-	def initialize(obj)
+	def initialize video_url
     @embed_url = 
-		  if TUDOU_SINGLE.match obj.video_url
+		  if TUDOU_SINGLE.match video_url
         "http://www.tudou.com/v/#{$1}"
-		  elsif TUDOU_ALBUM.match obj.video_url 
+		  elsif TUDOU_ALBUM.match video_url 
         "http://www.tudou.com/player/skin/plu.swf?iid=#{$1}"
-      elsif TUDOU_ALBUM2.match obj.video_url
+      elsif TUDOU_ALBUM2.match video_url
         "http://www.tudou.com/l/#{$1}"
       end
 	end

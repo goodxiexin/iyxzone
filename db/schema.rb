@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100629100658) do
+ActiveRecord::Schema.define(:version => 20100630094415) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -437,19 +437,16 @@ ActiveRecord::Schema.define(:version => 20100629100658) do
 
   add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
 
-  create_table "mini_blog_topics", :force => true do |t|
-    t.integer "mini_blog_id"
-    t.integer "mini_topic_id"
-  end
-
   create_table "mini_blogs", :force => true do |t|
     t.integer  "poster_id"
     t.string   "poster_type"
     t.integer  "initiator_id"
     t.string   "initiator_type"
-    t.text     "forwarder_ids"
     t.string   "content"
-    t.string   "category"
+    t.text     "nodes"
+    t.text     "forwarder_ids"
+    t.integer  "images_count",   :default => 0
+    t.integer  "videos_count",   :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "forwards_count", :default => 0
     t.datetime "created_at"
@@ -457,33 +454,33 @@ ActiveRecord::Schema.define(:version => 20100629100658) do
   end
 
   create_table "mini_images", :force => true do |t|
-    t.integer "mini_blog_id"
-    t.integer "parent_id"
-    t.string  "content_type"
-    t.string  "filename"
-    t.string  "thumbnail"
-    t.integer "size"
-    t.integer "width"
-    t.integer "height"
+    t.integer  "poster_id"
+    t.integer  "mini_blog_id"
+    t.integer  "parent_id"
+    t.string   "content_type"
+    t.string   "filename"
+    t.string   "thumbnail"
+    t.integer  "size"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "mini_links", :force => true do |t|
     t.string   "url"
+    t.string   "thumbnail_url"
+    t.text     "embed_html"
+    t.integer  "reference_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "mini_topics", :force => true do |t|
     t.string   "name"
+    t.integer  "reference_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "mini_videos", :force => true do |t|
-    t.integer "mini_blog_id"
-    t.string  "video_url"
-    t.string  "embed_html"
-    t.string  "thumbnail_url"
   end
 
   create_table "news", :force => true do |t|

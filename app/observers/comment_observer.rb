@@ -275,6 +275,9 @@ class CommentObserver < ActiveRecord::Observer
     end
   end
 
+  def after_mini_blog_comment_create comment
+  end
+
   def after_update comment
     if comment.recently_rejected?
       # 如果有相关的notice怎么办, 现在就忽略他

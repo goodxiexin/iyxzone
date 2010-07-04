@@ -1,5 +1,9 @@
 class MiniTopic < ActiveRecord::Base
 
-  has_many :mini_blogs, :through => :mini_blog_topics, :source => :mini_blog
+  TopicReg = /#([^#.]+)#/
+
+  validates_presence_of :name
+
+  validates_uniqueness_of :name  
 
 end
