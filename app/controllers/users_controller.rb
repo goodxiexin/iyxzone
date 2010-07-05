@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 	end
 
   def more_friends
-		@friend_suggestions = FriendSuggestion.random(:limit => 30, :conditions => {:user_id => current_user.id}, :include => [{:suggested_friend => :profile}])
+		@friend_suggestions = current_user.friend_suggestions.limit(30)
 		@idols = User.match(:is_idol => true).order("fans_count DESC")
     render :action => 'more_friends', :layout => 'root'
 	end

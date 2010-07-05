@@ -4,8 +4,8 @@ module User::HomeHelper
     beginning_of_today = Time.now.beginning_of_day
     beginning_of_yesterday = 1.day.ago.beginning_of_day
     beginning_of_this_week = Time.now.beginning_of_week
-    beginning_of_last_week = 1.week.ago.beginning_of_week
-    beginning_of_this_month = Time.now.beginning_of_month
+    beginning_of_last_week = 1.week.ago.beginning_of_day
+    beginning_of_this_month = 30.days.ago.beginning_of_day
     deliveries.group_by do |d|
       if d.created_at >= beginning_of_today 
         # today
