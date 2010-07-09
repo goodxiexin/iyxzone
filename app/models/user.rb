@@ -2,16 +2,34 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  def self.test
+=begin
+find:{include:, select:DISTINCT `users`.*, limit:, from:`users`, joins:INNER JOIN `game_characters` ON `users`.id = `game_characters`.user_id   , conditions:(`game_characters`.game_id = 671) AND ((users.activated_at IS NOT NULL)), order:, readonly:}, create:{game_id:671}
+=end
+    with_scope(:find => {:include => {}, :select => "DISTINCT `users`.*", :limit => nil, :from => '`users`', :joins => "INNER JOIN `game_characters` ON `users`.id = `game_characters`.user_id", :conditions => "(`game_characters`.game_id = 671) AND ((users.activated_at IS NOT NULL))", :order => nil, :readonly => nil}, :create => {:game_id => 671}) do
+      User.count
+    end
+  end
+
   acts_as_attentionable
 
-  has_many :mini_blogs, :order => 'created_at DESC', :as => :poster, :dependent => :destroy
+  has_many :mini_images, :foreign_key => 'poster_id', :order => 'created_at DESC'
 
-  def follows category=nil
-    attentions = Attention.match(:follower_id => id)
-    attentions.group_by(&:attentionable_type).map do |attentionable_type, attentions|
-      cond = {:poster_id => attentions.map(&:attentionable_id)}.merge(category.nil? ? {} : {:category => category})
-      MiniBlog.match(cond).all
-    end.flatten.uniq.sort {|a, b| b.created_at <=> a.created_at }
+  has_many :mini_blogs, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy, :conditions => {:deleted => false}
+
+  def interested_mini_blogs category='all'
+    atts = Attention.match(:follower_id => id)
+    interested = atts.map do |att|
+      attentionable = att.attentionable
+      if attentionable.is_a? Guild
+        attentionable.president
+      elsif attentionable.is_a? Game
+      elsif attentionable.is_a? User
+        attentionable
+      end
+    end.uniq 
+    cond = {:deleted => false, :poster_id => interested.map(&:id)}.merge(category.nil? ? {} : {:category => category})
+    MiniBlog.category(category.to_s).match({:deleted => false, :poster_id => interested.map(&:id)}).all
   end
 
   has_many :fanships, :foreign_key => :idol_id, :dependent => :destroy

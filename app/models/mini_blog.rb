@@ -2,26 +2,36 @@ class MiniBlog < ActiveRecord::Base
 
   serialize :nodes, Array
 
-  serialize :forwarder_ids, Array
+  belongs_to :poster, :class_name => 'User'
 
-  belongs_to :poster, :polymorphic => true
+  belongs_to :root, :class_name => 'MiniBlog'
 
-  belongs_to :initiator, :polymorphic => true
+  belongs_to :parent, :class_name => 'MiniBlog'
 
-  def poster= poster
-    unless poster.blank?
-      self.poster_id = poster.id
-      self.poster_type = poster.class.name
+  has_many :children, :class_name => 'MiniBlog', :foreign_key => 'parent_id'
+
+  named_scope :hot, :conditions => {:deleted => false}, :order => "forwards_count DESC, created_at DESC"
+  
+  named_scope :sexy, :conditions => {:deleted => false}, :order => "comments_count DESC, created_at DESC"
+
+  named_scope :category, lambda {|type|
+    if type == 'all'
+      {:order => 'created_at DESC'}
+    elsif type == 'original'
+      {:order => 'created_at DESC', :conditions => {:root_id => nil, :parent_id => nil}}
+    elsif type == 'text'
+      {:order => 'created_at DESC', :conditions => {:videos_count => 0, :images_count => 0}}
+    elsif type == 'video'
+      {:order => 'created_at DESC', :conditions => "videos_count != 0"}
+    elsif type == 'image'
+      {:order => 'created_at DESC', :conditions => "images_count != 0"}
     end
-  end
+  }
 
-  def initiator= initiator
-    unless initiator.blank?
-      self.initiator_id = initiator.id
-      self.initiator_type = initiator.class.name
-    end
-  end
+  acts_as_commentable :recipient_required => false, :order => 'created_at ASC'
 
+  acts_as_random
+ 
   def text_type?
     images_count == 0 and videos_count == 0
   end
@@ -34,55 +44,58 @@ class MiniBlog < ActiveRecord::Base
     videos_count != 0
   end
 
-  def origin?
-    initiator.blank?
+  def original?
+    root_id.nil? and parent_id.nil?
   end
 
   def forward user, content
-    if origin?
-      MiniBlog.create :poster => user, :initiator => poster, :content => content, :forwarder_ids => []
-    else
-      new_forwarder_ids = forwarder_ids.push poster_id
-      MiniBlog.create :poster => user, :initiator => initiator, :content => content, :forwarder_ids => new_forwarder_ids
-    end
+    MiniBlog.create :poster => user, :parent_id => id, :root_id => (original? ? id : root_id), :content => content
   end
 
-  def forwarders
-    # TODO: 为啥这样的顺序就不对了
-    #User.find(forwarder_ids || [])
-    (forwarder_ids || []).map {|id| User.find_by_id(id)}
-  end 
+  has_one :mini_image
 
   def mini_topics
-    MiniTopic.find(nodes.select{|n| n[:type] == 'topic'}.map{|n| n[:topic_id]})
+    nodes.select{|n| n[:type] == 'topic'}.map{|n| MiniTopic.find_by_name n[:name]}
   end
 
   def mini_videos
+    mini_links.select {|l| l.is_video?}
   end
 
   def mini_links
-    MiniLink.find(nodes.select{|n| n[:type] == 'link'}.map{|n| n[:link_id]})
+    nodes.select{|n| n[:type] == 'link'}.map{|n| MiniLink.find_by_proxy_url n[:proxy_url]}
   end
 
   def relative_users
-    User.find(nodes.select{|n| n[:type] == 'ref'}.map{|n| n[:user_id]})
-  end
-
-  def mini_image_id= image_id
-    @mini_image_id = image_id.to_i
+    nodes.select{|n| n[:type] == 'ref'}.map{|n| User.find_by_login n[:login]}
   end
 
   before_create :parse_content
 
-  validates_size_of :content, :within => 1..140
+  validate_on_create :content_length_is_valid
+
+  alias_method 'real_destroy', 'destroy'
+  
+  def destroy
+    if original? and forwards_count != 0
+      update_attributes(:deleted => true)
+    else
+      real_destroy
+    end
+  end
 
 protected
 
-  def update_mini_image
-    unless @mini_image_id.blank?
-      MiniImage.update_all("mini_blog_id = #{id}", {:id => @mini_image_id})
-      increment :images_count
-      @mini_image_id = nil
+  def content_length_is_valid
+    if content.blank?
+      errors.add(:content, "不能为空")
+    else
+      content.gsub!(/[ |\r|\n|\t]+/, " ")
+      if content.length > 140
+        errors.add(:content, "太长")
+      elsif content.length < 1
+        errors.add(:content, "太短")
+      end
     end
   end
 
@@ -93,18 +106,18 @@ protected
       when 'text'
         nodes << {:type => 'text', :val => node[:val]}
       when 'topic'
-        mini_topic = MiniTopic.find_or_create :name => node[:val]
-        nodes << {:type => 'topic', :val => node[:val], :topic_id => mini_topic.id}
+        MiniTopic.find_or_create :name => node[:val]
+        nodes << {:type => 'topic', :name => node[:val]}
       when 'link'
         if node[:val] =~ MiniLink::UrlReg
-          mini_link = MiniLink.find_by_compressed_id node[:val].split('/').last
+          mini_link = MiniLink.find_by_proxy_url node[:val]
         else
           mini_link = MiniLink.find_or_create :url => node[:val]
         end
-        nodes << {:type => 'link', :val => mini_link.proxy_url, :link_id => mini_link.id}
+        increment :videos_count if !mini_link.blank? and mini_link.is_video?
+        nodes << {:type => 'link', :proxy_url => mini_link.nil? ? node[:val] : mini_link.proxy_url}
       when 'ref'
-        user = User.find_by_login node[:val]
-        nodes << {:type => 'ref', :val => node[:val], :user_id => user.nil? ? nil : user.id}
+        nodes << {:type => 'ref', :login => node[:val]}
       end
     end
     self.nodes = nodes 

@@ -27,4 +27,11 @@
   </div>
 </div>
 
-<%= javascript_tag "new Iyxzone.limitedTextField($('#{type}_comment_content_#{commentable.id}'), 140, $('#{type}_#{commentable.id}_words_count'), false)" %>
+<% javascript_tag do %>
+  new Iyxzone.limitedTextInput($('<%= type %>_comment_content_<%= commentable.id %>'), {
+    max: 140,
+    interval: 200,
+    autoClearOnFirstFocus: false,
+    doCheck: Iyxzone.Comment.checkLength
+  });
+<% end %>

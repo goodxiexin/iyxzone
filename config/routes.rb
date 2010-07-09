@@ -82,7 +82,13 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
 
-    users.resources :mini_blogs, :collection => {:hot => :get, :sexy => :get}
+    users.resources :attentions
+
+    users.resources :mini_links
+
+    users.resources :mini_images
+
+    users.resources :mini_blogs, :collection => {:random => :get, :public => :get, :hot => :get, :sexy => :get, :interested => :get, :list => :get}, :member => {:new_forward => :get, :forward => :post}
 
     users.resources :fans
 
@@ -240,6 +246,8 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:more_feeds => :get} do |games|
 
+      games.resources :mini_blogs, :controller => 'games/mini_blogs'
+
       games.resources :blogs, :controller => 'games/blogs'
       
 			games.resources :comrades, :controller => 'games/comrades', :collection => {:search => :any, :character_search => :any}
@@ -253,8 +261,6 @@ ActionController::Routing::Routes.draw do |map|
       games.resources :albums, :controller => 'games/albums'
 
       games.resources :tags, :controller => 'games/tags'
-
-      games.resources :attentions, :controller => 'games/attentions'
 
     end
 

@@ -12,7 +12,7 @@
   <% end %> 
   <div class='info-list'>
     <%= render :partial => 'guild_info', :locals => {:guild => @guild} %>
-    <%= render :partial => 'guild_menu', :locals => {:guild => @guild, :role => @role} %>  
+    <%= render :partial => 'guild_menu', :locals => {:guild => @guild, :role => @role, :attention => @attention} %>  
     <%= render :partial => 'guild_request', :locals => {:guild => @guild} %>
   </div>
 <% end %>

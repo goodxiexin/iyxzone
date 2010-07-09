@@ -7,6 +7,20 @@ class AttentionTest < ActiveSupport::TestCase
     @user2 = UserFactory.create
   end
 
+  test "counter" do
+    assert @user1.followed_by(@user2)
+    assert_equal @user1.reload.attentions_count, 1
+    assert @user1.unfollowed_by(@user2)
+    assert_equal @user1.reload.attentions_count, 0
+  end
+
+  test "follow repeatedly" do
+    assert @user1.followed_by(@user2)
+    assert_equal @user1.reload.attentions_count, 1
+    assert !@user1.followed_by(@user2)
+    assert_equal @user1.reload.attentions_count, 1
+  end
+
   test "follow" do
     assert_difference "Attention.count" do
       assert @user1.followed_by(@user2)
@@ -21,14 +35,6 @@ class AttentionTest < ActiveSupport::TestCase
 
     assert @user1.followed_by?(@user2)
     assert @user2.followed_by?(@user1)
-
-    assert_no_difference "Attention.count" do
-      assert !@user1.followed_by(@user2)
-    end
-  
-    assert_no_difference "Attention.count" do
-      assert !@user2.followed_by(@user1)
-    end
   end
 
 end

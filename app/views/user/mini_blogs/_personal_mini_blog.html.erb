@@ -1,0 +1,5 @@
+  <% render :layout => 'mini_blog', :locals => {:mini_blog => personal_mini_blog, :at => 'index'} do %>
+    <div class='feedFunc'>
+      <%= avatar personal_mini_blog.poster, :class => 'imgbox01' %>
+    </div>
+  <% end %>

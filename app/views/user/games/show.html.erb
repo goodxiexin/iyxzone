@@ -1,5 +1,6 @@
 <% content_for :javascript_include do %>
   <%= javascript_include_merged :game %>
+  <%= javascript_include_tag 'mini_blog' %>
 <% end %>
 
 <% content_for :html_title, "#{@game.name} - 主页 - 17Gaming.com" %>
@@ -26,6 +27,7 @@
 <% end %>
 
 <div class='box02 canvas_con'>
+  <%= render :partial => 'user/mini_blogs/form_at_index', :locals => {:poster_id => @game.id, :poster_type => 'Game', :at => 'game'} %>
   <% unless @comrades.blank? %>
     <%= render :partial => 'comrade_suggestions', :locals => {:game => @game, :comrades => @comrades} %>
   <% end %>

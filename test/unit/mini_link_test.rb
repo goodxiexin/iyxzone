@@ -17,10 +17,12 @@ class MiniLinkTest < ActiveSupport::TestCase
     assert_no_difference "MiniLink.count" do
       MiniLink.create :url => 'http://www.baidu.com'
     end
+  end
 
-    @topic = MiniLink.find_by_url 'http://www.baidu.com'
-    assert_not_nil @topic
-    assert_equal @topic.proxy_url, "#{SITE_URL}/links/#{@topic.compressed_id}"
+  test "compressed id and proxy url" do
+    @link = MiniLink.create :url => 'http://www.baidu.com'
+    assert_equal @link.proxy_url, "#{SITE_URL}/links/#{@link.compressed_id}"
+    assert_equal MiniLink.find_by_proxy_url(@link.proxy_url), @link
   end
 
   test "video link" do

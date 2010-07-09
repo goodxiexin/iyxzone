@@ -1,0 +1,36 @@
+            <div class="mBlogTopic mBlogMyTopic">
+              <div class="topTitle fix">
+                <strong>有什么新鲜事想要告诉大家？</strong>
+                <span class="count">你还可以输入<span class="num" id="mini_blog_words_count">140</span>字</span>
+              </div>
+              <div class="topBg fix">
+                  <div class="mBlogEditor">
+                    <div class="bd fix">
+                      <textarea name="" id="mini_blog_text_area"></textarea>
+                      <span class="button03"><span><%= button_to_function "发布", "Iyxzone.MiniBlog.Builder.publish('index');", {:id => 'publish_btn'} %></span></span>
+                    </div>
+                    <div class="ft fix">
+                      <ul>
+                        <li id='publisher_emotion'>
+                          <%= link_to_function '<span class="i iFace"></span>表情', "Iyxzone.Emotion.Manager.toggleFaces(this, $('mini_blog_text_area'), event)" %>
+                        </li>
+                        <li id='publisher_image'>
+                          <%= link_to_function '<span class="i iPic"></span>图片</a>', "Iyxzone.MiniBlog.Builder.newImage()" %>
+                          <span class="picUpload">
+                            <% form_for :mini_image, :url => mini_images_url, :html => {:id => "publisher_image_form", :multipart => true, :target => 'upload_frame'} do |f| %>
+                              <%= f.file_field :uploaded_data, :onchange => "Iyxzone.MiniBlog.Builder.imageSelected();" %>
+                            <% end %>
+                            <iframe id='upload_frame' name='upload_frame' style='width:1px;height:1px;border:0px' src="about:blank"></iframe>
+                          </span>
+                        </li>
+                        <li id='publisher_video'><%= link_to_function '<span class="i iVideo"></span>视频</a>', "Iyxzone.MiniBlog.Builder.newVideo()" %></li>
+                        <li id='publisher_topic'><%= link_to_function '<span class="i iTopic"></span>话题</a>', "Iyxzone.MiniBlog.Builder.newTopic()" %></li>
+                      </ul>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+<% javascript_tag do %>
+  Iyxzone.MiniBlog.Builder.init();
+<% end %>

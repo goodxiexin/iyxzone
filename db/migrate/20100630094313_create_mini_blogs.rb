@@ -2,12 +2,11 @@ class CreateMiniBlogs < ActiveRecord::Migration
   def self.up
     create_table :mini_blogs do |t|
       t.integer :poster_id
-      t.string :poster_type
-      t.integer :initiator_id
-      t.string :initiator_type
+      t.integer :root_id
+      t.integer :parent_id
       t.string :content
       t.text :nodes
-      t.text :forwarder_ids
+      t.boolean :deleted, :default => false
       t.integer :images_count, :default => 0
       t.integer :videos_count, :default => 0
       t.integer :comments_count, :default => 0

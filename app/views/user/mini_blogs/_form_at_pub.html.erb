@@ -1,0 +1,30 @@
+<% facebox_tag "我来说说" do %>
+  <div class="mBlogEditor mBlogIFeed">
+    <div class="hd fix">
+      <div class="tips">可以直接输入视频的URL地址</div>
+      <div class="count">你还可以输入<span class="num" id="mini_blog_words_count">140</span>字</div>
+    </div>
+    <div class="bd fix">
+      <div class="cTxtArea"><textarea id="mini_blog_text_area"></textarea></div>
+    </div>
+    <div class="ft fix">
+      <ul>
+        <li id='publisher_emotion'><%= link_to_function "<span class='i iFace'></span>表情", "Iyxzone.Emotion.Manager.toggleFaces(this, $('mini_blog_text_area'), event)" %></li>
+        <li id='publisher_image'>
+          <%= link_to_function "<span class='i iPic'></span>图片", "Iyxzone.MiniBlog.Builder.newImage();" %>
+          <span class="picUpload">
+            <% form_for :mini_image, :url => mini_images_url, :html => {:id => "publisher_image_form", :multipart => true, :target => 'upload_frame'} do |f| %>
+              <%= f.file_field :uploaded_data, :onchange => "Iyxzone.MiniBlog.Builder.imageSelected();" %>
+            <% end %>
+            <iframe id='upload_frame' name='upload_frame' style='width:1px;height:1px;border:0px' src="about:blank"></iframe>
+          </span>
+        </li>
+        <li class="submit"><%= link_to_function "发布", "Iyxzone.MiniBlog.Builder.publish('public');", {:id => 'publish_btn'} %></li>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag "
+Iyxzone.MiniBlog.Builder.init();
+"%>

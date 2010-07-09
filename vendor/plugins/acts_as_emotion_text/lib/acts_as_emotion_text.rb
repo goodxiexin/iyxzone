@@ -10,6 +10,14 @@ module Emotion
     base.extend(ClassMethods)
   end
 
+  def self.map name
+    "<img src='/images/faces/#{name}.gif'>"
+  end 
+
+  def self.parse content
+    content.gsub(Re, "<img src='/images/faces/\\1.gif'/>")
+  end
+
   module ClassMethods
     
     def acts_as_emotion_text options={}

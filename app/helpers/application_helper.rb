@@ -315,7 +315,7 @@ module ApplicationHelper
       min = e / 60
       "#{min.to_i}分钟前"
     elsif e >= 1470 and e < 5370
-      "大约一小时前"
+      "大约1小时前"
     elsif e >= 5370 and e < 86370
       hour = e / 3600
       "#{hour.to_i}小时前"
@@ -509,13 +509,56 @@ module ApplicationHelper
   end
 
   def mini_blog_content mini_blog
-    mini_blog.content.gsub(/#([^#]+)#/).each do |match|
-      "<a href='javascript:void(0)'>#{match}</a>"
-    end.gsub(/[^#.](http:\/\/17gaming.com\/links\/[\w]+)[^#.]/).each do |url|
-      "<a href='#{url}'>#{url}</a>"
-    end.gsub(/[^#.]@([\w]+)[^#.]/).each do |login|
-      "<a href='javascript:void(0)'>#{login}</a>"
+    mini_blog.nodes.map do |node|
+      if node[:type] == 'text'
+        emotion_text node[:val]
+      elsif node[:type] == 'topic'
+        "<a href='javascript:void(0)'>##{node[:name]}#</a>"
+      elsif node[:type] == 'link'
+        link = MiniLink.find_by_proxy_url node[:proxy_url]
+        if mini_blog.original?
+          if link and link.is_video?
+            link_to_function "#{link.proxy_url}<span class='i iVideo'></span>", "Iyxzone.MiniBlog.Presenter.showVideo(#{mini_blog.id}, '#{link.thumbnail_url}', '#{link.embed_html}');"
+          else
+            "<a href='#{link.url}'>#{link.proxy_url}</a>"
+          end
+        else
+          "<a href='#{link.url}'>#{link.proxy_url}</a>"
+        end         
+      elsif node[:type] == 'ref'
+        user = User.find_by_login node[:login]
+        if user.nil?
+          "<a href='#'>@#{node[:login]}</a>"
+        else 
+          "<a href='/mini_blogs?uid=#{user.id}'>@#{user.login}</a>"
+        end
+      end
     end
   end
   
+  def mini_blog_content2 mini_blog
+    mini_blog.nodes.map do |node|
+      if node[:type] == 'text'
+        emotion_text node[:val]
+      elsif node[:type] == 'topic'
+        "<a href='javascript:void(0)'>##{node[:name]}#</a>"
+      elsif node[:type] == 'link'
+        link = MiniLink.find_by_proxy_url node[:proxy_url]
+        if link and link.is_video?
+          "<a href='#{link.url}'>#{link.proxy_url}<span class='i iVideo'></span></a>"
+        else
+          "<a href='#{link.url}'>#{link.proxy_url}</a>"
+        end          
+      elsif node[:type] == 'ref'
+        user = User.find_by_login node[:login]
+        if user.nil?
+          "<a href=''>@#{node[:login]}</a>"
+        else
+          "<a href='/mini_blogs?uid=#{user.id}'>@#{user.login}</a>"
+        end  
+      end
+    end
+  end
+
 end
+

@@ -6,6 +6,7 @@ class MiniBlogTest < ActiveSupport::TestCase
     @me = UserFactory.create
     @someone = UserFactory.create
     @another = UserFactory.create
+    Role.create :name => 'game_admin'
   end
 
   test "validation" do
@@ -17,208 +18,204 @@ class MiniBlogTest < ActiveSupport::TestCase
 
     @mb = MiniBlog.new :poster => @me, :content => 'a' * 141
     assert !@mb.save
-  end
 
-  test "create text mini-blog" do
-    # no topic
-    @mb = MiniBlog.new :poster => @me, :content => 'content'
+    # 空格,tab会被转成一个空格
+    @mb = MiniBlog.new :poster => @me, :content => 'a   ' * 70
     assert @mb.save
-  
-    # one topic
+  end
+
+  test "creat text mini blog" do
+    @mb = MiniBlog.create :poster => @me, :content => '简单的文本微波'
+    assert @mb.text_type?
+
     assert_difference "MiniTopic.count" do
-      @mb = MiniBlog.create :poster => @me, :content => '#topic1#haha'
+      @mb = MiniBlog.create :poster => @me, :content => '#简单的文本微波#'
     end
-    @topic1 = MiniTopic.find_by_name 'topic1'
-    assert_not_nil @topic1
-    assert_equal @mb.mini_topics, [@topic1]
+    assert @mb.text_type?
 
-    # two topics
-    assert_difference "MiniTopic.count" do
-      @mb = MiniBlog.create :poster => @me, :content => '#topic1#next#topic2#'
+    assert_difference "MiniTopic.count", 3 do
+      @mb = MiniBlog.create :poster => @me, :content => '#t1# #t2# #t3# #t1#'
     end
-    @topic2 = MiniTopic.find_by_name 'topic2'
-    assert_not_nil @topic2
-    assert_equal @mb.mini_topics, [@topic1, @topic2]
+    @t1 = MiniTopic.find_by_name 't1'
+    @t2 = MiniTopic.find_by_name 't2'
+    @t3 = MiniTopic.find_by_name 't3'
+    assert @mb.text_type?
+    assert_equal @mb.mini_topics, [@t1, @t2, @t3, @t1]
 
-    # four topics
-    assert_no_difference "MiniTopic.count" do
-      @mb = MiniBlog.create :poster => @me, :content => '#topic2#next#topic1#next#topic2#next#topic1#'
-    end
-    assert_equal @mb.mini_topics, [@topic2, @topic1]
+    @mb = MiniBlog.create :poster => @me, :content => "@#{@someone.login} @#{@another.login} @#{@someone.login}"
+    assert @mb.text_type?
+    assert_equal @mb.relative_users, [@someone, @another, @someone]
   end
 
-  test "create image mini-blog" do
-    @image = PhotoFactory.create :poster_id => @me.id, :type => 'MiniImage'
-    @mb = MiniBlog.new :poster => @me, :content => '#good picture# have a look', :mini_image_id => @image.id
-    assert @mb.save
-    assert @mb.image_type?
-    assert_equal @image.reload.mini_blog, @mb
-    assert_equal @mb.images_count, 1
+  test "create video mini blog" do
+    assert_difference "MiniLink.count" do
+      @mb = MiniBlog.create :poster => @me, :content => 'http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html'
+    end
+    @link = MiniLink.last
+    assert_equal @mb.videos_count, 1
+    assert @mb.video_type?
+    
+    assert_no_difference "MiniLink.count" do
+      @mb = MiniBlog.create :poster => @me, :content => "#{@link.proxy_url} http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html"
+    end
+    assert_equal @mb.videos_count, 2
+    assert @mb.video_type?
+    assert_equal @mb.mini_videos, [@link, @link]
   end
 
-  test "create video mini-blog" do
-    # normal link
-    assert_difference "MiniLink.count" do
-      @mb = MiniBlog.create :poster => @me, :content => '#link1#http://www.baidu.com'
-    end
-    @link1 = MiniLink.find_by_url 'http://www.baidu.com'
-    assert_not_nil @link1
-    assert !@link1.is_video?
-    assert_equal @mb.mini_links, [@link1]
-
-    # multiple normal link
-    assert_difference "MiniLink.count", 2 do
-      @mb = MiniBlog.create :poster => @me, :content => '#link1#http://www.baidu.com#link2#http://www.google.com#link3#http://www.bin.com'
-    end
-    @link2 = MiniLink.find_by_url 'http://www.google.com'
-    @link3 = MiniLink.find_by_url 'http://www.bin.com'
-    assert_not_nil @link2
-    assert_not_nil @link3
-    assert !@link2.is_video?
-    assert !@link3.is_video?
-    assert_equal @mb.mini_links, [@link1, @link2, @link3]
-
-    assert_difference "MiniLink.count" do
-      @mb= MiniBlog.create :poster => @me, :content => '#link4#http://www.dm5.com#link4#http://www.dm5.com'
-    end
-    @link4 = MiniLink.find_by_url 'http://www.dm5.com'
-    assert_not_nil @link4
-    assert !@link4.is_video?
-    assert_equal @mb.mini_links, [@link4]
-
-    # some valid proxy url
-    assert_no_difference "MiniLink.count" do
-      @mb = MiniBlog.create :poster => @me, :content => "#{@link1.proxy_url} next #{@link2.proxy_url} next #{@link1.proxy_url}"
-    end
-    assert_equal @mb.mini_links, [@link1, @link2]
-
-    # some invalid proxy url
-    assert_no_difference "MiniLink.count" do
-      @mb = MiniBlog.create :poster => @me, :content => "#{@link1.proxy_url} next #{SITE_URL}/links/FFFFFF"
-    end
-    assert_equal @mb.mini_links, [@link1]
-
-    # video link
-    assert_difference "MiniLink.count" do
-      @mb = MiniBlog.create :poster => @me, :content => "#video1#http://v.youku.com/v_show/id_XMTg1MjI5Mzg0.html"
-    end
-    @video1 = MiniLink.find_by_url 'http://v.youku.com/v_show/id_XMTg1MjI5Mzg0.html'
-    assert_not_nil @video1
-    assert @video1.is_video?
-    assert_equal @mb.mini_videos, [@video1]
-
-    # multiple video link
-    assert_difference "MiniLink.count" do
-      @mb = MiniBlog.create :poster => @me, :content => "#video1#http://v.youku.com/v_show/id_XMTg1MjI5Mzg0.html#video2#http://v.youku.com/v_show/id_XMTg1MzAwOTI4.html"
-    end
-    @video2 = MiniLink.find_by_url 'http://v.youku.com/v_show/id_XMTg1MzAwOTI4.html'
-    assert_not_nil @video2
-    assert @video2.is_video?
-    assert_equal @mb.mini_videos, [@video1, @video2]
-
-    # some valid proxy url
-    assert_no_difference "MiniLink.count" do
-      @mb = MiniBlog.create :poster => @me, :content => "#video1##{@video1.proxy_url}#video2##{@video2.proxy_url}"
-    end
-    assert_equal @mb.mini_videos, [@video1, @video2]
-   
-    # some invalid proxy url
-    assert_no_difference "MiniLink.count" do
-      @mb = MiniBlog.create :poster => @me, :content => "#video1##{@video1.proxy_url}#invalid video##{SITE_URL}/links/FFFFFF"
-    end
-    assert_equal @mb.mini_videos, [@video1]
-   
-    # mixed
-    # 1 existing links, 1 new link, 1 new video, 1 invalid proxy url
-    assert_difference "MiniLink.count", 2 do
-      @mb = MiniBlog.create :poster => @me, :content => "#{@video1.proxy_url} http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html http://17gaming.com #{SITE_URL}/links/FFFFF"
-    end
-    @video3 = MiniLink.find_by_url 'http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html'
-    assert_not_nil @video3
-    assert @video3.is_video?
-    @link5 = MiniLink.find_by_url 'http://17gaming.com'
-    assert_not_nil @link5
-    assert !@link5.is_video?
-    assert_equal @mb.mini_links, [@video1, @video3, @link5]
-    assert_equal @mb.mini_videos, [@video1, @video3]
-  end
-
-  test "create composite(video + image) mini-blog" do
+  test "create image mini blog" do
     @image = PhotoFactory.create :type => 'MiniImage'
-    assert_difference "MiniLink.count", 2 do
-      @mb = MiniBlog.create :poster => @me, :content => "http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html http://www.baidu.com", :mini_image_id => @image.id
+    @mb = MiniBlog.create :poster => @me, :content => 'a', :mini_image => @image
+    assert_equal @image.reload.mini_blog_id, @mb.id
+    assert_equal @mb.mini_image, @image
+    assert_equal @mb.reload.images_count, 1
+    assert @mb.image_type?
+  end
+
+  test "complicate mini blog" do
+    @image = PhotoFactory.create :type => 'MiniImage'
+    assert_difference "MiniTopic.count" do
+      assert_difference "MiniLink.count" do
+        @mb = MiniBlog.create :poster => @me, :content => 'http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html #好片#', :mini_image => @image
+      end
     end
-    @video = MiniLink.find_by_url 'http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html'
-    @link = MiniLink.find_by_url 'http://www.baidu.com'
-    assert_equal @mb.mini_links, [@video, @link]
-    assert_equal @mb.mini_videos, [@video]
-    assert_equal @image.reload.mini_blog, @mb
+    assert_equal @image.reload.mini_blog_id, @mb.id
+    assert_equal @mb.reload.images_count, 1
+    assert_equal @mb.videos_count, 1
+    assert !@mb.text_type? 
     assert @mb.video_type?
     assert @mb.image_type?
-    assert !@mb.text_type?
   end
 
-  test "create mini-blog with some relative users" do
-    @mb = MiniBlog.new :poster => @me, :content => "@#{@someone.login} @#{@another.login} @not_exist"
-    assert @mb.save
-    assert @mb.relative_users, [@someone, @another]
-  end
-
+  #
+  # 建立这样的forward
+  # 1 => {2,3}表示2,3转发自1
+  # 1 => { 2 => {4 => {6, 7}, 5}, 3}
+  #
   test "forward" do
-    @mb1 = MiniBlog.create :poster => @me, :content => 'haha'
-    assert_nil @mb1.initiator
-    #assert_equal @mb1.poster, @me
-    assert_equal @mb1.forwarders, []    
+    @b1 = MiniBlog.create :poster => @me, :content => '1'
+    
+    assert_difference "MiniBlog.count" do
+      @b2 = @b1.forward @someone, '2'
+    end
+    assert_equal @b1.reload.forwards_count, 1
 
     assert_difference "MiniBlog.count" do
-      @mb2 = @mb1.forward @someone, 'haha'
+      @b3 = @b1.forward @another, '3'
     end
-    assert_equal @mb2.initiator, @me
-    assert_equal @mb2.poster, @someone
-    assert_equal @mb2.forwarders, []
+    assert_equal @b1.reload.forwards_count, 2
 
     assert_difference "MiniBlog.count" do
-      @mb3 = @mb1.forward @another, 'haha'
+      @b4 = @b2.forward @someone, '4'
     end
-    assert_equal @mb3.initiator, @me
-    assert_equal @mb3.poster, @another
-    assert_equal @mb3.forwarders, []
-  
-    assert_difference "MiniBlog.count" do
-      @mb4 = @mb3.forward @someone, 'haha'
-    end
-    assert_equal @mb4.initiator, @me
-    assert_equal @mb4.poster, @someone
-    assert_equal @mb4.forwarders, [@another]
+    assert_equal @b1.reload.forwards_count, 3
+    assert_equal @b2.reload.forwards_count, 1
 
     assert_difference "MiniBlog.count" do
-      @mb5 = @mb4.forward @another, 'haha'
+      @b5 = @b2.forward @someone, '5'
     end
-    assert_equal @mb5.initiator, @me
-    assert_equal @mb5.poster, @another
-    assert_equal @mb5.forwarders, [@another, @someone]
+    assert_equal @b1.reload.forwards_count, 4
+    assert_equal @b2.reload.forwards_count, 2
 
     assert_difference "MiniBlog.count" do
-      @mb6 = @mb5.forward @someone, 'haha'
+      @b6 = @b4.forward @someone, '6'
     end
-    assert_equal @mb6.initiator, @me
-    assert_equal @mb6.poster, @someone
-    assert_equal @mb6.forwarders, [@another, @someone, @another]
+    assert_equal @b1.reload.forwards_count, 5
+    assert_equal @b2.reload.forwards_count, 2
+    assert_equal @b4.reload.forwards_count, 1
 
     assert_difference "MiniBlog.count" do
-      @mb7 = @mb6.forward @me, 'haha'
+      @b7 = @b4.forward @someone, '7'
     end
-    assert_equal @mb7.initiator, @me
-    assert_equal @mb7.poster, @me
-    assert_equal @mb7.forwarders, [@another, @someone, @another, @someone]
+    assert_equal @b1.reload.forwards_count, 6
+    assert_equal @b2.reload.forwards_count, 2
+    assert_equal @b4.reload.forwards_count, 2
 
-    assert_difference "MiniBlog.count" do
-      @mb8 = @mb7.forward @me, 'haha'
+    assert @b1.original?
+    [@b2, @b3, @b4, @b5, @b6, @b7].each do |b|
+      assert !b.original?
     end
-    assert_equal @mb8.initiator, @me
-    assert_equal @mb8.poster, @me
-    assert_equal @mb8.forwarders, [@another, @someone, @another, @someone, @me]
 
+    # 删除一个叶子节点
+    @b7.destroy
+    assert_equal @b1.reload.forwards_count, 5
+    assert_equal @b2.reload.forwards_count, 2
+    assert_equal @b4.reload.forwards_count, 1
+
+    # 删除一个中间节点
+    @b4.destroy
+    assert_equal @b6.reload.parent, @b1
+    assert_equal @b1.reload.forwards_count, 4
+    assert_equal @b2.reload.forwards_count, 1
+
+    # 删除跟节点的一个孩子
+    @b3.destroy
+    assert_equal @b1.reload.forwards_count, 3
+
+    # 删除根节点, 由于forwards_count不为0，要假删除
+    @b1.destroy
+    assert_not_nil @b1
+    assert @b1.deleted
+    assert_equal @b2.reload.parent, @b1
+    assert_equal @b5.reload.parent, @b2
+    assert_equal @b6.reload.parent, @b1
+    assert_equal @b1.reload.forwards_count, 3
+    assert_equal @b2.reload.forwards_count, 1
+
+    # 再删除b2
+    @b2.destroy
+    assert_equal @b1.reload.forwards_count, 2
+    assert_equal @b5.reload.parent, @b1
+  end
+
+  test "category" do
+    @image1 = PhotoFactory.create :type => 'MiniImage'
+    @image2 = PhotoFactory.create :type => 'MiniImage'
+    @b1 = MiniBlog.create :poster => @me, :content => 'text'
+    sleep 1
+    @b2 = MiniBlog.create :poster => @me, :content => '#topic#', :mini_image => @image1
+    sleep 1
+    @b3 = @b1.forward @me, "@#{@me.login}"
+    sleep 1
+    @b4 = MiniBlog.create :poster => @me, :content => "http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html"
+    sleep 1
+    @b5 = MiniBlog.create :poster => @me, :content => "http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html", :mini_image => @image2
+    
+    assert_equal MiniBlog.category('all'), [@b5, @b4, @b3, @b2, @b1]
+    assert_equal MiniBlog.category('original'), [@b5, @b4, @b2, @b1]
+    assert_equal MiniBlog.category('text'), [@b3, @b1]
+    assert_equal MiniBlog.category('image'), [@b5, @b2]
+    assert_equal MiniBlog.category('video'), [@b5, @b4]
+  end
+
+  test "comment" do
+    @mb = MiniBlog.create :poster => @me, :content => 'text'
+    [@me, @someone, @another].each do |u|
+      assert @mb.is_commentable_by?(u)
+    end
+  end
+
+  test "interested mini blogs" do
+    @someone.followed_by @me
+    @another.followed_by @me
+
+    @image1 = PhotoFactory.create :type => 'MiniImage'
+    @image2 = PhotoFactory.create :type => 'MiniImage'
+    @b1 = MiniBlog.create :poster => @someone, :content => 'text'
+    sleep 1
+    @b2 = MiniBlog.create :poster => @someone, :content => '#topic#', :mini_image => @image1
+    sleep 1
+    @b3 = @b1.forward @another, "@#{@me.login}"
+    sleep 1
+    @b4 = MiniBlog.create :poster => @another, :content => "http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html"
+    sleep 1
+    @b5 = MiniBlog.create :poster => @another, :content => "http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html", :mini_image => @image2
+    
+    assert_equal @me.interested_mini_blogs, [@b5, @b4, @b3, @b2, @b1]
+    assert_equal @me.interested_mini_blogs('original'), [@b5, @b4, @b2, @b1]
+    assert_equal @me.interested_mini_blogs('text'), [@b3, @b1]
+    assert_equal @me.interested_mini_blogs('image'), [@b5, @b2]
+    assert_equal @me.interested_mini_blogs('video'), [@b5, @b4]    
   end
 
 end

@@ -134,25 +134,83 @@ Object.extend(Iyxzone, {
 
 });
 
-Iyxzone.limitedTextField = Class.create({
+// some cursor operation
+Object.extend(Iyxzone, {
 
-  initialize: function(el, max, div, autoClear){
+  resetCursor: function (field) { 
+    if (field.setSelectionRange) { 
+      field.focus(); 
+      field.setSelectionRange(0, 0); 
+    }else if (field.createTextRange) { 
+      var range = field.createTextRange();  
+      range.moveStart('character', 0); 
+      range.select(); 
+    } 
+  },
+
+  insertAtCursor: function(field, value) {
+    //IE support
+    if (document.selection) {
+        field.focus();
+        sel = document.selection.createRange();
+        sel.text = value;
+    //Mozilla/Firefox/Netscape 7+ support
+    } else if (field.selectionStart || field.selectionStart == '0') {
+        field.focus();
+        var startPos = field.selectionStart;
+        var endPos = field.selectionEnd;
+        field.value = field.value.substring(0, startPos) + value + field.value.substring(endPos, field.value.length);
+        field.setSelectionRange(endPos+value.length, endPos+value.length);
+    } else {
+        field.value += value;
+    }
+  },
+
+  getCurPos: function(field){
+    if(field.selectionStart)
+      return field.selectionStart;
+    else if(document.selection)
+      return Math.abs(document.selection.createRange().moveStart("character", -1000000));
+  },
+
+  selectText: function(field, start, end){
+    field.focus();
+    if(field.setSelectionRange){
+      field.setSelectionRange(start, end);
+    }else{
+      var r = element.createTextRange();
+      r.collapse(true);
+      r.moveEnd('character', end);
+      r.moveStart('character', start);
+      r.select();
+    }
+  }
+
+});
+
+Iyxzone.limitedTextInput = Class.create({
+
+  initialize: function(el, opts){
+    this.opts = Object.extend({
+      max: 140,
+      interval: 200,
+      autoClearOnFirstFocus: false,
+      doCheck: Prototype.emptyFunction
+    }, opts || {});
+
     this.el = el;
-    this.max = max;
-    this.div = div;
     this.timer = null;
     this.firstFocus = true;
-    this.interval = 200;
     
     this.el.observe('focus', function(){
       if(this.firstFocus){
-				if(autoClear)
+				if(this.opts.autoClearOnFirstFocus)
 					this.el.clear();
-        if(this.div)
-          this.div.innerHTML = '0/' + this.max;
+        if(this.opts.doCheck != Prototype.emptyFunction)
+          this.opts.doCheck(this.el, this.opts.max);
         this.firstFocus = false;
       }
-      this.timer = setTimeout(this.checkLength.bind(this), this.interval);
+      this.timer = setTimeout(this.checkLength.bind(this), this.opts.interval);
     }.bind(this));
 
     this.el.observe('blur', function(){
@@ -161,13 +219,9 @@ Iyxzone.limitedTextField = Class.create({
   },
 
   checkLength: function(){
-    var count = this.el.value.length;
-    if(count > this.max){
-      this.el.value = this.el.value.substr(0, this.max);
-    }else{
-      if(this.div)
-        this.div.innerHTML = count + "/" + this.max;
+    if(this.opts.doCheck != Prototype.emptyFunction){
+      this.opts.doCheck(this.el, this.opts.max);
     }
-    this.timer = setTimeout(this.checkLength.bind(this), this.interval);
+    this.timer = setTimeout(this.checkLength.bind(this), this.opts.interval);
   }
 });

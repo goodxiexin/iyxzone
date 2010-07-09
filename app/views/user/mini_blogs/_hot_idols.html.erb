@@ -1,0 +1,37 @@
+          <div class="round06 round_r_t popMemberEx space">
+            <div class="round_l_t">
+              <div class="round_r_b">
+                <div class="round_l_b">
+                  <div class="round_m">
+                    <div class="round_body">
+                      <h2 class="title">名人排行榜</h2>
+                      <ul class="list">
+                        <% idols.each do |idol| %>
+                        <li>
+                          <div class="m-card">
+                            <div class="m-avatar"><%= avatar idol, :class => 'imgbox01' %></div>
+                            <div class="m-con">
+                              <h4><%= profile_link idol, :class => 'member-name' %></h4
+                              <div class="red">魔兽世界</div>
+                              <div class="op" id='idol_<%= idol.id %>_op'>
+                                <% if idol.has_fan? current_user %>
+                                  <%= render :partial => 'user/idols/unfollow', :locals => {:idol => idol} %>
+                                <% elsif !idol.has_friend?(current_user) and idol != current_user %>
+                                  <%= render :partial => 'user/idols/follow', :locals => {:idol => idol} %>
+                                <% end %>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <% end %>
+                      </ul>
+                      <div class="more">
+                        <%= link_to "更多游戏名人>>", idols_url, :class => 'red' %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+

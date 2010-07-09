@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100630094415) do
+ActiveRecord::Schema.define(:version => 20100708092908) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -392,6 +392,7 @@ ActiveRecord::Schema.define(:version => 20100630094415) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
+    t.integer  "attentions_count",  :default => 0
   end
 
   add_index "guilds", ["president_id"], :name => "index_guilds_on_president_id"
@@ -439,12 +440,11 @@ ActiveRecord::Schema.define(:version => 20100630094415) do
 
   create_table "mini_blogs", :force => true do |t|
     t.integer  "poster_id"
-    t.string   "poster_type"
-    t.integer  "initiator_id"
-    t.string   "initiator_type"
+    t.integer  "root_id"
+    t.integer  "parent_id"
     t.string   "content"
     t.text     "nodes"
-    t.text     "forwarder_ids"
+    t.boolean  "deleted",        :default => false
     t.integer  "images_count",   :default => 0
     t.integer  "videos_count",   :default => 0
     t.integer  "comments_count", :default => 0
@@ -714,6 +714,7 @@ ActiveRecord::Schema.define(:version => 20100630094415) do
   create_table "role_users", :force => true do |t|
     t.integer "role_id"
     t.integer "user_id"
+    t.integer "data"
   end
 
   add_index "role_users", ["role_id", "user_id"], :name => "index_role_users_on_role_id_and_user_id"
@@ -911,6 +912,7 @@ ActiveRecord::Schema.define(:version => 20100630094415) do
     t.integer  "fans_count",                               :default => 0
     t.integer  "idols_count",                              :default => 0
     t.string   "invite_fan_code"
+    t.integer  "attentions_count",                         :default => 0
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"

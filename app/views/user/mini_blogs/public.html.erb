@@ -1,0 +1,48 @@
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'mini_blog' %>
+<% end %>
+
+<% canvas_tag do %>
+  <h1 class="app-status">微博</h1>
+  <div class="box02 canvas_int">
+    <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 0} %>
+    <div class="mainConWrap clear">
+      <div class="mBlog fix">
+        <div class="mBlogMain">
+          <div class="mBlogMainWrap">
+            <%= render :partial => 'today_topic' %>
+            <div class="mBlogSearch fix">
+              <span class="l-c"></span>
+              <input type="text" class="ipt"/>
+              <span class="searchBtn01"><span><button>搜话题</button></span></span>
+              <span class="r-c"></span>
+            </div>
+            <div class="mBlogSearchTag fix">
+              <span class="miniTitle"><span>热词</span><em></em></span>
+              <div class="tags">
+                <a href="#">世界杯</a><a href="#">世界杯</a><a href="#">世界杯</a><a href="#">世界杯</a><a href="#">世界杯</a><a href="#">世界杯世界杯世界杯</a><a href="#">世界杯世界杯世界杯</a><a href="#">世界杯</a><a href="#">世界杯</a>
+              </div>
+            </div> 
+            <div class="tab tab01 mBlogTab">
+              <ul>
+                <li class="hover" id='mini_blog_category_hot'><span><%= link_to_function "热门转发", "Iyxzone.MiniBlog.Pub.fetch('hot');" %></span></li>
+                <li id='mini_blog_category_sexy'><span><%= link_to_function "热门回复", "Iyxzone.MiniBlog.Pub.fetch('sexy');" %></span></li>
+                <li id='mini_blog_category_random'><span><%= link_to_function "随便看看", "Iyxzone.MiniBlog.Pub.fetch('random');" %></span></li>
+                <li id='mini_blog_category_same_game'><span><%= link_to_function "同游微博", "Iyxzone.MiniBlog.Pub.fetch('same_game');" %></span></li>
+              </ul>
+            </div>
+            <div class="mBlogPostHead"><span class="topicTag">南非世界杯</span>，已有3500条参与话题讨论</div>
+            <div class="mBlogPostList" id='mini_blogs_list'>
+              <%= render :partial => 'hot_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
+            </div>
+          </div>
+        </div>
+        <div class="mBlogExtra">
+          <%= render :partial => 'hot_topics' %>
+          <%= render :partial => 'pop_users' %>
+          <%= render :partial => 'hot_idols', :locals => {:idols => @hot_idols} %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

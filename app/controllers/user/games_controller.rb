@@ -42,7 +42,7 @@ class User::GamesController < UserBaseController
       @comrades = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:server_id => servers.map(&:id)}, :include => [{:user => :profile}])
 		end
 		@players = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:game_id => @game.id}, :include => [{:user => :profile}])
-    @attention = @game.attentions.find_by_user_id(current_user.id)
+    @attention = @game.attentions.find_by_follower_id current_user.id
     @messages = @game.comments.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :commentable]
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @game.id, :wall_type => 'game'}}
     @feed_deliveries = @game.feed_deliveries.limit(FirstFetchSize).order('created_at DESC')

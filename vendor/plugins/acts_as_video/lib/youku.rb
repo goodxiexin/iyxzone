@@ -37,7 +37,7 @@ class Youku
 	end
 
 	def embed_html
-		"<param name=\"wmode\" value=\"transparent\"/><embed src=\""+ @embed_url + "\" quality=\"high\" width=\"470\" height=\"392\" align=\"middle\" allowScriptAccess=\"sameDomain\" type=\"application/x-shockwave-flash\" wmode=\"transparent\"></embed>"
+		"<embed src=\""+ @embed_url + "\" quality=\"high\" width=\"470\" height=\"392\" align=\"middle\" allowScriptAccess=\"sameDomain\" type=\"application/x-shockwave-flash\" wmode=\"transparent\"></embed>"
 	end
 
 end

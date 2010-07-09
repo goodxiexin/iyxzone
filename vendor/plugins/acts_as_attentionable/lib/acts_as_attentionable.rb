@@ -35,6 +35,15 @@ module ActsAsAttentionable
       !attentions.find_by_follower_id(user.id).blank?
     end
 
+    def unfollowed_by user
+      attention = attentions.find_by_follower_id(user.id)
+      if attention.nil?
+        false
+      else
+        attention.destroy
+      end
+    end
+
   end
   
   module SingletonMethods

@@ -1,3 +1,11 @@
+      <div class='op' id='guild_attention_<%= guild.id %>'>
+      <% if attention %>
+        <%= render :partial => 'user/attentions/unfollow', :locals => {:attention => attention} %>
+      <% else %>
+        <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => guild} %>
+      <% end %>
+      </div>
+
 <div class='avatarbox'>
 <dl class='menu-op'>
   <dt>操作</dt>

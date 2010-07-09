@@ -70,6 +70,9 @@ Rails::Initializer.run do |config|
     :poke_delivery_observer,
     :viewing_observer,
     :guestbook_observer,
-    :fanship_observer
+    :fanship_observer,
+    :mini_image_observer,
+    :mini_blog_observer,
+    :attention_observer
 
 end

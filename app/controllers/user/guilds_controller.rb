@@ -43,6 +43,7 @@ class User::GuildsController < UserBaseController
 		@feed_deliveries = @guild.feed_deliveries.limit(FirstFetchSize).order('created_at DESC')
 		@first_fetch_size = FirstFetchSize
 		@messages = @guild.comments.nonblocked.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :commentable]
+    @attention = @guild.attentions.find_by_follower_id current_user.id
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @guild.id, :wall_type => 'guild'}}
     render :action => 'show', :layout => 'app2'
 	end
