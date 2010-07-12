@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100708092908) do
+ActiveRecord::Schema.define(:version => 20100712071039) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -196,6 +196,13 @@ ActiveRecord::Schema.define(:version => 20100708092908) do
     t.string   "originator_type"
     t.integer  "originator_id"
     t.datetime "created_at"
+  end
+
+  create_table "ferret_infos", :force => true do |t|
+    t.string   "model_name"
+    t.integer  "main_max_doc_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "forums", :force => true do |t|
@@ -451,6 +458,7 @@ ActiveRecord::Schema.define(:version => 20100708092908) do
     t.integer  "forwards_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "index_state",    :default => 0
   end
 
   create_table "mini_images", :force => true do |t|
@@ -481,6 +489,13 @@ ActiveRecord::Schema.define(:version => 20100708092908) do
     t.integer  "reference_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "modified_ferret_indices", :force => true do |t|
+    t.integer "ferret_info_id"
+    t.integer "doc_id"
+    t.integer "category"
+    t.string  "in"
   end
 
   create_table "news", :force => true do |t|

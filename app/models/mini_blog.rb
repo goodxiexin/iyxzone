@@ -84,7 +84,32 @@ class MiniBlog < ActiveRecord::Base
     end
   end
 
+  before_create :create_index
+
+  before_update :update_index
+  
+  before_destroy :destroy_index
+
 protected
+
+  def create_index
+    self.index_state = 0 # unindexed
+  end
+
+  def update_index
+    if self.index_state == 1 # indexed in main
+      self.index_state = 2 # updated in main index
+      #info = FerretInfo.find_by_model_name 'MiniBlog'
+      #info.modified_indexes.updated.create :doc_id => id
+    end
+  end
+
+  def destroy_index
+    if self.index_state == 1 # indexed in main
+      info = FerretInfo.find_by_model_name 'MiniBlog'
+      info.modified_indexes.deleted.create :doc_id => id
+    end
+  end
 
   def content_length_is_valid
     if content.blank?
