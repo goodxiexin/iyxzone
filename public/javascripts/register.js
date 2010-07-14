@@ -253,7 +253,7 @@ Object.extend(Iyxzone.Register, {
 
     var html = '<div class="rows s_clear"><div class="fldid"><label>人物昵称：</label></div><div class="fldvalue"><div class="textfield" style="width: 100px;"><input id="profile_new_characters_' + id + '_name" name="profile[new_characters][' + id + '][name]" onblur="Iyxzone.Register.isCharacterNameValid(' + id + ')" size="30" type="text"></div></div><span class="red" id="characters_' + id + '_name_error"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>级别：</label></div><div class="fldvalue"><div style="width: 100px;" class="textfield"><input id="profile_new_characters_' + id + '_level" name="profile[new_characters][' + id + '][level]" onblur="Iyxzone.Register.isCharacterLevelValid(' + id + ')" size="30" type="text"></div></div><span class="red" id="characters_' + id + '_level_error"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">游戏：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_game_id" name="profile[new_characters][' + id + '][game_id]"><option value="">---</option></select></div><span class="red" id="characters_' + id + '_game_id_error"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><input style="display: none" type="text" name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"/><div class="fldvalue"><div class="selectSim" id="game_display_'+id+'" onclick="Iyxzone.Game.Panel.startPanel(this, $(\'profile_new_characters_'+ id +'_game_id\'), event)">选择游戏</div></div><span id="characters_' + id + '_game_id_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">区域：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_area_id" name="profile[new_characters][' + id + '][area_id]"><option value="">---</option></select></div><span class="red" id="characters_' + id + '_area_id_error"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">服务器：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_server_id" name="profile[new_characters][' + id + '][server_id]"><option value="">---</option></select></div><span class="red" id="characters_' + id + '_server_id_error"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">种族：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_race_id" name="profile[new_characters][' + id + '][race_id]"><option value="">---</option></select></div><span class="red" id="characters_' + id + '_race_id_error"></span></div>';
@@ -269,7 +269,7 @@ Object.extend(Iyxzone.Register, {
     // set game info
     var prefix = 'profile_new_characters_' + id + '_';
     var dprefix = 'characters_' + id + '_';
-    var selector = Iyxzone.Game.initPinyinSelector(
+    var selector = Iyxzone.Game.initSelector(
       prefix + 'game_id',
       dprefix + 'game_id_error',
       prefix + 'area_id',
@@ -282,6 +282,7 @@ Object.extend(Iyxzone.Register, {
       dprefix + 'profession_id_error',
       null,
       {onGameChange: this.showInfoWhenNoServers.bind(this)});
+		Iyxzone.Game.currentSelector = selector;
     this.gameSelectors.set(id, selector);
   },
 
