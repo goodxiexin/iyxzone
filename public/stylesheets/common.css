@@ -414,6 +414,9 @@ a.more{display:inline-block;padding-left:14px;height:15px;line-height:15px;/*bac
 .round06,.round06 .round_l_t,.round06 .round_l_b,.round06 .round_r_b{background-image:url(../images/skin/roundBoxbg06.gif);}
 .round06 .round_m{background:#f4faf1;border:0}
 
+.round07,.round07 .round_l_t,.round07 .round_l_b,.round07 .round_r_b{background-image:url(../images/skin/roundBoxbg07.gif);}
+.round07 .round_m{border-left:1px #9ace5f solid;border-right:1px #9ace5f solid;background:#fff;}
+
 /*圆角*/
 
 /*列表样式*/
@@ -477,6 +480,7 @@ div.table01 td,div.table01 th{border-bottom:1px #E7F0E0 solid;}
 .button04{float:left;cursor:pointer;display:block;background:url(../images/skin/btn2010.png) no-repeat right -122px;padding:0 10px 0 0;}
 .button04 span{display:block;padding:0 0 0 10px;background:url(../images/skin/btn2010.png) no-repeat 0 -122px;}
 .button04 span button{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:25px;line-height:25px;color:#fff;background:none;white-space:nowrap;width:auto;}
+
 
 .textfield04{background:url(../images/skin/skin2010.png) no-repeat 0 -275px;width:110px;height:32px;overflow:hidden;vertical-align:middle;margin-top:6px}
 .textfield04 input{width:92px;border:0;background:none;margin:8px 0 0 8px}

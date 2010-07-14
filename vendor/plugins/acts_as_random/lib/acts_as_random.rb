@@ -22,7 +22,7 @@ module ActsAsRandom
     def random opts={}
       cond = opts[:conditions] || {}
       prefetch = opts[:include] || []
-      count = self.count(:conditions => cond)
+      count = self.count( :conditions => cond)
       except = opts[:except] || []
       limit = opts[:limit] || 1
       picked = []

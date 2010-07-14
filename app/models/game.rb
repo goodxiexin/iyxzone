@@ -70,4 +70,8 @@ class Game < ActiveRecord::Base
 		professions_count == 0
 	end
 
+	def self.find_by_first_letter(letter)
+		find(:all, :conditions => ['pinyin LIKE ?', "#{letter}%"], :order => 'pinyin ASC')
+	end
+
 end

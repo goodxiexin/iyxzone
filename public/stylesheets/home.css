@@ -1320,7 +1320,7 @@ span.i,a.i{width:16px;height:16px;margin-right:3px;display:-moz-inline-stack;dis
 .iVideo{background-position:0 -327px;}
 .iTopic{background-position:-16px -327px;}
 .iToggleUp{background-position:-96px -25px}
-
+.iViewOrig{background-position:0 -146px}
 
 
 /*btn*/
@@ -1445,9 +1445,9 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogTopic .topTitle strong{color:#fff;float:left}
 .mBlogTopic .topTitle h2{float:left;width:300px;height:30px;overflow:hidden}
 .mBlogTopic .topIsay{position:absolute;top:12px;right:30px}
-.mBlogTopic .topBg{padding:20px;_height:120px;min-height:120px}
+.mBlogTopic .topBg{padding:15px 20px;_height:120px;min-height:120px}
 .mBlogTopic .topWrap{padding:0 0 0 80px;}
-.mBlogTopic .topSubTitle{font-size:14px;margin-bottom:10px;color:#217308}
+.mBlogTopic .topSubTitle{font-size:14px;margin-bottom:5px;color:#217308}
 .mBlogTopic .topImg{float:left;margin-left:-80px;_display:inline;}
 .mBlogTopic .topImg .op{margin-top:5px}
 .mBlogTopic .topCon{float:left;width:98%;line-height:20px;}
@@ -1475,6 +1475,8 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogEditor textarea{width:300px;height:60px;float:left;}
 .mBlogEditor .button03{float:left;margin:15px 0 0 10px}
 .mBlogEditor .ft li{float:left;margin:0 5px;padding:5px 0;position:relative}
+.mBlogEditor .ft li .picUpload{height:22px;width:50px;position:absolute;left:-2px;top:0;display:block;overflow:hidden;cursor:pointer;}
+.mBlogEditor .ft li .picUpload input{height:22px;width:50px;background:none;border:0;cursor:pointer;-moz-opacity:0;filter:alpha(opacity=0);opacity:0;}
 
 /*我来说说*/
 .mBlogIFeed{margin:10px 15px 20px 15px}
@@ -1518,7 +1520,9 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 /*我的微博*/
 .mBlogMyTopic{background:url(../images/skin/mblog-topic-bg02.png) no-repeat;height:217px}
 .mBlogMyTopic .topTitle{margin:0 0 5px 0}
-.mBlogMyTopic .topTitle strong{color:#217308;}
+.mBlogMyTopic .topTitle strong{color:#217308;float:left}
+.mBlogMyTopic .topTitle .count{color:#217308;float:right;font-size:12px;margin:-5px 20px 0 0}
+.mBlogMyTopic .topTitle .count .num{color:#c56601;font-family:Constantia,Georgia;font-size:24px;font-weight:bold;vertical-align:-2px;}
 .mBlogMyTopic .mBlogEditor textarea{width:330px;padding:3px}
 .mBlogMyTopic .topBg{padding:30px 0 0 50px}
 
@@ -1542,11 +1546,11 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogPostList .mConWrap .mConBgT{background:#fff url(../images/skin/title-bg01.gif) repeat-x top;}
 .mBlogPostList .mConWrap .mConBgB{background:url(../images/skin/title-bg02.gif) repeat-x bottom;text-align:center;padding:10px;}
 .mBlogPostList .mConWrap .mCon{overflow:hidden;width:380px}
-.mBlogPostList .mConWrap .mCon img.zoomOut{width:380px}
 .mBlogPostList .mConWrap .mCon .mTrans{text-align:left;}
 .mBlogPostList .mConWrap .mCon .mTrans .hd{color:#666}
 .mBlogPostList .mConWrap .mCon .mTrans .ft span{margin:0 5px;color:#999}
 .mBlogPostList .mConWrap .mCon .mTrans .ft a{color:#999}
+.mBlogPostList .mConWrap .mCon .op{background:url(../images/skin/dotline.gif) repeat-x top;padding-top:5px}
 
 .mBlogPostList .item .feedCon .ft{margin-top:5px}
 .mBlogPostList .item .feedCon .ft span{margin:0 5px;color:#666}
@@ -1577,8 +1581,8 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 
 .mBlogExtra .xList li a strong{display:block;float:left;font-weight:400;width:150px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 
-.zoomIn{cursor:url(/images/skin/zoomIn.cur), auto;}
-.zoomOut{cursor:url(/images/skin/zoomOut.cur), auto;}
+.zoomIn{cursor:url(/images/skin/zoomin.cur), auto;}
+.zoomOut{cursor:url(/images/skin/zoomout.cur), auto;}
 
 /*我关注的*/
 .hotGameEx .xList li a{color:#217308}
@@ -1596,4 +1600,68 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogTrans .ft textarea{width:99%;padding:3px 0}
 .mBlogTrans .ft .icon-face{float:left;}
 .mBlogTrans .ft .tips{float:right;}
+
+/*游戏列表*/
+.allGameSelector{width:750px;z-index:1001;position:absolute;}
+.allGameSelector .mask-wrap{_height:500px;_overflow:hidden}
+.allGameSelector .mask-wrap iframe.mask-iframe{_height:500px;}
+.allGameSelector .round07{position:absolute;z-index:1}
+.allGameSelector .round_m{padding:0}
+.allGameSelector .allGameTitle{padding:10px}
+.allGameSelector .allGameTitle h3{float:left}
+.allGameSelector .allGameTitle h3 strong{font-size:14px}
+.allGameSelector .allGameTitle .op{float:right;cursor:pointer}
+.alphaList{border:1px solid #9ace5f;border-width:1px 0 1px 0;background:#e4f2d8;padding:10px 0 10px 14px;}
+.alphaList li{float:left;margin-right:4px;text-align:center;}
+.alphaList li a{border-color:#74bc20;border-style:solid;border-width:1px 0;color:#333;display:block;float:left;text-decoration:none;background:#fff;width:auto;height:auto;overflow:visible;position:relative;}
+.alphaList li a span{position:relative;border-color:#74bc20;border-style:solid;border-width:0 1px;cursor:pointer;display:block;float:left;height:16px;line-height:16px;margin:0 -1px;padding:0 5px 0;white-space:nowrap;}
+.alphaList li.current a,.alphaList li a:hover{background:#74bc20}
+.alphaList li.current a span,.alphaList li a:hover span{color:#fff}
+.alphaList li.hotGame{margin-right:10px}
+.alphaList li.hotGame a span{font-weight:700;font-size:14px;height:20px;line-height:20px;}
+.alphaList li.hotGame a:hover span,.alphaList li.hotCurrent a span{font-weight:700;font-size:14px;height:20px;line-height:20px;border-color:#ff6e02;color:#fff}
+.alphaList li.hotGame a:hover,.alphaList li.hotCurrent a,.alphaList li.hotCurrent a:hover{background:#ff6e02;border-color:#ff6e02;}
+
+.allGameSelector .catGameList{padding:10px 0 10px 120px;background:url(../images/skin/title-bg03.gif) repeat-x}
+.allGameSelector .catGameList .t{float:left;margin-left:-110px;_display:inline;width:100px}
+.allGameSelector .catGameList .t em{background:url(../images/skin/skin2010.png) no-repeat 0 -830px;width:85px;height:35px;display:block;margin:0 auto}
+.allGameSelector .catGameList .con{float:left;width:620px}
+.allGameSelector .catGameList .con li{float:left;width:140px;font-size:14px;height:30px;line-height:30px;overflow:hidden;padding:0 5px;border-bottom:1px dotted #ccc}
+.allGameSelector .catGameList .con li a{color:#333}
+.allGameSelector .catGameList .con li.hot a{color:#d63200}
+
+.selectSim{width:165px;height:22px;line-height:22px;color:#666;border:1px solid #7f9db9;background:#fff url(../images/skin/skin2010.png) no-repeat right -869px;padding:0 20px 0 5px;overflow:hidden;cursor:pointer}
+
+.alphaImg{background:url(../images/skin/alpha26.png) no-repeat;width:40px;height:65px;margin:10px auto}
+.alphaHot{background:url(../images/skin/skin2010.png) no-repeat -88px -829px;width:82px;height:36px;margin:10px auto}
+.alpha-a{background-position:0 0}
+.alpha-b{background-position:-40px 0}
+.alpha-c{background-position:-80px 0}
+.alpha-d{background-position:-120px 0}
+.alpha-e{background-position:0 -65px}
+.alpha-f{background-position:-40px -65px}
+.alpha-g{background-position:-80px -65px}
+.alpha-h{background-position:-120px -65px}
+.alpha-i{background-position:0 -130px}
+.alpha-j{background-position:-40px -130px}
+.alpha-k{background-position:-80px -130px}
+.alpha-l{background-position:-120px -130px}
+.alpha-m{background-position:0 -195px}
+.alpha-n{background-position:-40px -195px}
+.alpha-o{background-position:-80px -195px}
+.alpha-p{background-position:-120px -195px}
+.alpha-q{background-position:0 -260px}
+.alpha-r{background-position:-40px -260px}
+.alpha-s{background-position:-80px -260px}
+.alpha-t{background-position:-120px -260px}
+.alpha-u{background-position:0 -325px}
+.alpha-v{background-position:-40px -325px}
+.alpha-w{background-position:-80px -325px}
+.alpha-x{background-position:-120px -325px}
+.alpha-y{background-position:0 -390px}
+.alpha-z{background-position:-40px -390px}
+
+
+
+
 
