@@ -21,8 +21,10 @@
 												<% f = f.suggested_friend %>
 												<li>
 													<%= avatar_image f, :size => :medium, :class => "imgbox01" %>
+													<p>
 													<strong><%=f.login%></strong><br />
 													<%= facebox_link '<span class="icon-friend02"></span>加为好友', new_friend_request_url(:friend_id => f.id), :class=>"red" %>
+													</p>
 												</li>
 											<% end %>
 										</ul>
