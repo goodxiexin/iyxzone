@@ -18,7 +18,7 @@ Iyxzone.MiniBlog = {
       parameters: {type: type, uid: uid},
       onLoading: function(transport){
         $('mini_blog_category_' + type).addClassName("selected");
-        $('mini_blogs_list').innerHTML = 'Loading';
+        $('mini_blogs_list').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"></div>';
       },
       onSuccess: function(transport){
         $('mini_blogs_list').innerHTML = transport.responseText;
@@ -41,7 +41,7 @@ Object.extend(Iyxzone.MiniBlog.Pub, {
       method: 'get',
       onLoading: function(transport){
         $('mini_blog_category_' + type).addClassName("hover");
-        $('mini_blogs_list').innerHTML = 'Loading';
+        $('mini_blogs_list').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"></div>';
       },
       onSuccess: function(transport){
         $('mini_blogs_list').innerHTML = transport.responseText;
@@ -313,11 +313,10 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
     });
   },
 
-  init: function(){
+  init: function(text){
     $('mini_image_uploaded_data').clear();
     this.imagePublishPanel = $('publisher_image').innerHTML;
 
-    $('mini_blog_text_area').clear();
     new Iyxzone.limitedTextInput($('mini_blog_text_area'), {
       max: 140,
       interval: 200, //ms
@@ -342,5 +341,8 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
         }
       }
     });
+    if(text){
+      Iyxzone.insertAtCursor($('mini_blog_text_area'), text);
+    }
   } 
 });

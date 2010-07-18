@@ -2,6 +2,8 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  belongs_to :skilled_game, :class_name => "Game"
+
   def self.test
 =begin
 find:{include:, select:DISTINCT `users`.*, limit:, from:`users`, joins:INNER JOIN `game_characters` ON `users`.id = `game_characters`.user_id   , conditions:(`game_characters`.game_id = 671) AND ((users.activated_at IS NOT NULL)), order:, readonly:}, create:{game_id:671}
@@ -136,9 +138,6 @@ find:{include:, select:DISTINCT `users`.*, limit:, from:`users`, joins:INNER JOI
   def is_pokeable_by? user
     privacy_setting.poke? user.relationship_with(self)
   end
-
-	# status
-  has_many :statuses, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
   # friend
 	has_many :all_friendships, :class_name => 'Friendship', :dependent => :destroy
@@ -420,7 +419,6 @@ find:{include:, select:DISTINCT `users`.*, limit:, from:`users`, joins:INNER JOI
 	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'
   acts_as_feed_recipient :delete_conditions => lambda {|requestor, user| requestor == user},
                          :categories => {
-                            :status => 'Status', 
                             :blog => 'Blog', 
                             :video => 'Video', 
                             :personal_album => 'PersonalAlbum',

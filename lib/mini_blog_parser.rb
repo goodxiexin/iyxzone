@@ -107,6 +107,10 @@ class MiniBlogParser
           @base = @ptr
           @ptr += 1
           @state = 0
+        elsif ch == '['
+          parse_text_and_http
+          @base = @ptr
+          @state = 0
         elsif ch == '#'
           @state = 4
           @ptr += 1
@@ -200,6 +204,7 @@ class MiniBlogParser
     end
 
     @nodes
+    #print
   end
 
 protected
@@ -213,7 +218,7 @@ protected
   end
 
   def self.http?
-    @content[@ptr..(@ptr+6)] == 'http://' and @content[@ptr + 7] and !(@content[(@ptr+7)..(@ptr+7)] =~ blank)  
+    @content[@ptr..(@ptr+6)] == 'http://' and @content[@ptr + 7] and !(@content[(@ptr+7)..(@ptr+7)] =~ blank) and (@content[(@ptr+7)..(@ptr+7)] != '[') 
   end
 
   def self.sharp?

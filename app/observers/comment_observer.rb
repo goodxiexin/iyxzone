@@ -140,23 +140,6 @@ class CommentObserver < ActiveRecord::Observer
     end
 	end
 
-  def after_status_comment_create(comment)
-		status = comment.commentable
-    poster = status.poster
-    commentor = comment.poster
-    recipient = comment.recipient
-
-    if poster != commentor
-			comment.notices.create(:user_id => poster.id, :data => 'comment')
-      CommentMailer.deliver_status_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_status?
-    end
-
-    if recipient != poster and recipient != commentor
-			comment.notices.create(:user_id => recipient.id, :data => 'reply')
-      CommentMailer.deliver_status_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_status_after_me?
-    end
-	end
-
 	def after_poll_comment_create(comment)
 	  poll = comment.commentable
     poster = poll.poster

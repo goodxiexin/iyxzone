@@ -25,7 +25,7 @@ class MiniLink < ActiveRecord::Base
 
   validates_uniqueness_of :url
 
-  validates_format_of :url, :with => /(http:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\-%=&]+)?/, :on => :create
+  #validates_format_of :url, :with => /(http:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\-%=&]+)?/, :on => :create
 
   validate_on_create :check_if_video
 

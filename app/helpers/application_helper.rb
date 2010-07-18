@@ -3,7 +3,7 @@ module ApplicationHelper
 
   def avatar_path user, size="medium"
     if user.avatar.blank? || user.avatar.rejected?
-      "default_#{user.gender}_#{size}.png"
+      "/images/default_#{user.gender}_#{size}.png"
     else
       user.avatar.public_filename(size)
     end
@@ -513,7 +513,7 @@ module ApplicationHelper
       if node[:type] == 'text'
         emotion_text node[:val]
       elsif node[:type] == 'topic'
-        "<a href='javascript:void(0)'>##{node[:name]}#</a>"
+        "<a href='/mini_blogs/search?key=#{node[:name]}'>##{emotion_text node[:name]}#</a>"
       elsif node[:type] == 'link'
         link = MiniLink.find_by_proxy_url node[:proxy_url]
         if mini_blog.original?
@@ -541,7 +541,7 @@ module ApplicationHelper
       if node[:type] == 'text'
         emotion_text node[:val]
       elsif node[:type] == 'topic'
-        "<a href='javascript:void(0)'>##{node[:name]}#</a>"
+        "<a href='/mini_blogs/search?key=#{node[:name]}'>##{emotion_text node[:name]}#</a>"
       elsif node[:type] == 'link'
         link = MiniLink.find_by_proxy_url node[:proxy_url]
         if link and link.is_video?

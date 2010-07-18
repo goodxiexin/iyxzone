@@ -2,7 +2,7 @@ var Facebox = Class.create({
 	
   initialize: function(extra_set){
 		this.settings = {
-			loading_image	: '/images/loading.gif',
+			loading_image	: '/images/ajax-loader.gif',
 			image_types		: new RegExp('\.' + ['png', 'jpg', 'jpeg', 'gif'].join('|') + '$', 'i'),
 			inited				: true,	
 			facebox_html	: '<div class="z-box" id="facebox" style="overflow:hidden;display:none"><div class="z-t"><span class="l"><strong></strong></span><span class="r"></span></div><div class="z-m rows s_clear"><div class="box01 s_clear" id="facebox-content"></div><div class="bg"></div></div><div class="z-b"><span class="l"><strong></strong></span><span class="r"></span></div>'
@@ -54,7 +54,7 @@ var Facebox = Class.create({
 	loading: function() {
 		if ($$('#facebox .loading').length == 1) return true;
 		
-		this.content.innerHTML = '<div class="loading"><img src="'+this.loading_image.src+'"/></div>';
+		this.content.innerHTML = '<div class="ajaxLoading"><img src="'+this.loading_image.src+'"/></div>';
 		
 		var pageScroll = document.viewport.getScrollOffsets();
 		this.facebox.setStyle({"position": 'absolute'});

@@ -9,8 +9,8 @@ class StatusObserver < ActiveRecord::Observer
     status.poster.raw_increment :statuses_count
 
     # deliver feeds
-		status.deliver_feeds
-	end
+    status.deliver_feeds
+  end
 
   def before_update status
     status.auto_verify
@@ -33,3 +33,4 @@ class StatusObserver < ActiveRecord::Observer
   end
 
 end
+

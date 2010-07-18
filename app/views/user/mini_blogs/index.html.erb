@@ -36,7 +36,7 @@
           <% elsif !@interested_idols.blank? %>
             <%= render :partial => 'interested_idols', :locals => {:idols => @interested_idols, :user => @user} %>
           <% end %>
-          <%= render :partial => 'hot_topics' %>
+          <%= render :partial => 'hot_topics', :locals => {:topics => @hot_topics} %>
         </div>
       </div>
     </div>

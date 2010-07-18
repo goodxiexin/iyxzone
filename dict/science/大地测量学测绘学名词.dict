@@ -1,0 +1,373 @@
+大地测量  	1	GAME
+几何大地测量学 	1	GAME
+椭球面大地测量学 	1	GAME
+大地天文学 	1	GAME
+物理大地测量学	1	GAME
+大地重力学	1	GAME
+空间大地测量学 	1	GAME
+卫星大地测量学 	1	GAME
+动力大地测量学 	1	GAME
+海洋大地测量学 	1	GAME
+月面测量学 	1	GAME
+行星测量学 	1	GAME
+天文大地网	1	GAME
+国家大地网	1	GAME
+参考椭球 	1	GAME
+贝塞尔椭球 	1	GAME
+海福德椭球 	1	GAME
+克拉索夫斯基椭球 	1	GAME
+参考椭球定位   	1	GAME
+大地基准 	1	GAME
+大地坐标系  	1	GAME
+弧度测量 	1	GAME
+拉普拉斯方位角 	1	GAME
+拉普拉斯点 	1	GAME
+三角测量	1	GAME
+三角点 	1	GAME
+三角锁 	1	GAME
+三角网 	1	GAME
+图形权倒数   	1	GAME
+菲列罗公式 	1	GAME
+施赖伯全组合测角法    	1	GAME
+方向观测法     	1	GAME
+测 回 	1	GAME
+归心元素  	1	GAME
+归心改正  	1	GAME
+水平折光差	1	GAME
+旁折光差	1	GAME
+基线测量 	1	GAME
+基线	1	GAME
+基线网 	1	GAME
+精密导线测量 	1	GAME
+三角高程测量 	1	GAME
+三角高程网  	1	GAME
+铅垂线 	1	GAME
+天顶距 	1	GAME
+高度角   	1	GAME
+垂直折光差  	1	GAME
+垂直折光系数  	1	GAME
+国家水准网  	1	GAME
+精密水准测量 	1	GAME
+水准面 	1	GAME
+高程	1	GAME
+正高 	1	GAME
+正常高 	1	GAME
+力高  	1	GAME
+地球位数 	1	GAME
+水准点	1	GAME
+水准路线 	1	GAME
+跨河水准测量 	1	GAME
+椭球长半径   	1	GAME
+椭球扁率  	1	GAME
+椭球偏心率  	1	GAME
+子午面 	1	GAME
+子午圈	1	GAME
+卯酉圈 	1	GAME
+平行圈 	1	GAME
+法截面 	1	GAME
+子午圈曲率半径    	1	GAME
+卯酉圈曲率半径     	1	GAME
+平均曲率半径   	1	GAME
+大地线	1	GAME
+大地线微分方程   	1	GAME
+大地坐标 	1	GAME
+大地经度 	1	GAME
+大地纬度 	1	GAME
+大地高  	1	GAME
+大地方位角 	1	GAME
+天文大地垂线偏差   	1	GAME
+垂线偏差改正     	1	GAME
+标高差改正   	1	GAME
+截面差改正     	1	GAME
+大地主题正解    	1	GAME
+大地主题反解     	1	GAME
+高斯中纬度公式 	1	GAME
+贝塞尔大地主题解算公式      	1	GAME
+高斯一克吕格投影 	1	GAME
+高斯投影	1	GAME
+归化纬度 	1	GAME
+等量纬度 	1	GAME
+中央子午线 	1	GAME
+分带子午线  	1	GAME
+高斯平面子午线收敛角  	1	GAME
+高斯投影距离改正    	1	GAME
+高斯投影方向改正    	1	GAME
+底点纬度  	1	GAME
+高斯平面坐标  	1	GAME
+坐标方位角 	1	GAME
+天文点 	1	GAME
+基本天文点  	1	GAME
+本初子午线 	1	GAME
+经度起算点  	1	GAME
+极移 	1	GAME
+瞬时极 	1	GAME
+平极 	1	GAME
+固定平极  	1	GAME
+历元平极    	1	GAME
+国际协议原点  	1	GAME
+地极坐标   	1	GAME
+地球自转参数  	1	GAME
+恒星时 	1	GAME
+世界时  	1	GAME
+协调世界时  	1	GAME
+天文年历  	1	GAME
+5星表	1	GAME
+天文坐标 	1	GAME
+天文经度 	1	GAME
+天文纬度 	1	GAME
+天文方位角 	1	GAME
+津格尔[星对]测时法	1	GAME
+东西星等高测时法	1	GAME
+中天法 	1	GAME
+恒星中天测时法      	1	GAME
+塔尔科特测纬度法    	1	GAME
+多星等高法  	1	GAME
+北极星任意时角法     	1	GAME
+时号 	1	GAME
+平时式时号	1	GAME
+协调世界时时号   	1	GAME
+收时 	1	GAME
+时号改正数   	1	GAME
+电波传播[时延]改正       	1	GAME
+轴颈误差  	1	GAME
+人仪差   	1	GAME
+星径曲率改正      	1	GAME
+重力位 	1	GAME
+重力	1	GAME
+引力	1	GAME
+离心力 	1	GAME
+引力位 	1	GAME
+离心力位   	1	GAME
+正常引力位  	1	GAME
+正常重力位  	1	GAME
+地球位	1	GAME
+大地位	1	GAME
+扰动位 	1	GAME
+正常重力 	1	GAME
+正常重力线  	1	GAME
+正常重力公式  	1	GAME
+扰动重力 	1	GAME
+平均地球椭球  	1	GAME
+正常椭球 	1	GAME
+水准椭球 	1	GAME
+大地测量参考系  	1	GAME
+地心引力常数  	1	GAME
+地球长半径   	1	GAME
+地球扁率       	1	GAME
+地球自转角速度     	1	GAME
+地球重力模型  	1	GAME
+地球位系数    	1	GAME
+带谐系数   	1	GAME
+扇谐系数   	1	GAME
+田谐系数   	1	GAME
+克莱罗定理 	1	GAME
+大地测量边值问题   	1	GAME
+斯托克斯理论 	1	GAME
+斯托克斯公式 	1	GAME
+莫洛坚斯基理论 	1	GAME
+莫洛竖斯基公式 	1	GAME
+布耶哈马问题 	1	GAME
+布隆斯公式 	1	GAME
+费宁—梅内斯公式	1	GAME
+维宁曼乃兹公式	1	GAME
+大地水准面	1	GAME
+调整大地水准面—	1	GAME
+共大地水准面	1	GAME
+似大地水准面	1	GAME
+近似地形面	1	GAME
+大地水准面高 	1	GAME
+高程异常 	1	GAME
+天文水准 	1	GAME
+天文重力水准	1	GAME
+垂线偏差   	1	GAME
+绝对垂线偏差    	1	GAME
+重力垂线偏差    	1	GAME
+重力测量 	1	GAME
+大地水准面起伏 	1	GAME
+微重力测量	1	GAME
+绝对重力测量  	1	GAME
+相对重力测量  	1	GAME
+航空重力测量  	1	GAME
+重力梯度测量   	1	GAME
+重力基线 	1	GAME
+重力点 	1	GAME
+基本重力点  	1	GAME
+世界重力基点   	1	GAME
+波茨坦重力系统   	1	GAME
+零漂改正   	1	GAME
+重力潮汐改正     	1	GAME
+重力归算 	1	GAME
+空间改正 	1	GAME
+地形改正 	1	GAME
+法伊改正 	1	GAME
+庞加莱改正 	1	GAME
+地壳均衡改正 	1	GAME
+布格改正 	1	GAME
+重力异常 	1	GAME
+布格异常 	1	GAME
+空间异常 	1	GAME
+混合重力异常  	1	GAME
+纯重力异常  	1	GAME
+重力垂直梯度   	1	GAME
+重力水平梯度   	1	GAME
+重力异常阶方差    	1	GAME
+协方差函数 	1	GAME
+固体潮 	1	GAME
+固体潮观测   	1	GAME
+地倾斜观测  	1	GAME
+地壳形变测量  	1	GAME
+监测网 	1	GAME
+引潮位	1	GAME
+引潮力	1	GAME
+平衡潮 	1	GAME
+载荷潮 	1	GAME
+附加位 	1	GAME
+潮汐波 	1	GAME
+潮汐频谱 	1	GAME
+杜德森常数 	1	GAME
+勒夫数’ 	1	GAME
+志田数’ 	1	GAME
+潮汐因子 	1	GAME
+相位滞后 	1	GAME
+地球液核动力效应       	1	GAME
+地球动力扁率    	1	GAME
+地球动力因子    	1	GAME
+地壳均衡说 	1	GAME
+地壳均衡	1	GAME
+大陆漂移 	1	GAME
+板块运动 	1	GAME
+卫星大地测量几何法    	1	GAME
+卫星大地测量动力法    	1	GAME
+惯性坐标系  	1	GAME
+天球坐标系  	1	GAME
+轨道坐标系  	1	GAME
+地固坐标系   	1	GAME
+站心坐标系   	1	GAME
+地心直角坐标  	1	GAME
+地心经度 	1	GAME
+地心纬度 	1	GAME
+平移参数 	1	GAME
+旋转参数 	1	GAME
+尺度参数 	1	GAME
+大地测量卫星 	1	GAME
+卫星轨道 	1	GAME
+受摄轨道 	1	GAME
+卫星轨道升交点    	1	GAME
+卫星轨道近地点   	1	GAME
+卫星轨道根数	1	GAME
+卫星轨道参数	1	GAME
+卫星轨道长半径    	1	GAME
+卫星轨道偏心率   	1	GAME
+卫星轨道倾角   	1	GAME
+卫星升交点赤经     	1	GAME
+卫星轨道近地点幅角     	1	GAME
+卫星过近地点时刻    	1	GAME
+平均运动 	1	GAME
+卫星高度 	1	GAME
+近地点高度  	1	GAME
+卫星星下点 	1	GAME
+真近点角 	1	GAME
+偏近点角 	1	GAME
+平近点角 	1	GAME
+轨道周期 	1	GAME
+卫星运动方程   	1	GAME
+摄动力 	1	GAME
+摄动函数 	1	GAME
+地球引力摄动  	1	GAME
+日月引力摄动  	1	GAME
+大气阻力摄动  	1	GAME
+太阳光压摄动   	1	GAME
+潮汐摄动 	1	GAME
+运动方程分析解    	1	GAME
+运动方程数值解    	1	GAME
+状态向量 	1	GAME
+一阶摄动  	1	GAME
+二阶摄动  	1	GAME
+卫星共振分析   	1	GAME
+卫星轨道改进   	1	GAME
+照相观测    	1	GAME
+卫星激光测距  	1	GAME
+卫星多普勒[频移]测量   	1	GAME
+卫星测高 	1	GAME
+卫星射电干涉测量  	1	GAME
+卫星跟踪卫星技术 	1	GAME
+卫星跟踪站   	1	GAME
+卫星重力梯度测量 	1	GAME
+卫星三角测量 	1	GAME
+同步观测 	1	GAME
+同步平面 	1	GAME
+史密森[天文台]星表   	1	GAME
+底片常数法   	1	GAME
+底片方位元素法    	1	GAME
+闪烁误差  	1	GAME
+卫星相位差   	1	GAME
+卫星光行差 	1	GAME
+卫星多普勒定位  	1	GAME
+多普勒单点定位  	1	GAME
+多普勒联测定位 	1	GAME
+多普勒短弧法定位      	1	GAME
+伪距测量	1	GAME
+载波[差频]相位测量[]  	1	GAME
+钟差  	1	GAME
+钟速 	1	GAME
+双频信标  	1	GAME
+粗码 	1	GAME
+精码   	1	GAME
+频偏 	1	GAME
+频漂 	1	GAME
+多普勒计数 	1	GAME
+广播星历 	1	GAME
+精密星历 	1	GAME
+吉尔平面 	1	GAME
+电离层折射改正  	1	GAME
+对流层折射改正  	1	GAME
+相对论改正 	1	GAME
+甚长基线干涉测量     	1	GAME
+激光测月   	1	GAME
+整体大地测量 	1	GAME
+误差理论  	1	GAME
+测量误差 	1	GAME
+真误差 	1	GAME
+随机误差 	1	GAME
+平均误差 	1	GAME
+慨然误差	1	GAME
+或然误差	1	GAME
+极限误差 	1	GAME
+容许误差 	1	GAME
+截断误差 	1	GAME
+权	1	GAME
+单位权 	1	GAME
+仅函数 	1	GAME
+权系数 	1	GAME
+单位权方差   	1	GAME
+方差因子	1	GAME
+权矩阵 	1	GAME
+权逆阵   	1	GAME
+方差一协方差阵	1	GAME
+积差阵	1	GAME
+方差一协方差传播律 	1	GAME
+误差放大因子   	1	GAME
+误差检验 	1	GAME
+抗差估计  	1	GAME
+稳健估计	1	GAME
+最小二乘法  	1	GAME
+参数千差 	1	GAME
+间接平差	1	GAME
+附条件参数平差   	1	GAME
+附条件的间接手差	1	GAME
+观测方程	1	GAME
+误差方程	1	GAME
+条件平差 	1	GAME
+附参数条件平差   	1	GAME
+条件方程 	1	GAME
+联系数	1	GAME
+法方程 	1	GAME
+高斯约化法   	1	GAME
+序贯平差 	1	GAME
+秩亏网平差   	1	GAME
+拟稳平差 	1	GAME
+天文大地网平差   	1	GAME
+最小二乘配置法  	1	GAME
+最小二乘拟合推估法	1	GAME
+相关平差   	1	GAME
+平差值 	1	GAME

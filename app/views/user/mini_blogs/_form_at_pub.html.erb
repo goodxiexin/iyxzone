@@ -5,7 +5,9 @@
       <div class="count">你还可以输入<span class="num" id="mini_blog_words_count">140</span>字</div>
     </div>
     <div class="bd fix">
-      <div class="cTxtArea"><textarea id="mini_blog_text_area"></textarea></div>
+      <div class="cTxtArea">
+        <textarea id="mini_blog_text_area"></textarea>
+      </div>
     </div>
     <div class="ft fix">
       <ul>
@@ -26,5 +28,5 @@
 <% end %>
 
 <%= javascript_tag "
-Iyxzone.MiniBlog.Builder.init();
+Iyxzone.MiniBlog.Builder.init('##{h params[:topic]}#');
 "%>

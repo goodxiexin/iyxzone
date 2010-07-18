@@ -32,7 +32,6 @@ Rails::Initializer.run do |config|
     :friendship_observer,
 		:blog_observer,
 		:video_observer,
-		:status_observer,
 		:event_observer, 
     :participation_observer, 
 		:poll_observer,
@@ -73,6 +72,11 @@ Rails::Initializer.run do |config|
     :fanship_observer,
     :mini_image_observer,
     :mini_blog_observer,
-    :attention_observer
+    :attention_observer,
+    :status_observer
 
 end
+
+require 'ferret'
+RMMSeg::Dictionary.load_dictionaries
+INDEX = Ferret::Index::Index.new :path => "index/mini_blog", :anlayzer => MiniBlogAnalyzer.new

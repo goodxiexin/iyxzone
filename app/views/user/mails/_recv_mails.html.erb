@@ -11,7 +11,7 @@
     </td>
     <td class='title'>
       <%= link_to mail.title, mail_url(mail, :type => 1), :id => "mail_#{mail.id}_title", :style => style %><br/>
-      <span class='mail-content-truncate'><%= mail.content %></span>
+      <span class='mail-content-truncate'><%= emotion_text mail.content %></span>
     </td>
     <td class='operation'><%= link_to_remote 'x', :url => mail_url(mail, :type => 1), :method => :delete %></td>
   </tr>

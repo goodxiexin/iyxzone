@@ -88,7 +88,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :mini_images
 
-    users.resources :mini_blogs, :collection => {:random => :get, :public => :get, :hot => :get, :sexy => :get, :interested => :get, :list => :get}, :member => {:new_forward => :get, :forward => :post}
+    users.resources :mini_blogs, :collection => {:random => :get, :public => :get, :hot => :get, :sexy => :get, :interested => :get, :list => :get, :search => :get}, :member => {:new_forward => :get, :forward => :post}
 
     users.resources :fans
 

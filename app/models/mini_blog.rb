@@ -1,5 +1,9 @@
 class MiniBlog < ActiveRecord::Base
 
+  def self.deleted_indexes
+    DeletedIndex.all(:conditions => {:model_name => "MiniBlog"})
+  end
+
   serialize :nodes, Array
 
   belongs_to :poster, :class_name => 'User'
@@ -93,21 +97,19 @@ class MiniBlog < ActiveRecord::Base
 protected
 
   def create_index
-    self.index_state = 0 # unindexed
+    self.index_state = 0
   end
 
   def update_index
-    if self.index_state == 1 # indexed in main
-      self.index_state = 2 # updated in main index
-      #info = FerretInfo.find_by_model_name 'MiniBlog'
-      #info.modified_indexes.updated.create :doc_id => id
+    if self.index_state == 1
+      DeletedIndex.create :model_name => "MiniBlog", :doc_id => self.id
+      self.index_state = 0
     end
   end
 
   def destroy_index
-    if self.index_state == 1 # indexed in main
-      info = FerretInfo.find_by_model_name 'MiniBlog'
-      info.modified_indexes.deleted.create :doc_id => id
+    if self.index_state == 1
+      DeletedIndex.create :model_name => "MiniBlog", :doc_id => self.id
     end
   end
 
@@ -131,14 +133,13 @@ protected
       when 'text'
         nodes << {:type => 'text', :val => node[:val]}
       when 'topic'
-        MiniTopic.find_or_create :name => node[:val]
         nodes << {:type => 'topic', :name => node[:val]}
       when 'link'
         if node[:val] =~ MiniLink::UrlReg
           mini_link = MiniLink.find_by_proxy_url node[:val]
         else
           mini_link = MiniLink.find_or_create :url => node[:val]
-        end
+        end 
         increment :videos_count if !mini_link.blank? and mini_link.is_video?
         nodes << {:type => 'link', :proxy_url => mini_link.nil? ? node[:val] : mini_link.proxy_url}
       when 'ref'

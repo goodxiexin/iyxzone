@@ -4,4 +4,6 @@ class MiniTopic < ActiveRecord::Base
 
   validates_uniqueness_of :name  
 
+  named_scope :hot, :order => "freq DESC"
+
 end

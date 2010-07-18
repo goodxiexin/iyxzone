@@ -1,0 +1,32 @@
+:mini_blog:
+  :writer:
+    :max_buffer_memory: 32 # 单位MB
+    :max_buffered_docs: 20000
+  :field_infos:
+    :id:
+      :store: :yes
+      :index: :yes
+      :term_vector: :no
+    :content:
+      :store: :yes
+      :index: :yes
+      :term_vector: :yes
+      :highlight: :yes
+  :query_step: 20000
+  :interval: <%= 30.minutes %>
+
+#:user:
+#  :writer:
+#    :max_buffer_memory: 16
+#    :max_buffered_docs: 20000
+#  :field_infos:
+#    :id:
+#      :store: :yes
+#      :index: :yes
+#      :term_vector: :no
+#    :login:
+#      :store: :yes
+#      :index: :yes
+#      :term_vector: :yes
+#  :step: 20000
+#  :interval: <%= 1.hour %>

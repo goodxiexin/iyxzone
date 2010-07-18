@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100712071039) do
+ActiveRecord::Schema.define(:version => 20100718062330) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -124,6 +124,11 @@ ActiveRecord::Schema.define(:version => 20100712071039) do
 
   add_index "comrade_suggestions", ["user_id"], :name => "index_comrade_suggestions_on_user_id"
 
+  create_table "deleted_indices", :force => true do |t|
+    t.integer "doc_id"
+    t.string  "model_name"
+  end
+
   create_table "digs", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "diggable_id"
@@ -196,13 +201,6 @@ ActiveRecord::Schema.define(:version => 20100712071039) do
     t.string   "originator_type"
     t.integer  "originator_id"
     t.datetime "created_at"
-  end
-
-  create_table "ferret_infos", :force => true do |t|
-    t.string   "model_name"
-    t.integer  "main_max_doc_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "forums", :force => true do |t|
@@ -445,6 +443,12 @@ ActiveRecord::Schema.define(:version => 20100712071039) do
 
   add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
 
+  create_table "mini_blog_meta_datas", :force => true do |t|
+    t.text   "random_ids"
+    t.string "today_topic"
+    t.string "today_topic_desc"
+  end
+
   create_table "mini_blogs", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "root_id"
@@ -485,17 +489,8 @@ ActiveRecord::Schema.define(:version => 20100712071039) do
   end
 
   create_table "mini_topics", :force => true do |t|
-    t.string   "name"
-    t.integer  "reference_count", :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "modified_ferret_indices", :force => true do |t|
-    t.integer "ferret_info_id"
-    t.integer "doc_id"
-    t.integer "category"
-    t.string  "in"
+    t.string  "name"
+    t.integer "freq", :default => 0
   end
 
   create_table "news", :force => true do |t|
@@ -729,7 +724,6 @@ ActiveRecord::Schema.define(:version => 20100712071039) do
   create_table "role_users", :force => true do |t|
     t.integer "role_id"
     t.integer "user_id"
-    t.integer "data"
   end
 
   add_index "role_users", ["role_id", "user_id"], :name => "index_role_users_on_role_id_and_user_id"
@@ -788,17 +782,6 @@ ActiveRecord::Schema.define(:version => 20100712071039) do
     t.text     "access_list"
     t.string   "directory"
   end
-
-  create_table "statuses", :force => true do |t|
-    t.integer  "poster_id"
-    t.text     "content"
-    t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "verified",       :default => 0
-  end
-
-  add_index "statuses", ["poster_id"], :name => "index_statuses_on_poster_id"
 
   create_table "subdomains", :force => true do |t|
     t.integer "user_id"
@@ -928,6 +911,7 @@ ActiveRecord::Schema.define(:version => 20100712071039) do
     t.integer  "idols_count",                              :default => 0
     t.string   "invite_fan_code"
     t.integer  "attentions_count",                         :default => 0
+    t.integer  "skilled_game_id"
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"

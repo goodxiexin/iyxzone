@@ -220,3 +220,10 @@ send mail to
 (in /home/gaoxh04/iyxzone)
 (in /home/gaoxh04/iyxzone)
 (in /home/gaoxh04/iyxzone)
+(in /home/gaoxh04/iyxzone)
+(in /home/gaoxh04/iyxzone)
+rake aborted!
+no such file to load -- lib/ferret_analyzer_ext
+/home/gaoxh04/iyxzone/Rakefile:10
+(See full trace by running task with --trace)
+(in /home/gaoxh04/iyxzone)
