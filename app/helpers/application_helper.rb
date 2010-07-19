@@ -374,12 +374,6 @@ module ApplicationHelper
 	  "<p>Copyright &copy; 2010-2010 MingZen. All Rights Reserved</p> <p><a href='#'>鸣禅公司 版权所有</a></p>"
 	end
 
-  def sharing_reason sharing, opts={}
-    reason = sharing.reason.blank? ? '。。。哥笑而不语。。。' : sharing.reason
-    class_name = opts[:class] || 'con'
-    simple_format "<span class='quote-start'></span>#{h reason}<span class='quote-end'></span>", :class => class_name
-  end
-
   def game_infos
     Game.find(:all, :order => "pinyin ASC").map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
   end
@@ -421,8 +415,6 @@ module ApplicationHelper
 			return "投票"
 		when /guild/
 			return "公会"
-		when /share/
-			return "分享"
 		end
 	end
 
@@ -501,14 +493,12 @@ module ApplicationHelper
       'app-vote'
     when '活动'
       'app-ploy'
-    when '工会'
+    when '公会'
       'app-cons'
-    when '分享'
-      'app-share'
     end
   end
 
-  def mini_blog_content mini_blog
+  def mini_blog_content mini_blog, words=""
     mini_blog.nodes.map do |node|
       if node[:type] == 'text'
         emotion_text node[:val]

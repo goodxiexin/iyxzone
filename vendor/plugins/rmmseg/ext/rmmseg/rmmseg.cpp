@@ -4,6 +4,8 @@
 #include "token.h"
 #include "dict.h"
 #include "algor.h"
+#include "word.h"
+#include "cixing.h"
 
 using namespace std;
 
@@ -144,6 +146,207 @@ extern "C" {
 			return tk->freq;
 		}
 
+		/*
+		 * 下面17个函数都差不多就是告诉你是不是某种词性
+		 */
+		static VALUE tk_cx_unkown(VALUE self)
+		{
+			Token *tk = (Token *)DATA_PTR(self);
+			int cixing = FIX2INT(tk->cixing);
+			if(CX_UNKNOWN(cixing)){
+				return Qtrue;
+			}else{
+				return Qfalse;
+			}
+		}
+
+		static VALUE tk_cx_noun(VALUE self)
+		{
+			Token *tk = (Token *)DATA_PTR(self);
+			int cixing = FIX2INT(tk->cixing);
+			if(CX_NOUN(cixing)){
+				return Qtrue;
+			}else{
+				return Qfalse;
+			}
+		}
+
+		static VALUE tk_cx_verb(VALUE self)
+		{
+			Token *tk = (Token *)DATA_PTR(self);
+			int cixing = FIX2INT(tk->cixing);
+			if(CX_VERB(cixing)){
+				return Qtrue;
+			}else{
+				return Qfalse;
+			}
+		}
+
+    static VALUE tk_cx_adj(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_ADJ(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_adv(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_ADV(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_clas(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_CLAS(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      } 
+    }
+
+    static VALUE tk_cx_echo(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_ECHO(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_stru(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_STRU(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_aux(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_AUX(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_coor(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_COOR(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_conj(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_CONJ(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_suffix(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_SUFFIX(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_prefix(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_PREFIX(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_prep(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_PREP(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_ques(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_QUES(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_num(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_NUM(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+    static VALUE tk_cx_idiom(VALUE self)
+    {
+      Token *tk = (Token *)DATA_PTR(self);
+      int cixing = FIX2INT(tk->cixing);
+      if(CX_IDIOM(cixing)){
+        return Qtrue;
+      }else{
+        return Qfalse;
+      }
+    }
+
+		static VALUE tk_cx_game(VALUE self)
+		{
+			Token *tk = (Token *)DATA_PTR(self);
+			int cixing = FIX2INT(tk->cixing);
+			if(CX_GAME(cixing)){
+				return Qtrue;
+			}else{
+				return Qfalse;
+			}
+		}
+
     /*
      * Get the start position of this token.
      *
@@ -269,6 +472,25 @@ extern "C" {
         rb_define_method(cToken, "end", RUBY_METHOD_FUNC(tk_end), 0);
 				rb_define_method(cToken, "cixing", RUBY_METHOD_FUNC(tk_cixing), 0);
 				rb_define_method(cToken, "freq", RUBY_METHOD_FUNC(tk_freq), 0);
+
+				/* 一些判断词性的方法 */
+				rb_define_method(cToken, "cx_unkown", RUBY_METHOD_FUNC(tk_cx_unkown), 0);
+				rb_define_method(cToken, "cx_noun", RUBY_METHOD_FUNC(tk_cx_noun), 0);
+				rb_define_method(cToken, "cx_verb", RUBY_METHOD_FUNC(tk_cx_verb), 0);
+				rb_define_method(cToken, "cx_adj", RUBY_METHOD_FUNC(tk_cx_adj), 0);
+				rb_define_method(cToken, "cx_adv", RUBY_METHOD_FUNC(tk_cx_adv), 0);
+				rb_define_method(cToken, "cx_clas", RUBY_METHOD_FUNC(tk_cx_clas), 0);
+				rb_define_method(cToken, "cx_echo", RUBY_METHOD_FUNC(tk_cx_echo), 0);
+				rb_define_method(cToken, "cx_stru", RUBY_METHOD_FUNC(tk_cx_stru), 0);
+				rb_define_method(cToken, "cx_aux", RUBY_METHOD_FUNC(tk_cx_aux), 0);
+				rb_define_method(cToken, "cx_coor", RUBY_METHOD_FUNC(tk_cx_coor), 0);
+				rb_define_method(cToken, "cx_conj", RUBY_METHOD_FUNC(tk_cx_conj), 0);
+				rb_define_method(cToken, "cx_suffix", RUBY_METHOD_FUNC(tk_cx_suffix), 0);
+				rb_define_method(cToken, "cx_prefix", RUBY_METHOD_FUNC(tk_cx_prefix), 0);
+				rb_define_method(cToken, "cx_ques", RUBY_METHOD_FUNC(tk_cx_ques), 0);
+				rb_define_method(cToken, "cx_num", RUBY_METHOD_FUNC(tk_cx_num), 0);
+				rb_define_method(cToken, "cx_idiom", RUBY_METHOD_FUNC(tk_cx_idiom), 0);
+				rb_define_method(cToken, "cx_game", RUBY_METHOD_FUNC(tk_cx_game), 0);
 
         /* An Algorithm object use the MMSEG algorithm to do segmenting. */
         cAlgorithm = rb_define_class_under(mRMMSeg, "Algorithm", rb_cObject);

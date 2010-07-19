@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + '/lib/rmmseg.rb'
 # 一般类的单字和多词
 RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "chars.dict"), :chars
 RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "words.dict"), :words
-
+=begin
 # 游戏
 Dir.new(File.join(RAILS_ROOT, "dict", "game")).each do |f|
   if f =~ /.+\.dict/
@@ -47,6 +47,8 @@ Dir.new(File.join(RAILS_ROOT, "dict", "art")).each do |f|
     RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "games", f), :words
   end
 end
-
+=end
 # 其他，这里包括一些17gaming.com的词条，还有其他上面不包括的词条
 RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "other.dict"), :words
+
+RMMSeg::Dictionary.load_dictionaries

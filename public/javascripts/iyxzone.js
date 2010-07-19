@@ -7,8 +7,11 @@ Object.extend(Iyxzone, {
   author: ['高侠鸿'],
 
   SiteURL: "http://localhost:3000",
+});
 
-  // some utilities
+// 一些按钮操作
+Object.extend(Iyxzone, {
+  
   disableButton: function(button, text){
     button.innerHTML = text;
     $(button).writeAttribute('disabled', 'disabled');
@@ -35,7 +38,12 @@ Object.extend(Iyxzone, {
     button.disabled = '';
     var span = $(button.up('span')).up('span');
     $(span).writeAttribute('class', 'button03');
-  },
+  }
+
+});
+
+
+Object.extend(Iyxzone, {
 
   validationCode: function(digits){
     var codes = new Array(digits);       //用于存储随机验证码
@@ -224,4 +232,51 @@ Iyxzone.limitedTextInput = Class.create({
     }
     this.timer = setTimeout(this.checkLength.bind(this), this.opts.interval);
   }
+});
+
+// app game bar
+Iyxzone.AppBar = {};
+
+Object.extend(Iyxzone.AppBar, {
+
+  gameInfos: null,
+
+  gameList: null,
+
+  init: function(gameInfos){
+    this.gameInfos = gameInfos;
+  },
+
+  showGameBar: function(link){
+    if(this.gameList == null){
+      this.gameList = this.constructGameList();
+      document.body.appendChild(this.gameList);
+    }
+    var li = link.up('li');
+    this.gameList.setStyle({
+      position: 'absolute',
+      left: (li.cumulativeOffset().left + li.getWidth()/2) + 'px',
+      top: (li.cumulativeOffset().top + li.getHeight()*3/4) + 'px',
+    });
+    this.gameList.show();
+  },
+
+  hideGameBar: function(){
+    if(this.gameList){
+      this.gameList.hide();
+    }
+  },
+
+  constructGameList: function(){
+    var el = new Element('div', {id: 'app_game_bar', class: 'appGameMine'});
+    var html = '<div class="t fix"><strong class="left">我的游戏</strong><a href="javascript:void(0)" onclick="Iyxzone.AppBar.hideGameBar()" class="icon-active right"/></div>';
+    html += '<div class="con"><ul class="xList">';
+    for(var i=0;i<this.gameInfos.length;i++){
+      html += '<li><a href="/games/' + this.gameInfos[i].id + '">' + this.gameInfos[i].name + '</a></li>';
+    }
+    html += '</ul></div>';
+    el.innerHTML = html;
+    return el;
+  }
+
 });

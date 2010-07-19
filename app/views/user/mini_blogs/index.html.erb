@@ -11,7 +11,7 @@
         <div class="mBlogMain">
           <div class="mBlogMainWrap">
             <% if @user == current_user %>
-              <%= render :partial => 'form_at_index', :locals => {:at => 'index'} %>
+              <%= render :partial => 'form_at_index', :locals => {:at => 'mini_blogs_index'} %>
             <% end %>
             <div class="mBlogCatTab fix">
               <strong class="title"><%= get_subject @user %>的微博</strong>

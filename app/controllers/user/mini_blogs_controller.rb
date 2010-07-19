@@ -11,9 +11,8 @@ class User::MiniBlogsController < UserBaseController
     @meta_data = MiniBlogMetaData.first
     @today_topic_desc = @meta_data.today_topic_desc
     @today_topic = @meta_data.today_topic
-    @docs = INDEX.search(@today_topic, :limit => 50)
-    @today_mini_blogs = MiniBlog.find(@docs.hits.map{|hit| INDEX.reader.get_document(hit.doc)[:id]})
-    @today_mini_blogs = @today_mini_blogs.sort{|a,b| rand(2)<=>rand(2)}[0..19]
+    @today_mini_blogs = MiniBlog.search(@today_topic, :page => 1, :per_page => 50)
+    @shuffled_mini_blogs = @today_mini_blogs.shuffle[0..19]
     @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
     @pop_users = User.match(:is_idol => false).order("attentions_count DESC").limit(5)
     @hot_topics = MiniTopic.hot.limit(10)
@@ -62,10 +61,7 @@ class User::MiniBlogsController < UserBaseController
   end
 
   def search
-    page = params[:page].nil? ? 1 : params[:page].to_i
-    @docs = INDEX.search(params[:key], :offset => (page - 1) * PER_PAGE, :limit => PER_PAGE)
-    @mini_blogs = MiniBlog.find(@docs.hits.map{|hit| INDEX.reader.get_document(hit.doc)[:id]})
-    @mini_blogs = WillPaginate::Collection.create(page, PER_PAGE, @docs.total_hits) {|pager| pager.replace @mini_blogs.to_a}
+    @mini_blogs = MiniBlog.search(params[:key], :page => params[:page], :per_page => PER_PAGE)
     @idols = User.match(:is_idol => true).all
     @hot_topics = MiniTopic.hot.limit(10)
   end

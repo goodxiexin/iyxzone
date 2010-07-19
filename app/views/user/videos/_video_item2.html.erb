@@ -7,5 +7,5 @@
 		<p><%= profile_link video.poster%> 分享视频 <%= video_link video %></p>
 		<p class='space' id="video_<%=video.id%>"><%= video_thumbnail_link video %></p>
 	</div>
-  <div class='feeds'><%= link_to "评论(#{video.comments_count})", video_url(video) %> | <%= facebox_link "分享(#{video.sharings_count})", new_sharing_url(:url => video_url(video)), :width => 450 %> | <%= link_to "赞(#{video.digs_count})", video_url(video) %></div>
+  <div class='feeds'><%= link_to "评论(#{video.comments_count})", video_url(video) %> | <%= link_to "赞(#{video.digs_count})", video_url(video) %></div>
 </div>

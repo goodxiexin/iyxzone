@@ -28,5 +28,5 @@
 <% end %>
 
 <%= javascript_tag "
-Iyxzone.MiniBlog.Builder.init('##{h params[:topic]}#');
+Iyxzone.MiniBlog.Builder.init('#{h params[:content].gsub(/'/, "\\\\'")} ');
 "%>

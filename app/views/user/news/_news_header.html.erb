@@ -2,8 +2,6 @@
           <p class="left">
             <strong><%= news.title %></strong> <span class="gray"><%= ftime news.created_at %></span>
           </p>
-          <p class="right">
-            <%= facebox_link "分享", new_sharing_url(:url => news_url(news)), :width => 450, :class => 'share-btn' %>
-          </p>
         </div>
+        <div class="topIsay right"><span class="button04"><span><%= facebox_button "我来说说", new_mini_blog_url(:content => news.title), :width => 500 %></span></span></div>
 

@@ -1,8 +1,6 @@
-class MiniBlog < ActiveRecord::Base
+require 'ferret'
 
-  def self.deleted_indexes
-    DeletedIndex.all(:conditions => {:model_name => "MiniBlog"})
-  end
+class MiniBlog < ActiveRecord::Base
 
   serialize :nodes, Array
 
@@ -35,7 +33,15 @@ class MiniBlog < ActiveRecord::Base
   acts_as_commentable :recipient_required => false, :order => 'created_at ASC'
 
   acts_as_random
- 
+
+  has_index :query_step => 20000,
+            :select_fields => [:id, :nodes],
+            :writer => {:max_buffer_memory => 32, :max_buffered_docs => 20000},
+            :field_infos => {
+              :id => {:store => :yes, :index => :untokenized, :term_vector => :no}, 
+              :content => {:store => :yes, :index => :yes, :term_vector => :yes}
+            }
+   
   def text_type?
     images_count == 0 and videos_count == 0
   end
@@ -74,7 +80,7 @@ class MiniBlog < ActiveRecord::Base
     nodes.select{|n| n[:type] == 'ref'}.map{|n| User.find_by_login n[:login]}
   end
 
-  before_create :parse_content
+  before_save :parse_content
 
   validate_on_create :content_length_is_valid
 
@@ -88,30 +94,24 @@ class MiniBlog < ActiveRecord::Base
     end
   end
 
-  before_create :create_index
-
-  before_update :update_index
-  
-  before_destroy :destroy_index
+  # required by has_index
+  def to_doc
+    doc = Ferret::Document.new
+    doc[:id] = id
+    doc[:content] = []
+    nodes.each do |n|
+      if n[:type] == 'text'
+        doc[:content] << n[:val]
+      elsif n[:type] == 'topic'
+        doc[:content] << n[:name]
+      elsif n[:type] == 'ref'
+        doc[:content] << n[:login]
+      end
+    end
+    doc
+  end
 
 protected
-
-  def create_index
-    self.index_state = 0
-  end
-
-  def update_index
-    if self.index_state == 1
-      DeletedIndex.create :model_name => "MiniBlog", :doc_id => self.id
-      self.index_state = 0
-    end
-  end
-
-  def destroy_index
-    if self.index_state == 1
-      DeletedIndex.create :model_name => "MiniBlog", :doc_id => self.id
-    end
-  end
 
   def content_length_is_valid
     if content.blank?

@@ -1,9 +1,0 @@
-<% game = share.shareable %>
-
-<% render :layout => 'share_item', :locals => {:sharing => sharing, :share => share, :shareable => game} do %>
-  <h3>
-    <a href="#" class="left"><%= game_image game.name, :class => 'game-m' %></a>
-    <span>游戏: <%= link_to h(sharing.title), game_url(game), :popup => true %></span>
-  </h3>
-  <%= sharing_reason sharing, :class => 'con rows' %>
-<% end %>

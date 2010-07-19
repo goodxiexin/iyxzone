@@ -182,8 +182,8 @@ namespace rmmseg
             const int buf_len = 24;
             char buf[buf_len];
             char *ptr;
-						unsigned long mem = 0;
-            while(fgets(buf, buf_len, fp))
+					            
+						while(fgets(buf, buf_len, fp))
             {
                 // NOTE: there SHOULD be a newline at the end of the file
                 buf[strlen(buf)-1] = '\0';    // truncate the newline
@@ -191,7 +191,7 @@ namespace rmmseg
                 if (!ptr)
                     continue;       // illegal input
                 *ptr = '\0';
-                add(make_word(ptr+1, 1, atoi(buf), NULL, -1, &mem));
+                add(make_word(ptr+1, 1, atoi(buf), NULL, -1));
             }
             fclose(fp);
             return true;
@@ -208,8 +208,8 @@ namespace rmmseg
             char buf[buf_len];
             char *ptr;
 						char *_ptr;
-						unsigned long mem = 0;
-            while(fgets(buf, buf_len, fp))
+            
+						while(fgets(buf, buf_len, fp))
             {
                 // NOTE: there SHOULD be a newline at the end of the file
                 buf[strlen(buf)-1] = '\0';    // truncate the newline
@@ -218,10 +218,11 @@ namespace rmmseg
                     continue;       // illegal input
                 *ptr = '\0';
 								_ptr = strchr(ptr+1, '\t');
+								if(!_ptr)
+									continue; //illegal input
 								*_ptr = '\0';
-                add(make_word(buf, (ptr-buf)/3, atoi(ptr+1), _ptr+1, -1, &mem));
+                add(make_word(buf, (ptr-buf)/3, atoi(ptr+1), _ptr+1, -1));
             }
-						//printf("dic mem: %d\n", mem);
             fclose(fp);
             return true;
         }

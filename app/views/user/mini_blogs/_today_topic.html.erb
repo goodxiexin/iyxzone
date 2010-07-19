@@ -1,6 +1,6 @@
             <div class="mBlogTopic">
               <div class="topTitle fix"><strong>今日话题: </strong><%= desc %></div>
-              <div class="topIsay"><span class="button04"><span><%= facebox_button "我来说说", new_mini_blog_url(:topic => topic), :width => 500 %></span></span></div>
+              <div class="topIsay"><span class="button04"><span><%= facebox_button "我来说说", new_mini_blog_url(:content => "##{topic}#"), :width => 500 %></span></span></div>
               <div class="topBg">
                 <div class="topWrap fix" id='today_topic_panel'>
                 </div>
@@ -9,6 +9,6 @@
 
 
 <% javascript_tag do %>
-  Iyxzone.MiniBlog.Slider.init($('today_topic_panel'), <%= mini_blogs.map {|b| {:id => b.id, :content => b.content, :poster_login => b.poster.login, :poster_avatar => avatar_path(b.poster), :poster_id => b.poster_id, :time => time_ago_in_chinese(b.created_at)}}.to_json %>);
+  Iyxzone.MiniBlog.Slider.init($('today_topic_panel'), <%= mini_blogs.map {|b| {:id => b.id, :content => emotion_text(b.content), :poster_login => b.poster.login, :poster_avatar => avatar_path(b.poster), :poster_id => b.poster_id, :time => time_ago_in_chinese(b.created_at)}}.to_json %>);
   Iyxzone.MiniBlog.Slider.start();
 <% end %>

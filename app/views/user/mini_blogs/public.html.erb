@@ -10,7 +10,7 @@
       <div class="mBlog fix">
         <div class="mBlogMain">
           <div class="mBlogMainWrap">
-            <%= render :partial => 'today_topic', :locals => {:mini_blogs => @today_mini_blogs, :desc => @today_topic_desc, :topic => @today_topic} %>
+            <%= render :partial => 'today_topic', :locals => {:mini_blogs => @shuffled_mini_blogs, :desc => @today_topic_desc, :topic => @today_topic} %>
             <%= render :partial => 'search_bar' %>
             <div class="mBlogSearchTag fix">
               <span class="miniTitle"><span>热词</span><em></em></span>
@@ -28,7 +28,7 @@
                 <li id='mini_blog_category_same_game'><span><%= link_to_function "同游微博", "Iyxzone.MiniBlog.Pub.fetch('same_game');" %></span></li>
               </ul>
             </div>
-            <div class="mBlogPostHead"><span class="topicTag"><%= @today_topic %></span>，已有<%= @docs.total_hits %>条参与话题讨论</div>
+            <div class="mBlogPostHead"><span class="topicTag"><%= @today_topic %></span>，已有<%= @today_mini_blogs.total_entries %>条参与话题讨论</div>
             <div class="mBlogPostList" id='mini_blogs_list'>
               <%= render :partial => 'hot_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
             </div>

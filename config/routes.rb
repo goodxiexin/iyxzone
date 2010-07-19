@@ -56,8 +56,6 @@ ActionController::Routing::Routes.draw do |map|
     
     admin.resources :videos, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :statuses, :member => {:verify => :put, :unverify => :put }
-    
     admin.resources :comments, :member => {:verify => :put, :unverify => :put }
     
     admin.resources :events, :member => {:verify => :put, :unverify => :put }
@@ -102,9 +100,8 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :links
 
+    # 这个仅仅是为了兼容微薄以前，那个分享到17gaming.com的代码
     users.resources :sharings
-
-    users.resources :shares, :collection => {:hot => :get, :recent => :get, :friends => :get}
 
     users.resources :notices, :collection => {:first_ten => :get}, :member => {:read => :put}
 
@@ -161,8 +158,6 @@ ActionController::Routing::Routes.draw do |map|
     users.resources :drafts
 
     users.resources :videos, :collection => [:hot, :recent, :relative, :friends]
-
-    users.resources :statuses, :collection => [:friends]
 
     users.friend_table_for_photo_tags '/friend_table_for_photo_tags', :controller => 'photo_tags', :action => 'friends'
 

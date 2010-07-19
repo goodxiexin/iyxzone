@@ -29,8 +29,12 @@ namespace rmmseg
             {
                 for (int i = 0; i < match_cache_size; ++i)
                     m_match_cache[i].first = -1;
-								for (int i = 0; i < max_tmp_words; ++i)
+
+								// init tmp words
+								for (int i = 0; i < max_tmp_words; ++i){
 										m_tmp_words[i].cixing = 0;
+										m_tmp_words[i].freq = 0;
+								}
             }
 
         Token next_token();

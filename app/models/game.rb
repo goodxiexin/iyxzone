@@ -32,8 +32,6 @@ class Game < ActiveRecord::Base
 
   acts_as_attentionable
 
-  acts_as_shareable :default_title => lambda {|game| game.name }, :path_reg => /\/games\/([\d]+)/
-
 	acts_as_taggable :delete_conditions => lambda {|game, user| user.is_admin? },
                    :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 10.days.ago }
   

@@ -1,7 +1,0 @@
-<% album = share.shareable %>
-
-<% render :layout => 'share_item', :locals => {:sharing => sharing, :share => share, :shareable => album} do %>
-  <h3>相册: <%= link_to h(sharing.title), eval("#{album.class.name.underscore}_url(album)"), :popup => true %></h3>
-  <p class="con space"><span class="share-album-cover"><%= album_cover album, :class => 'imgbox01', :size => :large, :width => 75, :height => 75, :popup => true %></span><br/></p>
-  <%= sharing_reason sharing %>
-<% end %>

@@ -43,6 +43,7 @@
 
 <div class="box02 canvas_con">
   <%= render :partial => 'user/profiles/about_me', :locals => {:user => @user, :profile => @profile} %>
+  <%= render :partial => 'user/profiles/recent_mini_blogs', :locals => {:user => @user, :mini_blogs => @mini_blogs} %>
   <%= render :partial => 'user/profiles/recent_albums', :locals => {:user => @user, :profile => @profile, :albums => @albums} %>
   <%= render :partial => 'user/profiles/recent_blogs', :locals => {:user => @user, :profile => @profile, :blogs => @blogs} %>
   <%= render :partial => 'user/profiles/feed_list', :locals => {:profile => @profile, :feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>

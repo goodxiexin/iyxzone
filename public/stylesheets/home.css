@@ -13,10 +13,24 @@ a:hover{color:#D63200;}
 .page_side_wrap .main{float:left;margin-left:-139px;width:100%;}
 .page_side_wrap .main .content{margin-left:139px;padding-left:6px;width:auto;} 
 
-#appbar{position:relative;}
+.pageSkinV2 .sideBar{float:left;width:340px;margin-left:10px}
+.pageSkinV2 .mainWrap{float:left;width:100%;margin-left:-360px}
+.pageSkinV2 .mainContent{margin:0 10px 0 360px}
+.skinV2Head .t-l,.skinV2Head .title,.skinV2Head .t-m,.skinV2Head .con,.skinV2Head .t-r{background:url(../images/skin/skin-v2.png) no-repeat;height:46px}
+.skinV2Head{height:46px}
+.skinV2Head .t-l{display:block;float:left;width:10px;background-position:0 0}
+.skinV2Head .title{float:left;width:auto;background-position:0 -47px;background-repeat:repeat-x}
+.skinV2Head .t-m{display:block;float:left;width:40px;background-position:0 -94px}
+.skinV2Head .con{float:left;background-position:0 -141px;background-repeat:repeat-x}
+.skinV2Head .t-r{display:block;float:right;width:10px;background-position:0 -188px}
+
+
+/*#appbar{position:relative;zoom:1}*/
 #appbar .applist{padding:7px 2px;}
-#appbar .applist li{height:37px;line-height:37px;padding:5px 0;overflow:hidden;}
-#appbar .applist li a{display:block;height:100%;padding-left:50px;background-repeat:no-repeat;font-size:14px;}
+#appbar .applist li{height:37px;line-height:37px;padding:5px 0;position:relative}
+#appbar .applist li a{display:block;position:relative;height:100%;padding-left:50px;background-repeat:no-repeat;font-size:14px;}
+#appbar .applist li span.hot{position:absolute;top:5px;left:80px}
+#appbar .applist li a.iArr02Down{position:absolute;top:15px;left:90px;width:20px;height:20px;z-index:2;padding:0}
 
 #canvas{zoom:1}
 #canvas .round_m{padding:2px 8px;}
@@ -740,7 +754,8 @@ a.jl-get-salary:link,a.jl-get-salary:visited,a.jl-get-salary:active{text-align:c
 .img-container-main .img-container-wrap{float:left;margin-right:-93px;width:100%;overflow:hidden}
 .img-container-main .img-container-wrap .img-container{margin-right:93px;width:auto;}
 .img-container-main .img-main{padding:0 15px;}
-.img-container-main .img-main .imgwrap{width:100%;padding:1px}
+.img-container-main .img-main .imgwrap{width:100%;padding:1px;position:relative}
+.img-container-main .img-main .imgwrap .topIsay{position:absolute;right:10px;top:10px;}
 .img-container-main .pic-desc{padding:20px 30px;background:url(../images/skin/title-bg02.gif) repeat-x 0 bottom;text-align:left;margin-top:20px;}
 
 .img-container-main .path-box{border:0}
@@ -969,7 +984,6 @@ dl.menu-op dd a{color:#333}
 .vote-detail h3{font-weight:400;line-height:24px;}
 .vote-detail ul li{margin:5px 0;padding-left:20px;}
 .vote-detail ul li.now{background:url(../images/icons/homeIcons.gif) no-repeat 0 -1440px}
-.vote-detail .time{color:#999}
 .vote-detail .jl-cutline{padding-bottom:15px}
 
 /*状态*/
@@ -1003,6 +1017,7 @@ a.blogImportBtn,.tab01 .right a.blogImportBtn,.tab01 .right a.blogImportBtn:hove
 /*视频 日志详细页面*/
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 15px}
 .detail-video-head p.left,.detail-blog-head p.left{margin-top:6px;width:500px}
+.detail-video-head p.right,.detail-blog-head p.right{margin:5px 10px 0 0;*margin:5px 0 0 0}
 .detail-video-head p.left .gray,.detail-blog-head p.left .gray{float:left;margin-left:5px}
 .detail-video-head strong,.detail-blog-head strong{color:#cc3300;font-size:14px;font-weight:400;width:78%;float:left;display:inline-block}
 .detail-video .con,.detail-blog .con{text-align:center;margin:10px 0}
@@ -1321,6 +1336,7 @@ span.i,a.i{width:16px;height:16px;margin-right:3px;display:-moz-inline-stack;dis
 .iTopic{background-position:-16px -327px;}
 .iToggleUp{background-position:-96px -25px}
 .iViewOrig{background-position:0 -146px}
+.iArr02Down{background:url(../images/skin/arrow.gif) no-repeat 3px -146px}
 
 .ajaxLoading{text-align:center;margin:30px 0}
 /*btn*/
@@ -1518,13 +1534,14 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogEditV .z-con .button{margin-top:3px}
 
 /*我的微博*/
-.mBlogMyTopic{background:url(../images/skin/mblog-topic-bg02.png) no-repeat;height:217px}
-.mBlogMyTopic .topTitle{margin:0 0 5px 0}
-.mBlogMyTopic .topTitle strong{color:#217308;float:left}
-.mBlogMyTopic .topTitle .count{color:#217308;float:right;font-size:12px;margin:-5px 20px 0 0}
+.mBlogMyTopic{background:none}
+.mBlogMyTopic .topTitle{background:url(../images/skin/mblog-topic-bg02.png) no-repeat;height:52px}
+.mBlogMyTopic .topTitle .count{float:right;color:#217308;font-size:12px;margin:15px 15px 0 0}
 .mBlogMyTopic .topTitle .count .num{color:#c56601;font-family:Constantia,Georgia;font-size:24px;font-weight:bold;vertical-align:-2px;}
-.mBlogMyTopic .mBlogEditor textarea{width:330px;padding:3px}
-.mBlogMyTopic .topBg{padding:30px 0 0 50px}
+.mBlogMyTopic .mBlogEditor textarea{width:98%;padding:3px}
+.mBlogMyTopic .topBg{padding:10px;min-height:0;_height:0}
+.mBlogMyTopic .mBlogEditor .ft li{margin-top:8px}
+.mBlogMyTopic .mBlogEditor .button03{float:right;margin:3px 2px 0 0}
 
 .mBlogTab{background:url(../images/skin/skin2010.png) repeat-x 0 -793px;margin-top:20px}
 .mBlogTab li,.mBlogTab li span{background:none}
@@ -1559,6 +1576,13 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .transIcon span,.transIcon a{background:url(../images/skin/skin2010.png) no-repeat;display:block;text-align:center;width:54px;}
 .transIcon span{background-position:0 -720px;color:#fff;font-size:14px;font-weight:700;height:53px;line-height:40px;}
 .transIcon a{background-position:-60px -210px;color:#217308;height:25px;line-height:25px;margin-top:3px;text-align:center}
+
+/*个人主页微博显示*/
+.mBlogProList{margin-top:15px}
+.mBlogProList .item{padding-left:30px}
+.mBlogProList .item .feedFunc{margin-left:-30px}
+.mBlogProList .cmt-box{width:385px}
+
 
 .mBlogExtra h2.title{font-size:12px;border-bottom:1px solid #ddd;padding:5px 0;font-weight:700;}
 .mBlogExtra .more{text-align:right;margin:10px 0}
@@ -1662,6 +1686,18 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .alpha-z{background-position:-40px -390px}
 
 
+.appGameMine{position:absolute;border:1px solid #bbd2aa;background:#f8fcf6;width:140px;padding:10px}
+.appGameMine .t{border-bottom:1px solid #bbd2aa;padding-bottom:5px}
+.appGameMine .xList li{border-bottom:1px solid #bbd2aa;background:none}
+.appGameMine .xList li a{padding:0 5px;color:#25700d;height:24px;line-height:24px;overflow:hidden;}
+.appGameMine .xList li a:hover{color:#fff}
 
-
+.mBlogFeed .feedHd{border-bottom:1px dashed #999;padding-bottom:5px;margin-top:10px}
+.mBlogFeed .feedHd .t{background:url(../images/skin/skin2010.png) no-repeat 0 -893px;width:103px;height:19px;float:left;font-size:0;line-height:0;text-indent:-999px}
+.mBlogFeed .feedHd .hotWords{float:right;}
+.mBlogFeed .feedHd .more{float:right;text-decoration:underline}
+.mBlogFeed .feedHd .hotWords,.mBlogFeed .feedHd .hotWords a{color:#999;margin-left:10px}
+.mBlogFeed .feedBd .item{padding:0 0 0 70px;margin:10px 0;border-bottom:1px dashed #ccc;padding-bottom:10px}
+.mBlogFeed .feedBd .avatar{float:left;margin-left:-70px;_display:inline}
+.mBlogFeed .feedBd .con{float:left;width:99%;line-height:20px}
 

@@ -1,9 +1,0 @@
-<% photo = share.shareable %>
-
-<% render :layout => 'share_item', :locals => {:sharing => sharing, :share => share, :shareable => photo} do %>
-  <h3>照片：<%= link_to h(sharing.title), eval("#{photo.class.name.underscore}_url(photo)"), :popup => true %></h3>
-  <p class="con">
-    <%= photo_link photo, :class => 'imgbox01', :popup => true%>
-    <%= sharing_reason sharing %>
-  </p>
-<% end %>

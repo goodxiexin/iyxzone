@@ -1,13 +1,12 @@
             <div class="mBlogTopic mBlogMyTopic">
               <div class="topTitle fix">
-                <strong>有什么新鲜事想要告诉大家？</strong>
                 <span class="count">你还可以输入<span class="num" id="mini_blog_words_count">140</span>字</span>
               </div>
-              <div class="topBg fix">
+              <div class="round08 round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m"><div class="round_body">
+                <div class="topBg fix">
                   <div class="mBlogEditor">
                     <div class="bd fix">
                       <textarea name="" id="mini_blog_text_area"></textarea>
-                      <span class="button03"><span><%= button_to_function "发布", "Iyxzone.MiniBlog.Builder.publish('index');", {:id => 'publish_btn'} %></span></span>
                     </div>
                     <div class="ft fix">
                       <ul>
@@ -26,9 +25,11 @@
                         <li id='publisher_video'><%= link_to_function '<span class="i iVideo"></span>视频</a>', "Iyxzone.MiniBlog.Builder.newVideo()" %></li>
                         <li id='publisher_topic'><%= link_to_function '<span class="i iTopic"></span>话题</a>', "Iyxzone.MiniBlog.Builder.newTopic()" %></li>
                       </ul>
+                      <span class="button03"><span><%= button_to_function "发布", "Iyxzone.MiniBlog.Builder.publish('#{at}');", {:id => 'publish_btn'} %></span></span>
                     </div>
+                  </div>
                 </div>
-              </div>
+              </div></div></div></div></div></div>
             </div>
 
 <% javascript_tag do %>

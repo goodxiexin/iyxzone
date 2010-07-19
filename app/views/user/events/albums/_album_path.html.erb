@@ -1,6 +1,5 @@
         <div class="path-box">
           <label>活动"<%= event_link event %>"</label>
           <span>相册</span>
-          <%= facebox_link '分享', new_sharing_url(:url => event_album_url(album)), :width => 450, :class => 'right love-btn' %>
+          <div class="topIsay right"><span class="button04"><span><%= facebox_button "我来说说", new_mini_blog_url(:content => "#{album.title} #{SITE_URL}/event_albums/#{album.id}"), :width => 500 %></span></span></div>
         </div>
-

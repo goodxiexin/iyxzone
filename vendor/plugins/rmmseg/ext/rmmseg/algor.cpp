@@ -1,6 +1,5 @@
 #include <cctype>
 #include <cassert>
-#include <cstdio>
 #include "rules.h"
 #include "algor.h"
 
@@ -13,10 +12,10 @@ namespace rmmseg
         do
         {
 						if (m_pos >= m_text_length){
-                return Token(NULL, 0, 0, NULL);
+                return Token(NULL, 0, 0, 0);
 						}
      
-            Token tk(NULL, 0, 0, NULL);
+            Token tk(NULL, 0, 0, 0);
             int len = next_char();
             if (len == 1)
                 tk = get_basic_latin_word();
@@ -69,7 +68,7 @@ namespace rmmseg
             len = next_char();
         }
 
-        return Token(m_text+start, end-start, 0, NULL);
+        return Token(m_text+start, end-start, 0, 0);
     }
 
     Token Algorithm::get_cjk_word(int len)
@@ -86,7 +85,7 @@ namespace rmmseg
             m_chunks_size = lsdmfocw_filter(m_chunks, m_chunks_size);
 
         if (m_chunks_size < 1)
-            return Token(NULL, 0, 0, NULL);
+            return Token(NULL, 0, 0, 0);
 
 				Word* word = m_chunks[0].words[0];	
         Token token(m_text+m_pos, word->nbytes, word->freq, word->cixing);
