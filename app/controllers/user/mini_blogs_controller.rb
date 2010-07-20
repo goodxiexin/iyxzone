@@ -1,3 +1,4 @@
+require 'ferret'
 class User::MiniBlogsController < UserBaseController
 
   layout 'app'
@@ -61,7 +62,18 @@ class User::MiniBlogsController < UserBaseController
   end
 
   def search
-    @mini_blogs = MiniBlog.search(params[:key], :page => params[:page], :per_page => PER_PAGE)
+    # construct ferret query lanuage first
+    @fql = []
+    if params[:key]
+      @fql << "content:(#{params[:key].split(/\s+/).join(" AND ")})"
+    end
+    if params[:category] and params[:category] != 'all'
+      @fql << "category:(#{params[:category]})"
+    end
+    @fql = @fql.join(" AND ")
+
+    # search index
+    @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
     @idols = User.match(:is_idol => true).all
     @hot_topics = MiniTopic.hot.limit(10)
   end

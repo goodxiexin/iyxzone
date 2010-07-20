@@ -6,6 +6,17 @@
       <div class="mBlog fix">
         <div class="mBlogMain">
           <div class="mBlogMainWrap">
+            <div class="mBlogCatTab fix">
+              <%= link_to_function "全部", "Iyxzone.MiniBlog.Searcher.filter('all')", :class => (params[:category].nil? or params[:category] == 'all') ? "selected" : "", :id => "search_category_all" %>
+              <span class="pipe">|</span>
+              <%= link_to_function "原创", "Iyxzone.MiniBlog.Searcher.filter('original')", :class => (params[:category] == 'original') ? "selected" : "", :id => "search_category_original" %>
+              <span class="pipe">|</span>
+              <%= link_to_function "文字", "Iyxzone.MiniBlog.Searcher.filter('text')", :class => (params[:category] == 'text') ? "selected" : "", :id => "search_category_text" %>
+              <span class="pipe">|</span>
+              <%= link_to_function "图片", "Iyxzone.MiniBlog.Searcher.filter('image')", :class => (params[:category] == 'image') ? "selected" : "", :id => "search_category_image" %>
+              <span class="pipe">|</span>
+              <%= link_to_function "视频", "Iyxzone.MiniBlog.Searcher.filter('video')", :class => (params[:category] == 'video') ? "selected" : "", :id => "search_category_video" %>
+            </div>
             <%= render :partial => 'search_bar' %>
             <div class="mBlogPostHead">以下是关于<span class="topicTag"><%= params[:key] %></span>的微博<%= @mini_blogs.total_entries %>条</div>
             <div class="mBlogPostList">

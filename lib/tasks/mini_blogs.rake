@@ -18,14 +18,10 @@ namespace :mini_blogs do
 
   task :analyze_topics => :environment do
     include Ferret
+    MiniTopic.delete_all
     reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
     reader.terms(:content).each do |term, freq|
-      topic = MiniTopic.find_by_name term
-      if topic
-        topic.update_attributes :freq => freq
-      else 
-        MiniTopic.create :name => term, :freq => freq
-      end
+      MiniTopic.create :name => term, :freq => freq
     end
   end
 

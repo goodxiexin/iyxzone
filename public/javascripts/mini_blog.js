@@ -5,6 +5,7 @@ Iyxzone.MiniBlog = {
   Builder: {},
   Presenter: {},
   Pub: {},
+  Searcher: {},
   Slider: {},
   fetch: function(type, uid){
     var types = ['all', 'original', 'text', 'image', 'video'];
@@ -48,6 +49,25 @@ Object.extend(Iyxzone.MiniBlog.Pub, {
         facebox.watchClickEvents();
       }
     });
+  }
+
+});
+
+Object.extend(Iyxzone.MiniBlog.Searcher, {
+  
+  filter: function(category){
+    var url = window.location.href;
+    var start = url.indexOf('key=');
+    var end = url.indexOf('&', start+4);
+    if(end < 0)
+      end = url.length;
+    var key = url.substr(start+4, end - (start+4));
+ 
+    url = "/mini_blogs/search?key=" + key;
+    if(category != 'all')
+      url += '&category=' + category;
+    alert(url);
+    window.location.href = url; 
   }
 
 });

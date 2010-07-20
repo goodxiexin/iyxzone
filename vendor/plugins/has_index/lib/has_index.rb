@@ -1,3 +1,6 @@
+require 'ferret'
+include Ferret
+
 module HasIndex
 
   def self.included base
@@ -98,20 +101,61 @@ module HasIndex
       query = args.first
       opts = args.extract_options!
 
+      # parse per page
       per_page = opts.delete(:per_page)
       per_page = per_page.nil? ? 20 : per_page.to_i
       opts[:limit] = per_page
 
+      # parse page
       page = opts.delete(:page)
       page = page.nil? ? 1 : page.to_i
       opts[:offset] = (page - 1) * per_page
-
+      
+      # construct sort if necessary
+      sort_fields = []
+      sort_str = opts.delete(:sort) || ""
+      sanitized_sort_str = []
+      sort_str.split(/\s*,\s*/).each do |str|
+        splits = str.split(/\s+/)
+        name = splits.first
+        order = splits[1].nil? ? 'asc' : splits[1].downcase
+        columns = self.columns.select{|c| c.name == name}
+        if !columns.blank?
+          column = columns.first
+          if column.type == :datetime
+            sort_fields << Ferret::Search::SortField.new(name, :type => :byte, :reverse => (order == "desc"))
+          elsif column.type == :string or column.type == :text
+            sort_fields << Ferret::Search::SortField.new(name, :type => :string, :reverse => (order == "desc"))
+          elsif column.type == :integer
+            sort_fields << Ferret::Search::SortField.new(name, :type => :integer, :reverse => (order == "desc"))
+          elsif column.type == :float
+            sort_fields << Ferret::Search::SortField.new(name, :type => :float, :reverse => (order == "desc"))
+          else
+            sort_fields << Ferret::Search::SortField.new(name, :type => :auto, :reverse => (order == "desc"))
+          end
+          sanitized_sort_str << "#{name} #{order}"
+        end
+      end
+      if !sort_fields.blank?
+        sort = Ferret::Search::Sort.new(sort_fields)
+        opts[:sort] = sort
+        puts sort
+      end
+ 
       # 目前默认field_infos里一定要有id      
       docs = indexer.search query, opts
-      records = self.find(docs.hits.map{|hit| indexer.reader.get_document(hit.doc)[:id]})
+      ids = docs.hits.map{|hit| indexer.reader.get_document(hit.doc)[:id]}
+      if sort_fields.blank?
+        records = self.find(ids)
+      else
+        records = self.order(sanitized_sort_str.join(",")).find(ids)
+      end
+
+      # 和will paginate兼容
       records = WillPaginate::Collection.create(page, per_page, docs.total_hits) do |pager|
         pager.replace records.to_a
       end
+
       records
     end
 

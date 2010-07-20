@@ -17,6 +17,7 @@ class MiniBlog < ActiveRecord::Base
   named_scope :sexy, :conditions => {:deleted => false}, :order => "comments_count DESC, created_at DESC"
 
   named_scope :category, lambda {|type|
+    type = type.to_s
     if type == 'all'
       {:order => 'created_at DESC'}
     elsif type == 'original'
@@ -35,11 +36,13 @@ class MiniBlog < ActiveRecord::Base
   acts_as_random
 
   has_index :query_step => 20000,
-            :select_fields => [:id, :nodes],
+            :select_fields => [:id, :nodes, :created_at, :images_count, :videos_count, :root_id, :parent_id],
             :writer => {:max_buffer_memory => 32, :max_buffered_docs => 20000},
             :field_infos => {
               :id => {:store => :yes, :index => :untokenized, :term_vector => :no}, 
-              :content => {:store => :yes, :index => :yes, :term_vector => :yes}
+              :content => {:store => :yes, :index => :yes, :term_vector => :yes},
+              :category => {:store => :no, :index => :untokenized, :term_vector => :no},
+              :created_at => {:store => :yes, :index => :untokenized, :term_vector => :no}
             }
    
   def text_type?
@@ -97,7 +100,10 @@ class MiniBlog < ActiveRecord::Base
   # required by has_index
   def to_doc
     doc = Ferret::Document.new
+    
     doc[:id] = id
+    doc[:created_at] = created_at.strftime("%Y%m%d%H%M%S")
+
     doc[:content] = []
     nodes.each do |n|
       if n[:type] == 'text'
@@ -108,6 +114,13 @@ class MiniBlog < ActiveRecord::Base
         doc[:content] << n[:login]
       end
     end
+
+    doc[:category] = []
+    doc[:category] << "text" if text_type?
+    doc[:category] << "image" if image_type?
+    doc[:category] << "video" if video_type?
+    doc[:category] << "original" if original?
+
     doc
   end
 

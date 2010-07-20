@@ -1,7 +1,7 @@
             <div class="mBlogSearch fix">
               <span class="l-c"></span>
               <% form_tag search_mini_blogs_url, :method => :get do %>
-                <%= text_field_tag "key", '', :class => "ipt" %>
+                <%= text_field_tag "key", params[:key], :class => "ipt" %>
                 <span class="searchBtn01"><span><button type='submit'>搜话题</button></span></span>
               <% end %>
               <span class="r-c"></span>

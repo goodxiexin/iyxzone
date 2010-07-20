@@ -1,50 +1,48 @@
 require File.dirname(__FILE__) + '/lib/rmmseg.rb'
 
-
 # load dictionary
 # 一般类的单字和多词
-RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "chars.dict"), :chars
+#RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "chars.dict"), :chars
 RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "words.dict"), :words
-=begin
 # 游戏
 Dir.new(File.join(RAILS_ROOT, "dict", "game")).each do |f|
   if f =~ /.+\.dict/
-    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "games", f), :words
+    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "game", f), :words
   end
 end
-
+=begin
 # 娱乐
 Dir.new(File.join(RAILS_ROOT, "dict", "entertainment")).each do |f|
   if f =~ /.+\.dict/
-    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "games", f), :words
+    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "entertainment", f), :words
   end
 end
 
 # 体育休闲
 Dir.new(File.join(RAILS_ROOT, "dict", "sports")).each do |f|
   if f =~ /.+\.dict/
-    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "games", f), :words
+    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "sports", f), :words
   end
 end
 
 # 生活
 Dir.new(File.join(RAILS_ROOT, "dict", "life")).each do |f|
   if f =~ /.+\.dict/
-    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "games", f), :words
+    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "life", f), :words
   end
 end
 
 # 科学
 Dir.new(File.join(RAILS_ROOT, "dict", "science")).each do |f|
   if f =~ /.+\.dict/
-    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "games", f), :words
+    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "science", f), :words
   end
 end
 
 # 艺术
 Dir.new(File.join(RAILS_ROOT, "dict", "art")).each do |f|
   if f =~ /.+\.dict/
-    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "games", f), :words
+    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "art", f), :words
   end
 end
 =end

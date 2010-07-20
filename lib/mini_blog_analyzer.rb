@@ -3,17 +3,11 @@ require 'ferret'
 
 class MiniBlogAnalyzer < Ferret::Analysis::Analyzer
       
-  def initialize(&brk)
-    @brk = brk
+  def initialize
   end
       
   def token_stream(field, text)
-    t = Tokenizer.new(text)
-    if @brk
-      @brk.call(t)
-    else
-      t
-    end
+    Ferret::Analysis::LowerCaseFilter.new(Tokenizer.new(text))
   end
 
 end
@@ -30,7 +24,7 @@ class Tokenizer < ::Ferret::Analysis::TokenStream
       if tok.nil?
         return nil
       else
-        if (tok.cx_game or tok.cx_unkown or tok.cx_noun) and tok.text.size > 3 and tok.freq < 250000000
+        if tok.cx_game or ((tok.cx_unkown or tok.cx_noun) and tok.text.size > 3 and tok.freq < 5000000)
           @token.text = tok.text
           @token.start = tok.start
           @token.end = tok.end
