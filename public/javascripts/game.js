@@ -7,11 +7,11 @@ Iyxzone.Game = {
 
   Suggestor: {},
 
+  Presentor: {},
+
   Selector: Class.create({}),
 
   PinyinSelector: Class.create({}),
-
-  Feeder: {},
 
   initPinyinSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options){
     if(Iyxzone.Game.infos == null){
@@ -577,19 +577,189 @@ Object.extend(Iyxzone.Game.Suggestor, {
 
 }); 
 
-Object.extend(Iyxzone.Game.Feeder, {
+//一些在game show页面上的操作
+Object.extend(Iyxzone.Game.Presentor, {
 
-  idx: 0,
+  feedIdx: 0,
+
+  curTab: null,
+
+  cache: new Hash(),
+
+  setTab: function(type){
+    $('tab_feed').writeAttribute('class', 'fix unSelected');
+    $('tab_blog').writeAttribute('class', 'fix unSelected');
+    $('tab_album').writeAttribute('class', 'fix unSelected');
+    $('tab_wall').writeAttribute('class', 'fix unSelected');
+    $('tab_' + type).writeAttribute('class', 'fix');
+    this.curTab = type;
+  }, 
+
+  loading: function(){
+    $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+  },
+
+  setFromCache: function(type){
+    var html = this.cache.get(type);
+
+    if(html){
+      $('presentation').innerHTML = html;
+      return true;
+    }else{
+      return false;
+    }
+  },
+
+  showFeeds: function(gameID){
+    if(this.curTab == 'feed')
+      return;
+
+    if(this.setFromCache('feed')){
+      this.setTab('feed');
+      return;
+    }
+
+    new Ajax.Request('/games/' + gameID + '/feeds', {
+      method: 'get',
+      onLoading: function(){
+        this.loading();
+        this.setTab('feed');
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('feed', transport.responseText);
+        if(this.curTab == 'feed'){
+          $('presentation').innerHTML = transport.responseText;
+          this.feedIdx = 0;
+        }
+      }.bind(this)
+    }); 
+  },
 
   moreFeeds: function(gameID){
-    $('more_feed').innerHTML = '<img src="/images/loading.gif" />';
+    // show loading page
+    //$('more_feed').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
 
-    new Ajax.Request('/games/' + gameID + '/more_feeds?idx=' + this.idx, {
+    // send ajax request
+    new Ajax.Request('/games/' + gameID + '/feeds/more?idx=' + this.feedIdx, {
       method: 'get',
-      onSuccess: function(transport){
-        this.idx++;
+      onSuccess: function(){
+        this.feedIdx++;
       }.bind(this)
     });
+  },
+
+  showBlogs: function(gameID){
+    if(this.curTab == 'blog')
+      return;
+
+    if(this.setFromCache('blog')){
+      this.setTab('blog');
+      return;
+    }
+
+    new Ajax.Request('/games/' + gameID + '/blogs?at=guild_show', {
+      method: 'get',
+      onLoading: function(){
+        this.loading();
+        this.setTab('blog');
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('blog', transport.responseText);
+        if(this.curTab == 'blog'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });
+  },
+
+  showAlbums: function(gameID){
+    if(this.curTab == 'album')
+      return;
+
+    if(this.setFromCache('album')){
+      this.setTab('album');
+      return;
+    }
+
+    new Ajax.Request('/games/' + gameID + '/albums?at=guild_show', {
+      method: 'get',
+      onLoading: function(){
+        this.loading();
+        this.setTab('album');
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('album', transport.responseText);
+        if(this.curTab == 'album'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });
+  },
+
+  showWall: function(gameID){
+    if(this.curTab == 'wall')
+      return;
+
+    if(this.setFromCache('wall')){
+      this.setTab('wall');
+      return;
+    }
+
+    new Ajax.Request('/wall_messages/index_with_form', {
+      method: 'get',
+      parameters: {wall_id: gameID, wall_type: 'game'},
+      onLoading: function(){
+        this.loading();
+        this.setTab('wall');
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('wall', transport.responseText);
+        if(this.curTab == 'wall'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });
+  },
+
+  // 下面2个函数和上面4个的机制不太一样
+  showComrades: function(gameID){
+    if($('tab_player')){
+      $('tab_player').writeAttribute('class', 'fix unSelected');
+      $('player_panel').hide();
+    }
+    $('tab_comrade').writeAttribute('class', 'fix');
+    $('comrade_panel').show();
+    $('cp_link').writeAttribute('href', '/games/' + gameID + '/comrades');
+  },
+
+  showPlayers: function(gameID){
+    if($('tab_comrade')){
+      $('tab_comrade').writeAttribute('class', 'fix unSelected');
+      $('comrade_panel').hide();
+    }
+    $('tab_player').writeAttribute('class', 'fix');
+    $('player_panel').show();
+    $('cp_link').writeAttribute('href', '/games/' + gameID + '/players');
+  },
+
+  showGuilds: function(gameID){
+    if($('tab_event')){
+      $('tab_event').writeAttribute('class', 'fix unSelected');
+      $('event_panel').hide();
+    }
+    $('tab_guild').writeAttribute('class', 'fix');
+    $('guild_panel').show();
+    $('ge_link').writeAttribute('href', '/games/' + gameID + '/guilds');
+  },
+
+  showEvents: function(gameID){
+    if($('tab_guild')){
+      $('tab_guild').writeAttribute('class', 'fix unSelected');
+      $('guild_panel').hide();
+    }
+    $('tab_event').writeAttribute('class', 'fix');
+    $('event_panel').show();
+    $('ge_link').writeAttribute('href', '/games/' + gameID + '/events');
   }
 
 });

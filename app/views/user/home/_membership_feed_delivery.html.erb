@@ -1,7 +1,0 @@
-<% delivery = membership_feed_delivery %>
-<% membership = membership_feed_delivery.feed_item.originator %>
-
-<% render :layout => 'user/home/small_feed_delivery', :locals => {:delivery => delivery, :poster => membership.user} do %>
-	<%= profile_link membership.user %> 加入了公会 <%= guild_link membership.guild, :class=> 'shine' %>
-	<span class="gray"><%= ftime delivery.created_at %></span>
-<% end %>

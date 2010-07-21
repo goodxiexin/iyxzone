@@ -1,0 +1,46 @@
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :game %>
+  <%= javascript_include_tag 'mini_blog' %>
+<% end %>
+
+<% content_for :html_title, "#{@game.name} - 主页 - 17Gaming.com" %>
+<% content_for :html_description, "#{@game.name} - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{@game.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
+<% content_for :left do %>
+  <% mc_avatar do %>
+    <%= game_image @game.name, :class => 'game-m' %>
+  <% end %>
+  <div class="info-list">
+	  <%= render :partial => 'game_info', :locals => {:game => @game, :attention => @attention} %>
+  </div>
+<% end %>
+
+<% content_for :right do %>
+  <%= render :partial => 'tag_panel', :locals => {:game => @game} %>
+  <% unless @events.blank? %>
+	  <%= render :partial => 'game_events', :locals => {:game => @game, :events => @events} %>
+	<% end %>
+  <% unless @guilds.blank? %>
+    <%= render :partial => 'game_guilds', :locals => {:game => @game, :guilds => @guilds} %>
+  <% end %>
+<% end %>
+
+<div class='box02 canvas_con'>
+  <%= render :partial => 'user/mini_blogs/form_at_index', :locals => {:poster_id => @game.id, :poster_type => 'Game', :at => 'game'} %>
+  <% unless @comrades.blank? %>
+    <%= render :partial => 'comrade_suggestions', :locals => {:game => @game, :comrades => @comrades} %>
+  <% end %>
+  <%= render :partial => 'player_suggestions', :locals => {:game => @game, :players => @players} %>
+  <%= render :partial => 'recent_albums', :locals => {:has_game => @has_game, :game => @game, :albums => @albums}  %>
+  <%= render :partial => 'recent_blogs', :locals => {:has_game => @has_game, :game => @game, :blogs => @blogs} %>
+  <%= render :partial => 'game_feeds', :locals => {:feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size, :game => @game} %>
+  <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @game, :recipient => nil, :with_comments => false} %>
+  <div class="feed-box" id='comments'>
+    <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>
+  </div>
+</div>
+
+<% unless @reply_to.blank? %>
+  <%= onload_javascript_tag "Iyxzone.WallMessage.set('#{@reply_to.login}', #{@reply_to.id});" %>
+<% end %>

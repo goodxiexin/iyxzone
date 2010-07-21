@@ -13,18 +13,6 @@ a:hover{color:#D63200;}
 .page_side_wrap .main{float:left;margin-left:-139px;width:100%;}
 .page_side_wrap .main .content{margin-left:139px;padding-left:6px;width:auto;} 
 
-.pageSkinV2 .sideBar{float:left;width:340px;margin-left:10px}
-.pageSkinV2 .mainWrap{float:left;width:100%;margin-left:-360px}
-.pageSkinV2 .mainContent{margin:0 10px 0 360px}
-.skinV2Head .t-l,.skinV2Head .title,.skinV2Head .t-m,.skinV2Head .con,.skinV2Head .t-r{background:url(../images/skin/skin-v2.png) no-repeat;height:46px}
-.skinV2Head{height:46px}
-.skinV2Head .t-l{display:block;float:left;width:10px;background-position:0 0}
-.skinV2Head .title{float:left;width:auto;background-position:0 -47px;background-repeat:repeat-x}
-.skinV2Head .t-m{display:block;float:left;width:40px;background-position:0 -94px}
-.skinV2Head .con{float:left;background-position:0 -141px;background-repeat:repeat-x}
-.skinV2Head .t-r{display:block;float:right;width:10px;background-position:0 -188px}
-
-
 /*#appbar{position:relative;zoom:1}*/
 #appbar .applist{padding:7px 2px;}
 #appbar .applist li{height:37px;line-height:37px;padding:5px 0;position:relative}
@@ -430,8 +418,8 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .photolist-box li .btns a{_display:inline;float:left;margin:0 4px 0 3px}
 
 .photolist-big-box li{float:left;padding:5px 8px;width:86px;overflow:hidden}
-.photolist-big-box .collection .middle{height:100%;}
-.photolist-big-box .collection .middle img{width:75px}
+.photolist-big-box .collection .middle{height:100%;}/*del*/
+.photolist-big-box .collection .middle img{width:75px}/*del*/
 
 .friend-box .appcontent01{margin-top:10px}
 .friend-box .formcontent .fldid{width:97px;}
@@ -1323,9 +1311,10 @@ h1.app-share{float:left}
 
 /*v2 start 100513*/
 /*icon*/
-.i{background:url(../images/skin/skin2010.png) no-repeat;}
-span.i,a.i{width:16px;height:16px;margin-right:3px;display:-moz-inline-stack;display:inline-block;_display:inline;overflow:hidden;outline:none;font:0/0 sans-serif;text-indent:-99999px;*text-indent:0;zoom:1;vertical-align:middle;_vertical-align:-2px}
+.i,.i40{background:url(../images/skin/skin2010.png) no-repeat;}
+span.i,a.i,.i40{width:16px;height:16px;margin-right:3px;display:-moz-inline-stack;display:inline-block;_display:inline;overflow:hidden;outline:none;font:0/0 sans-serif;text-indent:-99999px;*text-indent:0;zoom:1;vertical-align:middle;_vertical-align:-2px}
 
+.i40{width:40px;height:40px;}
 .iClose02{background-position:-22px -23px;}
 .iMedal{background-position:-44px -24px;}
 .iFollow{background-position:-78px -24px;}
@@ -1337,6 +1326,12 @@ span.i,a.i{width:16px;height:16px;margin-right:3px;display:-moz-inline-stack;dis
 .iToggleUp{background-position:-96px -25px}
 .iViewOrig{background-position:0 -146px}
 .iArr02Down{background:url(../images/skin/arrow.gif) no-repeat 3px -146px}
+.iSquare{background-position:-190px -69px}
+.iGuildLogo{height:53px;background-position:0 -935px}
+.iGameLogo{height:53px;background-position:-40px -935px}
+span.iGuild02{width:23px;height:27px;background-position:-81px -935px}
+span.iFunc02{width:19px;height:27px;background-position:-104px -935px}
+span.iRole02{width:19px;height:27px;background-position:-123px -935px}
 
 .ajaxLoading{text-align:center;margin:30px 0}
 /*btn*/
@@ -1694,10 +1689,87 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 
 .mBlogFeed .feedHd{border-bottom:1px dashed #999;padding-bottom:5px;margin-top:10px}
 .mBlogFeed .feedHd .t{background:url(../images/skin/skin2010.png) no-repeat 0 -893px;width:103px;height:19px;float:left;font-size:0;line-height:0;text-indent:-999px}
-.mBlogFeed .feedHd .hotWords{float:right;}
-.mBlogFeed .feedHd .more{float:right;text-decoration:underline}
-.mBlogFeed .feedHd .hotWords,.mBlogFeed .feedHd .hotWords a{color:#999;margin-left:10px}
+.mBlogFeed .feedHd .hotWords,.mBlogFeed .feedHd .topIsay{float:right;}
+.mBlogFeed .feedHd .more{float:right;text-decoration:underline;line-height:26px}
+.mBlogFeed .feedHd .hotWords,.mBlogFeed .feedHd .hotWords a{color:#999;margin-left:10px;line-height:26px}
 .mBlogFeed .feedBd .item{padding:0 0 0 70px;margin:10px 0;border-bottom:1px dashed #ccc;padding-bottom:10px}
 .mBlogFeed .feedBd .avatar{float:left;margin-left:-70px;_display:inline}
 .mBlogFeed .feedBd .con{float:left;width:99%;line-height:20px}
+
+.pageSkinV2{background:url(../images/skin/s2bg01.png) repeat-y 340px 0;}
+.pageSkinV2 .sideBar{float:left;width:340px;margin:20px 0 0 10px;*margin:30px 0 0 10px !important;_margin:20px 0 0 5px;padding:0 0 20px 0;position:relative;clear:both}
+.pageSkinV2 .mainWrap{float:left;width:100%;height:100%;margin:20px 0 0 -360px;*margin:30px 0 0 -360px !important;padding:0 0 20px 0}
+.pageSkinV2 .mainContent{margin:0 10px 0 370px;}
+.pageSkinV2 .tab01 li.hover{background-position:0 -132px;}
+.pageSkinV2 .tab01 li.hover span{background-position:right -165px;}
+.pageSkinV2 .photolist-big-box{position:relative}
+.pageSkinV2 .mainContent .s2m2 .title .wrap{width:535px}
+
+.skinV2Head,.skinV2Head .t-l,.skinV2Head .title,.skinV2Head .t-m,.skinV2Head .t-r{background:url(../images/skin/skin-v2.png) no-repeat;height:46px}
+.skinV2Head{background-position:0 -207px;background-repeat:repeat-x;height:46px;line-height:46px;margin:-3px -4px 0 -4px;position:relative}
+.skinV2Head .t-l{display:block;float:left;width:10px;background-position:0 0}
+.skinV2Head .title{float:left;width:240px;overflow:hidden;line-height:46px;background-position:0 -68px;background-repeat:repeat-x;font-size:14px;color:#fff;}
+.skinV2Head .t-m{display:block;float:left;width:40px;background-position:0 -137px}
+.skinV2Head .con{float:left;margin-top:10px;font-size:14px;font-weight:700;background:#F8FCF6}
+.skinV2Head .con .msg{float:left;display:inline-block;overflow:hidden;width:500px;height:46px;line-height:46px}
+.skinV2Head .con .msg input{background:#F8FCF6;border:1px solid #C9DCBC;height:28px;line-height:28px;margin-top:8px;font-size:14px;width:480px;color:#333}
+.skinV2Head .con .i,.skinV2Head .con .i40{float:left;margin:0 5px}
+.skinV2Head .con .i{margin-top:14px}
+.skinV2Head .iGuildMsg{background-position:-136px -893px;width:36px;height:16px}
+.skinV2Head .iGameMsg{background-position:-104px -893px;width:68px;height:16px}
+.skinV2Head .t-r{display:block;float:right;width:10px;background-position:right -279px}
+.pageSkinV2 .mBlogFeed .feedHd .t{background-position:0 -914px}
+.pageSkinV2 .feed-list-box h4 span{background:#f8fcf6}
+.pageSkinV2 .sPhotoList{margin:10px 0 10px 15px}
+/*公会游戏活动主页*/
+/*******Table*******/
+.tbItem{width:100%;table-layout:fixed;}
+.tbItem th{padding:5px 3px;color:#EE960F}
+.tbItem td{padding:3px;overflow:hidden;white-space:nowrap;word-break:keep-all;word-wrap:normal;}
+
+.guildMyRole .roleName{width:50%}
+.guildMyRole .state{width:40%}
+.guildMyRole td a{color:#333}
+
+
+.guildHome .guildProfile,.gameHome .gameProfile,.eventHome .eventProfile{padding-left:120px;}
+.guildHome .guildProfile .avatar,.gameHome .gameProfile .avatar,.eventHome .eventProfile .avatar{float:left;margin-left:-120px;_display:inline;}
+.guildHome .guildProfile .avatar .follow,.gameHome .gameProfile .avatar .follow,.eventHome .eventProfile .avatar .follow{margin:5px 0 0 10px;}
+.guildHome .guildProfile .con,.gameHome .gameProfile .con,.eventHome .eventProfile .con{float:left;width:100%;line-height:28px}
+.guildHome .guildProfile .con li,.gameHome .gameProfile .con li,.eventHome .eventProfile .con li{width:200px;height:28px;overflow:hidden}
+.guildHome .guildProfile .con li span,.gameHome .gameProfile .con li span,.eventHome .eventProfile .con li span{color:#217308}
+.gameHome .gameProfile .addRole{margin:10px 0 0 0}
+.gameHome .gameProfile .star-ratings-block{float:left}
+.s2m1,.s2m2{margin-top:30px;}
+.s2m1 .title span.i{float:left;margin-right:10px}
+.s2m1 .title h2{background:url(../images/skin/s2twill.png) repeat-x 0 7px;width:260px;float:left}
+.s2m1 .title strong{color:#217308;font-size:12px;line-height:22px;display:block;height:22px;float:left;background:#f8fcf6;padding:0 5px 0 0;*padding:2px 5px 0 0;padding:2px 5px 0 0\9}
+.s2m1 .con{width:80%;margin-left:30px}
+.s2m2 .title .wrap,.s2m2 .title em,.s2m2 .title h2 strong,.s2m2 .title h2 span{background:url(../images/skin/btn2010.png) no-repeat;height:29px;line-height:29px}
+.s2m2 .title .wrap{background-position:0 -997px;background-repeat:repeat-x;float:left;width:310px;}
+.s2m2 .title h2{float:left;margin:6px 0 0 10px;height:23px;overflow:hidden}
+.s2m2 .title h2 strong{float:left;background-position:0 -1031px;height:23px;line-height:23px;padding-left:10px;color:#217308;font-size:12px}
+.s2m2 .title h2 span{float:left;background-position:right -1031px;width:10px;height:23px}
+.s2m2 .title .more{float:right;line-height:29px;color:#fff}
+.s2m2 .title em{background-position:right -997px;width:10px;display:block;float:left}
+.s2m2 .title h2.unSelected strong,.s2m2 .title h2.unSelected span{background:none;color:#333;font-weight:400;cursor:pointer}
+.s2m2bd{background:#f3fae4;width:320px;padding:10px 0}
+.guildHome .guildIntro .item,.eventHome .eventIntro .item{padding:10px 0 10px 130px;}
+.guildHome .guildIntro .item .avatar,.eventHome .eventIntro .item .avatar{float:left;margin-left:-120px;_display:inline;}
+.guildHome .guildIntro .item .con,.eventHome .eventIntro .item .con{float:left;width:100%;line-height:28px}
+.guildHome .guildFunc li,.eventHome .eventFunc li{margin:10px 0}
+.guildHome .guildFunc li a,.eventHome .eventFunc li a{color:#333}
+.guildHome .guildMember li,.gameHome .gameMember li,.eventHome .eventMember li{float:left;width:25%;margin:5px 0;text-align:center;}
+.guildHome .guildMember li .memberName,.gameHome .gameMember li .memberName,.eventHome .eventMember li .memberName{width:70px;height:22px;line-height:22px;display:block;overflow:hidden;color:#666}
+/*照片*/
+.sPhotoList li{float:left;padding:5px 8px;width:86px;overflow:hidden;}
+.sPhotoList li img{width:75px}
+/*论坛*/
+.pageSkinV2 .forumList{margin-left:15px}
+.pageSkinV2 .forumList .t,.pageSkinV2 .sPhotoList .t{margin:20px 0}
+.pageSkinV2 .forumList ul{margin:10px 0;}
+.pageSkinV2 .forumList li{line-height:24px;margin:5px 0}
+.pageSkinV2 .forumList li h2{float:left;width:400px;height:24px;line-height:24px;overflow:hidden;background:url(../images/skin/skin2010.png) no-repeat -190px -65px;padding-left:20px}
+.pageSkinV2 .forumList li .time{float:right}
+.pageSkinV2 .forumList li a{color:#333;}
 

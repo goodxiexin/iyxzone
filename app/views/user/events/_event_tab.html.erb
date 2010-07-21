@@ -1,0 +1,9 @@
+<div class="s2m2 eventIntro">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix" id="tab_photo" onclick="Iyxzone.Event.Presentor.showPhotos(<%= event.album.id %>)"><strong>照片</strong><span/></h2>
+      <h2 class="fix unSelected" id="tab_wall" onclick="Iyxzone.Event.Presentor.showWall(<%= event.id %>, <%= event.poster_id %>)"><strong>留言板<% if event.comments_count != 0 %>(<%= event.comments_count %>)<% end %></strong><span/></h2>
+    </div>
+    <em></em>
+  </div>
+</div>

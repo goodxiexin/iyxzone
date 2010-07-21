@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100718062330) do
+ActiveRecord::Schema.define(:version => 20100720143100) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -177,6 +177,7 @@ ActiveRecord::Schema.define(:version => 20100718062330) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
+    t.string   "bulletin"
   end
 
   add_index "events", ["poster_id"], :name => "index_events_on_poster_id"
@@ -329,6 +330,7 @@ ActiveRecord::Schema.define(:version => 20100718062330) do
     t.integer  "last_week_attentions_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "bulletin"
   end
 
   create_table "gameswithholes", :force => true do |t|
@@ -398,13 +400,10 @@ ActiveRecord::Schema.define(:version => 20100718062330) do
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
     t.integer  "attentions_count",  :default => 0
+    t.string   "bulletin"
   end
 
   add_index "guilds", ["president_id"], :name => "index_guilds_on_president_id"
-
-  create_table "links", :force => true do |t|
-    t.string "url"
-  end
 
   create_table "mails", :force => true do |t|
     t.integer  "sender_id"
@@ -739,29 +738,6 @@ ActiveRecord::Schema.define(:version => 20100718062330) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "shares", :force => true do |t|
-    t.integer  "shareable_id"
-    t.string   "shareable_type"
-    t.integer  "digs_count",     :default => 0
-    t.integer  "sharings_count", :default => 0
-    t.string   "url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "sharings", :force => true do |t|
-    t.string   "title"
-    t.text     "reason"
-    t.string   "shareable_type"
-    t.integer  "share_id"
-    t.integer  "poster_id"
-    t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.integer  "verified",       :default => 0
-  end
-
-  add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"
 
   create_table "signup_invitations", :force => true do |t|
     t.integer  "sender_id"

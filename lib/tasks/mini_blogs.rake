@@ -2,6 +2,10 @@ require 'ferret'
 
 namespace :mini_blogs do
 
+  task :test => :environment do
+    RMMSeg::Dictionary.load_dictionaries
+  end
+
   task :random => :environment do
     ids = MiniBlog.random(:limit => 100).map(&:id)
     # 如果审核不通过了怎么办

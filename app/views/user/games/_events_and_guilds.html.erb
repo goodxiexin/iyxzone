@@ -1,0 +1,53 @@
+<div class="s2m2 guildIntro">
+  <div class="title fix">
+    <div class="wrap">
+      <% if !guilds.blank? %>
+        <h2 class="fix" id='tab_guild' onclick="Iyxzone.Game.Presentor.showGuilds(<%= game.id %>)"><strong>工会</strong><span></span></h2>
+      <% end %>
+      <% if !events.blank? %>
+        <h2 class="fix <%if !guilds.blank? %>unSelected<% end %>" id='tab_event' onclick="Iyxzone.Game.Presentor.showEvents(<%= game.id %>)"><strong>活动</strong><span></span></h2>
+      <% end %>
+    </div>
+    <%= link_to "更多", guilds.blank? ? game_events_url(game) : game_guilds_url(game), :class => "more", :id => "ge_link" %>
+    <em></em>
+  </div>
+  <% if !guilds.blank? %>
+    <div class="s2m2bd fix" id='guild_panel'>
+      <% guilds.each do |g| %>
+        <div class="item fix">
+          <div class="avatar">
+            <%= album_cover g.album, :class => "imgbox01" %>
+          </div>
+          <div class="con">
+            <ul>
+              <li><%= guild_link g, :class => 'red' %></li>
+              <li>游戏：<%= game_link g.game %></li>
+              <li>时间：<%= ftime3 g.created_at %></li>
+              <li>地点：<%= server_location g.game_server, false %></li>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if !events.blank? %>
+    <div class="s2m2bd fix" id='event_panel' <% if !guilds.blank? %>style="display:none"<% end %>>
+      <% events.each do |e| %>
+        <div class="item fix">
+          <div class="avatar">
+            <%= album_cover e.album, :class => "imgbox01" %>
+          </div>
+          <div class="con">
+            <ul>
+              <li><%= event_link e, :class => 'red' %></li>
+              <li>游戏：<%= game_link e.game %></li>
+              <li>时间：<%= ftime3 e.start_time %></li>
+              <li>地点：<%= server_location e.game_server, false %></li>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+

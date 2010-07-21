@@ -271,14 +271,23 @@ module ApplicationHelper
     content_tag(:button, name, html_options)
 	end
 
-	def server_location server
+	def server_location server, with_game=true
     return if server.nil?
 
+    str = []
+
+    if with_game
+      str << game_link(server.game)
+    end
+
     if server.game.no_areas
-			"#{game_link server.game}, #{server.name}"
+			str << server.name
 		else
-			"#{game_link server.game}, #{server.area.name}, #{server.name}"
+			str << server.area.name
+      str << server.name
 		end
+
+    str.join(", ")
 	end
 
   def advanced_collection_select object, method, collection, value_method, text_method, options={}, html_options={}, extra_attributes={}

@@ -66,10 +66,12 @@ class Event < ActiveRecord::Base
 
   needs_verification :sensitive_columns => [:title, :description]
 
+  acts_as_attentionable
+
   acts_as_commentable :order => 'created_at DESC', 
-                      :delete_conditions => lambda {|user, event, comment| event.poster == user}, 
-                      :create_conditions => lambda {|user, event| event.has_participant?(user)}, 
-                      :view_conditions => lambda { true }
+                      :delete_conditions => lambda {|user, event, comment| event.poster == user}#, 
+                      #:create_conditions => lambda {|user, event| event.has_participant?(user)}, 
+                      #:view_conditions => lambda { true }
 
 	acts_as_resource_feeds :recipients => lambda {|event| 
     poster = event.poster
@@ -102,6 +104,10 @@ class Event < ActiveRecord::Base
 
   def has_participant? user
     confirmed_and_maybe_participations.exists? :participant_id => user.id
+  end
+
+  def participant_ids
+    confirmed_and_maybe_participations.map(&:participant_id).uniq
   end
 
   def inviteable_characters
@@ -146,7 +152,9 @@ class Event < ActiveRecord::Base
 
   validates_size_of :title, :within => 1..100
 
-  validates_size_of :description, :within => 1..10000
+  validates_size_of :description, :within => 1..10000, :allow_blank => true
+
+  validates_size_of :bulletin, :within => 1..50, :allow_blank => true
 
   validates_presence_of :start_time, :end_time
 

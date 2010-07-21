@@ -1,0 +1,20 @@
+<div class="s2m2 gameMember">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix"><strong>游戏玩家</strong><span></span></h2>
+      <%= link_to "更多", game_players_url(game), :class => "more" %>
+    </div>
+    <em></em>
+  </div>
+  <div class="s2m2bd fix">
+    <ul class="fix">
+      <% players.each do |c| %>
+        <li>
+          <%= avatar c.user, :class => 'imgbox01' %>
+          <%= profile_link c.user, :class => "memberName" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+

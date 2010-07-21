@@ -102,15 +102,19 @@ class Guild < ActiveRecord::Base
   acts_as_attentionable
 
 	acts_as_commentable :order => 'created_at DESC',
-                      :delete_conditions => lambda {|user, guild, comment| guild.president == user}, 
-                      :create_conditions => lambda {|user, guild| guild.has_people?(user)},
-                      :view_conditions => lambda { true } # anyone can view
+                      :delete_conditions => lambda {|user, guild, comment| guild.president == user}
+                      #:create_conditions => lambda {|user, guild| guild.has_people?(user)},
+                      #:view_conditions => lambda { true } # anyone can view
 
 	searcher_column :name
 
 	def people_count
 		veterans_count + members_count + 1
 	end
+
+  def people_ids
+    people_memberships.map(&:user_id).uniq
+  end
 
   def has_people? user
     people_memberships.exists? :user_id => user.id
@@ -154,7 +158,9 @@ class Guild < ActiveRecord::Base
 
   validates_size_of :name, :within => 1..100
 
-  validates_size_of :description, :within => 1..10000
+  validates_size_of :description, :within => 1..10000, :allow_blank => true
+
+  validates_size_of :bulletin, :within => 1..40, :allow_blank => true
 
   validate_on_create :character_is_valid
 

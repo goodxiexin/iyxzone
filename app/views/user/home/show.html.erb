@@ -17,22 +17,22 @@
 			  		<%= render :partial => 'user/notices/notices', :object => @notices %>
           </div>
           <div class="feed-box rows">
-            <%= render :partial => 'feed_category' %>
-            <div class='feed-wrap'>
-              <% if !@news_list.blank? or !@picture_news.blank?%>
+            <%= render :partial => 'feed_category', :locals => {:fetch_size => 2} %>
+            <div class='feed-wrap' id='feed_panel'>
+              <% if !@news_list.blank? %>
                 <%= render :partial => 'daily_news', :locals => {:news_list => @news_list, :rich_news => @rich_news} %>
               <% end %>
               <% if current_user.friends_count == 0 and current_user.idols_count == 0 %>
                 <%= render :partial => 'welcome_info', :locals => {:friend_suggestions => @friend_suggestions} %>
               <% else %>
-                <%= render :partial => 'feed_list', :locals => {:feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
+                <%= render :partial => 'feed_list', :locals => {:feed_deliveries => @feed_deliveries, :fetch_size => 2} %>
               <% end %>
             </div>
           </div>
         </div>
   		</div>
   	</div>
-    <% content_tag :div, :id => "rightsidebar", :class => "canvas_r" do %>
+    <div id='rightsidebar' class='canvas_r'>
       <% if current_user.requests_count != 0 or current_user.invitations_count != 0 or current_user.poke_deliveries_count != 0 %> 
         <%= render :partial => 'requests_invitations_pokes' %>
       <% end %>
@@ -42,5 +42,5 @@
       <% if !@friend_suggestions.blank? %>
         <%= render :partial => 'friend_suggestions', :locals => {:friend_suggestions => @friend_suggestions} %>
       <% end %>
-    <% end %>
+    </div>
 <% end %>

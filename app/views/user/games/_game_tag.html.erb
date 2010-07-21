@@ -1,0 +1,22 @@
+<div class="s2m2 gameIntro">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix"><strong>游戏印象</strong><span></span></h2>
+    </div>
+    <em></em>
+  </div>
+  <div class="s2m2bd fix">
+    <% if game.is_taggable_by? current_user %>
+      <div class="impress-add s_clear space">
+      <%= render :partial => 'user/games/tags/game_tag', :locals => {:game => game} %>
+      <% form_remote_for :tag, :url => game_tags_url(game), :html => {:onsubmit=> "Iyxzone.disableButton($(tag_submit),'请等待..');"} do |f| %>
+        <p class='space'>都不贴切？自己想个</p>
+        <div class='textfield04 left space'><%= text_field_tag 'tag_name', '' %></div>
+        <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
+      <% end %>
+      </div>
+    <% else %>
+      <%= render :partial => 'user/games/tags/tag_cloud', :locals => {:game => game} %>
+    <% end %>
+  </div>
+</div>

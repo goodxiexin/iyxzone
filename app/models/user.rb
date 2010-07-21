@@ -4,15 +4,6 @@ class User < ActiveRecord::Base
 
   belongs_to :skilled_game, :class_name => "Game"
 
-  def self.test
-=begin
-find:{include:, select:DISTINCT `users`.*, limit:, from:`users`, joins:INNER JOIN `game_characters` ON `users`.id = `game_characters`.user_id   , conditions:(`game_characters`.game_id = 671) AND ((users.activated_at IS NOT NULL)), order:, readonly:}, create:{game_id:671}
-=end
-    with_scope(:find => {:include => {}, :select => "DISTINCT `users`.*", :limit => nil, :from => '`users`', :joins => "INNER JOIN `game_characters` ON `users`.id = `game_characters`.user_id", :conditions => "(`game_characters`.game_id = 671) AND ((users.activated_at IS NOT NULL))", :order => nil, :readonly => nil}, :create => {:game_id => 671}) do
-      User.count
-    end
-  end
-
   acts_as_attentionable
 
   has_many :mini_images, :foreign_key => 'poster_id', :order => 'created_at DESC'

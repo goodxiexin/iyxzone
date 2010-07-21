@@ -1,6 +1,5 @@
 #ifndef _WORD_H_
 #define _WORD_H_
-
 #include <climits>
 #include <cstring>
 #include "memory.h"
@@ -39,9 +38,10 @@ namespace rmmseg
 				
 				// parse cixng
 				w->cixing = parse_cixing(cixing); 
-		
+				
 				std::strncpy(w->text, text, nbytes);
         w->text[nbytes] = '\0';
+
 				return w;
     }
 }

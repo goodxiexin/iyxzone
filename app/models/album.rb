@@ -35,6 +35,9 @@ class Album < ActiveRecord::Base
       if user.application_setting.emit_photo_feed? and !is_owner_privilege?
         deliver_feeds :data => {:ids => photos.map(&:id)}
       end
+      true
+    else
+      false
     end
   end
 

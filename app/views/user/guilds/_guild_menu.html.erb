@@ -1,31 +1,25 @@
-      <div class='op' id='guild_attention_<%= guild.id %>'>
-      <% if attention %>
-        <%= render :partial => 'user/attentions/unfollow', :locals => {:attention => attention} %>
-      <% else %>
-        <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => guild} %>
-      <% end %>
-      </div>
-
-<div class='avatarbox'>
-<dl class='menu-op'>
-  <dt>操作</dt>
+<div class="s2m1 guildFunc">
+  <div class="title fix"><span class="i iFunc02"></span><h2><strong>公会操作</strong></h2></div>
+  <div class="con">
+    <ul>
   <% if role.blank? %>
-    <dd><%= link_to '逛逛论坛', forum_url(guild.forum) %></dd>
-    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></dd>
+    <li><%= link_to '逛逛论坛', forum_url(guild.forum) %></li>
+    <li><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></li>
   <% elsif role.is_president? %>
-    <dd><%= facebox_confirm '放所有人鸽子', guild_url(guild), {:msg => '你确定要取消这次工会吗?', :method => :delete} %></dd>
-    <dd><%= link_to '邀请更多人', new_guild_invitation_url(guild) %></dd>
-    <dd><%= link_to '创建活动', new_event_url(:guild_id => guild.id) %></dd>
-    <dd><%= link_to '人事任命', guild_memberships_url(guild) %></dd>
-    <dd><%= link_to '上传图片', new_guild_photo_url(:album_id => guild.album.id) %></dd>
-    <dd><%= link_to '逛逛论坛', forum_url(guild.forum) %></dd>
+    <li><%= facebox_confirm '放所有人鸽子', guild_url(guild), {:msg => '你确定要取消这次工会吗?', :method => :delete} %></li>
+    <li><%= link_to '邀请更多人', new_guild_invitation_url(guild) %></li>
+    <li><%= link_to '创建活动', new_event_url(:guild_id => guild.id) %></li>
+    <li><%= link_to '人事任命', guild_memberships_url(guild) %></li>
+    <li><%= link_to '上传图片', new_guild_photo_url(:album_id => guild.album.id) %></li>
+    <li><%= link_to '逛逛论坛', forum_url(guild.forum) %></li>
   <% elsif role.is_veteran? %>
-		<dd><%= link_to '创建活动', new_event_url(:guild_id => guild.id) %></dd>
-    <dd><%= link_to '逛逛论坛', forum_url(guild.forum) %></dd>
-    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></dd>
+    <li><%= link_to '创建活动', new_event_url(:guild_id => guild.id) %></li>
+    <li><%= link_to '逛逛论坛', forum_url(guild.forum) %></li>
+    <li><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></li>
   <% elsif role.is_member? %>
-    <dd><%= link_to '逛逛论坛', forum_url(guild.forum) %></dd>
-    <dd><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></dd>
+    <li><%= link_to '逛逛论坛', forum_url(guild.forum) %></li>
+    <li><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></li>
   <% end %>
-</dl>
+    </ul>
+  </div>
 </div>

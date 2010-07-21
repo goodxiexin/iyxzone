@@ -1,0 +1,39 @@
+<div class="s2m2 gameMember">
+  <div class="title fix">
+    <div class="wrap">
+      <% if !comrades.blank? %>
+        <h2 class="fix" id='tab_comrade' onclick="Iyxzone.Game.Presentor.showComrades(<%= game.id %>);"><strong>同服玩家</strong><span></span></h2>
+      <% end %>
+      <% if !players.blank? %>
+        <h2 id='tab_player' class="fix <% if !comrades.blank? %>unSelected<% end %>" onclick="Iyxzone.Game.Presentor.showPlayers(<%= game.id %>);"><strong>游戏玩家</strong><span></span></h2>
+      <% end %>
+      <%= link_to "更多", players.blank? ? game_comrades_url(game) : game_players_url(game), :class => :more, :id => "cp_link" %>
+    </div>
+    <em></em>
+  </div>
+  <% if !comrades.blank? %>
+    <div class="s2m2bd fix" id='comrade_panel'>
+      <ul class="fix">
+        <% comrades.each do |c| %>
+          <li>
+            <%= avatar c.user, :class => 'imgbox01' %>
+            <%= profile_link c.user, :class => "memberName" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if !players.blank? %>
+    <div class="s2m2bd fix" <% if !comrades.blank? %>style="display:none"<% end %> id='player_panel'>
+      <ul class="fix">
+        <% players.each do |c| %>
+          <li>
+            <%= avatar c.user, :class => 'imgbox01' %>
+            <%= profile_link c.user, :class => "memberName" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>
+

@@ -73,7 +73,7 @@ module Taggable
 			return unless @tag_list
 			new_tag_names = @tag_list - tags.map(&:name)
 			new_tag_names.each do |tag_name|
-        tag = Tag.find_or_create(:name => name, :taggable_type => self.class.to_s)
+        tag = Tag.find_or_create(:name => tag_name, :taggable_type => self.class.to_s)
         if !tag.id.nil?
 				  tagging = Tagging.new(:taggable_type => self.class.to_s, :taggable_id => id, :tag_id => tag.id)
 				  tagging.save_with_validation(false)

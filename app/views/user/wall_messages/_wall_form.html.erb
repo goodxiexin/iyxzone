@@ -1,11 +1,10 @@
 <!--
   parameters:
+    commentable: 是否能留言
     wall: 留言版的拥有者，可以是event, 或者guild或者profile
     recipient: 默认的收到回复的人
 -->
 <% type = wall.class.to_s.underscore %>
-<div class="bookbox">
-  <h3><label for="book">留言板</label>(共<%= wall.comments_count %>条留言)</h3>
   <div class="formcontent s_clear">
     <% form_for :comment, :html => {:onsubmit => "Iyxzone.WallMessage.save('#{type}', #{wall.id}, #{recipient.nil? ? 'null' : recipient.id}, $('submit_btn'), this); return false;"} do |f| %>
       <%= hidden_field_tag 'wall_type', wall.class.name %>
@@ -23,14 +22,11 @@
       </div>
     <% end %>
   </div>
-</div>
-
-<% javascript_tag do %>
+  <% javascript_tag do %>
   new Iyxzone.limitedTextInput($('wall_message_content_<%= wall.id %>'), {
     max: 140,
     interval: 200,
     autoClearOnFirstFocus: false,
     doCheck: Iyxzone.WallMessage.checkLength
   });
-<% end %>
-
+  <% end %>

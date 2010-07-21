@@ -2,6 +2,11 @@ class User::Events::PhotosController < UserBaseController
 
   layout 'app'
 
+  def index
+    @photos = @album.photos.nonblocked.limit(5).all
+    render :action => 'index', :layout => false
+  end
+
   def new
   end
 
@@ -85,7 +90,10 @@ class User::Events::PhotosController < UserBaseController
 protected
 
   def setup
-    if ['show', 'edit', 'update', 'destroy'].include? params[:action]
+    if ['index'].include? params[:action]
+      @album = EventAlbum.find(params[:album_id])
+      require_verified @album
+    elsif ['show', 'edit', 'update', 'destroy'].include? params[:action]
       @photo = EventPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
       require_verified @photo
       @album = @photo.album

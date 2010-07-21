@@ -1,0 +1,19 @@
+<div class="multibox">
+  <div class="piclist s_clear">
+    <div class='t'><%= link_to "查看更多相册>>", game_albums_url(@game) %></div>
+    <% @albums.each do |a| %>
+      <div class="picitem jl-picitem">
+        <div class="picbox01">
+          <a class="btn" href="#"></a>
+          <div class="picwrap">
+            <table cellpadding="0">
+                <tbody><tr><td><%= album_cover a, :class => "imgbox01" %></td></tr>
+              </tbody></table>     
+          </div>
+        </div>
+        <p><b><%= profile_link a.poster %></b></p>
+        <p>于 <span><%= ftime a.uploaded_at %></span> 更新</p>
+      </div>  
+    <% end %> 
+  </div>
+</div>

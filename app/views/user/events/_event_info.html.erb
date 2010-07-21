@@ -1,23 +1,39 @@
-  <div class='formComposer'>
-    <div class="formcontent">
-      <% rows_s_clear '<strong>名称</strong>: ' do %><span class='shine'><strong><%= h event.title %></strong></span><% end %>
-      <% if event.is_guild_event? %>
-        <% rows_s_clear '<strong>工会</strong>: ' do %><span class='shine'><strong><%= guild_link event.guild %></strong></span><% end %>
+  <div class="eventProfile fix">
+    <div class="avatar">
+      <%= album_cover event.album, :class => "imgbox01" %>
+      <div class='follow' id='event_attention_<%= event.id %>'>
+        <% if attention %>
+          <%= render :partial => 'user/attentions/unfollow', :locals => {:attention => attention} %>
+        <% else %>
+          <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => event} %>
+        <% end %>
+      </div>
+    </div>
+    <div class="con">
+      <ul>
+        <li>组织者：<span class="memberName"><%= profile_link event.poster %></span></li>
+        <li>时间：<span class="time"><%= ftime3 event.start_time %>至<%= ftime3 event.end_time %></span></li>
+        <li>游戏：<span class="gameName"><%= game_link event.game %></span></li>
+        <% if event.game_area %>
+          <li>服务区：<span class="gameName"><a href="javascript:void(0)"><%= event.game_area.name %></a></li>
+        <% end %>
+        <li>服务器：<span class="gameName"><a href="javascript:void(0)"><%= event.game_server.name %></a></li>
+      </ul>
+      <div>
+      <% if event.is_requestable_by?(current_user) %>
+        <% if event.requestable_characters_for(current_user).blank? %>
+          <%= facebox_tip '无法请求加入？', "你已经没有在该游戏的游戏角色，请查看该活动的游戏、服务器，然后创建相应的游戏角色，然后你就可以申请加入工会啦~", :class => 'red' %>
+        <% else %>
+          <%= facebox_link '申请加入该工会', new_event_request_url(event), :class => 'red' %>
+        <% end %>
+      <% else %>
+        <% if event.is_guild_event? %>
+          <%= facebox_tip '无法请求加入？', "该活动是工会活动，只有工会会员才能参加, 去工会#{guild_link event.guild}看看", :clas => 'red' %>
+        <% else %>
+          <% link = facebox_link "加#{get_subject event.poster}为好友", new_friend_request_url(:friend_id => user.id) %>
+          <%= facebox_tip '无法请求加入？', "只有#{get_subject event.poster}的好友可以参加, #{link}", :class => 'red' %></div> 
+        <% end %>
       <% end %>
-      <% rows_s_clear '游戏: ' do %><%= event.game.name %><% end %>
-      <% unless event.game.no_areas %>
-        <% rows_s_clear '游戏服务区: ' do %><%= event.game_area.name %><% end %>
-      <% end %>
-      <% rows_s_clear '游戏服务区: ' do %><%= event.game_server.name %><%end %>
-      <% rows_s_clear '时间: ' do %>
-        从 <span class='shine'><%= ftime event.start_time %></span> 到 <span class='shine'><%= ftime event.end_time %></span>
-      <% end %>
+      </div>
     </div>
   </div>
-  <div class="multibox">
-    <div class="title"><b>描述</b></div>
-    <div class="feed-box">
-      <%= simple_format h event.description %>
-    </div>
-  </div>
-

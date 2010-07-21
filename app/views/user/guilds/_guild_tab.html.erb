@@ -1,0 +1,11 @@
+<div class="s2m2 guildIntro">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix" id="tab_feed" onclick="Iyxzone.Guild.Presentor.showFeeds(<%= guild.id %>)"><strong>新鲜事</strong><span/></h2>
+      <h2 class="fix unSelected" id="tab_photo" onclick="Iyxzone.Guild.Presentor.showPhotos(<%= guild.album.id %>)"><strong>照片</strong><span/></h2>
+      <h2 class="fix unSelected" id="tab_topic" onclick="Iyxzone.Guild.Presentor.showTopics(<%= guild.id %>)"><strong>论坛</strong><span/></h2>
+      <h2 class="fix unSelected" id="tab_wall" onclick="Iyxzone.Guild.Presentor.showWall(<%= guild.id %>, <%= guild.president_id %>)"><strong>留言板<% if guild.comments_count != 0 %>(<%= guild.comments_count %>)<% end %></strong><span/></h2>
+    </div>
+    <em></em>
+  </div>
+</div>

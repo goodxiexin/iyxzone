@@ -31,23 +31,32 @@ class User::GamesController < UserBaseController
 
   def show
     @game = Game.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, :tags])
-    @events = @game.events.nonblocked.limit(4).people_order.prefetch([{:album => :cover}])
-    @guilds = @game.guilds.nonblocked.limit(4).people_order.prefetch([{:album => :cover}, {:president => :profile}])
-    @albums = @game.albums.nonblocked.limit(3).prefetch([:cover]) 
+    
+    @mini_blogs = MiniBlog.limit(3).all
+    @topics = MiniTopic.hot.limit(3).all
+
+    @events = @game.events.nonblocked.limit(3).people_order.prefetch([{:album => :cover}])
+    
+    @guilds = @game.guilds.nonblocked.limit(3).people_order.prefetch([{:album => :cover}, {:president => :profile}])
+    
+    @albums = @game.albums.nonblocked.limit(6).prefetch([:cover]) 
+    
     @blogs = @game.blogs.nonblocked.limit(3).prefetch([{:poster => :profile}])
+   
     @has_game = current_user.has_game? @game
-    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
 		if @has_game
       servers = current_user.servers.match(:game_id => @game.id)
-      @comrades = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:server_id => servers.map(&:id)}, :include => [{:user => :profile}])
+      @comrades = GameCharacter.random(:limit => 8, :except => current_user.characters, :conditions => {:server_id => servers.map(&:id)}, :include => [{:user => :profile}])
 		end
-		@players = GameCharacter.random(:limit => 6, :except => current_user.characters, :conditions => {:game_id => @game.id}, :include => [{:user => :profile}])
+		@players = GameCharacter.random(:limit => 8, :except => current_user.characters, :conditions => {:game_id => @game.id}, :include => [{:user => :profile}])
+    
     @attention = @game.attentions.find_by_follower_id current_user.id
+
+    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @messages = @game.comments.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => [{:poster => :profile}, :commentable]
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @game.id, :wall_type => 'game'}}
-    @feed_deliveries = @game.feed_deliveries.limit(FirstFetchSize).order('created_at DESC')
-		@first_fetch_size = FirstFetchSize
-    render :action => 'show', :layout => 'app2'
+    
+    render :action => 'show', :layout => 'app3'
   end
 
   def hot

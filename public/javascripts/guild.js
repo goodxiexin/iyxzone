@@ -1,11 +1,159 @@
 Iyxzone.Guild = {
-  version: '1.0',
+  version: '1.4',
   author: ['高侠鸿'],
   Builder: {},
-  Feeder: {},
   Editor: {},
-  MemberManager: {}
+  MemberManager: {},
+  Presentor: {}
 };
+
+// 一些guild/show页面上的函数
+Object.extend(Iyxzone.Guild.Presentor, {
+
+  feedIdx: 0,
+
+  curTab: null,
+  
+  cache: new Hash(),
+
+  setTab: function(type){
+    $('tab_feed').writeAttribute('class', 'fix unSelected');
+    $('tab_topic').writeAttribute('class', 'fix unSelected');
+    $('tab_photo').writeAttribute('class', 'fix unSelected');
+    $('tab_wall').writeAttribute('class', 'fix unSelected');
+    $('tab_' + type).writeAttribute('class', 'fix');
+    this.curTab = type;
+  },
+
+  loading: function(){
+    $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+  },
+ 
+  showFeeds: function(guildID){
+    if(this.curTab == 'feed')
+      return;
+  
+    var html = this.cache.get('feed');
+    
+    if(html){
+      this.setTab('feed');
+      $('presentation').innerHTML = html;
+      this.feedIdx = 0;
+      return;
+    }
+
+    new Ajax.Request('/guilds/' + guildID + '/feeds', {
+      method: 'get',
+      onLoading: function(){
+        this.setTab('feed');
+        this.loading();
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('feed', transport.responseText);
+        if(this.curTab == 'feed'){
+          $('presentation').innerHTML = transport.responseText;
+          this.feedIdx = 0;
+        }
+      }.bind(this)
+    });
+  },
+
+  moreFeeds: function(guildID){
+    // show loading page
+    //$('more_feed').innerhTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+
+    // send ajax request
+    new Ajax.Request('/guilds/' + guildID + '/feeds/more?idx=' + this.feedIdx, {
+      method: 'get',
+      onSuccess: function(){
+        this.feedIdx++;
+      }.bind(this)
+    });
+  },
+
+  showPhotos: function(albumID){
+    if(this.curTab == 'photo')
+      return;
+
+    var html = this.cache.get('photo')
+    
+    if(html){
+      this.setTab('photo');
+      $('presentation').innerHTML = html;
+      return;
+    }
+
+    new Ajax.Request('/guild_photos?album_id=' + albumID, {
+      method: 'get',
+      onLoading: function(){
+        this.setTab('photo');
+        this.loading();
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('photo', transport.responseText);
+        if(this.curTab == 'photo'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });
+  },
+
+  showTopics: function(guildID){
+    if(this.curTab == 'topic')
+      return;
+
+    var html = this.cache.get('topic');
+
+    if(html){
+      this.setTab('topic');
+      $('presentation').innerHTML = html;
+      return;
+    }
+
+    new Ajax.Request('/guilds/' + guildID + '/topics', {
+      method: 'get',
+      onLoading: function(){
+        this.setTab('topic');
+        this.loading();
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('topic', transport.responseText);
+        if(this.curTab == 'topic'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });
+  },
+
+  showWall: function(guildID, recipientID){
+    if(this.curTab == 'wall')
+      return;
+
+    var html = this.cache.get('wall');
+
+    if(html){
+      this.setTab('wall');
+      $('presentation').innerHTML = html;
+      return;
+    }
+
+    new Ajax.Request('/wall_messages/index_with_form', {
+      method: 'get',
+      parameters: {wall_type: 'guild', wall_id: guildID, recipient_id: recipientID},
+      onLoading: function(){
+        this.setTab('wall');
+        this.loading();
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('wall', transport.responseText);
+        if(this.curTab == 'wall'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });      
+  }
+
+});
 
 Object.extend(Iyxzone.Guild.MemberManager, {
 
@@ -166,25 +314,6 @@ Object.extend(Iyxzone.Guild.Builder, {
     }else{
       Iyxzone.enableButton(button, '提交');
     }
-  }
-
-});
-
-Object.extend(Iyxzone.Guild.Feeder, {
-  
-  idx: 0,
-
-  moreFeeds: function(guildID){
-    // show loading page
-    $('more_feed').innerHTML = '<img src="/images/loading.gif" />';
-
-    // send ajax request
-    new Ajax.Request('/guilds/' + guildID + '/more_feeds?idx=' + this.idx, {
-      method: 'get',
-      onSuccess: function(){
-        this.idx++;
-      }
-    });
   }
 
 });

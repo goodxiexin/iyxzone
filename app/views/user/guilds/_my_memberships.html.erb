@@ -1,26 +1,28 @@
-<div class="multibox">
-  <div class="title">
-    <b>我在公会中的游戏角色</b>
-  </div>
-  <table class="data-table jl-data-table" cellpadding="0">
-    <tr>
-      <th class="name name02">游戏角色名称</th>
-      <th class="level level02">角色情况</th>
-    </tr>
-      <% memberships.group_by(&:status).each do |status, memberships| %>
-        <% memberships.each do |m| %>
-          <% if status == Membership::President %>
-            <tr><td><%= m.character.name %></td><td>会长</td></tr>
-          <% elsif status == Membership::Veteran %>
-            <tr><td><%= m.character.name %></td><td>长老</td></tr>
-          <% elsif status == Membership::Member %>
-            <tr><td><%= m.character.name %></td><td>会员</td></tr>
-          <% elsif status == Membership::Invitation %>
-            <tr><td><%= m.character.name %></td><td>邀请[<%= facebox_link "回复", edit_guild_invitation_url(guild, m) %>]</td></tr>
-          <% elsif status == Membership::Request %>
-            <tr><td><%= m.character.name %></td><td>请求[等待]</td></tr>
+<div class="s2m1 guildMyRole">
+  <div class="title fix"><span class="i iRole02"></span><h2><strong>我在公会中的游戏角色</strong></h2></div>
+  <div class="con">
+    <table class="tbItem">
+      <tbody>
+        <tr>
+          <th class="roleName tl">角色名称</th>
+          <th class="state tl">公会状态</th>
+        </tr>
+        <% memberships.group_by(&:status).each do |status, memberships| %>
+          <% memberships.each do |m| %>
+            <% if status == Membership::President %>
+              <tr><td class="roleName"><%= m.character.name %></td><td>会长</td></tr>
+            <% elsif status == Membership::Veteran %>
+              <tr><td class="roleName"><%= m.character.name %></td><td>长老</td></tr>
+            <% elsif status == Membership::Member %>
+              <tr><td class="roleName"><%= m.character.name %></td><td>会员</td></tr>
+            <% elsif status == Membership::Invitation %>
+              <tr><td class="roleName"><%= m.character.name %></td><td>邀请[<%= facebox_link "回复", edit_guild_invitation_url(guild, m) %>]</td></tr>
+            <% elsif status == Membership::Request %>
+              <tr><td class="roleName"><%= m.character.name %></td><td>请求[等待]</td></tr>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>

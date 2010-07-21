@@ -15,7 +15,9 @@ class MiniBlog < ActiveRecord::Base
   named_scope :hot, :conditions => {:deleted => false}, :order => "forwards_count DESC, created_at DESC"
   
   named_scope :sexy, :conditions => {:deleted => false}, :order => "comments_count DESC, created_at DESC"
-
+  
+  named_scope :by, lambda {|ids| {:conditions => {:poster_id => ids}}}
+  
   named_scope :category, lambda {|type|
     type = type.to_s
     if type == 'all'

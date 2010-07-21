@@ -2,10 +2,6 @@ class User::GuildsController < UserBaseController
 
   layout 'app'
 
-	FirstFetchSize = 5
-	
-	FetchSize = 5
-
   PER_PAGE = 10
 
   PREFETCH = [:forum, {:president => :profile}, {:game_server => [:area, :game]}, {:album => :cover}]
@@ -32,20 +28,14 @@ class User::GuildsController < UserBaseController
   end
 
   def show
-    @guild_characters = @guild.characters.limit(6).prefetch([{:user => :profile}])
-    @hot_topics = @guild.forum.topics.hot.limit(6).prefetch([:forum])
+    @mini_blogs = MiniBlog.category(:text).by(@guild.people_ids).limit(3).all
+    @topics = MiniTopic.hot.limit(3).all
+    @members = @guild.people.limit(6).prefetch(:profile)
     @events = @guild.events.people_order.limit(4).prefetch([{:album => :cover}])
     @memberships = @guild.memberships.prefetch([:character]).by(current_user.id)
     @role = @guild.role_for current_user
-    @album = @guild.album
-    @photos = @album.latest_photos.nonblocked
-    @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-		@feed_deliveries = @guild.feed_deliveries.limit(FirstFetchSize).order('created_at DESC')
-		@first_fetch_size = FirstFetchSize
-		@messages = @guild.comments.nonblocked.paginate :page => params[:page], :per_page => 10, :include => [{:poster => :profile}, :commentable]
     @attention = @guild.attentions.find_by_follower_id current_user.id
-    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @guild.id, :wall_type => 'guild'}}
-    render :action => 'show', :layout => 'app2'
+    render :action => 'show', :layout => 'app3'
 	end
 
   def new
@@ -69,6 +59,8 @@ class User::GuildsController < UserBaseController
   def update
     if @guild.update_attributes(params[:guild])
       render :json => @guild
+    else
+      render_js_error "输入太多了"
     end
   end
 
@@ -78,11 +70,6 @@ class User::GuildsController < UserBaseController
     else
       render_js_error
     end 
-  end
-
-	def more_feeds
-		@feed_deliveries = @guild.feed_deliveries.offset(FirstFetchSize + FetchSize * params[:idx].to_i).limit(FetchSize)
-		@fetch_size = FetchSize
   end
 
   def search

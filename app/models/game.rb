@@ -1,5 +1,13 @@
 class Game < ActiveRecord::Base
 
+  has_many :role_users, :foreign_key => 'data'
+
+  has_many :admins, :through => :role_users, :source => :user
+
+  def has_admin? user
+    !role_users.find_by_user_id(user).blank?
+  end
+
   has_many :servers, :class_name => 'GameServer'
   
   has_many :areas, :class_name => 'GameArea'
@@ -67,5 +75,7 @@ class Game < ActiveRecord::Base
 	def no_professions
 		professions_count == 0
 	end
+
+  validates_size_of :bulletin, :within => 1..50, :allow_blank => true
 
 end

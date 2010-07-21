@@ -139,7 +139,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :friend_requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :delete}, :collection => {:create_multiple => :post}
 
-    users.resources :feed_deliveries
+    users.resources :feed_deliveries, :collection => {:more => :get}
 
     users.resource :home, :controller => 'home', :member => {:more_feeds => :get, :feeds => :get}
 
@@ -167,7 +167,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :comments
 
-    users.resources :wall_messages
+    users.resources :wall_messages, :collection => {:index_with_form => :get}
 
     users.resources :digs
 
@@ -208,8 +208,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :guild_photos, :controller => 'guilds/photos', :collection => {:edit_multiple => :get, :update_multiple => :put, :record_upload => :post}
 
-    users.resources :guilds, :member => {:more_feeds => :get, :edit_rules => :get},
-                    :collection => {:hot => :get, :recent => :get , :participated => :get, :friends => :get} do |guilds|
+    users.resources :guilds, :collection => {:hot => :get, :recent => :get, :participated => :get, :friends => :get} do |guilds|
 
       guilds.resources :friends
 
@@ -221,11 +220,11 @@ ActionController::Routing::Routes.draw do |map|
 
       guilds.resources :events, :controller => 'guilds/events', :collection => {:search => :get}
 
-      guilds.resources :bosses, :controller => 'guilds/bosses', :collection => {:create_or_update => :post}
-    
-      guilds.resources :rules, :controller => 'guilds/rules', :collection => {:create_or_update => :post}
+      guilds.resources :blogs, :controller => "guilds/blogs"
 
-      guilds.resources :gears, :controller => 'guilds/gears', :collection => {:create_or_update => :post}
+      guilds.resources :feeds, :controller => "guilds/feeds", :collection => {:more => :get}
+
+      guilds.resources :topics, :controller => "guilds/topics"
 
     end
 
@@ -241,8 +240,6 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:more_feeds => :get} do |games|
 
-      games.resources :mini_blogs, :controller => 'games/mini_blogs'
-
       games.resources :blogs, :controller => 'games/blogs'
       
 			games.resources :comrades, :controller => 'games/comrades', :collection => {:search => :any, :character_search => :any}
@@ -257,6 +254,8 @@ ActionController::Routing::Routes.draw do |map|
 
       games.resources :tags, :controller => 'games/tags'
 
+      games.resources :feeds, :controller => 'games/feeds', :collection => {:more => :get}
+  
     end
 
     users.resources :forums

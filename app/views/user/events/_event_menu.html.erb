@@ -1,0 +1,27 @@
+<div class="s2m1 eventFunc">
+  <h2 class="title fix"><span class="i iFunc02"></span><strong>活动操作</strong><em></em></h2>
+  <div class="con">
+    <ul>
+      <% if event.expired? %>
+        <% if user == current_user %>
+          <li><%= link_to '上传照片', new_event_photo_url(:album_id => album) %></li>
+        <% elsif event.has_participant? current_user %>
+          <li><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [event.poster_id]) %></li>
+        <% end %>
+        <li>该活动已经过期</li>
+      </dl>
+    </div>
+  <% else %>
+    <% if user == current_user %>
+      <li><%= link_to '编辑活动', edit_event_url(event) %></li>
+      <li><%= link_to '邀请更多人', new_event_invitation_url(event) %></li>
+      <li><%= link_to '上传图片', new_event_photo_url(:album_id => album) %></li>
+      <li><%= facebox_confirm '放所有人鸽子', event_url(event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></li>
+    <% elsif event.has_participant? current_user %>
+      <li><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [event.poster_id]) %></li>
+    <% end %>
+  <% end %>
+    </ul>
+  </div>
+</div>
+

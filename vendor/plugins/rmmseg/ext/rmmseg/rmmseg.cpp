@@ -382,6 +382,7 @@ extern "C" {
         // This is necessary, see
         // http://pluskid.lifegoo.com/?p=348
         VALUE text = rb_str_new(t.text, t.length);
+printf("text: %s, freq: %d, cixing: %d\n", text, t.freq, t.cixing);
         tk->text = text;
         tk->cixing = INT2FIX(t.cixing);
 				tk->freq = INT2FIX(t.freq);

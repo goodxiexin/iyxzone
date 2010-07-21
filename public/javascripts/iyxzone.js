@@ -272,7 +272,7 @@ Object.extend(Iyxzone.AppBar, {
     var html = '<div class="t fix"><strong class="left">我的游戏</strong><a href="javascript:void(0)" onclick="Iyxzone.AppBar.hideGameBar()" class="icon-active right"/></div>';
     html += '<div class="con"><ul class="xList">';
     for(var i=0;i<this.gameInfos.length;i++){
-      html += '<li><a href="/games/' + this.gameInfos[i].id + '">' + this.gameInfos[i].name + '</a></li>';
+      html += '<li><a href="/games/' + this.gameInfos[i].id + '" onclick="Iyxzone.AppBar.hideGameBar();">' + this.gameInfos[i].name + '</a></li>';
     }
     html += '</ul></div>';
     el.innerHTML = html;
