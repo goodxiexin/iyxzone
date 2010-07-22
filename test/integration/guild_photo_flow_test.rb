@@ -39,7 +39,10 @@ class GuildPhotoFlowTest < ActionController::IntegrationTest
     @photo1 = PhotoFactory.create :album_id => @album.id, :type => 'GuildPhoto'
     sleep 1
     @photo2 = PhotoFactory.create :album_id => @album.id, :type => 'GuildPhoto'
-    
+   
+    @role = @guild.role_for @idol
+    assert_nil @role
+ 
     [@user_sess, @friend_sess, @same_game_user_sess, @stranger_sess, @fan_sess, @idol_sess].each do |sess| 
       sess.get "/guild_albums/#{@album.id}"
       sess.assert_template "user/guilds/albums/show"

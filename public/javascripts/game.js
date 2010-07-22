@@ -7,11 +7,11 @@ Iyxzone.Game = {
 
   Suggestor: {},
 
+  Presentor: {},
+
   Selector: Class.create({}),
 
   PinyinSelector: Class.create({}),
-
-  Feeder: {},
 
   initPinyinSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options){
     if(Iyxzone.Game.infos == null){
@@ -577,19 +577,225 @@ Object.extend(Iyxzone.Game.Suggestor, {
 
 }); 
 
-Object.extend(Iyxzone.Game.Feeder, {
+//一些在game show页面上的操作
+Object.extend(Iyxzone.Game.Presentor, {
 
-  idx: 0,
+  feedIdx: 0,
 
-  moreFeeds: function(gameID){
-    $('more_feed').innerHTML = '<img src="/images/loading.gif" />';
+  gameID: null,
 
-    new Ajax.Request('/games/' + gameID + '/more_feeds?idx=' + this.idx, {
+  fetchSize: null,
+
+  curTab: null,
+
+  cache: new Hash(),
+
+  init: function(gameID, fetchSize){
+    this.gameID = gameID;
+    this.feedIdx = 1;
+    this.fetchSize = fetchSize;
+    this.curTab = 'feed';
+    this.cache.set('feed', $('presentation').innerHTML);
+  },
+
+  setTab: function(type){
+    $('tab_feed').writeAttribute('class', 'fix unSelected');
+    $('tab_blog').writeAttribute('class', 'fix unSelected');
+    $('tab_album').writeAttribute('class', 'fix unSelected');
+    $('tab_wall').writeAttribute('class', 'fix unSelected');
+    $('tab_' + type).writeAttribute('class', 'fix');
+    this.curTab = type;
+  }, 
+
+  showFeeds: function(gameID){
+    if(this.curTab == 'feed')
+      return;
+
+    this.setTab('feed');
+
+    var html = this.cache.get('feed');
+    //一定有
+    if(html){
+      $('presentation').innerHTML = html;
+      return;
+    }
+  },
+
+  moreFeeds: function(){
+    // send ajax request
+    new Ajax.Request('/feed_deliveries', {
       method: 'get',
+      parameters: {recipient_id: this.gameID, recipient_type: 'Game', fetch: this.fetchSize, idx: this.feedIdx},
+      onLoading: function(){
+        $('more_feed_panel').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('feed', $('presentation').innerHTML);
+      }.bind(this),
       onSuccess: function(transport){
-        this.idx++;
+        var newFeeds = new Element('div').update(transport.responseText);
+        var moreFeeds = new Element('div');
+        var len = newFeeds.childElements().length;
+        if(len == 0 || len < this.fetchSize){
+          moreFeeds.update(this.noFeedHTML());
+        }else{
+          moreFeeds.update(this.moreFeedHTML());
+        }
+        
+        if(this.curTab == 'feed'){
+          $('feed_list').insert({bottom: newFeeds.innerHTML});
+          $('more_feed_panel').update(moreFeeds.innerHTML);
+          this.cache.set('feed', $('presentation').innerHTML);
+        }else{
+          var html = this.cache.get('feed');
+          var tmp = new Element('div').update(html);
+          var oldFeedList = tmp.childElements()[0];
+          var oldMoreFeeds = tmp.childElements()[2];
+          oldFeedList.insert({bottom: newFeeds.innerHTML});
+          oldMoreFeeds.update(moreFeeds.innerHTML);
+          this.cache.set('feed', tmp.innerHTML);
+        }
+  
+        this.feedIdx = this.feedIdx + 1; 
       }.bind(this)
     });
+  },
+
+  noFeedHTML: function(){
+    return this.baseHTML('<div class="jl-more">没有更多了...</div>');
+  },
+
+  moreFeedHTML: function(){
+    return this.baseHTML('<a href="javascript:void(0)" onclick="Iyxzone.Game.Presentor.moreFeeds();" class="jl-more">更多新鲜事</a>');
+  },
+
+  baseHTML: function(con){
+    var html = '<div class="round04 round_r_t jl-read-more space s_clear">';
+    html += '<div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m"><div class="round_body" id="more_feed_link">';
+    html +=  con;
+    html += '</div></div></div></div></div></div>';
+    return html;
+  },
+
+  showBlogs: function(){
+    if(this.curTab == 'blog')
+      return;
+
+    this.setTab('blog');
+
+    var html = this.cache.get('blog');
+    if(html){
+      $('presentation').innerHTML = html;
+      return;
+    }
+
+    new Ajax.Request('/games/' + this.gameID + '/blogs?at=guild_show', {
+      method: 'get',
+      onLoading: function(){
+        $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('blog', $('presentation').innerHTML);
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('blog', transport.responseText);
+        if(this.curTab == 'blog'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });
+  },
+
+  showAlbums: function(){
+    if(this.curTab == 'album')
+      return;
+
+    this.setTab('album');
+    
+    var html = this.cache.get('album');
+    if(html){
+      $('presentation').innerHTML = html;
+      return;
+    }
+
+    new Ajax.Request('/games/' + this.gameID + '/albums?at=guild_show', {
+      method: 'get',
+      onLoading: function(){
+        $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('album', $('presentation').innerHTML);
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('album', transport.responseText);
+        if(this.curTab == 'album'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });
+  },
+
+  showWall: function(){
+    if(this.curTab == 'wall')
+      return;
+
+    this.setTab('wall');
+
+    var html = this.cache.get('wall');
+    if(html){
+      $('presentation').innerHTML = html;
+      return;
+    }
+
+    new Ajax.Request('/wall_messages/index_with_form', {
+      method: 'get',
+      parameters: {wall_id: this.gameID, wall_type: 'game'},
+      onLoading: function(){
+        $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('wall', $('presentation').innerHTML);
+      }.bind(this),
+      onSuccess: function(transport){
+        this.cache.set('wall', transport.responseText);
+        if(this.curTab == 'wall'){
+          $('presentation').innerHTML = transport.responseText;
+        }
+      }.bind(this)
+    });
+  },
+
+  // 下面2个函数和上面4个的机制不太一样
+  showComrades: function(gameID){
+    if($('tab_player')){
+      $('tab_player').writeAttribute('class', 'fix unSelected');
+      $('player_panel').hide();
+    }
+    $('tab_comrade').writeAttribute('class', 'fix');
+    $('comrade_panel').show();
+    $('cp_link').writeAttribute('href', '/games/' + gameID + '/comrades');
+  },
+
+  showPlayers: function(gameID){
+    if($('tab_comrade')){
+      $('tab_comrade').writeAttribute('class', 'fix unSelected');
+      $('comrade_panel').hide();
+    }
+    $('tab_player').writeAttribute('class', 'fix');
+    $('player_panel').show();
+    $('cp_link').writeAttribute('href', '/games/' + gameID + '/players');
+  },
+
+  showGuilds: function(gameID){
+    if($('tab_event')){
+      $('tab_event').writeAttribute('class', 'fix unSelected');
+      $('event_panel').hide();
+    }
+    $('tab_guild').writeAttribute('class', 'fix');
+    $('guild_panel').show();
+    $('ge_link').writeAttribute('href', '/games/' + gameID + '/guilds');
+  },
+
+  showEvents: function(gameID){
+    if($('tab_guild')){
+      $('tab_guild').writeAttribute('class', 'fix unSelected');
+      $('guild_panel').hide();
+    }
+    $('tab_event').writeAttribute('class', 'fix');
+    $('event_panel').show();
+    $('ge_link').writeAttribute('href', '/games/' + gameID + '/events');
   }
 
 });

@@ -1,16 +1,28 @@
-<div class='avatarbox'>
-  <table>
-    <tr>
-      <td class='id'><strong>会长: </strong></td>
-      <td class='value'><%= profile_link guild.president %></td>
-    </tr>
-    <tr>
-      <td class="id">成立：</td>
-      <td class="value"><%= ftime2 guild.created_at %></td>
-    </tr>
-    <tr>
-      <td class="id">游戏：</td>
-      <td class="value"><%= game_link guild.game %></td>
-    </tr>
-  </table>
-</div>
+  <div class="guildProfile fix">
+    <div class="avatar">
+      <%= album_cover guild.album, :class => "imgbox01" %>
+      <div class='follow' id='guild_attention_<%= guild.id %>'>
+        <% if guild.followed_by? current_user %>
+          <%= render :partial => 'user/attentions/unfollow', :locals => {:attentionable => guild} %>
+        <% else %>
+          <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => guild} %>
+        <% end %>
+      </div>
+    </div>
+    <div class="con">
+      <ul>
+        <li>会长：<span class="memberName"><%= profile_link guild.president %></span></li>
+        <li>成立：<span class="time"><%= ftime3 guild.created_at %></span></li>
+        <li>游戏：<span class="gameName"><%= game_link guild.game %></span></li>
+      </ul>
+      <% if guild.is_requestable_by? current_user %>
+        <% if !guild.requestable_characters_for(current_user).blank? %>
+          <div><%= facebox_link '申请加入该公会', new_guild_request_url(guild), :class => 'red' %></div>
+        <% else %>
+          <div><%= facebox_tip '无法申请加入?', "你已经没有在该游戏的游戏角色，请查看该工会的游戏、服务器，然后创建相应的游戏角色，然后你就可以申请加入工会啦~", :class => 'red' %></div>
+        <% end %>
+      <% else %>
+      <% end %>
+    </div>
+  </div>
+

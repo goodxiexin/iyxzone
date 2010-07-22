@@ -308,7 +308,7 @@ Object.extend(Iyxzone.Profile.Editor, {
 
   newCharacter: function(){
     var id = this.newCharacterID;
-    var div = new Element('div', {id: 'new_character_' + id});
+    var div = new Element('div', {id: 'new_characters_' + id});
   
     var html = '<div class="rows s_clear"><div class="fldid"><label>名字：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterNameValid(' + id + ', 1)" name="profile[new_characters][' + id + '][name]" id="profile_new_characters_' + id + '_name"/></div></div><span id="new_characters_' + id + '_name_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>等级：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterLevelValid(' + id + ', 1)" name="profile[new_characters][' + id + '][level]" id="profile_new_characters_' + id + '_level"/></div></div><span id="new_characters_' + id + '_level_error" class="red"></span></div>';
@@ -502,7 +502,6 @@ Object.extend(Iyxzone.Profile.Editor, {
   removeCharacter: function(characterID, newCharacter, link){
     //var currentCharactersCount = this.newGameSelectors.keys().length + this.gameSelectors.keys().length - this.delCharacterIDs.length;
     var currentCharactersCount = this.newGameSelectors.keys().length + this.existingCharactersCount - this.delCharacterIDs.length;
-    
     if(currentCharactersCount == 1){
       error('至少要有1个游戏角色');
       return;

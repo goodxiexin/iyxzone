@@ -1,9 +1,9 @@
 if @feed_deliveries.blank?
 	page.replace_html 'more_feed', "没有更多了..."
 elsif @feed_deliveries.size < @fetch_size
-	page.replace_html 'feed_list', :partial => 'group_deliveries', :locals => {:feed_deliveries => @feed_deliveries}
+	page.replace_html 'feed_list', :partial => 'user/feed_deliveries/group_deliveries', :locals => {:feed_deliveries => @feed_deliveries}
   page.replace_html 'more_feed', "<div class='jl-more'>没有更多了...</div>"
 else
-  page.replace_html 'feed_list', :partial => 'group_deliveries', :locals => {:feed_deliveries => @feed_deliveries}
+  page.replace_html 'feed_list', :partial => 'user/feed_deliveries/group_deliveries', :locals => {:feed_deliveries => @feed_deliveries}
 	page.replace_html 'more_feed', "#{link_to_function "更多新鲜事", "Iyxzone.Home.Feeder.moreFeeds();"}"
 end

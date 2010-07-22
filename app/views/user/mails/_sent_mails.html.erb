@@ -10,7 +10,7 @@
       </td>
       <td class='title'>
         <%= mail_link mail, 'sent' %><br/>
-        <span class='mail-content-truncate'><%= mail.content %></span>
+        <span class='mail-content-truncate'><%= emotion_text mail.content %></span>
       </td>
       <td class='operation'><%= link_to_remote 'x', :url => mail_url(mail, :type => 0), :method => :delete %></td>
     </tr>

@@ -23,11 +23,11 @@ class FiveSix
 	end
 
 	
-	def initialize(obj)
+	def initialize video_url
 		@embed_url = 
-		  if FIVESIX_SINGLE.match obj.video_url
+		  if FIVESIX_SINGLE.match video_url
         "http://player.56.com/v_#{$1}.swf"
-		  elsif FIVESIX_ALBUM.match obj.video_url
+		  elsif FIVESIX_ALBUM.match video_url
         "http://player.56.com/v_#{$1}.swf"
 		  end
 	end

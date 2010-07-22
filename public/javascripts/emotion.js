@@ -56,7 +56,8 @@ Object.extend(Iyxzone.Emotion.Manager, {
 			a.appendChild(img);
 			a.observe('click', function(e){
 				var idx = parseInt(e.element().readAttribute('index'));
-				this.currentField.value += myFaces[idx];
+				Iyxzone.insertAtCursor(this.currentField, myFaces[idx]);
+        this.currentField.focus();
 				this.toggleFaces(this.currentLink, this.currentField, e);
 			}.bind(this));
 			this.facePages[pageIndex].appendChild(a);

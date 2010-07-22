@@ -4,8 +4,10 @@
 class GameCharacterObserver < ActiveRecord::Observer
 
   def before_create character
-    # increment counter
-    character.user.raw_increment :games_count unless character.user.has_game? character.game_id
+    unless character.user.has_game? character.game
+      # increment counter
+      character.user.raw_increment :games_count
+    end
   end
 	
   def after_create character
@@ -42,8 +44,10 @@ class GameCharacterObserver < ActiveRecord::Observer
     character.game.raw_decrement :characters_count
     character.user.raw_decrement :characters_count
 
-    # decrement game counter if necessary
-		character.user.raw_decrement :games_count unless character.user.has_game? character.game_id
+    unless character.user.has_game? character.game
+      # decrement game counter if necessary
+		  character.user.raw_decrement :games_count
+    end
   end
 
 end

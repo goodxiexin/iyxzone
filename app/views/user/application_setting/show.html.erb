@@ -16,7 +16,7 @@
             <%= facebox_link "设置", edit_application_setting_url(:type => i) %>
             <%= link_to "关于", application_url(app) %>
           </div>
-          <h2 class="<%= app.icon_class %>"><%= app.name %></h2>
+          <h2 class="<%= application_icon_class app %>"><%= app.name %></h2>
         </div>
         <% end %>
       </div>

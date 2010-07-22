@@ -1,9 +1,0 @@
-      <% subject = get_subject user %>
-      <div class="tab tab01">
-        <ul>
-          <li <% if hover==0 %>class='hover'<% end %>><span><%= link_to "#{subject}的状态", statuses_url(:uid => user.id) %></span></li>
-          <% if user == current_user %>
-          <li <% if hover==1 %>class='hover'<% end %>><span><%= link_to "好友的状态", friends_statuses_url %></span></li>
-          <% end %>
-        </ul>
-      </div>

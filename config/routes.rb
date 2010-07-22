@@ -62,8 +62,6 @@ ActionController::Routing::Routes.draw do |map|
     
     admin.resources :videos, :member => {:verify => :put, :unverify => :put }
     
-    admin.resources :statuses, :member => {:verify => :put, :unverify => :put }
-    
     admin.resources :comments, :member => {:verify => :put, :unverify => :put }
     
     admin.resources :events, :member => {:verify => :put, :unverify => :put }
@@ -88,6 +86,14 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
 
+    users.resources :attentions
+
+    users.resources :mini_links
+
+    users.resources :mini_images
+
+    users.resources :mini_blogs, :collection => {:random => :get, :public => :get, :hot => :get, :sexy => :get, :interested => :get, :list => :get, :search => :get}, :member => {:new_forward => :get, :forward => :post}
+
     users.resources :fans
 
     users.resources :idols, :member => {:follow => :post, :unfollow => :delete}
@@ -100,9 +106,8 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :links
 
+    # 这个仅仅是为了兼容微薄以前，那个分享到17gaming.com的代码
     users.resources :sharings
-
-    users.resources :shares, :collection => {:hot => :get, :recent => :get, :friends => :get}
 
     users.resources :notices, :collection => {:first_ten => :get}, :member => {:read => :put}
 
@@ -140,9 +145,9 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :friend_requests, :controller => 'friends/requests', :member => {:accept => :put, :decline => :delete}, :collection => {:create_multiple => :post}
 
-    users.resources :feed_deliveries
+    users.resources :feed_deliveries, :collection => {:more => :get}
 
-    users.resource :home, :controller => 'home', :member => {:more_feeds => :get, :feeds => :get}
+    users.resource :home, :controller => 'home'
 
     users.resource :privacy_setting, :controller => 'privacy_setting'
 
@@ -160,8 +165,6 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :videos, :collection => [:hot, :recent, :relative, :friends]
 
-    users.resources :statuses, :collection => [:friends]
-
     users.friend_table_for_photo_tags '/friend_table_for_photo_tags', :controller => 'photo_tags', :action => 'friends'
 
     users.auto_complete_for_photo_tags '/auto_complete_for_photo_tags', :controller => 'photo_tags', :action => 'auto_complete_for_friends'
@@ -170,7 +173,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :comments
 
-    users.resources :wall_messages
+    users.resources :wall_messages, :collection => {:index_with_form => :get}
 
     users.resources :digs
 
@@ -211,8 +214,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :guild_photos, :controller => 'guilds/photos', :collection => {:edit_multiple => :get, :update_multiple => :put, :record_upload => :post}
 
-    users.resources :guilds, :member => {:more_feeds => :get, :edit_rules => :get},
-                    :collection => {:hot => :get, :recent => :get , :participated => :get, :friends => :get} do |guilds|
+    users.resources :guilds, :collection => {:hot => :get, :recent => :get, :participated => :get, :friends => :get} do |guilds|
 
       guilds.resources :friends
 
@@ -224,11 +226,9 @@ ActionController::Routing::Routes.draw do |map|
 
       guilds.resources :events, :controller => 'guilds/events', :collection => {:search => :get}
 
-      guilds.resources :bosses, :controller => 'guilds/bosses', :collection => {:create_or_update => :post}
-    
-      guilds.resources :rules, :controller => 'guilds/rules', :collection => {:create_or_update => :post}
+      guilds.resources :blogs, :controller => "guilds/blogs"
 
-      guilds.resources :gears, :controller => 'guilds/gears', :collection => {:create_or_update => :post}
+      guilds.resources :topics, :controller => "guilds/topics"
 
     end
 
@@ -242,7 +242,7 @@ ActionController::Routing::Routes.draw do |map|
 
     end
 
-    users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:more_feeds => :get} do |games|
+    users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get} do |games|
 
       games.resources :blogs, :controller => 'games/blogs'
       
@@ -257,8 +257,6 @@ ActionController::Routing::Routes.draw do |map|
       games.resources :albums, :controller => 'games/albums'
 
       games.resources :tags, :controller => 'games/tags'
-
-      games.resources :attentions, :controller => 'games/attentions'
 
     end
 

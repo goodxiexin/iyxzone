@@ -1,9 +1,0 @@
-<% delivery = link_sharing_feed_delivery %>
-<% sharing = delivery.feed_item.originator %>
-<% link = sharing.shareable %>
-
-<% render :layout => 'user/home/small_feed_delivery', :locals => {:delivery => delivery, :poster => sharing.poster} do %>
-  <%= profile_link sharing.poster %> 分享了连接 <%= link_to "#{link.url}", sharing_url(sharing), :class => "shine", :popup => true %>
-	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "回复", "Iyxzone.Comment.showForm('sharing', #{sharing.id}, null, #{sharing.poster_id});", :class => "gray"%></p>
-	<%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => sharing, :recipient => sharing.poster} %>
-<% end %>

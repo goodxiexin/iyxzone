@@ -3,6 +3,7 @@
             <h5><%= poll.voters_count %>人</h5>
             <p>参与投票</p>
             </div>
-            <%= facebox_link '分享', new_sharing_url(:url => poll_url(poll)), :width => 450, :class => "left love-btn" %>
+            <div class="topIsay left"><span class="button04"><span><%= facebox_button "我来说说", new_mini_blog_url(:content => "#{poll.name} #{SITE_URL}/polls/#{poll.id}"), :width => 500 %></span></span></div>
           </div>
+
 

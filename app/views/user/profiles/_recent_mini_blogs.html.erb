@@ -1,0 +1,21 @@
+<div class='multibox space'>
+  <div class="title">
+    <%= link_to "更多", mini_blogs_url(:uid => user.id) %>
+    <b>我的微博</b>
+  </div>
+  <div class="mBlogPostList mBlogProList">
+  <% if !mini_blogs.blank? %>
+    <% mini_blogs.each do |mb| %>
+      <% render :layout => 'user/mini_blogs/mini_blog', :locals => {:mini_blog => mb, :at => 'public'} do %>
+        <div class="feedFunc icon-state"></div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <% if user==current_user %>
+      <div class='space'>还没有微博赶紧去<%= link_to '弄一个', mini_blogs_url(:uid => user.id) %>吧</div>
+    <% else %>
+      <div class='space'>这家伙没微博，太不入流了</div>
+    <% end %>
+  <% end %>
+  </div>
+</div>

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100605082925) do
+ActiveRecord::Schema.define(:version => 20100722144538) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -33,6 +33,14 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
     t.string   "name"
     t.text     "about"
     t.integer  "comments_count", :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "attentions", :force => true do |t|
+    t.integer  "attentionable_id"
+    t.string   "attentionable_type"
+    t.integer  "follower_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -116,6 +124,11 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
 
   add_index "comrade_suggestions", ["user_id"], :name => "index_comrade_suggestions_on_user_id"
 
+  create_table "deleted_indices", :force => true do |t|
+    t.integer "doc_id"
+    t.string  "model_name"
+  end
+
   create_table "digs", :force => true do |t|
     t.integer  "poster_id"
     t.integer  "diggable_id"
@@ -164,6 +177,8 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
+    t.string   "bulletin"
+    t.integer  "attentions_count",  :default => 0
   end
 
   add_index "events", ["poster_id"], :name => "index_events_on_poster_id"
@@ -316,6 +331,7 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
     t.integer  "last_week_attentions_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "bulletin"
   end
 
   create_table "gameswithholes", :force => true do |t|
@@ -384,13 +400,11 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
+    t.integer  "attentions_count",  :default => 0
+    t.string   "bulletin"
   end
 
   add_index "guilds", ["president_id"], :name => "index_guilds_on_president_id"
-
-  create_table "links", :force => true do |t|
-    t.string "url"
-  end
 
   create_table "mails", :force => true do |t|
     t.integer  "sender_id"
@@ -428,6 +442,56 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
   end
 
   add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
+
+  create_table "mini_blog_meta_datas", :force => true do |t|
+    t.text   "random_ids"
+    t.string "today_topic"
+    t.string "today_topic_desc"
+  end
+
+  create_table "mini_blogs", :force => true do |t|
+    t.integer  "poster_id"
+    t.integer  "root_id"
+    t.integer  "parent_id"
+    t.string   "content"
+    t.text     "nodes"
+    t.boolean  "deleted",        :default => false
+    t.integer  "images_count",   :default => 0
+    t.integer  "videos_count",   :default => 0
+    t.integer  "comments_count", :default => 0
+    t.integer  "forwards_count", :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "index_state",    :default => 0
+  end
+
+  create_table "mini_images", :force => true do |t|
+    t.integer  "poster_id"
+    t.integer  "mini_blog_id"
+    t.integer  "parent_id"
+    t.string   "content_type"
+    t.string   "filename"
+    t.string   "thumbnail"
+    t.integer  "size"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mini_links", :force => true do |t|
+    t.string   "url"
+    t.string   "thumbnail_url"
+    t.text     "embed_html"
+    t.integer  "reference_count", :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mini_topics", :force => true do |t|
+    t.string  "name"
+    t.integer "freq", :default => 0
+  end
 
   create_table "news", :force => true do |t|
     t.integer  "game_id"
@@ -660,6 +724,7 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
   create_table "role_users", :force => true do |t|
     t.integer "role_id"
     t.integer "user_id"
+    t.integer "data"
   end
 
   add_index "role_users", ["role_id", "user_id"], :name => "index_role_users_on_role_id_and_user_id"
@@ -675,29 +740,6 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "shares", :force => true do |t|
-    t.integer  "shareable_id"
-    t.string   "shareable_type"
-    t.integer  "digs_count",     :default => 0
-    t.integer  "sharings_count", :default => 0
-    t.string   "url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "sharings", :force => true do |t|
-    t.string   "title"
-    t.text     "reason"
-    t.string   "shareable_type"
-    t.integer  "share_id"
-    t.integer  "poster_id"
-    t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.integer  "verified",       :default => 0
-  end
-
-  add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"
 
   create_table "signup_invitations", :force => true do |t|
     t.integer  "sender_id"
@@ -718,17 +760,6 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
     t.text     "access_list"
     t.string   "directory"
   end
-
-  create_table "statuses", :force => true do |t|
-    t.integer  "poster_id"
-    t.text     "content"
-    t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "verified",       :default => 0
-  end
-
-  add_index "statuses", ["poster_id"], :name => "index_statuses_on_poster_id"
 
   create_table "subdomains", :force => true do |t|
     t.integer "user_id"
@@ -857,6 +888,8 @@ ActiveRecord::Schema.define(:version => 20100605082925) do
     t.integer  "fans_count",                               :default => 0
     t.integer  "idols_count",                              :default => 0
     t.string   "invite_fan_code"
+    t.integer  "attentions_count",                         :default => 0
+    t.integer  "skilled_game_id"
   end
 
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"

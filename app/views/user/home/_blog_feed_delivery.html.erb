@@ -1,9 +1,0 @@
-<% delivery = blog_feed_delivery %>
-<% blog = delivery.feed_item.originator %>
-
-<% render :layout => 'user/home/feed_delivery', :locals => {:delivery => delivery, :poster => blog.poster} do %>
-	    <%= profile_link blog.poster%> 写了日志 <%= blog_link blog, :class => 'shine'%>
-      <p class="gray jl-con"><%= blog_content blog, :length => 80, :omission => '...' %></p>
-      <p class="gray"><%= ftime delivery.created_at %> <%= link_to_function '评论', "Iyxzone.Comment.showForm('blog', #{blog.id}, null, #{blog.poster_id})" %></p>
-	    <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => blog, :recipient => blog.poster} %>
-<% end %>

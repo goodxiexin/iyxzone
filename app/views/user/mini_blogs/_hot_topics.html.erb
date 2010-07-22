@@ -1,0 +1,32 @@
+          <% first = topics[0] %>
+          <% second = topics[1] %>
+          <% third = topics[2] %>
+          <% rest = topics[3..(topics.count -1)] %>
+          <div class="round06 round_r_t hotTopicEx space">
+            <div class="round_l_t">
+              <div class="round_r_b">
+                <div class="round_l_b">
+                  <div class="round_m">
+                    <div class="round_body">
+                      <h2 class="title">热门话题</h2>
+                      <ul class="xList">
+                        <% if first %>
+                          <li class="first"><a href="/mini_blogs/search?key=<%= first.name %>"><span>01</span><strong><%= first.name %></strong></a></li>
+                        <% end %>
+                        <% if second %>
+                          <li class="second"><a href="/mini_blogs/search?key=<%= second.name %>"><span>02</span><strong><%= second.name %></strong></a></li>
+                        <% end %>
+                        <% if third %>
+                          <li class="third"><a href="/mini_blogs/search?key=<%= third.name %>"><span>03</span><strong><%= third.name %></strong></a></li>
+                        <% end %>
+                        <% (rest || []).each_with_index do |t, i| %>
+                          <li><a href="/mini_blogs/search?key=<%= t.name %>"><span><%= "%02d" % (i+4) %></span><strong><%= t.name %></strong></a></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+

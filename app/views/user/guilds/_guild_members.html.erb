@@ -1,14 +1,19 @@
-  <div class="multibox">
-    <div class="title"><%= link_to "更多", guild_memberships_url(guild, :type => 0) %><b>会员</b></div>
-    <div class="photolist-box gamer-list">
-      <ul class="collection s_clear">
-      <% guild_characters.each do |c| %>
+<div class="s2m2 guildMember">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix"><strong>公会会员</strong><span></span></h2>
+      <%= link_to "更多", guild_memberships_url(guild, :type => 0), :class => "more" %>
+    </div>
+    <em></em>
+  </div>
+  <div class="s2m2bd fix">
+    <ul class="fix">
+      <% members.each do |m| %>
         <li>
-          <div class="middle"><div class="middle-center"><div class="center"><%= avatar c.user, :class => 'imgbox01' %></div></div></div>
-          <p><%= profile_link c.user %></p>
+          <%= avatar m, :class => 'imgbox01' %>
+          <%= profile_link m, :class => "memberName" %>
         </li>
       <% end %>
-      </ul>
-    </div>
+    </ul>
   </div>
-
+</div>

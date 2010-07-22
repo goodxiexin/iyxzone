@@ -32,18 +32,15 @@ class User::EventsController < UserBaseController
   end
 
   def show
-    @maybe_characters = @event.maybe_characters.limit(6).prefetch([{:user => :profile}])
-    @invite_characters = @event.invite_characters.limit(6).prefetch([{:user => :profile}])
-    @request_characters = @event.request_characters.limit(6).prefetch([{:user => :profile}])
-    @confirmed_characters = @event.confirmed_characters.limit(6).prefetch([{:user => :profile}])
+    @mini_blogs = MiniBlog.category(:text).by(@event.participant_ids).limit(3).all
+    @topics = MiniTopic.hot.limit(3).all
+    @maybe_participants = @event.maybe_participants.limit(8).prefetch(:profile)
+    @confirmed_participants = @event.confirmed_participants.limit(8).prefetch(:profile)
     @user = @event.poster
     @album = @event.album
     @photos = @album.latest_photos.nonblocked
-		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @participations = @event.participations.prefetch([:character]).by(current_user.id)
-    @messages = @event.comments.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => [:commentable, {:poster => :profile}]
-    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @event.id, :wall_type => 'event'}}
-		render :action => 'show', :layout => 'app2'
+    render :action => 'show', :layout => 'app3'
   end
 
   def new
@@ -67,9 +64,15 @@ class User::EventsController < UserBaseController
 
   def update
     if @event.update_attributes(params[:event] || {})
-      redirect_to event_url(@event)
+      respond_to do |format|
+        format.json { render :json => @event } 
+        format.html { redirect_to event_url(@event) }
+      end
     else
-      render :action => 'edit'
+      respond_to do |format|
+        format.json { render :json => @event } 
+        format.html { render :action => 'edit' }
+      end
     end
   end
 

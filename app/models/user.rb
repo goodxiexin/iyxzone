@@ -2,6 +2,29 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
+  belongs_to :skilled_game, :class_name => "Game"
+
+  acts_as_attentionable
+
+  has_many :mini_images, :foreign_key => 'poster_id', :order => 'created_at DESC'
+
+  has_many :mini_blogs, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy, :conditions => {:deleted => false}
+
+  def interested_mini_blogs category='all'
+    atts = Attention.match(:follower_id => id)
+    interested = atts.map do |att|
+      attentionable = att.attentionable
+      if attentionable.is_a? Guild
+        attentionable.president
+      elsif attentionable.is_a? Game
+      elsif attentionable.is_a? User
+        attentionable
+      end
+    end.uniq 
+    cond = {:deleted => false, :poster_id => interested.map(&:id)}.merge(category.nil? ? {} : {:category => category})
+    MiniBlog.category(category.to_s).match({:deleted => false, :poster_id => interested.map(&:id)}).all
+  end
+
   has_many :fanships, :foreign_key => :idol_id, :dependent => :destroy
 
   has_many :fans, :through => :fanships, :source => :fan
@@ -106,9 +129,6 @@ class User < ActiveRecord::Base
   def is_pokeable_by? user
     privacy_setting.poke? user.relationship_with(self)
   end
-
-	# status
-  has_many :statuses, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
 
   # friend
 	has_many :all_friendships, :class_name => 'Friendship', :dependent => :destroy
@@ -261,62 +281,6 @@ class User < ActiveRecord::Base
 
   has_many :digs, :foreign_key => 'poster_id', :dependent => :destroy
 
-  # sharings
-  has_many :sharings, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy
-
-  # alias for sharings
-  has_many :all_sharings, :foreign_key => 'poster_id', :order => 'created_at DESC', :class_name => 'Sharing'
-
-  with_options :class_name => 'Sharing', :foreign_key => 'poster_id', :order => 'created_at DESC' do |user|
-    
-    user.has_many :blog_sharings, :conditions => {:shareable_type => 'Blog'}
-  
-    user.has_many :video_sharings, :conditions => {:shareable_type => 'Video'}
-
-    user.has_many :link_sharings, :conditions => {:shareable_type => 'Link'}
-
-    user.has_many :photo_sharings, :conditions => {:shareable_type => 'Photo'}
-
-    user.has_many :album_sharings, :conditions => {:shareable_type => 'Album'}
-
-    user.has_many :poll_sharings, :conditions => {:shareable_type => 'Poll'}
-
-    user.has_many :game_sharings, :conditions => {:shareable_type => 'Game'}
-
-    user.has_many :profile_sharings, :conditions => {:shareable_type => 'Profile'}
-
-    user.has_many :topic_sharings, :conditions => {:shareable_type => 'Topic'}
- 
-    user.has_many :news_sharings, :conditions => {:shareable_type => 'News'}
- 
-  end
-
-  has_many :shares, :through => :sharings, :order => 'created_at DESC'
-
-  with_options :source => 'share', :order => 'created_at DESC' do |user|
-
-    user.has_many :blog_shares, :through => 'blog_sharings'
-
-    user.has_many :video_shares, :through => 'video_sharings'
-
-    user.has_many :link_shares, :through => 'link_sharings'
-
-    user.has_many :photo_shares, :through => 'photo_sharings'
-
-    user.has_many :album_shares, :through => 'album_sharings'
-
-    user.has_many :poll_shares, :through => 'poll_sharings'
-
-    user.has_many :game_shares, :through => 'game_sharings'
-  
-    user.has_many :profile_shares, :through => 'profile_sharings'
-
-    user.has_many :topic_shares, :through => 'topic_sharings'
-
-    user.has_many :news_shares, :through => 'news_sharings'
-
-  end
-
   # polls
   has_many :votes, :foreign_key => 'voter_id', :dependent => :destroy
 
@@ -386,11 +350,8 @@ class User < ActiveRecord::Base
     infos
   end
 
-	# feeds
-	#has_many :feed_deliveries, :as => 'recipient', :order => 'created_at DESC'
   acts_as_feed_recipient :delete_conditions => lambda {|requestor, user| requestor == user},
                          :categories => {
-                            :status => 'Status', 
                             :blog => 'Blog', 
                             :video => 'Video', 
                             :personal_album => 'PersonalAlbum',
@@ -407,9 +368,8 @@ class User < ActiveRecord::Base
                             :guild => 'Guild',
                             :membership => 'Membership',
                             :all_guild_related => ['Guild', 'Membership'],
-                            :sharing => 'Sharing',
                             :profile => 'Profile',
-                            :friendship => 'Friendship'}                                                                                
+                            :friendship => 'Friendship'}  
 
   # role
   has_many :role_users, :dependent => :destroy

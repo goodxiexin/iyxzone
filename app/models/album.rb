@@ -16,10 +16,6 @@ class Album < ActiveRecord::Base
                       :delete_conditions => lambda {|user, album, comment| album.poster == user || comment.poster == user}, 
                       :create_conditions => lambda {|user, album| album.available_for?(user.relationship_with album.poster) }
 
-  acts_as_shareable :path_reg => [/\/avatar_albums\/([\d]+)/, /\/personal_albums\/([\d]+)/, /\/event_albums\/([\d]+)/, /\/guild_albums\/([\d]+)/],
-                    :default_title => lambda {|album| album.title}, 
-                    :create_conditions => lambda {|user, album| album.available_for? user.relationship_with(album.poster)}
-
   attr_readonly :poster_id, :owner_id
 
   validates_presence_of :owner_id, :message => "不能为空"
@@ -39,6 +35,9 @@ class Album < ActiveRecord::Base
       if user.application_setting.emit_photo_feed? and !is_owner_privilege?
         deliver_feeds :data => {:ids => photos.map(&:id)}
       end
+      true
+    else
+      false
     end
   end
 

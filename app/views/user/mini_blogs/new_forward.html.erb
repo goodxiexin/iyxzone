@@ -1,0 +1,28 @@
+<% facebox_tag '转发到我的微博' do %>
+  <div class="content mBlogTrans"> 
+    <div class="bd">
+      <span class="green">转</span>：<%= mini_blog_content2 @root %>
+    </div>
+    <div class="ft space">
+      <div class="fix"><%= link_to_function '', "Iyxzone.Emotion.Manager.toggleFaces(this, $('forward_content'), event)", :class => 'icon-face' %><span class="green tips">还可以输入<span id='forward_words_count'>140</span>个字</span></div>
+      <div><textarea id="forward_content" onfocus="Iyxzone.limitText($(this), 140, Iyxzone.MiniBlog.Forwarder.checkTextLength);" onblur="Iyxzone.cancelLimitText($(this));"></textarea></div>
+    </div>
+  </div>  
+  <div class="rows"></div>
+  <div class="z-submit s_clear space">
+    <div class="buttons">
+      <span class="button"><span><%= button_to_function "立即转发", "Iyxzone.MiniBlog.Forwarder.forward(#{@mini_blog.id}, $(this), '#{params[:at]}');" %></span></span>
+      <span class="button button-gray"><span><button type="reset" onclick="facebox.close()">取消</button></span></span>
+    </div>
+  </div>
+<% end %>
+
+<% javascript_tag do %>
+  <% if @root == @mini_blog %>
+    Iyxzone.insertAtCursor($('forward_content'), "随便说说?");
+    Iyxzone.selectText($('forward_content'), 0, 5);
+  <% else %>
+    Iyxzone.insertAtCursor($('forward_content'), "<%= " @#{@mini_blog.poster.login}://#{@mini_blog.content}" %>");
+    Iyxzone.resetCursor($('forward_content'));
+  <% end %>
+<% end %>
