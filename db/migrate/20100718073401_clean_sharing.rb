@@ -1,5 +1,6 @@
 class CleanSharing < ActiveRecord::Migration
   def self.up
+=begin
     # 只转3类，其他的就不管了
     Sharing.all.each do |s|
       if s.shareable_type == 'Profile'
@@ -34,7 +35,7 @@ class CleanSharing < ActiveRecord::Migration
 
     drop_table :links
 
-    remove_column :
+=end
   end
 
   def self.down

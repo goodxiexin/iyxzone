@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100720143100) do
+ActiveRecord::Schema.define(:version => 20100722144538) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(:version => 20100720143100) do
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
     t.string   "bulletin"
+    t.integer  "attentions_count",  :default => 0
   end
 
   add_index "events", ["poster_id"], :name => "index_events_on_poster_id"
@@ -723,6 +724,7 @@ ActiveRecord::Schema.define(:version => 20100720143100) do
   create_table "role_users", :force => true do |t|
     t.integer "role_id"
     t.integer "user_id"
+    t.integer "data"
   end
 
   add_index "role_users", ["role_id", "user_id"], :name => "index_role_users_on_role_id_and_user_id"

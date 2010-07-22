@@ -16,7 +16,7 @@ class User::MiniLinksController < UserBaseController
       if @link.is_video?
         render :json => {:video => 1, :url => @link.proxy_url}
       else
-        @link.destroy
+        #@link.destroy
         render :json => {:video => 0, :url => params[:url]}
       end
     else
