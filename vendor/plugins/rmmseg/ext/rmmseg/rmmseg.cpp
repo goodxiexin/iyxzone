@@ -58,6 +58,11 @@ extern "C" {
         return Qfalse;
     }
 
+		static VALUE dic_mem_usage(VALUE self)
+		{
+			printf("mem_usage: %d\n", dict_mem);
+		}
+
     /*
      * Add a word to the in-memory dictionary.
      *
@@ -382,7 +387,6 @@ extern "C" {
         // This is necessary, see
         // http://pluskid.lifegoo.com/?p=348
         VALUE text = rb_str_new(t.text, t.length);
-printf("text: %s, freq: %d, cixing: %d\n", text, t.freq, t.cixing);
         tk->text = text;
         tk->cixing = INT2FIX(t.cixing);
 				tk->freq = INT2FIX(t.freq);
@@ -464,6 +468,7 @@ printf("text: %s, freq: %d, cixing: %d\n", text, t.freq, t.cixing);
         rb_define_singleton_method(mDictionary, "load_words", RUBY_METHOD_FUNC(dic_load_words), 1);
         rb_define_singleton_method(mDictionary, "add", RUBY_METHOD_FUNC(dic_add), 3);
         rb_define_singleton_method(mDictionary, "has_word?", RUBY_METHOD_FUNC(dic_has_word), 1);
+				rb_define_singleton_method(mDictionary, "mem_usage", RUBY_METHOD_FUNC(dic_mem_usage), 0);
 
         /* A Token hold the text and related position information. */
         cToken = rb_define_class_under(mRMMSeg, "Token", rb_cObject);

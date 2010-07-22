@@ -1,1363 +1,0 @@
-电子专业词汇	1	GAME
-	1	GAME
-直流	1	GAME
-交流	1	GAME
-周期	1	GAME
-频率	1	GAME
-波长	1	GAME
-振幅	1	GAME
-有效值	1	GAME
-相位	1	GAME
-相移	1	GAME
-滞后	1	GAME
-超前	1	GAME
-容抗	1	GAME
-感抗	1	GAME
-电抗	1	GAME
-阻抗	1	GAME
-电纳	1	GAME
-导纳	1	GAME
-导抗	1	GAME
-负载	1	GAME
-衰减	1	GAME
-增益	1	GAME
-匹配	1	GAME
-失配	1	GAME
-功率	1	GAME
-脉冲功率	1	GAME
-瞬时功率	1	GAME
-平均功率	1	GAME
-效率	1	GAME
-谐振	1	GAME
-半功率点	1	GAME
-耦合度	1	GAME
-调谐	1	GAME
-失谐	1	GAME
-带宽	1	GAME
-频谱	1	GAME
-基波	1	GAME
-谐波	1	GAME
-谐波分析	1	GAME
-瞬态	1	GAME
-时间常数	1	GAME
-放大	1	GAME
-输入电阻	1	GAME
-输入阻抗	1	GAME
-输出电阻	1	GAME
-输出阻抗	1	GAME
-频率特性	1	GAME
-幅频特性	1	GAME
-相频特性	1	GAME
-反馈	1	GAME
-负反馈	1	GAME
-正反馈	1	GAME
-寄生反馈	1	GAME
-直流放大器	1	GAME
-差分放大器	1	GAME
-失调电压	1	GAME
-共模抑制比	1	GAME
-斩波器	1	GAME
-低频放大器	1	GAME
-功率放大器	1	GAME
-甲类放大器	1	GAME
-乙类放大器	1	GAME
-丙类放大器	1	GAME
-丁类放大器	1	GAME
-戊类放大器	1	GAME
-限幅放大器	1	GAME
-推挽功率放大器	1	GAME
-音频放大器	1	GAME
-电压放大器	1	GAME
-电流放大器	1	GAME
-前置放大器	1	GAME
-阻容耦合放大器	1	GAME
-变压器耦合放大器	1	GAME
-负反馈放大器	1	GAME
-缓冲放大器	1	GAME
-阴极输出器	1	GAME
-射极输出器	1	GAME
-隔离放大器	1	GAME
-直接耦合放大器	1	GAME
-对数放大器	1	GAME
-运算放大器	1	GAME
-相敏放大器	1	GAME
-低噪声放大器	1	GAME
-选频放大器	1	GAME
-调谐放大器	1	GAME
-高频放大器	1	GAME
-射频放大器	1	GAME
-中频放大器	1	GAME
-宽带放大器	1	GAME
-窄带放大器	1	GAME
-视频放大器	1	GAME
-脉冲放大器	1	GAME
-参量放大器	1	GAME
-伺服放大器	1	GAME
-脉泽	1	GAME
-振荡	1	GAME
-自激振荡	1	GAME
-自由振荡	1	GAME
-阻尼振荡	1	GAME
-强迫振荡	1	GAME
-寄生振荡	1	GAME
-频率牵引	1	GAME
-他激振荡器	1	GAME
-负阻振荡器	1	GAME
-晶体振荡器	1	GAME
-调谐振荡器	1	GAME
-张弛振荡器	1	GAME
-多谐振荡器	1	GAME
-移相振荡器	1	GAME
-扫频振荡器	1	GAME
-拍频振荡器	1	GAME
-音频振荡器	1	GAME
-分子振荡器	1	GAME
-返波振荡器	1	GAME
-耿氏效应振荡器	1	GAME
-原子频标	1	GAME
-脉冲	1	GAME
-矩形脉冲	1	GAME
-方波	1	GAME
-脉冲幅度	1	GAME
-上升时间	1	GAME
-脉冲前沿	1	GAME
-下降时间	1	GAME
-脉冲后沿	1	GAME
-脉冲宽度	1	GAME
-平顶降落	1	GAME
-上冲	1	GAME
-下冲	1	GAME
-占空比	1	GAME
-阶跃电压	1	GAME
-开关电路	1	GAME
-反相器	1	GAME
-逆变器	1	GAME
-加速电容	1	GAME
-整形电路	1	GAME
-成形电路	1	GAME
-微分电路	1	GAME
-积分电路	1	GAME
-限幅	1	GAME
-限幅器	1	GAME
-削波	1	GAME
-削波器	1	GAME
-箝位	1	GAME
-箝位器	1	GAME
-锯齿波形	1	GAME
-扫描	1	GAME
-扫描时间	1	GAME
-扫时间	1	GAME
-恢复时间	1	GAME
-逆程率	1	GAME
-扫描发生器	1	GAME
-时基电路	1	GAME
-米勒积分电路	1	GAME
-梯形波	1	GAME
-峰化器	1	GAME
-间歇振荡器	1	GAME
-准稳态	1	GAME
-双稳触发电路	1	GAME
-单稳触发电路	1	GAME
-施密特触发器	1	GAME
-计数触发器	1	GAME
-置位-复位触发器	1	GAME
-无险触发器	1	GAME
-主从触发器	1	GAME
-计数器	1	GAME
-脉冲引导电路	1	GAME
-回差现象	1	GAME
-数字电路	1	GAME
-逻辑电路	1	GAME
-真值表	1	GAME
-禁止门	1	GAME
-符合门	1	GAME
-与门	1	GAME
-与非门	1	GAME
-与或门	1	GAME
-非门	1	GAME
-或非门	1	GAME
-记忆电路	1	GAME
-寄存器	1	GAME
-移位寄存器	1	GAME
-时钟脉冲	1	GAME
-数模转换器	1	GAME
-模数转换器	1	GAME
-扩展器	1	GAME
-分频	1	GAME
-分频器	1	GAME
-倍频	1	GAME
-倍频器	1	GAME
-倍频链	1	GAME
-倍频程	1	GAME
-混频	1	GAME
-混频器	1	GAME
-平衡混频器	1	GAME
-参量混频器	1	GAME
-晶体混频器	1	GAME
-本机振荡器	1	GAME
-外差振荡器	1	GAME
-变频	1	GAME
-变频器	1	GAME
-上变频	1	GAME
-下变频	1	GAME
-频率稳定度	1	GAME
-频率抖动	1	GAME
-相位抖动	1	GAME
-调制	1	GAME
-调幅	1	GAME
-寄生调幅	1	GAME
-调角	1	GAME
-调频	1	GAME
-调相	1	GAME
-调制器	1	GAME
-调幅器	1	GAME
-调相器	1	GAME
-通断键控	1	GAME
-幅移键控	1	GAME
-频移键控	1	GAME
-相移键控	1	GAME
-正交调制	1	GAME
-载波	1	GAME
-边带	1	GAME
-上边带	1	GAME
-下边带	1	GAME
-残留边带	1	GAME
-包络	1	GAME
-频偏	1	GAME
-调制指数	1	GAME
-线性调制	1	GAME
-单边带调制	1	GAME
-双边带调制	1	GAME
-连续波调制	1	GAME
-脉冲调制	1	GAME
-脉幅调制	1	GAME
-脉宽调制	1	GAME
-脉位调制	1	GAME
-脉时调制	1	GAME
-脉码调制	1	GAME
-自适应差分脉码调制	1	GAME
-增量调制	1	GAME
-自适应增量调制	1	GAME
-解调	1	GAME
-检测	1	GAME
-线性检波	1	GAME
-幅度检波	1	GAME
-包络检波	1	GAME
-峰值检波	1	GAME
-脉冲检波	1	GAME
-平方律检波	1	GAME
-相干检波器	1	GAME
-相关检测器	1	GAME
-乘积检波器	1	GAME
-零交叉检测器	1	GAME
-同步检波器	1	GAME
-平衡检波器	1	GAME
-环形解调器	1	GAME
-鉴频	1	GAME
-鉴频器	1	GAME
-斜率鉴频器	1	GAME
-相移鉴频器	1	GAME
-比率鉴频器	1	GAME
-锁相鉴频器	1	GAME
-检相	1	GAME
-检相器	1	GAME
-相位比较器	1	GAME
-锁相	1	GAME
-锁相环路	1	GAME
-压控振荡器	1	GAME
-锁定	1	GAME
-失锁	1	GAME
-跟踪	1	GAME
-捕捉	1	GAME
-捕捉带	1	GAME
-同步带	1	GAME
-跳周	1	GAME
-同步	1	GAME
-同步器	1	GAME
-频率阶跃	1	GAME
-相位阶跃	1	GAME
-闭环	1	GAME
-开环	1	GAME
-发射机	1	GAME
-调幅发射机	1	GAME
-调频发射机	1	GAME
-调相发射机	1	GAME
-脉冲发射机	1	GAME
-连续波发射机	1	GAME
-基带频率	1	GAME
-石英谐振器	1	GAME
-锁相振荡器	1	GAME
-电平	1	GAME
-接收机	1	GAME
-直接检波式接收机	1	GAME
-来复接收机	1	GAME
-再生接收机	1	GAME
-自差接收机	1	GAME
-超再生接收机	1	GAME
-外差接收机	1	GAME
-超外差接收机	1	GAME
-灵敏度	1	GAME
-噪声系数	1	GAME
-噪声温度	1	GAME
-选择性	1	GAME
-保真度	1	GAME
-中频抑制比	1	GAME
-镜象抑制比	1	GAME
-镜频干扰	1	GAME
-交叉调制	1	GAME
-互调	1	GAME
-干扰哨声	1	GAME
-自动音量控制	1	GAME
-自动增益控制	1	GAME
-自动频率控制	1	GAME
-二端网络	1	GAME
-三端网络	1	GAME
-四端网络	1	GAME
-多端网络	1	GAME
-二口网络	1	GAME
-多口网络	1	GAME
-网络函数	1	GAME
-激励函数	1	GAME
-响应函数	1	GAME
-单位阶跃函数	1	GAME
-单位冲激函数	1	GAME
-复频率	1	GAME
-极点	1	GAME
-零点	1	GAME
-奇点	1	GAME
-单向性	1	GAME
-双向性	1	GAME
-对偶性	1	GAME
-基尔霍夫定律	1	GAME
-等效电源定理	1	GAME
-戴维宁定理	1	GAME
-互易定理	1	GAME
-叠加定理	1	GAME
-补偿定理	1	GAME
-最大功率传输定理	1	GAME
-电抗定理	1	GAME
-中剖定理	1	GAME
-卷积定理	1	GAME
-半节网络	1	GAME
-梯型网络	1	GAME
-等效网络	1	GAME
-对称网络	1	GAME
-对偶网络	1	GAME
-平面网络	1	GAME
-非平面网络	1	GAME
-无源网络	1	GAME
-有源网络	1	GAME
-冲激响应	1	GAME
-传递函数	1	GAME
-反射系数	1	GAME
-散射系数	1	GAME
-插入损耗	1	GAME
-特征参数	1	GAME
-影象参数	1	GAME
-品质因数	1	GAME
-耗散因数	1	GAME
-重复阻抗	1	GAME
-特性阻抗	1	GAME
-线性失真	1	GAME
-非线性失真	1	GAME
-电抗网络	1	GAME
-无耗网络	1	GAME
-互易网络	1	GAME
-非互易网络	1	GAME
-线性网络	1	GAME
-非线性网络	1	GAME
-集总参数网络	1	GAME
-分布参数网络	1	GAME
-校正网络	1	GAME
-相移网络	1	GAME
-全通网络	1	GAME
-开关网络	1	GAME
-微波网络	1	GAME
-预加重网络	1	GAME
-环路	1	GAME
-节点	1	GAME
-结点	1	GAME
-信号流图	1	GAME
-状态变量	1	GAME
-多余因数	1	GAME
-网络综合	1	GAME
-零点移位法	1	GAME
-级联综合法	1	GAME
-最平幅度逼近	1	GAME
-最小二乘方逼近	1	GAME
-等波纹逼近	1	GAME
-半无限斜线逼近	1	GAME
-最平时延逼近	1	GAME
-传输	1	GAME
-传输线	1	GAME
-波参数	1	GAME
-波阻抗	1	GAME
-传播常数	1	GAME
-衰减常数	1	GAME
-相移常数	1	GAME
-时延常数	1	GAME
-传播	1	GAME
-传播速度	1	GAME
-相速	1	GAME
-群速	1	GAME
-相时延	1	GAME
-群时延	1	GAME
-均匀线	1	GAME
-开路线	1	GAME
-短路线	1	GAME
-长线	1	GAME
-指数线	1	GAME
-滤波器	1	GAME
-晶体滤波器	1	GAME
-通带	1	GAME
-阻带	1	GAME
-过渡带	1	GAME
-截止频率	1	GAME
-格型滤波器	1	GAME
-曲折滤波器	1	GAME
-数字滤波器	1	GAME
-波数字滤波器	1	GAME
-开关电容滤波器	1	GAME
-横向滤波器	1	GAME
-线性相位滤波器	1	GAME
-理想频域滤波器	1	GAME
-理想时域滤波器	1	GAME
-低通滤波器	1	GAME
-高通滤波器	1	GAME
-带通滤波器	1	GAME
-带阻滤波器	1	GAME
-窄带滤波器	1	GAME
-方向滤波器	1	GAME
-原型滤波器	1	GAME
-导出型滤波器	1	GAME
-去耦滤波器	1	GAME
-匹配滤波器	1	GAME
-动态滤波器	1	GAME
-梳齿滤波器	1	GAME
-切比雪夫滤波器	1	GAME
-巴特沃思滤波器	1	GAME
-均衡器	1	GAME
-仿真线	1	GAME
-衰减器	1	GAME
-差接变量器	1	GAME
-回旋器	1	GAME
-零子	1	GAME
-任意子	1	GAME
-零任偶	1	GAME
-电路仿真	1	GAME
-电路拓扑学	1	GAME
-混沌	1	GAME
-神经网络	1	GAME
-电磁场	1	GAME
-电磁谱	1	GAME
-自感应	1	GAME
-互感应	1	GAME
-涡流	1	GAME
-趋肤效应	1	GAME
-传导电流	1	GAME
-位移电流	1	GAME
-运流电流	1	GAME
-媒质	1	GAME
-电磁波	1	GAME
-天波	1	GAME
-地波	1	GAME
-对流层传播	1	GAME
-电离层传播	1	GAME
-平流层传播	1	GAME
-理想媒质	1	GAME
-各向同性媒质	1	GAME
-各向异性媒质	1	GAME
-旋磁媒质	1	GAME
-旋电媒质	1	GAME
-反射	1	GAME
-散射	1	GAME
-折射	1	GAME
-双折射	1	GAME
-辐射	1	GAME
-镜象原理	1	GAME
-玻印亭矢量	1	GAME
-平面极化	1	GAME
-线极化	1	GAME
-圆极化	1	GAME
-椭圆极化	1	GAME
-共极化	1	GAME
-交叉极化	1	GAME
-水平极化	1	GAME
-正交极化	1	GAME
-平行极化	1	GAME
-垂直极化	1	GAME
-退极化	1	GAME
-复极化比	1	GAME
-等相面	1	GAME
-等幅面	1	GAME
-球面波	1	GAME
-平面波	1	GAME
-柱面波	1	GAME
-表面波	1	GAME
-横波	1	GAME
-纵波	1	GAME
-波前	1	GAME
-驻波	1	GAME
-导波	1	GAME
-行波	1	GAME
-腹点	1	GAME
-驻波比	1	GAME
-阻抗圆图	1	GAME
-导纳圆图	1	GAME
-史密斯圆图	1	GAME
-微波	1	GAME
-分米波	1	GAME
-厘米波	1	GAME
-毫米波	1	GAME
-亚毫米波	1	GAME
-模式	1	GAME
-主模式	1	GAME
-基本模式	1	GAME
-简并模式	1	GAME
-隐失模式	1	GAME
-横电磁模	1	GAME
-横电模	1	GAME
-横磁模	1	GAME
-临界频率	1	GAME
-临界功率	1	GAME
-临界波长	1	GAME
-截止波长	1	GAME
-波导波长	1	GAME
-归一化阻抗	1	GAME
-隔离度	1	GAME
-谐振腔	1	GAME
-波导	1	GAME
-矩形波导	1	GAME
-圆形波导	1	GAME
-椭圆波导	1	GAME
-波束波导	1	GAME
-隔膜波导	1	GAME
-脊形波导	1	GAME
-介质波导	1	GAME
-截止波导	1	GAME
-软波导	1	GAME
-同轴线	1	GAME
-同轴电缆	1	GAME
-漏泄同轴电缆	1	GAME
-带状线	1	GAME
-微带	1	GAME
-鳍线	1	GAME
-径向线	1	GAME
-渐变截面波导	1	GAME
-波导法兰盘	1	GAME
-平板法兰盘	1	GAME
-扼流法兰盘	1	GAME
-平接关节	1	GAME
-扼流关节	1	GAME
-四分之一波长变换器	1	GAME
-纵横杆式变换器	1	GAME
-步进阻抗变换器	1	GAME
-活塞	1	GAME
-接触式活塞	1	GAME
-延迟线	1	GAME
-延伸线	1	GAME
-短截线	1	GAME
-端口	1	GAME
-开路终端	1	GAME
-短路终端	1	GAME
-失配终端	1	GAME
-匹配终端	1	GAME
-假负载	1	GAME
-滑动负载	1	GAME
-水负载	1	GAME
-截止式衰减器	1	GAME
-劈	1	GAME
-劈形终端	1	GAME
-波导调配器	1	GAME
-滑动螺钉调配器	1	GAME
-E-H调配器	1	GAME
-匹配段	1	GAME
-沟槽	1	GAME
-波导膜片	1	GAME
-波导窗	1	GAME
-耦合环	1	GAME
-耦合孔	1	GAME
-耦合探针	1	GAME
-定向耦合器	1	GAME
-混合接头	1	GAME
-模式变换器	1	GAME
-模式滤波器	1	GAME
-膜环滤波器	1	GAME
-混合环	1	GAME
-回波箱	1	GAME
-移相器	1	GAME
-非互易移相器	1	GAME
-双工器	1	GAME
-波导开关	1	GAME
-功率分配器	1	GAME
-旋转关节	1	GAME
-旋磁器件	1	GAME
-环行器	1	GAME
-结环行器	1	GAME
-隔离器	1	GAME
-天线	1	GAME
-远场区	1	GAME
-近场区	1	GAME
-自由空间损耗	1	GAME
-菲涅耳等值线	1	GAME
-菲涅耳区	1	GAME
-可视区	1	GAME
-不可视区	1	GAME
-辐射效率	1	GAME
-辐射强度	1	GAME
-立体波束效率	1	GAME
-阵单元	1	GAME
-激励单元	1	GAME
-无源单元	1	GAME
-单极子	1	GAME
-偶极子	1	GAME
-电偶极子	1	GAME
-磁偶极子	1	GAME
-微带偶极子	1	GAME
-惠更斯源	1	GAME
-线源	1	GAME
-辐射器	1	GAME
-初级辐射器	1	GAME
-各向同性辐射器	1	GAME
-引向器单元	1	GAME
-折合振子	1	GAME
-发射器	1	GAME
-喇叭	1	GAME
-脊形喇叭	1	GAME
-波纹喇叭	1	GAME
-玻特喇叭	1	GAME
-偶极子天线	1	GAME
-对称振子天线	1	GAME
-喇叭天线	1	GAME
-帚状喇叭天线	1	GAME
-角锥喇叭天线	1	GAME
-套筒偶极子天线	1	GAME
-套筒短柱天线	1	GAME
-缝隙天线	1	GAME
-基平面	1	GAME
-基间平面	1	GAME
-波瓣	1	GAME
-主瓣	1	GAME
-副瓣	1	GAME
-旁瓣	1	GAME
-栅瓣	1	GAME
-和波束	1	GAME
-时序波瓣控制	1	GAME
-差波束	1	GAME
-波束角	1	GAME
-差波束零深	1	GAME
-波束立体角	1	GAME
-差波束分离角	1	GAME
-波束调向	1	GAME
-波束形状因数	1	GAME
-波束宽度	1	GAME
-电子扫描	1	GAME
-圆扫描	1	GAME
-扫描角	1	GAME
-机械扫描	1	GAME
-扫描扇形	1	GAME
-角跟踪	1	GAME
-阵因子	1	GAME
-视轴	1	GAME
-斜视	1	GAME
-无惯性扫描	1	GAME
-天线方向图	1	GAME
-机电调向	1	GAME
-天线基准轴	1	GAME
-电轴	1	GAME
-合成孔径	1	GAME
-方向性	1	GAME
-方向性增益	1	GAME
-庞加莱球	1	GAME
-馈线	1	GAME
-馈源	1	GAME
-非周期天线	1	GAME
-背射天线	1	GAME
-贝弗里奇天线	1	GAME
-双锥天线	1	GAME
-刀形天线	1	GAME
-笼形天线	1	GAME
-同轴天线	1	GAME
-定向天线	1	GAME
-盘锥天线	1	GAME
-鱼骨天线	1	GAME
-平顶天线	1	GAME
-对数周期天线	1	GAME
-长线天线	1	GAME
-环天线	1	GAME
-微带天线	1	GAME
-全向天线	1	GAME
-倒向天线	1	GAME
-行波天线	1	GAME
-驻波天线	1	GAME
-绕杆式天线	1	GAME
-伞形天线	1	GAME
-鞭状天线	1	GAME
-线天线	1	GAME
-面天线	1	GAME
-八木天线	1	GAME
-阵天线	1	GAME
-接地平面	1	GAME
-镜象平面	1	GAME
-天线阵	1	GAME
-相控阵	1	GAME
-圆锥阵	1	GAME
-柱面阵	1	GAME
-微带阵	1	GAME
-平面阵	1	GAME
-环形阵	1	GAME
-球面阵	1	GAME
-直线阵	1	GAME
-有源阵	1	GAME
-自动定相阵	1	GAME
-变距阵	1	GAME
-共形阵天线	1	GAME
-共形天线	1	GAME
-密度递减阵天线	1	GAME
-端射阵天线	1	GAME
-圆顶相控阵天线	1	GAME
-螺旋相位天线	1	GAME
-疏化阵天线	1	GAME
-环形缝隙天线	1	GAME
-干涉仪天线	1	GAME
-米尔斯交叉天线	1	GAME
-乌兰韦伯天线	1	GAME
-波束天线	1	GAME
-多波束天线	1	GAME
-赋形波束天线	1	GAME
-扇形波束天线	1	GAME
-盒形天线	1	GAME
-消旋天线	1	GAME
-介质天线	1	GAME
-平嵌天线	1	GAME
-短程透镜天线	1	GAME
-漏波天线	1	GAME
-透镜天线	1	GAME
-笔形波束天线	1	GAME
-潜望镜天线	1	GAME
-枕盒天线	1	GAME
-平方余割天线	1	GAME
-阶梯天线	1	GAME
-表面波天线	1	GAME
-线栅透镜天线	1	GAME
-抛物面天线	1	GAME
-抛物环面天线	1	GAME
-卡塞格伦反射面天线	1	GAME
-格雷戈里反射面天线	1	GAME
-喇叭反射天线	1	GAME
-伞形反射天线	1	GAME
-扼流式活塞	1	GAME
-主反射器	1	GAME
-抛物面反射器	1	GAME
-副反射器	1	GAME
-环面反射器	1	GAME
-角形反射器	1	GAME
-功率反射率	1	GAME
-功率透射率	1	GAME
-天线罩	1	GAME
-贝里斯分布	1	GAME
-多尔夫-切比雪夫分布	1	GAME
-线性泰勒分布	1	GAME
-孔径	1	GAME
-电磁透镜	1	GAME
-次级辐射器	1	GAME
-漏失	1	GAME
-二极管	1	GAME
-合金二极管	1	GAME
-开关二极管	1	GAME
-平面二极管	1	GAME
-反向二极管	1	GAME
-双向二极管	1	GAME
-整流二极管	1	GAME
-稳压二极管	1	GAME
-箝位二极管	1	GAME
-点接触二极管	1	GAME
-面接触二极管	1	GAME
-电荷存储二极管	1	GAME
-变容二极管	1	GAME
-阶跃恢复二极管	1	GAME
-热载流子二极管	1	GAME
-肖特基势垒二极管	1	GAME
-隧道二极管	1	GAME
-光电二极管	1	GAME
-耿氏二极管	1	GAME
-里德二极管	1	GAME
-齐纳二极管	1	GAME
-崩越二极管	1	GAME
-势越二极管	1	GAME
-俘越二极管	1	GAME
-电平漂移二极管	1	GAME
-晶体管	1	GAME
-合金晶体管	1	GAME
-开关晶体管	1	GAME
-平面晶体管	1	GAME
-单结晶体管	1	GAME
-单极晶体管	1	GAME
-双极晶体管	1	GAME
-台面晶体管	1	GAME
-塑封晶体管	1	GAME
-薄膜晶体管	1	GAME
-弹道晶体管	1	GAME
-光电晶体管	1	GAME
-横向寄生晶体管	1	GAME
-可渗基区晶体管	1	GAME
-热电子晶体管	1	GAME
-异质结晶体管	1	GAME
-异质结双极晶体管	1	GAME
-多晶硅发射极晶体管	1	GAME
-达林顿功率管	1	GAME
-晶闸管	1	GAME
-双向晶闸管	1	GAME
-场效应晶体管	1	GAME
-绝缘栅场效晶体管	1	GAME
-结型场效晶体管	1	GAME
-耗尽型场效晶体管	1	GAME
-高电子迁移率场效晶体管	1	GAME
-双栅场效晶体管	1	GAME
-调制掺杂场效晶体管	1	GAME
-铁电场效晶体管	1	GAME
-增强型场效晶体管	1	GAME
-金属-半导体场效晶体管	1	GAME
-金属-氮化物-氧化物-半导体场效晶体管	1	GAME
-金属-氧化铝-氧化物-半导体场效晶体管	1	GAME
-量子阱异质结激光器	1	GAME
-转移电子器件	1	GAME
-热电器件	1	GAME
-等离子体耦合器件	1	GAME
-电子束半导体器件	1	GAME
-高压硅堆	1	GAME
-光电池	1	GAME
-可控硅整流器	1	GAME
-温差电致冷器	1	GAME
-发射结	1	GAME
-发射区	1	GAME
-耗尽层	1	GAME
-合金结	1	GAME
-基极	1	GAME
-基区	1	GAME
-集电极	1	GAME
-集电结	1	GAME
-结电容	1	GAME
-结电阻	1	GAME
-集电区	1	GAME
-反向击穿电压	1	GAME
-夹断电压	1	GAME
-阈值电压	1	GAME
-阈值电流	1	GAME
-开关时间	1	GAME
-开关损耗	1	GAME
-抗烧毁能量	1	GAME
-扩散电容	1	GAME
-扩散激活能	1	GAME
-扩散势	1	GAME
-扩散系数	1	GAME
-热击穿	1	GAME
-势垒高度	1	GAME
-特征频率	1	GAME
-内量子效率	1	GAME
-外量子效率	1	GAME
-限累模式	1	GAME
-高场畴雪崩振荡	1	GAME
-正切灵敏度	1	GAME
-内建势	1	GAME
-粒子数反转分布	1	GAME
-漂移区	1	GAME
-标准单元	1	GAME
-集成电路	1	GAME
-小规模集成电路	1	GAME
-中规模集成电路	1	GAME
-大规模集成电路	1	GAME
-超大规模集成电路	1	GAME
-超高速集成电路	1	GAME
-数字集成电路	1	GAME
-模拟集成电路	1	GAME
-单片集成电路	1	GAME
-多片电路	1	GAME
-线性集成电路	1	GAME
-非线性集成电路	1	GAME
-分布参数集成电路	1	GAME
-双极型集成电路	1	GAME
-定制集成电路	1	GAME
-半定制集成电路	1	GAME
-专用集成电路	1	GAME
-三维集成电路	1	GAME
-微功耗集成电路	1	GAME
-微波集成电路	1	GAME
-微波单片集成电路	1	GAME
-微波混合集成电路	1	GAME
-单片微波集成放大器	1	GAME
-电阻-电容-晶体管逻辑	1	GAME
-电阻－晶体管逻辑	1	GAME
-二极管-晶体管逻辑	1	GAME
-晶体管-晶体管逻辑	1	GAME
-直接耦合晶体管逻辑	1	GAME
-发射极耦合逻辑	1	GAME
-阈逻辑电路	1	GAME
-非阈逻辑	1	GAME
-高阈逻辑	1	GAME
-可变阈逻辑	1	GAME
-互补晶体管逻辑	1	GAME
-缓冲场效晶体管逻辑	1	GAME
-抗饱和型逻辑	1	GAME
-三态逻辑	1	GAME
-约瑟夫森隧道逻辑	1	GAME
-增强-耗尽型逻辑	1	GAME
-衬底馈电逻辑	1	GAME
-垂直注入逻辑	1	GAME
-集成注入逻辑	1	GAME
-等平面集成注入逻辑	1	GAME
-肖特基集成注入逻辑	1	GAME
-电流开关型逻辑	1	GAME
-焦平面阵列	1	GAME
-微处理器	1	GAME
-单片计算机	1	GAME
-中央处理器	1	GAME
-算术逻辑部件	1	GAME
-随机存取存储器	1	GAME
-静态随机存取存储器	1	GAME
-动态随机存取存储器	1	GAME
-只读存储器	1	GAME
-可编程只读存储器	1	GAME
-可擦编程只读存储器	1	GAME
-电可擦编程只读存储器	1	GAME
-非逸失性半导体存储器	1	GAME
-单管单元存储器	1	GAME
-双极存储器	1	GAME
-电荷耦合器件存储器	1	GAME
-存储器地址寄存器	1	GAME
-与或堆栈寄存器	1	GAME
-分时地址缓冲器	1	GAME
-读出放大器	1	GAME
-行译码器	1	GAME
-列译码器	1	GAME
-硅编译器	1	GAME
-硅汇编程序	1	GAME
-可编程逻辑器件	1	GAME
-可编程逻辑阵列	1	GAME
-门阵列	1	GAME
-门海	1	GAME
-三态缓冲器	1	GAME
-时钟发生器	1	GAME
-内建诊断电路	1	GAME
-电子电话电路	1	GAME
-模拟乘法器	1	GAME
-电荷耦合器件	1	GAME
-电荷耦合成象器件	1	GAME
-电荷注入器件	1	GAME
-电荷引发器件	1	GAME
-电荷转移器件	1	GAME
-电压控制雪崩振荡器	1	GAME
-斗链器件	1	GAME
-固体电路	1	GAME
-环形振荡器	1	GAME
-恢复电路	1	GAME
-图象抑制混频器	1	GAME
-可编程横向滤波器	1	GAME
-视频处理器	1	GAME
-视频信号处理电路	1	GAME
-数字用户线滤波器	1	GAME
-用户专线接口滤波路	1	GAME
-正常关断器件	1	GAME
-正常开启器件	1	GAME
-自恢复自举驱动电路	1	GAME
-升压高电平时钟发生器	1	GAME
-自举电容器	1	GAME
-电荷耦合器件延迟线	1	GAME
-带式自动键合封装	1	GAME
-单元尺寸	1	GAME
-地址存取时间	1	GAME
-电荷泵	1	GAME
-集成度	1	GAME
-开关电容器	1	GAME
-轻掺杂漏极技术	1	GAME
-逻辑摆幅	1	GAME
-门传输延迟	1	GAME
-模拟能力	1	GAME
-母片	1	GAME
-保护环	1	GAME
-冗余技术	1	GAME
-软失效率	1	GAME
-扇入	1	GAME
-扇出	1	GAME
-刷新周期	1	GAME
-双列直插式封装	1	GAME
-闩锁效应	1	GAME
-位线	1	GAME
-芯片尺寸	1	GAME
-虚设单元	1	GAME
-页分段模式	1	GAME
-页模式	1	GAME
-无源元件	1	GAME
-有源元件	1	GAME
-预充电周期	1	GAME
-语音网络	1	GAME
-噪声容限	1	GAME
-周期时间	1	GAME
-转换率	1	GAME
-字线	1	GAME
-伴随模型	1	GAME
-按比例缩小	1	GAME
-标准单元法	1	GAME
-波形松弛法	1	GAME
-场氧化层	1	GAME
-衬底偏置	1	GAME
-短沟效应	1	GAME
-多元胞法	1	GAME
-埃伯斯-莫尔模型	1	GAME
-符号布图法	1	GAME
-工艺模拟	1	GAME
-根梅尔-普恩模型	1	GAME
-简约关联矩阵	1	GAME
-结点分析法	1	GAME
-漏极电导	1	GAME
-逻辑模拟	1	GAME
-门阵列法	1	GAME
-宏单元	1	GAME
-仿真器	1	GAME
-任意单元法	1	GAME
-时序模拟	1	GAME
-模型参数提取	1	GAME
-窄沟效应	1	GAME
-分级设计法	1	GAME
-电路提取	1	GAME
-存储电容	1	GAME
-计算机辅助设计	1	GAME
-计算机辅助测试	1	GAME
-计算机辅助制造	1	GAME
-布图规则检查	1	GAME
-自动布局布线	1	GAME
-启发式布线	1	GAME
-自动布图设计系统	1	GAME
-积木式布图系统	1	GAME
-交互式布图系统	1	GAME
-晶片	1	GAME
-衬底	1	GAME
-主平面	1	GAME
-次平面	1	GAME
-切片	1	GAME
-清洗	1	GAME
-双面研磨	1	GAME
-直径研磨	1	GAME
-抛光	1	GAME
-化学机械抛光	1	GAME
-化学抛光	1	GAME
-机械抛光	1	GAME
-电抛光	1	GAME
-离子束抛光	1	GAME
-二氧化硅乳胶抛光	1	GAME
-吸杂	1	GAME
-本征吸杂工艺	1	GAME
-损伤吸杂工艺	1	GAME
-损伤感生缺陷	1	GAME
-容错	1	GAME
-离子镀	1	GAME
-离子束镀	1	GAME
-射频离子镀	1	GAME
-离子束淀积	1	GAME
-离子束外延	1	GAME
-离子团束淀积	1	GAME
-离子团束外延	1	GAME
-薄膜淀积	1	GAME
-低压等离子体淀积	1	GAME
-淀积率	1	GAME
-成核	1	GAME
-增密工艺	1	GAME
-针孔	1	GAME
-冷壁反应器	1	GAME
-热壁反应器	1	GAME
-气相质量转移系数	1	GAME
-界面反应率常数	1	GAME
-表面反应控制	1	GAME
-台阶覆盖	1	GAME
-二氧化硅	1	GAME
-热氧化	1	GAME
-干氧氧化	1	GAME
-湿氧氧化	1	GAME
-水汽氧化	1	GAME
-减压氧化	1	GAME
-高压氧化	1	GAME
-等离子体氧化	1	GAME
-选择氧化	1	GAME
-生长率	1	GAME
-正硅酸乙酯	1	GAME
-石英反应室	1	GAME
-石墨承热器	1	GAME
-阳极氧化法	1	GAME
-加热合成氧化技术	1	GAME
-氧化增强扩散	1	GAME
-氧化掩模	1	GAME
-氧化层陷阱电荷	1	GAME
-氧化感生缺陷	1	GAME
-氧化感生堆垛层错	1	GAME
-界面陷阱电荷	1	GAME
-隔离工艺	1	GAME
-等平面隔离	1	GAME
-外延隔离	1	GAME
-介质击穿	1	GAME
-介质隔离	1	GAME
-平面工艺	1	GAME
-等平面工艺	1	GAME
-自隔离	1	GAME
-自对准隔离工艺	1	GAME
-静电保护	1	GAME
-静电放电损伤	1	GAME
-溅射	1	GAME
-直流溅射	1	GAME
-等离子体溅射	1	GAME
-射频溅射	1	GAME
-磁控溅射	1	GAME
-共溅射	1	GAME
-反应溅射	1	GAME
-真空蒸发	1	GAME
-反应蒸发	1	GAME
-离子束蒸发	1	GAME
-电子束蒸发	1	GAME
-共蒸发	1	GAME
-元素靶	1	GAME
-复合靶	1	GAME
-离子轰击	1	GAME
-薄栅氧化层	1	GAME
-迪尔-格罗夫模型	1	GAME
-氮氧化硅	1	GAME
-多晶硅-硅化物栅	1	GAME
-多孔硅氧化隔离	1	GAME
-硅化物	1	GAME
-二硅化物	1	GAME
-硅栅	1	GAME
-硅栅自对准工艺	1	GAME
-钼栅工艺	1	GAME
-难熔金属硅化物	1	GAME
-扩散	1	GAME
-预扩散	1	GAME
-自扩散	1	GAME
-外扩散	1	GAME
-双扩散	1	GAME
-间隙扩散	1	GAME
-替位扩散	1	GAME
-选择扩散	1	GAME
-掩蔽扩散	1	GAME
-场助扩散	1	GAME
-箱法扩散	1	GAME
-闭管真空扩散	1	GAME
-液态源扩散	1	GAME
-气态源扩散	1	GAME
-空位流	1	GAME
-扩散控制	1	GAME
-扩散工艺	1	GAME
-掺杂	1	GAME
-自掺杂	1	GAME
-掺杂剂	1	GAME
-选择掺杂	1	GAME
-光掺杂	1	GAME
-中子嬗变掺杂	1	GAME
-杂质浓度	1	GAME
-杂质扩散	1	GAME
-掺杂多晶硅扩散	1	GAME
-掺杂氧化物扩散	1	GAME
-表面浓度	1	GAME
-浓度剖面分布	1	GAME
-余误差函数分布	1	GAME
-结深	1	GAME
-扩展电阻	1	GAME
-浅结工艺	1	GAME
-发射区陷落效应	1	GAME
-埋层	1	GAME
-图形发生器	1	GAME
-离子源	1	GAME
-离子注入	1	GAME
-离子注入机	1	GAME
-沟道效应	1	GAME
-射程分布	1	GAME
-深度分布	1	GAME
-投影射程	1	GAME
-阻止距离	1	GAME
-阻止本领	1	GAME
-标准阻止截面	1	GAME
-退火	1	GAME
-激活能	1	GAME
-等温退火	1	GAME
-激光退火	1	GAME
-应力感生缺陷	1	GAME
-择优取向	1	GAME
-制版工艺	1	GAME
-图形畸变	1	GAME
-初缩	1	GAME
-精缩	1	GAME
-母版	1	GAME
-铬版	1	GAME
-干版	1	GAME
-乳胶版	1	GAME
-透明版	1	GAME
-高分辨率版	1	GAME
-超微粒干版	1	GAME
-掩模	1	GAME
-掩模对准	1	GAME
-对准精度	1	GAME
-光刻胶	1	GAME
-负性光刻胶	1	GAME
-正性光刻胶	1	GAME
-无机光刻胶	1	GAME
-多层光刻胶	1	GAME
-电子束光刻胶	1	GAME
-刷洗	1	GAME
-甩胶	1	GAME
-涂胶	1	GAME
-后烘	1	GAME
-光刻	1	GAME
-X射线光刻	1	GAME
-电子束光刻	1	GAME
-离子束光刻	1	GAME
-深紫外光刻	1	GAME
-光刻机	1	GAME
-投影光刻机	1	GAME
-曝光	1	GAME
-接触式曝光法	1	GAME
-接近式曝光法	1	GAME
-光学投影曝光法	1	GAME
-电子束曝光系统	1	GAME
-分步重复系统	1	GAME
-显影	1	GAME
-线宽	1	GAME
-去胶	1	GAME
-氧化去胶	1	GAME
-等离子体去胶	1	GAME
-边缘效应	1	GAME
-刻蚀	1	GAME
-干法刻蚀	1	GAME
-反应离子刻蚀	1	GAME
-各向同性刻蚀	1	GAME
-各向异性刻蚀	1	GAME
-反应溅射刻蚀	1	GAME
-离子铣	1	GAME
-等离子体刻蚀	1	GAME
-钻蚀	1	GAME
-剥离技术	1	GAME
-终点监测	1	GAME
-金属化	1	GAME
-互连	1	GAME
-多层金属化	1	GAME
-电迁徙	1	GAME
-回流	1	GAME
-磷硅玻璃	1	GAME
-硼磷硅玻璃	1	GAME
-钝化工艺	1	GAME
-多层介质钝化	1	GAME
-划片	1	GAME
-电子束切片	1	GAME
-烧结	1	GAME
-印压	1	GAME
-热压焊	1	GAME
-热超声焊	1	GAME
-冷焊	1	GAME
-点焊	1	GAME
-球焊	1	GAME
-楔焊	1	GAME
-内引线焊接	1	GAME
-外引线焊接	1	GAME
-梁式引线	1	GAME
-装架工艺	1	GAME
-附着	1	GAME
-封装	1	GAME
-金属封装	1	GAME
-陶瓷封装	1	GAME
-扁平封装	1	GAME
-塑封	1	GAME
-玻璃封装	1	GAME
-微封装	1	GAME
-管壳	1	GAME
-管芯	1	GAME
-引线键合	1	GAME
-引线框式键合	1	GAME
-带式自动键合	1	GAME
-激光键合	1	GAME
-超声键合	1	GAME
-红外键合	1	GAME
-椭偏仪法	1	GAME
-滚槽法	1	GAME
-磨角染色法	1	GAME
-红外干涉法	1	GAME
-电容电压法	1	GAME
-故障诊断	1	GAME
-工艺过程监测	1	GAME
-成品率	1	GAME
-洁净室	1	GAME
-洁净台	1	GAME
-超纯水	1	GAME
-超过滤	1	GAME
-去离子水	1	GAME
-反渗透	1	GAME
-毛细成形技术	1	GAME
-膜过滤	1	GAME
-激光再结晶	1	GAME
-蓝宝石上硅薄膜	1	GAME
-绝缘体上硅薄膜	1	GAME
-扭折	1	GAME
-沉降分析法	1	GAME
-老化	1	GAME
-成型	1	GAME
-定向	1	GAME
-封口	1	GAME
-化学共沉淀工艺	1	GAME
-化学液相淀积	1	GAME
-挤压	1	GAME
-磨球面	1	GAME
-磨圆	1	GAME
-磨边	1	GAME
-捏练	1	GAME
-喷雾干燥	1	GAME
-去蜡	1	GAME
-排气	1	GAME
-热压铸	1	GAME
-热压	1	GAME
-热挤压	1	GAME
-筛分析法	1	GAME
-上釉	1	GAME
-匣钵	1	GAME
-修整	1	GAME
-预烧	1	GAME
-压滤	1	GAME
-预压	1	GAME
-振动磨	1	GAME
-选粒	1	GAME
-注浆	1	GAME
-轧膜	1	GAME
-差热分析	1	GAME
-中子活化分析	1	GAME
-离子探针谱学	1	GAME
-离子微分析	1	GAME
-俄歇电子能谱学	1	GAME
-内反射谱学	1	GAME
-外反射谱学	1	GAME
-光声拉曼谱学	1	GAME
-低能电子衍射	1	GAME
-反射高能电子衍射	1	GAME
-透射高能电子衍射	1	GAME
-紫外光电子能谱学	1	GAME
-中能电子衍射	1	GAME
-出现电势谱学	1	GAME
-电子探针	1	GAME
-化学分析电子能电子能谱谱学	1	GAME
-场致发射显微镜学	1	GAME
-场致离子质谱学	1	GAME
-离子中和谱学	1	GAME
-扫描俄歇电子能谱学	1	GAME
-扫描电子显微镜学	1	GAME
-热解吸质谱术	1	GAME
-卢瑟福背散射谱学	1	GAME
-深能级瞬态谱学	1	GAME
-光声光谱学	1	GAME
-低能离子散射	1	GAME
-火花源质谱术	1	GAME
-电子能量损失能谱学	1	GAME
-电子自旋共振谱学	1	GAME
-电子核子双共振谱学	1	GAME
-电子双共振谱学	1	GAME
-飞行时间质谱仪	1	GAME
-双聚焦质谱仪	1	GAME
-回旋质谱仪	1	GAME
-射频质谱仪	1	GAME
-余摆线聚焦质谱仪	1	GAME
-四极质谱仪	1	GAME
-激光探针质量分析仪	1	GAME
-离子回旋共振加热	1	GAME
-电子回旋共振加�	1	GAME

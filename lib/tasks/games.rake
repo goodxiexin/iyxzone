@@ -1,24 +1,5 @@
 namespace :games do 
 
-  task :test => :environment do  
-d = Dir.new('db/migrate')
-d.each do |fname|
-  if fname != '.' and fname != '..'
-    f = File.open("db/migrate/#{fname}", "r")
-    while str = f.gets
-      if str =~ /game(\d+)\.tag_list \= \"(.+)\"/
-        game_id = $1
-        game_tags = $2
-        puts "game_id: #{game_id}, tags: #{game_tags}, real_game_id: #{Gameswithhole.find_by_txtid(game_id).sqlid}"
-        game = Game.find Gameswithhole.find_by_txtid($1).sqlid
-        game.tag_list = $2
-        game.save
-      end
-    end
-  end
-end 
-  end
-
   desc "更新游戏的角色计数器"
   task :update_last_week_characters_count => :environment do 
     Game.update_all("last_week_characters_count = characters_count")

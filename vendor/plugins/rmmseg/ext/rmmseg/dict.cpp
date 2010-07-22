@@ -4,8 +4,11 @@
 
 using namespace std;
 
+int dict_mem = 0;
+
 namespace rmmseg
 {
+
     struct Entry
     {
         Word *word;
@@ -223,6 +226,7 @@ namespace rmmseg
 								*_ptr = '\0';
                 add(make_word(buf, (ptr-buf)/3, atoi(ptr+1), _ptr+1, -1));
             }
+printf("dict: %s, size: %d\n", filename, dict_mem);
             fclose(fp);
             return true;
         }

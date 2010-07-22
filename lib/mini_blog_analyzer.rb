@@ -24,15 +24,14 @@ class Tokenizer < ::Ferret::Analysis::TokenStream
       if tok.nil?
         return nil
       else
-        puts "#{tok.text}, #{tok.freq}, #{tok.cixing}"
-        if tok.cx_game or ((tok.cx_unkown or tok.cx_noun) and tok.text.size > 3 and tok.freq < 5000000)
+        #if tok.cx_game or ((tok.cx_unkown or tok.cx_noun) and tok.text.size > 3 and tok.freq < 5000000)
           @token.text = tok.text
           @token.start = tok.start
           @token.end = tok.end
           @token.cixing = tok.cixing
           @token.freq = tok.freq
           return @token
-        end
+        #end
       end
     end
   end
