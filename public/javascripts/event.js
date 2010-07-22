@@ -10,9 +10,19 @@ Iyxzone.Event = {
 // 一些在event show页面的操作
 Object.extend(Iyxzone.Event.Presentor, {
 
+  posterID: null,
+
+  eventID: null,
+
   curTab: null,
 
   cache: new Hash(),
+
+  init: function(eventID, posterID){
+    this.eventID = eventID;
+    this.posterID = posterID;
+    this.cache.set('photo', $('presentation').innerHTML);
+  },
 
   setTab: function(type){
     $('tab_photo').writeAttribute('class', 'fix unSelected');
@@ -21,55 +31,38 @@ Object.extend(Iyxzone.Event.Presentor, {
     this.curTab = type;
   },
 
-  loading: function(){
-    $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
-  },
-
-  showPhotos: function(albumID){
+  showPhotos: function(){
     if(this.curTab == 'photo')
       return;
 
+    this.setTab('photo');
+
     var html = this.cache.get('photo');
-    
+    //一定存在
     if(html){
       $('presentation').innerHTML = html;
-      this.setTab('photo');
       return;
     }
-
-    new Ajax.Request('/event_photos?album_id=' + albumID, {
-      method: 'get',
-      onLoading: function(){
-        this.loading();
-        this.setTab('photo');
-      }.bind(this),
-      onSuccess: function(transport){
-        this.cache.set('photo', transport.responseText);
-        if(this.curTab == 'photo'){
-          $('presentation').innerHTML = transport.responseText;
-        }
-      }.bind(this)
-    });   
   },
 
-  showWall: function(eventID, recipientID){
+  showWall: function(){
     if(this.curTab == 'wall')
       return;
 
-    var html = this.cache.get('wall');
+    this.setTab('wall');
     
+    var html = this.cache.get('wall');
     if(html){
       $('presentation').innerHTML = html;
-      this.setTab('wall');
       return;
     }
 
     new Ajax.Request('/wall_messages/index_with_form', {
       method: 'get',
-      parameters: {wall_id: eventID, wall_type: 'Event', recipient_id: recipientID},
+      parameters: {wall_id: this.eventID, wall_type: 'Event', recipient_id: this.posterID},
       onLoading: function(){
-        this.loading();
-        this.setTab('wall');
+        $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('wall', $('presentation').innerHTML);
       }.bind(this),
       onSuccess: function(transport){
         this.cache.set('wall', transport.responseText);

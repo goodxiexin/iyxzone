@@ -23,7 +23,7 @@
 			<%= hidden_field_tag 'commentable_id', commentable.id %>
 			<%= hidden_field_tag 'commentable_type', commentable.class.base_class.to_s %>
 			<%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id, :id => "#{type}_comment_recipient_#{commentable.id}" %>
-      <%= f.text_area 'content', :class=>'textarea', :id => "#{type}_comment_content_#{commentable.id}" %>
+      <%= f.text_area 'content', :class=>'textarea', :id => "#{type}_comment_content_#{commentable.id}", :onfocus => "Iyxzone.limitText($(this), 140, Iyxzone.Comment.checkLength);", :onblur => "Iyxzone.cancelLimitText($(this));" %>
       <div class="submit s_clear">
 				<span class="button button-gray"><span><button onclick='Iyxzone.Comment.hideForm("<%=type%>",<%=commentable.id%>, event)'>取消</button></span></span>
         <span class="button w-l"><span><button type="submit" onclick='Iyxzone.Comment.save( "<%=type%>", <%= commentable.id %>, this, event)'>发布</button></span></span>
@@ -33,13 +33,3 @@
     <% end %>
   </div>
 </div>
-
-<% javascript_tag do %>
-  new Iyxzone.limitedTextInput($('<%= type %>_comment_content_<%= commentable.id %>'), {
-    max: 140,
-    interval: 200,
-    autoClearOnFirstFocus: false,
-    doCheck: Iyxzone.Comment.checkLength
-  });
-<% end %>
-

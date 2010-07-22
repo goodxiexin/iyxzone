@@ -1,1 +1,1 @@
-<%= link_to_remote  "<span class='i iNoFollow'></span>取消关注", :url => attention_url(attention), :method => :delete, :html => {:class => 'red'} %>
+<%= link_to_remote  "<span class='i iNoFollow'></span>取消关注", :url => "/attentions/0?attentionable_id=#{attentionable.id}&attentionable_type=#{attentionable.class.name}", :method => :delete, :html => {:class => 'red'} %>

@@ -2,8 +2,8 @@
     <div class="avatar">
       <%= album_cover guild.album, :class => "imgbox01" %>
       <div class='follow' id='guild_attention_<%= guild.id %>'>
-        <% if attention %>
-          <%= render :partial => 'user/attentions/unfollow', :locals => {:attention => attention} %>
+        <% if guild.followed_by? current_user %>
+          <%= render :partial => 'user/attentions/unfollow', :locals => {:attentionable => guild} %>
         <% else %>
           <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => guild} %>
         <% end %>

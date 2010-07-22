@@ -5,7 +5,7 @@ class User::AttentionsController < UserBaseController
 
     if @attention.save
       render :update do |page|
-        page.replace_html "#{@attentionable.class.name.underscore}_attention_#{@attentionable.id}", :partial => 'unfollow', :locals => {:attention => @attention}
+        page.replace_html "#{@attentionable.class.name.underscore}_attention_#{@attentionable.id}", :partial => 'unfollow', :locals => {:attentionable => @attention.attentionable}
       end    
     else
       render_js_error
@@ -13,7 +13,7 @@ class User::AttentionsController < UserBaseController
   end
 
   def destroy
-    @attentionable = @attention.attentionable
+    @attention = @attentionable.attentions.find_by_follower_id(current_user.id)
 
     if @attention.destroy
       render :update do |page|
@@ -30,8 +30,7 @@ protected
     if ['create'].include? params[:action]
       @attentionable = params[:attentionable_type].camelize.constantize.find(params[:attentionable_id])
     elsif ['destroy'].include? params[:action]
-      @attention = Attention.find params[:id]
-      require_owner @attention.follower
+      @attentionable = params[:attentionable_type].camelize.constantize.find(params[:attentionable_id]) #Attention.find params[:id]
     end 
   end
   

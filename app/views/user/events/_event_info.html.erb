@@ -2,8 +2,8 @@
     <div class="avatar">
       <%= album_cover event.album, :class => "imgbox01" %>
       <div class='follow' id='event_attention_<%= event.id %>'>
-        <% if attention %>
-          <%= render :partial => 'user/attentions/unfollow', :locals => {:attention => attention} %>
+        <% if event.followed_by? current_user %>
+          <%= render :partial => 'user/attentions/unfollow', :locals => {:attentionable => event} %>
         <% else %>
           <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => event} %>
         <% end %>

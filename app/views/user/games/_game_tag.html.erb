@@ -5,7 +5,7 @@
     </div>
     <em></em>
   </div>
-  <div class="s2m2bd fix">
+  <div class="s2m2bd fix" id='tag_cloud'>
     <% if game.is_taggable_by? current_user %>
       <div class="impress-add s_clear space">
       <%= render :partial => 'user/games/tags/game_tag', :locals => {:game => game} %>

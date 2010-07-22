@@ -34,7 +34,8 @@ class User::GuildsController < UserBaseController
     @events = @guild.events.people_order.limit(4).prefetch([{:album => :cover}])
     @memberships = @guild.memberships.prefetch([:character]).by(current_user.id)
     @role = @guild.role_for current_user
-    @attention = @guild.attentions.find_by_follower_id current_user.id
+    @fetch_size = 1
+    @feed_deliveries = @guild.feed_deliveries.limit(@fetch_size).all
     render :action => 'show', :layout => 'app3'
 	end
 

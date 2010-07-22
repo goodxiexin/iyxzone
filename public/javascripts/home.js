@@ -53,96 +53,148 @@ Object.extend(Iyxzone.Home.NoticeManager, {
 
 Object.extend(Iyxzone.Home.Feeder, {
   
-  idx: 1, 
+  curIdx: 0, 
 
-  type: 'all',
+  curType: null,
+
+  curLoading: false,
+
+  userID: null,
+
+  fetchSize: null,
 
   cache: new Hash(),
 
-  loading: function(div){
-    div.innerHTML = "<div class='ajaxLoading'><img src='/images/ajax-loader.gif' /></div>";
+  init: function(userID, fetchSize){
+    this.cache.set("all", {idx: 1, loading: false, html: null});
+    this.cache.set("blog", {idx: 0, loading: false, html: null});
+    this.cache.set("album", {idx: 0, loading: false, html: null});
+    this.cache.set("video", {idx: 0, loading: false, html: null});
+    this.curType = 'all';
+    this.curIdx = 1;
+    this.curLoading = false;
+    this.userID = userID;
+    this.fetchSize = fetchSize;
   },
 
   setTab: function(type){
     $('tab_all').className = '';
     $('tab_blog').className = '';
-    $('tab_photo').className = '';
+    $('tab_album').className = '';
     $('tab_video').className = '';
     $('tab_' + type).className = 'hover';
-    this.type = type;
   },
 
-  showFeeds: function(userID, type, fetchSize){
-    if(this.type == type)
+  showFeeds: function(type){
+    if(this.curType == type)
       return;
 
-    // save old
-    this.cache.set(this.type, {html: $('feed_panel').innerHTML, idx: this.idx});
-
-    // try to load from cache
+    // save
+    this.cache.set(this.curType, {html: $('feed_panel').innerHTML, idx: this.curIdx, loading: this.curLoading});
+   
+    // restore
     var info = this.cache.get(type);
-    if(info){
-      $('feed_list').innerHTML = info.html;
-      this.idx = info.idx;
-      this.setTab(type);
+    this.curIdx = info.idx;
+    this.curLoading = info.loading;
+    this.curType = type;
+    this.setTab(type);
+    
+    // try to load from cache
+    if(info.html){
+      $('feed_panel').innerHTML = info.html;
+      $('feed_panel').innerHTML.evalScripts();
       return;
     }
 
-    // get new
-    new Ajax.Request('/feed_deliveries', {
-      method: 'get',
-      parameters: {recipient_id: userID, recipient_type: 'User', category: type, fetch: fetchSize},
-      onLoading: function(){
-        this.idx = 0;
-        this.setTab(type);
-        $('feed_list').update('');
-        this.loading($('more_feed_panel'));
-      }.bind(this),
-      onSuccess: function(transport){
-        if(this.type == type){
-          this.handleResult(transport, userID, fetchSize);
-          this.idx = 1;
-        }
-      }.bind(this)
-    });
-  },
-
-  moreFeeds: function(userID, fetchSize){
-    var old_type = this.type;
-
-    new Ajax.Request('/feed_deliveries', {
-      method: 'get',
-      parameters: {recipient_id: userID, recipient_type: 'User', fetch: fetchSize, category: this.type, idx: this.idx},
-      onLoading: function(){
-        this.loading($('more_feed_panel'));
-      }.bind(this),
-      onSuccess: function(transport){
-        if(this.type == old_type){
-          this.handleResult(transport, userID, fetchSize);
-          this.idx++;
-        }
-      }.bind(this)
-    });
-  },
-
-  handleResult: function(transport, userID, fetchSize){
-    var tmp = new Element('div');
-    tmp.innerHTML = transport.responseText;
-    $('feed_list').insert({bottom: tmp.innerHTML});
-    var len = tmp.childElements().length;
-    if(len == 0 || len < fetchSize){ //说明没有了
-      $('more_feed_panel').update(this.noFeedHTML());
-    }else{
-      $('more_feed_panel').update(this.moreFeedHTML(userID, fetchSize));
+    // 说明前面已经让他在loading了，不多发请求
+    // 这保证了相同类型的，每次只会发一次请求
+    if(this.curLoading){
+      return;
     }
+
+    // info.html为空说明是第一次点击
+    new Ajax.Request('/feed_deliveries', {
+      method: 'get',
+      parameters: {recipient_id: this.userID, recipient_type: 'User', category: type, fetch: this.fetchSize},
+      onLoading: function(){
+        this.curLoading = true;
+        $('feed_list').update('');
+        $('more_feed_panel').update("<div class='ajaxLoading'><img src='/images/ajax-loader.gif' /></div>");
+      }.bind(this),
+      onSuccess: function(transport){
+        var newFeeds = new Element('div');
+        var moreFeeds = new Element('div');
+        newFeeds.innerHTML = transport.responseText;
+        var len = newFeeds.childElements().length;
+        if(len == 0 || len < this.fetchSize){ //说明没有了
+          moreFeeds.update(this.noFeedHTML());
+        }else{
+          moreFeeds.update(this.moreFeedHTML());
+        }
+        
+        if(this.curType == type){ //说明没切换，或者又切了回来
+          $('feed_list').insert({bottom: newFeeds.innerHTML});
+          $('more_feed_panel').update(moreFeeds.innerHTML);
+          this.curIdx = 1;
+          this.curLoading = false;
+        }else{ // 说明切换了, curIdx, curType, curLoading已经不是当时的值了
+          var info = this.cache.get(type);
+          var tmp = new Element('div').update(info.html);
+          var oldFeedList = tmp.childElements()[0];
+          var oldMoreFeeds = tmp.childElements()[2];
+          oldFeedList.insert({bottom: newFeeds.innerHTML});
+          oldMoreFeeds.update(moreFeeds.innerHTML);
+          this.cache.set(type, {html: tmp.innerHTML, idx: info.idx + 1, loading: false});
+        }
+      }.bind(this)
+    });
+  },
+
+  moreFeeds: function(){
+    var oldType = this.curType;
+
+    new Ajax.Request('/feed_deliveries', {
+      method: 'get',
+      parameters: {recipient_id: this.userID, recipient_type: 'User', fetch: this.fetchSize, category: this.curType, idx: this.curIdx},
+      onLoading: function(){
+        this.curLoading = true;
+        $('more_feed_panel').update("<div class='ajaxLoading'><img src='/images/ajax-loader.gif' /></div>");
+      }.bind(this),
+      onSuccess: function(transport){
+        var newFeeds = new Element('div');
+        var moreFeeds = new Element('div');
+        newFeeds.innerHTML = transport.responseText;
+        var len = newFeeds.childElements().length;
+        if(len == 0 || len < this.fetchSize){ //说明没有了
+          moreFeeds.update(this.noFeedHTML());
+        }else{
+          moreFeeds.update(this.moreFeedHTML());
+        }
+
+        if(this.curType == oldType){
+          $('feed_list').insert({bottom: newFeeds.innerHTML});
+          $('more_feed_panel').update(moreFeeds.innerHTML);
+          this.curIdx = this.curIdx + 1;
+          this.curLoading = false;
+        }else{
+          var info = this.cache.get(oldType);
+          var tmp = new Element('div').update(info.html);
+          var oldFeedList = tmp.childElements()[0];
+          var oldMoreFeeds = tmp.childElements()[2];
+          oldFeedList.insert({bottom: newFeeds.innerHTML});
+          oldMoreFeeds.update(moreFeeds.innerHTML);
+          this.cache.set(oldType, {html: tmp.innerHTML, idx: info.idx + 1, loading: false});
+        }
+      }.bind(this)
+    });
   },
 
   noFeedHTML: function(){
     return this.baseHTML('<div class="jl-more">没有更多了...</div>');
   },
 
-  moreFeedHTML: function(userID, fetchSize){
-    return this.baseHTML('<a href="javascript:void(0)" onclick="Iyxzone.Home.Feeder.moreFeeds(' + userID + ', ' + fetchSize + ');" class="jl-more">更多新鲜事</a>');
+  moreFeedHTML: function(){
+    return this.baseHTML('<a href="javascript:void(0)" onclick="Iyxzone.Home.Feeder.moreFeeds();" class="jl-more">更多新鲜事</a>');
   },
 
   baseHTML: function(con){

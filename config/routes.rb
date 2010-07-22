@@ -141,7 +141,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :feed_deliveries, :collection => {:more => :get}
 
-    users.resource :home, :controller => 'home', :member => {:more_feeds => :get, :feeds => :get}
+    users.resource :home, :controller => 'home'
 
     users.resource :privacy_setting, :controller => 'privacy_setting'
 
@@ -222,8 +222,6 @@ ActionController::Routing::Routes.draw do |map|
 
       guilds.resources :blogs, :controller => "guilds/blogs"
 
-      guilds.resources :feeds, :controller => "guilds/feeds", :collection => {:more => :get}
-
       guilds.resources :topics, :controller => "guilds/topics"
 
     end
@@ -238,7 +236,7 @@ ActionController::Routing::Routes.draw do |map|
 
     end
 
-    users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get}, :member => {:more_feeds => :get} do |games|
+    users.resources :games, :collection => {:sexy => :get, :hot => :get, :interested => :get, :beta => :get, :friends => :get} do |games|
 
       games.resources :blogs, :controller => 'games/blogs'
       
@@ -254,8 +252,6 @@ ActionController::Routing::Routes.draw do |map|
 
       games.resources :tags, :controller => 'games/tags'
 
-      games.resources :feeds, :controller => 'games/feeds', :collection => {:more => :get}
-  
     end
 
     users.resources :forums

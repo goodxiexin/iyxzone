@@ -12,7 +12,7 @@
       <%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id %>
       <div class="rows">
         <div class="textarea-wrap"><div class="textarea-wide">
-          <%= f.text_area 'content', :class => 'textarea', :id => "wall_message_content_#{wall.id}" %>
+          <%= f.text_area 'content', :class => 'textarea', :onfocus => "Iyxzone.limitText($(this),140, Iyxzone.WallMessage.checkLength);", :onblur => "Iyxzone.cancelLimitText($(this));", :id => "wall_message_content_#{wall.id}" %>
         </div></div>
       </div>
       <div class="buttons">
@@ -22,11 +22,3 @@
       </div>
     <% end %>
   </div>
-  <% javascript_tag do %>
-  new Iyxzone.limitedTextInput($('wall_message_content_<%= wall.id %>'), {
-    max: 140,
-    interval: 200,
-    autoClearOnFirstFocus: false,
-    doCheck: Iyxzone.WallMessage.checkLength
-  });
-  <% end %>

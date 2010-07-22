@@ -6,7 +6,7 @@
                 <div class="topBg fix">
                   <div class="mBlogEditor">
                     <div class="bd fix">
-                      <textarea name="" id="mini_blog_text_area"></textarea>
+                      <textarea name="" id="mini_blog_text_area" onfocus="Iyxzone.limitText($(this), 140, Iyxzone.MiniBlog.Builder.checkTextLength);" onblur="Iyxzone.cancelLimitText($(this));"></textarea>
                     </div>
                     <div class="ft fix">
                       <ul>

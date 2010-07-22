@@ -3,7 +3,7 @@ class User::FeedDeliveriesController < UserBaseController
   FetchSize = 20
 
   def index
-    @fetch_size = params[:fetch] || FetchSize
+    @fetch_size = params[:fetch].nil? ? FetchSize : params[:fetch].to_i
     @offset = params[:idx].nil? ? 0 : @fetch_size*params[:idx].to_i
     @feed_deliveries = @recipient.feed_deliveries.category(@category).offset(@offset).limit(@fetch_size).all
     render :partial => 'group_deliveries', :locals => {:feed_deliveries => @feed_deliveries}

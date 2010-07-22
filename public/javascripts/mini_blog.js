@@ -29,6 +29,40 @@ Iyxzone.MiniBlog = {
   }
 };
 
+Object.extend(Iyxzone.MiniBlog.Forwarder, {
+
+  checkTextLength: function(field, max){
+    var value = field.value;
+    var count = value.gsub(/[ |\r|\n|\t]+/, '').length;
+    var delta = count - max;
+    if(delta > 0){
+      var len = value.length;
+      for(var i=len-1;i>0;i--){
+        if(!value.substr(i, i).match(/[ |\r|\n|\t]/)){
+          delta--;
+          if(delta == 0){
+            field.value = value.substr(0, i);
+            break;
+          }
+        }
+      }
+    }else{
+      $('forward_words_count').innerHTML = (140 - count);
+    }    
+  },
+
+  forward: function(id, button, at){
+    new Ajax.Request('/mini_blogs/' + id + '/forward', {
+      method: 'post',
+      onLoading: function(transport){
+        Iyxzone.disableButton(button, '发送..');
+      },
+      parameters: {at: at, content: $('forward_content').value}
+    });
+  }
+
+});
+
 Object.extend(Iyxzone.MiniBlog.Pub, {
 
   fetch: function(type){
@@ -127,31 +161,6 @@ Object.extend(Iyxzone.MiniBlog.Slider, {
 
   constructHTML: function(miniBlog){
     return '<div class="topImg"><img class="imgbox01" alt="" src="' + miniBlog.poster_avatar + '"/><div class="op"></div></div><div class="topCon"><h4 class="topSubTitle"><a href="/mini_blogs?uid=' + miniBlog.poster_id + '">' + miniBlog.poster_login + '</a></h4><div class="topSubText">' + miniBlog.content.substr(0, 100) + '...</div><div class="time">(' + miniBlog.time + ')</div></div>';
-  }
-
-});
-
-Object.extend(Iyxzone.MiniBlog.Forwarder, {
-
-  init: function(){
-    new Iyxzone.limitedTextInput($('forward_content'), {
-      max: 140,
-      interval: 200,
-      autoClearOnFirstFocus: false,
-      display: function(count){
-        $('forward_words_count').innerHTML = '还可以输入' + (140 - count) + '个字';
-      }
-    });      
-  },
-
-  forward: function(id, button, at){
-    new Ajax.Request('/mini_blogs/' + id + '/forward', {
-      method: 'post',
-      onLoading: function(transport){
-        Iyxzone.disableButton(button, '发送..');
-      },
-      parameters: {at: at, content: $('forward_content').value}
-    });
   }
 
 });
@@ -337,32 +346,28 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
     $('mini_image_uploaded_data').clear();
     this.imagePublishPanel = $('publisher_image').innerHTML;
 
-    new Iyxzone.limitedTextInput($('mini_blog_text_area'), {
-      max: 140,
-      interval: 200, //ms
-      autoClearOnFirstFocus: false,
-      doCheck: function(field, max){
-        var value = field.value;
-        var count = value.gsub(/[ |\r|\n|\t]+/, '').length;
-        var delta = count - max;
-        if(delta > 0){
-          var len = value.length;
-          for(var i=len-1;i>0;i--){
-            if(!value.substr(i, i).match(/[ |\r|\n|\t]/)){
-              delta--;
-              if(delta == 0){
-                field.value = value.substr(0, i);
-                break;
-              }
-            }
-          } 
-        }else{
-          $('mini_blog_words_count').innerHTML = (140 - count);
-        }
-      }
-    });
     if(text){
       Iyxzone.insertAtCursor($('mini_blog_text_area'), text);
+    }
+  },
+
+  checkTextLength: function(field, max){
+    var value = field.value;
+    var count = value.gsub(/[ |\r|\n|\t]+/, '').length;
+    var delta = count - max;
+    if(delta > 0){
+      var len = value.length;
+      for(var i=len-1;i>0;i--){
+        if(!value.substr(i, i).match(/[ |\r|\n|\t]/)){
+          delta--;
+          if(delta == 0){
+            field.value = value.substr(0, i);
+            break;
+          }
+        }
+      }
+    }else{
+      $('mini_blog_words_count').innerHTML = (140 - count);
     }
   } 
 });

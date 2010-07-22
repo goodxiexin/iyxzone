@@ -23,7 +23,7 @@
 <% end %>
 
 <% content_for :side_bar do %>
-  <%= render :partial => 'guild_info', :locals => {:guild => @guild, :attention => @attention} %>  
+  <%= render :partial => 'guild_info', :locals => {:guild => @guild} %>  
   <%= render :partial => 'my_memberships', :locals => {:guild => @guild, :memberships => @memberships} %>
   <%= render :partial => 'guild_desc', :locals => {:guild => @guild} %>
   <%= render :partial => 'guild_menu', :locals => {:guild => @guild, :role => @role} %>
@@ -36,6 +36,10 @@
 <% content_for :content do %>
   <%= render :partial => "user/home/talking_about", :locals => {:mini_blogs => @mini_blogs, :topics => @topics} %>
   <%= render :partial => "guild_tab", :locals => {:guild => @guild} %>
-  <div id='presentation'></div>
-  <%= javascript_tag "Iyxzone.Guild.Presentor.showFeeds(#{@guild.id});" %>
+  <div id='presentation'>
+    <%= render :partial => 'feed_list', :locals => {:feed_deliveries => @feed_deliveries, :fetch_size => @fetch_size} %>
+  </div>
+  <% javascript_tag do %>
+    Iyxzone.Guild.Presentor.init(<%= @guild.id %>, <%= @guild.album.id %>, <%= @guild.president_id %>, <%= @fetch_size %>);
+  <% end %>
 <% end %>

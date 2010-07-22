@@ -2,8 +2,8 @@
     <div class="avatar">
       <%= game_image game.name, :class => "imgbox01" %>
       <div class='follow' id='game_attention_<%= game.id %>'>
-        <% if attention %>
-          <%= render :partial => 'user/attentions/unfollow', :locals => {:attention => attention} %>
+        <% if game.followed_by? current_user %>
+          <%= render :partial => 'user/attentions/unfollow', :locals => {:attentionable => game} %>
         <% else %>
           <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => game} %>
         <% end %>

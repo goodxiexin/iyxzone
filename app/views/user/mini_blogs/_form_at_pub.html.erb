@@ -6,7 +6,7 @@
     </div>
     <div class="bd fix">
       <div class="cTxtArea">
-        <textarea id="mini_blog_text_area"></textarea>
+        <textarea id="mini_blog_text_area" onfocus="Iyxzone.limitText($(this), 140, Iyxzone.MiniBlog.Builder.checkTextLength);" onblur="Iyxzone.cancelLimitText($(this));"></textarea>
       </div>
     </div>
     <div class="ft fix">

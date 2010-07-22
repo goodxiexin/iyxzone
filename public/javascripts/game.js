@@ -582,9 +582,21 @@ Object.extend(Iyxzone.Game.Presentor, {
 
   feedIdx: 0,
 
+  gameID: null,
+
+  fetchSize: null,
+
   curTab: null,
 
   cache: new Hash(),
+
+  init: function(gameID, fetchSize){
+    this.gameID = gameID;
+    this.feedIdx = 1;
+    this.fetchSize = fetchSize;
+    this.curTab = 'feed';
+    this.cache.set('feed', $('presentation').innerHTML);
+  },
 
   setTab: function(type){
     $('tab_feed').writeAttribute('class', 'fix unSelected');
@@ -595,73 +607,91 @@ Object.extend(Iyxzone.Game.Presentor, {
     this.curTab = type;
   }, 
 
-  loading: function(){
-    $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
-  },
-
-  setFromCache: function(type){
-    var html = this.cache.get(type);
-
-    if(html){
-      $('presentation').innerHTML = html;
-      return true;
-    }else{
-      return false;
-    }
-  },
-
   showFeeds: function(gameID){
     if(this.curTab == 'feed')
       return;
 
-    if(this.setFromCache('feed')){
-      this.setTab('feed');
+    this.setTab('feed');
+
+    var html = this.cache.get('feed');
+    //一定有
+    if(html){
+      $('presentation').innerHTML = html;
       return;
     }
-
-    new Ajax.Request('/games/' + gameID + '/feeds', {
-      method: 'get',
-      onLoading: function(){
-        this.loading();
-        this.setTab('feed');
-      }.bind(this),
-      onSuccess: function(transport){
-        this.cache.set('feed', transport.responseText);
-        if(this.curTab == 'feed'){
-          $('presentation').innerHTML = transport.responseText;
-          this.feedIdx = 0;
-        }
-      }.bind(this)
-    }); 
   },
 
-  moreFeeds: function(gameID){
-    // show loading page
-    //$('more_feed').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
-
+  moreFeeds: function(){
     // send ajax request
-    new Ajax.Request('/games/' + gameID + '/feeds/more?idx=' + this.feedIdx, {
+    new Ajax.Request('/feed_deliveries', {
       method: 'get',
-      onSuccess: function(){
-        this.feedIdx++;
+      parameters: {recipient_id: this.gameID, recipient_type: 'Game', fetch: this.fetchSize, idx: this.feedIdx},
+      onLoading: function(){
+        $('more_feed_panel').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('feed', $('presentation').innerHTML);
+      }.bind(this),
+      onSuccess: function(transport){
+        var newFeeds = new Element('div').update(transport.responseText);
+        var moreFeeds = new Element('div');
+        var len = newFeeds.childElements().length;
+        if(len == 0 || len < this.fetchSize){
+          moreFeeds.update(this.noFeedHTML());
+        }else{
+          moreFeeds.update(this.moreFeedHTML());
+        }
+        
+        if(this.curTab == 'feed'){
+          $('feed_list').insert({bottom: newFeeds.innerHTML});
+          $('more_feed_panel').update(moreFeeds.innerHTML);
+          this.cache.set('feed', $('presentation').innerHTML);
+        }else{
+          var html = this.cache.get('feed');
+          var tmp = new Element('div').update(html);
+          var oldFeedList = tmp.childElements()[0];
+          var oldMoreFeeds = tmp.childElements()[2];
+          oldFeedList.insert({bottom: newFeeds.innerHTML});
+          oldMoreFeeds.update(moreFeeds.innerHTML);
+          this.cache.set('feed', tmp.innerHTML);
+        }
+  
+        this.feedIdx = this.feedIdx + 1; 
       }.bind(this)
     });
   },
 
-  showBlogs: function(gameID){
+  noFeedHTML: function(){
+    return this.baseHTML('<div class="jl-more">没有更多了...</div>');
+  },
+
+  moreFeedHTML: function(){
+    return this.baseHTML('<a href="javascript:void(0)" onclick="Iyxzone.Game.Presentor.moreFeeds();" class="jl-more">更多新鲜事</a>');
+  },
+
+  baseHTML: function(con){
+    var html = '<div class="round04 round_r_t jl-read-more space s_clear">';
+    html += '<div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m"><div class="round_body" id="more_feed_link">';
+    html +=  con;
+    html += '</div></div></div></div></div></div>';
+    return html;
+  },
+
+  showBlogs: function(){
     if(this.curTab == 'blog')
       return;
 
-    if(this.setFromCache('blog')){
-      this.setTab('blog');
+    this.setTab('blog');
+
+    var html = this.cache.get('blog');
+    if(html){
+      $('presentation').innerHTML = html;
       return;
     }
 
-    new Ajax.Request('/games/' + gameID + '/blogs?at=guild_show', {
+    new Ajax.Request('/games/' + this.gameID + '/blogs?at=guild_show', {
       method: 'get',
       onLoading: function(){
-        this.loading();
-        this.setTab('blog');
+        $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('blog', $('presentation').innerHTML);
       }.bind(this),
       onSuccess: function(transport){
         this.cache.set('blog', transport.responseText);
@@ -672,20 +702,23 @@ Object.extend(Iyxzone.Game.Presentor, {
     });
   },
 
-  showAlbums: function(gameID){
+  showAlbums: function(){
     if(this.curTab == 'album')
       return;
 
-    if(this.setFromCache('album')){
-      this.setTab('album');
+    this.setTab('album');
+    
+    var html = this.cache.get('album');
+    if(html){
+      $('presentation').innerHTML = html;
       return;
     }
 
-    new Ajax.Request('/games/' + gameID + '/albums?at=guild_show', {
+    new Ajax.Request('/games/' + this.gameID + '/albums?at=guild_show', {
       method: 'get',
       onLoading: function(){
-        this.loading();
-        this.setTab('album');
+        $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('album', $('presentation').innerHTML);
       }.bind(this),
       onSuccess: function(transport){
         this.cache.set('album', transport.responseText);
@@ -696,21 +729,24 @@ Object.extend(Iyxzone.Game.Presentor, {
     });
   },
 
-  showWall: function(gameID){
+  showWall: function(){
     if(this.curTab == 'wall')
       return;
 
-    if(this.setFromCache('wall')){
-      this.setTab('wall');
+    this.setTab('wall');
+
+    var html = this.cache.get('wall');
+    if(html){
+      $('presentation').innerHTML = html;
       return;
     }
 
     new Ajax.Request('/wall_messages/index_with_form', {
       method: 'get',
-      parameters: {wall_id: gameID, wall_type: 'game'},
+      parameters: {wall_id: this.gameID, wall_type: 'game'},
       onLoading: function(){
-        this.loading();
-        this.setTab('wall');
+        $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+        this.cache.set('wall', $('presentation').innerHTML);
       }.bind(this),
       onSuccess: function(transport){
         this.cache.set('wall', transport.responseText);

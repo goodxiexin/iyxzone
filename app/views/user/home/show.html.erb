@@ -17,7 +17,7 @@
 			  		<%= render :partial => 'user/notices/notices', :object => @notices %>
           </div>
           <div class="feed-box rows">
-            <%= render :partial => 'feed_category', :locals => {:fetch_size => 2} %>
+            <%= render :partial => 'feed_category' %>
             <div class='feed-wrap' id='feed_panel'>
               <% if !@news_list.blank? %>
                 <%= render :partial => 'daily_news', :locals => {:news_list => @news_list, :rich_news => @rich_news} %>
@@ -25,7 +25,7 @@
               <% if current_user.friends_count == 0 and current_user.idols_count == 0 %>
                 <%= render :partial => 'welcome_info', :locals => {:friend_suggestions => @friend_suggestions} %>
               <% else %>
-                <%= render :partial => 'feed_list', :locals => {:feed_deliveries => @feed_deliveries, :fetch_size => 2} %>
+                <%= render :partial => 'feed_list', :locals => {:fetch_size => @fetch_size, :feed_deliveries => @feed_deliveries} %>
               <% end %>
             </div>
           </div>
@@ -43,4 +43,8 @@
         <%= render :partial => 'friend_suggestions', :locals => {:friend_suggestions => @friend_suggestions} %>
       <% end %>
     </div>
+<% end %>
+
+<% javascript_tag do %>
+  Iyxzone.Home.Feeder.init(<%= current_user.id %>, <%= @fetch_size %>);
 <% end %>

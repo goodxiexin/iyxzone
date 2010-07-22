@@ -196,42 +196,29 @@ Object.extend(Iyxzone, {
 
 });
 
-Iyxzone.limitedTextInput = Class.create({
+Object.extend(Iyxzone, {
+  
+  limitTextTimers: new Hash(),
 
-  initialize: function(el, opts){
-    this.opts = Object.extend({
-      max: 140,
-      interval: 200,
-      autoClearOnFirstFocus: false,
-      doCheck: Prototype.emptyFunction
-    }, opts || {});
-
-    this.el = el;
-    this.timer = null;
-    this.firstFocus = true;
-    
-    this.el.observe('focus', function(){
-      if(this.firstFocus){
-				if(this.opts.autoClearOnFirstFocus)
-					this.el.clear();
-        if(this.opts.doCheck != Prototype.emptyFunction)
-          this.opts.doCheck(this.el, this.opts.max);
-        this.firstFocus = false;
-      }
-      this.timer = setTimeout(this.checkLength.bind(this), this.opts.interval);
-    }.bind(this));
-
-    this.el.observe('blur', function(){
-      clearTimeout(this.timer);
-    }.bind(this));
+  limitText: function(el, max, hook){
+    this.limitTextTimers.set(el, {timer: setTimeout(function(){Iyxzone.checkLength(el);}, 200), hook: hook, max: max});
   },
 
-  checkLength: function(){
-    if(this.opts.doCheck != Prototype.emptyFunction){
-      this.opts.doCheck(this.el, this.opts.max);
+  cancelLimitText: function(el){
+    var info = this.limitTextTimers.unset(el);
+    if(info)
+      clearTimeout(info.timer);
+  },
+
+  checkLength: function(el){
+    var info = this.limitTextTimers.unset(el);
+    if(info && info.hook && info.max){
+      info.hook(el, info.max);
     }
-    this.timer = setTimeout(this.checkLength.bind(this), this.opts.interval);
+    info.timer = setTimeout(function(){Iyxzone.checkLength(el);}, 200);
+    this.limitTextTimers.set(el, info);
   }
+
 });
 
 // app game bar

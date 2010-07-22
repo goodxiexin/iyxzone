@@ -8,6 +8,7 @@ class User::HomeController < UserBaseController
     @topics = MiniTopic.hot.limit(3).all
 
     @feed_deliveries = current_user.feed_deliveries.limit(2).all
+    @fetch_size = 2
     @viewings = current_user.profile.viewings.prefetch([{:viewer => :profile}]).limit(6)
     @notices = current_user.notices.unread.limit(10).all
     @news_list, @rich_news = News.daily

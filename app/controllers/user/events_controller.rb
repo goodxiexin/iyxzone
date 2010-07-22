@@ -34,22 +34,12 @@ class User::EventsController < UserBaseController
   def show
     @mini_blogs = MiniBlog.category(:text).by(@event.participant_ids).limit(3).all
     @topics = MiniTopic.hot.limit(3).all
-
     @maybe_participants = @event.maybe_participants.limit(8).prefetch(:profile)
     @confirmed_participants = @event.confirmed_participants.limit(8).prefetch(:profile)
-    
     @user = @event.poster
     @album = @event.album
     @photos = @album.latest_photos.nonblocked
-
-    @attention = @event.attentions.find_by_follower_id(current_user.id)
-
     @participations = @event.participations.prefetch([:character]).by(current_user.id)
-
-		@reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    @messages = @event.comments.nonblocked.paginate :page => params[:page], :per_page => PER_PAGE, :include => [:commentable, {:poster => :profile}]
-    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @event.id, :wall_type => 'event'}}
-		
     render :action => 'show', :layout => 'app3'
   end
 
