@@ -4,6 +4,8 @@ Iyxzone.Game = {
   author: ['高侠鸿'],
 
   infos: null, // name and id 
+	
+	currentSelector: null,
 
   Suggestor: {},
 
@@ -12,6 +14,12 @@ Iyxzone.Game = {
   Selector: Class.create({}),
 
   PinyinSelector: Class.create({}),
+
+	Panel: {},
+
+  initSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, gameDetails, options){
+    return new Iyxzone.Game.Selector(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, gameDetails, options);
+	},
 
   initPinyinSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options){
     if(Iyxzone.Game.infos == null){
@@ -47,7 +55,7 @@ Iyxzone.Game.Selector = Class.create({
     this.raceInfoDiv = raceInfoDiv;
     this.professionSelectorID = professionSelectorID;
     this.professionInfoDiv = professionInfoDiv;
-    this.details = gameDetails;
+		this.details = gameDetails;
 
     // 钩子函数 
     this.options = Object.extend({
@@ -470,7 +478,152 @@ Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Base, {
 
 });
 
+Object.extend(Iyxzone.Game.Panel, {
 
+  currentLink: null,
+
+	hiddenField: null,
+
+	gamePanel : null,
+
+	currentLetterCode : null,
+
+  constructGamePanelTable: function(link, letterCode){
+		this.gamePanel = new Element('div', {'class':'allGameSelector'});
+		var mask  = new Element('div', {'class': 'mask-wrap'});
+		var round1 = new Element('div', {'class':'round07 round_r_t'});
+		var round2 = new Element('div', {'class':'round_l_t'});
+		var round3 = new Element('div', {'class':'round_r_b'});
+		var round4 = new Element('div', {'class':'round_l_b'});
+		var round5 = new Element('div', {'class':'round_m'});
+		var round6 = new Element('div', {'class':'round_body'});
+		var title = new Element('div', {'class':'allGameTitle fix'});
+		var h3 = new Element('h3');
+		h3.update("<strong>请选择游戏</strong>(点击游戏名称选择游戏)");
+		var close = new Element('a', {'class' : "op", href: 'javascript: void(0)'});
+		close.update("关闭<span class='icon-active'></span>");
+		close.observe('click', function(e){
+			this.gamePanel.remove();
+			this.currentLink = null;
+		}.bind(this));
+		title.appendChild(h3);
+		title.appendChild(close);
+		var alpha = new Element('div', {'class':'alphaList fix'});
+		var alphaUl = new Element('ul', {id : "alphabet_list"});
+		var hotLi = new Element('li', {'class' : 'hotGame'});
+		if (letterCode == 123)
+			hotLi.addClassName("hotCurrent");
+		var aLi = new Element('a', {href: 'javascript: void(0)'});
+		aLi.update("<span>热门游戏</span>");
+		aLi.observe('click', function(e){
+			this.changeLetter("123");
+		}.bind(this));
+		this.currentLetterCode = letterCode;
+		hotLi.appendChild(aLi);
+		alphaUl.appendChild(hotLi);
+		for (i=97; i<=122; i++){
+			var tempLi = new Element('li');
+			if (i == letterCode)
+				tempLi.addClassName("current");
+				
+			var tempA = new Element('a', {href: 'javascript: void(0)'});
+			tempA.update("<span index="+ i +">"+ String.fromCharCode(i) +"</span>");
+			tempA.observe('click', function(e){
+				this.changeLetter(e.element().readAttribute('index'));
+			}.bind(this));
+			tempLi.appendChild(tempA);
+			alphaUl.appendChild(tempLi);
+		}
+		alpha.appendChild(alphaUl);
+		var list = new Element('div', {'class':'catGameList fix'});
+		var listLeft = new Element('div', {'class':'t'});
+		if (letterCode == 123)
+			listLeft.update("<em></em><div class='alphaImg alphaHot'></div>");
+		else
+			listLeft.update("<em></em><div class='alphaImg alpha-"+ String.fromCharCode(letterCode) + "'></div>");
+			
+		var listCon = new Element('div', {'class':'con'});
+		var listUl = new Element('ul', {id : "game_list"});
+    Iyxzone.Game.infos.each(function(g){
+			var tempLi = new Element('li');
+			var tempA = new Element('a', {href: 'javascript: void(0)', title: g.name, index: g.id});
+			tempA.update(g.name);
+			tempA.observe('click', function(e){
+				this.selectGame(e.element().readAttribute('index'), e.element().readAttribute('title'));
+			}.bind(this));
+			tempLi.appendChild(tempA);
+			listUl.appendChild(tempLi);
+		}.bind(this));
+		listCon.appendChild(listUl);
+		list.appendChild(listLeft);
+		list.appendChild(listCon);
+		round6.appendChild(title);
+		round6.appendChild(alpha);
+		round6.appendChild(list);
+		round5.appendChild(round6);
+		round4.appendChild(round5);
+		round3.appendChild(round4);
+		round2.appendChild(round3);
+		round1.appendChild(round2);
+		mask.appendChild(round1);
+		var iframeMask = new Element('iframe', {'class':'mask-iframe','frameborder':0,'src':''});
+		iframeMask.update("<html><head><title></title></head><body></body></html>")
+		mask.appendChild(iframeMask);
+		this.gamePanel.appendChild(mask);
+		document.body.appendChild(this.gamePanel);
+		this.setPanelStyle(link);
+	},
+
+	setPanelStyle: function(link){
+		this.currentLink = link;
+		this.gamePanel.setStyle({
+      position: 'absolute',
+			top: ($(link).cumulativeOffset().top) + 20 + 'px',
+			left: document.viewport.getWidth() / 2 - 325 + 'px'
+		});
+	},
+
+	changeLetter: function(letterCode){
+		// check if the letter is current letter
+		if (letterCode == this.currentLetterCode)
+			return letterCode;
+		// if it is not current letter render according games
+    new Ajax.Request('/game_list_details/' + letterCode + '.json', {
+      method: 'get',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      }.bind(this),
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      }.bind(this),      
+      onSuccess: function(transport){
+        var games = transport.responseText.evalJSON();
+				Iyxzone.Game.infos = games;
+				this.gamePanel.remove();
+				this.constructGamePanelTable(this.currentLink, letterCode);
+			}.bind(this)
+    });
+	},
+
+	selectGame: function(gid, gname){
+		this.currentLink.update(gname);
+		this.hiddenField.writeAttribute("value",gid);
+		this.gamePanel.remove();
+		this.currentLink = null;
+		Iyxzone.Game.currentSelector.gameChange();
+	},
+
+  startPanel: function(link, hiddenField, event){
+    Event.stop(event);
+    // if it is a new link, create a new table
+		if (this.currentLink != link){
+			var letterCode = 123;
+			this.currentLink = link;
+			this.hiddenField = hiddenField;
+			this.constructGamePanelTable(link, letterCode);
+		}
+	}
+});
 
 Object.extend(Iyxzone.Game.Suggestor, {
 

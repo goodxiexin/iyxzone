@@ -77,5 +77,9 @@ class Game < ActiveRecord::Base
 	end
 
   validates_size_of :bulletin, :within => 1..50, :allow_blank => true
+	
+  def self.find_by_first_letter(letter)
+		find(:all, :conditions => ['pinyin LIKE ?', "#{letter}%"], :order => 'pinyin ASC')
+	end
 
 end

@@ -4,7 +4,11 @@
     <% content_tag :div, :class => 'formcontent' do %>
       <%= f.text_field 'name', :label => '角色昵称' %>
       <%= f.text_field 'level', :label => '等级' %>
-			<%= f.collection_select :game_id, @games, :id, :name, {}, :label => '游戏', :class => 'selector selector02' %>
+			<% if !@games.blank? %>
+				<%= f.collection_select :game_id, @games, :id, :name, {}, :label => '游戏', :class => 'selector selector02' %>
+			<% else %>
+				<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><input style="display: none" type="text" name="character[game_id]" id="character_game_id"/><div class="fldvalue"><div class="selectSim" id="game_display" onclick="Iyxzone.Game.Panel.startPanel(this, $('character_game_id'), event)">选择游戏</div></div></div>
+			<% end %>
 			<%= f.collection_select :area_id, @areas, :id, :name, {:prompt => '---'}, :label => '服务区', :class => 'selector selector02' %>
 			<%= f.collection_select :server_id, @servers, :id, :name, {:prompt => '---'}, :label => '服务器', :class => 'selector selector02' %>
 			<%= f.collection_select :race_id, @races, :id, :name, {:prompt => '---'}, :label => '种族', :class => 'selector selector02' %>
@@ -17,5 +21,5 @@
 <% if !@games.blank? %>
 	<%= javascript_tag "new Iyxzone.Game.Selector('character_game_id', null,'character_area_id', null,'character_server_id', null,'character_race_id', null,'character_profession_id', null, null, {})" %>
 <% else %>
-  <%= javascript_tag "Iyxzone.Game.infos = #{game_infos};Iyxzone.Game.initPinyinSelector('character_game_id', null,'character_area_id', null,'character_server_id', null,'character_race_id', null,'character_profession_id', null, null, {})" %> 
+  <%= javascript_tag "Iyxzone.Game.infos = #{game_infos};Iyxzone.Game.currentSelector = Iyxzone.Game.initSelector('character_game_id', null,'character_area_id', null,'character_server_id', null,'character_race_id', null,'character_profession_id', null, null, {})" %> 
 <% end %>

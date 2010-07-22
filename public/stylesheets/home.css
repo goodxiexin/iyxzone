@@ -1324,7 +1324,7 @@ span.i,a.i,.i40{width:16px;height:16px;margin-right:3px;display:-moz-inline-stac
 .iVideo{background-position:0 -327px;}
 .iTopic{background-position:-16px -327px;}
 .iToggleUp{background-position:-96px -25px}
-
+.iViewOrig{background-position:0 -146px}
 
 
 =======
@@ -1784,7 +1784,4 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .photoFeed .expand{float:left;width:23px;height:24px;display:block;font-size:0;line-height:0;text-indent:-999px;background:url(../images/skin/skin2010.png) no-repeat -98px -760px;margin-top:20px}
 .photoFeed .sList li{float:left;margin:5px;overflow:hidden;width:65px;height:65px}
 .photoFeed .sList img{width:50px;height:50px}
-
-
-
 

@@ -6,6 +6,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :game_details, :controller => 'games'
 
+  map.resources :game_list_details, :controller => 'game_list'
+
   map.resources :area_details, :controller => 'game_areas'
 
   map.resources :regions, :controller => 'regions'

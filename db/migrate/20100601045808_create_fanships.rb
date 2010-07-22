@@ -1,6 +1,6 @@
 class CreateFanships < ActiveRecord::Migration
   def self.up
-    create_table :fanships do |t|
+    create_table :fanships, :force => true do |t|
       t.integer :fan_id
       t.integer :idol_id
     end
