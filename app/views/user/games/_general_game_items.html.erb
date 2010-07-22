@@ -6,6 +6,9 @@
 										<div class="imgwrap">
 												<%= game_image game.name, :class => 'game-m' %>
 										</div>
+										<div class="data">
+											<p><strong><%= game_link game %></strong></p>
+											<p><%= game.description%></p>
                     <div class='follow' id='game_attention_<%= game.id %>'>
                       <% if game.followed_by? current_user %>
                         <%= render :partial => 'user/attentions/unfollow', :locals => {:attentionable => game} %>
@@ -13,9 +16,6 @@
                         <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => game} %>
                       <% end %>
                     </div>
-										<div class="data">
-											<p><strong><%= game_link game %></strong></p>
-											<p><%= game.description%></p>
 											<div>
 												<ul>
 													<li>玩家打分：<strong><%= "%.1f" % game.average_rating %></strong></li>

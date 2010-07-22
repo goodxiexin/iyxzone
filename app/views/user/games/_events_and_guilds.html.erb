@@ -1,4 +1,4 @@
-<div class="s2m2 guildIntro">
+<div class="s2m2">
   <div class="title fix">
     <div class="wrap">
       <% if !guilds.blank? %>
@@ -7,12 +7,12 @@
       <% if !events.blank? %>
         <h2 class="fix <%if !guilds.blank? %>unSelected<% end %>" id='tab_event' onclick="Iyxzone.Game.Presentor.showEvents(<%= game.id %>)"><strong>活动</strong><span></span></h2>
       <% end %>
+      <%= link_to "更多", guilds.blank? ? game_events_url(game) : game_guilds_url(game), :class => "more", :id => "ge_link" %>
     </div>
-    <%= link_to "更多", guilds.blank? ? game_events_url(game) : game_guilds_url(game), :class => "more", :id => "ge_link" %>
     <em></em>
   </div>
   <% if !guilds.blank? %>
-    <div class="s2m2bd fix" id='guild_panel'>
+    <div class="s2m2bd gameGE fix" id='guild_panel'>
       <% guilds.each do |g| %>
         <div class="item fix">
           <div class="avatar">

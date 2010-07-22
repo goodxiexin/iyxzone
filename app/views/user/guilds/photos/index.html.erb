@@ -1,6 +1,8 @@
 <div class="sPhotoList">
   <ul class="fix">
-    <div class="t"><%= link_to "查看更多照片>>", guild_album_url(@album) %></div>
+    <div class='sBlogList'>
+      <div class="t"><%= link_to "查看更多照片>>", guild_album_url(@album) %></div>
+    </div>
     <% @photos.each do |p| %>
       <li>
         <div><%= photo_link p, :class => 'imgbox02' %></div>

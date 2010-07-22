@@ -1748,15 +1748,15 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .s2m2 .title .wrap,.s2m2 .title em,.s2m2 .title h2 strong,.s2m2 .title h2 span{background:url(../images/skin/btn2010.png) no-repeat;height:29px;line-height:29px}
 .s2m2 .title .wrap{background-position:0 -997px;background-repeat:repeat-x;float:left;width:310px;}
 .s2m2 .title h2{float:left;margin:6px 0 0 10px;height:23px;overflow:hidden}
-.s2m2 .title h2 strong{float:left;background-position:0 -1031px;height:23px;line-height:23px;padding-left:10px;color:#217308;font-size:12px}
-.s2m2 .title h2 span{float:left;background-position:right -1031px;width:10px;height:23px}
+.s2m2 .title h2 strong{float:left;background-position:0 -1030px;height:23px;line-height:23px;padding-left:10px;color:#217308;font-size:12px}
+.s2m2 .title h2 span{float:left;background-position:right -1030px;width:10px;height:23px}
 .s2m2 .title .more{float:right;line-height:29px;color:#fff}
 .s2m2 .title em{background-position:right -997px;width:10px;display:block;float:left}
 .s2m2 .title h2.unSelected strong,.s2m2 .title h2.unSelected span{background:none;color:#333;font-weight:400;cursor:pointer}
 .s2m2bd{background:#f3fae4;width:320px;padding:10px 0}
-.guildHome .guildIntro .item,.eventHome .eventIntro .item{padding:10px 0 10px 130px;}
-.guildHome .guildIntro .item .avatar,.eventHome .eventIntro .item .avatar{float:left;margin-left:-120px;_display:inline;}
-.guildHome .guildIntro .item .con,.eventHome .eventIntro .item .con{float:left;width:100%;line-height:28px}
+.guildHome .guildIntro .item,.eventHome .eventIntro .item,.gameHome .gameGE .item{padding:10px 0 10px 130px;}
+.guildHome .guildIntro .item .avatar,.eventHome .eventIntro .item .avatar,.gameHome .gameGE .item .avatar{float:left;margin-left:-120px;_display:inline;}
+.guildHome .guildIntro .item .con,.eventHome .eventIntro .item .con,.gameHome .gameGE .item .con{float:left;width:100%;line-height:28px}
 .guildHome .guildFunc li,.eventHome .eventFunc li{margin:10px 0}
 .guildHome .guildFunc li a,.eventHome .eventFunc li a{color:#333}
 .guildHome .guildMember li,.gameHome .gameMember li,.eventHome .eventMember li{float:left;width:25%;margin:5px 0;text-align:center;}
@@ -1766,10 +1766,20 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .sPhotoList li img{width:75px}
 /*论坛*/
 .pageSkinV2 .forumList{margin-left:15px}
-.pageSkinV2 .forumList .t,.pageSkinV2 .sPhotoList .t{margin:20px 0}
+.pageSkinV2 .forumList .t,.pageSkinV2 .sPhotoList .t,.pageSkinV2 .sBlogList .t{margin:20px 0}
 .pageSkinV2 .forumList ul{margin:10px 0;}
 .pageSkinV2 .forumList li{line-height:24px;margin:5px 0}
 .pageSkinV2 .forumList li h2{float:left;width:400px;height:24px;line-height:24px;overflow:hidden;background:url(../images/skin/skin2010.png) no-repeat -190px -65px;padding-left:20px}
 .pageSkinV2 .forumList li .time{float:right}
 .pageSkinV2 .forumList li a{color:#333;}
+
+.photoFeed .mList ul{float:left}
+.photoFeed .mList li{float:left;margin:5px;overflow:hidden;width:120px;}
+.photoFeed .mList img{width:100px;}
+.photoFeed .expand{float:left;width:23px;height:24px;display:block;font-size:0;line-height:0;text-indent:-999px;background:url(../images/skin/skin2010.png) no-repeat -98px -760px;margin-top:20px}
+.photoFeed .sList li{float:left;margin:5px;overflow:hidden;width:65px;height:65px}
+.photoFeed .sList img{width:50px;height:50px}
+
+
+
 
