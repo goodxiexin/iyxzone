@@ -172,7 +172,7 @@ end
 
 namespace :assets do
 
-  ASSETS = %w(photos regions cities blog_images news_pictures)
+  ASSETS = %w(photos blog_images news_pictures mini_images regions cities game_details area_details game_list_details)
 
   desc "preserve resources across deployment"
   task :symlink, :roles => :app do
@@ -185,6 +185,11 @@ namespace :assets do
   desc "copy game pics"
   task :restore_gamepic, :roles => :app do
     run "cp -r #{shared_path}/gamepic #{release_path}/public/images/gamepic"
+  end
+
+  desc "copy dictionaries"
+  task :restore_dicts, :roles => :app do
+    run "cp -r #{shared_path}/dict #{release_path}/dict"
   end
 
 end
