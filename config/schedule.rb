@@ -27,7 +27,7 @@ every 2.weeks, :at => '2:00am' do
 end
 
 every :monday, :at => '3:00am' do
-  rake "users:send_long_time_no_seen"
+  #rake "users:send_long_time_no_seen"
 end
 
 every :tuesday, :at => '2:00am' do
@@ -47,8 +47,8 @@ every :thursday, :at => '2:00am' do
 end
 
 every :thursday, :at => '5:00am' do
-  rake "suggestions:create_friend_suggestions"
-  rake "suggestions:create_comrade_suggestions"
+  #rake "suggestions:create_friend_suggestions"
+  #rake "suggestions:create_comrade_suggestions"
 end
 
 # 关于mini blog 
