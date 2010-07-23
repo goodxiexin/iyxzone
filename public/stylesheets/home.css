@@ -1325,10 +1325,6 @@ span.i,a.i,.i40{width:16px;height:16px;margin-right:3px;display:-moz-inline-stac
 .iTopic{background-position:-16px -327px;}
 .iToggleUp{background-position:-96px -25px}
 .iViewOrig{background-position:0 -146px}
-
-
-=======
-.iViewOrig{background-position:0 -146px}
 .iArr02Down{background:url(../images/skin/arrow.gif) no-repeat 3px -146px}
 .iSquare{background-position:-190px -69px}
 .iGuildLogo{height:53px;background-position:0 -935px}
@@ -1338,7 +1334,6 @@ span.iFunc02{width:19px;height:27px;background-position:-104px -935px}
 span.iRole02{width:19px;height:27px;background-position:-123px -935px}
 
 .ajaxLoading{text-align:center;margin:30px 0}
->>>>>>> twitter:public/stylesheets/home.css
 /*btn*/
 .sBtn,.sBtn span{background:url(../images/skin/btn2010.png) no-repeat}
 span.sBtn{background-position:right -122px;display:inline-block;padding-right:10px;margin:0 2px}
@@ -1784,4 +1779,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .photoFeed .expand{float:left;width:23px;height:24px;display:block;font-size:0;line-height:0;text-indent:-999px;background:url(../images/skin/skin2010.png) no-repeat -98px -760px;margin-top:20px}
 .photoFeed .sList li{float:left;margin:5px;overflow:hidden;width:65px;height:65px}
 .photoFeed .sList img{width:50px;height:50px}
+
+
+
 

@@ -25,7 +25,7 @@ class Guestbook < ActiveRecord::Base
 
   def set_reply text
     @action = :recently_set_reply
-    self.reply = text
+    self.reply = "你的问题是:“#{self.description}” \n<br/>#{text}"
     self.save
   end
 
