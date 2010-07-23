@@ -81,14 +81,53 @@ Object.extend(Iyxzone.Comment, {
     Element.scrollTo(commentableType + '_comment_form_' + commentableID);
   },
 
-  more: function(commentableType, commentableID, link){
-    link.innerHTML = '<img src="/images/loading.gif" />';
-    new Ajax.Request('/comments?commentable_id=' + commentableID + '&commentable_type=' + commentableType, {
+  moreCommentsInFoldedBox: function(commentableType, commentableID, offset, limit, link){
+    var div = link.up();
+    
+    if(offset < 1)
+      offset = 1;
+    if(limit < 0)
+      limit = 0;
+    
+    new Ajax.Request('/comments',{
       method: 'get',
+      parameters: {commentable_id: commentableID, commentable_type: commentableType, offset: offset, limit: limit},
+      onLoading: function(){
+        div.update('显示更多<img src="/images/small-ajax-loader.gif"/>');
+      }.bind(this),
       onSuccess: function(transport){
-//        $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
-        $(commentableType + '_comments_' + commentableID).update( transport.responseText);
-      }
+        $(commentableType + '_comments_' + commentableID).update(transport.responseText);
+        if(offset == 1){
+          div.remove();
+        }else{
+          div.update('<a href="javascript:void(0)" onclick="Iyxzone.Comment.moreCommentsInFoldedBox(\'' + commentableType + '\', ' + commentableID + ', ' + (offset - limit) + ', ' + limit + ', $(this))">显示更多' + (offset - 1) + '条</a>');
+        }
+      }.bind(this)
+    });
+  },
+
+  moreComments: function(commentableType, commentableID, offset, limit, link){
+    if(offset < 0)
+      offset = 0;
+    if(limit < 0)
+      limit = 0;
+
+    var div = link.up();
+
+    new Ajax.Request('/comments', {
+      method: 'get',
+      parameters: {commentable_id: commentableID, commentable_type: commentableType, offset: offset, limit: limit},
+      onLoading: function(){
+        div.update('显示较早评论<img src="/images/small-ajax-loader.gif"/>');
+      }.bind(this),
+      onSuccess: function(transport){
+        $(commentableType + '_comments_' + commentableID).insert({top: transport.responseText});
+        if(offset == 0){
+          div.update('没有评论了');
+        }else{
+          div.update('<a href="javascript:void(0)" onclick="Iyxzone.Comment.moreComments(\'' + commentableType + '\', ' + commentableID + ', ' + (offset - limit) + ', ' + limit + ', $(this))">显示较早评论</a>');
+        }
+      }.bind(this)
     });
   },
 
