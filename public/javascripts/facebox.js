@@ -244,9 +244,6 @@ document.observe('dom:loaded', function(){
   //window.alert = function(mess){
 	//	return facebox.show_notice(mess);
 	//};
-  window.largetip = function(mess){
-		return facebox.show_large_tip(mess);
-  };
 
   window.tip = function(mess){
 		return facebox.show_tip(mess);

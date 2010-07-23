@@ -129,6 +129,8 @@ Object.extend(Iyxzone.MiniBlog.Slider, {
   },
 
   start: function(){
+    if(this.miniBlogs.length == 0)
+      return;
     this.panel.update(this.getHTML());
     this.curPos = 0;
     this.timer = setTimeout(this.showMiniBlog.bind(this), this.interval);
