@@ -69,7 +69,7 @@ class Event < ActiveRecord::Base
   acts_as_attentionable
 
   acts_as_commentable :order => 'created_at DESC', 
-                      :delete_conditions => lambda {|user, event, comment| event.poster == user}#, 
+                      :delete_conditions => lambda {|user, event, comment| event.poster == user}, 
                       :create_conditions => lambda {|user, event| event.has_participant?(user)}, 
                       :view_conditions => lambda { true }
 
