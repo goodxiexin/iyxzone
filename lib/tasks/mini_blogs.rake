@@ -31,8 +31,10 @@ namespace :mini_blogs do
     reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
     reader.terms(:content).each do |term, freq|
       word = RMMSeg::Dictionary.get_word(term)
-      if !word.nil? and (word.cx_game? or ((word.cx_noun? or word.cx_unkown?) and word.freq < 10000000))
-        MiniTopic.create :name => term, :freq_in_site => freq, :freq_in_chinese => word.freq
+      if word.nil?
+        MiniTopic.create :name => term, :freq => freq if term =~ /[a-ZA-Z0-9_]+/
+      elsif (word.cx_game? or ((word.cx_noun? or word.cx_unkown?) and word.freq < 10000000))
+        MiniTopic.create :name => term, :freq => freq
       end
     end
   end
