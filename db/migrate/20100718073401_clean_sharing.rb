@@ -33,6 +33,16 @@ class CleanSharing < ActiveRecord::Migration
     drop_table :sharings
 
     drop_table :links
+
+    if File.exist? "app/models/share.rb"
+      File.delete "app/models/share.rb"
+    end
+    if File.exist? "app/models/sharing.rb"
+      File.delete "app/models/sharing.rb"
+    end
+    if File.exist? "app/models/link.rb"
+      File.delete "app/models/link.rb"
+    end
   end
 
   def self.down
