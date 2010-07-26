@@ -21,8 +21,6 @@ class User::CommentsController < UserBaseController
     @limit = params[:limit].to_i || 0
     @comments = @commentable.comments.offset(@offset).limit(@limit).all
     render :partial => 'comment', :collection => @comments
-    #@comments = @commentable.comments
-    #render :partial => 'comment', :collection => @comments
   end
 
 protected

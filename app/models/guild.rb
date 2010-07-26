@@ -103,8 +103,8 @@ class Guild < ActiveRecord::Base
 
 	acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, guild, comment| guild.president == user}
-                      #:create_conditions => lambda {|user, guild| guild.has_people?(user)},
-                      #:view_conditions => lambda { true } # anyone can view
+                      :create_conditions => lambda {|user, guild| guild.has_people?(user)},
+                      :view_conditions => lambda { true } # anyone can view
 
 	searcher_column :name
 

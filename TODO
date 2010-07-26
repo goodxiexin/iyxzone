@@ -1,0 +1,13 @@
+0. status为啥不会删除feeds
+
+1. 增加status.rb和sharing.rb和link.rb
+
+2. guild, event comment的recipient_id
+
+3. clean status, sharing
+
+4. convert emotion 删去status
+
+5. bulletin 和 gameUpdate吊环位置
+
+6. css 不对

@@ -96,8 +96,8 @@ STATIC_LIB =
 
 BINDIR        = $(bindir)
 RUBYCOMMONDIR = $(sitedir)$(target_prefix)
-RUBYLIBDIR = /usr/lib/ruby/gems/1.8/gems/rmmseg-cpp-0.2.7/lib$(target_prefix)
-RUBYARCHDIR = /usr/lib/ruby/gems/1.8/gems/rmmseg-cpp-0.2.7/lib$(target_prefix)
+RUBYLIBDIR    = $(sitelibdir)$(target_prefix)
+RUBYARCHDIR   = $(sitearchdir)$(target_prefix)
 
 TARGET_SO     = $(DLLIB)
 CLEANLIBS     = $(TARGET).so $(TARGET).il? $(TARGET).tds $(TARGET).map
