@@ -1,4 +1,13 @@
+class Status < ActiveRecord::Base
+
+  belongs_to :poster, :class_name => "User"
+
+  acts_as_commentable
+
+end
+
 class CleanStatus < ActiveRecord::Migration
+
   def self.up
     # 必须有status.rb才能删除
     Status.all.each do |s|
@@ -6,9 +15,6 @@ class CleanStatus < ActiveRecord::Migration
     end
     Status.destroy_all
     drop_table :statuses 
-    if File.exist? 'app/models/status.rb'
-      File.delete 'app/models/status.rb'
-    end
   end
 
   def self.down
