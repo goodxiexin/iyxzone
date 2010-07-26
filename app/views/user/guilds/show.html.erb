@@ -1,49 +1,45 @@
-<% content_for :html_title, "#{@guild.name}的首页 - 17Gaming.com" %>
-<% content_for :html_description, "#{@guild.name}的首页 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
-<% content_for :html_keywords, "#{@guild.name}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
-
 <% content_for :javascript_include do %>
-<%= javascript_include_merged :guild %>
+  <%= javascript_include_merged :guild %>
 <% end %>
 
-<% content_for :left do %>
-  <% mc_avatar do %>
-    <%= album_cover @album %>
-  <% end %> 
-  <div class='info-list'>
-    <%= render :partial => 'guild_info', :locals => {:guild => @guild} %>
-    <%= render :partial => 'guild_menu', :locals => {:guild => @guild, :role => @role} %>  
-    <%= render :partial => 'guild_request', :locals => {:guild => @guild} %>
-  </div>
+<% content_for :style do %>
+  guildHome
 <% end %>
 
-<% content_for :right do %>
-  <% unless @memberships.blank? %>
-    <%= render :partial => 'my_memberships', :locals => {:memberships => @memberships, :guild => @guild} %>
-  <% end %>
-  <% unless @hot_topics.blank? %>
-	  <%= render :partial => 'guild_topics', :locals => {:hot_topics => @hot_topics, :guild => @guild} %>
-  <% end %>
-  <% unless @events.blank? %>
-	  <%= render :partial => 'guild_events', :locals => {:events => @events, :guild => @guild} %>
-  <% end %>
+<% content_for :title do %>
+  <strong><%= @guild.name %></strong>
 <% end %>
 
-<div class="box02 canvas_con">
-  <%= render :partial => "guild_desc", :locals => {:guild => @guild} %> 
-  <%= render :partial => "recent_photos", :locals => {:album => @album, :photos => @photos} %>
-  <%= render :partial => "guild_members", :locals => {:guild_characters => @guild_characters, :guild => @guild} %>
-  <%= render :partial => "guild_feeds", :locals => {:guild => @guild, :feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
-  <% if @role and (@role.is_president? or @role.is_authorized?) %>
-    <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @guild, :recipient => @guild.president, :with_comments => false} %>
+<% content_for :notice do %>
+  <span class="i40 iGuildLogo"></span>
+  <span class="i iGuildMsg">公告：</span>
+  <div class="msg">
+  <% if @guild.president == current_user %>
+    <strong><%= in_place_text_field @guild, :bulletin, '有啥公告?', :param_name => 'guild[bulletin]' %></strong>
   <% else %>
-    <div class="bookbox"><h3><label for="book">留言板</label>(共<%= @guild.comments_count %>条留言)</h3></div>
+    <strong><%= h @guild.bulletin %></strong>
   <% end %>
-  <div class="feed-box" id='comments'>
-    <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>
   </div>
-</div>
+<% end %>
 
-<% unless @reply_to.blank? %>
-<%= onload_javascript_tag "Iyxzone.WallMessage.set('#{@reply_to.login}', #{@reply_to.id})" %>
+<% content_for :side_bar do %>
+  <%= render :partial => 'guild_info', :locals => {:guild => @guild} %>  
+  <%= render :partial => 'my_memberships', :locals => {:guild => @guild, :memberships => @memberships} %>
+  <%= render :partial => 'guild_desc', :locals => {:guild => @guild} %>
+  <%= render :partial => 'guild_menu', :locals => {:guild => @guild, :role => @role} %>
+  <% if !@events.blank? %>
+    <%= render :partial => 'guild_events', :locals => {:events => @events, :guild => @guild} %>
+  <% end %>
+  <%= render :partial => 'guild_members', :locals => {:members => @members, :guild => @guild} %>
+<% end %>
+
+<% content_for :content do %>
+  <%= render :partial => "user/home/talking_about", :locals => {:mini_blogs => @mini_blogs, :topics => @topics} %>
+  <%= render :partial => "guild_tab", :locals => {:guild => @guild} %>
+  <div id='presentation'>
+    <%= render :partial => 'feed_list', :locals => {:feed_deliveries => @feed_deliveries, :fetch_size => @fetch_size} %>
+  </div>
+  <% javascript_tag do %>
+    Iyxzone.Guild.Presentor.init(<%= @guild.id %>, <%= @guild.album.id %>, <%= @guild.president_id %>, <%= @fetch_size %>);
+  <% end %>
 <% end %>

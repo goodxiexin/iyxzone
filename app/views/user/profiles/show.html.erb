@@ -43,14 +43,11 @@
 
 <div class="box02 canvas_con">
   <%= render :partial => 'user/profiles/about_me', :locals => {:user => @user, :profile => @profile} %>
+  <%= render :partial => 'user/profiles/recent_mini_blogs', :locals => {:user => @user, :mini_blogs => @mini_blogs} %>
   <%= render :partial => 'user/profiles/recent_albums', :locals => {:user => @user, :profile => @profile, :albums => @albums} %>
   <%= render :partial => 'user/profiles/recent_blogs', :locals => {:user => @user, :profile => @profile, :blogs => @blogs} %>
   <%= render :partial => 'user/profiles/feed_list', :locals => {:profile => @profile, :feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
-  <% if @profile.is_commentable_by? current_user %>
-    <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user} %>
-  <% else %>
-    <div class="bookbox"><h3><label for="book">留言板</label>(共<%= @profile.comments_count %>条留言)</h3></div>
-  <% end %> 
+  <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @profile, :recipient => @profile.user, :commentable => (@profile.is_commentable_by? current_user)} %>
   <% if @profile.is_comment_viewable_by? current_user %>
     <div class='feed-box' id='comments'><%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %></div>
   <% end %>

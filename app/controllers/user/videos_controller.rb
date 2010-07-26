@@ -4,7 +4,7 @@ class User::VideosController < UserBaseController
 
   PER_PAGE = 10
 
-  PREFETCH = [{:poster => :profile}, :share]
+  PREFETCH = [{:poster => :profile}]
 
   def index
     @relationship = @user.relationship_with current_user

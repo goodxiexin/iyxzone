@@ -23,9 +23,8 @@
                 <div class="imgwrap box05">
                   <%= render:partial => 'user/photos/photo_operations', :locals => {:photo => @photo,
                     :taggable => (@role and (@role.is_authorized? or @role.is_president?)),
-                    :editable => @role.is_president?,
-                    :deleteable => @role.is_president?,
-                    :shareable => true,
+                    :editable => (@role and @role.is_president?),
+                    :deleteable => (@role and @role.is_president?),
                     :diggable => true
                   }  %>
                   <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>

@@ -503,7 +503,6 @@ Object.extend(Iyxzone.Profile.Editor, {
   removeCharacter: function(characterID, newCharacter, link){
     //var currentCharactersCount = this.newGameSelectors.keys().length + this.gameSelectors.keys().length - this.delCharacterIDs.length;
     var currentCharactersCount = this.newGameSelectors.keys().length + this.existingCharactersCount - this.delCharacterIDs.length;
-    
     if(currentCharactersCount == 1){
       error('至少要有1个游戏角色');
       return;

@@ -15,7 +15,7 @@ class Comment < ActiveRecord::Base
   
   acts_as_emotion_text :columns => [:content]
 
-  attr_readonly :poster_id, :recipient_id, :commentable_id, :commentable_type, :content
+  #attr_readonly :poster_id, :recipient_id, :commentable_id, :commentable_type, :content
 
   validates_presence_of :poster_id
 

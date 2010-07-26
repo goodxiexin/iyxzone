@@ -13,5 +13,5 @@
               <div class="bd jl-cutline">
                 <p><%= topic.content %></p>
               </div>
-              <div class="ft"><a href="javascript:void(0)">分享(<%= topic.sharings_count %>)</a> | <a href="javascript:void(0)">阅读(<%= topic.viewings_count %>)</a>  | <%= link_to_function "回复(#{ topic.posts_count })", "Iyxzone.Forum.Post.reply(null, '#{topic.poster.login}', #{topic.poster_id})" %></div>
+              <div class="ft"><a href="javascript:void(0)">阅读(<%= topic.viewings_count %>)</a>  | <%= link_to_function "回复(#{ topic.posts_count })", "Iyxzone.Forum.Post.reply(null, '#{topic.poster.login}', #{topic.poster_id})" %></div>
 

@@ -34,6 +34,7 @@
 
 .footer-shine{width:970px;height:69px;margin:20px auto;background:url(../images/welcome/footer-bg.png) no-repeat;position:relative}
 .footer-shine .logo{position:absolute;top:10px;left:20px}
+.footer-shine .logo h2{font-size:0;line-height:0;text-indent:-999px}
 .footer-shine .con{text-align:center;line-height:24px;padding-top:10px}
 .footer-shine .con a{color:#333}
 .footer-shine .company-logo{width:51px;height:51px;position:absolute;top:-15px;right:45px;background:url(../images/welcome/company-logo.png) no-repeat;font:0/0 sans-serif;text-indent:-9999px;*text-indent:0;overflow:hidden}
@@ -82,3 +83,42 @@
 .box-v2 .t strong.get-pws{width:53px;height:13px;background-position:0 -69px;}
 .box-v2 .m{border-left:1px solid #bdd6ad;border-right:1px solid #bdd6ad;background:#f8fcf6;}
 
+/*index 20100702*/
+.idxMessage .t,.idxCommend .t,.idxCommend .pipe,.idxCommend .memberShow .subTitle,.idxTopic,.idxTopic .wrap,.idxTopic .r-c{background:url(../images/welcome/idx-skin.png) no-repeat}
+.idxMessage,.idxCommend,.idxTopic{margin-top:20px}
+.idxMessage .t{width:87px;height:52px;float:left;background-position:0 0;font-size:0;line-height:0;text-indent:-999px}
+.idxMessage .bd{float:left}
+.idxMessage .bd li{float:left;margin:0 15px;line-height:55px;}
+.idxMessage .bd li .time{margin-right:10px;}
+.idxMessage .ft{height:5px;background:#73bd21;margin-top:10px}
+.idxMessage .ft span{display:block;height:5px;width:340px;margin:0 auto;background:#fdad00;font-size:0;line-height:0}
+
+.idxCommend .t{float:left;width:50px;height:130px;background-position:-150px 0;margin-top:10px}
+.idxCommend .t strong{font-size:14px;display:block;width:20px;margin:0 auto;line-height:22px;margin-top:18px}
+.idxCommend .guild{float:left;padding-left:120px;margin:15px 0 0 10px}
+.idxCommend .guild .avatar{float:left;margin-left:-120px;_display:inline}
+.idxCommend .guild .con{float:left;width:160px}
+.idxCommend .guild .con h3{font-size:14px;line-height:24px;width:150px;height:24px;overflow:hidden;}
+.idxCommend .guild .con h3 a{color:#d63200;}
+.idxCommend .guild .con li{width:150px;height:22px;line-height:22px;overflow:hidden;}
+.idxCommend .guild .con li .gameName{color:#333}
+.idxCommend .pipe{float:left;width:10px;height:148px;background-position:-131px 0;margin-right:15px}
+.idxCommend .memberShow,.idxCommend .memberShow .subTitle,.idxCommend .memberShow .list{float:left}
+.idxCommend .memberShow .subTitle{width:64px;height:58px;margin:12px 10px 0 0}
+.idxCommend .memberShow .subTitle strong{width:40px;display:block;margin:14px 0 0 14px;font-size:14px;color:#073811}
+.idxCommend .memberShow .star .subTitle{background-position:0 -54px}
+.idxCommend .memberShow .online .subTitle{background-position:0 -113px}
+.idxCommend .memberShow .list{width:520px}
+.idxCommend .memberShow li{width:33%;float:left}
+
+.idxTopic{background-position:0 -407px;background-repeat:repeat-x;position:relative;height:200px}
+.idxTopic .wrap{background-position:0 -190px;}
+.idxTopic h1{font-size:0;line-height:0;text-indent:-999px}
+.idxTopic .t{padding:23px 0 0 160px;font-size:14px;color:#073811}
+.idxTopic .r-c{background-position:-104px 0;width:19px;height:104px;position:absolute;right:0;top:7px}
+.idxTopic .list{width:97%;margin:20px auto;}
+.idxTopic .list li{width:33%;float:left;background:url(../images/welcome/sperator01.gif) repeat-y right}
+.idxTopic .list li .time{color:#666}
+.idxTopic .list li .con{position:relative}
+.idxTopic .list li .m-con{height:100px;overflow:hidden}
+.idxTopic .list li.nobd{background:none}

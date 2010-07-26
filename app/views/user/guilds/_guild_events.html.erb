@@ -1,24 +1,26 @@
-<div class="multibox">
-  <div class="title">
-		<%= link_to '更多', guild_events_url(guild) %>
-    <b>活动</b>
+<div class="s2m2 guildIntro">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix"><strong>公会活动</strong><span></span></h2>
+      <%= link_to "更多", guild_events_url(guild), :class => :more %>
+    </div>
+    <em></em>
   </div>
-  <div class="piclist-rows">
-    <table class="small" cellpadding="0">
-		<% events.each do |event| %>
-			<tr>
-        <td>
-          <div class="imgwrap">
-            <%= album_cover event.album, :size => :medium, :class => 'imgbox01' %>
-          </div>
-          <div class="data">
-            <p>名称：<span><%= event_link event %></span></p>
-            <p>时间：<span><%= ftime2 event.created_at %></span></p>
-						<p>人数: <span><%= event.confirmed_count %></span></p>	
-          </div>
-        </td>
-			</tr>
-		<% end %>
-    </table>
+  <div class="s2m2bd fix">
+    <% events.each do |e| %>
+      <div class="item fix">
+        <div class="avatar">
+          <%= album_cover e.album, :class => "imgbox01" %>
+        </div>
+        <div class="con">
+          <ul>
+            <li><%= event_link e, :class => 'red' %></li>
+            <li>游戏：<%= game_link e.game %></li>
+            <li>时间：<%= ftime3 e.start_time %></li>
+            <li>地点：<%= server_location e.game_server, false %></li>
+          </ul>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

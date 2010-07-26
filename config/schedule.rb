@@ -1,24 +1,3 @@
-# Use this file to easily define all of your cron jobs.
-#
-# It's helpful, but not entirely necessary to understand cron before proceeding.
-# http://en.wikipedia.org/wiki/Cron
-
-# Example:
-#
-# set :output, "/path/to/my/cron_log.log"
-#
-# every 2.hours do
-#   command "/usr/bin/some_great_command"
-#   runner "MyModel.some_method"
-#   rake "some:great:rake:task"
-# end
-#
-# every 4.days do
-#   runner "AnotherModel.prune_old_records"
-# end
-
-# Learn more: http://github.com/javan/whenever
-
 # 输出到tmp/cron_log
 set :output, "#{RAILS_ROOT}/tmp/cron_log"
 
@@ -48,7 +27,7 @@ every 2.weeks, :at => '2:00am' do
 end
 
 every :monday, :at => '3:00am' do
-  rake "users:send_long_time_no_seen"
+  #rake "users:send_long_time_no_seen"
 end
 
 every :tuesday, :at => '2:00am' do
@@ -68,6 +47,12 @@ every :thursday, :at => '2:00am' do
 end
 
 every :thursday, :at => '5:00am' do
-  rake "suggestions:create_friend_suggestions"
-  rake "suggestions:create_comrade_suggestions"
+  #rake "suggestions:create_friend_suggestions"
+  #rake "suggestions:create_comrade_suggestions"
+end
+
+# 关于mini blog 
+every 30.minutes do
+  rake "mini_blogs:delta_index"
+  rake "mini_blogs:analyze_topics"
 end

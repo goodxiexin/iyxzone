@@ -6,7 +6,17 @@
 Iyxzone.Comment = {
   version: '1.1',
   author: ['高侠鸿'],
-  changeLog: '修正了wall message的一个bug'
+  changeLog: '修正了wall message的一个bug',
+  checkLength: function(field, max){
+    var fieldID = field.id;
+    var count = field.value.length;
+    if(count > max){
+      field.value = field.value.substr(0, max);
+    }else{
+      var wordsCountID = fieldID.gsub('comment_content_', '') + '_words_count';
+      $(wordsCountID).innerHTML = count + '/' + max;
+    }
+  }
 };
 
 Object.extend(Iyxzone.Comment, {
@@ -71,14 +81,53 @@ Object.extend(Iyxzone.Comment, {
     Element.scrollTo(commentableType + '_comment_form_' + commentableID);
   },
 
-  more: function(commentableType, commentableID, link){
-    link.innerHTML = '<img src="/images/loading.gif" />';
-    new Ajax.Request('/comments?commentable_id=' + commentableID + '&commentable_type=' + commentableType, {
+  moreCommentsInFoldedBox: function(commentableType, commentableID, offset, limit, link){
+    var div = link.up();
+    
+    if(offset < 1)
+      offset = 1;
+    if(limit < 0)
+      limit = 0;
+    
+    new Ajax.Request('/comments',{
       method: 'get',
+      parameters: {commentable_id: commentableID, commentable_type: commentableType, offset: offset, limit: limit},
+      onLoading: function(){
+        div.update('显示更多<img src="/images/small-ajax-loader.gif"/>');
+      }.bind(this),
       onSuccess: function(transport){
-//        $(commentableType + '_comments_' + commentableID).innerHTML = transport.responseText;
-        $(commentableType + '_comments_' + commentableID).update( transport.responseText);
-      }
+        $(commentableType + '_comments_' + commentableID).update(transport.responseText);
+        if(offset == 1){
+          div.remove();
+        }else{
+          div.update('<a href="javascript:void(0)" onclick="Iyxzone.Comment.moreCommentsInFoldedBox(\'' + commentableType + '\', ' + commentableID + ', ' + (offset - limit) + ', ' + limit + ', $(this))">显示更多' + (offset - 1) + '条</a>');
+        }
+      }.bind(this)
+    });
+  },
+
+  moreComments: function(commentableType, commentableID, offset, limit, link){
+    if(offset < 0)
+      offset = 0;
+    if(limit < 0)
+      limit = 0;
+
+    var div = link.up();
+
+    new Ajax.Request('/comments', {
+      method: 'get',
+      parameters: {commentable_id: commentableID, commentable_type: commentableType, offset: offset, limit: limit},
+      onLoading: function(){
+        div.update('显示较早评论<img src="/images/small-ajax-loader.gif"/>');
+      }.bind(this),
+      onSuccess: function(transport){
+        $(commentableType + '_comments_' + commentableID).insert({top: transport.responseText});
+        if(offset == 0){
+          div.update('没有评论了');
+        }else{
+          div.update('<a href="javascript:void(0)" onclick="Iyxzone.Comment.moreComments(\'' + commentableType + '\', ' + commentableID + ', ' + (offset - limit) + ', ' + limit + ', $(this))">显示较早评论</a>');
+        }
+      }.bind(this)
     });
   },
 
@@ -98,11 +147,24 @@ Object.extend(Iyxzone.Comment, {
 
 });
 
-Iyxzone.WallMessage = Class.create({});
+Iyxzone.WallMessage = {
+  version: '1.1',
+  author: ['高侠鸿'],
+  changeLog: ['修正了回复别人后，默认的收到评论的人没有恢复']
+};
 
 Object.extend(Iyxzone.WallMessage, {
 
-  recipientID: null, // initialize this in your page
+  checkLength: function(field, max){
+    var fieldID = field.id;
+    var count = field.value.length;
+    if(count > max){
+      field.value = field.value.substr(0, max);
+    }else{
+      var wordsCountID = fieldID.gsub('message_content_', '') + '_words_count';
+      $(wordsCountID).innerHTML = count + '/' + max;
+    }
+  },
 
   validate: function(content){
     if(content.value.length == 0){
@@ -116,8 +178,8 @@ Object.extend(Iyxzone.WallMessage, {
     return true; 
   },
 
-  save: function(wallType, wallID, button, form){
-		if(this.validate($('comment_content'))){
+  save: function(wallType, wallID, defaultRecipientID, button, form){
+		if(this.validate($('wall_message_content_' + wallID))){
 			new Ajax.Request('/wall_messages', {
         method: 'post',
         onLoading: function(){
@@ -125,7 +187,7 @@ Object.extend(Iyxzone.WallMessage, {
         }.bind(this),
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-          $('comment_recipient_id').value = this.recipientID;
+          $('comment_recipient_id').value = defaultRecipientID;
           $('comment_content').focus();
         }.bind(this),
 				parameters: $(form).serialize()
@@ -140,16 +202,15 @@ Object.extend(Iyxzone.WallMessage, {
         $('comments').innerHTML = '<img src="images/loading.gif" />';
       },
       onSuccess: function(transport){
-//        $('comments').innerHTML = transport.responseText;
         $('comments').update( transport.responseText);
       }
     });
   },
 
-  set: function(login, id){
+  set: function(wallType, wallID, login, id){
     $('comment_recipient_id').value = id;
-    $('comment_content').focus();
-    $('comment_content').value = '回复' + login + '：';
+    $('wall_message_content_' + wallID).focus();
+    $('wall_message_content_' + wallID).value = '回复' + login + '：';
   }
 
 });

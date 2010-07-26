@@ -1,0 +1,10 @@
+    <div class='tab tab01'>
+      <ul>
+        <% subject = get_subject user %>
+        <li <% if hover == 0 %>class='hover'<% end %>><span><%= link_to "微博广场", public_mini_blogs_url %></span></li>
+        <li <% if hover == 1 %>class='hover'<% end %>><span><%= link_to "#{subject}的微博", mini_blogs_url(:uid => user.id) %></span></li>
+        <% if user == current_user %>
+        <li <% if hover == 2 %>class='hover'<% end %>><span><%= link_to "我的关注", interested_mini_blogs_url %></span></li><% end %>
+      </ul>
+    </div>
+

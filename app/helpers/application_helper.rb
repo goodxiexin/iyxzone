@@ -3,7 +3,7 @@ module ApplicationHelper
 
   def avatar_path user, size="medium"
     if user.avatar.blank? || user.avatar.rejected?
-      "default_#{user.gender}_#{size}.png"
+      "/images/default_#{user.gender}_#{size}.png"
     else
       user.avatar.public_filename(size)
     end
@@ -271,14 +271,23 @@ module ApplicationHelper
     content_tag(:button, name, html_options)
 	end
 
-	def server_location server
+	def server_location server, with_game=true
     return if server.nil?
 
+    str = []
+
+    if with_game
+      str << game_link(server.game)
+    end
+
     if server.game.no_areas
-			"#{game_link server.game}, #{server.name}"
+			str << server.name
 		else
-			"#{game_link server.game}, #{server.area.name}, #{server.name}"
+			str << server.area.name
+      str << server.name
 		end
+
+    str.join(", ")
 	end
 
   def advanced_collection_select object, method, collection, value_method, text_method, options={}, html_options={}, extra_attributes={}
@@ -315,7 +324,7 @@ module ApplicationHelper
       min = e / 60
       "#{min.to_i}分钟前"
     elsif e >= 1470 and e < 5370
-      "大约一小时前"
+      "大约1小时前"
     elsif e >= 5370 and e < 86370
       hour = e / 3600
       "#{hour.to_i}小时前"
@@ -374,12 +383,6 @@ module ApplicationHelper
 	  "<p>Copyright &copy; 2010-2010 MingZen. All Rights Reserved</p> <p><a href='#'>鸣禅公司 版权所有</a></p>"
 	end
 
-  def sharing_reason sharing, opts={}
-    reason = sharing.reason.blank? ? '。。。哥笑而不语。。。' : sharing.reason
-    class_name = opts[:class] || 'con'
-    simple_format "<span class='quote-start'></span>#{h reason}<span class='quote-end'></span>", :class => class_name
-  end
-
   def game_infos
     Game.hot.limit(20).map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
   end
@@ -421,8 +424,6 @@ module ApplicationHelper
 			return "投票"
 		when /guild/
 			return "公会"
-		when /share/
-			return "分享"
 		end
 	end
 
@@ -501,11 +502,62 @@ module ApplicationHelper
       'app-vote'
     when '活动'
       'app-ploy'
-    when '工会'
+    when '公会'
       'app-cons'
-    when '分享'
-      'app-share'
+    end
+  end
+
+  def mini_blog_content mini_blog, words=""
+    mini_blog.nodes.map do |node|
+      if node[:type] == 'text'
+        emotion_text node[:val]
+      elsif node[:type] == 'topic'
+        "<a href='/mini_blogs/search?key=#{node[:name]}'>##{emotion_text node[:name]}#</a>"
+      elsif node[:type] == 'link'
+        link = MiniLink.find_by_proxy_url node[:proxy_url]
+        if mini_blog.original?
+          if link and link.is_video?
+            link_to_function "#{link.proxy_url}<span class='i iVideo'></span>", "Iyxzone.MiniBlog.Presenter.showVideo(#{mini_blog.id}, '#{link.thumbnail_url}', '#{link.embed_html}');"
+          else
+            "<a href='#{link.url}'>#{link.proxy_url}</a>"
+          end
+        else
+          "<a href='#{link.url}'>#{link.proxy_url}</a>"
+        end         
+      elsif node[:type] == 'ref'
+        user = User.find_by_login node[:login]
+        if user.nil?
+          "<a href='#'>@#{node[:login]}</a>"
+        else 
+          "<a href='/mini_blogs?uid=#{user.id}'>@#{user.login}</a>"
+        end
+      end
+    end
+  end
+  
+  def mini_blog_content2 mini_blog
+    mini_blog.nodes.map do |node|
+      if node[:type] == 'text'
+        emotion_text node[:val]
+      elsif node[:type] == 'topic'
+        "<a href='/mini_blogs/search?key=#{node[:name]}'>##{emotion_text node[:name]}#</a>"
+      elsif node[:type] == 'link'
+        link = MiniLink.find_by_proxy_url node[:proxy_url]
+        if link and link.is_video?
+          "<a href='#{link.url}'>#{link.proxy_url}<span class='i iVideo'></span></a>"
+        else
+          "<a href='#{link.url}'>#{link.proxy_url}</a>"
+        end          
+      elsif node[:type] == 'ref'
+        user = User.find_by_login node[:login]
+        if user.nil?
+          "<a href=''>@#{node[:login]}</a>"
+        else
+          "<a href='/mini_blogs?uid=#{user.id}'>@#{user.login}</a>"
+        end  
+      end
     end
   end
 
 end
+

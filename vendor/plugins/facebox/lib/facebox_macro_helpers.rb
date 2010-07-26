@@ -2,6 +2,17 @@ module FaceboxMacroHelpers
 
   DEFAULT_FACEBOX_WIDTH = 350
 
+  def facebox_button(text, url, options={})
+    width = options.delete(:width) || DEFAULT_FACEBOX_WIDTH
+    options = options.merge({
+      :rel => 'facebox',
+      :facebox_href => url,
+      :facebox_width => width,
+      :facebox_type => 'normal'})
+
+    content_tag :button, text, options  
+  end
+
   def facebox_link(text, url, options={})
     width = options.delete(:width) || DEFAULT_FACEBOX_WIDTH
     options = options.merge({

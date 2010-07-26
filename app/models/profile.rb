@@ -12,10 +12,6 @@ class Profile < ActiveRecord::Base
 
   acts_as_viewable :create_conditions => lambda {|profile, user| profile.user != user}
 
-  acts_as_shareable :default_title => lambda {|profile| "玩家#{profile.user.login}"}, 
-                    :path_reg => /\/profiles\/([\d]+)/,
-                    :create_conditions => lambda {|user, profile| profile.available_for? user.relationship_with(profile.user)}
-  
   acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user}
 
 	acts_as_resource_feeds :recipients => lambda {|profile| [profile] + profile.user.friends + (profile.user.is_idol ? profile.user.fans : [])}

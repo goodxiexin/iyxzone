@@ -29,7 +29,6 @@
                       :taggable => (@relationship == 'friend' or @relationship == 'owner'),
                       :editable => (@user == current_user),
                       :deleteable => (@user == current_user),
-                      :shareable => true,
                       :diggable => true
                     } %>
                 <p><%= resize_image @photo, :id => "photo_#{@photo.id}" %></p>

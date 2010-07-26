@@ -1,0 +1,13 @@
+<div class="multibox"> 
+<div class='sBlogList'>
+  <div class="t"><%= link_to "查看更多博客>>", game_blogs_url(@game) %></div>
+</div>
+<% @blogs.each do |b| %>
+    <div class="diary-box">
+      <div class="diary-header">
+        <%= blog_link b,:class => 'shine' %> <%= ftime b.created_at %>
+      </div>
+      <p> <%= blog_content b, :length => 80, :omission => '...' %> </p>
+    </div>
+<% end %>
+</div>

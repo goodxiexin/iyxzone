@@ -11,12 +11,12 @@ class MiniBlogParser
     @refer_start = 0
     @http_start = 0
     @nodes = []
-    @content = content.gsub(/[ |\r|\t]+/, ' ')
+    @content = content
     @len = @content.size
 
     while @ptr != @len
       ch = @content[@ptr..@ptr]
-      puts "state: #{@state}, ch: #{ch}"
+      #puts "state: #{@state}, ch: #{ch}"
       if @state == 0
         if ch =~ blank
           @state = 0
@@ -44,7 +44,7 @@ class MiniBlogParser
           @state = 1
           @ptr += 1
         elsif ch == '#'
-          @topic_stat = @ptr
+          @topic_start = @ptr
           @state = 2
           @ptr += 1
         elsif ch == '@'
@@ -90,10 +90,7 @@ class MiniBlogParser
           @state = 3
           @ptr += 1
         elsif ch == '#'
-          if @base != @topic_start
-            @nodes.push({:type => 'text', :val => @content[@base..(@topic_start-1)]})
-          end 
-          @nodes.push({:type => 'topic', :val => @content[@topic_start..@ptr]})
+          parse_text_and_topic
           @ptr += 1
           @base = @ptr
           @state = 0
@@ -106,12 +103,13 @@ class MiniBlogParser
         end
       elsif @state == 4
         if ch =~ blank
-          if @base != @http_start
-            @nodes.push({:type => 'text', :val => @content[@base..(@http_start-1)]})
-          end
-          @nodes.push({:type => 'link', :val => @content[@http_start..(@ptr-1)]})
+          parse_text_and_http
           @base = @ptr
           @ptr += 1
+          @state = 0
+        elsif ch == '['
+          parse_text_and_http
+          @base = @ptr
           @state = 0
         elsif ch == '#'
           @state = 4
@@ -141,7 +139,7 @@ class MiniBlogParser
             @state = 4
             @ptr += 7 
           else
-            if ch =~ /[a-zA-Z0-9_]/
+            if ch =~ /[a-zA-Z0-9_\-]/
               @state = 6
               @ptr += 1
             else
@@ -152,50 +150,35 @@ class MiniBlogParser
         end
       elsif @state == 6
         if ch =~ blank
-          if @base != @refer_start
-            @nodes.push({:type => 'text', :val => @content[@base..(@refer_start-1)]})
-          end
-          @nodes.push({:type => 'ref', :val => @content[@refer_start..(@ptr-1)]})
+          parse_text_and_refer
           @base = @ptr
           @ptr += 1
           @state = 0
         elsif ch == '#'
-          if @base != @refer_start
-            @nodes.push({:type => 'text', :val => @content[@base..(@refer_start-1)]})
-          end
-          @nodes.push({:type => 'ref', :val => @content[@refer_start..(@ptr-1)]})
+          parse_text_and_refer
           @base = @ptr
           @topic_start = @ptr
           @ptr += 1
           @state = 2
         elsif ch == '@'
-          if @base != @refer_start
-            @nodes.push({:type => 'text', :val => @content[@base..(@refer_start-1)]})
-          end
-          @nodes.push({:type => 'ref', :val => @content[@refer_start..(@ptr-1)]})
+          parse_text_and_refer
           @base = @ptr
           @refer_start = @ptr
           @ptr += 1
           @state = 5
         else
           if http?
-            if @base != @refer_start
-              @nodes.push({:type => 'text', :val => @content[@base..(@refer_start-1)]})
-            end
-            @nodes.push({:type => 'ref', :val => @content[@refer_start..(@ptr-1)]})
+            parse_text_and_refer
             @base = @ptr
             @http_start = @ptr
             @ptr += 7
             @state = 4
           else
-            if ch =~ /[a-zA-Z0-9_]/
+            if ch =~ /[a-zA-Z0-9_\-]/
               @state = 6
               @ptr += 1
             else
-              if @base != @refer_start
-                @nodes.push({:type => 'text', :val => @content[@base..(@refer_start-1)]})
-              end
-              @nodes.push({:type => 'ref', :val => @content[@refer_start..(@ptr-1)]})
+              parse_text_and_refer
               @base = @ptr
               @ptr += 1
               @state = 1
@@ -207,26 +190,21 @@ class MiniBlogParser
 
     if @state == 0
     elsif @state == 1
-      @nodes.push({:type => 'text', :val => @content[@base..(@ptr-1)]})
+      parse_text
     elsif @state == 2
-      @nodes.push({:type => 'text', :val => @content[@base..(@ptr-1)]})
+      parse_text
     elsif @state == 3
-      @nodes.push({:type => 'text', :val => @content[@base..(@ptr-1)]})
+      parse_text
     elsif @state == 4
-      if @base != @http_start
-        @nodes.push({:type => 'text', :val => @content[@base..(@http_start-1)]})
-      end
-      @nodes.push({:type => 'link', :val => @content[@http_start..(@ptr-1)]})
+      parse_text_and_http
     elsif @state == 5
       @nodes.push({:type => 'text', :val => @content[@base..(@ptr-1)]})
     elsif @state == 6
-      if @base != @refer_start
-        @nodes.push({:type => 'text', :val => @content[@base..(@refer_start-1)]})
-      end
-      @nodes.push({:type => 'ref', :val => @content[@refer_start..(@ptr-1)]})
+      parse_text_and_refer
     end
 
     @nodes
+    #print
   end
 
 protected
@@ -240,11 +218,36 @@ protected
   end
 
   def self.http?
-    @content[@ptr..(@ptr+6)] == 'http://' and @content[@ptr + 7] and !(@content[(@ptr+7)..(@ptr+7)] =~ blank)  
+    @content[@ptr..(@ptr+6)] == 'http://' and @content[@ptr + 7] and !(@content[(@ptr+7)..(@ptr+7)] =~ blank) and (@content[(@ptr+7)..(@ptr+7)] != '[') 
   end
 
   def self.sharp?
     @content[(@ptr+1)..(@len-1)].include? '#'
+  end
+
+  def self.parse_text_and_http
+    if @base != @http_start
+      @nodes.push({:type => 'text', :val => @content[@base..(@http_start-1)]})
+    end
+    @nodes.push({:type => 'link', :val => @content[@http_start..(@ptr-1)]})
+  end
+
+  def self.parse_text_and_refer
+    if @base != @refer_start
+      @nodes.push({:type => 'text', :val => @content[@base..(@refer_start-1)]})
+    end
+    @nodes.push({:type => 'ref', :val => @content[(@refer_start+1)..(@ptr-1)]})
+  end
+
+  def self.parse_text_and_topic
+    if @base != @topic_start
+      @nodes.push({:type => 'text', :val => @content[@base..(@topic_start-1)]})
+    end
+    @nodes.push({:type => 'topic', :val => @content[(@topic_start+1)..(@ptr-1)]})
+  end    
+
+  def self.parse_text
+    @nodes.push({:type => 'text', :val => @content[@base..(@ptr-1)]})
   end
 
 end

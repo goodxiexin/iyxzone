@@ -10,20 +10,22 @@ class MiniLink < ActiveRecord::Base
   end
 
   def proxy_url
-    "#{SITE_URL}/links/#{compressed_id}"    
+    "#{SITE_URL}\/links/#{compressed_id}"    
   end
 
   def is_video?
     !embed_html.blank? and !thumbnail_url.blank?
   end
 
-  def self.find_by_compressed_id id
-    self.find_by_id id.from_base_62
+  def self.find_by_proxy_url url
+    self.find_by_id url.split('/').last.from_base_62
   end
 
   validates_presence_of :url
 
   validates_uniqueness_of :url
+
+  #validates_format_of :url, :with => /(http:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\-%=&]+)?/, :on => :create
 
   validate_on_create :check_if_video
 

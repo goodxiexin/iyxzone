@@ -18,8 +18,6 @@ class Topic < ActiveRecord::Base
 
   needs_verification :sensitive_columns => [:content, :subject]
 
-  acts_as_shareable :default_title => lambda {|topic| topic.subject}, :path_reg => /\/topics\/([\d]+)/
-
   acts_as_list :order => 'created_at', :scope => 'forum_id'
 
   acts_as_abstract :columns => [:content]

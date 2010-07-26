@@ -18,11 +18,11 @@ class Ku6
 		end
 	end
 		
-	def initialize(obj)
+	def initialize video_url
     @embed_url = 
-		  if KU6_SINGLE.match obj.video_url
+		  if KU6_SINGLE.match video_url
         "http://player.ku6.com/refer/#{$1}/v.swf"
-      elsif KU6_ALBUM.match obj.video_url
+      elsif KU6_ALBUM.match video_url
         "http://player.ku6.com/refer/#{$2}/v.swf"
       end
 	end

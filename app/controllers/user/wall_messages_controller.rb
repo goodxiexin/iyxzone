@@ -22,10 +22,17 @@ class User::WallMessagesController < UserBaseController
     render :partial => 'wall_messages', :locals => {:messages => @messages}    
   end
 
+  def index_with_form
+    @messages = @wall.comments.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => params[:wall_id], :wall_type => params[:wall_type]}}
+    @recipient = params[:recipient_id].nil? ? nil : User.find(params[:recipient_id]) 
+    render :partial => 'wall', :locals => {:messages => @messages, :wall => @wall, :recipient => @recipient}    
+  end
+
 protected
 
   def setup
-    if ['index', 'create'].include? params[:action]
+    if ['index', 'index_with_form', 'create'].include? params[:action]
       @wall = params[:wall_type].camelize.constantize.find(params[:wall_id])
       require_verified @wall if @wall.respond_to?(:rejected?)
       require_view_privilege @wall if params[:action] == 'index'

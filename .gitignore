@@ -1,7 +1,15 @@
 log/*
+dict/*
+index/*
+tmp/*
+public/blog_images/*
+public/game_details/*
+public/area_details/*
+public/game_list_details/*
+public/mini_images/*
 public/photos/*
 public/news_pictures/*
-public/blog_images/*
+public/regions/*
 public/images/gamepic
 config/database.yml
 config/juggernaut_hosts.yml

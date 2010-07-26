@@ -7,7 +7,9 @@ class FriendshipObserver < ActiveRecord::Observer
 			FriendshipMailer.deliver_request(friendship.user, friendship.friend) if friendship.friend.mail_setting.request_to_be_friend?
 			friendship.friend.raw_increment :friend_requests_count
 		elsif friendship.is_friend?
-      friendship.user.raw_increment :friends_count      
+      friendship.user.raw_increment :friends_count 
+      # follow     
+      friendship.friend.followed_by friendship.user
     end
 	end
 
@@ -18,6 +20,9 @@ class FriendshipObserver < ActiveRecord::Observer
 			friendship.user.destroy_obsoleted_comrade_suggestions friendship.friend
 			friendship.friend.destroy_obsoleted_friend_suggestions friendship.user
       friendship.friend.destroy_obsoleted_comrade_suggestions friendship.user
+
+      # follow
+      friendship.friend.followed_by friendship.user
 
       # change counter
       friendship.friend.raw_decrement :friend_requests_count
@@ -49,6 +54,8 @@ class FriendshipObserver < ActiveRecord::Observer
       end
 		elsif friendship.is_friend?
       friendship.user.raw_decrement :friends_count
+      # unfollow
+      friendship.friend.unfollowed_by friendship.user
       if friendship.recently_cancelled?
         friendship.friend.notifications.create(:data => "你和#{profile_link friendship.user}的好友关系解除了", :category => Notification::Friend)
       end

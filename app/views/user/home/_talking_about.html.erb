@@ -1,0 +1,24 @@
+<div class="mBlogFeed">
+  <div class="feedHd fix">
+    <strong class="t">大家正在说</strong>
+    <%= link_to "更多", public_mini_blogs_url, :class => "more" %>
+    <div class="hotWords">热词：
+      <% topics.each do |t| %>
+        <%= link_to t.name, search_mini_blogs_url(:key => t.name) %>
+      <% end %>
+    </div>
+  </div>
+  <div class="feedBd">
+    <% mini_blogs.each do |mb| %>
+      <div class="item fix">
+        <div class="avatar">
+          <%= avatar mb.poster, :class => "imgbox01" %>
+        </div>
+        <div class="con">
+          <%= profile_link mb.poster %>：<%= mini_blog_content mb %>
+          <div class="time"><%= ftime mb.created_at %></div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

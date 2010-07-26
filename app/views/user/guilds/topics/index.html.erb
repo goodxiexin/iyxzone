@@ -1,0 +1,20 @@
+<div class="forumList">
+  <div class='sBlogList'>
+    <div class="t"><%= link_to "进入论坛话题区>>", forum_url(@forum) %></div>
+  </div>
+  <div class="con">
+    <% if @topics.blank? %>
+      啥话题都没有，太冷清了
+    <% else %>
+    <% @topics.group_by{|t| t.created_at.strftime("%m月%d号")}.each do |time, topics| %>
+    <ul class="fix">
+      <% topics.each do |t| %>
+        <li>
+          <h2><%= topic_link t %></h2><span class="time"><%= time %></span>
+        </li>
+      <% end %>
+    </ul>
+    <% end %>
+    <% end %>
+  </div>
+</div>

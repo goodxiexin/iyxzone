@@ -1,44 +1,42 @@
-<% content_for :left do %>
-  <% mc_avatar do %>
-    <%= album_cover @album %>
-  <% end %>
-  <%= render :partial => 'operations', :locals => {:event => @event, :user => @user, :album => @album} %> 
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :event %>
 <% end %>
 
-<% content_for :right do %>
-  <% if !@participations.blank? %>
-    <%= render :partial => 'rsvp', :locals => {:event => @event, :participations => @participations} %>
-  <% end %>
-  <% unless @maybe_characters.blank? %>
-    <%= render :partial => 'maybe_participants', :locals => {:event => @event, :maybe_characters => @maybe_characters} %>
-  <% end %>
-  <% unless @invite_characters.blank? %>
-    <%= render :partial => 'invitees', :locals => {:event => @event, :invite_characters => @invite_characters} %>
-  <% end %>
-  <% unless @request_characters.blank? %>
-    <%= render :partial => 'requestors', :locals => {:event => @event, :request_characters => @request_characters} %>
-  <% end %>
+<% content_for :style do %>
+  eventHome
 <% end %>
 
-<% content_for :html_title, "活动：#{@event.title} - 17Gaming.com" %>
-<% content_for :html_description, "活动：#{@event.title} - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
-<% content_for :html_keywords, "#{@event.title}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+<% content_for :title do %>
+  <strong><%= @event.title %></strong>
+<% end %>
 
-<div class='box02 canvas_con'>
-  <%= render :partial => 'event_info', :locals => {:event => @event} %>
-  <%= render :partial => 'recent_photos', :locals => {:album => @album, :photos => @photos} %>
-  <%= render :partial => 'participants', :locals => {:event => @event, :confirmed_characters => @confirmed_characters} %>
-  <% if @event.has_participant? current_user %>
-    <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => @event, :recipient => @event.poster} %>
+<% content_for :notice do %>
+  <span class="i40 iGuildLogo"></span>
+  <span class="i iGuildMsg">公告：</span>
+  <div class='msg'>
+  <% if @event.poster == current_user %>
+    <strong><%= in_place_text_field @event, :bulletin, '有啥公告?', :param_name => 'event[bulletin]' %></strong>
   <% else %>
-    <div class="bookbox"><h3><label for="book">留言板</label>(共<%= @event.comments_count %>条留言)</h3></div>
+    <strong><%= h @event.bulletin %></strong>
   <% end %>
-  <div class='feed-box' id='comments'>
-    <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => @messages} %>
   </div>
-</div>
-
-<% unless @reply_to.blank? %>
-<%= onload_javascript_tag "Iyxzone.WallMessage.set('#{@reply_to.login}', #{@reply_to.id})" %> 
 <% end %>
 
+<% content_for :side_bar do %>
+  <%= render :partial => 'event_info', :locals => {:event => @event} %>  
+  <%= render :partial => 'event_desc', :locals => {:event => @event} %>
+  <%= render :partial => 'event_menu', :locals => {:event => @event, :user => @user, :album => @album} %>
+  <%= render :partial => 'event_confirmed_participants', :locals => {:event => @event, :participants => @confirmed_participants} %>
+  <% unless @maybe_participants.blank? %>
+    <%= render :partial => 'event_maybe_participants', :locals => {:event => @event, :participants => @maybe_participants} %>
+  <% end %>
+<% end %>
+
+<% content_for :content do %>
+  <%= render :partial => "user/home/talking_about", :locals => {:mini_blogs => @mini_blogs, :topics => @topics} %>
+  <%= render :partial => "event_tab", :locals => {:event => @event} %>
+  <div id='presentation'>
+    <%= render :partial => 'event_photos', :locals => {:photos => @photos, :album => @album} %>
+  </div>
+  <%= javascript_tag "Iyxzone.Event.Presentor.init(#{@event.id}, #{@event.poster_id})" %>
+<% end %>

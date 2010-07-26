@@ -1,6 +1,0 @@
-<% link = share.shareable %>
-
-<% render :layout => 'share_item', :locals => {:sharing => sharing, :share => share, :shareable => link} do %>
-  <h3>连接：<%= link_to h(sharing.title), sharing_url(sharing), :popup => true %></h3>
-  <%= sharing_reason sharing %>
-<% end %>

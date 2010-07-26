@@ -1,19 +1,18 @@
 <!--
   parameters:
+    commentable: 是否能留言
     wall: 留言版的拥有者，可以是event, 或者guild或者profile
     recipient: 默认的收到回复的人
 -->
 <% type = wall.class.to_s.underscore %>
-<div class="bookbox">
-  <h3><label for="book">留言板</label>(共<%= wall.comments_count %>条留言)</h3>
   <div class="formcontent s_clear">
-    <% form_for :comment, :html => {:onsubmit => "Iyxzone.WallMessage.save('#{type}', #{wall.id}, $('submit_btn'), this); return false;"} do |f| %>
+    <% form_for :comment, :html => {:onsubmit => "Iyxzone.WallMessage.save('#{type}', #{wall.id}, #{recipient.nil? ? 'null' : recipient.id}, $('submit_btn'), this); return false;"} do |f| %>
       <%= hidden_field_tag 'wall_type', wall.class.name %>
       <%= hidden_field_tag 'wall_id', wall.id %>
       <%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id %>
       <div class="rows">
         <div class="textarea-wrap"><div class="textarea-wide">
-          <%= f.text_area 'content', :class => 'textarea' %>
+          <%= f.text_area 'content', :class => 'textarea', :onfocus => "Iyxzone.limitText($(this),140, Iyxzone.WallMessage.checkLength);", :onblur => "Iyxzone.cancelLimitText($(this));", :id => "wall_message_content_#{wall.id}" %>
         </div></div>
       </div>
       <div class="buttons">
@@ -23,10 +22,3 @@
       </div>
     <% end %>
   </div>
-</div>
-
-<% onload_javascript_tag do %>
-  new Iyxzone.limitedTextField($('comment_content'), 140, $('wall_<%= wall.id %>_words_count'), false);
-  Iyxzone.WallMessage.recipientID = <%= recipient.nil? ? 'null' : recipient.id %>;
-<% end %>
-

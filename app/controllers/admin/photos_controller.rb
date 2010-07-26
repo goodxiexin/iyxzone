@@ -5,9 +5,9 @@ class Admin::PhotosController < AdminBaseController
     when 0
       @photos = Photo.unverified.paginate :page => params[:page], :per_page => 20, :conditions => {:thumbnail => nil}
     when 1
-      @photos = Photo.accepted.paginate :page => params[:page], :per_page => 20
+      @photos = Photo.accepted.paginate :page => params[:page], :per_page => 20, :conditions => {:thumbnail => nil}
     when 2
-      @photos = Photo.rejected.paginate :page => params[:page], :per_page => 20
+      @photos = Photo.rejected.paginate :page => params[:page], :per_page => 20, :conditions => {:thumbnail => nil}
     end
   end
 

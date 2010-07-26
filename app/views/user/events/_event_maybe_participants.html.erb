@@ -1,0 +1,16 @@
+<div class="s2m2 eventMember">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix"><strong>可能参加的人</strong><span></span></h2>
+      <%= link_to "更多", event_participations_url(event, :type => 1), :class => "more" %>
+    </div>
+    <em></em>
+  </div>
+  <div class="s2m2bd fix">
+    <ul class="fix">
+      <% participants.each do |p| %>
+        <li><%= avatar p, :class => 'imgbox01' %><%= profile_link p, :class => "memberName" %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

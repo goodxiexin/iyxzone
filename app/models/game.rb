@@ -1,5 +1,13 @@
 class Game < ActiveRecord::Base
 
+  has_many :role_users, :foreign_key => 'data'
+
+  has_many :admins, :through => :role_users, :source => :user
+
+  def has_admin? user
+    !role_users.find_by_user_id(user).blank?
+  end
+
   has_many :servers, :class_name => 'GameServer'
   
   has_many :areas, :class_name => 'GameArea'
@@ -20,8 +28,6 @@ class Game < ActiveRecord::Base
 
 	has_many :users, :through => :characters, :conditions => "users.activated_at IS NOT NULL", :uniq => true
 
-  has_many :attentions, :class_name => 'GameAttention'
-
   has_many :news
 
   named_scope :sexy, :order => "(characters_count - last_week_characters_count) DESC"
@@ -32,7 +38,7 @@ class Game < ActiveRecord::Base
   
   named_scope :recent, :conditions => ["created_at > ?", 1.week.ago.to_s(:db)], :order => "characters_count DESC, created_at DESC"
 
-  acts_as_shareable :default_title => lambda {|game| game.name }, :path_reg => /\/games\/([\d]+)/
+  acts_as_attentionable
 
 	acts_as_taggable :delete_conditions => lambda {|game, user| user.is_admin? },
                    :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 10.days.ago }
@@ -70,7 +76,9 @@ class Game < ActiveRecord::Base
 		professions_count == 0
 	end
 
-	def self.find_by_first_letter(letter)
+  validates_size_of :bulletin, :within => 1..50, :allow_blank => true
+	
+  def self.find_by_first_letter(letter)
 		find(:all, :conditions => ['pinyin LIKE ?', "#{letter}%"], :order => 'pinyin ASC')
 	end
 

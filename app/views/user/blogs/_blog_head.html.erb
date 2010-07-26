@@ -2,12 +2,12 @@
           <p class="left">
             <strong style="width: 75%;"><%= h blog.title %></strong> <span class='gray'><%= ftime blog.created_at %></span>
           </p>
+          <div class="topIsay right"><span class="button04"><span><%= facebox_button "我来说说", new_mini_blog_url(:content => "#{blog.title} #{SITE_URL}/blogs/#{blog.id}"), :width => 500 %></span></span></div> 
           <p class="right">
             <% if user == current_user %>
               <%= link_to "<span class='icon2-edit'></span>编辑", edit_blog_url(blog), :class=>"red" %>
               <%= facebox_confirm "<span class='icon2-close'></span>删除", blog_url(blog), {:msg => '你确定要删除这篇日志吗', :method => :delete}, :class=>"red w-l" %>
             <% end %>
-            <%= facebox_link "分享", new_sharing_url(:url => blog_url(blog)), :width => 450, :class => 'share-btn' %>
-          </p> 
+          </p>
         </div>
 

@@ -1,0 +1,10 @@
+<div class="sPhotoList">
+  <ul class="fix">
+    <div class="t"><%= link_to "查看更多照片>>", event_album_url(@album) %></div>
+    <% @photos.each do |p| %>
+      <li>
+        <div><%= photo_link p, :class => 'imgbox02' %></div>
+      </li>
+    <% end %>
+  </ul>
+</div>

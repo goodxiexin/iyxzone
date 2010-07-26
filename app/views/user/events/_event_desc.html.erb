@@ -1,0 +1,11 @@
+  <div class="s2m1 eventIntro">
+    <h2 class="title fix"><span class="i iGuild02"></span><strong>活动介绍</strong><em></em></h2>
+    <div class="con">
+      <% if event.poster == current_user %>
+        <%= in_place_text_area event, :description, '介绍一下活动?', :param_name => 'event[description]'  %>
+      <% else %>
+        <%= simple_format h event.description %>
+      <% end %>
+    </div>
+  </div>
+

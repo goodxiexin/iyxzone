@@ -6,6 +6,7 @@ javascripts:
   - controls
   - sound
   - iyxzone
+  - feed_delivery
   - comment
   - facebox
   - in_place_editor_extension
@@ -16,6 +17,7 @@ javascripts:
   - calendar_date_select/locale/cn
   - calendar_date_select/format_iso_date
   - production_config
+  - mini_blog
 - register:
   - game
   - register

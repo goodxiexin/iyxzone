@@ -1,4 +1,5 @@
                   <% class_name = photo.class.name.underscore %>
+                  <div class="topIsay"><span class="button04"><span><%= facebox_button "我来说说", new_mini_blog_url(:content => "#{SITE_URL}/#{photo.class.name.underscore}s/#{photo.id}"), :width => 500 %></span></span></div>
                   <div class="photo-op">
                     <% if taggable %>
                       <span class="photo-op-mark"></span>
@@ -11,10 +12,6 @@
                     <% if deleteable %> 
                       <span class="photo-op-del"></span>
                       <%= facebox_confirm '删除', eval("#{class_name}_url(photo)"), {:method => :delete, :msg => '你确定要删除吗?'} %> |
-                    <% end %>
-                    <% if shareable %>
-                      <span class="photo-op-share" ></span>
-                      <%= facebox_link "分享", new_sharing_url(:url => eval("#{class_name}_url(photo)")), :width => 450 %> |
                     <% end %>
                     <% if diggable %>
                       <span class="photo-op-praise" ></span>

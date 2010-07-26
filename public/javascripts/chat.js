@@ -151,9 +151,9 @@ Object.extend(Iyxzone.Chat, {
     html += '<div class="con"><div class="im-dlg-show" id="chat-form-content-' + friendID + '"></div></div>';
     html += '<div class="foot">';
     html += '<div class="im-dlg-send s_clear">';
-    html += '<textarea class="left" id="message-content-' + friendID + '" name=""></textarea>';
+    html += '<textarea onfocus="Iyxzone.limitText($(this), 140, Iyxzone.Chat.checkTextLength);" onblur="Iyxzone.cancelLimitText($(this))" class="left" id="message-content-' + friendID + '" name=""></textarea>';
     html += '<div class="right">';
-    html += '<button type="submit" class="right btn-v2 w-l" onclick=\'Iyxzone.Chat.sendMessage(' + friendID + ', "' + friendLogin + '", this, event);\'>确定</button><a href="javascript:void(0)" onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $(\'message-content-' + friendID + '\'), event);" class="icon-face right w-l"></a><p class="rows">字数：<span id="im_words_count_' + friendID + '">0/200</span></p>';
+    html += '<button type="submit" class="right btn-v2 w-l" onclick=\'Iyxzone.Chat.sendMessage(' + friendID + ', "' + friendLogin + '", this, event);\'>确定</button><a href="javascript:void(0)" onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $(\'message-content-' + friendID + '\'), event);" class="icon-face right w-l"></a><p class="rows">字数：<span id="im_words_count_' + friendID + '">0/140</span></p>';
     html += '</div></div>';
     html += '<div class="im-dlg-log">';
     html += '<h2><a class="" href="javascript:void(0)" onclick="Iyxzone.Chat.toggleHistory(' + friendID + ', this);">聊天记录<span/></a></h2>';
@@ -167,9 +167,18 @@ Object.extend(Iyxzone.Chat, {
         this.sendMessage(friendID, friendLogin, null, null); 
       }
     }.bind(this)); 
-    new Iyxzone.limitedTextField($('message-content-' + friendID), 200, $('im_words_count_' + friendID));
 
     return div;
+  },
+
+  checkTextLength: function(field, max){
+    var id = field.id;
+    var friendID = id.split('-')[2];
+    if(field.length > max){
+      field.value = field.value.substr(0, max);
+    }else{
+      $('im_words_count_' + friendID).innerHTML = field.value.length + '/140';
+    }
   },
 
   // 关闭聊天窗口

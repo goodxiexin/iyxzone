@@ -27,8 +27,6 @@ class News < ActiveRecord::Base
 
   acts_as_viewable
 
-  acts_as_shareable :path_reg => /\/news\/([\d]+)/, :default_title => lambda {|news| news.title}
-
   acts_as_abstract :columns => [:data], :if => "news_type == 'text'"
 
   acts_as_diggable

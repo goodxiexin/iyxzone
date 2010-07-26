@@ -1,0 +1,15 @@
+<div class="s2m2 guildIntro">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix"><strong>留言板</strong><span/></h2>
+    </div>
+    <em></em>
+    <% if guild.comments_count != 0 %>
+      <%= link_to_function "#{guild.comments_count}条", "", :class => 'more' %>
+    <% end %>
+  </div>
+  <%= render :partial => 'user/wall_messages/wall_form', :locals => {:wall => guild, :recipient => guild.president} %>
+  <div class="feed-box" id='comments'>
+    <%= render :partial => 'user/wall_messages/wall_messages', :locals => {:messages => messages} %>
+  </div>
+</div>

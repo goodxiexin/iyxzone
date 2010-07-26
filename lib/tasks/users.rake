@@ -6,6 +6,10 @@ require "iconv"
 
 namespace :users do
 
+  task :test => :environment do 
+User.all(:select => "login, id").group_by(&:login).each {|login, ids| puts "#{login}: #{ids.map(&:id).join(", ")}" if ids.count > 1}
+  end
+
   desc "提示那些很久没上线的人"
   task :send_long_time_no_seen => :environment do 
     users = User.find(:all, :conditions => ["last_seen_at <= ?", 1.year.ago.to_s(:db)])

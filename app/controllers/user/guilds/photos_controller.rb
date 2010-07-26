@@ -2,7 +2,11 @@ class User::Guilds::PhotosController < UserBaseController
 
   layout 'app'
 
-  # TODO: veteran能够编辑吗?
+  # 用在了guild show页面上
+  def index
+    @photos = @album.photos.nonblocked.limit(5).all
+    render :action => 'index', :layout => false
+  end
 
   def new
   end
@@ -88,7 +92,10 @@ class User::Guilds::PhotosController < UserBaseController
 protected
 
   def setup
-    if ['show', 'edit', 'update', 'destroy'].include? params[:action]
+    if ['index'].include? params[:action]
+      @album = GuildAlbum.find(params[:album_id])
+      require_verified @album
+    elsif ['show', 'edit', 'update', 'destroy'].include? params[:action]
       @photo = GuildPhoto.find(params[:id], :include => [{:comments => [{:poster => :profile}, :commentable]}, {:tags => [:poster, :tagged_user]}])
       require_verified @photo
       @album = @photo.album

@@ -9,6 +9,13 @@
 										<div class="data">
 											<p><strong><%= game_link game %></strong></p>
 											<p><%= game.description%></p>
+                    <div class='follow' id='game_attention_<%= game.id %>'>
+                      <% if game.followed_by? current_user %>
+                        <%= render :partial => 'user/attentions/unfollow', :locals => {:attentionable => game} %>
+                      <% else %>
+                        <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => game} %>
+                      <% end %>
+                    </div>
 											<div>
 												<ul>
 													<li>玩家打分：<strong><%= "%.1f" % game.average_rating %></strong></li>
@@ -20,7 +27,6 @@
 										</div>
 									</td>
 									<td>
-											<div id='game_attention_<%= game.id %>'> <%= link_to_remote "添加关注", :url=> game_attentions_url(game, :at => 1), :html => {:class=>"concern-btn02"} %> </div>
 											<div class="space"> <%= facebox_link "", new_character_url(:gid => game.id), :class=>"addGameRoleBtn", :title=>"增加该游戏角色" %></div>
 									</td>
 								</tr>

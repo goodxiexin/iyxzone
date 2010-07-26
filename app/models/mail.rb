@@ -14,7 +14,7 @@ class Mail < ActiveRecord::Base
 
   named_scope :unread, :conditions => {:read_by_recipient => 0}
 
-  attr_readonly :sender_id, :recipient_id, :content
+  #attr_readonly :sender_id, :recipient_id, :content
 
   attr_protected :parent_id
 

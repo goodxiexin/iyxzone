@@ -18,10 +18,6 @@ class Photo < ActiveRecord::Base
                       :delete_conditions => lambda {|user, photo, comment| photo.album.poster == user || comment.poster == user},
                       :create_conditions => lambda {|user, photo| photo.available_for?(user.relationship_with photo.album.poster)}
  
-  acts_as_shareable :path_reg => [/\/avatars\/([\d]+)/, /\/personal_photos\/([\d]+)/, /\/event_photos\/([\d]+)/, /\/guild_photos\/([\d]+)/],
-                    :default_title => lambda {|photo| "#{photo.album.title}的照片"},
-                    :create_conditions => lambda {|user, photo| photo.available_for? user.relationship_with(photo.poster)}
-
   acts_as_diggable :create_conditions => lambda {|user, photo| photo.available_for? user.relationship_with(photo.poster)}
 
   attr_readonly :poster_id, :game_id

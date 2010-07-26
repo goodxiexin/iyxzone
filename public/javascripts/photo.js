@@ -9,8 +9,6 @@ Iyxzone.Photo = {
 
   Slide: Class.create({}), // 纵向的图片浏览
 
-  Slide2: Class.create({}), // 横向的图片浏览
-
   Slide3: Class.create({}) // 纵向的图片浏览，而且不不切换url的
 };
 
@@ -672,94 +670,6 @@ Iyxzone.Photo.Slide = Class.create({
   }
 
 });
-
-Iyxzone.Photo.Slide2 = Class.create({
-
-  initialize: function(photoType, ids, urls, frames, leftBtn, rightBtn){
-    this.loadingImage = new Image();
-    this.loadingImage.src = '/images/loading.gif';
-    this.photoType = photoType + 's';
-    this.ids = ids;
-    this.urls = urls;
-    this.frames = frames;
-    this.leftBtn = leftBtn;
-    this.rightBtn = rightBtn;
-    this.idPos = 1;
-    
-    for(var i=0;i<frames.length;i++){
-      if(i >= 0 && i < ids.length)
-        this.load(i, i);
-    }
-
-    this.rightBtn.observe('click', this.scrollRight.bindAsEventListener(this));
-    this.leftBtn.observe('click', this.scrollLeft.bindAsEventListener(this));
-  },
-
-  load: function(idx, photoIdx){
-    if(photoIdx < 0){
-      photoIdx = (photoIdx + this.ids.length) % this.ids.length;
-    }else if(photoIdx >= this.ids.length){
-      photoIdx = (photoIdx) % this.ids.length;
-    }
-
-    this.frames[idx].innerHTML = '<img src="' + this.loadingImage.src + '" class="imgbox01"/>';
-    this.frames[idx].innerHTML = '<img src="' + this.urls[photoIdx] + '" class="imgbox01"/>';
-    this.frames[idx].writeAttribute('href', '/' + this.photoType + '/' + this.ids[photoIdx]);
-  },
-
-  scrollRight: function(){
-    if(this.rightTimer != null)
-      return;
-
-    var div = this.frames[0].up();
-    new Effect.Morph(div, {style: 'left: 0px', duration: 0.5});
-    this.rightTimer = setTimeout(this.afterScrollRight.bind(this), 550);
-
-    this.idPos = (this.idPos - 1 + this.ids.length) % this.ids.length;
-  },
-
-  afterScrollRight: function(){
-    var len = this.frames.length;
-    this.frames[len - 1].remove();
-    this.frames.splice(len - 1, 1);
-    
-    var frame = new Element('a');
-    Element.insert(this.frames[0], {before: frame});
-    this.frames = frame.up().childElements();
-    this.load(0, this.idPos - 1);
-    frame.up().setStyle({left: '-136px'});
-   
-    this.rightTimer = null;
-  },
-
-  scrollLeft: function(){
-    if(this.leftTimer != null)
-      return;
-
-    var div = this.frames[0].up();
-    new Effect.Morph(div, {style: 'left: -272px', duration: 0.5});
-    this.leftTimer = setTimeout(this.afterScrollLeft.bind(this), 550);    
-
-    this.idPos = (this.idPos + 1) % this.ids.length;
-  },
-
-  afterScrollLeft: function(){
-    // remove first
-    this.frames[0].remove();
-    this.frames.splice(0,1);
-    this.frames[0].up().setStyle({left: '-136px'});
-    
-    // add last frame 
-    var frame = new Element('a');
-    Element.insert(this.frames[this.frames.length - 1], {after: frame});
-    this.frames = frame.up().childElements();
-    this.load(this.frames.length - 1, this.idPos + this.frames.length);
-
-    this.leftTimer = null;
-  }
-
-});
-
 
 Iyxzone.Photo.Slide3 = Class.create({
   

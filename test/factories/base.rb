@@ -120,3 +120,7 @@ end
 Factory.define :district do |d|
   d.sequence(:name) {|n| "district-#{n}"}
 end
+
+Factory.define :mini_blog do |b|
+  b.sequence(:content) {|n| "content-#{n}"}
+end
