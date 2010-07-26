@@ -2,6 +2,7 @@
 #define _WORD_H_
 #include <climits>
 #include <cstring>
+#include <cstdio>
 #include "memory.h"
 #include "cixing.h"
 

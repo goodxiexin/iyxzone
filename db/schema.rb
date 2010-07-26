@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100720024656) do
+ActiveRecord::Schema.define(:version => 20100726070348) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -490,7 +490,8 @@ ActiveRecord::Schema.define(:version => 20100720024656) do
 
   create_table "mini_topics", :force => true do |t|
     t.string  "name"
-    t.integer "freq", :default => 0
+    t.integer "freq_in_chinese", :default => 0
+    t.integer "freq_in_site",    :default => 0
   end
 
   create_table "news", :force => true do |t|

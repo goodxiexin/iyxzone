@@ -4,6 +4,8 @@ namespace :mini_blogs do
 
   task :test => :environment do
     RMMSeg::Dictionary.load_dictionaries
+    w = RMMSeg::Dictionary.get_word "海涛"
+    puts "word: #{w.text}, freq: #{w.freq}, cixing: #{w.cixing}"
   end
 
   task :random => :environment do
@@ -20,12 +22,18 @@ namespace :mini_blogs do
     MiniBlog.build_delta_index 
   end
 
+  #
+  # FIXME: this might be quite slow
+  #
   task :analyze_topics => :environment do
     include Ferret
     MiniTopic.delete_all
     reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
     reader.terms(:content).each do |term, freq|
-      MiniTopic.create :name => term, :freq => freq
+      word = RMMSeg::Dictionary.get_word(term)
+      if !word.nil? and (word.cx_game? or ((word.cx_noun? or word.cx_unkown?) and word.freq < 10000000))
+        MiniTopic.create :name => term, :freq_in_site => freq, :freq_in_chinese => word.freq
+      end
     end
   end
 

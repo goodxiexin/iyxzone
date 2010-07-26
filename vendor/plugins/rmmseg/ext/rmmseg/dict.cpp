@@ -116,8 +116,9 @@ namespace rmmseg
             do
             {
                 if (len == entry->word->nbytes &&
-                    strncmp(str, entry->word->text, len) == 0)
+                    strncmp(str, entry->word->text, len) == 0){
                     return entry->word;
+								}
                 entry = entry->next;
             }
             while (entry);
