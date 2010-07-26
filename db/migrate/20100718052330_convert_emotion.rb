@@ -1,3 +1,13 @@
+class Status < ActiveRecord::Base
+
+  belongs_to :poster, :class_name => "User"
+
+  acts_as_commentable
+
+  acts_as_resource_feeds :recipients => lambda {|status| status.poster}
+
+end
+
 class ConvertEmotion < ActiveRecord::Migration
   def self.up
     puts "convert status"

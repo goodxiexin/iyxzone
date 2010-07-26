@@ -26,6 +26,9 @@
   <%= render :partial => 'event_info', :locals => {:event => @event} %>  
   <%= render :partial => 'event_desc', :locals => {:event => @event} %>
   <%= render :partial => 'event_menu', :locals => {:event => @event, :user => @user, :album => @album} %>
+  <% if !@participations.blank? %>
+    <%= render :partial => 'rsvp', :locals => {:participations => @participations, :event => @event} %>
+  <% end %>
   <%= render :partial => 'event_confirmed_participants', :locals => {:event => @event, :participants => @confirmed_participants} %>
   <% unless @maybe_participants.blank? %>
     <%= render :partial => 'event_maybe_participants', :locals => {:event => @event, :participants => @maybe_participants} %>

@@ -1,26 +1,28 @@
-<div class='multibox'>
-  <div class='title'>
-    <b>状态</b>
-  </div>
-  <table class="data-table jl-data-table" cellpadding="0">
-    <tr>
-      <th class="name name02">游戏角色名称</th>
-      <th class="level level02">公会状态</th>
-    </tr>
-      <% participations.group_by(&:status).each do |status, participations| %>
-        <% participations.each do |p| %>
-        <tr id='participation_<%= p.id %>'>
-          <% if status == Participation::Confirmed %>
-            <td><%= p.character.name %></td><td>一定去<% if p.character != event.poster_character and !event.expired? %><%= facebox_link "[修改]", edit_event_participation_url(event, p) %><% end %></td>
-          <% elsif status == Participation::Maybe %>
-            <td><%= p.character.name %></td><td>可能去<% if !event.expired? %><%= facebox_link "[修改]", edit_event_participation_url(event, p) %><% end %></td>
-          <% elsif status == Participation::Invitation %>
-            <td><%= p.character.name %></td><td>被邀请<%= facebox_link "[回复]", edit_event_invitation_url(event, p) %></td>
-          <% elsif status == Participation::Request %>
-            <td><%= p.character.name %></td><td>已请求[等待]</td>
-          <% end %>
+<div class="s2m1 guildMyRole">
+  <div class="title fix"><span class="i iRole02"></span><h2><strong>我在活动中的游戏角色</strong></h2></div>
+  <div class="con">
+    <table class="tbItem">
+      <tbody>
+        <tr>
+          <th class="roleName tl">角色名称</th>
+          <th class="state tl">公会状态</th>
         </tr>
+        <% participations.group_by(&:status).each do |status, participations| %>
+          <% participations.each do |p| %>
+            <tr id='participation_<%= p.id %>'>
+              <% if status == Participation::Confirmed %>
+                <td class="roleName"><%= p.character.name %></td><td>一定去<% if p.character != event.poster_character and !event.expired? %><%= facebox_link "[修改]", edit_event_participation_url(event, p) %><% end %></td>
+              <% elsif status == Participation::Maybe %>
+                <td class="roleName"><%= p.character.name %></td><td>可能去<% if !event.expired? %><%= facebox_link "[修改]", edit_event_participation_url(event, p) %><% end %></td>
+              <% elsif status == Participation::Invitation %>
+                <td class="roleName"><%= p.character.name %></td><td>被邀请<%= facebox_link "[回复]", edit_event_invitation_url(event, p) %></td>
+              <% elsif status == Participation::Request %>
+                <td><%= p.character.name %></td><td>已请求[等待]</td>
+              <% end %>
+            </tr>
+          <% end %>
         <% end %>
-      <% end %>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>
