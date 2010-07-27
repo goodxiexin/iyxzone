@@ -567,7 +567,6 @@ Object.extend(Iyxzone.Game.Panel, {
 		round1.appendChild(round2);
 		mask.appendChild(round1);
 		var iframeMask = new Element('iframe', {'class':'mask-iframe','frameborder':0,'src':''});
-		iframeMask.update("<html><head><title></title></head><body></body></html>")
 		mask.appendChild(iframeMask);
 		this.gamePanel.appendChild(mask);
 		document.body.appendChild(this.gamePanel);

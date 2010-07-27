@@ -177,8 +177,14 @@ Object.extend(Iyxzone, {
   getCurPos: function(field){
     if(field.selectionStart)
       return field.selectionStart;
-    else if(document.selection)
-      return Math.abs(document.selection.createRange().moveStart("character", -1000000));
+    else if(document.selection){
+			field.focus ();
+			var Sel = document.selection.createRange();
+			var SelLength = document.selection.createRange().text.length;
+			Sel.moveStart ('character', -field.value.length);
+			CaretPos = Sel.text.length - SelLength;
+			return CaretPos
+			}
   },
 
   selectText: function(field, start, end){
@@ -186,7 +192,7 @@ Object.extend(Iyxzone, {
     if(field.setSelectionRange){
       field.setSelectionRange(start, end);
     }else{
-      var r = element.createTextRange();
+      var r = field.createTextRange();
       r.collapse(true);
       r.moveEnd('character', end);
       r.moveStart('character', start);
@@ -255,14 +261,14 @@ Object.extend(Iyxzone.AppBar, {
   },
 
   constructGameList: function(){
-    var el = new Element('div', {id: 'app_game_bar', class: 'appGameMine'});
-    var html = '<div class="t fix"><strong class="left">我的游戏</strong><a href="javascript:void(0)" onclick="Iyxzone.AppBar.hideGameBar()" class="icon-active right"/></div>';
+    var el = new Element('div', {id: 'app_game_bar', 'class': 'appGameMine'});
+    var html = '<div class="t fix"><strong class="left">我的游戏</strong><a href="javascript:void(0)" onclick="Iyxzone.AppBar.hideGameBar()" class="icon-active right"></a></div>';
     html += '<div class="con"><ul class="xList">';
     for(var i=0;i<this.gameInfos.length;i++){
       html += '<li><a href="/games/' + this.gameInfos[i].id + '" onclick="Iyxzone.AppBar.hideGameBar();">' + this.gameInfos[i].name + '</a></li>';
     }
     html += '</ul></div>';
-    el.innerHTML = html;
+    el.update(html);
     return el;
   }
 
