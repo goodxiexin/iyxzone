@@ -11,7 +11,6 @@ class User::ProfilesController < UserBaseController
   def show
     # mini blogs
     @mini_blogs = @user.mini_blogs.limit(3).all
-    logger.error "mini_blogs: #{@mini_blogs.count}"
     @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2] if @relationship != 'owner'
     @friends = @user.friends.sort_by{rand}[0..2]
     @fans = @user.fans[0..8] if @user.is_idol

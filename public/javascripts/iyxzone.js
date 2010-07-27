@@ -186,7 +186,7 @@ Object.extend(Iyxzone, {
     if(field.setSelectionRange){
       field.setSelectionRange(start, end);
     }else{
-      var r = element.createTextRange();
+      var r = field.createTextRange();
       r.collapse(true);
       r.moveEnd('character', end);
       r.moveStart('character', start);
@@ -262,7 +262,8 @@ Object.extend(Iyxzone.AppBar, {
       html += '<li><a href="/games/' + this.gameInfos[i].id + '" onclick="Iyxzone.AppBar.hideGameBar();">' + this.gameInfos[i].name + '</a></li>';
     }
     html += '</ul></div>';
-    el.innerHTML = html;
+    el.update(html);
+    alert(html);
     return el;
   }
 

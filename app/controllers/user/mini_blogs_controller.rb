@@ -40,6 +40,12 @@ class User::MiniBlogsController < UserBaseController
     render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
 
+  def same_game
+    @fql = current_user.games.map(&:name).join(" OR ")
+    @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
+    render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
+  end
+
   def index
     @mini_blogs = @user.mini_blogs.paginate :page => params[:page], :per_page => PER_PAGE
     @hot_topics = MiniTopic.hot.limit(10)
@@ -57,8 +63,10 @@ class User::MiniBlogsController < UserBaseController
   end
 
   def interested
-    @mini_blogs = current_user.interested_mini_blogs.paginate :page => params[:page], :per_page => PER_PAGE
+    @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids)
+    @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => params[:page], :per_page => PER_PAGE
     @interested_idols = current_user.idols.order("fans_count DESC").limit(5) 
+    @interested_topics = current_user.mini_topic_attentions
   end
 
   def search

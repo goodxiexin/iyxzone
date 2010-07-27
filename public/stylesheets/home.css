@@ -1327,11 +1327,13 @@ span.i,a.i,.i40{width:16px;height:16px;margin-right:3px;display:-moz-inline-stac
 .iViewOrig{background-position:0 -146px}
 .iArr02Down{background:url(../images/skin/arrow.gif) no-repeat 3px -146px}
 .iSquare{background-position:-190px -69px}
+.iGuildJoin{background-position:0 -428px}
 .iGuildLogo{height:53px;background-position:0 -935px}
 .iGameLogo{height:53px;background-position:-40px -935px}
 span.iGuild02{width:23px;height:27px;background-position:-81px -935px}
 span.iFunc02{width:19px;height:27px;background-position:-104px -935px}
 span.iRole02{width:19px;height:27px;background-position:-123px -935px}
+a.iHelpTips{background-position:0 -412px}
 
 .ajaxLoading{text-align:center;margin:30px 0}
 /*btn*/
@@ -1377,6 +1379,8 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .actEx .d6-list{height:260px;max-height:260px;overflow-x:hidden;overflow-y:auto;border:1px solid #BBD2AA}
 .actEx .d6-list li{width:160px;margin:8px}
 .actEx .d6-list li strong{width:90px;}
+
+.actEx .starGuild{height:260px;max-height:260px;overflow-x:hidden;overflow-y:auto;border:1px solid #BBD2AA;position:relative}
 
 .actEx .starMember{height:260px;max-height:260px;overflow-x:hidden;overflow-y:auto;border:1px solid #BBD2AA;position:relative}
 .actEx .starMember .starItem{margin:10px;}
@@ -1438,14 +1442,23 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .followBtn button{font-weight:700;}
 .starMember .starItem{margin:10px 0;background:#f8fcf6;border:1px solid #ebebeb;padding:10px 10px 10px 90px;}
 .starMember .starItem .starAvatar{margin-left:-80px;float:left;_display:inline;}
-.starMember .starItem .starAvatar .con{background:url(../images/skin/skin2010.png) no-repeat 0 -644px;width:68px;height:68px;display:table-cell;vertical-align:middle;text-align:center;*display: block;*font-size:65px;*font-family:Arial;}
+.starMember .starItem .starAvatar .con{background:url(../images/skin/skin2010.png) no-repeat 0 -644px;width:68px;height:68px;display:table-cell;vertical-align:middle;text-align:center;*display:block;*font-size:65px;*font-family:Arial;}
 .starMember .starItem .starCon{width:100%;float:left;position:relative;}
 .starMember .starItem .starCon h3 a{font-size:14px;color:#d63000;}
 .starMember .starItem .starCon .intro{line-height:20px;margin:10px 180px 0 0;}
-
 .starMember .starItem .starFans{position:absolute;right:0;top:5px;text-align:right;color:#666;}
 .starMember .starItem .starFans .op{margin-top:10px}
 .starMember .starItem .starFans .op a{color:#d63000}
+/*明星公会*/
+.starGuild .starItem{margin:10px;background:#f8fcf6;border:1px solid #ebebeb;padding:10px 10px 10px 135px;}
+.starGuild .starItem .starAvatar{float:left;margin-left:-125px;_display:inline;}
+.starGuild .starItem .starAvatar .con{width:118px;height:118px;background:url(../images/skin/skin2010.png) no-repeat 0 -989px;text-align:center}
+.starGuild .starItem .starAvatar .con img{width:100px;height:100px;margin-top:8px}
+.starGuild .starItem .starCon{float:left;width:100%;line-height:28px;position:relative}
+.starGuild .starItem .starCon .op{position:absolute;right:10px;top:20px}
+.starGuild .starItem .starCon .iHelpTips{position:absolute;right:0;top:10px;_top:3px}
+.starGuild .starItem li.guildName{width:260px;height:22px;line-height:22px;display:block;overflow:hidden;}
+.starGuild .starItem li.guildName a{color:#d63000;font-weight:700;}
 
 /*mBlog*/
 .mBlogMain{width:100%;margin-right:-230px;float:left}
@@ -1453,7 +1466,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogExtra{width:220px;float:right}
 .mBlogTopic{background:url(../images/skin/mblog-topic-bg.png) no-repeat;padding:1px;position:relative;z-index:2;zoom:1}
 .mBlogTopic .topTitle{height:40px;line-height:40px;font-size:14px;padding-left:20px;margin-top:5px}
-.mBlogTopic .topTitle strong{color:#fff;float:left}
+.mBlogTopic .topTitle strong{color:#fff;float:left;margin-right:5px}
 .mBlogTopic .topTitle h2{float:left;width:300px;height:30px;overflow:hidden}
 .mBlogTopic .topIsay{position:absolute;top:12px;right:30px}
 .mBlogTopic .topBg{padding:15px 20px;_height:120px;min-height:120px}
@@ -1463,7 +1476,14 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogTopic .topImg .op{margin-top:5px}
 .mBlogTopic .topCon{float:left;width:98%;line-height:20px;}
 
-/*话题搜索*/
+/*话题搜索、我关注的*/
+.mBlogExtra .funcEx{margin:70px 0 20px 0}
+.mBlogExtra .myTopicEx{position:relative}
+.mBlogExtra .topicAdd{text-align:right;margin:10px 0}
+.mBlogExtra .topicAddIpt{position:absolute;bottom:-10px;left:0;width:200px}
+.topicAddIpt{border:1px solid #BDD6AE;background:#fff;padding:5px 5px 10px 10px;}
+.topicAddIpt .con{clear:both;margin:10px 0}
+.topicAddIpt .textfield{width:130px;*width:120px;float:left;margin:2px 3px 0 0;color:#333;}
 .mBlogSearch,.mBlogSearch .l-c,.mBlogSearch .r-c{background:url(../images/skin/mblog-skin.png) no-repeat;}
 .mBlogSearch{background-repeat:repeat-x;background-position:0 -223px;height:47px;width:95%;margin:0 auto}
 .mBlogSearch .l-c,.mBlogSearch .r-c{width:10px;height:47px;display:block}
@@ -1585,14 +1605,14 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 #canvas .mBlogExtra .round_m{padding:5px 15px}
 
 .xList{margin-top:5px}
-.xList li{background:url(../images/skin/dotline.gif) repeat-x bottom;padding:1px 0}
+.xList li{background:url(../images/skin/dotline.gif) repeat-x bottom;padding:1px 0;}
 .xList li a{line-height:14px;color:#333;display:block;padding:10px 5px;zoom:1;}
 .xList li a:after,.xList li a:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
-
 .xList li a:hover{background:#74bc20}
 .xList li.selected a,.xList li.selected a:hover{background:#74bc20;}
 .xList li.selected span,.xList li.selected a,.xList li a:hover,.xList li a:hover span{color:#fff}
 .xList li span{font-weight:700;color:#666;margin:0 8px 0 0;display:block;float:left;width:22px;text-align:center}
+.xList li em{float:right;cursor:pointer;margin-top:2px;}
 .xList .first span,.xList .second span,.xList .third span{background:url(../images/skin/skin2010.png) no-repeat;height:14px;font-size:0;line-height:0;text-indent:-9999px;}
 .xList .first span{background-position:-142px 0;}
 .xList .second span{background-position:-142px -14px;}
@@ -1605,7 +1625,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 
 /*我关注的*/
 .hotGameEx .xList li a{color:#217308}
-.hotGameEx .xList li.selected a{color:#fff}
+.hotGameEx .xList li.selected a,.hotGameEx .xList li a:hover{color:#fff}
 
 /*会员、角色等信息card*/
 .m-card{position:relative;padding:10px 10px 10px 80px;height:60px;}
@@ -1704,6 +1724,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .pageSkinV2 .tab01 li.hover span{background-position:right -165px;}
 .pageSkinV2 .photolist-big-box{position:relative}
 .pageSkinV2 .mainContent .s2m2 .title .wrap{width:535px}
+.pageSkinV2 .mainContent #presentation{margin-top:20px}
 
 .skinV2Head,.skinV2Head .t-l,.skinV2Head .title,.skinV2Head .t-m,.skinV2Head .t-r{background:url(../images/skin/skin-v2.png) no-repeat;height:46px}
 .skinV2Head{background-position:0 -207px;background-repeat:repeat-x;height:46px;line-height:46px;margin:-3px -4px 0 -4px;position:relative}
@@ -1731,10 +1752,11 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .guildMyRole .state{width:40%}
 .guildMyRole td a{color:#333}
 
-
 .guildHome .guildProfile,.gameHome .gameProfile,.eventHome .eventProfile{padding-left:120px;}
 .guildHome .guildProfile .avatar,.gameHome .gameProfile .avatar,.eventHome .eventProfile .avatar{float:left;margin-left:-120px;_display:inline;}
-.guildHome .guildProfile .avatar .follow,.gameHome .gameProfile .avatar .follow,.eventHome .eventProfile .avatar .follow{margin:5px 0 0 10px;}
+.guildHome .guildProfile .avatar img,.gameHome .gameProfile .avatar img,.eventHome .eventProfile .avatar img{width:100px}
+.guildHome .guildProfile .avatar .follow,.gameHome .gameProfile .avatar .follow,.eventHome .eventProfile .avatar .follow{margin:15px 0 0 10px;position:relative}
+.guildHome .guildProfile .avatar .follow .iHelpTips,.gameHome .gameProfile .avatar .follow .iHelpTips,.eventHome .eventProfile .avatar .follow .iHelpTips{position:absolute;right:0;top:-14px;}
 .guildHome .guildProfile .con,.gameHome .gameProfile .con,.eventHome .eventProfile .con{float:left;width:100%;line-height:28px}
 .guildHome .guildProfile .con li,.gameHome .gameProfile .con li,.eventHome .eventProfile .con li{width:200px;height:28px;overflow:hidden}
 .guildHome .guildProfile .con li span,.gameHome .gameProfile .con li span,.eventHome .eventProfile .con li span{color:#217308}
@@ -1756,11 +1778,13 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .s2m2bd{background:#f3fae4;width:320px;padding:10px 0}
 .guildHome .guildIntro .item,.eventHome .eventIntro .item,.gameHome .gameGE .item{padding:10px 0 10px 130px;}
 .guildHome .guildIntro .item .avatar,.eventHome .eventIntro .item .avatar,.gameHome .gameGE .item .avatar{float:left;margin-left:-120px;_display:inline;}
+.gameHome .gameGE .item .avatar img{width:100px}
 .guildHome .guildIntro .item .con,.eventHome .eventIntro .item .con,.gameHome .gameGE .item .con{float:left;width:100%;line-height:28px}
 .guildHome .guildFunc li,.eventHome .eventFunc li{margin:10px 0}
 .guildHome .guildFunc li a,.eventHome .eventFunc li a{color:#333}
 .guildHome .guildMember li,.gameHome .gameMember li,.eventHome .eventMember li{float:left;width:25%;margin:5px 0;text-align:center;}
-.guildHome .guildMember li .memberName,.gameHome .gameMember li .memberName,.eventHome .eventMember li .memberName{width:70px;height:22px;line-height:22px;display:block;overflow:hidden;color:#666}
+.guildHome .guildMember li .memberName,.gameHome .gameMember li .memberName,.eventHome .eventMember li .memberName{width:98%;height:22px;line-height:22px;display:block;overflow:hidden;color:#666}
+.guildHome .guildMember li img,.gameHome .gameMember li img,.eventHome .eventMember li img{width:50px;height:50px}
 /*照片*/
 .sPhotoList li{float:left;padding:5px 8px;width:86px;overflow:hidden;}
 .sPhotoList li img{width:75px}

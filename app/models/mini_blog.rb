@@ -133,9 +133,10 @@ protected
       errors.add(:content, "不能为空")
     else
       content.gsub!(/[ |\r|\n|\t]+/, " ")
-      if content.length > 140
+      size = content.chars.count
+      if size > 140
         errors.add(:content, "太长")
-      elsif content.length < 1
+      elsif size < 1
         errors.add(:content, "太短")
       end
     end

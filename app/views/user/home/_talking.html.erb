@@ -1,0 +1,10 @@
+      <div class="item fix">
+        <div class="avatar">
+          <%= avatar mini_blog.poster, :class => "imgbox01" %>
+        </div>
+        <div class="con">
+          <%= profile_link mini_blog.poster %>：<%= mini_blog_content mini_blog %>
+          <div class="time"><%= ftime mini_blog.created_at %></div>
+        </div>
+      </div>
+

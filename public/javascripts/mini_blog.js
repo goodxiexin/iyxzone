@@ -7,6 +7,7 @@ Iyxzone.MiniBlog = {
   Pub: {},
   Searcher: {},
   Slider: {},
+  Topic: {},
   fetch: function(type, uid){
     var types = ['all', 'original', 'text', 'image', 'video'];
 
@@ -28,6 +29,62 @@ Iyxzone.MiniBlog = {
     });
   }
 };
+
+Object.extend(Iyxzone.MiniBlog.Topic, {
+
+  form: null,
+
+  cancel: function(){
+    if(this.form){
+      this.form.remove();
+    }
+  },
+
+  new: function(link){
+    var div = new Element('div');
+    div.innerHTML = '<div class="topicAddIpt"><div class="fix"><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Topic.cancel();" class="icon-active right"/></div><div class="con fix"><input type="text" value="" id="new_topic_name" class="textfield"/><span class="button03"><span><button onclick="Iyxzone.MiniBlog.Topic.create($(this));">发布</button></span></span></div></div>';
+    this.form = div.childElements()[0];
+    $('topic_list_panel').appendChild(this.form);
+      this.form.setStyle({
+      position: 'abosulte',
+      left: (link.positionedOffset().left - 124) + 'px',
+      top: (link.positionedOffset().top) + 'px'
+    });
+    this.form.show();
+  },
+
+  create: function(btn){
+    var name = $('new_topic_name').value;
+
+    new Ajax.Request('/mini_topic_attentions', {
+      method: 'post',
+      parameters: {'attention[topic_name]': name},
+      onLoading: function(){
+//        Iyxzone.disableButton(btn, '发送中..');
+      },
+      onComplete: function(){
+        this.cancel();
+      }.bind(this),
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('topic_list').insert({bottom: this.getHTML(name, json.id)});
+        }else{
+          error('发生错误');
+        }
+      }.bind(this)
+    });
+  },
+
+  destroy: function(id){
+  
+  },
+
+  getHTML: function(name, id){
+    return '<li><a href="/mini_blogs/search?key=' + encodeURIComponent(name) + '">' + name + '<em class="icon-active" onclick="Iyxzone.MiniBlog.Topic.destroy(' + id + ');"></em></a></li>';
+  }
+
+});
 
 Object.extend(Iyxzone.MiniBlog.Forwarder, {
 
@@ -100,7 +157,6 @@ Object.extend(Iyxzone.MiniBlog.Searcher, {
     url = "/mini_blogs/search?key=" + key;
     if(category != 'all')
       url += '&category=' + category;
-    alert(url);
     window.location.href = url; 
   }
 
@@ -244,7 +300,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
     var html = '<a href="#"><span class="i iPic"></span>' + fileName + '</a><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Builder.delImage(' + id + ');" class="icon-active"></a>';
   
     // show image preview
-    html += '<div class="mBlogEditZ"><table class="trimBox"><tbody><tr><td></td><td class="arrUp"></td><td></td></tr><tr><td class="t-l"></td><td class="t-c"></td><td class="t-r"></td></tr><tr><td class="m-l"></td><td class="m-c"><img src="' + url + '"/></td><td class="m-r"></td></tr><tr><td class="b-l"></td><td class="b-c"></td><td class="b-r"></td></tr></tbody></table></div>';
+    html += '<div class="mBlogEditZ"><table class="trimBox"><tbody><tr><td></td><td class="arrUp"></td><td></td></tr><tr><td class="t-l"></td><td class="t-c"></td><td class="t-r"></td></tr><tr><td class="m-l">&nbsp;</td><td class="m-c"><img src="' + url + '"/></td><td class="m-r">&nbsp;</td></tr><tr><td class="b-l"></td><td class="b-c"></td><td class="b-r"></td></tr></tbody></table></div>';
     
     $('publisher_image').update(html);
   },

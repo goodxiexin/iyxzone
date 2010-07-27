@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100726070348) do
+ActiveRecord::Schema.define(:version => 20100727083756) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -33,14 +33,6 @@ ActiveRecord::Schema.define(:version => 20100726070348) do
     t.string   "name"
     t.text     "about"
     t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "attentions", :force => true do |t|
-    t.integer  "attentionable_id"
-    t.string   "attentionable_type"
-    t.integer  "follower_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -253,13 +245,6 @@ ActiveRecord::Schema.define(:version => 20100726070348) do
   end
 
   add_index "game_areas", ["game_id"], :name => "index_game_areas_on_game_id"
-
-  create_table "game_attentions", :force => true do |t|
-    t.integer "user_id"
-    t.integer "game_id"
-  end
-
-  add_index "game_attentions", ["user_id"], :name => "index_game_attentions_on_user_id"
 
   create_table "game_characters", :force => true do |t|
     t.integer  "user_id"
@@ -488,10 +473,16 @@ ActiveRecord::Schema.define(:version => 20100726070348) do
     t.datetime "updated_at"
   end
 
+  create_table "mini_topic_attentions", :force => true do |t|
+    t.string   "topic_name"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "mini_topics", :force => true do |t|
     t.string  "name"
-    t.integer "freq_in_chinese", :default => 0
-    t.integer "freq_in_site",    :default => 0
+    t.integer "freq", :default => 0
   end
 
   create_table "news", :force => true do |t|

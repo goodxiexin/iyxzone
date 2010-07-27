@@ -15,7 +15,7 @@
         <% else %>
           <%= render :partial => 'user/ratings/new', :locals => {:rateable => game} %>
         <% end %>
-      <ul>
+      <ul class="clear">
         <li>公司：<span class="memberName"><%= link_to game.company, game.official_web %></span></li>
         <li>成立：<span class="time"><%= ftime2 game.sale_date %></span></li>
       </ul>

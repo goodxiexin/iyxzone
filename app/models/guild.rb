@@ -99,8 +99,6 @@ class Guild < ActiveRecord::Base
     [president.profile, guild.game] + friends + (president.is_idol ? president.fans : [])
   }
 
-  acts_as_attentionable
-
 	acts_as_commentable :order => 'created_at DESC',
                       :delete_conditions => lambda {|user, guild, comment| guild.president == user},
                       :create_conditions => lambda {|user, guild| guild.has_people?(user)},
