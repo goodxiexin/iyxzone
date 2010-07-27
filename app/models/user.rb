@@ -4,6 +4,10 @@ class User < ActiveRecord::Base
 
   has_many :mini_topic_attentions
 
+  def interested_in_topic? name
+    !mini_topic_attentions.find_by_topic_name(name).blank?
+  end
+
   belongs_to :skilled_game, :class_name => "Game"
 
   has_many :mini_images, :foreign_key => 'poster_id', :order => 'created_at DESC'

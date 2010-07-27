@@ -41,15 +41,9 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
   },
 
   new: function(link){
-    var div = new Element('div');
-    div.innerHTML = '<div class="topicAddIpt"><div class="fix"><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Topic.cancel();" class="icon-active right"/></div><div class="con fix"><input type="text" value="" id="new_topic_name" class="textfield"/><span class="button03"><span><button onclick="Iyxzone.MiniBlog.Topic.create($(this));">发布</button></span></span></div></div>';
-    this.form = div.childElements()[0];
-    $('topic_list_panel').appendChild(this.form);
-      this.form.setStyle({
-      position: 'abosulte',
-      left: (link.positionedOffset().left - 124) + 'px',
-      top: (link.positionedOffset().top) + 'px'
-    });
+    $('topic_list_panel').insert({bottom: '<div class="topicAddIpt"><div class="fix"><a href="#" onclick="Iyxzone.MiniBlog.Topic.cancel();" class="icon-active right"></a></div><div class="con fix"><input type="text" id="new_topic_name" value="请添加关注的话题" class="textfield"/><span class="button03"><span><button onclick="Iyxzone.MiniBlog.Topic.create($(this));">发布</button></span></span></div></div>'});
+    var children = $('topic_list_panel').childElements();
+    this.form = children[children.length - 1];
     this.form.show();
   },
 
@@ -60,7 +54,7 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
       method: 'post',
       parameters: {'attention[topic_name]': name},
       onLoading: function(){
-//        Iyxzone.disableButton(btn, '发送中..');
+        Iyxzone.disableButton(btn, '...');
       },
       onComplete: function(){
         this.cancel();
@@ -77,11 +71,69 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
   },
 
   destroy: function(id){
-  
+    new Ajax.Request('/mini_topic_attentions/' + id, {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('attention_' + id).remove();
+        }else{
+          tip('发生错误');
+        }
+      }.bind(this)
+    });
   },
 
   getHTML: function(name, id){
-    return '<li><a href="/mini_blogs/search?key=' + encodeURIComponent(name) + '">' + name + '<em class="icon-active" onclick="Iyxzone.MiniBlog.Topic.destroy(' + id + ');"></em></a></li>';
+    return '<li id="attention_' + id + '"><a href="javascript:void(0)"><strong onclick="window.location.href = \'/mini_blogs/search?key=' + encodeURIComponent(name) + '\';">' + name + '</strong><em class="icon-active" onclick="Iyxzone.MiniBlog.Topic.destroy(' + id + ');"></em></a></li>';
+  },
+
+  // 下面2个用于搜索结果页面
+  follow: function(name){
+    new Ajax.Request('/mini_topic_attentions', {
+      method: 'post',
+      parameters: {'attention[topic_name]': name},
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      }.bind(this),
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('follow_topic').innerHTML = '<a onclick="Iyxzone.MiniBlog.Topic.unfollow(' + json.id + ');; return false;" href="#"><span class="icon-friend02"></span>关注该话题</a>';
+        }else{
+          error('发生错误');
+        }
+      }.bind(this)
+    });
+  },
+
+  unfollow: function(name, id){
+    new Ajax.Request('/mini_topic_attentions/' + id, {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('follow_topic').update('<a onclick="Iyxzone.MiniBlog.Topic.follow(\'' + name + '\'); return false;" href="#"><span class="icon-friend02"></span>关注该话题</a>');
+        }else{
+          tip('发生错误');
+        }
+      }.bind(this)
+    });
   }
 
 });

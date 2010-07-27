@@ -13,16 +13,6 @@
                             <div class="m-con">
                               <h4><%= profile_link user, :class => "member-name" %></h4>
                               <div><%= "关注人数：#{user.attentions_count}" %></div>
-                              <div id='user_attention_<%= user.id %>'>
-                                <% if user != current_user %>
-                                  <% attention = user.attentions.find_by_follower_id current_user.id %>
-                                  <% if user.followed_by? current_user %>
-                                    <%= render :partial => 'user/attentions/unfollow', :locals => {:attentionable => user} %>
-                                  <% else %>
-                                    <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => user} %>
-                                  <% end %>  
-                                <% end %>                              
-                              </div>
                             </div>
                           </div>
                         </li>

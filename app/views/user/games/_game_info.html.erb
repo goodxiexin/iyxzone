@@ -1,13 +1,6 @@
   <div class="gameProfile fix">
     <div class="avatar">
       <%= game_image game.name, :class => "imgbox01" %>
-      <div class='follow' id='game_attention_<%= game.id %>'>
-        <% if game.followed_by? current_user %>
-          <%= render :partial => 'user/attentions/unfollow', :locals => {:attentionable => game} %>
-        <% else %>
-          <%= render :partial => 'user/attentions/follow', :locals => {:attentionable => game} %>
-        <% end %>
-      </div>
     </div>
     <div class="con">
         <% if !game.is_rateable_by? current_user %>
