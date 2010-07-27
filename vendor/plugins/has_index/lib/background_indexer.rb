@@ -13,7 +13,7 @@ class BackgroundIndexer
     end
 
     #RMMSeg::Dictionary.load_dictionaries
-    @config[:writer][:analyzer] = MiniBlogAnalyzer.new
+    @config[:writer][:analyzer] = ChineseAnalyzer.new
     @config[:writer][:path] = @path
 
     # log file

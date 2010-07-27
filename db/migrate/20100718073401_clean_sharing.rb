@@ -1,6 +1,32 @@
+
+class Sharing < ActiveRecord::Base
+
+  belongs_to :poster, :class_name => 'User'
+
+  belongs_to :share
+
+  def shareable
+    share.nil? ? nil : share.shareable
+  end
+
+  acts_as_commentable
+
+end
+
+class Link < ActiveRecord::Base
+
+end
+
+class Share < ActiveRecord::Base
+
+  belongs_to :shareable, :polymorphic => true
+
+end
+
 class CleanSharing < ActiveRecord::Migration
+
+
   def self.up
-=begin
     # 只转3类，其他的就不管了
     Sharing.all.each do |s|
       if s.shareable_type == 'Profile'
@@ -35,9 +61,9 @@ class CleanSharing < ActiveRecord::Migration
 
     drop_table :links
 
-=end
   end
 
   def self.down
   end
+
 end

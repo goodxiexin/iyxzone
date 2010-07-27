@@ -20,4 +20,5 @@ module RMMSeg
       end
     end
   end
+
 end

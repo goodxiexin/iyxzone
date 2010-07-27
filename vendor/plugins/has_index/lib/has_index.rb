@@ -38,14 +38,14 @@ module HasIndex
 
     def update_index
       if self.index_state == 1 and index_columns_changed?
-        DeletedIndex.create :model_name => "MiniBlog", :doc_id => self.id
+        DeletedIndex.create :model_name => self.class.name, :doc_id => self.id
         self.index_state = 0
       end
     end
 
     def destroy_index
       if self.index_state == 1
-        DeletedIndex.create :model_name => "MiniBlog", :doc_id => self.id
+        DeletedIndex.create :model_name => self.class.name, :doc_id => self.id
       end
     end
 
@@ -91,7 +91,7 @@ module HasIndex
 
     def indexer
       if @indexer.nil?
-        @indexer = Ferret::Index::Index.new :path => "#{RAILS_ROOT}/index/mini_blog", :analyzer => MiniBlogAnalyzer.new
+        @indexer = Ferret::Index::Index.new :path => "#{RAILS_ROOT}/index/mini_blog", :analyzer => ChineseAnalyzer.new
       end
       @indexer
     end

@@ -74,6 +74,3 @@ Rails::Initializer.run do |config|
     :attention_observer
 
 end
-
-require 'ferret'
-INDEX = Ferret::Index::Index.new :path => "index/mini_blog", :anlayzer => MiniBlogAnalyzer.new

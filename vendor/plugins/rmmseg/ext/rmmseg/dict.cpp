@@ -116,8 +116,9 @@ namespace rmmseg
             do
             {
                 if (len == entry->word->nbytes &&
-                    strncmp(str, entry->word->text, len) == 0)
+                    strncmp(str, entry->word->text, len) == 0){
                     return entry->word;
+								}
                 entry = entry->next;
             }
             while (entry);
@@ -226,7 +227,6 @@ namespace rmmseg
 								*_ptr = '\0';
                 add(make_word(buf, (ptr-buf)/3, atoi(ptr+1), _ptr+1, -1));
             }
-printf("dict: %s, size: %d\n", filename, dict_mem);
             fclose(fp);
             return true;
         }

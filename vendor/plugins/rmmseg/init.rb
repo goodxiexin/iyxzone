@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/lib/rmmseg.rb'
 
 # load dictionary
 # 一般类的单字和多词
-RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "chars.dict"), :chars
+#RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "chars.dict"), :chars
 RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "words.dict"), :words
 # 游戏
 Dir.new(File.join(RAILS_ROOT, "dict", "game")).each do |f|
@@ -10,6 +10,14 @@ Dir.new(File.join(RAILS_ROOT, "dict", "game")).each do |f|
     RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "game", f), :words
   end
 end
+
+# 体育休闲
+Dir.new(File.join(RAILS_ROOT, "dict", "sports")).each do |f|
+  if f =~ /.+\.dict/
+    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "sports", f), :words
+  end
+end
+
 =begin
 # 娱乐
 Dir.new(File.join(RAILS_ROOT, "dict", "entertainment")).each do |f|
@@ -17,14 +25,7 @@ Dir.new(File.join(RAILS_ROOT, "dict", "entertainment")).each do |f|
     RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "entertainment", f), :words
   end
 end
-=end
-# 体育休闲
-Dir.new(File.join(RAILS_ROOT, "dict", "sports")).each do |f|
-  if f =~ /.+\.dict/
-    RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "sports", f), :words
-  end
-end
-=begin
+
 # 生活
 Dir.new(File.join(RAILS_ROOT, "dict", "life")).each do |f|
   if f =~ /.+\.dict/
