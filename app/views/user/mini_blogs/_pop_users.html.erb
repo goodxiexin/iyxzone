@@ -13,6 +13,9 @@
                             <div class="m-con">
                               <h4><%= profile_link user, :class => "member-name" %></h4>
                               <div><%= "关注人数：#{user.attentions_count}" %></div>
+                              <% if user != current_user and !user.has_friend?(current_user) %>
+                                <%= facebox_link '<span class="icon-friend02"></span>加为好友', new_friend_request_url(:friend_id => user.id), :class => "red" %>
+                              <% end %>
                             </div>
                           </div>
                         </li>

@@ -28,7 +28,7 @@ class User::GamesController < UserBaseController
   def show
     @game = Game.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, :tags])
     @mini_blogs = MiniBlog.limit(3).all
-    @topics = MiniTopic.hot.limit(3).all
+    @topics = MiniTopic.hot(6.hours.ago, Time.now).map{|a| a[1]}[0..2]
     @events = @game.events.nonblocked.limit(3).people_order.prefetch([{:album => :cover}])
     @guilds = @game.guilds.nonblocked.limit(3).people_order.prefetch([{:album => :cover}, {:president => :profile}])
     @has_game = current_user.has_game? @game

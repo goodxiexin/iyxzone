@@ -2,19 +2,13 @@ class User::MiniTopicsController < UserBaseController
 
   layout 'app'
 
-  TimeRange = [Time.now, Time.now.beginning_of_day, 1.day.ago.beginning_of_day, 7.day.ago.beginning_of_day, 365.day.ago.beginning_of_day]
+  TimeRange = [1.hours.ago, 6.hours.ago, 1.day.ago, 7.day.ago]
 
   def index
     @idx = params[:time].to_i
-    @from = TimeRange[@idx+1]
-    @to = TimeRange[@idx]
-    @topics = MiniTopic.within(@from, @to).order('created_at DESC').group_by(&:name).map do |name, topics|
-      from_topic = MiniTopic.find(:first, :conditions => ["name = ? and created_at < ?", name, topics.first.created_at], :order => "created_at DESC")
-      to_topic = MiniTopic.find(:first, :conditions => ["name = ? and created_at > ?", name, topics.last.created_at], :order => "created_at ASC")
-      from_freq = from_topic.blank? ? 0 : from_topic.freq
-      to_freq = to_topic.blank? ? 0 : to_topic.freq
-      [name, (to_freq - from_freq)]
-    end
+    @from = TimeRange[@idx]
+    @to = Time.now
+    @topics = MiniTopic.all.map{|t| [t.freq_within(@from, @to), t]}.sort{|a,b| b[0] <=> a[0]}.select{|a| a[0] > 0}[0..49]
   end
 
 end

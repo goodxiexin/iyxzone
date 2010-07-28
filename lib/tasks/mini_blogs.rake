@@ -22,38 +22,57 @@ namespace :mini_blogs do
     MiniBlog.build_delta_index 
   end
 
-  #
-  # FIXME: this might be quite slow
-  #
+  
   task :main_topics => :environment do
     include Ferret
-    MiniTopic.delete_all
     reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
+    MiniTopic.destroy_all
+    now = Time.now
     reader.terms(:content).each do |term, freq|
       word = RMMSeg::Dictionary.get_word term
       if word.nil?
-        MiniTopic.create :name => term, :freq => freq if term =~ /[a-zA-Z0-9_]+/
+        if word =~ /[a-zA-Z0-9]+/
+          topic = MiniTopic.create :name => term
+          topic.add_node freq, now
+        end
       else
-        if word.cx_game? or ((word.cx_unknown? or word.cx_noun?) and word.freq < 1000000)
-          MiniTopic.create :name => term, :freq => freq
+        if word.cx_game? or (word.cx_noun? and word.freq < 1000000)
+          topic = MiniTopic.create :name => term
+          topic.add_node freq, now
         end
       end
     end
+    e = Time.now
+    puts "#{e-now} s"
   end
 
   task :delta_topics => :environment do
     include Ferret
     reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
+    now = Time.now
     reader.terms(:content).each do |term, freq|
       word = RMMSeg::Dictionary.get_word term
-      if word.nil?
-        MiniTopic.create :name => term, :freq => freq if term =~ /[a-zA-Z0-9_]+/
+      topic = MiniTopic.find_by_name term
+      if topic.blank?
+        if word.nil?
+          if word =~ /[a-zA-Z0-9]+/
+            topic = MiniTopic.create :name => term
+            topic.add_node freq, now
+          end
+        else
+          if word.cx_game? or (word.cx_noun? and word.freq < 1000000)
+            topic = MiniTopic.create :name => term
+            topic.add_node freq, now
+          end
+        end
       else
-        if word.cx_game? or ((word.cx_unknown? or word.cx_noun?) and word.freq < 1000000)
-          MiniTopic.create :name => term, :freq => freq
+        if freq != topic.freq
+          topic.add_node freq, now
         end
       end
-    end    
+    end
+    e = Time.now
+    puts "#{e-now} s"
   end
 
 end

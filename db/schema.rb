@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100727083756) do
+ActiveRecord::Schema.define(:version => 20100728050016) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -480,9 +480,16 @@ ActiveRecord::Schema.define(:version => 20100727083756) do
     t.datetime "updated_at"
   end
 
+  create_table "mini_topic_nodes", :force => true do |t|
+    t.integer  "mini_topic_id"
+    t.integer  "freq"
+    t.datetime "created_at"
+  end
+
   create_table "mini_topics", :force => true do |t|
     t.string  "name"
-    t.integer "freq", :default => 0
+    t.integer "freq",  :default => 0
+    t.text    "nodes"
   end
 
   create_table "news", :force => true do |t|

@@ -1,34 +1,80 @@
 Iyxzone.MiniBlog = {
   version: '1.0',
+  
   author: ['高侠鸿'],
+  
   Forwarder: {},
+  
   Builder: {},
+  
   Presenter: {},
+  
   Pub: {},
+  
   Searcher: {},
+  
   Slider: {},
+  
   Topic: {},
-  fetch: function(type, uid){
+
+  MyIndex: {}
+
+};
+
+Object.extend(Iyxzone.MiniBlog.MyIndex, {
+
+  curTab: null,
+
+  cache: new Hash(),
+
+  init: function(type){
+    this.cache.set(type, $('mini_blogs_list').innerHTML);
+    this.setTab(type);
+  },
+
+  setTab: function(type){
+    this.curTab = type;
+
     var types = ['all', 'original', 'text', 'image', 'video'];
 
     for(var i=0;i<types.length;i++){
       $('mini_blog_category_' + types[i]).writeAttribute('class', '');
     }
 
+    $('mini_blog_category_' + type).addClassName("selected");   
+  },
+
+  loading: function(){
+    $('mini_blogs_list').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"></div>';
+  },
+
+  fetch: function(type, uid){
+    this.cache.set(this.curTab, $('mini_blogs_list').innerHTML);
+
+    this.setTab(type);
+    
+    var info = this.cache.get(type);
+    if(info){
+      $('mini_blogs_list').innerHTML = info;
+      return;
+    }
+
     new Ajax.Request('/mini_blogs/list', {
       method: 'get',
       parameters: {type: type, uid: uid},
       onLoading: function(transport){
-        $('mini_blog_category_' + type).addClassName("selected");
-        $('mini_blogs_list').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"></div>';
-      },
+        this.loading();
+      }.bind(this),
       onSuccess: function(transport){
-        $('mini_blogs_list').innerHTML = transport.responseText;
-        facebox.watchClickEvents();
-      }
+        this.cache.set(type, transport.responseText);
+        if(this.curTab == type){
+          $('mini_blogs_list').innerHTML = transport.responseText;
+          facebox.watchClickEvents();
+        }
+      }.bind(this)
     });
   }
-};
+});
 
 Object.extend(Iyxzone.MiniBlog.Topic, {
 
@@ -40,7 +86,7 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
     }
   },
 
-  new: function(link){
+  newTopic: function(link){
     $('topic_list_panel').insert({bottom: '<div class="topicAddIpt"><div class="fix"><a href="#" onclick="Iyxzone.MiniBlog.Topic.cancel();" class="icon-active right"></a></div><div class="con fix"><input type="text" id="new_topic_name" value="请添加关注的话题" class="textfield"/><span class="button03"><span><button onclick="Iyxzone.MiniBlog.Topic.create($(this));">发布</button></span></span></div></div>'});
     var children = $('topic_list_panel').childElements();
     this.form = children[children.length - 1];
@@ -174,23 +220,54 @@ Object.extend(Iyxzone.MiniBlog.Forwarder, {
 
 Object.extend(Iyxzone.MiniBlog.Pub, {
 
-  fetch: function(type){
+  curTab: null,
+
+  cache: new Hash(),
+
+  init: function(type){
+    this.curTab = type;
+    this.cache.set(type, $('mini_blogs_list').innerHTML);
+  },
+
+  setTab: function(type){
     var types = ['hot', 'sexy', 'random', 'same_game'];
     
     for(var i=0;i<types.length;i++){
       $('mini_blog_category_' + types[i]).writeAttribute('class', '');
     }
 
+    $('mini_blog_category_' + type).addClassName('hover');
+
+    this.curTab = type;    
+  },
+
+  loading: function(type){
+    $('mini_blogs_list').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"></div>';
+  },
+
+  fetch: function(type){
+    this.cache.set(this.curTab, $('mini_blogs_list').innerHTML);
+
+    this.setTab(type);
+
+    var info = this.cache.get(type);
+    if(info){
+      $('mini_blogs_list').innerHTML = info;
+      return;
+    }
+
     new Ajax.Request('/mini_blogs/' + type, {
       method: 'get',
       onLoading: function(transport){
-        $('mini_blog_category_' + type).addClassName("hover");
-        $('mini_blogs_list').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"></div>';
-      },
+        this.loading();
+      }.bind(this),
       onSuccess: function(transport){
-        $('mini_blogs_list').innerHTML = transport.responseText;
-        facebox.watchClickEvents();
-      }
+        this.cache.set(type, transport.responseText);
+        if(type == this.curTab){
+          $('mini_blogs_list').innerHTML = transport.responseText;
+          facebox.watchClickEvents();
+        }
+      }.bind(this)
     });
   }
 

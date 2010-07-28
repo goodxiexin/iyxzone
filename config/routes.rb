@@ -48,8 +48,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :admin do |admin|
 	
-    admin.resources :mini_topics
-	
 		admin.resources	:tasks
 
     admin.resources :news do |news|

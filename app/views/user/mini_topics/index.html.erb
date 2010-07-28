@@ -8,8 +8,8 @@
     <%= render :partial => 'user/mini_blogs/tab', :locals => {:user => current_user, :hover => 3} %>
     <div class="feed-box01">
       <%= render :partial => 'time_nav' %>
-      <% @topics.each do |name, freq| %>
-         <%= link_to name, search_mini_blogs_url(:key => name) %> : <%= freq %>
+      <% @topics.each do |freq, topic| %>
+         <%= link_to topic.name, search_mini_blogs_url(:key => topic.name) %> : <%= freq %>
       <% end %>
     </div>
   </div>

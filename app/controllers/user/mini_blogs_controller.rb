@@ -14,12 +14,16 @@ class User::MiniBlogsController < UserBaseController
     @today_topic = @meta_data.today_topic
     @today_mini_blogs = MiniBlog.search(@today_topic, :page => 1, :per_page => 50)
     @shuffled_mini_blogs = @today_mini_blogs.shuffle[0..19]
+
     @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
+
     @pop_users = User.match(:is_idol => false).order("attentions_count DESC").limit(5)
-    @hot_topics = MiniTopic.hot.limit(10)
+
+    # 6小时内的最热话题
+    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
     
     # 我觉得热词和热门话题不太好区分
-    @hot_words = MiniTopic.hot.limit(30).all.sort{|a,b| rand(2)<=>rand(2)}[0..9]
+    @hot_words = MiniTopic.hot(6.hours.ago, Time.now).map{|a| a[1]}[0..29].sort{|a,b| rand(2)<=>rand(2)}[0..9]
   end
 
   def hot
@@ -48,7 +52,7 @@ class User::MiniBlogsController < UserBaseController
 
   def index
     @mini_blogs = @user.mini_blogs.paginate :page => params[:page], :per_page => PER_PAGE
-    @hot_topics = MiniTopic.hot.limit(10)
+    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
     if @user == current_user
       @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
     else
@@ -83,7 +87,7 @@ class User::MiniBlogsController < UserBaseController
     # search index
     @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
     @idols = User.match(:is_idol => true).all
-    @hot_topics = MiniTopic.hot.limit(10)
+    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
   end
 
   def new

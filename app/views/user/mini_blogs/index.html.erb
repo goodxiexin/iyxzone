@@ -15,15 +15,15 @@
             <% end %>
             <div class="mBlogCatTab fix">
               <strong class="title"><%= get_subject @user %>的微博</strong>
-              <%= link_to_function "全部", "Iyxzone.MiniBlog.fetch('all', #{@user.id});", :id => 'mini_blog_category_all', :class => 'selected' %>
+              <%= link_to_function "全部", "Iyxzone.MiniBlog.MyIndex.fetch('all', #{@user.id});", :id => 'mini_blog_category_all', :class => 'selected' %>
               <span class="pipe">|</span>
-              <%= link_to_function "原创", "Iyxzone.MiniBlog.fetch('original', #{@user.id});", :id => 'mini_blog_category_original' %>
+              <%= link_to_function "原创", "Iyxzone.MiniBlog.MyIndex.fetch('original', #{@user.id});", :id => 'mini_blog_category_original' %>
               <span class="pipe">|</span>
-              <%= link_to_function "文字", "Iyxzone.MiniBlog.fetch('text', #{@user.id});", :id => 'mini_blog_category_text' %>
+              <%= link_to_function "文字", "Iyxzone.MiniBlog.MyIndex.fetch('text', #{@user.id});", :id => 'mini_blog_category_text' %>
               <span class="pipe">|</span>
-              <%= link_to_function "图片", "Iyxzone.MiniBlog.fetch('image', #{@user.id});", :id => 'mini_blog_category_image' %>
+              <%= link_to_function "图片", "Iyxzone.MiniBlog.MyIndex.fetch('image', #{@user.id});", :id => 'mini_blog_category_image' %>
               <span class="pipe">|</span>
-              <%= link_to_function "视频", "Iyxzone.MiniBlog.fetch('video', #{@user.id});", :id => 'mini_blog_category_video' %>
+              <%= link_to_function "视频", "Iyxzone.MiniBlog.MyIndex.fetch('video', #{@user.id});", :id => 'mini_blog_category_video' %>
             </div>
             <div class="mBlogPostList" id='mini_blogs_list'>
               <%= render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
@@ -42,3 +42,5 @@
     </div>
   </div>
 <% end %>
+
+<%= javascript_tag "Iyxzone.MiniBlog.MyIndex.init('all');" %>

@@ -5,7 +5,7 @@ class User::HomeController < UserBaseController
   def show
     # mini_blogs
     @mini_blogs = MiniBlog.category(:text).limit(3).all
-    @topics = MiniTopic.hot.limit(3).all
+    @topics = MiniTopic.hot(6.hours.ago, Time.now)[0..2]
 
     @fetch_size = 20
     @feed_deliveries = current_user.feed_deliveries.limit(@fetch_size).all
