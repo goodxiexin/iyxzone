@@ -33,16 +33,20 @@
 .welcome-intro li .con{position:absolute;bottom:5px;width:230px;margin-left:40px;line-height:18px}
 .welcome-intro li h2{font-size:16px;font-weight:700;color:#238204;margin-bottom:2px}
 /**/
-.simpleLogin{width:280px;margin:30px auto}
-.simpleLogin .errorMsg{border:1px solid #ffd496;position:relative;margin-bottom:20px;zoom:1;}
-.simpleLogin .errorMsg a{text-decoration:underline}
-.simpleLogin .errorMsg .arrDown{position:absolute;bottom:-11px;_bottom:-13px;left:20px;width:20px;height:12px;background:url(../images/skin/skin2010.png) no-repeat -17px -414px}
-.simpleLogin .errorMsg .wrap{border:1px solid #fff;background:#fff5c3;padding:10px}
-.simpleLogin .login-box{position:relative;top:0;right:0;color:#333;width:240px;margin:0 auto;zoom:1;padding-bottom:30px}
-.simpleLogin .login-box a{color:#333;}
-.simpleLogin .login-box .pipeLine{background:#fff;height:2px;font-size:0;line-height:0;margin-top:15px}
-.simpleLogin .login-box .pipeLine div{background:#ddd;height:1px;}
-.simpleLogin .login-box .idxRegTips {margin-top:10px}
+.signBox2{margin:20px auto}
+.signBox2 .banner{float:left;width:417px;height:356px;margin:30px 0 0 60px;_margin:30px 0 0 30px;background:url(../images/welcome/sign2-banner.jpg) no-repeat;font-size:0;line-height:0;text-indent:-999px}
+.login2{width:280px;height:420px;float:right;margin:20px 60px 0 0;_margin:20px 30px 0 0}
+.login2 .errorMsg{border:1px solid #ffd496;position:relative;margin-bottom:20px;zoom:1;}
+.login2 .errorMsg a{text-decoration:underline}
+.login2 .errorMsg .arrDown{position:absolute;bottom:-11px;_bottom:-13px;left:20px;width:20px;height:12px;background:url(../images/skin/skin2010.png) no-repeat -17px -414px}
+.login2 .errorMsg .wrap{border:1px solid #fff;background:#fff5c3;padding:10px}
+.login2 .login-box{position:relative;top:0;right:0;color:#333;width:240px;margin:0 auto;zoom:1;height:auto}
+.login2 .login-box .rows{margin-bottom:15px}
+.login2 .login-box a{color:#333;}
+.login2 .login-box .textfield{width:170px}
+.login2 .login-box .pipeLine{background:#fff;height:2px;font-size:0;line-height:0;margin-top:15px}
+.login2 .login-box .pipeLine div{background:#ddd;height:1px;}
+.login2 .login-box .idxRegTips {margin-top:10px}
 
 
 .footer-shine{width:970px;height:69px;margin:20px auto;background:url(../images/welcome/footer-bg.png) no-repeat;position:relative}

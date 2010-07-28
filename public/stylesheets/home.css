@@ -1476,6 +1476,21 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogTopic .topImg .op{margin-top:5px}
 .mBlogTopic .topCon{float:left;width:98%;line-height:20px;}
 
+/*热门话题列表*/
+.mBlogHotTopic h2.title{font-size:12px;font-weight:700;color:#217308;margin-top:20px}
+.mBlogTopicList{width:100%;margin-top:10px;*margin-top:20px;margin-top:20px\9}
+.mBlogTopicList th{border-top:1px solid #e7f0e1;border-bottom:1px solid #e7f0e1;background:#f2fee5;padding:5px;font-weight:400}
+.mBlogTopicList th.b-l{border-left:1px solid #e7f0e1;}
+.mBlogTopicList th.b-r{border-right:1px solid #e7f0e1;}
+.mBlogTopicList td{border-bottom:1px dotted #ccc;text-align:center;padding:10px}
+.mBlogTopicList .topicTitle{text-align:left;width:40%}
+.mBlogTopicList .degree{width:20%}
+.mBlogTopicList .num{width:20%}
+.mBlogTopicList .topicTitle .topicName{font-size:14px;font-weight:400;color:#217308;display:block;float:left;width:90%;height:20px;line-height:20px;overflow:hidden;margin-top:-2px}
+
+.hotBar{width:90%;background:#ddd;height:6px;margin:0 auto;text-align:left}
+.hotBar div{width:0;background:#f08e0c;height:6px;font-size:0;line-height:0;}
+
 /*话题搜索、我关注的*/
 .mBlogExtra .funcEx{margin:70px 0 20px 0}
 .mBlogExtra .myTopicEx{position:relative}
@@ -1610,13 +1625,14 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .xList li a:after,.xList li a:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
 .xList li a:hover{background:#74bc20}
 .xList li.selected a,.xList li.selected a:hover{background:#74bc20;}
-.xList li.selected span,.xList li.selected a,.xList li a:hover,.xList li a:hover span{color:#fff}
-.xList li span{font-weight:700;color:#666;margin:0 8px 0 0;display:block;float:left;width:22px;text-align:center}
+.xList li.selected span,.xList li a:hover span,.xList li.selected a,.xList li a:hover,.xList li.selected b,.xList li a:hover b{color:#fff}
+.xList li span,.mBlogTopicList .topicTitle span{font-weight:700;color:#666;margin:0 5px 0 0;display:block;float:left;width:22px;text-align:center}
+.xList li b{font-weight:400;font-size:10px;color:#666;}
 .xList li em{float:right;cursor:pointer;margin-top:2px;}
-.xList .first span,.xList .second span,.xList .third span{background:url(../images/skin/skin2010.png) no-repeat;height:14px;font-size:0;line-height:0;text-indent:-9999px;}
-.xList .first span{background-position:-142px 0;}
-.xList .second span{background-position:-142px -14px;}
-.xList .third span{background-position:-142px -28px;}
+.xList .first span,.xList .second span,.xList .third span,.mBlogTopicList .first span,.mBlogTopicList .second span,.mBlogTopicList .third span{background:url(../images/skin/skin2010.png) no-repeat;height:14px;font-size:0;line-height:0;text-indent:-9999px;}
+.xList .first span,.mBlogTopicList .first span{background-position:-142px 0;}
+.xList .second span,.mBlogTopicList .second span{background-position:-142px -14px;}
+.xList .third span,.mBlogTopicList .third span{background-position:-142px -28px;}
 
 .mBlogExtra .xList li a strong{display:block;float:left;font-weight:400;width:150px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
 
