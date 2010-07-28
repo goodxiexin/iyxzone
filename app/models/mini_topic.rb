@@ -6,6 +6,8 @@ class MiniTopic < ActiveRecord::Base
 
   named_scope :within, lambda {|from, to| {:conditions => ["created_at > ? AND created_at < ?", from, to]}}
 
+  has_many :nodes, :class_name => "MiniTopicNode", :order => "created_at DESC", :dependent => :destroy
+
   def ascend?
     last_topic = MiniTopic.find(:first, :conditions => {:name => self.name}, :order => "created_at DESC")
     if last_topic
