@@ -2,28 +2,17 @@ require 'digest/sha1'
 
 class User < ActiveRecord::Base
 
-  belongs_to :skilled_game, :class_name => "Game"
+  has_many :mini_topic_attentions
 
-  acts_as_attentionable
+  def interested_in_topic? name
+    !mini_topic_attentions.find_by_topic_name(name).blank?
+  end
+
+  belongs_to :skilled_game, :class_name => "Game"
 
   has_many :mini_images, :foreign_key => 'poster_id', :order => 'created_at DESC'
 
   has_many :mini_blogs, :foreign_key => 'poster_id', :order => 'created_at DESC', :dependent => :destroy, :conditions => {:deleted => false}
-
-  def interested_mini_blogs category='all'
-    atts = Attention.match(:follower_id => id)
-    interested = atts.map do |att|
-      attentionable = att.attentionable
-      if attentionable.is_a? Guild
-        attentionable.president
-      elsif attentionable.is_a? Game
-      elsif attentionable.is_a? User
-        attentionable
-      end
-    end.uniq 
-    cond = {:deleted => false, :poster_id => interested.map(&:id)}.merge(category.nil? ? {} : {:category => category})
-    MiniBlog.category(category.to_s).match({:deleted => false, :poster_id => interested.map(&:id)}).all
-  end
 
   has_many :fanships, :foreign_key => :idol_id, :dependent => :destroy
 
@@ -32,6 +21,10 @@ class User < ActiveRecord::Base
   has_many :idolships, :foreign_key => :fan_id, :class_name => 'Fanship', :dependent => :destroy
 
   has_many :idols, :through => :idolships, :source => :idol
+
+  def idol_ids
+    idolships.map(&:idol_id)
+  end
 
   def has_fan? fan
     fanships.map(&:fan_id).include?(fan.is_a?(Integer) ? fan : fan.id)

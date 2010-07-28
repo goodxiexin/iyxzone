@@ -10,15 +10,7 @@
   </div>
   <div class="feedBd">
     <% mini_blogs.each do |mb| %>
-      <div class="item fix">
-        <div class="avatar">
-          <%= avatar mb.poster, :class => "imgbox01" %>
-        </div>
-        <div class="con">
-          <%= profile_link mb.poster %>：<%= mini_blog_content mb %>
-          <div class="time"><%= ftime mb.created_at %></div>
-        </div>
-      </div>
+      <%= render :partial => 'user/home/talking', :locals => {:mini_blog => mb} %>
     <% end %>
   </div>
 </div>

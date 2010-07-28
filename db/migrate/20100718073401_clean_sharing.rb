@@ -11,6 +11,8 @@ class Sharing < ActiveRecord::Base
 
   acts_as_commentable
 
+  acts_as_resource_feeds :recipient => lambda {|sharing| sharing.poster}
+
 end
 
 class Link < ActiveRecord::Base

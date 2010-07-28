@@ -30,11 +30,11 @@ class User::GuildsController < UserBaseController
   def show
     @mini_blogs = MiniBlog.category(:text).by(@guild.people_ids).limit(3).all
     @topics = MiniTopic.hot.limit(3).all
-    @members = @guild.people.limit(6).prefetch(:profile)
-    @events = @guild.events.people_order.limit(4).prefetch([{:album => :cover}])
+    @members = @guild.people.limit(12).prefetch(:profile)
+    @events = @guild.events.people_order.limit(3).prefetch([{:album => :cover}])
     @memberships = @guild.memberships.prefetch([:character]).by(current_user.id)
     @role = @guild.role_for current_user
-    @fetch_size = 1
+    @fetch_size = 10
     @feed_deliveries = @guild.feed_deliveries.limit(@fetch_size).all
     render :action => 'show', :layout => 'app3'
 	end

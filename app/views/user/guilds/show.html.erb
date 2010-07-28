@@ -24,7 +24,9 @@
 
 <% content_for :side_bar do %>
   <%= render :partial => 'guild_info', :locals => {:guild => @guild} %>  
-  <%= render :partial => 'my_memberships', :locals => {:guild => @guild, :memberships => @memberships} %>
+  <% if !@memberships.blank? %>
+    <%= render :partial => 'my_memberships', :locals => {:guild => @guild, :memberships => @memberships} %>
+  <% end %>
   <%= render :partial => 'guild_desc', :locals => {:guild => @guild} %>
   <%= render :partial => 'guild_menu', :locals => {:guild => @guild, :role => @role} %>
   <% if !@events.blank? %>

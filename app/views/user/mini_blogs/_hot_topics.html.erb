@@ -23,6 +23,9 @@
                           <li><a href="/mini_blogs/search?key=<%= t.name %>"><span><%= "%02d" % (i+4) %></span><strong><%= t.name %></strong></a></li>
                         <% end %>
                       </ul>
+                      <div class="more">
+                        <%= link_to "更多热门话题>>", mini_topics_url, :class => 'red' %>
+                      </div>
                     </div>
                   </div>
                 </div>

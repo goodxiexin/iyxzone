@@ -1,0 +1,20 @@
+<div class="round06 round_r_t hotGameEx space">
+                                    <div class="round_l_t">
+                                      <div class="round_r_b">
+                                        <div class="round_l_b">
+                                          <div class="round_m">
+                                               <div class="round_body" id='topic_list_panel'>
+                                                     <h2 class="title">我关注的话题</h2>
+                                                       <ul class="xList" id="topic_list">
+                                                        <% topics.each do |topic| %>
+<li id='attention_<%= topic.id %>'><a href="javascript:void(0)"><strong onclick="window.location.href='<%= search_mini_blogs_url(:key => topic.topic_name) %>';"><%= topic.topic_name %></strong><em class="icon-active" onclick="Iyxzone.MiniBlog.Topic.destroy(<%= topic.id %>);"></em></a></li>                                                         
+                                                        <% end %>
+                                                       </ul>
+<div class="topicAdd"><%= link_to_function "添加", "Iyxzone.MiniBlog.Topic.new($(this));" %></div>
+                                                     </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+

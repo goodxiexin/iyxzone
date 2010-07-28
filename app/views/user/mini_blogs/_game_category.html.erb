@@ -7,7 +7,7 @@
                                                      <h2 class="title">游戏分类</h2>
                                                        <ul class="xList">
                                                         <% user.games.each do |game| %>
-                                                         <li><%= game_link game %></li>
+                                                         <li><%= link_to game.name, search_mini_blogs_url(:key => game.name) %></li>
                                                         <% end %>
                                                        </ul>
                                                      </div>

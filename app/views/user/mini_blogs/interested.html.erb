@@ -17,6 +17,7 @@
         </div>
         <div class="mBlogExtra">
           <%= render :partial => 'game_category', :locals => {:user => current_user} %>
+          <%= render :partial => 'interested_topics', :locals => {:topics => @interested_topics} %>
           <% if !@interested_idols.blank? %>
             <%= render :partial => 'interested_idols', :locals => {:user => current_user, :idols => @interested_idols} %>
           <% end %>

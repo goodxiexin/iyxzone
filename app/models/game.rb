@@ -38,8 +38,6 @@ class Game < ActiveRecord::Base
   
   named_scope :recent, :conditions => ["created_at > ?", 1.week.ago.to_s(:db)], :order => "characters_count DESC, created_at DESC"
 
-  acts_as_attentionable
-
 	acts_as_taggable :delete_conditions => lambda {|game, user| user.is_admin? },
                    :create_conditions => lambda {|tagging, game, user| tagging.nil? || tagging.created_at < 10.days.ago }
   

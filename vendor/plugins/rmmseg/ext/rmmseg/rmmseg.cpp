@@ -82,7 +82,7 @@ extern "C" {
                                 w);
     }
 
-		static VALUE w_cx_unkown(VALUE self)
+		static VALUE w_cx_unknown(VALUE self)
 		{
 			Word *w = (Word *)DATA_PTR(self);
 			int cixing = FIX2INT(w->cixing);
@@ -415,7 +415,7 @@ extern "C" {
 		/*
 		 * 下面17个函数都差不多就是告诉你是不是某种词性
 		 */
-		static VALUE tk_cx_unkown(VALUE self)
+		static VALUE tk_cx_unknown(VALUE self)
 		{
 			Token *tk = (Token *)DATA_PTR(self);
 			int cixing = FIX2INT(tk->cixing);
@@ -740,7 +740,7 @@ extern "C" {
 				rb_define_method(cWord, "freq", RUBY_METHOD_FUNC(w_freq), 0);
 
 				/* 一些判断字典word词性的方法 */
-        rb_define_method(cWord, "cx_unkown?", RUBY_METHOD_FUNC(w_cx_unkown), 0);
+        rb_define_method(cWord, "cx_unknown?", RUBY_METHOD_FUNC(w_cx_unknown), 0);
         rb_define_method(cWord, "cx_noun?", RUBY_METHOD_FUNC(w_cx_noun), 0);
         rb_define_method(cWord, "cx_verb?", RUBY_METHOD_FUNC(w_cx_verb), 0);
         rb_define_method(cWord, "cx_adj?", RUBY_METHOD_FUNC(w_cx_adj), 0);
@@ -768,7 +768,7 @@ extern "C" {
 				rb_define_method(cToken, "freq", RUBY_METHOD_FUNC(tk_freq), 0);
 
 				/* 一些判断Token词性的方法 */
-				rb_define_method(cToken, "cx_unkown?", RUBY_METHOD_FUNC(tk_cx_unkown), 0);
+				rb_define_method(cToken, "cx_unknown?", RUBY_METHOD_FUNC(tk_cx_unknown), 0);
 				rb_define_method(cToken, "cx_noun?", RUBY_METHOD_FUNC(tk_cx_noun), 0);
 				rb_define_method(cToken, "cx_verb?", RUBY_METHOD_FUNC(tk_cx_verb), 0);
 				rb_define_method(cToken, "cx_adj?", RUBY_METHOD_FUNC(tk_cx_adj), 0);

@@ -1,6 +1,6 @@
   <% render :layout => 'mini_blog', :locals => {:mini_blog => hot_mini_blog, :at => 'public'} do %>
     <div class="feedFunc transIcon">
       <span><%= hot_mini_blog.forwards_count %></span>
-      <a href="javascript: void(0)">转发</a>
+      <%= facebox_link "转发", new_forward_mini_blog_url(hot_mini_blog, :at => 'public'), :width => 400 %>
     </div>
   <% end %>

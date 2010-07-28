@@ -1,0 +1,13 @@
+<% canvas_tag do %>
+    <h1 class="app-log">热门话题</h1>
+    <div class="box02 canvas_int">
+      <div class="feed-box01">
+        <div class='gray'>共<%= @count %>个</div>
+        <ul>
+        <% @terms.each do |term, freq| %>
+          <li><%= link_to_remote  "[#{term}:#{freq}]", admin_mini_topics_url(:name => term, :freq => freq), :complete => "$(this).remove();"%></li>
+        <% end %> 
+        </ul>
+      </div>
+    </div>
+<% end %>

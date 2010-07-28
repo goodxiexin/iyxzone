@@ -4,6 +4,8 @@ class Status < ActiveRecord::Base
 
   acts_as_commentable
 
+  acts_as_resource_feeds :recipients => lambda {|status| status.poster}
+
 end
 
 class CleanStatus < ActiveRecord::Migration

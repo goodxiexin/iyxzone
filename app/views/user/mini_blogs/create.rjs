@@ -5,4 +5,6 @@ elsif params[:at] == 'home'
   page << "notice('成功');"
 elsif params[:at] == 'public'
   page << "notice('成功');"
+elsif params[:at] == 'outside'
+  page << "window.close();alert('成功');"
 end
