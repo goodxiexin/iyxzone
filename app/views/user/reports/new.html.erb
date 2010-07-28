@@ -7,6 +7,6 @@
       <%= f.text_area 'content', :label => '内容描述' %>
       <%= f.collection_select :category , Report::CATEGORY, 'to_s', "to_s", {:prompt => '---'}, :label => '内容分类', :class => 'selector selector02' %>
     </div>
-    <%= f.z_submit :submit => {:text => '完成', :id => 'report_submit_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'report_submit_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
   <% end %>
 <% end %>

@@ -285,7 +285,7 @@ Iyxzone.Photo.Tagger = Class.create({
       li.appendChild(deleteLink);
 			li.appendChild(spaceBar);
       deleteLink.observe('click', function(e){
-        facebox.show_confirm_with_callbacks('你确定要删除这个标价吗?', this.remove.bind(this), tagInfo.photo_tag.id);
+        Iyxzone.Facebox.show_confirm_with_callbacks('你确定要删除这个标价吗?', this.remove.bind(this), tagInfo.photo_tag.id);
       }.bind(this));
     }
   },

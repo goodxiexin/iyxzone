@@ -10,16 +10,16 @@
                       <h2 class="title">热门话题</h2>
                       <ul class="xList">
                         <% if first %>
-                          <li class="first"><a href="/mini_blogs/search?key=<%= first[1].name %>"><span>01</span><strong><%= first[1].name %>(<%= first[0] %>)</strong></a></li>
+                          <li class="first"><a href="/mini_blogs/search?key=<%= first[1].name %>"><span>01</span><strong><%= first[1].name %><b>(<%= first[0] %>)</b></strong></a></li>
                         <% end %>
                         <% if second %>
-                          <li class="second"><a href="/mini_blogs/search?key=<%= second[1].name %>"><span>02</span><strong><%= second[1].name %></strong></a></li>
+                          <li class="second"><a href="/mini_blogs/search?key=<%= second[1].name %>"><span>02</span><strong><%= second[1].name %><b>(<%= second[0] %>)</b></strong></a></li>
                         <% end %>
                         <% if third %>
-                          <li class="third"><a href="/mini_blogs/search?key=<%= third[1].name %>"><span>03</span><strong><%= third[1].name %></strong></a></li>
+                          <li class="third"><a href="/mini_blogs/search?key=<%= third[1].name %>"><span>03</span><strong><%= third[1].name %><b>(<%= third[0] %>)</b></strong></a></li>
                         <% end %>
                         <% (topics[3..(topics.count - 1)] || []).each_with_index do |t, i| %>
-                          <li><a href="/mini_blogs/search?key=<%= t[1].name %>"><span><%= "%02d" % (i+4) %></span><strong><%= t[1].name %></strong></a></li>
+                          <li><a href="/mini_blogs/search?key=<%= t[1].name %>"><span><%= "%02d" % (i+4) %></span><strong><%= t[1].name %><b>(<%= t[0] %>)</b></strong></a></li>
                         <% end %>
                       </ul>
                       <div class="more">

@@ -10,9 +10,9 @@
       </div>
     </div>
     <% if @characters.blank? %>
-      <%= f.z_submit :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+      <%= f.z_submit :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
     <% else %>
-      <%= f.z_submit :submit => {:text => '完成', :id => 'new_event_request_btn'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+      <%= f.z_submit :submit => {:text => '完成', :id => 'new_event_request_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
     <% end %>
   <% end %>
 <% end %>

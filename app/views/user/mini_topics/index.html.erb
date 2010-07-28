@@ -6,11 +6,42 @@
   <h1 class="app-status">微博</h1>
   <div class="box02 canvas_int">
     <%= render :partial => 'user/mini_blogs/tab', :locals => {:user => current_user, :hover => 3} %>
-    <div class="feed-box01">
-      <%= render :partial => 'time_nav' %>
-      <% @topics.each do |freq, topic| %>
-         <%= link_to topic.name, search_mini_blogs_url(:key => topic.name) %> : <%= freq %>
-      <% end %>
+    <div class="mainConWrap clear">
+      <div class="mBlog fix">
+        <div class="mBlogMain">
+          <div class="mBlogHotTopic">
+            <h2 class="title">热门话题排行榜</h2>
+            <%= render :partial => 'time_nav' %>
+            <table class="mBlogTopicList">
+              <tbody>
+                <tr>
+                  <th class="b-l">话题</th>
+                  <th><a href="#">热度</a></th>
+                  <th><a href="#">出现次数</a></th>
+                  <th class="b-r"><a href="#">趋势</a></th>
+                </tr>
+                <% if !@topics.blank? %>
+                  <% max_freq = @topics.first[0] %>
+                  <% @topics.each_with_index do |t, i| %>
+                  <tr>
+                    <td class='topicTitle'><span><%= "%02d" % (i + 1) %></span><%= link_to t[1].name, search_mini_blogs_url(:key => t[1].name), :class => "topicName" %></td>
+                    <td class="degree"><div class="hotBar"><div style="width: <%= t[0] * 100 / max_freq %>%;"/></div></td>
+                    <td class="num"><%= t[0] %></td>
+                    <td class="trend">
+                      <% if t[1].trend_within(@from, @to) %>
+                        <span class="icon-up"></span>
+                      <% else %>
+                        <span class="icon-down"></span>
+                      <% end %>
+                    </td>
+                  </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 <% end %>

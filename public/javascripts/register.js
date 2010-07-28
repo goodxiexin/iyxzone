@@ -36,6 +36,10 @@ Object.extend(Iyxzone.Register, {
     this.tip('login_info', '只能有2-100字符');
   },
 
+  loginCheckDone: false,
+
+  loginUnique: null,
+
   validateLogin: function(){
     var login = $('user_login').value;
 
@@ -48,18 +52,44 @@ Object.extend(Iyxzone.Register, {
       this.error('login_info', '至少要2个字符');
       return false;
     }
+
     if(login.length > 100){
-      this.error('login_info', '最多100个字符');
+      this.error('login_info', '最多20个字符');
       return false;
     }
 
-    this.pass('login_info');
-    return true;
+    if(!login.match(/[\344\270\200-\351\276\245a-zA-Z0-9_]+/)){
+      this.error('login_info', '只能包含字母，数字，汉字以及下划线');
+      return false;
+    }else{
+      new Ajax.Request('/register/validates_login_uniqueness?login=' + encodeURIComponent(login), {
+        method: 'get',
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            this.loginUnique = true;
+            this.pass('login_info');
+          }else{
+            this.loginUnique = false;
+            this.error('该用户名已经被占用');
+          }
+          this.loginCheckDone = true;
+        }.bind(this)
+      })
+
+      while(!this.checkLoginDone){}
+      
+      return this.loginUnique;
+    }
   },
 
   showEmailRequirement: function(){
     this.tip('email_info', '输入合法的邮件地址');
   },
+
+  emailCheckDone: false,
+
+  emailUnique: null,
 
   validateEmail: function(){
     var email = $('user_email').value;
@@ -75,17 +105,24 @@ Object.extend(Iyxzone.Register, {
       new Ajax.Request('/register/validates_email_uniqueness?email='+encodeURIComponent(email), {
         method: 'get',
         onSuccess: function(transport){
-          if(transport.responseText == 'yes'){
+          code = transport.responseText.evalJSON().code;
+          if(code == 1){
+            this.emailUnique = true;
             this.pass('email_info');
-          }else if (transport.responseText == 'domain_error') {
+          }else if (code == 2){
+            this.emailUnique = false;
             this.error('email_info', '该邮箱域名不存在');
-          }else if (transport.responseText == 'no'){
+          }else if (code == 0){
+            this.emailUnique = false;
             this.error('email_info', '该邮箱已被注册');
           }
+          this.emailCheckDone = true;
         }.bind(this)
       });
 
-      return true;
+      while(!this.emailCheckDone){}
+      
+      return this.emailUnique;
     }else{
       this.error('email_info', '非法的邮件格式');
       return false;
@@ -281,15 +318,9 @@ Object.extend(Iyxzone.Register, {
       prefix + 'profession_id',
       dprefix + 'profession_id_error',
       null,
-      {onGameChange: this.showInfoWhenNoServers.bind(this)});
+      {});
 		Iyxzone.Game.currentSelector = selector;
     this.gameSelectors.set(id, selector);
-  },
-
-  showInfoWhenNoServers: function(gameSelector){
-    var gameDetails = gameSelector.getDetails;
-    if(gameDetails.servers_count == 0)
-      tip('该游戏没有服务器，暂时无法注册，点击<a href="" rel=facebox>通知</a>我们');
   },
 
   removeCharacter: function(id){
@@ -321,15 +352,13 @@ Object.extend(Iyxzone.Register, {
     if(this.gameSelectors.keys().length == 0){
       tip("至少要有1个游戏角色");
       button.disabled = '';
-      return
+      return;
     }
 
     // 如果在发ajax请求的时候再屏蔽按钮貌似会来不及，可能用户可以连点2此
     new Ajax.Request('/users/', {
       method: 'post',
       parameters: $(form).serialize(),
-			onloading: function(){
-			},
       onComplete: function(){
         button.disabled = '';
       }

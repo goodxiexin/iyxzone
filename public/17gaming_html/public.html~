@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>微博_微博广场</title>
-<link href="stylesheets/common.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="stylesheets/home.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="css/common.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="css/home.css" rel="stylesheet" type="text/css" media="screen" />
 
 </head>
 
@@ -101,7 +101,14 @@
                     <div class="box02 canvas_int">
                     	
                         <div class="tab tab01">
-                        	
+                        	<div class="right">
+                              <a class="btn-17gaming w-l" href="#">分享到17gaming</a>
+                              <div id="share_tip" style="position: absolute; top: 33px; left: 5px; background: none repeat scroll 0% 0% rgb(255, 255, 255); width: 180px; border: 1px solid rgb(189, 214, 173); padding: 10px; line-height: 20px; color: rgb(102, 102, 102); display:none;">
+                                <span class="arrow-tip02"></span>
+                                <strong>添加浏览器按钮更方便</strong><br>
+                            右键点击下面按钮并选择"添加到收藏夹"，或将下面的按钮拖动到浏览器标签工具栏，让分享更加方便快捷
+                              </div>
+                            </div>
                             <ul>
                                  <li class="hover"><span><a href="#">微博广场</a></span></li>
                                  <li><span><a href="#">我的微博</a></span></li>
@@ -161,7 +168,6 @@
                                         	</ul>
                                         </div>
                                         <div class="ajaxLoading"><img src="images/ajax-loader.gif"></div>
-                                        
                                         <div class="mBlogPostHead"><span class="topicTag">南非世界杯</span>，已有3500条参与话题讨论</div>
                                         <!--话题列表-->
                                         <div class="mBlogPostList">
@@ -434,16 +440,16 @@
                                                <div class="round_body">
                                                      <h2 class="title">热门话题</h2>
                                                        <ul class="xList">
-                                                         <li class="first"><a href="#"><span>01</span><strong>南非世界杯南非世界杯南非世界杯</strong></a></li>
-                                                         <li class="second"><a href="#"><span>02</span><strong>南非世界杯南非世界杯南非世界杯</strong></a></li>
-                                                         <li class="selected third"><a href="#"><span>03</span><strong>南非世界杯南非世界杯南非世界杯</strong></a></li>
-                                                         <li><a href="#"><span>04</span>南非世界杯</a></li>
-                                                         <li><a href="#"><span>05</span><strong>南非世界杯南非世</strong></a></li>
-                                                         <li><a href="#"><span>06</span><strong>南非世界杯南非世界杯南非世界杯</strong></a></li>
-                                                         <li><a href="#"><span>07</span><strong>南非界杯</strong></a></li>
-                                                         <li><a href="#"><span>08</span><strong>南非世界杯南非世界杯南非世界杯</strong></a></li>
-                                                         <li><a href="#"><span>09</span><strong>南非世界杯南非世界杯南非世界杯</strong></a></li>
-                                                         <li><a href="#"><span>10</span><strong>南非世界杯南非世界杯南非世界杯</strong></a></li>
+                                                         <li class="first"><a href="#"><span>01</span><strong>南非世界杯非杯<b>(2132468)</b></strong></a></li>
+                                                         <li class="second"><a href="#"><span>02</span><strong>南非世界杯南非世界杯南非世界杯<b>(2132468)</b></strong></a></li>
+                                                         <li class="selected third"><a href="#"><span>03</span><strong>南非世界世界杯<b>(2132468)</b></strong></a></li>
+                                                         <li><a href="#"><span>04</span>南非世界杯<b>(2132468)</b></a></li>
+                                                         <li><a href="#"><span>05</span><strong>南非世界杯南非世<b>(2132468)</b></strong></a></li>
+                                                         <li><a href="#"><span>06</span><strong>南非世界杯南非世界杯南非世界杯<b>(2132468)</b></strong></a></li>
+                                                         <li><a href="#"><span>07</span><strong>南非界杯<b>(2132468)</b></strong></a></li>
+                                                         <li><a href="#"><span>08</span><strong>南非世界杯南非世界杯南非世界杯<b>(2132468)</b></strong></a></li>
+                                                         <li><a href="#"><span>09</span><strong>南非世界杯南非世界杯南非世界杯<b>(2132468)</b></strong></a></li>
+                                                         <li><a href="#"><span>10</span><strong>南非世界杯南非世界杯南非世界杯<b>(2132468)</b></strong></a></li>
                                                        </ul>
                                                      </div>
                                                   </div>

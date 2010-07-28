@@ -8,6 +8,6 @@
         <%= check_box_tag 'photo[is_cover]', 1, @photo.is_cover? %>
       <% end %>
     </div>
-    <%= f.z_submit :submit => {:text => '完成', :id => 'edit_photo_submit'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'edit_photo_submit'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
   <% end %>
 <% end %>

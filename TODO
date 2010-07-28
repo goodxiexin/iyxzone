@@ -1,7 +1,15 @@
-0. status为啥不会删除feeds
+1. gameSelector js
 
-4. convert emotion 删去status
+2. facebox js
 
-5. bulletin 和 gameUpdate吊环位置
+3. register js
 
-6. css 不对
+4. profile edit js, change login token
+
+5. login page
+
+6. controller interface with js
+
+7. cache mini blogs
+
+8. test program

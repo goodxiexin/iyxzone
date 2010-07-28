@@ -8,11 +8,19 @@ class RegisterController < ApplicationController
 
   def validates_email_uniqueness
     if User.find_by_email params[:email].downcase
-      render :text => 'no'
+      render :json => {:code => 0}
     elsif valid_domain? params[:email].downcase
-      render :text => 'yes'
+      render :json => {:code => 1}
     else
-      render :text => 'domain_error'
+      render :json => {:code => 2}
+    end
+  end
+
+  def validates_login_uniqueness
+    if User.find_by_login params[:login].downcase
+      render :json => {:code => 0}
+    else
+      render :json => {:code => 1}
     end
   end
 

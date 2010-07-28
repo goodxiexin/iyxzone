@@ -16,7 +16,7 @@ class MiniBlogParser
 
     while @ptr != @len
       ch = @content[@ptr..@ptr]
-      #puts "state: #{@state}, ch: #{ch}"
+      puts "state: #{@state}, ch: #{ch}"
       if @state == 0
         if ch =~ blank
           @state = 0
@@ -142,6 +142,9 @@ class MiniBlogParser
             if ch =~ /[a-zA-Z0-9_\-]/
               @state = 6
               @ptr += 1
+            elsif chinese?
+              @state = 6
+              @ptr += 3
             else
               @state = 1
               @ptr += 1
@@ -177,6 +180,9 @@ class MiniBlogParser
             if ch =~ /[a-zA-Z0-9_\-]/
               @state = 6
               @ptr += 1
+            elsif chinese?
+              @state = 6
+              @ptr += 3
             else
               parse_text_and_refer
               @base = @ptr
@@ -203,8 +209,8 @@ class MiniBlogParser
       parse_text_and_refer
     end
 
-    @nodes
-    #print
+    #@nodes
+    print
   end
 
 protected
@@ -219,6 +225,20 @@ protected
 
   def self.http?
     @content[@ptr..(@ptr+6)] == 'http://' and @content[@ptr + 7] and !(@content[(@ptr+7)..(@ptr+7)] =~ blank) and (@content[(@ptr+7)..(@ptr+7)] != '[') 
+  end
+
+  def self.chinese?
+    @content[@ptr..(@ptr+2)] =~ chinese_reg
+  end
+
+  def self.chinese_reg
+    if @chinese_reg.nil?
+      s = [0x4E00].pack("U")
+      e = [0x9FA5].pack("U") 
+      @chinese_reg = /[#{s}-#{e}]/
+      puts @chinese_reg
+    end
+    @chinese_reg
   end
 
   def self.sharp?
@@ -251,3 +271,5 @@ protected
   end
 
 end
+
+MiniBlogParser.parse ARGV[0]

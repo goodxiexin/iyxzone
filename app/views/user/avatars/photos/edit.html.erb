@@ -5,6 +5,6 @@
       <%= f.text_area 'notation', :label => '照片描述' %>
       <%= f.collection_select :album_id, [@album], :id, :title, {}, :label => '所属相册' %>
     </div>
-    <%= f.z_submit :submit => {:text => '完成', :id => 'edit_photo_submit'}, :cancel => {:text => '取消', :onclick => 'facebox.close();'} %>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'edit_photo_submit'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
   <% end %>
 <% end %>

@@ -1,9 +1,9 @@
-        <div class="nav-link">
-          <ul class="s_clear">
-              <li <%if params[:time].to_i == 0 %> class="hover"<% end %>><%= link_to "<span>1小时内</span>", mini_topics_url(:time => 0) %></li>
-              <li <%if params[:time].to_i == 1 %> class="hover"<% end %>><%= link_to "<span>6小时内</span>", mini_topics_url(:time => 1) %></li>
-              <li <%if params[:time].to_i == 2 %> class="hover"<% end %>><%= link_to "<span>今日</span>", mini_topics_url(:time => 2) %></li>
-              <li <%if params[:time].to_i == 3 %> class="hover"<% end %>><%= link_to "<span>本周</span>", mini_topics_url(:time => 3) %></li>
+    <div class="tab tab01 mBlogTab">
+          <ul>
+              <li <%if params[:time].to_i == 0 %> class="hover"<% end %>><span><%= link_to "6小时内", mini_topics_url(:time => 0) %></span></li>
+              <li <%if params[:time].to_i == 1 %> class="hover"<% end %>><span><%= link_to "今天", mini_topics_url(:time => 1) %></span></li>
+              <li <%if params[:time].to_i == 2 %> class="hover"<% end %>><span><%= link_to "昨天", mini_topics_url(:time => 2) %></span></li>
+              <li <%if params[:time].to_i == 3 %> class="hover"<% end %>><span><%= link_to "本周", mini_topics_url(:time => 3) %></span></li>
           </ul>
         </div>
 

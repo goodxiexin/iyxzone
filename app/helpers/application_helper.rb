@@ -459,7 +459,7 @@ module ApplicationHelper
   end
 
   def facebox_tag title, &block
-    concat "<p class='z-h s_clear'><strong class='left'>#{title}</strong>#{link_to_function '', "facebox.close();", :class => "icon2-close right"}</p><div class='z-con'>#{capture(&block)}</div>"
+    concat "<p class='z-h s_clear'><strong class='left'>#{title}</strong>#{link_to_function '', "Iyxzone.Facebox.close();", :class => "icon2-close right"}</p><div class='z-con'>#{capture(&block)}</div>"
   end
 
   def rows_form_for(*args, &block)

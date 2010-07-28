@@ -12,7 +12,7 @@
   <div class="z-submit s_clear space">
     <div class="buttons">
       <span class="button"><span><%= button_to_function "立即转发", "Iyxzone.MiniBlog.Forwarder.forward(#{@mini_blog.id}, $(this), '#{params[:at]}');" %></span></span>
-      <span class="button button-gray"><span><button type="reset" onclick="facebox.close()">取消</button></span></span>
+      <span class="button button-gray"><span><button type="reset" onclick="Iyxzone.Facebox.close()">取消</button></span></span>
     </div>
   </div>
 <% end %>
