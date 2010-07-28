@@ -5,7 +5,7 @@ class ChineseAnalyzer < Ferret::Analysis::Analyzer
   
   def initialize
     # ( ) [ ] 被自动省略
-    @stop_words = [",", "，", ".", "。", "\"", "\'", "“", "”", "‘", "’"] 
+    @stop_words = [",", "，", ".", "。", "\"", "\'", "（", "(", ")", "）", "[", "［", "］", "]", "“", "”", "‘", "’"] 
   end
       
   def token_stream(field, text)

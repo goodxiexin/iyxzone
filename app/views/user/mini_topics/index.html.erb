@@ -1,0 +1,16 @@
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'mini_blog' %>
+<% end %>
+
+<% canvas_tag do %>
+  <h1 class="app-status">微博</h1>
+  <div class="box02 canvas_int">
+    <%= render :partial => 'user/mini_blogs/tab', :locals => {:user => current_user, :hover => 3} %>
+    <div class="feed-box01">
+      <%= render :partial => 'time_nav' %>
+      <% @topics.each do |name, freq| %>
+         <%= link_to name, search_mini_blogs_url(:key => name) %> : <%= freq %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

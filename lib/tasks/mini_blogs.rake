@@ -25,18 +25,35 @@ namespace :mini_blogs do
   #
   # FIXME: this might be quite slow
   #
-  task :analyze_topics => :environment do
+  task :main_topics => :environment do
     include Ferret
     MiniTopic.delete_all
     reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
     reader.terms(:content).each do |term, freq|
-      word = RMMSeg::Dictionary.get_word(term)
+      word = RMMSeg::Dictionary.get_word term
       if word.nil?
         MiniTopic.create :name => term, :freq => freq if term =~ /[a-zA-Z0-9_]+/
-      elsif (word.cx_game? or ((word.cx_noun? or word.cx_unkown?) and word.freq < 10000000))
-        MiniTopic.create :name => term, :freq => freq
+      else
+        if word.cx_game? or ((word.cx_unknown? or word.cx_noun?) and word.freq < 1000000)
+          MiniTopic.create :name => term, :freq => freq
+        end
       end
     end
+  end
+
+  task :delta_topics => :environment do
+    include Ferret
+    reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
+    reader.terms(:content).each do |term, freq|
+      word = RMMSeg::Dictionary.get_word term
+      if word.nil?
+        MiniTopic.create :name => term, :freq => freq if term =~ /[a-zA-Z0-9_]+/
+      else
+        if word.cx_game? or ((word.cx_unknown? or word.cx_noun?) and word.freq < 1000000)
+          MiniTopic.create :name => term, :freq => freq
+        end
+      end
+    end    
   end
 
 end

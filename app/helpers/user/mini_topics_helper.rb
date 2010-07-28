@@ -1,0 +1,2 @@
+module User::MiniTopicsHelper
+end
