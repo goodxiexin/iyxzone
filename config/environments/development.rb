@@ -1,5 +1,5 @@
 # Settings specified here will take precedence over those in config/environment.rb
-SITE_URL = "http://17gaming.com"
+SITE_URL = "http://www.17gaming.com"
 SITE_MAIL = "17Gaming<system@17gaming.com>"
 
 # session options

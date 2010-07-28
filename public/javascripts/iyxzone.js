@@ -6,7 +6,7 @@ Object.extend(Iyxzone, {
 
   author: ['高侠鸿'],
 
-  SiteURL: "http://localhost:3000",
+  SiteURL: "http://localhost:3000"
 });
 
 // 一些按钮操作
@@ -249,7 +249,7 @@ Object.extend(Iyxzone.AppBar, {
     this.gameList.setStyle({
       position: 'absolute',
       left: (li.cumulativeOffset().left + li.getWidth()/2) + 'px',
-      top: (li.cumulativeOffset().top + li.getHeight()*3/4) + 'px',
+      top: (li.cumulativeOffset().top + li.getHeight()*3/4) + 'px'
     });
     this.gameList.show();
   },

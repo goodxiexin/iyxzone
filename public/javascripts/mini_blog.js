@@ -40,7 +40,7 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
     }
   },
 
-  new: function(link){
+  newTopic: function(link){
     $('topic_list_panel').insert({bottom: '<div class="topicAddIpt"><div class="fix"><a href="#" onclick="Iyxzone.MiniBlog.Topic.cancel();" class="icon-active right"></a></div><div class="con fix"><input type="text" id="new_topic_name" value="请添加关注的话题" class="textfield"/><span class="button03"><span><button onclick="Iyxzone.MiniBlog.Topic.create($(this));">发布</button></span></span></div></div>'});
     var children = $('topic_list_panel').childElements();
     this.form = children[children.length - 1];
@@ -421,7 +421,6 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
     var str = '#请在这里输入自定义话题#';
     Iyxzone.insertAtCursor($('mini_blog_text_area'), str);
     var start = Iyxzone.getCurPos($('mini_blog_text_area'));
-		alert(start);
     if(start >= 0){
       Iyxzone.selectText($('mini_blog_text_area'), (start - str.length + 1), start  - 1);
     }
