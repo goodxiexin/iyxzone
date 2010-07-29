@@ -16,7 +16,6 @@ class MiniBlogParser
 
     while @ptr != @len
       ch = @content[@ptr..@ptr]
-      puts "state: #{@state}, ch: #{ch}"
       if @state == 0
         if ch =~ blank
           @state = 0
@@ -209,8 +208,7 @@ class MiniBlogParser
       parse_text_and_refer
     end
 
-    #@nodes
-    print
+    @nodes
   end
 
 protected
@@ -271,5 +269,3 @@ protected
   end
 
 end
-
-MiniBlogParser.parse ARGV[0]
