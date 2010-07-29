@@ -22,7 +22,7 @@ class User::Avatars::PhotosController < UserBaseController
     if @photo.save && @album.set_cover(@photo)
 			responds_to_parent do
         render :update do |page|
-          page << "Iyxzone.Facebox.close()()"
+          page << "Iyxzone.Facebox.close()"
           if params[:at] == 'album'
             page.redirect_to avatar_album_url(@album)
           elsif params[:at] == 'profile'
@@ -48,7 +48,7 @@ class User::Avatars::PhotosController < UserBaseController
 			respond_to do |format|
 				format.html {
           render :update do |page|
-					  page << "Iyxzone.Facebox.close()();"
+					  page << "Iyxzone.Facebox.close();"
             if params[:at] == 'set_cover'
               page.redirect_to avatar_album_url(@album)
             elsif params[:at] == 'photo'

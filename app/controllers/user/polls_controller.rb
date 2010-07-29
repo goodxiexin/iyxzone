@@ -61,7 +61,7 @@ class User::PollsController < UserBaseController
   def update
     if @poll.update_attributes(params[:poll] || {})
       render :update do |page|
-        page << "Iyxzone.Facebox.close()();"
+        page << "Iyxzone.Facebox.close();"
       end
     else
       render :update do |page|
@@ -73,7 +73,7 @@ class User::PollsController < UserBaseController
   def destroy
     if @poll.destroy
       render :update do |page|
-        page << "Iyxzone.Facebox.close()();"
+        page << "Iyxzone.Facebox.close();"
         page.redirect_to polls_url(:uid => current_user.id)
       end
     else

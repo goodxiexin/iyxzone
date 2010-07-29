@@ -6,7 +6,7 @@ class User::Polls::AnswersController < UserBaseController
   def create
     if @poll.update_attributes(:answers => params[:poll][:answers])
       render :update do |page|
-        page << "Iyxzone.Facebox.close()();"
+        page << "Iyxzone.Facebox.close();"
         page.redirect_to poll_url(@poll)
       end
     else

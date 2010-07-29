@@ -10,7 +10,7 @@ class Admin::GuestbooksController < AdminBaseController
 
   def update
     if @guestbook.set_reply params[:guestbook][:reply]
-      render_js_code "var a = new Element('a', {href: 'javascript:void(0)'}).update('已经回复了');a.observe('click', function(e){facebox.set_width(350);tip('回复内容:<br/>#{@guestbook.reply}');});$('guestbook_#{@guestbook.id}').childElements()[2].update(a);Iyxzone.Facebox.close()();"
+      render_js_code "var a = new Element('a', {href: 'javascript:void(0)'}).update('已经回复了');a.observe('click', function(e){facebox.set_width(350);tip('回复内容:<br/>#{@guestbook.reply}');});$('guestbook_#{@guestbook.id}').childElements()[2].update(a);Iyxzone.Facebox.close();"
     else
       render_js_error
     end    

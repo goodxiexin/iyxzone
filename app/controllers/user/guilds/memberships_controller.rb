@@ -10,7 +10,7 @@ class User::Guilds::MembershipsController < UserBaseController
 
   def update
     if @membership.change_role params[:status]
-      render_js_code "Iyxzone.Facebox.close()();$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
+      render_js_code "Iyxzone.Facebox.close();$('member_status_#{@membership.id}').innerHTML = '#{@membership.to_s}'"
     else
       render_js_error 
     end 
