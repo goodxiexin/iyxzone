@@ -1,7 +1,6 @@
         <div class='nav-link'>
           <ul class="s_clear">
             <li <% if hover==0 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}玩的游戏(#{user.games_count})</span>", games_url(:uid => user.id) %></li>
-            <li <% if hover==1 %>class='hover'<% end %>><%= link_to "<span>#{get_subject user}关注的游戏(#{user.game_attentions_count})</span>", interested_games_url(:uid => user.id) %></li>
           </ul>
         </div>
 

@@ -166,6 +166,19 @@ class User < ActiveRecord::Base
 
 	has_many :servers, :through => :characters, :uniq => true
 
+  def interested_games
+    games = []
+    mini_topic_attentions.each do |a|
+      g = Game.find_by_name a.topic_name
+      games << g if !g.blank?
+    end
+    games
+  end
+
+  def interested_in_game? game
+    !mini_topic_attentions.find_by_topic_name(game.name).blank?
+  end
+
 	def has_same_game_with? user
 		!(user.characters.map(&:game_id) & characters.map(&:game_id)).blank?
 	end
