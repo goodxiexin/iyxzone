@@ -234,7 +234,6 @@ protected
       s = [0x4E00].pack("U")
       e = [0x9FA5].pack("U") 
       @chinese_reg = /[#{s}-#{e}]/
-      puts @chinese_reg
     end
     @chinese_reg
   end

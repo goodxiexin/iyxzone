@@ -15,7 +15,9 @@ class CleanStatus < ActiveRecord::Migration
     Status.all.each do |s|
       MiniBlog.create :poster => s.poster, :content => s.content
     end
-    Status.destroy_all
+    Comment.delete_all(:commentable_type => "Status")
+    FeedDelivery.delete_all(:item_type => "Status")
+    Status.delete_all
     drop_table :statuses 
   end
 

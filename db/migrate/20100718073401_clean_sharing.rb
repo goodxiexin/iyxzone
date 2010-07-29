@@ -52,6 +52,9 @@ class CleanSharing < ActiveRecord::Migration
     puts "删除分享"
     remove_column :users, :sharings_count
     remove_column :news, :sharings_count
+
+    Comment.delete_all(:commentable_type => "Sharing")
+    FeedDelivery.delete_all(:commentable_type => "Sharing")
     
     Share.destroy_all
 
