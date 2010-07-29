@@ -8,6 +8,29 @@ class Status < ActiveRecord::Base
 
 end
 
+class Sharing < ActiveRecord::Base
+
+  belongs_to :poster, :class_name => 'User'
+
+  belongs_to :share
+
+  def shareable
+    share.nil? ? nil : share.shareable
+  end
+
+  acts_as_commentable
+
+  acts_as_resource_feeds :recipient => lambda {|sharing| sharing.poster}
+
+end
+
+class Share < ActiveRecord::Base
+
+  belongs_to :shareable, :polymorphic => true
+
+end
+
+
 class ConvertEmotion < ActiveRecord::Migration
   def self.up
     puts "convert status"
