@@ -18,6 +18,7 @@ class CleanStatus < ActiveRecord::Migration
     Comment.delete_all(:commentable_type => "Status")
     FeedDelivery.delete_all(:item_type => "Status")
     Status.delete_all
+    remove_column :users, :statuses_count
     drop_table :statuses 
   end
 
