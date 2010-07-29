@@ -16,7 +16,6 @@
 								  <div class="textfield">
 									  <%= text_field_tag 'search', "搜索您的好友", :onfocus => "$(this).clear()" %>
 									  <%= observe_field :search,
-										  							  :complete  => "facebox.watchClickEvents();",
 											  						  :update    => "friends",
 												  						:frequency => 1,
 													  					:url       => search_friends_url(current_user),

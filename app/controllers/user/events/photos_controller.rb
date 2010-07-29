@@ -45,9 +45,9 @@ class User::Events::PhotosController < UserBaseController
 				format.html { 
           render :update do |page|
             if params[:at] == 'album'
-	  				  page << "facebox.close();"
+	  				  page << "Iyxzone.Facebox.close()();"
             elsif params[:at] == 'photo'
-              page<< "facebox.close();"
+              page<< "Iyxzone.Facebox.close()();"
               page << "$('event_photo_notation_#{@photo.id}').update( '#{@photo.notation.gsub(/\n/, '<br/>')}');"
             end
 				  end 

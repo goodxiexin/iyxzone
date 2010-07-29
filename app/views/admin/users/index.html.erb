@@ -4,7 +4,7 @@
     <div class='share-url box02'>
       <%= text_field_tag 'search', params[:key] %>
       <%= observe_field :search,
-                        :complete  => "facebox.watchClickEvents();",
+                        :complete  => "",
                         :update    => "users",
                         :frequency => 1,
                         :url       => search_admin_users_url,

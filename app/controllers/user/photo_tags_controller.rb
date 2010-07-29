@@ -12,7 +12,7 @@ class User::PhotoTagsController < UserBaseController
 
   def destroy
     if @tag.destroy
-      render_js_code "facebox.close();"
+      render_js_code "Iyxzone.Facebox.close()();"
     else
       render_js_error
     end

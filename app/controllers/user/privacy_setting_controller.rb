@@ -25,7 +25,7 @@ class User::PrivacySettingController < UserBaseController
   def update
     if @setting.update_attributes(params[:setting])
 			respond_to do |format|
-        format.js { render_js_code "facebox.close();" }
+        format.js { render_js_code "Iyxzone.Facebox.close()();" }
         format.html {  
           flash[:notice] = "设置保存成功"
 			    case params[:type].to_i

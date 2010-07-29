@@ -69,7 +69,6 @@ Object.extend(Iyxzone.MiniBlog.MyIndex, {
         this.cache.set(type, transport.responseText);
         if(this.curTab == type){
           $('mini_blogs_list').innerHTML = transport.responseText;
-          facebox.watchClickEvents();
         }
       }.bind(this)
     });
@@ -265,7 +264,6 @@ Object.extend(Iyxzone.MiniBlog.Pub, {
         this.cache.set(type, transport.responseText);
         if(type == this.curTab){
           $('mini_blogs_list').innerHTML = transport.responseText;
-          facebox.watchClickEvents();
         }
       }.bind(this)
     });

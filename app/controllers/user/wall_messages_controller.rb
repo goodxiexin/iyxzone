@@ -10,7 +10,7 @@ class User::WallMessagesController < UserBaseController
 
   def destroy
     if @message.destroy
-      render_js_code "facebox.close();Effect.BlindUp($('comment_#{@message.id}'));"
+      render_js_code "Iyxzone.Facebox.close()();Effect.BlindUp($('comment_#{@message.id}'));"
     else
       render_js_error
     end

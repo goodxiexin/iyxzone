@@ -131,7 +131,6 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.contactInfoHTML = frame.innerHTML;
     if(this.editContactInfoHTML){
       frame.update( this.editContactInfoHTML);
-      facebox.watchClickEvents();
     }else{
       new Ajax.Request('/profiles/' + profileID + '/edit?type=2', {
         method: 'get',
@@ -141,7 +140,6 @@ Object.extend(Iyxzone.Profile.Editor, {
         onSuccess: function(transport){
           this.editContactInfoHTML = transport.responseText;
           $('contact_info_frame').update( transport.responseText);
-          facebox.watchClickEvents();
         }.bind(this)
       });
     }

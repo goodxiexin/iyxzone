@@ -1,5 +1,4 @@
 if params[:at] == 'index'  
-  @newly_created = true
   page.insert_html :top, 'mini_blogs_list', :partial => 'personal_mini_blog', :object => @new_mini_blog
   page << "notice('成功');"
 elsif params[:at] == 'public'

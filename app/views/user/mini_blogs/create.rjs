@@ -1,5 +1,4 @@
 if params[:at] == 'mini_blogs_index'  
-  @newly_created = true
   page.insert_html :top, "mini_blogs_list", :partial => 'personal_mini_blog', :object => @mini_blog.reload
 elsif params[:at] == 'home'
   page << "notice('成功');"

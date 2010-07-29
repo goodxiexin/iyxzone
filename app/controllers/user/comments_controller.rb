@@ -10,7 +10,7 @@ class User::CommentsController < UserBaseController
 
   def destroy
     if @comment.destroy
-      render_js_code "facebox.close();Effect.BlindUp($('comment_#{@comment.id}'));"
+      render_js_code "Iyxzone.Facebox.close()();Effect.BlindUp($('comment_#{@comment.id}'));"
     else
       render_js_error
     end

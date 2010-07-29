@@ -44,7 +44,7 @@ class User::CharactersController < UserBaseController
 		@character = current_user.characters.build(params[:character] || {})
 
     if @character.save
-      render_js_code "facebox.close()"
+      render_js_code "Iyxzone.Facebox.close()()"
     else
 		  render :update do |page|
 				page.replace_html 'errors', :inline =>"<%= error_messages_for :character, :header_message => '遇到以下问题无法保存', :message => nil %>"

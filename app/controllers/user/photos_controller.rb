@@ -55,7 +55,7 @@ class User::PhotosController < UserBaseController
               end
   					else
               if params[:at] == 'album'
-		  				  page << "facebox.close();"
+		  				  page << "Iyxzone.Facebox.close()();"
               elsif params[:at] == 'photo'
                 page.redirect_to personal_photo_url(@photo)
 					    end
