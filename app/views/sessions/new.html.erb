@@ -13,6 +13,7 @@
   <%= javascript_include_tag :defaults %>
 	<%= javascript_include_tag 'swfobject' %>
 	<%= javascript_include_tag 'iyxzone' %>
+	<%= javascript_include_tag 'facebox' %>
 </head>
 
 <body>
@@ -62,10 +63,16 @@
 									<div class="fldvalue">
 											<%= check_box_tag 'remember_me', 1, true %><%= label_tag 'auto', '下次自动登录' %>
 									</div>
-									<div class="fldcb">
+								</div>
+								<div class="rows s_clear">
+                    <div class="fldid">&nbsp;</div>
+                    <div class="fldvalue">
 											 <input class='login-btn' id='loginBtn' title="登录" name="commit" type="submit" value="" onmouseover="$('loginBtn').writeAttribute('class', 'login-btn-hover');" onmouseout="$('loginBtn').writeAttribute('class','login-btn')"/>
 									</div>
 							</div>  
+							<div class="rows idxRegTips">
+                    <strong>还没有账号么？</strong>
+                </div>  
 							<div class="rows s_clear">
 									<div class="fldid">&nbsp;</div>
 									<div class="fldvalue">
@@ -75,6 +82,142 @@
 							<% end %>
         </div>
     </div>
+		
+    <!--公告-->
+    <div class="idxMessage fix">
+    	<h2 class="t">一起游戏网公告：</h2>
+        <div class="bd">
+            <ul>
+                <li><span class="time">07月30日</span>新版网站正是上线</li><li><span class="time">07月30日</span>今日话题：ChinaJoy</li><li><span class="time">07月30日</span>微博功能闪亮登场</li> 
+            </ul>
+        </div>
+        <div class="ft clear"><span></span></div>
+    </div>
+    <!--公告 end-->
+
+    <!--每日推荐-->
+    <div class="idxCommend fix">
+    	<h2 class="t"><strong>每日推荐</strong></h2>
+        <div class="guild">
+        	<div class="avatar"><img src="images/photo/photo01.png" alt="" class="imgbox01" /></div>
+            <div class="con">
+                <h3><%= facebox_tip "【九龍帝盟】〆网游娱乐会所","登录后才能执行此操作", :title => "【九龍帝盟】〆网游娱乐会所" %></h3>
+                <ul>
+                    <li>所属游戏：<span class="gameName">龙之谷</span></li>
+                    <li>成员：<span class="num">5</span></li>
+                    <li>创建时间：<span class="time">2010-07-24</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="pipe"></div>
+        <div class="memberShow">
+        	<div class="star fix">
+            	<div class="subTitle"><strong>游戏达人</strong></div>
+                   <ul class="list">
+                     <li>
+                     <div class="m-card">
+                        <div class="m-avatar"><img class="imgbox01" src="images/photo/photo11.png"></div>
+                        <div class="m-con">
+                          <h4><%= facebox_tip "esports海涛","登录后才能执行此操作", :class => "memberName red" %></h4>
+                          <div class="gameName">Dota</div>
+                          <div class="op"><%= facebox_tip "<span class=\"i iFollow\"></span>成为粉丝","登录后才能执行此操作", :class => "memberName red" %></div>
+                        </div>
+                      </div>
+                     </li>
+                     <li>
+                     <div class="m-card">
+                        <div class="m-avatar"><img class="imgbox01" src="images/photo/photo11.png"></a></div>
+                        <div class="m-con">
+                          <h4><%= facebox_tip "苹果牛","登录后才能执行此操作", :class => "memberName red" %></h4>
+                          <div class="gameName">魔兽世界</div>
+                          <div class="op"><%= facebox_tip "<span class=\"i iFollow\"></span>成为粉丝","登录后才能执行此操作", :class => "memberName red" %></div>
+                        </div>
+                      </div>
+                     </li>
+                     <li>
+                     <div class="m-card">
+                        <div class="m-avatar"><img class="imgbox01" src="images/photo/photo11.png"></div>
+                        <div class="m-con">
+                          <h4><%= facebox_tip "xiaoy","登录后才能执行此操作", :class => "memberName red" %></h4>
+                          <div class="gameName">魔兽争霸</div>
+                          <div class="op"><%= facebox_tip "<span class=\"i iFollow\"></span>成为粉丝","登录后才能执行此操作", :class => "memberName red" %></div>
+                        </div>
+                      </div>
+                     </li>
+                   </ul>
+								</div>
+
+        	<div class="online fix">
+            	<div class="subTitle"><strong>在线用户</strong></div>
+                   <ul class="list">
+                     <li>
+                     <div class="m-card">
+                      <!---->
+                        
+                        <div class="m-avatar"><a href="#" title=""><img class="imgbox01" src="images/photo/photo11.png"></a></div>
+                        <div class="m-con">
+                          <h4><%= facebox_tip "TLRN","登录后才能执行此操作", :class => "memberName red" %></h4>
+                          <div class="gameName">魔兽世界</div>
+                        </div>
+                      <!---->
+                      </div>
+                     </li>
+                     <li>
+                     <div class="m-card">
+                      <!---->
+                        
+                        <div class="m-avatar"><a href="#" title=""><img class="imgbox01" src="images/photo/photo11.png"></a></div>
+                        <div class="m-con">
+                          <h4><%= facebox_tip "风中雨中","登录后才能执行此操作", :class => "memberName red" %></h4>
+                          <div class="gameName">龙之谷</div>
+                        </div>
+                      <!---->
+                      </div>
+                     </li>
+                     <li>
+                     <div class="m-card">
+                      <!---->
+                        
+                        <div class="m-avatar"><a href="#" title=""><img class="imgbox01" src="images/photo/photo11.png"></a></div>
+                        <div class="m-con">
+                          <h4><%= facebox_tip "米粒","登录后才能执行此操作", :class => "memberName red" %></h4>
+                          <div class="gameName">跑跑卡丁车</div>
+                        </div>
+                      <!---->
+                      </div>
+                     </li>
+                   </ul>
+			</div>
+        </div>
+    </div>
+
+    <!--每日推荐 end-->
+    <!--今日话题-->
+    <div class="idxTopic fix">
+    	<div class="wrap">
+            <h1>游戏微博</h1>
+            <h3 class="t">ChinaJoy</h3>
+            <div class="con">
+               <ul class="list">
+								<% @mini_blogs.each do |mini_blog|%>
+                 <li>
+                 <div class="m-card">
+                  <!---->
+                    <div class="m-avatar"><%= avatar_image mini_blog.poster, :class=>"imgbox01" %></div>
+                    <div class="m-con">
+                      <div><%=mini_blog.poster.login%>：<%=mini_blog.content%></div>
+                      <div class="time"><%= ftime mini_blog.created_at %></div>
+                    </div>
+                  <!---->
+                  </div>
+                 </li>
+								 <% end %>
+            	</ul>
+            </div>
+            <div class="r-c"></div>
+        </div>
+    </div>
+
     <div class="welcome-intro s_clear">
     	<ul>
     	  <li class="item-1">
@@ -85,8 +228,8 @@
           </li>
     	  <li class="item-2">
           	<div class="con">
-              <h2>游戏</h2>
-              <p>建立自己的游戏库，分享游戏的心得体会，也留下那些快逝去的游戏回忆。</p>
+              <h2>微博</h2>
+              <p>开始你的游戏微博，分享你的游戏精彩给更多的玩家</p>
            </div>
           </li>
     	  <li class="item-3">

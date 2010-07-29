@@ -13,7 +13,6 @@ a:hover{color:#D63200;}
 .page_side_wrap .main{float:left;margin-left:-139px;width:100%;}
 .page_side_wrap .main .content{margin-left:139px;padding-left:6px;width:auto;} 
 
-/*#appbar{position:relative;zoom:1}*/
 #appbar .applist{padding:7px 2px;}
 #appbar .applist li{height:37px;line-height:37px;padding:5px 0;position:relative}
 #appbar .applist li a{display:block;position:relative;height:100%;padding-left:50px;background-repeat:no-repeat;font-size:14px;}
@@ -128,9 +127,7 @@ a:hover{color:#D63200;}
 .feed-message-box li{padding-left:22px;height:30px;line-height:30px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -73px;color:#000;overflow:hidden}
 .feed-message-box .feed-message{height:29px;line-height:29px;border-bottom:1px #E7F0E0 solid;overflow:hidden}
 .feed-message-box .feed-message a.icon-active{float:right;_display:inline-block;margin:10px 8px 0 0;}
-/*.feed-message-box .feed-message .time{float:right;margin-right:10px}
-.feed-message-box .feed-message .con{float:left;width:330px;overflow:hidden;}
-*/
+
 .feed-box{line-height:24px;word-spacing:5px;}
 .feed-box .tab{margin-bottom:20px;padding:0 16px;position:relative}
 
@@ -256,7 +253,6 @@ a:hover{color:#D63200;}
 .piclist-rows table .imgwrap img{width:100px;height:100px;}
 .piclist-rows table .data{margin-left:125px;_margin-left:122px;line-height:21px;}
 .piclist-rows table .data h3,.piclist-rows table .data span,.piclist-rows table .data .link a{color:#25700D}
-/*.piclist-rows table .data a{color:#D63200}*/
 .piclist-rows table .data a:hover{text-decoration:underline}
 
 /*各种图片尺寸定义*/
@@ -305,8 +301,6 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .piclist .pics-list p.link{margin-top:9px;text-align:center;line-height:18px;}
 
 .pic-box .path-box{padding:9px 0 10px 0;border-bottom:1px solid #bdd6ad;margin:0 15px}
-/*.pic-box .piclist{padding:20px 7px;border-bottom:1px #E7F0E0 solid;}
-*/
 .pic-box .piclist{padding:20px 7px;background:url(../images/skin/dotline.gif) repeat-x bottom;/*border-bottom:1px #E7F0E0 solid;*/}
 .pic-box .piclist li{float:left;padding:14px 17px;width:149px;height:122px;overflow:hidden;text-align:center;}
 .pic-box .piclist li p{margin-top:9px;text-align:center;line-height:18px;}
@@ -314,11 +308,6 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .pic-box .pic-desc{padding:40px 24px 15px 24px;min-height:30px;_height:30px;}
 .pic-box .pic-desc h4{line-height:19px;margin-bottom:25px;font-size:14px}
 .pic-box .pic-desc h4 a{color:#666}
-/*.pic-box .pic-flag{margin:0 -3px;}
-.pic-box .pic-flag li{float:left;_display:inline;margin:3px;}
-.pic-box .pic-flag .rect-box .rect{position:relative;padding-right:27px;white-space:nowrap;}
-.pic-box .pic-flag .rect-box .icon-active{position:absolute;right:0;top:6px;float:right;}
-*/
 
 .formcontent{/*clear:both;*/padding:15px 0;}
 .formcontent .rows{padding:5px 0;line-height:27px;}
@@ -492,8 +481,6 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .inform-box .inform-list th{width:30px}
 .inform-box .inform-list th,.inform-box .inform-list td{padding:9px 0;}
 .inform-box .inform-list td{color:#7E7F80;line-height:18px;}
-/*.inform-box .inform-list .img{padding-right:4px;width:49px;}
-*/
 .inform-box .inform-list .close{width:8px;padding-left:4px;padding-right:22px;text-align:right;}
 
 .request-box{clear:both;margin-bottom:16px;}
@@ -561,8 +548,7 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .vote-box .vote-status-table .percent{width:211px;padding-left:2px;}
 .vote-box .vote-status-table .cb{width:22px;}
 .vote-box .vote-status-table .btn{text-align:right;width:100px}
-/*.vote-box .foot{margin-top:150px;}
-*/.vote-box .foot .feed-list{padding-left:23px;width:400px;}
+.vote-box .foot .feed-list{padding-left:23px;width:400px;}
 .vote-box .foot .feed-list .textarea{width:298px;}
 .vote-box .foot .feed-list .txt-add-comment{width:336px;}
 
@@ -864,10 +850,7 @@ a.i-s-8:hover span{background-position:right -310px;}
 .friend-invite-list li img{float:left;}
 .friend-invite-list li strong{float:left;display:block;margin:5px 0 0 10px;color:#333;font-weight:400;text-align:left;width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .friend-invite-list li strong span{display:block;margin:5px 0 0 0;}
-/**/
-/*.relation-member{border:0}
-.relation-member ul{height:auto;overflow:visible}
-*/
+
 /*好友的好友*/
 .d6-head{font-size:14px;border-bottom:1px solid #bdd6ad;padding:0 10px 10px 10px}
 .d6-list li{height:80px;width:205px;float:left;margin:10px 12px;line-height:20px;background:url(../images/skin/dotline.gif) repeat-x bottom;}
@@ -1798,8 +1781,8 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .guildHome .guildIntro .item .con,.eventHome .eventIntro .item .con,.gameHome .gameGE .item .con{float:left;width:100%;line-height:28px}
 .guildHome .guildFunc li,.eventHome .eventFunc li{margin:10px 0}
 .guildHome .guildFunc li a,.eventHome .eventFunc li a{color:#333}
-.guildHome .guildMember li,.gameHome .gameMember li,.eventHome .eventMember li{float:left;width:25%;margin:5px 0;text-align:center;}
-.guildHome .guildMember li .memberName,.gameHome .gameMember li .memberName,.eventHome .eventMember li .memberName{width:98%;height:22px;line-height:22px;display:block;overflow:hidden;color:#666}
+.guildHome .guildMember li,.gameHome .gameMember li,.eventHome .eventMember li{float:left;width:25%;height:90px;margin:5px 0;text-align:center;}
+.guildHome .guildMember li .memberName,.gameHome .gameMember li .memberName,.eventHome .eventMember li .memberName{width:98%;height:22px;line-height:22px;display:block;overflow:hidden;color:#666;}
 .guildHome .guildMember li img,.gameHome .gameMember li img,.eventHome .eventMember li img{width:50px;height:50px}
 /*照片*/
 .sPhotoList li{float:left;padding:5px 8px;width:86px;overflow:hidden;}
