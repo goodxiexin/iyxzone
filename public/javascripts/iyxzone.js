@@ -145,6 +145,7 @@ Object.extend(Iyxzone, {
 // some cursor operation
 Object.extend(Iyxzone, {
 
+  // FIXME: ie下的resetCursor貌似有点问题
   resetCursor: function (field) { 
     if (field.setSelectionRange) { 
       field.focus(); 
@@ -178,13 +179,11 @@ Object.extend(Iyxzone, {
     if(field.selectionStart)
       return field.selectionStart;
     else if(document.selection){
-			field.focus ();
-			var Sel = document.selection.createRange();
-			var SelLength = document.selection.createRange().text.length;
-			Sel.moveStart ('character', -field.value.length);
-			CaretPos = Sel.text.length - SelLength;
-			return CaretPos
-			}
+			var sel = document.selection.createRange();
+			var selLength = sel.text.length;
+			sel.moveStart ('character', -field.value.length);
+			return (sel.text.length - selLength);
+		}
   },
 
   selectText: function(field, start, end){
