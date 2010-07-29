@@ -461,7 +461,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
   },
 
   newVideo: function(){
-    var div = new Element('div', {class: 'z-box mBlogEditV'});
+    var div = new Element('div', {'class': 'z-box mBlogEditV'});
     div.update('<div class="z-t"><div class="fix"><span class="l"><strong></strong></span><span class="r"></span></div><div class="arrUp"></div></div><div class="z-m rows s_clear"><div class="box01 s_clear"><div class="z-con"> <a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Builder.cancelVideo()" class="icon-active"></a><div>请输入<a target="_blank" href="http://www.youku.com">优酷网</a>、<a target="_blank" href="http://www.tudou.com">土豆网</a>、<a target="_blank" href="http://video.sina.com.cn">新浪播客</a>、<a target="_blank" href="http://www.ku6.com/">酷6网</a>等视频网站的视频播放页链接</div><div class="fix space"><span class="textfield w-l"><input type="text" id="publisher_video_url" onclick="$(this).clear();" value="http://"/></span><span class="button"><span><button onclick="Iyxzone.MiniBlog.Builder.createVideo();" id="publisher_video_url_btn">确定</button></span></span></div></div></div><div class="bg"></div></div><div class="z-b"><span class="l"><strong></strong></span><span class="r"></span></div>');
     $('publisher_video').appendChild(div);
     this.videoPublishPanel = div;

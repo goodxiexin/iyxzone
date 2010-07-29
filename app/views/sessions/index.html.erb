@@ -1,0 +1,72 @@
+
+  <div class="signBox2 fix">
+      <div class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m"><div class="round_body fix">
+            <div class="banner">一起游戏网</div>
+
+  <div class="login2">
+  		<div class="errorMsg">
+        	<div class="arrDown"></div>
+        	<div class="wrap fix">
+					<% flash.each do |key, msg| %>
+						<span class="left"><%= msg %></span> 
+					<% end %>
+						<%= link_to '忘记密码？', forgot_password_url, :class => "right"%>
+          </div>
+        </div>
+        <!---->
+        <div class="round09 round_r_t">
+          <div class="round_l_t">
+            <div class="round_r_b">
+              <div class="round_l_b">
+                <div class="round_m">
+                <div class="round_body">
+                   <div class="login-box formcontent">
+											<% form_tag sessions_url do %>
+                          <div class="rows s_clear">
+                                <div class="fldid"><strong>邮箱：</strong></div>
+                                <div class="fldvalue">
+																	<div class="textfield"><%= text_field_tag 'email', nil %></div>
+                                </div>
+                            </div>
+                          <div class="rows s_clear">
+                                <div class="fldid"><strong>密码：</strong></div>
+                                <div class="fldvalue">
+																	<div class="textfield"><%= password_field_tag 'password', nil %></div>
+                                </div>
+                            </div>
+                          <div class="rows s_clear">
+                                <div class="fldid">&nbsp;</div>
+                                <div class="fldvalue">
+																	<%= check_box_tag 'remember_me', 1, true %><%= label_tag 'auto', '下次自动登录' %>
+                                </div>
+                            </div>  
+                          <div class="rows s_clear">
+                                <div class="fldid">&nbsp;</div>
+                                <div class="fldvalue">
+																		<input class='login-btn' id='loginBtn' title="登录" name="commit" type="submit" value="" onmouseover="$('loginBtn').writeAttribute('class', 'login-btn-hover');" onmouseout="$('loginBtn').writeAttribute('class','login-btn')"/>
+                                </div>
+                            </div>  
+                          <div class="rows pipeLine">
+                                <div>&nbsp;</div>
+                            </div>  
+                          <div class="rows idxRegTips">
+                                <strong>还没有账号么？</strong>
+                            </div>  
+                          <div class="rows s_clear">
+                                <div class="fldid">&nbsp;</div>
+                                <div class="fldvalue">
+																	<%= link_to '', signup_url, :class => 'reg-btn', :title=>"马上注册" %>
+                                </div>
+                            </div>  
+                         <% end %>
+                    </div>
+                
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+			</div>
+       </div></div></div></div></div></div>
+  </div>

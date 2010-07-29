@@ -10,6 +10,6 @@ ActionMailer::Base.smtp_settings = {
   :domain => "gmail.com",
   :authentication => :plain,
   :user_name => "xiexinwang",
-  :password => "JJK78ytx"
+  :password => "JJK78ytx*>"
 }
 ActionMailer::Base.delivery_method = :activerecord

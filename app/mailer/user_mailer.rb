@@ -10,6 +10,12 @@ class UserMailer < ActionMailer::Base
     body        :user => user, :hot_users => hot_users, :games => games, :photos => photos, :polls => polls, :news => news, :url => "#{SITE_URL}/home"
   end
 
+  def mini_blog user
+    setup_email user
+    subject     "17Gaming(一起游戏网) - 大改版，迎来微博时代"
+    body        :user => user
+  end
+
   def signup_notification user
     setup_email	  user
     subject			  "17Gaming(一起游戏网) - 激活您的帐号"

@@ -9,7 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD:db/schema.rb
 ActiveRecord::Schema.define(:version => 20100728050016) do
+=======
+ActiveRecord::Schema.define(:version => 20100727220813) do
+>>>>>>> d31a016d7a956dc2c0562d96d3fab31b859d576a:db/schema.rb
 
   create_table "albums", :force => true do |t|
     t.string   "type"
