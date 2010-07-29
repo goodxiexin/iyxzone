@@ -4,7 +4,7 @@
     <%= link_to "更多", public_mini_blogs_url, :class => "more" %>
     <div class="hotWords">热词：
       <% topics.each do |t| %>
-        <%= link_to t.name, search_mini_blogs_url(:key => t.name) %>
+        <%= link_to "#{t[1].name}(#{t[0]})", search_mini_blogs_url(:key => t[1].name) %>
       <% end %>
     </div>
   </div>

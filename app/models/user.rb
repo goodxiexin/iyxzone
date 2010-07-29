@@ -87,18 +87,10 @@ class User < ActiveRecord::Base
     mails.find_all {|m| !m.read_by_recipient}
   end
 
-  def interested_in_game? game
-		!game_attentions.find_by_game_id(game.id).nil?
-  end
-
   def has_game? game
     game_id = game.is_a?(Integer) ? game : game.id
     !characters.find_by_game_id(game_id).blank?
   end
-
-  has_many :game_attentions, :dependent => :destroy
-
-	has_many :interested_games, :through => :game_attentions, :source => :game, :order => 'sale_date DESC'
 
 	# notifications
 	has_many :notifications, :order => 'created_at DESC', :dependent => :destroy
@@ -173,10 +165,6 @@ class User < ActiveRecord::Base
   has_many :games, :through => :characters, :uniq => true
 
 	has_many :servers, :through => :characters, :uniq => true
-
-	def interested_in_game? game
-    !game_attentions.find_by_game_id(game.id).nil?
-  end
 
 	def has_same_game_with? user
 		!(user.characters.map(&:game_id) & characters.map(&:game_id)).blank?

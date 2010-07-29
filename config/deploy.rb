@@ -26,7 +26,7 @@ after "deploy:update_code", "deploy:pack_js"
 after "deploy:symlink", "assets:symlink"
 after "deploy:symlink", "assets:restore_gamepic"
 after "deploy:symlink", "deploy:chown_deployer"
-after "deploy:symlink", "deploy:clear_online_records"
+#after "deploy:symlink", "deploy:clear_online_records"
 #after "deploy:symlink", "deploy:migrate"
 
 namespace :deploy do

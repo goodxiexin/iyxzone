@@ -15,11 +15,7 @@ Iyxzone.Game = {
 
   PinyinSelector: Class.create({}),
 
-	Panel: {},
-
-  initSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, gameDetails, options){
-    return new Iyxzone.Game.Selector(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, gameDetails, options);
-	},
+  PanelSelector: Class.create({}),
 
   initPinyinSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options){
     if(Iyxzone.Game.infos == null){
@@ -37,7 +33,14 @@ Iyxzone.Game = {
     $(game).value = '';
  
     return new Iyxzone.Game.PinyinSelector(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options);
+  },
+
+  initPanelSelector: function(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options){
+    $(game).innerHTML = '';
+
+    return new Iyxzone.Game.PanelSelector(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options);
   }
+
 };
 
 Iyxzone.Game.Selector = Class.create({
@@ -423,6 +426,199 @@ Iyxzone.Game.PinyinSelector = Class.create(Iyxzone.Game.Selector, {
 
 });
 
+Iyxzone.Game.PanelSelector = Class.create(Iyxzone.Game.Selector, {
+
+  initialize: function($super, gameSelectorID, gameInfoDiv, areaSelectorID, areaInfoDiv, serverSelectID, serverInfoDiv, raceSelectorID, raceInfoDiv, professionSelectorID, professionInfoDiv, gameDetails, options){
+    $(gameSelectorID).replace('<input style="display: none" type="text" name="' + $(gameSelectorID).readAttribute('name') + '" id="' + gameSelectorID + '"/><div class="fldvalue"><div class="selectSim">选择游戏</div></div>');
+    
+    // 这样gameSelectorID就变成那个新的了
+    $super(gameSelectorID, gameInfoDiv, areaSelectorID, areaInfoDiv, serverSelectID, serverInfoDiv, raceSelectorID, raceInfoDiv, professionSelectorID, professionInfoDiv, gameDetails, options);
+
+    // get hot games and truncate it
+    this.hotGames = Iyxzone.Game.infos.clone().sort(function(a,b){return b.hot - a.hot;});
+    this.hotGames.length = 20;
+
+    this.panel = null;
+    this.panelTrigger = $(gameSelectorID).next();
+    this.curLetterCode = null;
+    this.lis = new Hash();
+
+    $(this.panelTrigger).observe('click', function(e){
+      this.showPanel(e.target);
+    }.bind(this));
+  },
+
+  setEvents: function($super){
+    $super();
+
+    Event.stopObserving($(this.gameSelectorID), 'change');
+
+    Event.observe($(this.gameSelectorID), 'click', function(e){
+      Event.stop(e);
+      this.showPanel(e.target);
+    }.bind(this));
+  },
+
+  showPanel: function(el){
+    if(this.panel == null){
+      this.buildPanel();
+      if(this.curLetterCode == null)
+        this.changeLetter(123);
+    }
+    this.locatePanel(el);
+    this.panel.show();
+  },
+
+  closePanel: function(){
+    this.panel.hide();
+  },
+
+  locatePanel: function(el){
+    if(this.panel){
+      this.panel.setStyle({
+        position: 'absolute',
+        top: ($(el).cumulativeOffset().top) + 20 + 'px',
+        left: document.viewport.getWidth() / 2 - 325 + 'px'
+      });
+    } 
+  },
+
+  changeLetter: function(letterCode){
+    if(this.curLetterCode == letterCode){
+      return;
+    }else{
+      this.curLetterCode = letterCode;
+    }
+
+    this.lis.each(function(pair){
+      var code = pair.key;
+      var li = pair.value;
+      if(code != 123){
+        li.writeAttribute({'class': ''});
+      }else{
+        li.writeAttribute({'class': 'hotGame'});
+      }
+    });
+
+    if(letterCode == 123){
+      this.lis.get(letterCode).addClassName('hotCurrent');
+    }else{
+      this.lis.get(letterCode).addClassName('current');
+    }
+
+    var listLeft = new Element('div', {'class':'t'});
+    if(letterCode == 123)
+      listLeft.update("<em></em><div class='alphaImg alphaHot'></div>");
+    else
+      listLeft.update("<em></em><div class='alphaImg alpha-"+ String.fromCharCode(letterCode) + "'></div>");
+
+    var listCon = new Element('div', {'class':'con'});
+    var listUl = new Element('ul', {});
+
+    var gameInfos = [];
+    if(letterCode == 123){
+      gameInfos = this.hotGames;
+    }else{
+      Iyxzone.Game.infos.each(function(g){
+        if(g.pinyin.charCodeAt(0) == letterCode){
+          gameInfos.push(g);
+        }
+      }.bind(this));
+    }
+    gameInfos.each(function(g){
+        var tempLi = new Element('li');
+        var tempA = new Element('a', {href: 'javascript: void(0)', title: g.name, index: g.id});
+        tempA.update(g.name);
+        tempA.observe('click', function(e){
+          this.selectGame(e.target.readAttribute('index'), e.target.readAttribute('title'));
+        }.bind(this));
+        tempLi.appendChild(tempA);
+        listUl.appendChild(tempLi);
+    }.bind(this));
+    
+    this.gameList.update('');
+    listCon.appendChild(listUl);
+    this.gameList.appendChild(listLeft);
+    this.gameList.appendChild(listCon);   
+  },
+
+  selectGame: function(gid, gname){
+    $(this.gameSelectorID).value = gid;
+    $(this.panelTrigger).update(gname); 
+    this.closePanel();
+    this.gameChange();
+  },
+
+  buildPanel: function(letterCode){
+    if(this.panel)
+      return;
+
+    this.panel = new Element('div', {'class':'allGameSelector'});
+    var mask  = new Element('div', {'class': 'mask-wrap'});
+    var round1 = new Element('div', {'class':'round07 round_r_t'});
+    var round2 = new Element('div', {'class':'round_l_t'});
+    var round3 = new Element('div', {'class':'round_r_b'});
+    var round4 = new Element('div', {'class':'round_l_b'});
+    var round5 = new Element('div', {'class':'round_m'});
+    var round6 = new Element('div', {'class':'round_body'});
+
+    var title = new Element('div', {'class':'allGameTitle fix'});
+    var h3 = new Element('h3');
+    h3.update("<strong>请选择游戏</strong>(点击游戏名称选择游戏)");
+    var close = new Element('a', {'class' : "op", href: 'javascript: void(0)'});
+    close.update("关闭<span class='icon-active'></span>");
+    close.observe('click', function(e){
+      this.closePanel();
+    }.bind(this));
+    title.appendChild(h3);
+    title.appendChild(close);
+
+    var alpha = new Element('div', {'class':'alphaList fix'});
+    var alphaUl = new Element('ul', {id : "alphabet_list"});
+    
+    var hotLi = new Element('li', {'class' : 'hotGame'});
+    var aLi = new Element('a', {href: 'javascript: void(0)'});
+    aLi.update("<span>热门游戏</span>");
+    aLi.observe('click', function(e){
+      this.changeLetter(123);
+    }.bind(this));
+    this.lis.set(123, hotLi);
+    hotLi.appendChild(aLi);
+    alphaUl.appendChild(hotLi);
+    
+    for (i=97; i<=122; i++){
+      var tempLi = new Element('li');
+      var tempA = new Element('a', {href: 'javascript: void(0)'});
+      tempA.update("<span index="+ i +">"+ String.fromCharCode(i) +"</span>");
+      tempA.observe('click', function(e){
+        this.changeLetter(e.target.readAttribute('index'));
+      }.bind(this));
+      this.lis.set(i, tempLi);
+      tempLi.appendChild(tempA);
+      alphaUl.appendChild(tempLi);
+    }
+    
+    alpha.appendChild(alphaUl);
+    
+    this.gameList = new Element('div', {'class':'catGameList fix'});
+    
+    round6.appendChild(title);
+    round6.appendChild(alpha);
+    round6.appendChild(this.gameList);
+    round5.appendChild(round6);
+    round4.appendChild(round5);
+    round3.appendChild(round4);
+    round2.appendChild(round3);
+    round1.appendChild(round2);
+    mask.appendChild(round1);
+    var iframeMask = new Element('iframe', {'class':'mask-iframe','frameborder':0,'src':''});
+    mask.appendChild(iframeMask);
+    this.panel.appendChild(mask);
+    document.body.appendChild(this.panel);
+  }
+
+});
+
 Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Base, {
 
   initialize: function(element, update, url, options) {
@@ -476,152 +672,6 @@ Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Base, {
     }
   }
 
-});
-
-Object.extend(Iyxzone.Game.Panel, {
-
-  currentLink: null,
-
-	hiddenField: null,
-
-	gamePanel : null,
-
-	currentLetterCode : null,
-
-  constructGamePanelTable: function(link, letterCode){
-		this.gamePanel = new Element('div', {'class':'allGameSelector'});
-		var mask  = new Element('div', {'class': 'mask-wrap'});
-		var round1 = new Element('div', {'class':'round07 round_r_t'});
-		var round2 = new Element('div', {'class':'round_l_t'});
-		var round3 = new Element('div', {'class':'round_r_b'});
-		var round4 = new Element('div', {'class':'round_l_b'});
-		var round5 = new Element('div', {'class':'round_m'});
-		var round6 = new Element('div', {'class':'round_body'});
-		var title = new Element('div', {'class':'allGameTitle fix'});
-		var h3 = new Element('h3');
-		h3.update("<strong>请选择游戏</strong>(点击游戏名称选择游戏)");
-		var close = new Element('a', {'class' : "op", href: 'javascript: void(0)'});
-		close.update("关闭<span class='icon-active'></span>");
-		close.observe('click', function(e){
-			this.gamePanel.remove();
-			this.currentLink = null;
-		}.bind(this));
-		title.appendChild(h3);
-		title.appendChild(close);
-		var alpha = new Element('div', {'class':'alphaList fix'});
-		var alphaUl = new Element('ul', {id : "alphabet_list"});
-		var hotLi = new Element('li', {'class' : 'hotGame'});
-		if (letterCode == 123)
-			hotLi.addClassName("hotCurrent");
-		var aLi = new Element('a', {href: 'javascript: void(0)'});
-		aLi.update("<span>热门游戏</span>");
-		aLi.observe('click', function(e){
-			this.changeLetter("123");
-		}.bind(this));
-		this.currentLetterCode = letterCode;
-		hotLi.appendChild(aLi);
-		alphaUl.appendChild(hotLi);
-		for (i=97; i<=122; i++){
-			var tempLi = new Element('li');
-			if (i == letterCode)
-				tempLi.addClassName("current");
-				
-			var tempA = new Element('a', {href: 'javascript: void(0)'});
-			tempA.update("<span index="+ i +">"+ String.fromCharCode(i) +"</span>");
-			tempA.observe('click', function(e){
-				this.changeLetter(e.element().readAttribute('index'));
-			}.bind(this));
-			tempLi.appendChild(tempA);
-			alphaUl.appendChild(tempLi);
-		}
-		alpha.appendChild(alphaUl);
-		var list = new Element('div', {'class':'catGameList fix'});
-		var listLeft = new Element('div', {'class':'t'});
-		if (letterCode == 123)
-			listLeft.update("<em></em><div class='alphaImg alphaHot'></div>");
-		else
-			listLeft.update("<em></em><div class='alphaImg alpha-"+ String.fromCharCode(letterCode) + "'></div>");
-			
-		var listCon = new Element('div', {'class':'con'});
-		var listUl = new Element('ul', {id : "game_list"});
-    Iyxzone.Game.infos.each(function(g){
-			var tempLi = new Element('li');
-			var tempA = new Element('a', {href: 'javascript: void(0)', title: g.name, index: g.id});
-			tempA.update(g.name);
-			tempA.observe('click', function(e){
-				this.selectGame(e.element().readAttribute('index'), e.element().readAttribute('title'));
-			}.bind(this));
-			tempLi.appendChild(tempA);
-			listUl.appendChild(tempLi);
-		}.bind(this));
-		listCon.appendChild(listUl);
-		list.appendChild(listLeft);
-		list.appendChild(listCon);
-		round6.appendChild(title);
-		round6.appendChild(alpha);
-		round6.appendChild(list);
-		round5.appendChild(round6);
-		round4.appendChild(round5);
-		round3.appendChild(round4);
-		round2.appendChild(round3);
-		round1.appendChild(round2);
-		mask.appendChild(round1);
-		var iframeMask = new Element('iframe', {'class':'mask-iframe','frameborder':0,'src':''});
-		mask.appendChild(iframeMask);
-		this.gamePanel.appendChild(mask);
-		document.body.appendChild(this.gamePanel);
-		this.setPanelStyle(link);
-	},
-
-	setPanelStyle: function(link){
-		this.currentLink = link;
-		this.gamePanel.setStyle({
-      position: 'absolute',
-			top: ($(link).cumulativeOffset().top) + 20 + 'px',
-			left: document.viewport.getWidth() / 2 - 325 + 'px'
-		});
-	},
-
-	changeLetter: function(letterCode){
-		// check if the letter is current letter
-		if (letterCode == this.currentLetterCode)
-			return letterCode;
-		// if it is not current letter render according games
-    new Ajax.Request('/game_list_details/' + letterCode + '.json', {
-      method: 'get',
-      onLoading: function(){
-        Iyxzone.changeCursor('wait');
-      }.bind(this),
-      onComplete: function(){
-        Iyxzone.changeCursor('default');
-      }.bind(this),      
-      onSuccess: function(transport){
-        var games = transport.responseText.evalJSON();
-				Iyxzone.Game.infos = games;
-				this.gamePanel.remove();
-				this.constructGamePanelTable(this.currentLink, letterCode);
-			}.bind(this)
-    });
-	},
-
-	selectGame: function(gid, gname){
-		this.currentLink.update(gname);
-		this.hiddenField.writeAttribute("value",gid);
-		this.gamePanel.remove();
-		this.currentLink = null;
-		Iyxzone.Game.currentSelector.gameChange();
-	},
-
-  startPanel: function(link, hiddenField, event){
-    Event.stop(event);
-    // if it is a new link, create a new table
-		if (this.currentLink != link){
-			var letterCode = 123;
-			this.currentLink = link;
-			this.hiddenField = hiddenField;
-			this.constructGamePanelTable(link, letterCode);
-		}
-	}
 });
 
 Object.extend(Iyxzone.Game.Suggestor, {

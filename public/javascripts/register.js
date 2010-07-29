@@ -49,19 +49,26 @@ Object.extend(Iyxzone.Register, {
     }
 
     if(login.length < 2){
-      this.error('login_info', '至少要2个字符');
+      this.error('login_info', '至少要2个字');
       return false;
     }
 
-    if(login.length > 100){
-      this.error('login_info', '最多20个字符');
+    if(login.length > 30){
+      this.error('login_info', '最多30个字');
       return false;
     }
 
-    if(!login.match(/[\344\270\200-\351\276\245a-zA-Z0-9_]+/)){
+    first = login[0];
+    if((first >= '0' && first <= '9')){
+      this.error('login_info', '昵称不能以数字开头');
+      return false;
+    }
+
+    if(!login.match(/[a-zA-Z0-9_\u4e00-\u9fa5]+/)){
       this.error('login_info', '只能包含字母，数字，汉字以及下划线');
       return false;
     }else{
+      this.load('login_info');
       new Ajax.Request('/register/validates_login_uniqueness?login=' + encodeURIComponent(login), {
         method: 'get',
         onSuccess: function(transport){
@@ -71,15 +78,13 @@ Object.extend(Iyxzone.Register, {
             this.pass('login_info');
           }else{
             this.loginUnique = false;
-            this.error('该用户名已经被占用');
+            this.error('login_info', '该用户名已经被占用');
           }
           this.loginCheckDone = true;
         }.bind(this)
       })
-
-      while(!this.checkLoginDone){}
       
-      return this.loginUnique;
+      return true;
     }
   },
 
@@ -119,10 +124,8 @@ Object.extend(Iyxzone.Register, {
           this.emailCheckDone = true;
         }.bind(this)
       });
-
-      while(!this.emailCheckDone){}
       
-      return this.emailUnique;
+      return true;
     }else{
       this.error('email_info', '非法的邮件格式');
       return false;
@@ -290,7 +293,7 @@ Object.extend(Iyxzone.Register, {
 
     var html = '<div class="rows s_clear"><div class="fldid"><label>人物昵称：</label></div><div class="fldvalue"><div class="textfield" style="width: 100px;"><input id="profile_new_characters_' + id + '_name" name="profile[new_characters][' + id + '][name]" onblur="Iyxzone.Register.isCharacterNameValid(' + id + ')" size="30" type="text"></div></div><span class="red" id="characters_' + id + '_name_error"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>级别：</label></div><div class="fldvalue"><div style="width: 100px;" class="textfield"><input id="profile_new_characters_' + id + '_level" name="profile[new_characters][' + id + '][level]" onblur="Iyxzone.Register.isCharacterLevelValid(' + id + ')" size="30" type="text"></div></div><span class="red" id="characters_' + id + '_level_error"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><input style="display: none" type="text" name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"/><div class="fldvalue"><div class="selectSim" id="game_display_'+id+'" onclick="Iyxzone.Game.Panel.startPanel(this, $(\'profile_new_characters_'+ id +'_game_id\'), event)">选择游戏</div></div><span id="characters_' + id + '_game_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">游戏：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_game_id" name="profile[new_characters][' + id + '][game_id]"><option value="">---</option></select></div><span class="red" id="characters_' + id + '_game_id_error"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">区域：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_area_id" name="profile[new_characters][' + id + '][area_id]"><option value="">---</option></select></div><span class="red" id="characters_' + id + '_area_id_error"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">服务器：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_server_id" name="profile[new_characters][' + id + '][server_id]"><option value="">---</option></select></div><span class="red" id="characters_' + id + '_server_id_error"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label for="inbox">种族：</label></div><div class="fldvalue"><select id="profile_new_characters_' + id + '_race_id" name="profile[new_characters][' + id + '][race_id]"><option value="">---</option></select></div><span class="red" id="characters_' + id + '_race_id_error"></span></div>';
@@ -306,7 +309,7 @@ Object.extend(Iyxzone.Register, {
     // set game info
     var prefix = 'profile_new_characters_' + id + '_';
     var dprefix = 'characters_' + id + '_';
-    var selector = Iyxzone.Game.initSelector(
+    var selector = Iyxzone.Game.initPanelSelector(
       prefix + 'game_id',
       dprefix + 'game_id_error',
       prefix + 'area_id',
@@ -319,7 +322,6 @@ Object.extend(Iyxzone.Register, {
       dprefix + 'profession_id_error',
       null,
       {});
-		Iyxzone.Game.currentSelector = selector;
     this.gameSelectors.set(id, selector);
   },
 

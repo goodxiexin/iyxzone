@@ -76,17 +76,23 @@ Object.extend(Iyxzone.Profile.Editor, {
     }
 
     if(login.value.length < 2){
-      this.showError('login_error', '昵称至少要2个字符');
+      this.showError('login_error', '至少要2个字');
       return false;
     }
-    if(login.value.length > 16){
-      this.showError('login_error', '昵称最多16个字符');
+
+    if(login.value.length > 30){
+      this.showError('login_error', '最多30个字');
       return false;
     }
 
     first = login.value[0];
     if((first >= '0' && first <= '9')){
       this.showError('login_error', '昵称不能以数字开头');
+      return false;
+    }
+
+    if(!login.match(/[a-zA-Z0-9_\u4e00-\u9fa5]+/)){
+      this.error('login_info', '只能包含字母，数字，汉字以及下划线');
       return false;
     }
 
@@ -304,13 +310,13 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.newGameSelectors = new Hash();
   },
 
-  newCharacter: function(games){
+  newCharacter: function(){
     var id = this.newCharacterID;
     var div = new Element('div', {id: 'new_characters_' + id});
   
     var html = '<div class="rows s_clear"><div class="fldid"><label>名字：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterNameValid(' + id + ', 1)" name="profile[new_characters][' + id + '][name]" id="profile_new_characters_' + id + '_name"/></div></div><span id="new_characters_' + id + '_name_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>等级：</label></div><div class="fldvalue"><div class="textfield"><input type="text" size="30" onblur="Iyxzone.Profile.Editor.isCharacterLevelValid(' + id + ', 1)" name="profile[new_characters][' + id + '][level]" id="profile_new_characters_' + id + '_level"/></div></div><span id="new_characters_' + id + '_level_error" class="red"></span></div>';
-    html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><input style="display: none" type="text" name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"/><div class="fldvalue"><div class="selectSim" id="game_display_'+id+'" onclick="Iyxzone.Game.Panel.startPanel(this, $(\'profile_new_characters_'+ id +'_game_id\'), event)">选择游戏</div></div><span id="new_characters_' + id + '_game_id_error" class="red"></span></div>';
+    html += '<div class="rows s_clear"><div class="fldid"><label>游戏：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][game_id]" id="profile_new_characters_' + id + '_game_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_game_id_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>服务区：</label></div><div class="fldvalue"><div><select name="profile[new_characters]['+ id + '][area_id]" id="profile_new_characters_' + id + '_area_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_area_id_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>服务器：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][server_id]" id="profile_new_characters_' + id + '_server_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_server_id_error" class="red"></span></div>';
     html += '<div class="rows s_clear"><div class="fldid"><label>种族：</label></div><div class="fldvalue"><div><select name="profile[new_characters][' + id + '][race_id]" id="profile_new_characters_' + id + '_race_id"><option value="">---</option></select></div></div><span id="new_characters_' + id + '_race_id_error" class="red"></span></div>';
@@ -325,7 +331,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     // set game selector
     var prefix = 'profile_new_characters_' + id + '_';
     var dprefix = 'new_characters_' + id + '_';
-    var selector = Iyxzone.Game.initSelector(
+    var selector = Iyxzone.Game.initPanelSelector(
       prefix + 'game_id',
       dprefix + 'game_id_error',
       prefix + 'area_id',
@@ -338,7 +344,6 @@ Object.extend(Iyxzone.Profile.Editor, {
       dprefix + 'profession_id_error',
       null,
       {});
-		Iyxzone.Game.currentSelector = selector;
     this.newGameSelectors.set("new_" + id, selector);
   },
 

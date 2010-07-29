@@ -384,7 +384,7 @@ module ApplicationHelper
 	end
 
   def game_infos
-    Game.hot.limit(20).map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
+    Game.order("pinyin ASC").all.map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin, :hot => (g.attentions_count - g.last_week_attentions_count)}}.to_json
   end
 
   def album_infos

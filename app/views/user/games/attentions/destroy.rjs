@@ -1,5 +1,0 @@
-if params[:at].to_i == 0
-  page.replace_html "game_attention_#{@game.id}", (link_to_remote "关注", :url => game_attentions_url(@game, :at => 0), :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');", :html => {:class => "concern-btn"})
-elsif params[:at].to_i == 1
-  page.replace_html "game_attention_#{@game.id}", (link_to_remote "添加关注", :url => game_attentions_url(@game, :at => 1), :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');", :html => {:class => "concern-btn02"})
-end
