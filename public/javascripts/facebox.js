@@ -27,7 +27,8 @@ Object.extend(Iyxzone.Facebox, {
   },
 
   setWidth: function(width){
-    this.facebox.setStyle({width: width + 'px'});
+		if (width != null)
+			this.facebox.setStyle({width: width + 'px'});
   },
 
   appear: function(){
@@ -150,7 +151,11 @@ Object.extend(Iyxzone.Facebox, {
 
   init: function(){
     if(this.facebox == null){
-      this.facebox = new Element('div', {class: 'z-box', style:"overflow:hidden;display:none"});
+      this.facebox = new Element('div', {'class': 'z-box'});
+			this.facebox.setStyle({
+				overflow: 'hidden',
+				display:'none'
+			});
       this.facebox.innerHTML = '<div class="z-t"><span class="l"><strong></strong></span><span class="r"></span></div><div class="z-m rows s_clear"><div class="box01 s_clear" id="facebox_content"></div><div class="bg"></div></div><div class="z-b"><span class="l"><strong></strong></span><span class="r"></span></div>';
       document.body.appendChild(this.facebox);
     }

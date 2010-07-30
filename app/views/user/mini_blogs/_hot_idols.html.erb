@@ -11,7 +11,7 @@
                           <div class="m-card">
                             <div class="m-avatar"><%= avatar idol, :class => 'imgbox01' %></div>
                             <div class="m-con">
-                              <h4><%= profile_link idol, :class => 'member-name' %></h4
+                              <h4><%= profile_link idol, :class => 'member-name' %></h4>
                               <div><%= game_link idol.skilled_game, :class => "red" %></div>
                               <div class="op" id='idol_<%= idol.id %>_op'>
                                 <% if idol.has_fan? current_user %>

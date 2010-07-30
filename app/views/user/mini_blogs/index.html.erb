@@ -14,7 +14,7 @@
               <%= render :partial => 'form_at_index', :locals => {:at => 'mini_blogs_index'} %>
             <% end %>
             <div class="mBlogCatTab fix">
-              <strong class="title"><%= get_subject @user %>的微博</strong>
+              <strong class="title"><%= get_subject @user %>写的微博</strong>
               <%= link_to_function "全部", "Iyxzone.MiniBlog.MyIndex.fetch('all', #{@user.id});", :id => 'mini_blog_category_all', :class => 'selected' %>
               <span class="pipe">|</span>
               <%= link_to_function "原创", "Iyxzone.MiniBlog.MyIndex.fetch('original', #{@user.id});", :id => 'mini_blog_category_original' %>
