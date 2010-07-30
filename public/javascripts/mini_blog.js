@@ -97,7 +97,7 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
 
     new Ajax.Request('/mini_topic_attentions', {
       method: 'post',
-      parameters: {'attention[topic_name]': name},
+      parameters: {'name': name},
       onLoading: function(){
         Iyxzone.disableButton(btn, '...');
       },
@@ -143,7 +143,7 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
   follow: function(name){
     new Ajax.Request('/mini_topic_attentions', {
       method: 'post',
-      parameters: {'attention[topic_name]': name},
+      parameters: {'name': name},
       onLoading: function(){
         Iyxzone.changeCursor('wait');
       },

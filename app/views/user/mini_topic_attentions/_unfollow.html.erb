@@ -1,4 +1,0 @@
-<div class="funcEx">
-  <% a = user.mini_topic_attentions.find_by_topic_name(name) %> 
-  <%= link_to_remote "<span class='icon-friend02'></span>取消关注该话题(正在关注)", mini_topic_attention_url(a), :class => 'red', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default')" %>
-</div>

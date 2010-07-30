@@ -1,6 +1,14 @@
   <div class="gameProfile fix">
     <div class="avatar">
       <%= game_image game.name, :class => "imgbox01" %>
+                    <div class='follow' id='follow_game_<%= game.id %>'>
+                      <% attention = current_user.mini_topic_attentions.find_by_topic_name game.name %>
+                      <% if attention.blank? %>
+                        <%= link_to_function "<span class='i iFollow'></span>关注", "Iyxzone.Game.follow('#{game.name}', #{game.id});" %>
+                      <% else %>
+                        <%= link_to_function "<span class='i iNoFollow'></span>取消关注", "Iyxzone.Game.unfollow(#{attention.id}, '#{game.name}', #{game.id});" %>
+                      <% end %>
+                    </div> 
     </div>
     <div class="con">
         <% if !game.is_rateable_by? current_user %>

@@ -1,5 +1,7 @@
 class Game < ActiveRecord::Base
 
+  has_mini_topic_attentions :column => :name
+
   has_many :role_users, :foreign_key => 'data'
 
   has_many :admins, :through => :role_users, :source => :user
@@ -32,7 +34,7 @@ class Game < ActiveRecord::Base
 
   named_scope :sexy, :order => "(characters_count - last_week_characters_count) DESC"
 
-	named_scope :hot, :conditions => "attentions_count != 0", :order => "(attentions_count - last_week_attentions_count) DESC" 
+	named_scope :hot, :order => "(attentions_count - last_week_attentions_count) DESC" 
 
 	named_scope :beta, :conditions => ["sale_date > ?", Time.now.to_s(:db)], :order => 'sale_date ASC'
   

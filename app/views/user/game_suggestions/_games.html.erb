@@ -38,12 +38,14 @@
       <% end %>
     </td>
     <td class="attention">
-      <% attention = current_user.game_attentions.find_by_game_id(g.id) %>
+      <span id='follow_game_<%= g.id %>'>
+      <% attention = current_user.mini_topic_attentions.find_by_topic_name(g.name) %>
       <% if !attention.blank? %>
-        <span id='game_attention_<%= g.id %>'><%= link_to_remote "取消关注", :url => game_attention_url(g, attention, :at => 0), :method => :delete, :html => {:class => "concern-btn"} %></span>
+        <%= link_to_function "<span class='i iNoFollow'></span>取消关注", "Iyxzone.Game.unfollow(#{attention.id}, '#{g.name}', #{g.id});" %>
       <% else %>
-			  <span id='game_attention_<%= g.id %>'><%= link_to_remote "关注", :url => game_attentions_url(g, :at => 0), :html => {:class => "concern-btn"} %></span>
+			  <%= link_to_function "<span class='i iFollow'></span>关注", "Iyxzone.Game.follow('#{g.name}', #{g.id});" %>
 		  <% end %>
+      </span>
     </td>
   </tr>
   <% end %>

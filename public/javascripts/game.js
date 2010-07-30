@@ -39,6 +39,48 @@ Iyxzone.Game = {
     $(game).innerHTML = '';
 
     return new Iyxzone.Game.PanelSelector(game, gameDiv, area, areaDiv, server, serverDiv, race, raceDiv, profession, professionDiv, initValue, options);
+  },
+
+  follow: function(name, gid){
+    new Ajax.Request('/mini_topic_attentions', {
+      method: 'post',
+      parameters: {'name': name},
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      }.bind(this),
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('follow_game_' + gid).innerHTML = '<a onclick="Iyxzone.Game.unfollow(' + json.id + ', \'' + name + '\', ' + gid + '); return false;" href="#"><span class="i iNoFollow"></span>取消关注</a>';
+        }else{
+          error('发生错误');
+        }
+      }.bind(this)
+    });
+
+  },
+
+  unfollow: function(id, name, gid){
+    new Ajax.Request('/mini_topic_attentions/' + id, {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('follow_game_' + gid).update('<a onclick="Iyxzone.Game.follow(\'' + name + '\', ' + gid + '); return false;" href="#"><span class="i iFollow"></span>关注</a>');
+        }else{
+          error('发生错误');
+        }
+      }.bind(this)
+    });
   }
 
 };

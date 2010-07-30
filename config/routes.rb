@@ -94,7 +94,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :mini_blogs, :collection => {:random => :get, :same_game => :get, :public => :get, :hot => :get, :sexy => :get, :interested => :get, :list => :get, :search => :get}, :member => {:new_forward => :get, :forward => :post}
 
-    users.resources :mini_topic_attentions
+    users.resources :mini_topic_attentions, :member => {:follow => :post, :unfollow => :delete}
 
     users.resources :fans
 

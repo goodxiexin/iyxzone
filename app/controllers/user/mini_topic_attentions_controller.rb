@@ -1,7 +1,7 @@
 class User::MiniTopicAttentionsController < UserBaseController
 
   def create
-    @attention = current_user.mini_topic_attentions.build params[:attention]
+    @attention = current_user.mini_topic_attentions.build(:topic_name => params[:name])
     
     if @attention.save
       render :json => {:code => 1, :id => @attention.id}
@@ -11,18 +11,12 @@ class User::MiniTopicAttentionsController < UserBaseController
   end
 
   def destroy
+    @attention = current_user.mini_topic_attentions.find(params[:id])
+
     if @attention.destroy
       render :json => {:code => 1}
     else
       render :json => {:code => 0}
-    end
-  end
-
-protected
-
-  def setup
-    if ['destroy'].include? params[:action]
-      @attention = MiniTopicAttention.find(params[:id])
     end
   end
 

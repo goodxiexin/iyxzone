@@ -4,7 +4,49 @@ Iyxzone.Event = {
   Builder: {},
   Summary: {},
   ParticipantManager: {},
-  Presentor: {}
+  Presentor: {},
+
+  follow: function(name, eid){
+    new Ajax.Request('/mini_topic_attentions', {
+      method: 'post',
+      parameters: {'name': name},
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      }.bind(this),
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('follow_event_' + eid).innerHTML = '<a onclick="Iyxzone.Event.unfollow(' + json.id + ', \'' + name + '\', ' + eid + '); return false;" href="#"><span class="i iNoFollow"></span>取消关注</a>';
+        }else{
+          error('发生错误');
+        }
+      }.bind(this)
+    });
+
+  },
+
+  unfollow: function(id, name, eid){
+    new Ajax.Request('/mini_topic_attentions/' + id, {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('follow_event_' + eid).update('<a onclick="Iyxzone.Event.follow(\'' + name + '\', ' + eid + '); return false;" href="#"><span class="i iFollow"></span>关注</a>');
+        }else{
+          error('发生错误');
+        }
+      }.bind(this)
+    });
+  }
 };
 
 // 一些在event show页面的操作

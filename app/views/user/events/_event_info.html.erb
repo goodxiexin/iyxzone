@@ -1,6 +1,14 @@
   <div class="eventProfile fix">
     <div class="avatar">
       <%= album_cover event.album, :class => "imgbox01" %>
+                    <div class='follow' id='follow_event_<%= event.id %>'>
+                      <% attention = current_user.mini_topic_attentions.find_by_topic_name event.title %>
+                      <% if attention.blank? %>
+                        <%= link_to_function "<span class='i iFollow'></span>关注", "Iyxzone.Event.follow('#{event.title}', #{event.id});" %>
+                      <% else %>
+                        <%= link_to_function "<span class='i iNoFollow'></span>取消关注", "Iyxzone.Event.unfollow(#{attention.id}, '#{event.title}', #{event.id});" %>
+                      <% end %>
+                    </div> 
     </div>
     <div class="con">
       <ul>

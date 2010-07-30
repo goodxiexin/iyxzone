@@ -8,10 +8,11 @@ end
 
 class CleanGameAttention < ActiveRecord::Migration
   def self.up
+    Game.update_all("attentions_count = 0")
+    User.update_all("game_attentions_count = 0")
     GameAttention.all.each do |a|
-      a.user.mini_topic_attentions.create :topic_name => a.game.name if !a.user.has_game?(a.game)
+      a.game.followed_by a.user
     end
-    remove_column :games, :attentions_count
     drop_table :game_attentions
   end
 

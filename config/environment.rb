@@ -69,6 +69,7 @@ Rails::Initializer.run do |config|
     :guestbook_observer,
     :fanship_observer,
     :mini_image_observer,
-    :mini_blog_observer
+    :mini_blog_observer,
+    :mini_topic_attention_observer
 
 end

@@ -1,6 +1,14 @@
   <div class="guildProfile fix">
     <div class="avatar">
       <%= album_cover guild.album, :class => "imgbox01" %>
+                    <div class='follow' id='follow_guild_<%= guild.id %>'>
+                      <% attention = current_user.mini_topic_attentions.find_by_topic_name guild.name %>
+                      <% if attention.blank? %>
+                        <%= link_to_function "<span class='i iFollow'></span>关注", "Iyxzone.Guild.follow('#{guild.name}', #{guild.id});" %>
+                      <% else %>
+                        <%= link_to_function "<span class='i iNoFollow'></span>取消关注", "Iyxzone.Guild.unfollow(#{attention.id}, '#{guild.name}', #{guild.id});" %>
+                      <% end %>
+                    </div> 
     </div>
     <div class="con">
       <ul>

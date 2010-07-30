@@ -5,7 +5,6 @@ class User::GameSuggestionsController < UserBaseController
   def index
     @game_tags = Tag.game_tags 
     @interested_games = current_user.interested_games
-    @game_attentions = current_user.game_attentions
     @game_list = Game.hot.paginate :page => params[:page], :per_page => 8 
     @beta_list = Game.beta.paginate :page => params[:page], :per_page => 8
   end
