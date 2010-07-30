@@ -10,7 +10,7 @@
 			<%= f.collection_select :race_id, @races, :id, :name, {:prompt => '---'}, :label => '种族', :class => 'selector selector02' %>
 			<%= f.collection_select :profession_id, @professions, :id, :name, {:prompt => '---'}, :label => '职业', :class => 'selector selector02' %>
     <% end %>
-    <%= f.z_submit :submit => {:text => '完成', :id => 'new_character_submit'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'new_character_submit'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
   <% end %>
 <% end %>
 

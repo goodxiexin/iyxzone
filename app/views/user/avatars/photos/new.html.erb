@@ -4,7 +4,7 @@
       <%= f.span '支持png, gif, jpg, 最大4MB' %>
       <%= f.file_field 'uploaded_data' %>
     </div>
-    <%= f.z_submit :submit => {:text => '完成', :id => 'new_photo_submit_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'new_photo_submit_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
   <% end %>
 <% end %>
 <iframe id='upload_frame' name='upload_frame' style='width:1px;height:1px;border:0px' src="about:blank"></iframe>

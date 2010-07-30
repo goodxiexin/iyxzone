@@ -8,7 +8,7 @@
           <div class='tip'>你想让 <%= collection_select :request, :character_id, @characters, :id, :name, {:prompt => '---'} %> 加入公会? </div>
         <% end %>
       </div>
-      <%= f.z_submit :submit => {:text => '完成', :id => 'new_guild_request_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
+      <%= f.z_submit :submit => {:text => '完成', :id => 'new_guild_request_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
     <% end %>
   <% end %>
 <% end %>
