@@ -5,6 +5,6 @@
     <%= hidden_field_tag 'request[friend_id]', @recipient.id %>
     <div class="left"><span class="blk tip01">验证信息</span><%= f.text_area 'data' %></div>
     <div class="rows"></div>
-    <%= f.z_submit :submit => {:text => '发送', :id => 'new_friend_request_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close()();'} %>
+    <%= f.z_submit :submit => {:text => '发送', :id => 'new_friend_request_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
   <% end %>
 <% end %>
