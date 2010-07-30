@@ -15,6 +15,13 @@ class CleanStatus < ActiveRecord::Migration
     Status.all.each do |s|
       MiniBlog.create :poster => s.poster, :content => s.content
     end
+
+    puts "去掉设置里的状态设置"
+    app = Application.find_by_name("状态")
+    app.destroy if app
+    User.update_all("mail_setting=#{MailSetting.default} and application_setting=#{ApplicationSetting.default}")
+
+    # 删除status
     Comment.delete_all(:commentable_type => "Status")
     FeedDelivery.delete_all(:item_type => "Status")
     Status.delete_all
