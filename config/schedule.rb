@@ -52,7 +52,11 @@ every :thursday, :at => '5:00am' do
 end
 
 # 关于mini blog 
-every 30.minutes do
+every 15.minutes do
   rake "mini_blogs:delta_index"
   rake "mini_blogs:analyze_topics"
+end
+
+every 30.minutes do
+  rake "mini_blogs:random"
 end

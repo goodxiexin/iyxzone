@@ -1,4 +1,5 @@
 status在设置里还有
+set mysql database default char set, collate
 
 1. gameSelector js DONE
 
