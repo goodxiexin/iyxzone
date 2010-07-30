@@ -11,7 +11,7 @@ class CleanGameAttention < ActiveRecord::Migration
     Game.update_all("attentions_count = 0")
     User.update_all("game_attentions_count = 0")
     GameAttention.all.each do |a|
-      a.game.followed_by a.user
+      a.game.follow_by a.user
     end
     drop_table :game_attentions
   end
