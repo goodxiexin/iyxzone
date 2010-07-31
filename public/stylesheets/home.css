@@ -1478,7 +1478,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogExtra .funcEx{margin:70px 0 20px 0}
 .mBlogExtra .myTopicEx{position:relative}
 .mBlogExtra .topicAdd{text-align:right;margin:10px 0}
-.mBlogExtra .topicAddIpt{position:absolute;bottom:-10px;left:0;width:200px}
+.mBlogExtra .topicAddIpt{position:absolute;width:200px}
 .topicAddIpt{border:1px solid #BDD6AE;background:#fff;padding:5px 5px 10px 10px;}
 .topicAddIpt .con{clear:both;margin:10px 0}
 .topicAddIpt .textfield{width:130px;*width:120px;float:left;margin:2px 3px 0 0;color:#333;}

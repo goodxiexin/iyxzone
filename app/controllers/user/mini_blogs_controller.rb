@@ -17,7 +17,7 @@ class User::MiniBlogsController < UserBaseController
 
     @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
 
-    @pop_users = User.match(:is_idol => false).order("attentions_count DESC").limit(5)
+    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
 
     # 6小时内的最热话题
     @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]

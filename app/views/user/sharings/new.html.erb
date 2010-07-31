@@ -4,6 +4,9 @@
 
 <% content_for :body do %>
 <%= render :partial => 'user/mini_blogs/form_at_index', :locals => {:at => 'outside'} %>
+<% javascript_tag do %>
+  Iyxzone.insertAtCursor($('mini_blog_text_area'), "<%= @link.proxy_url %> ");
+<% end %>
 <% end %>
 
 <%= render :file => 'layouts/base' %>

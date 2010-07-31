@@ -2,6 +2,7 @@
 <% subject = get_subject(user) %>
 <ul>
 	<li><span class='icon-data'></span><%= link_to "#{subject}的档案", edit_profile_url(profile) %></li>
+  <li><span class='icon-data'></span><%= link_to "#{subject}的微博", mini_blogs_url(:uid => user.id) %></li>
   <li><span class='icon-blog'></span><%= link_to "#{subject}的日志", blogs_url(:uid => user.id) %><span>(<%= user.blogs_count relationship %>)</span></li>
   <li><span class='icon-photo'></span><%= link_to "#{subject}的相册", personal_albums_url(:uid => user.id) %><span>(<%= user.albums_count relationship%>)</span></li>
   <li><span class='icon-video'></span><%= link_to "#{subject}的视频", videos_url(:uid => user.id) %><span>(<%= user.videos_count relationship %>)</span></li>

@@ -91,15 +91,14 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
     this.form = children[children.length - 1];
     this.form.setStyle({
       'position': 'absolute',
-      'left': (link.positionedOffset().left - 100) + 'px',
-      'top': (link.positionedOffset().top + 20) + 'px'
+      'left': (link.cumulativeOffset().left - 180) + 'px',
+      'top': (link.cumulativeOffset().top) + 'px'
     });
     this.form.show();
   },
 
   create: function(btn){
     var name = $('new_topic_name').value;
-
     new Ajax.Request('/mini_topic_attentions', {
       method: 'post',
       parameters: {'name': name},
@@ -158,7 +157,8 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
-          $('follow_topic').innerHTML = '<a onclick="Iyxzone.MiniBlog.Topic.unfollow(' + json.id + ');; return false;" href="#"><span class="icon-friend02"></span>关注该话题</a>';
+          alert('code 1');
+          $('follow_topic').update('<a onclick="Iyxzone.MiniBlog.Topic.unfollow(' + json.id + ');; return false;" href="#"><span class="i iNoFollow"></span>取消关注该话题（已经关注）</a>');
         }else{
           error('发生错误');
         }
