@@ -89,6 +89,11 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
     $('topic_list_panel').insert({bottom: '<div class="topicAddIpt"><div class="fix"><a href="#" onclick="Iyxzone.MiniBlog.Topic.cancel();" class="icon-active right"></a></div><div class="con fix"><input type="text" id="new_topic_name" value="请添加关注的话题" class="textfield"/><span class="button03"><span><button onclick="Iyxzone.MiniBlog.Topic.create($(this));">发布</button></span></span></div></div>'});
     var children = $('topic_list_panel').childElements();
     this.form = children[children.length - 1];
+    this.form.setStyle({
+      'position': 'absolute',
+      'left': (link.positionedOffset().left - 100) + 'px',
+      'top': (link.positionedOffset().top + 20) + 'px'
+    });
     this.form.show();
   },
 
