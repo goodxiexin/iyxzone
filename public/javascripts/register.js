@@ -370,8 +370,12 @@ alert('invalid email');        window.scrollTo(0, $('user_email').positionedOffs
     new Ajax.Request('/users/', {
       method: 'post',
       parameters: $(form).serialize(),
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
       onComplete: function(){
         button.disabled = '';
+        Iyxzone.changeCursor('default');
       }.bind(this),
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
