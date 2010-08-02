@@ -12,7 +12,7 @@
 		  <div class="canvas_c">
   			<div class="box02 canvas_con">
           <%= render :partial => 'user/mini_blogs/form_at_index', :locals => {:at => 'home'} %>
-          <%= render :partial => 'talking_about', :locals => {:mini_blogs => @mini_blogs, :topics => @topics} %>
+          <%= render :partial => 'talking_about', :locals => {:mini_blogs => @mini_blogs, :hot_words => @hot_words} %>
           <div class="feed-message-box s_clear" id='my_notices'>
 			  		<%= render :partial => 'user/notices/notices', :object => @notices %>
           </div>

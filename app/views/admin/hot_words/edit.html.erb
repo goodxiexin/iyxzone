@@ -1,0 +1,5 @@
+<% form_for :word, :url => admin_hot_word_url(@word), :html => {:method => :put} do |f| %>
+  <%= f.text_field :name %>
+  <%= f.text_field :keywords, :value => @word.keywords.join(" ") %>
+  <%= f.submit %>
+<% end %>

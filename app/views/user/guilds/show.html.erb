@@ -36,7 +36,7 @@
 <% end %>
 
 <% content_for :content do %>
-  <%= render :partial => "user/home/talking_about", :locals => {:mini_blogs => @mini_blogs, :topics => @topics} %>
+  <%= render :partial => "user/home/talking_about", :locals => {:mini_blogs => @mini_blogs, :hot_words => @hot_words} %>
   <%= render :partial => "guild_tab", :locals => {:guild => @guild} %>
   <div id='presentation'>
     <%= render :partial => 'feed_list', :locals => {:feed_deliveries => @feed_deliveries, :fetch_size => @fetch_size} %>

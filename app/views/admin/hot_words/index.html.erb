@@ -1,0 +1,12 @@
+新建：
+<% form_for :word, :url => admin_hot_words_url do |f| %>
+  <%= f.text_field :name %>
+  <%= f.text_field :keywords %>
+  <%= f.submit "创建" %>
+<% end %>
+<br/><br/>
+<table>
+<% @words.each do |word| %>
+  <tr><td><%= word.name %></td><td><%= word.keywords.join(", ") %></td><td><%= link_to "edit", edit_admin_hot_word_url(word) %> | <%= link_to "destroy", admin_hot_word_url(word), :method => :delete %></td></tr>
+<% end %>
+</table>

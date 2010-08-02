@@ -16,7 +16,7 @@
               <span class="miniTitle"><span>热词</span><em></em></span>
               <div class="tags">
                 <% @hot_words.each do |w| %>
-                  <%= link_to w.name, search_mini_blogs_url(:key => w.name) %>
+                  <%= link_to w.name, search_mini_blogs_url(:key => w.search_key) %>
                 <% end %>
               </div>
             </div> 

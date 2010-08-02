@@ -36,7 +36,7 @@
 <% end %>
 
 <% content_for :content do %>
-  <%= render :partial => "user/home/talking_about", :locals => {:mini_blogs => @mini_blogs, :topics => @topics} %>
+  <%= render :partial => "user/home/talking_about", :locals => {:mini_blogs => @mini_blogs, :hot_words => @hot_words} %>
   <%= render :partial => "event_tab", :locals => {:event => @event} %>
   <div id='presentation'>
     <%= render :partial => 'event_photos', :locals => {:photos => @photos, :album => @album} %>

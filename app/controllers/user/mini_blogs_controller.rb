@@ -22,8 +22,9 @@ class User::MiniBlogsController < UserBaseController
     # 6小时内的最热话题
     @start_time, @topics = MiniTopic.hot
     @hot_topics = @topics[0..9]
-    # 我觉得热词和热门话题不太好区分
-    @hot_words = @topics[0..19].sort{|a,b| rand(2)<=>rand(2)}[0..9].map{|a| a[1]}
+
+    # 引导热词
+    @hot_words = HotWord.recent.limit(10)
   end
 
   def hot
@@ -50,33 +51,33 @@ class User::MiniBlogsController < UserBaseController
     render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
 
-  def index
+  def home
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
     @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => 1, :per_page => PER_PAGE
     @time, @hot_topics = MiniTopic.hot
     @hot_topics = @hot_topics[0..9]
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
     @interested_topics = current_user.mini_topic_attentions
-    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 
   end
 
-  def index_list
+  def home_list
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
     @mini_blogs = MiniBlog.by(@interested_user_ids).category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
-    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 
     render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
 
-  def other
+  def index
     @mini_blogs = @user.mini_blogs.paginate :page => 1, :per_page => PER_PAGE
-    @remote = {:update => 'mini_blogs_list', :url => {:action => 'other_list', :type => params[:type]}} 
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
     @interested_idols = current_user.idols.order("fans_count DESC").limit(5)
     @interested_topics = current_user.mini_topic_attentions
   end
 
-  def other_list
+  def index_list
     @mini_blogs = @user.mini_blogs.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
-    @remote = {:update => 'mini_blogs_list', :url => {:action => 'list', :type => params[:type]}} 
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
     render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}  
   end
 
@@ -84,7 +85,7 @@ class User::MiniBlogsController < UserBaseController
     # construct ferret query lanuage first
     @fql = []
     if params[:key]
-      @fql << "content:(#{params[:key].split(/\s+/).join(" AND ")})"
+      @fql << "content:(#{params[:key].split(/\s*~\s*/).map{|a| "(#{a.split(/\s+/).join(" AND ")})"}.join(" OR ")})"
     end
     if params[:category] and params[:category] != 'all'
       @fql << "category:(#{params[:category]})"
@@ -134,7 +135,7 @@ class User::MiniBlogsController < UserBaseController
 protected
 
   def setup
-    if ['other', 'other_list'].include? params[:action]
+    if ['index', 'index_list'].include? params[:action]
       @user = User.find(params[:uid])
     elsif ['create'].include? params[:action]
       params[:mini_blog][:mini_image] = current_user.mini_images.find(params[:mini_image_id]) unless params[:mini_image_id].blank?
