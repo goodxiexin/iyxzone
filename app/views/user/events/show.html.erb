@@ -13,7 +13,7 @@
 <% content_for :notice do %>
   <span class="i40 iGuildLogo"></span>
   <span class="i iGuildMsg">公告：</span>
-  <div class='msg'>
+  <div class="msg">
   <% if @event.poster == current_user %>
     <strong><%= in_place_text_field @event, :bulletin, '有啥公告?', :param_name => 'event[bulletin]' %></strong>
   <% else %>
@@ -25,7 +25,7 @@
 <% content_for :side_bar do %>
   <%= render :partial => 'event_info', :locals => {:event => @event} %>  
   <%= render :partial => 'event_desc', :locals => {:event => @event} %>
-  <%= render :partial => 'event_menu', :locals => {:event => @event, :user => @user, :album => @album} %>
+  <%= render :partial => 'event_menu', :locals => {:event => @event, :album => @album, :user => @user} %>
   <% if !@participations.blank? %>
     <%= render :partial => 'rsvp', :locals => {:participations => @participations, :event => @event} %>
   <% end %>

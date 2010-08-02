@@ -29,7 +29,8 @@ class User::GamesController < UserBaseController
     @game = Game.find(params[:id], :include => [{:comments => [:commentable, {:poster => :profile}]}, :tags])
     @mini_blogs = MiniBlog.search("content: '#{@game.name}'", :sort => "created_at DESC", :page => 1, :per_page => 3)
     @mini_blogs = MiniBlog.by(@game.users.limit(3).map(&:id)).limit(3).all if @mini_blogs.blank?
-    @topics = MiniTopic.hot(6.hours.ago, Time.now)[0..2]
+    @time, @topics = MiniTopic.hot
+    @topics = @topics[0..3]
     @events = @game.events.nonblocked.limit(3).people_order.prefetch([{:album => :cover}])
     @guilds = @game.guilds.nonblocked.limit(3).people_order.prefetch([{:album => :cover}, {:president => :profile}])
     @has_game = current_user.has_game? @game

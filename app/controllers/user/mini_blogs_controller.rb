@@ -5,8 +5,6 @@ class User::MiniBlogsController < UserBaseController
 
   PER_PAGE = 10
 
-  TimeRange = [6.hours.ago, 24.hours.ago, 2.day.ago, 7.day.ago]
-
   def public
     @mini_blogs = MiniBlog.hot.paginate :page => params[:page], :per_page => PER_PAGE    
     
@@ -22,7 +20,7 @@ class User::MiniBlogsController < UserBaseController
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
 
     # 6小时内的最热话题
-    @start_time, @topics = MiniTopic.hot(TimeRange)
+    @start_time, @topics = MiniTopic.hot
     @hot_topics = @topics[0..9]
     # 我觉得热词和热门话题不太好区分
     @hot_words = @topics[0..19].sort{|a,b| rand(2)<=>rand(2)}[0..9].map{|a| a[1]}
@@ -55,7 +53,8 @@ class User::MiniBlogsController < UserBaseController
   def index
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
     @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => 1, :per_page => PER_PAGE
-    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
+    @time, @hot_topics = MiniTopic.hot
+    @hot_topics = @hot_topics[0..9]
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
     @interested_topics = current_user.mini_topic_attentions
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
@@ -95,7 +94,8 @@ class User::MiniBlogsController < UserBaseController
     # search index
     @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
     @idols = User.match(:is_idol => true).all
-    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
+    @time, @hot_topics = MiniTopic.hot
+    @hot_topics = @hot_topics[0..9]
   end
 
   def new

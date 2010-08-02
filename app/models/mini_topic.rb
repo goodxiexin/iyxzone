@@ -18,8 +18,8 @@ class MiniTopic < ActiveRecord::Base
     MiniTopic.all.map{|t| [t.freq_within(from, to), t]}.sort{|a, b| b[0] <=> a[0]}.select{|a| a[0] != 0}
   end
 
-  def self.hot range
-    return nil if range.blank?
+  def self.hot range=[]
+    range = range.blank? ? [6.hours.ago, 1.day.ago, 2.day.ago, 7.day.ago] : range
     from = range.shift
     to = Time.now
     topics = []

@@ -29,7 +29,8 @@ class User::GuildsController < UserBaseController
 
   def show
     @mini_blogs = MiniBlog.category(:text).by(@guild.people_ids).limit(3).all
-    @topics = MiniTopic.hot(6.hours.ago, Time.now)[0..2]
+    @time, @topics = MiniTopic.hot
+    @topics = @topics[0..3]
     @members = @guild.people.limit(12).prefetch(:profile)
     @events = @guild.events.people_order.limit(3).prefetch([{:album => :cover}])
     @memberships = @guild.memberships.prefetch([:character]).by(current_user.id)
