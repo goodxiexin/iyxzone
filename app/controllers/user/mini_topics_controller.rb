@@ -8,7 +8,7 @@ class User::MiniTopicsController < UserBaseController
     @idx = params[:time].to_i
     @from = TimeRange[@idx]
     @to = Time.now
-    @topics = MiniTopic.hot(@from, @to).select{|a| a[0] > 0}[0..49]
+    @topics = MiniTopic.hot_within(@from, @to).select{|a| a[0] > 0}[0..49]
   end
 
 end

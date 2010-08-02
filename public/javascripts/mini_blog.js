@@ -17,19 +17,26 @@ Iyxzone.MiniBlog = {
   
   Topic: {},
 
-  MyIndex: {}
+  Category: {}
 
 };
 
-Object.extend(Iyxzone.MiniBlog.MyIndex, {
+Object.extend(Iyxzone.MiniBlog.Category, {
+
+  url: null,
 
   curTab: null,
 
   cache: new Hash(),
 
-  init: function(type){
+  init: function(type, url){
     this.cache.set(type, $('mini_blogs_list').innerHTML);
     this.setTab(type);
+    this.setUrl(url);
+  },
+
+  setUrl: function(url){
+    this.url = url;
   },
 
   setTab: function(type){
@@ -48,7 +55,7 @@ Object.extend(Iyxzone.MiniBlog.MyIndex, {
     $('mini_blogs_list').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"></div>';
   },
 
-  fetch: function(type, uid){
+  fetch: function(type){
     this.cache.set(this.curTab, $('mini_blogs_list').innerHTML);
 
     this.setTab(type);
@@ -59,9 +66,9 @@ Object.extend(Iyxzone.MiniBlog.MyIndex, {
       return;
     }
 
-    new Ajax.Request('/mini_blogs/list', {
+    new Ajax.Request(this.url, {
       method: 'get',
-      parameters: {type: type, uid: uid},
+      parameters: {type: type},
       onLoading: function(transport){
         this.loading();
       }.bind(this),

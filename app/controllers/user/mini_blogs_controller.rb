@@ -5,6 +5,8 @@ class User::MiniBlogsController < UserBaseController
 
   PER_PAGE = 10
 
+  TimeRange = [6.hours.ago, 24.hours.ago, 2.day.ago, 7.day.ago]
+
   def public
     @mini_blogs = MiniBlog.hot.paginate :page => params[:page], :per_page => PER_PAGE    
     
@@ -20,10 +22,10 @@ class User::MiniBlogsController < UserBaseController
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
 
     # 6小时内的最热话题
-    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
-    
+    @start_time, @topics = MiniTopic.hot(TimeRange)
+    @hot_topics = @topics[0..9]
     # 我觉得热词和热门话题不太好区分
-    @hot_words = MiniTopic.hot(6.hours.ago, Time.now).map{|a| a[1]}[0..29].sort{|a,b| rand(2)<=>rand(2)}[0..9]
+    @hot_words = @topics[0..19].sort{|a,b| rand(2)<=>rand(2)}[0..9].map{|a| a[1]}
   end
 
   def hot
@@ -51,26 +53,32 @@ class User::MiniBlogsController < UserBaseController
   end
 
   def index
-    @mini_blogs = @user.mini_blogs.paginate :page => params[:page], :per_page => PER_PAGE
+    @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
+    @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => 1, :per_page => PER_PAGE
     @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
-    if @user == current_user
-      @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
-    else
-      @interested_idols = @user.idols.order("fans_count DESC").limit(5)
-    end
+    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
+    @interested_topics = current_user.mini_topic_attentions
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
   end
 
-  def list
-    @mini_blogs = @user.mini_blogs.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
-    @remote = {:update => 'mini_blogs_list', :url => {:action => 'list', :type => params[:type]}} 
+  def index_list
+    @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
+    @mini_blogs = MiniBlog.by(@interested_user_ids).category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
     render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
 
-  def interested
-    @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids)
-    @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => params[:page], :per_page => PER_PAGE
-    @interested_idols = current_user.idols.order("fans_count DESC").limit(5) 
+  def other
+    @mini_blogs = @user.mini_blogs.paginate :page => 1, :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'other_list', :type => params[:type]}} 
+    @interested_idols = current_user.idols.order("fans_count DESC").limit(5)
     @interested_topics = current_user.mini_topic_attentions
+  end
+
+  def other_list
+    @mini_blogs = @user.mini_blogs.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'list', :type => params[:type]}} 
+    render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}  
   end
 
   def search
@@ -126,9 +134,8 @@ class User::MiniBlogsController < UserBaseController
 protected
 
   def setup
-    if ['index', 'list'].include? params[:action]
+    if ['other', 'other_list'].include? params[:action]
       @user = User.find(params[:uid])
-      require_friend_or_owner @user
     elsif ['create'].include? params[:action]
       params[:mini_blog][:mini_image] = current_user.mini_images.find(params[:mini_image_id]) unless params[:mini_image_id].blank?
     elsif ['new_forward', 'forward'].include? params[:action]

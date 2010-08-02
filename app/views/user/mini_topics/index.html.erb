@@ -12,15 +12,17 @@
           <div class="mBlogHotTopic">
             <h2 class="title">热门话题排行榜</h2>
             <%= render :partial => 'time_nav' %>
-            <table class="mBlogTopicList">
-              <tbody>
-                <tr>
-                  <th class="b-l">话题</th>
-                  <th><a href="#">热度</a></th>
-                  <th><a href="#">出现次数</a></th>
-                  <th class="b-r"><a href="#">趋势</a></th>
-                </tr>
-                <% if !@topics.blank? %>
+            <% if @topics.blank? %>
+              <div class='tip'>没有话题</div>
+            <% else %>
+              <table class="mBlogTopicList">
+                <tbody>
+                  <tr>
+                    <th class="b-l">话题</th>
+                    <th><a href="#">热度</a></th>
+                    <th><a href="#">出现次数</a></th>
+                    <th class="b-r"><a href="#">趋势</a></th>
+                  </tr>
                   <% max_freq = @topics.first[0] %>
                   <% @topics.each_with_index do |t, i| %>
                   <tr>
@@ -36,9 +38,9 @@
                     </td>
                   </tr>
                   <% end %>
-                <% end %>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            <% end %>
           </div>
         </div>
       </div>

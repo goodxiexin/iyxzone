@@ -1,0 +1,31 @@
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'mini_blog' %>
+<% end %>
+
+<% canvas_tag do %>
+  <h1 class="app-status">微博</h1>
+  <div class="box02 canvas_int">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 2} %>
+    <div class="mainConWrap clear">
+      <div class="mBlog fix">
+        <div class="mBlogMain">
+          <div class="mBlogMainWrap">
+            <%= render :partial => 'category', :locals => {:url => other_list_mini_blogs_url(:uid => @user.id), :title => "#{get_subject @user}的微博"} %>
+            <div class="mBlogPostList" id='mini_blogs_list'>
+              <%= render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
+            </div>
+          </div>
+        </div>
+        <div class="mBlogExtra">
+          <%= render :partial => 'game_category', :locals => {:user => @user} %>
+          <%= render :partial => 'interested_topics', :locals => {:topics => @interested_topics} %>
+          <% if !@interested_idols.blank? %>
+            <%= render :partial => 'interested_idols', :locals => {:idols => @interested_idols, :user => @user} %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= javascript_tag "Iyxzone.MiniBlog.IndexPage.init('all');" %>
