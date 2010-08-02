@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="mBlogExtra">
-          <%= render :partial => 'hot_topics', :locals => {:topics => @hot_topics} %>
+          <%= render :partial => 'hot_topics', :locals => {:start_time => @start_time, :topics => @hot_topics} %>
           <%= render :partial => 'pop_users', :locals => {:users => @pop_users} %>
           <%= render :partial => 'hot_idols', :locals => {:idols => @hot_idols} %>
         </div>

@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="mBlogExtra">
-          <%= render :partial => 'hot_topics', :locals => {:topics => @hot_topics} %>
+          <%= render :partial => 'hot_words', :locals => {:hot_words => @hot_words} %>
           <%= render :partial => 'game_category', :locals => {:user => current_user} %>
           <%= render :partial => 'interested_topics', :locals => {:topics => @interested_topics} %>
           <%= render :partial => 'pop_users', :locals => {:users => @pop_users} %>

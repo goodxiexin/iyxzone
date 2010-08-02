@@ -54,8 +54,7 @@ class User::MiniBlogsController < UserBaseController
   def home
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
     @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => 1, :per_page => PER_PAGE
-    @time, @hot_topics = MiniTopic.hot
-    @hot_topics = @hot_topics[0..9]
+    @hot_words = HotWord.recent.limit(10) 
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
     @interested_topics = current_user.mini_topic_attentions
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 

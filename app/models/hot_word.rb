@@ -8,4 +8,8 @@ class HotWord < ActiveRecord::Base
     keywords.join("~")
   end
 
+  def freq
+    MiniBlog.indexer.search("content: (#{keywords.join(" ")})").total_hits
+  end
+
 end
