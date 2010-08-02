@@ -40,7 +40,7 @@ namespace :mini_blogs do
       idx = sorted_freqs.index freq
       word = RMMSeg::Dictionary.get_word term
       if word.nil?
-        if word =~ /[a-zA-Z0-9]+/
+        if term =~ /[a-zA-Z0-9]+/
           topic = MiniTopic.create :name => term
           topic.add_node freq, (idx+1), now
         end
@@ -76,7 +76,7 @@ namespace :mini_blogs do
       topic = MiniTopic.find_by_name term
       if topic.blank?
         if word.nil?
-          if word =~ /[a-zA-Z0-9]+/
+          if term =~ /[a-zA-Z0-9]+/
             topic = MiniTopic.create :name => term
             topic.add_node freq, (idx+1), now
           end
