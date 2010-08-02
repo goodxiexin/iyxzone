@@ -477,9 +477,9 @@ Iyxzone.Game.PanelSelector = Class.create(Iyxzone.Game.Selector, {
     $super(gameSelectorID, gameInfoDiv, areaSelectorID, areaInfoDiv, serverSelectID, serverInfoDiv, raceSelectorID, raceInfoDiv, professionSelectorID, professionInfoDiv, gameDetails, options);
 
     // get hot games and truncate it
-    this.hotGames = Iyxzone.Game.infos.clone().sort(function(a,b){return b.hot - a.hot;});
-    this.hotGames.length = 20;
-
+    Iyxzone.Game.hotGames = Iyxzone.Game.infos.clone().sort(function(a,b){return b.hot - a.hot;});
+    Iyxzone.Game.hotGames.length = 20;
+alert(Iyxzone.Game.hotGames[0].name);
     this.panel = null;
     this.panelTrigger = $(gameSelectorID).next();
     this.curLetterCode = null;
@@ -531,7 +531,6 @@ Iyxzone.Game.PanelSelector = Class.create(Iyxzone.Game.Selector, {
     }else{
       this.curLetterCode = letterCode;
     }
-
     this.lis.each(function(pair){
       var code = pair.key;
       var li = pair.value;
@@ -559,7 +558,7 @@ Iyxzone.Game.PanelSelector = Class.create(Iyxzone.Game.Selector, {
 
     var gameInfos = [];
     if(letterCode == 123){
-      gameInfos = this.hotGames;
+      gameInfos = Iyxzone.Game.hotGames;
     }else{
       Iyxzone.Game.infos.each(function(g){
         if(g.pinyin.charCodeAt(0) == letterCode){
@@ -567,6 +566,7 @@ Iyxzone.Game.PanelSelector = Class.create(Iyxzone.Game.Selector, {
         }
       }.bind(this));
     }
+    
     gameInfos.each(function(g){
         var tempLi = new Element('li');
         var tempA = new Element('a', {href: 'javascript: void(0)', title: g.name, index: g.id});

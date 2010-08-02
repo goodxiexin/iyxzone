@@ -17,12 +17,16 @@ class UsersController < ApplicationController
       logger.error @user.reload.characters_count
       if @user.reload.characters_count == 0
         @user.destroy
-        render_js_error "没有游戏角色"
+        render :json => {:code => 2}
       else
-        redirect_js "/activation_mail_sent?email=#{@email}"
+        render :json => {:code => 1, :email => @email}
       end
     else
-      render_js_error
+      if !@user.errors.on(:email).blank?
+        render :json => {:code => 3}
+      elsif !@user.errors.on(:login).blank?
+        render :json => {:code => 4}
+      end
     end
 	end
 

@@ -8,6 +8,7 @@ class HotWord < ActiveRecord::Base
     keywords.join("~")
   end
 
+  # TODO: this is slow and ugly
   def freq
     MiniBlog.indexer.search("content: (#{keywords.join(" ")})").total_hits
   end
