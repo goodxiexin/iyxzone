@@ -9,11 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD:db/schema.rb
-ActiveRecord::Schema.define(:version => 20100731113055) do
-=======
-ActiveRecord::Schema.define(:version => 20100728050016) do
->>>>>>> c8eb76ebafacf1d9dbd14e824222c30205ca2871:db/schema.rb
+ActiveRecord::Schema.define(:version => 20100803034547) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -181,7 +177,6 @@ ActiveRecord::Schema.define(:version => 20100728050016) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
-    t.integer  "attentions_count",  :default => 0
     t.string   "bulletin"
   end
 
@@ -397,11 +392,17 @@ ActiveRecord::Schema.define(:version => 20100728050016) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
-    t.integer  "attentions_count",  :default => 0
     t.string   "bulletin"
   end
 
   add_index "guilds", ["president_id"], :name => "index_guilds_on_president_id"
+
+  create_table "hot_words", :force => true do |t|
+    t.string   "name"
+    t.text     "keywords"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "links", :force => true do |t|
     t.string "url"
@@ -916,7 +917,6 @@ ActiveRecord::Schema.define(:version => 20100728050016) do
     t.integer  "videos_count2",                            :default => 0
     t.integer  "videos_count3",                            :default => 0
     t.integer  "videos_count4",                            :default => 0
-    t.integer  "statuses_count",                           :default => 0
     t.integer  "friend_requests_count",                    :default => 0
     t.integer  "guild_requests_count",                     :default => 0
     t.integer  "event_requests_count",                     :default => 0
