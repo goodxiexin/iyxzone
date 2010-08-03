@@ -100,17 +100,6 @@ class GuildAlbumTest < ActiveSupport::TestCase
     assert !@friend.recv_notice?(@comment)
   end
 
-  test "share album" do
-    @guild = GuildFactory.create :character_id => @character1.id
-    @album = @guild.album
-    @guild.member_memberships.create :user_id => @friend.id, :character_id => @character2.id
-    @guild.member_memberships.create :user_id => @friend.id, :character_id => @character2.id
-
-    [@user, @friend, @same_game_user, @stranger, @fan, @idol].each do |u|
-      assert @album.is_shareable_by?(u)
-    end
-  end
-
   test "record upload" do
     @guild = GuildFactory.create :character_id => @character1.id
     @guild.member_memberships.create :user_id => @friend.id, :character_id => @character2.id

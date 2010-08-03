@@ -39,9 +39,6 @@ class NewsTest < ActiveSupport::TestCase
 		# 编辑 data不能为空
 		assert !news1.update_attributes(:data => '')
 
-		# user 分享
-		assert news1.is_shareable_by? @user
-
 		# user 留言
 		assert news1.is_commentable_by? @user
 	  @comment = news1.comments.create :poster_id => @user.id, :content => 'a'
@@ -69,9 +66,6 @@ class NewsTest < ActiveSupport::TestCase
 		# 编辑 video url 不能为空
 		assert !news1.update_attributes(:video_url => '')
 
-		# user 分享
-		assert news1.is_shareable_by? @user
-
 		# user 留言
 		assert news1.is_commentable_by? @user
     @comment = news1.comments.create :poster_id => @user.id, :content => 'a'
@@ -95,9 +89,6 @@ class NewsTest < ActiveSupport::TestCase
 
 		# 编辑 data不能为空
 		assert !news1.update_attributes(:data => '')
-
-		# user 分享
-		assert news1.is_shareable_by? @user
 
 		# user 留言
 		assert news1.is_commentable_by? @user

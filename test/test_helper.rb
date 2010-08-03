@@ -1,7 +1,8 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
-Dir.new("test/factories").each {|f| require File.join('test', 'factories', f)}
+require 'factory_girl'
+Dir.new("test/factories").each {|f| require File.join('test', 'factories', f) if f =~ /.+\.rb/}
 
 class ActiveSupport::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method

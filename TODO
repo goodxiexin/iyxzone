@@ -6,7 +6,7 @@ set mysql database default char set, collate
 
 2. facebox js DONE
 
-3. register js 
+3. register js DONE 
 
 4. profile edit js, change login token
 
@@ -21,3 +21,5 @@ set mysql database default char set, collate
 9. uniq login name
 
 10. test program
+
+11. mini blog comment js

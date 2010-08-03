@@ -79,15 +79,6 @@ class AvatarAlbumTest < ActiveSupport::TestCase
     assert @user.recv_notice?(@comment)
   end
 
-  test "share avatar album" do
-    assert @album.is_shareable_by?(@user)
-    assert @album.is_shareable_by?(@friend)
-    assert !@album.is_shareable_by?(@same_game_user)
-    assert !@album.is_shareable_by?(@stranger)
-    assert @album.is_shareable_by?(@fan)
-    assert @album.is_shareable_by?(@idol)
-  end
-
   test "sensitive album" do
     @photo1 = PhotoFactory.create :album_id => @album.id, :type => 'Avatar'
     @friend.reload and @fan.reload

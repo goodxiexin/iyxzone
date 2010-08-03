@@ -275,55 +275,6 @@ class BlogTest < ActiveSupport::TestCase
     assert !@idol.recv_feed?(@draft1)
   end
 
-  test "share blog" do
-    @blog = BlogFactory.create
-
-    type, id = Share.get_type_and_id "/blogs/#{@blog.id}"
-
-    assert_equal type, 'Blog'
-    assert_equal id.to_i, @blog.id
-
-    @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
-    assert @blog1.is_shareable_by?(@user)
-    assert @blog1.is_shareable_by?(@friend1)
-    assert @blog1.is_shareable_by?(@same_game_user)
-    assert @blog1.is_shareable_by?(@stranger)
-    assert @blog1.is_shareable_by?(@fan)
-    assert @blog1.is_shareable_by?(@idol)
-
-    @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
-    assert @blog2.is_shareable_by?(@user)
-    assert @blog2.is_shareable_by?(@friend1)
-    assert @blog2.is_shareable_by?(@same_game_user)
-    assert !@blog2.is_shareable_by?(@stranger)    
-    assert @blog1.is_shareable_by?(@fan)
-    assert @blog1.is_shareable_by?(@idol)
-
-    @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
-    assert @blog3.is_shareable_by?(@user)
-    assert @blog3.is_shareable_by?(@friend1)
-    assert !@blog3.is_shareable_by?(@same_game_user)
-    assert !@blog3.is_shareable_by?(@stranger)    
-    assert @blog1.is_shareable_by?(@fan)
-    assert @blog1.is_shareable_by?(@idol)
-
-    @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
-    assert @blog4.is_shareable_by?(@user)
-    assert !@blog4.is_shareable_by?(@friend1)
-    assert !@blog4.is_shareable_by?(@same_game_user)
-    assert !@blog4.is_shareable_by?(@stranger)    
-    assert !@blog4.is_shareable_by?(@fan)
-    assert !@blog4.is_shareable_by?(@idol)
-
-    @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
-    assert !@draft.is_shareable_by?(@user)
-    assert !@draft.is_shareable_by?(@friend)
-    assert !@draft.is_shareable_by?(@same_game_user)
-    assert !@draft.is_shareable_by?(@stranger)
-    assert !@draft.is_shareable_by?(@fan)
-    assert !@draft.is_shareable_by?(@idol)
-  end
- 
   test "comment blog" do
     @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
 

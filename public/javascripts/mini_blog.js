@@ -436,11 +436,19 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
 
     // show image name and delete icon
     var html = '<a href="#"><span class="i iPic"></span>' + fileName + '</a><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Builder.delImage(' + id + ');" class="icon-active"></a>';
-  
-    // show image preview
-    html += '<div class="mBlogEditZ"><table class="trimBox"><tbody><tr><td></td><td class="arrUp"></td><td></td></tr><tr><td class="t-l"></td><td class="t-c"></td><td class="t-r"></td></tr><tr><td class="m-l">&nbsp;</td><td class="m-c"><img src="' + url + '"/></td><td class="m-r">&nbsp;</td></tr><tr><td class="b-l"></td><td class="b-c"></td><td class="b-r"></td></tr></tbody></table></div>';
-    
     $('publisher_image').update(html);
+ 
+    // show image preview
+    var div = new Element('div', {'class': "mBlogEditZ", 'id':"publisher_image_preview"});
+    div.update('<table class="trimBox"><tbody><tr><td></td><td class="arrUp"></td><td></td></tr><tr><td class="t-l"></td><td class="t-c"></td><td class="t-r"></td></tr><tr><td class="m-l">&nbsp;</td><td class="m-c"><img src="' + url + '"/></td><td class="m-r">&nbsp;</td></tr><tr><td class="b-l"></td><td class="b-c"></td><td class="b-r"></td></tr></tbody></table></div>');
+    document.body.appendChild(div); 
+  
+    div.setStyle({
+      'position': 'absolute',
+      'zIndex': 1001,
+      'left': $('publisher_image').cumulativeOffset().left + 'px',
+      'top': ($('publisher_image').cumulativeOffset().top + 20) + 'px'
+    });
   },
 
   delImage: function(id){
@@ -467,6 +475,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
   cancelImage: function(){
     this.imageID = null;
     $('publisher_image').innerHTML = this.imagePublishPanel;
+    $('publisher_image_preview').remove();
   },
 
   newVideo: function(){

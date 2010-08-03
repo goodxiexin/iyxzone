@@ -122,7 +122,7 @@ module FriendSuggestor
 	
 	end
 
-	def destroy_obsoleted_fri_sug friend
+	def destroy_obsoleted_friend_suggestions friend
 		FriendSuggestion.delete_all(:user_id => id, :suggested_friend_id => friend.id)
 	end
 

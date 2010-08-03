@@ -215,40 +215,6 @@ class VideoTest < ActiveSupport::TestCase
     assert !@idol.recv_feed?(@video)
   end
 
-  test "share video" do
-    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id
-    assert @video.is_shareable_by?(@user)
-    assert @video.is_shareable_by?(@friend1)
-    assert @video.is_shareable_by?(@same_game_user)
-    assert @video.is_shareable_by?(@stranger)
-    assert @video.is_shareable_by?(@fan)
-    assert @video.is_shareable_by?(@idol)
-
-    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
-    assert @video.is_shareable_by?(@user)
-    assert @video.is_shareable_by?(@friend1)
-    assert @video.is_shareable_by?(@same_game_user)
-    assert !@video.is_shareable_by?(@stranger)
-    assert @video.is_shareable_by?(@fan)
-    assert @video.is_shareable_by?(@idol)
-
-    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
-    assert @video.is_shareable_by?(@user)
-    assert @video.is_shareable_by?(@friend1)
-    assert !@video.is_shareable_by?(@same_game_user)
-    assert !@video.is_shareable_by?(@stranger)
-    assert @video.is_shareable_by?(@fan)
-    assert @video.is_shareable_by?(@idol)
-
-    @video = VideoFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
-    assert @video.is_shareable_by?(@user)
-    assert !@video.is_shareable_by?(@friend1)
-    assert !@video.is_shareable_by?(@same_game_user)
-    assert !@video.is_shareable_by?(@stranger)
-    assert !@video.is_shareable_by?(@fan)
-    assert !@video.is_shareable_by?(@idol)
-  end
-
   test "sensitive video" do
     @sensitive = '政府'
 
