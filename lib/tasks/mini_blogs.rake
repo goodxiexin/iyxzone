@@ -52,7 +52,7 @@ namespace :mini_blogs do
       end
     end
     e = Time.now
-    puts "#{e-now} s"
+    puts "main topics #{e-now} s"
   end
 
   task :delta_topics => :environment do
@@ -92,7 +92,7 @@ namespace :mini_blogs do
     end
 
     e = Time.now
-    puts "#{e-now} s"
+    puts "delta topics #{e-now} s"
   end
 
 end

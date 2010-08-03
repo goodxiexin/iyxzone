@@ -70,8 +70,8 @@ class User::MiniBlogsController < UserBaseController
   def index
     @mini_blogs = @user.mini_blogs.paginate :page => 1, :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
-    @interested_idols = current_user.idols.order("fans_count DESC").limit(5)
-    @interested_topics = current_user.mini_topic_attentions
+    @interested_idols = @user.idols.order("fans_count DESC").limit(5)
+    @interested_topics = @user.mini_topic_attentions
   end
 
   def index_list

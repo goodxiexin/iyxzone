@@ -343,7 +343,7 @@ Object.extend(Iyxzone.Register, {
     if(!valid){
       button.disabled = '';
       if(!emailValid){
-alert('invalid email');        window.scrollTo(0, $('user_email').positionedOffset().top);         
+        window.scrollTo(0, $('user_email').positionedOffset().top);         
       }else if(!loginValid){
         window.scrollTo(0, $('user_login').positionedOffset().top);      
       }else if(!passwordValid || !passwordConfirmValid){
