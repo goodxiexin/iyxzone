@@ -164,7 +164,6 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
-          alert('code 1');
           $('follow_topic').update('<a onclick="Iyxzone.MiniBlog.Topic.unfollow(' + json.id + ');; return false;" href="#"><span class="i iNoFollow"></span>取消关注该话题（已经关注）</a>');
         }else{
           error('发生错误');

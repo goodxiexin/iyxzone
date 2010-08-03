@@ -68,15 +68,22 @@ class User::MiniBlogsController < UserBaseController
   end
 
   def index
-    @mini_blogs = @user.mini_blogs.paginate :page => 1, :per_page => PER_PAGE
-    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
+    if params[:bid] and params[:reply_to]
+      @reply_to = User.find(params[:reply_to])
+      @mini_blog = MiniBlog.find(params[:bid])
+      @index = @user.mini_blogs.all(:select => "id").map(&:id).index(@mini_blog.id)
+    end
+    
+    @page = @index.nil? ? 1 : @index/PER_PAGE + 1
+    @mini_blogs = @user.mini_blogs.paginate :page => @page, :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :uid => @user.id, :type => params[:type]}} 
     @interested_idols = @user.idols.order("fans_count DESC").limit(5)
     @interested_topics = @user.mini_topic_attentions
   end
 
   def index_list
     @mini_blogs = @user.mini_blogs.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
-    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :type => params[:type]}} 
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :uid => @user.id, :type => params[:type]}} 
     render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}  
   end
 

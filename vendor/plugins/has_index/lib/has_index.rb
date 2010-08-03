@@ -146,17 +146,10 @@ module HasIndex
       docs = indexer.search query, opts
       ids = docs.hits.map{|hit| indexer.reader.get_document(hit.doc)[:id]}
       if sort_fields.blank?
-        records = self.find(ids)
+        self.match(:id => ids).paginate :page => page, :per_page => per_page
       else
-        records = self.order(sanitized_sort_str.join(",")).find(ids)
+        self.order(sanitized_sort_str.join(",")).match(:id => ids).paginate :page => page, :per_page => per_page
       end
-
-      # 和will paginate兼容
-      records = WillPaginate::Collection.create(page, per_page, docs.total_hits) do |pager|
-        pager.replace records.to_a
-      end
-
-      records
     end
 
   end

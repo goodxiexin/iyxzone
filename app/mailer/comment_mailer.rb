@@ -158,6 +158,18 @@ class CommentMailer < ActionMailer::Base
     body        :comment => comment, :user => user, :url => "#{SITE_URL}/news/#{comment.commentable_id}?reply_to=#{comment.poster_id}"
   end
 
+  def mini_blog_comment_to_poster comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}评论了你的微博"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/mini_blogs?uid=#{user.id}&reply_to=#{comment.poster_id}&bid=#{comment.commentable_id}"
+  end
+
+  def mini_blog_comment_to_recipient comment, user
+    setup_email user
+    subject     "17Gaming.com(一起游戏网) - #{comment.poster.login}在微博中回复了你的评论"
+    body        :comment => comment, :user => user, :url => "#{SITE_URL}/mini_blogs?uid=#{comment.commentable.poster_id}&reply_to=#{comment.poster_id}&bid=#{comment.commentable_id}"  
+  end
+
 protected
 
   def setup_email user

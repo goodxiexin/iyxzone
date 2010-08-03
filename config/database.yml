@@ -34,7 +34,7 @@ test:
   database: dayday3_test
   pool: 5
   username: root
-  password: 123456
+  password: 20041065
   socket: /var/run/mysqld/mysqld.sock
 
 production:

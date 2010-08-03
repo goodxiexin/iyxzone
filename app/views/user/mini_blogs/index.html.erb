@@ -18,7 +18,7 @@
         </div>
         <div class="mBlogExtra">
           <%= render :partial => 'game_category', :locals => {:user => @user} %>
-          <%= render :partial => 'interested_topics', :locals => {:topics => @interested_topics} %>
+          <%= render :partial => 'interested_topics', :locals => {:user => @user, :topics => @interested_topics} %>
           <% if !@interested_idols.blank? %>
             <%= render :partial => 'interested_idols', :locals => {:idols => @interested_idols, :user => @user} %>
           <% end %>
@@ -28,4 +28,6 @@
   </div>
 <% end %>
 
-<%= javascript_tag "Iyxzone.MiniBlog.IndexPage.init('all');" %>
+<% if !@mini_blog.nil? and !@reply_to.nil? %>
+  <%= onload_javascript_tag "Iyxzone.Comment.showForm('mini_blog', #{@mini_blog.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+<% end %>
