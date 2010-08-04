@@ -44,7 +44,8 @@ Object.extend(Iyxzone.Facebox, {
     new Ajax.Request(href, {
       method: method,
       onLoading: function(){
-        this.setWidth(width);
+				if(width)
+					this.setWidth(width);
         this.loading();
         this.locate();
         this.appear();

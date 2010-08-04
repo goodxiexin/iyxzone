@@ -529,10 +529,9 @@ Iyxzone.Photo.Slide = Class.create({
 
   getSide: function(event){
     var mouseX = event.pointerX();
-    var photoLeft = this.photo.positionedOffset().left;
+    var photoLeft = this.photo.cumulativeOffset().left;
     var photoWidth = this.photo.width;
     var delta = mouseX - photoLeft;
-    
     if(delta < photoWidth/2){
       return 'left'; //left
     }else if(delta > photoWidth/2 && delta < photoWidth){
@@ -734,7 +733,7 @@ Iyxzone.Photo.Slide3 = Class.create({
 
   getSide: function(event){
     var mouseX = event.pointerX();
-    var photoLeft = this.photo.positionedOffset().left;
+    var photoLeft = this.photo.cumulativeOffset().left;
     var photoWidth = this.photo.width;
     var delta = mouseX - photoLeft;
     

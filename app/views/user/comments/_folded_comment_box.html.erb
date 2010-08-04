@@ -5,8 +5,9 @@
   <div class="box04 comment-box">
     <%= link_to_function "显示更多#{commentable.comments_count - 2}条", "Iyxzone.Comment.moreCommentsInFoldedBox('#{type}', #{commentable.id}, #{commentable.comments_count - 51}, 50, $(this));" %>
   </div>
-  <div id='<%= type %>_comments_<%= commentable.id %>'></div>
-	<%= render :partial => "user/comments/comment", :object => commentable.comments.nonblocked.last %>
+  <div id='<%= type %>_comments_<%= commentable.id %>'>
+	  <%= render :partial => "user/comments/comment", :object => commentable.comments.nonblocked.last %>
+  </div>
 <% else %>
   <div id='<%= type %>_comments_<%= commentable.id %>'>
 	  <%= render :partial => "user/comments/comment", :collection => commentable.comments %>

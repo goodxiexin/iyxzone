@@ -6,7 +6,7 @@ Iyxzone.Rating = {
 Object.extend(Iyxzone.Rating, {
   
   set: function(rating, rateableID, rateableType, link){
-    var stars = link.up().childElements();
+    var stars = $(link).up().childElements();
     var i = 0;
     for(i=0; i < stars.length; i++){
       if(i < rating)

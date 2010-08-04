@@ -35,4 +35,20 @@ class NicknameController < ApplicationController
     end
   end
 
+  def validates_login_uniqueness
+    @record = InvalidName.find_by_token(params[:nickname_code])   
+
+    if @record.nil?
+      render_not_found
+    else
+      @user = @record.user
+      @users = User.match(:login => (params[:login] || "").downcase).all
+      if @users.blank? or (@users == [@user])
+        render :json => {:code => 1}
+      else
+        render :json => {:code => 0}
+      end  
+    end 
+  end
+
 end

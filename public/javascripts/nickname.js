@@ -13,12 +13,11 @@ Object.extend(Iyxzone.Nickname, {
   },
 
   load: function(div){
-    $(div).innerHTML = '<img src="/images/loading.gif" />';
+    $(div).innerHTML = '正在检查该昵称是否合法';
   },
 
   pass: function(div){
-    $(div).innerHTML = '';
-    $(div).addClassName('fldstatus');
+    $(div).innerHTML = '合法！！';
   },
 
   tip: function(div, content){
@@ -53,8 +52,9 @@ Object.extend(Iyxzone.Nickname, {
       return false;
     }else{
       this.load('nickname_info');
-      new Ajax.Request('/register/validates_login_uniqueness?login=' + encodeURIComponent(nickname), {
+      /*new Ajax.Request('/nickname/validates_login_uniqueness', {
         method: 'get',
+        parameters: {'login': encodeURIComponent(nickname), 'nickname_code': this.code},
         onSuccess: function(transport){
           var json = transport.responseText.evalJSON();
           if(json.code == 1){
@@ -63,20 +63,23 @@ Object.extend(Iyxzone.Nickname, {
             this.error('nickname_info', '该用户名已经被占用');
           }
         }.bind(this)
-      })
+      })*/
     }
   
     return true;
   },
 
   reset: function(button, form){
-    alert('reset');
     Iyxzone.disableButton(button, '正在发送');
     if(this.validate()){
       form.submit();
     }else{
       Iyxzone.enableButton(button, '重置');
     }
+  },
+
+  init: function(code){
+    this.code = encodeURIComponent(code);
   }
 
 });

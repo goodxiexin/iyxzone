@@ -254,7 +254,6 @@ Iyxzone.Friend.Tagger = Class.create({
           newTags.push(input);
         }
       }.bind(this));
-      alert("new: " + newTags);
       this.addTags(newTags);
 
       this.toggleFriends();

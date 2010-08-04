@@ -628,12 +628,13 @@ Iyxzone.Game.PanelSelector = Class.create(Iyxzone.Game.Selector, {
     hotLi.appendChild(aLi);
     alphaUl.appendChild(hotLi);
     
-    for (i=97; i<=122; i++){
-      var tempLi = new Element('li');
-      var tempA = new Element('a', {href: 'javascript: void(0)'});
+    var tempLi, tempA;
+    for (var i=97; i<=122; i++){
+      tempLi = new Element('li');
+      tempA = new Element('a', {href: 'javascript: void(0)'});
       tempA.update("<span index="+ i +">"+ String.fromCharCode(i) +"</span>");
       tempA.observe('click', function(e){
-        this.changeLetter(e.target.readAttribute('index'));
+        this.changeLetter(e.element().readAttribute('index'));
       }.bind(this));
       this.lis.set(i, tempLi);
       tempLi.appendChild(tempA);

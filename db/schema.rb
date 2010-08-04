@@ -385,7 +385,6 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
-    t.integer  "attentions_count",  :default => 0
     t.string   "bulletin"
   end
 
@@ -398,6 +397,10 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.datetime "updated_at"
   end
 
+<<<<<<< HEAD:db/schema.rb
+  create_table "links", :force => true do |t|
+    t.string "url"
+=======
   create_table "invalid_login_names", :force => true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -413,6 +416,7 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
 
   create_table "invalid_users", :force => true do |t|
     t.integer "user_id"
+>>>>>>> 2e3defb6b5fbbc163f1356f16b60c42223816f8b:db/schema.rb
   end
 
   create_table "mails", :force => true do |t|
@@ -887,7 +891,6 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.integer  "videos_count2",                            :default => 0
     t.integer  "videos_count3",                            :default => 0
     t.integer  "videos_count4",                            :default => 0
-    t.integer  "statuses_count",                           :default => 0
     t.integer  "friend_requests_count",                    :default => 0
     t.integer  "guild_requests_count",                     :default => 0
     t.integer  "event_requests_count",                     :default => 0

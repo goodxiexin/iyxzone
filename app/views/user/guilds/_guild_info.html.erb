@@ -15,6 +15,10 @@
         <li>会长：<span class="memberName"><%= profile_link guild.president %></span></li>
         <li>成立：<span class="time"><%= ftime3 guild.created_at %></span></li>
         <li>游戏：<span class="gameName"><%= game_link guild.game %></span></li>
+				<% unless guild.game_area.nil? %>
+        <li>服务区：<span><%= guild.game_area.name %></span></li>
+				<% end %>
+        <li>服务器：<span><%= guild.game_server.name %></span></li>
       </ul>
       <% if guild.is_requestable_by? current_user %>
         <% if !guild.requestable_characters_for(current_user).blank? %>
