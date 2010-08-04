@@ -161,8 +161,9 @@ Object.extend(Iyxzone, {
     //IE support
     if (document.selection) {
         field.focus();
-        sel = document.selection.createRange();
-        sel.text = value;
+				field.update(value);
+        //var sel = document.selection.createRange();
+        //sel.text = value;
     //Mozilla/Firefox/Netscape 7+ support
     } else if (field.selectionStart || field.selectionStart == '0') {
         field.focus();

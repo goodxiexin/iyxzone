@@ -105,54 +105,6 @@ class ProfileTest < ActiveSupport::TestCase
     assert @profile.is_viewable_by?(@stranger)
   end 
 
-  test "share profile" do
-    # normal user
-    @user.privacy_setting.update_attributes(:profile => 1)
-    assert @profile.is_shareable_by?(@user)
-    assert @profile.is_shareable_by?(@friend)
-    assert @profile.is_shareable_by?(@same_game_user)
-    assert @profile.is_shareable_by?(@stranger)
-  
-    @user.privacy_setting.update_attributes(:profile => 2)
-    @profile.reload # reload profile.user
-    assert @profile.is_shareable_by?(@user)
-    assert @profile.is_shareable_by?(@friend)
-    assert @profile.is_shareable_by?(@same_game_user)
-    assert !@profile.is_shareable_by?(@stranger)
-
-    @user.privacy_setting.update_attributes(:profile => 3)
-    @profile.reload # reload profile.user
-    assert @profile.is_shareable_by?(@user)
-    assert @profile.is_shareable_by?(@friend)
-    assert !@profile.is_shareable_by?(@same_game_user)
-    assert !@profile.is_shareable_by?(@stranger)
-  
-    # idol
-    @idol.privacy_setting.update_attributes(:profile => 1)
-    assert @idol_profile.is_shareable_by?(@user)
-    assert @idol_profile.is_shareable_by?(@friend)
-    assert @idol_profile.is_shareable_by?(@same_game_user)
-    assert @idol_profile.is_shareable_by?(@stranger)
-    assert @idol_profile.is_shareable_by?(@fan)
-    assert @idol_profile.is_shareable_by?(@idol_idol)
-
-    @idol.privacy_setting.update_attributes(:profile => 2)
-    assert @idol_profile.is_shareable_by?(@user)
-    assert @idol_profile.is_shareable_by?(@friend)
-    assert @idol_profile.is_shareable_by?(@same_game_user)
-    assert @idol_profile.is_shareable_by?(@stranger)
-    assert @idol_profile.is_shareable_by?(@fan)
-    assert @idol_profile.is_shareable_by?(@idol_idol)
-
-    @idol.privacy_setting.update_attributes(:profile => 3)
-    assert @idol_profile.is_shareable_by?(@user)
-    assert @idol_profile.is_shareable_by?(@friend)
-    assert @idol_profile.is_shareable_by?(@same_game_user)
-    assert @idol_profile.is_shareable_by?(@stranger)
-    assert @idol_profile.is_shareable_by?(@fan)
-    assert @idol_profile.is_shareable_by?(@idol_idol)
-  end
-
   test "comment profile" do
     # normal user
     @user.privacy_setting.update_attributes(:leave_wall_message => 1)

@@ -45,6 +45,10 @@ ActionController::Routing::Routes.draw do |map|
   map.invite '/invite', :controller => 'register', :action => 'invite'
 
   map.namespace :admin do |admin|
+
+    admin.resource :mini_blog_meta_data, :controller => :mini_blog_meta_data
+
+    admin.resources :hot_words
 	
 		admin.resources	:tasks
 
@@ -92,7 +96,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :mini_topics
 
-    users.resources :mini_blogs, :collection => {:random => :get, :same_game => :get, :public => :get, :hot => :get, :sexy => :get, :interested => :get, :list => :get, :search => :get}, :member => {:new_forward => :get, :forward => :post}
+    users.resources :mini_blogs, :collection => {:random => :get, :same_game => :get, :public => :get, :hot => :get, :sexy => :get, :home => :get, :index_list => :get, :home_list => :get, :search => :get}, :member => {:new_forward => :get, :forward => :post}
 
     users.resources :mini_topic_attentions, :member => {:follow => :post, :unfollow => :delete}
 

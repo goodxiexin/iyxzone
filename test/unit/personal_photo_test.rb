@@ -275,46 +275,7 @@ class PersonalPhotoTest < ActiveSupport::TestCase
     assert !@friend.recv_notice?(@comment)
     assert @fan.recv_notice?(@comment)
   end
-
-  test "share photo" do
-    @album1 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::PUBLIC
-    @album2 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
-    @album3 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::FRIEND
-    @album4 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::OWNER
-    @photo1 = PhotoFactory.create :album_id => @album1.id, :type => 'PersonalPhoto'
-    @photo2 = PhotoFactory.create :album_id => @album2.id, :type => 'PersonalPhoto'
-    @photo3 = PhotoFactory.create :album_id => @album3.id, :type => 'PersonalPhoto'
-    @photo4 = PhotoFactory.create :album_id => @album4.id, :type => 'PersonalPhoto'
-
-    assert @photo1.is_shareable_by?(@user)
-    assert @photo1.is_shareable_by?(@friend)
-    assert @photo1.is_shareable_by?(@same_game_user)
-    assert @photo1.is_shareable_by?(@stranger)
-    assert @photo1.is_shareable_by?(@fan)
-    assert @photo1.is_shareable_by?(@idol)
-
-    assert @photo2.is_shareable_by?(@user)
-    assert @photo2.is_shareable_by?(@friend)
-    assert @photo2.is_shareable_by?(@same_game_user)
-    assert !@photo2.is_shareable_by?(@stranger)
-    assert @photo2.is_shareable_by?(@fan)
-    assert @photo2.is_shareable_by?(@idol)
-
-    assert @photo3.is_shareable_by?(@user)
-    assert @photo3.is_shareable_by?(@friend)
-    assert !@photo3.is_shareable_by?(@same_game_user)
-    assert !@photo3.is_shareable_by?(@stranger)
-    assert @photo3.is_shareable_by?(@fan)
-    assert @photo3.is_shareable_by?(@idol)
-
-    assert @photo4.is_shareable_by?(@user)
-    assert !@photo4.is_shareable_by?(@friend)
-    assert !@photo4.is_shareable_by?(@same_game_user)
-    assert !@photo4.is_shareable_by?(@stranger)
-    assert !@photo4.is_shareable_by?(@fan)
-    assert !@photo4.is_shareable_by?(@idol)
-  end
-
+  
   test "dig photo" do
     @album1 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::PUBLIC
     @album2 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME

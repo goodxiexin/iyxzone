@@ -242,6 +242,20 @@ class CommentObserver < ActiveRecord::Observer
   end
 
   def after_mini_blog_comment_create comment
+    mini_blog = comment.commentable
+    poster = mini_blog.poster
+    commentor = comment.poster
+    recipient = comment.recipient
+
+    if poster != commentor
+      comment.notices.create(:user_id => poster.id, :data => 'comment')
+      CommentMailer.deliver_mini_blog_comment_to_poster(comment, poster) if poster.mail_setting.comment_my_mini_blog?
+    end
+
+    if recipient != poster and recipient != commentor
+      comment.notices.create(:user_id => recipient.id, :data => 'reply')
+      CommentMailer.deliver_mini_blog_comment_to_recipient(comment, recipient) if recipient.mail_setting.comment_same_mini_blog_after_me?
+    end    
   end
 
   def after_update comment

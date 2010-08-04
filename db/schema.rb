@@ -37,14 +37,6 @@ ActiveRecord::Schema.define(:version => 20100803034547) do
     t.datetime "updated_at"
   end
 
-  create_table "attentions", :force => true do |t|
-    t.integer  "attentionable_id"
-    t.string   "attentionable_type"
-    t.integer  "follower_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "blog_images", :force => true do |t|
     t.integer  "blog_id"
     t.integer  "parent_id"
@@ -178,6 +170,7 @@ ActiveRecord::Schema.define(:version => 20100803034547) do
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
     t.string   "bulletin"
+    t.integer  "attentions_count",  :default => 0
   end
 
   add_index "events", ["poster_id"], :name => "index_events_on_poster_id"
@@ -404,8 +397,19 @@ ActiveRecord::Schema.define(:version => 20100803034547) do
     t.datetime "updated_at"
   end
 
+<<<<<<< HEAD:db/schema.rb
   create_table "links", :force => true do |t|
     t.string "url"
+=======
+  create_table "invalid_login_names", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "invalid_users", :force => true do |t|
+    t.integer "user_id"
+>>>>>>> 2e3defb6b5fbbc163f1356f16b60c42223816f8b:db/schema.rb
   end
 
   create_table "mails", :force => true do |t|
@@ -515,6 +519,7 @@ ActiveRecord::Schema.define(:version => 20100803034547) do
     t.string   "thumbnail_url"
     t.integer  "comments_count", :default => 0
     t.integer  "viewings_count", :default => 0
+    t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -750,29 +755,6 @@ ActiveRecord::Schema.define(:version => 20100803034547) do
     t.datetime "updated_at"
   end
 
-  create_table "shares", :force => true do |t|
-    t.integer  "shareable_id"
-    t.string   "shareable_type"
-    t.integer  "digs_count",     :default => 0
-    t.integer  "sharings_count", :default => 0
-    t.string   "url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "sharings", :force => true do |t|
-    t.string   "title"
-    t.text     "reason"
-    t.string   "shareable_type"
-    t.integer  "share_id"
-    t.integer  "poster_id"
-    t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.integer  "verified",       :default => 0
-  end
-
-  add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"
-
   create_table "signup_invitations", :force => true do |t|
     t.integer  "sender_id"
     t.string   "recipient_email"
@@ -792,17 +774,6 @@ ActiveRecord::Schema.define(:version => 20100803034547) do
     t.text     "access_list"
     t.string   "directory"
   end
-
-  create_table "statuses", :force => true do |t|
-    t.integer  "poster_id"
-    t.text     "content"
-    t.integer  "comments_count", :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "verified",       :default => 0
-  end
-
-  add_index "statuses", ["poster_id"], :name => "index_statuses_on_poster_id"
 
   create_table "subdomains", :force => true do |t|
     t.integer "user_id"
@@ -840,11 +811,6 @@ ActiveRecord::Schema.define(:version => 20100803034547) do
     t.datetime "expires_at"
     t.integer  "duration"
     t.integer  "state"
-  end
-
-  create_table "tests", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "topics", :force => true do |t|
@@ -894,6 +860,7 @@ ActiveRecord::Schema.define(:version => 20100803034547) do
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
     t.integer  "game_attentions_count",                    :default => 0
+    t.integer  "sharings_count",                           :default => 0
     t.integer  "notices_count",                            :default => 0
     t.integer  "unread_notices_count",                     :default => 0
     t.integer  "notifications_count",                      :default => 0

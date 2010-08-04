@@ -25,24 +25,6 @@ class GameTest < ActiveSupport::TestCase
 	end
 
 	test "关注" do
-		# 已经玩了游戏的关注此游戏 (是不是应该这样？已经玩了游戏的再关注貌似没有任何意义)
-    assert_difference "@game.reload.attentions_count" do
-		  @attention1 = GameAttention.create(:user_id => @user1.id, :game_id => @game.id)
-    end
-
-		# 没有玩这个游戏的关注此游戏
-    assert_difference "@game.reload.attentions_count" do
-		  @attention2 = GameAttention.create(:user_id => @user2.id, :game_id => @game.id)
-    end
-
-		# 取消关注
-    assert_difference "@game.reload.attentions_count", -1 do
-		  @attention1.destroy
-    end
-
-    assert_difference "@game.reload.attentions_count", -1 do
-		  @attention2.destroy
-    end
 	end
 
 	test "打分" do
@@ -103,21 +85,6 @@ class GameTest < ActiveSupport::TestCase
     assert !@comment.is_deleteable_by?(@user1)
     assert !@comment.is_deleteable_by?(@user2)
     assert @comment.is_deleteable_by?(@admin)
-	end
-
-	test "分享" do
-		# 游戏分享的基本测试
-    type, id = Share.get_type_and_id "/games/#{@game.id}"
-
-    assert_equal type, 'Game'
-    assert_equal id.to_i, @game.id
-
-		# 玩家分享
-		assert @game.is_shareable_by? @user1
-
-		# 非玩家分享
-		assert @game.is_shareable_by? @user2
-		
 	end
 
   # 以下为非用户才能进行的操作

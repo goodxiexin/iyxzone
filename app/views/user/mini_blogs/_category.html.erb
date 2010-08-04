@@ -1,0 +1,14 @@
+            <div class="mBlogCatTab fix">
+              <strong class="title"><%= title %></strong>
+              <%= link_to_function "全部", "Iyxzone.MiniBlog.Category.fetch('all');", :id => 'mini_blog_category_all', :class => 'selected' %>
+              <span class="pipe">|</span>
+              <%= link_to_function "原创", "Iyxzone.MiniBlog.Category.fetch('original');", :id => 'mini_blog_category_original' %>
+              <span class="pipe">|</span>
+              <%= link_to_function "文字", "Iyxzone.MiniBlog.Category.fetch('text');", :id => 'mini_blog_category_text' %>
+              <span class="pipe">|</span>
+              <%= link_to_function "图片", "Iyxzone.MiniBlog.Category.fetch('image');", :id => 'mini_blog_category_image' %>
+              <span class="pipe">|</span>
+              <%= link_to_function "视频", "Iyxzone.MiniBlog.Category.fetch('video');", :id => 'mini_blog_category_video' %>
+            </div>
+<%= onload_javascript_tag "Iyxzone.MiniBlog.Category.init('all', '#{url}');" %>
+

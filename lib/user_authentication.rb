@@ -32,7 +32,7 @@ module UserAuthentication
 
       validates_presence_of :email, :message => "不能为空"
 
-      validates_format_of :email, :with => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, :message => "邮件格式不对"
+      validates_format_of :email, :with => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, :message => "邮件格式不对", :allow_blank => true
 
       validates_uniqueness_of :email, :message => "邮件已经被注册了"
 

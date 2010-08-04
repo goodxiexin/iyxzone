@@ -1,0 +1,7 @@
+随即的微波的ID: <%= @meta_data.random_ids.join(", ") %>
+<br/>
+今日话题: 
+<% form_for @meta_data, :url => admin_mini_blog_meta_data_url(@meta_data), :html => {:method => :put} do |f| %>
+  <%= f.text_field :today_topic %>
+  <%= f.submit %>
+<% end %>

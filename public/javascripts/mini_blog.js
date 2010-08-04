@@ -17,19 +17,26 @@ Iyxzone.MiniBlog = {
   
   Topic: {},
 
-  MyIndex: {}
+  Category: {}
 
 };
 
-Object.extend(Iyxzone.MiniBlog.MyIndex, {
+Object.extend(Iyxzone.MiniBlog.Category, {
+
+  url: null,
 
   curTab: null,
 
   cache: new Hash(),
 
-  init: function(type){
+  init: function(type, url){
     this.cache.set(type, $('mini_blogs_list').innerHTML);
     this.setTab(type);
+    this.setUrl(url);
+  },
+
+  setUrl: function(url){
+    this.url = url;
   },
 
   setTab: function(type){
@@ -48,7 +55,7 @@ Object.extend(Iyxzone.MiniBlog.MyIndex, {
     $('mini_blogs_list').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"></div>';
   },
 
-  fetch: function(type, uid){
+  fetch: function(type){
     this.cache.set(this.curTab, $('mini_blogs_list').innerHTML);
 
     this.setTab(type);
@@ -59,9 +66,9 @@ Object.extend(Iyxzone.MiniBlog.MyIndex, {
       return;
     }
 
-    new Ajax.Request('/mini_blogs/list', {
+    new Ajax.Request(this.url, {
       method: 'get',
-      parameters: {type: type, uid: uid},
+      parameters: {type: type},
       onLoading: function(transport){
         this.loading();
       }.bind(this),
@@ -157,7 +164,6 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
-          alert('code 1');
           $('follow_topic').update('<a onclick="Iyxzone.MiniBlog.Topic.unfollow(' + json.id + ');; return false;" href="#"><span class="i iNoFollow"></span>取消关注该话题（已经关注）</a>');
         }else{
           error('发生错误');
@@ -430,11 +436,19 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
 
     // show image name and delete icon
     var html = '<a href="#"><span class="i iPic"></span>' + fileName + '</a><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Builder.delImage(' + id + ');" class="icon-active"></a>';
-  
-    // show image preview
-    html += '<div class="mBlogEditZ"><table class="trimBox"><tbody><tr><td></td><td class="arrUp"></td><td></td></tr><tr><td class="t-l"></td><td class="t-c"></td><td class="t-r"></td></tr><tr><td class="m-l">&nbsp;</td><td class="m-c"><img src="' + url + '"/></td><td class="m-r">&nbsp;</td></tr><tr><td class="b-l"></td><td class="b-c"></td><td class="b-r"></td></tr></tbody></table></div>';
-    
     $('publisher_image').update(html);
+ 
+    // show image preview
+    var div = new Element('div', {'class': "mBlogEditZ", 'id':"publisher_image_preview"});
+    div.update('<table class="trimBox"><tbody><tr><td></td><td class="arrUp"></td><td></td></tr><tr><td class="t-l"></td><td class="t-c"></td><td class="t-r"></td></tr><tr><td class="m-l">&nbsp;</td><td class="m-c"><img src="' + url + '"/></td><td class="m-r">&nbsp;</td></tr><tr><td class="b-l"></td><td class="b-c"></td><td class="b-r"></td></tr></tbody></table></div>');
+    document.body.appendChild(div); 
+  
+    div.setStyle({
+      'position': 'absolute',
+      'zIndex': 1001,
+      'left': $('publisher_image').cumulativeOffset().left + 'px',
+      'top': ($('publisher_image').cumulativeOffset().top + 20) + 'px'
+    });
   },
 
   delImage: function(id){
@@ -461,6 +475,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
   cancelImage: function(){
     this.imageID = null;
     $('publisher_image').innerHTML = this.imagePublishPanel;
+    $('publisher_image_preview').remove();
   },
 
   newVideo: function(){

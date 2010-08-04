@@ -20,10 +20,11 @@ class User::MiniBlogsController < UserBaseController
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
 
     # 6小时内的最热话题
-    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
-    
-    # 我觉得热词和热门话题不太好区分
-    @hot_words = MiniTopic.hot(6.hours.ago, Time.now).map{|a| a[1]}[0..29].sort{|a,b| rand(2)<=>rand(2)}[0..9]
+    @start_time, @topics = MiniTopic.hot
+    @hot_topics = @topics[0..9]
+
+    # 引导热词
+    @hot_words = HotWord.recent.limit(10)
   end
 
   def hot
@@ -50,34 +51,47 @@ class User::MiniBlogsController < UserBaseController
     render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
 
-  def index
-    @mini_blogs = @user.mini_blogs.paginate :page => params[:page], :per_page => PER_PAGE
-    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
-    if @user == current_user
-      @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
-    else
-      @interested_idols = @user.idols.order("fans_count DESC").limit(5)
-    end
+  def home
+    @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
+    @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => 1, :per_page => PER_PAGE
+    @hot_words = HotWord.recent.limit(10) 
+    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
+    @interested_topics = current_user.mini_topic_attentions
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 
   end
 
-  def list
-    @mini_blogs = @user.mini_blogs.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
-    @remote = {:update => 'mini_blogs_list', :url => {:action => 'list', :type => params[:type]}} 
+  def home_list
+    @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
+    @mini_blogs = MiniBlog.by(@interested_user_ids).category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 
     render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
 
-  def interested
-    @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids)
-    @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => params[:page], :per_page => PER_PAGE
-    @interested_idols = current_user.idols.order("fans_count DESC").limit(5) 
-    @interested_topics = current_user.mini_topic_attentions
+  def index
+    if params[:bid] and params[:reply_to]
+      @reply_to = User.find(params[:reply_to])
+      @mini_blog = MiniBlog.find(params[:bid])
+      @index = @user.mini_blogs.all(:select => "id").map(&:id).index(@mini_blog.id)
+    end
+    
+    @page = @index.nil? ? 1 : @index/PER_PAGE + 1
+    @mini_blogs = @user.mini_blogs.paginate :page => @page, :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :uid => @user.id, :type => params[:type]}} 
+    @interested_idols = @user.idols.order("fans_count DESC").limit(5)
+    @interested_topics = @user.mini_topic_attentions
+  end
+
+  def index_list
+    @mini_blogs = @user.mini_blogs.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :uid => @user.id, :type => params[:type]}} 
+    render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}  
   end
 
   def search
     # construct ferret query lanuage first
     @fql = []
     if params[:key]
-      @fql << "content:(#{params[:key].split(/\s+/).join(" AND ")})"
+      @fql << "content:(#{params[:key].split(/\s*~\s*/).map{|a| "(#{a.split(/\s+/).join(" AND ")})"}.join(" OR ")})"
     end
     if params[:category] and params[:category] != 'all'
       @fql << "category:(#{params[:category]})"
@@ -87,7 +101,8 @@ class User::MiniBlogsController < UserBaseController
     # search index
     @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
     @idols = User.match(:is_idol => true).all
-    @hot_topics = MiniTopic.hot(6.hours.ago, Time.now)[0..9]
+    @time, @hot_topics = MiniTopic.hot
+    @hot_topics = @hot_topics[0..9]
   end
 
   def new
@@ -126,9 +141,8 @@ class User::MiniBlogsController < UserBaseController
 protected
 
   def setup
-    if ['index', 'list'].include? params[:action]
+    if ['index', 'index_list'].include? params[:action]
       @user = User.find(params[:uid])
-      require_friend_or_owner @user
     elsif ['create'].include? params[:action]
       params[:mini_blog][:mini_image] = current_user.mini_images.find(params[:mini_image_id]) unless params[:mini_image_id].blank?
     elsif ['new_forward', 'forward'].include? params[:action]

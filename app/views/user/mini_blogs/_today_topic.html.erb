@@ -1,5 +1,5 @@
             <div class="mBlogTopic">
-              <div class="topTitle fix"><strong>今日话题: </strong><%= desc %></div>
+              <div class="topTitle fix"><strong>今日话题: </strong>大家来说说<%= link_to topic, search_mini_blogs_url(:key => topic) %></div>
               <div class="topIsay"><span class="button04"><span><%= facebox_button "我来说说", new_mini_blog_url(:content => "##{topic}#"), :width => 500 %></span></span></div>
               <div class="topBg">
                 <div class="topWrap fix" id='today_topic_panel'>

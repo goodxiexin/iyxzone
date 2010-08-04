@@ -2,8 +2,6 @@ class MiniTopic < ActiveRecord::Base
 
   validates_presence_of :name
 
-  named_scope :within, lambda {|from, to| {:conditions => ["created_at > ? AND created_at < ?", from, to]}}
-
   serialize :nodes, Array
 
   def freq_within from, to
@@ -16,8 +14,28 @@ class MiniTopic < ActiveRecord::Base
     (to_node.nil? ? 0 : to_node[:rank]) >= (from_node.nil? ? 0 : from_node[:rank]) 
   end
 
-  def self.hot from, to
-    MiniTopic.all.map{|t| [t.freq_within(from, to), t]}.sort{|a, b| b[0] <=> a[0]}
+  def self.hot_within from, to
+    MiniTopic.all.map{|t| [t.freq_within(from, to), t]}.sort{|a, b| b[0] <=> a[0]}.select{|a| a[0] != 0}
+  end
+
+  def self.hot range=[]
+    range = range.blank? ? [6.hours.ago, 1.day.ago, 2.day.ago, 7.day.ago] : range
+    from = range.shift
+    to = Time.now
+    topics = []
+    while true
+      topics = MiniTopic.all.map{|t| [t.freq_within(from, to), t]}.sort{|a, b| b[0] <=> a[0]}.select{|a| a[0] != 0}
+      if topics.blank?
+        if range.empty?
+          return [from, []]
+        else
+          from = range.shift
+        end
+      else
+        break
+      end
+    end
+    [from, topics]
   end
 
   def add_node freq, rank, time

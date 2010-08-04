@@ -184,21 +184,6 @@ class GuildPhotoTest < ActiveSupport::TestCase
     assert @photo.is_diggable_by?(@idol)
   end
 
-  test "share photo" do
-    @photo = PhotoFactory.create :album_id => @album.id, :type => 'GuildPhoto'
-
-    @type, @id = Share.get_type_and_id("/guild_photos/#{@photo.id}")
-    assert_equal @id.to_i, @photo.id
-    assert_equal @type, 'Photo'
-
-    assert @photo.is_shareable_by?(@user)
-    assert @photo.is_shareable_by?(@friend)
-    assert @photo.is_shareable_by?(@same_game_user)
-    assert @photo.is_shareable_by?(@stranger)
-    assert @photo.is_shareable_by?(@fan)
-    assert @photo.is_shareable_by?(@idol)
-  end
-
   test "album photos_count" do
     assert_difference "@album.reload.photos_count" do
       @photo1 = PhotoFactory.create :album_id => @album.id, :type => 'GuildPhoto'

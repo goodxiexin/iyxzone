@@ -70,12 +70,6 @@ class EventAlbumTest < ActiveSupport::TestCase
     assert @friend.recv_notice?(@comment)
   end
 
-  test "share album" do
-    [@user, @friend, @same_game_user, @stranger, @fan, @idol].each do |u|
-      assert @album.is_shareable_by? u
-    end
-  end
-
   test "record upload" do
     @photo1 = PhotoFactory.create :album_id => @album.id, :type => 'EventPhoto'
     @photo2 = PhotoFactory.create :album_id => @album.id, :type => 'EventPhoto'

@@ -1,0 +1,19 @@
+          <div class="round06 round_r_t hotTopicEx space">
+            <div class="round_l_t">
+              <div class="round_r_b">
+                <div class="round_l_b">
+                  <div class="round_m">
+                    <div class="round_body">
+                      <h2 class="title">热门话题</h2>
+                      <ul class="xList">
+                        <% hot_words.each do |word| %>
+                          <li><%= link_to "<strong>#{word.name}<b>(#{word.freq})</b></strong>", search_mini_blogs_url(:key => word.search_key) %></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+

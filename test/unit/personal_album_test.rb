@@ -155,44 +155,6 @@ class PersonalAlbumTest < ActiveSupport::TestCase
     assert @user.recv_notice?(@comment)
   end
 
-  test "share album" do
-    @album = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::PUBLIC
-    assert @album.is_shareable_by?(@user)
-    assert @album.is_shareable_by?(@friend)
-    assert @album.is_shareable_by?(@same_game_user)
-    assert @album.is_shareable_by?(@stranger)
-    assert @album.is_shareable_by?(@fan)
-    assert @album.is_shareable_by?(@idol)
-
-    @album = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
-    assert @album.is_shareable_by?(@user)
-    assert @album.is_shareable_by?(@friend)
-    assert @album.is_shareable_by?(@same_game_user)
-    assert !@album.is_shareable_by?(@stranger)
-    assert @album.is_shareable_by?(@fan)
-    assert @album.is_shareable_by?(@idol)
-
-    @album = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::FRIEND
-    assert @album.is_shareable_by?(@user)
-    assert @album.is_shareable_by?(@friend)
-    assert !@album.is_shareable_by?(@same_game_user)
-    assert !@album.is_shareable_by?(@stranger)
-    assert @album.is_shareable_by?(@fan)
-    assert @album.is_shareable_by?(@idol)
-
-    @album = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::OWNER
-    assert @album.is_shareable_by?(@user)
-    assert !@album.is_shareable_by?(@friend)
-    assert !@album.is_shareable_by?(@same_game_user)
-    assert !@album.is_shareable_by?(@stranger)
-    assert !@album.is_shareable_by?(@fan)
-    assert !@album.is_shareable_by?(@idol)
-
-    @type, @id = Share.get_type_and_id "/personal_albums/#{@album.id}"
-    assert_equal @type, "Album"
-    assert_equal @id.to_i, @album.id
-  end
-
   test "upload photos feed" do
     @album = PersonalAlbumFactory.create :owner_id => @user.id
 

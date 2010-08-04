@@ -16,7 +16,7 @@
               <span class="miniTitle"><span>热词</span><em></em></span>
               <div class="tags">
                 <% @hot_words.each do |w| %>
-                  <%= link_to w.name, search_mini_blogs_url(:key => w.name) %>
+                  <%= link_to w.name, search_mini_blogs_url(:key => w.search_key) %>
                 <% end %>
               </div>
             </div> 
@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="mBlogExtra">
-          <%= render :partial => 'hot_topics', :locals => {:topics => @hot_topics} %>
+          <%= render :partial => 'hot_topics', :locals => {:start_time => @start_time, :topics => @hot_topics} %>
           <%= render :partial => 'pop_users', :locals => {:users => @pop_users} %>
           <%= render :partial => 'hot_idols', :locals => {:idols => @hot_idols} %>
         </div>

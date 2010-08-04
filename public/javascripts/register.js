@@ -333,15 +333,24 @@ Object.extend(Iyxzone.Register, {
   submit: function(button, form){
     button.disabled = true;
 
-    var valid = true;
-    valid &= this.validateCharacters();
-    valid &= this.validateLogin();
-    valid &= this.validateEmail();
-    valid &= this.validatePassword();
-    valid &= this.validatePasswordConfirmation();
-    
+    var characterValid = this.validateCharacters();
+    var loginValid = this.validateLogin();
+    var emailValid = this.validateEmail();
+    var passwordValid = this.validatePassword();
+    var passwordConfirmValid = this.validatePasswordConfirmation();
+    var valid = characterValid & loginValid & emailValid & passwordValid & passwordConfirmValid;
+
     if(!valid){
       button.disabled = '';
+      if(!emailValid){
+        window.scrollTo(0, $('user_email').positionedOffset().top);         
+      }else if(!loginValid){
+        window.scrollTo(0, $('user_login').positionedOffset().top);      
+      }else if(!passwordValid || !passwordConfirmValid){
+        window.scrollTo(0, $('user_password').positionedOffset().top);
+      }else{
+        window.scrollTo(0, $('characters').positionedOffset().top)          
+      }
       return;
     }
 
@@ -361,9 +370,27 @@ Object.extend(Iyxzone.Register, {
     new Ajax.Request('/users/', {
       method: 'post',
       parameters: $(form).serialize(),
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
       onComplete: function(){
         button.disabled = '';
-      }
+        Iyxzone.changeCursor('default');
+      }.bind(this),
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = '/activation_mail_sent?email=' + json.email;
+        }else if(json.code == 2){
+          error('游戏角色信息不正确');
+        }else if(json.code == 3){
+          window.scrollTo(0, $('user_email').positionedOffset().top)          
+          this.error('email_info', '该邮箱已经被注册');
+        }else if(json.code == 4){
+          window.scrollTo(0, $('user_login').positionedOffset().top)
+          this.error('login_info', '该昵称已经被注册');
+        }
+      }.bind(this)
     }); 
   }
 
