@@ -12,9 +12,9 @@ class MiniBlog < ActiveRecord::Base
 
   has_many :children, :class_name => 'MiniBlog', :foreign_key => 'parent_id'
 
-  named_scope :hot, :conditions => {:deleted => false}, :order => "forwards_count DESC, created_at DESC"
+  named_scope :hot, :conditions => ["deleted = 0 and created_at > ?", 2.days.ago], :order => "forwards_count DESC, created_at DESC"
   
-  named_scope :sexy, :conditions => {:deleted => false}, :order => "comments_count DESC, created_at DESC"
+  named_scope :sexy, :conditions => ["deleted = 0 and created_at > ?", 2.days.ago], :order => "comments_count DESC, created_at DESC"
   
   named_scope :by, lambda {|ids| {:conditions => {:poster_id => ids}}}
   

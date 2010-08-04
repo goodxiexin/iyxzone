@@ -62,7 +62,7 @@ class User::MiniBlogsController < UserBaseController
 
   def home_list
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
-    @mini_blogs = MiniBlog.by(@interested_user_ids).category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
+    @mini_blogs = MiniBlog.by(@interested_user_ids).order("created_at DESC").category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 
     render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
