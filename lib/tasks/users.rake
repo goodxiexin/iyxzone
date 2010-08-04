@@ -6,8 +6,56 @@ require "iconv"
 
 namespace :users do
 
-  task :test => :environment do 
-    User.all(:select => "login, id").group_by(&:login).each {|login, ids| puts "#{login}: #{ids.map(&:id).join(", ")}" if ids.count > 1}
+  desc "改邮件"
+  task :change_email => :environment do
+    User.all(:select => "id, email").group_by(&:email).select{|email, users| users.count > 1}.each do |email, users|
+      users.shift
+      puts "#{email}: destroy #{users.map(&:id).join(", ")}"
+      users.map(&:id).each do |id|
+        User.destroy(id)
+      end
+    end
+  end
+
+  desc "改名字"
+  task :change_login_name => :environment do
+    s = [0x4E00].pack("U")
+    e = [0x9FA5].pack("U")
+    reg = /[a-zA-Z0-9_#{s}-#{e}]+/
+
+    # 先去掉特殊字符
+    puts "strange character"
+    User.all.select{|u| !(u.login =~ reg)}.each do |u|
+      if "用户#{u.id}".length > 30
+        puts "用户#{u.id} 名字太长"
+      else
+        puts "#{u.id}: #{u.login} 变成 用户#{u.id}"
+        u.login = "用户#{u.id}"
+        u.save
+        InvalidName.create :user_id => u.id
+      end
+    end 
+    
+    # 修改重复名字
+    puts "duplicate name"
+    User.all(:select => "id, login").group_by(&:login).select{|login, users| users.count > 1}.each do |login, users|
+      ids = users.map(&:id)
+      ids.each_with_index do |id, i|
+        u = User.find(id)
+        if i != 0
+          if "#{login}_#{i}".length > 30
+            puts "#{login}_#{i} 新名字太长"
+          elsif User.exists? :login => "#{login}_#{i}"
+            puts "新名字 #{login}_#{i} 已经被使用了"
+          else
+            u.login = "#{login}_#{i}"
+            InvalidName.create :user_id => u.id
+            u.save
+            puts "#{id}: #{login} => #{u.login}"
+          end
+        end
+      end
+    end
   end
 
   desc "提示那些很久没上线的人"

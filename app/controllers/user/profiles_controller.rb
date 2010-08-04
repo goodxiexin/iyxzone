@@ -41,6 +41,8 @@ class User::ProfilesController < UserBaseController
   end
 
   def update
+    params[:profile].delete(:login) if params[:profile]
+
     if @profile.update_attributes(params[:profile])
 			respond_to do |format|
 				format.html {

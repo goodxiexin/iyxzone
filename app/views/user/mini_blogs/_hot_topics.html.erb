@@ -7,7 +7,11 @@
                 <div class="round_l_b">
                   <div class="round_m">
                     <div class="round_body">
+                      <% if start_time >= 6.hours.ago %>
+                        <h2 class="title">6小时话题榜</h2>
+                      <% else %>
                         <h2 class="title">话题榜</h2>
+                      <% end %>
                       <ul class="xList">
                         <% if first %>
                           <li class="first"><a href="/mini_blogs/search?key=<%= first[1].name %>"><span>01</span><strong><%= first[1].name %><b>(<%= first[0] %>)</b></strong></a></li>

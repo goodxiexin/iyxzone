@@ -9,7 +9,7 @@ Iyxzone.Profile = {
 Object.extend(Iyxzone.Profile.Editor, {
 
   loading: function(div, title){
-    div.innerHTML = '<div class="edit-toggle space edit"><h3 class="s_clear"><strong class="left">' + title + '</strong><a href="#" class="right">取消</a></h3><div class="formcontent con con2"><img src="/images/loading.gif"/></div></div>';
+    div.innerHTML = '<div class="edit-toggle space edit"><h3 class="s_clear"><strong class="left">' + title + '</strong><a href="#" class="right">取消</a></h3><div class="formcontent con con2"><div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div></div></div>';
   },
 
   showError: function(div, content){
@@ -65,42 +65,8 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.isEditingBasicInfo = false;
   },
 
-  isLoginValid: function(){
-    var login = $('profile_login');
-  
-    this.clearError('login_error');
-
-    if(login.value == ''){
-      this.showError('login_error', '昵称不能为空');
-      return false;
-    }
-
-    if(login.value.length < 2){
-      this.showError('login_error', '至少要2个字');
-      return false;
-    }
-
-    if(login.value.length > 30){
-      this.showError('login_error', '最多30个字');
-      return false;
-    }
-
-    first = login.value[0];
-    if((first >= '0' && first <= '9')){
-      this.showError('login_error', '昵称不能以数字开头');
-      return false;
-    }
-
-    if(!login.match(/[a-zA-Z0-9_\u4e00-\u9fa5]+/)){
-      this.error('login_info', '只能包含字母，数字，汉字以及下划线');
-      return false;
-    }
-
-    return true;
-  },
-
   validateBasicInfo: function(){
-    return this.isLoginValid();
+    return true;
   },
 
   updateBasicInfo: function(profileID, button, form){

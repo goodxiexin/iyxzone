@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100803033027) do
+ActiveRecord::Schema.define(:version => 20100803065403) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -400,6 +400,13 @@ ActiveRecord::Schema.define(:version => 20100803033027) do
 
   create_table "invalid_login_names", :force => true do |t|
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "invalid_names", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

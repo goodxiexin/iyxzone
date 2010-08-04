@@ -28,9 +28,7 @@ class MiniBlogTest < ActiveSupport::TestCase
     @mb = MiniBlog.create :poster => @me, :content => '简单的文本微波'
     assert @mb.text_type?
 
-    assert_difference "MiniTopic.count" do
-      @mb = MiniBlog.create :poster => @me, :content => '#简单的文本微波#'
-    end
+    @mb = MiniBlog.create :poster => @me, :content => '#简单的文本微波#'
     assert @mb.text_type?
 
     assert_difference "MiniTopic.count", 3 do
@@ -74,11 +72,9 @@ class MiniBlogTest < ActiveSupport::TestCase
 
   test "complicate mini blog" do
     @image = PhotoFactory.create :type => 'MiniImage'
-    assert_difference "MiniTopic.count" do
       assert_difference "MiniLink.count" do
         @mb = MiniBlog.create :poster => @me, :content => 'http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html #好片#', :mini_image => @image
       end
-    end
     assert_equal @image.reload.mini_blog_id, @mb.id
     assert_equal @mb.reload.images_count, 1
     assert_equal @mb.videos_count, 1
@@ -196,26 +192,6 @@ class MiniBlogTest < ActiveSupport::TestCase
   end
 
   test "interested mini blogs" do
-    @someone.followed_by @me
-    @another.followed_by @me
-
-    @image1 = PhotoFactory.create :type => 'MiniImage'
-    @image2 = PhotoFactory.create :type => 'MiniImage'
-    @b1 = MiniBlog.create :poster => @someone, :content => 'text'
-    sleep 1
-    @b2 = MiniBlog.create :poster => @someone, :content => '#topic#', :mini_image => @image1
-    sleep 1
-    @b3 = @b1.forward @another, "@#{@me.login}"
-    sleep 1
-    @b4 = MiniBlog.create :poster => @another, :content => "http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html"
-    sleep 1
-    @b5 = MiniBlog.create :poster => @another, :content => "http://v.youku.com/v_show/id_XMTg1NjgwMTg0.html", :mini_image => @image2
-    
-    assert_equal @me.interested_mini_blogs, [@b5, @b4, @b3, @b2, @b1]
-    assert_equal @me.interested_mini_blogs('original'), [@b5, @b4, @b2, @b1]
-    assert_equal @me.interested_mini_blogs('text'), [@b3, @b1]
-    assert_equal @me.interested_mini_blogs('image'), [@b5, @b2]
-    assert_equal @me.interested_mini_blogs('video'), [@b5, @b4]    
   end
 
 end

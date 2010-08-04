@@ -58,12 +58,6 @@ Object.extend(Iyxzone.Register, {
       return false;
     }
 
-    first = login[0];
-    if((first >= '0' && first <= '9')){
-      this.error('login_info', '昵称不能以数字开头');
-      return false;
-    }
-
     if(!login.match(/[a-zA-Z0-9_\u4e00-\u9fa5]+/)){
       this.error('login_info', '只能包含字母，数字，汉字以及下划线');
       return false;

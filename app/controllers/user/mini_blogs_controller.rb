@@ -53,7 +53,7 @@ class User::MiniBlogsController < UserBaseController
 
   def home
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
-    @mini_blogs = MiniBlog.by(@interested_user_ids).paginate :page => 1, :per_page => PER_PAGE
+    @mini_blogs = MiniBlog.by(@interested_user_ids).order("created_at DESC").paginate :page => 1, :per_page => PER_PAGE
     @hot_words = HotWord.recent.limit(10) 
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
     @interested_topics = current_user.mini_topic_attentions

@@ -20,6 +20,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => 'user/home', :action => 'show'
 
+  # 这个是暂时存在
+  map.change_nickname '/change_nickname/:nickname_code', :controller => 'nickname', :action => 'edit'
+
   map.signup '/signup', :controller => 'users', :action => 'new'
 
   map.login '/login', :controller => 'sessions', :action => 'new'

@@ -1,7 +1,6 @@
 class ProfileObserver < ActiveRecord::Observer
 
   def before_create profile
-    profile.login = profile.user.login
     profile.gender = profile.user.gender
   end
 
@@ -10,7 +9,6 @@ class ProfileObserver < ActiveRecord::Observer
     
     # to see if login or gender has changed. if so, change login or gender in user table as well
     profile.user.update_attribute('gender', profile.gender) if profile.gender_changed?
-    profile.user.update_attribute('login', profile.login) if profile.login_changed?
 
     # issue feeds if necessary
 		modified = []

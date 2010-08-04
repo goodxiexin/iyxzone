@@ -7,13 +7,6 @@
     <% form_for :profile, :html => {:onsubmit => "Iyxzone.Profile.Editor.updateBasicInfo(#{@profile.id}, $('basic_info_submit_btn'), this); return false;"} do |f| %>
       <div class="item space">
         <div class="rows s_clear">
-          <div class="fldid"><label>昵称：</label></div>
-          <div class="fldvalue">
-            <div class="textfield left"><%= f.text_field 'login', :onblur => "Iyxzone.Profile.Editor.isLoginValid();" %></div>
-          </div>
-          <span class='red' id='login_error'></span>
-        </div>
-        <div class="rows s_clear">
           <div class="fldid"><label>生日：</label></div>
           <div class="fldvalue">
             <div class="calendar-field"><%= calendar_date_select :profile, :birthday, :popup => 'force', :time => false, :year_range => 40.years.ago..10.years.ago %></div>

@@ -24,7 +24,7 @@ module UserAuthentication
 
       validates_presence_of :login, :message => "不能为空"
 
-      validates_size_of :login, :within => 2..100, :too_long => "最长100个字符", :too_short => "最短2个字符"
+      validates_size_of :login, :within => 2..30, :too_long => "最长100个字符", :too_short => "最短2个字符"
 
       validates_presence_of :gender, :message => "不能为空"
 
