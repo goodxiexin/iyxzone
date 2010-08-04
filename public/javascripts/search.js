@@ -115,7 +115,7 @@ Iyxzone.Search = {
       error('请输入邮箱');
       Iyxzone.enableButton($('email_submit_btn'),'导入');
       return false;
-    }else if(!email.value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
+    }else if(!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.exec(email.value)){
       error('非法的邮箱地址');
       Iyxzone.enableButton($('email_submit_btn'),'导入');
       return false;

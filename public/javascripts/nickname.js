@@ -47,7 +47,7 @@ Object.extend(Iyxzone.Nickname, {
       return false;
     }
 
-    if(!nickname.match(/[a-zA-Z0-9_\u4e00-\u9fa5]+/)){
+    if(!/[a-zA-Z0-9_\u4e00-\u9fa5]+/.exec(nickname)){
       this.error('nickname_info', '只能包含字母，数字，汉字以及下划线');
       return false;
     }else{

@@ -129,7 +129,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.clearError('qq_error');
 
     if(qq != ''){
-      if(qq.match(/\d+/)){
+      if(/\d+/.exec(qq)){
         if(qq.length < 4 || qq.length > 15){
           this.showError('qq_error', 'qq号码长度不对');
           return false;
@@ -149,7 +149,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.clearError('phone_error');
 
     if(phone != ''){
-      if(phone.match(/\d+(-\d+)*/)){
+      if(/\d+(-\d+)*/.exec(phone)){
         if(phone.length < 7 || phone.length > 15){
           this.showError('phone_error', '联系电话长度不对');
           return false;
@@ -169,7 +169,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.clearError('url_error');
 
     if(url != ''){
-			if(!url.match(/^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/)){
+			if(!/^((https?:\/\/)?)([a-zA-Z0-9_-])+(\.([a-zA-Z0-9_-]+))+(:([\d])+)*([\/a-zA-Z0-9\.\?=&_-])*$/.exec(url)){
         this.showError('url_error', '非法的url地址');
         return false;
       }

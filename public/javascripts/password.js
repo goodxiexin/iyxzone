@@ -82,10 +82,10 @@ Object.extend(Iyxzone.Password, {
     }
 
     // check strength
-    if(password.match(strongReg)){
+    if(strongReg.exec(strongReg)){
       this.tip('password_info', '密码强度: 强');
       return true;
-    }else if(password.match(mediumReg)){
+    }else if(mediumReg.exec(mediumReg)){
       this.tip('password_info', '密码强度: 中');
       return true;
     }else{

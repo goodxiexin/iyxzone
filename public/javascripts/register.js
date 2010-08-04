@@ -58,7 +58,7 @@ Object.extend(Iyxzone.Register, {
       return false;
     }
 
-    if(!login.match(/[a-zA-Z0-9_\u4e00-\u9fa5]+/)){
+    if(!/[a-zA-Z0-9_\u4e00-\u9fa5]+/.exec(login)){
       this.error('login_info', '只能包含字母，数字，汉字以及下划线');
       return false;
     }else{
@@ -98,7 +98,7 @@ Object.extend(Iyxzone.Register, {
       return false;
     }
 
-    if(email.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
+    if(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.exec(email)){
       this.load('email_info');
 
       new Ajax.Request('/register/validates_email_uniqueness?email='+encodeURIComponent(email), {
@@ -150,10 +150,10 @@ Object.extend(Iyxzone.Register, {
     }
 
     // check strength
-    if(password.match(strongReg)){
+    if(strongReg.exec(password)){
       this.tip('password_info', '密码强度: 强');
       return true;
-    }else if(password.match(mediumReg)){
+    }else if(mediumReg.exec(password)){
       this.tip('password_info', '密码强度: 中');
       return true;
     }else{

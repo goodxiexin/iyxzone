@@ -203,7 +203,7 @@ Object.extend(Iyxzone.MiniBlog.Forwarder, {
     if(delta > 0){
       var len = value.length;
       for(var i=len-1;i>0;i--){
-        if(!value.substr(i, i).match(/[ |\r|\n|\t]/)){
+        if(!/[ |\r|\n|\t]/.exec(value.substr(i,i))){
           delta--;
           if(delta == 0){
             field.value = value.substr(0, i);
@@ -563,7 +563,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
     if(delta > 0){
       var len = value.length;
       for(var i=len-1;i>0;i--){
-        if(!value.substr(i, i).match(/[ |\r|\n|\t]/)){
+        if(!/[ |\r|\n|\t]/.exec(value.substr(i,i))){
           delta--;
           if(delta == 0){
             field.value = value.substr(0, i);

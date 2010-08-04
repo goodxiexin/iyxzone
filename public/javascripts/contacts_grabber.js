@@ -121,7 +121,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
     if(value == ''){
       error('请输入邮箱');
       return false;
-    }else if(!value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)){
+    }else if(!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.exec(value)){
       error('非法的邮箱地址');
       return false;
     }

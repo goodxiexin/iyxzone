@@ -66,7 +66,7 @@ Object.extend(Iyxzone, {
   },
 
   blinkTitle: function(){
-    if(!document.title.match(/^【　　　】/)){
+    if(!/^【　　　】/.exec(document.title)){
       document.title='【　　　】' + this.documentTitle;
     }else{
       document.title='【' + this.blinkText + '】' + this.documentTitle;
