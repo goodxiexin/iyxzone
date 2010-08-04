@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   def more_friends
 		@friend_suggestions = current_user.friend_suggestions.limit(30)
 		@idols = User.match(:is_idol => true).order("fans_count DESC")
-		@guilds = Guild.hot.nonblocked.match(user_game_conds).limit(5)
+		@guilds = Guild.hot.nonblocked.match({:game_id => current_user.characters.map(&:game_id).uniq}).limit(5)
     render :action => 'more_friends', :layout => 'root'
 	end
 

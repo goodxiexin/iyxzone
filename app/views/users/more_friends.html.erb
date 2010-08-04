@@ -1,3 +1,7 @@
+<% content_for :javascript_include do %>
+	<%= javascript_include_merged :guild %>
+<% end %>
+
 <% content_for :html_title, "一起游戏网-添加好友" %>
 
 <div class="regist-box">
@@ -31,6 +35,50 @@
 									</div>
 								</div>
 								</div>
+
+                <!--公会-->
+               <div class="actExGuild">
+               	<h2 class="actExTitle">加入/关注热门公会，寻找共同战斗的好友。</h2>
+                <div class="actExCon fix">
+                    <div class="starGuild">
+														<% @guilds.each do |guild| %>
+                            <div class="starItem fix">
+                                <div class="starAvatar">
+                                	<div class="con">
+																		<%= album_cover_image guild.album, :class => "imgbox01" %>
+                                  </div>
+                                </div>
+                                <div class="starCon">
+                                    <ul>
+                                      <li class="guildName"><%=guild.name%></li>
+                                      <li>游戏：<%= server_location guild.game_server %></li>
+                                      <li>成员：<%= guild.people_count %> </li>
+																			<% if guild.is_requestable_by? current_user %>
+																				<% if !guild.requestable_characters_for(current_user).blank? %>
+																					<li><%= facebox_link '<span class="icon-friend02"></span>加入该公会', new_guild_request_url(guild), :class => 'red' %></li>
+																				<% else %>
+																					<li><%= facebox_tip '无法申请加入?', "你已经没有在该游戏的游戏角色，请查看该工会的游戏、服务器，然后创建相应的游戏角色，然后你就可以申请加入工会啦~", :class => 'red' %></li>
+																				<% end %>
+																			<% else %>
+																			<% end %>
+                                    </ul>
+                                    <div class="op" id='follow_guild_<%= guild.id %>'>
+																		<% attention = current_user.mini_topic_attentions.find_by_topic_name guild.name %>
+																		<% if attention.blank? %>
+																			<%= link_to_function "<span class='i iFollow'></span>关注", "Iyxzone.Guild.follow('#{guild.name}', #{guild.id});" %>
+																		<% else %>
+																			<%= link_to_function "<span class='i iNoFollow'></span>取消关注", "Iyxzone.Guild.unfollow(#{attention.id}, '#{guild.name}', #{guild.id});" %>
+																		<% end %>
+                                    </div>
+																			<%= facebox_tip '', "关注后，可以快速的找到跟这个公会有关的话题~", :class => 'i iHelpTips' %>
+																</div>
+                            </div>
+														<% end %>
+                      </div>
+                </div>
+               </div>
+                
+								<!---->
 
                 <!--名人-->
                <div class="actExFamous">
