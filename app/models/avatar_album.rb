@@ -4,7 +4,7 @@ class AvatarAlbum < Album
 
   belongs_to :user, :foreign_key => 'owner_id'
 
-  has_many :photos, :class_name => 'Avatar', :foreign_key => 'album_id', :order => 'created_at DESC'
+  has_many :photos, :class_name => 'Avatar', :foreign_key => 'album_id', :order => 'created_at DESC', :dependent => :destroy
 
   has_many :latest_photos, :class_name => 'Avatar', :foreign_key => 'album_id', :limit => 3, :order => "created_at DESC"
 

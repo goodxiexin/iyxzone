@@ -11,7 +11,7 @@
       <div class="mList fix">
         <ul>
         <% photos[0..2].each do |p| %>
-          <li><%= photo_link p, :class => 'imgbox01' %></li>
+          <li><%= photo_link p, :size => :large, :class => 'imgbox01' %></li>
         <% end %>
         </ul>
         <% if photos.count > 3 %>

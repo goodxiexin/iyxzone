@@ -27,7 +27,7 @@ class User::Avatars::PhotosController < UserBaseController
             page.redirect_to avatar_album_url(@album)
           elsif params[:at] == 'profile'
 						@album.reload
-            page.replace_html 'avatar', album_cover(@album, :size => :large, :width => 100, :height => 112)
+            page.replace_html 'avatar', album_cover(@album, :size => :clarge)
           elsif params[:at] == 'first_time'
 						@album.reload
             page.replace_html 'the_avatar_image', album_cover_image(@album, :size => :large)

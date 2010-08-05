@@ -20,7 +20,7 @@
             <% photo = info[:photo] %>
             <% if i == 0 %><tr><% end %>
             <td valign="bottom">
-              <%= photo_link photo, :class => 'imgbox02' %><br />
+              <%= photo_link photo, :class => 'imgbox02', :size => :large %><br />
               <%= info[:posters].map{|p| profile_link(p, :class => 'red')}.join(',') %> <span class='gray'>标记</span>
             </td>
             <% i = i + 1 %>

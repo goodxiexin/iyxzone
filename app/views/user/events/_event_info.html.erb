@@ -1,6 +1,6 @@
   <div class="eventProfile fix">
     <div class="avatar">
-      <%= album_cover event.album, :class => "imgbox01" %>
+      <%= album_cover event.album, :class => "imgbox01", :size => :clarge %>
                     <div class='follow' id='follow_event_<%= event.id %>'>
                       <% attention = current_user.mini_topic_attentions.find_by_topic_name event.title %>
                       <% if attention.blank? %>

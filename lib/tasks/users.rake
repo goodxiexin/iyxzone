@@ -19,19 +19,29 @@ namespace :users do
 
   desc "改名字"
   task :change_login_name => :environment do
+    changed = File.open("changed1.log", "w")
+    failed = File.open("failed1.log", "w")
     s = [0x4E00].pack("U")
     e = [0x9FA5].pack("U")
-    reg = /[a-zA-Z0-9_#{s}-#{e}]+/
+    reg = /^[a-zA-Z0-9_#{s}-#{e}]+$/
 
     # 先去掉特殊字符
-    puts "strange character"
     User.all.select{|u| !(u.login =~ reg)}.each do |u|
-      if "用户#{u.id}".length > 30
-        puts "用户#{u.id} 名字太长"
+      r = /^[ \~\.\-\,。，\(\)、\^\~\`\!\?？！\\\/\*\@\·\>\<a-zA-Z0-9_#{s}-#{e}]+$/
+      if r =~ u.login
+        # 将空格换成_
+        new_login = u.login.gsub(/[ \.\,\-。，\(\)、\^\~\`\\\/\!\?！？\*\@\·\>\<]/, '_')
+        puts "#{u.login} => #{new_login}"
+        u.login = new_login
+        u.save
+        InvalidName.create :user_id => u.id
+      elsif "用户#{u.id}".length > 30
+        failed.write "用户#{u.id} 名字太长\n"
       elsif User.exists? :login => "用户#{u.id}"
-        puts "用户#{u.id} 已经存在"
+        failed.write "用户#{u.id} 已经存在\n"
       else
-        puts "#{u.id}: #{u.login} 变成 用户#{u.id}"
+        changed.write "#{u.id}: #{u.login} => 用户#{u.id}\n"
+        puts "#{u.id}: #{u.login} => 用户#{u.id}\n"
         u.login = "用户#{u.id}"
         u.save
         InvalidName.create :user_id => u.id
@@ -39,21 +49,24 @@ namespace :users do
     end 
     
     # 修改重复名字
-    puts "duplicate name"
+    changed.close
+    failed.close
+    changed = File.open("changed2.log", "w")
+    failed = File.open("failed2.log", "w")
     User.all(:select => "id, login").group_by{|u| u.login.downcase}.select{|login, users| users.count > 1}.each do |login, users|
       ids = users.map(&:id)
       ids.each_with_index do |id, i|
         u = User.find(id)
         if i != 0
           if "#{login}_#{i}".length > 30
-            puts "#{login}_#{i} 新名字太长"
+            failed.write "#{login}_#{i} 新名字太长\n"
           elsif User.exists? :login => "#{login}_#{i}"
-            puts "新名字 #{login}_#{i} 已经被使用了"
+            failed.write "新名字 #{login}_#{i} 已经被使用了\n"
           else
             u.login = "#{login}_#{i}"
             InvalidName.create :user_id => u.id
             u.save
-            puts "#{id}: #{login} => #{u.login}"
+            changed.write "#{id}: #{login} => #{u.login}\n"
           end
         end
       end

@@ -1,6 +1,6 @@
   <div class="guildProfile fix">
     <div class="avatar">
-      <%= album_cover guild.album, :class => "imgbox01" %>
+      <%= album_cover guild.album, :class => "imgbox01", :size => :clarge %>
                     <div class='follow' id='follow_guild_<%= guild.id %>'>
                       <% attention = current_user.mini_topic_attentions.find_by_topic_name guild.name %>
                       <% if attention.blank? %>

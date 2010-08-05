@@ -5,7 +5,7 @@ class NewsPicture < ActiveRecord::Base
   belongs_to :news
 
   # no thumbnail is needed
-  has_attachment :content_type => :image, :storage => :file_system, :max_size => 8.megabytes, :thumbnails => { :medium => '50x50>'}
+  has_attachment :content_type => :image, :storage => :file_system, :max_size => 8.megabytes, :thumbnails => { :clarge => 'crop: 100x100'}
                                   
   validates_as_attachment
 

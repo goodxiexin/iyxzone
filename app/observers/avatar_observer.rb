@@ -53,7 +53,7 @@ class AvatarObserver < ActiveRecord::Observer
     return unless avatar.thumbnail.blank?
 
     # decrement counter
-    if !avatar.rejected?
+    if !avatar.rejected? and avatar.album
       avatar.album.raw_decrement :photos_count
     end
   end   

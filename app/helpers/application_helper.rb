@@ -1,7 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
-  def avatar_path user, size="medium"
+  def avatar_path user, size="csmall"
     if user.avatar.blank? || user.avatar.rejected?
       "/images/default_#{user.gender}_#{size}.png"
     else
@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def avatar_image(user, opts={})
-    size = opts.delete(:size) || "medium"
+    size = opts.delete(:size) || "csmall"
     if user.avatar.blank? || user.avatar.rejected?
       image_tag "default_#{user.gender}_#{size}.png", opts
     else
@@ -30,7 +30,7 @@ module ApplicationHelper
 	end
 
   def avatar(user, img_opts={}, a_opts={})
-		size = img_opts.delete(:size) || "medium"
+		size = img_opts.delete(:size) || "csmall"
     a_opts.merge!({:popup => true})
     if user.avatar.blank? || user.avatar.rejected?
       link_to image_tag("default_#{user.gender}_#{size}.png", img_opts), profile_url(user.profile), a_opts
@@ -104,7 +104,7 @@ module ApplicationHelper
   end
 
   def album_cover_image album, opts={}
-    size = opts.delete(:size) || 'large'
+    size = opts.delete(:size) || 'clarge'
     if album.rejected? || album.photos_count == 0
 			if album.is_a? GuildAlbum
 				image_tag "default_guild_#{size}.png", opts
@@ -123,7 +123,7 @@ module ApplicationHelper
   end
 
   def album_cover(album, opts={})
-		size = opts.delete(:size) || 'large'
+		size = opts.delete(:size) || 'clarge'
     if album.rejected? || album.photos_count == 0
 			if album.is_a? GuildAlbum
 				link_to image_tag("default_guild_#{size}.png", opts), eval("#{album.class.to_s.underscore}_url(album, :format => 'html')")

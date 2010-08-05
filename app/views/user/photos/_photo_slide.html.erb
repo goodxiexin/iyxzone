@@ -12,7 +12,7 @@
           </div>
 <% type = photo.class.name.underscore %>
 <% photo_ids = array_or_string_for_javascript album.photos.nonblocked.map(&:id) %>
-<% urls = array_or_string_for_javascript album.photos.nonblocked.map {|p| p.public_filename(:medium)} %>
+<% urls = array_or_string_for_javascript album.photos.nonblocked.map {|p| p.public_filename(:csmall)} %>
 <%= onload_javascript_tag "
   slide = new Iyxzone.Photo.Slide('#{type}', #{photo.id}, #{photo_ids}, #{urls}, $('frames').childElements(), $('down_btn'), $('up_btn'));
 "%>

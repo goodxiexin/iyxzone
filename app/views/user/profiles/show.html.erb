@@ -15,7 +15,7 @@
 
 <% content_for :left do %>
   <% mc_avatar do %>
-    <%= avatar_image @user, :size => :large, :width => '100px', :height => '112px' %>
+    <%= avatar_image @user, :size => :large, :size => 'clarge' %>
   <% end %>
   <% if @user != current_user and @user.is_idol and !@user.has_fan?(current_user) %>
     <%= render :partial => 'follow_idol', :locals => {:user => @user} %>
