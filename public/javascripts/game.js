@@ -479,6 +479,10 @@ Iyxzone.Game.PanelSelector = Class.create(Iyxzone.Game.Selector, {
     // get hot games and truncate it
     Iyxzone.Game.hotGames = Iyxzone.Game.infos.clone().sort(function(a,b){return b.hot - a.hot;});
     Iyxzone.Game.hotGames.length = 20;
+    Iyxzone.Game.hotGames[19].id = 716;
+    Iyxzone.Game.hotGames[19].name = "绝对女神II";
+    Iyxzone.Game.hotGames[19].pinyin = "jueduinvshenII";
+    Iyxzone.Game.hotGames[19].hot = 100;
     
     this.panel = null;
     this.panelTrigger = $(gameSelectorID).next();

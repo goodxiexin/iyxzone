@@ -4,7 +4,7 @@ class User::HomeController < UserBaseController
 
   def show
     # mini_blogs
-    @mini_blogs = MiniBlog.category(:text).limit(3).all
+    @mini_blogs = MiniBlog.category("all").limit(3).all.paginate :page => params[:page]
     @hot_words = HotWord.recent.limit(3)
 
     @fetch_size = 20

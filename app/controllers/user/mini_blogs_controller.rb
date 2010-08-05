@@ -6,7 +6,7 @@ class User::MiniBlogsController < UserBaseController
   PER_PAGE = 10
 
   def public
-    @mini_blogs = MiniBlog.hot.paginate :page => params[:page], :per_page => PER_PAGE    
+    @mini_blogs = MiniBlog.category("all").paginate :page => params[:page], :per_page => PER_PAGE    
     
     # 今日话题
     @meta_data = MiniBlogMetaData.first
@@ -25,6 +25,12 @@ class User::MiniBlogsController < UserBaseController
 
     # 引导热词
     @hot_words = HotWord.recent.limit(10)
+  end
+
+  def recent
+    @mini_blogs = MiniBlog.category("all").paginate :page => params[:page], :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'recent'}}
+    render :partial => 'recent_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
 
   def hot
