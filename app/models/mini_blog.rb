@@ -14,6 +14,8 @@ class MiniBlog < ActiveRecord::Base
 
   named_scope :hot, :conditions => ["deleted = 0 and created_at > ?", 2.days.ago], :order => "forwards_count DESC, created_at DESC"
   
+  named_scope :recent, :order => "created_at DESC"
+
   named_scope :sexy, :conditions => ["deleted = 0 and created_at > ?", 2.days.ago], :order => "comments_count DESC, created_at DESC"
   
   named_scope :by, lambda {|ids| {:conditions => {:poster_id => ids}}}
@@ -21,15 +23,15 @@ class MiniBlog < ActiveRecord::Base
   named_scope :category, lambda {|type|
     type = type.to_s
     if type == 'all'
-      {:order => 'created_at DESC'}
+      {}
     elsif type == 'original'
-      {:order => 'created_at DESC', :conditions => {:root_id => nil, :parent_id => nil}}
+      {:conditions => {:root_id => nil, :parent_id => nil}}
     elsif type == 'text'
-      {:order => 'created_at DESC', :conditions => {:videos_count => 0, :images_count => 0}}
+      {:conditions => {:videos_count => 0, :images_count => 0}}
     elsif type == 'video'
-      {:order => 'created_at DESC', :conditions => "videos_count != 0"}
+      {:conditions => "videos_count != 0"}
     elsif type == 'image'
-      {:order => 'created_at DESC', :conditions => "images_count != 0"}
+      {:conditions => "images_count != 0"}
     end
   }
 

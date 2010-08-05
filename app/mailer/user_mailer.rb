@@ -4,10 +4,10 @@ class UserMailer < ActionMailer::Base
 
   add_template_helper MailerHelper
 
-  def duplicate_login_name user, token
+  def change_nickname user, token
     setup_email user
-    subject     "17Gaming(一起游戏网) - 由于系统升级，您的昵称需要修改"
-    body        :user => user, :url => "#{SITE_URL}/change_nick_name/#{token}"
+    subject     "17Gaming(一起游戏网) - 由于网站改版升级，您的昵称需要修改"
+    body        :user => user, :login => user.login, :url => "#{SITE_URL}/change_nick_name/#{token}"
   end
 
   def long_time_no_seen user, hot_users, games, photos, polls, news

@@ -81,8 +81,7 @@ class LoginFlowTest < ActionController::IntegrationTest
 
     # 激活
     post "/activate/#{user.activation_code}"
-    assert_redirected_to login_url
-    assert_not_nil flash[:notice]
+		assert_template "/activated"
     user.reload
     assert user.active?
 

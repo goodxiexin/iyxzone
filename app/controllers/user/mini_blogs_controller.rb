@@ -6,7 +6,7 @@ class User::MiniBlogsController < UserBaseController
   PER_PAGE = 10
 
   def public
-    @mini_blogs = MiniBlog.hot.paginate :page => params[:page], :per_page => PER_PAGE    
+    @mini_blogs = MiniBlog.recent.paginate :page => params[:page], :per_page => PER_PAGE    
     
     # 今日话题
     @meta_data = MiniBlogMetaData.first
@@ -25,6 +25,12 @@ class User::MiniBlogsController < UserBaseController
 
     # 引导热词
     @hot_words = HotWord.recent.limit(10)
+  end
+
+  def recent
+    @mini_blogs = MiniBlog.recent.paginate :page => params[:page], :per_page => PER_PAGE
+    @remote = {:update => 'mini_blogs_list', :url => {:action => 'recent'}}
+    render :partial => 'recent_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
 
   def hot
@@ -53,7 +59,7 @@ class User::MiniBlogsController < UserBaseController
 
   def home
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
-    @mini_blogs = MiniBlog.by(@interested_user_ids).order("created_at DESC").paginate :page => 1, :per_page => PER_PAGE
+    @mini_blogs = MiniBlog.by(@interested_user_ids).recent.paginate :page => 1, :per_page => PER_PAGE
     @hot_words = HotWord.recent.limit(10) 
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
     @interested_topics = current_user.mini_topic_attentions
@@ -62,7 +68,7 @@ class User::MiniBlogsController < UserBaseController
 
   def home_list
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
-    @mini_blogs = MiniBlog.by(@interested_user_ids).order("created_at DESC").category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
+    @mini_blogs = MiniBlog.by(@interested_user_ids).recent.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 
     render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end

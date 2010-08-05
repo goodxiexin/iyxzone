@@ -22,7 +22,8 @@
             </div> 
             <div class="tab tab01 mBlogTab">
               <ul>
-                <li class="hover" id='mini_blog_category_hot'><span><%= link_to_function "热门转发", "Iyxzone.MiniBlog.Pub.fetch('hot');" %></span></li>
+                <li class="hover" id='mini_blog_category_recent'><span><%= link_to_function "大家在说", "Iyxzone.MiniBlog.Pub.fetch('recent');" %></span></li>
+                <li id='mini_blog_category_hot'><span><%= link_to_function "热门转发", "Iyxzone.MiniBlog.Pub.fetch('hot');" %></span></li>
                 <li id='mini_blog_category_sexy'><span><%= link_to_function "热门回复", "Iyxzone.MiniBlog.Pub.fetch('sexy');" %></span></li>
                 <li id='mini_blog_category_random'><span><%= link_to_function "随便看看", "Iyxzone.MiniBlog.Pub.fetch('random');" %></span></li>
                 <li id='mini_blog_category_same_game'><span><%= link_to_function "同游微博", "Iyxzone.MiniBlog.Pub.fetch('same_game');" %></span></li>
@@ -30,7 +31,7 @@
             </div>
             <div class="mBlogPostHead"><span class="topicTag"><%= @today_topic %></span>，已有<%= @today_mini_blogs.total_entries %>条参与话题讨论</div>
             <div class="mBlogPostList" id='mini_blogs_list'>
-              <%= render :partial => 'hot_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
+              <%= render :partial => 'interested_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
             </div>
           </div>
         </div>
@@ -44,4 +45,4 @@
   </div>
 <% end %>
 
-<%= javascript_tag "Iyxzone.MiniBlog.Pub.init('hot');" %>
+<%= javascript_tag "Iyxzone.MiniBlog.Pub.init('recent');" %>

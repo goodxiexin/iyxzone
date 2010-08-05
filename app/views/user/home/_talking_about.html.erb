@@ -8,9 +8,7 @@
       <% end %>
     </div>
   </div>
-  <div class="feedBd">
-    <% mini_blogs.each do |mb| %>
-      <%= render :partial => 'user/home/talking', :locals => {:mini_blog => mb} %>
-    <% end %>
+  <div class="mBlogPostList" id='mini_blogs_list'>
+    <%= render :partial => 'user/mini_blogs/interested_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
   </div>
 </div>

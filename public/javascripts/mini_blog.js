@@ -240,7 +240,7 @@ Object.extend(Iyxzone.MiniBlog.Pub, {
   },
 
   setTab: function(type){
-    var types = ['hot', 'sexy', 'random', 'same_game'];
+    var types = ['recent','hot', 'sexy', 'random', 'same_game'];
     
     for(var i=0;i<types.length;i++){
       $('mini_blog_category_' + types[i]).writeAttribute('class', '');

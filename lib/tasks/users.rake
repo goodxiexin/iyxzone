@@ -27,24 +27,26 @@ namespace :users do
 
     # 先去掉特殊字符
     User.all.select{|u| !(u.login =~ reg)}.each do |u|
-      r = /^[ \~\.\-\,。，\(\)、\^\~\`\!\?？！\\\/\*\@\·\>\<a-zA-Z0-9_#{s}-#{e}]+$/
+      r = /^[ \=】【\$\t\~\.\-\,。，\(\)、\^\~\`\!\?？！\\\/\*\@\·\>\<a-zA-Z0-9_#{s}-#{e}]+$/
       if r =~ u.login
         # 将空格换成_
-        new_login = u.login.gsub(/[ \.\,\-。，\(\)、\^\~\`\\\/\!\?！？\*\@\·\>\<]/, '_')
-        puts "#{u.login} => #{new_login}"
+        new_login = u.login.gsub(/[ \=】【\$\t\.\,\-。，\(\)、\^\~\`\\\/\!\?！？\*\@\·\>\<]/, '_')
+        puts "#{u.id}: #{u.login} => #{new_login}"
         u.login = new_login
         u.save
-        InvalidName.create :user_id => u.id
+        record = InvalidName.create :user_id => u.id
+        UserMailer.deliver_change_nickname u, record.token
       elsif "用户#{u.id}".length > 30
-        failed.write "用户#{u.id} 名字太长\n"
+        failed.write "#{u.id}: 用户#{u.id} 名字太长\n"
       elsif User.exists? :login => "用户#{u.id}"
-        failed.write "用户#{u.id} 已经存在\n"
+        failed.write "#{u.id}: 用户#{u.id} 已经存在\n"
       else
         changed.write "#{u.id}: #{u.login} => 用户#{u.id}\n"
         puts "#{u.id}: #{u.login} => 用户#{u.id}\n"
         u.login = "用户#{u.id}"
         u.save
-        InvalidName.create :user_id => u.id
+        record = InvalidName.create :user_id => u.id
+        UserMailer.deliver_change_nickname u, record.token
       end
     end 
     
@@ -59,14 +61,15 @@ namespace :users do
         u = User.find(id)
         if i != 0
           if "#{login}_#{i}".length > 30
-            failed.write "#{login}_#{i} 新名字太长\n"
+            failed.write "#{id}: #{login}_#{i} 新名字太长\n"
           elsif User.exists? :login => "#{login}_#{i}"
-            failed.write "新名字 #{login}_#{i} 已经被使用了\n"
+            failed.write "#{id}: 新名字 #{login}_#{i} 已经被使用了\n"
           else
             u.login = "#{login}_#{i}"
-            InvalidName.create :user_id => u.id
             u.save
             changed.write "#{id}: #{login} => #{u.login}\n"
+            record = InvalidName.create :user_id => u.id
+            UserMailer.deliver_change_nickname u, record.token
           end
         end
       end
