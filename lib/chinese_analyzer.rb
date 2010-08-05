@@ -23,6 +23,7 @@ class ChineseTokenizer < ::Ferret::Analysis::TokenStream
   def next
     tok = @algor.next_token
     if tok
+      puts "tok: #{tok.text}, cixing: #{tok.cixing}, freq: #{tok.freq}"
       @token.text = tok.text
       @token.start = tok.start
       @token.end = tok.end

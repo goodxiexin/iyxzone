@@ -2,6 +2,7 @@
   <%= javascript_include_tag 'mini_blog' %>
 <% end %>
 
+<% cache "hot_topics_#{@idx}" do %>
 <% canvas_tag do %>
   <h1 class="app-status">微博</h1>
   <div class="box02 canvas_int">
@@ -46,4 +47,5 @@
       </div>
     </div>
   </div>
+<% end %>
 <% end %>

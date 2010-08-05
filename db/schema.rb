@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100803065403) do
+ActiveRecord::Schema.define(:version => 20100805150042) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -170,7 +170,6 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.datetime "updated_at"
     t.integer  "verified",          :default => 0
     t.string   "bulletin"
-    t.integer  "attentions_count",  :default => 0
   end
 
   add_index "events", ["poster_id"], :name => "index_events_on_poster_id"
@@ -397,26 +396,11 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.datetime "updated_at"
   end
 
-<<<<<<< HEAD:db/schema.rb
-  create_table "links", :force => true do |t|
-    t.string "url"
-=======
-  create_table "invalid_login_names", :force => true do |t|
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "invalid_names", :force => true do |t|
     t.integer  "user_id"
     t.string   "token"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "invalid_users", :force => true do |t|
-    t.integer "user_id"
->>>>>>> 2e3defb6b5fbbc163f1356f16b60c42223816f8b:db/schema.rb
   end
 
   create_table "mails", :force => true do |t|
@@ -508,10 +492,16 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.datetime "updated_at"
   end
 
+  create_table "mini_topic_freq_nodes", :force => true do |t|
+    t.integer  "mini_topic_id"
+    t.integer  "freq"
+    t.integer  "rank"
+    t.datetime "created_at"
+  end
+
   create_table "mini_topics", :force => true do |t|
     t.string  "name"
-    t.integer "freq",  :default => 0
-    t.text    "nodes"
+    t.integer "freq", :default => 0
   end
 
   create_table "news", :force => true do |t|
@@ -526,7 +516,6 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.string   "thumbnail_url"
     t.integer  "comments_count", :default => 0
     t.integer  "viewings_count", :default => 0
-    t.integer  "sharings_count", :default => 0
     t.integer  "digs_count",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -820,6 +809,11 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.integer  "state"
   end
 
+  create_table "tests", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "topics", :force => true do |t|
     t.integer  "forum_id"
     t.integer  "poster_id"
@@ -867,7 +861,6 @@ ActiveRecord::Schema.define(:version => 20100803065403) do
     t.integer  "characters_count",                         :default => 0
     t.integer  "games_count",                              :default => 0
     t.integer  "game_attentions_count",                    :default => 0
-    t.integer  "sharings_count",                           :default => 0
     t.integer  "notices_count",                            :default => 0
     t.integer  "unread_notices_count",                     :default => 0
     t.integer  "notifications_count",                      :default => 0

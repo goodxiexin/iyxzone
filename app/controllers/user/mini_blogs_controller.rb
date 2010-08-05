@@ -19,9 +19,15 @@ class User::MiniBlogsController < UserBaseController
 
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
 
-    # 6小时内的最热话题
-    @start_time, @topics = MiniTopic.hot
-    @hot_topics = @topics[0..9]
+    # 第一次用很慢，可以考虑把排序放到后台，使得第一次也很快
+    # TODO: why??
+    MiniTopic
+    MiniTopicFreqNode
+    Rails.cache.fetch("hot_topics", :expires_in => 15.minutes) do
+      # 6小时内的最热话题
+      @start_time, @topics = MiniTopic.hot
+      @hot_topics = @topics[0..9]
+    end
 
     # 引导热词
     @hot_words = HotWord.recent.limit(10)
@@ -107,8 +113,14 @@ class User::MiniBlogsController < UserBaseController
     # search index
     @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
     @idols = User.match(:is_idol => true).all
-    @time, @hot_topics = MiniTopic.hot
-    @hot_topics = @hot_topics[0..9]
+  
+    MiniTopic
+    MiniTopicFreqNode
+    Rails.cache.fetch("hot_topics", :expires_in => 15.minutes) do
+      # 6小时内的最热话题
+      @start_time, @topics = MiniTopic.hot
+      @hot_topics = @topics[0..9]
+    end
   end
 
   def new
