@@ -8,8 +8,6 @@
       <div class="box-v2 space20">
         <div class="t s_clear"><strong class="get-pws"></strong><span></span></div>
           <div class="m rows">
-            <% form_tag url_for(:controller => 'nickname', :action => 'update'), :method => :put, :onsubmit => "Iyxzone.Nickname.reset($('submit_btn'), this); return false;" do %>
-              <%= hidden_field_tag 'nickname_code', params[:nickname_code] %>
               <div class="form-con" style="padding-left:40px">
                     <div class="rows s_clear">
                         <div class="f-id">&nbsp;</div>
@@ -20,19 +18,19 @@
                     <div class="rows s_clear space">
                         <div class="f-id"><label for="mail">昵称：</label></div>
                         <div class="f-value">
-                            <%= text_field_tag 'login', @user.login, :onblur => "Iyxzone.Nickname.validate()", :onfocus => "Iyxzone.Nickname.showRequirement();", :id => 'login_field' %>
+                          <%= text_field_tag 'login', @user.login, :onblur => "Iyxzone.Nickname.validate('#{params[:nickname_code]}')", :onfocus => "Iyxzone.Nickname.showRequirement();", :id => "login_field" %>
                         </div>
                         <span class='' id='nickname_info'></span>
                     </div>
                     <div class="rows s_clear space20">
                         <div class="f-id">&nbsp;</div>
                         <div class="f-value">
-                              <span class="button rows"><span><button type='submit' id='submit_btn'>重置</button>
+                          <span class="button rows"><span><button disable='' onclick="Iyxzone.Nickname.submit($(this), '<%= params[:nickname_code] %>');" type='submit' id='submit_btn'>重置</button>
+<%= javascript_tag "$('submit_btn').disabled = '';" %>
                                 </span></span>
                         </div>
                     </div>
                   </div>
-                <% end %>
                      <div class="jl-cutline" style="margin:0 auto;width:95%;">&nbsp;</div>
                     <div class="foot space20 rows">
                      <p class="gray" style="margin:0 auto;width:50%;">
@@ -45,5 +43,3 @@
         <div class="b"><span></span></div>
       </div>
     </div>
-
-<%= javascript_tag "Iyxzone.Nickname.init('#{params[:nickname_code]}')" %>

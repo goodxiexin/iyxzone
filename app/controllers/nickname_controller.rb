@@ -18,18 +18,18 @@ class NicknameController < ApplicationController
     if @record.nil?
       render_not_found
     else
+      # 由于历史问题，profile和user里都有login，修改profile的login会同时修改user的login
       @user = @record.user
-      @user.login = params[:login]
-      if @user.save
-        flash[:notice] = "昵称修改成功"
-        redirect_to login_path
+      @profile = @user.profile
+      @profile.login = params[:login]
+      if @profile.save
+        @record.destroy
+        render :json => {:code => 1}
       else
-        if @user.errors.on(:login)
-          flash.now[:error] = "该昵称已经被注册"
-          render :action => 'edit'
+        if @profile.errors.on(:login)
+          render :json => {:code => 2} 
         else
-          flash.now[:error] = "发生错误，稍后再试"
-          render :action => 'edit'
+          render :json => {:code => 3}
         end
       end  
     end

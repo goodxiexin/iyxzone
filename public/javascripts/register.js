@@ -152,7 +152,7 @@ Object.extend(Iyxzone.Register, {
     }
 
     // check strength
-    if(password.match(strongStr)){
+    if(password.match(strongReg)){
       this.tip('password_info', '密码强度: 强');
       return true;
     }else if(password.match(mediumReg)){

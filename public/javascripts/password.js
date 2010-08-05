@@ -46,7 +46,7 @@ Object.extend(Iyxzone.Password, {
 
   pass: function(div){
     $(div).innerHTML = '';
-    $(div).className = 'fldstatus';
+    $(div).className = 'f-stat';
   },
 
   tip: function(div, content){

@@ -26,6 +26,8 @@ module UserAuthentication
 
       validates_size_of :login, :within => 2..30, :too_long => "最长100个字符", :too_short => "最短2个字符"
 
+      validates_uniqueness_of :login, :case_sensitive => false, :message => "昵称已经被注册"
+
       validates_presence_of :gender, :message => "不能为空"
 
       validates_inclusion_of :gender, :in => ['male', 'female'], :message => "只能是male或者female"
@@ -34,7 +36,7 @@ module UserAuthentication
 
       validates_format_of :email, :with => /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, :message => "邮件格式不对", :allow_blank => true
 
-      validates_uniqueness_of :email, :message => "邮件已经被注册了"
+      validates_uniqueness_of :email, :case_sensitive => false, :message => "邮件已经被注册了"
 
       validates_presence_of :password, :message => "不能为空", :if => :require_password?
 

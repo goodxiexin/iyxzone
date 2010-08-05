@@ -117,7 +117,9 @@ class Profile < ActiveRecord::Base
   
   attr_readonly :user_id
 
-  validates_size_of :login, :within => 2..100
+  validates_size_of :login, :within => 2..30
+
+  validates_uniqueness_of :login, :case_sensitive => false
 
   validates_inclusion_of :gender, :in => ['male', 'female']
 

@@ -13,11 +13,13 @@ Object.extend(Iyxzone.Nickname, {
   },
 
   load: function(div){
-    $(div).innerHTML = '正在检查该昵称是否合法';
+    $(div).className = '';
+    $(div).innerHTML = '正在检查该昵称是否合法..';
   },
 
   pass: function(div){
-    $(div).innerHTML = '合法！！';
+    $(div).innerHTML = '';
+    $(div).className = 'f-stat';
   },
 
   tip: function(div, content){
@@ -29,7 +31,7 @@ Object.extend(Iyxzone.Nickname, {
     this.tip('nickname_info', '2－30个字，只能是数字、字母、汉字或下划线');
   },
 
-  validate: function(){
+  validate: function(code){
     var nickname = $('login_field').value;
 
     if(nickname == ''){
@@ -47,39 +49,53 @@ Object.extend(Iyxzone.Nickname, {
       return false;
     }
 
-    if(!/[a-zA-Z0-9_\u4e00-\u9fa5]+/.exec(nickname)){
-      this.error('nickname_info', '只能包含字母，数字，汉字以及下划线');
-      return false;
-    }else{
+    var a = /[a-zA-Z0-9_\u4e00-\u9fa5]+/.exec(nickname);
+    if(a != null && a[0] == nickname){
       this.load('nickname_info');
-      /*new Ajax.Request('/nickname/validates_login_uniqueness', {
+      new Ajax.Request('/nickname/validates_login_uniqueness', {
         method: 'get',
-        parameters: {'login': encodeURIComponent(nickname), 'nickname_code': this.code},
+        parameters: {'login': nickname, 'nickname_code': encodeURIComponent(code)},
         onSuccess: function(transport){
           var json = transport.responseText.evalJSON();
           if(json.code == 1){
             this.pass('nickname_info');
-          }else{
-            this.error('nickname_info', '该用户名已经被占用');
+          }else if(json.code == 0){
+            this.error('nickname_info', '该昵称太受欢迎了,已经被注册');
           }
         }.bind(this)
-      })*/
+      });
+    }else{
+      this.error('nickname_info', '只能包含字母，数字，汉字以及下划线');
+      return false;
     }
   
     return true;
   },
 
-  reset: function(button, form){
-    Iyxzone.disableButton(button, '正在发送');
-    if(this.validate()){
-      form.submit();
-    }else{
-      Iyxzone.enableButton(button, '重置');
+  submit: function(button, code){
+    if(this.validate(code)){
+      new Ajax.Request('/nickname/update', {
+        method: 'put',
+        parameters: {'nickname_code': encodeURIComponent(code), 'login': $('login_field').value},
+        onLoading: function(){
+          Iyxzone.disableButton(button, '正在发送');
+        },
+        onComplete: function(){
+          Iyxzone.enableButton(button, '重置');
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            tip('成功！！2秒后将自动跳转到登录页面..');
+            setTimeout('window.location.href = "/login";');
+          }else if(json.code == 2){
+            this.error('nickname_info', '该昵称太受欢迎了,已经被注册');
+          }else if(json.code == 3){
+            error('发生错误, 稍后再试');
+          }
+        }.bind(this)
+      });
     }
-  },
-
-  init: function(code){
-    this.code = encodeURIComponent(code);
   }
 
 });

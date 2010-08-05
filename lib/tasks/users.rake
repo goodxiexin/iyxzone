@@ -8,7 +8,7 @@ namespace :users do
 
   desc "改邮件"
   task :change_email => :environment do
-    User.all(:select => "id, email").group_by(&:email).select{|email, users| users.count > 1}.each do |email, users|
+    User.all(:select => "id, email").group_by{|u| u.email.downcase}.select{|email, users| users.count > 1}.each do |email, users|
       users.shift
       puts "#{email}: destroy #{users.map(&:id).join(", ")}"
       users.map(&:id).each do |id|
@@ -28,6 +28,8 @@ namespace :users do
     User.all.select{|u| !(u.login =~ reg)}.each do |u|
       if "用户#{u.id}".length > 30
         puts "用户#{u.id} 名字太长"
+      elsif User.exists? :login => "用户#{u.id}"
+        puts "用户#{u.id} 已经存在"
       else
         puts "#{u.id}: #{u.login} 变成 用户#{u.id}"
         u.login = "用户#{u.id}"
@@ -38,7 +40,7 @@ namespace :users do
     
     # 修改重复名字
     puts "duplicate name"
-    User.all(:select => "id, login").group_by(&:login).select{|login, users| users.count > 1}.each do |login, users|
+    User.all(:select => "id, login").group_by{|u| u.login.downcase}.select{|login, users| users.count > 1}.each do |login, users|
       ids = users.map(&:id)
       ids.each_with_index do |id, i|
         u = User.find(id)
