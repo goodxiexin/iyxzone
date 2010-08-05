@@ -2,8 +2,6 @@ class User::FeedDeliveriesController < UserBaseController
 
   FetchSize = 20
 
-  caches_page :show
-
   def index
     @fetch_size = params[:fetch].nil? ? FetchSize : params[:fetch].to_i
     @offset = params[:idx].nil? ? 0 : @fetch_size*params[:idx].to_i
