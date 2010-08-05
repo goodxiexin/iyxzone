@@ -339,13 +339,13 @@ Object.extend(Iyxzone.Register, {
     if(!valid){
       button.disabled = '';
       if(!emailValid){
-        window.scrollTo(0, $('user_email').positionedOffset().top);         
+        window.scrollTo(0, $('user_email').cumulativeOffset().top);         
       }else if(!loginValid){
-        window.scrollTo(0, $('user_login').positionedOffset().top);      
+        window.scrollTo(0, $('user_login').cumulativeOffset().top);      
       }else if(!passwordValid || !passwordConfirmValid){
-        window.scrollTo(0, $('user_password').positionedOffset().top);
+        window.scrollTo(0, $('user_password').cumulativeOffset().top);
       }else{
-        window.scrollTo(0, $('characters').positionedOffset().top)          
+        window.scrollTo(0, $('characters').cumulativeOffset().top)          
       }
       return;
     }
@@ -380,10 +380,10 @@ Object.extend(Iyxzone.Register, {
         }else if(json.code == 2){
           error('游戏角色信息不正确');
         }else if(json.code == 3){
-          window.scrollTo(0, $('user_email').positionedOffset().top)          
+          window.scrollTo(0, $('user_email').cumulativeOffset().top)          
           this.error('email_info', '该邮箱已经被注册');
         }else if(json.code == 4){
-          window.scrollTo(0, $('user_login').positionedOffset().top)
+          window.scrollTo(0, $('user_login').cumulativeOffset().top)
           this.error('login_info', '该昵称已经被注册');
         }
       }.bind(this)

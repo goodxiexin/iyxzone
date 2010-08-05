@@ -63,9 +63,9 @@
       <div class="ft">
         <span class="time"><%= ftime mini_blog.created_at %></span>
         <% if mini_blog.comments_count == 0 %>
-          <span><%= link_to_function "回复", "Iyxzone.Comment.toggleBox('mini_blog', #{mini_blog.id}, #{mini_blog.comments_count})" %></span> | 
+          <span><%= link_to_function "回复", "Iyxzone.Comment.toggleBox('mini_blog', #{mini_blog.id}, #{mini_blog.comments_count})", :id => "mini_blog_comment_link_#{mini_blog.id}" %></span> | 
         <% else %>
-          <span><%= link_to_function "回复(#{mini_blog.comments_count})", "Iyxzone.Comment.toggleBox('mini_blog', #{mini_blog.id}, #{mini_blog.comments_count})" %></span> | 
+          <span><%= link_to_function "回复(#{mini_blog.comments_count})", "Iyxzone.Comment.toggleBox('mini_blog', #{mini_blog.id}, #{mini_blog.comments_count})", :id => "mini_blog_comment_link_#{mini_blog.id}" %></span> | 
         <% end %>
         <% if mini_blog.forwards_count == 0 %> 
           <span><%= facebox_link "转发", new_forward_mini_blog_url(mini_blog, :at => at), :width => 400 %></span>

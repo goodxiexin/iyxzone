@@ -29,5 +29,8 @@
 <% end %>
 
 <% if !@mini_blog.nil? and !@reply_to.nil? %>
-  <%= onload_javascript_tag "Iyxzone.Comment.showForm('mini_blog', #{@mini_blog.id}, '#{@reply_to.login}', #{@reply_to.id});" %>
+  <%= onload_javascript_tag "
+    Iyxzone.Comment.toggleBox('mini_blog', #{@mini_blog.id}, #{@mini_blog.comments_count});
+    Iyxzone.Comment.set('mini_blog', #{@mini_blog.id}, '#{@reply_to.login}', #{@reply_to.id});" 
+  %>
 <% end %>

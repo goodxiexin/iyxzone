@@ -1,11 +1,10 @@
 <% post = notice.producer %>
 <% topic = post.topic %>
-<% forum = topic.forum %>
 
 <% if home_page %>
-  <% link = link_to_function truncate(h(topic.subject), :length => 20, :omission => '...'), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/forums/#{forum.id}/topics/#{topic.id}/posts?post_id=#{post.id}');" %>
+  <% link = link_to_function truncate(h(topic.subject), :length => 20, :omission => '...'), "Iyxzone.Home.NoticeManager.read(#{notice.id}, '#{form_authenticity_token}'); window.open('/topics/#{topic.id}?post_id=#{post.id}');" %>
 <% else %>
-  <% link = link_to_function truncate(h(post.subject), :length => 20, :omission => '...'), "window.open('/forums/#{forum.id}/topics/#{topic.id}/posts?post_id=#{post.id}');" %>
+  <% link = link_to_function truncate(h(post.subject), :length => 20, :omission => '...'), "window.open('/topics/#{topic.id}?post_id=#{post.id}');" %>
 <% end %>
 
 <li>

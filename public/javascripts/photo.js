@@ -394,8 +394,8 @@ Iyxzone.Photo.Tagger = Class.create({
   showNearestTagWithContent: function(event){
     var distance = 100000000;
     var tagID = -1;
-    var photoX = this.photo.positionedOffset().left;
-    var photoY = this.photo.positionedOffset().top;
+    var photoX = this.photo.cumulativeOffset().left;
+    var photoY = this.photo.cumulativeOffset().top;
     var mouseX = event.pointerX();
     var mouseY = event.pointerY();
 
@@ -435,7 +435,7 @@ Iyxzone.Photo.Tagger = Class.create({
 
   showTagWithContent: function(tagID){
     var tag = this.tagInfos.get(tagID);
-    var pos = this.photo.positionedOffset();
+    var pos = this.photo.cumulativeOffset();
     var x = tag.left;
     var y = tag.top;
     var width = tag.width;

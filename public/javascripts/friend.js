@@ -124,16 +124,16 @@ Iyxzone.Friend.Autocompleter = Class.create(Autocompleter.Local, {
     var comp = this.options.comp;
     
     this.update.setStyle({
-        position: 'absolute',
-        left: comp.positionedOffset().left + 'px',
-        top: (comp.positionedOffset().top + comp.getHeight()) + 'px',
-        width: (comp.getWidth() - 10) + 'px',
-        maxHeight: '200px',
-        overflowX: 'hidden',
-        overflowY: 'auto',
-        padding: '5px',
-        background: 'white',
-        border: '1px solid #E7F0E0'
+      position: 'absolute',
+      left: comp.positionedOffset().left + 'px',
+      top: (comp.positionedOffset().top + comp.getHeight()) + 'px',
+      width: (comp.getWidth() - 10) + 'px',
+      maxHeight: '200px',
+      overflowX: 'hidden',
+      overflowY: 'auto',
+      padding: '5px',
+      background: 'white',
+      border: '1px solid #E7F0E0'
     });
 
     this.update.show();
