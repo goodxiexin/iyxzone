@@ -10,10 +10,14 @@ namespace :mini_blogs do
 
   task :main_index => :environment do
     MiniBlog.build_main_index
+
+    `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
   end
 
   task :delta_index => :environment do
     MiniBlog.build_delta_index 
+
+    `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
   end
 
   #
@@ -40,7 +44,7 @@ namespace :mini_blogs do
       idx = sorted_freqs.index freq
       word = RMMSeg::Dictionary.get_word term
       if word.nil?
-        if term =~ /[a-zA-Z0-9]+/
+        if term =~ /[a-zA-Z0-9]+/ and !(term =~ /\d+/)
           topic = MiniTopic.create :name => term
           topic.add_node freq, (idx+1), now
         end
@@ -52,7 +56,9 @@ namespace :mini_blogs do
       end
     end
     e = Time.now
-    puts "main topics #{e-now} s"
+
+    `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
+    puts "main_topics #{e-now} s"
   end
 
   task :delta_topics => :environment do
@@ -76,7 +82,7 @@ namespace :mini_blogs do
       topic = MiniTopic.find_by_name term
       if topic.blank?
         if word.nil?
-          if term =~ /[a-zA-Z0-9]+/
+          if term =~ /[a-zA-Z0-9]+/ and !(term =~ /\d+/)
             topic = MiniTopic.create :name => term
             topic.add_node freq, (idx+1), now
           end
@@ -90,7 +96,7 @@ namespace :mini_blogs do
         topic.add_node freq, (idx+1), now
       end
     end
-
+		`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
     e = Time.now
     puts "delta topics #{e-now} s"
   end

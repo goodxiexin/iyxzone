@@ -9,7 +9,7 @@
               </div>
             </div>
             <div class="btn downbtn" id="down_btn"></div>
-            <% photo_infos = pictures.map {|p| {:id => p.id, :url => p.public_filename, :thumbnail_url => p.public_filename(:medium), :width => p.width, :height => p.height, :notation => p.notation}}.to_json %> 
+            <% photo_infos = pictures.map {|p| {:id => p.id, :url => p.public_filename, :thumbnail_url => p.public_filename(:clarge), :width => p.width, :height => p.height, :notation => p.notation}}.to_json %> 
             <%= onload_javascript_tag "
               slide = new Iyxzone.Photo.Slide3(#{first_picture.id}, #{photo_infos}, $('frames').childElements(), $('down_btn'), $('up_btn'));
             "%>

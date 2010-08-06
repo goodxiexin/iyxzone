@@ -1,6 +1,6 @@
 <li id='friend_suggestion_<%= nicer_friend_suggestion.id %>' suggestion_id=<%= nicer_friend_suggestion.id %>>
   <% f = nicer_friend_suggestion.suggested_friend %>
-  <%= avatar f, :size => :medium, :class => "imgbox01" %>
+  <%= avatar f, :size => :clarge, :class => "imgbox01" %>
   <%= link_to_function '', "Iyxzone.Friend.Suggestor.newSuggestion(#{nicer_friend_suggestion.id}, '#{form_authenticity_token}', 1)", :class => 'right icon-active icon-active-del' %>
   <p>
     <%= link_to "<strong>#{h f.login}</strong>", profile_url(f.profile) %>

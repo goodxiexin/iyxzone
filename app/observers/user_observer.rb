@@ -35,9 +35,8 @@ class UserObserver < ActiveRecord::Observer
       end
 
       # create suggestions
-=begin
+=begin too slow
 			user.create_friend_suggestions
-太慢了，所以先听了
 			user.servers.each do |s|
 				user.create_comrade_suggestions s
 			end

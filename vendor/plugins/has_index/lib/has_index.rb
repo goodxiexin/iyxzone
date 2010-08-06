@@ -141,14 +141,20 @@ module HasIndex
         opts[:sort] = sort
         puts sort
       end
- 
-      # 目前默认field_infos里一定要有id      
+      
+			# 目前默认field_infos里一定要有id      
       docs = indexer.search query, opts
       ids = docs.hits.map{|hit| indexer.reader.get_document(hit.doc)[:id]}
+      records = []
       if sort_fields.blank?
-        self.match(:id => ids).paginate :page => page, :per_page => per_page
+        records = self.match(:id => ids).all
       else
-        self.order(sanitized_sort_str.join(",")).match(:id => ids).paginate :page => page, :per_page => per_page
+        records = self.order(sanitized_sort_str.join(",")).match(:id => ids).all
+      end
+
+      # 为了效率考虑，ids只取一页的数量，这样如果直接用paginate会有错误，永远显示的都只是一页
+      WillPaginate::Collection.create(page, per_page, docs.total_hits) do |pager|
+        pager.replace records.to_a
       end
     end
 

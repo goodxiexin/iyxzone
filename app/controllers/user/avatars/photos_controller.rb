@@ -30,7 +30,7 @@ class User::Avatars::PhotosController < UserBaseController
             page.replace_html 'avatar', album_cover(@album, :size => :clarge)
           elsif params[:at] == 'first_time'
 						@album.reload
-            page.replace_html 'the_avatar_image', album_cover_image(@album, :size => :large)
+            page.replace_html 'the_avatar_image', album_cover_image(@album, :size => :clarge)
           end
         end
       end

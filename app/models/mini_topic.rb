@@ -11,6 +11,7 @@ class MiniTopic < ActiveRecord::Base
     (to_node.nil? ? 0 : to_node[:freq]) - (from_node.nil? ? 0 : from_node[:freq])
   end
 
+	# FIXME: 有问题，fixme
   def trend_within from, to
     from_node, to_node = get_nodes_between(from, to)
     (to_node.nil? ? 0 : to_node[:rank]) >= (from_node.nil? ? 0 : from_node[:rank]) 
@@ -48,8 +49,11 @@ class MiniTopic < ActiveRecord::Base
   # 太大则可能需要特别处理下，比如1天应该有24 * 4 = 96个node, 一周就该有96*7个
   # 但是其实只需要4个
   def add_node freq, rank, time
-    freq_nodes.create(:freq => freq, :rank => rank, :created_at => time)
-  end
+		last_node = freq_nodes.last
+		if last_node.blank? or freq != last_node.freq
+			freq_nodes.create(:freq => freq, :rank => rank, :created_at => time)
+		end
+	end
 
 protected
   

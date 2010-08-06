@@ -59,7 +59,7 @@
 							<% @users.each do |user_id, characters| %>
               <% f = User.find(user_id) %>
 							<li>
-								<div class="middle"><div class="middle-center"><div class="center"><%= avatar f, :size => :medium %></div></div></div>
+								<div class="middle"><div class="middle-center"><div class="center"><%= avatar f, :size => :clarge %></div></div></div>
 								<span> <%= profile_link f %></span>
                 <span> <%= characters.map(&:name).join(',') %></span>
                 <p class="btns">

@@ -38,7 +38,6 @@ module Technoweenie # :nodoc:
 
         # Performs the actual resizing operation for a thumbnail
         def resize_image(img, size)
-puts "size: #{size}"
           size = size.first if size.is_a?(Array) && size.length == 1 && !size.first.is_a?(Fixnum)
           if size.is_a?(Fixnum) || (size.is_a?(Array) && size.first.is_a?(Fixnum))
             size = [size, size] if size.is_a?(Fixnum)

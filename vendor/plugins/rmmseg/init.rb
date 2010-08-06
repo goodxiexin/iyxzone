@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/lib/rmmseg.rb'
 
 # load dictionary
 # 一般类的单字和多词
-#RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "chars.dict"), :chars
+RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "chars.dict"), :chars
 RMMSeg::Dictionary.add_dictionary File.join(RAILS_ROOT, "dict", "words.dict"), :words
 
 # 游戏

@@ -31,15 +31,23 @@ namespace :users do
       if r =~ u.login
         # 将空格换成_
         new_login = u.login.gsub(/[ \=】【\$\t\.\,\-。，\(\)、\^\~\`\\\/\!\?！？\*\@\·\>\<]/, '_')
-        puts "#{u.id}: #{u.login} => #{new_login}"
+        if new_login.split(//).count > 30
+					new_login = "用户#{u.id}"
+				end
+				if User.exists? :login => new_login
+					new_login = "用户#{u.id}"
+				end
+				puts "#{u.id}: #{u.login} => #{new_login}"
         u.login = new_login
         u.save
         record = InvalidName.create :user_id => u.id
         UserMailer.deliver_change_nickname u, record.token
       elsif "用户#{u.id}".length > 30
         failed.write "#{u.id}: 用户#{u.id} 名字太长\n"
+				puts "#{u.id}: 用户#{u.id} 名字太长\n"
       elsif User.exists? :login => "用户#{u.id}"
         failed.write "#{u.id}: 用户#{u.id} 已经存在\n"
+				puts "#{u.id}: 用户#{u.id} 已经存在\n"
       else
         changed.write "#{u.id}: #{u.login} => 用户#{u.id}\n"
         puts "#{u.id}: #{u.login} => 用户#{u.id}\n"
@@ -62,12 +70,27 @@ namespace :users do
         if i != 0
           if "#{login}_#{i}".length > 30
             failed.write "#{id}: #{login}_#{i} 新名字太长\n"
+						puts "#{id}: #{login}_#{i} 新名字太长\n"
+u.login = "用户#{u.id}"
+u.save
+changed.write "#{id}: #{login} => #{u.login}\n"
+puts "#{id}: #{login} => #{u.login}"
+            record = InvalidName.create :user_id => u.id
+            UserMailer.deliver_change_nickname u, record.token
           elsif User.exists? :login => "#{login}_#{i}"
             failed.write "#{id}: 新名字 #{login}_#{i} 已经被使用了\n"
+						puts "#{id}: 新名字 #{login}_#{i} 已经被使用了\n"
+u.login = "用户#{u.id}"
+u.save
+changed.write "#{id}: #{login} => #{u.login}\n"
+puts "#{id}: #{login} => #{u.login}"
+            record = InvalidName.create :user_id => u.id
+            UserMailer.deliver_change_nickname u, record.token
           else
             u.login = "#{login}_#{i}"
             u.save
             changed.write "#{id}: #{login} => #{u.login}\n"
+puts "#{id}: #{login} => #{u.login}"
             record = InvalidName.create :user_id => u.id
             UserMailer.deliver_change_nickname u, record.token
           end

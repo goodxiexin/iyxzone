@@ -4,7 +4,7 @@
         <div class="round_m"><div class="round_body">
           <div class="applist">
             <ul>
-              <li><%= link_to "微博<span class='hot'><img src='/images/skin/hot.gif'/></span>", public_mini_blogs_url, :class => 'app-status'%></li>
+              <li><%= link_to "微博<span class='hot'><img src='/images/skin/hot.gif'/></span>", home_mini_blogs_url, :class => 'app-status'%></li>
               <li><%= link_to "日志", hot_blogs_url(:uid => current_user.id), :class => 'app-log' %></li>
               <li><%= link_to "照片", hot_personal_photos_url(:uid => current_user.id), :class => 'app-photo' %></li>
               <li><%= link_to "视频", hot_videos_url(:uid => current_user.id), :class => 'app-video' %></li>

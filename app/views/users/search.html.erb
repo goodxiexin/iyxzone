@@ -64,7 +64,7 @@
 						<ul class="collection s_clear">
 							<% @users.each do |f| %>
 							<li>
-								<div class="middle"><div class="middle-center"><div class="center"><%= avatar f, :size => :medium %></div></div></div>
+								<div class="middle"><div class="middle-center"><div class="center"><%= avatar f, :size => :clarge %></div></div></div>
 								<span> <%= profile_link f %></span>
                 <p class="btns">
 									<%= facebox_link '', new_friend_request_url(:friend_id => f.id), :class => "icon-active icon-active-add" %>
