@@ -49,7 +49,7 @@ class User::Avatars::PhotosController < UserBaseController
 				format.html {
           render :update do |page|
 					  page << "Iyxzone.Facebox.close();"
-            if params[:at] == 'set_cover'
+            if params[:at] == 'album'
               page.redirect_to avatar_album_url(@album)
             elsif params[:at] == 'photo'
               page.redirect_to avatar_url(@photo)

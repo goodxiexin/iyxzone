@@ -23,7 +23,7 @@
         <% photos[j..j+n].each do |photo| %>
           <td>
           <% if !photo.is_cover? %>
-            <%= facebox_confirm '', avatar_url(photo, :photo => {:is_cover => 1}), {:msg => "你确定要把这张照片设为头像吗", :method => :put}, {:class => 'icon-active'} %>
+            <%= facebox_confirm '', avatar_url(photo, :at => 'album', :photo => {:is_cover => 1}), {:msg => "你确定要把这张照片设为头像吗", :method => :put}, {:class => 'icon-active icon-active-camera'} %>
           <% end %>
           <%= facebox_link "", edit_avatar_url(photo, :at => 'album'), :class => "icon-active icon-active-edit" %>
           <% if !photo.is_cover? %>
