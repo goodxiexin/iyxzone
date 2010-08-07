@@ -103,6 +103,8 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :mini_topic_attentions, :member => {:follow => :post, :unfollow => :delete}
 
+    users.resources :promotions, :collection => {:wolves => :get}
+
     users.resources :fans
 
     users.resources :idols, :member => {:follow => :post, :unfollow => :delete}
