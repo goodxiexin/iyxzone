@@ -1,6 +1,6 @@
             <div class="mBlogTopic mBlogMyTopic">
               <div class="topTitle fix">
-                <span class="count">你还可以输入<span class="num" id="mini_blog_words_count">140</span>字</span>
+                <%= link_to "领取狼队封测激活>>>", wolves_promotions_url, :class => "entrance" %>
               </div>
               <div class="round08 round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m"><div class="round_body">
                 <div class="topBg fix">
@@ -25,6 +25,7 @@
                         <li id='publisher_video'><%= link_to_function '<span class="i iVideo"></span>视频</a>', "Iyxzone.MiniBlog.Builder.newVideo()" %></li>
                         <li id='publisher_topic'><%= link_to_function '<span class="i iTopic"></span>话题</a>', "Iyxzone.MiniBlog.Builder.newTopic()" %></li>
                       </ul>
+											<span class="count">你还可以输入<span class="num" id="mini_blog_words_count">140</span>字</span>
                       <span class="button03"><span><%= button_to_function "发布", "Iyxzone.MiniBlog.Builder.publish('#{at}');", {:id => 'publish_btn'} %></span></span>
                     </div>
                   </div>
