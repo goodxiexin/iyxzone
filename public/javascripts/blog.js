@@ -118,9 +118,6 @@ Object.extend(Iyxzone.Blog.Builder, {
       new Ajax.Request('/blogs', {
         method: 'post',
         parameters: this.parameters,
-        onComplete: function(){
-          Iyxzone.enableButtonThree(button, '发布');
-        },
         onSuccess: function(transport){
           var json = transport.responseText.evalJSON();
           if(json.code == 1){
