@@ -552,6 +552,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
     this.imagePublishPanel = $('publisher_image').innerHTML;
 
     if(text){
+      $('mini_blog_text_area').focus();
       Iyxzone.insertAtCursor($('mini_blog_text_area'), text);
     }
   },

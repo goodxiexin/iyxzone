@@ -4,6 +4,59 @@ Iyxzone.Blog = {
   Builder: {}
 };
 
+Object.extend(Iyxzone.Blog, {
+  
+  deleteBlog: function(id, userID){
+    new Ajax.Request(Iyxzone.URL.deleteBlog(id), {
+      method: 'delete',
+      onLoading: function(){
+      },
+      onComplete: function(){
+        Iyxzone.Facebox.close();
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.listBlog(userID);
+        }else if(json.code == 0){
+          error('删除的时候发生错误，请稍后再试');
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmDeletingBlog: function(id, userID){
+    Iyxzone.Facebox.confirmWithCallback("你确定要删除这篇日志吗", null, null, function(){
+      Iyxzone.Blog.deleteBlog(id, userID);
+    });
+  },
+
+  deleteDraft: function(id, userID){
+    new Ajax.Request(Iyxzone.URL.deleteDraft(id), {
+      method: 'delete',
+      onLoading: function(){
+      },
+      onComplete: function(){
+        Iyxzone.Facebox.close();
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.listDraft(userID);
+        }else if(json.code == 0){
+          error('删除的时候发生错误，请稍后再试');
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmDeletingDraft: function(id, userID){
+    Iyxzone.Facebox.confirmWithCallback("你确定要删除这篇日志吗", null, null, function(){
+      Iyxzone.Blog.deleteDraft(id, userID);
+    });
+  }
+
+});
 
 Object.extend(Iyxzone.Blog.Builder, {  
 
@@ -64,7 +117,17 @@ Object.extend(Iyxzone.Blog.Builder, {
       this.prepare(form);
       new Ajax.Request('/blogs', {
         method: 'post',
-        parameters: this.parameters
+        parameters: this.parameters,
+        onComplete: function(){
+          Iyxzone.enableButtonThree(button, '发布');
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.showBlog(json.id);
+          }else{
+          }
+        }.bind(this)
       });
     }else{
       Iyxzone.enableButtonThree(button, '发布');
@@ -77,7 +140,14 @@ Object.extend(Iyxzone.Blog.Builder, {
       this.prepare(form);
       new Ajax.Request('/drafts', {
         method: 'post',
-        parameters: this.parameters
+        parameters: this.parameters,
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.editDraft(json.id, {"tip": 1});
+          }else{
+          }
+        }.bind(this)
       });
     }else{
       Iyxzone.enableButtonThree(button, '保存为草稿');
@@ -90,7 +160,14 @@ Object.extend(Iyxzone.Blog.Builder, {
       this.prepare(form);
       new Ajax.Request('/blogs/' + blogID, {
         method: 'put',
-        parameters: this.parameters
+        parameters: this.parameters,
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.showBlog(blogID);
+          }else{
+          }
+        }.bind(this)
       });
     }else{
       Iyxzone.enableButtonThree(button, '修改');
@@ -104,14 +181,19 @@ Object.extend(Iyxzone.Blog.Builder, {
       new Ajax.Request('/drafts/' + draftID, {
         method: 'put',
         parameters: this.parameters,
+        onComplete: function(){
+          Iyxzone.enableButtonThree(button, '保存为草稿');
+        },
         onSuccess: function(transport){
-          var ret = transport.responseText.evalJSON();
-          this.tagBuilder.reset(ret.tags);
-          this.lastContent = this.editor.nicInstances[0].getContent();  
-					Iyxzone.enableButtonThree(button, '保存为草稿');
-          tip('保存成功，可以继续写了');
-          $('errors').innerHTML = '';
-          this.saved = true;
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            this.tagBuilder.reset();
+            this.lastContent = this.editor.nicInstances[0].getContent();  
+            tip('保存成功，可以继续写了');
+            $('errors').innerHTML = '';
+            this.saved = true;
+          }else{
+          }
         }.bind(this)
       });
     }else{

@@ -421,7 +421,7 @@ Iyxzone.Friend.Tagger = Class.create({
     }
   },
 
-  reset: function(tagInfos){
+  reset: function(){
     // move new tags to tags
     this.newTags.each(function(pair){
       this.tags.set(pair.key, pair.value);

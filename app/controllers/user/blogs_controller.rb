@@ -47,13 +47,9 @@ class User::BlogsController < UserBaseController
     @blog = current_user.blogs.build(params[:blog] || {})
     
     if @blog.save
-      render :update do |page|
-        page.redirect_to blog_url(@blog)
-      end
+      render :json => {:code => 1, :id => @blog.id}
     else
-      render :update do |page|
-        page.replace_html 'errors', :inline => "<%= error_messages_for :blog, :header_message => '遇到以下问题无法保存', :message => nil %>"
-      end
+      render :json => {:code => 0}
     end
   end
 
@@ -63,23 +59,17 @@ class User::BlogsController < UserBaseController
 
   def update
     if @blog.update_attributes(params[:blog] || {})
-      render :update do |page|
-        page.redirect_to blog_url(@blog)
-      end
+      render :json => {:code => 1}
     else
-      render :update do |page|
-        page.replace_html 'errors', :inline => "<%= error_messages_for :blog, :header_message => '遇到以下问题无法保存', :message => nil %>"
-      end
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @blog.destroy
-			render :update do |page|
-				page.redirect_to blogs_url(:uid => current_user.id)
-			end
+      render :json => {:code => 1}
 		else
-      render_js_error '删除的时候发生错误'
+      render :json => {:code => 0}
 		end
   end
 

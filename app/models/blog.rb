@@ -20,7 +20,9 @@ class Blog < ActiveRecord::Base
 
   acts_as_viewable
 
-	acts_as_diggable :create_conditions => lambda {|user, blog| !blog.draft and blog.available_for?(user.relationship_with(blog.poster))}
+	acts_as_diggable :create_conditions => lambda {|user, blog| 
+    !blog.draft and blog.available_for?(user.relationship_with(blog.poster))
+  }
 
   acts_as_resource_feeds :recipients => lambda {|blog| 
     poster = blog.poster

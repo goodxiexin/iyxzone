@@ -6,6 +6,7 @@ javascripts:
   - controls
   - sound
   - iyxzone
+  - url
   - feed_delivery
   - comment
   - facebox
