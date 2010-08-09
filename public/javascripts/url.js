@@ -94,3 +94,22 @@ Object.extend(Iyxzone.URL, {
 });
 
 // poll  url
+Object.extend(Iyxzone.URL, {
+
+  createPoll: function(params){
+    return this.build("/polls", params);
+  },
+
+  showPoll: function(pollID, params){
+    return this.build("/polls/" + pollID, params);
+  },
+
+  deletePoll: function(pollID, params){
+    return this.build("/polls/" + pollID, params);
+  },
+
+  listPoll: function(userID, params){
+    return this.build("/polls?uid=" + userID, params);
+  }
+
+});

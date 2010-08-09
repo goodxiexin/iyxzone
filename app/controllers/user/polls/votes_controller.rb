@@ -4,10 +4,12 @@ class User::Polls::VotesController < UserBaseController
 		@vote = @poll.votes.build(:voter_id => current_user.id, :answer_ids => params[:votes])
 		
     if @vote.save
-      redirect_to poll_url(@poll)
+      render :json => {:code => 1}
+      #redirect_to poll_url(@poll)
 		else
-			flash[:error] = "#{@vote.errors.on(:answer_ids)}: #{@vote.errors.on(:poll_id)}"#保存的时候发生错误"
-			redirect_to poll_url(@poll)
+      render :json => {:code => 0}
+			#flash[:error] = "#{@vote.errors.on(:answer_ids)}: #{@vote.errors.on(:poll_id)}"#保存的时候发生错误"
+			#redirect_to poll_url(@poll)
 		end
   end
 

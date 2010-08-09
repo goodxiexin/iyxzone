@@ -79,10 +79,13 @@ Object.extend(Iyxzone.Poll.Builder, {
     return true;
   },
 
+  prepare: function(form){
+  
+  },
+
   save: function(button, form){
     Iyxzone.disableButton(button, '请等待..');
     if(this.validate()){
-      form.submit();
     }else{
       Iyxzone.enableButton(button, '发布投票');
     }
