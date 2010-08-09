@@ -18,7 +18,10 @@ Iyxzone.URL = {
     if(params == null){
       return baseURL;
     }else{
-      return baseURL + "?" + this.buildParams(params);
+      if(baseURL.indexOf("?") > 0)
+        return baseURL + "&" + this.buildParams(params);
+      else
+        return baseURL + "?" + this.buildParams(params);
     }
   }
 };
@@ -122,6 +125,32 @@ Object.extend(Iyxzone.URL, {
 
   createPollAnswer: function(pollID, params){
     return this.build("/polls/" + pollID + "/answers", params);
+  },
+
+  createPollInvitation: function(pollID, params){
+    return this.build("/polls/" + pollID + "/invitations", params);
+  }
+
+});
+
+// dig
+Object.extend(Iyxzone.URL, {
+
+  createDig: function(diggableType, diggableID, params){
+    return this.build("/digs", Object.extend({'diggable_type': diggableType, 'diggable_id': diggableID}, params || {}));
+  }
+
+});
+
+// photo tag
+Object.extend(Iyxzone.URL, {
+
+  createPhotoTag: function(photoType, photoID, params){
+    return this.build("/photo_tags", Object.extend({'photo_type': photoType, 'photo_id': photoID}, params || {}));
+  },
+
+  deletePhotoTag: function(tagID, params){
+    return this.build("/photo_tags/" + tagID, params);
   }
 
 });

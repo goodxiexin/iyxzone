@@ -9,7 +9,9 @@ Iyxzone.Poll = {
     document.write("<td class='status'>" + votes + "(" + percent + "%)</td>");
   },
 
-  Builder: {}
+  Builder: {},
+
+  Invitation: {}
 };
 
 // vote
@@ -297,3 +299,87 @@ Object.extend(Iyxzone.Poll.Builder, {
   }
 
 });
+
+
+// invitation
+Object.extend(Iyxzone.Poll.Invitation, {
+
+  selected: new Hash(),
+
+  onClick: function(td, val){
+    if(this.selected.get(val)){
+      td.setStyle({background: 'white'});
+      this.selected.unset(val);
+    }else{
+      this.selected.set(val, td)
+      td.setStyle({background: '#DEFEBB'});
+    } 
+  },
+
+  submit: function(button, pollID){
+    if(this.selected.size() == 0){
+      error('你必须至少邀请一个游戏角色');
+    }else{
+      Iyxzone.disableButton(button,'请等待..');
+
+      // construct url
+      var url = Iyxzone.URL.createPollInvitation(pollID);
+      var params = "";
+      this.selected.each(function(pair){
+        if(params != "")
+          params += "&";
+        params += 'values[]=' + pair.key;
+      });
+      
+      new Ajax.Request(Iyxzone.URL.createPollInvitation(pollID), {
+        method: 'post',
+        parameters: params,
+        onLoading: function(){},
+        onComplete: function(){},
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.showPoll(pollID);
+          }else if(json.code == 0){
+            error("发生错误，请稍后再试试");
+            Iyxzone.enableButton(button, '确定'); 
+          }
+        }.bind(this)
+      });
+    }
+  },
+
+  reset: function(){
+    this.selected = new Hash();
+  },
+
+  search: function(){
+    var val = this.field.value;
+    var ul = $('invitee_list');
+    var els = ul.childElements();
+
+    els.each(function(li){
+      var pinyin = li.readAttribute('pinyin');
+      var name = li.readAttribute('name');
+      if(name.include(val) || pinyin.include(val)){
+        li.show();
+      }else{
+        li.hide();
+      }
+    }.bind(this));
+
+    this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  startObservingInput: function(field){
+    this.field = field;
+    this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  stopObservingInput: function(){
+    clearTimeout(this.timer);
+  }
+
+});
+
+

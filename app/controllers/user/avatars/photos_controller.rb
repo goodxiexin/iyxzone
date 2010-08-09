@@ -21,6 +21,8 @@ class User::Avatars::PhotosController < UserBaseController
 
     if @photo.save && @album.set_cover(@photo)
 			responds_to_parent do
+        render :json => {:code => 1, :id => @photo.id}
+=begin
         render :update do |page|
           page << "Iyxzone.Facebox.close()"
           if params[:at] == 'album'
@@ -33,12 +35,16 @@ class User::Avatars::PhotosController < UserBaseController
             page.replace_html 'the_avatar_image', album_cover_image(@album, :size => :clarge)
           end
         end
+=end
       end
     else
       responds_to_parent do
+        render :json => {:code => 0}
+=begin
         render :update do |page|
           page << "$('error').innerHTML = 'There was an error uploading this icon"
         end
+=end
       end
     end
   end
@@ -46,7 +52,8 @@ class User::Avatars::PhotosController < UserBaseController
   def update
     if @photo.update_attributes(params[:photo])
 			respond_to do |format|
-				format.html {
+				format.html { render :json => {:code => 1} }
+=begin
           render :update do |page|
 					  page << "Iyxzone.Facebox.close();"
             if params[:at] == 'album'
@@ -56,27 +63,30 @@ class User::Avatars::PhotosController < UserBaseController
             end
 				  end 
         }
-				format.json { 
-          render :json => @photo 
-        }
+=end
+				format.json { render :json => @photo }
 			end
     else
       respond_to do |format|
-        format.html { 
+        format.html { render :json => {:code => 0}}
+=begin
           render :update do |page|
             page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
             page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题没法保存', :message => nil %>"
           end 
         }
+=end
       end
     end
   end
 
   def destroy
     if @photo.destroy
-      redirect_js avatar_album_url(@album)
+      render :json => {:code => 1}
+      #redirect_js avatar_album_url(@album)
     else
-      render_js_error '发生错误'
+      render :json => {:code => 0}
+      #render_js_error '发生错误'
     end
   end
 

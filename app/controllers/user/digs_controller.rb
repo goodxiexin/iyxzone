@@ -2,9 +2,9 @@ class User::DigsController < UserBaseController
 
   def create
     if @diggable.dug_by current_user
-      @diggable.reload # reload is mandatory, otherwise digs_count is not uptodate
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

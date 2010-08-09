@@ -1,8 +1,8 @@
 <ul id='invitee_list'>  
   <% @friends.each do |friend| %>
     <li pinyin='<%= friend.pinyin %>' name='<%= friend.login %>'>
-      <a onclick="Iyxzone.Invitation.Builder.onClick(this, <%= friend.id %>);">
-        <%= avatar_image friend, :class=>'imgbox01' %>
+      <a onclick="Iyxzone.Poll.Invitation.onClick(this, <%= friend.id %>);">
+        <%= avatar_image friend, :class => 'imgbox01' %>
         <strong><%= friend.login %></strong>
       </a>
     </li>

@@ -8,6 +8,7 @@ javascripts:
   - iyxzone
   - url
   - feed_delivery
+  - dig
   - comment
   - facebox
   - in_place_editor_extension

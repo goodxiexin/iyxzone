@@ -44,12 +44,19 @@ class User::AlbumsController < UserBaseController
 
   def create
     @album = current_user.albums.build(params[:album] || {})
-    
+
+    if @album.save
+      render :json => {:code => 1, :id => @album.id}
+    else
+      render :json => {:code => 0}
+    end
+=begin    
     unless @album.save
       render :update do |page|
         page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
       end
     end
+=end
   end
 
   def edit
@@ -59,16 +66,18 @@ class User::AlbumsController < UserBaseController
   def update
     if @album.update_attributes(params[:album] || {})
 			respond_to do |format|
-        format.html { render_js_tip '成功' }    
+        format.html { render :json => {:code => 1} } #render_js_tip '成功' }    
         format.json { render :json => @album }
 			end
     else
       respond_to do |format|
-        format.html { 
+        format.html { render :json => {:code => 0} }
+=begin
           render :update do |page|
             page.replace_html 'errors', :inline => "<%= error_messages_for :album, :header_message => '遇到以下问题无法保存', :message => nil %>"
           end 
         }
+=end
       end
     end
   end 
@@ -83,9 +92,11 @@ class User::AlbumsController < UserBaseController
     end
     
     if @album.destroy
-		  redirect_js personal_albums_url(:uid => current_user.id)
+		  render :json => {:code => 1}
+      #redirect_js personal_albums_url(:uid => current_user.id)
     else
-      render_js_error '发生错误'
+      render :json => {:code => 0}
+      #render_js_error '发生错误'
     end
 	end
 

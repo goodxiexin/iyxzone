@@ -231,17 +231,17 @@ Iyxzone.Photo.Tagger = Class.create({
 
   insertTag: function(tagInfo){
     // save tag info
-    this.tagInfos.set(tagInfo.photo_tag.id, {
-      id: tagInfo.photo_tag.id,
-      width: tagInfo.photo_tag.width,
-      height: tagInfo.photo_tag.height,
-      left: tagInfo.photo_tag.x,
-      top: tagInfo.photo_tag.y,
-      content: tagInfo.photo_tag.content,
-      tagged_user_id: tagInfo.photo_tag.tagged_user.id,
-      tagged_user_login: tagInfo.photo_tag.tagged_user.login,
-      poster_id: tagInfo.photo_tag.poster.id,
-      poster_login: tagInfo.photo_tag.poster.login
+    this.tagInfos.set(tagInfo.id, {
+      id: tagInfo.id,
+      width: tagInfo.width,
+      height: tagInfo.height,
+      left: tagInfo.x,
+      top: tagInfo.y,
+      content: tagInfo.content,
+      tagged_user_id: tagInfo.tagged_user.id,
+      tagged_user_login: tagInfo.tagged_user.login,
+      poster_id: tagInfo.poster.id,
+      poster_login: tagInfo.poster.login
     });
 
     /*
@@ -254,14 +254,14 @@ Iyxzone.Photo.Tagger = Class.create({
         </div>
       </li>
     */
-    var li = new Element('li', {id: 'tag_' + tagInfo.photo_tag.id});
+    var li = new Element('li', {id: 'tag_' + tagInfo.id});
 		var rectTag = new Element('strong');
-    var posterLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.poster.id}).update(tagInfo.photo_tag.poster.login);
-    var taggedUserLink = new Element('a', {href: '/profiles/' + tagInfo.photo_tag.tagged_user.id}).update(tagInfo.photo_tag.tagged_user.login);
+    var posterLink = new Element('a', {href: '/profiles/' + tagInfo.poster.id}).update(tagInfo.poster.login);
+    var taggedUserLink = new Element('a', {href: '/profiles/' + tagInfo.tagged_user.id}).update(tagInfo.tagged_user.login);
 		rectTag.appendChild(posterLink);
 		rectTag.innerHTML += ('标记了');
 		rectTag.appendChild(taggedUserLink);
-		rectTag.innerHTML += (' : ' + tagInfo.photo_tag.content.escapeHTML());
+		rectTag.innerHTML += (' : ' + tagInfo.content.escapeHTML());
 		li.appendChild(rectTag);
 
     if(this.isLoading){
@@ -273,11 +273,11 @@ Iyxzone.Photo.Tagger = Class.create({
     }
 
     // add tag events
-    Event.observe('tag_' + tagInfo.photo_tag.id, 'mouseover', function(e){
-      this.showTagWithContent(tagInfo.photo_tag.id);
+    Event.observe('tag_' + tagInfo.id, 'mouseover', function(e){
+      this.showTagWithContent(tagInfo.id);
     }.bind(this));
-    Event.observe('tag_' + tagInfo.photo_tag.id, 'mouseout', function(e){
-      this.hideTagWithContent(tagInfo.photo_tag.id);
+    Event.observe('tag_' + tagInfo.id, 'mouseout', function(e){
+      this.hideTagWithContent(tagInfo.id);
     }.bind(this));
     if(this.isCurrentUser){
       var deleteLink = new Element('a', {href:'javascript: void(0)', 'class': 'icon-active'});
@@ -286,7 +286,7 @@ Iyxzone.Photo.Tagger = Class.create({
 			li.appendChild(spaceBar);
       deleteLink.observe('click', function(e){
         Iyxzone.Facebox.confirmWithCallback('你确定要删除这个标签吗?', null, null, function(){
-          this.remove(tagInfo.photo_tag.id);
+          this.remove(tagInfo.id);
         }.bind(this));
       }.bind(this));
     }
@@ -349,47 +349,71 @@ Iyxzone.Photo.Tagger = Class.create({
   },
 
   remove: function(tagID){
-    new Ajax.Request('/photo_tags/' + tagID, {
+    new Ajax.Request(Iyxzone.URL.deletePhotoTag(tagID), {
       method: 'delete',
       parameters: 'authenticity_token=' + encodeURIComponent(this.token),
-      loading: function(){
+      onLoading: function(){
         Iyxzone.changeCursor('wait');
       },
-      onSuccess: function(transport){
-        if($('square_'+tagID)) $('square_'+tagID).remove();
-        if($('content_'+tagID)) $('content_'+tagID).remove();
-        $('tag_' + tagID).remove();
-        this.tagInfos.unset(tagID);
+      onComplete: function(){
+        Iyxzone.Facebox.close();
         Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          if($('square_'+tagID)) $('square_'+tagID).remove();
+          if($('content_'+tagID)) $('content_'+tagID).remove();
+          $('tag_' + tagID).remove();
+          this.tagInfos.unset(tagID);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
       }.bind(this)
     });
   },
 
   save: function(){
     Iyxzone.disableButton(this.confirmButton, '保存中');
+    
     if(this.validate()){
       var params = "";
+      var taggedUserID = this.friendSelector.friendID;
+      var x = this.cropImg.areaCoords.x1;
+      var y = this.cropImg.areaCoords.y1;
+      var width = this.cropImg.calcW();
+      var height = this.cropImg.calcH();
+
       params = $('tag_form').serialize();
-      params += "&tag[tagged_user_id]=" + this.friendSelector.friendID;
-      params += "&tag[x]=" + this.cropImg.areaCoords.x1;
-      params += "&tag[y]=" + this.cropImg.areaCoords.y1;
-      params += "&tag[width]=" + this.cropImg.calcW();
-      params += "&tag[height]=" + this.cropImg.calcH();
-      params += "&tag[photo_id]=" + this.photoID;
-      params += "&tag[photo_type]=" + this.type;
-      new Ajax.Request('/photo_tags', {
+      params += "&tag[tagged_user_id]=" + taggedUserID;
+      params += "&tag[x]=" + x;
+      params += "&tag[y]=" + y;
+      params += "&tag[width]=" + width;
+      params += "&tag[height]=" + height;
+      
+      new Ajax.Request(Iyxzone.URL.createPhotoTag(this.type, this.photoID), {
         method: 'post', 
         parameters: params,
+        onLoading: function(){
+          Iyxzone.changeCursor('wait');
+        },
+        onComplete: function(){
+          Iyxzone.changeCursor('default');
+          Iyxzone.enableButton(this.confirmButton, '保存');
+        }.bind(this), 
         onSuccess: function(transport){
           this.friendSelector.reset();
           this.contentInput.clear();
-          var tagInfo = transport.responseText.evalJSON();
-          this.insertTag(tagInfo);
-          Iyxzone.enableButton(this.confirmButton, '保存');
+          var json = transport.responseText.evalJSON();
+          if(json.code == 0){
+            error("发生错误，请稍后再试");
+          }else if(json.code == 1){
+            this.insertTag(json.tag);
+          }
         }.bind(this)
       });
     }else{
-      Iyxzone.enableButotn(this.confirmButotn, '保存');
+      Iyxzone.enableButton(this.confirmButton, '保存');
     } 
   },
 

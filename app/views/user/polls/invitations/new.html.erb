@@ -1,5 +1,5 @@
 <% content_for :javascript_include do %>
-  <%= javascript_include_tag 'invitation' %>
+  <%= javascript_include_merged 'poll' %>
 <% end %>
 
 <% content_for :html_title, "#{current_user.login}的投票邀请 - 17Gaming.com" %>
@@ -21,7 +21,7 @@
           <div class="friend-invite-head">
             <strong class="green">搜索好友</strong> 
 						<% unless @friends.blank? %>
-            <%= text_field_tag 'search', '输入好友的名字', :class => 'ipt', :onclick => "$(this).clear();", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
+            <%= text_field_tag 'search', '输入好友的名字', :class => 'ipt', :onclick => "$(this).clear();", :onfocus => "Iyxzone.Poll.Invitation.startObservingInput($('search'));", :onblur => "Iyxzone.Poll.Invitation.stopObservingInput();"%>
 						<% end %>
           </div>
           <div class="friend-invite-list">
@@ -30,7 +30,7 @@
           <% else %>
             <div id='invitations'><%= render :partial => 'friends' %></div>
             <div class="rows s_clear">
-              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Invitation.Builder.submit(this, $('invitation_form'))" %></span></span>
+              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Poll.Invitation.submit(this, #{@poll.id})" %></span></span>
             </div>
           <% end %>  
           </div>
@@ -39,6 +39,3 @@
     </div>
   </div></div>
 </div></div></div><div>
-
-<% form_tag poll_invitations_url(@poll), :id => 'invitation_form' do %>
-<% end %>

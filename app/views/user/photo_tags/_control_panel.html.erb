@@ -44,6 +44,7 @@
   </div>
 </div>
 
+<% tags = photo.tags.map{|t| {:id => t.id, :width => t.width, :height => t.height, :x => t.x, :y => t.y, :content => t.content, :tagged_user => {:login => t.tagged_user.login, :id => t.tagged_user.id}, :poster => {:login => t.poster.login, :id => t.poster.id}}}.to_json %>
 <%= onload_javascript_tag "
   tagger = new Iyxzone.Photo.Tagger('#{photo.class.name.underscore}', #{photo.id}, 'control_panel', 'confirm_btn', 'cancel_btn', #{tags}, 'photo_tags', #{user == current_user ? 1 : 0}, 'tag_content', 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', '#{form_authenticity_token}', {});
 "%>
