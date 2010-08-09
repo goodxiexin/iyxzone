@@ -36,9 +36,9 @@ class User::VideosController < UserBaseController
 		@video = current_user.videos.build(params[:video] || {})
     
     if @video.save
-      redirect_to video_url(@video)
+      render :json => {:code => 1, :id => @video.id}
     else
-      render :action => 'new'
+      render :json => {:code => 0}
     end
   end
 
@@ -57,19 +57,17 @@ class User::VideosController < UserBaseController
 
   def update
     if @video.update_attributes(params[:video] || {})
-		  redirect_to video_url(@video)
+		  render :json => {:code => 1}
     else
-      render :action => 'edit'
+      render :json => {:code => 0}
     end
   end
 
   def destroy
 		if @video.destroy
-			render :update do |page|
-				page.redirect_to videos_url(:uid => current_user.id)
-			end
+      render :json => {:code => 1}
 		else
-			render_js_error '删除的时候发生错误'
+      render :json => {:code => 0}
 		end
   end
 

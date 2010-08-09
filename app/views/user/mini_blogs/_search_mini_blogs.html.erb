@@ -1,0 +1,7 @@
+<%= render :partial => 'search_mini_blog', :collection => mini_blogs, :locals => {:words => words} %>
+
+<% if @remote.nil? %>
+  <%= will_paginate mini_blogs %>
+<% else %>
+  <%= remote_will_paginate mini_blogs, :remote => @remote %>
+<% end %> 

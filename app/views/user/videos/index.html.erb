@@ -15,22 +15,28 @@
   <div class="box02 canvas_int space">
     <%= render :partial => 'tab', :locals => {:user => @user, :hover => 1} %>
     <div class="box02 canvas_int space">
-      <% if @count == 0 %>
-				<% if @user == current_user %>
-					<div class='tip'>还没有视频，赶紧<%= link_to '弄一个', new_video_url %>? 
-						<br/><br/>或者观看以下视频对这项功能进行进一步的了解，随时点击右上角<a href="#" class="icon-movie"></a>都可以观看此视频<br/><br/>
-						<%= application_show %>
-					</div>
-				<% else %>
-					<div class='tip'><%= get_subject @user %>还没分享视频呢。</div>
-				<% end %>
-      <% else %>
-				<div class='tip'><%= "共#{@count}个视频" %></div>
-				<div class='feed-img-list' id='videos'>
-					<%= render :partial => 'video_item2', :collection => @videos %>
-				</div>
-				<%= will_paginate @videos %>
-      <% end %>
+      <div class="appcontent05">
+        <div class="myblog">
+        <% if @count == 0 %>
+				  <% if @user == current_user %>
+					  <div class='tip'>还没有视频，赶紧<%= link_to '弄一个', new_video_url %>? 
+						  <br/><br/>或者观看以下视频对这项功能进行进一步的了解，随时点击右上角<a href="#" class="icon-movie"></a>都可以观看此视频<br/><br/>
+						  <%= application_show %>
+					  </div>
+				  <% else %>
+					  <div class='tip'><%= get_subject @user %>还没分享视频呢。</div>
+				  <% end %>
+        <% else %>
+				  <div class='tip'><%= "共#{@count}个视频" %></div>
+				  <div class='myblog-table' id='videos'>
+            <table cellpadding="0">
+					    <%= render :partial => 'video_item', :collection => @videos %>
+            </table>
+				  </div>
+				  <%= will_paginate @videos %>
+        <% end %>
+        </div>
+      </div>
     </div>
   </div>
 <% end %>

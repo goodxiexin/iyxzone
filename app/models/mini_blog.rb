@@ -127,7 +127,7 @@ class MiniBlog < ActiveRecord::Base
 
     doc
   end
-
+  
 protected
 
   def content_length_is_valid

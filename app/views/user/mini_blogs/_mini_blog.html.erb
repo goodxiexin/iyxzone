@@ -1,3 +1,4 @@
+  <% words = words || [] %>
   <div class="item jl-cutline fix" id='mini_blog_<%= mini_blog.id %>'>
     <%= yield %>
     <div class="feedCon">
@@ -8,7 +9,7 @@
               <div class="round_m jl-round_m"> 
                 <span class="arrow-dialog"></span>
                 <div class="round_body">
-                  <div class='sp'><%= link_to mini_blog.poster.login, mini_blogs_url(:uid => mini_blog.poster_id), :class => "memberName" %>：<%= mini_blog_content mini_blog %></div>
+                  <div class='sp'><%= link_to mini_blog.poster.login, mini_blogs_url(:uid => mini_blog.poster_id), :class => "memberName" %>：<%= mini_blog_content mini_blog, words %></div>
                   <% if mini_blog.original? %>
                     <% if mini_blog.image_type? or mini_blog.video_type? %>
                     <div id='mini_blog_<%= mini_blog.id %>_images'><div class="mCon fix">
@@ -34,7 +35,7 @@
                             <div class="mTrans">
                               <div class="hd">
                                 <div class="sp">
-                                  <%= link_to root.poster.login, mini_blogs_url(:uid => root.poster_id), :class => "memberName" %>：<%= mini_blog_content root %>
+                                  <%= link_to root.poster.login, mini_blogs_url(:uid => root.poster_id), :class => "memberName" %>：<%= mini_blog_content root, words %>
                                 </div>
                               </div>
                               <% if root.image_type? or root.video_type? %>

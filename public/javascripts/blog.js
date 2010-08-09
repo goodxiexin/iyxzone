@@ -7,7 +7,7 @@ Iyxzone.Blog = {
 Object.extend(Iyxzone.Blog, {
   
   deleteBlog: function(id, userID){
-    new Ajax.Request(Iyxzone.URL.deleteBlog(id), {
+    new Ajax.Request(Iyxzone.URL.deleteBlog(id), { 
       method: 'delete',
       onLoading: function(){
       },
@@ -115,8 +115,8 @@ Object.extend(Iyxzone.Blog.Builder, {
     Iyxzone.disableButtonThree(button, '发布中..');
     if(this.validate()){
       this.prepare(form);
-      new Ajax.Request('/blogs', {
-        method: 'post',
+      new Ajax.Request(Iyxzone.URL.createBlog(), {
+        method: 'post', 
         parameters: this.parameters,
         onSuccess: function(transport){
           var json = transport.responseText.evalJSON();
@@ -135,7 +135,7 @@ Object.extend(Iyxzone.Blog.Builder, {
     Iyxzone.disableButtonThree(button, '保存中..');
     if(this.validate()){
       this.prepare(form);
-      new Ajax.Request('/drafts', {
+      new Ajax.Request(Iyxzone.URL.createDraft(), {
         method: 'post',
         parameters: this.parameters,
         onSuccess: function(transport){
@@ -155,7 +155,7 @@ Object.extend(Iyxzone.Blog.Builder, {
     Iyxzone.disableButtonThree(button, '修改中..');
     if(this.validate()){
       this.prepare(form);
-      new Ajax.Request('/blogs/' + blogID, {
+      new Ajax.Request(Iyxzone.URL.updateBlog(blogID), {
         method: 'put',
         parameters: this.parameters,
         onSuccess: function(transport){
@@ -175,7 +175,7 @@ Object.extend(Iyxzone.Blog.Builder, {
     Iyxzone.disableButtonThree(button, '保存中..');
     if(this.validate()){
       this.prepare(form);
-      new Ajax.Request('/drafts/' + draftID, {
+      new Ajax.Request(Iyxzone.URL.updateDraft(draftID), {
         method: 'put',
         parameters: this.parameters,
         onComplete: function(){

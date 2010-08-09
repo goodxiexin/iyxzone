@@ -30,8 +30,24 @@ Object.extend(Iyxzone.URL, {
     return this.build("/blogs/" + blogID, params);
   },
 
+  createBlog: function(params){
+    return this.build("/blogs", params);
+  },
+
+  createDraft: function(params){
+    return this.build("/drafts", params);
+  },
+
   editDraft: function(draftID, params){
     return this.build("/drafts/" + draftID + "/edit", params);
+  },
+
+  updateBlog: function(blogID, params){
+    return this.build("/blogs/" + blogID, params);
+  },
+
+  updateDraft: function(draftID, params){
+    return this.build("/drafts/" + draftID, params);
   },
 
   deleteBlog: function(blogID, params){
@@ -55,4 +71,26 @@ Object.extend(Iyxzone.URL, {
 // video url
 Object.extend(Iyxzone.URL, {
 
+  createVideo: function(params){
+    return this.build("/videos", params);
+  },
+
+  showVideo: function(videoID, params){
+    return this.build("/videos/" + videoID, params);
+  },
+
+  deleteVideo: function(videoID, params){
+    return this.build("/videos/" + videoID, params);
+  },
+
+  updateVideo: function(videoID, params){
+    return this.build("/videos/" + videoID, params);
+  },
+
+  listVideo: function(userID, params){
+    return this.build("/videos?uid=" + userID, params);
+  }
+
 });
+
+// poll  url

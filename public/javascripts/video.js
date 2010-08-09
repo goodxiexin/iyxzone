@@ -7,6 +7,36 @@ Iyxzone.Video = {
   }
 };
 
+// delete video
+Object.extend(Iyxzone.Video, {
+  
+  deleteVideo: function(videoID, userID){
+    new Ajax.Request(Iyxzone.URL.deleteVideo(videoID), {
+      method: 'delete',
+      onLoading: function(){
+      },
+      onComplete: function(){
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.listVideo(userID);
+        }else if(json.code == 0){
+          error('删除的时候发生错误，请稍后再试');
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmDeletingVideo: function(videoID, userID){
+    Iyxzone.Facebox.confirmWithCallback("你确定要删除这个视频吗?", null, null, function(){
+      Iyxzone.Video.deleteVideo(videoID, userID);
+    }.bind(this));
+  }
+
+});
+
+// create video
 Object.extend(Iyxzone.Video.Builder, {
 
   tagBuilder: null, //initialize this in your page
@@ -32,15 +62,14 @@ Object.extend(Iyxzone.Video.Builder, {
   },  
 
   prepare: function(form){
+    this.parameters = $(form).serialize();
     var newTags = this.tagBuilder.getNewTags();
     var delTags = this.tagBuilder.getDelTags();
     for(var i=0;i<newTags.length;i++){
-      var el = new Element("input", {type: 'hidden', value: newTags[i], id: 'video[new_friend_tags][]', name: 'video[new_friend_tags][]' });
-      form.appendChild(el);
+      this.parameters += "&video[new_friend_tags][]=" + newTags[i];
     }
     for(var i=0;i<delTags.length;i++){
-      var el = new Element("input", {type: 'hidden', value: delTags[i], id: 'video[del_friend_tags][]', name: 'video[del_friend_tags][]' });
-      form.appendChild(el);
+      this.parameters += "&video[del_friend_tags][]=" + delTags[i];
     }
   },
 
@@ -48,19 +77,51 @@ Object.extend(Iyxzone.Video.Builder, {
     Iyxzone.disableButtonThree(button, '发布中..');
     if(this.validate()){
       this.prepare(form);
-      form.submit();
+      new Ajax.Request(Iyxzone.URL.createVideo(), {
+        method: 'post',
+        parameters: this.parameters,
+        onLoading: function(){
+        },
+        onComplete: function(){
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.showVideo(json.id);
+          }else if(json.code == 0){
+            error('不是合法的视频url，请检查你的视频url');
+            Iyxzone.enableButtonThree(button, '保存');
+          }
+        }.bind(this)
+      });
     }else{
       Iyxzone.enableButtonThree(button, '保存');
     }
   },
 
-  update: function(button, form){
+  update: function(button, form, videoID){
     Iyxzone.disableButtonThree(button, '更新中..');
     if(this.validate()){
       this.prepare(form);
-      form.submit();
+      new Ajax.Request(Iyxzone.URL.updateVideo(videoID), {
+        method: 'put',
+        parameters: this.parameters,
+        onLoading: function(){
+        },
+        onComplete: function(){
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.showVideo(videoID);
+          }else if(json.code == 0){
+            error('不是合法的视频url，请检查你的视频url');
+            Iyxzone.enableButtonThree(button, '保存');
+          }
+        }.bind(this)
+      });
     }else{
-      Iyxzone.enableButtonThree(button, '更新');
+      iyxzone.enablebuttonthree(button, '更新');
     }
   },
 

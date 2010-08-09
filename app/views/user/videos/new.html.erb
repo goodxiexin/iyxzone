@@ -15,8 +15,8 @@
         <%= error_messages_for :video, :header_message => '遇到以下问题，没法成功保存', :message => nil %>
         <% rows_form_for @video, :html => {:onsubmit => "Iyxzone.Video.Builder.save($('submit_btn'), this); return false;"} do |f| %>
           <%= f.text_field 'title', :label => '视频标题' %>
-          <%= f.text_field 'video_url', :label => '连接地址', :id => 'video_url' %>
-          <%= f.text_area 'description', :label => '视频连接' %>
+          <%= f.text_field 'video_url', :label => '视频URL', :id => 'video_url' %>
+          <%= f.text_area 'description', :label => '视频介绍' %>
           <%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :label => '游戏类别', :class => "selector selector02" %>
           <%= f.select 'privilege', privilege_options, {}, :label => '浏览权限', :class => "selector selector02" %>
           <%= render :partial => 'user/friend_tags/control_panel', :locals => {:title => '点名相关好友'} %>

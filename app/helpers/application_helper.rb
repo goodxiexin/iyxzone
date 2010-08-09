@@ -507,10 +507,10 @@ module ApplicationHelper
     end
   end
 
-  def mini_blog_content mini_blog, words=""
+  def mini_blog_content mini_blog, words
     mini_blog.nodes.map do |node|
       if node[:type] == 'text'
-        emotion_text node[:val]
+        highlight (emotion_text node[:val]), words
       elsif node[:type] == 'topic'
         "<a href='/mini_blogs/search?key=#{node[:name]}'>##{emotion_text node[:name]}#</a>"
       elsif node[:type] == 'link'
@@ -556,6 +556,15 @@ module ApplicationHelper
           "<a href='/mini_blogs?uid=#{user.id}'>@#{user.login}</a>"
         end  
       end
+    end
+  end
+
+  def highlight content, words
+    if words.blank?
+      content
+    else
+      re = /(#{words.map{|w| "(#{w})"}.join("|")})/
+      content.gsub(re, "<span class='topicTag'>\\1</span>");  
     end
   end
 
