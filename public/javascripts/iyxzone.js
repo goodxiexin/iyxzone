@@ -157,13 +157,42 @@ Object.extend(Iyxzone, {
     } 
   },
 
-  insertAtCursor: function(field, value) {
+  insertAtCursor: function(txtarea, text) {
+		 var scrollPos = txtarea.scrollTop;
+		 var strPos = 0;
+		 var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? "ff" : (document.selection ? "ie" : false ) );
+		 if (br == "ie") { 
+				txtarea.focus();
+				var range = document.selection.createRange();
+				range.moveStart ('character', -txtarea.value.length);
+				strPos = range.text.length;
+			} 
+			else if (br == "ff") strPos = txtarea.selectionStart;
+			var front = (txtarea.value).substring(0,strPos);
+			var back = (txtarea.value).substring(strPos,txtarea.value.length);
+			txtarea.value=front+text+back;
+			strPos = strPos + text.length;
+			if (br == "ie") {
+				txtarea.focus();
+				var range = document.selection.createRange();
+				range.moveStart ('character', -txtarea.value.length);
+				range.moveStart ('character', strPos);
+				range.moveEnd ('character', 0);
+				range.select(); 
+				} 
+				else if (br == "ff"){
+					txtarea.selectionStart = strPos;
+					txtarea.selectionEnd = strPos;
+					txtarea.focus(); 
+				}
+				txtarea.scrollTop = scrollPos; 
     //IE support
+		/*
     if (document.selection) {
         field.focus();
-				field.update(value);
-        //var sel = document.selection.createRange();
-        //sel.text = value;
+				//field.update(value);
+        var sel = document.selection.createRange();
+				range.moveStart ('character', -field.value.length);
     //Mozilla/Firefox/Netscape 7+ support
     } else if (field.selectionStart || field.selectionStart == '0') {
         field.focus();
@@ -173,7 +202,7 @@ Object.extend(Iyxzone, {
         field.setSelectionRange(endPos+value.length, endPos+value.length);
     } else {
         field.value += value;
-    }
+    }*/
   },
 
   getCurPos: function(field){
