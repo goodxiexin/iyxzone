@@ -13,3 +13,5 @@ set mysql database default char set, collate
 7. cache mini blogs
 
 10. test program
+
+11. insertAtCursor
