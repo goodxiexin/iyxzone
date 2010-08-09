@@ -25,8 +25,10 @@
                         <li id='publisher_video'><%= link_to_function '<span class="i iVideo"></span>视频</a>', "Iyxzone.MiniBlog.Builder.newVideo()" %></li>
                         <li id='publisher_topic'><%= link_to_function '<span class="i iTopic"></span>话题</a>', "Iyxzone.MiniBlog.Builder.newTopic()" %></li>
                       </ul>
+											<div class="submit fix">
 											<span class="count">你还可以输入<span class="num" id="mini_blog_words_count">140</span>字</span>
                       <span class="button03"><span><%= button_to_function "发布", "Iyxzone.MiniBlog.Builder.publish('#{at}');", {:id => 'publish_btn'} %></span></span>
+											</div>
                     </div>
                   </div>
                 </div>
