@@ -104,12 +104,24 @@ Object.extend(Iyxzone.URL, {
     return this.build("/polls/" + pollID, params);
   },
 
+  updatePoll: function(pollID, params){
+    return this.build("/polls/" + pollID, params);
+  },
+
   deletePoll: function(pollID, params){
     return this.build("/polls/" + pollID, params);
   },
 
   listPoll: function(userID, params){
     return this.build("/polls?uid=" + userID, params);
+  },
+
+  createVote: function(pollID, params){
+    return this.build("/polls/" + pollID + "/votes", params);
+  },
+
+  createPollAnswer: function(pollID, params){
+    return this.build("/polls/" + pollID + "/answers", params);
   }
 
 });

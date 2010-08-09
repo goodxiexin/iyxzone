@@ -1,5 +1,5 @@
 <% facebox_tag '修改选项说明' do %>
-  <% rows_form_remote_for :poll, :url => poll_url(@poll), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($('update_explanation_btn'), '请等待');"} do |f| %>
+  <% rows_form_for :poll, :html => {:onsubmit => "Iyxzone.Poll.updatePoll($('update_explanation_btn'), this, #{@poll.id}); return false"} do |f| %>
     <div class='formcontent'>
       <%= f.text_area 'explanation', :rows => 20, :label => '选项说明' %>
     </div>

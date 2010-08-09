@@ -1,4 +1,4 @@
-        <% form_tag poll_votes_url(poll), :onsubmit=> "Iyxzone.disableButton($(poll_vote_submit_btn),'请等待..');" do %>
+        <% form_tag poll_votes_url(poll), :onsubmit => "Iyxzone.Poll.vote($('poll_vote_submit_btn'), this, #{poll.id});return false;" do %>
           <table class="vote-status-table" cellpadding="0">
             <% poll.answers.each_with_index do |answer, i| %>
             <tr>

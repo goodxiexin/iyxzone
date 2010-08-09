@@ -9,6 +9,12 @@ Iyxzone.Poll = {
     document.write("<td class='status'>" + votes + "(" + percent + "%)</td>");
   },
 
+  Builder: {}
+};
+
+// vote
+Object.extend(Iyxzone.Poll, {
+
   checkMultipleSelection: function(max, checkbox){
     var inputs = $$('input');
     var selected = 0;
@@ -22,10 +28,122 @@ Iyxzone.Poll = {
     }
   },
 
-  Builder: {}
-};
+  vote: function(button, form, pollID){
+    Iyxzone.disableButton(button, '发送中');
 
+    // validate
+    var inputs = $$('input');
+    var selected = 0;
+    for(var i=0;i<inputs.length;i++){
+      if(inputs[i].type == 'checkbox' && inputs[i].checked && inputs[i].readAttribute('id') != 'anonymous')
+        selected++;
+    }
+    if(selected == 0){
+      tip('你至少需要选1项');
+      Iyxzone.enableButton(button, '提交');
+    }
 
+    new Ajax.Request(Iyxzone.URL.createVote(pollID), {
+      method: 'post',
+      parameters: $(form).serialize(),
+      onLoading: function(){},
+      onComplete: function(){},
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showPoll(pollID);
+        }else if(json.code == 0){
+          error("发生错误，请稍后在试试");
+        }
+      }.bind(this)
+    });
+  }
+
+});
+
+// add answer
+Object.extend(Iyxzone.Poll, {
+
+  addAnswer: function(button, form, pollID){
+    Iyxzone.disableButton(button, '发送中');
+
+    // validate
+    // TODO
+
+    new Ajax.Request(Iyxzone.URL.createPollAnswer(pollID), {
+      method: 'post',
+      parameters: $(form).serialize(),
+      onLoading: function(){},
+      onComplete: function(){},
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showPoll(pollID);
+        }else if(json.code == 0){
+          error("发生错误，请稍后在试试");
+          Iyxzone.enableButton(button, '完成');
+        }
+      }.bind(this)
+    });
+  }
+
+});
+
+// edit deadline and explanation
+Object.extend(Iyxzone.Poll, {
+
+  updatePoll: function(button, form, pollID){
+    Iyxzone.disableButton(button, '发送中');
+    new Ajax.Request(Iyxzone.URL.updatePoll(pollID), {
+      method: 'put',
+      parameters: $(form).serialize(),
+      onLoading: function(){},
+      onComplete: function(){},
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showPoll(pollID);
+        }else if(json.code == 0){
+          error("发生错误，请稍后在试试");
+          Iyxzone.enableButton(button, '完成');
+        }
+      }.bind(this)
+    });
+  }
+
+});
+
+// delete poll
+Object.extend(Iyxzone.Poll, {
+
+  deletePoll: function(userID, pollID){
+    new Ajax.Request(Iyxzone.URL.deletePoll(pollID), {
+      method: 'delete',
+      onLoading: function(){
+      },
+      onComplete: function(){
+        Iyxzone.Facebox.close();
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.listPoll(userID);
+        }else if(json.code == 0){
+          error('发生错误，请稍后再试试');
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmDeletingPoll: function(userID, pollID){
+    Iyxzone.Facebox.confirmWithCallback("你确定要删除这个投票吗", null, null, function(){
+      this.deletePoll(userID, pollID);
+    }.bind(this)); 
+  }
+
+});
+
+// create poll
 Object.extend(Iyxzone.Poll.Builder, {
 
   validate: function(){
@@ -79,13 +197,26 @@ Object.extend(Iyxzone.Poll.Builder, {
     return true;
   },
 
-  prepare: function(form){
-  
-  },
-
   save: function(button, form){
     Iyxzone.disableButton(button, '请等待..');
     if(this.validate()){
+      new Ajax.Request(Iyxzone.URL.createPoll(), {
+        method: 'post',
+        parameters: $(form).serialize(),
+        onLoading: function(){
+        },
+        onComplete: function(){
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.showPoll(json.id);
+          }else if(json.code == 0){
+            error("发生错误，请稍后再试试");
+            Iyxzone.enableButton(button, '发布投票');
+          }
+        }.bind(this)
+      });
     }else{
       Iyxzone.enableButton(button, '发布投票');
     }

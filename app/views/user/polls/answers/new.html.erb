@@ -1,5 +1,5 @@
 <% facebox_tag '增加选项' do %>
-  <% form_remote_tag :url => poll_answers_url(@poll), :html=> {:onsubmit=> "Iyxzone.disableButton($(new_poll_answer_btn),'请等待..');"} do %>
+  <% form_remote_tag :url => poll_answers_url(@poll), :html=> {:onsubmit=> "Iyxzone.Poll.addAnswer($(new_poll_answer_btn), this, #{@poll.id});return false;"} do %>
     <div class='formcontent'>
       <div class='content'>
         <div id='poll_answers'>
