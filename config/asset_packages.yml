@@ -41,6 +41,8 @@ javascripts:
   - friend
   - textboxlist
   - cropper
+- album:
+  - album
 - blog:
   - blog
   - yushan_nicEdit

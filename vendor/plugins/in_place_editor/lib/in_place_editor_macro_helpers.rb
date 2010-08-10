@@ -93,7 +93,7 @@ module InPlaceEditorMacroHelpers
   def in_place_text_area object, property, empty_text="", options={}
     object_name = object.class.to_s.underscore
 		span_id = "#{object_name}_#{property}_#{object.to_param}"
-		url = "/#{object_name.pluralize}/#{object.id}.json"
+		url = "/#{object_name.pluralize}/#{object.id}"
  
 		return content_tag(:span, h(object.send(property)), {:id => span_id}) + text_area_js(span_id, url, empty_text, object_name, property, options)
   end
@@ -101,7 +101,7 @@ module InPlaceEditorMacroHelpers
   def in_place_text_field object, property, empty_text="", options={}
     object_name = object.class.to_s.underscore
     span_id = "#{object_name}_#{property}_#{object.to_param}"
-    url = "/#{object_name.pluralize}/#{object.id}.json"
+    url = "/#{object_name.pluralize}/#{object.id}"
  
     return content_tag(:span, h(object.send(property)), {:id => span_id}) + text_field_js(span_id, url, empty_text, object_name, property, options)
   end

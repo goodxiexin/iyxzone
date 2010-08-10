@@ -1,5 +1,5 @@
 <% facebox_tag '删除相册' do %>
-  <% rows_form_remote_for :album, :url => personal_album_url(@album), :html=>{ :method => :delete, :onsubmit=> "Iyxzone.disableButton($(album_confirm_destroy_btn),'请等待..');"} do |f| %>
+  <% rows_form_for :album, :html => {:onsubmit => "Iyxzone.Album.deleteAlbum($(album_confirm_destroy_btn), #{@album.id}, #{current_user.id});return false"} do |f| %>
     <div class='formcontent'>
       <% if @album.photos_count == 0 or current_user.albums_count == 2 %>
         <%= f.span '你确实是否要删除这个相册吗' %>

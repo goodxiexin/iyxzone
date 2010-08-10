@@ -1,7 +1,7 @@
 <% facebox_tag '新建相册' do %>
-  <%= content_tag :div, '', :id => 'errors'%>
-  <% rows_form_remote_for :album, :url => personal_albums_url(:at => params[:at]), :loading => "Iyxzone.disableButton($('new_album_submit'), '请等待..');", :complete => "Iyxzone.enableButton($('new_album_submit'), '完成');Iyxzone.Facebox.close();" do |f| %>
+  <% rows_form_for :album, :html => {:onsubmit => "Iyxzone.Album.Builder.create('#{params[:at]}', $('new_album_submit'), this, #{current_user.id}); return false"} do |f| %>
     <% content_tag :div, :class => 'formcontent' do %>
+      <%= content_tag :div, '', :id => 'errors', :class => "error-msg", :style => "display:none" %>
       <%= f.text_field 'title', :label => '相册名称' %>
       <%= f.text_area 'description', :label => '相册描述' %>
       <%= f.collection_select :game_id, current_user.games, :id, :name, {:prompt => '---'}, :label => '游戏分类', :class => 'selector selector02' %>

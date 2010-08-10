@@ -5,8 +5,6 @@ Iyxzone.Photo = {
 
   Tagger: Class.create({}),
 
-  SlideManager: {},
-
   Slide: Class.create({}), // 纵向的图片浏览
 
   Slide3: Class.create({}) // 纵向的图片浏览，而且不不切换url的

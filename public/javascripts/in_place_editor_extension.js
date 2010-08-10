@@ -32,25 +32,31 @@ Ajax.InPlaceTextArea = Class.create(Ajax.InPlaceEditor, {
     if (empty_span = this.element.select("." + this.options.emptyClassName).first()) {
       empty_span.remove();
     }
-    this.element.update( this.element.innerHTML.replace(/<br>/g, '\n')); 
+    this.element.update(this.element.innerHTML.replace(/<br>/g, '\n')); 
     return $super();
   },
 
   callbackHandler: function(form, value){
+    this.value = value; // used as a cache
+
     var param = this.options.paramName;
     if((param == null || param == 'value') && this.options.updateClass && this.options.updateAttr){
       param = (this.options.updateClass + "[" + this.options.updateAttr + "]");
     }
+
     return param + "=" + value + "&authenticity_token=" + encodeURIComponent(this.options.token);
   },
 
   onCompleteHandler: function(transport, element){
     if (transport && transport.status == 200) {
-      new Effect.Highlight(element.id, {"startcolor": "#00ffff"});
       var json = transport.responseText.evalJSON();
-      var html = eval("json." + this.options.updateClass + "." + this.options.updateAttr).escapeHTML();
-      element.update(html);
-      this.checkElement();
+      if(json.code == 1){
+        new Effect.Highlight(element.id, {"startcolor": "#00ffff"});
+        element.update(this.value);
+        this.checkElement();
+      }else{
+        // do nothing
+      }
     }
   }, 
 
@@ -119,20 +125,26 @@ Ajax.InPlaceTextField = Class.create(Ajax.InPlaceEditor, {
   },
 
   callbackHandler: function(form, value){
+    this.value = value;
+    
     var param = this.options.paramName;
     if((param == null || param == 'value') && this.options.updateClass && this.options.updateAttr){
       param = (this.options.updateClass + "[" + this.options.updateAttr + "]");
     }
+
     return param + "=" + value + "&authenticity_token=" + encodeURIComponent(this.options.token);
   },
 
   onCompleteHandler: function(transport, element){
     if (transport && transport.status == 200) {
-      new Effect.Highlight(element.id, {"startcolor": "#00ffff"});
       var json = transport.responseText.evalJSON();
-      var html = eval("json." + this.options.updateClass + "." + this.options.updateAttr).escapeHTML();
-      element.update(html);
-      this.checkElement();
+      if(json.code == 1){
+        new Effect.Highlight(element.id, {"startcolor": "#00ffff"});
+        element.update(this.value);
+        this.checkElement();
+      }else{
+        // do nothing;
+      }
     }
   }, 
 

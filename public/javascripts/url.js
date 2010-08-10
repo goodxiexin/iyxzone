@@ -154,3 +154,24 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// album and photo
+Object.extend(Iyxzone.URL, {
+
+  createAlbum: function(params){
+    return this.build("/personal_albums", params);
+  },
+
+  updateAlbum: function(albumID, params){
+    return this.build("/personal_albums/" + albumID, params);
+  },
+
+  listAlbum: function(userID, params){
+    return this.build("/personal_albums?uid=" + userID, params);
+  },
+
+  deleteAlbum: function(albumID, params){
+    return this.build("/personal_albums/" + albumID, params);
+  }
+
+});
