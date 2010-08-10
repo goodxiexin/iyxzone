@@ -107,13 +107,18 @@ function uploadProgress(file, bytesLoaded, bytesTotal) {
 
 function uploadSuccess(file, serverData) {
 	try {
-		var progress = new FileProgress(file, this.customSettings.progressTarget);
-		//progress.setComplete();
-		progress.setStatus("完成");
-		this.customSettings.uploadedPhotoIds.push(serverData);
-    if(this.getStats().files_queued != 0){
-      document.getElementById(this.customSettings.submitButtonId).disabled = true;
-      document.getElementById(this.customSettings.cancelButtonId).disabled = false;
+    var json = serverData.evalJSON();
+    if(json.code == 1){
+		  var progress = new FileProgress(file, this.customSettings.progressTarget);
+		  //progress.setComplete();
+		  progress.setStatus("完成");
+		  this.customSettings.uploadedPhotoIds.push(json.id);
+      if(this.getStats().files_queued != 0){
+        document.getElementById(this.customSettings.submitButtonId).disabled = true;
+        document.getElementById(this.customSettings.cancelButtonId).disabled = false;
+      }
+    }else{
+      // TODO, error
     }
 	} catch (ex) {
 		this.debug(ex);
@@ -192,19 +197,24 @@ function queueComplete(numFilesUploaded) {
   $('total_size').innerHTML = '总计: 0KB';
   $('total_entries').innerHTML = '0张照片'; 
 
-  var url = this.customSettings.recordUploadURL;
   var params = "";
-  var photo_ids = this.customSettings.uploadedPhotoIds;
-  for(var i=0;i< photo_ids.length;i++){
-    params += "ids[]=" + photo_ids[i] + "&";
-  }
-  params += "authenticity_token=" + this.customSettings.authenticityToken + "&";
+  params += "authenticity_token=" + encodeURIComponent(this.customSettings.authenticityToken);
+  params += "&album_id=" + this.customSettings.albumID;
+  this.customSettings.uploadedPhotoIds.each(function(id){
+    params += "&ids[]=" + id;
+  });
 
-  new Ajax.Request(url, {
+  new Ajax.Request(this.customSettings.recordUploadURL, {
     method: 'post',
     parameters: params,
     onSuccess: function(transport){
-      this.customSettings.uploadedPhotoIds = [];
+      var json = transport.responseText.evalJSON();
+      if(json.code == 1){
+        window.location.href = Iyxzone.URL.editMultiplePhoto(this.customSettings.albumID, this.customSettings.uploadedPhotoIds);
+        this.customSettings.uploadedPhotoIds = [];
+      }else if(json.code == 0){
+        error("发生错误，无法跳转页面");
+      }
     }.bind(this)
   });
 }

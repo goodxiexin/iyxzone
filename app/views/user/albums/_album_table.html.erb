@@ -23,7 +23,7 @@
         <% photos[j..j+n].each do |photo| %>
           <td>
           <%= facebox_link "", eval("edit_#{photo.class.name.underscore}_url(photo, :at => 'album')"), :class => "icon-active icon-active-edit" %>
-          <%= facebox_confirm '', eval("#{photo.class.name.underscore}_url(photo)"), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %>
+          <%= link_to_function '', "Iyxzone.#{photo.class.name}.confirmDeletingPhoto(#{photo.id}, #{photo.album_id});", :class => "icon-active" %>
           </td>
         <% end %>
         <td></td></td></td>

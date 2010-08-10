@@ -10,6 +10,7 @@ Iyxzone.Photo = {
   Slide3: Class.create({}) // 纵向的图片浏览，而且不不切换url的
 };
 
+
 Iyxzone.Photo.FriendSelector = Class.create({
 
   initialize: function(toggleButton, input, friendList, friendTable, friendItems, gameSelector, token){

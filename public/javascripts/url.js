@@ -155,7 +155,7 @@ Object.extend(Iyxzone.URL, {
 
 });
 
-// album and photo
+// personal album and photo
 Object.extend(Iyxzone.URL, {
 
   createAlbum: function(params){
@@ -166,12 +166,67 @@ Object.extend(Iyxzone.URL, {
     return this.build("/personal_albums/" + albumID, params);
   },
 
+  showAlbum: function(albumID, params){
+    return this.build("/personal_albums/" + albumID, params);
+  },
+
   listAlbum: function(userID, params){
     return this.build("/personal_albums?uid=" + userID, params);
   },
 
   deleteAlbum: function(albumID, params){
     return this.build("/personal_albums/" + albumID, params);
+  },
+
+  editMultiplePhoto: function(albumID, photoIDs, params){
+    var ids = "";
+    photoIDs.each(function(id){
+      if(ids != "")
+        ids += "&";
+      ids += "ids[]=" + id;
+    });
+    return this.build("/personal_photos/edit_multiple?album_id=" + albumID + "&" + ids, params);     
+  },
+
+  updateMultiplePhoto: function(albumID, params){
+    return this.build("/personal_photos/update_multiple?album_id=" + albumID, params);
+  },
+
+  showPhoto: function(photoID, params){
+    return this.build("/personal_photos/" + photoID, params);
+  },
+
+  updatePhoto: function(photoID, params){
+    return this.build("/personal_photos/" + photoID, params);
+  },
+
+  deletePhoto: function(photoID, params){
+    return this.build("/personal_photos/" + photoID, params);
+  }
+
+});
+
+// avatar album, photo
+Object.extend(Iyxzone.URL, {
+
+  showAvatarAlbum: function(albumID, params){
+    return this.build("/avatar_albums/" + albumID, params);
+  },
+
+  updateAvatarAlbum: function(albumID, params){
+    return this.build("/avatar_albums/" + albumID, params);
+  },
+
+  updateAvatar: function(photoID, params){
+    return this.build("/avatars/" + photoID, params);
+  },
+
+  showAvatar: function(photoID, params){
+    return this.build("/avatars/" + photoID, params);
+  },
+
+  deleteAvatar: function(photoID, params){
+    return this.build("/avatars/" + photoID, params);
   }
 
 });

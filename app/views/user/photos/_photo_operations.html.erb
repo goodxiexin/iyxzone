@@ -11,7 +11,7 @@
                     <% end %>
                     <% if deleteable %> 
                       <span class="photo-op-del"></span>
-                      <%= facebox_confirm '删除', eval("#{class_name}_url(photo)"), {:method => :delete, :msg => '你确定要删除吗?'} %> |
+                      <%= link_to_function '删除', "Iyxzone.#{photo.class.name}.confirmDeletingPhoto(#{photo.id}, #{photo.album_id})" %> |
                     <% end %>
                     <% if diggable %>
                       <span class="photo-op-praise" ></span>

@@ -27,7 +27,7 @@
           <% end %>
           <%= facebox_link "", edit_avatar_url(photo, :at => 'album'), :class => "icon-active icon-active-edit" %>
           <% if !photo.is_cover? %>
-            <%= facebox_confirm '', avatar_url(photo), {:msg => '你确定要删除这张图片吗', :method => 'delete'}, {:class => "icon-active"} %>
+            <%= link_to_function '', "Iyxzone.Avatar.confirmDeletingPhoto(#{photo.id}, #{photo.album_id});", :class => "icon-active" %>
           <% end %>
           </td>
         <% end %>

@@ -23,7 +23,6 @@ class User::PhotosController < UserBaseController
     
     if @photo.save
       render :json => {:code => 1, :id => @photo.id}
-			#render :text => @photo.id	
 		else
       # TODO
     end
@@ -33,10 +32,9 @@ class User::PhotosController < UserBaseController
     @photos = @album.photos.nonblocked.find(params[:ids] || [])
 
 		if @album.record_upload current_user, @photos
-      render :json => {:code => 1} #redirect_js edit_multiple_personal_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+      render :json => {:code => 1}
     else
       render :json => {:code => 0}
-      #render_js_error
     end
   end 
 
@@ -46,39 +44,9 @@ class User::PhotosController < UserBaseController
 
   def update
     if @photo.update_attributes(params[:photo])
-			respond_to do |format|
-				format.html { render :json => {:code => 1}}
-=begin
-          render :update do |page|
-  					if @album.id != @photo.album_id
-              if params[:at] == 'album'
-		  				  page.redirect_to personal_album_url(@album)
-              elsif params[:at] == 'photo'
-                page.redirect_to personal_photo_url(@photo)
-              end
-  					else
-              if params[:at] == 'album'
-		  				  page << "Iyxzone.Facebox.close();"
-              elsif params[:at] == 'photo'
-                page.redirect_to personal_photo_url(@photo)
-					    end
-            end
-				  end 
-        }
-=end
-				format.json { render :json => @photo }
-			end 
+			render :json => {:code => 1}
     else
-      respond_to do |format|
-        format.html { render :json => {:code => 0}}
-=begin
-          render :update do |page|
-            page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
-            page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题无法保存', :message => nil %>"
-          end 
-        }
-=end
-      end
+      render :json => {:code => 0}
     end
   end
 
@@ -100,10 +68,8 @@ class User::PhotosController < UserBaseController
   def destroy
     if @photo.destroy
       render :json => {:code => 1}
-      #redirect_js personal_album_url(@album)
     else
       render :json => {:code => 0}
-      #render_js_error
     end
   end
 
