@@ -1,5 +1,5 @@
 <div class='impress-add s_clear space'>
-<% all_tags = game.tags.map(&:name).uniq %>
+<% all_tags = game.tags.limit(6).map(&:name) %>
 <% if all_tags.size > 6 %>
 <% tags = all_tags.sort_by{rand}[0..5] %>
 <% else %>
