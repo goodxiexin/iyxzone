@@ -22,15 +22,9 @@ class SessionsController < ApplicationController
       flash.now[:error] = "你的帐号被删除了"
       render :action => (params[:at] == 'outside')? 'new_from_outside' : 'index', :layout => (params[:at] == 'outside')? '':'root'
     else
-      invalid_name = InvalidName.find_by_user_id current_user.id
-      if invalid_name.blank?
-        remember_me_in_cookie if params[:remember_me]
-        flash[:notice] = "欢迎来到一起游戏网！"
-        redirect_back_or_default(home_url)
-      else
-        flash[:notice] = "请先修改你的昵称，谢谢!"
-        redirect_to "/change_nickname/#{invalid_name.token}"
-      end
+      remember_me_in_cookie if params[:remember_me]
+      flash[:notice] = "欢迎来到一起游戏网！"
+      redirect_back_or_default(home_url)
     end
   end
 
