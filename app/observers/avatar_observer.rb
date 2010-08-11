@@ -41,9 +41,11 @@ class AvatarObserver < ActiveRecord::Observer
 
     # verify
     if avatar.recently_recovered?
+puts "recently recovered"
       avatar.album.raw_increment :photos_count
       # 就不恢复了，因为头像可能已经是别的了
     elsif avatar.recently_rejected?
+puts "recently rejected"
       avatar.album.raw_decrement :photos_count
       avatar.destroy_feeds
     end

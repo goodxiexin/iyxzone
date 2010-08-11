@@ -21,8 +21,6 @@ class User::Avatars::PhotosController < UserBaseController
 
     if @photo.save && @album.set_cover(@photo)
 			responds_to_parent do
-        render :json => {:code => 1, :id => @photo.id}
-=begin
         render :update do |page|
           page << "Iyxzone.Facebox.close()"
           if params[:at] == 'album'
@@ -35,16 +33,12 @@ class User::Avatars::PhotosController < UserBaseController
             page.replace_html 'the_avatar_image', album_cover_image(@album, :size => :clarge)
           end
         end
-=end
       end
     else
       responds_to_parent do
-        render :json => {:code => 0}
-=begin
         render :update do |page|
           page << "$('error').innerHTML = 'There was an error uploading this icon"
         end
-=end
       end
     end
   end
