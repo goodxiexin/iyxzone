@@ -70,57 +70,7 @@ module FriendSuggestor
 	end
 
 	def collect_friends
-    fri_sug = {} # (user_id, frequency) pair
-		fri_sug.default = 0
-
-    # friend's friends
-    friends.random(:limit => 10).each do |friend|
-      friend.friends.each do |u|
-				if u != self and !self.has_friend?(u)	and !self.has_fan?(u) and !u.has_fan?(self) and !self.wait_for?(u) and !u.wait_for?(self)
-          fri_sug[u.id] += 10  # 是好友的好友加10分
-        end
-      end
-    end
-
-		# events
-		all_events.each do |event|
-			event.participants.each do |u|
-				if u != self and !self.has_friend?(u)	and !self.has_fan?(u) and !u.has_fan?(self) and !self.wait_for?(u) and !u.wait_for?(self)
-					fri_sug[u.id] += 10 # 参加同一个活动加10分
-				end
-			end
-		end	
-
-		#	guilds
-		all_guilds.each do |guild|
-			guild.people.each do |u|
-				if u != self and !self.has_friend?(u)	and !self.has_fan?(u) and !u.has_fan?(self) and !self.wait_for?(u) and !u.wait_for?(self)
-					fri_sug[u.id] += 10  # 参加同一个工会加10分
-				end
-			end
-		end
-
-		# user within same game
-		# TODO
-    games.each do |game|
-			game.users.random(:limit => FRIEND_SUGGESTION_SET_SIZE).each do |u|
-				if u != self and !self.has_friend?(u)	and !self.has_fan?(u) and !u.has_fan?(self) and !self.wait_for?(u) and !u.wait_for?(self)
-					fri_sug[u.id] += 3 # 相同游戏加3分
-				end
-			end
-		end
-
-    # radom picked users
-    User.random(:limit => FRIEND_SUGGESTION_SET_SIZE, :conditions => "activated_at IS NOT NULL").each do |u|
-			if u != self and !self.has_friend?(u)	and !self.has_fan?(u) and !u.has_fan?(self) and !self.wait_for?(u) and !u.wait_for?(self)
-				fri_sug[u.id] += 1 # 加1分
-			end
-    end
-
-    # sort by score and return first FRIEND_SUGGESTION_SET_SIZE 
-    fri_sug.sort{|a, b| b[1] <=> a[1]}[0..(FRIEND_SUGGESTION_SET_SIZE - 1)].map{|info| info[0]}
-	
-	end
+  end
 
 	def destroy_obsoleted_friend_suggestions friend
 		FriendSuggestion.delete_all(:user_id => id, :suggested_friend_id => friend.id)
@@ -141,7 +91,7 @@ module FriendSuggestor
   def create_friend_suggestions
 		# now destroy all existing friend suggestions
 		FriendSuggestion.delete_all(:user_id => id)
-
+e=Time.now
 		# construct new suggestions and insert into database
 		values = []
 		f_s = collect_friends
@@ -155,7 +105,9 @@ module FriendSuggestor
 		sql = "insert into friend_suggestions values #{values.join(',')}"
 		values.clear
 		ActiveRecord::Base.connection.execute(sql)
-	end 
+s=Time.now
+puts "total: #{s-e} s"
+  end 
 	
 	def new_collect_comrades server
     s = Time.now
