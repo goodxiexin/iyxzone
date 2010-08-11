@@ -59,6 +59,7 @@ Object.extend(Iyxzone.Register, {
     }
 
     var a = /[a-zA-Z0-9_\u4e00-\u9fa5]+/.exec(login);
+    alert(a[0]);
     if(a == null || a[0] != login){
       this.error('login_info', '只能包含字母，数字，汉字以及下划线');
       return false;

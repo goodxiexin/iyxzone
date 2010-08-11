@@ -38,9 +38,9 @@
 								<% end %>
                   <td class= "<%=index%>"align="center" width="33%">
 									<% if hot_user.avatar.blank? %>
-                    <a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>?utm_source=mailSite&utm_clarge=email&utm_term=revive&utm_content=newMemberLink&utm_campaign=weekReminder" style="text-decoration:none;" target='_blank'><%= image_tag "/images/default_#{hot_user.gender}_clarge.png", :width=>"50", :height=>"50", :border=>"0"%>
+                    <a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>?utm_source=mailSite&utm_clarge=email&utm_term=revive&utm_content=newMemberLink&utm_campaign=weekReminder" style="text-decoration:none;" target='_blank'><%= image_tag "/images/default_#{hot_user.gender}_cmedium.png" :border=>"0"%>
 									<% else %>
-										<a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>?utm_source=mailSite&utm_clarge=email&utm_term=revive&utm_content=newMemberLink&utm_campaign=weekReminder" style="text-decoration:none;" target='_blank'><%= image_tag "#{hot_user.avatar.public_filename("clarge")}", :width=>"50", :height=>"50", :border=>"0" %>
+										<a href="<%=SITE_URL%>/profiles/<%= hot_user.id%>?utm_source=mailSite&utm_clarge=email&utm_term=revive&utm_content=newMemberLink&utm_campaign=weekReminder" style="text-decoration:none;" target='_blank'><%= image_tag "#{hot_user.avatar.public_filename("cmedium")}", :border=>"0" %>
 									<% end %>
                     <div style="width:80px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;color:#333;font-size:12px"><%= hot_user.login%></div></a>
                   </td>

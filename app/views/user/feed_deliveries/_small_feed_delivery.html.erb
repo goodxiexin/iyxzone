@@ -2,7 +2,7 @@
   <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
     <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html =>{ :class => "icon-active"} %><% end %> 
     <div class="s-img left">
-      <div class="imgbox01"><%= avatar poster, :size => "csmall", :width => 25, :height => 25 %></div>
+      <div class="imgbox01"><%= avatar poster, :size => :csmall %></div>
     </div>
     <div class="jl-list-con jl-cutline">
       <%= yield %>

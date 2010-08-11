@@ -3,7 +3,7 @@
     <div class="new"></div>
     <div class="img">
       <table cellpadding="0"><tr><td>
-        <%= album_cover album, :class => 'imgbox01', :size => :clarge %>
+        <%= album_cover album, :class => 'imgbox01' %>
       </td></tr></table>
     </div>
     <div class="info">
@@ -11,7 +11,7 @@
       <p><%= ftime2 album.created_at %>更新</p>
       <ul>
         <% album.latest_photos.nonblocked.each do |p| %>
-          <li><%= photo_link p, :class => 'imgbox01', :size => :csmall %></li>
+          <li><%= photo_link p, :class => 'imgbox01', :size => :cmedium %></li>
         <% end %>
       </ul>
     </div>

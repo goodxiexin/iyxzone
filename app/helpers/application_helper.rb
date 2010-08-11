@@ -1,7 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
-  def avatar_path user, size="csmall"
+  def avatar_path user, size="cmedium"
     if user.avatar.blank? || user.avatar.rejected?
       "/images/default_#{user.gender}_#{size}.png"
     else
@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def avatar_image(user, opts={})
-    size = opts.delete(:size) || "csmall"
+    size = opts.delete(:size) || "cmedium"
     if user.avatar.blank? || user.avatar.rejected?
       image_tag "default_#{user.gender}_#{size}.png", opts
     else
@@ -30,7 +30,7 @@ module ApplicationHelper
 	end
 
   def avatar(user, img_opts={}, a_opts={})
-		size = img_opts.delete(:size) || "csmall"
+		size = img_opts.delete(:size) || "cmedium"
     a_opts.merge!({:popup => true})
     if user.avatar.blank? || user.avatar.rejected?
       link_to image_tag("default_#{user.gender}_#{size}.png", img_opts), profile_url(user.profile), a_opts
