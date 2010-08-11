@@ -14,7 +14,6 @@ protected
   def need_change_nickname
     record = InvalidName.find_by_user_id current_user.id
     if !record.nil?
-      flash[:notice] = "您需要先修改昵称才能继续访问我们网站，谢谢合作！！"
       redirect_to "/change_nick_name/#{record.token}"
     end
   end
