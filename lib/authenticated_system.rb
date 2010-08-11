@@ -81,6 +81,10 @@ module AuthenticatedSystem
       session[:return_to] = nil
     end
 
+    # session 其实也是cookie中的一部分，只不过有个特定的名字叫_XXXX_session
+    # 这个cookie里有个码，服务器用这个来识别这个session是否合法
+    # 如果已经登录了，那session总是合法的，总能取到session[:user_id]
+    # 不然就要从auth_token这个cookie来读入了
     def login_from_session
       self.current_user = User.find_by_id(session[:user_id]) if session[:user_id]
     end
