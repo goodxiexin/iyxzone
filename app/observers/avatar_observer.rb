@@ -7,7 +7,7 @@ class AvatarObserver < ActiveRecord::Observer
 
   def before_create avatar
     return unless avatar.thumbnail.blank?
-
+puts "before_create #{avatar.id}"
     # verify
     avatar.needs_verify # 总是需要验证的
 
@@ -20,6 +20,7 @@ class AvatarObserver < ActiveRecord::Observer
 
 	def after_create avatar
     return unless avatar.thumbnail.blank?
+puts "after_create #{avatar.id}"
 
     avatar.album.update_attributes(:uploaded_at => Time.now)
     avatar.album.raw_increment :photos_count
@@ -32,12 +33,14 @@ class AvatarObserver < ActiveRecord::Observer
 
   def before_update avatar
     return unless avatar.thumbnail.blank?
+puts "before_update #{avatar.id}"
 
     avatar.auto_verify 
   end
  
   def after_update avatar
     return unless avatar.thumbnail.blank?
+puts "after_update #{avatar.id}"
 
     # verify
     if avatar.recently_recovered?
@@ -51,6 +54,7 @@ class AvatarObserver < ActiveRecord::Observer
  
   def after_destroy avatar
     return unless avatar.thumbnail.blank?
+puts "after_destroy #{avatar.id}"
 
     # decrement counter
     if !avatar.rejected? and avatar.album
