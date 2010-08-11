@@ -7,7 +7,7 @@ class AvatarObserver < ActiveRecord::Observer
 
   def before_create avatar
     return unless avatar.thumbnail.blank?
-puts "before_create #{avatar.id}"
+    
     # verify
     avatar.needs_verify # 总是需要验证的
 
@@ -20,10 +20,18 @@ puts "before_create #{avatar.id}"
 
 	def after_create avatar
     return unless avatar.thumbnail.blank?
-puts "after_create #{avatar.id}"
 
-    avatar.album.update_attributes(:uploaded_at => Time.now)
-    avatar.album.raw_increment :photos_count
+    album = avatar.album
+
+    album.update_attributes(:uploaded_at => Time.now)
+    album.raw_increment :photos_count
+
+    # check if photo is cover
+    if avatar.recently_set_cover?
+      album.set_cover avatar
+    end
+
+    avatar.clear_cover_action
 
     # issue avatar feeds if necessary 
     if avatar.poster.application_setting.emit_photo_feed?
@@ -33,28 +41,34 @@ puts "after_create #{avatar.id}"
 
   def before_update avatar
     return unless avatar.thumbnail.blank?
-puts "before_update #{avatar.id}"
 
     avatar.auto_verify 
   end
  
   def after_update avatar
     return unless avatar.thumbnail.blank?
-puts "after_update #{avatar.id}"
+
+    album = avatar.album(true)
 
     # verify
     if avatar.recently_recovered?
-      avatar.album.raw_increment :photos_count
+      album.raw_increment :photos_count
       # 就不恢复了，因为头像可能已经是别的了
     elsif avatar.recently_rejected?
-      avatar.album.raw_decrement :photos_count
+      album.raw_decrement :photos_count
       avatar.destroy_feeds
+    end
+
+    # check if it is cover now
+    if avatar.recently_set_cover?
+      album.set_cover avatar
+    elsif avatar.recently_unset_cover?
+      album.set_cover nil if album.cover_id == avatar.id
     end
   end 
  
   def after_destroy avatar
     return unless avatar.thumbnail.blank?
-puts "after_destroy #{avatar.id}"
 
     # decrement counter
     if !avatar.rejected? and avatar.album

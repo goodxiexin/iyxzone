@@ -27,12 +27,20 @@ class Photo < ActiveRecord::Base
   end
 
   def is_cover= is_cover
-    @is_cover = (is_cover.to_i == 1) ? true : false
+    @cover_action = (is_cover.to_i == 1) ? :recently_set_cover : :recently_unset_cover
   end
 
-  after_create :set_album_cover_on_create
+  def recently_set_cover?
+    @cover_action == :recently_set_cover
+  end
 
-  after_update :set_album_cover_on_update
+  def recently_unset_cover?
+    @cover_action == :recently_unset_cover
+  end
+
+  def clear_cover_action
+    @cover_action = nil
+  end
 
 	def swf_uploaded_data=(data)
     data.content_type = MIME::Types.type_for(data.original_filename)
@@ -44,37 +52,5 @@ class Photo < ActiveRecord::Base
   validates_presence_of :album_id, :if => "thumbnail.blank?", :on => :create
 
   attr_readonly :poster_id, :game_id
-
-protected
-
-  def set_album_cover_on_create
-    return unless thumbnail.blank?
-    if @is_cover
-      album.reload.set_cover self
-    end
-    @is_cover = nil
-  end
-
-  def set_album_cover_on_update
-    return unless thumbnail.blank?
-    if @is_cover
-      if album_id_changed?
-        from_album = Album.find(self.album_id_was)
-        to_album = Album.find(self.album_id)
-        from_album.set_cover nil if from_album.cover_id == self.id
-        to_album.set_cover self
-      else
-        album.set_cover self
-      end
-    else
-      if album_id_changed?
-        from_album = Album.find(self.album_id_was)
-        from_album.set_cover nil if from_album.cover_id == self.id
-      else
-        album.set_cover nil if album.cover_id == self.id
-      end
-    end
-    @is_cover = nil
-  end
 
 end

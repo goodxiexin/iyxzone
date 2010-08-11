@@ -75,7 +75,7 @@ class PersonalPhotoTest < ActiveSupport::TestCase
     @album.reload
     assert_nil @album.cover
   end
-  
+
   test "set cover, migration" do
     @album1 = PersonalAlbumFactory.create :owner_id => @user.id
     @album2 = PersonalAlbumFactory.create :owner_id => @user.id
@@ -110,11 +110,13 @@ class PersonalPhotoTest < ActiveSupport::TestCase
     assert_equal @album2.cover, @photo2
 
     # move cover to another album
+    puts "photo1: #{@photo1.id}, photo2: #{@photo2.id}, photo3: #{@photo3.id}"
     @photo3.update_attributes(:album_id => @album2.id)
     @album1.reload and @album2.reload
     assert_equal @album1.photos_count, 0
     assert_equal @album2.photos_count, 3
     assert_nil @album1.cover
+    puts "album2.cover: #{@album2.cover.id}"
     assert_equal @album2.cover, @photo2
  
     # move photo and set it as cover
@@ -132,7 +134,7 @@ class PersonalPhotoTest < ActiveSupport::TestCase
     assert_equal @album1.cover, @photo2
     assert_nil @album2.cover
   end
-  
+
   test "photo feeds" do
     @album1 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::PUBLIC
     @album2 = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::OWNER
