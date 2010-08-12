@@ -1,9 +1,9 @@
 class UserBaseController < ApplicationController
 
+  before_filter :login_required
+
   # 临时家出来的，为了让别人改名字
   before_filter :need_change_nickname
-
-  before_filter :login_required
 
   before_filter :set_last_seen_at
 

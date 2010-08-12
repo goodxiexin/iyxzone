@@ -71,26 +71,26 @@ namespace :users do
           if "#{login}_#{i}".length > 30
             failed.write "#{id}: #{login}_#{i} 新名字太长\n"
 						puts "#{id}: #{login}_#{i} 新名字太长\n"
-u.login = "用户#{u.id}"
-u.save
-changed.write "#{id}: #{login} => #{u.login}\n"
-puts "#{id}: #{login} => #{u.login}"
+            u.login = "用户#{u.id}"
+            u.save
+            changed.write "#{id}: #{login} => #{u.login}\n"
+            puts "#{id}: #{login} => #{u.login}"
             record = InvalidName.create :user_id => u.id
             UserMailer.deliver_change_nickname u, record.token
           elsif User.exists? :login => "#{login}_#{i}"
             failed.write "#{id}: 新名字 #{login}_#{i} 已经被使用了\n"
 						puts "#{id}: 新名字 #{login}_#{i} 已经被使用了\n"
-u.login = "用户#{u.id}"
-u.save
-changed.write "#{id}: #{login} => #{u.login}\n"
-puts "#{id}: #{login} => #{u.login}"
+            u.login = "用户#{u.id}"
+            u.save
+            changed.write "#{id}: #{login} => #{u.login}\n"
+            puts "#{id}: #{login} => #{u.login}"
             record = InvalidName.create :user_id => u.id
             UserMailer.deliver_change_nickname u, record.token
           else
             u.login = "#{login}_#{i}"
             u.save
             changed.write "#{id}: #{login} => #{u.login}\n"
-puts "#{id}: #{login} => #{u.login}"
+            puts "#{id}: #{login} => #{u.login}"
             record = InvalidName.create :user_id => u.id
             UserMailer.deliver_change_nickname u, record.token
           end

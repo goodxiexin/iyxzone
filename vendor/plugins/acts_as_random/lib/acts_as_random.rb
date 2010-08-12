@@ -32,11 +32,11 @@ module ActsAsRandom
       picked = []
       if limit + except.uniq.count >= count
         # just return all records
-        picked = self.all(:conditions => cond, :include => prefetch) - except
+        picked = self.all(:conditions => cond, :include => prefetch, :select => select) - except
       else
         limit.times.each do
           while 1
-            record = self.find(:first, :conditions => cond, :include => prefetch, :offset => rand(count))
+            record = self.find(:first, :conditions => cond, :include => prefetch, :select => select, :offset => rand(count))
             if !picked.include?(record) and !except.include?(record)
               picked << record
               break

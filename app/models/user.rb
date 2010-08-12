@@ -26,6 +26,10 @@ class User < ActiveRecord::Base
     idolships.map(&:idol_id)
   end
 
+  def fan_ids
+    fanships.map(&:fan_id)
+  end
+
   def has_fan? fan
     fanships.map(&:fan_id).include?(fan.is_a?(Integer) ? fan : fan.id)
   end
@@ -127,6 +131,16 @@ class User < ActiveRecord::Base
 
   def friend_ids
     friendships.map(&:friend_id)
+  end
+
+  # 那些你请求加为好友的人
+  def request_friend_ids
+    all_friendships.match(:status => Friendship::Request, :user_id => id).map(&:friend_id) 
+  end
+
+  # 那些请求加你好友的人
+  def requested_friend_ids
+    all_friendships.match(:status => Friendship::Request, :friend_id => id).map(&:user_id)
   end
 
   def has_friend? user

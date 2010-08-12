@@ -35,12 +35,10 @@ class UserObserver < ActiveRecord::Observer
       end
 
       # create suggestions
-=begin too slow
 			user.create_friend_suggestions
 			user.servers.each do |s|
 				user.create_comrade_suggestions s
 			end
-=end
     end
     
     UserMailer.deliver_forgot_password user if user.recently_forgot_password?

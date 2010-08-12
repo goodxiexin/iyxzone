@@ -14,10 +14,10 @@ class FriendshipObserver < ActiveRecord::Observer
 	def after_update friendship
 		if friendship.was_request? and friendship.is_friend?
       # delete some obsoleted friend/comrade suggestions
-			# friendship.user.destroy_obsoleted_friend_suggestions friendship.friend
-			# friendship.user.destroy_obsoleted_comrade_suggestions friendship.friend
-			# friendship.friend.destroy_obsoleted_friend_suggestions friendship.user
-      # friendship.friend.destroy_obsoleted_comrade_suggestions friendship.user
+			friendship.user.destroy_obsoleted_friend_suggestions friendship.friend
+			friendship.user.destroy_obsoleted_comrade_suggestions friendship.friend
+			friendship.friend.destroy_obsoleted_friend_suggestions friendship.user
+      friendship.friend.destroy_obsoleted_comrade_suggestions friendship.user
 
       # change counter
       friendship.friend.raw_decrement :friend_requests_count
