@@ -1,0 +1,11 @@
+<div class='impress-add s_clear space' id='tag_cloud'> 
+<% all_tags = profile.tags.limit(9).map(&:name) %>
+<% if all_tags.size == 9 %>
+<% tags = all_tags %>
+<% else %>
+<% tags = all_tags.concat((profiler.user.gender == 'female') ? Tag::DEFAULLT_FEMALE_TAGS : Tag::DEFAULT_MALE_TAGS)[0..8] %>
+<% end %>
+<% tags.each do |name| %>
+	<%= link_to_function "<span>#{name}</span>", "Iyxzone.Profile.Tag.addTag(#{profile.id}, '#{name}');", :class => "impress-btn-#{rand(4)}"} %>
+<% end %>
+</div>

@@ -9,17 +9,15 @@
   <% end %>
   </div>
   <div id='tag_cloud'>
-  <% if user == current_user %>
-    <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => profile} %>
-  <% elsif profile.is_taggable_by? current_user %>
-    <%= render :partial => 'user/profiles/tags/profile_tag', :locals => {:profile => profile} %>
-    <% form_remote_for :tag, :url => profile_tags_url(profile), :loading => "Iyxzone.disableButton($('tag_submit'), '请等待')", :complete => "if($('tag_submit')){Iyxzone.enableButton($('tag_submit'), '评价');}", :html => {} do |f| %>
+  <% if profile.is_taggable_by? current_user %>
+    <%= render :partial => 'user/profiles/tag_candidates', :locals => {:profile => profile} %>
+    <% form_for :tag, :html => {:onsubmit => "Iyxzone.Profile.Tag.submitForm(#{profile.id}, this); return false"} do |f| %>
       <p class='space'>都不贴切？自己想个</p>
       <div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
       <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
     <% end %>
   <% else %>
-    <%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => profile} %>
+    <%= render :partial => 'user/tags/tag_cloud', :locals => {:taggable => profile, :deleteable => profile.is_tag_deleteable_by?(current_user)} %>
   <% end %>
   </div>
 </div>

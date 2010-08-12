@@ -1,0 +1,13 @@
+<div class='impress-show s_clear space' id='tag_cloud'> 
+<% if taggable.tags.blank? %>
+	还没有人进行评价
+<% else %>
+	<% tag_cloud taggable, %w(css1 css2 css3 css4) do |tag, css_class| %>
+		<% if deleteable %>
+			<a href="javascript:void(0)" class="impress-<%=rand(4)%>" id='tag_<%= tag.id %>'><span class=<%= css_class %>><%= tag.name %></span><b class='icon2-close' onclick="Iyxzone.Profile.Tag.deleteTag(<%=taggable.id%>, <%=tag.id%>, '<%= form_authenticity_token%>')"></b></a>
+		<% else %>
+			<a href="javascript:void(0)" class="impress-<%=rand(4)%>"><span class=<%= css_class %>><%= tag.name %></span></a>
+		<% end %>
+	<% end %>
+<% end %>
+</div>
