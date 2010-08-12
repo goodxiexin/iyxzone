@@ -1,11 +1,6 @@
 <div class='impress-add s_clear space'>
-<% all_tags = game.tags.limit(6).map(&:name) %>
-<% if all_tags.size > 6 %>
-<% tags = all_tags.sort_by{rand}[0..5] %>
-<% else %>
-<% tags = all_tags %>
-<% end %>
-<% tags.each do |name| %>
+<% all_tags = game.tags.limit(10).map(&:name) %>
+<% all_tags.each do |name| %>
 	<%= link_to_remote "<span>#{name}</span>", :url => game_tags_url(game, "tag_name" => name), :html=>{ :class=>"impress-btn-#{rand(4)}"}%>
 <% end %>
 </div>

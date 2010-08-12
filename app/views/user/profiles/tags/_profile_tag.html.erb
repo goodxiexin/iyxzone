@@ -1,11 +1,11 @@
 <div class='impress-add s_clear space' id='tag_cloud'> 
-<% all_tags = profile.tags.limit(6) %>
-<% if all_tags.size > 6 %>
-<% tags = all_tags %>
+<% all_tags = profile.tags.limit(17) %>
+<% if all_tags.size == 17 %>
+<% tags = all_tags.map(&:name) %>
 <% else %>
-<% tags = all_tags.concat Tag.profile_tags.limit(6) %>
+<% tags = all_tags.map(&:name).concat((profile.user.gender == 'female') ? Tag::DEFAULT_FEMALE_TAGS : Tag::DEFAULT_MALE_TAGS)[0..16] %>
 <% end %>
-<% tags.map(&:name).each do |name| %>
+<% tags.each do |name| %>
 	<%= link_to_remote "<span>#{name}</span>", :url => profile_tags_url(profile, :tag_name => name),:html=>{:class=> "impress-btn-#{rand(4)}"} %>
 <% end %>
 </div>
