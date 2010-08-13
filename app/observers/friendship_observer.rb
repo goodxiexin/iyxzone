@@ -4,8 +4,13 @@ class FriendshipObserver < ActiveRecord::Observer
 
 	def after_create friendship
 		if friendship.is_request?
-			FriendshipMailer.deliver_request(friendship.user, friendship.friend) if friendship.friend.mail_setting.request_to_be_friend?
-			friendship.friend.raw_increment :friend_requests_count
+      requests = Friendship.match(:status => Friendship::Request, :user_id => friendship.user_id, :friend_id => friendship.friend_id).all - [friendship]
+      if requests.blank?
+        FriendshipMailer.deliver_request(friendship.user, friendship.friend) if friendship.friend.mail_setting.request_to_be_friend?
+      else
+        requests.each {|r| r.destroy} # 只保留最新的，应该只有1个
+      end
+      friendship.friend.raw_increment :friend_requests_count
 		elsif friendship.is_friend?
       friendship.user.raw_increment :friends_count 
     end

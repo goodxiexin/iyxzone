@@ -6,6 +6,9 @@ module FriendSuggestor
 	COMRADE_SUGGESTION_SET_SIZE = 50
 
 	def collect_friends
+    game_ids = self.game_ids
+    return [] if game_ids.blank?
+
     except_ids = [self.id]
     except_ids.concat self.friend_ids
     except_ids.concat self.request_friend_ids

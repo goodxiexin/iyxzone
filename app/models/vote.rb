@@ -11,7 +11,7 @@ class Vote < ActiveRecord::Base
 	acts_as_resource_feeds :recipients => lambda {|vote| 
     voter = vote.voter
     friends = voter.friends.find_all{|f| f.application_setting.recv_poll_feed?}
-    [voter.profile, vote.poll.game] + voter.all_guilds + friends + (voter.is_idol ? voter.fans : [])
+    ([voter.profile, vote.poll.game] + voter.all_guilds + friends + (voter.is_idol ? voter.fans : [])).uniq
   }
 
   attr_readonly :voter_id, :poll_id, :answer_ids

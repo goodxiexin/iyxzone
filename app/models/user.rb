@@ -205,7 +205,7 @@ class User < ActiveRecord::Base
   has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'created_at DESC', :dependent => :destroy
 
   # 活跃的相册，就是有上传过东西的相册
-  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "photos_count IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
+  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "photos_count != 0 AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
   def albums_count relationship='owner'
     # dont forget avatar album which is not accessible to none-friend

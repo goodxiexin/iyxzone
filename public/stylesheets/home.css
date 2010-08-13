@@ -482,15 +482,20 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .inform-box .inform-list td{color:#7E7F80;line-height:18px;}
 .inform-box .inform-list .close{width:8px;padding-left:4px;padding-right:22px;text-align:right;}
 
-.request-box{clear:both;margin-bottom:16px;}
-.request-box h4{margin-bottom:7px;padding:0 14px;height:21px;line-height:21px;color:#7E7F80;border-bottom:1px #E7F0E0 solid;overflow:hidden;}
+.request-box{clear:both;margin-bottom:16px;color:#666;}
+.request-box h4{margin-bottom:7px;padding:0 14px;height:21px;line-height:21px;border-bottom:1px #E7F0E0 solid;overflow:hidden;}
 .request-box h4 span{float:right;}
-.request-box .request-list{padding:7px 14px;}
-.request-box .request-list .img{float:left;width:60px;text-align:center;overflow:hidden}
-.request-box .request-list .info{margin-left:72px;_margin-left:69px;}
-.request-box .request-list .info p{display:block;height:25px;line-height:25px;color:#7E7F80;overflow:hidden}
-.request-box .request-list .info .buttons{clear:none;padding:7px 0;}
-.request-box .request-list .info .buttons .button{margin-right:8px}
+.request-list{padding:10px 10px 10px 70px;}
+.request-list .img{float:left;margin-left:-70px;_display:inline}
+.request-list .info{float:left;width:100%}
+.request-list .info p{display:block;height:25px;line-height:25px;color:#7E7F80;overflow:hidden}
+.request-list .info .buttons{clear:none;padding:7px 0;}
+.request-list .info .buttons .button{margin-right:8px}
+.request-list .info .hd{border-bottom:1px dotted #ccc;padding-bottom:5px}
+.request-list .info .hd a{margin:0 8px}
+.request-list .info .bd{margin:10px 0}
+.request-list .info .piclist .picitem{padding:0;width:130px}
+.request-list .info .mBlogFeed{margin:10px 0}
 
 .share-box{margin-bottom:8px;padding-left:20px;}
 .share-box .nav-link ul{margin-left:-3px;}
@@ -1313,6 +1318,7 @@ span.i,a.i,.i40{width:16px;height:16px;margin-right:3px;display:-moz-inline-stac
 .iToggleUp{background-position:-96px -25px}
 .iViewOrig{background-position:0 -146px}
 .iArr02Down{background:url(../images/skin/arrow.gif) no-repeat 3px -146px}
+.iArr03{background-position:-17px -90px;width:14px;height:14px}
 .iSquare{background-position:-190px -69px}
 .iGuildJoin{background-position:0 -428px}
 .iGuildLogo{height:53px;background-position:0 -935px}
@@ -1354,6 +1360,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .actExStep1 h1.s1,.actExStep2 h1.s2,.actExStep3 h1.s3{color:#fff}
 .actEx h2.actExTitle{background:#e1fcc4;padding:8px 10px;font-size:12px;color:#333;font-weight:700;margin:15px 0}
 .actEx .actExCon{margin:20px 0 30px 0}
+.actEx .actExCon .mBlogStarCat li{width:105px}
 
 .actExInfo h2{color:#bf3a00;text-align:center;font-weight:700;font-size:12px;margin:20px 0 10px 0}
 .actExInfo p,.actExRole p{line-height:22px;padding:0 1em}
@@ -1599,6 +1606,34 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .transIcon span,.transIcon a{background:url(../images/skin/skin2010.png) no-repeat;display:block;text-align:center;width:54px;}
 .transIcon span{background-position:0 -720px;color:#fff;font-size:14px;font-weight:700;height:53px;line-height:40px;}
 .transIcon a{background-position:-60px -210px;color:#217308;height:25px;line-height:25px;margin-top:3px;text-align:center}
+/*微博详情*/
+.mBlogDetail .mBlogPostList .item{padding:0 0 10px 130px;}
+.mBlogDetail .mBlogPostList .item .feedFunc{margin-left:-130px;}
+.mBlogMore .mBlogPostList .item{padding:0 0 10px 15px;line-height:18px}
+.mBlogMore .mBlogPostList .item .feedFunc{margin-left:-20px;}
+.mBlogMore .mBlogPostList .mConWrap .mCon{width:230px}
+.mBlogMore h5{line-height:24px;*line-height:28px}
+.mBlogMore h5 a{font-weight:400;font-size:12px;text-decoration:underline}
+/*关注游戏达人*/
+.mBlogStar h2.title{font-size:14px;font-weight:700;color:#237800;border-bottom:1px solid #c6dea4;padding:10px 0;margin-bottom:20px}
+.mBlogStarCat{width:95%;border-bottom:1px solid #c6dea4;padding:20px 0;margin:0 auto}
+.mBlogStarCat .title{margin-bottom:20px}
+.mBlogStarCat .title h3{font-size:14px;float:left}
+.mBlogStarCat .title .func{float:right}
+.mBlogStarCat li{float:left;margin:10px 0;position:relative;z-index:1;width:115px;text-align:center}
+.mBlogStarCat li.selected{z-index:2}
+.mBlogStarCat li .check{height:24px;line-height:24px;overflow:hidden;width:100px}
+.mBlogStarCat li .starCard{position:absolute;top:-10px;left:-10px;width:245px}
+.starCard .wrap{position:relative;padding:10px 10px 10px 90px;text-align:left;}
+.starCard .wrap .op .icon-active{position:absolute;right:10px;top:10px;}
+.starCard .wrap .avatar{float:left;margin-left:-80px;_display:inline;text-align:center;line-height:22px}
+.starCard .wrap .con{float:left;width:100%;line-height:20px;padding-bottom:10px;}
+.starCard .wrap .con .memberName{width:130px;height:22px;line-height:22px;overflow:hidden}
+.starCard .wrap .con .data{text-align:center;margin:10px 0;border-bottom:1px dotted #999;padding-bottom:10px}
+.starCard .wrap .con .data .pipe{border-right:1px solid #999;padding-right:15px;margin:0 15px}
+.starCard .wrap .con .data .num{color:#d83200}
+.starCard .wrap .con .intro{line-height:18px}
+.mBlogStarCat .multiFollow{width:150px;margin:20px auto 0 auto;}
 
 /*微博活动*/
 .mBlogAct{width:720px;margin:20px auto}

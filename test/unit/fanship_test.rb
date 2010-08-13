@@ -93,7 +93,7 @@ class FanshipTest < ActiveSupport::TestCase
       Fanship.create :fan_id => @user1.id, :idol_id => @friend.id
     end
 
-    # 不是好友，不是粉丝可以加为偶像
+    # 不是粉丝可以加为偶像
     assert_difference "Fanship.count" do
       Fanship.create :fan_id => @user1.id, :idol_id => @idol1.id
     end
@@ -102,30 +102,24 @@ class FanshipTest < ActiveSupport::TestCase
     assert_no_difference "Fanship.count" do
       Fanship.create :fan_id => @user1.id, :idol_id => @idol1.id
     end
-  end
 
-  test "friendship and fanship" do
+    # 可以同时是好友和偶像
+    assert_difference "Friendship.count", 2 do
+      FriendFactory.create @user1, @idol1
+    end
+    assert_difference "Friendship.count", 2 do
+      FriendFactory.create @user1, @idol2
+    end
     assert_difference "Fanship.count" do
-      Fanship.create :fan_id => @user1.id, :idol_id => @idol1.id
+      Fanship.create :fan_id => @user1.id, :idol_id => @idol2.id
     end
 
-    # 已经是偶像－粉丝关系了，那就没发成为好友关系
-    assert_no_difference "Friendship.count" do
-      Friendship.create :user_id => @user1.id, :friend_id => @idol1.id, :status => Friendship::Request
-    end
-
-    assert_no_difference "Friendship.count" do
-      Friendship.create :user_id => @idol1.id, :friend_id => @user1.id, :status => Friendship::Request
-    end
-
-    # 偶像能和不是偶像－粉丝关系的人加为好友，无论那人是不是偶像
-    assert_difference "Friendship.count" do
-      Friendship.create :user_id => @idol1.id, :friend_id => @idol2.id, :status => Friendship::Request
-    end 
-
-    assert_difference "Friendship.count" do
-      Friendship.create :user_id => @idol1.id, :friend_id => @friend.id, :status => Friendship::Request
-    end 
+    # 偶像还能是偶像的粉丝、好友
+    FriendFactory.create @idol1, @idol2
+    Fanship.create :fan_id => @idol1.id, :idol_id => @idol2.id
+    @idol1.reload and @idol2.reload
+    assert @idol1.has_friend? @idol2
+    assert @idol2.has_friend? @idol1
   end
 
 end

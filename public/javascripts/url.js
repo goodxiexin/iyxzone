@@ -94,3 +94,20 @@ Object.extend(Iyxzone.URL, {
 });
 
 // poll  url
+
+// friend request url
+Object.extend(Iyxzone.URL, {
+
+  createFriendRequest: function(friendID, params){
+    return this.build("/friend_requests?friend_id=" + friendID, params);
+  },
+
+  acceptFriendRequest: function(requestID, params){
+    return this.build("/friend_requests/" + requestID + "/accept", params);
+  },
+
+  declineFriendRequest: function(requestID, params){
+    return this.build("/friend_requests/" + requestID + "/decline", params);
+  }
+
+});

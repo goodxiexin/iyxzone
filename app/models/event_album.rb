@@ -13,7 +13,7 @@ class EventAlbum < Album
   acts_as_resource_feeds :recipients => lambda {|album| 
     poster = album.poster
     event = album.event
-    (poster.is_idol ? poster.fans : []) + poster.friends.find_all {|f| f.application_setting.recv_photo_feed?} + event.participants - [poster]
+    ((poster.is_idol ? poster.fans : []) + poster.friends.find_all {|f| f.application_setting.recv_photo_feed?} + event.participants - [poster]).uniq
   }
 
 end

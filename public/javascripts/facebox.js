@@ -30,6 +30,10 @@ Object.extend(Iyxzone.Facebox, {
 		this.facebox.setStyle({width: width + 'px'});
   },
 
+  setTitle: function(title){
+  
+  },
+
   appear: function(){
     if(!this.facebox.visible()) 
       new Effect.Appear(this.facebox, {'duration': 0.5}); 
@@ -83,7 +87,7 @@ Object.extend(Iyxzone.Facebox, {
     if(width)
       this.setWidth(width);
     if(title == null)
-      title = "通知"
+      title = "错误"
 
     this.setContent('<p class="z-h z-h-error s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + mess + '</p></div>');
     this.locate();

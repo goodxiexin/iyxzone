@@ -14,7 +14,7 @@ class PersonalAlbum < Album
 
   acts_as_resource_feeds :recipients => lambda {|album| 
     poster = album.poster
-    (poster.is_idol ? poster.fans : []) + poster.friends.find_all {|f| f.application_setting.recv_photo_feed?}
+    ((poster.is_idol ? poster.fans : []) + poster.friends.find_all {|f| f.application_setting.recv_photo_feed?}).uniq
   }
 
   validate_on_create :game_is_valid
