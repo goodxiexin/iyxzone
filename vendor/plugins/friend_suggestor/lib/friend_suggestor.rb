@@ -6,37 +6,40 @@ module FriendSuggestor
 	COMRADE_SUGGESTION_SET_SIZE = 50
 
 	def collect_friends
-    except_ids = ([self.id] + self.friend_ids + self.request_friend_ids + self.requested_friend_ids + self.friend_suggestions.map(&:suggested_friend_id) + self.comrade_suggestions.map(&:comrade_id) + User.match(:is_idol => true).all(:select => "id").map(&:id)).uniq
+    except_ids = [self.id]
+    except_ids.concat self.friend_ids
+    except_ids.concat self.request_friend_ids
+    except_ids.concat self.requested_friend_ids
+    # 避免2次create_friend_suggestions产生重复的结果
+    except_ids.concat self.friend_suggestions.map(&:suggested_friend_id)
+    except_ids.concat self.comrade_suggestions.map(&:comrade_id)
+    # 去掉下面这2行的原因是，fan, idol可能太多了，而且现在fan, idol和friend2种关系可以共存
+    #except_ids.concat User.match(:is_idol => true).all(:select => "id").map(&:id)
+    #except_ids.concat fan_ids if is_idol?
+    except_ids.uniq
 
-    if is_idol?
-      except_ids.concat fan_ids
-    end
-  
-    game_ids = self.games.map(&:id)
     remain = FRIEND_SUGGESTION_SET_SIZE
     suggestions = []
-    count = GameCharacter.match(:game_id => game_ids).count
-    
+    cond = "game_id IN (#{game_ids.join(',')}) and user_id NOT IN (#{except_ids.join(',')})"
+    count = GameCharacter.match(cond).count
+
     if count <= remain
-      return (GameCharacter.match(:game_id => game_ids).all(:select => "user_id").map(&:user_id).uniq - except_ids)
+      return GameCharacter.match(cond).all(:select => "user_id").map(&:user_id).uniq
     end
 
-    # 如果总量不是很大，随机将会很慢，因为老是有重复的
-    if count <= 6 * remain
-      return (GameCharacter.match(:game_id => game_ids).all(:select => "user_id").map(&:user_id).uniq - except_ids).sort{rand(2)}[0..(FRIEND_SUGGESTION_SET_SIZE - 1)]
+    if count <=  5 * remain
+      return (GameCharacter.match(cond).all(:select => "user_id").map(&:user_id).uniq).sort{rand(2)}[0..(FRIEND_SUGGESTION_SET_SIZE - 1)]
     end
 
     while true
       offset = rand(count)
-      user_ids = GameCharacter.match(:game_id => game_ids).offset(offset).limit(remain).all(:select => "user_id").map(&:user_id).uniq - except_ids
-      except_ids = user_ids + except_ids
+      user_ids = GameCharacter.match(cond).offset(offset).limit(remain).all(:select => "user_id").map(&:user_id).uniq - except_ids
       suggestions = suggestions.concat(user_ids).uniq
       remain = FRIEND_SUGGESTION_SET_SIZE - suggestions.count
-      if remain <= 0
-        break
-      end
+      break if remain <= 0
+      except_ids = except_ids + user_ids
     end
-    suggestions
+    suggestions 
 	end
 
 	def destroy_obsoleted_friend_suggestions friend
@@ -50,6 +53,7 @@ module FriendSuggestor
   end
 
   def create_friend_suggestions
+    s = Time.now
 		# now destroy all existing friend suggestions
 		FriendSuggestion.delete_all(:user_id => id)
 
@@ -67,36 +71,40 @@ module FriendSuggestor
 		values.clear
 		ActiveRecord::Base.connection.execute(sql)
 	  e = Time.now
+    puts "#{e-s} sec"
   end 
 	
 	def collect_comrades server
-    except_ids = ([self.id] + self.friend_ids + self.requested_friend_ids + self.requested_friend_ids + self.friend_suggestions.map(&:suggested_friend_id) + self.comrade_suggestions.map(&:comrade_id) + User.match(:is_idol => true).all(:select => "id").map(&:id)).uniq
-
-    if is_idol?
-      except_ids.concat fan_ids
-    end
+    except_ids = [self.id]
+    except_ids.concat self.friend_ids
+    except_ids.concat self.request_friend_ids
+    except_ids.concat self.requested_friend_ids
+    except_ids.concat self.friend_suggestions.map(&:suggested_friend_id)
+    except_ids.concat self.comrade_suggestions.map(&:comrade_id)
+    #except_ids.concat User.match(:is_idol => true).all(:select => "id").map(&:id).uniq
+    #except_ids.concat fan_ids if is_idol?
+    except_ids.uniq
 
     remain = COMRADE_SUGGESTION_SET_SIZE
     suggestions = []
-    count = GameCharacter.match(:server_id => server.id).count
+    cond = "server_id = #{server.id} and user_id NOT IN (#{except_ids.join(',')})"
+    count = GameCharacter.match(cond).count
 
     if count <= remain
-      return (GameCharacter.match(:server_id => server.id).all(:select => "user_id").map(&:user_id).uniq - except_ids)
+      return GameCharacter.match(cond).all(:select => "user_id").map(&:user_id).uniq
     end
 
-    if count <=  6 * remain
-      return (GameCharacter.match(:server_id => server.id).all(:select => "user_id").map(&:user_id).uniq - except_ids).sort{rand(2)}[0..(COMRADE_SUGGESTION_SET_SIZE - 1)]
+    if count <=  5 * remain
+      return (GameCharacter.match(cond).all(:select => "user_id").map(&:user_id).uniq).sort{rand(2)}[0..(COMRADE_SUGGESTION_SET_SIZE - 1)]
     end
 
     while true
       offset = rand(count)
-      user_ids = GameCharacter.match(:server_id => server.id).offset(offset).limit(remain).all(:select => "user_id").map(&:user_id).uniq - except_ids
-      except_ids = except_ids + user_ids
+      user_ids = GameCharacter.match(cond).offset(offset).limit(remain).all(:select => "user_id").map(&:user_id).uniq - except_ids
       suggestions = suggestions.concat(user_ids).uniq
       remain = FRIEND_SUGGESTION_SET_SIZE - suggestions.count
-      if remain <= 0
-        break
-      end
+      break if remain <= 0
+      except_ids = except_ids + user_ids
     end
     suggestions	
   end
@@ -112,6 +120,7 @@ module FriendSuggestor
   end
 
   def create_comrade_suggestions server
+    s = Time.now
     # destroy old suggestions
     ComradeSuggestion.delete_all(:user_id => id, :game_id => server.game_id, :server_id => server.id)
 
@@ -133,6 +142,7 @@ module FriendSuggestor
 	  sql = "insert into comrade_suggestions values #{values.join(',')}"
 		values.clear
 	  ActiveRecord::Base.connection.execute(sql)
-	end 
+	  puts "#{Time.now - s} sec"
+  end 
 
 end

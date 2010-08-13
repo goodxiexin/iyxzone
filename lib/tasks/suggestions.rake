@@ -12,13 +12,12 @@ namespace :suggestions do
 
   desc "计算好友推荐"
   task :create_friend_suggestions => :environment do
-    # 已经显示不满一页的时候再重新计算
     count = User.count
     offset = 0
     step = 1000
     while offset < count
       s = Time.now
-      User.offset(offset).limit(step).all(:select => "id").select{|u| u.friend_suggestions.count < 20}.each_with_index do |user, i|
+      User.offset(offset).limit(step).all(:select => "id").select{|u| u.friend_suggestions.count < FriendSuggestor::FRIEND_SUGGESTION_SET_SIZE/2}.each_with_index do |user, i|
         user.create_friend_suggestions
       end
       e = Time.now
@@ -37,7 +36,7 @@ namespace :suggestions do
       s = Time.now
       User.offset(offset).limit(step).all(:select => "id").each do |user|
         user.servers.each do |server|
-          if user.comrade_suggestions.match(:server_id => server.id).count < 20
+          if user.comrade_suggestions.match(:server_id => server.id).count < FriendSuggestor::COMRADE_SUGGESTION_SETS_SIZE
             user.create_comrade_suggestions server
           end
         end
