@@ -4,7 +4,7 @@
 <% else %>
 	<% tag_cloud taggable, %w(css1 css2 css3 css4) do |tag, css_class| %>
 		<% if deleteable %>
-			<a href="javascript:void(0)" class="impress-<%=rand(4)%>" id='tag_<%= tag.id %>'><span class=<%= css_class %>><%= tag.name %></span><b class='icon2-close' onclick="Iyxzone.Profile.Tag.deleteTag(<%=taggable.id%>, <%=tag.id%>, '<%= form_authenticity_token%>')"></b></a>
+			<a href="javascript:void(0)" class="impress-<%=rand(4)%>" id='tag_<%= tag.id %>'><span class=<%= css_class %>><%= tag.name %></span><b class='icon2-close' onclick="Iyxzone.<%= taggable.class.name %>.Tag.confirmDeletingTag(<%=taggable.id%>, <%=tag.id%>)"></b></a>
 		<% else %>
 			<a href="javascript:void(0)" class="impress-<%=rand(4)%>"><span class=<%= css_class %>><%= tag.name %></span></a>
 		<% end %>

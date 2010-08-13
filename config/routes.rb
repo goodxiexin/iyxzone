@@ -138,7 +138,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :profiles, :member => {:more_feeds => :get} do |profiles|
 
-      profiles.resources :tags, :controller => 'profiles/tags'
+      #profiles.resources :tags, :controller => 'profiles/tags'
 
       profiles.resources :viewings, :controller => 'profiles/viewings'
 
@@ -267,9 +267,11 @@ ActionController::Routing::Routes.draw do |map|
 
       games.resources :albums, :controller => 'games/albums'
 
-      games.resources :tags, :controller => 'games/tags'
+      #games.resources :tags, :controller => 'games/tags'
 
     end
+
+    users.resources :tags
 
     users.resources :forums
   

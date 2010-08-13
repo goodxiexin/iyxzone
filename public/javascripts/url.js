@@ -230,3 +230,21 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// tag
+Object.extend(Iyxzone.URL, {
+
+  createTag: function(taggableType, taggableID, params){
+    return this.build("/tags", Object.extend({'taggable_type': taggableType, 'taggable_id': taggableID}, params || {}));
+  },
+
+  // 不是真的删除tag，只是删除taggable关于这个tag的所有taggings
+  deleteTag: function(tagID, taggableType, taggableID, params){
+    return this.build("/tags/" + tagID, Object.extend({'taggable_type': taggableType, 'taggable_id': taggableID}, params|| {}));
+  },
+
+  listTag: function(taggableType, taggableID, params){
+    return this.build("/tags", Object.extend({'taggable_type': taggableType, 'taggable_id': taggableID}, params || {}));
+  }
+
+});

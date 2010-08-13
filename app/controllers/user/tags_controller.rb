@@ -41,9 +41,10 @@ protected
 	def setup
     if ["index", "create"].include? params[:action]
       @taggable = params[:taggable_type].camelize.constantize.find(params[:taggable_id])
-      require_create_privilege @taggable
+      require_create_privilege @taggable if params[:action] == 'create'
 		elsif ["destroy"].include? params[:action]
-      @taggable = get_taggable
+      # 不是真的删除tag，只是删除taggable关于这个tag的所有taggings
+      @taggable = params[:taggable_type].camelize.constantize.find(params[:taggable_id])
       require_delete_privilege @taggable
 		end
 	end
