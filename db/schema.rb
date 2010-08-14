@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100812061115) do
+ActiveRecord::Schema.define(:version => 20100814063914) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -445,6 +445,7 @@ ActiveRecord::Schema.define(:version => 20100812061115) do
     t.text   "random_ids"
     t.string "today_topic"
     t.string "today_topic_desc"
+    t.text   "hot_topics"
   end
 
   create_table "mini_blogs", :force => true do |t|

@@ -36,8 +36,8 @@
           </div>
         </div>
         <div class="mBlogExtra">
-          <% cache "hot_topics" do %>
-          <%= render :partial => 'hot_topics', :locals => {:start_time => @start_time, :topics => @hot_topics} %>
+          <% unless @hot_topics.blank? %>
+            <%= render :partial => 'hot_topics', :locals => {:start_time => @start_time, :topics => @hot_topics} %>
           <% end %>
           <%= render :partial => 'pop_users', :locals => {:users => @pop_users} %>
           <%= render :partial => 'hot_idols', :locals => {:idols => @hot_idols} %>
