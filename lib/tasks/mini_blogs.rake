@@ -57,7 +57,7 @@ namespace :mini_blogs do
     end
     e = Time.now
 
-    #`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
+    `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
     puts "main_topics #{e-now} s"
   
     puts "now compute rank"
@@ -114,6 +114,7 @@ namespace :mini_blogs do
 		`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
     e = Time.now
     puts "delta topics #{e-now} s"
+
     puts "now compute rank"
     s = Time.now
     meta_data = MiniBlogMetaData.first
