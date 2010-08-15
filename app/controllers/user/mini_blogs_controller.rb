@@ -124,6 +124,9 @@ class User::MiniBlogsController < UserBaseController
     end
   end
 
+  def show
+  end
+
   def new_forward
     @root = @mini_blog.original? ? @mini_blog : @mini_blog.root
     render :action => 'new_forward', :layout => false
@@ -152,7 +155,7 @@ protected
       @user = User.find(params[:uid])
     elsif ['create'].include? params[:action]
       params[:mini_blog][:mini_image] = current_user.mini_images.find(params[:mini_image_id]) unless params[:mini_image_id].blank?
-    elsif ['new_forward', 'forward'].include? params[:action]
+    elsif ['show', 'new_forward', 'forward'].include? params[:action]
       @mini_blog = MiniBlog.find params[:id]
     elsif ['destroy'].include? params[:action]
       @mini_blog = current_user.mini_blogs.find(params[:id])
