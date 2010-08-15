@@ -1,9 +1,17 @@
 Iyxzone.Event = {
-  version: '1.6',
+
+  version: '1.7',
+
   author: ['高侠鸿'],
+
   Builder: {},
-  Summary: {},
+
+  Invitation: {},
+
+  Participation: {},
+
   ParticipantManager: {},
+
   Presentor: {},
 
   follow: function(name, eid){
@@ -222,7 +230,25 @@ Object.extend(Iyxzone.Event.Builder, {
   save: function(form, button){
     Iyxzone.disableButton(button, '请等待..');
     if(this.validate(true)){
-      form.submit();
+      new Ajax.Request(Iyxzone.URL.createEvent(), {
+        method: 'post',
+        parameters: form.serialize(),
+        onLoading: function(){
+          Iyxzone.changeCursor('wait');
+        },
+        onComplete: function(){
+          Iyxzone.changeCursor('default');
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.newEventInvitation(json.id);
+          }else{
+            error("保存的时候发生错误，请稍后再试");
+            Iyxzone.enableButton(button, '提交');
+          }
+        }.bind(this)
+      });
     }else{
       Iyxzone.enableButton(button, '提交');
     } 
@@ -231,7 +257,25 @@ Object.extend(Iyxzone.Event.Builder, {
   update: function(eventID, form, button){
     Iyxzone.disableButton(button, '请等待..');
     if(this.validate(false)){
-      form.submit();
+      new Ajax.Request(Iyxzone.URL.updateEvent(eventID), {
+        method: 'post',
+        parameters: form.serialize(),
+        onLoading: function(){
+          Iyxzone.changeCursor('wait');
+        },
+        onComplete: function(){
+          Iyxzone.changeCursor('default');
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.showEvent(eventID);
+          }else{
+            error("保存的时候发生错误，请稍后再试");
+            Iyxzone.enableButton(button, '提交');
+          }
+        }.bind(this)
+      });
     }else{
       Iyxzone.enableButton(button, '提交');
     }
@@ -277,6 +321,240 @@ Object.extend(Iyxzone.Event.Builder, {
       $('event_character_id').value = '';
     if($('is_guild_event'))
       $('is_guild_event').checked = false;
+  }
+
+});
+
+Iyxzone.Event.Invitation = {
+  
+  Builder: {},
+
+  // 在所有的邀请页面接受请求
+  accept1: function(invitationID, eventID, status, btn){
+    var btn1 = $('ei_btn1_' + invitationID);
+    var btn2 = $('ei_btn2_' + invitationID);
+    var btn3 = $('ei_btn3_' + invitationID);
+
+    new Ajax.Request(Iyxzone.URL.acceptEventInvitation(eventID, invitationID), {
+      method: 'put',
+      parameters: {'status': status},
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        btn1.disabled = 'disabled';
+        btn2.disabled = 'disabled';
+        btn3.disabled = 'disabled';        
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+        btn1.disabled = '';
+        btn2.disabled = '';
+        btn3.disabled = '';
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('ei_' + invitationID).innerHTML = '<div class="hd"><span class="icon-invitation"></span>你已经加入了活动，快去看看<a href="' + Iyxzone.URL.showEvent(eventID) + '"><strong>活动主页</strong></a></div>'; 
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  },
+
+  decline1: function(invitationID, eventID, link, at){
+    var btn1 = $('ei_btn1_' + invitationID);
+    var btn2 = $('ei_btn2_' + invitationID);
+    var btn3 = $('ei_btn3_' + invitationID);
+
+    new Ajax.Request(Iyxzone.URL.declineEventInvitation(eventID, invitationID), {
+      method: 'delete',
+      parameters: {'status': status},
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        btn1.disabled = 'disabled';
+        btn2.disabled = 'disabled';
+        btn3.disabled = 'disabled';        
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+        Iyxzone.Facebox.close();
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('ei_' + invitationID).innerHTML = '<strong class="nowrap"><span class="icon-success"></span>已经拒绝邀请！</strong>';
+          setTimeout(function(){new Effect.Fade('event_invitation_' + invitationID);}, 2000);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  },
+
+  // 在所有的邀请页面接受请求
+  accept2: function(invitationID, eventID, status, btn){
+    var btn1 = $('ei_btn1');
+    var btn2 = $('ei_btn2');
+    var btn3 = $('ei_btn3');
+
+    new Ajax.Request(Iyxzone.URL.acceptEventInvitation(eventID, invitationID), {
+      method: 'put',
+      parameters: {'status': status},
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        btn1.disabled = 'disabled';
+        btn2.disabled = 'disabled';
+        btn3.disabled = 'disabled';        
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+        btn1.disabled = '';
+        btn2.disabled = '';
+        btn3.disabled = '';
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showEvent(eventID);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  },
+
+  decline2: function(invitationID, eventID, link, at){
+    var btn1 = $('ei_btn1');
+    var btn2 = $('ei_btn2');
+    var btn3 = $('ei_btn3');
+
+    new Ajax.Request(Iyxzone.URL.declineEventInvitation(eventID, invitationID), {
+      method: 'delete',
+      parameters: {'status': status},
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        btn1.disabled = 'disabled';
+        btn2.disabled = 'disabled';
+        btn3.disabled = 'disabled';        
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+        Iyxzone.Facebox.close();
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showEvent(eventID);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  }
+
+}
+
+Object.extend(Iyxzone.Event.Invitation.Builder, {
+
+  selected: new Hash(),
+
+  onClick: function(td, val){
+    if(this.selected.get(val)){
+      td.setStyle({background: 'white'});
+      this.selected.unset(val);
+    }else{
+      this.selected.set(val, td)
+      td.setStyle({background: '#DEFEBB'});
+    } 
+  },
+
+  submit: function(button, eventID){
+    if(this.selected.size() == 0){
+      error('你必须至少邀请一个游戏角色');
+    }else{
+      Iyxzone.disableButton(button,'请等待..');
+
+      // construct url
+      var url = Iyxzone.URL.createEventInvitation(eventID);
+      var params = "";
+      this.selected.each(function(pair){
+        if(params != "")
+          params += "&";
+        params += 'values[]=' + pair.key;
+      });
+      
+      new Ajax.Request(Iyxzone.URL.createEventInvitation(eventID), {
+        method: 'post',
+        parameters: params,
+        onLoading: function(){},
+        onComplete: function(){},
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            window.location.href = Iyxzone.URL.showEvent(eventID);
+          }else if(json.code == 0){
+            error("发生错误，请稍后再试试");
+            Iyxzone.enableButton(button, '确定'); 
+          }
+        }.bind(this)
+      });
+    }
+  },
+
+  reset: function(){
+    this.selected = new Hash();
+  },
+
+  search: function(){
+    var val = this.field.value;
+    var ul = $('invitee_list');
+    var els = ul.childElements();
+
+    els.each(function(li){
+      var pinyin = li.readAttribute('pinyin');
+      var name = li.readAttribute('name');
+      if(name.include(val) || pinyin.include(val)){
+        li.show();
+      }else{
+        li.hide();
+      }
+    }.bind(this));
+
+    this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  startObservingInput: function(field){
+    this.field = field;
+    this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  stopObservingInput: function(){
+    clearTimeout(this.timer);
+  }
+
+
+});
+
+Object.extend(Iyxzone.Event.Participation, {
+
+  update: function(participationID, eventID, form, btn){
+    new Ajax.Request(Iyxzone.URL.updateParticipation(eventID, participationID), {
+      method: 'put',
+      parameters: $(form).serialize(),
+      onLoading: function(){
+        Iyxzone.disableButton(btn, '发送中');
+      },
+      onComplete: function(){
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showEvent(eventID);
+        }else{
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
   }
 
 });

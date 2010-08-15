@@ -248,3 +248,41 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// event
+Object.extend(Iyxzone.URL, {
+
+  createEvent: function(params){
+    return this.build("/events", params);
+  },
+
+  showEvent: function(eventID, params){
+    return this.build("/events/" + eventID, params);
+  },
+
+  updateEvent: function(eventID, params){
+    return this.build("/events/" + eventID, params);
+  },
+
+  newEventInvitation: function(eventID, params){
+    return this.build("/events/" + eventID + "/invitations/new", params);
+  },
+
+  createEventInvitation: function(eventID, params){
+    return this.build("/events/" + eventID + "/invitations", params);
+  },
+
+  acceptEventInvitation: function(eventID, invitationID, params){
+    return this.build("/events/" + eventID + "/invitations/" + invitationID + "/accept", params);
+  },
+
+  declineEventInvitation: function(eventID, invitationID, params){
+    return this.build("/events/" + eventID + "/invitations/" + invitationID + "/decline", params);
+  },
+
+  updateParticipation: function(eventID, participationID, params){
+    return this.build("/events/" + eventID + "/participations/" + participationID, params);
+  }
+
+});
+

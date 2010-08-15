@@ -22,8 +22,8 @@
       <tr>
         <% photos[j..j+n].each do |photo| %>
           <td>
-          <%= facebox_link "", eval("edit_#{photo.class.name.underscore}_url(photo, :at => 'album')"), :class => "icon-active icon-active-edit" %>
-          <%= link_to_function '', "Iyxzone.#{photo.class.name}.confirmDeletingPhoto(#{photo.id}, #{photo.album_id});", :class => "icon-active" %>
+          <%= facebox_link "", edit_personal_photo_url(photo, :at => 'album'), :class => "icon-active icon-active-edit" %>
+          <%= link_to_function '', "Iyxzone.PersonalPhoto.confirmDeletingPhoto(#{photo.id}, #{photo.album_id});", :class => "icon-active" %>
           </td>
         <% end %>
         <td></td></td></td>

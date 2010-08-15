@@ -78,6 +78,9 @@ javascripts:
 - forum:
   - forum
   - yushan_nicEdit
+- invitation:
+  - event
+  - guild
 stylesheets: 
 - base: 
   - common

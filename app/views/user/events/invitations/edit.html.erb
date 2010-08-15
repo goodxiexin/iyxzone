@@ -2,17 +2,17 @@
 <div class='formcontent'>
   <div class="rows s_clear">
     <div class="fldvalue">
-      <%= radio_button :invitation, :status, 1, :onclick => "new Ajax.Request('#{accept_event_invitation_url(@event, @invitation, :at => 'event', :status => Participation::Confirmed, :authenticity_token => form_authenticity_token )}', {method: 'put', onLoading: function(){Iyxzone.changeCursor('wait');}});" %><%= label_tag '', '接受' %>
+      <%= radio_button :invitation, :status, 1, :onclick => "Iyxzone.Event.Invitation.accept2(#{@invitation.id}, #{@event.id}, #{Participation::Confirmed}, this);", :id => 'ei_btn1' %><%= label_tag '', '接受' %>
     </div>          
   </div>
   <div class="rows s_clear">
     <div class="fldvalue">
-      <%= radio_button :invitation, :status, 2, :onclick => "new Ajax.Request('#{accept_event_invitation_url(@event, @invitation, :at => 'event', :status => Participation::Maybe, :authenticity_token => form_authenticity_token )}', {method: 'put', onLoading: function(){Iyxzone.changeCursor('wait');}});" %><%= label_tag '', '可能去' %>
+      <%= radio_button :invitation, :status, 2, :onclick => "Iyxzone.Event.Invitation.accept2(#{@invitation.id}, #{@event.id}, #{Participation::Maybe}, this);", :id => 'ei_btn2' %><%= label_tag '', '可能去' %>
     </div>          
   </div>
   <div class="rows s_clear">
     <div class="fldvalue">
-      <%= radio_button :invitation, :status, 3, :onclick => "if(confirm('你确定吗?')){new Ajax.Request('#{decline_event_invitation_url(@event, @invitation, :at => 'event', :authenticity_token => form_authenticity_token)}', {method: 'delete', onLoading: function(){Iyxzone.changeCursor('wait');}});}" %><%= label_tag '', '拒绝' %>
+      <%= radio_button :invitation, :status, 3, :onclick => "Iyxzone.Event.Invitation.decline2(#{@invitation.id}, #{@event.id}, this);", :id => 'ei_btn3' %><%= label_tag '', '拒绝' %>
     </div>
   </div>
 </div>

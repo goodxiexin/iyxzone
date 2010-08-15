@@ -3,7 +3,7 @@
 <% content_for :html_keywords, "#{@event.title}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% content_for :javascript_include do %>
-  <%= javascript_include_tag 'invitation' %>
+  <%= javascript_include_merged :event %>
 <% end %>
 
 <% canvas_tag do %>
@@ -28,14 +28,11 @@
           <% else %>
             <div id='invitations'><%= render :partial => 'characters', :object => @characters %></div>
             <div class="rows s_clear">
-              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Invitation.Builder.submit(this, $('invitation_form'))" %></span></span>
+              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Event.Invitation.submit(this, #{@event.id})" %></span></span>
             </div>
           <% end %>  
           </div>
         </div>
       </div>
     </div>
-<% end %>
-
-<% form_tag event_invitations_url(@event), :id => 'invitation_form' do %>
 <% end %>

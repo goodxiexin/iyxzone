@@ -1,14 +1,15 @@
 <% invitation = event_invitation %>
+<% event = invitation.event %>
 <div class="request-box" id='event_invitation_<%= invitation.id %>'>
   <h4><span> <%= ftime invitation.created_at %> </span>活动</h4>
   <div class="request-list s_clear">
-    <div class="img"><%= avatar invitation.event.poster %> </div>
-    <div class="info">
-      <p> <%= profile_link invitation.event.poster %> 邀请你加入他的活动 <%= event_link invitation.event %>, 是否同意？</p>
-      <div class="buttons" id='event_invitation_option_<%= invitation.id %>'>
-        <span class="button"><span><%= button_to_remote '肯定去', :url => accept_event_invitation_url(invitation.event, invitation, :at => 'invitations', :status => Participation::Confirmed), :method => :put, :loading => "Iyxzone.disableButton($('event_invitation_option_#{invitation.id}').down('button',0),'请等待..'); Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %></span></span>
-        <span class="button"><span><%= button_to_remote '可能去', :url => accept_event_invitation_url(invitation.event, invitation, :at => 'invitations', :status => Participation::Maybe), :method => :put, :loading => "Iyxzone.disableButton($('event_invitation_option_#{invitation.id}').down('button',1),'请等待..');Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %></span></span>
-        <span class="button button-gray"><span><%= button_to_remote '不去', :url => decline_event_invitation_url(invitation.event, invitation, :at => 'invitations'), :method => :delete, :loading => "Iyxzone.disableButton($('event_invitation_option_#{invitation.id}').down('button',2),'请等待..'); Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %></span></span>
+    <div class="img"><%= avatar event.poster %> </div>
+    <div class="info" id='ei_<%= invitation.id %>'>
+      <p> <%= profile_link event.poster %> 邀请你加入他的活动 <%= event_link event %>, 是否同意？</p>
+      <div class="buttons">
+        <span class="button"><span><%= button_to_function '肯定去', "Iyxzone.Event.Invitation.accept1(#{invitation.id}, #{event.id}, #{Participation::Confirmed}, this);", :id => "ei_btn1_#{invitation.id}" %></span></span>
+        <span class="button"><span><%= button_to_function '可能去', "Iyxzone.Event.Invitation.accept1(#{invitation.id}, #{event.id}, #{Participation::Maybe}, this);", :id => "ei_btn2_#{invitation.id}" %></span></span>
+        <span class="button button-gray"><span><%= button_to_function '不去', "Iyxzone.Event.Invitation.decline1(#{invitation.id}, #{event.id}, this);", :id => "ei_btn3_#{invitation.id}" %></span></span>
       </div>
     </div>
   </div>
