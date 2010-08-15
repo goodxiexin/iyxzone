@@ -1,1 +1,1 @@
-<%= facebox_confirm "<span class='i iFollow'></span>成为粉丝", follow_idol_url(idol, :at => 'idol_list'), {:msg => "你确定要成为 #{idol.login} 的粉丝吗？ 这样你能在首页看到关于他的新鲜事~", :loading => "Iyxzone.changeCursor('wait')", :complete => "Iyxzone.changeCursor('default')", :method => :post} %>
+<%= link_to_function "<span class='i iFollow'></span>成为粉丝", "Iyxzone.Idol.follow(#{idol.id}, this);" %>

@@ -108,7 +108,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :fans
 
-    users.resources :idols, :member => {:follow => :post, :unfollow => :delete}
+    users.resources :idols, :member => {:follow => :post, :unfollow => :delete}, :collection => {:follow_multiple => :post}
 
 		users.resources :rss_feeds
 		

@@ -1,12 +1,34 @@
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'idol' %>
+<% end %>
+
 <% canvas_tag do%> 
   <h1 class="app-friend">好友</h1>
   <div class="box02 canvas_int">
     <%= render :partial => 'user/friends/tab', :locals => {:hover => 3} %> 
     <div class="mainConWrap clear">
-      <div class="starMember">
-        <%= render :partial => 'idol', :collection => @idols %>
+      <div class="mBlog fix">
+        <div class="mBlogStar">
+          <% @idols.group_by(&:skilled_game_id).each do |skilled_game_id, idols| %>
+            <% game = Game.find skilled_game_id %>
+            <div class="mBlogStarCat">
+              <div class="title fix"><h3><span class="i iArr03"></span><%= game.name %></h3><span class="func"><input type="checkbox" onclick="Iyxzone.Idol.Pub.toggleAllIdols(<%= game.id %>, $(this))" />全选</span></div>
+              <ul class="fix">
+                <% idols.each do |idol| %>
+                <li id='idol_<%= idol.id %>'>
+                  <div class="starAvatar"><%= avatar_image idol, :class => 'imgbox01', :onclick => "Iyxzone.Idol.Pub.showIdolInfo(#{idol.id}, #{game.id}, this)" %></div>
+                  <div class="check"><input type="checkbox" id='cb_<%= game.id %>_<%= idol.id %>'/><span class="memberName"><%= idol.login %></span></div>
+                </li>
+                <% end %>
+              </ul>
+              <div class="multiFollow fix"><span class="button04"><span><button onclick="Iyxzone.Idol.Pub.followMultiple(<%= game.id %>, this);">批量关注</button></span></span></div>
+            </div>
+            <% javascript_tag do %>
+              Iyxzone.Idol.Pub.addGameIdols(<%= {:id => game.id, :name => game.name}.to_json %>, <%= idols.map{|i| {:id => i.id, :login => i.login, :fans_count => i.fans_count, :mini_blogs_count => i.mini_blogs_count, :profile_id => i.profile.id, :motto => i.idol_description, :followed => i.has_fan?(current_user)}}.to_json %>)
+            <% end %> 
+          <% end %>
+        </div>
       </div>
-      <%= will_paginate @idols %>
     </div>
   </div>
 <% end %>

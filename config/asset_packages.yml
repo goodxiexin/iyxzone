@@ -49,6 +49,7 @@ javascripts:
 - search:
   - game
   - search
+  - idol
   - event.simulate
 - game:
   - game

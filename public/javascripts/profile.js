@@ -6,6 +6,63 @@ Iyxzone.Profile = {
 	Tag: {}
 };
 
+// follow/unfollow idol
+Object.extend(Iyxzone.Profile, {
+
+  followIdol: function(idolID, idolName, profileID, btn){
+    new Ajax.Request(Iyxzone.URL.followIdol(idolID), {
+      method: 'post',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showProfile(profileID);
+        }else if(json.code == 0){
+          error('发生错误，请稍后再试');
+        }
+      }.bind(this)
+    });
+  },
+
+  unfollowIdol: function(idolID, idolName, profileID, link){
+    new Ajax.Request(Iyxzone.URL.unfollowIdol(idolID), {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showProfile(profileID);
+        }else if(json.code == 0){
+          error('发生错误，请稍后再试');
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmFollowingIdol: function(idolID, idolName, profileID, btn){
+    Iyxzone.Facebox.confirmWithCallback("你确定要成为 <b>" + idolName + "</b> 的粉丝吗？这样你可以在首页上看到TA的新鲜事", null, null, function(){
+      Iyxzone.Profile.followIdol(idolID, idolName, profileID, btn);
+    });
+  },
+
+  confirmUnfollowingIdol: function(idolID, idolName, profileID, link){
+    Iyxzone.Facebox.confirmWithCallback("你确定要不做 <b>" + idolName + "</b> 的粉丝吗？", null, null, function(){
+      Iyxzone.Profile.unfollowIdol(idolID, idolName, profileID, link);
+    });
+  }
+
+});
+
 Object.extend(Iyxzone.Profile.Editor, {
 
   loading: function(div, title){

@@ -111,3 +111,47 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// fan url
+Object.extend(Iyxzone.URL, {
+
+  followIdol: function(idolID, params){
+    return this.build("/idols/" + idolID + "/follow", params);
+  },
+
+  unfollowIdol: function(idolID, params){
+    return this.build("/idols/" + idolID + "/unfollow", params);
+  },
+  
+  followMultipleIdols: function(params){
+    return this.build("/idols/follow_multiple", params);
+  }
+
+});
+
+// profile url
+Object.extend(Iyxzone.URL, {
+  
+  showProfile: function(profileID, params){
+    return this.build("/profiles/" + profileID, params);
+  }
+
+});
+
+// game url
+Object.extend(Iyxzone.URL, {
+
+  showGame: function(gameID, params){
+    return this.build("/games/" + gameID, params);
+  }
+
+});
+
+// mini blog url
+Object.extend(Iyxzone.URL, {
+
+  listMiniBlog: function(userID, params){
+    return this.build("/mini_blogs?uid=" + userID, params);
+  }
+
+});

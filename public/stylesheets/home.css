@@ -1609,6 +1609,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 /*微博详情*/
 .mBlogDetail .mBlogPostList .item{padding:0 0 10px 130px;}
 .mBlogDetail .mBlogPostList .item .feedFunc{margin-left:-130px;}
+.mBlogDetail .mBlogPostList .mConWrap .mCon{width:565px}
 .mBlogMore .mBlogPostList .item{padding:0 0 10px 15px;line-height:18px}
 .mBlogMore .mBlogPostList .item .feedFunc{margin-left:-20px;}
 .mBlogMore .mBlogPostList .mConWrap .mCon{width:230px}
@@ -1623,7 +1624,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogStarCat li{float:left;margin:10px 0;position:relative;z-index:1;width:115px;text-align:center}
 .mBlogStarCat li.selected{z-index:2}
 .mBlogStarCat li .check{height:24px;line-height:24px;overflow:hidden;width:100px}
-.mBlogStarCat li .starCard{position:absolute;top:-10px;left:-10px;width:245px}
+.mBlogStarCat li .starCard{position:absolute;top:-11px;left:13px;width:245px}
 .starCard .wrap{position:relative;padding:10px 10px 10px 90px;text-align:left;}
 .starCard .wrap .op .icon-active{position:absolute;right:10px;top:10px;}
 .starCard .wrap .avatar{float:left;margin-left:-80px;_display:inline;text-align:center;line-height:22px}
@@ -1642,7 +1643,9 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogAct .mBlogActBanner{margin:10px 0}
 .mBlogAct .ft{text-align:right}
 .mBlogAct .ft span{margin-left:10px}
-
+/*.mBlogAct .mBlogPostList .mConWrap .mConBgB{text-align:left}
+.mBlogAct .mBlogPostList .mConWrap .mCon{width:580px;}
+*/
 /*个人主页微博显示*/
 .mBlogProList{margin-top:15px}
 .mBlogProList .item{padding-left:30px}
