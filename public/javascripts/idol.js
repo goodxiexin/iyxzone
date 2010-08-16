@@ -200,7 +200,7 @@ Object.extend(Iyxzone.Idol.Pub, {
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
-          notice("关注成功");
+          notice("你已经成功成为了他们的粉丝");
         }else if(json.code == 0){
           error("发生错误，请稍后再试");
         }
