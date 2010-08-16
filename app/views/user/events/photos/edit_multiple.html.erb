@@ -2,13 +2,17 @@
 <% content_for :html_description, "#{@event.title}的照片编辑 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@event.title}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'event_photo' %>
+<% end %>
+
 <% canvas_tag do %>
     <%= render :partial => 'user/events/event_header', :locals => {:event => @event, :text => "#{@event.title}的照片"} %>
     <div class="box02 canvas_int space">
       <%= render :partial => 'user/events/albums/tab', :locals => {:user => @user, :album => @album, :event => @event} %>
       <div class="photo-box">
         <%= render :partial => 'photo_path', :locals => {:event => @event} %>
-        <% form_tag update_multiple_event_photos_url(:album_id => @album.id), :method => :put, :onsubmit => "Iyxzone.disableButton($(edit_multiple_event_photos_btn),'请等待..');" do %>
+        <% form_tag "", :onsubmit => "Iyxzone.EventPhoto.updateMultiplePhotos($('edit_multiple_photos_btn'), this, #{@album.id}); return false;" do %>
         <% @photos.each do |p| %>
         <% fields_for 'photos[]', p do |f| %>        
         <div class="photo-list box04 s_clear">
@@ -34,7 +38,7 @@
         <div class="buttons s_clear">
           <table class="center" cellpadding="0">
             <tr><td>
-              <span class="button"><span><button type="submit" id="edit_multiple_event_photos_btn">保存修改</button></span></span>
+              <span class="button"><span><button type="submit" id="edit_multiple_photos_btn">保存修改</button></span></span>
             </td></tr>
           </table>
         </div>

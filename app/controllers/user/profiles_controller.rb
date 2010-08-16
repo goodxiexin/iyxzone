@@ -44,6 +44,11 @@ class User::ProfilesController < UserBaseController
     params[:profile].delete(:login) if params[:profile]
 
     if @profile.update_attributes(params[:profile])
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
+    end
+=begin
 			respond_to do |format|
 				format.html {
 					case params[:type].to_i
@@ -57,6 +62,7 @@ class User::ProfilesController < UserBaseController
 				}
 				format.json { render :json => @profile.to_json }
 			end
+=end
     end
   end
 

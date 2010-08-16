@@ -1,9 +1,15 @@
 Iyxzone.Guild = {
-  version: '1.4',
+  
+  version: '1.5',
+  
   author: ['高侠鸿'],
+  
   Builder: {},
+  
   Editor: {},
+  
   MemberManager: {},
+  
   Presentor: {},
 
   follow: function(name, gid){

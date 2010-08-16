@@ -3,7 +3,8 @@
 <% end %>
 
 <% content_for :javascript_include do %>
-<%= javascript_include_merged :photo %>
+  <%= javascript_include_merged :photo %>
+  <%= javascript_include_tag 'event_photo' %>
 <% end %>
 
 <% content_for :html_title, "#{@event.title}的照片 - 17Gaming.com" %>

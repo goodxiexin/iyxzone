@@ -1,10 +1,11 @@
 <% facebox_tag '编辑照片' do %>
-  <% rows_form_remote_for :photo, :url => guild_photo_url(@photo, :at => params[:at]), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(edit_photo_submit),'请等待..');"} do |f| %>
+  <% rows_form_for :photo, :html => {:onsubmit => "Iyxzone.GuildPhoto.updatePhoto('#{params[:at]}', $('edit_photo_submit'), this, #{@photo.id}, #{@photo.album_id}); return false;"} do |f| %>
     <div class='formcontent'>
       <%= f.text_area 'notation', :label => '照片描述' %>
-      <%= f.span "#{h @album.title}", :label => '所属相册' %>
+      <%= f.collection_select :album_id, [@album], :id, :title, {}, {:label => '所属相册', :class => 'selector selector02'} %>
+      <%= hidden_field_tag 'photo[is_cover]', @photo.is_cover? ? 1 : 0 %>
       <% f.rows :label => '相册封面' do %>
-        <%= check_box_tag 'photo[cover]', 1, @photo.is_cover? %>设置为公会封面
+        <%= check_box_tag '', 1, @photo.is_cover?, :onclick => "$('photo_is_cover').value = $(this).checked ? 1 : 0;" %>设置为公会封面
       <% end %>
     </div>
     <%= f.z_submit :submit => {:text => '完成', :id => 'edit_photo_submit'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>

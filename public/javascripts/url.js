@@ -186,6 +186,14 @@ Object.extend(Iyxzone.URL, {
     return this.build("/personal_albums/" + albumID, params);
   },
 
+  showEventAlbum: function(albumID, params){
+    return this.build("/event_albums/" + albumID, params);
+  },
+
+  showGuildAlbum: function(albumID, params){
+    return this.build("/guild_albums/" + albumID, params);
+  },
+
   listAlbum: function(userID, params){
     return this.build("/personal_albums?uid=" + userID, params);
   },
@@ -204,21 +212,73 @@ Object.extend(Iyxzone.URL, {
     return this.build("/personal_photos/edit_multiple?album_id=" + albumID + "&" + ids, params);     
   },
 
+  editMultipleEventPhoto: function(albumID, photoIDs, params){
+    var ids = "";
+    photoIDs.each(function(id){
+      if(ids != "")
+        ids += "&";
+      ids += "ids[]=" + id;
+    });
+    return this.build("/event_photos/edit_multiple?album_id=" + albumID + "&" + ids, params);
+  },
+
+  editMultipleGuildPhoto: function(albumID, photoIDs, params){
+    var ids = "";
+    photoIDs.each(function(id){
+      if(ids != "")
+        ids += "&";
+      ids += "ids[]=" + id;
+    });
+    return this.build("/guild_photos/edit_multiple?album_id=" + albumID + "&" + ids, params);
+  },
+
   updateMultiplePhoto: function(albumID, params){
     return this.build("/personal_photos/update_multiple?album_id=" + albumID, params);
+  },
+
+  updateMultipleEventPhoto: function(albumID, params){
+    return this.build("/event_photos/update_multiple?album_id=" + albumID, params);
+  },
+
+  updateMultipleGuildPhoto: function(albumID, params){
+    return this.build("/guild_photos/update_multiple?album_id=" + albumID, params);
   },
 
   showPhoto: function(photoID, params){
     return this.build("/personal_photos/" + photoID, params);
   },
 
+  showEventPhoto: function(photoID, params){
+    return this.build("/event_photos/" + photoID, params);
+  },
+
+  showGuildPhoto: function(photoID, params){
+    return this.build("/guild_photos/" + photoID, params);
+  },
+
   updatePhoto: function(photoID, params){
     return this.build("/personal_photos/" + photoID, params);
   },
 
+  updateEventPhoto: function(photoID, params){
+    return this.build("/event_photos/" + photoID, params);
+  },
+
+  updateGuildPhoto: function(photoID, params){
+    return this.build("/guild_photos/" + photoID, params);
+  },
+
   deletePhoto: function(photoID, params){
     return this.build("/personal_photos/" + photoID, params);
-  }
+  },
+
+  deleteEventPhoto: function(photoID, params){
+    return this.build("/event_photos/" + photoID, params);
+  },
+
+  deleteGuildPhoto: function(photoID, params){
+    return this.build("/guild_photos/" + photoID, params);
+  }  
 
 });
 

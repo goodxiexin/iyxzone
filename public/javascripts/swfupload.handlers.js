@@ -204,13 +204,23 @@ function queueComplete(numFilesUploaded) {
     params += "&ids[]=" + id;
   });
 
+  var url = "";
+  var type = this.customSettings.albumType;
+  if(type == 'PersonalAlbum'){
+    url = Iyxzone.URL.editMultiplePhoto(this.customSettings.albumID, this.customSettings.uploadedPhotoIds);
+  }else if(type == 'EventAlbum'){
+    url = Iyxzone.URL.editMultipleEventPhoto(this.customSettings.albumID, this.customSettings.uploadedPhotoIds);
+  }else if(type == 'GuildAlbum'){
+    url = Iyxzone.URL.editMultipleGuildPhoto(this.customSettings.albumID, this.customSettings.uploadedPhotoIds);
+  }
+
   new Ajax.Request(this.customSettings.recordUploadURL, {
     method: 'post',
     parameters: params,
     onSuccess: function(transport){
       var json = transport.responseText.evalJSON();
       if(json.code == 1){
-        window.location.href = Iyxzone.URL.editMultiplePhoto(this.customSettings.albumID, this.customSettings.uploadedPhotoIds);
+        window.location.href = url;
         this.customSettings.uploadedPhotoIds = [];
       }else if(json.code == 0){
         error("发生错误，无法跳转页面");

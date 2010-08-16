@@ -24,6 +24,8 @@ class User::PrivacySettingController < UserBaseController
 
   def update
     if @setting.update_attributes(params[:setting])
+      render :json => {:code => 1}
+=begin
 			respond_to do |format|
         format.js { render_js_code "Iyxzone.Facebox.close();" }
         format.html {  
@@ -38,6 +40,9 @@ class User::PrivacySettingController < UserBaseController
 			    end
         }
       end
+=end
+    else
+      render :json => {:code => 0}
     end
   end
 

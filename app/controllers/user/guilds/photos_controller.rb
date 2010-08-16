@@ -21,9 +21,9 @@ class User::Guilds::PhotosController < UserBaseController
 		@photo = @album.photos.build(:swf_uploaded_data => params[:Filedata])
 
     if @photo.save
-			render :text => @photo.id
+			render :json => {:code => 1, :id => @photo.id}
 		else
-			# TODO
+		  render :json => {:code => 0}
 		end
 	end
 
@@ -31,9 +31,9 @@ class User::Guilds::PhotosController < UserBaseController
     @photos = @album.photos.nonblocked.find(params[:ids])
 		
     if @album.record_upload current_user, @photos
-			redirect_js edit_multiple_guild_photos_url(:album_id => @album.id, :ids => @photos.map {|p| p.id})
+			render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end 
 
@@ -43,28 +43,9 @@ class User::Guilds::PhotosController < UserBaseController
 
   def update
     if @photo.update_attributes(params[:photo])
-			respond_to do |format|
-				format.html { 
-          render :update do |page|
-            if params[:at] == 'album'
-					    page << "Iyxzone.Facebox.close();"
-            elsif params[:at] == 'photo'
-              page << "Iyxzone.Facebox.close();"
-		  			  page << "$('guild_photo_notation_#{@photo.id}').update( '#{@photo.notation.gsub(/\n/, '<br/>')}');"
-            end
-				  end 
-        }
-				format.json { render :json => @photo }
-			end
+			render :json => {:code => 1}
     else
-      respond_to do |format|
-        format.html { 
-          render :update do |page|
-            page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
-            page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题无法保存', :message => nil %>"
-          end 
-        }
-      end 
+      render :json => {:code => 0}
     end
   end
 
@@ -78,14 +59,14 @@ class User::Guilds::PhotosController < UserBaseController
       photo.update_attributes(params[:photos]["#{photo.id}"])
     end
     @album.update_attribute('cover_id', params[:cover_id]) if params[:cover_id]
-    redirect_to guild_album_url(@album)
+    render :json => {:code => 1}
   end
 
   def destroy
     if @photo.destroy
-      redirect_js guild_album_url(@album)
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

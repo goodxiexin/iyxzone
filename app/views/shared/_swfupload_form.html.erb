@@ -28,6 +28,7 @@ var settings = {
 		authenticityToken : "<%= form_authenticity_token %>",
 		recordUploadURL : "<%= url_for(:controller => photo_controller, :action => 'record_upload') -%>",
     albumID: <%= @album.id %>,
+    albumType: "<%= @album.class.name %>",
     totalSize: 0,
     photosCount: 0
 	},

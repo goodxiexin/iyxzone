@@ -1,12 +1,12 @@
 <% facebox_tag '编辑照片' do %>
-  <div id='errors'></div>
   <% rows_form_for :photo, :html => {:onsubmit => "Iyxzone.PersonalPhoto.updatePhoto('#{params[:at]}', $('edit_photo_submit'), this, #{@photo.id}, #{@photo.album_id}); return false" } do |f| %>
     <div class='formcontent'>
       <div id='errors' class='error-msg' style="display:none"></div>
       <%= f.text_area 'notation', :label => '照片描述' %>
       <%= f.collection_select :album_id, current_user.albums, :id, :title, {}, {:label => '所属相册', :class => 'selector selector02'} %>
+      <%= hidden_field_tag 'photo[is_cover]', @photo.is_cover? ? 1 : 0 %>
       <% f.rows :label => '设置为封面' do %>
-        <%= check_box_tag 'photo[is_cover]', 1, @photo.is_cover? %>
+        <%= check_box_tag '', 1, @photo.is_cover?, :onclick => "$('photo_is_cover').value = $(this).checked ? 1 : 0;" %>
       <% end %>
     </div>
     <%= f.z_submit :submit => {:text => '完成', :id => 'edit_photo_submit'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
