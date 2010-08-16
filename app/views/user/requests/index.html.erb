@@ -3,7 +3,7 @@
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% content_for :javascript_include do %>
-  <%= javascript_include_tag 'friend' %>
+  <%= javascript_include_merged :request %>
 <% end %>
 
 <% canvas_tag do %>

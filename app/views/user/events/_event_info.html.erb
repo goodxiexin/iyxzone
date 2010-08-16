@@ -25,7 +25,7 @@
         <% if event.requestable_characters_for(current_user).blank? %>
           <%= facebox_tip '无法请求加入？', "你已经没有在该游戏的游戏角色，请查看该活动的游戏、服务器，然后创建相应的游戏角色，然后你就可以申请加入工会啦~", :class => 'red' %>
         <% else %>
-          <%= facebox_link '申请加入该工会', new_event_request_url(event), :class => 'red' %>
+          <%= facebox_link '申请加入该活动', new_event_request_url(event), :class => 'red' %>
         <% end %>
       <% else %>
         <% if event.is_guild_event? %>

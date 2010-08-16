@@ -13,21 +13,27 @@ class User::Events::RequestsController < UserBaseController
 
   def create
     @request = @event.requests.build((params[:request] || {}).merge({:participant_id => current_user.id}))
-    
-    unless @request.save
-      render_js_error '发生错误，可能活动已经过期了'
+
+    if @request.save
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 
   def accept
-    unless @request.accept_request
-      render_js_error
+    if @request.accept_request
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 
   def decline
-    unless @request.decline_request
-      render_js_error
+    if @request.decline_request
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 

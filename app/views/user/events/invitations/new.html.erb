@@ -19,7 +19,7 @@
           <div class="friend-invite-head">
           <% unless @characters.blank? %>
             <strong class="green"><% if @guild %>搜索公会战友的游戏角色：<% else %>搜索好友的游戏角色：<% end %></strong> 
-            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "$(this).clear()", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
+            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "$(this).clear()", :onfocus => "Iyxzone.Event.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Event.Invitation.Builder.stopObserving();"%>
           <% end %>  
           </div>
           <div class="friend-invite-list">
@@ -28,7 +28,7 @@
           <% else %>
             <div id='invitations'><%= render :partial => 'characters', :object => @characters %></div>
             <div class="rows s_clear">
-              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Event.Invitation.submit(this, #{@event.id})" %></span></span>
+              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Event.Invitation.Builder.submit(this, #{@event.id})" %></span></span>
             </div>
           <% end %>  
           </div>

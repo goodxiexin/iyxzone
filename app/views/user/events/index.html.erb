@@ -2,6 +2,10 @@
 <% content_for :html_description, "#{@user.login}的发起活动 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{@user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :event %>
+<% end %>
+
 <% canvas_tag do %>
 	<% if @user==current_user %>
     <h1 class="app-ploy">活动</h1>

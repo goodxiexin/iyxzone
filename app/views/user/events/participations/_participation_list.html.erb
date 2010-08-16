@@ -9,17 +9,17 @@
     <% participation_list.each do |participation| %>
       <% participant = participation.participant %>
       <% character = participation.character %>
-      <li class='bg' id='<%= "participation_#{participation.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+      <li class='bg' id='p_<%= participation.id %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
         <div class='card'>
           <% if current_user == event.poster and participant != current_user %>
-            <%= facebox_confirm '', event_participation_url(event, participation), {:method => :delete, :msg => '你确定要删除吗?'}, :class=>'icon-active right' %>
+            <%= link_to_function '', "Iyxzone.Event.Participation.confirmEvicting(#{participation.id}, #{event.id}, this);", :class => 'icon-active right' %>
           <% end %>
           <div class='img'>
             <div class='middle'><div class='middle-center'><div class='center'>
               <%= avatar participant, :class => 'imgbox01' %>
             </div></div></div>
           </div>
-          <div class='info member s_clear'>
+          <div class='info member s_clear' id='p_<%= participation.id %>_info'>
             <h4><%= profile_link participant, :class=>'blk' %></h4>
             <span class='red nowrap'><%= participation.character.name %></span>
           </div>

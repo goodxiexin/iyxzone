@@ -1,8 +1,0 @@
-if params[:at] == 'event'
-  flash[:notice] = "成功提交"
-  page.redirect_to event_url(@event)
-elsif params[:at] == 'invitations'
-  page << "$('event_invitation_option_#{@invitation.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>接受邀请成功！</strong>';"
-  page << "setTimeout(\"new Effect.Fade('event_invitation_#{@invitation.id}')\", 2000);"
-end
-

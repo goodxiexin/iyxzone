@@ -5,7 +5,7 @@
     <% request_list.each do |request| %>
       <% character = request.character %>
       <% participant = request.participant %>
-      <li class='bg' id='event_request_<%= request.id %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+      <li class='bg' id='er_<%= request.id %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
         <div class='card'>
           <div class='img'>
             <div class='middle'><div class='middle-center'><div class='center'>
@@ -16,9 +16,9 @@
             <h4><%= profile_link participant, :class => 'blk' %></h4>
             <span class='red nowrap'><%= character.name %></span><br/>
             <% if event.poster == current_user %>
-              <span class='blk op' id='event_request_option_<%= request.id %>'>
-              <%= link_to_remote '接受', :url => accept_event_request_url(event, request, :at => 'event'), :method => 'put', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %> |
-              <%= link_to_remote '拒绝', :url => decline_event_request_url(event, request, :at => 'event'), :method => 'delete', :class => 'gray', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %>
+              <span class='blk op' id='er_<%= request.id %>_info'>
+              <%= link_to_function '接受', "Iyxzone.Event.Request.accept(#{request.event_id}, #{request.id});", :id => "er_btn1_#{request.id}" %> |
+              <%= link_to_function '拒绝', "Iyxzone.Event.Request.decline(#{request.event_id}, #{request.id});", :id => "er_btn2_#{request.id}" %>
               </span>
             <% end %>
           </div>

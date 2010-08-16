@@ -16,7 +16,7 @@
           <li><%= link_to '编辑活动', edit_event_url(event) %></li>
           <li><%= link_to '邀请更多人', new_event_invitation_url(event) %></li>
           <li><%= link_to '上传图片', new_event_photo_url(:album_id => album) %></li>
-          <li><%= facebox_confirm '放所有人鸽子', event_url(event), {:msg => '你确定要取消这次活动吗?', :method => :delete} %></li>
+          <li><%= link_to_function '放所有人鸽子', "Iyxzone.Event.confirmDeletingEvent(#{event.id});" %></li>
         <% elsif event.has_participant? current_user %>
           <li><%= link_to '给组织者发信', new_mail_url(:recipient_ids => [event.poster_id]) %></li>
         <% end %>

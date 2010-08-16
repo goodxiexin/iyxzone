@@ -8,9 +8,9 @@ Iyxzone.Event = {
 
   Invitation: {},
 
-  Participation: {},
+  Request: {},
 
-  ParticipantManager: {},
+  Participation: {},
 
   Presentor: {},
 
@@ -56,6 +56,39 @@ Iyxzone.Event = {
     });
   }
 };
+
+// delete event
+Object.extend(Iyxzone.Event, {
+
+  deleteEvent: function(eventID, userID){
+    new Ajax.Request(Iyxzone.URL.deleteEvent(eventID), {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        alert(json.code);
+        if(json.code == 1){
+          alert(Iyxzone.URL.listEvent(userID));
+          window.location.href = Iyxzone.URL.listEvent(userID);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmDeletingEvent: function(eventID, userID){
+    Iyxzone.Facebox.confirmWithCallback("你确定要删除这个活动吗", null, null, function(){
+      this.deleteEvent(eventID, userID);
+    }.bind(this));
+  }
+
+});
 
 // 一些在event show页面的操作
 Object.extend(Iyxzone.Event.Presentor, {
@@ -124,36 +157,6 @@ Object.extend(Iyxzone.Event.Presentor, {
   } 
 
 });
-
-Object.extend(Iyxzone.Event.ParticipantManager, {
-
-  startObserving: function(field){
-    this.field = field;
-    this.timer = setTimeout(this.search.bind(this), 300);
-  },
-
-  stopObserving: function(field){
-    clearTimeout(this.timer);
-  },
-
-  search: function(){
-    var val = this.field.value;
-    var ul = $('participations');
-    ul.childElements().each(function(li){
-      var pinyin = li.readAttribute('pinyin');
-      var name = li.readAttribute('name');
-      if(pinyin.include(val) || name.include(val)){
-        li.show();
-      }else{
-        li.hide();
-      }
-    }.bind(this));
-    this.timer = setTimeout(this.search.bind(this), 300);
-  }
-
-});
-
-
 
 Object.extend(Iyxzone.Event.Builder, {
 
@@ -253,7 +256,7 @@ Object.extend(Iyxzone.Event.Builder, {
       Iyxzone.enableButton(button, '提交');
     } 
   },
-
+  
   update: function(eventID, form, button){
     Iyxzone.disableButton(button, '请等待..');
     if(this.validate(false)){
@@ -537,6 +540,33 @@ Object.extend(Iyxzone.Event.Invitation.Builder, {
 
 Object.extend(Iyxzone.Event.Participation, {
 
+  evict: function(participationID, eventID, link){
+    new Ajax.Request(Iyxzone.URL.deleteParticipation(eventID, participationID), {
+      method: 'delete',
+      onLoading: function(){
+        $(link).writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        Iyxzone.Facebox.close();
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('p_' + participationID + '_info').innerHTML = '<strong class="nowrap"><span class="icon-success"></span>成功剔除此人！</strong>';
+          setTimeout(function(){new Effect.Fade('p_' + participationID);}, 2000); 
+        }else{
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    }); 
+  },
+
+  confirmEvicting: function(participationID, eventID, link){
+    Iyxzone.Facebox.confirmWithCallback("你确定要剔除此人吗?", null, null, function(){
+      this.evict(participationID, eventID, link);
+    }.bind(this));
+  },
+
   update: function(participationID, eventID, form, btn){
     new Ajax.Request(Iyxzone.URL.updateParticipation(eventID, participationID), {
       method: 'put',
@@ -552,6 +582,112 @@ Object.extend(Iyxzone.Event.Participation, {
           window.location.href = Iyxzone.URL.showEvent(eventID);
         }else{
           error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  },
+
+  startObserving: function(field){
+    this.field = field;
+    this.timer = setTimeout(this.search.bind(this), 300);
+  },
+
+  stopObserving: function(field){
+    clearTimeout(this.timer);
+  },
+
+  search: function(){
+    var val = this.field.value;
+    var ul = $('participations');
+    ul.childElements().each(function(li){
+      var pinyin = li.readAttribute('pinyin');
+      var name = li.readAttribute('name');
+      if(pinyin.include(val) || name.include(val)){
+        li.show();
+      }else{
+        li.hide();
+      }
+    }.bind(this));
+    this.timer = setTimeout(this.search.bind(this), 300);
+  }
+
+});
+
+Object.extend(Iyxzone.Event.Request, {
+
+  send: function(eventID, form, btn){
+    new Ajax.Request(Iyxzone.URL.createEventRequest(eventID), {
+      method: 'post', 
+      parameters: $(form).serialize(),
+      onLoading: function(){
+        Iyxzone.disableButton(btn, "发送中..");
+      },
+      onComplete: function(){
+        Iyxzone.enableButton(btn, "完成");
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          Iyxzone.Facebox.close();
+          window.location.href = Iyxzone.URL.showEvent(eventID);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  },
+
+  accept: function(eventID, requestID){
+    var btn1 = $('er_btn1_' + requestID);
+    var btn2 = $('er_btn2_' + requestID);
+
+    new Ajax.Request(Iyxzone.URL.acceptEventRequest(eventID, requestID), {
+      method: 'put', 
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        btn1.writeAttribute('onclick', '');
+        btn2.writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('er_' + requestID + '_info').innerHTML = '<strong class="nowrap"><span class="icon-success"></span>成功！</strong>';
+          setTimeout(function(){new Effect.Fade('er_' + requestID );}, 2000);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+          btn1.writeAttribute('onclick', 'Iyxzone.Event.Request.accept(' + eventID + ',' + requestID + ');');
+          btn2.writeAttribute('onclick', 'Iyxzone.Event.Request.decline(' + eventID + ',' + requestID + ');');        
+        }
+      }.bind(this)
+    });
+  },
+
+  decline: function(eventID, requestID){
+    var btn1 = $('er_btn1_' + requestID);
+    var btn2 = $('er_btn2_' + requestID);
+
+    new Ajax.Request(Iyxzone.URL.declineEventRequest(eventID, requestID), {
+      method: 'delete', 
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        btn1.writeAttribute('onclick', '');
+        btn2.writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('er_' + requestID + '_info').innerHTML = '<strong class="nowrap"><span class="icon-success"></span>成功拒绝！</strong>';
+          setTimeout(function(){new Effect.Fade('er_' + requestID );}, 2000);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+          btn1.writeAttribute('onclick', 'Iyxzone.Event.Request.accept(' + eventID + ',' + requestID + ');');
+          btn2.writeAttribute('onclick', 'Iyxzone.Event.Request.decline(' + eventID + ',' + requestID + ');');
         }
       }.bind(this)
     });

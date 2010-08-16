@@ -1,13 +1,15 @@
 <% request = event_request %>
-<div class="request-box" id='event_request_<%= request.id %>'>
+<% event = request.event %>
+<% participant = request.participant %>
+<div class="request-box" id='er_<%= request.id %>'>
   <h4><span> <%= ftime request.created_at %> </span>活动</h4>
   <div class="request-list s_clear">
-    <div class="img"><%= avatar request.participant %> </div>
-    <div class="info">
-      <p> <%= profile_link request.participant %> 请求加入你的活动 <%= event_link request.event %>, 是否同意？</p>
-      <div class="buttons" id='event_request_option_<%= request.id %>'>
-        <span class="button"><span><%= button_to_remote '同意', :url => accept_event_request_url(request.event, request, :at => 'requests'), :method => :put, :loading => "Iyxzone.disableButton($('event_request_#{request.id}').down('button',0),'请等待..'); Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %></span></span>
-        <span class="button button-gray"><span><%= facebox_button_confirm '拒绝', decline_event_request_url(request.event, request, :at => 'requests'), {:msg => '你确定要拒绝吗?', :method => :delete}%></span></span>
+    <div class="img"><%= avatar participant %> </div>
+    <div class="info" id='er_<%= request.id %>_info'>
+      <p> <%= profile_link participant %> 请求加入你的活动 <%= event_link event %>, 是否同意？</p>
+      <div class="buttons">
+        <span class="button"><span><%= button_to_function '同意', "Iyxzone.Event.Request.accept(#{event.id}, #{request.id}, this);", :id => "er_btn1_#{request.id}" %></span></span>
+        <span class="button button-gray"><span><%= button_to_function '拒绝', "Iyxzone.Event.Request.decline(#{event.id}, #{request.id}, this);", :id => "er_btn2_#{request.id}" %></span></span>
       </div>
     </div>
   </div>
