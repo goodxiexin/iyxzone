@@ -10,7 +10,7 @@
       <div class="mBlog fix">
         <div class="mBlogMain">
           <div class="mBlogMainWrap">
-            <%= render :partial => 'today_topic', :locals => {:mini_blogs => @shuffled_mini_blogs, :desc => @today_topic_desc, :topic => @today_topic} %>
+            <%= render :partial => 'today_topic', :locals => {:mini_blogs => @shuffled_mini_blogs, :hot_word => @today_hot_word} %>
             <%= render :partial => 'search_bar' %>
             <div class="mBlogSearchTag fix">
               <span class="miniTitle"><span>热词</span><em></em></span>

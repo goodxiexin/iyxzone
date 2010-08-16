@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100814063914) do
+ActiveRecord::Schema.define(:version => 20100816031558) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -442,10 +442,9 @@ ActiveRecord::Schema.define(:version => 20100814063914) do
   add_index "messages", ["recipient_id", "poster_id"], :name => "index_messages_on_recipient_id_and_poster_id"
 
   create_table "mini_blog_meta_datas", :force => true do |t|
-    t.text   "random_ids"
-    t.string "today_topic"
-    t.string "today_topic_desc"
-    t.text   "hot_topics"
+    t.text    "random_ids"
+    t.text    "hot_topics"
+    t.integer "today_hot_word"
   end
 
   create_table "mini_blogs", :force => true do |t|
@@ -903,6 +902,7 @@ ActiveRecord::Schema.define(:version => 20100814063914) do
     t.integer  "idols_count",                              :default => 0
     t.string   "invite_fan_code"
     t.integer  "skilled_game_id"
+    t.integer  "mini_blogs_count",                         :default => 0
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"

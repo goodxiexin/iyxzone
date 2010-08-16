@@ -49,7 +49,7 @@ namespace :mini_blogs do
           topic.add_node freq, (idx+1), now
         end
       else
-        if word.cx_game? or (word.cx_noun? and word.freq < 1000000)
+        if word.cx_game? or (word.cx_noun? and word.freq < 25000000)
           topic = MiniTopic.create :name => term
           topic.add_node freq, (idx+1), now
         end
@@ -102,7 +102,7 @@ namespace :mini_blogs do
             topic.add_node freq, (idx+1), now
           end
         else
-          if word.cx_game? or (word.cx_noun? and word.freq < 1000000)
+          if word.cx_game? or (word.cx_noun? and word.freq < 25000000)
             topic = MiniTopic.create :name => term
             topic.add_node freq, (idx+1), now
           end

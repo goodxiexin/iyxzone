@@ -4,6 +4,10 @@ class MiniBlogMetaData < ActiveRecord::Base
 
   serialize :hot_topics, Array
 
+  def today_hot_word
+    HotWord.find_by_id(today_hot_word_id)
+  end
+
   def find_hot_topics
     hot_topics.each_with_index do |topics, idx|
       if !topics.blank?
