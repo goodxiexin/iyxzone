@@ -71,9 +71,7 @@ Object.extend(Iyxzone.Event, {
       },
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
-        alert(json.code);
         if(json.code == 1){
-          alert(Iyxzone.URL.listEvent(userID));
           window.location.href = Iyxzone.URL.listEvent(userID);
         }else if(json.code == 0){
           error("发生错误，请稍后再试");
