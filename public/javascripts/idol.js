@@ -25,8 +25,7 @@ Object.extend(Iyxzone.Idol, {
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
           var unfollowLink = '<a href="javascript:void(0)" onclick="Iyxzone.Idol.unfollow(' + idolID + ', this);"><span class="i iNoFollow"></span>不做粉丝</a>';
-          if($('idol_' + idolID + '_op'))
-            $('idol_' + idolID + '_op').innerHTML =  unfollowLink;
+          $('idol_' + idolID + '_op').innerHTML =  unfollowLink;
         }else if(json.code == 0){
           error('发生错误，请稍后再试');
           $(link).writeAttribute('onclick', "Iyxzone.Idol.follow(idolID, this);");
@@ -49,8 +48,7 @@ Object.extend(Iyxzone.Idol, {
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
           var followLink = '<a href="javascript:void(0)" onclick="Iyxzone.Idol.follow(' + idolID + ', this);"><span class="i iFollow"></span>成为粉丝</a>';
-          if($('idol_' + idolID + '_op'))
-            $('idol_' + idolID + '_op').innerHTML = followLink;
+          $('idol_' + idolID + '_op').innerHTML = followLink;
         }else if(json.code == 0){
           error('发生错误，请稍后再试');
           $(link).writeAttribute('click', "Iyxzone.Idol.unfollow(idolID, this);");
@@ -70,7 +68,26 @@ Object.extend(Iyxzone.Idol.Pub, {
 
   addGameIdols: function(gameInfo, idols){
     var gameID = gameInfo.id;
+    var info = new Hash();
     this.infos.set(gameID, {'game': gameInfo, 'idols': idols});
+  },
+
+  setIdolInfo: function(gameID, idolID, idolInfo){
+    var info = this.infos.get(gameID);
+    if(info){
+      var idols = info.idols;
+      var game = info.game;
+      for(var i=0;i<idols.length;i++){
+        if(idols[i].id == idolID){
+          idols[i] = idolInfo;
+          this.infos.set(gameID, {'game': game, 'idols': idols});
+          return 1;
+        }
+      }
+      return 0;
+    }else{
+      return 0;
+    }
   },
 
   getIdolInfo: function(gameID, idolID){
@@ -142,9 +159,9 @@ Object.extend(Iyxzone.Idol.Pub, {
     html += '<div class="avatar"><img alt="" class="imgbox01" src="' + img.src + '"></img><br/>';
     html += '<div id="idol_' + idolInfo.id + '_op">';
     if(idolInfo.followed){
-      html += '<a href="javascript:void(0)" onclick="Iyxzone.Idol.unfollow(' + idolInfo.id + ', this);" ><span class="i iNoFollow"></span>不做粉丝</a>';
+      html += '<a href="javascript:void(0)" onclick="Iyxzone.Idol.Pub.unfollow(' + gameInfo.id + ', ' + idolInfo.id + ', this);" ><span class="i iNoFollow"></span>不做粉丝</a>';
     }else{
-      html += '<a href="javascript:void(0)" onclick="Iyxzone.Idol.follow(' + idolInfo.id + ', this);" ><span class="i iFollow"></span>成为粉丝</a>';
+      html += '<a href="javascript:void(0)" onclick="Iyxzone.Idol.Pub.follow(' + gameInfo.id + ', ' + idolInfo.id + ', this);" ><span class="i iFollow"></span>成为粉丝</a>';
     }
     html += '</div>';
     html += '</div>';
@@ -201,8 +218,86 @@ Object.extend(Iyxzone.Idol.Pub, {
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
           notice("你已经成功成为了他们的粉丝");
+          // invalidate some caches
+          for(var i=0;i<idolIDs.length;i++){
+            var idolID = idolIDs[i];
+            var idolInfo = this.getIdolInfo(gameID, idolID);
+            if(idolInfo == null){
+              continue;
+            }else if(!idolInfo.followed){
+              idolInfo.followed = true;
+              this.setIdolInfo(gameID, idolID, idolInfo);
+              this.idolHTMLCache.unset(idolID);
+            }
+          }
         }else if(json.code == 0){
           error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  },
+
+  follow: function(gameID, idolID, link){
+    new Ajax.Request(Iyxzone.URL.followIdol(idolID), {
+      method: 'post',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        $(link).writeAttribute("onclick", "");
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          // change view
+          var unfollowLink = '<a href="javascript:void(0)" onclick="Iyxzone.Idol.unfollow(' + idolID + ', this);"><span class="i iNoFollow"></span>不做粉丝</a>';
+          if($('idol_' + idolID + '_op'))
+            $('idol_' + idolID + '_op').innerHTML =  unfollowLink;
+          
+          // invalidate info cache and html cache
+          var idolInfo = this.getIdolInfo(gameID, idolID);
+          if(idolInfo != null){
+            idolInfo.followed = true;
+            this.setIdolInfo(gameID, idolID, idolInfo);
+            this.idolInfoCache.unset(idolID);
+          }
+        }else if(json.code == 0){
+          error('发生错误，请稍后再试');
+          $(link).writeAttribute('onclick', "Iyxzone.Idol.follow(idolID, this);");
+        }
+      }.bind(this)
+    });
+  },
+
+  unfollow: function(gameID, idolID, link){
+    new Ajax.Request(Iyxzone.URL.unfollowIdol(idolID), {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        $(link).writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          // change view
+          var followLink = '<a href="javascript:void(0)" onclick="Iyxzone.Idol.follow(' + idolID + ', this);"><span class="i iFollow"></span>成为粉丝</a>';
+          if($('idol_' + idolID + '_op'))
+            $('idol_' + idolID + '_op').innerHTML = followLink;
+          
+          // invalidate info cache and html cache
+          var idolInfo = this.getIdolInfo(gameID, idolID);
+          if(idolInfo != null){
+            idolInfo.followed = false;
+            this.setIdolInfo(gameID, idolID, idolInfo);
+            this.idolInfoCache.unset(idolID);
+          }
+        }else if(json.code == 0){
+          error('发生错误，请稍后再试');
+          $(link).writeAttribute('click', "Iyxzone.Idol.unfollow(idolID, this);");
         }
       }.bind(this)
     });
