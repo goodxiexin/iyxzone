@@ -1583,7 +1583,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogCatTab .pipe{margin:0 5px}
 
 .mBlogMain .topicTag{color:#d82d01}
-.mBlogPostList .item{padding:0 0 10px 90px;_height:100px;min-height:100px;margin-bottom:15px}
+.mBlogPostList .item{padding:0 0 10px 90px;/*_height:100px;min-height:100px;*/margin-bottom:15px}
 .mBlogPostList .item .round_body{padding:5px 0}
 .mBlogPostList .item .feedFunc{float:left;margin-left:-80px;_display:inline}
 .mBlogPostList .item .feedCon{float:left;width:100%;}
@@ -1608,6 +1608,22 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .transIcon span,.transIcon a{background:url(../images/skin/skin2010.png) no-repeat;display:block;text-align:center;width:54px;}
 .transIcon span{background-position:0 -720px;color:#fff;font-size:14px;font-weight:700;height:53px;line-height:40px;}
 .transIcon a{background-position:-60px -210px;color:#217308;height:25px;line-height:25px;margin-top:3px;text-align:center}
+/*TA的微博*/
+.mBlogTaPost{margin:0 15px}
+.mBlogTaPost .item{padding:0 0 10px 0;}
+.mBlogTaPost .mConWrap .mCon{width:435px}
+.mBlogTaPost .item .transCon,.mBlogTaPost .item .oriCon{margin:0 0 10px 0}
+.mBlogTaPost .item .arrow-tip03{top:-11px}
+.mBlogExtra .taProfile{padding:0 0 0 70px}
+.mBlogExtra .taProfile .avatar{float:left;margin-left:-70px;_display:inline}
+.mBlogExtra .taProfile .con{float:left;width:100%}
+.mBlogExtra .taProfile .con .memberName{font-size:14px;font-weight:700;color:#333;margin-bottom:5px;line-height:24px;height:24px;overflow:hidden;width:140px}
+
+.mBlogStats{border-bottom:1px dotted #ccc;padding-bottom:10px;}
+.mBlogStats li{border-right:1px solid #ccc;float:left;text-align:center;padding-right:10px;margin:0 5px;width:50px}
+.mBlogStats li.nobd{border:0;}
+.mBlogStats li strong{color:#bf3a00;font-size:14px;line-height:22px}
+
 /*微博详情*/
 .mBlogDetail .mBlogPostList .item{padding:0 0 10px 130px;}
 .mBlogDetail .mBlogPostList .item .feedFunc{margin-left:-130px;}
