@@ -1,4 +1,4 @@
-﻿body{background:#020001 url(images/body_bg.jpg) no-repeat center bottom;color:#799eaa}
+﻿body{background:#020001 url(/images/themes/esports-haitao/body_bg.jpg) no-repeat center bottom;color:#799eaa}
 a.gray:link,a.gray:visited,a.gray:active,.home-wrap .feed-list-box a.gray,.multibox .data-table a{color:#799eaa}
 a,.menu-icon-list li a span{color:#799eaa}
 .home-wrap .feed-list-box a,.feed-box .feed-img-list .feed-list a{color:#f0bd0c}
@@ -12,14 +12,14 @@ a,.menu-icon-list li a span{color:#799eaa}
 .comment-box,.cmt-box{background:#0e4357;}
 .feed-list .word-box span,.feed-list .cmt-box span {color:#799eaa;}
 
-#header{width:100%;background:url(images/top_bg.png) repeat-x;height:40px;}
-.logo-top{background-image:url(images/logo.png);top:0}
+#header{width:100%;background:url(/images/themes/esports-haitao/top_bg.png) repeat-x;height:40px;}
+.logo-top{background-image:url(/images/themes/esports-haitao/logo.png);top:0}
 #navbar{width:950px;margin:0 auto;background:none}
 #navbar a{color:#666}
 #navbar #navwrap {background:none}
 #navbar #navwrap #navmid{background:none}
 #navbar #navsearch .textfield{border-color:#355c1b;background:#fff}
-#navbar #navsearch .gobtn {background:url(images/go.png) no-repeat;height:20px}
+#navbar #navsearch .gobtn {background:url(/images/themes/esports-haitao/go.png) no-repeat;height:20px}
 #navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
 
 #leftsidebar .avatarbox {border-bottom:1px solid #0c2e41;}
@@ -27,30 +27,30 @@ a,.menu-icon-list li a span{color:#799eaa}
 .s-dialog a{color:#799eaa}
 
 .banner{width:100%;}
-.banner .con{width:100%;height:269px;margin:0 auto;background:url(images/banner_haitao.jpg) no-repeat center 0}
+.banner .con{width:100%;height:269px;margin:0 auto;background:url(/images/themes/esports-haitao/banner_haitao.jpg) no-repeat center 0}
 .round_l_t, .round_r_t, .round_l_b, .round_r_b, .round_title_l_t, .round_title_r_t {background-image:none;}
 .round_m{background:transparent;border:0}
 .round_l_b{padding:0}
 .round02 .round_l_b,.round04 .round_l_b{padding:0 0 6px}
-#page{width:1030px;background:url(images/page_bg.jpg) no-repeat 0 100px;} 
+#page{width:1030px;background:url(/images/themes/esports-haitao/page_bg.jpg) no-repeat 0 100px;} 
 #canvas{width:940px;margin:0 auto;padding:6px 0 50px 0;} 
 #canvas .tipbar {background:#061f29;border-color:#1a4755;color:#799eaa}
-#canvas .canvas_con .multibox .title,#rightsidebar .multibox .title{background:url(images/title_bg.png) no-repeat;height:32px;line-height:32px;border:0;padding:0 10px;color:#f0bd0c}
-#canvas #rightsidebar .multibox .title{background:url(images/title_bg02.png) no-repeat;}
+#canvas .canvas_con .multibox .title,#rightsidebar .multibox .title{background:url(/images/themes/esports-haitao/title_bg.png) no-repeat;height:32px;line-height:32px;border:0;padding:0 10px;color:#f0bd0c}
+#canvas #rightsidebar .multibox .title{background:url(/images/themes/esports-haitao/title_bg02.png) no-repeat;}
 .multibox .title a{color:#f0bd0c}
-.bookbox h3{background:url(images/title_bg.png) no-repeat;height:32px;line-height:32px;border:0;padding:0 10px;color:#f0bd0c}
+.bookbox h3{background:url(/images/themes/esports-haitao/title_bg.png) no-repeat;height:32px;line-height:32px;border:0;padding:0 10px;color:#f0bd0c}
 
-.jl-cutline{background:url(images/dotline.png) repeat-x center bottom;}
-.arrow-dialog {background:url(images/roundBoxbg03.png) no-repeat;}
-.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(images/roundBoxbg02.png);}
-.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(images/roundBoxbg04.png);}
+.jl-cutline{background:url(/images/themes/esports-haitao/dotline.png) repeat-x center bottom;}
+.arrow-dialog {background:url(/images/themes/esports-haitao/roundBoxbg03.png) no-repeat;}
+.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/esports-haitao/roundBoxbg02.png);}
+.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/esports-haitao/roundBoxbg04.png);}
 .round02 .round_m {background:#061c24;border-left:1px solid #1a4755;border-right:1px solid #1a4755;margin:0 -6px 0 0;color:#f0bd0c}
 .round04 .round_m {background:#061c24;border-left:1px solid #1a4755;border-right:1px solid #1a4755;margin:0 -6px 0 0}
-.feed-list-box h4 {background:url(images/date-cutline.png) no-repeat}
+.feed-list-box h4 {background:url(/images/themes/esports-haitao/date-cutline.png) no-repeat}
 .feed-list-box h4 span{background:#020001}
-a.jl-more {background:url(images/arr-more.png) no-repeat;color:#f0bd0c}
+a.jl-more {background:url(/images/themes/esports-haitao/arr-more.png) no-repeat;color:#f0bd0c}
 .jl-my-gold .green {color:#df6505;}
-.button,.button span {background-image:url(images/btns01.png);}
+.button,.button span {background-image:url(/images/themes/esports-haitao/btns01.png);}
 .button span button{color:#799eaa}
 .button-gray span button{color:#666}
 .bookbox .textarea-wrap .textarea-wide textarea {background:#061c24;border:1px solid #1a4755}
