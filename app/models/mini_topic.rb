@@ -31,15 +31,14 @@ class MiniTopic < ActiveRecord::Base
 protected
   
   def get_nodes_between from, to
-    len = freq_nodes.size
     from_node = nil
     to_node = nil
-    freq_nodes.each_with_index do |node, i|
-      if to_node.nil? and freq_nodes[len - i - 1][:created_at] < to
-        to_node = freq_nodes[len - i - 1]
+    freq_nodes.each do |node|
+      if to_node.nil? and node[:created_at] < to
+        to_node = node
       end
-      if from_node.nil? and freq_nodes[len -i - 1][:created_at] < from
-        from_node = freq_nodes[len -i - 1]
+      if from_node.nil? and node[:created_at] < from
+        from_node = node
       end
     end
     [from_node, to_node]
