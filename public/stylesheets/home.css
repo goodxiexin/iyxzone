@@ -1595,6 +1595,8 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogPostList .mConWrap .mCon{overflow:hidden;width:380px}
 .mBlogPostList .mConWrap .mCon .mTrans{text-align:left;}
 .mBlogPostList .mConWrap .mCon .mTrans .hd{color:#666}
+.mBlogPostList .mConWrap .mCon .mTrans .hd .orgTrans{margin:0 15px}
+.mBlogPostList .mConWrap .mCon .mTrans .hd .orgTrans .pipe{margin:0 6px}
 .mBlogPostList .mConWrap .mCon .mTrans .ft span{margin:0 5px;color:#999}
 .mBlogPostList .mConWrap .mCon .mTrans .ft a{color:#999}
 .mBlogPostList .mConWrap .mCon .op{background:url(../images/skin/dotline.gif) repeat-x top;padding-top:5px}

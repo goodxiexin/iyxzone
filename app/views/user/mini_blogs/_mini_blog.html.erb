@@ -36,6 +36,7 @@
                               <div class="hd">
                                 <div class="sp">
                                   <%= link_to root.poster.login, mini_blogs_url(:uid => root.poster_id), :class => "memberName" %>：<%= mini_blog_content root, words %>
+                                  <span class="orgTrans"><%= link_to "原文转发(#{root.forwards_count})", mini_blog_url(root) %><span class="pipe">|</span><%= link_to "原文评论(#{root.comments_count})", mini_blog_url(root) %></span>
                                 </div>
                               </div>
                               <% if root.image_type? or root.video_type? %>
