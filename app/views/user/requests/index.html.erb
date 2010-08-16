@@ -2,6 +2,10 @@
 <% content_for :html_description, "#{current_user.login}的请求 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'friend' %>
+<% end %>
+
 <% canvas_tag do %>
     <h1 class="app-notice">请求</h1>
     <div class="box02 canvas_int space">

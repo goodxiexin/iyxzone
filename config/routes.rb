@@ -21,7 +21,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'user/home', :action => 'show'
 
   # 这个是暂时存在
-  map.change_nickname '/change_nickname/:nickname_code', :controller => 'nickname', :action => 'edit'
+  # url是change_nick_name是因为我手误了一次，发出去的邮件都是这样的，因此只能这么写了
+  map.change_nickname '/change_nick_name/:nickname_code', :controller => 'nickname', :action => 'edit'
 
   map.signup '/signup', :controller => 'users', :action => 'new'
 
@@ -107,7 +108,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :fans
 
-    users.resources :idols, :member => {:follow => :post, :unfollow => :delete}
+    users.resources :idols, :member => {:follow => :post, :unfollow => :delete}, :collection => {:follow_multiple => :post}
 
 		users.resources :rss_feeds
 		

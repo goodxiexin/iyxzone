@@ -1,0 +1,79 @@
+﻿body{background:#333 url(/images/themes/modadisi/body_bg.jpg) no-repeat; background-attachment:fixed;color:#aaa}
+a{color:#c9baa4}
+a.gray:link,a.gray:visited,a.gray:active,.home-wrap .feed-list-box a.gray{color:#aaa}
+.gray{color:#aaa;}
+.shine, a.shine:link, a.shine:visited, a.shine:active {color:#aaa;}
+
+#header{width:100%;background:url(/images/themes/modadisi/top_bg.png) repeat-x;height:40px;}
+.logo-top{background-image:url(/images/themes/modadisi/logo.png);top:0}
+#navbar{width:950px;margin:0 auto;background:none}
+#navbar a{color:#454545}
+#navbar #navwrap {background:none}
+#navbar #navwrap #navmid{background:none}
+#navbar #navsearch .textfield{border-color:#355c1b;background:#fff}
+#navbar #navsearch .gobtn {background:url(/images/themes/modadisi/go.png) no-repeat;height:20px}
+#navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
+
+#leftsidebar,#rightsidebar{border:1px solid #030303;background:#292929;padding:10px 0}
+#leftsidebar .avatarbox {background:url(/images/themes/modadisi/left_avatarbox.png) no-repeat bottom;padding-bottom:20px;border:0}
+#leftsidebar .avatarbox a {color:#aaa}
+.menu-icon-list li a{color:#aaa}
+.menu-icon-list li a span{color:#aaa}
+.s-dialog a{color:#c9baa4}
+.piclist .jl-picitem a{color:#aaa}
+.home-wrap .feed-list-box a,.feed-box .feed-img-list .feed-list a{color:#c9baa4}
+.multibox .diary-box .diary-header,.feed-img-list .feed-list, .home-wrap .feed-box .feed-img-list .feed-list{color:#aaa;}
+
+.banner{width:100%;}
+.banner .con{width:100%;height:250px;margin:20px auto;background:url(/images/themes/modadisi/banner.jpg) no-repeat center 0;}
+.round_l_t, .round_r_t, .round_l_b, .round_r_b, .round_title_l_t, .round_title_r_t {background-image:none;}
+.round_l_t{padding:0}
+.round_m{background:transparent;border:0}
+.round02 .round_l_b,.round04 .round_l_b{padding:0 0 6px}
+#page{width:100%;margin-top:0;background:url(/images/themes/modadisi/page_bg.jpg) no-repeat center 0;} 
+#canvas .round_m{padding:0}
+#canvas{width:950px;margin:0 auto;padding:0 0 30px 0;} 
+#canvas .canvas_wrap .canvas_main{margin-left:-169px}
+#canvas .canvas_wrap .canvas_main .canvas_main_c {margin-left:169px}
+#canvas .canvas_wrap .canvas_m{margin-right:-208px}
+#canvas .canvas_wrap .canvas_m .canvas_c {margin-right:208px;}
+#canvas .canvas_wrap .canvas_r {width:198px;padding-left:2px}
+#canvas .canvas_con{border:1px solid #030303;background:#292929;}
+#canvas .tipbar {background:#373737;border-color:#000;color:#aaa}
+#canvas .canvas_con .multibox .title,#rightsidebar .multibox .title,.bookbox h3{background:url(/images/themes/modadisi/title_bg.png) no-repeat;height:37px;line-height:37px;border:0;padding:0 20px 0 30px;color:#aaa}
+#canvas #rightsidebar .multibox .title{background:url(/images/themes/modadisi/title_bg02.png) no-repeat 2px 0;line-height:37px;height:37px;color:#aaa}
+#canvas .canvas_con .multibox .title a{color:#aaa}
+.multibox .title a{color:#aaa}
+
+.box02 {background:none;border:0}
+.box04 {background:none;border:0;}
+.button,.button span {background-image:url(/images/themes/modadisi/btns01.png);}
+.button span button{color:#aaa}
+.button-gray span button{color:#666}
+
+.textarea,textarea{background:#333;border:1px solid #000;color:#aaa}
+.word-box{color:#aaa}
+.comment-box,.cmt-box,.word-box{background:#333;border:0;}
+.feed-list .word-box span,.feed-list .cmt-box span {color:#aaa;}
+
+.jl-cutline{background:url(/images/themes/modadisi/cutline.png) repeat-x center bottom}
+.multibox .diary-box{border-bottom:1px dotted #616161}
+#comments .feed-img-list{border-top:1px dotted #616161}
+.arrow-dialog {background:url(/images/themes/modadisi/roundBoxbg03.png) no-repeat;}
+.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/modadisi/roundBoxbg02.png);}
+.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/modadisi/roundBoxbg04.png);}
+.round02 .round_l_t,.round04 .round_l_t{padding:6px 0 0}
+.round02 .round_m {background:#363636;border:1px solid #000;border-width:0 1px;margin:0 -6px 0 0;}
+.round04 .round_m {background:#363636;border:1px solid #000;border-width:0 1px;margin:0 -6px 0 0}
+.feed-list-box h4 {background:url(/images/themes/modadisi/date-cutline.png) repeat-x center}
+.feed-list-box h4 span{background:#292929}
+a.jl-more {background:url(/images/themes/modadisi/arr-more.png) no-repeat;}
+
+.jl-my-gold{color:#c9baa4}
+.jl-my-gold .green {color:#c9baa4;}
+.multibox .jl-data-table th {color:#c9baa4;}
+.multibox .data-table a,.multibox .data-table td{color:#aaa}
+.collection a{color:#aaa}
+
+#footer{width:100%;padding:0 0 30px 0;line-height:22px;color:#666}
+#footer a{color:#666}

@@ -33,7 +33,7 @@
             <%= link_to_function "<span class='i iNoFollow'></span>取消关注该话题（已经关注）", "Iyxzone.MiniBlog.Topic.unfollow('#{params[:key]}', #{a.id});" %>
           <% end %>
           </div>
-          <% cache "hot_topics" do %>
+          <% unless @hot_topics.blank? %>
             <%= render :partial => 'hot_topics', :locals => {:start_time => @start_time, :topics => @hot_topics} %>
           <% end %>
           <%= render :partial => 'hot_idols', :locals => {:idols => @idols} %>

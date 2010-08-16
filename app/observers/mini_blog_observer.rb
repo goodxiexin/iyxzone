@@ -4,6 +4,7 @@ class MiniBlogObserver < ActiveRecord::Observer
     root = mini_blog.root
     parent = mini_blog.parent
 
+    mini_blog.poster.raw_increment :mini_blogs_count
     root.raw_increment :forwards_count if root
     parent.raw_increment :forwards_count if parent and root != parent
   end
@@ -13,6 +14,7 @@ class MiniBlogObserver < ActiveRecord::Observer
     parent = mini_blog.parent
 
     # change counter
+    mini_blog.poster.raw_decrement :mini_blogs_count
     root.raw_decrement :forwards_count if root
     parent.raw_decrement :forwards_count if parent and root != parent
 

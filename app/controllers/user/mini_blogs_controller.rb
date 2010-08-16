@@ -7,27 +7,16 @@ class User::MiniBlogsController < UserBaseController
 
   def public
     @mini_blogs = MiniBlog.recent.paginate :page => params[:page], :per_page => PER_PAGE    
-    
-    # 今日话题
-    @meta_data = MiniBlogMetaData.first
-    @today_topic_desc = @meta_data.today_topic_desc
-    @today_topic = @meta_data.today_topic
-    @today_mini_blogs = MiniBlog.search(@today_topic, :page => 1, :per_page => 50)
-    @shuffled_mini_blogs = @today_mini_blogs.shuffle[0..19]
-
     @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
-
     @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
-
-    # 第一次用很慢，可以考虑把排序放到后台，使得第一次也很快
-    # TODO: why??
-    MiniTopic
-    MiniTopicFreqNode
-    Rails.cache.fetch("hot_topics", :expires_in => 15.minutes) do
-      # 6小时内的最热话题
-      @start_time, @topics = MiniTopic.hot
-      @hot_topics = @topics[0..9]
-    end
+   
+    # 今日话题和热门话题 
+    @meta_data = MiniBlogMetaData.first
+    @today_hot_word = @meta_data.today_hot_word
+    @today_mini_blogs = MiniBlog.search(@today_hot_word.search_key, :page => 1, :per_page => 50)
+    @shuffled_mini_blogs = @today_mini_blogs.shuffle[0..19]
+    @start_time, @hot_topics = @meta_data.find_hot_topics
+    @hot_topics = @hot_topics[0..9]
 
     # 引导热词
     @hot_words = HotWord.recent.limit(10)
@@ -58,7 +47,7 @@ class User::MiniBlogsController < UserBaseController
   end
 
   def same_game
-    @fql = current_user.games.map(&:name).join(" OR ")
+    @fql = current_user.games.map(&:name).join(" ")
     @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
     render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
   end
@@ -101,26 +90,17 @@ class User::MiniBlogsController < UserBaseController
 
   def search
     # construct ferret query lanuage first
-    @fql = []
-    if params[:key]
-      @fql << "content:(#{params[:key].split(/\s*~\s*/).map{|a| "(#{a.split(/\s+/).join(" AND ")})"}.join(" OR ")})"
-    end
-    if params[:category] and params[:category] != 'all'
-      @fql << "category:(#{params[:category]})"
-    end
-    @fql = @fql.join(" AND ")
-
+    @fql = {}
+    @fql[:content] = params[:key] if params[:key]
+    @fql[:category] = params[:category] if params[:category] and params[:category] != 'all'
+    
     # search index
     @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
     @idols = User.match(:is_idol => true).all
-  
-    MiniTopic
-    MiniTopicFreqNode
-    Rails.cache.fetch("hot_topics", :expires_in => 15.minutes) do
-      # 6小时内的最热话题
-      @start_time, @topics = MiniTopic.hot
-      @hot_topics = @topics[0..9]
-    end
+ 
+    @meta_data = MiniBlogMetaData.first 
+    @start_time, @hot_topics = @meta_data.find_hot_topics
+    @hot_topics = @hot_topics[0..9]
   end
 
   def new
@@ -133,6 +113,9 @@ class User::MiniBlogsController < UserBaseController
     unless @mini_blog.save
       render_js_error
     end
+  end
+
+  def show
   end
 
   def new_forward
@@ -163,7 +146,7 @@ protected
       @user = User.find(params[:uid])
     elsif ['create'].include? params[:action]
       params[:mini_blog][:mini_image] = current_user.mini_images.find(params[:mini_image_id]) unless params[:mini_image_id].blank?
-    elsif ['new_forward', 'forward'].include? params[:action]
+    elsif ['show', 'new_forward', 'forward'].include? params[:action]
       @mini_blog = MiniBlog.find params[:id]
     elsif ['destroy'].include? params[:action]
       @mini_blog = current_user.mini_blogs.find(params[:id])

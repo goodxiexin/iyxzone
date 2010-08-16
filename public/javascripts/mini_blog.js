@@ -399,9 +399,9 @@ Object.extend(Iyxzone.MiniBlog.Presenter, {
     }
 
     if(forward){
-      $('mini_blog_' + id + '_images').update('<div class="sp op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')"><span class="i iToggleUp"></span>收起</a><div class="bd"><img width="' + width + '" height="' + height + '" class="zoomIn" src="' + src + '" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')"/></div>');
+      $('mini_blog_' + id + '_images').update('<div class="sp op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')"><span class="i iToggleUp"></span>收起</a><a class="w-l" target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原图</a><div class="bd"><img width="' + width + '" height="' + height + '" class="zoomIn" src="' + src + '" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')"/></div>');
     }else{
-      $('mini_blog_' + id + '_images').update('<div class="mConWrap"><div class="mConBgT"><div class="mConBgB"><div class="mCon fix"><div class="mTrans"><div class="sp"><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ');"><span class="i iToggleUp"></span>收起</a></div><div class="bd"><img src="' + src + '" width=' + width + ' height=' + height + ' class="zoomOut" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')" /></div></div></div></div></div>');
+      $('mini_blog_' + id + '_images').update('<div class="mConWrap"><div class="mConBgT"><div class="mConBgB"><div class="mCon fix"><div class="mTrans"><div class="sp"><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ');"><span class="i iToggleUp"></span>收起</a><a class="w-l" target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原图</a></div><div class="bd"><img src="' + src + '" width=' + width + ' height=' + height + ' class="zoomOut" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')" /></div></div></div></div></div>');
     }
   }
 

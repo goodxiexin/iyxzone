@@ -3,9 +3,109 @@ Iyxzone.Friend = {
   version: '1.0',
   author: ['高侠鸿'],
   Suggestor: {},
+  Request: {},
   Tagger: Class.create({}) // only used in Blog or Video
 };
 
+// create friend request
+Object.extend(Iyxzone.Friend.Request, {
+
+  clicked: false,
+
+  validate: function(val){
+    if(val.length > 80){
+      alert('最多80个字');
+      return false;
+    }
+
+    return true;
+  },
+
+  send: function(form, btn, friendID){
+    Iyxzone.disableButton(btn, "发送..");
+    if(this.validate($('request_data').value)){
+      new Ajax.Request(Iyxzone.URL.createFriendRequest(friendID), {
+        method: 'post',
+        parameters: $(form).serialize(),
+        onLoading: function(){
+          Iyxzone.changeCursor('wait');
+        },
+        onComplete: function(){
+          Iyxzone.changeCursor('default');
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            notice("发送成功");
+          }else if(json.code == 0){
+            var errors = json.errors;
+            errors.each(function(error){
+              if(error[0] == 'friend_id'){
+                Iyxzone.Facebox.error(error[1]);
+              }
+            }.bind(this));
+          }
+        }.bind(this)
+      });
+    }else{
+      Iyxzone.enableButton(btn, "发送");
+    }
+  },
+
+  clickTextArea: function(field){
+    if(!this.clicked){
+      this.clicked = true;
+      field.clear();
+    }
+  },
+
+  accept: function(requestID, btn){
+    new Ajax.Request(Iyxzone.URL.acceptFriendRequest(requestID), {
+      method: 'put',
+      onLoading: function(){
+        Iyxzone.disableButton(btn, "提交..");
+        Iyxzone.changeCursor("wait");
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor("default");
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          var info = $('friend_info_' + requestID);
+          var parent = info.up();
+          parent.update('');
+          parent.appendChild(info);
+          info.show();
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  },
+
+  decline: function(requestID, btn){
+    new Ajax.Request(Iyxzone.URL.declineFriendRequest(requestID), {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor("wait");
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor("default");
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('friend_request_option_' + requestID).innerHTML = '<strong class="nowrap"><span class="icon-success"></span>拒绝请求成功！</strong>';
+          setTimeout(function(){new Effect.Fade('friend_request_' + requestID );}, 2000);
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+        }
+      }.bind(this)
+    });
+  }
+
+});
 
 //战友
 Iyxzone.Comrade = {

@@ -155,6 +155,22 @@ Object.extend(Iyxzone.URL, {
 
 });
 
+Object.extend(Iyxzone.URL, {
+
+  createFriendRequest: function(friendID, params){
+    return this.build("/friend_requests?friend_id=" + friendID, params);
+  },
+
+  acceptFriendRequest: function(requestID, params){
+    return this.build("/friend_requests/" + requestID + "/accept", params);
+  },
+
+  declineFriendRequest: function(requestID, params){
+    return this.build("/friend_requests/" + requestID + "/decline", params);
+  }
+
+});
+
 // personal album and photo
 Object.extend(Iyxzone.URL, {
 
@@ -206,6 +222,23 @@ Object.extend(Iyxzone.URL, {
 
 });
 
+// fan url
+Object.extend(Iyxzone.URL, {
+
+  followIdol: function(idolID, params){
+    return this.build("/idols/" + idolID + "/follow", params);
+  },
+
+  unfollowIdol: function(idolID, params){
+    return this.build("/idols/" + idolID + "/unfollow", params);
+  },
+  
+  followMultipleIdols: function(params){
+    return this.build("/idols/follow_multiple", params);
+  }
+
+});
+
 // avatar album, photo
 Object.extend(Iyxzone.URL, {
 
@@ -231,6 +264,15 @@ Object.extend(Iyxzone.URL, {
 
 });
 
+// profile url
+Object.extend(Iyxzone.URL, {
+  
+  showProfile: function(profileID, params){
+    return this.build("/profiles/" + profileID, params);
+  }
+
+});
+
 // tag
 Object.extend(Iyxzone.URL, {
 
@@ -245,6 +287,15 @@ Object.extend(Iyxzone.URL, {
 
   listTag: function(taggableType, taggableID, params){
     return this.build("/tags", Object.extend({'taggable_type': taggableType, 'taggable_id': taggableID}, params || {}));
+  }
+
+});
+
+// game
+Object.extend(Iyxzone.URL, {
+
+  showGame: function(gameID, params){
+    return this.build("/games/" + gameID, params);
   }
 
 });
@@ -286,3 +337,11 @@ Object.extend(Iyxzone.URL, {
 
 });
 
+// mini blog url
+Object.extend(Iyxzone.URL, {
+
+  listMiniBlog: function(userID, params){
+    return this.build("/mini_blogs?uid=" + userID, params);
+  }
+
+});

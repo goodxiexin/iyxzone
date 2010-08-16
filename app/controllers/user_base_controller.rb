@@ -2,11 +2,21 @@ class UserBaseController < ApplicationController
 
   before_filter :login_required
 
+  # 临时家出来的，为了让别人改名字
+  before_filter :need_change_nickname
+
   before_filter :set_last_seen_at
 
   before_filter :setup
 
 protected
+
+  def need_change_nickname
+    record = InvalidName.find_by_user_id current_user.id
+    if !record.nil?
+      redirect_to "/change_nick_name/#{record.token}"
+    end
+  end
 
   def user_game_conds
     {:game_id => current_user.characters.map(&:game_id).uniq}

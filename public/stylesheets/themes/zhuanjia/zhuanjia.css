@@ -1,0 +1,76 @@
+﻿body{background:#ffff01;color:#454545}
+a{color:#006da3}
+a.gray:link,a.gray:visited,a.gray:active,.home-wrap .feed-list-box a.gray{color:#006da3}
+.gray{color:#666;}
+.shine, a.shine:link, a.shine:visited, a.shine:active {color:#006da3;}
+
+#header{width:100%;background:url(/images/themes/zhuanjia/top_bg.png) repeat-x;height:40px;}
+.logo-top{background-image:url(/images/themes/zhuanjia/logo.png);top:0}
+#navbar{width:950px;margin:0 auto;background:none}
+#navbar a{color:#666}
+#navbar #navwrap {background:none}
+#navbar #navwrap #navmid{background:none}
+#navbar #navsearch .textfield{border-color:#355c1b;background:#fff}
+#navbar #navsearch .gobtn {background:url(/images/themes/zhuanjia/go.png) no-repeat;height:20px}
+#navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
+
+#leftsidebar,#rightsidebar{border:1px solid #f5a100;background:#faffb3;padding:10px 0}
+#leftsidebar .avatarbox {background:url(/images/themes/zhuanjia/left_avatarbox.png) no-repeat bottom;padding-bottom:20px;border:0}
+#leftsidebar .avatarbox a {color:#006da3}
+.menu-icon-list li a span{color:#006da3}
+.s-dialog a{color:#006da3}
+.piclist .jl-picitem a{color:#666}
+.home-wrap .feed-list-box a,.feed-box .feed-img-list .feed-list a{color:#006da3}
+.multibox .diary-box .diary-header,.feed-img-list .feed-list, .home-wrap .feed-box .feed-img-list .feed-list{color:#666;}
+
+.banner{width:100%;}
+.banner .con{width:100%;height:200px;margin:0 auto;background:url(/images/themes/zhuanjia/banner.jpg) no-repeat center 0;}
+.round_l_t, .round_r_t, .round_l_b, .round_r_b, .round_title_l_t, .round_title_r_t {background-image:none;}
+.round_m{background:transparent;border:0}
+.round02 .round_l_b,.round04 .round_l_b{padding:0 0 6px}
+#page{width:100%;margin-top:0;background:url(/images/themes/zhuanjia/page_bg.jpg) no-repeat center 0;} 
+#canvas .round_m{padding:0}
+#canvas{width:950px;margin:0 auto;padding:0 0 50px 0;} 
+#canvas .canvas_wrap .canvas_main{margin-left:-169px}
+#canvas .canvas_wrap .canvas_main .canvas_main_c {margin-left:169px}
+#canvas .canvas_wrap .canvas_m{margin-right:-208px}
+#canvas .canvas_wrap .canvas_m .canvas_c {margin-right:208px;}
+#canvas .canvas_wrap .canvas_r {width:198px;padding-left:2px}
+#canvas .canvas_con{border:1px solid #f5a100;background:#faffb3;}
+#canvas .tipbar {background:#faffb3;border-color:#f5a100;color:#333}
+#canvas .canvas_con .multibox .title,#rightsidebar .multibox .title{background:url(/images/themes/zhuanjia/title_bg.png) no-repeat;height:55px;line-height:55px;border:0;padding:0 20px 0 50px;color:#333}
+.bookbox h3{background:url(/images/themes/zhuanjia/title_bg.png) no-repeat;height:55px;line-height:55px;border:0;padding:0 20px 0 50px;color:#333}
+#canvas #rightsidebar .multibox .title{background:url(/images/themes/zhuanjia/title_bg02.png) no-repeat 2px 0;line-height:37px;height:37px}
+.multibox .title a{color:#333}
+
+.box02 {background:none;border:0}
+.box04 {background:#133c4e;border:0;}
+.button,.button span {background-image:url(/images/themes/zhuanjia/btns01.png);}
+.button span button{color:#666}
+.button-gray span button{color:#666}
+
+.textarea,textarea{background:#fafcc4;border:1px solid #f5a100;color:#333}
+.word-box{color:#666}
+.comment-box,.cmt-box,.word-box{background:#fafcc4;}
+.feed-list .word-box span,.feed-list .cmt-box span {color:#666;}
+
+.jl-cutline{background:url(/images/themes/zhuanjia/date-cutline.png) repeat-x center bottom;}
+.arrow-dialog {background:url(/images/themes/zhuanjia/roundBoxbg03.png) no-repeat;}
+.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/zhuanjia/roundBoxbg02.png);}
+.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/zhuanjia/roundBoxbg04.png);}
+.round02 .round_m {background:#fafcc4;border-left:1px solid #f5a100;border-right:1px solid #f5a100;margin:0 -6px 0 0;color:#333}
+.round04 .round_m {background:#fafcc4;border-left:1px solid #f5a100;border-right:1px solid #f5a100;margin:0 -6px 0 0}
+.feed-list-box h4 {background:url(/images/themes/zhuanjia/date-cutline.png) repeat-x center}
+.feed-list-box h4 span{background:#faffb3}
+a.jl-more {background:url(/images/themes/zhuanjia/arr-more.png) no-repeat;}
+#comments .feed-img-list {border-top:1px dotted #ccc;}
+.multibox .diary-box {border-bottom:1px dotted #ccc;}
+
+.jl-my-gold{color:#229bbe}
+.jl-my-gold .green {color:#229bbe;}
+.multibox .jl-data-table th {color:#006da3;}
+.multibox .data-table a,.multibox .data-table td{color:#666}
+.collection a{color:#666}
+
+#footer{width:100%;padding:0 0 30px 0;line-height:22px;color:#666}
+#footer a{color:#666}

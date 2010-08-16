@@ -13,6 +13,7 @@ javascripts:
   - facebox
   - in_place_editor_extension
   - emotion
+  - friend
   - menu
   - chat
   - calendar_date_select/calendar_date_select
@@ -28,7 +29,6 @@ javascripts:
   - home
   - photo
   - video
-  - friend
   - status
 - profile: 
   - profile
@@ -38,7 +38,6 @@ javascripts:
   - event.simulate
 - photo:
   - photo
-  - friend
   - textboxlist
   - cropper
 - album:
@@ -46,7 +45,6 @@ javascripts:
 - blog:
   - blog
   - yushan_nicEdit
-  - friend
   - textboxlist
 - event:
   - game
@@ -54,7 +52,7 @@ javascripts:
 - search:
   - game
   - search
-  - friend
+  - idol
   - event.simulate
 - game:
   - game
@@ -65,7 +63,6 @@ javascripts:
   - guild
 - mail:
   - mail
-  - friend
   - emotion
   - textboxlist
 - share:
@@ -73,7 +70,6 @@ javascripts:
   - video
 - video:
   - video
-  - friend
   - textboxlist
 - forum:
   - forum

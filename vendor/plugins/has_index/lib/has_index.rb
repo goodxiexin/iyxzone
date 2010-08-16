@@ -98,8 +98,20 @@ module HasIndex
 
     # 这个是和will_paginate兼容的，比那个煞笔acts_as_ferret强多了
     def search *args
-      query = args.first
+      fql = args.first
       opts = args.extract_options!
+
+      # parse query string
+      query = ""
+      if fql.is_a? Hash
+        query = []
+        fql.each do |key, val|
+          query << "#{key}:(#{val.split(/\s*~\s*/).map{|a| "(#{a.split(/\s+/).join(" AND ")})"}.join(" OR ")})"
+        end
+        query = query.join(" AND ")
+      elsif query.is_a? String
+        query = fql.split(/\s*~\s*/).map{|a| "(#{a.split(/\s+/).join(" AND ")})"}.join(" OR ")
+      end
 
       # parse per page
       per_page = opts.delete(:per_page)
@@ -119,6 +131,10 @@ module HasIndex
         splits = str.split(/\s+/)
         name = splits.first
         order = splits[1].nil? ? 'asc' : splits[1].downcase
+t_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
+
+    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
+
         columns = self.columns.select{|c| c.name == name}
         if !columns.blank?
           column = columns.first

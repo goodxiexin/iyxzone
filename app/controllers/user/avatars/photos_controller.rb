@@ -19,7 +19,7 @@ class User::Avatars::PhotosController < UserBaseController
   def create
     @photo = @album.photos.build(params[:photo])
 
-    if @photo.save && @album.set_cover(@photo)
+    if @photo.save
 			responds_to_parent do
         render :update do |page|
           page << "Iyxzone.Facebox.close()"

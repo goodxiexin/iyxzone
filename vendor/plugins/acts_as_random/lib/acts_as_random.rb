@@ -19,8 +19,9 @@ module ActsAsRandom
 
   module SingletonMethods
     
-    # 这里有个假设，就是该表的id域是unique的
-    # 另外，如果是join, 再random那会很慢，因为数据库没有索引
+    # 默认id是unique的
+    # join操作会很慢，因为offset没法从index里查找
+    # 建立mysql的对id的index来加快超找
     def random opts={}
       cond = opts[:conditions] || {}
       prefetch = opts[:include] || []
@@ -35,7 +36,7 @@ module ActsAsRandom
       else
         limit.times.each do
           while 1
-            record = self.find(:first, :conditions => cond, :select => select, :include => prefetch, :offset => rand(count))
+            record = self.find(:first, :conditions => cond, :include => prefetch, :select => select, :offset => rand(count))
             if !picked.include?(record) and !except.include?(record)
               picked << record
               break
