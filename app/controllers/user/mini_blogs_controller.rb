@@ -116,6 +116,8 @@ class User::MiniBlogsController < UserBaseController
   end
 
   def show
+    @user = @mini_blog.poster
+    @other_mini_blogs = MiniBlog.by(@user.id).random(:limit => 5, :except => [@mini_blog])
   end
 
   def new_forward

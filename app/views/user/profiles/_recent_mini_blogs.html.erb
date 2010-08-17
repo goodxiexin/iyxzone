@@ -6,7 +6,7 @@
   <div class="mBlogPostList mBlogProList">
   <% if !mini_blogs.blank? %>
     <% mini_blogs.each do |mb| %>
-      <% render :layout => 'user/mini_blogs/mini_blog', :locals => {:mini_blog => mb, :at => 'public'} do %>
+      <% render :layout => 'user/mini_blogs/mini_blog', :locals => {:mini_blog => mb, :at => 'public', :with_foot => true} do %>
         <div class="feedFunc icon-state"></div>
       <% end %>
     <% end %>

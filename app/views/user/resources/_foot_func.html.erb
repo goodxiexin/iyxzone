@@ -2,13 +2,13 @@
     <div class='fix'>
       <div class='left'>
       <% if commentable %>
-        <span class="w-l red">评论(<%= resource.comments_count %>)</span><span class="w-l">|</span>
+        <span class="w-l red">评论(<%= resource.comments_count %>)</span>
       <% end %>
       <% if viewable %>
-        <span class="w-l red">浏览(<%= resource.viewings_count %>)</span><span class="w-l">|</span>
+        <span class="w-l">|</span> <span class="w-l red">浏览(<%= resource.viewings_count %>)</span>
       <% end %>
       <% if diggable %>
-        <span class="photo-op-praise" ></span><%= text_dig_link resource, :class => 'red' %>
+        <span class="w-l">|</span> <span class="photo-op-praise" ></span><%= text_dig_link resource, :class => 'red' %>
       <% end %>
       </div>
       <div class='right'>
