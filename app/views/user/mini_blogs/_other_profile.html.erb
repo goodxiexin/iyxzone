@@ -1,0 +1,28 @@
+<% profile = user.profile %>
+<div class="taProfile fix">
+  <div class="avatar"><%= avatar_image user, :class => 'imgbox01' %></div>
+  <div class="con">
+    <div class="memberName"><%= link_to user.login, mini_blogs_url(:uid => user.id) %></div>
+    <div class="op"><span class="button04"><span>
+      <% if user.is_idol? %>
+        <% if !user.has_fan?(current_user) %>
+          <%= button_to_function '成为粉丝', "Iyxzone.MiniBlog.confirmFollowingIdol(#{user.id}, '#{user.login}', this);" %>
+        <% end %>
+      <% else %>
+        <% if !user.has_friend?(current_user) %>
+          <%= facebox_button "加为好友", new_friend_request_url(:friend_id => user.id) %>
+        <% end %>
+      <% end %>
+    </span></span></div>
+  </div>
+</div>
+<div class="mBlogStats fix space">
+  <ul>
+    <li><strong><%= user.mini_blogs_count %></strong><br/><span>微博</span></li>
+    <% if user.is_idol? %>
+      <li class='nobd'><strong><%= user.idols_count %></strong><br/><span>粉丝</span></li>
+    <% else %>
+      <li class='nobd'><strong><%= user.friends_count %></strong><br/><span>好友</span></li>
+    <% end %>
+  </ul>
+</div>

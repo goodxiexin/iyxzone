@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>微博_TA的微博</title>
-<link href="stylesheets/common.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="stylesheets/home.css" rel="stylesheet" type="text/css" media="screen" />
+<title>微博_我关注的</title>
+<link href="css/common.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="css/home.css" rel="stylesheet" type="text/css" media="screen" />
 
 </head>
 
@@ -101,11 +101,18 @@
                     <div class="box02 canvas_int">
                     	
                         <div class="tab tab01">
-                        	
+                        	<div class="right">
+                              <a class="btn-17gaming w-l" href="#">分享到17gaming</a>
+                              <div id="share_tip" style="position: absolute; top: 33px; left: 5px; background: none repeat scroll 0% 0% rgb(255, 255, 255); width: 180px; border: 1px solid rgb(189, 214, 173); padding: 10px; line-height: 20px; color: rgb(102, 102, 102); display:none;">
+                                <span class="arrow-tip02"></span>
+                                <strong>添加浏览器按钮更方便</strong><br>
+                            右键点击下面按钮并选择"添加到收藏夹"，或将下面的按钮拖动到浏览器标签工具栏，让分享更加方便快捷
+                              </div>
+                            </div>
                             <ul>
                                  <li><span><a href="#">微博广场</a></span></li>
-                                 <li class="hover"><span><a href="#">我的微博</a></span></li>
-                                 <li><span><a href="#">我的关注</a></span></li>
+                                 <li><span><a href="#">我的微博</a></span></li>
+                                 <li class="hover"><span><a href="#">我的关注</a></span></li>
                  			</ul>
                         
                         </div>
@@ -115,8 +122,66 @@
                               <div class="mBlog fix">
                               	<div class="mBlogMain">
                                 	<div class="mBlogMainWrap">
+                                    	<!--今日话题提交-->
+                                    	<div class="mBlogTopic mBlogMyTopic">
+                                            <div class="topTitle fix">
+                                                <a href="#" class="entrance">微博活动微博活动微博活动微博活动入口标题>></a>
+                                            </div>
+                                            <div class="round08 round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m"><div class="round_body">
+                                                <div class="topBg fix">
+                                                        <div class="mBlogEditor">
+                                                            <div class="bd fix">
+                                                                <textarea name="" id="">#请在这里输入自定义话题#</textarea>
+                                                            </div>
+                                                            <div class="ft fix">
+                                                                <ul>
+                                                                  <li><a href="#"><span class="i iFace"></span>表情</a></li>
+                                                                  <li><a href="#"><span class="i iPic"></span>图片</a> <a href="" class="icon-active"></a>
+                                                                  <span class="picUpload"><input type="file" /></span>
+                                                                <!--上传图片-->
+                                                                <div class="mBlogEditZ">
+                                                                <table class="trimBox">
+                                                                <tbody><tr>
+                                                                    <td></td>
+                                                                    <td class="arrUp"></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="t-l"></td>
+                                                                    <td class="t-c"></td>
+                                                                    <td class="t-r"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="m-l">&nbsp;</td>
+                                                                    <td class="m-c"><img src="images/photo/photo18.png"></td>
+                                                                    <td class="m-r">&nbsp;</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="b-l"></td>
+                                                                    <td class="b-c"></td>
+                                                                    <td class="b-r"></td>
+                                                                </tr>
+                                                            </tbody></table>
+                                                            
+                                                            </div>
+                                                                <!--上传图片 end-->
+                                                                  </li>
+                                                                  <li><a href="#"><span class="i iVideo"></span>视频</a>
+                                                                  </li>
+                                                                  <li><a href="#"><span class="i iTopic"></span>话题</a></li>
+                                                                </ul>
+                                                                <div class="submit fix">
+                                                                    <span class="count">你还可以输入<span class="num">140</span>字</span>
+                                                                    <span class="button03"><span><button>发布</button></span></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                             </div></div></div></div></div></div>
+                                        </div>
+                                    	<!--今日话题提交 End-->
                                     	<div class="mBlogCatTab fix">
-                                        	  <strong class="title">TA的微博</strong>
+                                        	  <strong class="title">我的微博</strong>
                                         	  <a href="#" class="selected">全部</a>
                                               <span class="pipe">|</span>
                                         	  <a href="#">原创</a>
@@ -126,13 +191,17 @@
                                         	  <a href="#">图片</a>
                                               <span class="pipe">|</span>
                                         	  <a href="#">视频</a>
-                                        </div>
+                                  </div>
+                                                	
                                         <!--话题列表-->
-                                        <div class="mBlogPostList mBlogTaPost">
+                                        <div class="mBlogPostList">
                                             <!---->
                                         	<div class="item jl-cutline fix">
+                                            	<div class="feedFunc">
+                                                	<img src="images/photo/photo11.png" class="imgbox01" alt="" />
+                                                </div>
                                                 <div class="feedCon">
-                                            	<div class="transCon">转发内容转发内容转发内容转发内容转发内容</div>
+                                            	<div class="transCon"><a href="#" class="memberName">张大饼</a>：转发内容转发内容转发内容转发内容转发内容</div>
                                                     <div class="round02 round_r_t s-dialog">
                                                     <div class="round_l_t">
                                                       <div class="round_r_b">
@@ -154,8 +223,11 @@
                                             <!---->
                                             <!---->
                                         	<div class="item jl-cutline fix">
+                                            	<div class="feedFunc">
+                                                	<img src="images/photo/photo11.png" class="imgbox01" alt="" />
+                                                </div>
                                                 <div class="feedCon">
-                                            	<div class="transCon">转发内容转发内容转发内容转发内容转发内容</div>
+                                            	<div class="transCon"><a href="#" class="memberName">张大饼</a>：转发内容转发内容转发内容转发内容转发内容</div>
                                                     <div class="round02 round_r_t s-dialog">
                                                     <div class="round_l_t">
                                                       <div class="round_r_b">
@@ -181,8 +253,11 @@
                                             <!---->
                                             <!---->
                                         	<div class="item jl-cutline fix">
+                                            	<div class="feedFunc">
+                                                	<img src="images/photo/photo11.png" class="imgbox01" alt="" />
+                                                </div>
                                                 <div class="feedCon">
-                                            	<div class="transCon">我转我转我转我转我转</span></div>
+                                            	<div class="transCon"><a href="#" class="memberName">张家强</a>：我转我转我转我转我转</span></div>
                                                     <div class="round02 round_r_t s-dialog">
                                                     <div class="round_l_t">
                                                       <div class="round_r_b">
@@ -249,8 +324,11 @@
                                             <!---->
                                             <!---->
                                         	<div class="item jl-cutline fix">
+                                            	<div class="feedFunc">
+                                                	<img src="images/photo/photo11.png" class="imgbox01" alt="" />
+                                                </div>
                                                 <div class="feedCon">
-                                            	<div class="transCon">我转我转我转我转我转</span></div>
+                                            	<div class="transCon"><a href="#" class="memberName">张家强</a>：我转我转我转我转我转</span></div>
                                                     <div class="round02 round_r_t s-dialog">
                                                     <div class="round_l_t">
                                                       <div class="round_r_b">
@@ -277,8 +355,11 @@
                                             <!---->
                                             <!---->
                                         	<div class="item jl-cutline fix">
+                                            	<div class="feedFunc">
+                                                	<img src="images/photo/photo11.png" class="imgbox01" alt="" />
+                                                </div>
                                                 <div class="feedCon">
-                                                   <div class="oriCon">自发内容自发内容自发内容</div>
+                                                   <div class="oriCon"><a href="#" class="memberName">张大饼</a>：自发内容自发内容自发内容</div>
                                                      
                                                 <div class="ft"><span class="time">2010-06-07 21:49</span><span><a href="#">回复</a>(2)</span> | <span><a href="#">转发</a></span></div>
                                                 </div>
@@ -286,13 +367,17 @@
                                             <!---->
                                             <!---->
                                         	<div class="item jl-cutline fix">
+                                            	<div class="feedFunc">
+                                                	<img src="images/photo/photo11.png" class="imgbox01" alt="" />
+                                                </div>
                                                 <div class="feedCon">
-                                                   <div class="oriCon">自发内容自发内容自发内容</div>
+                                                   <div class="oriCon"><a href="#" class="memberName">张大饼</a>：自发内容自发内容自发内容</div>
                                                          <div class="mCon fix">
-                                                         
+                                                                         
                                                            <div class="feedImg"><img src="images/photo/photo18.png" class="zoomIn imgbox01" alt="" /></div>
                                                            <div class="feedImg"><img src="images/photo/photo18.png" class="zoomIn imgbox01" alt="" /></div>
-                                                         </div>
+                                                                         </div>
+                                                                         
                                                      
                                                 <div class="ft"><span class="time">2010-06-07 21:49</span><span><a href="#">回复</a>(2)</span> | <span><a href="#">转发</a></span></div>
                                                 </div>
@@ -300,16 +385,20 @@
                                             <!---->
                                             <!---->
                                         	<div class="item jl-cutline fix">
+                                            	<div class="feedFunc">
+                                                	<img src="images/photo/photo11.png" class="imgbox01" alt="" />
+                                                </div>
                                                 <div class="feedCon">
-                                                   <div class="oriCon">自发内容自发内容自发内容</div>
+                                                   <div class="oriCon"><a href="#" class="memberName">张大饼</a>：自发内容自发内容自发内容</div>
                                                     <div class="round02 round_r_t s-dialog"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m jl-round_m"><div class="round_body">
                                                          <div class="mCon fix">
-                                                            <div class="op"><a href="#" class="w-l"><span class="i iToggleUp"></span>收起</a><a href="#"><span class="i iViewOrig"></span>查看原图</a></div>
-                                                           <div class="bd">
-                                                             <img src="images/photo/photo08.png" width="500" class="zoomIn" alt="" />
-                                                           </div>
-                                                         </div>
+                                                                            <div class="op"><a href="#" class="w-l"><span class="i iToggleUp"></span>收起</a><a href="#"><span class="i iViewOrig"></span>查看原图</a></div>
+                                                                           <div class="bd">
+                                                                             <img src="images/photo/photo08.png" width="500" class="zoomIn" alt="" />
+                                                                           </div>
+                                                                         </div>
                                                     </div></div></div></div></div></div>
+                                                                         
                                                      
                                                 <div class="ft"><span class="time">2010-06-07 21:49</span><span><a href="#">回复</a>(2)</span> | <span><a href="#">转发</a></span></div>
                                                 </div>
@@ -317,8 +406,11 @@
                                             <!---->
                                             <!---->
                                         	<div class="item jl-cutline fix">
+                                            	<div class="feedFunc">
+                                                	<img src="images/photo/photo11.png" class="imgbox01" alt="" />
+                                                </div>
                                                 <div class="feedCon">
-                                                   <div class="oriCon">自发内容自发内容自发内容</div>
+                                                   <div class="oriCon"><a href="#" class="memberName">张大饼</a>：自发内容自发内容自发内容</div>
                                                     <div class="round02 round_r_t s-dialog"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m jl-round_m"><div class="round_body">
                                                          <div class="mCon fix">
                                                                             <div class="op"><a href="#" class="w-l"><span class="i iToggleUp"></span>收起</a></div>
@@ -339,22 +431,8 @@
                                 </div>
                                 <!---->
                               	<div class="mBlogExtra">
-                                	<div class="taProfile fix">
-                                    	<div class="avatar"><a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt="" /></a></div>
-                                        <div class="con">
-                                            <div class="memberName"><a href="#">小甲壳虫小甲壳虫小甲壳虫小甲壳虫</a></div>
-                                            <div class="op"><span class="button04"><span><button>加为好友</button></span></span></div>
-                                        </div>
-                                    </div>
-                                    <div class="mBlogStats fix space">
-                                    	<ul>
-                                    	  <li><strong>321065</strong><br /><span>微博</span></li>
-                                    	  <li><strong>32165</strong><br /><span>好友</span></li>
-                                    	  <li class="nobd"><strong>302165</strong><br /><span>关注</span></li>
-                                    	</ul>
-                                    </div>
                                     <!---->
-                                	<div class="round06 round_r_t myTopicEx space">
+                                	<div class="round06 round_r_t myTopicEx">
                                     <div class="round_l_t">
                                       <div class="round_r_b">
                                         <div class="round_l_b">

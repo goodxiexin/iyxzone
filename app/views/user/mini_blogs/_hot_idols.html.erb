@@ -16,7 +16,7 @@
                               <div class="op" id='idol_<%= idol.id %>_op'>
                                 <% if idol.has_fan? current_user %>
                                   <%= render :partial => 'user/idols/unfollow', :locals => {:idol => idol} %>
-                                <% elsif !idol.has_friend?(current_user) and idol != current_user %>
+                                <% elsif idol != current_user %>
                                   <%= render :partial => 'user/idols/follow', :locals => {:idol => idol} %>
                                 <% end %>
                               </div>

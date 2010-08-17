@@ -7,7 +7,7 @@ Iyxzone.MiniBlog = {
   
   Builder: {},
   
-  Presenter: {},
+  Presentor: {},
   
   Pub: {},
   
@@ -20,6 +20,37 @@ Iyxzone.MiniBlog = {
   Category: {}
 
 };
+
+// follow idol in mini blog page
+Object.extend(Iyxzone.MiniBlog, {
+
+  confirmFollowingIdol: function(idolID, login, btn){
+    Iyxzone.Facebox.confirmWithCallback("你确定要成为 <b>" + login + "</b> 的粉丝吗? 这样你可以在主页上看到他的新鲜事", null, null, function(){
+      this.followIdol(idolID, login, btn);
+    });
+  },
+
+  followIdol: function(idolID, login, btn){
+    new Ajax.Request(Iyxzone.URL.followIdol(idolID), {
+      method: 'post',
+      onLoading: function(){
+        btn.writeAttribute('onclick', '');
+      },
+      onComplete: function(){},
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          alert('成功');
+          btn.writeAttribute('onclick', 'alert("你已经是粉丝了");');
+        }else if(json.code == 0){
+          error('发生错误，请稍后再试试');
+          btn.writeAttribute('onclick', 'Iyxzone.MiniBlog.confirmFollowingIdol(' + idolID + ',' + '"' + login + '", this);');
+        }
+      }.bind(this)
+    });
+  }
+
+});
 
 Object.extend(Iyxzone.MiniBlog.Category, {
 
@@ -361,47 +392,111 @@ Object.extend(Iyxzone.MiniBlog.Slider, {
 
 });
 
-Object.extend(Iyxzone.MiniBlog.Presenter, {
+Object.extend(Iyxzone.MiniBlog.Presentor, {
 
   cache: new Hash(),
 
-  showVideo: function(id, thumbnail, embedHTML, forward){
-    if(!this.cache.get(id)){
-      this.cache.set(id, $('mini_blog_' + id + '_images').innerHTML);
-    }
+  showVideo: function(id, url, thumbnail, embedHTML){
+    var panel = $('mb_' + id + '_img');
+    var origCon = panel.previous();
+    
+    this.cache.set(id, panel.innerHTML);
 
-    // calc new width and height
-    var embed = embedHTML.gsub(/width=\"\d+\"/, "width=380").gsub(/height=\"\d+\"/, "height=320");
+    var width = panel.getWidth() - 20;
+    var height = width * 320 / 380;
+    var embed = embedHTML.gsub(/width=\"\d+\"/, "width=" + width).gsub(/height=\"\d+\"/, "height="+height);
 
-    if(forward){
-      $('mini_blog_' + id + '_images').update('<div class="sp op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')"><span class="i iToggleUp"></span>收起</a><div class="bd">' + embed + '</div>');
-    }else{
-      $('mini_blog_' + id + '_images').update('<div class="mConWrap"><div class="mConBgT"><div class="mConBgB"><div class="mCon fix"><div class="mTrans"><div class="hd"><div class="sp"><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')" ><span class="i iToggleUp"></span>收起</a></div></div><div>' + embed + '</div></div></div></div></div></div>');
-    }
+    var html = '';
+    html += '<div class="round02 round_r_t s-dialog" id="mb_' + id + '_img"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m jl-round_m"><div class="round_body">';
+    html += '<div class="mCon fix">';
+    html += '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreview(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="' + url + '" target="_blank"><span class="i iViewOrig"></span>查看原视频</a></div>';
+    html += '<div class="bd">' + embed + '</div>';
+    html += '</div>';
+    html += '</div></div></div></div></div></div>';
+
+    panel.remove();
+    Element.insert(origCon, {'after': html}); 
   },
 
-  back: function(id){
+  showImage: function(id, src, width, height){
+    var panel = $('mb_' + id + '_img');
+    var origCon = panel.previous();
+    
+    this.cache.set(id, panel.innerHTML);
+
+    var panelWidth = panel.getWidth();
+    if(width > panelWidth - 20){
+      height = (panelWidth - 20) * height / width;
+      width = panelWidth - 20;
+    }
+
+    var html = '';
+    html += '<div class="round02 round_r_t s-dialog" id="mb_' + id + '_img"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m jl-round_m"><div class="round_body">';
+    html += '<div class="mCon fix">';
+    html += '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreview(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="' + src + '" target="_blank"><span class="i iViewOrig"></span>查看原图</a></div>';
+    html += '<div class="bd"><img width="' + width + '" height="' + height + '" alt="" class="zoomIn" src="' + src + '"/><div>';
+    html += '</div>';
+    html += '</div></div></div></div></div></div>';
+
+    panel.remove();
+    Element.insert(origCon, {'after': html}); 
+  },
+
+  showPreview: function(id){
     var html = this.cache.get(id);
     if(html){
-      $('mini_blog_' + id + '_images').update(html);
+      var panel = $('mb_' + id + '_img');
+      var origCon = panel.previous();
+      var origHTML = '<div class="mCon fix" id="mb_' + id + '_img">' + html + '</div>';
+      panel.remove();
+      Element.insert(origCon, {'after': origHTML});
     }
   },
 
-  showImage: function(id, src, width, height, forward){
-    if(!this.cache.get(id)){
-      this.cache.set(id, $('mini_blog_' + id + '_images').innerHTML);
-    }
+  showVideoInForward: function(id, url, thumbnail, embedHTML){
+    var panel = $('mb_' + id + '_img');
+    var hd = panel.previous();
+
+    this.cache.set(id, panel.innerHTML);
+
+    // calc new width and height
+    var width = panel.getWidth() - 20;
+    var height = (width * 320) / 380;
+    var embed = embedHTML.gsub(/width=\"\d+\"/, "width=" + width).gsub(/height=\"\d+\"/, "height="+height);
+    
+    var op = '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="javascript:void(0)" target="_blank" href="' + url + '"><span class="i iViewOrig"></span>查看原视频</a></div>';
+    panel.update(embed);
+    Element.insert(panel, {'before': op});
+    hd.addClassName('jl-cutline');
+  },
+
+  showImageInForward: function(id, src, width, height){
+    var panel = $('mb_' + id + '_img');
+    var hd = panel.previous();
+
+    this.cache.set(id, panel.innerHTML);
 
     // calc height and width
-    if(width > 380){
-      height = height * 380 / width;
-      width = 380;
+    var panelWidth = panel.getWidth();
+    if(width > panelWidth - 40){
+      height = height * (panelWidth - 40) / width;
+      width = panelWidth - 40;
     }
 
-    if(forward){
-      $('mini_blog_' + id + '_images').update('<div class="sp op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')"><span class="i iToggleUp"></span>收起</a><a class="w-l" target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原图</a><div class="bd"><img width="' + width + '" height="' + height + '" class="zoomIn" src="' + src + '" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')"/></div>');
-    }else{
-      $('mini_blog_' + id + '_images').update('<div class="mConWrap"><div class="mConBgT"><div class="mConBgB"><div class="mCon fix"><div class="mTrans"><div class="sp"><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ');"><span class="i iToggleUp"></span>收起</a><a class="w-l" target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原图</a></div><div class="bd"><img src="' + src + '" width=' + width + ' height=' + height + ' class="zoomOut" onclick="Iyxzone.MiniBlog.Presenter.back(' + id + ')" /></div></div></div></div></div>');
+    var op = '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="javascript:void(0)" target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原视频</a></div>';
+    panel.update('<img width="' + width + '" height="' + height + '" class="zoomIn" src="' + src + '" onclick="Iyxzone.MiniBlog.Presentor.back(' + id + ')"/>');
+    Element.insert(panel, {'before': op});
+    hd.addClassName('jl-cutline');
+  },
+
+  showPreviewInForward: function(id){
+    var html = this.cache.get(id);
+    if(html){
+      var panel = $('mb_' + id + '_img');
+      var hd = panel.previous();
+      panel.update(html);
+      panel.previous().remove();
+      hd.writeAttribute('class', 'hd');
     }
   }
 
@@ -435,7 +530,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
     this.imageID = id;
 
     // show image name and delete icon
-    var html = '<a href="#"><span class="i iPic"></span>' + fileName + '</a><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Builder.delImage(' + id + ');" class="icon-active"></a>';
+    var html = '<a href="#"><span class="i iPic"></span>' + fileName.subStr(0,10) + '</a><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Builder.delImage(' + id + ');" class="icon-active"></a>';
     $('publisher_image').update(html);
  
     // show image preview
