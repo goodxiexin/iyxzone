@@ -12,15 +12,15 @@ class User::ProfilesController < UserBaseController
     # mini blogs
     @mini_blogs = @user.mini_blogs.limit(3).all
     @common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..2] if @relationship != 'owner'
-    @friends = @user.friends.sort_by{rand}[0..2]
-    @fans = @user.fans[0..8] if @user.is_idol
+    @friends = @user.friends.limit(3)
+    @fans = @user.fans.limit(9).all if @user.is_idol
 		@blogs = @user.blogs.for(@relationship).limit(3)
 		@albums = @user.active_albums.for(@relationship).limit(3)
     @feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).order('created_at DESC').prefetch([{:feed_item => :originator}]).all
 		@first_fetch_size = FirstFetchSize
     @skin = @profile.skin
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
-    @viewings = @profile.viewings.limit(3).prefetch([{:viewer => :profile}])
+    @viewings = @profile.viewings.limit(3)
     @characters = @user.characters.prefetch([:game])
     @messages = @profile.comments.nonblocked.paginate :page => params[:page], :per_page => 10
     @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'Profile'}}
