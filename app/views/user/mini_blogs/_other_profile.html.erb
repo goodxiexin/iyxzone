@@ -7,10 +7,14 @@
       <% if user.is_idol? %>
         <% if !user.has_fan?(current_user) %>
           <%= button_to_function '成为粉丝', "Iyxzone.MiniBlog.confirmFollowingIdol(#{user.id}, '#{user.login}', this);" %>
+        <% else %>
+          <%= button_to_function "个人主页", "window.location.href = Iyxzone.URL.showProfile(#{user.profile.id});" %>
         <% end %>
       <% else %>
         <% if !user.has_friend?(current_user) %>
           <%= facebox_button "加为好友", new_friend_request_url(:friend_id => user.id) %>
+        <% else %>
+          <%= button_to_function "个人主页", "window.location.href = Iyxzone.URL.showProfile(#{user.profile.id});" %>
         <% end %>
       <% end %>
     </span></span></div>
