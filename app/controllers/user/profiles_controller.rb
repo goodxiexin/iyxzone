@@ -63,7 +63,6 @@ class User::ProfilesController < UserBaseController
 				format.json { render :json => @profile.to_json }
 			end
 =end
-    end
   end
 
 	def more_feeds

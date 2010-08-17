@@ -10,7 +10,7 @@
     <h1 class="app-notice">通知</h1>
     <div class="box02 canvas_int space">
       <% render :layout => 'tab', :locals => {:hover => 0} do %>
-        <%= facebox_confirm '删除所有通知', destroy_all_notifications_url, {:method => :delete, :msg => '你确定要删除所有通知吗'} %>
+        <%= link_to_function '删除所有通知', "Iyxzone.Notification.confirmDestroyingAll(#{current_user.id}, this);" %>
       <% end %>
       <div class="box02 appcontent02">
       <% if @notifications.blank? %>

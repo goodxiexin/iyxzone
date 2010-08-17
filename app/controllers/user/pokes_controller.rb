@@ -16,26 +16,25 @@ class User::PokesController < UserBaseController
     @delivery = PokeDelivery.new((params[:delivery] || {}).merge({:sender_id => current_user.id}))
 
     if @delivery.save
-      render_js_tip '发送成功' 
+      render :json => {:code => 1}
     else
-      render_js_error '你没有权限'
+      render :json => {:code => 0, :errors => @delivery.errors}
     end
   end
 
   def destroy
     if @delivery.destroy
-      render_js_code "$('poke_delivery_#{@delivery.id}').remove();"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 
   def destroy_all
 		if PokeDelivery.delete_all_for current_user
-      flash[:notice] = "删除成功"
-      redirect_js pokes_url
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

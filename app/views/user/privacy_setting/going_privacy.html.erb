@@ -3,6 +3,10 @@
 <% content_for :html_description, "#{current_user.login} - 隐私操作 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :setting %>
+<% end %>
+
 <% canvas_tag do %>
     <h1 class="app-lock">隐私设置</h1>
     <div class="box02 canvas_int space">
@@ -10,13 +14,13 @@
       <div class="box02 appcontent04">
         <div class="path-box"></div>
         <div class="privacy-form formcontent">
-          <% config_form_for :setting, :url => privacy_setting_url(:type => 1, :format => 'html'), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(going_privacy_submit_btn),'请等待..');"} do |f| %>
+          <% config_form_for :setting, :html => {:onsubmit => "Iyxzone.GoingPrivacySetting.update(this, $('config_btn'));return false;"} do |f| %>
             <h3>谁可以对你进行以下操作？</h3>
             <%= f.select :add_me_as_friend, friend_privacy_options, {}, :label => '申请加好友' %>
             <%= f.select :leave_wall_message, privacy_options, {}, :label => '留言版上留言' %>
             <%= f.select :send_mail, privacy_options, {}, :label => '发站内信' %>
             <%= f.select :poke, privacy_options, {}, :label => '打招呼' %>
-            <%= f.submit :submit => {:text => '保存修改', :id => 'going_privacy_submit_btn'}, :cancel => {:text => '取消', :onclick => "history.back()"} %> 
+            <%= f.submit :submit => {:text => '保存修改', :id => 'config_btn'}, :cancel => {:text => '取消', :onclick => "history.back()"} %> 
           <% end %>
         </div>
       </div>

@@ -2,24 +2,28 @@
 <% content_for :html_description, "#{current_user.login} - 所有招呼 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :poke %>
+<% end %>
+
 <% canvas_tag do %>
     <h1 class="app-notice">招呼</h1>
     <div class="box02 canvas_int space">
       <% render :layout => 'user/notifications/tab', :locals => {:hover => 3} do %>
         <% unless @deliveries.blank? %>
-          <%= facebox_confirm "删除所有招呼", destroy_all_pokes_url, {:msg => '你确定要删除所有通知吗', :method => :delete} %>
+          <%= link_to_function "删除所有招呼", "Iyxzone.Poke.confirmDestroyingAll(#{current_user.id}, this);" %>
         <% end %>
       <% end %>
       <div class="box02 appcontent02">
         <div class="feed-img-list hello-history">
           <% @deliveries.each do |d| %>
-          <div class="feed-list jl-cutline" id='poke_delivery_<%= d.id %>'>
+          <div class="feed-list jl-cutline" id='pd_<%= d.id %>'>
             <div class="feed-img"><%= avatar d.sender, :class => 'imgbox01' %></div>
             <div class="feed-header">
-              <%= facebox_confirm '', poke_url(d), {:msg => "你确定要删除吗?", :method => :delete}, {:class => 'icon2-close'} %>
+              <%= link_to_function '', "Iyxzone.Poke.destroy(#{d.id}, this);", :class => "icon2-close" %>
               <div class="head">来自：<%= profile_link d.sender %> <%= ftime d.created_at %></div>
               <div class="con"><%= profile_link d.sender %> <%= d.poke.content_html %></div>
-              <div class="foot"><%= link_to_remote "用#{d.poke.name}回应", :url => pokes_url('delivery[poke_id]' => d.poke_id, 'delivery[recipient_id]' => d.sender_id) %> | <%= facebox_link "用其他动作回应", new_poke_url(:recipient_id => d.sender_id)%></div>
+              <div class="foot"><%= link_to_function "用#{d.poke.name}回应", "Iyxzone.Poke.reply(#{d.poke_id}, #{d.sender_id}, this);" %> | <%= facebox_link "用其他动作回应", new_poke_url(:recipient_id => d.sender_id)%></div>
             </div>
           </div>
           <% end %>

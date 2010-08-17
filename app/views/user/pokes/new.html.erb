@@ -1,5 +1,5 @@
 <% facebox_tag "向#{@recipient.login}打招呼" do %>
-  <% rows_form_remote_for :delivery, :url => pokes_url, :html => {:method => :post, :onsubmit => "Iyxzone.disableButton($('new_poke_btn'), '请等待..');"} do |f| %>
+  <% rows_form_for :delivery, :html => {:onsubmit => "Iyxzone.Poke.deliver(this, $('new_poke_btn'));return false;"} do |f| %>
     <%= hidden_field_tag 'delivery[recipient_id]', @recipient.id %>
     <div class="face-hello space">
       <div class="avatar">

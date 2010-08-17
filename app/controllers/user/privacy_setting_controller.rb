@@ -25,22 +25,6 @@ class User::PrivacySettingController < UserBaseController
   def update
     if @setting.update_attributes(params[:setting])
       render :json => {:code => 1}
-=begin
-			respond_to do |format|
-        format.js { render_js_code "Iyxzone.Facebox.close();" }
-        format.html {  
-          flash[:notice] = "设置保存成功"
-			    case params[:type].to_i
-			    when 0
-				    redirect_to edit_privacy_setting_url(:type => 0)
-			    when 1
-				    redirect_to edit_privacy_setting_url(:type => 1)
-			    when 2	
-				    redirect_to edit_privacy_setting_url(:type => 2)
-			    end
-        }
-      end
-=end
     else
       render :json => {:code => 0}
     end

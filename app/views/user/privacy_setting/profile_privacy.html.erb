@@ -2,6 +2,10 @@
 <% content_for :html_description, "#{current_user.login} - 个人主页设置 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :setting %>
+<% end %>
+
 <% canvas_tag do %>
     <h1 class="app-lock">隐私设置</h1>
     <div class="box02 canvas_int space">
@@ -9,7 +13,7 @@
       <div class="box02 appcontent04">
         <div class="path-box"></div>
         <div class="privacy-form formcontent">
-          <% config_form_for :setting, :url => privacy_setting_url(:type => 0, :format => 'html'), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(profile_privacy_submit_btn),'请等待..');"} do |f| %>
+          <% config_form_for :setting, :html => {:onsubmit => "Iyxzone.ProfilePrivacySetting.update(this, $('config_btn')); return false"} do |f| %>
             <div class="form-group">
               <h3>谁可以浏览你的个人主页？</h3>
               <%= f.select :profile, privacy_options, {}, :label => '个人主页' %>
@@ -32,7 +36,7 @@
               <%= f.span '相关浏览权限需要在每个日志中单独设置', :label => '日志' %>
               <%= f.span '相关浏览权限需要在每个相册中单独设置', :label => '相册' %>
             </div>
-            <%= f.submit :submit => {:text => '保存修改', :id => 'profile_privacy_submit_btn'}, :cancel => {:text => '取消', :onclick => "history.back()"} %>
+            <%= f.submit :submit => {:text => '保存修改', :id => 'config_btn'}, :cancel => {:text => '取消', :onclick => "history.back()"} %>
           <% end %>
         </div>
       </div>

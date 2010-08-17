@@ -35,6 +35,8 @@ javascripts:
   - chinese_region
   - video
   - game
+  - poke
+  - setting
   - event.simulate
 - photo:
   - photo

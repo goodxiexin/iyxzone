@@ -429,3 +429,74 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// notification url
+Object.extend(Iyxzone.URL, {
+
+  deleteNotification: function(id, params){
+    return this.build("/notifications/" + id, params);
+  },
+
+  deleteAllNotification: function(userID, params){
+    return this.build("/notifications/destroy_all", params);
+  },
+
+  listNotification: function(userID, params){
+    return this.build("/notifications", params);
+  }
+
+});
+
+// poke url
+Object.extend(Iyxzone.URL, {
+
+  createPoke: function(params){
+    return this.build("/pokes", params);
+  },
+
+  deletePoke: function(id, params){
+    return this.build("/pokes/" + id, params);
+  },
+
+  deleteAllPoke: function(userID, params){
+    return this.build("/pokes/destroy_all", params);
+  },
+
+  listPoke: function(userID, params){
+    return this.build("/pokes", params);
+  }
+
+});
+
+// setting url
+Object.extend(Iyxzone.URL, {
+
+  updateApplicationSetting: function(params){
+    return this.build("/application_setting", params);
+  },
+
+  editMailSetting: function(params){
+    return this.build("/mail_setting/edit", params);
+  },
+
+  updateMailSetting: function(params){
+    return this.build("/mail_setting", params);
+  },
+
+  updatePrivacySetting: function(params){
+    return this.build("/privacy_setting", params);
+  },
+
+  editProfilePrivacySetting: function(params){
+    return this.build("/privacy_setting/edit?type=0", params);
+  }, 
+
+  editGoingPrivacySetting: function(params){
+    return this.build("/privacy_setting/edit?type=1", params);
+  },
+
+  editOutsidePrivacySetting: function(params){
+    return this.build("/privacy_setting/edit?type=2", params);
+  }
+
+});

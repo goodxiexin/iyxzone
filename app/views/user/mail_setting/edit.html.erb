@@ -2,6 +2,10 @@
 <% content_for :html_description, "#{current_user.login}的邮件提示 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :setting %>
+<% end %>
+
 <% canvas_tag do %>
     <h1 class="app-lock">隐私设置</h1>
     <div class="box02 canvas_int space">
@@ -12,7 +16,7 @@
 				<h3>我们将会把在17gaming上和您相关的事件通知您。</h3>
 				<h3>每个应用程序拥有它自己的通知设置。点击复选框来改变相应应用程序的设置。</h3>
 				<h3>发送电子邮件通知到：<%= current_user.email %></h3><br/>
-				<% config_form_for :setting, :url => mail_setting_url, :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(setting_submit),'请等待..');"} do |f| %>
+				<% config_form_for :setting, :html => {:onsubmit => "Iyxzone.MailSetting.update(this, $('config_btn')); return false;"} do |f| %>
 				  <h3>基本设定</h3>
           <%= f.check_box 'tag_my_profile', :label => '发表了对我的印象' %>
 					<%= f.check_box 'request_to_be_friend', :label => '将我添加为朋友' %>
@@ -62,7 +66,7 @@
 					<%= f.check_box 'poll_expire', :label => '投票结束' %>
 					<%= f.check_box 'comment_my_poll', :label => '评论我的投票' %>
 					<%= f.check_box 'comment_same_poll_after_me', :label => '在我之后对同一投票进行评论' %>
-          <%= f.submit :submit => {:text => '保存修改', :id => 'setting_submit'}, :cancel => {:text => '取消', :onclick => 'history.back();'} %>
+          <%= f.submit :submit => {:text => '保存修改', :id => 'config_btn'}, :cancel => {:text => '取消', :onclick => 'history.back();'} %>
 			  <% end %>
       </div>
     </div>

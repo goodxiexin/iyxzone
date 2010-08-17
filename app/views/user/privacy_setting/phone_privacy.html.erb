@@ -1,8 +1,8 @@
 <% facebox_tag '隐私设置' do %>
-  <% rows_form_remote_for :setting, :url => privacy_setting_url(@setting, :format => 'js'), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($('phone_privacy_btn'), '请等待..')"} do |f| %>
+  <% rows_form_for :setting, :html => {:onsubmit => "Iyxzone.PhonePrivacySetting.update(this, $('config_btn')); return false"} do |f| %>
     <div class='formcontent'>
       <%= f.select 'phone', privacy_options, {}, :label => '想让谁看到', :class => "selector selector02" %>
     </div>
-    <%= f.z_submit :submit => {:text => '完成', :id => 'phone_privacy_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
+    <%= f.z_submit :submit => {:text => '完成', :id => 'config_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
   <% end %>
 <% end %>

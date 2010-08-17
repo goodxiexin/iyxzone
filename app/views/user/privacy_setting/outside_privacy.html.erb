@@ -3,6 +3,10 @@
 <% content_for :html_description, "#{current_user.login} - 站外搜索设置 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
 <% content_for :html_keywords, "#{current_user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :setting %>
+<% end %>
+
 <% canvas_tag do %>
     <h1 class="app-lock">隐私设置</h1>
     <div class="box02 canvas_int space">
@@ -10,10 +14,10 @@
       <div class="box02 appcontent04">
         <div class="path-box"></div>
         <div class="privacy-form formcontent">
-          <% config_form_for :setting, :url => privacy_setting_url(:type => 2, :format => 'html'), :html => {:method => :put, :onsubmit=> "Iyxzone.disableButton($(outside_privacy_submit_btn),'请等待..');"} do |f| %>
+          <% config_form_for :setting, :html => {:onsubmit => "Iyxzone.OutsidePrivacySetting.update(this, $('config_btn')); return false"} do |f| %>
             <h3>用户是否可以在站外搜索到你？</h3>
             <%= f.check_box :search, :label => '允许被搜索到' %>
-            <%= f.submit :submit => {:text => '保存修改', :id => 'outside_privacy_submit_btn'}, :cancel => {:text => '取消', :onclick => "history.back();"} %>
+            <%= f.submit :submit => {:text => '保存修改', :id => 'config_btn'}, :cancel => {:text => '取消', :onclick => "history.back();"} %>
           <% end %>
         </div>
       </div>
