@@ -1582,7 +1582,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogCatTab a.selected{font-weight:700}
 .mBlogCatTab .pipe{margin:0 5px}
 
-.mBlogMain .topicTag{color:#d82d01}
+.topicTag,.mBlogMain .topicTag{color:#d82d01}
 .mBlogPostList{margin:20px 0;}
 .mBlogPostList .item{padding:0 0 10px 80px;/*_height:100px;min-height:100px;*/margin-bottom:15px}
 .mBlogPostList .item .arrow-tip03{top:-11px}
@@ -1592,7 +1592,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogPostList .item .op{margin-bottom:5px;_margin-bottom:10px;}
 .mBlogPostList .item .feedFunc .op .button04{margin:5px 0 0 18px;_margin:5px 0 0 10px}
 .mBlogPostList .item .mCon .feedImg{float:left;margin-right:10px}
-.mBlogPostList .item .transCon,.mBlogPostList .item .oriCon{margin:0 0 10px 0}
+.mBlogPostList .item .transCon,.mBlogPostList .item .oriCon{margin:0 0 10px 0;line-height:18px}
 .mConWrap{padding:1px;border:1px solid #ddd;width:98%;margin:0 auto}
 .mConWrap .mConBgT{background:#fff url(../images/skin/title-bg01.gif) repeat-x top;}
 .mConWrap .mConBgB{background:url(../images/skin/title-bg02.gif) repeat-x bottom;text-align:center;padding:10px;}
@@ -1881,6 +1881,19 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .photoFeed .sList li{float:left;margin:5px;overflow:hidden;width:65px;height:65px}
 .photoFeed .sList img{width:50px;height:50px}
 
+/*活动页面头部*/
+.eventHeader{height:40px;background:url(../images/skin/skin2010.png) repeat-x 0 -1156px;color:#333}
+.eventHeader .wrap{width:950px;margin:0 auto}
+.eventHeader a{color:#333}
+.eventHeader li{float:left;margin:0 10px;line-height:40px}
+.eventHeader li.logo a{width:106px;height:37px;display:block;background:url(../images/skin/skin2010.png) no-repeat 0 -1203px;font-size:0;line-height:0;text-indent:-9999px}
+.eventHeader li.nav a{margin:0 10px}
+.eventHeader li.signIn li{margin:0 3px;_margin-top:5px;}
+.eventHeader li.signIn li.reMe{_padding-top:5px;}
+.eventHeader li.signIn .ipt{border:1px solid #224997;width:120px}
+.eventHeader li.signIn .button04{margin-top:8px;_margin-top:3px;*padding:0 15px 0 0;}
+.eventHeader li.signIn .button04 span{*padding:0 0 0 15px}
+.eventHeader li.signIn .button04 span button{color:#111;*padding:0 5px 2px;*margin:0 -10px}
 
 
 
