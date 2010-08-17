@@ -7,6 +7,7 @@ Object.extend(Iyxzone, {
   author: ['高侠鸿'],
 
   SiteURL: "http://localhost:3000"
+
 });
 
 // 一些按钮操作

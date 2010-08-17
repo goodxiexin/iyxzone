@@ -13,21 +13,15 @@ class User::TagsController < UserBaseController
     else
       render :json => {:code => 0}
     end
-=begin
-    unless @taggable.add_tag current_user, params[:tag_name]
-      render_js_error "发生错误，内容太长拉！"
-    end
-=end
 	end
 
 	def destroy
     @tag = Tag.find(params[:id])
 		
     if @taggable.destroy_tag @tag.name 
-			render :json => {:code => 1} #render_js_code "$('tag_#{@tag.id}').remove();"
+			render :json => {:code => 1}
 		else
       render :json => {:code => 0}
-      #render_js_error
     end
 	end
 

@@ -500,3 +500,12 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// rating
+Object.extend(Iyxzone.URL, {
+
+  createRating: function(rateableType, rateableID, params){
+    return this.build("/ratings", Object.extend({'rateable_type': rateableType, 'rateable_id': rateableID}, params || {}));
+  }
+
+});

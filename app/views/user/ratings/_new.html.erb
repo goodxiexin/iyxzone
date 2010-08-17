@@ -1,17 +1,17 @@
-<% rateable_type = rateable.class.name %>
-<div id='<%= rateable_type.underscore %>_<%= rateable.id %>_rating_form'>
-<% form_remote_for :rating, :url => ratings_url(:rateable_id => rateable.id, :rateable_type => rateable_type), :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" do |f| %>
-  <%= hidden_field_tag 'rating[rateable_type]', rateable_type %>
-  <%= hidden_field_tag 'rating[rateable_id]', rateable.id %> 
-  <%= hidden_field_tag 'rating[rating]', Rating::Default, :id => "#{rateable_type.underscore}_#{rateable.id}_rating"%>
+<% rateable_type = rateable.class.name.underscore %>
+<div id='<%= rateable_type %>_<%= rateable.id %>_rating_form'>
+<% form_for :rating, :html => {:onsubmit => "Iyxzone.Rating.submit(this, $('rate_btn'), '#{rateable_type}', #{rateable.id}); return false;"} do |f| %>
+  <%= hidden_field_tag 'rating[rating]', Rating::Default, :id => "#{rateable_type}_#{rateable.id}_rating"%>
   <div class="star-ratings-block s_clear">
   <% Rating::Default.times do |i| %>
-    <%= link_to_function '', "Iyxzone.Rating.set(#{i + 1}, #{rateable.id}, '#{rateable_type.underscore}', this)", :class => 'lit'%>
+    <%= link_to_function '', "Iyxzone.Rating.set(#{i + 1}, #{rateable.id}, '#{rateable_type}', this)", :class => 'lit'%>
   <% end %>
   <% (Rating::Maximum - Rating::Default).times do |i| %>
-    <%= link_to_function '', "Iyxzone.Rating.set(#{Rating::Default + i + 1}, #{rateable.id}, '#{rateable_type.underscore}', this)"%>
+    <%= link_to_function '', "Iyxzone.Rating.set(#{Rating::Default + i + 1}, #{rateable.id}, '#{rateable_type}', this)"%>
   <% end %>
   </div>
-  <%= f.submit '提交' %>
+<div class="fldbtn left space"><span class="button04"><span>
+  <button type='submit' id='rate_btn'>提交</button>
+</span></span></div>
 <% end %>
 </div>
