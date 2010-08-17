@@ -530,7 +530,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
     this.imageID = id;
 
     // show image name and delete icon
-    var html = '<a href="#"><span class="i iPic"></span>' + fileName.subStr(0,10) + '</a><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Builder.delImage(' + id + ');" class="icon-active"></a>';
+    var html = '<a href="#"><span class="i iPic"></span>' + fileName.substr(0,10) + '</a><a href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Builder.delImage(' + id + ');" class="icon-active"></a>';
     $('publisher_image').update(html);
  
     // show image preview
