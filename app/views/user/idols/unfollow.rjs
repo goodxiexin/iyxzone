@@ -1,5 +1,0 @@
-if params[:at] == 'idol_list'
-  page.replace_html "idol_#{@fanship.idol_id}_op", :partial => "follow", :locals => {:idol => @fanship.idol}
-elsif params[:at] == 'profile_show'
-  page.redirect_to profile_url(@fanship.idol.profile)
-end

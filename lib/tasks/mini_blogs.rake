@@ -11,13 +11,13 @@ namespace :mini_blogs do
   task :main_index => :environment do
     MiniBlog.build_main_index
 
-    `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
+    #`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
   end
 
   task :delta_index => :environment do
     MiniBlog.build_delta_index 
 
-    `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
+    #`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
   end
 
   #
@@ -49,7 +49,7 @@ namespace :mini_blogs do
           topic.add_node freq, (idx+1), now
         end
       else
-        if word.cx_game? or (word.cx_noun? and word.freq < 1000000)
+        if word.cx_game? or (word.cx_noun? and word.freq < 25000000)
           topic = MiniTopic.create :name => term
           topic.add_node freq, (idx+1), now
         end
@@ -59,6 +59,21 @@ namespace :mini_blogs do
 
     `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
     puts "main_topics #{e-now} s"
+  
+    puts "now compute rank"
+    s = Time.now
+    meta_data = MiniBlogMetaData.first
+    hot_topics = []
+    range = [6.hours.ago, 1.day.ago, 2.day.ago, 7.day.ago]
+    range.each do |from|
+      to = Time.now
+      topics = MiniTopic.hot_within(from ,to)
+      hot_topics << topics[0..49].map{|a| [a[0], a[1].name]}
+    end
+    meta_data.hot_topics = hot_topics
+    meta_data.save
+    e = Time.now
+    puts "rank #{e-s} s"
   end
 
   task :delta_topics => :environment do
@@ -87,7 +102,7 @@ namespace :mini_blogs do
             topic.add_node freq, (idx+1), now
           end
         else
-          if word.cx_game? or (word.cx_noun? and word.freq < 1000000)
+          if word.cx_game? or (word.cx_noun? and word.freq < 25000000)
             topic = MiniTopic.create :name => term
             topic.add_node freq, (idx+1), now
           end
@@ -99,6 +114,21 @@ namespace :mini_blogs do
 		`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
     e = Time.now
     puts "delta topics #{e-now} s"
+
+    puts "now compute rank"
+    s = Time.now
+    meta_data = MiniBlogMetaData.first
+    hot_topics = []
+    range = [6.hours.ago, 1.day.ago, 2.day.ago, 7.day.ago]
+    range.each do |from|
+      to = Time.now
+      topics = MiniTopic.hot_within from ,to
+      hot_topics << topics[0..49].map{|a| [a[0], a[1].name]}
+    end
+    meta_data.hot_topics = hot_topics
+    meta_data.save   
+    e = Time.now
+    puts "rank #{e-s} s"
   end
 
 end

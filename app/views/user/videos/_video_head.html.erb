@@ -4,7 +4,7 @@
           <p class="right">
             <% if user == current_user %>
               <%= link_to "<span class='icon2-edit'></span>编辑", edit_video_url(video), :class => 'red' %>
-              <%= facebox_confirm "<span class='icon2-close'></span>删除", video_url(video), {:msg => '你确定要删除这个视频吗', :method => :delete}, :class=>'red w-l' %>
+              <%= link_to_function "<span class='icon2-close'></span>删除", "Iyxzone.Video.confirmDeletingVideo(#{video.id}, #{user.id});", :class=>'red w-l' %>
             <% end %>
           </p>
         </div>

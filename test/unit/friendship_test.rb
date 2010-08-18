@@ -38,9 +38,13 @@ class FriendshipTest < ActiveSupport::TestCase
     assert_equal @user1.friend_requests_count, 1
     assert_equal @user1.friend_requests, [@request]
 
+    # 重复发，只保留最新的
     assert_no_difference "Friendship.count" do
-      @request = Friendship.create :user_id => @user2.id, :friend_id => @user1.id, :status => Friendship::Request
+      @request2 = Friendship.create :user_id => @user2.id, :friend_id => @user1.id, :status => Friendship::Request
     end
+    @user1.reload and @user2.reload
+    assert_equal @user1.friend_requests_count, 1
+    assert_equal @user1.friend_requests, [@request2]
   end
 
   test "accept/decline request" do

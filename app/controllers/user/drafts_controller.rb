@@ -10,14 +10,9 @@ class User::DraftsController < UserBaseController
     @blog = current_user.drafts.build(params[:blog] || {})
     
     if @blog.save
-      render :update do |page|
-        flash[:notice] = "保存成功，你可以继续写了!"
-        page.redirect_to edit_draft_url(@blog)
-      end
+      render :json => {:code => 1, :id => @blog.id}
     else
-      render :update do |page|
-        page.replace_html :errors, :partial => 'blog/validation_errors'
-      end
+      render :json => {:code => 0}
     end
   end
 
@@ -27,21 +22,17 @@ class User::DraftsController < UserBaseController
 
   def update
     if @blog.update_attributes(params[:blog] || {})
-      render :json => {:draft_id => @blog.id, :tags => @blog.tags.map{|t| {:id => t.id, :friend_login => t.tagged_user.login, :friend_id => t.tagged_user_id}}}
+      render :json => {:code => 1}
     else
-      render :update do |page|
-        page.replace_html 'errors', :partial => 'blog/validation_errors'
-      end
+      render :json => {:code => 0}
     end
   end
 
   def destroy
 		if @blog.destroy
-      render :update do |page|
-        page.redirect_to drafts_url
-      end
+      render :json => {:code => 1}
     else
-      render_js_error '删除的时候发生错误'
+      render :json => {:code => 0}
     end
   end
 

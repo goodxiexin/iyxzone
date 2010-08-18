@@ -1,1 +1,1 @@
-<%= facebox_confirm "<span class='i iNoFollow'></span>不做粉丝", unfollow_idol_url(idol, :at => 'idol_list'), {:msg => "你确定要<b>不做</b> #{idol.login} 的粉丝了吗?", :loading => "Iyxzone.changeCursor('waiting');", :complete => "Iyxzone.changeCursor('default')", :method => :delete} %>
+<%= link_to_function "<span class='i iNoFollow'></span>不做粉丝", "Iyxzone.Idol.unfollow(#{idol.id}, this);" %>

@@ -26,6 +26,10 @@ class User < ActiveRecord::Base
     idolships.map(&:idol_id)
   end
 
+  def fan_ids
+    fanships.map(&:fan_id)
+  end
+
   def has_fan? fan
     fanships.map(&:fan_id).include?(fan.is_a?(Integer) ? fan : fan.id)
   end
@@ -129,6 +133,16 @@ class User < ActiveRecord::Base
     friendships.map(&:friend_id)
   end
 
+  # 那些你请求加为好友的人
+  def request_friend_ids
+    all_friendships.match(:status => Friendship::Request, :user_id => id).map(&:friend_id) 
+  end
+
+  # 那些请求加你好友的人
+  def requested_friend_ids
+    all_friendships.match(:status => Friendship::Request, :friend_id => id).map(&:user_id)
+  end
+
   def has_friend? user
     user_id = (user.is_a? Integer)? user : user.id
 		!friendships.find_by_friend_id(user_id).blank? 
@@ -191,7 +205,7 @@ class User < ActiveRecord::Base
   has_many :albums, :class_name => 'PersonalAlbum', :foreign_key => 'owner_id', :order => 'created_at DESC', :dependent => :destroy
 
   # 活跃的相册，就是有上传过东西的相册
-  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "photos_count IS NOT NULL AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
+  has_many :active_albums, :class_name => 'Album', :foreign_key => 'owner_id', :order => 'uploaded_at DESC', :conditions => "photos_count != 0 AND (type = 'AvatarAlbum' OR type = 'PersonalAlbum')"
 
   def albums_count relationship='owner'
     # dont forget avatar album which is not accessible to none-friend

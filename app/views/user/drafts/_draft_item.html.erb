@@ -2,5 +2,5 @@
   <td class="title"><div><%= link_to draft_item.title, edit_draft_url(draft_item) %></div></td>
   <td class="time"><%= ftime draft_item.created_at %></td>
   <td class="icon"><%= link_to '', edit_draft_url(draft_item), :class => "icon-active icon-active-edit" %></td>
-  <td class="icon"><%= facebox_confirm '', draft_url(draft_item), {:msg => '你确定要删除这篇草稿么?', :method => :delete}, {:class => "icon-active"} %></td>
+  <td class="icon"><%= link_to_function "", "Iyxzone.Blog.confirmDeletingDraft(#{draft_item.id}, #{current_user.id})", :class => "icon-active" %></td>
 </tr>

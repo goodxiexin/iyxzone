@@ -1,7 +1,7 @@
 <% facebox_tag '转发到我的微博' do %>
   <div class="content mBlogTrans"> 
     <div class="bd">
-      <span class="green">转</span>：<%= mini_blog_content2 @root %>
+      <span class="green">转</span>：<%= forward_mini_blog_content @root %>
     </div>
     <div class="ft space">
       <div class="fix"><%= link_to_function '', "Iyxzone.Emotion.Manager.toggleFaces(this, $('forward_content'), event)", :class => 'icon-face' %><span class="green tips">还可以输入<span id='forward_words_count'>140</span>个字</span></div>

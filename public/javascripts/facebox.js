@@ -30,6 +30,10 @@ Object.extend(Iyxzone.Facebox, {
 		this.facebox.setStyle({width: width + 'px'});
   },
 
+  setTitle: function(title){
+  
+  },
+
   appear: function(){
     if(!this.facebox.visible()) 
       new Effect.Appear(this.facebox, {'duration': 0.5}); 
@@ -83,7 +87,7 @@ Object.extend(Iyxzone.Facebox, {
     if(width)
       this.setWidth(width);
     if(title == null)
-      title = "通知"
+      title = "错误"
 
     this.setContent('<p class="z-h z-h-error s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + mess + '</p></div>');
     this.locate();
@@ -130,19 +134,23 @@ Object.extend(Iyxzone.Facebox, {
     }.bind(this));  
   },
 
-  // FIXME: 怎么传多个参数?
-  show_confirm_with_callbacks: function(){
-    var properties = $A(arguments);
-    var confirm_message = properties.shift();
-    var callback= properties.shift();
+  confirmWithCallback: function(msg, title, width, callback){
+    if(title == null)
+      title = '确认';
+    if(width)
+      this.setWidth(width);
+
     var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="Iyxzonw.Facebox.close();" class="icon2-close right"></a></p>';
-    html += '<div class="z-con"><p>' + confirm_message + "</p>";
+    html += '<div class="z-con"><p>' + msg + "</p>";
     html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button'><span><button type='submit' id='facebox_confirm'>确定</button></span></span><span class='button button-gray'><span><button type='button' onclick='Iyxzone.Facebox.close();'>取消</button></span></span></div></div></div>";
+    
     this.setContent(html);
     this.locate();
     this.appear();
-    Event.observe('facebox_confirm', 'click', function(){
-      callback.apply(this, properties);
+    
+    Event.observe('facebox_confirm', 'click', function(event){
+      Iyxzone.disableButton($('facebox_confirm'), '请等待..');
+      callback.apply(this);
     }.bind(this));
   },
 

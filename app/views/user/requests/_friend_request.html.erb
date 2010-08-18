@@ -1,13 +1,39 @@
 <% request = friend_request %>
+<% user = request.user %>
 <div class="request-box" id='friend_request_<%= request.id %>'>
   <h4><span> <%= ftime request.created_at %> </span>好友</h4>
   <div class="request-list s_clear">
-    <div class="img"><%= avatar request.user %> </div>
+    <div class="img"><%= avatar user %> </div>
     <div class="info">
-      <p> <%= profile_link request.user %> 请求加你为好友。是否同意？</p>
+      <p> <%= profile_link user %> 请求加你为好友。是否同意？</p>
       <div class="buttons" id='friend_request_option_<%= request.id %>'>
-        <span class="button"><span><%= button_to_remote '同意', :url => accept_friend_request_url(request), :method => :put, :loading => "Iyxzone.disableButton($('friend_request_#{request.id}').down('button',0),'请等待..'); Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');" %></span></span>
-        <span class="button button-gray"><span><%= facebox_button_confirm '拒绝', decline_friend_request_url(request), {:msg => '你确定要拒绝吗?', :method => :delete} %></span></span>
+        <span class="button"><span><%= button_to_function '同意', "Iyxzone.Friend.Request.accept(#{request.id}, $(this));" %></span></span>
+        <span class="button button-gray"><span><%= button_to_function '拒绝', "Iyxzone.Friend.Request.decline(#{request.id}, $(this));" %></span></span>
+      </div>
+      <div id='friend_info_<%= request.id %>' style="display:none">
+        <div class="hd">
+          <span class="icon-invitation"></span>你已经加<%= link_to "<strong>#{user.login}</strong>", profile_url(user.profile) %>为好友，你可以<%= link_to "<strong>查看TA的主页</strong>", profile_url(user.profile) %><%= link_to "<strong>查看TA的微博</strong>", mini_blogs_url(:uid => user.id) %><%= link_to "<strong>给TA发站内信</strong>", new_mail_url(:recipient_ids => [user.id]) %>
+        </div>
+        <div class="bd">
+          <% albums = user.active_albums.for('friend').limit(2).all %>
+          <% unless albums.blank? %>
+          <div class="piclist s_clear">
+            <span class="left">最新照片：</span>
+            <% albums.each do |album| %>
+              <div class="picitem jl-picitem">
+                <div class="picbox01">
+                  <div class="picwrap">
+                    <table cellpadding="0">
+                      <tbody><tr><td><%= album_cover album, :class => 'imgbox01' %></td></tr></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            <% end %>  
+            <%= link_to "更多照片>>", personal_albums_url(:uid => user.id), :class => 'left' %>
+          </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

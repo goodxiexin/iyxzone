@@ -194,12 +194,13 @@ a:hover{color:#D63200;}
 .feed-box01 .feed-img-list{border:0;padding:0;margin-bottom:10px;position:relative;}
 .feed-box01 .feed-img-list .feed-list{padding-left:73px;}
 
-.mcAvatar{border:1px #BBD2AA solid;width:100px;height:112px;background:#fff;padding:5px;overflow:hidden;position:relative} 
-.mcAvatar a{display:block;width:110px;height:122px;position:absolute;left:0;top:0;background:url(../images/blank.gif) no-repeat 0 -500px;z-index:2}
+.mcAvatar{border:1px #BBD2AA solid;width:100px;height:100px;background:#fff;padding:5px;overflow:hidden;position:relative;margin:0 auto} 
+/*.mcAvatar a{display:block;width:100px;height:100px;position:absolute;left:0;top:0;background:url(../images/blank.gif) no-repeat 0 -500px;z-index:2}
+#leftsidebar .mcAvatar{margin:0 auto}
 #leftsidebar .mcAvatar a{width:auto;height:auto;position:static;background:none;}
 .mcAvatar .picwrap{width:100%;height:100%;text-align:center;overflow:hidden}
+*/
 
-#leftsidebar .mcAvatar{margin:0 auto}
 #leftsidebar .avatarbox{padding:5px 0;border-bottom:1px #E7F0E0 solid;}
 #leftsidebar .avatarbox span{color:#25700D}
 #leftsidebar .avatarbox a{color:#000}
@@ -481,15 +482,20 @@ img.game-m,.piclist-rows table .imgwrap img.game-m{width:100px;height:auto}
 .inform-box .inform-list td{color:#7E7F80;line-height:18px;}
 .inform-box .inform-list .close{width:8px;padding-left:4px;padding-right:22px;text-align:right;}
 
-.request-box{clear:both;margin-bottom:16px;}
-.request-box h4{margin-bottom:7px;padding:0 14px;height:21px;line-height:21px;color:#7E7F80;border-bottom:1px #E7F0E0 solid;overflow:hidden;}
+.request-box{clear:both;margin-bottom:16px;color:#666;}
+.request-box h4{margin-bottom:7px;padding:0 14px;height:21px;line-height:21px;border-bottom:1px #E7F0E0 solid;overflow:hidden;}
 .request-box h4 span{float:right;}
-.request-box .request-list{padding:7px 14px;}
-.request-box .request-list .img{float:left;width:60px;text-align:center;overflow:hidden}
-.request-box .request-list .info{margin-left:72px;_margin-left:69px;}
-.request-box .request-list .info p{display:block;height:25px;line-height:25px;color:#7E7F80;overflow:hidden}
-.request-box .request-list .info .buttons{clear:none;padding:7px 0;}
-.request-box .request-list .info .buttons .button{margin-right:8px}
+.request-list{padding:10px 10px 10px 70px;}
+.request-list .img{float:left;margin-left:-70px;_display:inline}
+.request-list .info{float:left;width:100%}
+.request-list .info p{display:block;height:25px;line-height:25px;color:#7E7F80;overflow:hidden}
+.request-list .info .buttons{clear:none;padding:7px 0;}
+.request-list .info .buttons .button{margin-right:8px}
+.request-list .info .hd{border-bottom:1px dotted #ccc;padding-bottom:5px}
+.request-list .info .hd a{margin:0 8px}
+.request-list .info .bd{margin:10px 0}
+.request-list .info .piclist .picitem{padding:0;width:130px}
+.request-list .info .mBlogFeed{margin:10px 0}
 
 .share-box{margin-bottom:8px;padding-left:20px;}
 .share-box .nav-link ul{margin-left:-3px;}
@@ -630,15 +636,16 @@ a.icon-face{background:url(../images/icons/face-icon.gif) no-repeat;width:16px;h
 #canvas .s-dialog .arrow-dialog{left:-11px;_left:-21px;}
 #canvas .s-dialog .round_body{line-height:18px} 
 
-.jl-mcAvatar{border:none;width:50px;height:50px;} 
+/*.jl-mcAvatar{border:none;width:50px;height:50px;} 
 .jl-mcAvatar a{width:50px;height:50px;}
 .jl-fldbtn{margin-top:10px}
-
+*/
 /*首页/个人/好友主页*/
 .home-daily .rich{width:160px;float:left;line-height:18px}
 .home-daily .rich span{display:block;width:160px;margin-top:3px;line-height:18px;cursor:pointer;}
-.home-daily .list{float:left;margin-left:10px}
-.home-daily .list ul li{list-style:square;margin-left:20px}
+.home-daily .list{float:left;margin-left:10px;width:285px}
+.home-daily .list ul li{padding:5px 0;line-height:16px}
+.home-daily .list ul li.jl-cutline a{padding-left:20px;background:url(../images/skin/skin2010.png) no-repeat -190px -69px;line-height:16px;height:16px;display:block;overflow:hidden;}
 .home-wrap .s-dialog{margin:0 30px 0 10px}
 .feed-wrap,.home-wrap{zoom:1}
 .feed-wrap .feed-list,.home-wrap .feed-list{padding-left:0;}
@@ -1311,6 +1318,7 @@ span.i,a.i,.i40{width:16px;height:16px;margin-right:3px;display:-moz-inline-stac
 .iToggleUp{background-position:-96px -25px}
 .iViewOrig{background-position:0 -146px}
 .iArr02Down{background:url(../images/skin/arrow.gif) no-repeat 3px -146px}
+.iArr03{background-position:-17px -90px;width:14px;height:14px}
 .iSquare{background-position:-190px -69px}
 .iGuildJoin{background-position:0 -428px}
 .iGuildLogo{height:53px;background-position:0 -935px}
@@ -1352,6 +1360,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .actExStep1 h1.s1,.actExStep2 h1.s2,.actExStep3 h1.s3{color:#fff}
 .actEx h2.actExTitle{background:#e1fcc4;padding:8px 10px;font-size:12px;color:#333;font-weight:700;margin:15px 0}
 .actEx .actExCon{margin:20px 0 30px 0}
+.actEx .actExCon .mBlogStarCat li{width:105px}
 
 .actExInfo h2{color:#bf3a00;text-align:center;font-weight:700;font-size:12px;margin:20px 0 10px 0}
 .actExInfo p,.actExRole p{line-height:22px;padding:0 1em}
@@ -1375,7 +1384,7 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .actEx .starMember .starItem{margin:10px;}
 
 .actExUpAvatar .actExCon{padding-left:130px;}
-.actExUpAvatar .actExCon .avatar{float:left;margin-left:-120px;_display:inline;/*background:url(../images/skin/no-avatar.png) no-repeat;*/width:98px;height:110px;overflow:hidden;border:1px solid #bfd5af}
+.actExUpAvatar .actExCon .avatar{float:left;margin-left:-120px;_display:inline;/*background:url(../images/skin/no-avatar.png) no-repeat;*/width:100px;height:100px;overflow:hidden;border:1px solid #bfd5af}
 .actExUpAvatar .actExCon .con{float:left;width:100%;line-height:22px;}
 .actExUpAvatar .actExCon .con .op{margin:10px 0 0 80px}
 
@@ -1573,22 +1582,28 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogCatTab a.selected{font-weight:700}
 .mBlogCatTab .pipe{margin:0 5px}
 
-.mBlogMain .topicTag{color:#d82d01}
-.mBlogPostList .item{padding:0 0 10px 90px;_height:100px;min-height:100px;margin-bottom:15px}
+.topicTag,.mBlogMain .topicTag{color:#d82d01}
+.mBlogPostList{margin:20px 0;}
+.mBlogPostList .item{padding:0 0 10px 80px;/*_height:100px;min-height:100px;*/margin-bottom:15px}
+.mBlogPostList .item .arrow-tip03{top:-11px}
 .mBlogPostList .item .round_body{padding:5px 0}
-.mBlogPostList .item .feedFunc{float:left;margin-left:-80px;_display:inline}
-.mBlogPostList .item .feedCon{float:left;width:100%;}
-.mBlogPostList .item .sp{margin-bottom:5px;_margin-bottom:10px;}
+.mBlogPostList .item .feedFunc{float:left;margin-left:-70px;_display:inline}
+.mBlogPostList .item .feedCon{float:left;width:99%;/*IE6游戏主页无法100%*/}
+.mBlogPostList .item .op{margin-bottom:5px;_margin-bottom:10px;}
+.mBlogPostList .item .feedFunc .op .button04{margin:5px 0 0 18px;_margin:5px 0 0 10px}
 .mBlogPostList .item .mCon .feedImg{float:left;margin-right:10px}
+.mBlogPostList .item .transCon,.mBlogPostList .item .oriCon{margin:0 0 10px 0;line-height:18px}
 .mConWrap{padding:1px;border:1px solid #ddd;width:98%;margin:0 auto}
 .mConWrap .mConBgT{background:#fff url(../images/skin/title-bg01.gif) repeat-x top;}
 .mConWrap .mConBgB{background:url(../images/skin/title-bg02.gif) repeat-x bottom;text-align:center;padding:10px;}
-.mBlogPostList .mConWrap .mCon{overflow:hidden;width:380px}
-.mBlogPostList .mConWrap .mCon .mTrans{text-align:left;}
-.mBlogPostList .mConWrap .mCon .mTrans .hd{color:#666}
-.mBlogPostList .mConWrap .mCon .mTrans .ft span{margin:0 5px;color:#999}
-.mBlogPostList .mConWrap .mCon .mTrans .ft a{color:#999}
-.mBlogPostList .mConWrap .mCon .op{background:url(../images/skin/dotline.gif) repeat-x top;padding-top:5px}
+.mBlogPostList .mCon{overflow:hidden;width:380px;width:100%}
+.mBlogPostList .mCon{text-align:left;}
+.mBlogPostList .mCon .hd{color:#666;margin-bottom:10px}
+.mBlogPostList .mCon .jl-cutline{padding-bottom:10px}
+.mBlogPostList .orgTrans{margin:0 15px}
+.mBlogPostList .orgTrans .pipe{margin:0 6px}
+.mBlogPostList .mCon .ft span{margin:0 5px;color:#999}
+.mBlogPostList .mCon .ft a{color:#999}
 
 .mBlogPostList .item .feedCon .ft{margin-top:5px}
 .mBlogPostList .item .feedCon .ft span{margin:0 5px;color:#666}
@@ -1597,6 +1612,51 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .transIcon span,.transIcon a{background:url(../images/skin/skin2010.png) no-repeat;display:block;text-align:center;width:54px;}
 .transIcon span{background-position:0 -720px;color:#fff;font-size:14px;font-weight:700;height:53px;line-height:40px;}
 .transIcon a{background-position:-60px -210px;color:#217308;height:25px;line-height:25px;margin-top:3px;text-align:center}
+/*TA的微博*/
+.mBlogTaPost{margin:0 15px}
+.mBlogTaPost .item{padding:0 0 10px 0;}
+/*.mBlogTaPost .mConWrap .mCon{width:435px}
+*/
+.mBlogExtra .taProfile{padding:0 0 0 70px}
+.mBlogExtra .taProfile .avatar{float:left;margin-left:-70px;_display:inline}
+.mBlogExtra .taProfile .con{float:left;width:100%}
+.mBlogExtra .taProfile .con .memberName{font-size:14px;font-weight:700;color:#333;margin-bottom:5px;line-height:24px;height:24px;overflow:hidden;width:140px}
+
+.mBlogStats{border-bottom:1px dotted #ccc;padding-bottom:10px;}
+.mBlogStats li{border-right:1px solid #ccc;float:left;text-align:center;padding-right:10px;margin:0 5px;width:50px}
+.mBlogStats li.nobd{border:0;}
+.mBlogStats li strong{color:#bf3a00;font-size:14px;line-height:22px}
+
+/*微博详情*/
+.mBlogDetail .mBlogPostList .item{padding:0 0 10px 130px;}
+.mBlogDetail .mBlogPostList .item .feedFunc{margin-left:-130px;}
+/*.mBlogDetail .mBlogPostList .mConWrap .mCon{width:565px}*/
+.mBlogMore .mBlogPostList .item{padding:0 0 5px 15px;margin-bottom:5px}
+.mBlogMore .mBlogPostList .item .feedFunc{margin-left:-20px;}
+.mBlogMore .mBlogPostList .item .feedCon{height:20px;line-height:20px;overflow:hidden;width:95%}
+/*.mBlogMore .mBlogPostList .mConWrap .mCon{width:230px}*/
+.mBlogMore h5{line-height:24px;*line-height:28px}
+.mBlogMore h5 a{font-weight:400;font-size:12px;text-decoration:underline}
+/*关注游戏达人*/
+.mBlogStar h2.title{font-size:14px;font-weight:700;color:#237800;border-bottom:1px solid #c6dea4;padding:10px 0;margin-bottom:20px}
+.mBlogStarCat{width:95%;border-bottom:1px solid #c6dea4;padding:20px 0;margin:0 auto}
+.mBlogStarCat .title{margin-bottom:20px}
+.mBlogStarCat .title h3{font-size:14px;float:left}
+.mBlogStarCat .title .func{float:right}
+.mBlogStarCat li{float:left;margin:10px 0;position:relative;z-index:1;width:115px;text-align:center}
+.mBlogStarCat li.selected{z-index:2}
+.mBlogStarCat li .check{height:24px;line-height:24px;overflow:hidden;width:100px}
+.mBlogStarCat li .starCard{position:absolute;top:-11px;left:13px;width:245px}
+.starCard .wrap{position:relative;padding:10px 10px 10px 90px;text-align:left;}
+.starCard .wrap .op .icon-active{position:absolute;right:10px;top:10px;}
+.starCard .wrap .avatar{float:left;margin-left:-80px;_display:inline;text-align:center;line-height:22px}
+.starCard .wrap .con{float:left;width:100%;line-height:20px;padding-bottom:10px;}
+.starCard .wrap .con .memberName{width:130px;height:22px;line-height:22px;overflow:hidden}
+.starCard .wrap .con .data{text-align:center;margin:10px 0;border-bottom:1px dotted #999;padding-bottom:10px}
+.starCard .wrap .con .data .pipe{border-right:1px solid #999;padding-right:15px;margin:0 15px}
+.starCard .wrap .con .data .num{color:#d83200}
+.starCard .wrap .con .intro{line-height:18px}
+.mBlogStarCat .multiFollow{width:150px;margin:20px auto 0 auto;}
 
 /*微博活动*/
 .mBlogAct{width:720px;margin:20px auto}
@@ -1605,7 +1665,8 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .mBlogAct .mBlogActBanner{margin:10px 0}
 .mBlogAct .ft{text-align:right}
 .mBlogAct .ft span{margin-left:10px}
-
+/*.mBlogAct .mBlogPostList .mConWrap .mConBgB{text-align:left}
+.mBlogAct .mBlogPostList .mConWrap .mCon{width:580px;}*/
 /*个人主页微博显示*/
 .mBlogProList{margin-top:15px}
 .mBlogProList .item{padding-left:30px}
@@ -1723,14 +1784,14 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .appGameMine .xList li a{padding:0 5px;color:#25700d;height:24px;line-height:24px;overflow:hidden;}
 .appGameMine .xList li a:hover{color:#fff}
 
-.mBlogFeed .feedHd{border-bottom:1px dashed #999;padding-bottom:5px;margin-top:10px}
+.mBlogFeed .feedHd{border-bottom:1px dashed #999;padding-bottom:5px;margin:10px 0}
 .mBlogFeed .feedHd .t{background:url(../images/skin/skin2010.png) no-repeat 0 -893px;width:103px;height:19px;float:left;font-size:0;line-height:0;text-indent:-999px}
 .mBlogFeed .feedHd .hotWords,.mBlogFeed .feedHd .topIsay{float:right;}
 .mBlogFeed .feedHd .more{float:right;text-decoration:underline;line-height:26px}
 .mBlogFeed .feedHd .hotWords,.mBlogFeed .feedHd .hotWords a{color:#999;margin-left:10px;line-height:26px}
-.mBlogFeed .feedBd .item{padding:0 0 0 70px;margin:10px 0;border-bottom:1px dashed #ccc;padding-bottom:10px}
+/*.mBlogFeed .feedBd .item{padding:0 0 0 70px;margin:10px 0;border-bottom:1px dashed #ccc;padding-bottom:10px}
 .mBlogFeed .feedBd .avatar{float:left;margin-left:-70px;_display:inline}
-.mBlogFeed .feedBd .con{float:left;width:99%;line-height:20px}
+.mBlogFeed .feedBd .con{float:left;width:99%;line-height:20px}*/
 
 .pageSkinV2{background:url(../images/skin/s2bg01.png) repeat-y 340px 0;}
 .pageSkinV2 .sideBar{float:left;width:340px;margin:20px 0 0 10px;*margin:30px 0 0 10px !important;_margin:20px 0 0 5px;padding:0 0 20px 0;position:relative;clear:both}
@@ -1820,6 +1881,23 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .photoFeed .sList li{float:left;margin:5px;overflow:hidden;width:65px;height:65px}
 .photoFeed .sList img{width:50px;height:50px}
 
+/*活动页面头部*/
+.eventHeader{height:40px;background:url(../images/skin/skin2010.png) repeat-x 0 -1156px;color:#333}
+.eventHeader .wrap{width:950px;margin:0 auto}
+.eventHeader a{color:#333}
+.eventHeader li{float:left;margin:0 10px;line-height:40px}
+.eventHeader li.logo a{width:106px;height:37px;display:block;background:url(../images/skin/skin2010.png) no-repeat 0 -1203px;font-size:0;line-height:0;text-indent:-9999px}
+.eventHeader li.nav a{margin:0 10px}
+.eventHeader li.signIn{width:430px;}
+.eventHeader li.signIn li{margin:0 3px;*margin-top:0 !important;margin-top:5px\9}
+.eventHeader li.signIn .txt{display:block;text-align:right;height:40px;line-height:40px;overflow:hidden}
+.eventHeader li.signIn li.reMe{_padding-top:10px;*margin-top:0 !important;margin-top:0\9}
+.eventHeader li.signIn .ipt{border:1px solid #224997;width:120px}
+.eventHeader li.signIn .button04{margin-top:8px;*margin-top:8px !important;margin-top:0\9;*padding:0 15px 0 0;}
+.eventHeader li.signIn .button04 span{*padding:0 0 0 15px}
+.eventHeader li.signIn .button04 span input{color:#111;*padding:0 5px 2px;*margin:0 -10px}
 
-
+/*广告Banner*/
+.adColM{position:relative;zoom:1}
+.adColM .icon-active{position:absolute;right:5px;top:5px}
 

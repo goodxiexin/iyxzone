@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   end
 
   def new
-    @mini_blogs = MiniBlog.category(:text).limit(3).all
+    @mini_blogs = MiniBlog.category(:text).recent.limit(3).all
     render :action => (params[:at] == 'outside')? 'new_from_outside' : 'new'
   end
 

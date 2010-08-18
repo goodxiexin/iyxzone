@@ -1,0 +1,42 @@
+<% content_for :stylesheet_link do %>
+  <%= stylesheet_link_tag 'welcome' %>
+<% end %>
+
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :register %>
+<% end %>
+ 
+<% content_for :body do %>
+<body>
+<div class="eventHeader">
+	<div class="wrap">
+        <ul>
+          <li class="logo"><a href= <%=SITE_URL%>>一起游戏网</a></li>
+          <li class="nav"><a href= <%=SITE_URL%>>首页</a><%= link_to_function "加入收藏", "Iyxzone.addToBookmark()" %></li>
+          <li class="signIn">
+						<% if logged_in? %>
+							<span class="txt"> 欢迎你，<span class="memberName"><%= self.current_user.login%></span>
+							</span>
+						<% else %>
+							<% form_tag promotions_url do %>
+							<ol>
+								<li><%= text_field_tag 'email', "邮箱地址", :class => "ipt" %></li>
+								<li><%= password_field_tag 'password', "登录密码", :class=>"ipt"%></li>
+								<li class="reMe"><%= check_box_tag 'remember_me', 1, true %>记住我</li>
+								<li class="login"><span class="button04"><span><input type="submit" value="登陆"></span></span></li>
+							</ol>
+							<% end %>
+						<% end %>
+          </li>
+          <li class="nav"><%= link_to '忘记密码', forgot_password_url %><span class="pipe">|</span><%= link_to '立即注册', signup_url %></li>
+        </ul>
+    </div>
+</div>
+
+  <%= yield %>
+  <%= render :partial => 'layouts/footer' %>  
+</body>
+<% end %>
+
+<%= render :file => 'layouts/base' %>
+

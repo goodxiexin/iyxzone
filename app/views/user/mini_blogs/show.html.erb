@@ -1,0 +1,57 @@
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'mini_blog' %>
+<% end %>
+
+<% canvas_tag do %>
+  <h1 class='app-status'>微博</h1>
+  <div class="box02 canvas_int">
+    <%= render :partial => 'tab', :locals => {:user => @user, :hover => 3} %>
+    <div class="mainConWrap clear">
+      <div class="mBlog fix">
+        <div class="mBlogDetail">
+          <div class="mBlogPostList">
+            <% render :layout => 'mini_blog', :locals => {:mini_blog => @mini_blog, :at => 'index', :with_foot => false} do %>
+              <div class="feedFunc">
+                <%= avatar @user, :class => 'imgbox01', :size => :clarge %>
+                <% if @user != current_user and !current_user.has_friend?(@user) %>
+                  <div class="op"><span class="button04"><span><%= facebox_button "加为好友", new_friend_request_url(:friend_id => @mini_blog.poster_id) %></span></span></div>
+                <% end %>
+              </div> 
+            <% end %>
+          </div>
+          <div class="page-foot s_clear">
+            <div class="foot-func s_clear">
+              <div class='fix'>
+                <div class='left'>
+                  <%= link_to_function "评论(#{@mini_blog.comments_count})", "Iyxzone.Comment.showForm('mini_blog', #{@mini_blog.id}, null, null);" %>
+                  <span class="w-l">|</span>
+                  <%= facebox_link "转发(#{@mini_blog.forwards_count})", new_forward_mini_blog_url(@mini_blog, :at => 'interested', :class => "w-l red") %>
+                </div>
+              </div>
+              <div class='feed-list'>
+                <%= render :partial => 'user/comments/comment_box', :locals => {:commentable => @mini_blog, :recipient => @mini_blog.poster} %>
+              </div>
+            </div>
+            <div class="prompt-list-box mBlogMore">
+              <h5 class="fix"><strong class="left">TA的其他微博</strong><%= link_to "更多", mini_blogs_url(:uid => @user.id), :class => 'right' %></h5>
+              <div class="list-box box04">
+                <div class="mBlogPostList">
+                  <% @other_mini_blogs.each do |mb| %>
+                    <div class="item jl-cutline fix">
+                      <div class="feedFunc">
+                        <span class="i iSquare"></span>
+                      </div>
+                      <div class="feedCon">
+                        <%= link_to mb.content, mini_blog_url(mb) %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -12,34 +12,39 @@ namespace :suggestions do
 
   desc "计算好友推荐"
   task :create_friend_suggestions => :environment do
-		#my_file = File.new("f_sugguestion_data_temp", 'a')
-    User.all.select{|u| u.friend_suggestions.count < 50}.each_with_index do |user, i|
-			start_time = Time.now
-      user.create_friend_suggestions
-			time_usage = Time.now - start_time
-      ram_usage = `pmap #{Process.pid} | tail -1`[6,40].strip
-      puts "#{user.id} - #{user.login}: generate #{user.friend_suggestions.count} suggestions, ram usage: #{ram_usage} MB, time usage: #{time_usage} sec"
-     # my_file.puts " #{ram_usage}  #{time_usage}"
+    count = User.count
+    offset = 0
+    step = 1000
+    while offset < count
+      s = Time.now
+      User.offset(offset).limit(step).all(:select => "id").select{|u| u.friend_suggestions.count < FriendSuggestor::FRIEND_SUGGESTION_SET_SIZE/2}.each_with_index do |user, i|
+        user.create_friend_suggestions
+      end
+      e = Time.now
+      puts "#{e-s} sec: generate #{step} users' friend suggestions"
+      offset = offset + step
     end
-		#my_file.close
+    puts "#{Time.now - s} sec"
   end
 
   desc "计算战友推荐"
   task :create_comrade_suggestions => :environment do
-		#my_file = File.new("c_sugguestion_data_temp4", 'a')
-    User.all.each do |user|
-      user.servers.each do |server|
-        if user.comrade_suggestions.all(:conditions => {:game_id => server.game_id, :server_id => server.id}).count < 25
-					st = Time.now
-          user.create_comrade_suggestions server
-					duration = Time.now - st
-					ram_usage = `pmap #{Process.pid} | tail -1`[6,40].strip
-          puts "#{user.id} - #{user.login}: generate #{user.comrade_suggestions.all(:conditions => {:server_id => server.id}).count} suggestions, ram usage: #{ram_usage} MB,"
-		#			my_file.puts "#{ram_usage} #{duration}"
+    count = User.count
+    offset = 0
+    step = 1000
+    while offset < count
+      s = Time.now
+      User.offset(offset).limit(step).all(:select => "id").each do |user|
+        user.servers.each do |server|
+          if user.comrade_suggestions.match(:server_id => server.id).count < FriendSuggestor::COMRADE_SUGGESTION_SETS_SIZE
+            user.create_comrade_suggestions server
+          end
         end
       end
+      e = Time.now
+      puts "#{e-s} sec: generate #{step} user's comrade suggestions"
+      offset = offset + step
     end
-		#my_file.close
   end
 
 end

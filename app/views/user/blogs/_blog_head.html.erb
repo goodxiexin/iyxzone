@@ -6,7 +6,7 @@
           <p class="right">
             <% if user == current_user %>
               <%= link_to "<span class='icon2-edit'></span>编辑", edit_blog_url(blog), :class=>"red" %>
-              <%= facebox_confirm "<span class='icon2-close'></span>删除", blog_url(blog), {:msg => '你确定要删除这篇日志吗', :method => :delete}, :class=>"red w-l" %>
+              <%= link_to_function "<span class='icon2-close'></span>删除", "Iyxzone.Blog.confirmDeletingBlog(#{blog.id}, #{user.id})", :class=>"red w-l" %>
             <% end %>
           </p>
         </div>

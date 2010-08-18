@@ -1,6 +1,10 @@
 <% content_for :html_title, "#{@user.login}的日志" %>
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
-<%=javascript_include_tag "video_blogs" %>
+
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :blog%> 
+  <%=javascript_include_tag "video_blogs" %>
+<% end %>
 
 <% canvas_tag do %>
 	<% if @user == current_user %>

@@ -20,7 +20,7 @@ class Participation < ActiveRecord::Base
     event = participation.event
     friends = participant.friends.find_all {|f| f.application_setting.recv_event_feed?} 
     fans = participant.is_idol ? participant.fans : []
-    [participant.profile, event.game] + (event.is_guild_event? ? [event.guild] : []) + friends + fans - [event.poster]
+    ([participant.profile, event.game] + (event.is_guild_event? ? [event.guild] : []) + friends + fans - [event.poster]).uniq
   }
 
   def is_invitation?

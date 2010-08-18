@@ -14,7 +14,7 @@ class GuildAlbum < Album
     friends = poster.friends.find_all {|f| f.application_setting.recv_photo_feed?}
     fans = poster.is_idol ? poster.fans : []
     people = guild.people.find_all {|p| p != poster and p.application_setting.recv_photo_feed?}
-    people + fans + friends
+    (people + fans + friends).uniq
   }
 
   attr_readonly :game_id, :privilege

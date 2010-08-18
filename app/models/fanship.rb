@@ -16,8 +16,6 @@ protected
       errors.add(:idol_id, '不能加自己为偶像')
     elsif idol.has_fan? fan_id
       errors.add(:idol_id, '已经是粉丝了')
-    elsif idol.has_friend? fan_id
-      errors.add(:idol_id, '已经是好友了，不能再是粉丝了')
     end
   end
 

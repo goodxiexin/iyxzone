@@ -75,7 +75,7 @@ class Event < ActiveRecord::Base
     poster = event.poster
     fans = poster.is_idol ? poster.fans : []
     friends = poster.friends.find_all {|f| f.application_setting.recv_event_feed?}
-    [poster.profile, event.game] + (event.is_guild_event? ? [event.guild] : []) + friends + fans
+    ([poster.profile, event.game] + (event.is_guild_event? ? [event.guild] : []) + friends + fans).uniq
   }
 
 	searcher_column :title

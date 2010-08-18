@@ -1,83 +1,75 @@
+  <% words = words || [] %>
   <div class="item jl-cutline fix" id='mini_blog_<%= mini_blog.id %>'>
     <%= yield %>
-    <div class="feedCon">
-      <div class="round02 round_r_t s-dialog">
-        <div class="round_l_t">
-          <div class="round_r_b">
-            <div class="round_l_b">
-              <div class="round_m jl-round_m"> 
-                <span class="arrow-dialog"></span>
-                <div class="round_body">
-                  <div class='sp'><%= link_to mini_blog.poster.login, mini_blogs_url(:uid => mini_blog.poster_id), :class => "memberName" %>：<%= mini_blog_content mini_blog %></div>
-                  <% if mini_blog.original? %>
-                    <% if mini_blog.image_type? or mini_blog.video_type? %>
-                    <div id='mini_blog_<%= mini_blog.id %>_images'><div class="mCon fix">
-                        <% if mini_blog.mini_image %>
-                          <div class="feedImg">
-                            <%= link_to_function (image_tag mini_blog.mini_image.public_filename(:large), :class => 'zoomIn imgbox01'), "Iyxzone.MiniBlog.Presenter.showImage(#{mini_blog.id}, '#{mini_blog.mini_image.public_filename}', #{mini_blog.mini_image.width}, #{mini_blog.mini_image.height}, false);" %>
-                          </div>
-                        <% end %>
-                        <% if mini_blog.videos_count != 0 %>
-                          <div class="feedImg">
-                            <% video = mini_blog.mini_videos.first %>
-                            <%= link_to_function (image_tag video.thumbnail_url, :width => '120x90', :class => 'zoomIn imgbox01'), "Iyxzone.MiniBlog.Presenter.showVideo(#{mini_blog.id}, '#{video.thumbnail_url}', '#{video.embed_html}', false);" %>
-                          </div>
-                        <% end %>
-                      </div></div>
-                    <% end %>
-                  <% else %>
-                    <% root = mini_blog.root %>
-                    <div class="mConWrap">
-                      <div class="mConBgT">
-                        <div class="mConBgB">
-                          <div class="mCon fix">
-                            <div class="mTrans">
-                              <div class="hd">
-                                <div class="sp">
-                                  <%= link_to root.poster.login, mini_blogs_url(:uid => root.poster_id), :class => "memberName" %>：<%= mini_blog_content root %>
-                                </div>
-                              </div>
-                              <% if root.image_type? or root.video_type? %>
-                                <div id='mini_blog_<%= mini_blog.id %>_images'>
-                                <% if !root.mini_image.blank? %>
-                                  <div class='feedImg'><%= link_to_function (image_tag root.mini_image.public_filename(:large), :class => 'zoomIn'), "Iyxzone.MiniBlog.Presenter.showImage(#{mini_blog.id}, '#{root.mini_image.public_filename}', #{root.mini_image.width}, #{root.mini_image.height}, true);" %></div>
-                                <% end %>
-                                <% if root.videos_count != 0 %>
-                                  <% video = root.mini_videos.first %>
-                                  <div class='feedImg'><%= link_to_function (image_tag video.thumbnail_url, :class => 'zoomIn', :size => '120x90'), "Iyxzone.MiniBlog.Presenter.showVideo(#{mini_blog.id}, '#{video.thumbnail_url}', '#{video.embed_html}', true);" %></div>
-                                <% end %>
-                                </div>
-                              <% end %>
-                            </div>
-                          </div>
-                        </div>
+    <div class='feedCon'>
+      <div class="oriCon">
+        <%= link_to mini_blog.poster.login, mini_blogs_url(:uid => mini_blog.poster_id), :class => "memberName" %>：<%= mini_blog_content mini_blog, words %>
+      </div>
+      <% if mini_blog.original? %>
+        <% if mini_blog.video_type? or mini_blog.image_type? %>
+          <div class="mCon fix" id="mb_<%= mini_blog.id %>_img">
+            <% if !mini_blog.mini_image.blank? %>
+              <% image = mini_blog.mini_image %>
+              <div class="feedImg"><%= link_to_function (image_tag image.public_filename(:large), :class => 'imgbox01 zoomIn'), "Iyxzone.MiniBlog.Presentor.showImage(#{mini_blog.id}, '#{image.public_filename}', #{image.width}, #{image.height}, false);" %></div>
+            <% end %>
+            <% if mini_blog.videos_count != 0 %>
+              <% video = mini_blog.mini_videos.first %>
+              <div class='feedImg'><%= link_to_function (image_tag video.thumbnail_url, :class => 'imgbox01 zoomIn', :size => '120x90'), "Iyxzone.MiniBlog.Presentor.showVideo(#{mini_blog.id}, '#{video.url}', '#{video.thumbnail_url}', '#{video.embed_html}', true);" %></div>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <% root = mini_blog.root %>
+        <div class="round02 round_r_t s-dialog">
+          <div class="round_l_t">
+            <div class="round_r_b">
+              <div class="round_l_b">
+                <div class="round_m jl-round_m"><span class="arrow-tip03"></span>
+                  <div class="round_body">
+                    <div class="mCon fix">
+                      <div class="hd">
+                        <%= link_to root.poster.login, mini_blogs_url(:uid => root.poster_id), :class => "memberName" %>：<%= root_mini_blog_content mini_blog, root, words %>
+                        <span class="orgTrans"><%= link_to "原文转发(#{root.forwards_count})", mini_blog_url(root) %><span class="pipe">|</span><%= link_to "原文评论(#{root.comments_count})", mini_blog_url(root) %></span>
                       </div>
+                      <% if root.image_type? or root.video_type? %>
+                        <div class="bd" id='mb_<%= mini_blog.id %>_img'>
+                          <% if !root.mini_image.blank? %>
+                            <div class='feedImg'><%= link_to_function (image_tag root.mini_image.public_filename(:large), :class => 'imgbox01 zoomIn'), "Iyxzone.MiniBlog.Presentor.showImageInForward(#{mini_blog.id}, '#{root.mini_image.public_filename}', #{root.mini_image.width}, #{root.mini_image.height}, true);" %></div>
+                          <% end %>
+                          <% if root.videos_count != 0 %>
+                            <% video = root.mini_videos.first %>
+                            <div class='feedImg'><%= link_to_function (image_tag video.thumbnail_url, :class => 'imgbox01 zoomIn', :size => '120x90'), "Iyxzone.MiniBlog.Presentor.showVideoInForward(#{mini_blog.id}, '#{video.url}', '#{video.thumbnail_url}', '#{video.embed_html}', true);" %></div>
+                          <% end %>
+                        </div>
+                      <% end %>
                     </div>
-                  <% end %>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="ft">
-        <span class="time"><%= ftime mini_blog.created_at %></span>
-        <% if mini_blog.comments_count == 0 %>
-          <span><%= link_to_function "回复", "Iyxzone.Comment.toggleBox('mini_blog', #{mini_blog.id}, #{mini_blog.comments_count})", :id => "mini_blog_comment_link_#{mini_blog.id}" %></span> | 
-        <% else %>
-          <span><%= link_to_function "回复(#{mini_blog.comments_count})", "Iyxzone.Comment.toggleBox('mini_blog', #{mini_blog.id}, #{mini_blog.comments_count})", :id => "mini_blog_comment_link_#{mini_blog.id}" %></span> | 
-        <% end %>
-        <% if mini_blog.forwards_count == 0 %> 
-          <span><%= facebox_link "转发", new_forward_mini_blog_url(mini_blog, :at => at), :width => 400 %></span>
-        <% else %>
-          <span><%= facebox_link "转发(#{mini_blog.forwards_count})", new_forward_mini_blog_url(mini_blog, :at => at), :width => 400 %></span>  
-        <% end %>  
-        <% if mini_blog.poster ==  current_user %>
-          | <span><%= facebox_confirm "删除", mini_blog_url(mini_blog), {:msg => "你确定要删除这条微博吗", :method => :delete} %></span>
-        <% end %>
-      </div>
-      <div class='feed-list' id='mini_blog_comment_box_<%= mini_blog.id %>' style='display:none'>
-        <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => mini_blog, :recipient => mini_blog.poster} %>
-      </div> 
-    </div>
+      <% end %>
+      <% if with_foot %>
+        <div class="ft">
+          <span class="time"><%= ftime mini_blog.created_at %></span>
+          <% if mini_blog.comments_count == 0 %>
+            <span><%= link_to_function "回复", "Iyxzone.Comment.toggleBox('mini_blog', #{mini_blog.id}, #{mini_blog.comments_count})", :id => "mini_blog_comment_link_#{mini_blog.id}" %></span> | 
+          <% else %>
+            <span><%= link_to_function "回复(#{mini_blog.comments_count})", "Iyxzone.Comment.toggleBox('mini_blog', #{mini_blog.id}, #{mini_blog.comments_count})", :id => "mini_blog_comment_link_#{mini_blog.id}" %></span> | 
+          <% end %>
+          <% if mini_blog.forwards_count == 0 %> 
+            <span><%= facebox_link "转发", new_forward_mini_blog_url(mini_blog, :at => at), :width => 400 %></span>
+          <% else %>
+            <span><%= facebox_link "转发(#{mini_blog.forwards_count})", new_forward_mini_blog_url(mini_blog, :at => at), :width => 400 %></span>  
+          <% end %>  
+          <% if mini_blog.poster ==  current_user %>
+            | <span><%= facebox_confirm "删除", mini_blog_url(mini_blog), {:msg => "你确定要删除这条微博吗", :method => :delete} %></span>
+          <% end %>
+        </div>
+        <div class='feed-list' id='mini_blog_comment_box_<%= mini_blog.id %>' style='display:none'>
+          <%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => mini_blog, :recipient => mini_blog.poster} %>
+        </div>
+      <% end %>
+    </div> 
   </div>

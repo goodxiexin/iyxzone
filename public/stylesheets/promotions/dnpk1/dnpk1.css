@@ -1,0 +1,23 @@
+.eventBanner .hd{height:186px;background:url(/images/promotions/dnpk1/images/banner_head.jpg) no-repeat center top;}
+.eventBanner .bd{height:355px;background:url(/images/promotions/dnpk1/images/banner_foot.jpg) no-repeat center top;}
+.eventBanner .wrap{width:950px;margin:0 auto;position:relative}
+.eventBanner .intro{font-size:12px;color:#333;font-weight:400;line-height:22px;width:760px;position:absolute;top:20px;left:100px}
+.eventBanner .action{width:220px;height:40px;display:block;position:absolute;top:205px;left:370px;font-size:0;line-height:0;text-indent:-999px}
+
+.eventBody{margin:-30px auto 0 auto;width:941px;}
+.col-side{float:left;position:relative;width:200px;margin-right:-200px;z-index:2}
+.col-content{float:left;width:100%;}
+.col-content .col-wrap{margin-left:210px;position:relative;width:731px}
+.col-side .r-t{background:url(/images/promotions/dnpk1/images/col_side_r.png) no-repeat;height:50px}
+.col-side .r-m{background:url(/images/promotions/dnpk1/images/col_side_r_m.png) repeat-y;}
+.col-side .r-b{background:url(/images/promotions/dnpk1/images/col_side_r.png) no-repeat bottom;height:15px}
+.col-content .r-t{background:url(/images/promotions/dnpk1/images/col_con_r.png) no-repeat;height:15px}
+.col-content .r-m{background:url(/images/promotions/dnpk1/images/col_con_r_m.png) repeat-y;padding:20px 40px}
+.col-content .r-b{background:url(/images/promotions/dnpk1/images/col_con_r.png) no-repeat bottom;height:15px}
+.col-side .sideNav{position:relative;zoom:1;overflow:hidden}
+.col-side .sideNav li{background:url(/images/promotions/dnpk1/images/nav_bg.jpg) no-repeat;width:160px;height:110px;margin:10px 0 10px 20px;font-weight:700;text-align:center;}
+.col-side .sideNav li.t02{background-position:0 -114px}
+.col-side .sideNav li.t03{background-position:0 -227px}
+.col-side .sideNav li.t04{background-position:0 -342px}
+.col-side .sideNav li a{color:#111;font-size:16px;display:block;width:160px;height:100px;line-height:100px}
+.eventTips{margin:0 0 10px 0;line-height:20px}
