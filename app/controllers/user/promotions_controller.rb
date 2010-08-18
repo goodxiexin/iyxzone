@@ -4,4 +4,5 @@ class User::PromotionsController < UserBaseController
 
 	def wolves
 	end
+
 end
