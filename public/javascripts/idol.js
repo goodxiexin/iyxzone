@@ -8,6 +8,33 @@ Iyxzone.Idol = {
 
 };
 
+// delete fan
+Object.extend(Iyxzone.Idol, {
+
+  deleteFan: function(fanID, link){
+    new Ajax.Request(Iyxzone.URL.deleteFan(fanID), {
+      method: 'delete',
+      onLoading: function(){
+        $(link).updateAttribute('onclick', '');
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('fan_' + fanID).remove();
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试");
+          $(link).writeAttribute('onclick', "Iyxzone.Idol.deleteFan(" + fanID + ", this);");
+        }
+      }.bind(this)
+    });
+  }
+
+});
+
 // follow, unfollow
 Object.extend(Iyxzone.Idol, {
 

@@ -1,11 +1,48 @@
 //好友
 Iyxzone.Friend = {
-  version: '1.0',
+
+  version: '1.9',
+
   author: ['高侠鸿'],
+
   Suggestor: {},
+
   Request: {},
+
   Tagger: Class.create({}) // only used in Blog or Video
 };
+
+// destroy friend
+Object.extend(Iyxzone.Friend, {
+
+  destroy: function(friendID, link){
+    new Ajax.Request(Iyxzone.URL.destroyFriend(friendID), {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          Iyxzone.Facebox.close();
+          $('friend_' + friendID).remove();
+        }else if(json.code == 0){
+          error("发生错误");
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmDestroying: function(friendID, link){
+    Iyxzone.Facebox.confirmWithValidation("你确定要解除好友关系吗?", null, null, function(){
+      this.destroy(friendID, link);
+    }.bind(this)); 
+  }
+
+});
 
 // create friend request
 Object.extend(Iyxzone.Friend.Request, {

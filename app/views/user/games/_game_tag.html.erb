@@ -9,7 +9,7 @@
     <% if game.is_taggable_by? current_user %>
       <div class="impress-add s_clear space">
       <%= render :partial => 'user/games/tag_candidates', :locals => {:game => game} %>
-      <% form_for :tag, :html => {:onsubmit => "Iyxzone.Game.Tag.submitForm(#{game.id}, $('tag_name')); return false"} do |f| %>
+      <% form_for :tag, :html => {:onsubmit => "Iyxzone.Tag.submitForm('game', #{game.id}, $('tag_name')); return false"} do |f| %>
         <p class='space'>都不贴切？自己想个</p>
         <div class='textfield04 left space'><%= text_field_tag 'tag_name', '' %></div>
         <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>

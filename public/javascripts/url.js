@@ -295,6 +295,10 @@ Object.extend(Iyxzone.URL, {
   
   followMultipleIdols: function(params){
     return this.build("/idols/follow_multiple", params);
+  },
+
+  deleteFan: function(fanID, params){
+    return this.build("/fans/" + fanID, params);
   }
 
 });
@@ -506,6 +510,15 @@ Object.extend(Iyxzone.URL, {
 
   createRating: function(rateableType, rateableID, params){
     return this.build("/ratings", Object.extend({'rateable_type': rateableType, 'rateable_id': rateableID}, params || {}));
+  }
+
+});
+
+// friend
+Object.extend(Iyxzone.URL, {
+
+  destroyFriend: function(friendID, params){
+    return this.build("/friends/" + friendID, params);
   }
 
 });

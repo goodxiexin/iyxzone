@@ -6,6 +6,6 @@
 <% tags = all_tags.concat((profile.user.gender == 'female') ? Tag::DEFAULLT_FEMALE_TAGS : Tag::DEFAULT_MALE_TAGS)[0..8] %>
 <% end %>
 <% tags.each do |name| %>
-	<%= link_to_function "<span>#{name}</span>", "Iyxzone.Profile.Tag.addTag(#{profile.id}, '#{name}');", :class => "impress-btn-#{rand(4)}" %>
+	<%= link_to_function "<span>#{name}</span>", "Iyxzone.Tag.addTag('profile', #{profile.id}, '#{name}');", :class => "impress-btn-#{rand(4)}" %>
 <% end %>
 </div>

@@ -11,7 +11,7 @@
   <div id='tag_cloud'>
   <% if profile.is_taggable_by? current_user %>
     <%= render :partial => 'user/profiles/tag_candidates', :locals => {:profile => profile} %>
-    <% form_for :tag, :html => {:onsubmit => "Iyxzone.Profile.Tag.submitForm(#{profile.id}, $('tag_name')); return false"} do |f| %>
+    <% form_for :tag, :html => {:onsubmit => "Iyxzone.Tag.submitForm('profile', #{profile.id}, $('tag_name')); return false"} do |f| %>
       <p class='space'>都不贴切？自己想个</p>
       <div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
       <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
@@ -19,7 +19,7 @@
   <% else %>
     <%= render :partial => 'user/tags/tag_cloud', :locals => {:taggable => profile, :deleteable => profile.is_tag_deleteable_by?(current_user)} %>
   <% end %>
-  <%= onload_javascript_tag "Iyxzone.Profile.Tag.init('#{form_authenticity_token}');" %>
+  <%= onload_javascript_tag "Iyxzone.Tag.init('#{form_authenticity_token}');" %>
   </div>
 </div>
 

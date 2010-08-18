@@ -5,8 +5,6 @@ Iyxzone.Game = {
 
   infos: null, // name and id 
 
-  Tag: {},
-	
   Suggestor: {},
 
   Presentor: {},
@@ -1048,100 +1046,3 @@ Object.extend(Iyxzone.Game.Presentor, {
   }
 
 });
-
-Object.extend(Iyxzone.Game.Tag, {
-
-  validate: function(tagName){
-    if(tagName == ""){
-      error("写点什么吧");
-      return false;
-    }
-
-    if(tagName.size > 10){
-      error("你的评价太长了吧，最多只能10个字");
-      return false;
-    }
-
-    return true;
-  },
-
-  showTags: function(gameID){
-    new Ajax.Request(Iyxzone.URL.listTag('game', gameID), {
-      method: 'get',
-      onLoading: function(){},
-      onComplete: function(){},
-      onSuccess: function(transport){
-        Element.replace($('tag_cloud'), transport.responseText);
-      }.bind(this)
-    }); 
-  },
-
-  addTag: function(gameID, tagName){
-    new Ajax.Request(Iyxzone.URL.createTag('game', gameID), {
-      method: 'post',
-      parameters: {'tag_name': tagName, 'authenticity_token': this.token},
-      onLoading: function(){
-        Iyxzone.disableButton($('tag_submit'), '发送');
-        Iyxzone.changeCursor('wait');
-      },
-      onComplete: function(){
-        Iyxzone.enableButton($('tag_submit'), '评价');
-        Iyxzone.changeCursor('default');
-      },
-      onSuccess: function(transport){
-        var json = transport.responseText.evalJSON();
-        if(json.code == 1){
-          this.showTags(gameID);
-        }else if(json.code == 0){
-          error("发生错误，请稍后再试"); 
-        }
-      }.bind(this)
-    });
-  },
-
-  submitForm: function(gameID, field){
-    var tagName = $(field).value;
-
-    if(this.validate(tagName)){
-      this.addTag(gameID, tagName);
-    }
-  },
-
-  deleteTag: function(gameID, tagID){
-    new Ajax.Request(Iyxzone.URL.deleteTag(tagID, 'game', gameID), {
-      method: 'delete',
-      parameters: 'authenticity_token=' + this.token,
-      onLoading: function(){
-        this.isDeleting = true;
-      }.bind(this),
-      onComplete: function(){
-        this.isDeleting = false;
-        Iyxzone.Facebox.close();
-      }.bind(this),
-      onSuccess: function(transport){
-        var json = transport.responseText.evalJSON();
-        if(json.code == 1){
-          $('tag_' + tagID).remove();
-        }else if(json.code == 0){
-          error("发生错误，请稍后再试");
-        }
-      }.bind(this)
-    });  
-  },
-
-  confirmDeletingTag: function(gameID, tagID){
-    // this prevents multiple tags being deleted at the same time
-    if(this.isDeleting){
-      return;
-    }
-
-    Iyxzone.Facebox.confirmWithCallback('你确定要删除这个印象吗?', null, null, function(){
-      this.deleteTag(gameID, tagID);
-    }.bind(this));
-  },
-
-  init: function(token){
-    this.token = encodeURIComponent(token);
-  }
-
-}); 

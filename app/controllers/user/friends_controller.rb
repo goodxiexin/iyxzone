@@ -31,9 +31,9 @@ class User::FriendsController < UserBaseController
 
   def destroy
     if @friendship.cancel
-      render_js_code "tip('删除成功');$('friend_#{params[:id]}').remove();"
+      render :json => {:code => 1} #render_js_code "tip('删除成功');$('friend_#{params[:id]}').remove();"
     else
-      render_js_error
+      render :json => {:code => 0} #render_js_error
     end
   end
 

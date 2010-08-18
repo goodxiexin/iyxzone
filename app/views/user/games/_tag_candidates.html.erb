@@ -1,6 +1,6 @@
 <div class='impress-add s_clear space' id='tag_cloud'>
 <% all_tags = game.tags.limit(10).map(&:name) %>
 <% all_tags.each do |name| %>
-	<%= link_to_function "<span>#{name}</span>", "Iyxzone.Game.Tag.addTag(#{game.id}, '#{name}');", :class => "impress-btn-#{rand(4)}" %>
+	<%= link_to_function "<span>#{name}</span>", "Iyxzone.Tag.addTag('game', #{game.id}, '#{name}');", :class => "impress-btn-#{rand(4)}" %>
 <% end %>
 </div>

@@ -115,22 +115,36 @@ Object.extend(Iyxzone.Facebox, {
     return str == $('validation_code').value;
   },
 
-  confirmWithValidation: function(mess, title, width, url, token, method){
+  confirmWithValidation: function(mess, title, width, callback){
     if(title == null)
       title = '确认';
     if(width)
       this.setWidth(width);
 
-    this.setContent('<p class="z-h s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><div id="error"></div><p>' + mess + "<br/>输入验证码<input id='validation_code' type='text' size=4 /><span id='validation'>正在生成验证码</span></p></div><div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' onclick=\"if(Iyxzone.Facebox.validate()){new Ajax.Request('" + url +"', {parameters: 'authenticity_token=" + token + "', method: '" + method + "', onLoading: function(){Iyxzone.disableButton($('fb-confirm').down('button',0),'请等待..'); Iyxzone.changeCursor('wait');}, onComplete: function(){Iyxzone.changeCursor('default');} });}else{$('error').innerHTML = '验证码错误';}\">完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='Iyxzone.Facebox.close();'>取消</button></span></span></div></div></div>");
+    this.setContent('<p class="z-h s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><div id="error"></div><p>' + mess + "<br/>输入验证码<input id='validation_code' type='text' size=4 /><span id='validation'>正在生成验证码</span></p></div><div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' id='facebox_confirm'>完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='Iyxzone.Facebox.close();'>取消</button></span></span></div></div></div>");
     this.locate();
     this.appear();
+  
+    // set code regeneration event  
     var validation = Iyxzone.validationCode(4);
     $('validation').update( validation.div.innerHTML);
-    this.codes = validation.codes;
+    this.codes = validation.codes.join("");
     $('validation').observe('click', function(){
       var validation = Iyxzone.validationCode(4);
       $('validation').update( validation.div.innerHTML);
-      this.codes = validation.codes;
+      this.codes = validation.codes.join("");
+    }.bind(this));
+
+    // set
+    Event.observe('facebox_confirm', 'click', function(event){
+      var code = $('validation_code').value;
+      if(code == this.codes){
+        alert('equal');
+        Iyxzone.disableButton($('facebox_confirm'), '请等待..');
+        callback.apply(this);
+      }else{
+        $('error').innerHTML = '验证码错误';
+      }
     }.bind(this));  
   },
 

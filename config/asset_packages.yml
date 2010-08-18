@@ -37,6 +37,7 @@ javascripts:
   - game
   - poke
   - setting
+  - tag
   - event.simulate
 - photo:
   - photo
@@ -60,6 +61,7 @@ javascripts:
   - game
   - rating
   - video
+  - tag
 - guild:
   - photo
   - guild

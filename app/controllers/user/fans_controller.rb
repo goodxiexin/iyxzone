@@ -8,9 +8,9 @@ class User::FansController < UserBaseController
 
   def destroy
     if @fanship.destroy
-      render_js_code "$('fan_#{@fanship.fan_id}').remove();"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 
