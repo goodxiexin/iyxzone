@@ -483,7 +483,7 @@ Object.extend(Iyxzone.MiniBlog.Presentor, {
       width = panelWidth - 40;
     }
 
-    var op = '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="javascript:void(0)" target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原视频</a></div>';
+    var op = '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="javascript:void(0)" target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原图</a></div>';
     panel.update('<img width="' + width + '" height="' + height + '" class="zoomIn" src="' + src + '" onclick="Iyxzone.MiniBlog.Presentor.back(' + id + ')"/>');
     Element.insert(panel, {'before': op});
     hd.addClassName('jl-cutline');
