@@ -152,6 +152,10 @@ Object.extend(Iyxzone.URL, {
 
   listMiniBlog: function(userID, params){
     return this.build("/mini_blogs?uid=" + userID, params);
+  },
+
+  miniBlogHome: function(params){
+    return this.build("/mini_blogs/home", params);
   }
 
 });

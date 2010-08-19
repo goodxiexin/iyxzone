@@ -42,25 +42,9 @@ class SessionsController < ApplicationController
           flash[:notice] = "欢迎来到一起游戏网！"
           redirect_back_or_default(home_url)
         }
-        format.json { render :json => {:code => 1} }
+        format.json { render :json => {:code => 1, :login => current_user.login, :profile_id => current_user.profile.id} }
       end
     end
-=begin
-    if current_user.nil?
-      flash.now[:error] = "您的用户名或者密码输入不正确"
-      render :action => (params[:at] == 'outside')? 'new_from_outside' : 'index', :layout => (params[:at] == 'outside')? '':'root'
-    elsif !current_user.active?
-      reset_session
-      redirect_to :controller => 'users', :action => 'activation_mail_sent', :email => current_user.email
-    elsif current_user.enabled == false
-      flash.now[:error] = "你的帐号被删除了"
-      render :action => (params[:at] == 'outside')? 'new_from_outside' : 'index', :layout => (params[:at] == 'outside')? '':'root'
-    else
-      remember_me_in_cookie if params[:remember_me]
-      flash[:notice] = "欢迎来到一起游戏网！"
-      redirect_back_or_default(home_url)
-    end
-=end
   end
 
   def destroy
