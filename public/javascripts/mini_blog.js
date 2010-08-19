@@ -434,7 +434,7 @@ Object.extend(Iyxzone.MiniBlog.Presentor, {
     html += '<div class="round02 round_r_t s-dialog" id="mb_' + id + '_img"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b"><div class="round_m jl-round_m"><div class="round_body">';
     html += '<div class="mCon fix">';
     html += '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreview(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="' + src + '" target="_blank"><span class="i iViewOrig"></span>查看原图</a></div>';
-    html += '<div class="bd"><img width="' + width + '" height="' + height + '" alt="" class="zoomIn" src="' + src + '"/><div>';
+    html += '<div class="bd"><img width="' + width + '" height="' + height + '" alt="" class="zoomOut" src="' + src + '"/><div>';
     html += '</div>';
     html += '</div></div></div></div></div></div>';
 
@@ -464,7 +464,7 @@ Object.extend(Iyxzone.MiniBlog.Presentor, {
     var height = (width * 320) / 380;
     var embed = embedHTML.gsub(/width=\"\d+\"/, "width=" + width).gsub(/height=\"\d+\"/, "height="+height);
     
-    var op = '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="javascript:void(0)" target="_blank" href="' + url + '"><span class="i iViewOrig"></span>查看原视频</a></div>';
+    var op = '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"><span class="i iToggleUp"></span>收起</a><a target="_blank" href="' + url + '"><span class="i iViewOrig"></span>查看原视频</a></div>';
     panel.update(embed);
     Element.insert(panel, {'before': op});
     hd.addClassName('jl-cutline');
@@ -482,9 +482,9 @@ Object.extend(Iyxzone.MiniBlog.Presentor, {
       height = height * (panelWidth - 40) / width;
       width = panelWidth - 40;
     }
-
-    var op = '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"><span class="i iToggleUp"></span>收起</a><a href="javascript:void(0)" target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原视频</a></div>';
-    panel.update('<img width="' + width + '" height="' + height + '" class="zoomIn" src="' + src + '" onclick="Iyxzone.MiniBlog.Presentor.back(' + id + ')"/>');
+    
+    var op = '<div class="op"><a class="w-l" href="javascript:void(0)" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"><span class="i iToggleUp"></span>收起</a><a target="_blank" href="' + src + '"><span class="i iViewOrig"></span>查看原图</a></div>';
+    panel.update('<img width="' + width + '" height="' + height + '" class="zoomOut" src="' + src + '" onclick="Iyxzone.MiniBlog.Presentor.showPreviewInForward(' + id + ')"/>');
     Element.insert(panel, {'before': op});
     hd.addClassName('jl-cutline');
   },
