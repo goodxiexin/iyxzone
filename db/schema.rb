@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100816031558) do
+ActiveRecord::Schema.define(:version => 20100818142306) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -33,6 +33,14 @@ ActiveRecord::Schema.define(:version => 20100816031558) do
     t.string   "name"
     t.text     "about"
     t.integer  "comments_count", :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "attentions", :force => true do |t|
+    t.integer  "attentionable_id"
+    t.string   "attentionable_type"
+    t.integer  "follower_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -261,7 +269,6 @@ ActiveRecord::Schema.define(:version => 20100816031558) do
     t.text     "data"
   end
 
-  add_index "game_characters", ["id"], :name => "idx_game_characters_id"
   add_index "game_characters", ["name", "pinyin"], :name => "index_game_characters_on_name_and_pinyin"
   add_index "game_characters", ["user_id"], :name => "index_game_characters_on_user_id"
 
@@ -404,6 +411,10 @@ ActiveRecord::Schema.define(:version => 20100816031558) do
     t.datetime "updated_at"
   end
 
+  create_table "links", :force => true do |t|
+    t.string "url"
+  end
+
   create_table "mails", :force => true do |t|
     t.integer  "sender_id"
     t.integer  "recipient_id"
@@ -444,7 +455,7 @@ ActiveRecord::Schema.define(:version => 20100816031558) do
   create_table "mini_blog_meta_datas", :force => true do |t|
     t.text    "random_ids"
     t.text    "hot_topics"
-    t.integer "today_hot_word"
+    t.integer "today_hot_word_id"
   end
 
   create_table "mini_blogs", :force => true do |t|
@@ -751,6 +762,29 @@ ActiveRecord::Schema.define(:version => 20100816031558) do
     t.datetime "updated_at"
   end
 
+  create_table "shares", :force => true do |t|
+    t.integer  "shareable_id"
+    t.string   "shareable_type"
+    t.integer  "digs_count",     :default => 0
+    t.integer  "sharings_count", :default => 0
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sharings", :force => true do |t|
+    t.string   "title"
+    t.text     "reason"
+    t.string   "shareable_type"
+    t.integer  "share_id"
+    t.integer  "poster_id"
+    t.integer  "comments_count", :default => 0
+    t.datetime "created_at"
+    t.integer  "verified",       :default => 0
+  end
+
+  add_index "sharings", ["poster_id"], :name => "index_sharings_on_poster_id"
+
   create_table "signup_invitations", :force => true do |t|
     t.integer  "sender_id"
     t.string   "recipient_email"
@@ -770,6 +804,17 @@ ActiveRecord::Schema.define(:version => 20100816031558) do
     t.text     "access_list"
     t.string   "directory"
   end
+
+  create_table "statuses", :force => true do |t|
+    t.integer  "poster_id"
+    t.text     "content"
+    t.integer  "comments_count", :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "verified",       :default => 0
+  end
+
+  add_index "statuses", ["poster_id"], :name => "index_statuses_on_poster_id"
 
   create_table "subdomains", :force => true do |t|
     t.integer "user_id"
@@ -905,7 +950,6 @@ ActiveRecord::Schema.define(:version => 20100816031558) do
     t.integer  "mini_blogs_count",                         :default => 0
   end
 
-  add_index "users", ["id"], :name => "index_users_on_id"
   add_index "users", ["login", "pinyin"], :name => "index_users_on_login_and_pinyin"
 
   create_table "videos", :force => true do |t|

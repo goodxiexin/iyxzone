@@ -7,8 +7,8 @@ class User::MiniBlogsController < UserBaseController
 
   def public
     @mini_blogs = MiniBlog.recent.paginate :page => params[:page], :per_page => PER_PAGE    
-    @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
-    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
+    @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5).all
+    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5).all
    
     # 今日话题和热门话题 
     @meta_data = MiniBlogMetaData.first

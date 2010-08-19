@@ -13,7 +13,6 @@
 	  <%= render :partial => "user/comments/comment", :collection => commentable.comments %>
 	</div>
 <% end %>
-
 <div class="box04 comment-box" id= "add_<%=type%>_comment_<%=commentable.id%>">
   <%= text_area_tag 'add-comment', '添加评论...', :id => "add_#{type}_comment_#{commentable.id}", :class => "textarea txt-add-comment", :onclick => "Iyxzone.Comment.showForm('#{type}', #{commentable.id}, null, #{recipient.nil? ? 'null' : recipient.id})" %>
 </div>

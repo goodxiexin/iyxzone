@@ -303,3 +303,69 @@ Object.extend(Iyxzone.AppBar, {
   }
 
 });
+
+// login from outside
+Object.extend(Iyxzone, {
+
+  redirectBackOrDefault: function(url){
+    var returnTo = Iyxzone.Cookie.get('return_to');
+    if(returnTo != null){
+      window.location.href = returnTo;
+      Iyxzone.Cookie.unset('return_to');
+    }else{
+      window.location.href = url;
+    }
+  },
+
+  loginFromOutside: function(form, btn){
+    new Ajax.Request(Iyxzone.URL.login() + ".json", {
+      method: 'post',
+      parameters: $(form).serialize(),
+      onLoading: function(){
+        Iyxzone.disableButton(btn, '登录..');
+        $('error_tips').update('');
+      },
+      onComplete: function(){
+        Iyxzone.enableButton(btn, '登录');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          Iyxzone.redirectBackOrDefault(Iyxzone.URL.newSharing());
+        }else if(json.code == 2){
+          $('error_tips').update("<span class='icon-error'></span><span>用户名密码不正确</span>");
+        }else if(json.code == 3){
+          $('error_tips').update("<span class='icon-error'></span><span>您的帐号还没激活</span>");
+        }else if(json.code == 4){
+          $('error_tips').update("<span class='icon-error'></span><span>您的帐号已经被删除了</span>");
+        }
+      }.bind(this)
+    });
+  },
+
+  loginFromPromotion: function(form, btn){
+    new Ajax.Request(Iyxzone.URL.login() + ".json", {
+      method: 'post',
+      parameters: $(form).serialize(),
+      onLoading: function(){
+      },
+      onComplete: function(){
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('login_info').update("<span class='txt'> 欢迎你，<span class='memberName'>" + json.login + "</span></span>");
+          $('nav2').remove();
+          $('nav1').update("<a href='" + Iyxzone.URL.home() + "'>首页</a><a href='" + Iyxzone.URL.showProfile(json.profile_id) + "'>个人主页</a><a href='" + Iyxzone.URL.miniBlogHome() + "'>微博</a><a href='javascript:void(0)' onclick='Iyxzone.addToBookmark();'>加入收藏</a>");
+        }else if(json.code == 2){
+          alert("用户名密码不正确");
+        }else if(json.code == 3){
+          alert("您的帐号还没激活");
+        }else if(json.code == 4){
+          alert("您的帐号已经被删除了");
+        }
+      }.bind(this)
+    });
+  }
+
+});

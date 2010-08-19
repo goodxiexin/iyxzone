@@ -13,18 +13,37 @@ class SessionsController < ApplicationController
     self.current_user = User.authenticate(params[:email], params[:password])
 
     if current_user.nil?
-      flash.now[:error] = "您的用户名或者密码输入不正确"
-      render :action => (params[:at] == 'outside')? 'new_from_outside' : 'index', :layout => (params[:at] == 'outside')? '':'root'
+      respond_to do |format|
+        format.html {
+          flash.now[:error] = "您的用户名密码不正确"
+          render :action => 'index', :layout => 'root'
+        }
+        format.json { render :json => {:code => 2} }
+      end
     elsif !current_user.active?
       reset_session
-      redirect_to :controller => 'users', :action => 'activation_mail_sent', :email => current_user.email
+      respond_to do |format|
+        format.html { redirect_to :controller => 'users', :action => 'activation_mail_sent', :email => current_user.email }
+        format.json { render :json => {:code => 3} }
+      end
     elsif current_user.enabled == false
-      flash.now[:error] = "你的帐号被删除了"
-      render :action => (params[:at] == 'outside')? 'new_from_outside' : 'index', :layout => (params[:at] == 'outside')? '':'root'
+      reset_session
+      respond_to do |format|
+        format.html { 
+          flash.now[:error] = "您的帐号被删除了"
+          render :action => 'index', :layout => 'root'
+        }
+        format.json { render :json => {:code => 4} }
+      end
     else
       remember_me_in_cookie if params[:remember_me]
-      flash[:notice] = "欢迎来到一起游戏网！"
-      redirect_back_or_default(home_url)
+      respond_to do |format|
+        format.html {
+          flash[:notice] = "欢迎来到一起游戏网！"
+          redirect_back_or_default(home_url)
+        }
+        format.json { render :json => {:code => 1, :login => current_user.login, :profile_id => current_user.profile.id} }
+      end
     end
   end
 

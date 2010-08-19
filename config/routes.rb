@@ -15,6 +15,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :districts, :controller => 'districts'
 
   map.resources :sessions
+	
+  map.resources :promotions, :collection => {:dnpk => :get}
 
   map.resources :help, :collection => {:about_us => :get, :app_info => :get, :contact_info => :get, :privacy_info => :get}
 
@@ -103,8 +105,6 @@ ActionController::Routing::Routes.draw do |map|
     users.resources :mini_blogs, :collection => {:random => :get, :recent => :get, :same_game => :get, :public => :get, :hot => :get, :sexy => :get, :home => :get, :index_list => :get, :home_list => :get, :search => :get}, :member => {:new_forward => :get, :forward => :post}
 
     users.resources :mini_topic_attentions, :member => {:follow => :post, :unfollow => :delete}
-
-    users.resources :promotions, :collection => {:wolves => :get}
 
     users.resources :fans
 

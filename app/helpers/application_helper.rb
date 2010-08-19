@@ -38,7 +38,7 @@ module ApplicationHelper
       link_to image_tag(user.avatar.public_filename(size), img_opts), profile_url(user.profile), a_opts
     end
   end
-
+=begin
   def profile_url profile
     if profile.user.subdomain.blank?
       "/profiles/#{profile.id}" 
@@ -46,7 +46,7 @@ module ApplicationHelper
       "/#{profile.user.subdomain.name}"
     end
   end
-  
+=end  
   def profile_link(user, opts={})
     link_to user.login, profile_url(user.profile), opts
   end

@@ -57,7 +57,7 @@ module AuthenticatedSystem
     def login_denied
       respond_to do |format|
         format.html do
-          session[:return_to] = request.request_uri
+          cookies[:return_to] = request.request_uri
           if params[:at] == 'outside'
             redirect_to login_path(:at => 'outside')
           else
@@ -77,8 +77,8 @@ module AuthenticatedSystem
     end
 
     def redirect_back_or_default(default)
-      redirect_to(session[:return_to] || default)
-      session[:return_to] = nil
+      redirect_to(cookies[:return_to] || default)
+      cookies[:return_to] = nil
     end
 
     # session 其实也是cookie中的一部分，只不过有个特定的名字叫_XXXX_session

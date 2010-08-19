@@ -17,7 +17,7 @@ namespace :mini_blogs do
   task :delta_index => :environment do
     MiniBlog.build_delta_index 
 
-    `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
+    #`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
   end
 
   #
