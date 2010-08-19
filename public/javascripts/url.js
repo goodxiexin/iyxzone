@@ -155,3 +155,29 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// login
+Object.extend(Iyxzone.URL, {
+
+  login: function(params){
+    return this.build("/sessions", params);
+  },
+
+  loginFailure: function(params){
+    return this.build("/sessions", params);
+  },
+
+  home: function(params){
+    return this.build("/home", params);
+  }
+
+});
+
+// sharing
+Object.extend(Iyxzone.URL, {
+
+  newSharing: function(params){
+    return this.build("/sharings/new", params);
+  }
+
+});

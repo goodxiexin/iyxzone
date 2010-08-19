@@ -302,3 +302,44 @@ Object.extend(Iyxzone.AppBar, {
   }
 
 });
+
+// login from outside
+Object.extend(Iyxzone, {
+
+  redirectBackOrDefault: function(url){
+    var returnTo = Iyxzone.Cookie.get('return_to');
+    if(returnTo != null){
+      window.location.href = returnTo;
+      Iyxzone.Cookie.unset('return_to');
+    }else{
+      window.location.href = url;
+    }
+  },
+
+  loginFromOutside: function(form, btn){
+    new Ajax.Request(Iyxzone.URL.login() + ".json", {
+      method: 'post',
+      parameters: $(form).serialize(),
+      onLoading: function(){
+        Iyxzone.disableButton(btn, '登录..');
+        $('notice_error').update('');
+      },
+      onComplete: function(){
+        Iyxzone.enableButton(btn, '登录');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          Iyxzone.redirectBackOrDefault(Iyxzone.URL.newSharing());
+        }else if(json.code == 2){
+          $('notice_error').update("<span class='icon-error'></span>用户名密码不正确");
+        }else if(json.code == 3){
+          $('notice_error').update("<span class='icon-error'></span>您的帐号还没激活");
+        }else if(json.code == 4){
+          $('notice_error').update("<span class='icon-error'></span>您的帐号已经被删除了");
+        }
+      }.bind(this)
+    });
+  }
+
+});

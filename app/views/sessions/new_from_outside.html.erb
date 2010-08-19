@@ -7,6 +7,8 @@
 <%= stylesheet_link_tag 'home' %>
 <%= javascript_include_tag :defaults %> 
 <%= javascript_include_tag 'iyxzone' %>
+<%= javascript_include_tag 'cookie' %>
+<%= javascript_include_tag 'url' %>
 <style type="text/css">
 .z-box{width:380px}
 .z-con{background:#f8fcf6;color:#666}
@@ -26,17 +28,11 @@
       <p class="z-h"><img src="images/skin/logo.png" /></p>
       <div class="z-con">
         <p>请先登录17gaming完成当前操作</p>
-        <% form_tag sessions_url, :html => {:onsubmit=> "Iyxzone.disableButton($(new_from_outside_login_btn),'请等待..');"} do %>
+        <% form_tag "", :onsubmit => "Iyxzone.loginFromOutside(this, $('new_from_outside_login_btn')); return false;" do %>
         <%= hidden_field_tag 'outside', 1 %>
-          <% flash.each do |key, msg| %>
-            <div class="<%=key%>-msg" id="notice_<%=key%>">
-              <span class="icon-<%= key %>"></span>
-              <%= msg %>
-            </div>
-            <script type="text/javascript">
-              setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
-            </script>
-          <% end %>
+        <div class="error-msg" id="notice_error">
+          <span class="icon-error"></span>
+        </div>
         <div class="login-box formcontent s_clear">
           <div class="item rows">
             <div class="fldid"><label for="name">邮箱</label></div>
