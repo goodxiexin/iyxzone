@@ -28,8 +28,8 @@ class User::GuildsController < UserBaseController
   end
 
   def show
-    @mini_blogs = MiniBlog.category(:text).by(@guild.people_ids).limit(3).all
-    @hot_words = HotWord.limit(3).recent
+    @mini_blogs = MiniBlog.category(:all).by(@guild.people_ids).recent.limit(3).all
+    @hot_words = HotWord.recent.limit(3)
     @members = @guild.people.limit(12).prefetch(:profile)
     @events = @guild.events.people_order.limit(3).prefetch([{:album => :cover}])
     @memberships = @guild.memberships.prefetch([:character]).by(current_user.id)

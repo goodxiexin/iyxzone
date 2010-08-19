@@ -32,7 +32,7 @@ class User::EventsController < UserBaseController
   end
 
   def show
-    @mini_blogs = MiniBlog.category(:text).by(@event.participant_ids).limit(3).all
+    @mini_blogs = MiniBlog.category(:all).by(@event.participant_ids).recent.limit(3).all
     @hot_words = HotWord.recent.limit(3)
     @maybe_participants = @event.maybe_participants.limit(8).prefetch(:profile)
     @confirmed_participants = @event.confirmed_participants.limit(8).prefetch(:profile)
