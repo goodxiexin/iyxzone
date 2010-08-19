@@ -161,6 +161,10 @@ Object.extend(Iyxzone.URL, {
     return this.build("/friend_requests?friend_id=" + friendID, params);
   },
 
+  createMultipleFriendRequests: function(params){
+    return this.build("/friend_requests/create_multiple", params);
+  },
+  
   acceptFriendRequest: function(requestID, params){
     return this.build("/friend_requests/" + requestID + "/accept", params);
   },
@@ -549,6 +553,27 @@ Object.extend(Iyxzone.URL, {
 
   destroyFriend: function(friendID, params){
     return this.build("/friends/" + friendID, params);
+  }
+
+});
+
+// email contacts
+Object.extend(Iyxzone.URL, {
+
+  parseEmailContacts: function(params){
+    return this.build("/email_contacts/parse", params);
+  },
+
+  createMultipleSignupInvitations: function(params){
+    return this.build("/signup_invitations/create_multiple", params);
+  },
+
+  listSignupInvitation: function(params){
+    return this.build("/signup_invitations", params);
+  },
+
+  createSignupInvitation: function(params){
+    return this.build("/signup_invitations", params);
   }
 
 });

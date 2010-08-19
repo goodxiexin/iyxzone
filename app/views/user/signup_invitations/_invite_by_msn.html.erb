@@ -2,7 +2,7 @@
         <div class="invite-tip jl-cutline">导入MSN联系人名单并邀请其加入，对方会直接加入你的好友。</div>
         <div class="invite-msn jl-cutline" style="display:none">
           <div id='msn_invite'></div>
-          <% form_tag url_for(:controller => 'user/signup_invitations', :action => 'add_friend'),  {:onsubmit => "return Iyxzone.ContactsGrabber.checkMsnInput(this);"} do %>
+          <% form_tag prepare_signup_invitations_url, {:onsubmit => "return Iyxzone.ContactsGrabber.checkMsnInput(this);"} do %>
           <%= hidden_field_tag 'type', 'msn'%>
           <div class="s_clear space">
             <div class="fldid"><label>你的MSN账号</label></div>

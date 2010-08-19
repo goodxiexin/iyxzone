@@ -282,7 +282,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :ratings
 
-    users.resources :signup_invitations, :collection => {:create_multiple => :post}#, :controller => 'temp_signup_invitations'
+    users.resources :signup_invitations, :collection => {:create_multiple => :post, :prepare => :post}
 
     users.auto_complete_for_game_tags '/auto_complete_for_game_tags', :controller => 'tags', :action => 'auto_complete_for_game_tags' 
 
@@ -298,7 +298,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :guestbooks
 
-    users.resources :contacts, :controller => 'email_contacts', :collection => {:sina => :get, :netease => :get, :hotmail => :get, :yahoo => :get, :gmail => :get, :msn => :get}
+    users.resources :email_contacts, :collection => {:parse => :post}
   end
 
   map.connect ':subdomain', :controller => 'user/profiles', :action => 'show'

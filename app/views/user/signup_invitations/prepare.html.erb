@@ -15,4 +15,4 @@
 <% end %>
 
 <!-- 为了安全，不显示password，只显示用户名，然后password存在session里 -->
-<%= javascript_tag "Iyxzone.ContactsGrabber.grabNotFriendContacts('#{params[:type]}', '#{params[:user_name]}', '#{form_authenticity_token}')" %>
+<%= javascript_tag "Iyxzone.ContactsGrabber.fetchContacts('#{params[:type]}', '#{params[:user_name]}', '#{form_authenticity_token}')" %>
