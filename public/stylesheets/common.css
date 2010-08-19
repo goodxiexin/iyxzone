@@ -661,6 +661,9 @@ div.tip{color:#999;padding:10px 25px}
 #errorExplanation{margin:10px;background:#fcb08b;padding:10px;color:#333;}
 #errorExplanation .icon-error,#errorExplanation .con{float:left}
 
+.errorTips{color:#C30;text-align:center}
+.z-box .errorTips{margin:15px}
+
 /*翻页*/
 .pagination {text-align:center; background:none;margin:10px 0 5px 0;padding:5px 0;clear:both;zoom:1}
 .pagination:after{content:".";display:block;height:0;clear:both;visibility:hidden;}

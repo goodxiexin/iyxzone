@@ -30,10 +30,8 @@
         <p>请先登录17gaming完成当前操作</p>
         <% form_tag "", :onsubmit => "Iyxzone.loginFromOutside(this, $('new_from_outside_login_btn')); return false;" do %>
         <%= hidden_field_tag 'outside', 1 %>
-        <div class="error-msg" id="notice_error">
-          <span class="icon-error"></span>
-        </div>
         <div class="login-box formcontent s_clear">
+          <div class="errorTips" id='error_tips'></div>
           <div class="item rows">
             <div class="fldid"><label for="name">邮箱</label></div>
             <div class="fldvalue"><%= text_field_tag 'email', '' %></div>

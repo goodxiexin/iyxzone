@@ -322,7 +322,7 @@ Object.extend(Iyxzone, {
       parameters: $(form).serialize(),
       onLoading: function(){
         Iyxzone.disableButton(btn, '登录..');
-        $('notice_error').update('');
+        $('error_tips').update('');
       },
       onComplete: function(){
         Iyxzone.enableButton(btn, '登录');
@@ -332,11 +332,11 @@ Object.extend(Iyxzone, {
         if(json.code == 1){
           Iyxzone.redirectBackOrDefault(Iyxzone.URL.newSharing());
         }else if(json.code == 2){
-          $('notice_error').update("<span class='icon-error'></span>用户名密码不正确");
+          $('error_tips').update("<span class='icon-error'></span><span>用户名密码不正确</span>");
         }else if(json.code == 3){
-          $('notice_error').update("<span class='icon-error'></span>您的帐号还没激活");
+          $('error_tips').update("<span class='icon-error'></span><span>您的帐号还没激活</span>");
         }else if(json.code == 4){
-          $('notice_error').update("<span class='icon-error'></span>您的帐号已经被删除了");
+          $('error_tips').update("<span class='icon-error'></span><span>您的帐号已经被删除了</span>");
         }
       }.bind(this)
     });
