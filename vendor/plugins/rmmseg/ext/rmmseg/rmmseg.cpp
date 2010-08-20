@@ -69,217 +69,17 @@ extern "C" {
     static VALUE cWord;
     static VALUE w_create(const rmmseg::Word *rw)
     {
-				//printf("get word: %s, cixing: %d, freq: %d\n", rw->text, rw->cixing, rw->freq);
 				Word *w = ALLOC(Word);
         VALUE text = rb_str_new(rw->text, std::strlen(rw->text));
         w->text = text;
         w->cixing = INT2FIX(rw->cixing);
 				w->freq = INT2FIX(rw->freq);
-				//printf("create word: %s, cixing: %d, freq: %d\n", w->text, w->cixing, w->freq); 
        return Data_Wrap_Struct(cWord,
                                 (RUBY_DATA_FUNC)w_mark,
                                 (RUBY_DATA_FUNC)w_free,
                                 w);
     }
 
-		static VALUE w_cx_unknown(VALUE self)
-		{
-			Word *w = (Word *)DATA_PTR(self);
-			int cixing = FIX2INT(w->cixing);
-			if(CX_UNKNOWN(cixing)){
-				return Qtrue;
-			}else{
-				return Qfalse;
-			}
-		}
-
-		static VALUE w_cx_noun(VALUE self)
-		{
-			Word *w = (Word *)DATA_PTR(self);
-			int cixing = FIX2INT(w->cixing);
-			if(CX_NOUN(cixing)){
-				return Qtrue;
-			}else{
-				return Qfalse;
-			}
-		}
-
-		static VALUE w_cx_verb(VALUE self)
-		{
-			Word *w = (Word *)DATA_PTR(self);
-			int cixing = FIX2INT(w->cixing);
-			if(CX_VERB(cixing)){
-				return Qtrue;
-			}else{
-				return Qfalse;
-			}
-		}
-
-    static VALUE w_cx_adj(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_ADJ(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_adv(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_ADV(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_clas(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_CLAS(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      } 
-    }
-
-    static VALUE w_cx_echo(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_ECHO(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_stru(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_STRU(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_aux(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_AUX(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_coor(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_COOR(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_conj(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_CONJ(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_suffix(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_SUFFIX(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_prefix(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_PREFIX(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_prep(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_PREP(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_ques(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_QUES(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_num(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_NUM(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE w_cx_idiom(VALUE self)
-    {
-      Word *w = (Word *)DATA_PTR(self);
-      int cixing = FIX2INT(w->cixing);
-      if(CX_IDIOM(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-		static VALUE w_cx_game(VALUE self)
-		{
-			Word *w = (Word *)DATA_PTR(self);
-			int cixing = FIX2INT(w->cixing);
-			if(CX_GAME(cixing)){
-				return Qtrue;
-			}else{
-				return Qfalse;
-			}
-		}
-	
     /*
      * Load a character dictionary.
      *
@@ -316,10 +116,10 @@ extern "C" {
 				rmmseg::dict::init();
     }
 
-		static VALUE dic_mem_usage(VALUE self)
-		{
-			return INT2FIX(dict_mem);
-		}
+    static VALUE dic_shm_usage(VALUE self)
+    {
+				return INT2FIX(rmmseg::shm_usage()); 
+    }
 
     /*
      * Add a word to the in-memory dictionary.
@@ -416,207 +216,6 @@ extern "C" {
 		{
 			Token *tk = (Token *)DATA_PTR(self);
 			return tk->freq;
-		}
-
-		/*
-		 * 下面17个函数都差不多就是告诉你是不是某种词性
-		 */
-		static VALUE tk_cx_unknown(VALUE self)
-		{
-			Token *tk = (Token *)DATA_PTR(self);
-			int cixing = FIX2INT(tk->cixing);
-			if(CX_UNKNOWN(cixing)){
-				return Qtrue;
-			}else{
-				return Qfalse;
-			}
-		}
-
-		static VALUE tk_cx_noun(VALUE self)
-		{
-			Token *tk = (Token *)DATA_PTR(self);
-			int cixing = FIX2INT(tk->cixing);
-			if(CX_NOUN(cixing)){
-				return Qtrue;
-			}else{
-				return Qfalse;
-			}
-		}
-
-		static VALUE tk_cx_verb(VALUE self)
-		{
-			Token *tk = (Token *)DATA_PTR(self);
-			int cixing = FIX2INT(tk->cixing);
-			if(CX_VERB(cixing)){
-				return Qtrue;
-			}else{
-				return Qfalse;
-			}
-		}
-
-    static VALUE tk_cx_adj(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_ADJ(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_adv(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_ADV(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_clas(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_CLAS(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      } 
-    }
-
-    static VALUE tk_cx_echo(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_ECHO(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_stru(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_STRU(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_aux(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_AUX(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_coor(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_COOR(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_conj(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_CONJ(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_suffix(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_SUFFIX(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_prefix(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_PREFIX(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_prep(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_PREP(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_ques(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_QUES(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_num(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_NUM(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-    static VALUE tk_cx_idiom(VALUE self)
-    {
-      Token *tk = (Token *)DATA_PTR(self);
-      int cixing = FIX2INT(tk->cixing);
-      if(CX_IDIOM(cixing)){
-        return Qtrue;
-      }else{
-        return Qfalse;
-      }
-    }
-
-		static VALUE tk_cx_game(VALUE self)
-		{
-			Token *tk = (Token *)DATA_PTR(self);
-			int cixing = FIX2INT(tk->cixing);
-			if(CX_GAME(cixing)){
-				return Qtrue;
-			}else{
-				return Qfalse;
-			}
 		}
 
     /*
@@ -734,36 +333,17 @@ extern "C" {
         rb_define_singleton_method(mDictionary, "load_chars", RUBY_METHOD_FUNC(dic_load_chars), 1);
         rb_define_singleton_method(mDictionary, "load_words", RUBY_METHOD_FUNC(dic_load_words), 1);
 				rb_define_singleton_method(mDictionary, "init", RUBY_METHOD_FUNC(dic_init), 0);
+				rb_define_singleton_method(mDictionary, "shm_usage", RUBY_METHOD_FUNC(dic_shm_usage), 0);
         rb_define_singleton_method(mDictionary, "add", RUBY_METHOD_FUNC(dic_add), 4);
         rb_define_singleton_method(mDictionary, "has_word?", RUBY_METHOD_FUNC(dic_has_word), 1);
 				rb_define_singleton_method(mDictionary, "get_word", RUBY_METHOD_FUNC(dic_get_word), 1);
-				rb_define_singleton_method(mDictionary, "mem_usage", RUBY_METHOD_FUNC(dic_mem_usage), 0);
-				
+								
 				/* Dictionary Word */
 				cWord = rb_define_class_under(mRMMSeg, "Word", rb_cObject);
 				rb_undef_method(rb_singleton_class(cWord), "new");
 				rb_define_method(cWord, "text", RUBY_METHOD_FUNC(w_text), 0);
 				rb_define_method(cWord, "cixing", RUBY_METHOD_FUNC(w_cixing), 0);
 				rb_define_method(cWord, "freq", RUBY_METHOD_FUNC(w_freq), 0);
-
-				/* 一些判断字典word词性的方法 */
-        rb_define_method(cWord, "cx_unknown?", RUBY_METHOD_FUNC(w_cx_unknown), 0);
-        rb_define_method(cWord, "cx_noun?", RUBY_METHOD_FUNC(w_cx_noun), 0);
-        rb_define_method(cWord, "cx_verb?", RUBY_METHOD_FUNC(w_cx_verb), 0);
-        rb_define_method(cWord, "cx_adj?", RUBY_METHOD_FUNC(w_cx_adj), 0);
-        rb_define_method(cWord, "cx_adv?", RUBY_METHOD_FUNC(w_cx_adv), 0);
-        rb_define_method(cWord, "cx_clas?", RUBY_METHOD_FUNC(w_cx_clas), 0);
-        rb_define_method(cWord, "cx_echo?", RUBY_METHOD_FUNC(w_cx_echo), 0);
-        rb_define_method(cWord, "cx_stru?", RUBY_METHOD_FUNC(w_cx_stru), 0);
-        rb_define_method(cWord, "cx_aux?", RUBY_METHOD_FUNC(w_cx_aux), 0);
-        rb_define_method(cWord, "cx_coor?", RUBY_METHOD_FUNC(w_cx_coor), 0);
-        rb_define_method(cWord, "cx_conj?", RUBY_METHOD_FUNC(w_cx_conj), 0);
-        rb_define_method(cWord, "cx_suffix?", RUBY_METHOD_FUNC(w_cx_suffix), 0);
-        rb_define_method(cWord, "cx_prefix?", RUBY_METHOD_FUNC(w_cx_prefix), 0);
-        rb_define_method(cWord, "cx_ques?", RUBY_METHOD_FUNC(w_cx_ques), 0);
-        rb_define_method(cWord, "cx_num?", RUBY_METHOD_FUNC(w_cx_num), 0);
-        rb_define_method(cWord, "cx_idiom?", RUBY_METHOD_FUNC(w_cx_idiom), 0);
-        rb_define_method(cWord, "cx_game?", RUBY_METHOD_FUNC(w_cx_game), 0);
 
         /* A Token hold the text and related position information. */
         cToken = rb_define_class_under(mRMMSeg, "Token", rb_cObject);
@@ -773,25 +353,6 @@ extern "C" {
         rb_define_method(cToken, "end", RUBY_METHOD_FUNC(tk_end), 0);
 				rb_define_method(cToken, "cixing", RUBY_METHOD_FUNC(tk_cixing), 0);
 				rb_define_method(cToken, "freq", RUBY_METHOD_FUNC(tk_freq), 0);
-
-				/* 一些判断Token词性的方法 */
-				rb_define_method(cToken, "cx_unknown?", RUBY_METHOD_FUNC(tk_cx_unknown), 0);
-				rb_define_method(cToken, "cx_noun?", RUBY_METHOD_FUNC(tk_cx_noun), 0);
-				rb_define_method(cToken, "cx_verb?", RUBY_METHOD_FUNC(tk_cx_verb), 0);
-				rb_define_method(cToken, "cx_adj?", RUBY_METHOD_FUNC(tk_cx_adj), 0);
-				rb_define_method(cToken, "cx_adv?", RUBY_METHOD_FUNC(tk_cx_adv), 0);
-				rb_define_method(cToken, "cx_clas?", RUBY_METHOD_FUNC(tk_cx_clas), 0);
-				rb_define_method(cToken, "cx_echo?", RUBY_METHOD_FUNC(tk_cx_echo), 0);
-				rb_define_method(cToken, "cx_stru?", RUBY_METHOD_FUNC(tk_cx_stru), 0);
-				rb_define_method(cToken, "cx_aux?", RUBY_METHOD_FUNC(tk_cx_aux), 0);
-				rb_define_method(cToken, "cx_coor?", RUBY_METHOD_FUNC(tk_cx_coor), 0);
-				rb_define_method(cToken, "cx_conj?", RUBY_METHOD_FUNC(tk_cx_conj), 0);
-				rb_define_method(cToken, "cx_suffix?", RUBY_METHOD_FUNC(tk_cx_suffix), 0);
-				rb_define_method(cToken, "cx_prefix?", RUBY_METHOD_FUNC(tk_cx_prefix), 0);
-				rb_define_method(cToken, "cx_ques?", RUBY_METHOD_FUNC(tk_cx_ques), 0);
-				rb_define_method(cToken, "cx_num?", RUBY_METHOD_FUNC(tk_cx_num), 0);
-				rb_define_method(cToken, "cx_idiom?", RUBY_METHOD_FUNC(tk_cx_idiom), 0);
-				rb_define_method(cToken, "cx_game?", RUBY_METHOD_FUNC(tk_cx_game), 0);
 
         /* An Algorithm object use the MMSEG algorithm to do segmenting. */
         cAlgorithm = rb_define_class_under(mRMMSeg, "Algorithm", rb_cObject);

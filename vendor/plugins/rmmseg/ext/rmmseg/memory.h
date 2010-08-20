@@ -4,10 +4,15 @@
 #include <cstdlib>
 #include <stdio.h>
 
+#define TO_ADDR(x) (_shm_base + x)
+#define TO_OFFSET(x) ((char*)x - _shm_base)
+
 namespace rmmseg
 {
-		const int SHMSZ = 31248588; //64MB
+		const int SHMSZ = 134217728; //64MB
+
 		extern char* _shm_base;
+
 		extern bool first;
 
 		void *shm_alloc(int len);
@@ -17,6 +22,8 @@ namespace rmmseg
 		bool shm_inited();
 
 		bool first_copy();
+
+		int shm_usage();
 
 }
 

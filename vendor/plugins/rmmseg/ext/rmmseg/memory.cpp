@@ -71,4 +71,10 @@ namespace rmmseg
 			return first;
 		}
 
+		int shm_usage()
+		{
+			int *sz = (int*)_shm_base;
+			return (*sz);
+		}
+
 }
