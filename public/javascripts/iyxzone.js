@@ -353,9 +353,7 @@ Object.extend(Iyxzone, {
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
-          $('login_info').update("<span class='txt'> 欢迎你，<span class='memberName'>" + json.login + "</span></span>");
-          $('nav2').remove();
-          $('nav1').update("<a href='" + Iyxzone.URL.home() + "'>首页</a><a href='" + Iyxzone.URL.showProfile(json.profile_id) + "'>个人主页</a><a href='" + Iyxzone.URL.miniBlogHome() + "'>微博</a><a href='javascript:void(0)' onclick='Iyxzone.addToBookmark();'>加入收藏</a>");
+          window.location.href = window.location.href;
         }else if(json.code == 2){
           alert("用户名密码不正确");
         }else if(json.code == 3){
