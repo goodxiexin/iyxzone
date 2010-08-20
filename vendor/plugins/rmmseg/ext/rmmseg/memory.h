@@ -2,43 +2,22 @@
 #define _MEMORY_H_
 
 #include <cstdlib>
-
-/**
- * Pre-allocate a chunk of memory and allocate them in small pieces.
- * Those memory are never freed after allocation. Used for persist
- * data like dictionary contents that will never be destroyed unless
- * the application exited.
- */
+#include <stdio.h>
 
 namespace rmmseg
 {
-    const int REALLOC_SIZE = 2048; /* 2KB */
-		extern int pool_mem_usage; 
-    extern int   _pool_size;
-    extern char *_pool_base;
+		const int SHMSZ = 31248588; //64MB
+		extern char* _shm_base;
+		extern bool first;
 
-    inline void *pool_alloc(int len)
-    {
-        void *mem = _pool_base;
-        
-        if (len <= _pool_size)
-        {
-            _pool_size -= len;
-            _pool_base += len;
-            return mem;
-        }
-        
-        /* NOTE: the remaining memory is simply discard, which WILL
-         * cause memory leak. However, this function is not for allocating
-         * large object. Larger pre-alloc chunk size will also reduce the
-         * impact of this leak. So this is generally not a problem. */
-        _pool_base = static_cast<char *>(std::malloc(REALLOC_SIZE));
-        mem = _pool_base;
-        _pool_base += len;
-        _pool_size = REALLOC_SIZE - len;
-				pool_mem_usage += 2048;
-        return mem;
-    }
+		void *shm_alloc(int len);
+
+		void init_shm();
+
+		bool shm_inited();
+
+		bool first_copy();
+
 }
 
 #endif /* _MEMORY_H_ */

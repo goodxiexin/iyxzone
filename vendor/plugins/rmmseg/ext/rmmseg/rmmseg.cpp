@@ -310,6 +310,12 @@ extern "C" {
         return Qfalse;
     }
 
+    static VALUE dic_init(VALUE self)
+    {
+				rmmseg::init_shm();
+				rmmseg::dict::init();
+    }
+
 		static VALUE dic_mem_usage(VALUE self)
 		{
 			return INT2FIX(dict_mem);
@@ -727,7 +733,8 @@ extern "C" {
         mDictionary = rb_define_module_under(mRMMSeg, "Dictionary");
         rb_define_singleton_method(mDictionary, "load_chars", RUBY_METHOD_FUNC(dic_load_chars), 1);
         rb_define_singleton_method(mDictionary, "load_words", RUBY_METHOD_FUNC(dic_load_words), 1);
-        rb_define_singleton_method(mDictionary, "add", RUBY_METHOD_FUNC(dic_add), 3);
+				rb_define_singleton_method(mDictionary, "init", RUBY_METHOD_FUNC(dic_init), 0);
+        rb_define_singleton_method(mDictionary, "add", RUBY_METHOD_FUNC(dic_add), 4);
         rb_define_singleton_method(mDictionary, "has_word?", RUBY_METHOD_FUNC(dic_has_word), 1);
 				rb_define_singleton_method(mDictionary, "get_word", RUBY_METHOD_FUNC(dic_get_word), 1);
 				rb_define_singleton_method(mDictionary, "mem_usage", RUBY_METHOD_FUNC(dic_mem_usage), 0);

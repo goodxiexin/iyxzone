@@ -34,8 +34,8 @@ namespace rmmseg
             nbytes = strlen(text);
 
 				dict_mem += sizeof(Word) + nbytes + 1 - word_embed_len;
-				Word *w = static_cast<Word *>(pool_alloc(sizeof(Word) + nbytes + 1 - word_embed_len));
-        
+				Word *w = static_cast<Word *>(shm_alloc(sizeof(Word) + nbytes + 1 - word_embed_len));
+				        
 				w->nbytes = std::strlen(text);
         w->length = length;
         w->freq = freq;
@@ -45,7 +45,7 @@ namespace rmmseg
 				
 				std::strncpy(w->text, text, nbytes);
         w->text[nbytes] = '\0';
-
+				
 				return w;
     }
 }

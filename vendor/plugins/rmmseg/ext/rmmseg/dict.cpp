@@ -4,16 +4,34 @@
 
 using namespace std;
 
-int dict_mem = 0;
+int dict_mem;
 
 namespace rmmseg
 {
 
     struct Entry
     {
-        Word *word;
-        Entry *next;
+        int word_offset;//Word *word;
+        int next_offset; //下一个的偏移量，从_shm_base开始算Entry *next;
     };
+
+		Entry* next_entry(Entry* entry){
+			int offset = entry->next_offset;
+			if(offset < 0){
+				return NULL;
+			}else{
+				return (Entry*)(_shm_base + offset);
+			}
+		}
+
+		Word* entry_word(Entry* entry){
+			int offset = entry->word_offset;
+			if(offset < 0){
+				return NULL;
+			}else{
+				return (Word*)(_shm_base + offset);
+			}
+		}
 
     const int init_size = 262147;
     const int max_density = 5;
@@ -36,25 +54,11 @@ namespace rmmseg
     };
 
 
-    static int n_bins = init_size;
-    static int n_entries = 0;
-    static Entry **bins = static_cast<Entry **>(std::calloc(init_size,
-                                                            sizeof(Entry *)));
-
-    static int new_size()
-    {
-        for (int i = 0;
-             i < sizeof(primes)/sizeof(primes[0]);
-             ++i)
-        {
-            if (primes[i] > n_bins)
-            {
-                return primes[i];
-            }
-        }
-        // TODO: raise exception here
-        return n_bins;
-    }
+    //static int n_bins = init_size;
+    static int n_offsets = init_size;
+		static int n_entries = 0;
+		static int *offsets = NULL;
+    //static Entry **bins = NULL;
 
     static unsigned int hash(const char *str, int len)
     {
@@ -71,34 +75,27 @@ namespace rmmseg
         return key;
     }
 
-    static void rehash()
-    {
-        int new_n_bins = new_size();
-        Entry **new_bins = static_cast<Entry **>(calloc(new_n_bins,
-                                                        sizeof(Entry *)));
-        Entry *entry, *next;
-        unsigned int hash_val;
-
-        for (int i = 0; i < n_bins; ++i)
-        {
-            entry = bins[i];
-            while (entry)
-            {
-                next = entry->next;
-                hash_val = hash(entry->word->text,
-                                entry->word->nbytes) % new_n_bins;
-                entry->next = new_bins[hash_val];
-                new_bins[hash_val] = entry;
-                entry = next;
-            }
-        }
-        free(bins);
-        n_bins = new_n_bins;
-        bins = new_bins;
-    }
-
     namespace dict
     {
+
+				void init()
+				{
+						if(rmmseg::first_copy()){
+							offsets = (int*)(shm_alloc(init_size * sizeof(int)));
+							for(int i=0;i<init_size;i++){
+								offsets[i] = -1;
+							}
+							//bins = static_cast<Entry **>(shm_alloc(init_size * sizeof(Entry *)));
+						}else{
+							if(!rmmseg::shm_inited()){
+								perror("shm not inited");
+								exit(1);
+							}
+							offsets = (int*)(_shm_base + sizeof(int));
+							printf("海涛, offset: %d\n", offsets[142939]);
+							//bins = static_cast<Entry **>(static_cast<void*>(_shm_base + sizeof(int)));
+						}
+				}
 
         /**
          * str: the base of the string
@@ -109,17 +106,23 @@ namespace rmmseg
          */
         Word *get(const char *str, int len)
         {
-            unsigned int h = hash(str, len) % n_bins;
-            Entry *entry = bins[h];
+            unsigned int h = hash(str, len) % n_offsets;//n_bins;
+            Entry *entry = NULL;//bins[h];
+						int offset = offsets[h];
+						printf("h: %d, offset: %d\n", h, offsets[h]);
+						if(offset > 0){
+							entry = (Entry*)(_shm_base + offset);
+						}
             if (!entry)
                 return NULL;
             do
             {
-                if (len == entry->word->nbytes &&
-                    strncmp(str, entry->word->text, len) == 0){
-                    return entry->word;
+								Word* word = entry_word(entry);
+                if (len == word->nbytes &&
+                    strncmp(str, word->text, len) == 0){
+                    return word;
 								}
-                entry = entry->next;
+                entry = next_entry(entry);
             }
             while (entry);
 
@@ -129,54 +132,53 @@ namespace rmmseg
         void add(Word *word)
         {
             unsigned int hash_val = hash(word->text, word->nbytes);
-            unsigned int h = hash_val % n_bins;
-            Entry *entry = bins[h];
+            unsigned int h = hash_val % n_offsets;//n_bins;
+            Entry *entry = NULL; //bins[h];
+						int offset = offsets[h];
+						if(offset > 0){
+							entry = (Entry*)(_shm_base + offset);
+						}
+
             if (!entry)
             {
-                if (n_entries/n_bins > max_density)
-                {
-                    rehash();
-                    h = hash_val % n_bins;
-                }
-            
-                entry = static_cast<Entry *>(pool_alloc(sizeof(Entry)));
-                entry->word = word;
-                entry->next = NULL;
-                bins[h] = entry;
+                entry = (Entry*)(shm_alloc(sizeof(Entry)));
+                entry->word_offset = (char*)word - _shm_base;
+                entry->next_offset = -1; //next = NULL;
+                offsets[h] = (char*)entry - _shm_base;
+						printf("h: %d, offset: %d\n", h, offsets[h]);
+								//bins[h] = entry;
                 n_entries++;
             }
 
             bool done = false;
             do
             {
-                if (word->nbytes == entry->word->nbytes &&
-                    strncmp(word->text, entry->word->text, word->nbytes) == 0)
+								Word* eword = entry_word(entry);
+                if (word->nbytes == eword->nbytes &&
+                    strncmp(word->text, eword->text, word->nbytes) == 0)
                 {
-                    /* Overwriting. WARNING: the original Word object is
-                     * permanently lost. This IS a memory leak, because
-                     * the memory is allocated by pool_alloc. Instead of
-                     * fixing this, tuning the dictionary file is a better
-                     * idea
-                     */
-                    entry->word = word;
+                    entry->word_offset = (char*)word - _shm_base;
                     done = true;
                     break;
                 }
-                entry = entry->next;
+                entry = next_entry(entry);//entry->next;
             }
             while (entry);
 
             if (!done)
             {
-                entry = static_cast<Entry *>(pool_alloc(sizeof(Entry)));
-                entry->word = word;
-                entry->next = bins[h];
-                bins[h] = entry;
+                entry = (Entry*)(shm_alloc(sizeof(Entry)));
+                entry->word_offset = (char*)word - _shm_base;
+                entry->next_offset = offsets[h];//bins[h];
+                offsets[h] = (char*)entry - _shm_base; //bins[h] = entry;
             }
         }
 
         bool load_chars(const char *filename)
         {
+						if(!first)
+							return false;
+
             FILE *fp = fopen(filename, "r");
             if (!fp)
             {
@@ -203,6 +205,9 @@ namespace rmmseg
 
         bool load_words(const char *filename)
         {
+						if(!first)
+							return false;
+
             FILE *fp = fopen(filename, "r");
             if (!fp)
             {

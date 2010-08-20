@@ -24,6 +24,7 @@ namespace rmmseg
 
     namespace dict
     {
+				void	init();
         void  add(Word *word);
         bool  load_chars(const char *filename);
         bool  load_words(const char *filename);
