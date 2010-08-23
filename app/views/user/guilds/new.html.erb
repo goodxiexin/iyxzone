@@ -12,7 +12,6 @@
       <%= render :partial => 'tab', :locals => {:user => current_user, :hover => 1} %>
       <div class="appcontent01">
         <h3>新建公会</h3>
-        <%= error_messages_for :guild, :header_message => '以下原因导致没法保存', :message => nil %>
         <div class="cons-form formcontent">
           <% rows_form_for @guild, :html => {:onsubmit => "Iyxzone.Guild.Builder.save(this, $('submit_btn')); return false;"} do |f| %>  
             <%= f.text_field :name, :label => '公会名字' %>

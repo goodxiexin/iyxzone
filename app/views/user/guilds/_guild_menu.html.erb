@@ -6,7 +6,7 @@
     <li><%= link_to '逛逛论坛', forum_url(guild.forum) %></li>
     <li><%= link_to '发信给会长', new_mail_url(:recipient_ids => [guild.president_id]) %></li>
   <% elsif role.is_president? %>
-    <li><%= facebox_confirm '放所有人鸽子', guild_url(guild), {:msg => '你确定要取消这次工会吗?', :method => :delete} %></li>
+    <li><%= link_to_function '放所有人鸽子', "Iyxzone.Guild.confirmDeletingGuild(#{guild.id}, #{current_user.id});" %></li>
     <li><%= link_to '邀请更多人', new_guild_invitation_url(guild) %></li>
     <li><%= link_to '创建活动', new_event_url(:guild_id => guild.id) %></li>
     <li><%= link_to '人事任命', guild_memberships_url(guild) %></li>

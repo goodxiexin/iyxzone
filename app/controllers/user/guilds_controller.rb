@@ -47,29 +47,25 @@ class User::GuildsController < UserBaseController
     @guild = current_user.guilds.build(params[:guild] || {})
     
     if @guild.save
-      redirect_to new_guild_invitation_url(@guild)
+      render :json => {:code => 1, :id => @guild.id}
     else
-      render :action => 'new'
+      render :json => {:code => 0}
     end
-  end
-
-  def edit_rules
-    render :action => 'edit_rules'
   end
 
   def update
     if @guild.update_attributes(params[:guild])
-      render :json => @guild
+      render :json => {:code => 1}
     else
-      render_js_error "输入太多了"
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @guild.destroy
-      redirect_js guilds_url(:uid => current_user.id)
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end 
   end
 

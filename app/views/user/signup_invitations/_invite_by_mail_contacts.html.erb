@@ -2,7 +2,7 @@
         <div class="invite-tip jl-cutline">导入邮箱联系人名单并邀请其加入，对方会直接加入你的好友。</div>
         <div class="invite-email jl-cutline" style="display:none">
           <div id='email_contacts'></div>
-          <% form_tag prepare_signup_invitations_url, {:onsubmit => "return Iyxzone.ContactsGrabber.checkEmailContactsInput(this);"} do %>
+          <% form_tag prepare_signup_invitations_url, :html => {:onsubmit => "Iyxzone.SignupInvitation.inviteByEmailContacts(this, $('other_mail_contact_grabber_btn'));return false;"} do %>
           <div class="s_clear space">
             <div class="fldid"><label>你的邮箱</label></div>
             <div class="fldvalue">

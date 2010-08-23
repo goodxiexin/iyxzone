@@ -2,20 +2,20 @@
   <% memberships.each do |membership| %>
 	<% user = membership.user %>
   <% character = membership.character %>
-  <li class='bg' id='<%= "guild_request_#{membership.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+  <li class='bg' id='<%= "gr_#{membership.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
     <div class='card'>
       <div class='img'>
         <div class='middle'><div class='middle-center'><div class='center'>
           <%= avatar user, :class => 'imgbox01' %>
         </div></div></div>
       </div>
-      <div class='info member s_clear'>
+      <div class='info member s_clear' id="gr_<%= membership.id %>_info">
         <h4><%= profile_link user, :class => 'blk' %></h4>
         <span class='red nowrap'><%= character.name %></span><br/>
         <% if guild.president == current_user %>
-        <span class="blk op" id='guild_request_option_<%= membership.id %>'>
-          <%= link_to_remote '接受', :url => accept_guild_request_url(guild, membership, :at => 'guild'), :method => 'put', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');setTimeout('new Effect.Fade(\"guild_request_#{membership.id}\")', 2000);" %> |
-          <%= link_to_remote '拒绝', :url => decline_guild_request_url(guild, membership, :at => 'guild'), :method => 'delete', :class => 'gray', :loading => "Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');setTimeout('new Effect.Fade(\"guild_request_#{membership.id}\")', 2000);" %>
+        <span class="blk op" id='gr_<%= membership.id %>'>
+          <%= link_to_function '接受', "Iyxzone.Guild.Request.accept(#{guild.id}, #{membership.id});", :id => "gr_btn1_#{membership.id}" %>
+          <%= link_to_function '拒绝', "Iyxzone.Guild.Request.decline(#{guild.id}, #{membership.id});", :id => "gr_btn2_#{membership.id}" %>
         </span> 
         <% end %>
       </div>

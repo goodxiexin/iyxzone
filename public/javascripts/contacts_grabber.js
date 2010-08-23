@@ -122,13 +122,13 @@ Object.extend(Iyxzone.ContactsGrabber, {
           }
         }else if(json.code == 2){
           error("不支持的邮件类型");
-          history.back();
+          setTimeout("window.location.href = Iyxzone.URL.listSignupInvitation();", 2000);
         }else if(json.code == 3){
           error("用户名密码错误");
-          history.back();
+          setTimeout("window.location.href = Iyxzone.URL.listSignupInvitation();", 2000);
         }else if(json.code == 4){
           error("无法连接服务器，请稍后再试");
-          history.back();
+          setTimeout("window.location.href = Iyxzone.URL.listSignupInvitation();", 2000);
         }
       }.bind(this)
     });
@@ -182,7 +182,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
       method: 'post',
       parameters: params + "&authenticity_token=" + encodeURIComponent(this.token),
       onLoading: function(){
-        $(btn).writeAttribute('onclick', '');
+        Iyxzone.disableButton($(btn), '发送..');
       },
       onComplete: function(){
       },
@@ -193,7 +193,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
           window.location.href = Iyxzone.URL.listSignupInvitation();
         }else if(json.code == 0){
           error("发生错误");
-          $(btn).writeAttribute('onclick', 'Iyxzone.ContactsGrabber.addContactsAsFriends(this);');
+          Iyxzone.enableButton($(btn), '发送邀请');
         }
       }.bind(this)
     });
@@ -231,17 +231,15 @@ Object.extend(Iyxzone.ContactsGrabber, {
         $(button).writeAttribute('onclick', '');
       },
       onComplete: function(){
-        Iyxzone.enableButton(button, '发送邀请');
       },
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
-          this.contacts = json.contacts;
           var contacts = this.getNotFriendContacts();
 
           if(contacts.length == 0){
-            notice("发送成功，页面将自动跳转");
-            window.location.href = Iyxzone.URL.listSignupInvitation();
+            notice("发送成功，页面将跳转到下一步");
+            window.location.href = Iyxzone.URL.listSignupInvitaiton();
           }else{
             this.showNotFriend();
           }
@@ -251,58 +249,6 @@ Object.extend(Iyxzone.ContactsGrabber, {
         }
       }.bind(this)
     });
-  },
-
-  checkMsnInput: function(form){
-    Iyxzone.disableButton($('msn_contact_grabber_btn'), '请等待..');
-    var id = form.getInputs('text')[0];
-    var pwd = form.getInputs('password')[0];
-    if(id.value == ''){
-      error('请输入msn用户名');
-      Iyxzone.enableButton($('msn_contact_grabber_btn'), '导入联系人');
-      return false;
-    }
-    if(pwd.value == ''){
-      error('请输入msn密码');
-      Iyxzone.enableButton($('msn_contact_grabber_btn'), '导入联系人');
-      return false;
-    }
-    return true;
-  },
-
-  checkEmailInvitation: function(form){
-    var value = form.getInputs('text')[0].value;
-    if(value == ''){
-      error('请输入邮箱');
-      return false;
-    }else if(!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.exec(value)){
-      error('非法的邮箱地址');
-      return false;
-    }
-    return true;
-  },
-
-  checkEmailContactsInput: function(form){
-    Iyxzone.disableButton($('other_mail_contact_grabber_btn'), '请等待..');
-    var id = form.getInputs('text')[0];
-    var pwd = form.getInputs('password')[0];
-    var type = $('email_selector').value;
-    if(type == ''){
-      error('请选择邮箱种类');
-      Iyxzone.enableButton($('other_mail_contact_grabber_btn'), '导入联系人');
-      return false;
-    }
-    if(id.value == ''){
-      error('请输入用户名');
-      Iyxzone.enableButton($('other_mail_contact_grabber_btn'), '导入联系人');
-      return false;
-    }
-    if(pwd.value == ''){
-      error('请输入密码');
-      Iyxzone.enableButton($('other_mail_contact_grabber_btn'), '导入联系人');
-      return false;
-    }
-    return true;
   }
 
 });

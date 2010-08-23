@@ -2,22 +2,22 @@
   <% memberships.each do |membership| %>
 	<% user = membership.user %>
   <% character = membership.character %>
-  <li class='bg' id='<%= "membership_#{membership.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
+  <li class='bg' id='<%= "m_#{membership.id}" %>' name='<%= character.name %>' pinyin='<%= character.pinyin %>'>
     <div class='card'>
 			<% if current_user == @guild.president %>
-      <%= facebox_confirm "", guild_membership_url(membership.guild, membership), {:msg => '你确定要让这个用户退出公会吗', :method => :delete}, :class=>"icon-active right" %>
+        <%= link_to_function "", "Iyxzone.Guild.MemberManager.confirmEvicting(#{membership.id}, #{membership.guild_id}, this);", :class =>"icon-active right" %>
 			<% end %>
       <div class='img'>
         <div class='middle'><div class='middle-center'><div class='center'>
           <%= avatar user, :class => 'imgbox01' %>
         </div></div></div>
       </div>
-      <div class='info member s_clear'>
+      <div class='info member s_clear' id='m_<%= membership.id %>_info'>
         <h4><%= profile_link user, :class => 'blk' %></h4>
         <span class='red nowrap'><%= character.name %></span><br/>
         <div class='selector01'>
           <% if guild.president == current_user %>
-          <span><%= link_to_function "#{membership.to_s}", "Iyxzone.Guild.MemberManager.toggleRoleList(#{membership.id}, #{membership.status}, event, $(this).up())", :id => "member_status_#{membership.id}", :class => 'green' %></span>
+          <span><%= link_to_function "#{membership.to_s}", "Iyxzone.Guild.MemberManager.toggleRoleList(#{membership.id}, #{membership.status}, event, $(this).up())", :id => "ms_#{membership.id}", :class => 'green' %></span>
           <% else %>
           <span><%= membership.to_s %></span>
           <% end %>

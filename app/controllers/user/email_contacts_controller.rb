@@ -22,7 +22,7 @@ class User::EmailContactsController < UserBaseController
         elsif current_user != user
           h[:is_friend] = false
           h[:avatar] = user.avatar.nil? ? "/images/default_#{user.gender}_cmedium.png" : user.avatar.public_filename(:cmedium)
-       end
+        end
       end
       h
     end

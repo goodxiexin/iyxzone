@@ -1,4 +1,5 @@
 Iyxzone.URL = {
+
   author: "高侠鸿",
 
   // params should be an non-empty hash
@@ -574,6 +575,67 @@ Object.extend(Iyxzone.URL, {
 
   createSignupInvitation: function(params){
     return this.build("/signup_invitations", params);
+  }
+
+});
+
+// guild
+Object.extend(Iyxzone.URL, {
+
+  createGuild: function(params){
+    return this.build("/guilds", params);
+  },
+
+  updateGuild: function(guildID, params){
+    return this.build("/guilds/" + guildID, params);
+  },
+
+  showGuild: function(guildID, params){
+    return this.build("/guilds/" + guildID, params);
+  },
+
+  deleteGuild: function(guildID, params){
+    return this.build("/guilds/" + guildID, params);
+  },
+
+  listGuild: function(userID, params){
+    return this.build("/guilds?uid=" + userID, params);
+  },
+
+  newGuildInvitation: function(guildID, params){
+    return this.build("/guilds/" + guildID + "/invitations/new", params);
+  },
+
+  createGuildInvitation: function(guildID, params){
+    return this.build("/guilds/" + guildID + "/invitations", params);
+  },
+
+  acceptGuildInvitation: function(guildID, invitationID, params){
+    return this.build("/guilds/" + guildID + "/invitations/" + invitationID + "/accept", params);
+  },
+
+  declineGuildInvitation: function(guildID, invitationID, params){
+    return this.build("/guilds/" + guildID + "/invitations/" + invitationID + "/decline", params);
+  },
+
+  createGuildRequest: function(guildID, requestID, params){
+    return this.build("/guilds/" + guildID + "/requests", params);
+  },
+
+  acceptGuildRequest: function(guildID, requestID, params){
+    return this.build("/guilds/" + guildID + "/requests/" + requestID + "/accept", params);
+  },
+
+  declineGuildRequest: function(guildID, requestID, params){
+    return this.build("/guilds/" + guildID + "/requests/" + requestID + "/decline", params);
+  },
+
+  updateMembership: function(guildID, membershipID, params){
+    return this.build("/guilds/" + guildID + "/memberships/" + membershipID, params);
+  },
+
+  deleteMembership: function(guildID, membershipID, params){
+    return this.build("/guilds/" + guildID + "/memberships/" + membershipID, params);
   }
 
 });

@@ -9,10 +9,10 @@ class User::Guilds::InvitationsController < UserBaseController
   def create
     @characters = GameCharacter.find params[:values]
 
-    if @guild.invite @characters #update_attributes(:invitees => params[:values])
-      redirect_to guild_url(@guild)
+    if @guild.invite @characters
+      render :json => {:code => 1}
     else
-      render :action => 'new'
+      render :json => {:code => 0}
     end
   end
 
@@ -21,14 +21,18 @@ class User::Guilds::InvitationsController < UserBaseController
   end
 
 	def accept
-		unless @invitation.accept_invitation
-      render_js_error
+		if @invitation.accept_invitation
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 
 	def decline
-    unless @invitation.decline_invitation
-      render_js_error
+    if @invitation.decline_invitation
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 

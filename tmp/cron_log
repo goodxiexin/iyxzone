@@ -1,3 +1,9 @@
 (in /home/gaoxh04/iyxzone)
 (in /home/gaoxh04/iyxzone)
+<<<<<<< HEAD:tmp/cron_log
 (in /home/gaoxh04/iyxzone)
+=======
+shared memory overflow: No such file or directory
+(in /home/gaoxh04/iyxzone)
+len: 1048588, size: 0
+>>>>>>> master:tmp/cron_log

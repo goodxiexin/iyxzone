@@ -1,14 +1,15 @@
 <% guild = guild_invitation.guild %>
 <% invitation = guild_invitation %>
+<% president = guild.president %>
 <div class="request-box" id='guild_invitation_<%= invitation.id %>'>
   <h4><span> <%= ftime invitation.created_at %> </span>公会</h4>
   <div class="request-list s_clear">
-    <div class="img"><%= avatar invitation.guild.president %> </div>
-    <div class="info">
-      <p> <%= profile_link invitation.guild.president %> 邀请你加入他的公会 <%= guild_link invitation.guild %>, 是否同意？</p>
-      <div class="buttons" id='guild_invitation_option_<%= invitation.id %>'>
-        <span class="button"><span><%= button_to_remote '接受', :url => accept_guild_invitation_url(invitation.guild, invitation, :at => 'invitations'), :method => :put, :loading => "Iyxzone.disableButton($('guild_invitation_#{invitation.id}').down('button',0),'请等待..'); Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default');"%></span></span>
-        <span class="button button-gray"><span><%= button_to_remote '拒绝', :url => decline_guild_invitation_url(invitation.guild, invitation, :at => 'invitations'), :method => :delete, :loading => "Iyxzone.disableButton($('guild_invitation_#{invitation.id}').down('button',1),'请等待..'); Iyxzone.changeCursor('wait');", :complete => "Iyxzone.changeCursor('default')" %></span></span>
+    <div class="img"><%= avatar president %> </div>
+    <div class="info" id='gi_<%= invitation.id %>'>
+      <p> <%= profile_link president %> 邀请你加入他的公会 <%= guild_link guild %>, 是否同意？</p>
+      <div class="buttons">
+        <span class="button"><span><%= button_to_function '接受', "Iyxzone.Guild.Invitation.accept1(#{invitation.id}, #{guild.id});", :id => "gi_btn1_#{invitation.id}" %></span></span>
+        <span class="button button-gray"><span><%= button_to_function '拒绝', "Iyxzone.Guild.Invitation.decline1(#{invitation.id}, #{guild.id});", :id => "gi_btn2_#{invitation.id}" %></span></span>
       </div>
     </div>
   </div>
