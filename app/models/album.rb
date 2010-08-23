@@ -18,9 +18,9 @@ class Album < ActiveRecord::Base
 
   attr_readonly :poster_id, :owner_id
 
-  validates_presence_of :owner_id, :message => "不能为空"
+  validates_presence_of :owner_id
 
-  validates_size_of :description, :maximum => 500, :too_long => "最长500字节", :allow_blank => true
+  validates_size_of :description, :maximum => 500, :allow_blank => true
 
   def set_cover photo
     photo_id = photo.nil? ? nil : photo.id

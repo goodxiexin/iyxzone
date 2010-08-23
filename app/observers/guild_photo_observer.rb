@@ -34,13 +34,21 @@ class GuildPhotoObserver < ActiveRecord::Observer
   def after_update photo
     return unless photo.thumbnail.blank?
 
+    album = photo.album
+
     # verify
     if photo.recently_recovered?
-      photo.album.raw_increment :photos_count
+      album.raw_increment :photos_count
     elsif photo.recently_rejected?
-      photo.album.raw_decrement :photos_count
+      album.raw_decrement :photos_count
     end
 
+    # change cover if necessary
+    if photo.recently_set_cover?
+      album.set_cover photo
+    elsif photo.recently_unset_cover?
+      album.set_cover nil if album.cover_id == photo.id
+    end
   end
   
   def after_destroy photo

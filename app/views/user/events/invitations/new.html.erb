@@ -3,7 +3,7 @@
 <% content_for :html_keywords, "#{@event.title}, 游戏活动, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% content_for :javascript_include do %>
-  <%= javascript_include_tag 'invitation' %>
+  <%= javascript_include_merged :event %>
 <% end %>
 
 <% canvas_tag do %>
@@ -19,7 +19,7 @@
           <div class="friend-invite-head">
           <% unless @characters.blank? %>
             <strong class="green"><% if @guild %>搜索公会战友的游戏角色：<% else %>搜索好友的游戏角色：<% end %></strong> 
-            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "$(this).clear()", :onfocus => "Iyxzone.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Invitation.Builder.stopObserving();"%>
+            <%= text_field_tag 'search', '输入游戏角色的名字', :class => 'ipt', :onclick => "$(this).clear()", :onfocus => "Iyxzone.Event.Invitation.Builder.startObserving($('search'));", :onblur => "Iyxzone.Event.Invitation.Builder.stopObserving();"%>
           <% end %>  
           </div>
           <div class="friend-invite-list">
@@ -28,14 +28,11 @@
           <% else %>
             <div id='invitations'><%= render :partial => 'characters', :object => @characters %></div>
             <div class="rows s_clear">
-              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Invitation.Builder.submit(this, $('invitation_form'))" %></span></span>
+              <span class="button"><span><%= button_to_function '确定', "Iyxzone.Event.Invitation.Builder.submit(this, #{@event.id})" %></span></span>
             </div>
           <% end %>  
           </div>
         </div>
       </div>
     </div>
-<% end %>
-
-<% form_tag event_invitations_url(@event), :id => 'invitation_form' do %>
 <% end %>

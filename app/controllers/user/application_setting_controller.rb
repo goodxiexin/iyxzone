@@ -18,9 +18,9 @@ class User::ApplicationSettingController < UserBaseController
 
 	def update
 		if @setting.update_attributes(params[:setting])
-			render_js_code "Iyxzone.Facebox.close();"
+			render :json => {:code => 1}
 		else
-      render_js_error
+      render :json => {:code => 0}
     end	
 	end
 

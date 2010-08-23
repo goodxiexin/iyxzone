@@ -10,10 +10,9 @@ class User::Events::InvitationsController < UserBaseController
     @characters = GameCharacter.find(params[:values])
 
     if @event.invite @characters
-      redirect_to event_url(@event)
+      render :json => {:code => 1}
     else
-			flash[:error] = '邀请出错'
-      redirect_to event_url(@event)
+      render :json => {:code => 0}
     end
   end
 
@@ -22,14 +21,18 @@ class User::Events::InvitationsController < UserBaseController
   end
 
   def accept
-    unless @invitation.accept_invitation params[:status]
-      render_js_error
+    if @invitation.accept_invitation params[:status]
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 
   def decline
-    unless @invitation.decline_invitation
-      render_js_error
+    if @invitation.decline_invitation
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end  
   end
 

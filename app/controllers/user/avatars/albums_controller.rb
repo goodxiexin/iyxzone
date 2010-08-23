@@ -18,11 +18,9 @@ class User::Avatars::AlbumsController < UserBaseController
 
   def update
     if @album.update_attributes(params[:album])
-      respond_to do |format|
-        format.json { render :json => @album }
-      end  
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

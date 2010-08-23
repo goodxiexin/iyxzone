@@ -45,38 +45,17 @@ class User::Avatars::PhotosController < UserBaseController
 
   def update
     if @photo.update_attributes(params[:photo])
-			respond_to do |format|
-				format.html {
-          render :update do |page|
-					  page << "Iyxzone.Facebox.close();"
-            if params[:at] == 'album'
-              page.redirect_to avatar_album_url(@album)
-            elsif params[:at] == 'photo'
-              page.redirect_to avatar_url(@photo)
-            end
-				  end 
-        }
-				format.json { 
-          render :json => @photo 
-        }
-			end
+      render :json => {:code => 1}
     else
-      respond_to do |format|
-        format.html { 
-          render :update do |page|
-            page << "Iyxzone.enableButton($('edit_photo_submit'), '完成');"
-            page.replace_html 'errors', :inline => "<%= error_messages_for :photo, :header_message => '遇到以下问题没法保存', :message => nil %>"
-          end 
-        }
-      end
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @photo.destroy
-      redirect_js avatar_album_url(@album)
+      render :json => {:code => 1}
     else
-      render_js_error '发生错误'
+      render :json => {:code => 0}
     end
   end
 

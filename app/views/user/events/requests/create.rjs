@@ -1,4 +1,0 @@
-if params[:at] == 'event'
-  flash[:notice] = '成功提交'
-  page.redirect_to event_url(@event)
-end

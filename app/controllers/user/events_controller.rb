@@ -52,9 +52,11 @@ class User::EventsController < UserBaseController
     @event = current_user.events.build(params[:event] || {})
 
     if @event.save
-      redirect_to new_event_invitation_url(@event)
+      render :json => {:code => 1, :id => @event.id}
+      #redirect_to new_event_invitation_url(@event)
     else
-      render :action => 'new', :guild_id => @event.guild_id
+      render :json => {:code => 0, :errors => @event.errors}
+      #render :action => 'new', :guild_id => @event.guild_id
     end
   end
 
@@ -64,23 +66,30 @@ class User::EventsController < UserBaseController
 
   def update
     if @event.update_attributes(params[:event] || {})
+      render :json => {:code => 1}
+=begin
       respond_to do |format|
         format.json { render :json => @event } 
         format.html { redirect_to event_url(@event) }
       end
+=end
     else
+      render :json => {:code => 0}
+=begin
       respond_to do |format|
         format.json { render :json => @event } 
         format.html { render :action => 'edit' }
       end
+=end
     end
   end
 
   def destroy
     if @event.destroy
-      redirect_js events_url(:uid => current_user.id)
+      render :json => {:code => 1} #redirect_js events_url(:uid => current_user.id)
     else
-      render_js_error
+      render :json => {:code => 0}
+      #render_js_error
     end
   end  
 

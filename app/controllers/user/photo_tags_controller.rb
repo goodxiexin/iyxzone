@@ -1,27 +1,29 @@
 class User::PhotoTagsController < UserBaseController
 
   def create
-    @tag = PhotoTag.new((params[:tag] || {}).merge({:poster_id => current_user.id}))
+    @tag = @photo.tags.build((params[:tag] || {}).merge({:poster_id => current_user.id}))
     
     if @tag.save
-			render :text => (@tag.to_json :only => [:id, :width, :height, :x, :y, :content], :include => {:poster => {:only => [:login, :id]}, :tagged_user => {:only => [:login, :id]}})
+      render :json => {:code => 1, :tag => {:id => @tag.id, :x => @tag.x, :y => @tag.y, :width => @tag.width, :height => @tag.height, :content => @tag.content, :tagged_user => {:id => @tag.tagged_user_id, :login => @tag.tagged_user.login}, :poster => {:id => @tag.poster_id, :login => @tag.poster.login}}}
 		else
-      render_js_error @tag.errors.on(:photo_id)
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @tag.destroy
-      render_js_code "Iyxzone.Facebox.close();"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 
 protected
 
   def setup
-    if ["destroy"].include? params[:action]
+    if ["create"].include? params[:action]
+      @photo = params[:photo_type].camelize.constantize.find(params[:photo_id])
+    elsif ["destroy"].include? params[:action]
       @tag = PhotoTag.find(params[:id])
       require_verified @tag.photo
       require_delete_privilege @tag

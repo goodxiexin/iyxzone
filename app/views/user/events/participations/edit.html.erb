@@ -1,5 +1,5 @@
 <% facebox_tag '更新状态' do %>
-  <% rows_form_remote_for :participation, :url => event_participation_url(@event, @participation, :at => 'event'), :html => {:method => :put, :onsubmit => "Iyxzone.disableButton($(edit_participation_btn),'请等待..');"} do |f| %>
+  <% rows_form_for :participation, :html => {:onsubmit => "Iyxzone.Event.Participation.update(#{@participation.id}, #{@participation.event_id}, this, $(edit_participation_btn));return false;"} do |f| %>
     <div class='formcontent'>
       <% f.rows do %>
         <%= radio_button_tag 'status', 3 %><%= label_tag '', '肯定去' %><br/>

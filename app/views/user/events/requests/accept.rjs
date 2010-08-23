@@ -1,7 +1,0 @@
-if params[:at] == 'event'
-  page << "$('event_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>添加参与者成功！</strong>';"
-  page << "setTimeout(new Effect.Fade('event_request_#{@request.id}'), 2000);"
-elsif params[:at] == 'requests'
-  page << "$('event_request_option_#{@request.id}').innerHTML = '<strong class=\"nowrap\"><span class=\"icon-success\"></span>添加参与者成功！</strong>';"
-  page << "setTimeout(new Effect.Fade('event_request_#{@request.id}'), 2000);"
-end

@@ -1,5 +1,5 @@
 <% facebox_tag '邀请别人' do %>
-  <% rows_form_remote_for :request, :url => event_requests_url(@event, :at => 'event'), :html => {:method => :post, :onsubmit=> "Iyxzone.disableButton($(new_event_request_btn),'请等待..');"} do |f| %>
+  <% rows_form_for :request, :html => {:onsubmit => "Iyxzone.Event.Request.send(#{@event.id}, this, $('new_event_request_btn'));return false;"} do |f| %>
     <div class='formcontent'>
       <div class="rows s_clear">
         <% if @characters.blank? %>

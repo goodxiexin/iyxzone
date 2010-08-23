@@ -15,18 +15,17 @@ class User::NotificationsController < UserBaseController
 
   def destroy
     if @notification.destroy
-      render_js_code "$('notification_#{@notification.id}').remove();"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 
   def destroy_all
-    Notification.delete_all(:user_id => current_user.id)
-    current_user.update_attributes(:notifications_count => 0, :unread_notifications_count => 0)
-    flash[:notice] = '删除成功'
-    render :update do |page|
-      page.redirect_to notifications_url
+    if Notification.delete_all(:user_id => current_user.id) && current_user.update_attributes(:notifications_count => 0, :unread_notifications_count => 0)
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 

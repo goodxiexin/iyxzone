@@ -1,7 +1,7 @@
             <ul id='invitee_list'>
               <% characters.each do |character| %>
               <li pinyin='<%= character.pinyin %>' name='<%= character.name %>'>
-                <a onclick="Iyxzone.Invitation.Builder.onClick(this, <%= character.id %>);">
+                <a onclick="Iyxzone.Event.Invitation.Builder.onClick(this, <%= character.id %>);">
                   <%= avatar_image character.user, :class => 'imgbox01' %>
                   <strong><%= character.user.login %><span class='red'><%= character.name %></span></strong>
                 </a>

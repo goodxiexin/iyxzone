@@ -1,6 +1,0 @@
-if params[:at] == 'select'
-	page << "$('album_id').update( $('album_id').innerHTML + '<option value=#{@album.id}>#{@album.title}</option>');"
-  page << "$('album_id').value = #{@album.id};"
-else
-  page.redirect_to personal_albums_url(:uid => current_user.id)
-end

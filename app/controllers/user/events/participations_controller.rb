@@ -15,16 +15,18 @@ class User::Events::ParticipationsController < UserBaseController
   end
 
   def update
-    unless @participation.change_status params[:status]
-      render_js_error
+    if @participation.change_status params[:status]
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @participation.evict
-      render_js_code "$('participation_#{@participation.id}').remove();"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end 
   end
 

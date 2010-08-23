@@ -14,6 +14,13 @@ class User::Friends::RequestsController < UserBaseController
     end  
   end
 
+  def create_multiple
+    params[:ids].each do |id|
+      Friendship.create :status => Friendship::Request, :user_id => current_user.id, :friend_id => id
+    end
+    render :json => {:code => 1}
+  end
+
 	def accept
 		if @request.accept
       render :json => {:code => 1}

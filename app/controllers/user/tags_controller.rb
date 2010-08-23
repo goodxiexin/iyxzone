@@ -1,8 +1,17 @@
 class User::TagsController < UserBaseController
 
+  def index
+    respond_to do |format|
+      format.html { render :partial => 'tag_cloud', :locals => {:taggable => @taggable, :deleteable => @taggable.is_tag_deleteable_by?(current_user)}}
+      format.json { render :json => @taggable.tags.map{|t| {:id => t.id, :name => t.name}} }
+    end
+  end
+
 	def create
-    unless @taggable.add_tag current_user, params[:tag_name]
-      render_js_error "发生错误，内容太长拉！"
+    if @taggable.add_tag current_user, params[:tag_name]
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
 	end
 
@@ -10,9 +19,9 @@ class User::TagsController < UserBaseController
     @tag = Tag.find(params[:id])
 		
     if @taggable.destroy_tag @tag.name 
-			render_js_code "$('tag_#{@tag.id}').remove();"
+			render :json => {:code => 1}
 		else
-      render_js_error
+      render :json => {:code => 0}
     end
 	end
 
@@ -24,11 +33,12 @@ class User::TagsController < UserBaseController
 protected
 
 	def setup
-    if ["create"].include? params[:action]
-      @taggable = get_taggable
-      require_create_privilege @taggable
+    if ["index", "create"].include? params[:action]
+      @taggable = params[:taggable_type].camelize.constantize.find(params[:taggable_id])
+      require_create_privilege @taggable if params[:action] == 'create'
 		elsif ["destroy"].include? params[:action]
-      @taggable = get_taggable
+      # 不是真的删除tag，只是删除taggable关于这个tag的所有taggings
+      @taggable = params[:taggable_type].camelize.constantize.find(params[:taggable_id])
       require_delete_privilege @taggable
 		end
 	end

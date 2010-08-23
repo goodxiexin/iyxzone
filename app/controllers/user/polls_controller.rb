@@ -44,9 +44,9 @@ class User::PollsController < UserBaseController
     @poll = current_user.polls.build(params[:poll] || {})
 
     if @poll.save
-      redirect_to poll_url(@poll)
+      render :json => {:code => 1, :id => @poll.id}
     else
-      render :action => 'new'
+      render :json => {:code => 0}
     end
   end
 
@@ -60,24 +60,17 @@ class User::PollsController < UserBaseController
 
   def update
     if @poll.update_attributes(params[:poll] || {})
-      render :update do |page|
-        page << "Iyxzone.Facebox.close();"
-      end
+      render :json => {:code => 1}
     else
-      render :update do |page|
-        page.replace_html 'errors', :inline => "<%= error_messages_for :poll, :header_message => '遇到以下问题没法保存', :message => nil %>"
-      end
+      render :json => {:code => 0}
     end 
   end
 
   def destroy
     if @poll.destroy
-      render :update do |page|
-        page << "Iyxzone.Facebox.close();"
-        page.redirect_to polls_url(:uid => current_user.id)
-      end
+      render :json => {:code => 1}
     else
-      render_js_error '发生错误'
+      render :json => {:code => 0}
     end
   end
 

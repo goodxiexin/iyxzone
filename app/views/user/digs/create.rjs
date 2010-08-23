@@ -1,9 +1,0 @@
-        if params[:at] == 'show'
-          page << "notice('成功');"
-          page << "Element.replace($('digging_#{@diggable.class.name.underscore}_#{@diggable.id}'), '<a href=\"javascript:void(0)\">赞</a>')" 
-        else
-          page << "$('dig_#{@diggable.class.name.underscore}_#{@diggable.id}').addClassName('dug');"
-          page << "$('dig_#{@diggable.class.name.underscore}_#{@diggable.id}').update(#{@diggable.digs_count})"
-          page << "Element.replace($('digging_#{@diggable.class.name.underscore}_#{@diggable.id}'), '<a href=\"javascript:void(0)\">赞</a>')"
-        end 
-

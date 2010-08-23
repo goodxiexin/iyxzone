@@ -26,14 +26,16 @@ var settings = {
 		cancelButtonId : "btnCancel",
 		uploadedPhotoIds : [],
 		authenticityToken : "<%= form_authenticity_token %>",
-		recordUploadURL : "<%= url_for(:controller => photo_controller, :action => 'record_upload', :album_id => @album.id) -%>",
+		recordUploadURL : "<%= url_for(:controller => photo_controller, :action => 'record_upload') -%>",
+    albumID: <%= @album.id %>,
+    albumType: "<%= @album.class.name %>",
     totalSize: 0,
     photosCount: 0
 	},
 	debug: false,
 
 	// Button settings
-	button_image_url: "/images/skin/upload-img.png",
+	button_text: "点击选择图片", 
 	button_width: "120",
 	button_height: "40",
 	button_placeholder_id: "spanButtonPlaceHolder",

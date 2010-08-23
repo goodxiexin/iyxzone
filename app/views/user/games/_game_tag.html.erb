@@ -8,15 +8,18 @@
   <div class="s2m2bd fix" id='tag_cloud'>
     <% if game.is_taggable_by? current_user %>
       <div class="impress-add s_clear space">
-      <%= render :partial => 'user/games/tags/game_tag', :locals => {:game => game} %>
-      <% form_remote_for :tag, :url => game_tags_url(game), :html => {:onsubmit=> "Iyxzone.disableButton($(tag_submit),'请等待..');"} do |f| %>
+      <%= render :partial => 'user/games/tag_candidates', :locals => {:game => game} %>
+      <% form_for :tag, :html => {:onsubmit => "Iyxzone.Tag.submitForm('game', #{game.id}, $('tag_name')); return false"} do |f| %>
         <p class='space'>都不贴切？自己想个</p>
         <div class='textfield04 left space'><%= text_field_tag 'tag_name', '' %></div>
         <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
       <% end %>
       </div>
     <% else %>
-      <%= render :partial => 'user/games/tags/tag_cloud', :locals => {:game => game} %>
+      <%= render :partial => 'user/tags/tag_cloud', :locals => {:taggable => game, :deleteable => game.is_tag_deleteable_by?(current_user)} %>
+    <% end %>
+    <% javascript_include_tag do %>
+      Iyxzone.Game.Tag.init('<%= form_authenticity_token %>');
     <% end %>
   </div>
 </div>
