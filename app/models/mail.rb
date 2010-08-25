@@ -10,23 +10,21 @@ class Mail < ActiveRecord::Base
  
   has_many :children, :class_name => 'Mail', :foreign_key => 'parent_id', :order => 'created_at ASC'
 
-	acts_as_emotion_text :columns => [:content]
-
   named_scope :unread, :conditions => {:read_by_recipient => 0}
 
-  #attr_readonly :sender_id, :recipient_id, :content
+  attr_readonly :sender_id, :recipient_id
 
   attr_protected :parent_id
 
-  validates_presence_of :sender_id, :message => "不能为空"
+  validates_presence_of :sender_id
 
-  validates_presence_of :recipient_id, :message => "不能为空"
+  validates_presence_of :recipient_id
 
-  validates_presence_of :parent_id, :message => "不能为空"
+  validates_presence_of :parent_id
 
-  validates_presence_of :content, :message => "不能为空"
+  validates_presence_of :content
 
-  validates_size_of :content, :within => 1..1000, :too_long => "最多1000个字节", :too_short => "最少1000个字节"
+  validates_size_of :content, :within => 1..1000
 
   def mark_as_deleted(user_id)
     if recipient?(user_id)

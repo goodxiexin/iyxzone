@@ -1,5 +1,6 @@
 Iyxzone.MiniBlog = {
-  version: '1.0',
+  
+  version: '1.8',
   
   author: ['高侠鸿'],
   
@@ -20,6 +21,38 @@ Iyxzone.MiniBlog = {
   Category: {}
 
 };
+
+// delete mini blog
+Object.extend(Iyxzone.MiniBlog, {
+
+  destroy: function(id, link){
+    new Ajax.Request(Iyxzone.URL.deleteMiniBlog(id), {
+      method: 'delete',
+      onLoading: function(){
+        $(link).writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          Iyxzone.Facebox.close();
+          $('mb_' + id).remove();
+        }else{
+          error("发生错误");
+          $(link).writeAttribute('onclick', "Iyxzone.MiniBlog.confirmDeleting(" + id + ", this);");
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmDeleting: function(id, link){
+    Iyxzone.Facebox.confirmWithCallback("你确定要删除这条微博吗?", null, null, function(){
+      this.destroy(id, link);
+    }.bind(this));
+  }
+
+});
 
 // follow idol in mini blog page
 Object.extend(Iyxzone.MiniBlog, {
@@ -60,14 +93,19 @@ Object.extend(Iyxzone.MiniBlog.Category, {
 
   cache: new Hash(),
 
-  init: function(type, url){
+  init: function(type, url, at){
     this.cache.set(type, $('mini_blogs_list').innerHTML);
     this.setTab(type);
     this.setUrl(url);
+    this.setAt(at);
   },
 
   setUrl: function(url){
     this.url = url;
+  },
+
+  setAt: function(at){
+    this.at = at;
   },
 
   setTab: function(type){
@@ -99,7 +137,7 @@ Object.extend(Iyxzone.MiniBlog.Category, {
 
     new Ajax.Request(this.url, {
       method: 'get',
-      parameters: {type: type},
+      parameters: {'type': type, 'at': this.at},
       onLoading: function(transport){
         this.loading();
       }.bind(this),
@@ -120,24 +158,22 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
   cancel: function(){
     if(this.form){
       this.form.remove();
+      this.form = null;
     }
   },
 
   newTopic: function(link){
-    $('topic_list_panel').insert({bottom: '<div class="topicAddIpt"><div class="fix"><a href="#" onclick="Iyxzone.MiniBlog.Topic.cancel();" class="icon-active right"></a></div><div class="con fix"><input type="text" id="new_topic_name" value="请添加关注的话题" class="textfield"/><span class="button03"><span><button onclick="Iyxzone.MiniBlog.Topic.create($(this));">发布</button></span></span></div></div>'});
-    var children = $('topic_list_panel').childElements();
-    this.form = children[children.length - 1];
-    this.form.setStyle({
-      'position': 'absolute',
-      'left': (link.cumulativeOffset().left - 180) + 'px',
-      'top': (link.cumulativeOffset().top) + 'px'
-    });
+    if(this.form == null){
+      $('topic_list_panel').insert({bottom: '<div class="topicAddIpt"><div class="fix"><a href="#" onclick="Iyxzone.MiniBlog.Topic.cancel();" class="icon-active right"></a></div><div class="con fix"><input type="text" id="new_topic_name" value="请添加关注的话题" class="textfield"/><span class="button03"><span><button onclick="Iyxzone.MiniBlog.Topic.create($(this));">发布</button></span></span></div></div>'});
+      var children = $('topic_list_panel').childElements();
+      this.form = children[children.length - 1];
+    }
     this.form.show();
   },
 
   create: function(btn){
     var name = $('new_topic_name').value;
-    new Ajax.Request('/mini_topic_attentions', {
+    new Ajax.Request(Iyxzone.URL.createMiniTopicAttention(), {
       method: 'post',
       parameters: {'name': name},
       onLoading: function(){
@@ -158,7 +194,7 @@ Object.extend(Iyxzone.MiniBlog.Topic, {
   },
 
   destroy: function(id){
-    new Ajax.Request('/mini_topic_attentions/' + id, {
+    new Ajax.Request(Iyxzone.URL.deleteMiniTopicAttention(id), {
       method: 'delete',
       onLoading: function(){
         Iyxzone.changeCursor('wait');
@@ -248,12 +284,34 @@ Object.extend(Iyxzone.MiniBlog.Forwarder, {
   },
 
   forward: function(id, button, at){
-    new Ajax.Request('/mini_blogs/' + id + '/forward', {
+    new Ajax.Request(Iyxzone.URL.forwardMiniBlog(id), {
       method: 'post',
+      parameters: {'content': $('forward_content').value, 'at': at},
       onLoading: function(transport){
         Iyxzone.disableButton(button, '发送..');
       },
-      parameters: {at: at, content: $('forward_content').value}
+      onComplete: function(transport){
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          Iyxzone.Facebox.close();
+          if(at == 'mini_blog_home'){
+            $('mini_blogs_list').insert({'top': json.html});
+          }else if(at == 'mini_blog_index'){
+            $('mini_blogs_list').insert({'top': json.html});
+          }else if(at == 'talking'){
+            $('mini_blogs_list').insert({'top': json.html});
+          }else if(at == 'home'){
+            $('mini_blogs_list').insert({'top': json.html});
+          }else{        
+            notice("成功");
+          }
+        }else if(json.code == 0){
+          error("发生错误");
+          Iyxzone.enableBUtton(button, '立即转发');
+        }
+      }.bind(this)
     });
   }
 
@@ -297,8 +355,9 @@ Object.extend(Iyxzone.MiniBlog.Pub, {
       return;
     }
 
-    new Ajax.Request('/mini_blogs/' + type, {
+    new Ajax.Request(Iyxzone.URL.listMiniBlog(type), {
       method: 'get',
+      parameters: {'at': 'mini_blog_public'},
       onLoading: function(transport){
         this.loading();
       }.bind(this),
@@ -547,7 +606,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
   },
 
   delImage: function(id){
-    new Ajax.Request('/mini_images/' + id, {
+    new Ajax.Request(Iyxzone.URL.deleteMiniImage(id), {
       method: 'delete',
       onLoading: function(transport){
         Iyxzone.changeCursor('wait');
@@ -581,13 +640,12 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
   },
 
   createVideo: function(){
-    new Ajax.Request('/mini_links', {
+    new Ajax.Request(Iyxzone.URL.createMiniLink(), {
       parameters: {url: $('publisher_video_url').value},
       onLoading: function(transport){
         Iyxzone.disableButton($('publisher_video_url_btn'), '确定');
       },
       onComplete: function(transport){
-        Iyxzone.enableButton($('publisher_video_url_btn'), '确定');
       },
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
@@ -598,6 +656,7 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
           var div = new Element('div');
           div.update('<div class="space red">无法识别的视频url</div><div class="space"><a href="javascript:void(0)" onclick="Iyxzone.MiniBloger.Builder.cancelVideo();" class="red">取消操作</a> 或者 <a href="javascript:void(0)" onclick="Iyxzone.insertAtCursor($(\'mini_blog_text_area\'), \'' + json.url + ' \');Iyxzone.MiniBlog.Builder.cancelVideo();">作为普通连接发布</a></div>');
           $('publisher_video_url').up().up().up().appendChild(div);
+          Iyxzone.enableButton($('publisher_video_url_btn'), '确定');
         }
       }.bind(this)
     });
@@ -618,13 +677,13 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
 
   publish: function(at){
     if($('mini_blog_text_area').value.gsub(/[ |\r|\n|\t]+/, '').length == 0){
-      notice('写点什么吧，求你了～～');
+      alert('写点什么吧，求你了～～');
       return;
     } 
     
-    new Ajax.Request('/mini_blogs', {
+    new Ajax.Request(Iyxzone.URL.createMiniBlog(), {
       method: 'post',
-      parameters: {'mini_blog[content]': $('mini_blog_text_area').value, 'mini_image_id': this.imageID, 'at': at},
+      parameters: {'at': at, 'mini_blog[content]': $('mini_blog_text_area').value, 'mini_image_id': this.imageID},
       onLoading: function(transport){
         Iyxzone.disableButtonThree($('publish_btn'), '发送..');
       },
@@ -632,12 +691,26 @@ Object.extend(Iyxzone.MiniBlog.Builder, {
         Iyxzone.enableButtonThree($('publish_btn'), '发布');
       },
       onSuccess: function(transport){
-        if(this.imageID){
+        var json = transport.responseText.evalJSON();
+        if(this.imageID)
           this.cancelImage();
-        }
         $('mini_image_uploaded_data').clear();
         $('mini_blog_text_area').clear();
         $('mini_blog_text_area').focus();
+        if(json.code == 1){
+          if(at == 'mini_blog_home'){
+            $('mini_blogs_list').insert({'top': json.html});
+          }else if(at == 'home'){
+            $('mini_blogs_list').insert({'top': json.html});            
+          }else if(at == 'outside'){
+            window.close();
+            alert("发布成功");
+          }else{
+            notice("发布成功");
+          }
+        }else if(json.code == 0){
+          error("发生错误");
+        }
       }.bind(this)
     });
   },

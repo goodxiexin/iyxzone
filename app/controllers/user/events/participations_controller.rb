@@ -52,7 +52,7 @@ protected
 
   def require_not_event_poster participation
     if participation.participant == participation.event.poster
-      render_js_error "error('不能删除自己');"
+      render :json => {:code => 3}
     end
   end
 

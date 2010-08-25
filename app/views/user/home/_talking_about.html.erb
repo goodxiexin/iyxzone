@@ -9,6 +9,6 @@
     </div>
   </div>
   <div class="mBlogPostList space" id='mini_blogs_list'>
-    <%= render :partial => 'user/mini_blogs/interested_mini_blog', :collection => mini_blogs %>
+    <%= render :partial => 'user/mini_blogs/interested_mini_blog', :collection => mini_blogs, :locals => {:at => 'talking'} %>
   </div>
 </div>

@@ -1,4 +1,4 @@
-<%= render :partial => 'user/mini_blogs/interested_mini_blog', :collection => mini_blogs %>
+<%= render :partial => 'user/mini_blogs/interested_mini_blog', :collection => mini_blogs, :locals => {:at => at} %>
 
 <% if @remote.nil? %>
   <%= will_paginate mini_blogs %>

@@ -639,3 +639,96 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// report
+Object.extend(Iyxzone.URL, {
+
+  createReport: function(params){
+    return this.build("/reports", params);
+  }
+
+});
+
+// feed delivery
+Object.extend(Iyxzone.URL, {
+
+  showFeedDelivery: function(deliveryID, params){
+    return this.build("/feed_deliveries/" + deliveryID, params);
+  },
+
+  deleteFeedDelivery: function(deliveryID, params){
+    return this.build("/feed_deliveries/" + deliveryID, params);
+  }
+
+});
+
+// mini blog
+Object.extend(Iyxzone.URL, {
+
+  deleteMiniImage: function(imageID, params){
+    return this.build("/mini_images/" + imageID, params);
+  },
+
+  createMiniLinks: function(params){
+    return this.build("/mini_links", params);
+  },
+
+  listMiniBlog: function(type, params){
+    return this.build("/mini_blogs/" + type, params);
+  },
+
+  deleteMiniBlog: function(blogID, params){
+    return this.build("/mini_blogs/" + blogID, params);
+  },
+
+  forwardMiniBlog: function(blogID, params){
+    return this.build("/mini_blogs/" + blogID + "/forward", params);
+  },
+
+  createMiniBlog: function(params){
+    return this.build("/mini_blogs", params);
+  },
+
+  createMiniTopicAttention: function(params){
+    return this.build("/mini_topic_attentions", params);
+  },
+
+  deleteMiniTopicAttention: function(id, params){
+    return this.build("/mini_topic_attentions/" + id, params);
+  }
+
+});
+
+// comment
+Object.extend(Iyxzone.URL, {
+
+  createComment: function(params){
+    return this.build("/comments", params);
+  },
+
+  deleteComment: function(id, params){
+    return this.build("/comments/" + id, params);
+  },
+
+  createWallMessage: function(params){
+    return this.build("/wall_messages", params);
+  },
+
+  deleteWallMessage: function(messageID, params){
+    return this.build("/wall_messages/" + messageID, params);
+  }
+
+});
+
+// profile
+Object.extend(Iyxzone.URL, {
+
+  editProfile: function(profileID, params){
+    return this.build("/profiles/" + profileID + "/edit", params);
+  },
+
+  updateProfile: function(profileID, params){
+    return this.build("/profiles/" + profileID, params);
+  }
+
+});

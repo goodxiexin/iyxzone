@@ -1,19 +1,21 @@
 <% wall = wall_message.commentable %>
 <% type = wall.class.to_s.underscore %>
+<% poster = wall_message.poster %>
+
 <div class="feed-img-list" id='comment_<%= wall_message.id %>'>
   <div class="feed-list">
-  <div class="feed-img"><%= avatar wall_message.poster, :class => 'imgbox01' %></div>
+  <div class="feed-img"><%= avatar poster, :class => 'imgbox01' %></div>
     <p>
       <% if wall_message.is_deleteable_by? current_user %>
-        <%= link_to_remote '', :url => wall_message_url(wall_message), :method => :delete, :html => {:class => 'right icon-active'} %>
+        <%= link_to_function '', "Iyxzone.WallMessage.destroy(#{wall_message.id}, this);", :class => 'right icon-active' %>
       <% end %>
-      <%= profile_link wall_message.poster %> 
+      <%= profile_link poster %> 
       <%= ftime wall_message.created_at %>
       <% if wall.is_commentable_by? current_user %>
-        <%= link_to_function '回复', "Iyxzone.WallMessage.set('#{type}', #{wall.id}, '#{wall_message.poster.login}', #{wall_message.poster_id});" %>
+        <%= link_to_function '回复', "Iyxzone.WallMessage.set('#{type}', #{wall.id}, '#{poster.login}', #{poster.id});" %>
       <% end %>
     </p>
-    <p><%= wall_message.content  %></p>
+    <p><%= emotion_text wall_message.content  %></p>
   </div>
 </div>
 

@@ -4,9 +4,11 @@
  */
 
 Iyxzone.Comment = {
-  version: '1.1',
+
+  version: '1.6',
+
   author: ['高侠鸿'],
-  changeLog: '修正了wall message的一个bug',
+
   checkLength: function(field, max){
     var fieldID = field.id;
     var count = field.value.length;
@@ -17,6 +19,7 @@ Iyxzone.Comment = {
       $(wordsCountID).innerHTML = count + '/' + max;
     }
   }
+
 };
 
 Object.extend(Iyxzone.Comment, {
@@ -57,12 +60,16 @@ Object.extend(Iyxzone.Comment, {
     $('add_' + commentableType + '_comment_' + commentableID).show();
   },
 
-  save: function(commentableType, commentableID, button, event){
+  save: function(commentableType, commentableID, event){
     Event.stop(event);
+
+    var form = $(commentableType + '_comment_form_' + commentableID);
+    var button = form.down('button', 1);
+
     if(Iyxzone.Comment.validate($(commentableType + '_comment_content_' + commentableID))){
-      new Ajax.Request('/comments', { 
+      new Ajax.Request(Iyxzone.URL.createComment(), { 
         method: 'post',
-        parameters: $(commentableType+'_comment_form_' + commentableID).serialize(),
+        parameters: $(commentableType + '_comment_form_' + commentableID).serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
         },
@@ -70,9 +77,39 @@ Object.extend(Iyxzone.Comment, {
           Iyxzone.enableButton(button, '发布');
           $(commentableType + '_comment_' + commentableID).hide();
           $('add_' + commentableType + '_comment_' + commentableID).show();
-        }
+        },
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            $(commentableType + '_comments_' + commentableID).insert({'bottom': json.html});
+          }else{
+            error("发生错误，请稍后再试");
+          }
+        }.bind(this)
       });
     }
+  },
+
+  destroy: function(commentID, link){
+    new Ajax.Request(Iyxzone.URL.deleteComment(commentID), {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        $(link).writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          Effect.BlindUp($('comment_' + commentID));
+        }else{
+          error("发生错误");
+          $(link).writeAttribute('onclick', "Iyxzone.Comment.destroy(" + commentID, + ", this);");
+        }
+      }.bind(this)
+    });
   },
 
   set: function(commentableType, commentableID, login, commentorID){
@@ -161,7 +198,7 @@ Object.extend(Iyxzone.WallMessage, {
     if(count > max){
       field.value = field.value.substr(0, max);
     }else{
-      var wordsCountID = fieldID.gsub('message_content_', '') + '_words_count';
+      var wordsCountID = 'wall_words_count';
       $(wordsCountID).innerHTML = count + '/' + max;
     }
   },
@@ -178,19 +215,37 @@ Object.extend(Iyxzone.WallMessage, {
     return true; 
   },
 
-  save: function(wallType, wallID, defaultRecipientID, button, form){
-		if(this.validate($('wall_message_content_' + wallID))){
-			new Ajax.Request('/wall_messages', {
+  save: function(wallType, wallID, form){
+    var textarea = $(form).down('textarea', 0);
+    var button = $(form).down('button', 0);
+
+		if(this.validate(textarea)){
+			new Ajax.Request(Iyxzone.URL.createWallMessage(), {
         method: 'post',
+        parameters: $(form).serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
+          Iyxzone.changeCursor('wait');
         }.bind(this),
         onComplete: function(){
           Iyxzone.enableButton(button, '发布');
-          $('comment_recipient_id').value = defaultRecipientID;
-          $('comment_content').focus();
+          Iyxzone.changeCursor('default');
         }.bind(this),
-				parameters: $(form).serialize()
+        onSuccess: function(transport){
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            $('comments').insert({'top': json.html});
+            if(this.oldRecipientID){
+              $('comment_recipient_id').value = this.oldRecipientID;
+              this.oldRecipientID = null;
+            }
+            $('comment_content').clear();
+            $('comment_content').focus();
+            Effect.BlindDown('comment_' + json.id);
+          }else{
+            error("发生错误");
+          }
+        }.bind(this)
       });
 		} 
   },
@@ -207,10 +262,35 @@ Object.extend(Iyxzone.WallMessage, {
     });
   },
 
+  oldRecipientID: null,
+
   set: function(wallType, wallID, login, id){
+    this.oldRecipientID = $('comment_recipient_id').value;
     $('comment_recipient_id').value = id;
-    $('wall_message_content_' + wallID).focus();
-    $('wall_message_content_' + wallID).value = '回复' + login + '：';
+    $('comment_content').focus();
+    $('comment_content').value = '回复' + login + '：';
+  },
+  
+  destroy: function(messageID, link){
+    new Ajax.Request(Iyxzone.URL.deleteWallMessage(messageID), {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        $(link).writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          Effect.BlindUp('comment_' + messageID);
+        }else{
+          error("发生错误");
+          $(link).writeAttribute('onclick', "Iyxzone.WallMessage.destroy(" + messageID, + ", this);");
+        }
+      }.bind(this)
+    });
   }
 
 });

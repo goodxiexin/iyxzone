@@ -1,6 +1,6 @@
 <% facebox_tag '举报' do %>
   <div id='error'></div>
-  <% rows_form_remote_for :report, :url => reports_url, :html => {:onsubmit => "Iyxzone.disableButton($('report_submit_btn'), '请等待..');", :method => :post} do |f| %>
+  <% rows_form_for :report, :html => {:onsubmit => "Iyxzone.Report.submit(this, $('report_submit_btn')); return false;"} do |f| %>
     <%= hidden_field_tag "reportable_type", params[:reportable_type] %>
     <%= hidden_field_tag "reportable_id", params[:reportable_id] %>
     <div class='formcontent'>

@@ -12,9 +12,10 @@ class Notice < ActiveRecord::Base
   def read_by user, single=false
     if single
       update_attribute('read', '1')
+      user.raw_decrement :unread_notices_count, 1
     else
       notices = user.notices.unread.find_all {|n| self.relative_to? n}
-      Notice.update_all("notices.read = 1", {:user_id => user.id, :id => notices.map(&:id)})
+      Notice.update_all("notices.read = 1", {:id => notices.map(&:id)})
       user.raw_decrement :unread_notices_count, notices.count
     end
   end

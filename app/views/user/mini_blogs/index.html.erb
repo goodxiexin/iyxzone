@@ -10,9 +10,9 @@
       <div class="mBlog fix">
         <div class="mBlogMain">
           <div class="mBlogMainWrap">
-            <%= render :partial => 'category', :locals => {:url => index_list_mini_blogs_url(:uid => @user.id), :title => "#{get_subject @user}的微博"} %>
+            <%= render :partial => 'category', :locals => {:url => index_list_mini_blogs_url(:uid => @user.id), :title => "#{get_subject @user}的微博", :at => 'mini_blog_index'} %>
             <div class="mBlogPostList mBlogTaPost" id='mini_blogs_list'>
-              <%= render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
+              <%= render :partial => 'personal_mini_blogs', :locals => {:at => 'mini_blog_index', :mini_blogs => @mini_blogs} %>
             </div>
           </div>
         </div>

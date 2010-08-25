@@ -1,18 +1,20 @@
 class User::CommentsController < UserBaseController
 
   def create
-    @comment = @commentable.comments.build((params[:comment] || {}).merge({:poster_id => current_user.id}))
+    @comment = @commentable.comments.build(params[:comment].merge({:poster_id => current_user.id}))
 
-    unless @comment.save
-      render_js_error '评论由于某些问题而无法保存'
+    if @comment.save
+      render :json => {:code => 1, :html => partial_html('comment', :object => @comment)}
+    else
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @comment.destroy
-      render_js_code "Iyxzone.Facebox.close();Effect.BlindUp($('comment_#{@comment.id}'));"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

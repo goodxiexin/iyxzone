@@ -1,6 +1,6 @@
 <div class="box04 word-box" id='comment_<%= comment.id %>'>
   <% if comment.is_deleteable_by? current_user %>
-    <%= link_to_remote '', :url => comment_url(comment), :method => :delete, :html =>{ :class => 'icon-active'} %>
+    <%= link_to_function '', "Iyxzone.Comment.destroy(#{comment.id}, this);", :class => 'icon-active'%>
   <% end %>
 	<div class="img"><%= avatar comment.poster, :size => :csmall %></div>
   <div class="word">

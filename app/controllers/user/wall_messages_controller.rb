@@ -1,18 +1,20 @@
 class User::WallMessagesController < UserBaseController
 
   def create
-    @message = @wall.comments.build((params[:comment] || {}).merge({:poster_id => current_user.id}))
-    
-    unless @message.save
-      render_js_error
-    end
+    @message = @wall.comments.build(params[:comment].merge({:poster_id => current_user.id}))
+   
+    if @message.save
+      render :json => {:code => 1, :html => partial_html('wall_message', :object => @message) }
+    else
+      render :json => {:code => 0}
+    end 
   end
 
   def destroy
     if @message.destroy
-      render_js_code "Iyxzone.Facebox.close();Effect.BlindUp($('comment_#{@message.id}'));"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

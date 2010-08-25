@@ -1,35 +1,42 @@
-
+<% id = commentable.id %>
 <% type = commentable.class.to_s.underscore %>
-<% if commentable.comments_count >= 3 %>
+<% comments_count = commentable.comments_count %>
+<% recipient_id = recipient.nil? ? 'null' : recipient.id %>
+
+<% if comments_count >= 3 %>
 	<%= render :partial => "user/comments/comment", :object => commentable.comments.nonblocked.first %>
   <div class="box04 comment-box">
-    <%= link_to_function "显示更多#{commentable.comments_count - 2}条", "Iyxzone.Comment.moreCommentsInFoldedBox('#{type}', #{commentable.id}, #{commentable.comments_count - 51}, 50, $(this));" %>
+    <%= link_to_function "显示更多#{comments_count - 2}条", "Iyxzone.Comment.moreCommentsInFoldedBox('#{type}', #{id}, #{comments_count - 51}, 50, $(this));" %>
   </div>
-  <div id='<%= type %>_comments_<%= commentable.id %>'>
+  <div id='<%= type %>_comments_<%= id %>'>
 	  <%= render :partial => "user/comments/comment", :object => commentable.comments.nonblocked.last %>
   </div>
 <% else %>
-  <div id='<%= type %>_comments_<%= commentable.id %>'>
+  <div id='<%= type %>_comments_<%= id %>'>
 	  <%= render :partial => "user/comments/comment", :collection => commentable.comments %>
 	</div>
 <% end %>
-<div class="box04 comment-box" id= "add_<%=type%>_comment_<%=commentable.id%>">
-  <%= text_area_tag 'add-comment', '添加评论...', :id => "add_#{type}_comment_#{commentable.id}", :class => "textarea txt-add-comment", :onclick => "Iyxzone.Comment.showForm('#{type}', #{commentable.id}, null, #{recipient.nil? ? 'null' : recipient.id})" %>
+<div class="box04 comment-box" id= "add_<%= type %>_comment_<%= id %>">
+  <%= text_area_tag 'add-comment', '添加评论...', :id => "add_#{type}_comment_#{id}", :class => "textarea txt-add-comment", :onclick => "Iyxzone.Comment.showForm('#{type}', #{id}, null, #{recipient_id})" %>
 </div>
 
-<div class="box04 cmt-box s_clear" id='<%= type %>_comment_<%= commentable.id %>' style="display:none">
-	<div class="img"><%= avatar current_user, :size => :csmall %></div>
+<div class="box04 cmt-box s_clear" id='<%= type %>_comment_<%= id %>' style="display:none">
+	<div class="img"><%= avatar_image current_user, :size => :csmall %></div>
 	<div class="cmt-con">
-    <% form_remote_for :comment, :html => {:id => "#{type}_comment_form_#{commentable.id}"} do |f| %>
-			<%= hidden_field_tag 'commentable_id', commentable.id %>
+    <% form_for :comment, :html => {:onsubmit => "Iyxzone.Comment.save('#{type}', #{id}, event); return false;", :id => "#{type}_comment_form_#{id}"} do |f| %>
+			<%= hidden_field_tag 'commentable_id', id %>
 			<%= hidden_field_tag 'commentable_type', commentable.class.base_class.to_s %>
-			<%= hidden_field_tag 'comment[recipient_id]', recipient.nil? ? nil : recipient.id, :id => "#{type}_comment_recipient_#{commentable.id}" %>
-      <%= f.text_area 'content', :class=>'textarea', :id => "#{type}_comment_content_#{commentable.id}", :onfocus => "Iyxzone.limitText($(this), 140, Iyxzone.Comment.checkLength);", :onblur => "Iyxzone.cancelLimitText($(this));" %>
+			<%= hidden_field_tag 'comment[recipient_id]', recipient_id, :id => "#{type}_comment_recipient_#{id}" %>
+      <%= f.text_area 'content', :class => 'textarea', :id => "#{type}_comment_content_#{id}", :onfocus => "Iyxzone.limitText($(this), 140, Iyxzone.Comment.checkLength);", :onblur => "Iyxzone.cancelLimitText($(this));" %>
       <div class="submit s_clear">
-				<span class="button button-gray"><span><button onclick='Iyxzone.Comment.hideForm("<%=type%>",<%=commentable.id%>, event)'>取消</button></span></span>
-        <span class="button w-l"><span><button type="submit" onclick='Iyxzone.Comment.save( "<%=type%>", <%= commentable.id %>, this, event)'>发布</button></span></span>
-        <span class="left"><%= emotion_link "#{type}_comment_content_#{commentable.id}", :class => "icon-face" %></span>
-        <span id='<%= type %>_<%= commentable.id %>_words_count'>0/140</span>
+				<span class="button button-gray"><span>
+          <button onclick='Iyxzone.Comment.hideForm('<%= type %>',<%= id %>, event)'>取消</button>
+        </span></span>
+        <span class="button w-l"><span>
+          <button type="submit">发布</button>
+        </span></span>
+        <span class="left"><%= emotion_link "#{type}_comment_content_#{id}", :class => "icon-face" %></span>
+        <span id='<%= type %>_<%= id %>_words_count'>0/140</span>
       </div>
     <% end %>
   </div>

@@ -42,27 +42,17 @@ class User::ProfilesController < UserBaseController
 
   def update
     params[:profile].delete(:login) if params[:profile]
+    @type = case params[:type].to_i
+      when 1 then 'basic_info'
+      when 2 then 'contact_info'
+      when 3 then 'characters'
+    end
 
     if @profile.update_attributes(params[:profile])
-      render :json => {:code => 1}
+      render :json => {:code => 1, :html => partial_html(@type, :locals => {:profile => @profile, :setting => @setting, :relationship => 'owner'})}
     else
       render :json => {:code => 0}
     end
-=begin
-			respond_to do |format|
-				format.html {
-					case params[:type].to_i
-					when 1
-					  render :partial => 'basic_info', :locals => {:profile => @profile, :setting => @setting, :relationship => 'owner'}
-					when 2
-					  render :partial => 'contact_info', :locals => {:profile => @profile, :setting => @setting, :relationship => 'owner'}
-          when 3
-            render :partial => 'characters', :locals => {:profile => @profile, :setting => @setting, :relationship => 'owner'}
-					end
-				}
-				format.json { render :json => @profile.to_json }
-			end
-=end
   end
 
 	def more_feeds

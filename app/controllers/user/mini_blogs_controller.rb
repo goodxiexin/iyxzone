@@ -1,4 +1,3 @@
-require 'ferret'
 class User::MiniBlogsController < UserBaseController
 
   layout 'app'
@@ -25,31 +24,31 @@ class User::MiniBlogsController < UserBaseController
   def recent
     @mini_blogs = MiniBlog.recent.paginate :page => params[:page], :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'recent'}}
-    render :partial => 'recent_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
+    render :partial => 'recent_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => params[:at]}
   end
 
   def hot
     @mini_blogs = MiniBlog.hot.paginate :page => params[:page], :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'hot'}}
-    render :partial => 'hot_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
+    render :partial => 'hot_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => params[:at]}
   end
 
   def sexy
     @mini_blogs = MiniBlog.sexy.paginate :page => params[:page], :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'sexy'}}
-    render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
+    render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => params[:at]}
   end
 
   def random
     @mini_blogs = MiniBlog.find(MiniBlogMetaData.first.random_ids).paginate :page => params[:page], :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'sexy'}}
-    render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
+    render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => params[:at]}
   end
 
   def same_game
     @fql = current_user.games.map(&:name).join(" ")
     @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
-    render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
+    render :partial => 'sexy_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => params[:at]}
   end
 
   def home
@@ -65,7 +64,7 @@ class User::MiniBlogsController < UserBaseController
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
     @mini_blogs = MiniBlog.by(@interested_user_ids).recent.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 
-    render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}
+    render :partial => 'interested_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => params[:at]}
   end
 
   def index
@@ -85,7 +84,7 @@ class User::MiniBlogsController < UserBaseController
   def index_list
     @mini_blogs = @user.mini_blogs.category(params[:type]).paginate :page => params[:page], :per_page => PER_PAGE
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'index_list', :uid => @user.id, :type => params[:type]}} 
-    render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs}  
+    render :partial => 'personal_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => params[:at]}  
   end
 
   def search
@@ -110,8 +109,10 @@ class User::MiniBlogsController < UserBaseController
   def create
     @mini_blog = current_user.mini_blogs.build params[:mini_blog]
 
-    unless @mini_blog.save
-      render_js_error
+    if @mini_blog.save
+      render :json => {:code => 1, :html => partial_html('interested_mini_blog', :object => @mini_blog.reload, :locals => {:at => params[:at]})}
+    else
+      render :json => {:code => 0}
     end
   end
 
@@ -126,18 +127,20 @@ class User::MiniBlogsController < UserBaseController
   end
 
   def forward
-    @new_mini_blog = @mini_blog.forward current_user, params[:content]
+    @new_mini_blog = current_user.mini_blogs.build :parent_id => @mini_blog.id, :root_id => (@mini_blog.original? ? @mini_blog.id : @mini_blog.root_id), :content => params[:content]
 
-    if @new_mini_blog.id.nil?
-      render_js_error
+    if @new_mini_blog.save
+      render :json => {:code => 1, :html => partial_html('interested_mini_blog', :object => @new_mini_blog.reload, :locals => {:at => params[:at]})}
+    else 
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @mini_blog.destroy    
-      render_js_code "Effect.BlindUp($('mini_blog_#{@mini_blog.id}'));"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

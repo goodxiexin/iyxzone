@@ -23,9 +23,9 @@ class User::FeedDeliveriesController < UserBaseController
 
 	def destroy
 		if @feed_delivery.destroy
-		  render_js_code "Effect.BlindUp($('feed_delivery_#{@feed_delivery.id}'));" 
+		  render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
 	end
 
@@ -44,7 +44,9 @@ protected
   end
 
   def require_delete_privilege feed_delivery
-    feed_delivery.is_deleteable_by?(current_user) || render_js_error
+    if !feed_delivery.is_deleteable_by?(current_user)
+      render :json => {:code => 2} 
+    end
   end
 
 end

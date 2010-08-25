@@ -195,7 +195,7 @@ Object.extend(Iyxzone.Chat, {
     else
       html += '<h4>' + login + "(" + message.created_at + ")</h4>";
 
-    html += '<p>' + message.content.gsub('\n', '<br/>') + "</p>";
+    html += '<p>' + Emotion.parse(message.content).gsub('\n', '<br/>') + "</p>";
     return html;
   },
 

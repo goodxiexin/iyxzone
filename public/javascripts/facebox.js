@@ -1,6 +1,6 @@
 Iyxzone.Facebox = {
 
-  version: '1.0',
+  version: '1.5',
 
   author: ['高侠鸿']
 
@@ -115,6 +115,7 @@ Object.extend(Iyxzone.Facebox, {
     return str == $('validation_code').value;
   },
 
+  // 这个可能要改一改，验证码在服务器端生成？？
   confirmWithValidation: function(mess, title, width, callback){
     if(title == null)
       title = '确认';
@@ -154,7 +155,7 @@ Object.extend(Iyxzone.Facebox, {
     if(width)
       this.setWidth(width);
 
-    var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="Iyxzonw.Facebox.close();" class="icon2-close right"></a></p>';
+    var html = '<p class="z-h s_clear"><strong class="left">确认</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p>';
     html += '<div class="z-con"><p>' + msg + "</p>";
     html += "<div class='z-submit s_clear space'><div class='buttons'><span class='button'><span><button type='submit' id='facebox_confirm'>确定</button></span></span><span class='button button-gray'><span><button type='button' onclick='Iyxzone.Facebox.close();'>取消</button></span></span></div></div></div>";
     

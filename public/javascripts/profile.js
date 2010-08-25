@@ -1,6 +1,6 @@
 Iyxzone.Profile = {
 
-  version: '1.7',
+  version: '1.8',
 
   author: ['高侠鸿'],
 
@@ -106,7 +106,7 @@ Object.extend(Iyxzone.Profile.Editor, {
       frame.update( this.editBasicInfoHTML);
       this.regionSelector.setEvents();
     }else{
-      new Ajax.Updater('basic_info_frame', '/profiles/' + profileID + '/edit?type=1', {
+      new Ajax.Updater('basic_info_frame', Iyxzone.URL.editProfile(profileID, {'type': 1}), {
         method: 'get',
         evalScripts: true,
         onLoading: function(){
@@ -120,7 +120,6 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   cancelEditBasicInfo: function(){
-   // Event.stop(event);
     $('basic_info_frame').update( this.basicInfoHTML);
     this.isEditingBasicInfo = false;
   },
@@ -131,17 +130,27 @@ Object.extend(Iyxzone.Profile.Editor, {
 
   updateBasicInfo: function(profileID, button, form){
     if(this.validateBasicInfo()){
-      new Ajax.Request('/profiles/' + profileID + '?type=1', {
+      new Ajax.Request(Iyxzone.URL.updateProfile(profileID, {'type': 1}), {
         method: 'put',
         parameters: $(form).serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
+          Iyxzone.changeCursor('wait');
+        },
+        onComplete: function(){
+          Iyxzone.changeCursor('default');
         },
         onSuccess: function(transport){
-          $('basic_info_frame').update( transport.responseText);
-          this.isEditingBasicInfo = false;
-          this.editBasicInfoHTML = null;
-          this.regionSelector = null;
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            $('basic_info_frame').update(json.html);
+            this.isEditingBasicInfo = false;
+            this.editBasicInfoHTML = null;
+            this.regionSelector = null;
+          }else{
+            error("发生错误");
+            Iyxzone.enableButton(button, '保存');
+          }
         }.bind(this)
       });
     }
@@ -164,7 +173,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     if(this.editContactInfoHTML){
       frame.update( this.editContactInfoHTML);
     }else{
-      new Ajax.Request('/profiles/' + profileID + '/edit?type=2', {
+      new Ajax.Request(Iyxzone.URL.editProfile(profileID, {'type': 2}), {
         method: 'get',
         onLoading: function(){
           this.loading(frame, '联系信息');
@@ -178,8 +187,7 @@ Object.extend(Iyxzone.Profile.Editor, {
   },
 
   cancelEditContactInfo: function(){
-//    $('contact_info_frame').innerHTML = this.contactInfoHTML;
-    $('contact_info_frame').update( this.contactInfoHTML);
+    $('contact_info_frame').update(this.contactInfoHTML);
     this.isEditingContactInfo = false;
   },
 
@@ -244,24 +252,34 @@ Object.extend(Iyxzone.Profile.Editor, {
     var v3 = this.isUrlValid();
     return v1 && v2 && v3;
   },
-
+  
   updateContactInfo: function(profileID, button, form){
     if(this.validateContactInfo()){
-      new Ajax.Request('/profiles/' + profileID + '?type=2', {
+      new Ajax.Request(Iyxzone.URL.updateProfile(profileID, {'type': 2}), {
         method: 'put',
         parameters: $(form).serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
+          Iyxzone.changeCursor('wait');
         }.bind(this),
+        onComplete: function(){
+          Iyxzone.changeCursor('default');
+        },
         onSuccess: function(transport){
-          this.editContactInfoHTML = null;
-          $('contact_info_frame').update( transport.responseText);
-          this.isEditingContactInfo = false;
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            this.editContactInfoHTML = null;
+            $('contact_info_frame').update(json.html);
+            this.isEditingContactInfo = false;
+          }else{
+            error("发生错误");
+            Iyxzone.enableButton('保存');
+          }
         }.bind(this)
       });
     }
   },
-
+  
   charactersHTML: null,
 
   editCharactersHTML: null,
@@ -311,9 +329,6 @@ Object.extend(Iyxzone.Profile.Editor, {
     this.charactersHTML = frame.innerHTML;
     if(this.editCharactersHTML){
       frame.update(this.editCharactersHTML);
-      /*this.gameSelectors.values().each(function(selector){
-        selector.setEvents();
-      });*/
     }else{
       new Ajax.Request('/profiles/' + profileID + '/edit?type=3', {
         method: 'get',
@@ -502,7 +517,7 @@ Object.extend(Iyxzone.Profile.Editor, {
 
     return valid;
   },
-
+  
   updateCharacters: function(profileID, form, button){
     if(this.validateCharactersInfo(form)){
       // construct del character ids
@@ -511,24 +526,34 @@ Object.extend(Iyxzone.Profile.Editor, {
         delCharacterParams += "profile[del_characters][]=" + this.delCharacterIDs[i] + "&";
       }
 
-      new Ajax.Request('/profiles/' + profileID + '?type=3', {
+      new Ajax.Request(Iyxzone.URL.updateProfile(profileID, {'type': 3}), {
         method: 'put',
         parameters: delCharacterParams + $(form).serialize(),
         onLoading: function(){
           Iyxzone.disableButton(button, '请等待..');
+          Iyxzone.changeCursor('wait');
+        },
+        onComplete: function(){
+          Iyxzone.changeCursor('default');
         },
         onSuccess: function(transport){
-          $('character_frame').update( transport.responseText);
-          this.editCharactersHTML = null;
-          this.gameSelectors = new Hash();
-          this.newGameSelectors = new Hash();
-          this.delCharacterIDs = new Array();
-          this.isEditingCharacters = false;
+          var json = transport.responseText.evalJSON();
+          if(json.code == 1){
+            $('character_frame').update(json.html);
+            this.editCharactersHTML = null;
+            this.gameSelectors = new Hash();
+            this.newGameSelectors = new Hash();
+            this.delCharacterIDs = new Array();
+            this.isEditingCharacters = false;
+          }else{
+            error("发生错误");
+            Iyxzone.enableButton(button, '保存');
+          }
         }.bind(this)
       }); 
     }
   },
-
+  
   removeCharacter: function(characterID, newCharacter, link){
     //var currentCharactersCount = this.newGameSelectors.keys().length + this.gameSelectors.keys().length - this.delCharacterIDs.length;
     var currentCharactersCount = this.newGameSelectors.keys().length + this.existingCharactersCount - this.delCharacterIDs.length;

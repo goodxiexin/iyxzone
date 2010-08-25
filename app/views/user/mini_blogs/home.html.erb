@@ -10,10 +10,10 @@
       <div class="mBlog fix">
         <div class="mBlogMain">
           <div class="mBlogMainWrap">
-            <%= render :partial => 'form_at_index', :locals => {:at => 'mini_blogs_index'} %>
-            <%= render :partial => 'category', :locals => {:url => home_list_mini_blogs_url, :title => "我的首页"} %>
+            <%= render :partial => 'form_at_index', :locals => {:at => 'mini_blog_home'} %>
+            <%= render :partial => 'category', :locals => {:url => home_list_mini_blogs_url, :title => "我的首页", :at => 'mini_blog_home'} %>
             <div class="mBlogPostList" id='mini_blogs_list'>
-              <%= render :partial => 'interested_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
+              <%= render :partial => 'interested_mini_blogs', :locals => {:at => 'mini_blog_home', :mini_blogs => @mini_blogs} %>
             </div>
           </div>
         </div>

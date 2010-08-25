@@ -1,4 +1,4 @@
-  <% render :layout => 'mini_blog', :locals => {:mini_blog => hot_mini_blog, :at => 'public', :with_foot => true} do %>
+  <% render :layout => 'mini_blog', :locals => {:mini_blog => hot_mini_blog, :at => at, :with_foot => true} do %>
     <div class="feedFunc transIcon">
       <span><%= hot_mini_blog.forwards_count %></span>
       <%= facebox_link "转发", new_forward_mini_blog_url(hot_mini_blog, :at => 'public'), :width => 400 %>

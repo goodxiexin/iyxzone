@@ -1,4 +1,4 @@
-  <% render :layout => 'mini_blog', :locals => {:mini_blog => sexy_mini_blog, :at => 'public'} do %>
+  <% render :layout => 'mini_blog', :locals => {:mini_blog => sexy_mini_blog, :at => at, :with_foot => true} do %>
     <div class="feedFunc transIcon">
       <span><%= sexy_mini_blog.comments_count %></span>
       <a href="javascript: void(0)">评论</a>

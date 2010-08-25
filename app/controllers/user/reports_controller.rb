@@ -7,9 +7,9 @@ class User::ReportsController < UserBaseController
     @report = @reportable.reports.build((params[:report] || {}).merge({:poster_id => current_user.id}))
 
     if @report.save
-      render_js_code "Iyxzone.Facebox.close();"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

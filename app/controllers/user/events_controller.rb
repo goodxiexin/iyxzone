@@ -53,10 +53,8 @@ class User::EventsController < UserBaseController
 
     if @event.save
       render :json => {:code => 1, :id => @event.id}
-      #redirect_to new_event_invitation_url(@event)
     else
       render :json => {:code => 0, :errors => @event.errors}
-      #render :action => 'new', :guild_id => @event.guild_id
     end
   end
 
@@ -67,29 +65,16 @@ class User::EventsController < UserBaseController
   def update
     if @event.update_attributes(params[:event] || {})
       render :json => {:code => 1}
-=begin
-      respond_to do |format|
-        format.json { render :json => @event } 
-        format.html { redirect_to event_url(@event) }
-      end
-=end
     else
       render :json => {:code => 0}
-=begin
-      respond_to do |format|
-        format.json { render :json => @event } 
-        format.html { render :action => 'edit' }
-      end
-=end
     end
   end
 
   def destroy
     if @event.destroy
-      render :json => {:code => 1} #redirect_js events_url(:uid => current_user.id)
+      render :json => {:code => 1} 
     else
       render :json => {:code => 0}
-      #render_js_error
     end
   end  
 
@@ -132,10 +117,7 @@ protected
 
   def require_event_not_expired event
     if event.expired?
-      respond_to do |format|
-        format.js   { render_js_tip '该活动已经过期'}
-        format.html { render_not_found }
-      end
+      render :json => {:code => 2}
     end
   end
   

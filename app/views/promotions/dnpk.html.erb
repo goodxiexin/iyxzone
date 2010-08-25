@@ -47,14 +47,14 @@
                 请务必记住写下你的自我介绍和上传你在游戏中的截图，不然不算的哦～
               </div>
 							<% if logged_in? %>
-								<%= render :partial => 'user/mini_blogs/form_at_index', :locals => {:at => 'home'} %>
+								<%= render :partial => 'user/mini_blogs/form_at_index', :locals => {:at => 'promotion'} %>
 							<% end %>
 							<div class="mBlogPostHead">以下是关于<span class="topicTag">龙之谷pk赛</span>的微博<%= @mini_blogs.total_entries %>条</div>
 							<div class="mBlogPostList">
 							<% if logged_in? %>
-								<%= render :partial => '/user/mini_blogs/interested_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
+								<%= render :partial => '/user/mini_blogs/interested_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => 'promotion'} %>
 							<% else %>
-								<%= render :partial => '/user/mini_blogs/outside_mini_blogs', :locals => {:mini_blogs => @mini_blogs} %>
+								<%= render :partial => '/user/mini_blogs/outside_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => 'promotion'} %>
 							<% end %>
 							</div>
 						</div>

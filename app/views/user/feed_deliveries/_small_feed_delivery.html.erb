@@ -1,6 +1,8 @@
 <div class="feed-list-box">
-  <div class="feed-list" id='feed_delivery_<%= delivery.id %>'>
-    <% if delivery.is_deleteable_by? current_user %><%= link_to_remote "", :url => feed_delivery_url(delivery), :method => :delete, :html =>{ :class => "icon-active"} %><% end %> 
+  <div class="feed-list" id='fd_<%= delivery.id %>'>
+    <% if delivery.is_deleteable_by? current_user %>
+      <%= link_to_function "", "Iyxzone.FeedDelivery.destroy(#{delivery.id}, this);", :class => "icon-active" %>
+    <% end %> 
     <div class="s-img left">
       <div class="imgbox01"><%= avatar poster, :size => :csmall %></div>
     </div>

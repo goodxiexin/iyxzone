@@ -1,9 +1,0 @@
-if params[:at] == 'mini_blogs_index'  
-  page.insert_html :top, "mini_blogs_list", :partial => 'interested_mini_blog', :object => @mini_blog.reload
-elsif params[:at] == 'home'
-  page << "notice('成功');"
-elsif params[:at] == 'public'
-  page << "notice('成功');"
-elsif params[:at] == 'outside'
-  page << "window.close();alert('成功');"
-end

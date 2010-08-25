@@ -50,4 +50,9 @@ protected
     end
   end
 
+  # hack
+  def partial_html name, opts={}
+    @template.render({:partial => name}.merge(opts))
+  end
+
 end

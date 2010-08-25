@@ -12,6 +12,7 @@ javascripts:
   - dig
   - comment
   - facebox
+  - report
   - in_place_editor_extension
   - emotion
   - friend

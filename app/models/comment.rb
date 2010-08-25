@@ -13,9 +13,7 @@ class Comment < ActiveRecord::Base
   # escape html before convert emotion image, otherwise emotion would also be escaped
   escape_html :sanitize => :content
   
-  acts_as_emotion_text :columns => [:content]
-
-  #attr_readonly :poster_id, :recipient_id, :commentable_id, :commentable_type, :content
+  attr_readonly :poster_id, :recipient_id, :commentable_id, :commentable_type
 
   validates_presence_of :poster_id
 

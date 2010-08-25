@@ -10,21 +10,17 @@ class User::Polls::InvitationsController < UserBaseController
     @users = User.find(params[:values])
 
     if @poll.invite @users
-      render :json => {:code => 1} #redirect_to poll_url(@poll)
+      render :json => {:code => 1}
     else
       render :json => {:code => 0}
-      #flash.now[:error] = '生成邀请出错'
-      #render :action => 'new'
     end
   end
 
 	def destroy
 		if @invitation.destroy
       render :json => {:code => 1}
-      #redirect_js poll_url(@invitation.poll)
     else
       render :json => {:code => 0}
-      #render_js_error
     end
 	end
 

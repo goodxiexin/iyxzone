@@ -247,7 +247,7 @@ input.gobtn,input.loginbtn,input.registbtn{display:inline-block;border:0;}
 /*按钮样式*/
 .button{float:left;cursor:pointer;display:block;background:url(../images/skin/btn2010.png) no-repeat right 0;padding:0 10px 0 0;}
 .button span{display:block;padding:0 0 0 10px;background:url(../images/skin/btn2010.png) no-repeat;}
-.button span button,.button span a{cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:20px;line-height:20px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
+.button span button,.button span a,.button span input{border:0;cursor:pointer;display:block;margin:0 -10px;padding:0 10px 2px;height:20px;line-height:20px;color:#fff;background:none;font-weight:bold;white-space:nowrap;width:auto;}
 
 a.button,a.button:hover{height:20px;line-height:19px;_line-height:21px;padding:0 16px 0 0;color:#fff;font-weight:bold;overflow:hidden}
 a.button span{float:left;height:100%;padding:0 0 0 16px;}

@@ -6,7 +6,7 @@ class Report < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User' 
 
-  validates_size_of :content, :within => 1..10000, :allow_blank => true
+  validates_size_of :content, :within => 1..100, :allow_blank => true
 
   validate_on_create :reportable_is_valid
 
