@@ -1,6 +1,6 @@
 class GameAreasController < ApplicationController
 
-  #caches_page :show
+  caches_page :show
 
   def show
     @area = GameArea.find(params[:id])

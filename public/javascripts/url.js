@@ -2,7 +2,7 @@ Iyxzone.URL = {
 
   author: "高侠鸿",
 
-  // params should be an non-empty hash
+  // TODO: params的格式比较限制，可以改变
   buildParams: function(params){
     var str = "";
     var hash = new Hash(params); // 这是因为javascript其实是没有hash的
@@ -732,3 +732,17 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// chinese region
+Object.extend(Iyxzone.URL, {
+
+  showCity: function(cityID, params){
+    return this.build("/cities/" + cityID, params);
+  },
+
+  showRegion: function(regionID, params){
+    return this.build("/regions/" + regionID, params);
+  }
+
+});
+

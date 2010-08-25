@@ -1,5 +1,5 @@
 Iyxzone.ChineseRegion = {
-  version: '1.0',
+  version: '1.2',
   author: ['高侠鸿']
 };
 
@@ -32,9 +32,10 @@ Iyxzone.ChineseRegion.Selector = Class.create({
   setupCityInfo: function(cities){
     var html = '<option value="">---</option>';
     for(var i=0;i<cities.length;i++){
-      html += "<option value='" + cities[i].id + "'>" + cities[i].name + "</option>";
+      var city = cities[i].city;
+      html += "<option value='" + city.id + "'>" + city.name + "</option>";
     }
-    $(this.citySelectorID).update( html);
+    $(this.citySelectorID).update(html);
   },
 
   resetDistrictInfo: function(){
@@ -44,7 +45,8 @@ Iyxzone.ChineseRegion.Selector = Class.create({
   setupDistrictInfo: function(districts){
     var html = '<option value="">---</option>';
     for(var i=0;i<districts.length;i++){
-      html += "<option value='" + districts[i].id + "'>" + districts[i].name + "</option>";
+      var district = districts[i].district;
+      html += "<option value='" + district.id + "'>" + district.name + "</option>";
     }
     $(this.districtSelectorID).update( html);
   },
@@ -55,16 +57,16 @@ Iyxzone.ChineseRegion.Selector = Class.create({
       this.resetDistrictInfo();
       return;
     }
-    new Ajax.Request('/regions/' + $(this.regionSelectorID).value + '.json', {
+    new Ajax.Request(Iyxzone.URL.showRegion($(this.regionSelectorID).value) + '.json', {
       method: 'get',
       onSuccess: function(transport){
-        details = transport.responseText.evalJSON().region;
+        var json = transport.responseText.evalJSON();
         if(this.citySelectorID)
           this.resetCityInfo();
         if(this.districtSelectorID)
           this.resetDistrictInfo();
         if(this.citySelectorID)
-          this.setupCityInfo(details.cities);
+          this.setupCityInfo(json);
       
         this.options.onRegionChange($(this.regionSelectorID).value);
       }.bind(this)
@@ -77,13 +79,13 @@ Iyxzone.ChineseRegion.Selector = Class.create({
         this.resetDistrictInfo();
       return;
     }
-    new Ajax.Request('/cities/' + $(this.citySelectorID).value + '.json', {
+    new Ajax.Request(Iyxzone.URL.showCity($(this.citySelectorID).value) + '.json', {
       method: 'get',
       onSuccess: function(transport){
-        details = transport.responseText.evalJSON().city;
+        var json = transport.responseText.evalJSON();
         if(this.districtSelectorID){
           this.resetDistrictInfo();
-          this.setupDistrictInfo(details.districts);
+          this.setupDistrictInfo(json);
         }
 
         this.options.onCityChange($(this.citySelectorID).value);

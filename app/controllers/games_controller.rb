@@ -7,7 +7,6 @@ class GamesController < ApplicationController
   caches_page :show
 
   def show
-    logger.error 'games'
     @game = Game.find(params[:id])
     render :json => @game.to_json(:include => [:servers, :areas, :races, :professions])
   end

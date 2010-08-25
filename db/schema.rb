@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100825033820) do
+ActiveRecord::Schema.define(:version => 20100825063624) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -137,6 +137,11 @@ ActiveRecord::Schema.define(:version => 20100825033820) do
   end
 
   add_index "districts", ["city_id"], :name => "index_districts_on_city_id"
+
+  create_table "email_domains", :force => true do |t|
+    t.string   "domain"
+    t.datetime "validated_at"
+  end
 
   create_table "emails", :force => true do |t|
     t.string   "from"

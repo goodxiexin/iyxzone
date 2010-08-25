@@ -6,7 +6,7 @@ class RegionsController < ApplicationController
 
   def show
     @region = Region.find(params[:id])
-    render :json => @region.to_json(:include => [:cities])
+    render :json => @region.cities
   end
 
 end
