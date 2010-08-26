@@ -89,7 +89,7 @@ Object.extend(Iyxzone.Facebox, {
     if(title == null)
       title = "错误"
 
-    this.setContent('<p class="z-h z-h-error s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + mess + '</p></div>');
+    this.setContent('<p class="z-h z-error s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + mess + '</p></div>');
     this.locate();
     this.appear();
     setTimeout("Iyxzone.Facebox.close();",3000);

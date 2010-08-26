@@ -338,7 +338,7 @@ Object.extend(Iyxzone.PasswordSetting, {
           Iyxzone.enableButton(btn, '确定');
           if(json.code == 1){
             $(form).remove();
-            $('notes').update('修改成功');
+            $('notes').update('<div class="form-con"><div style="font-size: 14px;" class="jl-cutline"><span class="icon-success"/>修改成功。</div><div class="space20">新的密码已经奏效，请牢记您的新密码</div></div>');
           }else if(json.code == 0){
             error("更新时发生错误，请稍后再试");
           }else if(json.code == 2){

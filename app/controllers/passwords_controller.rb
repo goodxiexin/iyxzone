@@ -21,7 +21,7 @@ class PasswordsController < ApplicationController
   end
 
   def edit
-    @user = params[:password_reset_code].blank? ? nil : User.find_by_password_reset_code(params[:password_reset_code])
+    @user = User.find_by_password_reset_code(params[:password_reset_code])
     
     if @user.blank?
       render_not_found
@@ -31,7 +31,7 @@ class PasswordsController < ApplicationController
   end
 
   def update
-    @user = params[:password_reset_code].nil? ? nil : User.find_by_password_reset_code(params[:password_reset_code])
+    @user = User.find_by_password_reset_code(params[:password_reset_code])
 
     if @user.blank?
       flash.now[:error] = "非法的重置码"
