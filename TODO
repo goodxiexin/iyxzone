@@ -1,21 +1,5 @@
-cache how word, cache hot topics  DONE
+1. deploy后，有新的东西要link
 
-small avatar
+2. rake asset
 
-check change login name
-
-图片没删除赶紧
-
-后台任务和前台显示的数字有点脱节
-
-mini blog 还是速度太慢，主要是那个热门话题榜
-
-set mysql database default char set, collate
-
-6. controller interface with js
-
-7. cache mini blogs
-
-10. test program
-
-11. insertAtCursor
+3. 

@@ -60,11 +60,7 @@
 	<div class="multibox">
 		<div class="title"><b></b></div>
 		<strong>
-      <% if @user.is_idol %>
-        <%= facebox_confirm "加为粉丝", follow_idol_url(@user, :at => 'new_friend'), {:msg => "你确定要成为 #{@user.login} 的粉丝吗？这样可以在首页看到 #{@user.login} 的新鲜事", :method => :post} %>
-      <% else %>
-        <%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %>
-      <% end %>
+      <%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %>
     </strong> 
     或者 <strong><%= link_to "发站内信", new_mail_url(:recipient_ids => [@user.id]) %>
 	</div>

@@ -11,6 +11,7 @@ public/photos/*
 public/news_pictures/*
 public/regions/*
 public/images/gamepic
+public/images/captcha
 config/database.yml
 config/juggernaut_hosts.yml
 juggernaut.yml

@@ -23,10 +23,10 @@ after "deploy:update_code", "deploy:update_backup_config"
 after "deploy:update_code", "deploy:add_timestamps_to_css"
 after "deploy:update_code", "deploy:pack_js"
 
+after "deploy:symlink", "assets:symlink_public"
 after "deploy:symlink", "assets:symlink"
-after "deploy:symlink", "assets:restore_gamepic"
 after "deploy:symlink", "deploy:chown_deployer"
-#after "deploy:symlink", "deploy:clear_online_records"
+after "deploy:symlink", "deploy:clear_online_records"
 #after "deploy:symlink", "deploy:migrate"
 
 namespace :deploy do
@@ -172,24 +172,24 @@ end
 
 namespace :assets do
 
-  ASSETS = %w(photos blog_images news_pictures mini_images regions cities game_details area_details)
+  PUBLIC_ASSETS = %w(photos images/captcha images/gamepic blog_images news_pictures mini_images regions cities game_details area_details)
 
-  desc "preserve resources across deployment"
-  task :symlink, :roles => :app do
-    ASSETS.each do |name|
+  desc "preserve public resources across deployment"
+  task :symlink_public, :roles => :app do
+    PUBLIC_ASSETS.each do |name|
       run "mkdir -p #{shared_path}/#{name} && rm -rf #{release_path}/public/#{name} && ln -nfs #{shared_path}/#{name} #{release_path}/public/#{name}"
     end
     deploy.chown_deployer
   end
 
-  desc "copy game pics"
-  task :restore_gamepic, :roles => :app do
-    run "cp -r #{shared_path}/gamepic #{release_path}/public/images/gamepic"
-  end
+  ASSETS = %w(index dict)
 
-  desc "copy dictionaries"
-  task :restore_dicts, :roles => :app do
-    run "cp -r #{shared_path}/dict #{release_path}/dict"
+  desc "preserve resources across deployment"
+  task :symlink, :roles => :app do
+    ASSETS.each do |name|
+      run "mkdir -p #{shared_path}/#{name} && rm -rf #{release_path}/#{name} && ln -nfs #{shared_path}/#{name} #{release_path}/#{name}"
+    end
+    deploy.chown_deployer
   end
 
 end

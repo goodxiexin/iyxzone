@@ -1,6 +1,7 @@
 # 输出到tmp/cron_log
 set :output, "#{RAILS_ROOT}/tmp/cron_log"
 
+# 备份mysql
 every 1.day, :at => '4:00am' do
   rake "backup:local"
 end
@@ -9,6 +10,7 @@ every 2.weeks, :at => '4:30am' do
   rake "backup:s3"
 end
 
+# 活动快到了
 every 1.day, :at => '0:00am' do
   rake "events:send_approaching_notification"
 end
@@ -47,8 +49,8 @@ every :thursday, :at => '2:00am' do
 end
 
 every :thursday, :at => '5:00am' do
-  #rake "suggestions:create_friend_suggestions"
-  #rake "suggestions:create_comrade_suggestions"
+  rake "suggestions:create_friend_suggestions"
+  rake "suggestions:create_comrade_suggestions"
 end
 
 # 关于mini blog 
@@ -62,4 +64,9 @@ end
 
 every 30.minutes do
   rake "mini_blogs:random"
+end
+
+# 关于captcha
+every 2.hours do
+  rake "utils:generate_captcha"
 end
