@@ -38,6 +38,10 @@ Object.extend(Iyxzone.URL, {
     return this.build("/blogs", params);
   },
 
+  createMultipleBlog: function(params){
+    return this.build("/blogs/create_multiple", params);
+  },
+
   createDraft: function(params){
     return this.build("/drafts", params);
   },
@@ -786,6 +790,44 @@ Object.extend(Iyxzone.URL, {
 
   newCaptcha: function(params){
     return this.build("/captchas/new", params);
+  }
+
+});
+
+// instant message
+Object.extend(Iyxzone.URL, {
+
+  readMessage: function(params){
+    return this.build("/messages/read", params);
+  },
+
+  listMessage: function(params){
+    return this.build("/messages", params);
+  },
+
+  createMessage: function(params){
+    return this.build("/messages", params);
+  }
+
+});
+
+//rss
+Object.extend(Iyxzone.URL, {
+
+  createRssFeed: function(params){
+    return this.build("/rss_feeds", params);
+  },
+
+  destroyRssFeed: function(rssID, params){
+    return this.build("/rss_feeds/" + rssID, params);
+  },
+
+  showRssFeed: function(rssID, params){
+    return this.build("/rss_feeds/" + rssID, params);
+  },
+
+  newRssFeed: function(params){
+    return this.build("/rss_feeds/new", params);
   }
 
 });

@@ -1,0 +1,26 @@
+
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'rss' %>
+<% end %>
+
+<% if @error %>
+  不是合法的rss资源
+<% else %>
+<input type="checkbox" value=1 checked=false onclick="Iyxzone.RSS.Feeder.toggleAll(this);" >全选</input>
+
+<table>
+  <% @items.each_with_index do |item, i| %>
+  <tr>
+  <td width="30" align="center"><input type="checkbox" value=1 index=<%= i %> checked=false/></td> 
+  <td width="80"><%= item.title %></td>
+  <td width="60"><%= item.date %></td>
+  <td><%= link_to_function '预览', "Iyxzone.RSS.Feeder.preview(#{i});" %></td>
+  </tr>
+  <% javascript_tag do %>
+    Iyxzone.RSS.Feeder.addItem(<%= {:title => item.title, :date => item.date, :desc => item.description}.to_json %>)
+  <% end %>
+  <% end %>
+</table>
+
+<%= link_to_function "导入", "Iyxzone.RSS.Feeder.import(#{current_user.id}, this);" %>
+<% end %>

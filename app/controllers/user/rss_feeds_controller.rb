@@ -1,46 +1,45 @@
-require "open-uri"
-require "rss/1.0"
-require "rss/2.0"
-
 class User::RssFeedsController < UserBaseController
 
   layout 'app'
-  
-  def index
-    @rss_feed = current_user.rss_feed
+
+  def new
+    @rss = current_user.rss_feed
   end
 
   def show
-    
-    
+    @r = @rss.parse
+    @channel = @r.channel
+    @items = @r.items
+  rescue RssFeed::NotRssError 
+    @rss.destroy
+    flash[:error] = "不是合法的rss"
+    redirect_to new_rss_feed_url
   end
 
   def create
-    begin
-      @rss = get_blogs params[:rsslink]
-      logger.error @rss.inspect
-    rescue SocketError,Errno::ENOENT
-      flash[:notice] = "目标地址暂时不可用"
-      @rss = nil
-      redirect_to rss_feeds_path
-    rescue RSS::NotWellFormedError
-      flash[:notice] = "不是标准的RSS链接"
-      @rss = nil
-      redirect_to rss_feeds_path
+    @rss = RssFeed.new params[:rss_feed].merge({:user_id => current_user.id, :last_update => Time.now})
+
+    if @rss.save
+      render :json => {:code => 1, :id => @rss.id}
     else
-      render :create
+      render :json => {:code => 0}
     end
   end
 
-  def new
-   
+  def destroy
+    if @rss.destroy
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
+    end
   end
-#protected
-  #地址不对可能是SocketError
-  #parse错误是RSS::NotWellFormedError
-  def get_blogs source
-    content = open(source).read
-    RSS::Parser.parse(content)
+
+protected
+
+  def setup
+    if ['show', 'destroy'].include? params[:action]
+      @rss = RssFeed.find(params[:id])
+    end
   end
 
 end

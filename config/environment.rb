@@ -70,6 +70,7 @@ Rails::Initializer.run do |config|
     :fanship_observer,
     :mini_image_observer,
     :mini_blog_observer,
-    :mini_topic_attention_observer
+    :mini_topic_attention_observer,
+    :rss_feed_observer
 
 end

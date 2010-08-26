@@ -70,3 +70,8 @@ end
 every 2.hours do
   rake "utils:generate_captcha"
 end
+
+# 关于 rssfeed
+every 7.days do
+  rake "rss:import"
+end

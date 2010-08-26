@@ -204,10 +204,19 @@ Object.extend(Iyxzone.Chat, {
     var params = '';
     for(var i = 0;i < messages.length; i++)
       params += 'ids[]=' + messages[i].id + '&';
+    params += "authenticity_token=" + encodeURIComponent(this.token);
 
-    new Ajax.Request('/messages/read?authenticity_token=' + encodeURIComponent(this.token), {
+    new Ajax.Request(Iyxzone.URL.readMessage(), {
       method: 'put',
-      parameters: params
+      parameters: params,
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          // nothing to do
+        }else{
+          // maybe retry after 30 seconds
+        }
+      }.bind(this)
     });
   },
 
@@ -282,7 +291,7 @@ Object.extend(Iyxzone.Chat, {
         return;
 
       // send ajax
-      new Ajax.Request('/messages?friend_id=' + friendID, {
+      new Ajax.Request(Iyxzone.URL.listMessage({'friend_id': friendID}), {
         method: 'get',
         onLoading: function(){
           $(cont).update( '<image src="/images/loading.gif" />');
@@ -296,10 +305,12 @@ Object.extend(Iyxzone.Chat, {
 
   // 发送消息
   sendMessage: function(friendID, friendLogin, button, event){
-    if(event!=null)Event.stop(event);
-    new Ajax.Request('/messages?friend_id=' + friendID + "&authenticity_token=" + encodeURIComponent(this.token), {
+    if(event)
+      Event.stop(event);
+
+    new Ajax.Request(Iyxzone.URL.createMessage(), {
       method: 'post',
-      parameters: {'message[content]' : $('message-content-' + friendID).value},
+      parameters: {'friend_id': friendID, 'authenticity_token': encodeURIComponent(this.token), 'message[content]' : $('message-content-' + friendID).value},
       onLoading: function(){
         $('message-content-' + friendID).clear();        
       },

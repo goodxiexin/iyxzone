@@ -4,7 +4,6 @@ class CreateRssFeeds < ActiveRecord::Migration
       t.integer :user_id
       t.string :link
       t.datetime :last_update
-
       t.timestamps
     end
   end

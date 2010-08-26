@@ -1,3 +1,13 @@
-<%= debug params %>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'rss' %>
+<% end %>
 
-
+<% if @rss.nil? %>
+<% form_for :rss_feed, :html => {:onsubmit => "Iyxzone.RSS.submit(this); return false;"} do |f| %>
+  <%= f.text_field 'link' %>
+  <button type='submit'>submit</button>
+<% end %>
+<% else %>
+<%= @rss.link %>
+<%= link_to_function "X", "Iyxzone.RSS.destroy(#{@rss.id}, this);" %>
+<% end %>

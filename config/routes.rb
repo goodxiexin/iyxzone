@@ -171,7 +171,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resource :mail_setting, :controller => 'mail_setting'
 
-    users.resources :blogs, :collection => [:hot, :recent, :relative, :friends]
+    users.resources :blogs, :collection => {:hot => :get, :recent => :get, :relative => :get, :friends => :get, :create_multiple => :post}
 
     users.resources :blog_images, :controller => 'blogs/images'
 

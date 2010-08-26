@@ -8,7 +8,9 @@ class User::MessagesController < UserBaseController
 
   def read
     if Message.update_all("messages.read = 1", {:id => params[:ids], :recipient_id => current_user.id})
-      render :nothing => true
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
     end
   end
 
@@ -21,9 +23,9 @@ class User::MessagesController < UserBaseController
       render :juggernaut => {:type => :send_to_client, :client_id => @friend.id} do |page|
         page << "Iyxzone.Chat.recvMessage(#{@info.to_json}, #{@sender.to_json})"
       end
-      render :json => @info 
+      render :json => {:code => 1, :msg => @info}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

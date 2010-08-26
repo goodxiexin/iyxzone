@@ -30,10 +30,6 @@ Object.extend(Iyxzone.Facebox, {
 		this.facebox.setStyle({width: width + 'px'});
   },
 
-  setTitle: function(title){
-  
-  },
-
   appear: function(){
     if(!this.facebox.visible()) 
       new Effect.Appear(this.facebox, {'duration': 0.5}); 
@@ -89,10 +85,16 @@ Object.extend(Iyxzone.Facebox, {
     if(title == null)
       title = "错误"
 
-    this.setContent('<p class="z-h z-error s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + mess + '</p></div>');
+    // hack
+    var zm = $('facebox_content').up();
+    var oldClass = zm.readAttribute('class');
+    alert(oldClass);
+    zm.addClassName('z-error');
+
+    this.setContent('<p class="z-h s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + mess + '</p></div>');
     this.locate();
     this.appear();
-    setTimeout("Iyxzone.Facebox.close();",3000);
+    setTimeout(function(){Iyxzone.Facebox.close();$('facebox_content').up().writeAttribute('class', oldClass);}, 3000);
   },
 
   confirm: function(mess, title, width, url, token, method){

@@ -1,16 +1,38 @@
-class RssFeed < ActiveRecord::Base
-  belongs_to :user
-  validates_numericality_of :user_id
-  validate :is_rss?
-  validate :has_user_id?
+require "open-uri"
+require "rss/1.0"
+require "rss/2.0"
 
-  #TODO
-  def is_rss?
-    errors.add(:link, "不是可用的rss链接") if link.blank?
+class RssFeed < ActiveRecord::Base
+
+  class NotRssError < StandardError;  end
+
+  belongs_to :user
+
+  def parse
+    content = open(link).read
+    RSS::Parser.parse(content)
+  rescue
+    raise NotRssError, "连接不是有效的rss资源"
   end
 
-  def has_user_id?
-    errors.add(:user_id, "不存在这个用户") unless User.find(:first, :conditions => ["id = ?",user_id])
+  # 同步，返回新的rss feed
+  # 当前的rss版本记录在last_update里
+  def synchronize
+    content = open(link).read
+    css = RSS::Parser.parse(content)
+    channel = css.channel
+    items = css.items
+    timestamp = items.first.date.to_datetime
+    puts timestamp
+    if timestamp > last_update
+      new_items = items.select {|item| item.date.to_datetime > last_update}
+      update_attributes(:last_update => timestamp)
+      new_items
+    else
+      []
+    end
+  rescue
+    destroy
   end
 
 end

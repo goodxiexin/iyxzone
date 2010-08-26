@@ -47,7 +47,7 @@ class Blog < ActiveRecord::Base
 
   validates_size_of :content, :within => 1..10000
 
-  validate_on_create :game_is_valid
+  #validate_on_create :game_is_valid
 
   after_save :update_blog_images
 

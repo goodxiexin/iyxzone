@@ -53,6 +53,14 @@ class User::BlogsController < UserBaseController
     end
   end
 
+  # used by rss feeder
+  def create_multiple
+    params[:blogs].each_value do |attrs|
+      current_user.blogs.create attrs
+    end
+    render :json => {:code => 1}
+  end
+
   def edit
     @tag_infos = @blog.tags.map {|t| {:tag_id => t.id, :friend_id => t.tagged_user_id, :friend_name => t.tagged_user.login}}.to_json
   end
