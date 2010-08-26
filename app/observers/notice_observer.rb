@@ -7,7 +7,10 @@ class NoticeObserver < ActiveRecord::Observer
 
   def after_update notice
     if !notice.read_was and notice.read
-      notice.user.raw_decrement :unread_notices_count
+      notices = notice.unread_relative_notices # notices doesnt contain notice
+      notice.user.raw_decrement :unread_notices_count, notices.count + 1
+      # this doesnt trigger observer, thus no infinite loop
+      Notice.update_all("notices.read = 1", {:id => notices.map(&:id)})
     end
   end
 

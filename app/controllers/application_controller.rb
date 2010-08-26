@@ -50,6 +50,11 @@ protected
     end
   end
 
+  def captcha_valid?
+    captcha = Captcha.find_by_token params[:captcha_token]
+    !captcha.nil? and (captcha.code == params[:captcha_code])
+  end
+
   # hack
   def partial_html name, opts={}
     @template.render({:partial => name}.merge(opts))

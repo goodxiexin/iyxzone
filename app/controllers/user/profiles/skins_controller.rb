@@ -41,22 +41,10 @@ class User::Profiles::SkinsController < UserBaseController
     render :layout => 'app'
   end
 
-  def update
-    @profile = current_user.profile
-    
-    if @profile.update_attributes(:skin_id => @skin.id)
-      flash[:notice] = "皮肤更新完成！"
-      redirect_to profile_url(@profile)
-    else
-      flash[:notice] = "该皮肤不能使用"
-      redirect_to profile_url(@profile)
-    end
-  end
-
 protected
 
   def setup
-    if ['show', 'update'].include? params[:action]
+    if ['show'].include? params[:action]
       @skin = Skin.find(params[:id])
       require_skin_accessible @skin
     end

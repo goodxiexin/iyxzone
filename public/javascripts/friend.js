@@ -37,7 +37,7 @@ Object.extend(Iyxzone.Friend, {
   },
 
   confirmDestroying: function(friendID, link){
-    Iyxzone.Facebox.confirmWithValidation("你确定要解除好友关系吗?", null, null, function(){
+    Iyxzone.Facebox.confirmWithCallback("你确定要解除好友关系吗?", null, null, function(){
       this.destroy(friendID, link);
     }.bind(this)); 
   }

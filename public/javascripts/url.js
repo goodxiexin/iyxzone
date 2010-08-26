@@ -536,6 +536,10 @@ Object.extend(Iyxzone.URL, {
 
   editOutsidePrivacySetting: function(params){
     return this.build("/privacy_setting/edit?type=2", params);
+  },
+
+  updatePasswordSetting: function(params){
+    return this.build("/password_setting", params);
   }
 
 });
@@ -669,7 +673,7 @@ Object.extend(Iyxzone.URL, {
     return this.build("/mini_images/" + imageID, params);
   },
 
-  createMiniLinks: function(params){
+  createMiniLink: function(params){
     return this.build("/mini_links", params);
   },
 
@@ -746,3 +750,42 @@ Object.extend(Iyxzone.URL, {
 
 });
 
+// guestbook
+Object.extend(Iyxzone.URL, {
+
+  createGuestbook: function(params){
+    return this.build("/guestbooks", params);
+  }
+
+});
+
+// notices
+Object.extend(Iyxzone.URL, {
+
+  listNotice: function(params){
+    return this.build("/notices", params);
+  },
+
+  readNotice: function(noticeID, params){
+    return this.build("/notices/" + noticeID + "/read", params)
+  }
+
+});
+
+// Skin
+Object.extend(Iyxzone.URL, {
+
+  showSkin: function(skinID, params){
+    return this.build("/skins/" + skinID, params);
+  }
+
+});
+
+// captcha
+Object.extend(Iyxzone.URL, {
+
+  newCaptcha: function(params){
+    return this.build("/captchas/new", params);
+  }
+
+});

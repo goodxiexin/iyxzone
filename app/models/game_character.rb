@@ -3,7 +3,31 @@ class GameCharacter < ActiveRecord::Base
   named_scope :by, lambda {|user_ids| {:conditions => {:user_id => user_ids}}}
 	
 	serialize :data
+  
+  has_index :query_step => 20000,
+            :select_fields => [:id, :name, :game_id, :server_id, :area_id],
+            :writer => {:max_buffer_memory => 32, :max_buffered_docs => 20000},
+            :field_infos => {
+              :id => {:store => :yes, :index => :no, :term_vector => :no}, 
+              :name => {:store => :yes, :index => :yes, :term_vector => :yes},
+              :game_id => {:store => :yes, :index => :yes, :term_vector => :no},
+              :area_id => {:store => :yes, :index => :yes, :term_vector => :no},
+              :server_id => {:store => :yes, :index => :yes, :term_vector => :no}              
+            }
 
+  # required by has_index
+  def to_doc
+    doc = Ferret::Document.new
+    
+    doc[:id] = id
+    doc[:name] = name
+    doc[:game_id] = game_id
+    doc[:area_id] = area_id
+    doc[:server_id] = server_id
+
+    doc
+  end
+  
   acts_as_random
 
   acts_as_pinyin :name => 'pinyin'

@@ -8,18 +8,14 @@ class Notice < ActiveRecord::Base
 
 	named_scope :unread, :conditions => {:read => false}
 
-  # 把所有same source的通知都标记为以读
-  def read_by user, single=false
-    if single
-      update_attribute('read', '1')
-      user.raw_decrement :unread_notices_count, 1
-    else
-      notices = user.notices.unread.find_all {|n| self.relative_to? n}
-      Notice.update_all("notices.read = 1", {:id => notices.map(&:id)})
-      user.raw_decrement :unread_notices_count, notices.count
-    end
+  def relative_notices
+    Notice.match(:user_id => user_id).all {|n| relative_to? n}
   end
 
+  def unread_relative_notices
+    Notice.match(:user_id => user_id).unread.all {|n| n.relative_to? n}
+  end
+  
 protected
 
   def relative_to? notice

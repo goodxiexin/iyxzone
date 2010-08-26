@@ -50,7 +50,7 @@ class BackgroundIndexer
         @model_class.all(
           :conditions => cond, 
           :select => fields
-        ).each do 
+        ).each do
           @writer.add_document ar.to_doc
         end
       else

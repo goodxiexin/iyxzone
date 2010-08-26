@@ -23,6 +23,7 @@ javascripts:
   - calendar_date_select/format_iso_date
   - production_config
   - mini_blog
+  - guestbook
 - register:
   - game
   - register

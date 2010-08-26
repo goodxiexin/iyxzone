@@ -367,3 +367,25 @@ Object.extend(Iyxzone, {
   }
 
 });
+
+// Captcha
+Object.extend(Iyxzone, {
+
+  newCaptcha: function(img){
+    new Ajax.Request(Iyxzone.URL.newCaptcha(), {
+      method: 'get',
+      onLoading: function(){
+        $(img).writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        $(img).writeAttribute('onclick', "Iyxzone.newCaptcha(this);");
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        $(img).src = json.src;
+        $('captcha_token').value = json.token;
+      }
+    });
+  }
+
+});

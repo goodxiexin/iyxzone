@@ -32,6 +32,7 @@ module FaceboxMacroHelpers
     button_to_function text, "Iyxzone.Facebox.confirm('#{confirm_msg}', '#{title}', #{width}, '#{url}', '#{form_authenticity_token}', '#{method}');", html_options
   end
 
+  # 兼容以前的代码，实际上不推荐这样用了
   def facebox_confirm text, url, confirm_options={}, html_options={}
     width = html_options.delete(:width) || "null"
     confirm_msg = confirm_options[:msg] || "你确定吗"
@@ -39,13 +40,5 @@ module FaceboxMacroHelpers
     title = confirm_options[:title] || '确认'
     link_to_function text, "Iyxzone.Facebox.confirm('#{confirm_msg}', '#{title}', #{width}, '#{url}', '#{form_authenticity_token}', '#{method}');", html_options
   end
-
-	def facebox_confirm_with_validation(text, url, confirm_options={}, html_options={})
-    width = html_options.delete(:width) || "null"
-		confirm_msg = confirm_options[:msg] || "你确定吗"
-		method = confirm_options[:method] || "post"
-    title = confirm_options[:title] || "确认"
-		link_to_function text, "Iyxzone.Facebox.confirmWithValidation('#{confirm_msg}', '#{title}', #{width}, '#{url}', '#{form_authenticity_token}', '#{method}');", html_options
-	end
 
 end

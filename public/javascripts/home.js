@@ -13,40 +13,43 @@ Iyxzone.Home = {
 Object.extend(Iyxzone.Home.NoticeManager, {
 
   fetch: function(){
-    new Ajax.Request('notices/first_ten', {
+    new Ajax.Request(Iyxzone.URL.listNotice(), {
       method: 'get',
+      parameters: {'limit': 10, 'offset': 0},
       onSuccess: function(transport){
         $('my_notices').update(transport.responseText);
       }.bind(this)
     });
   },
 
+  isReading: false,
+
   read: function(noticeID, token){
-    new Ajax.Request('/notices/' + noticeID + '/read', {
+    // 要保证只能一条一条删，避免由于ajax异步带来的奇怪结果
+    if(this.isReading){
+      return;
+    }
+
+    new Ajax.Request(Iyxzone.URL.readNotice(noticeID), {
       method: 'put',
       parameters: "authenticity_token=" + encodeURIComponent(token),
       onLoading: function(){
+        this.isReading = true;
         Iyxzone.changeCursor('wait');
-      },
-      onSuccess: function(transport){
-        $('my_notices').innerHTML = transport.responseText;
+      }.bind(this),
+      onComplete: function(){
+        this.isReading = false;
         Iyxzone.changeCursor('default');
+      }.bind(this),
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('my_notices').innerHTML = json.html;
+        }else{
+          error("删除的时候发生错误");
+        }
       }.bind(this)
     });
-  },
-
-  readSingle: function(noticeID, token){
-    new Ajax.Request('/notices/' + noticeID + '/read', {
-      method: 'put',
-      parameters: "single=1&authenticity_token=" + encodeURIComponent(token),
-      onLoading: function(){
-        Iyxzone.changeCursor('wait');
-      },
-      onSuccess: function(transport){
-        Iyxzone.changeCursor('default');
-        $('my_notices').innerHTML = transport.responseText;
-      }.bind(this)
-    });    
   }
 
 });

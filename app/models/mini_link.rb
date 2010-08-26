@@ -17,15 +17,19 @@ class MiniLink < ActiveRecord::Base
     !embed_html.blank? and !thumbnail_url.blank?
   end
 
+  # http://www.17gaming.com/links/3K
   def self.find_by_proxy_url url
     self.find_by_id url.split('/').last.from_base_62
+  end
+
+  # 3K 
+  def self.find_by_compressed_id compressed_id
+    self.find_by_id compressed_id.from_base_62
   end
 
   validates_presence_of :url
 
   validates_uniqueness_of :url
-
-  #validates_format_of :url, :with => /(http:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\-%=&]+)?/, :on => :create
 
   validate_on_create :check_if_video
 

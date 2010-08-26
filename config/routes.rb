@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
+  map.resources :captchas
+
   map.resources :users, :collection => {:search => :get}
 
 	map.resources :guest_books, :controller => 'guestbooks'
@@ -96,6 +98,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :user, :name_prefix => '', :path_prefix => ''  do |users|
 
+    users.resources :links, :controller => "mini_links"
+
     users.resources :mini_links
 
     users.resources :mini_images
@@ -116,12 +120,10 @@ ActionController::Routing::Routes.draw do |map|
 		
     users.resources :applications
 
-    users.resources :links
-
     # 这个仅仅是为了兼容微薄以前，那个分享到17gaming.com的代码
     users.resources :sharings
 
-    users.resources :notices, :collection => {:first_ten => :get}, :member => {:read => :put}
+    users.resources :notices, :member => {:read => :put}
 
     users.resources :pokes, :collection => {:destroy_all => :delete}
 

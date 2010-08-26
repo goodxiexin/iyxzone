@@ -2,31 +2,29 @@ class User::PasswordSettingController < UserBaseController
 
   layout 'app'
 
+  before_filter :check_captcha, :only => [:update]
+
   def edit
   end
 
   def update
-    @old_password = params[:old_password]
-    @new_password = params[:password]
-    @confirmation = params[:password_confirmation]
-    # check old password
-    if User.authenticate(current_user.email, @old_password)
-      if @new_password != @confirmation
-        flash.now[:error] = "2次输入的密码不一致"
-        render :action => 'edit'
+    if current_user.authenticated? params[:old_password]
+      current_user.password = params[:password]
+      if current_user.save
+        render :json => {:code => 1} 
       else
-        current_user.password = @new_password
-        if current_user.save
-          flash.now[:notice] = '成功修改密码'
-          render :action => 'edit'
-        else
-          flash.now[:error] = '保存密码时发生错误，请稍后再试'
-          render :action => 'edit'
-        end
+        render :json => {:code => 0}
       end
     else
-      flash.now[:error] = "原来的密码不正确"
-      render :action => 'edit'
+      render :json => {:code => 2}
+    end
+  end
+
+protected
+
+  def check_captcha
+    if !captcha_valid?
+      render :json => {:code => 222}
     end
   end
 

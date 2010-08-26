@@ -115,40 +115,6 @@ Object.extend(Iyxzone.Facebox, {
     return str == $('validation_code').value;
   },
 
-  // 这个可能要改一改，验证码在服务器端生成？？
-  confirmWithValidation: function(mess, title, width, callback){
-    if(title == null)
-      title = '确认';
-    if(width)
-      this.setWidth(width);
-
-    this.setContent('<p class="z-h s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><div id="error"></div><p>' + mess + "<br/>输入验证码<input id='validation_code' type='text' size=4 /><span id='validation'>正在生成验证码</span></p></div><div class='z-submit s_clear space'><div class='buttons'><span class='button' id='fb-confirm'><span><button type='submit' id='facebox_confirm'>完成</button></span></span><span class='button button-gray'><span><button type='button' onclick='Iyxzone.Facebox.close();'>取消</button></span></span></div></div></div>");
-    this.locate();
-    this.appear();
-  
-    // set code regeneration event  
-    var validation = Iyxzone.validationCode(4);
-    $('validation').update( validation.div.innerHTML);
-    this.codes = validation.codes.join("");
-    $('validation').observe('click', function(){
-      var validation = Iyxzone.validationCode(4);
-      $('validation').update( validation.div.innerHTML);
-      this.codes = validation.codes.join("");
-    }.bind(this));
-
-    // set
-    Event.observe('facebox_confirm', 'click', function(event){
-      var code = $('validation_code').value;
-      if(code == this.codes){
-        alert('equal');
-        Iyxzone.disableButton($('facebox_confirm'), '请等待..');
-        callback.apply(this);
-      }else{
-        $('error').innerHTML = '验证码错误';
-      }
-    }.bind(this));  
-  },
-
   confirmWithCallback: function(msg, title, width, callback){
     if(title == null)
       title = '确认';

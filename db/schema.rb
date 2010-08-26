@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100825063624) do
+ActiveRecord::Schema.define(:version => 20100826055243) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -80,6 +80,16 @@ ActiveRecord::Schema.define(:version => 20100825063624) do
   end
 
   add_index "bosses", ["guild_id"], :name => "index_bosses_on_guild_id"
+
+  create_table "captcha_images", :force => true do |t|
+    t.string "token"
+    t.string "code"
+  end
+
+  create_table "captchas", :force => true do |t|
+    t.string "token"
+    t.string "code"
+  end
 
   create_table "chinese_characters", :force => true do |t|
     t.string "utf8_code"
@@ -264,6 +274,7 @@ ActiveRecord::Schema.define(:version => 20100825063624) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "data"
+    t.integer  "index_state"
   end
 
   add_index "game_characters", ["name", "pinyin"], :name => "index_game_characters_on_name_and_pinyin"
@@ -909,6 +920,7 @@ ActiveRecord::Schema.define(:version => 20100825063624) do
     t.string   "invite_fan_code"
     t.integer  "skilled_game_id"
     t.integer  "mini_blogs_count",                         :default => 0
+    t.integer  "index_state"
   end
 
   add_index "users", ["id"], :name => "index_users_on_id"

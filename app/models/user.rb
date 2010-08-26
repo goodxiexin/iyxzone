@@ -1,6 +1,29 @@
+require 'ferret'
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+
+  has_index :query_step => 20000,
+            :select_fields => [:id, :login, :created_at],
+            :writer => {:max_buffer_memory => 32, :max_buffered_docs => 20000},
+            :field_infos => {
+              :id => {:store => :yes, :index => :no, :term_vector => :no}, 
+              :login => {:store => :yes, :index => :yes, :term_vector => :yes},
+              :created_at => {:store => :yes, :index => :untokenized, :term_vector => :no} 
+            }
+
+  # required by has_index
+  def to_doc
+    doc = Ferret::Document.new
+    
+    doc[:id] = id
+    doc[:login] = login
+    doc[:created_at] = created_at
+
+    doc
+  end
+
+  has_many :mini_topics
 
   has_many :mini_topic_attentions
 

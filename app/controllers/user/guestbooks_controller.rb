@@ -9,9 +9,9 @@ class User::GuestbooksController < UserBaseController
     @guestbook = Guestbook.new((params[:guestbook] || {}).merge({:user_id => current_user.id}))
 
     if @guestbook.save
-			render_js_tip '17gaming感谢您的参与!'
+      render :json => {:code => 1}
     else
-      render_js_error '用户汇报错误出错'
+      render :json => {:code => 0}
     end
   end
 

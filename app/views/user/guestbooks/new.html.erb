@@ -1,6 +1,7 @@
+<%= javascript_include_tag 'guestbook' %>
+
 <% facebox_tag '汇报错误' do %>
-  <div id='error'></div>
-  <% rows_form_remote_for :guestbook, :url => guestbooks_url, :loading => "Iyxzone.disableButton($('button2'), '谢谢您的参与'); Iyxzone.disableButton($('button1'), '谢谢您的参与');", :html => {:method => :post} do |f| %>
+  <% rows_form_for :guestbook, :html => {:onsubmit => "Iyxzone.Guestbook.submit(this); return false;"} do |f| %>
     <%= hidden_field_tag 'guestbook[priority]', Guestbook::Urgent, :id => 'priority_field' %>
     <div class='formcontent'>
       <%= f.text_area 'description', :label => '错误描述' %>

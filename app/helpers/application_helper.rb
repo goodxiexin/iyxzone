@@ -519,10 +519,10 @@ module ApplicationHelper
           if mini_blog.original?
             link_to_function "#{link.proxy_url}<span class='i iVideo'></span>", "Iyxzone.MiniBlog.Presentor.showVideo(#{mini_blog.id}, '#{link.url}', '#{link.thumbnail_url}', '#{link.embed_html}');"
           else
-            "<a href='#{link.url}'>#{link.proxy_url}<span class='i iVideo'></span></a>"
+            "<a href='#{link.proxy_url}'>#{link.proxy_url}<span class='i iVideo'></span></a>"
           end
         else
-          "<a href='#{link.url}'>#{link.proxy_url}</a>"
+          "<a href='#{link.proxy_url}'>#{link.proxy_url}</a>"
         end         
       elsif node[:type] == 'ref'
         user = User.find_by_login node[:login]
@@ -546,7 +546,7 @@ module ApplicationHelper
         if link and link.is_video?
           link_to_function "#{link.proxy_url}<span class='i iVideo'></span>", "Iyxzone.MiniBlog.Presentor.showVideoInForward(#{mini_blog.id}, '#{link.url}', '#{link.thumbnail_url}', '#{link.embed_html}');"
         else
-          "<a href='#{link.url}'>#{link.proxy_url}</a>"
+          "<a href='#{link.proxy_url}'>#{link.proxy_url}</a>"
         end
       elsif node[:type] == 'ref'
         user = User.find_by_login node[:login]
@@ -568,9 +568,9 @@ module ApplicationHelper
       elsif node[:type] == 'link'
         link = MiniLink.find_by_proxy_url node[:proxy_url]
         if link and link.is_video?
-          "<a href='#{link.url}'>#{link.proxy_url}<span class='i iVideo'></span></a>"
+          "<a href='#{link.proxy_url}'>#{link.proxy_url}<span class='i iVideo'></span></a>"
         else
-          "<a href='#{link.url}'>#{link.proxy_url}</a>"
+          "<a href='#{link.proxy_url}'>#{link.proxy_url}</a>"
         end          
       elsif node[:type] == 'ref'
         user = User.find_by_login node[:login]
@@ -590,6 +590,16 @@ module ApplicationHelper
       re = /(#{words.map{|w| "(#{w})"}.join("|")})/
       content.gsub(re, "<span class='topicTag'>\\1</span>");  
     end
+  end
+
+  def captcha_image
+    cap = Captcha.random(:limit => 1).first
+    hidden_field_tag('captcha_token', cap.token) + image_tag(cap.image_filename, :onclick => "Iyxzone.newCaptcha(this);")
+  end
+
+  def captcha_block
+    cap = Captcha.random(:limit => 1).first
+    text_field_tag('captcha_code', '', :size => 5) + hidden_field_tag('captcha_token', cap.token) + image_tag(cap.image_filename, :onclick => "Iyxzone.newCaptcha(this);")
   end
 
 end

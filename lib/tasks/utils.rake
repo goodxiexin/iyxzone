@@ -37,4 +37,13 @@ namespace :utils do
     end
   end
 
+  task :generate_captcha => :environment do
+    `rm -f public/images/captcha/*`
+    Captcha.destroy_all
+  
+    s= Time.now
+    250.times {|i| Captcha.generate}
+    puts "#{Time.now - s} sec"
+  end 
+
 end

@@ -1,4 +1,9 @@
 <% content_for :html_title, "主页装扮" %>
+
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'skin' %>
+<% end %>
+
 <% canvas_tag do %>
     <h1 class="home-decoration">主页装扮</h1>
     <div class="box02 canvas_int space">
@@ -9,7 +14,7 @@
             <li>
 							<%= skin_image_tag skin %><br/>
 							<strong> <%= skin.name %> </strong><br />
-							<%= link_to "预览" , skin_url(skin)%>|<%= link_to "启用" , skin_url(skin), :method => :put%>
+							<%= link_to_function "预览" , "Iyxzone.Skin.show(#{skin.id});" %> | <%= link_to_function "启用" , "Iyxzone.Skin.set(#{skin.id}, #{current_user.profile.id}, '#{form_authenticity_token}', this);" %>
 						</li>
         <% end %>
         </ul>

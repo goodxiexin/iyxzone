@@ -5,23 +5,28 @@
   </div>
 <% end %>
 
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag 'skin' %>
+<% end %>
+
 <% content_for :theme_preview do %>
   <%= link_to "", skin_url(@prev), :class => "btn roll-l" -%>
   <ul>
-    <li><%= skin_image_tag @prev, :size=>"190x96" -%></li>
+    <li><%= skin_image_tag @prev, :size => "190x96" -%></li>
     <li class="focus">
-      <%= skin_image_tag @skin, :size=>"190x96", :class=>"left w-l" -%>
+      <%= skin_image_tag @skin, :size => "190x96", :class => "left w-l" -%>
       <div class="op">
         <strong>当前预览</strong><br /><span>装扮名称：<%= @skin.name -%></span>
         <p class="space">
-          <% form_for(@skin) do |f| %>
+          <% form_for :profile, :html => {:onsubmit => "Iyxzone.Skin.submit(#{current_user.profile.id}, this); return false;"} do |f| %>
+            <%= hidden_field_tag 'profile[skin_id]', @skin.id %>
             <span class="button w-l"><span><button name="act" type="submit" value ="apply">应用</button> </span></span>
           <% end %>
-          <span class="button button-gray"><span><button onclick= <%= "'location.href=\"#{profile_url(current_user.profile)}\"'"-%> type="submit">取消</button> </span></span>
+          <span class="button button-gray"><span><button onclick="Iyxzone.Skin.cancel(<%= current_user.profile.id %>);" type="submit">取消</button> </span></span>
         </p>
       </div>
     </li>
-    <li><%= skin_image_tag @next, :size=>"190x96" %></li>
+    <li><%= skin_image_tag @next, :size => "190x96" %></li>
   </ul>
   <%= link_to "", skin_url(@next), :class => "btn roll-r" -%>
 <% end %>

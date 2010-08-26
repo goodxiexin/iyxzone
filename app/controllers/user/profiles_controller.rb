@@ -49,7 +49,11 @@ class User::ProfilesController < UserBaseController
     end
 
     if @profile.update_attributes(params[:profile])
-      render :json => {:code => 1, :html => partial_html(@type, :locals => {:profile => @profile, :setting => @setting, :relationship => 'owner'})}
+      if @type
+        render :json => {:code => 1, :html => partial_html(@type, :locals => {:profile => @profile, :setting => @setting, :relationship => 'owner'})}
+      else
+        render :json => {:code => 1}
+      end
     else
       render :json => {:code => 0}
     end

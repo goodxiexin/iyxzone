@@ -5,35 +5,18 @@ class User::SearchController < UserBaseController
   PER_PAGE = 20
 
   def user
-    @key = params[:key]
-    @games = Game.find(:all, :order => 'pinyin ASC')
-    @users = User.activated.search(@key).paginate :page => params[:page], :per_page => PER_PAGE, :include => [:profile, {:characters => [{:server => [:area, :game]}]}] 
+    @fql = {:login => params[:key]}
+    @users = User.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
+    logger.error @users.class.name
   end
 
   def character
-    @game = Game.find(params[:game_id]) unless params[:game_id].blank?
-    @area = @game.areas.find(params[:area_id]) unless params[:area_id].blank?
-    @server = @game.servers.find(params[:server_id]) unless params[:server_id].blank?
-
-    cond = {}
-    cond.merge!({:game_id => @game.id}) if !@game.nil? 
-    cond.merge!({:area_id => @area.id}) if !@area.nil?
-    cond.merge!({:server_id => @server.id}) if !@server.nil?
-    
-    if @game.nil?
-      @areas = []
-      @servers = []
-    elsif !@game.nil? and !@game.no_areas
-      @areas = @game.areas
-      @servers = @area.nil? ? [] : @area.servers
-    elsif !@game.nil? and @game.no_areas
-      @areas = []
-      @servers = @game.servers
-    end
-
-    @key = params[:key]
-    @games = Game.find(:all, :order => 'pinyin ASC')
-		@total_users = GameCharacter.match(cond).search(@key).group_by(&:user).select{|user, characters| user.active?}.to_a
+    @fql = {}
+    @fql[:name] = params[:key] if !params[:key].blank?
+    @fql[:game_id] = params[:game_id] if !params[:game_id].blank?
+    @fql[:area_id] = params[:area_id] if !params[:area_id].blank?
+    @fql[:server_id] = params[:server_id] if !params[:server_id].blank?
+		@total_users = GameCharacter.search(@fql).group_by(&:user).to_a#.select{|user, characters| user.active?}.to_a
     @users = @total_users.paginate :page => params[:page], :per_page => PER_PAGE
   end
 

@@ -1,6 +1,7 @@
 class User::MiniLinksController < UserBaseController
 
   def show
+    redirect_to @link.url
   end
 
   # 只创建视频类的
@@ -31,6 +32,9 @@ class User::MiniLinksController < UserBaseController
 protected
 
   def setup
+    if ['show'].include? params[:action]
+      @link = MiniLink.find_by_compressed_id params[:id]
+    end
   end
 
 end

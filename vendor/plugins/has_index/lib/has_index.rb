@@ -15,7 +15,6 @@ module HasIndex
 
       self.index_opts = opts
 
-
       before_create :create_index
 
       before_update :update_index
@@ -91,7 +90,7 @@ module HasIndex
 
     def indexer
       if @indexer.nil?
-        @indexer = Ferret::Index::Index.new :path => "#{RAILS_ROOT}/index/mini_blog", :analyzer => ChineseAnalyzer.new
+        @indexer = Ferret::Index::Index.new :path => "#{RAILS_ROOT}/index/#{self.name.underscore}", :analyzer => ChineseAnalyzer.new
       end
       @indexer
     end
@@ -113,15 +112,16 @@ module HasIndex
         query = fql.split(/\s*~\s*/).map{|a| "(#{a.split(/\s+/).join(" AND ")})"}.join(" OR ")
       end
 
-      # parse per page
+      # parse per page and page
       per_page = opts.delete(:per_page)
-      per_page = per_page.nil? ? 20 : per_page.to_i
-      opts[:limit] = per_page
-
-      # parse page
       page = opts.delete(:page)
       page = page.nil? ? 1 : page.to_i
-      opts[:offset] = (page - 1) * per_page
+      if per_page.nil?
+        opts[:limit] = :all
+      else
+        opts[:limit] = per_page.to_i
+        opts[:offset] = (page - 1) * per_page.to_i
+      end
       
       # construct sort if necessary
       sort_fields = []
@@ -131,10 +131,6 @@ module HasIndex
         splits = str.split(/\s+/)
         name = splits.first
         order = splits[1].nil? ? 'asc' : splits[1].downcase
-t_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5) 
-
-    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
-
         columns = self.columns.select{|c| c.name == name}
         if !columns.blank?
           column = columns.first
@@ -155,7 +151,6 @@ t_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5)
       if !sort_fields.blank?
         sort = Ferret::Search::Sort.new(sort_fields)
         opts[:sort] = sort
-        puts sort
       end
       
 			# 目前默认field_infos里一定要有id      
@@ -168,9 +163,13 @@ t_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5)
         records = self.order(sanitized_sort_str.join(",")).match(:id => ids).all
       end
 
-      # 为了效率考虑，ids只取一页的数量，这样如果直接用paginate会有错误，永远显示的都只是一页
-      WillPaginate::Collection.create(page, per_page, docs.total_hits) do |pager|
-        pager.replace records.to_a
+      # 只要你指定了per_page我就转换为will paginate的分页
+      if page and per_page
+        WillPaginate::Collection.create(page, per_page, docs.total_hits) do |pager|
+          pager.replace records.to_a
+        end
+      else
+        records
       end
     end
 
