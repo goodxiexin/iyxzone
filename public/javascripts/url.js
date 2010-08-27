@@ -831,3 +831,44 @@ Object.extend(Iyxzone.URL, {
   }
 
 });
+
+// forum
+Object.extend(Iyxzone.URL, {
+
+  showForum: function(forumID, params){
+    return this.build("/forums/" + forumID, params);
+  },
+
+  createTopic: function(forumID, params){
+    return this.build("/topics", Object.extend({'forum_id': forumID}, params || {}));
+  },
+
+  listTopic: function(forumID, params){
+    return this.build("/topics", Object.extend({'forum_id': forumID}, params || {}));
+  },
+
+  listTopTopic: function(forumID, params){
+    return this.build("/topics/top", Object.extend({'forum_id': forumID}, params || {}));
+  },
+
+  toggleTopic: function(topicID, params){
+    return this.build("/topics/" + topicID + "/toggle", params);
+  }, 
+
+  deleteTopic: function(topicID, params){
+    return this.build("/topics/" + topicID, params);
+  },
+
+  showTopic: function(topicID, params){
+    return this.build("/topics/" + topicID, params);
+  },
+
+  createPost: function(topicID, params){
+    return this.build("/posts", Object.extend({'topic_id': topicID}, params || {}));
+  },
+
+  deletePost: function(postID, params){
+    return this.build("/posts/" + postID, params);
+  }
+
+});

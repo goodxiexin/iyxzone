@@ -1,6 +1,6 @@
               <div class="forum-cmt" id='new_post'>
                 <h2>回复话题</h2>
-                <% form_for :post, :url => posts_url(:topic_id => topic.id), :html => {:onsubmit => "Iyxzone.Forum.Post.save($('post_submit_btn'), this); return false;" } do |f| %>
+                <% form_for :post, :html => {:onsubmit => "Iyxzone.Forum.PostBuilder.save(this); return false;" } do |f| %>
                 <%= hidden_field_tag 'post[recipient_id]', topic.poster_id %>
                 <div class="formcontent">
                   <div class="rows s_clear">
@@ -9,11 +9,17 @@
                   <div class="rows s_clear">
                     <div class="fldvalue">
                       <div class="left">
-                        <span class="button03"><span><button type="submit" id='post_submit_btn'>发布</button></span></span>
+                        <span class="button03"><span><button type="submit">发布</button></span></span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <% end %>
               </div>
+<% onload_javascript_tag do %>
+  Iyxzone.Forum.PostBuilder.init(<%= @topic.id %>, <%= album_infos %>, 'post_content', '<%= form_authenticity_token %>');
+  <% if !@post.blank? %>
+    Iyxzone.Forum.PostBuilder.reply(<%= @post.floor %>, '<%= @post.poster.login %>', <%= @post.poster_id %>);
+  <% end %>
+<% end %>
 

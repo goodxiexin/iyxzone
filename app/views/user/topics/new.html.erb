@@ -9,7 +9,7 @@
       <div class='appcontent01'>
         <div id='errors'></div>
         <div class="cons-form formcontent">
-        <% form_for :topic, :url => topics_url(:forum_id => @forum), :html => {:onsubmit => "Iyxzone.Forum.Topic.save($('topic_submit_btn'), this); return false"} do |f| %>
+        <% form_for :topic, :html => {:onsubmit => "Iyxzone.Forum.TopicBuilder.save(this); return false"} do |f| %>
           <div class='rows s_clear'>
             <div class='fldid'><%= f.label "标题：" %></div>
             <div class='fldvalue'><div class='textfield'><%= f.text_field 'subject' %></div></div>
@@ -19,7 +19,7 @@
           </div>
           <div class='rows s_clear'>
             <div class='fldid'>&nbsp;</div>
-            <div class='fldvalue'><span class="button03"><span><button type='submit' id='topic_submit_btn'>发布</button></span></span>
+            <div class='fldvalue'><span class="button03"><span><button type='submit'>发布</button></span></span>
             </div>
           </div>
         <% end %>
@@ -29,5 +29,5 @@
 <% end %>
 
 <% onload_javascript_tag do %>
-  Iyxzone.Forum.Topic.init(<%= album_infos %>, 'topic_content', '<%= form_authenticity_token %>');
+  Iyxzone.Forum.TopicBuilder.init(<%= @forum.id %>, <%= album_infos %>, 'topic_content', '<%= form_authenticity_token %>');
 <% end %>

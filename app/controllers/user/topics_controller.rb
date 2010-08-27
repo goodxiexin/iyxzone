@@ -34,41 +34,25 @@ class User::TopicsController < UserBaseController
     @topic = @forum.topics.build(params[:topic].merge({:poster_id => current_user.id}))
     
     if @topic.save
-      redirect_to topic_url(@topic)
+      render :json => {:code => 1, :id => @topic.id} #redirect_to topic_url(@topic)
     else
-      render :action => 'new'
+      render :json => {:code => 0} #action => 'new'
     end
   end
 
   def toggle
     if @topic.toggle_top
-      if params[:at] == 'index'
-        redirect_to topics_url(:forum_id => @forum) 
-      elsif params[:at] == 'top_index'
-        redirect_to top_topics_url(:forum_id => @forum)
-      elsif params[:at] == 'forum_show'
-        redirect_to forum_url(@forum)
-      elsif params[:at] == 'show'
-        flash[:notice] = '成功'
-        redirect_to topic_url(@topic)
-      end
+      render :json => {:code => 1}
     else
-      flash[:error] = '发生错误'
-      redirect_to :back
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @topic.destroy
-      if params[:at] == 'index' or params[:at] == 'top_index'
-        render_js_code "$('topic_#{@topic.id}').remove(); tip('成功')"
-      elsif params[:at] == 'forum_show'
-        redirect_js forum_url(@forum)
-      elsif params[:at] == 'show'
-        redirect_js topics_url(:forum_id => @forum.id)
-      end
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end
   end
 

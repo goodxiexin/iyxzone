@@ -1,3 +1,7 @@
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :forum %>
+<% end %>
+
 <% canvas_tag do %>
   <%= render :partial => 'user/guilds/guild_header', :locals => {:text => "#{h @guild.name}的论坛", :guild => @guild} %>
   <div class="box02 canvas_int rows s_clear space">
@@ -6,7 +10,7 @@
       <div class="col-left">
         <h2 class="s_clear"><span class="left">精华区</span></h2>
         <div class="posts digest">
-          <%= render :partial => 'top_topics', :locals => {:top_topics => @top_topics, :forum => @forum, :guild => @guild} %>
+          <%= render :partial => 'top_topics', :locals => {:top_topics => @top_topics, :forum => @forum, :guild => @guild, :at => 'top_index'} %>
           <%= will_paginate @top_topics %>
         </div>
       </div>

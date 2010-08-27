@@ -6,18 +6,17 @@ class User::PostsController < UserBaseController
     @post = @topic.posts.build(params[:post].merge({:poster_id => current_user.id}))
 
     if @post.save
-      redirect_to topic_url(@topic, :page => (@topic.posts_count + 1)/20 + 1)     
+      render :json => {:code => 1, :id => @post.id}
     else
-      flash[:error] = '保存出错'
-      redirect_to topic_url(@topic)
+      render :json => {:code => 0}
     end
   end
 
   def destroy
     if @post.destroy
-      render_js_code  "$('post_#{@post.id}').remove();tip('成功')"
+      render :json => {:code => 1}
     else
-      render_js_error
+      render :json => {:code => 0}
     end 
   end
 

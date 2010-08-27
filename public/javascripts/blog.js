@@ -123,6 +123,8 @@ Object.extend(Iyxzone.Blog.Builder, {
           if(json.code == 1){
             window.location.href = Iyxzone.URL.showBlog(json.id);
           }else{
+            error("发生错误");
+            Iyxzone.enableButton(button, "完成");
           }
         }.bind(this)
       });
