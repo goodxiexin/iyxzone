@@ -3,14 +3,6 @@ class User::FriendsController < UserBaseController
   layout 'app'
   
   def index
-    @friends = current_user.friends
-    @json = @friends.map {|f| {:id => f.id, :login => f.login, :pinyin => f.pinyin, :game_ids => f.game_ids, :guild_ids => f.guild_ids}}
-
-    respond_to do |format|
-      format.json { render :json => @json }
-      format.html { render :action => 'index' }
-    end
-=begin
     @game = Game.find(params[:game_id]) unless params[:game_id].nil?
     @guild = Guild.find(params[:guild_id]) unless params[:guild_id].nil?
 
@@ -22,7 +14,6 @@ class User::FriendsController < UserBaseController
     when 2
       @friends = current_user.friends.find_all {|f| f.all_guilds.include?(@guild) }.paginate :page => params[:page], :per_page => 12, :order => 'created_at DESC'
     end
-=end
   end
 
   def new
