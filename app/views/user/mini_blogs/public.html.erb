@@ -29,7 +29,6 @@
                 <li id='mini_blog_category_same_game'><span><%= link_to_function "同游微博", "Iyxzone.MiniBlog.Pub.fetch('same_game');" %></span></li>
               </ul>
             </div>
-            <div class="mBlogPostHead"><span class="topicTag"><%= @today_topic %></span>，已有<%= @today_mini_blogs.total_entries %>条参与话题讨论</div>
             <div class="mBlogPostList" id='mini_blogs_list'>
               <%= render :partial => 'interested_mini_blogs', :locals => {:mini_blogs => @mini_blogs, :at => 'mini_blog_public'} %>
             </div>

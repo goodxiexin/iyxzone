@@ -5,17 +5,25 @@ class User::MiniBlogsController < UserBaseController
   PER_PAGE = 10
 
   def public
-    @mini_blogs = MiniBlog.recent.paginate :page => params[:page], :per_page => PER_PAGE    
-    @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5).all
-    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5).all
-   
+    @mini_blogs = MiniBlog.recent.paginate :page => params[:page], :per_page => PER_PAGE
+
+    Rails.cache.fetch("hot_idols", :expires_in => 1.hour) do
+      @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5).all
+    end
+
+    Rails.cache.fetch("pop_users", :expires_in => 1.hour) do
+      @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5).all
+    end
+
     # 今日话题和热门话题 
-    @meta_data = MiniBlogMetaData.first
-    @today_hot_word = @meta_data.today_hot_word
-    @today_mini_blogs = MiniBlog.search(@today_hot_word.search_key, :page => 1, :per_page => 50)
-    @shuffled_mini_blogs = @today_mini_blogs.shuffle[0..19]
-    @start_time, @hot_topics = @meta_data.find_hot_topics
-    @hot_topics = @hot_topics[0..9]
+    Rails.cache.fetch("today_topic", :expires_in => 1.hour) do
+      @meta_data = MiniBlogMetaData.first
+      @today_hot_word = @meta_data.today_hot_word
+      @today_mini_blogs = MiniBlog.search(@today_hot_word.search_key, :page => 1, :per_page => 50)
+      @shuffled_mini_blogs = @today_mini_blogs.shuffle[0..19]
+      @start_time, @hot_topics = @meta_data.find_hot_topics
+      @hot_topics = @hot_topics[0..9]
+    end
 
     # 引导热词
     @hot_words = HotWord.recent.limit(10)
@@ -55,7 +63,11 @@ class User::MiniBlogsController < UserBaseController
     @interested_user_ids = current_user.friend_ids.concat(current_user.idol_ids).concat([current_user.id])
     @mini_blogs = MiniBlog.by(@interested_user_ids).recent.paginate :page => 1, :per_page => PER_PAGE
     @hot_words = HotWord.recent.limit(10) 
-    @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
+  
+    Rails.cache.fetch("pop_users", :expires_in => 1.hour) do
+      @pop_users = User.match(:is_idol => false).order("friends_count DESC").limit(5)
+    end
+    
     @interested_topics = current_user.mini_topic_attentions
     @remote = {:update => 'mini_blogs_list', :url => {:action => 'home_list', :type => params[:type]}} 
   end
@@ -95,7 +107,11 @@ class User::MiniBlogsController < UserBaseController
     
     # search index
     @mini_blogs = MiniBlog.search(@fql, :sort => "created_at DESC", :page => params[:page], :per_page => PER_PAGE)
-    @idols = User.match(:is_idol => true).all
+
+    # hot idols
+    Rails.cache.fetch("hot_idols", :expires_in => 1.hour) do
+      @hot_idols = User.match(:is_idol => true).order("fans_count DESC").limit(5).all
+    end
  
     @meta_data = MiniBlogMetaData.first 
     @start_time, @hot_topics = @meta_data.find_hot_topics

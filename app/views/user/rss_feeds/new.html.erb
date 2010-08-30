@@ -2,12 +2,41 @@
   <%= javascript_include_tag 'rss' %>
 <% end %>
 
-<% if @rss.nil? %>
-<% form_for :rss_feed, :html => {:onsubmit => "Iyxzone.RSS.submit(this); return false;"} do |f| %>
-  <%= f.text_field 'link' %>
-  <button type='submit'>submit</button>
-<% end %>
-<% else %>
-<%= @rss.link %>
-<%= link_to_function "X", "Iyxzone.RSS.destroy(#{@rss.id}, this);" %>
+<% canvas_tag do %>
+  <div class="round_body">
+    <h1 class="app-log">日志</h1>
+    <div class="box02 canvas_int">
+      <div class="blogImport">
+        <h2 class="fix"><strong class="left">站外日志导入</strong><%= link_to "返回我的日志", blogs_url(:uid => current_user.id), :class => "right" %></h2>
+        <% if @rss.nil? %>
+          <% form_for :rss_feed, :html => {:onsubmit => "Iyxzone.RSS.submit(this); return false;"} do |f| %>
+            <div class="formcontent step-1">
+              <h3>导入站外日志</h3>
+              <p>你可以将你站外博客中的文章导入到一起游戏网，成功导入后那些文章将会出现在你的一起游戏网日志里。当系统检测到该站外博客有更新时，会自动同步更新到你的一起游戏网日志, 你的好友会看到并进行评论。</p>
+              <p><strong>导入您自己的日志，尊重他人著作权。</strong>请不要在一天内频繁的替换导入信息，如果检测到恶意导入，你的日志导入和发表日志功能都将会受到影响。</p>
+              <div class="rows s_clear">
+                <div class="fldid"><strong>地址：</strong></div>
+                <div class="fldvalue"><div class="textfield left"><%= text_field_tag 'rss_feed[link]', "在这里输入你的QQ号码或者博客空间的地址", :onclick => "$(this).clear();" %></div></div>
+              </div>
+              <div class="rows s_clear">
+                <div class="fldid"> </div>
+                <div class="fldvalue">
+                  <span class="button"><span><button type="submit">开始导入</button></span></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="formcontent step-1">
+            <h3>导入站外日志</h3>
+            <p>你可以将你站外博客中的文章导入到一起游戏网，成功导入后那些文章将会出现在你的一起游戏网日志里。当系统检测到该站外博客有更新时，会自动同步更新到你的一起游戏网日志, 你的好友会看到并进行评论。</p>
+            <div class="box04">
+              你所导入的站外博客的地址:<br/><%= link_to @rss.link, rss_feed_url(@rss) %>
+            </div>
+            <p><%= link_to_function "停止导入", "Iyxzone.RSS.destroy(#{@rss.id}, this);" %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 <% end %>

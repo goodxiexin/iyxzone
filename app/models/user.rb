@@ -203,6 +203,10 @@ class User < ActiveRecord::Base
 
 	has_many :servers, :through => :characters, :uniq => true
 
+  def game_ids
+    characters.map(&:game_id).uniq
+  end
+
   def interested_games
     games = []
     mini_topic_attentions.each do |a|
@@ -333,6 +337,10 @@ class User < ActiveRecord::Base
 		user.has_many :participated_guilds, :conditions => "memberships.status IN (#{Membership::Veteran}, #{Membership::Member})"
 
 	end
+
+  def guild_ids
+    memberships.map(&:guild_id).uniq
+  end
 	
   def common_guilds_with user
     all_guilds & user.all_guilds

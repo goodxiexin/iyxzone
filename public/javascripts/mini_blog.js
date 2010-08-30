@@ -18,7 +18,44 @@ Iyxzone.MiniBlog = {
   
   Topic: {},
 
-  Category: {}
+  Category: {},
+
+  showPopUsers: function(myID, friendIDs){
+    $$('li[id^=pu_]').each(function(li){
+      var id = li.readAttribute('id');
+      var userID = parseInt(id.split('_')[1]);
+      var con = li.down('div.m-con');
+      if(userID != myID && !friendIDs.include(userID)){
+        var link = new Element('a', {'class': 'red'}).update('<span class="icon-friend02"></span>加为好友');
+        con.appendChild(link);
+        link.observe('click', function(e){
+          Iyxzone.Facebox.link(Iyxzone.URL.newFriendRequest(userID), 'get', null);
+        }.bind(this));
+      }
+    }.bind(this));
+  },
+
+  showHotIdols: function(myID, idolIDs){
+    $$('div[class=op][id^=idol_]').each(function(div){
+      var id = div.readAttribute('id');
+      var userID = parseInt(id.split('_')[1]);
+      if(userID != myID){
+        var link = new Element('a');
+        if(idolIDs.include(userID)){
+          link.update("<span class='i iFollow'></span>成为粉丝");
+          link.observe('click', function(e){
+            Iyxzone.Idol.follow(userID, e.element());
+          }.bind(this));
+        }else{
+          link.update("<span class='i iNoFollow'></span>不做粉丝");
+          link.observe('click', function(e){
+            Iyxzone.Idol.unfollow(userID, e.element());
+          }.bind(this));
+        }
+        div.appendChild(link);
+      }
+    }.bind(this));  
+  }
 
 };
 

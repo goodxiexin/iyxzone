@@ -162,6 +162,10 @@ Object.extend(Iyxzone.URL, {
 
 Object.extend(Iyxzone.URL, {
 
+  newFriendRequest: function(friendID, params){
+    return this.build("/friend_requests/new?friend_id=" + friendID, params);
+  },
+
   createFriendRequest: function(friendID, params){
     return this.build("/friend_requests?friend_id=" + friendID, params);
   },

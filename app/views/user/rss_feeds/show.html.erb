@@ -3,24 +3,48 @@
   <%= javascript_include_tag 'rss' %>
 <% end %>
 
-<% if @error %>
-  不是合法的rss资源
-<% else %>
-<input type="checkbox" value=1 checked=false onclick="Iyxzone.RSS.Feeder.toggleAll(this);" >全选</input>
-
-<table>
-  <% @items.each_with_index do |item, i| %>
-  <tr>
-  <td width="30" align="center"><input type="checkbox" value=1 index=<%= i %> checked=false/></td> 
-  <td width="80"><%= item.title %></td>
-  <td width="60"><%= item.date %></td>
-  <td><%= link_to_function '预览', "Iyxzone.RSS.Feeder.preview(#{i});" %></td>
-  </tr>
-  <% javascript_tag do %>
-    Iyxzone.RSS.Feeder.addItem(<%= {:title => item.title, :date => item.date, :desc => item.description}.to_json %>)
-  <% end %>
-  <% end %>
-</table>
-
-<%= link_to_function "导入", "Iyxzone.RSS.Feeder.import(#{current_user.id}, this);" %>
+<% canvas_tag do %>
+  <div class="round_body">
+    <h1 class="app-log">日志</h1>
+    <div class="box02 canvas_int">
+      <div class="blogImport">
+        <h2 class="fix"><strong class="left">站外日志导入</strong><%= link_to "返回我的日志", blogs_url(:uid => current_user.id), :class => "right" %></h2>
+        <div class="formcontent step-2">
+          <div class="s_clear"><span class="button"><span>
+            <button type="submit" onclick="Iyxzone.RSS.Feeder.import(<%= current_user.id %>, this);">导入所选文章</button>
+          </span></span></div>
+          <div class="box02 space">
+            <div class="func">
+              <table cellpadding="0">
+                <tbody><tr>
+                  <td align="center" width="100">
+                    <input type="checkbox" value=1 checked=false onclick="Iyxzone.RSS.Feeder.toggleAll(this);" >全选</input>
+                  </td>
+                  <td width="280">标题</td>
+                  <td width="250">谁能浏览这篇日志</td>
+                </tr></tbody>
+              </table>
+            </div>
+            <div class="list">
+              <table cellpadding="0">
+                <tbody>
+                  <% @items.each_with_index do |item, i| %>
+                    <tr class="jl-cutline">
+                      <td align="center" width="100"><input type="checkbox" value=1 index=<%= i %> checked=false/></td>
+                      <td width="280"><div class="title"><%= item.title %></div></td>
+                      <td width="250"><%= select_tag 'privilege', options_for_select(privilege_options), :id => "ps_#{i}" %></td>
+                    </tr>
+                    <%= javascript_tag "Iyxzone.RSS.Feeder.addItem(#{{:title => item.title, :date => item.date, :desc => item.description}.to_json})" %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>                            
+          </div>  
+          <div class="s_clear space">                     
+            <span class="button"><span><button type="submit" onclick="Iyxzone.RSS.Feeder.import(<%= current_user.id %>, this);">导入所选文章</button></span></span> 
+          </div>    
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>

@@ -91,7 +91,7 @@ Object.extend(Iyxzone.RSS.Feeder, {
     for(var i=0;i<checked.length;i++){
       var idx = checked[i];
       var item = this.items[idx];
-      params += "blogs[" + idx + "][title]=" + encodeURIComponent(item.title) + "&blogs[" + idx + "][content]=" + encodeURIComponent(item.desc) + "&";
+      params += "blogs[" + idx + "][title]=" + encodeURIComponent(item.title) + "&blogs[" + idx + "][content]=" + encodeURIComponent(item.desc) + "&blogs[" + idx + "][privilege]=" + $('ps_' + idx).value + "&";
     }
     
     new Ajax.Request(Iyxzone.URL.createMultipleBlog(), {

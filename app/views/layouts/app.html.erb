@@ -10,13 +10,9 @@
 
 <% content_for :body do %>
 <body class='cut-side'>
-  <% cache("navbar-#{current_user.id}-#{current_user.unread_notifications_count}-#{current_user.unread_recv_mails.count}") do %>
   <%= render :partial => 'layouts/navbar' %>
-  <% end %>
   <div id="page" class="page_side_wrap s_clear">
-    <% cache("appbar-#{current_user.id}") do %>
-      <%= render :partial => 'layouts/appbar' %>
-    <% end %> 
+    <%= render :partial => 'layouts/appbar' %>
 	  <div class="main">
   		<div class="content">
 	  	<% flash.each do |key, msg| %>

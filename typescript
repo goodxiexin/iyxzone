@@ -6567,4 +6567,395 @@ Processing User::PostsController#destroy (for 127.0.0.1 at 2010-08-27 16:27:48) 
   [4;36;1mNotice Load (73.1ms)[0m   [0;1mSELECT * FROM `notices` WHERE (`notices`.producer_id = 13 AND `notices`.producer_type = 'Post') [0m
   [4;35;1mPost Destroy (0.2ms)[0m   [0mDELETE FROM `posts` WHERE `id` = 13[0m
   [4;36;1mSQL (0.1ms)[0m   [0;1mUPDATE forums SET posts_count = posts_count - 1 WHERE id = 110[0m
-  [4;35;1mTopic Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `topic
+  [4;35;1mTopic Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `topics`[0m
+  [4;36;1mTopic Load (0.1ms)[0m   [0;1mSELECT * FROM `topics` WHERE (`topics`.`id` = 11) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mUPDATE topics SET posts_count = posts_count - 1 WHERE id = 11[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mCOMMIT[0m
+Completed in 144ms (View: 2, DB: 99) | 200 OK [http://localhost/posts/13]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing User::PhotosController#hot (for 127.0.0.1 at 2010-08-27 16:36:18) [GET]
+  Parameters: {"uid"=>"14"}
+  [4;35;1mUser Columns (1.8ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.3ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 14) LIMIT 1[0m
+  [4;35;1mInvalidName Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `invalid_names`[0m
+  [4;36;1mInvalidName Load (0.0ms)[0m   [0;1mSELECT * FROM `invalid_names` WHERE (`invalid_names`.`user_id` = 14) LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mUser Update (0.2ms)[0m   [0;1mUPDATE `users` SET `updated_at` = '2010-08-27 16:36:18', `last_seen_at` = '2010-08-27 16:36:18' WHERE `id` = 14[0m
+  [4;35;1mSQL (5.5ms)[0m   [0mCOMMIT[0m
+  [4;36;1mPhoto Load (414.1ms)[0m   [0;1mSELECT * FROM `photos` WHERE (((`photos`.`verified` IN (0,1) AND `photos`.`privilege` IN (1,2,3))) AND (parent_id IS NULL and created_at > '2010-08-13 16:36:16')) ORDER BY digs_count DESC, created_at DESC LIMIT 0, 10[0m
+  [4;35;1mPhoto Columns (2.3ms)[0m   [0mSHOW FIELDS FROM `photos`[0m
+  [4;36;1mSQL (88.2ms)[0m   [0;1mSELECT count(*) AS count_all FROM `photos` WHERE (((`photos`.`verified` IN (0,1) AND `photos`.`privilege` IN (1,2,3))) AND (parent_id IS NULL and created_at > '2010-08-13 16:36:16')) [0m
+Rendering template within layouts/app
+Rendering user/photos/hot
+Rendered user/albums/_tab (4.5ms)
+  [4;35;1mPersonalPhoto Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `photos`[0m
+  [4;36;1mUser Load (68.3ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 59780) [0m
+  [4;35;1mProfile Load (11.7ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 59780) LIMIT 1[0m
+  [4;36;1mProfile Columns (1.0ms)[0m   [0;1mSHOW FIELDS FROM `profiles`[0m
+  [4;35;1mAlbum Columns (1.7ms)[0m   [0mSHOW FIELDS FROM `albums`[0m
+  [4;36;1mAlbum Load (5.6ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 60129) [0m
+  [4;35;1mPersonalAlbum Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `albums`[0m
+  [4;36;1mDig Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `digs`[0m
+  [4;35;1mDig Load (0.8ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 58836 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (114.9ms)
+  [4;36;1mAvatar Columns (1.8ms)[0m   [0;1mSHOW FIELDS FROM `photos`[0m
+  [4;35;1mUser Load (13.2ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 63896) [0m
+  [4;36;1mProfile Load (0.9ms)[0m   [0;1mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 63896) LIMIT 1[0m
+  [4;35;1mAlbum Load (0.2ms)[0m   [0mSELECT * FROM `albums` WHERE (`albums`.`id` = 64258) [0m
+  [4;36;1mAvatarAlbum Columns (1.1ms)[0m   [0;1mSHOW FIELDS FROM `albums`[0m
+  [4;35;1mDig Load (0.3ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 61481 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (46.3ms)
+  [4;36;1mUser Load (10.5ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 63555) [0m
+  [4;35;1mProfile Load (12.0ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 63555) LIMIT 1[0m
+  [4;36;1mAlbum Load (0.6ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 64208) [0m
+  [4;35;1mDig Load (0.3ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 61416 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (35.6ms)
+  [4;36;1mUser Load (9.2ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 62582) [0m
+  [4;35;1mProfile Load (1.6ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 62582) LIMIT 1[0m
+  [4;36;1mAlbum Load (1.0ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 62935) [0m
+  [4;35;1mDig Load (0.5ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 60986 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (32.4ms)
+  [4;36;1mUser Load (20.4ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 51639) [0m
+  [4;35;1mProfile Load (8.2ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 51639) LIMIT 1[0m
+  [4;36;1mAlbum Load (0.5ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 61594) [0m
+  [4;35;1mDig Load (0.2ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 59891 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (289.8ms)
+  [4;36;1mUser Load (0.8ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 59880) [0m
+  [4;35;1mProfile Load (0.6ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 59880) LIMIT 1[0m
+  [4;36;1mAlbum Load (0.5ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 60223) [0m
+  [4;35;1mDig Load (0.2ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 58921 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (11.3ms)
+  [4;36;1mUser Load (0.3ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 59787) [0m
+  [4;35;1mProfile Load (0.2ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 59787) LIMIT 1[0m
+  [4;36;1mAlbum Load (0.1ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 60127) [0m
+  [4;35;1mDig Load (0.2ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 58851 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (10.1ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 59780) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 59780) LIMIT 1[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 60129) [0m
+  [4;35;1mDig Load (0.2ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 58831 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (8.2ms)
+  [4;36;1mUser Load (8.2ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 56822) [0m
+  [4;35;1mProfile Load (0.7ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 56822) LIMIT 1[0m
+  [4;36;1mAlbum Load (11.5ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 57152) [0m
+  [4;35;1mDig Load (0.2ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 58811 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (30.2ms)
+  [4;36;1mUser Load (0.3ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 14) [0m
+  [4;35;1mProfile Load (0.1ms)[0m   [0mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 14) LIMIT 1[0m
+  [4;36;1mAlbum Load (0.2ms)[0m   [0;1mSELECT * FROM `albums` WHERE (`albums`.`id` = 18) [0m
+  [4;35;1mDig Load (0.2ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 61571 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_item (17.9ms)
+  [4;36;1mMail Load (0.1ms)[0m   [0;1mSELECT * FROM `mails` WHERE (`mails`.recipient_id = 14 AND (`mails`.`delete_by_recipient` = 0)) ORDER BY created_at DESC[0m
+  [4;35;1mMail Columns (1.0ms)[0m   [0mSHOW FIELDS FROM `mails`[0m
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:36:49 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:36:49 +0800 2010)
+Cached fragment hit: views/navbar-14-1-0 (1.3ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 14) LIMIT 1[0m
+  [4;35;1mNotification Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `notifications`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSELECT count(*) AS count_all FROM `notifications` WHERE (((`notifications`.`read` = 0) AND (`notifications`.user_id = 14)) AND (`notifications`.user_id = 14)) [0m
+Rendered layouts/_navbar (16.2ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:36:49 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:36:49 +0800 2010)
+Cached fragment miss: views/navbar-14-1-0 (0.8ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:36:49 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:36:49 +0800 2010)
+Cached fragment hit: views/appbar-14 (0.7ms)
+  [4;35;1mGame Load (0.1ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 14)) [0m
+  [4;36;1mGame Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `games`[0m
+Rendered layouts/_appbar (210.8ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:36:49 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:36:49 +0800 2010)
+Cached fragment miss: views/appbar-14 (0.5ms)
+  [4;35;1mAvatar Load (0.1ms)[0m   [0mSELECT * FROM `photos` WHERE (`photos`.`id` = 33961) AND ( (`photos`.`type` = 'Avatar' ) ) [0m
+Rendered layouts/_imbar (3.2ms)
+Rendered layouts/_footer (1.0ms)
+Completed in 1458ms (View: 703, DB: 715) | 200 OK [http://localhost/personal_photos/hot?uid=14]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:23) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:26) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:29) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:33) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:36) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:39) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:42) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:45) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:48) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing User::AlbumsController#index (for 127.0.0.1 at 2010-08-27 16:36:51) [GET]
+  Parameters: {"uid"=>"14"}
+  [4;36;1mUser Columns (1.9ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.3ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 14) LIMIT 1[0m
+  [4;36;1mInvalidName Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `invalid_names`[0m
+  [4;35;1mInvalidName Load (0.0ms)[0m   [0mSELECT * FROM `invalid_names` WHERE (`invalid_names`.`user_id` = 14) LIMIT 1[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mUser Update (0.2ms)[0m   [0mUPDATE `users` SET `updated_at` = '2010-08-27 16:36:51', `last_seen_at` = '2010-08-27 16:36:51' WHERE `id` = 14[0m
+  [4;36;1mSQL (17.3ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mUser Load (0.3ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 14) [0m
+  [4;36;1mAvatarAlbum Columns (0.7ms)[0m   [0;1mSHOW FIELDS FROM `albums`[0m
+  [4;35;1mAvatarAlbum Load (0.0ms)[0m   [0mSELECT * FROM `albums` WHERE (`albums`.owner_id = 14) AND ( (`albums`.`type` = 'AvatarAlbum' ) ) LIMIT 1[0m
+  [4;36;1mPersonalAlbum Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `albums`[0m
+  [4;35;1mPersonalAlbum Load (0.8ms)[0m   [0mSELECT * FROM `albums` WHERE (`albums`.owner_id = 14) AND (((`albums`.`verified` IN (0,1) AND `albums`.`privilege` IN (1,2,3,4))) AND (`albums`.owner_id = 14)) AND ( (`albums`.`type` = 'PersonalAlbum' ) ) ORDER BY created_at DESC[0m
+Rendering template within layouts/app
+Rendering user/albums/index
+Rendered user/albums/_tab (3.4ms)
+  [4;36;1mPersonalPhoto Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `photos`[0m
+  [4;35;1mPersonalPhoto Load (15.0ms)[0m   [0mSELECT * FROM `photos` WHERE (`photos`.album_id = 55664) AND ((`photos`.`verified` IN (0,1)) AND (`photos`.album_id = 55664)) AND ( (`photos`.`type` = 'PersonalPhoto' ) ) ORDER BY created_at DESC LIMIT 3[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 14) [0m
+Rendered user/albums/_album_item (27.9ms)
+  [4;35;1mPersonalPhoto Load (0.7ms)[0m   [0mSELECT * FROM `photos` WHERE (`photos`.album_id = 880) AND ((`photos`.`verified` IN (0,1)) AND (`photos`.album_id = 880)) AND ( (`photos`.`type` = 'PersonalPhoto' ) ) ORDER BY created_at DESC LIMIT 3[0m
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 14) [0m
+Rendered user/albums/_album_item (7.3ms)
+  [4;35;1mPersonalPhoto Load (27.5ms)[0m   [0mSELECT * FROM `photos` WHERE (`photos`.album_id = 396) AND ((`photos`.`verified` IN (0,1)) AND (`photos`.album_id = 396)) AND ( (`photos`.`type` = 'PersonalPhoto' ) ) ORDER BY created_at desc LIMIT 1[0m
+  [4;36;1mPersonalPhoto Load (2.1ms)[0m   [0;1mSELECT * FROM `photos` WHERE (`photos`.album_id = 396) AND ((`photos`.`verified` IN (0,1)) AND (`photos`.album_id = 396)) AND ( (`photos`.`type` = 'PersonalPhoto' ) ) ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 14) [0m
+Rendered user/albums/_album_item (124.0ms)
+  [4;36;1mAvatar Columns (2.5ms)[0m   [0;1mSHOW FIELDS FROM `photos`[0m
+  [4;35;1mAvatar Load (0.2ms)[0m   [0mSELECT * FROM `photos` WHERE (`photos`.`id` = 33961) AND ( (`photos`.`type` = 'Avatar' ) ) [0m
+  [4;36;1mAvatar Load (1.9ms)[0m   [0;1mSELECT * FROM `photos` WHERE (`photos`.album_id = 18) AND ((`photos`.`verified` IN (0,1)) AND (`photos`.album_id = 18)) AND ( (`photos`.`type` = 'Avatar' ) ) ORDER BY created_at DESC LIMIT 3[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 14) [0m
+Rendered user/albums/_album_item (47.6ms)
+  [4;36;1mMail Load (0.2ms)[0m   [0;1mSELECT * FROM `mails` WHERE (`mails`.recipient_id = 14 AND (`mails`.`delete_by_recipient` = 0)) ORDER BY created_at DESC[0m
+  [4;35;1mMail Columns (1.8ms)[0m   [0mSHOW FIELDS FROM `mails`[0m
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)
+Cached fragment hit: views/navbar-14-1-0 (2.4ms)
+  [4;36;1mProfile Load (0.2ms)[0m   [0;1mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 14) LIMIT 1[0m
+  [4;35;1mProfile Columns (2.2ms)[0m   [0mSHOW FIELDS FROM `profiles`[0m
+  [4;36;1mNotification Columns (1.4ms)[0m   [0;1mSHOW FIELDS FROM `notifications`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT count(*) AS count_all FROM `notifications` WHERE (((`notifications`.`read` = 0) AND (`notifications`.user_id = 14)) AND (`notifications`.user_id = 14)) [0m
+Rendered layouts/_navbar (38.5ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)
+Cached fragment miss: views/navbar-14-1-0 (1.6ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)
+Cached fragment hit: views/appbar-14 (1.5ms)
+  [4;36;1mGame Load (0.1ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 14)) [0m
+  [4;35;1mGame Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `games`[0m
+Rendered layouts/_appbar (221.6ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)
+Cached fragment miss: views/appbar-14 (0.5ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `photos` WHERE (`photos`.`id` = 33961) AND ( (`photos`.`type` = 'Avatar' ) ) [0m
+Rendered layouts/_imbar (144.5ms)
+Rendered layouts/_footer (1.0ms)
+Completed in 919ms (View: 639, DB: 80) | 200 OK [http://localhost/personal_albums?uid=14]
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:56) [GET]
+Rendering /errors/404 (404)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:36:59) [GET]
+Rendering /errors/404 (404)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:37:02) [GET]
+Rendering /errors/404 (404)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:37:05) [GET]
+Rendering /errors/404 (404)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:37:09) [GET]
+Rendering /errors/404 (404)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:37:12) [GET]
+Rendering /errors/404 (404)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:37:15) [GET]
+Rendering /errors/404 (404)
+  [4;35;1mSQL (0.1ms)[0m   [0mSET NAMES 'utf8'[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing User::Avatars::PhotosController#show (for 127.0.0.1 at 2010-08-27 16:37:18) [GET]
+  Parameters: {"id"=>"61571"}
+  [4;35;1mUser Columns (1.9ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mUser Load (0.3ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 14) LIMIT 1[0m
+  [4;35;1mInvalidName Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `invalid_names`[0m
+  [4;36;1mInvalidName Load (0.0ms)[0m   [0;1mSELECT * FROM `invalid_names` WHERE (`invalid_names`.`user_id` = 14) LIMIT 1[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mUser Update (0.2ms)[0m   [0;1mUPDATE `users` SET `updated_at` = '2010-08-27 16:37:18', `last_seen_at` = '2010-08-27 16:37:18' WHERE `id` = 14[0m
+  [4;35;1mSQL (18.1ms)[0m   [0mCOMMIT[0m
+  [4;36;1mAvatar Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `photos`[0m
+  [4;35;1mAvatar Load (0.2ms)[0m   [0mSELECT * FROM `photos` WHERE (`photos`.`id` = 61571) AND ( (`photos`.`type` = 'Avatar' ) ) [0m
+  [4;36;1mAlbum Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `albums`[0m
+  [4;35;1mAlbum Load (0.1ms)[0m   [0mSELECT * FROM `albums` WHERE (`albums`.`id` = 18) [0m
+  [4;36;1mAvatarAlbum Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `albums`[0m
+  [4;35;1mUser Load (0.2ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 14) [0m
+  [4;36;1mPersonalAlbum Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `albums`[0m
+  [4;35;1mSQL (199.0ms)[0m   [0mSELECT count(DISTINCT `albums`.id) AS count_id FROM `albums` WHERE (((`albums`.`verified` IN (0,1) AND `albums`.`privilege` IN (1,2,3))) AND (`albums`.`poster_id` = 14)) AND ( (`albums`.`type` = 'PersonalAlbum' ) ) [0m
+  [4;36;1mPersonalAlbum Load (145.8ms)[0m   [0;1mSELECT * FROM `albums` WHERE (((`albums`.`verified` IN (0,1) AND `albums`.`privilege` IN (1,2,3))) AND (`albums`.`poster_id` = 14)) AND ( (`albums`.`type` = 'PersonalAlbum' ) ) ORDER BY created_at DESC[0m
+  [4;35;1mPhotoTag Load (0.4ms)[0m   [0mSELECT * FROM `photo_tags` WHERE (`photo_tags`.photo_id = 61571) [0m
+Rendering template within layouts/app
+Rendering user/avatars/photos/show
+Rendered user/albums/_tab (3.8ms)
+Rendered user/photos/_photo_path (4.3ms)
+  [4;36;1mDig Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `digs`[0m
+  [4;35;1mDig Load (0.5ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 61571 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+Rendered user/photos/_photo_operations (7.5ms)
+Rendered user/photos/_photo_desc (1.4ms)
+  [4;36;1mAvatar Load (1.8ms)[0m   [0;1mSELECT * FROM `photos` WHERE (`photos`.album_id = 18) AND ((`photos`.`verified` IN (0,1)) AND (`photos`.album_id = 18)) AND ( (`photos`.`type` = 'Avatar' ) ) ORDER BY created_at DESC[0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `photos` WHERE (`photos`.album_id = 18) AND ((`photos`.`verified` IN (0,1)) AND (`photos`.album_id = 18)) AND ( (`photos`.`type` = 'Avatar' ) ) ORDER BY created_at DESC[0m
+Rendered user/photos/_photo_slide (7.5ms)
+  [4;36;1mCACHE (0.0ms)[0m   [0;1mSELECT * FROM `users` WHERE (`users`.`id` = 14) [0m
+  [4;35;1mCACHE (0.0ms)[0m   [0mSELECT * FROM `digs` WHERE (`digs`.`poster_id` = 14) AND (`digs`.diggable_id = 61571 AND `digs`.diggable_type = 'Photo') LIMIT 1[0m
+  [4;36;1mComment Load (0.7ms)[0m   [0;1mSELECT * FROM `comments` WHERE (`comments`.commentable_id = 61571 AND `comments`.commentable_type = 'Photo') AND ((`comments`.`verified` IN (0,1)) AND (`comments`.commentable_id = 61571 AND `comments`.commentable_type = 'Photo')) ORDER BY created_at ASC LIMIT 0, 20[0m
+  [4;35;1mAvatar Load (0.1ms)[0m   [0mSELECT * FROM `photos` WHERE (`photos`.`id` = 33961) AND ( (`photos`.`type` = 'Avatar' ) ) [0m
+Rendered user/comments/_comment_box (17.5ms)
+Rendered user/resources/_foot_func (24.8ms)
+Rendered user/resources/_randoms (4.6ms)
+  [4;36;1mGame Load (0.2ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 14)) [0m
+  [4;35;1mGame Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `games`[0m
+  [4;36;1mUser Load (5.0ms)[0m   [0;1mSELECT `users`.* FROM `users` INNER JOIN `friendships` ON `users`.id = `friendships`.friend_id WHERE ((`friendships`.user_id = 14) AND ((`friendships`.`status` = 1))) ORDER BY pinyin ASC[0m
+  [4;35;1mGame Load (0.9ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 174)) [0m
+  [4;36;1mGame Load (0.6ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 308)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 142)) [0m
+  [4;36;1mGame Load (0.5ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 66)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 361)) [0m
+  [4;36;1mGame Load (0.5ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 162)) [0m
+  [4;35;1mGame Load (0.7ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 2)) [0m
+  [4;36;1mGame Load (0.5ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 416)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 10)) [0m
+  [4;36;1mGame Load (0.6ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 591)) [0m
+  [4;35;1mGame Load (1.3ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 16)) [0m
+  [4;36;1mGame Load (0.9ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 82)) [0m
+  [4;35;1mGame Load (0.6ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 17109)) [0m
+  [4;36;1mGame Load (0.5ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 108)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 95)) [0m
+  [4;36;1mGame Load (0.6ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 3870)) [0m
+  [4;35;1mGame Load (0.6ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 56561)) [0m
+  [4;36;1mGame Load (0.5ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 281)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 7)) [0m
+  [4;36;1mGame Load (1.2ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 245)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 4)) [0m
+  [4;36;1mGame Load (0.6ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 98)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 75)) [0m
+  [4;36;1mGame Load (0.6ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 2952)) [0m
+  [4;35;1mGame Load (0.6ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 10441)) [0m
+  [4;36;1mGame Load (0.5ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 307)) [0m
+  [4;35;1mGame Load (0.6ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 20)) [0m
+  [4;36;1mGame Load (0.6ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 24479)) [0m
+  [4;35;1mGame Load (0.6ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 52450)) [0m
+  [4;36;1mGame Load (19.7ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 9)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 44)) [0m
+  [4;36;1mGame Load (0.6ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 3)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 17)) [0m
+  [4;36;1mGame Load (0.5ms)[0m   [0;1mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 612)) [0m
+  [4;35;1mGame Load (0.5ms)[0m   [0mSELECT DISTINCT `games`.* FROM `games` INNER JOIN `game_characters` ON `games`.id = `game_characters`.game_id WHERE ((`game_characters`.user_id = 3762)) [0m
+Rendered user/photo_tags/_control_panel (457.1ms)
+  [4;36;1mMail Load (0.1ms)[0m   [0;1mSELECT * FROM `mails` WHERE (`mails`.recipient_id = 14 AND (`mails`.`delete_by_recipient` = 0)) ORDER BY created_at DESC[0m
+  [4;35;1mMail Columns (6.6ms)[0m   [0mSHOW FIELDS FROM `mails`[0m
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)
+Cached fragment hit: views/navbar-14-1-0 (0.5ms)
+  [4;36;1mProfile Load (0.1ms)[0m   [0;1mSELECT * FROM `profiles` WHERE (`profiles`.user_id = 14) LIMIT 1[0m
+  [4;35;1mProfile Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `profiles`[0m
+  [4;36;1mNotification Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `notifications`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT count(*) AS count_all FROM `notifications` WHERE (((`notifications`.`read` = 0) AND (`notifications`.user_id = 14)) AND (`notifications`.user_id = 14)) [0m
+Rendered layouts/_navbar (15.3ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)
+Cached fragment miss: views/navbar-14-1-0 (0.5ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)
+Cached fragment hit: views/appbar-14 (0.4ms)
+Rendered layouts/_appbar (14.5ms)
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:37:22 +0800 2010)
+Cached fragment miss: views/appbar-14 (0.5ms)
+Rendered layouts/_imbar (1.9ms)
+Rendered layouts/_footer (1.1ms)
+Completed in 1175ms (View: 704, DB: 427) | 200 OK [http://localhost/avatars/61571]
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:37:23) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:37:26) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2010-08-27 16:37:30) [GET]
+Rendering /errors/404 (404)
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+
+
+Processing User::RssFeedsController#new (for 127.0.0.1 at 2010-08-27 16:55:11) [GET]
+  [4;36;1mUser Columns (1.9ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mUser Load (0.3ms)[0m   [0mSELECT * FROM `users` WHERE (`users`.`id` = 14) LIMIT 1[0m
+  [4;36;1mInvalidName Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `invalid_names`[0m
+  [4;35;1mInvalidName Load (0.0ms)[0m   [0mSELECT * FROM `invalid_names` WHERE (`invalid_names`.`user_id` = 14) LIMIT 1[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mUser Update (0.2ms)[0m   [0mUPDATE `users` SET `updated_at` = '2010-08-27 16:55:11', `last_seen_at` = '2010-08-27 16:55:11' WHERE `id` = 14[0m
+  [4;36;1mSQL (8.8ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mRssFeed Load (0.3ms)[0m   [0mSELECT * FROM `rss_feeds` WHERE (`rss_feeds`.user_id = 14) LIMIT 1[0m
+Rendering template within layouts/app
+Rendering user/rss_feeds/new
+  [4;36;1mMail Load (0.1ms)[0m   [0;1mSELECT * FROM `mails` WHERE (`mails`.recipient_id = 14 AND (`mails`.`delete_by_recipient` = 0)) ORDER BY created_at DESC[0m
+  [4;35;1mMail Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `mails`[0m
+MemCacheError (No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - connect(2)), will retry at Fri Aug 27 16:55:41 +0800 2010)): No connection to server (localhost:11211 DEAD (Errno::ECONNREFUSED: Connection refused - conn

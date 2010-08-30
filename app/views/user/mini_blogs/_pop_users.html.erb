@@ -1,3 +1,4 @@
+<% cache "pop_users" do %>
           <div class="round06 round_r_t popMemberEx space">
             <div class="round_l_t">
               <div class="round_r_b">
@@ -7,15 +8,12 @@
                       <h2 class="title">人气排行榜</h2>
                       <ul class="list">
                         <% users.each do |user| %>
-                        <li>
+                        <li id='pu_<%= user.id %>'>
                           <div class="m-card">
                             <div class="m-avatar"><%= avatar user, :class => "imgbox01" %></div>
                             <div class="m-con">
                               <h4><%= profile_link user, :class => "member-name" %></h4>
                               <div><%= "好友数量：#{user.friends_count}" %></div>
-                              <% if user != current_user and !user.has_friend?(current_user) %>
-                                <%= facebox_link '<span class="icon-friend02"></span>加为好友', new_friend_request_url(:friend_id => user.id), :class => "red" %>
-                              <% end %>
                             </div>
                           </div>
                         </li>
@@ -27,4 +25,9 @@
               </div>
             </div>
           </div>
+<% end %>
 
+<% javascript_tag do %>
+  friends = <%= current_user.friend_ids.to_json %>
+  Iyxzone.MiniBlog.showPopUsers(<%= current_user.id %>, friends);
+<% end %>

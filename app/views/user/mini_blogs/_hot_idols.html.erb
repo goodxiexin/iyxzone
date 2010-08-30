@@ -1,3 +1,4 @@
+<% cache "hot_idols" do %>
           <div class="round06 round_r_t popMemberEx space">
             <div class="round_l_t">
               <div class="round_r_b">
@@ -14,11 +15,6 @@
                               <h4><%= profile_link idol, :class => 'member-name' %></h4>
                               <div><%= game_link idol.skilled_game, :class => "red" %></div>
                               <div class="op" id='idol_<%= idol.id %>_op'>
-                                <% if idol.has_fan? current_user %>
-                                  <%= render :partial => 'user/idols/unfollow', :locals => {:idol => idol} %>
-                                <% elsif idol != current_user %>
-                                  <%= render :partial => 'user/idols/follow', :locals => {:idol => idol} %>
-                                <% end %>
                               </div>
                             </div>
                           </div>
@@ -34,4 +30,9 @@
               </div>
             </div>
           </div>
+<% end %>
 
+<% javascript_tag do %>
+  idols = <%= current_user.idol_ids.to_json %>
+  Iyxzone.MiniBlog.showHotIdols(<%= current_user.id %>, idols);
+<% end %>
