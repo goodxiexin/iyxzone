@@ -1,6 +1,5 @@
 class AddGameResources < ActiveRecord::Migration
   def self.up
-=begin
     puts "convert blog"
     Blog.all.each do |b|
       b.new_relative_games = [b.game_id]
@@ -42,7 +41,6 @@ class AddGameResources < ActiveRecord::Migration
 
     remove_column :albums, :game_id
     remove_column :photos, :game_id
-=end
 
     puts "convert news"
     News.all.each do |p|
