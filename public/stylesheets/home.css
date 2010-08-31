@@ -1133,6 +1133,8 @@ h1.app-share{float:left}
 
 /*好友下拉选择列表*/
 .selector03{height:auto;position:relative;z-index:10}
+.z-box .selector03{width:200px}
+.z-box .selector03 .drop-menu {width:190px}
 .selector03 ul.friend-select-list{position:relative;cursor:text;line-height:18px;min-height:20px;padding:2px 3px 0;}
 .selector03 ul.friend-select-list li{padding:0 4px 0 0;margin:2px 0;position:relative;float:left;}
 .selector03 ul.friend-select-list li a {border-color:#d1e2c5;border-style:solid;border-width:1px 0;color:#333;display:block;float:left;text-decoration:none;background:#f4fdef;width:auto;height:auto;overflow:visible;position:relative;}
@@ -1909,21 +1911,21 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 
 /*v2.0个人主页*/
 body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center 0}
-.alphaHeader{width:940px;margin:0 auto;height:42px;background:url(../images/skin/alpha-header.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/alpha-header.png');}
+.alphaHeader{height:42px;background:url(../images/skin/alpha-header.png) no-repeat;/*_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/alpha-header.png');*/}
 .alphaHeader #navbar,.alphaHeader #navbar #navwrap,.alphaHeader #navbar #navwrap #navmid{background:none}
-.alphaLogo{background:url(../images/skin/logo-top-v2.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/logo-top-v2.png');}
+.alphaHeader .logo-top{background:url(../images/skin/logo-top-v2.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/logo-top-v2.png');}
 
 .alphaPage{width:940px;margin:0 auto;clear:both;}
 .alphaPage .pageSkinV2{background:url(../images/skin/page-bg-alpha.png);width:100%;position:relative;}
 .alphaPage .pageRoundTop{background:url(../images/skin/page-round-alpha.png) no-repeat;margin:70px 0 0 0;height:10px}
 .alphaPage .pageRoundBottom{background:url(../images/skin/page-round-alpha.png) no-repeat 0 -10px;height:10px}
 
-.pageSkinV2 .alphaSide{position:relative;margin:0;}
+.pageSkinV2 .alphaSide{position:relative;margin:0;*margin:0 !important;}
 .alphaPage .pageSkinV2 .mainWrap{margin:0 0 0 -340px;*margin:0 0 0 -340px !important}
 .alphaPage .pageSkinV2 .alphaContent{margin:0 0 0 340px;/*_margin:0 0 0 380px;width:580px*/}
 
 .avatarXl{position:absolute;top:-60px;left:40px;background:url(../images/skin/alpha-avatar-xl.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/alpha-avatar-xl.png');}
-.avatarXl .wrap{width:280px;height:280px;display:table-cell;vertical-align:middle;text-align:center;*display: block;*font-size:244px;/*约为高度的0.873*/*font-family:Arial;_padding-top:25px}
+.avatarXl .wrap{width:280px;height:280px;display:table-cell;vertical-align:middle;text-align:center;*display: block;*font-size:244px;/*约为高度的0.873*/*font-family:Arial;*padding-top:25px}
 .memberProfile{padding:220px 0 0 20px;width:317px;height:154px;}
 .memberProfile .wrapBg{position:absolute;z-index:1;width:317px;height:154px;background:url(../images/skin/alpha-profile-bg.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/alpha-profile-bg.png');}
 .memberProfile .wrapCon{position:absolute;z-index:2}
@@ -1933,7 +1935,7 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .memberProfile .intro li.nobd{border:0}
 .memberProfile .intro .num{color:#ccff00;display:block;margin-bottom:5px;font-size:14px}
 .memberProfile .op{margin:30px 0 0 20px}
-.memberProfile .op li{float:left;width:40%;margin:5px}
+.memberProfile .op li{float:left;width:130px;margin:5px}
 .alphaBtn{width:75px;height:27px;line-height:28px;display:inline-block;cursor:pointer;background:url(../images/skin/alpha-btn.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=scale, src='images/skin/alpha-btn.png');}
 
 .alphaTitle{height:42px;line-height:37px;background:url(../images/skin/alpha-skin.png) no-repeat right -563px;padding-right:10px}
@@ -1942,12 +1944,13 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .alphaTitle .op{float:right;margin-right:10px;color:#fff}
 .alphaTitle .i{margin-top:10px}
 
+.alphaColum{margin:20px 0 0 0}
 .alphaSide .alphaColum{width:315px;margin:20px 0 0 20px}
-.alphaColum .alphaTitle,.alphaColum .ac-bd,.alphaColum .ac-ft{margin:0 10px 10px 10px}
+.alphaColum .alphaTitle,.alphaColum .ac-bd,.alphaColum .ac-ft{margin:0 15px 10px 15px}
 .alphaColum .ac-r-t{background:url(../images/skin/alpha-skin.png) no-repeat right -8px;padding-right:20px;height:6px;font-size:0;line-height:0;}
 .alphaColum .ac-r-t em{background:url(../images/skin/alpha-skin.png) no-repeat;height:6px;display:block}
-.alphaColum .ac-r-m{background:#fff;padding:20px 0;}
-.alphaColum .ac-r-b{background:url(../images/skin/alpha-skin.png) no-repeat right -24px;padding-right:20px;height:6px;}
+.alphaColum .ac-r-m{background:#fff;padding:15px 0;}
+.alphaColum .ac-r-b{background:url(../images/skin/alpha-skin.png) no-repeat right -24px;padding-right:20px;height:6px;font-size:0;line-height:0;}
 .alphaColum .ac-r-b em{background:url(../images/skin/alpha-skin.png) no-repeat 0 -16px;height:6px;display:block}
 .alphaColum .ac-ft{text-align:right;margin-top:10px}
 .alphaSide .colGuild .item{padding:0 0 10px 70px;margin-top:10px}
@@ -1990,8 +1993,10 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .alphaContent .myGameList li .gameName{display:block;color:#fff;margin:10px 0}
 .alphaContent .moreGame{background:#fff;padding-bottom:20px}
 .alphaContent .moreGame a{background:url(../images/skin/alpha-skin.png) no-repeat -288px -33px;width:138px;height:27px;line-height:27px;display:block;color:#fff;text-align:center;margin:0 auto;font-weight:700}
-
 .alphaContent .s-dialog .arrow-dialog{_left:-17px;}
+
+.acMain .acMainWrap{margin-top:0}
+.acMain .acMainWrap .ac-r-m{padding-top:0}
 
 .gameIntroPop{width:325px;}
 .gameIntroPop .r-t{background:url(../images/skin/alpha-skin.png) no-repeat right -371px;padding-right:20px;height:107px;}
@@ -2013,5 +2018,6 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .gameIntroPop .ft a{color:#e26a00;font-weight:700;margin-right:20px}
 
 
-
-
+/*个人主页-档案*/
+.acMain .archives-box .percent-box .percent{width:200px}
+.acMain .archives-box .edit-toggle .fldid{width:80px}

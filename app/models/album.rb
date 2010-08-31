@@ -2,7 +2,7 @@ class Album < ActiveRecord::Base
 
 	belongs_to :poster, :class_name => 'User'
 
-  belongs_to :game
+  related_to_game
 
   named_scope :recent, :conditions => "photos_count != 0", :order => 'uploaded_at DESC'
 

@@ -8,6 +8,6 @@ class EventPhoto < Photo
                          :create_conditions => lambda {|user, photo, album| album.event.has_participant? user},
                          :candidates => lambda {|tagger, photo, album| album.event.participants}
   
-  attr_readonly :album_id, :privilege
+  attr_readonly :album_id
 
 end

@@ -8,7 +8,7 @@ class EventAlbumObserver < ActiveRecord::Observer
     event = album.event
     album.poster_id = event.poster_id
     album.privilege = 1
-    album.game_id = event.game_id
+    album.new_relative_games = [event.game_id]
     album.title = "活动'#{event.title}'的相册" 
   end
 

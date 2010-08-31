@@ -1050,9 +1050,11 @@ Object.extend(Iyxzone.Game.Presentor, {
 
 });
 
-Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Local, {
+Iyxzone.Game.Autocompleter2 = Class.create(Autocompleter.Local, {
 
   gameCache: new Array(),
+
+  isFetching: false,
 
   initialize: function($super, element, update, options){
     options = Object.extend({}, options || {});
@@ -1113,10 +1115,17 @@ Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Local, {
     var choices = "";
 
     if(this.gameCache.length == 0){
+      if(this.isFetching)
+        return;
+
       new Ajax.Request(Iyxzone.URL.listGameDetails(), {
         method: 'get',
-        onLoading: function(){},
-        onComplete: function(){},
+        onLoading: function(){
+          this.isFetching = true;
+        }.bind(this),
+        onComplete: function(){
+          this.isFetching = false;
+        }.bind(this),
         onSuccess: function(transport){
           this.gameCache = transport.responseText.evalJSON();
           this.updateChoices(this.buildListFromCache());
@@ -1178,10 +1187,10 @@ Iyxzone.Game.Tagger = Class.create({
     }
 
     // custom auto completer
-    new Iyxzone.Game.Autocompleter(this.relGameList.getMainInput(), this.gameList, {
+    new Iyxzone.Game.Autocompleter2(this.relGameList.getMainInput(), this.gameList, {
       afterUpdateElement: this.afterSelectGame.bind(this),
       tipText: '输入你游戏的拼音或者名字',
-      emptyText: '没有匹配的好友...',
+      emptyText: '没有匹配的游戏...',
       comp: this.relGameList.holder
     }); 
   },

@@ -10,17 +10,15 @@ class Photo < ActiveRecord::Base
 
 	named_scope :hot, :conditions => ["parent_id IS NULL and created_at > ?", 2.weeks.ago.to_s(:db)], :order => "digs_count DESC, created_at DESC"
 
-  needs_verification :sensitive_columns => [:notation]
+  acts_as_privileged_resources :owner_field => :poster, :validate_on => "false"
 
-	acts_as_privileged_resources :owner_field => :poster, :validate_on => "false"
+  needs_verification :sensitive_columns => [:notation]
 
   acts_as_commentable :order => 'created_at ASC',
                       :delete_conditions => lambda {|user, photo, comment| photo.album.poster == user || comment.poster == user},
                       :create_conditions => lambda {|user, photo| photo.available_for?(user.relationship_with photo.album.poster)}
  
   acts_as_diggable :create_conditions => lambda {|user, photo| photo.available_for? user.relationship_with(photo.poster)}
-
-  attr_readonly :poster_id, :game_id
 
   def is_cover?
     album.cover_id == id
@@ -51,6 +49,6 @@ class Photo < ActiveRecord::Base
 
   validates_presence_of :album_id, :if => "thumbnail.blank?", :on => :create
 
-  attr_readonly :poster_id, :game_id
+  attr_readonly :poster_id
 
 end

@@ -88,7 +88,6 @@ Object.extend(Iyxzone.Facebox, {
     // hack
     var zm = $('facebox_content').up();
     var oldClass = zm.readAttribute('class');
-    alert(oldClass);
     zm.addClassName('z-error');
 
     this.setContent('<p class="z-h s_clear"><strong class="left">' + title + '</strong><a onclick="Iyxzone.Facebox.close();" class="icon2-close right"></a></p><div class="z-con"><p>' + mess + '</p></div>');

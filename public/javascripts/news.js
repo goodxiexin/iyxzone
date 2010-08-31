@@ -188,6 +188,8 @@ Object.extend(Iyxzone.News.Builder, {
 
   swfuploader: null, 
 
+  gameTagger: null,
+
   validateTextNews: function() {
     if ($('news_title').value == '') {
       error("请填写标题")
@@ -203,10 +205,6 @@ Object.extend(Iyxzone.News.Builder, {
     }
     if ($('news_data').length > 10000) {
       error("内容最长为10000个字节")
-      return false;
-    }
-    if ($('news_game_id').value == '') {
-      error("请选择与新闻相关的游戏")
       return false;
     }
     return true;
@@ -225,10 +223,6 @@ Object.extend(Iyxzone.News.Builder, {
       error("请填写视频url")
       return false;
     }
-    if ($('news_game_id').value == '') {
-      error("请选择与新闻相关的游戏")
-      return false;
-    }
     return true;
   },
 
@@ -245,10 +239,6 @@ Object.extend(Iyxzone.News.Builder, {
       error("请填写新闻描述")
       return false;
     }
-    if ($('news_game_id').value == '') {
-      error("请选择与新闻相关的游戏")
-      return false;
-    }
     return true;    
   },
 
@@ -257,6 +247,10 @@ Object.extend(Iyxzone.News.Builder, {
       this.editor.nicInstances[i].saveContent();
     }
     this.parameters = $(form).serialize();
+    var games = this.gameTagger.getNewRelGames();
+    for(var i=0;i<games.length;i++){
+      this.parameters += "&news[new_relative_games][]=" + games[i];
+    }
   },
 
   saveTextNews: function(button, form){
@@ -374,15 +368,21 @@ Object.extend(Iyxzone.News.Builder, {
     $('news-hide').show();
   },
 
-  initTextNews: function(textAreaID, token, albumInfos){
+  initTextNews: function(textAreaID, token, albumInfos, max, tags, input, list){
     this.editor = new nicEditor().panelInstance(textAreaID);
     nicEditors.albums = albumInfos;
     nicEditors.authenticity_token = token;
+    this.gameTagger = new Iyxzone.Game.Tagger(max, tags, input, list);
   },
 
-  initPictureNews: function(token, sessionKey, cookieValue){
+  initPictureNews: function(token, sessionKey, cookieValue, max, tags, input, list){
     // setup swfuploader
     this.swfuploader = new Iyxzone.News.Builder.SWFUploader(token, sessionKey, cookieValue);
+    this.gameTagger = new Iyxzone.Game.Tagger(max, tags, input, list);
+  },
+
+  initVideoNews: function(max, tags, input, list){
+    this.gameTagger = new Iyxzone.Game.Tagger(max, tags, input, list);
   }
 
 });

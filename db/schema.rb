@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(:version => 20100831051015) do
     t.string   "type"
     t.integer  "poster_id"
     t.integer  "owner_id"
-    t.integer  "game_id"
     t.integer  "photos_count",   :default => 0
     t.integer  "privilege",      :default => 1
     t.integer  "cover_id"
@@ -527,7 +526,6 @@ ActiveRecord::Schema.define(:version => 20100831051015) do
   end
 
   create_table "news", :force => true do |t|
-    t.integer  "game_id"
     t.integer  "poster_id"
     t.string   "news_type"
     t.string   "origin_address"
@@ -620,9 +618,7 @@ ActiveRecord::Schema.define(:version => 20100831051015) do
     t.integer  "tags_count",     :default => 0
     t.integer  "comments_count", :default => 0
     t.integer  "album_id"
-    t.integer  "game_id"
     t.integer  "poster_id"
-    t.integer  "privilege"
     t.text     "notation"
     t.integer  "parent_id"
     t.string   "content_type"
@@ -634,6 +630,7 @@ ActiveRecord::Schema.define(:version => 20100831051015) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "verified",       :default => 0
+    t.integer  "privilege"
   end
 
   add_index "photos", ["album_id"], :name => "index_photos_on_album_id"
@@ -676,7 +673,6 @@ ActiveRecord::Schema.define(:version => 20100831051015) do
   create_table "polls", :force => true do |t|
     t.string   "name"
     t.integer  "poster_id"
-    t.integer  "game_id"
     t.text     "description"
     t.text     "explanation"
     t.integer  "max_multiple",   :default => 1

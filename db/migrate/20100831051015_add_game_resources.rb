@@ -7,7 +7,6 @@ class AddGameResources < ActiveRecord::Migration
       b.save  
     end
     remove_column :blogs, :game_id
-=end
 
     puts "convert video"
     Video.all.each do |v|
@@ -15,6 +14,42 @@ class AddGameResources < ActiveRecord::Migration
       v.save  
     end
     remove_column :videos, :game_id
+
+    puts "convert poll"
+    Poll.all.each do |p|
+      p.new_relative_games = [p.game_id]
+      p.save  
+    end
+    remove_column :polls, :game_id
+
+    puts "convert personal album"
+    PersonalAlbum.all.each do |p|
+      p.new_relative_games = [p.game_id]
+      p.save  
+    end
+
+    puts "convert event album"
+    EventAlbum.all.each do |p|
+      p.new_relative_games = [p.game_id]
+      p.save  
+    end
+
+    puts "convert guild album"
+    GuildAlbum.all.each do |p|
+      p.new_relative_games = [p.game_id]
+      p.save  
+    end
+
+    remove_column :albums, :game_id
+    remove_column :photos, :game_id
+=end
+
+    puts "convert news"
+    News.all.each do |p|
+      p.new_relative_games = [p.game_id]
+      p.save  
+    end
+    remove_column :news, :game_id
   end
 
   def self.down

@@ -13,6 +13,6 @@ class Avatar < Photo
     (poster.friends.find_all{|f| f.application_setting.recv_photo_feed?} + (poster.is_idol ? poster.fans : [])).uniq
   }
   
-  attr_readonly :album_id, :privilege
+  attr_readonly :album_id
 
 end

@@ -1,5 +1,6 @@
 Iyxzone.Poll = {
-  version: '1.0',
+
+  version: '1.3',
 
   author: ['高侠鸿'],
 
@@ -148,13 +149,13 @@ Object.extend(Iyxzone.Poll, {
 // create poll
 Object.extend(Iyxzone.Poll.Builder, {
 
-  validate: function(){
-    var game_id = $('poll_game_id');
-    if(game_id.value == ''){
-      error('游戏类别不能为空');
-      return false;
-    }
+  gameTagger: null,
 
+  init: function(max, tags, input, list){
+    this.gameTagger = new Iyxzone.Game.Tagger(max, tags, input, list);
+  },
+
+  validate: function(){
     var name = $('poll_name');
     if(name.value == ''){
       error('标题不能为空');
@@ -199,12 +200,27 @@ Object.extend(Iyxzone.Poll.Builder, {
     return true;
   },
 
+  buildParams: function(form){
+    var params = $(form).serialize();
+
+    var newGames = this.gameTagger.getNewRelGames();
+    var delGames = this.gameTagger.getDelRelGames();
+    for(var i=0;i<newGames.length;i++){
+      params += "&poll[new_relative_games][]=" + newGames[i];
+    }
+    for(var i=0;i<delGames.length;i++){
+      params += "&poll[del_relative_games][]=" + delGames[i];
+    }
+
+    return params;
+  },
+
   save: function(button, form){
     Iyxzone.disableButton(button, '请等待..');
     if(this.validate()){
       new Ajax.Request(Iyxzone.URL.createPoll(), {
         method: 'post',
-        parameters: $(form).serialize(),
+        parameters: this.buildParams(form),
         onLoading: function(){
         },
         onComplete: function(){

@@ -6,7 +6,6 @@ class AvatarAlbumObserver < ActiveRecord::Observer
 
     # inherit some attributes from album
     album.poster_id = album.owner_id
-    album.game_id = nil
     album.privilege = PrivilegedResource::FRIEND
     album.title = "#{album.poster.login}的头像相册"
   end

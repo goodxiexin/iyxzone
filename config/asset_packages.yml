@@ -25,6 +25,7 @@ javascripts:
   - production_config
   - mini_blog
   - guestbook
+  - textboxlist
 - register:
   - register
   - event.simulate
@@ -43,14 +44,12 @@ javascripts:
   - event.simulate
 - photo:
   - photo
-  - textboxlist
   - cropper
 - album:
   - album
 - blog:
   - blog
   - yushan_nicEdit
-  - textboxlist
 - event:
   - event
 - search:
@@ -67,13 +66,11 @@ javascripts:
 - mail:
   - mail
   - emotion
-  - textboxlist
 - share:
   - share
   - video
 - video:
   - video
-  - textboxlist
 - forum:
   - forum
   - yushan_nicEdit

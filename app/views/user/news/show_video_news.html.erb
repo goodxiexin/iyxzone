@@ -13,7 +13,7 @@
 					<p class='space20'><%= simple_format h @news.data %></p>
         </div>
         <div class="detail-blog-foot s_clear">
-          <h2 class="gray">相关游戏：<%= game_link @news.game %></h2>
+          <h2 class="gray">相关游戏：<%= @news.games.map{|g| game_link g}.join(', ') %></h2>
           <% if !@news.origin_address.nil? %>
             <h2 class="gray">本帖转自：<%= link_to @news.origin_address, @news.origin_address %></h2>
           <% end %>

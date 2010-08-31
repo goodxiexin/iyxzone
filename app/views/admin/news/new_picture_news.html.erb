@@ -26,14 +26,7 @@
               <div class='fldid'><%= f.label "新闻原地址："%></div>
               <div class='fldvalue'><div class='textfield'><%= f.text_field 'origin_address' %></div></div>
             </div>
-            <div class='rows s_clear'>
-              <div class='fldid'>
-                <%= f.label "相关游戏：" %>
-              </div>
-              <div class='fldvalue'>
-                <%= f.collection_select 'game_id', Game.find(:all), :id, :name, {:prompt => '---'}, :class => "selector selector02"%>
-              </div>
-            </div>
+            <%= render :partial => 'user/game_resources/control_panel', :locals => {:title => "相关游戏", :z_index => 2} %>
             <div class='rows s_clear'>
               <div class='fldid'>&nbsp;</div>
               <div class='fldvalue'><span class='button03 w-l'><span><button type='submit' id='news_submit_btn'>发布</button></span></span></div>
@@ -63,5 +56,5 @@
 
 <% onload_javascript_tag do %>
   <% session_key = ActionController::Base.session_options[:key] %>
-  Iyxzone.News.Builder.initPictureNews('<%= form_authenticity_token %>', '<%= session_key %>', '<%= cookies[session_key] %>');
+  Iyxzone.News.Builder.initPictureNews('<%= form_authenticity_token %>', '<%= session_key %>', '<%= cookies[session_key] %>', 10, [], 'game_name', 'rel_game_list');
 <% end  %>

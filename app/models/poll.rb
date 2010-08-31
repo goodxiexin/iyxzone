@@ -2,7 +2,7 @@ class Poll < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User'
 
-  belongs_to :game
+  related_to_game
 
   has_many :answers, :class_name => 'PollAnswer', :dependent => :delete_all
 
@@ -29,12 +29,12 @@ class Poll < ActiveRecord::Base
   acts_as_resource_feeds :recipients => lambda {|poll| 
     poster = poll.poster
     friends = poster.friends.find_all {|f| f.application_setting.recv_poll_feed? }
-    ([poster.profile, poll.game] + poster.all_guilds + friends + (poster.is_idol ? poster.fans : [])).uniq
+    ([poster.profile] + poll.games + poster.all_guilds + friends + (poster.is_idol ? poster.fans : [])).uniq
   }
 
   acts_as_random
   
-  attr_readonly :poster_id, :game_id, :no_deadline
+  attr_readonly :poster_id, :no_deadline
 
   validates_presence_of :poster_id, :message => "不能为空", :on => :create
 
@@ -45,10 +45,6 @@ class Poll < ActiveRecord::Base
   validates_size_of :description, :within => 0..1000, :too_long => "最长1000个字符", :allow_blank => true
 
   validates_size_of :explanation, :within => 0..1000, :too_long => "最长1000个字符", :allow_blank => true
-
-  validates_presence_of :game_id, :message => "不能为空", :on => :create
-
-  validate_on_create :game_is_valid
 
   validates_presence_of :deadline, :message => "不能为空", :if => "!no_deadline"
 
@@ -98,13 +94,6 @@ class Poll < ActiveRecord::Base
   end
 
 protected
-
-  def game_is_valid
-    return if game_id.blank?
-    errors.add('game_id', "不存在") unless Game.exists?(game_id)
-    return if poster_id.blank?
-    errors.add('game_id', "该用户没有这个游戏") unless poster.has_game?(game_id)
-  end
 
   def deadline_is_valid 
     return if no_deadline or deadline.blank?
