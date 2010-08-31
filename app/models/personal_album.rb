@@ -17,19 +17,7 @@ class PersonalAlbum < Album
     ((poster.is_idol ? poster.fans : []) + poster.friends.find_all {|f| f.application_setting.recv_photo_feed?}).uniq
   }
 
-  validate_on_create :game_is_valid
-
   validates_size_of :title, :within => 1..100
-
-protected
-
-  def game_is_valid
-    if game.blank?
-      errors.add('game_id', "不存在")
-    elsif user and !user.has_game?(game_id)
-      errors.add('game_id', "该用户没有这个游戏")
-    end
-  end
 
 end
 

@@ -57,10 +57,7 @@
                 <div class="fldid"><label class="gray" for="one">最多选</label></div>
                 <div class="fldvalue" id='max_multiple_select'><%= max_multiple_select_tag %></div>
               </div>
-              <div class="rows s_clear">
-                <div class="fldid"><label class="gray" for="one">游戏分类</label></div>
-                <div class='fldvalue'><%= f.collection_select :game_id, current_user.games, :id, :name, {:prompt => '---'} %></div>
-              </div>
+              <%= render :partial => "user/game_resources/control_panel", :locals => {:title => "相关游戏:", :z_index => 2} %>
               <div class="rows s_clear">
                 <div class="fldid"><%= link_to_function "高级选项", "Iyxzone.Poll.Builder.toggleAdvancedOptions()" %></div>
               </div>
@@ -90,4 +87,8 @@
         </div>
       </div>
     </div>
+<% end %>
+
+<% onload_javascript_tag do %>
+  Iyxzone.Poll.Builder.init(10, [], 'game_name', 'rel_game_list');
 <% end %>

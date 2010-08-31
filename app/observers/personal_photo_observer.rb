@@ -7,10 +7,8 @@ class PersonalPhotoObserver < ActiveRecord::Observer
     photo.needs_verify # 总是需要验证的
 
     # inherit some attributes from album 
-    album = photo.album
-    photo.privilege = album.privilege
-    photo.poster_id = album.poster_id
-    photo.game_id = album.game_id
+    photo.poster_id = photo.album.poster_id
+    photo.privilege = photo.album.privilege
   end
 
   def after_create photo

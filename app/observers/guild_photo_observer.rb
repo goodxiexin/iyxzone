@@ -12,10 +12,8 @@ class GuildPhotoObserver < ActiveRecord::Observer
     photo.needs_verify
 
     # inherit some attributes from album
-    album = photo.album
-    photo.poster_id = album.poster_id
-    photo.privilege = album.privilege
-    photo.game_id = album.game_id
+    photo.poster_id = photo.album.poster_id
+    photo.privilege = photo.album.privilege
   end
 
 	def after_create photo

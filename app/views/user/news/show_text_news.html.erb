@@ -10,7 +10,7 @@
         <%= render :partial => 'news_header', :locals => {:news => @news} %>
         <div class="con" style='line-height: 3'><%= @news.data %></div>
         <div class="detail-blog-foot s_clear">
-          <h2 class="gray">相关游戏：<%= game_link @news.game %></h2>
+          <h2 class="gray">相关游戏：<%= @news.games.map{|g| game_link g}.join(", ") %></h2>
           <% if !@news.origin_address.nil? %>
             <h2 class="gray">本帖转自：<%= link_to @news.origin_address, @news.origin_address %></h2>
           <% end %>

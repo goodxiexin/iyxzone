@@ -12,10 +12,8 @@ class AvatarObserver < ActiveRecord::Observer
     avatar.needs_verify # 总是需要验证的
 
     # inherit some attributes from album
-    album = avatar.album
-    avatar.poster_id = album.poster_id
-    avatar.privilege = album.privilege
-    avatar.game_id = nil
+    avatar.poster_id = avatar.album.poster_id
+    avatar.privilege = avatar.album.privilege
   end
 
 	def after_create avatar

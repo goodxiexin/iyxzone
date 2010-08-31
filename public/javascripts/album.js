@@ -1,6 +1,6 @@
 Iyxzone.Album = {
   
-  version: '1.0',
+  version: '1.5',
 
   author: ['高侠鸿'],
 
@@ -48,16 +48,23 @@ Object.extend(Iyxzone.Album, {
 // create ablum
 Object.extend(Iyxzone.Album.Builder, {
 
+  gameTagger: null,
+
+  init: function(max, tags, input, list){
+    this.gameTagger = new Iyxzone.Game.Tagger(max, tags, input, list);
+  },
+
   clearError: function(){
-    $('errors').innerHTML = '';
-    $('errors').hide();
+    //$('errors').innerHTML = '';
+    //$('errors').hide();
   },
 
   addError: function(error){
-    $('errors').innerHTML = $('errors').innerHTML + "<br/>" + error;
-    if(!$('errors').visible()){
-      $('errors').show();
-    }
+    alert(error);
+    //$('errors').innerHTML = $('errors').innerHTML + "<br/>" + error;
+    //if(!$('errors').visible()){
+    //  $('errors').show();
+    //}
   },
 
   validate: function(){
@@ -88,14 +95,22 @@ Object.extend(Iyxzone.Album.Builder, {
       return false;
     }
 
-    // game_id
-    var gameID = $('album_game_id').value;
-    if(gameID == ''){
-      this.addError('请选择游戏类别');
-      return false;
+    return true;
+  },
+
+  buildParams: function(form){
+    var params = $(form).serialize();
+
+    var newGames = this.gameTagger.getNewRelGames();
+    var delGames = this.gameTagger.getDelRelGames();
+    for(var i=0;i<newGames.length;i++){
+      params += "&album[new_relative_games][]=" + newGames[i];
+    }
+    for(var i=0;i<delGames.length;i++){
+      params += "&album[del_relative_games][]=" + delGames[i];
     }
 
-    return true;
+    return params; 
   },
 
   create: function(at, btn, form, userID){
@@ -104,7 +119,7 @@ Object.extend(Iyxzone.Album.Builder, {
     if(this.validate()){
       new Ajax.Request(Iyxzone.URL.createAlbum(), {
         method: 'post',
-        parameters: $(form).serialize(),
+        parameters: this.buildParams(form),
         onLoading: function(){},
         onComplete: function(){},
         onSuccess: function(transport){
@@ -135,7 +150,7 @@ Object.extend(Iyxzone.Album.Builder, {
     if(this.validate()){
       new Ajax.Request(Iyxzone.URL.updateAlbum(albumID), {
         method: 'put',
-        parameters: $(form).serialize(),
+        parameters: this.buildParams(form),
         onLoading: function(){},
         onComplete: function(){},
         onSuccess: function(transport){

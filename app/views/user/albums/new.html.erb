@@ -4,9 +4,13 @@
       <%= content_tag :div, '', :id => 'errors', :class => "error-msg", :style => "display:none" %>
       <%= f.text_field 'title', :label => '相册名称' %>
       <%= f.text_area 'description', :label => '相册描述' %>
-      <%= f.collection_select :game_id, current_user.games, :id, :name, {:prompt => '---'}, :label => '游戏分类', :class => 'selector selector02' %>
+      <%= render :partial => 'user/game_resources/control_panel', :locals => {:title => '相关游戏', :z_index => 10000} %>
       <%= f.select :privilege, privilege_options, {}, :label => '谁可以浏览', :class => 'selector selector02' %>
     <% end %>
     <%= f.z_submit :submit => {:text => '完成', :id => 'new_album_submit'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
   <% end %>
+<% end %>
+
+<% javascript_tag do %>
+  Iyxzone.Album.Builder.init(10, [], 'game_name', 'rel_game_list');
 <% end %>

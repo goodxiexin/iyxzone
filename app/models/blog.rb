@@ -1,6 +1,6 @@
 class Blog < ActiveRecord::Base
 
-  belongs_to :game
+  related_to_game 
 
 	belongs_to :poster, :class_name => 'User'
 
@@ -20,7 +20,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_viewable
 
-	acts_as_diggable :create_conditions => lambda {|user, blog| 
+	acts_as_diggable :create_conditions => lambda {|user, blog|
     !blog.draft and blog.available_for?(user.relationship_with(blog.poster))
   }
 
@@ -39,7 +39,7 @@ class Blog < ActiveRecord::Base
 
   acts_as_abstract :columns => [:content]
 
-  attr_readonly :poster_id, :game_id
+  attr_readonly :poster_id
 
   validates_size_of :title, :within => 1..100
 
@@ -47,16 +47,9 @@ class Blog < ActiveRecord::Base
 
   validates_size_of :content, :within => 1..10000
 
-  #validate_on_create :game_is_valid
-
   after_save :update_blog_images
 
 protected
-
-  def game_is_valid
-    errors.add('game_id', "不存在") if game.blank?
-    errors.add('game_id', "该用户没有这个游戏") if poster and !poster.has_game?(game)
-  end
 
   def update_blog_images
     ids = BlogImage.parse_images self

@@ -18,7 +18,7 @@ class News < ActiveRecord::Base
 
   has_many :pictures, :class_name => 'NewsPicture' # only valid for picture news
 
-  belongs_to :game
+  related_to_game
 
   belongs_to :poster, :class_name => 'User' # this must be an admin
 
@@ -34,8 +34,6 @@ class News < ActiveRecord::Base
   acts_as_video
 
   acts_as_random
-
-  validates_presence_of :game_id
 
   validates_size_of :title, :within => 1..300
 

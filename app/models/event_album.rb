@@ -8,7 +8,7 @@ class EventAlbum < Album
 
   has_many :latest_photos, :class_name => 'EventPhoto', :foreign_key => 'album_id', :limit => 5, :order => "created_at DESC"
 
-  attr_readonly :game_id, :privilege
+  attr_readonly :privilege
 
   acts_as_resource_feeds :recipients => lambda {|album| 
     poster = album.poster

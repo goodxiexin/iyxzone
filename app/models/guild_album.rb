@@ -17,6 +17,6 @@ class GuildAlbum < Album
     (people + fans + friends).uniq
   }
 
-  attr_readonly :game_id, :privilege
+  attr_readonly :privilege
 
 end

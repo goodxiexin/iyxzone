@@ -4,7 +4,7 @@
                 <h5><%= h poll.name %> 
                   <span>（限选<%= poll.max_multiple %>项）<span><%= time_ago_in_chinese poll.created_at %></span></span>
                 </h5>
-                <p>关于<%= poll.game.name%></p>
+                <p>关于<%= poll.games.map{|g| link_to g.name, game_url(g), :class => :red}.join(', ') %></p>
                 <p><%= simple_format h poll.description %></p>
               </td>
             </tr>

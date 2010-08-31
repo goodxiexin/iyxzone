@@ -1,7 +1,11 @@
 Iyxzone.Blog = {
-  version: '1.0',
+
+  version: '1.6',
+
   author: ['高侠鸿 '],
+
   Builder: {}
+
 };
 
 Object.extend(Iyxzone.Blog, {
@@ -64,8 +68,10 @@ Object.extend(Iyxzone.Blog.Builder, {
 
   editor: null, // initialize this in your page
 
-  tagBuilder: null, // initialize this in your page
-  
+  friendTagger: null, // initialize this in your page
+ 
+  gameTagger: null,
+ 
   lastContent: null,
 
   contentChanged: function(){
@@ -75,10 +81,6 @@ Object.extend(Iyxzone.Blog.Builder, {
   validate: function(){
     if($('blog_privilege').value == ''){
       error("清选择权限");
-      return false;
-    }
-    if($('blog_game_id').value == ''){
-      error("请选择游戏类别");
       return false;
     }
     if($('blog_title').value == ''){
@@ -99,13 +101,23 @@ Object.extend(Iyxzone.Blog.Builder, {
     }
     
     this.parameters = $(form).serialize();
-    var newTags = this.tagBuilder.getNewTags();
-    var delTags = this.tagBuilder.getDelTags();
+
+    var newTags = this.friendTagger.getNewTags();
+    var delTags = this.friendTagger.getDelTags();
     for(var i=0;i<newTags.length;i++){
       this.parameters += "&blog[new_friend_tags][]=" + newTags[i];
     }
     for(var i=0;i<delTags.length;i++){
       this.parameters += "&blog[del_friend_tags][]=" + delTags[i];
+    }
+
+    var newGames = this.gameTagger.getNewRelGames();
+    var delGames = this.gameTagger.getDelRelGames();
+    for(var i=0;i<newGames.length;i++){
+      this.parameters += "&blog[new_relative_games][]=" + newGames[i];
+    }
+    for(var i=0;i<delGames.length;i++){
+      this.parameters += "&blog[del_relative_games][]=" + delGames[i];
     }
     
     window.onbeforeunload = null;
@@ -186,7 +198,7 @@ Object.extend(Iyxzone.Blog.Builder, {
         onSuccess: function(transport){
           var json = transport.responseText.evalJSON();
           if(json.code == 1){
-            this.tagBuilder.reset();
+            this.friendTagger.reset();
             this.lastContent = this.editor.nicInstances[0].getContent();  
             tip('保存成功，可以继续写了');
             $('errors').innerHTML = '';
@@ -200,7 +212,7 @@ Object.extend(Iyxzone.Blog.Builder, {
     }
   },
 
-  init: function(textAreaID, token, albumInfos, max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
+  init: function(textAreaID, token, albumInfos, max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton, max2, gameInfos, gameInput, gameList){
     // set nicEditor
     this.editor = new nicEditor().panelInstance(textAreaID);
     nicEditors.albums = albumInfos;
@@ -216,7 +228,11 @@ Object.extend(Iyxzone.Blog.Builder, {
       }
     };
 
-    // set tagger
-    this.tagBuilder = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton);
+    // set friend tagger
+    this.friendTagger = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton);
+
+    // set game tagger
+    this.gameTagger = new Iyxzone.Game.Tagger(max2, gameInfos, gameInput, gameList);
   }
+
 });

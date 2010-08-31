@@ -6,6 +6,11 @@ class GamesController < ApplicationController
 
   caches_page :show
 
+  def index
+    @games = Game.order("pinyin ASC").all
+    render :json => @games.map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}
+  end
+
   def show
     @game = Game.find(params[:id])
     render :json => @game.to_json(:include => [:servers, :areas, :races, :professions])

@@ -17,26 +17,23 @@ class PersonalAlbumObserver < ActiveRecord::Observer
   end
   
   def after_update album
+    poster = album.poster
+
     if album.recently_recovered?
-      album.poster.raw_increment "albums_count#{album.privilege}"
+      poster.raw_increment "albums_count#{album.privilege}"
       Photo.verify_all(:album_id => album.id)
       Album.update_all("photos_count = #{album.photos.count}", {:id => album.id})
     elsif album.recently_rejected?
-      album.poster.raw_decrement "albums_count#{album.privilege}"
+      poster.raw_decrement "albums_count#{album.privilege}"
       Photo.unverify_all(:album_id => album.id)
       Album.update_all("photos_count = 0", {:id => album.id})
       album.destroy_feeds 
     end
 
     if album.privilege_changed?
-      album.poster.raw_increment "albums_count#{album.privilege}"
-      album.poster.raw_decrement "albums_count#{album.privilege_was}"
-      # 这样的好处不仅在于一条sql，还让所有的该相册中的被屏蔽的照片也更新了，这样下次这些被屏蔽的照片恢复的时候，privilege还是和album保持一致
+      poster.raw_increment "albums_count#{album.privilege}"
+      poster.raw_decrement "albums_count#{album.privilege_was}"
       PersonalPhoto.update_all("privilege = #{album.privilege}", {:album_id => album.id})
-    end
-
-    if album.game_id_changed?
-      PersonalPhoto.update_all("game_id = #{album.game_id}", {:album_id =>album.id})
     end
   end
 

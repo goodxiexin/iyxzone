@@ -8,6 +8,6 @@ class GuildPhoto < Photo
                          :create_conditions => lambda {|user, photo, album| album.guild.has_people?(user) },
                          :candidates => lambda {|tagger, photo, album| album.guild.people}
 
-  attr_readonly :album_id, :privilege
+  attr_readonly :album_id
 
 end

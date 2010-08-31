@@ -30,7 +30,7 @@ class BlogTest < ActiveSupport::TestCase
     @idol = UserFactory.create_idol
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
-    [@user, @friend1, @friend2, @friend3, @friend4, @fan, @idol].each {|f| f.reload}
+    [@user, @friend1, @friend2, @friend3, @friend4, @same_game_user, @fan, @idol].each {|f| f.reload}
   end
 
   test "create, edit, destroy" do
@@ -93,11 +93,11 @@ class BlogTest < ActiveSupport::TestCase
 
   test "blog counter" do
     assert_difference "Blog.count", 5 do
-      BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
-      BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
-      BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
-      BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
-      DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+      BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC
+      BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+      BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND
+      BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::OWNER
+      DraftFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC
     end
 
     @user.reload
@@ -110,7 +110,7 @@ class BlogTest < ActiveSupport::TestCase
   test "friend tags" do
     # tested in test/unit/friend_tag_test.rb
     assert_difference "Notice.count" do
-      BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id]
+      BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id]
     end
     @tag = FriendTag.last
     @friend1.reload
@@ -118,28 +118,28 @@ class BlogTest < ActiveSupport::TestCase
 
     # tested in test/unit/friend_tag_test.rb
     assert_difference "Notice.count" do
-      BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
+      BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
     end
     @tag = FriendTag.last
     @friend1.reload
     assert @friend1.recv_notice?(@tag)
 
     assert_difference "Notice.count" do
-      BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
+      BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
     end
     @tag = FriendTag.last
     @friend1.reload
     assert @friend1.recv_notice?(@tag)
 
     assert_no_difference "Notice.count" do
-      BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend1.id]
+      BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend1.id]
     end
     @tag = FriendTag.last
     @friend1.reload
     assert !@friend1.recv_notice?(@tag)
 
     assert_no_difference "Notice.count" do
-      DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
+      DraftFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
     end
     @tag = FriendTag.last
     @friend1.reload
@@ -147,7 +147,7 @@ class BlogTest < ActiveSupport::TestCase
   end 
 
   test "view blogs" do
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
+    @blog = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
 
     assert @blog.is_viewable_by?(@user)
     assert @blog.is_viewable_by?(@friend1)
@@ -158,7 +158,7 @@ class BlogTest < ActiveSupport::TestCase
   end
 
   test "dig blog" do
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    @blog = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC
     assert @blog.is_diggable_by?(@user)
     assert @blog.is_diggable_by?(@friend1)
     assert @blog.is_diggable_by?(@same_game_user)
@@ -166,7 +166,7 @@ class BlogTest < ActiveSupport::TestCase
     assert @blog.is_diggable_by?(@fan)
     assert @blog.is_diggable_by?(@idol)
 
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    @blog = BlogFactory.create :poster_id => @user.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
     assert @blog.is_diggable_by?(@user)
     assert @blog.is_diggable_by?(@friend1)
     assert @blog.is_diggable_by?(@same_game_user)
@@ -174,7 +174,7 @@ class BlogTest < ActiveSupport::TestCase
     assert @blog.is_diggable_by?(@fan)
     assert @blog.is_diggable_by?(@idol)
 
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
+    @blog = BlogFactory.create :poster_id => @user.id, :privilege => PrivilegedResource::FRIEND
     assert @blog.is_diggable_by?(@user)
     assert @blog.is_diggable_by?(@friend1)
     assert !@blog.is_diggable_by?(@same_game_user)
@@ -182,7 +182,7 @@ class BlogTest < ActiveSupport::TestCase
     assert @blog.is_diggable_by?(@fan)
     assert @blog.is_diggable_by?(@idol)
 
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
+    @blog = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::OWNER
     assert @blog.is_diggable_by?(@user)
     assert !@blog.is_diggable_by?(@friend1)
     assert !@blog.is_diggable_by?(@same_game_user)
@@ -211,7 +211,7 @@ class BlogTest < ActiveSupport::TestCase
     @fan = UserFactory.create
     @fanship = Fanship.create :fan_id => @fan.id, :idol_id => @user.id
 
-    @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    @blog1 = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC
     assert @friend1.recv_feed? @blog1
     assert @guild1.recv_feed? @blog1
     assert @guild2.recv_feed? @blog1
@@ -226,7 +226,7 @@ class BlogTest < ActiveSupport::TestCase
     assert !@fan.recv_feed?(@blog1)
     assert !@idol.recv_feed?(@blog1)
 
-    @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    @blog2 = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
     @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert @friend1.recv_feed? @blog2
     assert @guild1.recv_feed? @blog2
@@ -250,7 +250,7 @@ class BlogTest < ActiveSupport::TestCase
     assert @fan.recv_feed? @blog2
     assert !@idol.recv_feed?(@blog1)
 
-    @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
+    @blog3 = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND
     @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert @friend1.recv_feed? @blog3
     assert @guild1.recv_feed? @blog3
@@ -258,7 +258,7 @@ class BlogTest < ActiveSupport::TestCase
     assert @fan.recv_feed? @blog3
     assert !@idol.recv_feed?(@blog3)
 
-    @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
+    @blog4 = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::OWNER
     @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert !@friend1.recv_feed?(@blog4)
     assert !@guild1.recv_feed?(@blog4)
@@ -274,7 +274,7 @@ class BlogTest < ActiveSupport::TestCase
     assert @fan.recv_feed? @blog4
     assert !@idol.recv_feed?(@blog4)
 
-    @draft1 = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    @draft1 = DraftFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC
     @friend1.reload and @guild1.reload and @guild2.reload and @fan.reload
     assert !@friend1.recv_feed?(@draft1)
     assert !@guild1.recv_feed?(@draft1)
@@ -292,7 +292,7 @@ class BlogTest < ActiveSupport::TestCase
   end
 
   test "comment blog" do
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC
+    @blog = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC
 
     [@user, @friend1, @same_game_user, @stranger, @fan, @idol].each do |u|
       assert @blog.is_commentable_by?(u)
@@ -349,7 +349,7 @@ class BlogTest < ActiveSupport::TestCase
       assert !@comment.is_deleteable_by?(u)
     end
 
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
+    @blog = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
     
     assert !@blog.is_commentable_by?(@stranger)
     [@user, @friend1, @same_game_user, @fan, @idol].each do |u|
@@ -395,7 +395,7 @@ class BlogTest < ActiveSupport::TestCase
       assert !@comment.is_deleteable_by?(u)
     end
 
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND
+    @blog = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::FRIEND
 
     assert !@blog.is_commentable_by?(@same_game_user)
     assert !@blog.is_commentable_by?(@stranger)
@@ -434,7 +434,7 @@ class BlogTest < ActiveSupport::TestCase
       assert !@comment.is_deleteable_by?(u)
     end
 
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER
+    @blog = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::OWNER
 
     assert @blog.is_commentable_by?(@user)
     [@friend1, @same_game_user, @stranger, @fan, @idol].each do |u|
@@ -450,11 +450,11 @@ class BlogTest < ActiveSupport::TestCase
   end
   
   test "blogs index / friend blogs / relative blogs" do
-    @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 1.day.ago, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id]
-    @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 2.days.ago, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
-    @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 3.days.ago, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
-    @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 4.days.ago, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend1.id]
-    @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id, :created_at => 3.days.ago, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
+    @blog1 = BlogFactory.create :poster_id => @user.id,   :created_at => 1.day.ago, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id]
+    @blog2 = BlogFactory.create :poster_id => @user.id,   :created_at => 2.days.ago, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend1.id]
+    @blog3 = BlogFactory.create :poster_id => @user.id,   :created_at => 3.days.ago, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
+    @blog4 = BlogFactory.create :poster_id => @user.id,   :created_at => 4.days.ago, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend1.id]
+    @draft = DraftFactory.create :poster_id => @user.id,   :created_at => 3.days.ago, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend1.id]
 
     # blog index
     @blogs = @user.blogs.for('owner')
@@ -512,7 +512,7 @@ class BlogTest < ActiveSupport::TestCase
   end 
 
   test "comment notice" do
-    @blog = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
+    @blog = BlogFactory.create :poster_id => @user.id,   :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend1.id, @friend2.id]
 
     assert_difference "Notice.count", 2 do
       @comment = @blog.comments.create :poster_id => @user.id, :recipient_id => @user.id, :content => 'a'
