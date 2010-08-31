@@ -63,10 +63,11 @@ class User::BlogsController < UserBaseController
 
   def edit
     @tag_infos = @blog.tags.map {|t| {:tag_id => t.id, :friend_id => t.tagged_user_id, :friend_name => t.tagged_user.login}}.to_json
+    @game_infos = @blog.games.map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
   end
 
   def update
-    if @blog.update_attributes(params[:blog] || {})
+    if @blog.update_attributes((params[:blog] || {}).merge({:draft => 0}))
       render :json => {:code => 1}
     else
       render :json => {:code => 0}
@@ -96,7 +97,7 @@ protected
       require_adequate_privilege @blog, @relationship
     elsif ['edit', 'destroy', 'update'].include? params[:action]
       @blog = Blog.find(params[:id])
-      require_not_draft @blog
+      require_not_draft @blog if ['edit', 'destroy'].include?(params[:action])
       require_verified @blog
       require_owner @blog.poster
     end

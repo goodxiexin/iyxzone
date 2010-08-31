@@ -16,6 +16,7 @@ javascripts:
   - in_place_editor_extension
   - emotion
   - friend
+  - game
   - menu
   - chat
   - calendar_date_select/calendar_date_select
@@ -25,7 +26,6 @@ javascripts:
   - mini_blog
   - guestbook
 - register:
-  - game
   - register
   - event.simulate
 - home:
@@ -37,7 +37,6 @@ javascripts:
   - profile
   - chinese_region
   - video
-  - game
   - poke
   - setting
   - tag
@@ -53,15 +52,12 @@ javascripts:
   - yushan_nicEdit
   - textboxlist
 - event:
-  - game
   - event
 - search:
-  - game
   - search
   - idol
   - event.simulate
 - game:
-  - game
   - rating
   - video
   - tag

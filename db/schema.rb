@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100826055243) do
+ActiveRecord::Schema.define(:version => 20100831051015) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(:version => 20100826055243) do
 
   create_table "blogs", :force => true do |t|
     t.integer  "poster_id"
-    t.integer  "game_id"
     t.string   "title",            :limit => 64
     t.text     "content",          :limit => 16777215
     t.text     "content_abstract"
@@ -297,6 +296,12 @@ ActiveRecord::Schema.define(:version => 20100826055243) do
   end
 
   add_index "game_races", ["game_id"], :name => "index_game_races_on_game_id"
+
+  create_table "game_resources", :force => true do |t|
+    t.integer "game_id"
+    t.integer "resource_id"
+    t.string  "resource_type"
+  end
 
   create_table "game_servers", :force => true do |t|
     t.string   "name"
@@ -928,7 +933,6 @@ ActiveRecord::Schema.define(:version => 20100826055243) do
 
   create_table "videos", :force => true do |t|
     t.integer  "poster_id"
-    t.integer  "game_id"
     t.string   "title"
     t.text     "description"
     t.string   "video_url"

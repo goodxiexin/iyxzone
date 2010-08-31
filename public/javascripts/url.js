@@ -373,6 +373,10 @@ Object.extend(Iyxzone.URL, {
 
   showGame: function(gameID, params){
     return this.build("/games/" + gameID, params);
+  },
+
+  listGameDetails: function(params){
+    return this.build("/game_details", params);
   }
 
 });

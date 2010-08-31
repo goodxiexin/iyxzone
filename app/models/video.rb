@@ -2,7 +2,7 @@ class Video < ActiveRecord::Base
 
   belongs_to :poster, :class_name => 'User'
 
-  belongs_to :game
+  related_to_game
 
   named_scope :by, lambda {|user_ids| {:conditions => {:poster_id => user_ids}}}
 
@@ -33,7 +33,7 @@ class Video < ActiveRecord::Base
   acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, video, comment| user == video.poster || user == comment.poster}, :create_conditions => lambda {|user, video| video.available_for? user.relationship_with(video.poster) }
 
   # video url 和 game_id 还有 poster_id 一经创建无法修改
-  attr_readonly :video_url, :game_id, :poster_id
+  attr_readonly :video_url, :poster_id
 
   validates_size_of :title, :within => 1..100
 
@@ -42,17 +42,5 @@ class Video < ActiveRecord::Base
   validates_presence_of :poster_id
 
   validates_presence_of :video_url
-
-  validate_on_create :game_is_valid
-
-protected
-
-  def game_is_valid
-    if game.blank?
-      errors.add('game_id', "不存在")
-    elsif poster and !poster.has_game?(game)
-      errors.add('game_id', "该用户没有这个游戏")
-    end
-  end
 
 end

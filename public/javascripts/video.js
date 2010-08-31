@@ -1,7 +1,11 @@
 Iyxzone.Video = {
-  version: '1.0',
+
+  version: '1.4',
+
   author: ['高侠鸿'],
+
   Builder: {},
+
   play: function(videoID, videoLink){
      $('video_' + videoID).update(videoLink);
   }
@@ -39,7 +43,9 @@ Object.extend(Iyxzone.Video, {
 // create video
 Object.extend(Iyxzone.Video.Builder, {
 
-  tagBuilder: null, //initialize this in your page
+  friendTagger: null, //initialize this in your page
+
+  gameTagger: null,
 
   validate: function(){
     if($('video_title').value == ''){
@@ -48,10 +54,6 @@ Object.extend(Iyxzone.Video.Builder, {
     }
     if($('video_video_url').value == ''){
       error('url不能为空');
-      return false;
-    }
-    if($('video_game_id').value == ''){
-      error('游戏类别不能为空');
       return false;
     }
     if($('video_title').length >= 100){
@@ -63,13 +65,23 @@ Object.extend(Iyxzone.Video.Builder, {
 
   prepare: function(form){
     this.parameters = $(form).serialize();
-    var newTags = this.tagBuilder.getNewTags();
-    var delTags = this.tagBuilder.getDelTags();
+
+    var newTags = this.friendTagger.getNewTags();
+    var delTags = this.friendTagger.getDelTags();
     for(var i=0;i<newTags.length;i++){
       this.parameters += "&video[new_friend_tags][]=" + newTags[i];
     }
     for(var i=0;i<delTags.length;i++){
       this.parameters += "&video[del_friend_tags][]=" + delTags[i];
+    }
+
+    var newGames = this.gameTagger.getNewRelGames();
+    var delGames = this.gameTagger.getDelRelGames();
+    for(var i=0;i<newGames.length;i++){
+      this.parameters += "&video[new_relative_games][]=" + newGames[i];
+    }
+    for(var i=0;i<delGames.length;i++){
+      this.parameters += "&video[del_relative_games][]=" + delGames[i];
     }
   },
 
@@ -125,9 +137,12 @@ Object.extend(Iyxzone.Video.Builder, {
     }
   },
 
-  init: function(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton){
-    // set tagger
-    this.tagBuilder = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton); 
+  init: function(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton, max2, gameInfos, gameInput, gameList){
+    // set friend tagger
+    this.friendTagger = new Iyxzone.Friend.Tagger(max, tagInfos, toggleButton, input, friendList, friendTable, friendItems, gameSelector, confirmButton, cancelButton); 
+
+    // set game tagger
+    this.gameTagger = new Iyxzone.Game.Tagger(max2, gameInfos, gameInput, gameList);
   }
 
 });

@@ -1,5 +1,6 @@
 Iyxzone.Game = {
-  version: '1.0',
+
+  version: '1.6',
 
   author: ['高侠鸿'],
 
@@ -8,6 +9,8 @@ Iyxzone.Game = {
   Suggestor: {},
 
   Presentor: {},
+
+  Tagger: Class.create({}),
 
   Selector: Class.create({}),
 
@@ -1046,3 +1049,182 @@ Object.extend(Iyxzone.Game.Presentor, {
   }
 
 });
+
+Iyxzone.Game.Autocompleter = Class.create(Autocompleter.Local, {
+
+  gameCache: new Array(),
+
+  initialize: function($super, element, update, options){
+    options = Object.extend({}, options || {});
+
+    Event.observe(element, 'focus', this.showTip.bindAsEventListener(this));
+
+    $super(element, update, null, options);
+  },
+
+  showTip: function(){
+    this.update.update( this.options.tipText);
+    var comp = this.options.comp;
+    
+    this.update.setStyle({
+      position: 'absolute',
+      left: comp.positionedOffset().left + 'px',
+      top: (comp.positionedOffset().top + comp.getHeight()) + 'px',
+      width: (comp.getWidth() - 10) + 'px',
+      maxHeight: '200px',
+      overflowX: 'hidden',
+      overflowY: 'auto',
+      padding: '5px',
+      background: 'white',
+      border: '1px solid #E7F0E0'
+    });
+
+    this.update.show();
+  },
+
+  // to prevent ie onbeforeunload from being fired
+  onClick: function($super, event){
+    Event.stop(event);
+    $super(event);
+  },
+
+  buildListFromCache: function(){
+    var thisToken = this.getToken();
+    var games = [];
+    
+    this.gameCache.each(function(game){
+      var token = this.options.ignoreCase ? thisToken.toLowerCase() : thisToken;
+      var name = this.options.ignoreCase ? game.name.toLowerCase() : game.name;
+      var pinyin = this.options.ignoreCase ? game.pinyin.toLowerCase() : game.pinyin;
+
+      if(name.indexOf(token) == 0 || pinyin.indexOf(token) == 0){
+        games.push('<li style="list-style-type:none;" id=' + game.id + ' ><a href="javascript:void(0)">' + game.name + '</a></li>');  
+      }
+    }.bind(this));
+
+    if(games.length == 0){
+      return this.options.emptyText;
+    }else{
+      return "<ul>" + games.join('') + "</ul>";
+    }
+  },
+
+  getUpdatedChoices: function(){
+    var choices = "";
+
+    if(this.gameCache.length == 0){
+      new Ajax.Request(Iyxzone.URL.listGameDetails(), {
+        method: 'get',
+        onLoading: function(){},
+        onComplete: function(){},
+        onSuccess: function(transport){
+          this.gameCache = transport.responseText.evalJSON();
+          this.updateChoices(this.buildListFromCache());
+        }.bind(this)
+      });
+    }else{
+      this.updateChoices(this.buildListFromCache());
+    }
+  },
+
+  updateChoices: function($super, data){
+    if(!this.changed && this.hasFocus){
+      if(data.indexOf('ul') < 0){
+        this.update.update( data);
+        this.update.show();
+      }else{
+        $super(data);
+      }
+
+      var comp = this.options.comp;
+    
+      this.update.setStyle({
+        position: 'absolute',
+        left: comp.positionedOffset().left + 'px',
+        top: (comp.positionedOffset().top + comp.getHeight()) + 'px',
+        width: (comp.getWidth() - 10) + 'px',
+        maxHeight: '200px',
+        overflowX: 'hidden',
+        autoflowY: 'auto',
+        padding: '5px',
+        background: 'white',
+        border: '1px solid #E7F0E0'
+      });
+    }
+  }
+
+});
+
+Iyxzone.Game.Tagger = Class.create({
+ 
+  initialize: function(max, gameInfos, input, gameList){
+    this.max = max;
+    this.games = new Hash(); // gameID => text_box_list el
+    this.newGames = new Hash(); // gameID => text_box_list el
+    this.delGames = new Array();
+    this.gameList = $(gameList);
+
+    // set text box list
+    this.relGameList = new TextBoxList(input, {
+      onBoxDispose: this.removeBox.bind(this),
+      holderClassName: 'friend-select-list s_clear',
+      bitClassName: ''
+    });
+
+    for(var i=0;i<gameInfos.length;i++){
+      var info = gameInfos[i];
+      var el = this.relGameList.add(info.id, info.name);
+      this.games.set(info.id, el);
+    }
+
+    // custom auto completer
+    new Iyxzone.Game.Autocompleter(this.relGameList.getMainInput(), this.gameList, {
+      afterUpdateElement: this.afterSelectGame.bind(this),
+      tipText: '输入你游戏的拼音或者名字',
+      emptyText: '没有匹配的好友...',
+      comp: this.relGameList.holder
+    }); 
+  },
+
+  removeBox: function(el, input){
+    var gameID = input.value;
+  
+    var info = this.games.unset(gameID);
+    
+    if(info){
+      // remove exsiting tag
+      this.delGames.push(gameID);
+    }else{
+      // remove new tag
+      this.newGames.unset(gameID);
+    }
+  },
+
+  getNewRelGames: function(){
+    return this.newGames.keys();
+  },
+
+  getDelRelGames: function(){
+    return this.delGames;
+  },
+
+  afterSelectGame: function(input, selectedLI){
+    var id = selectedLI.readAttribute('id');
+    var name = selectedLI.childElements()[0].innerHTML;
+    input.clear();
+
+    if(this.games.keys().include(id) || this.newGames.keys().include(id)){
+      return;
+    }else{
+      if(this.games.keys().length + this.newGames.keys().length >= this.max){
+        error('最多选' + this.max + '个!');
+        return;
+      }
+
+      var el = this.relGameList.add(id, name);
+      this.newGames.set(id, el);
+    }
+  }
+
+});
+

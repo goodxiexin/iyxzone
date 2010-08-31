@@ -17,9 +17,9 @@
           <%= f.text_field 'title', :label => '视频标题' %>
           <%= f.text_field 'video_url', :label => '视频URL', :id => 'video_url', :disabled => true %>
           <%= f.text_area 'description', :label => '视频介绍' %>
-          <%= f.collection_select 'game_id', current_user.games, :id, :name, {:prompt => '---'}, :label => '游戏类别', :class => "selector selector02" %>
           <%= f.select 'privilege', privilege_options, {}, :label => '浏览权限', :class => "selector selector02" %>
-          <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video, :title => '点名相关好友'} %>
+          <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video, :title => '相关游戏:', :z_index => 2} %>
+          <%= render :partial => 'user/friend_tags/control_panel', :locals => {:taggable => @video, :title => '相关好友:', :z_index => 1} %>
           <%= f.submit '保存' => {:id => 'submit_btn', :type => 'submit'} %>
         <% end %>
       </div>
@@ -28,6 +28,6 @@
 <% end %>
 
 <% onload_javascript_tag do %>
-  Iyxzone.Video.Builder.init(10, <%= @tag_infos %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn');
+  Iyxzone.Video.Builder.init(10, <%= @tag_infos %>, 'toggle_button', 'friend_login', 'friend_list', 'friend-wrap', 'friend_items', 'game_selector', 'confirm_btn', 'cancel_btn', 10, <%= @game_infos %>, 'game_name', 'rel_game_list');
 <% end %>
 

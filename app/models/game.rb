@@ -24,7 +24,9 @@ class Game < ActiveRecord::Base
 
 	has_many :albums, :class_name => 'Album', :order => "uploaded_at DESC", :conditions => "photos_count != 0"
 
-	has_many :blogs, :order => 'created_at DESC'
+  has_many :game_resources, :dependent => :destroy
+
+	has_many :blogs, :through => :game_resources, :source => :blog, :conditions => {:draft => 0}
 
 	has_many :characters, :class_name => 'GameCharacter'
 
