@@ -1,18 +1,20 @@
-<div class="multibox rows">
-  <div class="title">
-    <%= facebox_link "更多", profile_viewings_url(profile) %>
-    <b>最近来访</b>
-  </div>
-  <div class="photolist-box">
-    <ul class="collection s_clear">
-      <% viewings.each do |r| %>
-        <li>
-          <div class="middle"><div class="middle-center"><div class="center"><a href="#"><%= avatar r.viewer, :class => 'imgbox01' %></a></div></div></div>
-          <p><%= profile_link r.viewer %></p>
-          <p class="btns"></p>
-        </li>
-      <% end %>
-    </ul>
-  </div>
+<div class="alphaColum">
+	<div class="ac-r-t"><em></em></div>
+		<div class="ac-r-m fix">
+			<div class="alphaTitle fix"><div class="wrap"><strong>最近来访</strong><%= link_to_function '', "$('profile-recent-wrap').toggle()", :class=>"op i iArrUnFold"%></div></div>
+			<div id='profile-recent-wrap'>
+				<div class="ac-bd">
+					<ul class="memberList fix">
+						<% viewings.each do |r| %>
+							<li>
+								<a href="#"><%= avatar r.viewer, :class => 'imgbox01' %></a>
+								<%= profile_link r.viewer, :class=>"memberName" %>
+							</li>
+						<% end %>
+					</ul>
+					<div class="ac-ft"><%= facebox_link "查看全部>>", profile_viewings_url(profile) %></div>
+				</div>
+			</div>
+		</div>
+		<div class="ac-r-b"><em></em></div>
 </div>
-

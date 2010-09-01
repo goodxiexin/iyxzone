@@ -1,0 +1,10 @@
+<div class="addGame"><%= facebox_link "<span class=\"i iAdd02\"></span>添加游戏", new_character_url %></div>
+	<div class="myGameList">
+    <ul class="fix" id="game-list">
+			<%= render :partial => 'user/profiles/games_display', :locals => {:user => user, :profile=> profile, :games => games} %>
+		</ul>
+	<% if more_game %>
+		<div class="moreGame" id='more-game-button'><%= link_to_function "查看更多游戏", "Iyxzone.Profile.moreGames(#{profile.id})"%></div>
+	<% end %>
+	</div>
+<%= render :partial => 'user/profiles/recent_mini_blogs', :locals => {:user => user, :mini_blogs => mini_blogs} %>

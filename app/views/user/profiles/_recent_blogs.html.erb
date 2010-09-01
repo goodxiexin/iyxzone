@@ -1,20 +1,23 @@
+<div class="ac-bd">
 <div class="multibox">
-  <div class="title"><%= link_to "全部日志", blogs_url(:uid => user.id) %><b>最近日志</b></div>
   <% unless blogs.blank? %>
-  <% blogs.each do |blog| %>
-    <div class="diary-box">
-      <div class="diary-header">
-        <%= blog_link blog,:class=>'shine' %> <%= ftime blog.created_at %>
-      </div>
-      <p> <%= blog_content blog, :length => 80, :omission => '...' %> </p>
-    </div>
-  <% end %>
+		<% blogs.each do |blog| %>
+			<div class="diary-box">
+				<div class="diary-header">
+					<%= blog_link blog,:class=>'shine' %> <%= ftime blog.created_at %>
+				</div>
+				<p> <%= blog_content blog, :length => 80, :omission => '...' %> </p>
+			</div>
+		<% end %>
   <% else %>
     <% if user==current_user %>
-      <div class='space'>还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>吧</div>
+      <div>还没更新日志赶紧去<%= link_to '弄一个', new_blog_url%>吧</div>
     <% else %>
-      <div class='space'>这家伙没更新日志</div>
+      <div>这家伙没更新日志</div>
     <% end %>
   <% end %>
 </div>
-
+</div>
+<% if user.blogs_count > 5 %>
+	<div class="ac-ft"><%= link_to "查看全部>>", blogs_url(:uid => user.id)%></div>
+<% end %>

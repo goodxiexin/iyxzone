@@ -17,7 +17,7 @@
       </div>
       <div class="buttons">
         <span class="button"><span><button type='submit' id='submit_btn' >发布</button></span></span>
-        <%= emotion_link 'comment_content', :class=>'icon-face' %>
+        <%= emotion_link "wall_message_content_#{wall.id}", :class=>'icon-face' %>
         <span id='wall_<%= wall.id %>_words_count'>0/140</span>
       </div>
     <% end %>

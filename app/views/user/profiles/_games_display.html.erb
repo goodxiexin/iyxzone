@@ -1,0 +1,8 @@
+		<% games.each do |game| %>
+			<li>
+				<a href="/games/<%=game.id%>" id="game-display-<%=game.id%>" onmouseover="Iyxzone.Profile.GameDisplay.display(<%=profile.id%>,<%=game.id%>)">
+					<span class="gameName"><%= game.name%></span>
+					<span class="gameLogo"><%= game_image game.name, :width=>"70", :height=>"100" %></span>
+				</a>
+			</li>
+		<% end %>

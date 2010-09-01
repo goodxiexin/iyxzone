@@ -1,23 +1,31 @@
-<div class="multibox rows">
-  <div class="title">
-    <% unless user == current_user %>
-      <%= link_to "更多", other_friends_url(:uid => user.id) %>
-      <b>他的好友</b>
-    <% else %>
-      <%= link_to "更多", friends_url() %>
-      <b>我的好友</b>
-    <% end %>
-  </div>
-  <div class="photolist-box">
-    <ul class="collection s_clear">
-      <% friends.each do |u| %>
-        <li>
-          <div class="middle"><div class="middle-center"><div class="center"><a href="#"><%= avatar u, :class => 'imgbox01' %></a></div></div></div>
-          <p><%= profile_link u %></p>
-          <p class="btns"></p>
-        </li>
-      <% end %>
-    </ul>
-  </div>
+<div class="alphaColum">
+	<div class="ac-r-t"><em></em></div>
+		<div class="ac-r-m fix">
+			<div class="alphaTitle fix"><div class="wrap">
+			<% if user == current_user %>
+				<strong>我的好友</strong>
+			<% else %>
+				<strong>TA的好友</strong>
+			<% end %>
+			<%= link_to_function '', "$('profile-friends-wrap').toggle()", :class=>"op i iArrUnFold"%></div></div>
+			<div id='profile-friends-wrap'>
+				<div class="ac-bd">
+					<ul class="memberList fix">
+						<% friends.each do |u| %>
+							<li>
+								<a href="#"><%= avatar u, :class => 'imgbox01' %></a>
+								<%= profile_link u, :class=>"memberName" %>
+							</li>
+						<% end %>
+					</ul>
+					<% if user == current_user %>
+						<div class="ac-ft"><%= facebox_link "查看全部>>", friends_url() %></div>
+					<% else %>
+						<div class="ac-ft"><%= facebox_link "查看全部>>", other_friends_url(:uid => user.id) %></div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+		<div class="ac-r-b"><em></em></div>
 </div>
 

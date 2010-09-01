@@ -1,0 +1,31 @@
+<div class='ac-bd'>
+	<% unless polls.blank? %>
+	<div class='feed-box'>
+		<div class="home-wrap">
+			<div id ='feed_list'>
+				<% polls.each do |poll| %>
+						<% render :layout => 'user/profiles/resource_template', :locals => {:icon_type => 'icon-vote'} do %>
+							<%= profile_link poll.poster %> 发布了投票 <%= poll_link poll, :class => "shine" %>
+							<ul class='gray s_clear'>
+								<% poll.answers[0..2].each do |a| %>
+									<li><%= check_box_tag '', '', false, :disabled => true %><%= (truncate a.description, :length => 20, :omission => "...") %></li>
+								<% end %>
+							</ul>
+							<p class="gray"><%= ftime poll.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('poll', #{poll.id}, null, #{poll.poster_id});", :class => "gray"%></p>
+							<%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => poll , :recipient => poll.poster} %>
+						<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<% else %>
+    <% if user==current_user %>
+      <div>还没发起投票，赶紧去<%= link_to '弄一个', new_poll_url%>吧</div>
+    <% else %>
+      <div>这家伙没发起任何投票</div>
+    <% end %>
+	<% end %>
+</div>
+<% if user.polls_count > 3 %>
+	<div class="ac-ft"><%= link_to "查看全部>>", polls_url(:uid => user.id)%></div>
+<% end %>

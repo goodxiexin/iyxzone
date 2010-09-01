@@ -139,7 +139,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :notifications, :collection => {:destroy_all => :delete, :first_five => :get}
 
-    users.resources :profiles, :member => {:more_feeds => :get} do |profiles|
+    users.resources :profiles, :member => {:more_feeds => :get, :change_tab => :get, :game_display => :get, :more_games => :get} do |profiles|
 
       profiles.resources :tags, :controller => 'profiles/tags'
 

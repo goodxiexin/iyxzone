@@ -1,2 +1,2 @@
-page.replace_html 'tag_cloud_head', "<b>好友印象</b>"
+page.replace_html 'tag_cloud_header', "<strong>好友印象</strong>"
 page.replace_html 'tag_cloud', :partial => 'tag_cloud', :locals => {:profile => @taggable}

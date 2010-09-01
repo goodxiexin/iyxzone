@@ -1,0 +1,27 @@
+<div class='ac-bd'>
+	<% unless videos.blank? %>
+	<div class='feed-box'>
+		<div class="home-wrap">
+			<div id ='feed_list'>
+				<% videos.each do |video| %>
+						<% render :layout => 'user/profiles/resource_template', :locals => {:icon_type => 'icon-video'} do %>
+							<p><%= profile_link video.poster %> 分享了视频 <%= video_link video, :class => "shine"%></p>
+							<p class="gray s_clear" id='video_<%= video.id %>'> <%= video_thumbnail video, :class=>'imgbox01' %></p>
+							<p class="gray"><%= ftime video.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('video', #{video.id}, null, #{video.poster_id})" %></p>
+							<%= render :partial => 'user/comments/folded_comment_box', :locals => {:commentable => video, :recipient => video.poster} %>
+						<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<% else %>
+    <% if user==current_user %>
+      <div>还没收录视频，赶紧去<%= link_to '弄一个', new_video_url%>吧</div>
+    <% else %>
+      <div>这家伙没收录任何视频</div>
+    <% end %>
+	<% end %>
+</div>
+<% if user.videos_count > 3 %>
+	<div class="ac-ft"><%= link_to "查看全部>>", videos_url(:uid => user.id)%></div>
+<% end %>

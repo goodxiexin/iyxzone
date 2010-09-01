@@ -974,6 +974,7 @@ dl.menu-op dd a{color:#333}
 /*日志*/
 a.blogImportBtn,.tab01 .right a.blogImportBtn,.tab01 .right a.blogImportBtn:hover{background:url(../images/skin/skin2010.png) no-repeat -123px -760px;width:77px;height:25px;line-height:25px;display:inline-block;color:#fff;font-weight:700;text-decoration:none;text-align:center;position:relative}
 
+.blogImport .box04{padding:10px;margin:10px 0}
 .blogImport h2{border-bottom:1px solid #bdd6ad;padding-bottom:10px;}
 .blogImport h2 strong{color:#d63200;font-size:14px;}
 .blogImport h2 a{font-size:12px;color:#d63200;}
@@ -988,8 +989,8 @@ a.blogImportBtn,.tab01 .right a.blogImportBtn,.tab01 .right a.blogImportBtn:hove
 .blogImport .step-2 .list{height:300px;overflow-y:auto;overflow-x:hidden;}
 .blogImport .step-2 .list table{margin-left:5px}
 .blogImport .step-2 .list table td{padding:10px 3px}
-.blogImport .step-2 .list table td .title{width:260px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
-
+.blogImport .step-2 .list table td .title{width:220px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;word-wrap:normal;white-space:nowrap;word-break:keep-all;}
+.blogImport .step-2 .list table td input.textfield{width:200px;height:22px;line-height:22px}
 /*视频 日志详细页面*/
 .detail-video-head,.detail-blog-head{background-color:#f8fcf6;border-top:1px solid #c2e29d;padding:10px 15px}
 .detail-video-head p.left,.detail-blog-head p.left{margin-top:6px;width:500px}
@@ -1132,6 +1133,8 @@ h1.app-share{float:left}
 
 /*好友下拉选择列表*/
 .selector03{height:auto;position:relative;z-index:10}
+.z-box .selector03{width:200px}
+.z-box .selector03 .drop-menu {width:190px}
 .selector03 ul.friend-select-list{position:relative;cursor:text;line-height:18px;min-height:20px;padding:2px 3px 0;}
 .selector03 ul.friend-select-list li{padding:0 4px 0 0;margin:2px 0;position:relative;float:left;}
 .selector03 ul.friend-select-list li a {border-color:#d1e2c5;border-style:solid;border-width:1px 0;color:#333;display:block;float:left;text-decoration:none;background:#f4fdef;width:auto;height:auto;overflow:visible;position:relative;}
@@ -1324,7 +1327,9 @@ span.i,a.i,.i40{width:16px;height:16px;margin-right:3px;display:-moz-inline-stac
 .iGuildLogo{height:53px;background-position:0 -935px}
 .iGameLogo{height:53px;background-position:-40px -935px}
 a.iActBtn{width:142px;height:44px;background-position:0 -1110px}
-
+.iArrUnFold{background-position:-60px -764px}
+.iArrFold{background-position:-76px -764px}
+.iAdd02{background-position:-61px -742px}
 /*.iSetAvatar{background-position:-18px -429px}
 */
 span.iGuild02{width:23px;height:27px;background-position:-81px -935px}
@@ -1332,7 +1337,7 @@ span.iFunc02{width:19px;height:27px;background-position:-104px -935px}
 span.iRole02{width:19px;height:27px;background-position:-123px -935px}
 a.iHelpTips{background-position:0 -412px}
 
-.ajaxLoading{text-align:center;margin:30px 0}
+.ajaxLoading{text-align:center;padding:30px 0}
 /*btn*/
 .sBtn,.sBtn span{background:url(../images/skin/btn2010.png) no-repeat}
 span.sBtn{background-position:right -122px;display:inline-block;padding-right:10px;margin:0 2px}
@@ -1710,6 +1715,9 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .m-card .m-con{width:100%;position:relative;z-index:2;line-height:20px}
 .m-card .m-con h4{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .m-card .m-con .role-name{color:#BF3A00}
+/*通用会员头像列表*/
+.memberList li{float:left;height:90px;margin:5px 0;text-align:center;width:25%;}
+.memberList li .memberName{color:#666;display:block;height:22px;line-height:22px;overflow:hidden;width:98%;}
 
 .mBlogExtra .popMemberEx .list li{background:url(../images/skin/dotline.gif) repeat-x bottom;}
 .mBlogTrans .ft textarea{width:99%;padding:3px 0}
@@ -1901,3 +1909,115 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .adColM{position:relative;zoom:1}
 .adColM .icon-active{position:absolute;right:5px;top:5px}
 
+/*v2.0个人主页*/
+body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center 0}
+.alphaHeader{height:42px;background:url(../images/skin/alpha-header.png) no-repeat;/*_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/alpha-header.png');*/}
+.alphaHeader #navbar,.alphaHeader #navbar #navwrap,.alphaHeader #navbar #navwrap #navmid{background:none}
+.alphaHeader .logo-top{background:url(../images/skin/logo-top-v2.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/logo-top-v2.png');}
+
+.alphaPage{width:940px;margin:0 auto;clear:both;}
+.alphaPage .pageSkinV2{background:url(../images/skin/page-bg-alpha.png);width:100%;position:relative;}
+.alphaPage .pageRoundTop{background:url(../images/skin/page-round-alpha.png) no-repeat;margin:70px 0 0 0;height:10px}
+.alphaPage .pageRoundBottom{background:url(../images/skin/page-round-alpha.png) no-repeat 0 -10px;height:10px}
+
+.pageSkinV2 .alphaSide{position:relative;margin:0;*margin:0 !important;}
+.alphaPage .pageSkinV2 .mainWrap{margin:0 0 0 -340px;*margin:0 0 0 -340px !important}
+.alphaPage .pageSkinV2 .alphaContent{margin:0 0 0 340px;/*_margin:0 0 0 380px;width:580px*/}
+
+.avatarXl{position:absolute;top:-60px;left:40px;background:url(../images/skin/alpha-avatar-xl.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/alpha-avatar-xl.png');}
+.avatarXl .wrap{width:280px;height:280px;display:table-cell;vertical-align:middle;text-align:center;*display: block;*font-size:244px;/*约为高度的0.873*/*font-family:Arial;*padding-top:25px}
+.memberProfile{padding:220px 0 0 20px;width:317px;height:154px;}
+.memberProfile .wrapBg{position:absolute;z-index:1;width:317px;height:154px;background:url(../images/skin/alpha-profile-bg.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='images/skin/alpha-profile-bg.png');}
+.memberProfile .wrapCon{position:absolute;z-index:2}
+.memberProfile,.memberProfile a,.memberProfile a:hover{color:#fff}
+.memberProfile .intro{padding:30px 0 0 30px;}
+.memberProfile .intro li{border-right:1px solid #eee;padding-right:10px;margin-right:10px;width:70px;float:left;text-align:center}
+.memberProfile .intro li.nobd{border:0}
+.memberProfile .intro .num{color:#ccff00;display:block;margin-bottom:5px;font-size:14px}
+.memberProfile .op{margin:30px 0 0 20px}
+.memberProfile .op li{float:left;width:130px;margin:5px}
+.alphaBtn{width:75px;height:27px;line-height:28px;display:inline-block;cursor:pointer;background:url(../images/skin/alpha-btn.png) no-repeat;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=scale, src='images/skin/alpha-btn.png');}
+
+.alphaTitle{height:42px;line-height:37px;background:url(../images/skin/alpha-skin.png) no-repeat right -563px;padding-right:10px}
+.alphaTitle div.wrap{height:42px;background:url(../images/skin/alpha-skin.png) no-repeat 0 -516px;}
+.alphaTitle strong{float:left;font-size:12px;color:#fff;font-weight:400;margin-left:10px}
+.alphaTitle .op{float:right;margin-right:10px;color:#fff}
+.alphaTitle .i{margin-top:10px}
+
+.alphaColum{margin:20px 0 0 0}
+.alphaSide .alphaColum{width:315px;margin:20px 0 0 20px}
+.alphaColum .alphaTitle,.alphaColum .ac-bd,.alphaColum .ac-ft{margin:0 15px 10px 15px}
+.alphaColum .ac-r-t{background:url(../images/skin/alpha-skin.png) no-repeat right -8px;padding-right:20px;height:6px;font-size:0;line-height:0;}
+.alphaColum .ac-r-t em{background:url(../images/skin/alpha-skin.png) no-repeat;height:6px;display:block}
+.alphaColum .ac-r-m{background:#fff;padding:15px 0;}
+.alphaColum .ac-r-b{background:url(../images/skin/alpha-skin.png) no-repeat right -24px;padding-right:20px;height:6px;font-size:0;line-height:0;}
+.alphaColum .ac-r-b em{background:url(../images/skin/alpha-skin.png) no-repeat 0 -16px;height:6px;display:block}
+.alphaColum .ac-ft{text-align:right;margin-top:10px}
+.alphaSide .colGuild .item{padding:0 0 10px 70px;margin-top:10px}
+.alphaSide .colGuild .item .avatar{float:left;margin-left:-70px;_display:inline}
+.alphaSide .colGuild .item .con{float:left;width:100%;line-height:18px}
+.alphaSide .colGuild .item .guildName{height:26px;line-height:26px;overflow:hidden;width:200px}
+.alphaSide .colGuild .item .guildName a{color:#d63000;font-weight:700;}
+.alphaSide .colGuild .item .num{font-weight:700}
+
+.acMemberInfo{padding:10px 0}
+.acMemberInfo .memberName{font-size:16px;color:#fff;line-height:30px;font-weight:700}
+.acNav{background:url(../images/skin/alpha-skin.png) no-repeat 0 -78px;width:560px;height:94px;}
+.acNav li{float:left;width:75px;height:62px;margin:12px 2px 0 2px;text-align:center}
+.acNav li a{display:block;cursor:pointer;background:url(../images/skin/alpha-skin.png) no-repeat -776px -74px;width:75px;height:62px;padding-top:2px}
+.acNav li.selected a,.acNav li a:hover{background-position:-856px -74px;}
+.acNav li a span{width:40px;height:40px;display:block;background:url(../images/skin/alpha-skin.png) no-repeat;margin:0 auto}
+.acNav li a strong{color:#fff;font-weight:400;line-height:20px}
+.acNav li.selected a strong,.acNav li a:hover strong{color:#333;}
+.acNav span.home{background-position:0 -176px}
+.acNav span.info{background-position:-40px -176px}
+.acNav span.feed{background-position:-80px -176px}
+.acNav span.poll{background-position:-120px -176px}
+.acNav span.photo{background-position:-160px -176px}
+.acNav span.blog{background-position:-200px -176px}
+.acNav span.video{background-position:-240px -176px}
+.acNav li.selected a span.home,.acNav li a:hover span.home{background-position:0 -216px}
+.acNav li.selected a span.info,.acNav li a:hover span.info{background-position:-40px -216px}
+.acNav li.selected a span.feed,.acNav li a:hover span.feed{background-position:-80px -216px}
+.acNav li.selected a span.poll,.acNav li a:hover span.poll{background-position:-120px -216px}
+.acNav li.selected a span.photo,.acNav li a:hover span.photo{background-position:-160px -216px}
+.acNav li.selected a span.blog,.acNav li a:hover span.blog{background-position:-200px -216px}
+.acNav li.selected a span.video,.acNav li a:hover span.video{background-position:-240px -216px}
+
+.acTop{padding-left:20px;}
+.acMain{padding:0 20px 10px 20px;}
+.acMain .acWrap{padding:0 20px}
+.acMain .addGame{background:#fff;text-align:right;padding:0 10px 10px 0}
+.alphaContent .myGameList{background:url(../images/skin/cabinet-bg.jpg) repeat-y;margin-bottom:20px}
+.alphaContent .myGameList li{height:156px;width:112px;float:left;text-align:center;}
+.alphaContent .myGameList li .gameName{display:block;color:#fff;margin:10px 0}
+.alphaContent .moreGame{background:#fff;}
+.alphaContent .moreGame a{background:url(../images/skin/alpha-skin.png) no-repeat -288px -33px;width:138px;height:27px;line-height:27px;display:block;color:#fff;text-align:center;margin:0 auto;font-weight:700}
+.alphaContent .s-dialog .arrow-dialog{_left:-17px;}
+
+.acMain .acMainWrap{margin-top:0}
+.acMain .acMainWrap .ac-r-m{padding-top:0}
+
+.gameIntroPop{width:325px;z-index:10}
+.gameIntroPop .r-t{background:url(../images/skin/alpha-skin.png) no-repeat right -371px;padding-right:20px;}
+.gameIntroPop .r-t .c-r{background:url(../images/skin/alpha-skin.png) no-repeat 0 -258px;padding-bottom:5px}
+.gameIntroPop .r-m{background:#fff;padding:20px 20px 15px 20px;border:1px solid #22841e}
+.gameIntroPop .r-b{background:url(../images/skin/alpha-skin.png) no-repeat right -509px;padding-right:20px;height:6px;font-size:0;line-height:0;margin-top:-1px}
+.gameIntroPop .r-b em{background:url(../images/skin/alpha-skin.png) no-repeat 0 -494px;height:6px;display:block}
+
+.gameIntroPop .t{margin:0 0 5px 20px;padding:10px 0 5px 0;border-bottom:1px dotted #eee;}
+.gameIntroPop .t h2{font-size:12px;font-weight:700;color:#fff;float:left}
+.gameIntroPop .t a{color:#fff;float:right;text-decoration:underline}
+.gameIntroPop .roleList{color:#fff;line-height:20px;padding-left:20px}
+.gameIntroPop .roleList a{color:#fff}
+.gameIntroPop .bd{padding:0 0 10px 80px;border-bottom:1px dotted #666;}
+.gameIntroPop .bd .avatar{float:left;margin-left:-80px;_display:inline}
+.gameIntroPop .bd .con{float:left;width:100%;line-height:24px}
+.gameIntroPop .bd .con span{color:#25700d;font-weight:700}
+.gameIntroPop .ft{margin-top:10px}
+.gameIntroPop .ft a{color:#e26a00;font-weight:700;margin-right:20px}
+
+
+/*个人主页-档案*/
+.acMain .archives-box .percent-box .percent{width:200px}
+.acMain .archives-box .edit-toggle .fldid{width:80px}

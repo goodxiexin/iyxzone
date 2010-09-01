@@ -1,4 +1,4 @@
-<div class='impress-add s_clear space' id='tag_cloud'> 
+<div class='impress-add s_clear space'> 
 <% all_tags = profile.tags.limit(17) %>
 <% if all_tags.size == 17 %>
 <% tags = all_tags.map(&:name) %>
@@ -9,3 +9,8 @@
 	<%= link_to_remote "<span>#{name}</span>", :url => profile_tags_url(profile, :tag_name => name),:html=>{:class=> "impress-btn-#{rand(4)}"} %>
 <% end %>
 </div>
+<% form_remote_for :tag, :url => profile_tags_url(profile), :loading => "Iyxzone.disableButton($('tag_submit'), '请等待')", :complete => "if($('tag_submit')){Iyxzone.enableButton($('tag_submit'), '评价');}", :html => {} do |f| %>
+	<p class='space'>都不贴切？自己想个</p>
+	<div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
+	<div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
+<% end %>

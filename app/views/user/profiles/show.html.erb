@@ -14,19 +14,14 @@
 <% end %>
 
 <% content_for :left do %>
-  <% mc_avatar do %>
-    <%= avatar_image @user, :size => 'clarge' %>
-  <% end %>
-  <% if @user != current_user and @user.is_idol and !@user.has_fan?(current_user) %>
-    <%= render :partial => 'follow_idol', :locals => {:user => @user} %>
-  <% end %>
-	<%= render :partial => 'user/profiles/operations', :locals => {:profile => @profile, :user => @user, :relationship => @relationship} %>
-	<%= render :partial => 'user/profiles/menu', :locals => {:profile => @profile, :user => @user, :relationship => @relationship} %>
-<% end %>
-
-<% content_for :right do %>
-  <%= render :partial => 'user/profiles/character_infos', :locals => {:characters => @characters} %>
+	<div class="avatarXl">
+		<div class="wrap">
+			<%= avatar_image @user, :size => 'clarge' %>
+		</div>
+	</div>
+	<%= render :partial => "user/profiles/operations", :locals => {:user => @user, :profile => @profile, :relationship => @relationship} %>
   <%= render :partial => 'user/profiles/tag_panel', :locals => {:user => @user, :profile => @profile} %>
+	<%= render :partial => 'user/profiles/guilds', :locals => {:guilds => @guilds, :user => @user} %>
   <% unless @viewings.blank? %>
     <%= render :partial => 'user/profiles/recent_visitors', :locals => {:viewings => @viewings, :profile => @profile} %>
   <% end %>
@@ -39,18 +34,32 @@
   <% if @user.is_idol and !@fans.blank? %>
     <%= render :partial => 'user/profiles/fans', :locals => {:fans => @fans, :user => @user} %>
   <% end %>
+	
 <% end %>
 
-<div class="box02 canvas_con">
-  <%= render :partial => 'user/profiles/about_me', :locals => {:user => @user, :profile => @profile} %>
-  <%= render :partial => 'user/profiles/recent_mini_blogs', :locals => {:user => @user, :mini_blogs => @mini_blogs} %>
-  <%= render :partial => 'user/profiles/recent_albums', :locals => {:user => @user, :profile => @profile, :albums => @albums} %>
-  <%= render :partial => 'user/profiles/recent_blogs', :locals => {:user => @user, :profile => @profile, :blogs => @blogs} %>
-  <%= render :partial => 'user/profiles/feed_list', :locals => {:profile => @profile, :feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size} %>
-  <div class="bookbox"><h3><label for="book">留言板</label>(共<%= @profile.comments_count %>条留言)</h3></div>
-  <%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user, :messages => @messages} %>
+<%= render :partial => 'user/profiles/tab', :locals => {:user => @user, :profile => @profile} %>
+<div class='acMain'>
+	<div class="alphaColum acMainWrap" >
+		<div class="ac-r-m fix" id="profile-main-content">
+			<%= render :partial => "home_tab_info", :locals => {:user => @user, :profile=> @profile, :mini_blogs => @mini_blogs, :games => @games, :more_game => @more_game} %>
+		</div>
+		<div class="ac-r-b"><em></em></div>
+	</div>
+	<div class="alphaColum">
+		<div class="ac-r-t"><em></em></div>
+		<div class="ac-r-m fix">
+			<div class="alphaTitle fix"><div class="wrap"><strong>留言板(共<%=@profile.comments_count%>条)</strong></div></div>
+			<div class="ac-bd">
+				<%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user, :messages => @messages} %>
+			</div>
+		</div>
+		<div class="ac-r-b"><em></em></div>
+	</div>
 </div>
 
 <% unless @reply_to.nil? %>
   <%= onload_javascript_tag "Iyxzone.WallMessage.set('#{@reply_to.login}', #{@reply_to.id})" %>
+<% end %>
+<% javascript_tag do %>
+  Iyxzone.Profile.init(<%= @profile.id %>);
 <% end %>
