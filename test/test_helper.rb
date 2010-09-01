@@ -2,6 +2,7 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
 require 'factory_girl'
+require 'integration_test_ext'
 Dir.new("test/factories").each {|f| require File.join('test', 'factories', f) if f =~ /.+\.rb/}
 
 class ActiveSupport::TestCase

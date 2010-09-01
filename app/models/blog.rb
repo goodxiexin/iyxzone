@@ -28,7 +28,7 @@ class Blog < ActiveRecord::Base
     poster = blog.poster
     friends = poster.friends.all(:select => "users.id, users.application_setting").find_all {|f| f.application_setting.recv_blog_feed?}
     fans = poster.is_idol ? poster.fans.all(:select => "users.id") : []
-    (poster.all_guilds + friends + idols).uniq
+    (poster.all_guilds + friends + fans).uniq
   }
   
   acts_as_list :order => 'created_at', :scope => 'poster_id', :conditions => {:draft => false}

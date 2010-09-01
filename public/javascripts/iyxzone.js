@@ -2,7 +2,7 @@ Iyxzone = {};
 
 Object.extend(Iyxzone, {
 
-  version: 1.0,
+  version: '1.9',
 
   author: ['高侠鸿'],
 

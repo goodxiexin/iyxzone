@@ -26,7 +26,6 @@ class GuildAlbumTest < ActiveSupport::TestCase
     @album = @guild.album
 
     assert_not_nil @album
-    assert_equal @album.game_id, @guild.game_id
     assert_equal @album.privilege, PrivilegedResource::PUBLIC
     assert_equal @album.poster_id, @guild.president_id
   end
@@ -37,7 +36,6 @@ class GuildAlbumTest < ActiveSupport::TestCase
 
     @photo = PhotoFactory.create :album_id => @album.id, :type => 'GuildPhoto'
     assert_equal @photo.privilege, @album.privilege
-    assert_equal @photo.game_id, @album.game_id
     assert_equal @photo.poster_id, @album.poster_id
   end
 

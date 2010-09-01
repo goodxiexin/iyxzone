@@ -16,7 +16,7 @@ class PollTest < ActiveSupport::TestCase
 
     @sensitive = '政府'
   end
-=begin
+  
   test "create/destroy poll" do
     @poll = Poll.create :poster_id => @user.id, :privilege => 1, :no_deadline => 1, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}]
     @user.reload
@@ -271,7 +271,7 @@ class PollTest < ActiveSupport::TestCase
     assert_equal @user.participated_polls_count, 0
     assert_equal @friend.participated_polls_count, 2
   end
-=end
+  
   test "poll feed and vote feed" do
     @guild1 = GuildFactory.create :character_id => @character1.id
     @guild2 = GuildFactory.create :character_id => @character2.id
@@ -333,7 +333,7 @@ class PollTest < ActiveSupport::TestCase
     assert @guild2.recv_feed?(@vote)
     assert @fan.recv_feed?(@vote)
   end
-=begin
+  
   test "comment poll" do
     @poll = Poll.create :poster_id => @user.id, :privilege => 2, :no_deadline => 0, :deadline => 1.day.from_now, :name => 'name', :answers => [{:description => "answer1"}, {:description => "answer2"}, {:description => "answer3"}], :max_multiple => 2
 
@@ -413,5 +413,5 @@ class PollTest < ActiveSupport::TestCase
       @poll.invite [@stranger]
     end
   end
-=end
+
 end

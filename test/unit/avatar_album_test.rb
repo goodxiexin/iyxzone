@@ -23,7 +23,6 @@ class AvatarAlbumTest < ActiveSupport::TestCase
 
   test "album should be created automatically" do
     assert_not_nil @album
-    assert_nil @album.game_id
     assert_equal @album.poster_id, @user.id
     assert_equal @album.privilege, PrivilegedResource::FRIEND
     assert @album.accepted?

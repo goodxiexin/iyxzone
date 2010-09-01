@@ -36,7 +36,6 @@ class AvatarFlowTest < ActionController::IntegrationTest
     @stranger_sess = login @stranger
     @fan_sess = login @fan
     @idol_sess = login @idol
-
     @album = @user.avatar_album
   end
 

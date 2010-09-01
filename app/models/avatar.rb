@@ -10,7 +10,7 @@ class Avatar < Photo
 
   acts_as_resource_feeds :recipients => lambda {|photo| 
     poster = photo.album.poster
-    friends = poster.friends.all(:select => "user.id, users.applicationi_setting").find_all{|f| f.application_setting.recv_photo_feed?}
+    friends = poster.friends.all(:select => "users.id, users.application_setting").find_all{|f| f.application_setting.recv_photo_feed?}
     fans = poster.is_idol ? poster.fans.all(:select => "users.id") : []
     (friends + fans).uniq
   }

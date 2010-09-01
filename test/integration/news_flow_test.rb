@@ -143,7 +143,7 @@ class NewsFlowTest < ActionController::IntegrationTest
     @admin_sess.delete "admin/news/invalid"
     @admin_sess.assert_not_found
 
-    assert_difference "News.count",-1 do
+    assert_difference "News.count", -1 do
 			@admin_sess.delete "admin/news/#{@news2.id}"
 		end
 		

@@ -19,8 +19,17 @@ class GuildPhotoObserver < ActiveRecord::Observer
 	def after_create photo
     return unless photo.thumbnail.blank?
 
+    album = photo.album
+
     # increment counter
-    photo.album.raw_increment :photos_count
+    album.raw_increment :photos_count
+
+    # set cover
+    if photo.recently_set_cover?
+      album.set_cover photo
+    end
+
+    photo.clear_cover_action
 	end
 
   def before_update photo 

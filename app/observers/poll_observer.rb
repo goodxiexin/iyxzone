@@ -7,6 +7,7 @@ class PollObserver < ActiveRecord::Observer
   end
 
   def after_create poll
+    puts "after create"
     # increment user's counter
     poll.poster.raw_increment :polls_count
 

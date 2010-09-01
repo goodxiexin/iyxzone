@@ -30,17 +30,17 @@ class BlogsFlowTest < ActionController::IntegrationTest
     @stranger_sess = login @stranger
   
     # create 4 blogs for user
-    @blog1 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend.id], :created_at => 1.days.ago
-    @blog2 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend.id], :created_at => 2.days.ago
-    @blog3 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend.id], :created_at => 3.days.ago
-    @blog4 = BlogFactory.create :poster_id => @user.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend.id], :created_at => 4.days.ago
-    @draft = DraftFactory.create :poster_id => @user.id, :game_id => @game.id
+    @blog1 = BlogFactory.create :poster_id => @user.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@friend.id], :created_at => 1.days.ago
+    @blog2 = BlogFactory.create :poster_id => @user.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@friend.id], :created_at => 2.days.ago
+    @blog3 = BlogFactory.create :poster_id => @user.id, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@friend.id], :created_at => 3.days.ago
+    @blog4 = BlogFactory.create :poster_id => @user.id, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@friend.id], :created_at => 4.days.ago
+    @draft = DraftFactory.create :poster_id => @user.id
 
     # create 4 blogs for friend  
-    @blog5 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@user.id], :created_at => 5.days.ago
-    @blog6 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@user.id], :created_at => 6.days.ago
-    @blog7 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@user.id], :created_at => 7.days.ago
-    @blog8 = BlogFactory.create :poster_id => @friend.id, :game_id => @game.id, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@user.id], :created_at => 8.days.ago
+    @blog5 = BlogFactory.create :poster_id => @friend.id, :privilege => PrivilegedResource::PUBLIC, :new_friend_tags => [@user.id], :created_at => 5.days.ago
+    @blog6 = BlogFactory.create :poster_id => @friend.id, :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME, :new_friend_tags => [@user.id], :created_at => 6.days.ago
+    @blog7 = BlogFactory.create :poster_id => @friend.id, :privilege => PrivilegedResource::FRIEND, :new_friend_tags => [@user.id], :created_at => 7.days.ago
+    @blog8 = BlogFactory.create :poster_id => @friend.id, :privilege => PrivilegedResource::OWNER, :new_friend_tags => [@user.id], :created_at => 8.days.ago
 
     @nil_id = @blog8.id + 100
   end
@@ -223,12 +223,12 @@ class BlogsFlowTest < ActionController::IntegrationTest
     @user_sess.assert_template "user/blogs/new"
 
     assert_difference "Blog.count" do
-      @user_sess.post "/blogs", {:blog => {:title => 't', :content => 'c', :game_id => @game.id}}
+      @user_sess.post "/blogs", {:blog => {:title => 't', :content => 'c'}}
     end
     # TODO: assert js ?
 
     assert_no_difference "Blog.count" do
-      @user_sess.post "/blogs", {:blog => {:content => 'c', :game_id => @game.id}}
+      @user_sess.post "/blogs", {:blog => {:content => 'c'}}
     end
     # TODO: assert js ?
   end

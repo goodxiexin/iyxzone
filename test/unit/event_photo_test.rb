@@ -31,7 +31,6 @@ class EventPhotoTest < ActiveSupport::TestCase
     
     assert_equal @photo.privilege, @album.privilege
     assert_equal @photo.poster_id, @album.poster_id
-    assert_equal @photo.game_id, @album.game_id
   end
 
   test "create photo and set it as cover" do

@@ -24,7 +24,6 @@ class EventAlbumTest < ActiveSupport::TestCase
 
   test "album should be create automatically" do
     assert_not_nil @album
-    assert_equal @album.game_id, @event.game_id
     assert_equal @album.poster_id, @event.poster_id
     assert_equal @album.privilege, PrivilegedResource::PUBLIC
     assert @album.accepted? 

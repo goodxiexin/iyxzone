@@ -29,7 +29,6 @@ class AvatarTest < ActiveSupport::TestCase
     
     assert_equal @photo.privilege, @album.privilege
     assert_equal @photo.poster_id, @album.poster_id
-    assert_equal @photo.game_id, @album.game_id
   end
 
   test "create avatar and set it as cover" do
