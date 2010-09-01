@@ -14,7 +14,12 @@ class Profile < ActiveRecord::Base
 
   acts_as_feed_recipient :delete_conditions => lambda {|user, profile| profile.user == user}
 
-	acts_as_resource_feeds :recipients => lambda {|profile| ([profile] + profile.user.friends.all(:select => "id") + (profile.user.is_idol ? profile.user.fans.all(:select => "id") : [])).uniq}
+	acts_as_resource_feeds :recipients => lambda {|profile|
+    user = profile.user 
+    friends = user.friends.all(:select => "users.id")
+    fans = user.is_idol ? user.fans.all(:select => "users.id") : []
+    ([profile] + friends + idols).uniq
+  }
 
   acts_as_taggable :delete_conditions => lambda {|profile, user| profile.user == user}, 
                    :create_conditions => lambda {|tagging, profile, user| (tagging.nil? || tagging.created_at < 10.days.ago) and user != profile.user and user.relationship_with(profile.user) == 'friend'}

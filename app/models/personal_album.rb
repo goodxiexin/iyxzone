@@ -14,7 +14,9 @@ class PersonalAlbum < Album
 
   acts_as_resource_feeds :recipients => lambda {|album| 
     poster = album.poster
-    ((poster.is_idol ? poster.fans.all(:select => "id") : []) + poster.friends.all(:select => "id").find_all {|f| f.application_setting.recv_photo_feed?}).uniq
+    fans = poster.is_idol ? poster.fans.all(:select => "id") : []
+    friends = poster.friends.all(:select => "users.id, users.application_setting").find_all {|f| f.application_setting.recv_photo_feed?}
+    (fans + friends).uniq
   }
 
   validates_size_of :title, :within => 1..100

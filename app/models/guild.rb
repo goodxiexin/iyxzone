@@ -95,8 +95,10 @@ class Guild < ActiveRecord::Base
 
 	acts_as_resource_feeds :recipients => lambda {|guild| 
     president = guild.president
-    friends = president.friends.all(:select => "id").find_all {|f| f.application_setting.recv_guild_feed?}
-    ([president.profile, guild.game] + friends + (president.is_idol ? president.fans.all(:select => :id) : [])).uniq
+    friends = president.friends.all(:select => "users.id, users.application_setting").find_all {|f| f.application_setting.recv_guild_feed?}
+    fans = president.fans.all(:select => "users.id")
+    others = [president.profile, guild.game]
+    (others + friends + fans).uniq
   }
 
 	acts_as_commentable :order => 'created_at DESC',

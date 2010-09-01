@@ -10,7 +10,9 @@ class Avatar < Photo
 
   acts_as_resource_feeds :recipients => lambda {|photo| 
     poster = photo.album.poster
-    (poster.friends.all(:select => "id").find_all{|f| f.application_setting.recv_photo_feed?} + (poster.is_idol ? poster.fans.all(:select => "id") : [])).uniq
+    friends = poster.friends.all(:select => "user.id, users.applicationi_setting").find_all{|f| f.application_setting.recv_photo_feed?}
+    fans = poster.is_idol ? poster.fans.all(:select => "users.id") : []
+    (friends + fans).uniq
   }
   
   attr_readonly :album_id
