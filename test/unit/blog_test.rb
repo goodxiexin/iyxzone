@@ -17,7 +17,7 @@ class BlogTest < ActiveSupport::TestCase
     FriendFactory.create @user, @friend2
     FriendFactory.create @user, @friend3
     FriendFactory.create @user, @friend4
-    
+assert_equal 1, 0    
     # create stranger
     @stranger = UserFactory.create
 
