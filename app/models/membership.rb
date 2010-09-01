@@ -19,8 +19,8 @@ class Membership < ActiveRecord::Base
 	acts_as_resource_feeds :recipients => lambda {|membership| 
     user = membership.user
     guild = membership.guild 
-    friends = membership.user.friends.find_all{|f| f.application_setting.recv_guild_feed?}
-    ([user.profile, guild.game] + friends + (user.is_idol ? user.fans : []) - [guild.president]).uniq
+    friends = user.friends.all(:select => "id").find_all{|f| f.application_setting.recv_guild_feed?}
+    ([user.profile, guild.game] + friends + (user.is_idol ? user.fans.all(:select => "id") : []) - [guild.president]).uniq
   }
 
   def to_s

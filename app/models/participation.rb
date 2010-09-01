@@ -18,8 +18,8 @@ class Participation < ActiveRecord::Base
 	acts_as_resource_feeds :recipients => lambda {|participation|
     participant = participation.participant
     event = participation.event
-    friends = participant.friends.find_all {|f| f.application_setting.recv_event_feed?} 
-    fans = participant.is_idol ? participant.fans : []
+    friends = participant.friends.all(:select => "id").find_all {|f| f.application_setting.recv_event_feed?} 
+    fans = participant.is_idol ? participant.fans.all(:select => "id") : []
     ([participant.profile, event.game] + (event.is_guild_event? ? [event.guild] : []) + friends + fans - [event.poster]).uniq
   }
 

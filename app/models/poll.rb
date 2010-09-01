@@ -28,10 +28,8 @@ class Poll < ActiveRecord::Base
 
   acts_as_resource_feeds :recipients => lambda {|poll| 
     poster = poll.poster
-    friends = poster.friends.find_all {|f| f.application_setting.recv_poll_feed? }
-    recipients = ([poster.profile] + poll.reload.games + poster.all_guilds + friends + (poster.is_idol ? poster.fans : [])).uniq
-    puts "recipients: #{recipients.map{|r| "#{r.class.name}:#{r.id}"}.join(", ")}"
-    recipients
+    friends = poster.friends.all(:select => "id").find_all {|f| f.application_setting.recv_poll_feed? }
+    ([poster.profile] + poll.reload.games + poster.all_guilds + friends + (poster.is_idol ? poster.fans.all(:select => "id") : [])).uniq
   }
 
   acts_as_random

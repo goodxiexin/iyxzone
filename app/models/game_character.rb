@@ -61,7 +61,7 @@ class GameCharacter < ActiveRecord::Base
   has_many :events, :through => :confirmed_or_maybe_participations
 
 	acts_as_resource_feeds :recipients => lambda {|character|
-    [character.user.profile, character.game] + character.user.friends
+    [character.user.profile, character.game] + character.user.friends.all(:select => "id")
   }
 
   attr_readonly :game_id, :area_id, :server_id, :race_id, :profession_id

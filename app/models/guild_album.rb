@@ -11,8 +11,8 @@ class GuildAlbum < Album
   acts_as_resource_feeds :recipients => lambda {|album| 
     poster = album.poster
     guild = album.guild
-    friends = poster.friends.find_all {|f| f.application_setting.recv_photo_feed?}
-    fans = poster.is_idol ? poster.fans : []
+    friends = poster.friends.all(:select => "id").find_all {|f| f.application_setting.recv_photo_feed?}
+    fans = poster.is_idol ? poster.fans.all(:select => "id") : []
     people = guild.people.find_all {|p| p != poster and p.application_setting.recv_photo_feed?}
     (people + fans + friends).uniq
   }
