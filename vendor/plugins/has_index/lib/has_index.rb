@@ -69,13 +69,19 @@ module HasIndex
 
   module SingletonMethods
 
+    # some methods about index
+   
     def deleted_indexes
       DeletedIndex.all(:conditions => {:model_name => self.name})
+    end
+
+    def index_dir
+      "#{RAILS_ROOT}/index/#{self.name.underscore}"
     end
     
     def background_indexer
       if @background_indexer.nil?
-        @background_indexer = BackgroundIndexer.new self.name.underscore, self.index_opts
+        @background_indexer = HasIndex::BackgroundIndexer.new self.name.underscore, self.index_opts
       end
       @background_indexer 
     end
@@ -90,10 +96,30 @@ module HasIndex
 
     def indexer
       if @indexer.nil?
-        @indexer = Ferret::Index::Index.new :path => "#{RAILS_ROOT}/index/#{self.name.underscore}", :analyzer => ChineseAnalyzer.new
+        @indexer = Ferret::Index::Index.new :path => index_dir, :analyzer => ChineseAnalyzer.new
       end
       @indexer
     end
+
+    # some methods about index snapshot
+    def snapshot_manager
+      if @snapshot_manager.nil?
+        @snapshot_manager = HasIndex::SnapshotManager.new self
+      end
+      @snapshot_manager
+    end
+
+    def make_index_snapshot
+      snapshot_manager.make_snapshot
+    end
+
+    def clean_index_snapshots_before ago
+      snapshot_manager.clean_snapshots_before ago
+    end
+
+    def get_index_snapshots_between from, to
+      snapshot_manager.get_snapshots_between from, to
+    end  
 
     # 这个是和will_paginate兼容的，比那个煞笔acts_as_ferret强多了
     def search *args

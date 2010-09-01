@@ -11,122 +11,62 @@ namespace :mini_blogs do
   task :main_index => :environment do
     MiniBlog.build_main_index
 
-    #`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
+    `chown deployer:deployer #{File.join(RAILS_ROOT, MiniBlog.index_dir)}`
   end
 
   task :delta_index => :environment do
     MiniBlog.build_delta_index 
 
-    #`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
+    `chown deployer:deployer #{File.join(RAILS_ROOT, MiniBlog.index_dir)}`
   end
-
-  #
-  # the following two might be slow
-  # FIXME
-  #  
-  task :main_topics => :environment do
-    include Ferret
-    reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
-    MiniTopic.destroy_all
-    now = Time.now
-
-    enum = reader.terms(:content)
-    freqs = []
-    terms = []
-    enum.each do |term,freq|
-      terms << term
-      freqs << freq
-    end
-    sorted_freqs = freqs.sort{|a,b| b<=>a}
-
-    terms.each_with_index do |term, i|
-      freq = freqs[i]
-      idx = sorted_freqs.index freq
-      word = RMMSeg::Dictionary.get_word term
-      if word.nil?
-        if term =~ /[a-zA-Z0-9]+/ and !(term =~ /\d+/)
-          topic = MiniTopic.create :name => term
-          topic.add_node freq, (idx+1), now
-        end
-      else
-        if word.cixing == 16 or (word.cixing == 1 and word.freq < 25000000)
-          topic = MiniTopic.create :name => term
-          topic.add_node freq, (idx+1), now
-        end
-      end
-    end
-    e = Time.now
-
-    `chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
-    puts "main_topics #{e-now} s"
   
-    puts "now compute rank"
+  task :make_snapshot => :environment do
     s = Time.now
-    meta_data = MiniBlogMetaData.first
-    hot_topics = []
-    range = [6.hours.ago, 1.day.ago, 2.day.ago, 7.day.ago]
-    range.each do |from|
-      to = Time.now
-      topics = MiniTopic.hot_within(from ,to)
-      hot_topics << topics[0..49].map{|a| [a[0], a[1].name]}
-    end
-    meta_data.hot_topics = hot_topics
-    meta_data.save
+    MiniBlog.make_index_snapshot
     e = Time.now
-    puts "rank #{e-s} s"
+    puts "#{e-s} sec to make new snapshot"
   end
 
-  task :delta_topics => :environment do
-    include Ferret
-    reader = Index::IndexReader.new "#{RAILS_ROOT}/index/mini_blog"    
-    now = Time.now
-
-    enum = reader.terms(:content)
-    freqs = []
-    terms = []
-    enum.each do |term,freq|
-      terms << term
-      freqs << freq
-    end
-    sorted_freqs = freqs.sort{|a,b| b<=>a}
-
-    terms.each_with_index do |term, i|
-      freq = freqs[i]
-      idx = sorted_freqs.index freq
-      word = RMMSeg::Dictionary.get_word term
-      topic = MiniTopic.find_by_name term
-      if topic.blank?
-        if word.nil?
-          if term =~ /[a-zA-Z0-9]+/ and !(term =~ /\d+/)
-            topic = MiniTopic.create :name => term
-            topic.add_node freq, (idx+1), now
-          end
-        else
-          if word.cixing == 16 or (word.cixing == 1 and word.freq < 25000000)
-            topic = MiniTopic.create :name => term
-            topic.add_node freq, (idx+1), now
-          end
-        end
-      else
-        topic.add_node freq, (idx+1), now
-      end
-    end
-		`chown deployer:deployer #{RAILS_ROOT}/index/mini_blog -R`
-    e = Time.now
-    puts "delta topics #{e-now} s"
-
-    puts "now compute rank"
+  task :clean_obsolete_snapshots => :environment do
     s = Time.now
-    meta_data = MiniBlogMetaData.first
+    MiniBlog.clean_index_snapshots_before 1.week.ago
+    e = Time.now
+    puts "#{e-s} sec to clean snapshots"
+  end
+
+  task :compute_rank => :environment do
+    s = Time.now
     hot_topics = []
     range = [6.hours.ago, 1.day.ago, 2.day.ago, 7.day.ago]
     range.each do |from|
       to = Time.now
-      topics = MiniTopic.hot_within from ,to
-      hot_topics << topics[0..49].map{|a| [a[0], a[1].name]}
+      snapshots = MiniBlog.get_index_snapshots_between from, to
+      terms = []
+      if !snapshots.blank?
+        old_ss = snapshots.first
+        old_terms = old_ss.terms
+        ss = snapshots.last
+        ss.terms.each do |term, freq|
+          old_freq = old_terms["#{term}"]
+          old_freq = 0 if old_freq.nil?
+          if freq != old_freq and !(term =~ /\d+/) and term.length > 1
+            if term =~ /[0-9a-zA-Z]+/
+              terms << [term, freq - old_freq]
+            else
+              word = RMMSeg::Dictionary.get_word term
+              # 上面的freq是指在我们网站中的freq, 这个word.freq是指这个词（在中文）中的freq
+              if !word.nil? and ((word.cixing == 1 and word.freq < 100000000) or word.cixing == 17)
+                terms << [term, freq - old_freq]
+              end
+            end
+          end
+        end
+        terms.sort!{|a,b| b[1]<=>a[1]}
+      end
+      hot_topics.push terms
     end
-    meta_data.hot_topics = hot_topics
-    meta_data.save   
+    meta_data = MiniBlogMetaData.first
+    meta_data.update_attributes(:hot_topics => hot_topics)
     e = Time.now
     puts "rank #{e-s} s"
   end

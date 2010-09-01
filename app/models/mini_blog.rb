@@ -71,8 +71,9 @@ class MiniBlog < ActiveRecord::Base
 
   has_one :mini_image
 
+  # return array of string
   def mini_topics
-    nodes.select{|n| n[:type] == 'topic'}.map{|n| MiniTopic.find_by_name n[:name]}
+    nodes.select{|n| n[:type] == 'topic'}.map{|n| n[:name]}
   end
 
   def mini_videos

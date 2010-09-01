@@ -1,3 +1,10 @@
+#
+# 用来在后台生成索引的
+# 其实就是封装了Ferret的Indexer类
+# 主要是为了实现主索引和增量索引
+#
+module HasIndex
+
 class BackgroundIndexer
 
   def initialize model_name, config
@@ -16,15 +23,11 @@ class BackgroundIndexer
     @config[:writer][:analyzer] = ChineseAnalyzer.new
     @config[:writer][:path] = @path
 
-    # log file
-    @logger = IndexLogger.instance
-  
     # writer
     @writer = nil
   end
 
   def close
-    @logger.close if @logger
     @writer.close if @writer
   end
 
@@ -35,97 +38,86 @@ class BackgroundIndexer
       @writer.field_infos.add_field field, attrs
     end
     
-    measure_time "build main index for #{@model_class.name}" do
-      maximum_id = @model_class.maximum(:id)
+    maximum_id = @model_class.maximum(:id)
 
-      if maximum_id.blank?
-        @logger.log "nothing to index"
-        return
-      end
+    if maximum_id.blank?
+      return
+    end
 
-      cond = "id <= #{maximum_id}"
-      count = @model_class.count(:conditions => cond)
+    cond = "id <= #{maximum_id}"
+    count = @model_class.count(:conditions => cond)
 
-      if @query_step.nil?
-        @model_class.all(
+    if @query_step.nil?
+      @model_class.all(
           :conditions => cond, 
           :select => fields
         ).each do
-          @writer.add_document ar.to_doc
-        end
-      else
-        with_step @query_step, count do |offset|
-          @model_class.all(
+        @writer.add_document ar.to_doc
+      end
+    else
+      with_step @query_step, count do |offset|
+        @model_class.all(
             :conditions => cond, 
             :select => fields, 
             :limit => @query_step, 
             :offset => offset
           ).each do |ar|
-            @writer.add_document ar.to_doc
-          end
+          @writer.add_document ar.to_doc
         end
       end
-
-      DeletedIndex.delete_all :model_name => @model_class.name
-
-      @writer.optimize
-      @writer.close
-
-      @model_class.update_all("index_state = 1", "id <= #{maximum_id}")
     end
+
+    DeletedIndex.delete_all :model_name => @model_class.name
+
+    @writer.optimize
+    @writer.close
+
+    @model_class.update_all("index_state = 1", "id <= #{maximum_id}")
   end
 
   def build_delta_index
     @writer = Ferret::Index::IndexWriter.new @config[:writer]   
  
-    measure_time "build delta index for #{@model_class.name}" do
-      maximum_id = @model_class.maximum(:id)
+    maximum_id = @model_class.maximum(:id)
       
-      if maximum_id.blank?
-        @logger.log "nothing to index"
-        return
-      end
-
-      count = @model_class.count(:conditions => "id <= #{maximum_id} and index_state = 0")
-      cond = "id <= #{maximum_id} and index_state = 0"
-      
-      #
-      # 删除必须在前面，因为如果一个记录被更新了，那需要先删除，然后再创建
-      #
-      measure_time "unindexed deleted #{@model_class.deleted_indexes.count} records" do
-        @model_class.deleted_indexes.each do |idx|
-          @writer.delete :id, "#{idx.doc_id}"
-        end
-        DeletedIndex.delete_all :model_name => @model_class.name
-      end
-
-      measure_time "index newly created or newly updated records: #{count}" do
-        if @query_step.nil?
-          @model_class.all(
-            :conditions => cond, 
-            :select => fields
-          ).each do |ar|
-            @writer.add_document ar.to_doc
-          end
-        else
-          with_step @query_step, count do |offset|
-            @model_class.all(
-              :conditions => cond, 
-              :select => fields, 
-              :limit => @query_step, 
-              :offset => offset
-            ).each do |ar|
-                @writer.add_document ar.to_doc
-            end
-          end
-        end
-        @model_class.update_all("index_state = 1", "id <= #{maximum_id}")
-      end
-
-      @writer.optimize
-      @writer.close
+    if maximum_id.blank?
+      return
     end
 
+    count = @model_class.count(:conditions => "id <= #{maximum_id} and index_state = 0")
+    cond = "id <= #{maximum_id} and index_state = 0"
+      
+    #
+    # 删除必须在前面，因为如果一个记录被更新了，那需要先删除，然后再创建
+    #
+    @model_class.deleted_indexes.each do |idx|
+      @writer.delete :id, "#{idx.doc_id}"
+    end
+    DeletedIndex.delete_all("model_name = '#{@model_class.name}' AND id <= #{maximum_id}")
+        
+    if @query_step.nil?
+      @model_class.all(
+        :conditions => cond, 
+        :select => fields
+      ).each do |ar|
+        @writer.add_document ar.to_doc
+      end
+    else
+      with_step @query_step, count do |offset|
+        @model_class.all(
+          :conditions => cond, 
+          :select => fields, 
+          :limit => @query_step, 
+          :offset => offset
+        ).each do |ar|
+            @writer.add_document ar.to_doc
+        end
+      end
+    end
+    @model_class.update_all("index_state = 1", "id <= #{maximum_id}")
+    
+    @writer.optimize
+    @writer.close
   end
 
 protected
@@ -146,11 +138,6 @@ protected
     end
   end
 
-  def measure_time str, &block
-    s = Time.now
-    yield
-    e = Time.now
-    @logger.log "#{e-s} seconds #{str}"
-  end
+end
 
 end

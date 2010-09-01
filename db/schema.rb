@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100831051015) do
+ActiveRecord::Schema.define(:version => 20100901150025) do
 
   create_table "albums", :force => true do |t|
     t.string   "type"
@@ -512,17 +512,9 @@ ActiveRecord::Schema.define(:version => 20100831051015) do
     t.datetime "updated_at"
   end
 
-  create_table "mini_topic_freq_nodes", :force => true do |t|
-    t.integer  "mini_topic_id"
-    t.integer  "freq"
-    t.integer  "rank"
-    t.datetime "created_at"
-  end
-
   create_table "mini_topics", :force => true do |t|
     t.string   "name"
     t.datetime "updated_at"
-    t.integer  "freq"
   end
 
   create_table "news", :force => true do |t|
