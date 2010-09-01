@@ -1,3 +1,9 @@
+/*
+ * author: 高侠鸿
+ * version: 1.2
+ * 还有些bug
+ */
+
 ResizableTextBox = Class.create({
 
   initialize: function(element, options){

@@ -873,7 +873,7 @@ Object.extend(Iyxzone.Game.Presentor, {
 
   moreFeeds: function(){
     // send ajax request
-    new Ajax.Request('/feed_deliveries', {
+    new Ajax.Request(Iyxzone.URL.moreFeedDelivery(), {
       method: 'get',
       parameters: {recipient_id: this.gameID, recipient_type: 'Game', fetch: this.fetchSize, idx: this.feedIdx},
       onLoading: function(){
@@ -937,7 +937,7 @@ Object.extend(Iyxzone.Game.Presentor, {
       return;
     }
 
-    new Ajax.Request('/games/' + this.gameID + '/blogs?at=guild_show', {
+    new Ajax.Request(Iyxzone.URL.listGameBlog(this.gameID, {'at': 'guild_show'}), {
       method: 'get',
       onLoading: function(){
         $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
@@ -964,7 +964,7 @@ Object.extend(Iyxzone.Game.Presentor, {
       return;
     }
 
-    new Ajax.Request('/games/' + this.gameID + '/albums?at=guild_show', {
+    new Ajax.Request(Iyxzone.URL.listGameAlbum(this.gameID, {'at': 'guild_show'}), {
       method: 'get',
       onLoading: function(){
         $('presentation').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
@@ -991,7 +991,7 @@ Object.extend(Iyxzone.Game.Presentor, {
       return;
     }
 
-    new Ajax.Request('/wall_messages/index_with_form', {
+    new Ajax.Request(Iyxzone.URL.listWallMessagesWithForm(), {
       method: 'get',
       parameters: {wall_id: this.gameID, wall_type: 'game'},
       onLoading: function(){

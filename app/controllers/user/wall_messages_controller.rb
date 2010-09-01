@@ -4,7 +4,7 @@ class User::WallMessagesController < UserBaseController
     @message = @wall.comments.build(params[:comment].merge({:poster_id => current_user.id}))
    
     if @message.save
-      render :json => {:code => 1, :html => partial_html('wall_message', :object => @message) }
+      render :json => {:code => 1, :id => @message.id, :html => partial_html('wall_message', :object => @message) }
     else
       render :json => {:code => 0}
     end 

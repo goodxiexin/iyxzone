@@ -72,16 +72,26 @@ module ResourceFeeds
         return if recipients.blank?
         item = feed_items.create(:data => opts[:data])
         values = []
-        # use self.class.name rather than item.originator_type ensures correct class name
-        recipients.each do |recipient|
-          values << "(NULL, #{recipient.id}, '#{recipient.class.to_s}', #{item.id}, '#{self.class.name}', '#{Time.now.to_s(:db)}')"
+        # mysql的设置是max_allowed_packet=16MB, id和名字最大也就80B, 理论上每次插入2000条记录肯定行
+        with_step 2000, recipients.count do |offset|
+          recipients[offset..(offset+2000)].each do |recipient|
+            values << "(NULL, #{recipient.id}, '#{recipient.class.to_s}', #{item.id}, '#{self.class.name}', '#{Time.now.to_s(:db)}')"
+          end
+          sql = "insert into feed_deliveries values #{values.join(',')}"
+          ActiveRecord::Base.connection.execute(sql)
         end
-        sql = "insert into feed_deliveries values #{values.join(',')}"
-        ActiveRecord::Base.connection.execute(sql)  
       end
 
       def destroy_feeds
         feed_items.each {|f| f.destroy}
+      end
+
+      def with_step step, total, &block
+        i = 0
+        while i * step < total
+          yield (i * step)
+          i = i + 1
+        end
       end
 
     end

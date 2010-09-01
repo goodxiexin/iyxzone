@@ -16,7 +16,7 @@ class PersonalPhotoTest < ActiveSupport::TestCase
     @character3 = GameCharacterFactory.create :user_id => @user.id
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
-    [@user, @friend, @fan, @idol].each {|f| f.reload}
+    [@user, @friend, @same_game_user, @fan, @idol].each {|f| f.reload}
 
     @sensitive = "政府" 
   end
@@ -26,7 +26,6 @@ class PersonalPhotoTest < ActiveSupport::TestCase
     @photo = PhotoFactory.create :album_id => @album.id, :type => 'PersonalPhoto'
 
     assert_equal @photo.poster_id, @album.owner_id
-    assert_equal @photo.game_id, @album.game_id
     assert_equal @photo.privilege, @album.privilege
   end
 

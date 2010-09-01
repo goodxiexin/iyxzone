@@ -16,7 +16,7 @@ class PersonalAlbumTest < ActiveSupport::TestCase
     @character3 = GameCharacterFactory.create :user_id => @user.id
     Fanship.create :fan_id => @fan.id, :idol_id => @user.id
     Fanship.create :fan_id => @user.id, :idol_id => @idol.id
-    [@user, @friend, @fan, @idol].each {|f| f.reload}
+    [@user, @friend, @same_game_user, @fan, @idol].each {|f| f.reload}
 
     @sensitive = "政府" 
   end
@@ -60,20 +60,15 @@ class PersonalAlbumTest < ActiveSupport::TestCase
     end
   end
 
-  test "photo has the same privilege and game_id with album" do
-    @album = PersonalAlbumFactory.create :owner_id => @user.id, :game_id => @character1.game_id, :privilege => PrivilegedResource::PUBLIC
+  test "photo has the same privilege with album" do
+    @album = PersonalAlbumFactory.create :owner_id => @user.id, :privilege => PrivilegedResource::PUBLIC
     @photo = PhotoFactory.create :album_id => @album.id, :type => 'PersonalPhoto'
 
     assert_equal @photo.privilege, PrivilegedResource::PUBLIC 
-    assert_equal @photo.game_id, @character1.game_id
 
     @album.update_attributes :privilege => PrivilegedResource::FRIEND_OR_SAME_GAME
     @photo.reload
     assert_equal @photo.privilege, PrivilegedResource::FRIEND_OR_SAME_GAME
-
-    @album.update_attributes :game_id => @character3.game_id
-    @photo.reload
-    assert_equal @photo.game_id, @character3.game_id
   end
 
   test "comment album" do

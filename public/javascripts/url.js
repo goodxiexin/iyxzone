@@ -70,6 +70,10 @@ Object.extend(Iyxzone.URL, {
     return this.build("/blogs?uid=" + userID, params);
   },
 
+  listGameBlog: function(gameID, params){
+    return this.build("/games/" + gameID + "/blogs", params);
+  },
+
   listDraft: function(userID, params){
     return this.build("/drafts?uid=" + userID, params);
   }
@@ -203,12 +207,24 @@ Object.extend(Iyxzone.URL, {
     return this.build("/event_albums/" + albumID, params);
   },
 
+  listEventPhoto: function(albumID, params){
+    return this.build("/event_photos?album_id=" + albumID, params);
+  },
+
   showGuildAlbum: function(albumID, params){
     return this.build("/guild_albums/" + albumID, params);
   },
 
+  listGuildPhoto: function(albumID, params){
+    return this.build("/guild_photos?album_id=" + albumID, params);
+  },
+
   listAlbum: function(userID, params){
     return this.build("/personal_albums?uid=" + userID, params);
+  },
+
+  listGameAlbum: function(gameID, params){
+    return this.build("/games/" + gameID + "/albums", params);
   },
 
   deleteAlbum: function(albumID, params){
@@ -668,6 +684,10 @@ Object.extend(Iyxzone.URL, {
 // feed delivery
 Object.extend(Iyxzone.URL, {
 
+  moreFeedDelivery: function(params){
+    return this.build("/feed_deliveries", params);
+  },
+
   showFeedDelivery: function(deliveryID, params){
     return this.build("/feed_deliveries/" + deliveryID, params);
   },
@@ -732,6 +752,10 @@ Object.extend(Iyxzone.URL, {
 
   deleteWallMessage: function(messageID, params){
     return this.build("/wall_messages/" + messageID, params);
+  },
+
+  listWallMessagesWithForm: function(params){
+    return this.build("/wall_messages/index_with_form", params);
   }
 
 });
@@ -857,6 +881,10 @@ Object.extend(Iyxzone.URL, {
 
   listTopTopic: function(forumID, params){
     return this.build("/topics/top", Object.extend({'forum_id': forumID}, params || {}));
+  },
+
+  listGuildTopic: function(guildID, params){
+    return this.build("/guilds/" + guildID + "/topics", params);
   },
 
   toggleTopic: function(topicID, params){

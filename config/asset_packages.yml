@@ -26,6 +26,7 @@ javascripts:
   - mini_blog
   - guestbook
   - textboxlist
+  - idol
 - register:
   - register
   - event.simulate
@@ -54,7 +55,6 @@ javascripts:
   - event
 - search:
   - search
-  - idol
   - event.simulate
 - game:
   - rating

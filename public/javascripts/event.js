@@ -15,7 +15,7 @@ Iyxzone.Event = {
   Presentor: {},
 
   follow: function(name, eid){
-    new Ajax.Request('/mini_topic_attentions', {
+    new Ajax.Request(Iyxzone.URL.createMiniTopicAttention(), {
       method: 'post',
       parameters: {'name': name},
       onLoading: function(){
@@ -37,7 +37,7 @@ Iyxzone.Event = {
   },
 
   unfollow: function(id, name, eid){
-    new Ajax.Request('/mini_topic_attentions/' + id, {
+    new Ajax.Request(Iyxzone.URL.deleteMiniTopicAttention(), {
       method: 'delete',
       onLoading: function(){
         Iyxzone.changeCursor('wait');

@@ -1,2 +1,2 @@
 <%= render :partial => 'user/wall_messages/wall_message', :collection => messages %>
-<%= remote_will_paginate messages, :remote => @remote %>
+<%= remote_will_paginate messages, :remote => {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => params[:wall_id], :wall_type => params[:wall_type]}} %>

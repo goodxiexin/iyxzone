@@ -190,7 +190,7 @@ class BlogTest < ActiveSupport::TestCase
     assert !@blog.is_diggable_by?(@fan)
     assert !@blog.is_diggable_by?(@idol)
 
-    @blog = DraftFactory.create :poster_id => @user.id, :game_id => @game.id
+    @blog = DraftFactory.create :poster_id => @user.id
     assert !@blog.is_diggable_by?(@user)
     assert !@blog.is_diggable_by?(@friend1)
     assert !@blog.is_diggable_by?(@same_game_user)
@@ -487,7 +487,7 @@ class BlogTest < ActiveSupport::TestCase
   test "sensitive blogs" do
     @sensitive = "政府"
     
-    @blog = BlogFactory.create :title => '和谐', :poster_id => @user.id, :game_id => @game.id
+    @blog = BlogFactory.create :title => '和谐', :poster_id => @user.id
     @user.reload and @friend1.reload
     assert @blog.accepted? # 自动通过了应该
     assert_equal @user.blogs_count, 1

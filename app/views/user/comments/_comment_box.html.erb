@@ -28,7 +28,7 @@
       <%= f.text_area 'content', :class => 'textarea', :onfocus => "Iyxzone.limitText($(this), 140, Iyxzone.Comment.checkLength);", :onblur => "Iyxzone.cancelLimitText($(this));", :id => "#{type}_comment_content_#{id}"%>
       <div class="submit s_clear">
 				<span class="button button-gray"><span>
-          <button onclick='Iyxzone.Comment.hideForm("<%=type%>",<%= id %>, event)'>取消</button>
+          <button onclick="Iyxzone.Comment.hideForm('<%=type%>',<%= id %>, event)">取消</button>
         </span></span>
         <span class="button w-l"><span>
           <button type="submit">发布</button>

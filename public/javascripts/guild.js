@@ -15,7 +15,7 @@ Iyxzone.Guild = {
   MemberManager: {},
 
   follow: function(name, gid){
-    new Ajax.Request('/mini_topic_attentions', {
+    new Ajax.Request(Iyxzone.URL.createMiniTopicAttention(), {
       method: 'post',
       parameters: {'name': name},
       onLoading: function(){
@@ -37,7 +37,7 @@ Iyxzone.Guild = {
   },
 
   unfollow: function(id, name, gid){
-    new Ajax.Request('/mini_topic_attentions/' + id, {
+    new Ajax.Request(Iyxzone.URL.deleteMiniTopicAttention(id), {
       method: 'delete',
       onLoading: function(){
         Iyxzone.changeCursor('wait');
@@ -142,7 +142,7 @@ Object.extend(Iyxzone.Guild.Presentor, {
 
   moreFeeds: function(){
     // send ajax request
-    new Ajax.Request('/feed_deliveries', {
+    new Ajax.Request(Iyxzone.URL.moreFeedDelivery(), {
       method: 'get',
       parameters: {recipient_id: this.guildID, recipient_type: 'Guild', fetch: this.fetchSize, idx: this.feedIdx},
       onLoading: function(){
@@ -208,7 +208,7 @@ Object.extend(Iyxzone.Guild.Presentor, {
       return;
     }
 
-    new Ajax.Request('/guild_photos?album_id=' + this.albumID, {
+    new Ajax.Request(Iyxzone.URL.listGuildPhoto(this.albumID), {
       method: 'get',
       onLoading: function(){
         $('presentation').update('<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>');
@@ -237,7 +237,7 @@ Object.extend(Iyxzone.Guild.Presentor, {
       return;
     }
 
-    new Ajax.Request('/guilds/' + this.guildID + '/topics', {
+    new Ajax.Request(Iyxzone.URL.listGuildTopic(this.guildID), {
       method: 'get',
       onLoading: function(){
         $('presentation').update('<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>');
@@ -266,7 +266,7 @@ Object.extend(Iyxzone.Guild.Presentor, {
       return;
     }
 
-    new Ajax.Request('/wall_messages/index_with_form', {
+    new Ajax.Request(Iyxzone.URL.listWallMessagesWithForm(), {
       method: 'get',
       parameters: {wall_type: 'guild', wall_id: this.guildID, recipient_id: this.presidentID},
       onLoading: function(){
