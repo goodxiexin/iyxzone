@@ -1,25 +1,43 @@
-<div class='avatarbox'>
+<div class="memberProfile">
+		<div class="wrapBg"></div>
+		<div class="wrapCon">
+			<div class="intro">
+				<ul class="fix">
+					<li><strong class="num"><%=user.mini_blogs_count%></strong><span>微博</span></li>
+					<% if user.is_idol %>
+						<li><strong class="num"><%=user.fans_count%></strong><span>粉丝</span></li>
+						<% if !user.has_fan? current_user %>
+							<li class="nobd"><%= link_to_function "成为粉丝", "Iyxzone.Profile.confirmFollowingIdol(#{user.id}, '#{user.login}', #{user.profile.id}, this);", :class=> "alphaBtn" %></li>
+						<% end %>
+					<% else%>
+						<li><strong class="num"><%=user.friends_count%></strong><span>好友</span></li>
+						<% if !user.has_friend? current_user %>
+							<li class="nobd"><%= facebox_link "加为好友", new_friend_request_url(:friend_id => user.id), :class=> "alphaBtn" %></li>
+						<% end %>
+					<% end %>
+				</ul>
+			</div>
+<div class='op'>
   <% subject = get_subject user %>
-  <ul class='op s_clear'>
+  <ul class='fix'>
     <% if relationship == 'owner' %>
 	    <li><%= facebox_link "<span class='i-avatar'></span>修改头像", new_avatar_url(:at => 'profile'), :width => 400 %></li>
-	    <li><%= link_to "<span class='i-theme'></span>主页装扮", skins_url %></li>
+	    <li><%= link_to "<span class='i-skin'></span>主页装扮", skins_url %></li>
     <% elsif relationship == 'friend' %>
       <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>
-      <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %></li>
+      <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('wall_message_content_#{profile.id}').positionedOffset().top - 20);$('wall_message_content_#{profile.id}').focus();" %></li>
       <li><%= facebox_link "<span class='i-hello'></span>打个招呼", new_poke_url(:recipient_id => user.id), :width => 450 %></li>
     <% else %>
       <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>
       <% if profile.is_commentable_by? current_user %>
-		    <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %></li>
+		    <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('wall_message_content_#{profile.id}').positionedOffset().top - 20);$('wall_message_content_#{profile.id}').focus();" %></li>
       <% end %>
 	    <li><%= facebox_link "<span class='i-hello'></span>打个招呼", new_poke_url(:recipient_id => user.id), :width => 450 %></li>
-      <% if !user.is_idol or current_user.is_idol%>
-        <li><%= facebox_link "<span class='i-friend'></span>加为好友", new_friend_request_url(:friend_id => user.id) %></li>
-      <% end %>
     <% end %>
     <% if user.is_idol and user.has_fan? current_user %>
       <li><%= link_to_function "<span class='i iNoFollow'></span>不做粉丝", "Iyxzone.Profile.confirmUnfollowingIdol(#{user.id}, '#{user.login}', #{user.profile.id}, this);" %></li>
     <% end %>
   </ul>
+</div>
+</div>
 </div>

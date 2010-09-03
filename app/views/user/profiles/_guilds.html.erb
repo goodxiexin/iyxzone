@@ -1,0 +1,28 @@
+<div class="alphaColum colGuild">
+	<div class="ac-r-t"><em></em></div>
+	<div class="ac-r-m fix">
+  <% subject = get_subject user %>
+		<div class="alphaTitle fix"><div class="wrap"><strong><%= subject%>加入的公会</strong><%= link_to_function '', "$('profile-guild-wrap').toggle()", :class=>"op i iArrUnFold"%></div></div>
+		<div id='profile-guild-wrap'>
+			<div class="ac-bd">
+				<% guilds.each do |guild| %>
+					<div class="item jl-cutline fix">
+						<div class="avatar">
+							<%= album_cover_image guild.album %>
+						</div>
+						<div class="con">
+							<div class="guildName"><%= guild_link guild %></div>
+								<div><span class="num"><%= guild.people_count%></span>个成员</div>
+						</div>
+					</div>
+				<% end %>	
+			</div>
+			<% unless guilds.blank? %>
+			<div class="ac-ft"><%= link_to "查看全部>>", guilds_url(:uid => user.id) %></div>
+			<% else %>
+				<div class="ac-ft">没加入任何公会</div>
+			<% end %>
+		</div>
+	</div>
+	<div class="ac-r-b"><em></em></div>
+</div>

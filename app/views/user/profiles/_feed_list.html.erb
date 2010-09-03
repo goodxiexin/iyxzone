@@ -1,5 +1,4 @@
-<div class='multibox'>
-  <div class='title'><b>新鲜事</b></div>
+<div class='ac-bd'>
   <% unless feed_deliveries.blank? %>
   <div class='feed-box'>
     <div class="home-wrap">
@@ -26,5 +25,7 @@
         </div>
     </div>
   </div>
+	<% else %>
+		<div>没有任何新鲜事</div>
   <% end %>
 </div>

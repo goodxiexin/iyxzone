@@ -1337,7 +1337,7 @@ span.iFunc02{width:19px;height:27px;background-position:-104px -935px}
 span.iRole02{width:19px;height:27px;background-position:-123px -935px}
 a.iHelpTips{background-position:0 -412px}
 
-.ajaxLoading{text-align:center;margin:30px 0}
+.ajaxLoading{text-align:center;padding:30px 0}
 /*btn*/
 .sBtn,.sBtn span{background:url(../images/skin/btn2010.png) no-repeat}
 span.sBtn{background-position:right -122px;display:inline-block;padding-right:10px;margin:0 2px}
@@ -1988,24 +1988,24 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .acMain{padding:0 20px 10px 20px;}
 .acMain .acWrap{padding:0 20px}
 .acMain .addGame{background:#fff;text-align:right;padding:0 10px 10px 0}
-.alphaContent .myGameList{background:url(../images/skin/cabinet-bg.jpg) repeat-y;}
+.alphaContent .myGameList{background:url(../images/skin/cabinet-bg.jpg) repeat-y;margin-bottom:20px}
 .alphaContent .myGameList li{height:156px;width:112px;float:left;text-align:center;}
 .alphaContent .myGameList li .gameName{display:block;color:#fff;margin:10px 0}
-.alphaContent .moreGame{background:#fff;padding-bottom:20px}
+.alphaContent .moreGame{background:#fff;}
 .alphaContent .moreGame a{background:url(../images/skin/alpha-skin.png) no-repeat -288px -33px;width:138px;height:27px;line-height:27px;display:block;color:#fff;text-align:center;margin:0 auto;font-weight:700}
 .alphaContent .s-dialog .arrow-dialog{_left:-17px;}
 
 .acMain .acMainWrap{margin-top:0}
 .acMain .acMainWrap .ac-r-m{padding-top:0}
 
-.gameIntroPop{width:325px;}
-.gameIntroPop .r-t{background:url(../images/skin/alpha-skin.png) no-repeat right -371px;padding-right:20px;height:107px;}
-.gameIntroPop .r-t .c-r{background:url(../images/skin/alpha-skin.png) no-repeat 0 -258px;height:107px;}
+.gameIntroPop{width:325px;z-index:10}
+.gameIntroPop .r-t{background:url(../images/skin/alpha-skin.png) no-repeat right -371px;padding-right:20px;}
+.gameIntroPop .r-t .c-r{background:url(../images/skin/alpha-skin.png) no-repeat 0 -258px;padding-bottom:5px}
 .gameIntroPop .r-m{background:#fff;padding:20px 20px 15px 20px;border:1px solid #22841e}
 .gameIntroPop .r-b{background:url(../images/skin/alpha-skin.png) no-repeat right -509px;padding-right:20px;height:6px;font-size:0;line-height:0;margin-top:-1px}
 .gameIntroPop .r-b em{background:url(../images/skin/alpha-skin.png) no-repeat 0 -494px;height:6px;display:block}
 
-.gameIntroPop .t{margin:0 0 10px 20px;padding:10px 0 5px 0;border-bottom:1px dotted #eee;}
+.gameIntroPop .t{margin:0 0 5px 20px;padding:10px 0 5px 0;border-bottom:1px dotted #eee;}
 .gameIntroPop .t h2{font-size:12px;font-weight:700;color:#fff;float:left}
 .gameIntroPop .t a{color:#fff;float:right;text-decoration:underline}
 .gameIntroPop .roleList{color:#fff;line-height:20px;padding-left:20px}

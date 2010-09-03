@@ -1,6 +1,7 @@
 <% content_for :html_title, "龙之谷第一届pk赛" %>
 <% content_for :javascript_include do %>
   <%= javascript_include_tag 'mini_blog' %>
+	<%= javascript_include_tag 'facebox' %>
 <% end %>
 <% content_for :stylesheet_link do %>
   <%= stylesheet_link_tag 'promotions/dnpk1/dnpk1.css' %>
@@ -19,7 +20,11 @@
 							比赛服务器：我们取报名人数最多的那个服务器，大家都有机会<br/>
 							报名方法：写一条报名的微博。要求：1，需要写关键词#龙之谷pk赛#。2，需要带有你游戏内的截图（确认确实有这个人）。3，一句自我介绍包括所在服务器，职业。
             </div>
-            <%= link_to_function '立即参加', "Iyxzone.insertAtCursor($('mini_blog_text_area'),'#龙之谷pk赛#')", :class => "action "%>
+						<% if logged_in? %>
+							<%= link_to_function '立即参加', "Iyxzone.insertAtCursor($('mini_blog_text_area'),'#龙之谷pk赛#')", :class => "action "%>
+						<% else %>
+							<%= facebox_tip "立即参加","登录后才能执行此操作", :class => "action" %>
+						<% end %>
         </div>
     </div>
 </div>

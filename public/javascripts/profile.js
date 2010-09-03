@@ -3,7 +3,9 @@ Iyxzone.Profile = {
   version: '1.8',
 
   author: ['高侠鸿'],
-
+	
+  GameDisplay: {},
+  
   Editor: {},
 
   Feeder: {}
@@ -11,6 +13,111 @@ Iyxzone.Profile = {
 
 // follow/unfollow idol
 Object.extend(Iyxzone.Profile, {
+	
+	curType: null,
+
+	curLoading: false,
+
+  profileID: null,
+
+	cache: new Hash(),
+
+	gameIdx: 1,
+
+	gameFetchSize: 10,
+
+  init: function(profileID){
+    this.cache.set("home", { loading: false, html: null});
+    this.cache.set("info", { loading: false, html: null});
+    this.cache.set("feed", { loading: false, html: null});
+    this.cache.set("poll", { loading: false, html: null});
+    this.cache.set("photo", { loading: false, html: null});
+    this.cache.set("blog", { loading: false, html: null});
+    this.cache.set("video", { loading: false, html: null});
+    this.curType = 'home';
+    this.curLoading = false;
+    this.profileID = profileID;
+  },
+
+  moreGames: function(profileID){
+
+    new Ajax.Request('/profiles/' + profileID + '/more_games?idx=' + this.gameIdx, {
+      method: 'get',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+				var tmpHtml = transport.responseText
+				$('game-list').insert({bottom: tmpHtml});
+        var newFeeds = new Element('div');
+        newFeeds.innerHTML = tmpHtml;
+        var len = newFeeds.childElements().length;
+        if(len == 0 || len < this.gameFetchSize){ //说明没有了
+					$('more-game-button').hide();
+				}
+        this.gameIdx++;
+      }.bind(this)
+    });  
+  },
+
+  setTab: function(type){
+    $('tab_home').className = '';
+    $('tab_info').className = '';
+    $('tab_feed').className = '';
+    $('tab_poll').className = '';
+    $('tab_photo').className = '';
+    $('tab_blog').className = '';
+    $('tab_video').className = '';
+    $('tab_' + type).className = 'selected';
+  },
+
+	changeTab: function(type){
+		// when did not change type
+    if(this.curType == type)
+      return;
+
+
+    // save current tab info into cache
+    this.cache.set(this.curType, {html: $('profile-main-content').innerHTML, loading: this.curLoading});
+   
+    // restore
+    var info = this.cache.get(type);
+    this.curLoading = info.loading;
+    this.curType = type;
+    this.setTab(type);
+
+    if(info.html){
+      $('profile-main-content').innerHTML = info.html;
+      $('profile-main-content').innerHTML.evalScripts();
+      return;
+    }
+
+		// when still loading
+    if(this.curLoading)
+      return;
+
+    new Ajax.Request('/profiles/'+ this.profileID+'/change_tab', {
+			method: 'get',
+			parameters: {category: type},
+      onLoading: function(){
+        this.curLoading = true;
+        $('profile-main-content').update("<div class='ajaxLoading'><img src='/images/ajax-loader.gif' /></div>");
+      }.bind(this),
+      onSuccess: function(transport){
+        var newInfo = new Element('div');
+        newInfo.update(transport.responseText);
+        if(this.curType == type){ //说明没切换，或者又切了回来
+					$('profile-main-content').update(newInfo.innerHTML);
+					this.curLoading = false;
+				}	else {
+					this.cache.set(type, {html: newInfo.innerHTML, loading: false});
+				}
+			}.bind(this)
+		});
+	},
 
   followIdol: function(idolID, idolName, profileID, btn){
     new Ajax.Request(Iyxzone.URL.followIdol(idolID), {
@@ -63,6 +170,87 @@ Object.extend(Iyxzone.Profile, {
       Iyxzone.Profile.unfollowIdol(idolID, idolName, profileID, link);
     });
   }
+
+});
+
+Object.extend(Iyxzone.Profile.GameDisplay, {
+
+  gameDisplay: null,
+
+	cache: new Hash(),
+
+	curLoading: false,
+
+	curGame: null,
+
+	init: function(){
+		this.cache = new Hash();
+    this.curLoading = false;
+		if(this.gameDisplay == null){
+			this.gameDisplay = new Element('div', {'class':'gameIntroPop', 'id':'game-display-panel'});
+			this.gameDisplay.setStyle({overflow: 'hidden', display:'none'});
+		}
+    document.body.appendChild(this.gameDisplay);
+	},
+	
+  loading: function(html){
+    $('game-display-panel').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+  },
+
+  setContent: function(html){
+    $('game-display-panel').update(html);
+  },
+
+  locate: function(gameID){
+    this.gameDisplay.setStyle({
+      position: 'absolute',
+      top: ($('game-display-' + gameID).cumulativeOffset().top + 50)  + 'px',
+      left: ($('game-display-' + gameID).cumulativeOffset().left - 160)  + 'px'
+    });
+  },
+
+	display: function(profileID, gameID){
+
+    var info = this.cache.get(gameID);
+		this.curGame = gameID
+
+		if(info){
+      this.locate(gameID);
+      this.setContent(info.html);
+			this.gameDisplay.show();
+			$('game-display-panel').observe('mouseleave', this.disappear);
+			return;
+    }
+
+		if(this.curLoading)
+      return;
+
+		new Ajax.Request('/profiles/' + profileID + '/game_display',{
+      method: 'get',
+			parameters: {game: gameID},
+      onLoading: function(){
+				this.curLoading = true;
+        this.loading();
+        this.locate(gameID);
+        this.gameDisplay.show();
+      }.bind(this),
+      onSuccess: function(transport){
+				var newGameInfo = new Element('div');
+				newGameInfo.update(transport.responseText);
+				if(this.curGame == gameID){
+					this.setContent(newGameInfo.innerHTML);
+					$('game-display-panel').observe('mouseleave', this.disappear);
+				}
+        this.cache.set(gameID, {html: newGameInfo.innerHTML});
+				this.curLoading = false;
+      }.bind(this)
+		});
+	},
+
+	disappear: function(event){
+		$('game-display-panel').stopObserving();
+		$('game-display-panel').hide();
+	}
 
 });
 
@@ -599,5 +787,41 @@ Object.extend(Iyxzone.Profile.Feeder, {
       }.bind(this)
     });  
   }
+
+});
+
+Object.extend(Iyxzone.Profile.Tag, {
+
+  loading: function(div){
+    div.innerHTML = "<div style='textAligin: center'><img src='/images/loading.gif'/></div>";
+  },
+
+	deleteTag: function(profileID, tagID, token){
+    new Ajax.Request('/profiles/' + profileID + '/tags/' + tagID, {
+      method: 'delete',
+			parameters: 'authenticity_token=' + encodeURIComponent(token),
+			onLoading: function(){
+				this.loading($('tag_'+tagID));
+			}.bind(this)
+    });  
+	},
+
+	addTag: function(profileID){
+		new Ajax.Request('/profiles/' + profileID + '/tags',{
+			method: 'get',
+      onLoading: function(){
+        $('tag_cloud').update("<div class='ajaxLoading'><img src='/images/ajax-loader.gif' /></div>");
+      }.bind(this),
+			onSuccess: function(transport){
+				$('tag_cloud').update(transport.responseText);
+			}.bind(this)
+		});
+	}
+
+}); 
+
+document.observe('dom:loaded', function(){
+
+  Iyxzone.Profile.GameDisplay.init();
 
 });

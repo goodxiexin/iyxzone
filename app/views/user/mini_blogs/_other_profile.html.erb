@@ -2,7 +2,7 @@
 <div class="taProfile fix">
   <div class="avatar"><%= avatar_image user, :class => 'imgbox01' %></div>
   <div class="con">
-    <div class="memberName"><%= link_to user.login, mini_blogs_url(:uid => user.id) %></div>
+    <div class="memberName"><%= profile_link(user) %></div>
     <div class="op"><span class="button04"><span>
       <% if user.is_idol? %>
         <% if !user.has_fan?(current_user) %>

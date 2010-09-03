@@ -1,0 +1,23 @@
+<% delivery = album_feed_delivery %>
+<% album = delivery.feed_item.originator %>
+<% photos = album.photos.nonblocked.match(:id => delivery.feed_item.data[:ids]) %>
+<% poster = album.poster %>
+<% type = photos.first.class.name.underscore %>
+
+<% if !photos.blank? %>
+  <% render :layout => 'user/profiles/feed_delivery', :locals => {:icon_type => 'icon-photo', :delivery => delivery} do %>
+    <%= profile_link poster %> 上传了 <%= photos.count %> 张照片 到相册 <%= album_link album, :class => "shine" %>
+    <div class='photoFeed' id='photos_feed_<%= delivery.id %>'>
+      <div class="mList fix">
+        <ul>
+        <% photos[0..2].each do |p| %>
+          <li><%= photo_link p, :size => :large, :class => 'imgbox01' %></li>
+        <% end %>
+        </ul>
+        <% if photos.count > 3 %>
+          <%= link_to_function "展开", "Iyxzone.FeedDelivery.morePhotos(#{delivery.id})", :class => "expand" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

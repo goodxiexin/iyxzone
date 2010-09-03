@@ -2,6 +2,8 @@ class GameCharacter < ActiveRecord::Base
 
   named_scope :by, lambda {|user_ids| {:conditions => {:user_id => user_ids}}}
 	
+  named_scope :within, lambda {|game_ids| {:conditions => {:game_id => game_ids}}}
+	
 	serialize :data
   
   has_index :query_step => 20000,

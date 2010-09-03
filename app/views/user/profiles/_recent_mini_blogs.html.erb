@@ -1,8 +1,8 @@
-<div class='multibox space'>
-  <div class="title">
-    <%= link_to "更多", mini_blogs_url(:uid => user.id) %>
-    <b>我的微博</b>
-  </div>
+  <% subject = get_subject user %>
+<div class="alphaTitle fix"><div class="wrap"><strong><%= subject%>的微博</strong><%= link_to "更多", mini_blogs_url(:uid => user.id), :class=>"op"%></div></div>
+
+<div class="ac-bd">
+
   <div class="mBlogPostList mBlogProList">
   <% if !mini_blogs.blank? %>
     <% mini_blogs.each do |mb| %>

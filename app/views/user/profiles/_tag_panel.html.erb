@@ -1,25 +1,19 @@
-<div class='multibox s_clear'>
-  <div class='title' id='tag_cloud_head'>
-  <% if user == current_user %>
-    <b>大家对你的印象是</b>
-  <% elsif profile.is_taggable_by? current_user %>
-    <b class='space'>你对TA的印象是</b>
-  <% else %>
-    <b>印象</b>
-  <% end %>
-  </div>
-  <div id='tag_cloud'>
-  <% if profile.is_taggable_by? current_user %>
-    <%= render :partial => 'user/profiles/tag_candidates', :locals => {:profile => profile} %>
-    <% form_for :tag, :html => {:onsubmit => "Iyxzone.Tag.submitForm('profile', #{profile.id}, $('tag_name')); return false"} do |f| %>
-      <p class='space'>都不贴切？自己想个</p>
-      <div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
-      <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
-    <% end %>
-  <% else %>
-    <%= render :partial => 'user/tags/tag_cloud', :locals => {:taggable => profile, :deleteable => profile.is_tag_deleteable_by?(current_user)} %>
-  <% end %>
-  <%= onload_javascript_tag "Iyxzone.Tag.init('#{form_authenticity_token}');" %>
-  </div>
+<div class="alphaColum colImpress">
+	<div class="ac-r-t"><em></em></div>
+		<div class="ac-r-m fix">
+			<div class="alphaTitle fix"><div class="wrap" id="tag_cloud_header"><strong>好友印象</strong>
+				<% if profile.is_taggable_by? current_user %><%= link_to_function "添加对TA的评价", "Iyxzone.Profile.Tag.addTag(#{profile.id})", :class => "op"%><% end %>
+				</div></div>
+				<div class="ac-bd">
+					<% if user == current_user %>
+						<div class="jl-cutline">大家对你的印象是：</div>
+					<% else %>
+						<div class="jl-cutline">大家对TA的印象是：</div>
+					<% end %>
+          <div id="tag_cloud">
+						<%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => profile} %>
+					</div>
+				</div>
+		</div>
+	<div class="ac-r-b"><em></em></div>
 </div>
-
