@@ -7,27 +7,24 @@ module HasIndex
 
 class SnapshotManager
 
-  def initialize indexed_class
-    @class = indexed_class
+  def initialize klass
+    @klass = klass
+    @dir = File.join(@klass.index_dir, "snapshots")
+    `mkdir -p #{@dir}`
     load_snapshots
   end
 
-  def get_snapshots_between from, to
-    return @snapshots if from.nil? and to.nil?
-
-    @snapshots.find_all do |snapshot|
-      if from.nil?
-        snapshot.timestamp <= to
-      elsif to.nil?
-        snapshot.timestamp >= from
-      else
-        snapshot.timestamp >= from and snapshot.timestamp <= to
-      end
+  # 最接近time的一个snapshot
+  def get_snapshot_before time
+    if time.nil?
+      nil
+    else
+      @snapshots.find_all{|snapshot| snapshot.timestamp <= time }.max {|a,b| a.timestamp <=> b.timestamp}
     end
   end
 
   def make_snapshot
-    new_snapshot = Snapshot.create_from_enum @class.indexer.reader.terms(:content), @class.index_dir
+    new_snapshot = Snapshot.create_from_index @klass.indexer, @dir
     @snapshots.push new_snapshot
     new_snapshot
   end
@@ -43,8 +40,8 @@ protected
 
   def load_snapshots
     @snapshots = []
-    Dir.new(@class.index_dir).each do |file|
-      @snapshots.push Snapshot.new(File.join(@class.index_dir, file)) if file =~ /snapshot-/
+    Dir.new(@dir).each do |file|
+      @snapshots.push Snapshot.new(File.join(@dir, file)) if file =~ /\.ss$/
     end
   end
 
@@ -55,24 +52,20 @@ class Snapshot
   def initialize file
     @file = file
     @terms = nil
-    @timestamp = Time.parse file.split("snapshot-").last
+    @timestamp = Time.parse file.split(".").first
   end
 
-  def self.create_from_enum enum, to_dir
+  def self.create_from_index klass, to_dir
     time = Time.now.strftime("%Y-%m-%d-%H:%M")
-    name = File.join(to_dir, "snapshot-#{time}")
+    name = File.join(to_dir, "#{time}.ss")
     file = File.open(name, "w")
-    enum.each do |term, freq|
-      file.write "#{term}  #{freq}\n"
+    klass.reader.terms(:content).each do |term, freq|
+      file.write "#{term} #{freq}\n"
     end
 
+    # performance problem when invoking terms, it would parse terms one more time
     snapshot = Snapshot.new name
-    snapshot.set_terms enum
     snapshot
-  end
-
-  def set_terms terms
-    @terms = terms
   end
 
   def terms

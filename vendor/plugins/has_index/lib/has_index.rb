@@ -117,8 +117,8 @@ module HasIndex
       snapshot_manager.clean_snapshots_before ago
     end
 
-    def get_index_snapshots_between from, to
-      snapshot_manager.get_snapshots_between from, to
+    def get_index_snapshot_before time 
+      snapshot_manager.get_snapshot_before time
     end  
 
     # 这个是和will_paginate兼容的，比那个煞笔acts_as_ferret强多了
