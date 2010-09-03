@@ -6,6 +6,8 @@ class User::Profiles::SkinsController < UserBaseController
 
   FetchSize = 5
 
+	FetchGame = 10
+
   def show
     @user = current_user
     @profile = @user.profile
@@ -16,6 +18,11 @@ class User::Profiles::SkinsController < UserBaseController
     @next = @skins[(@idx + 1) % @skins.count] 
 
     @friends = @user.friends.sort_by{rand}[0..2]
+
+		@guilds = @user.all_guilds.limit(3)
+		limit = (@user.games_count > FetchGame) ? FetchGame : @user.games_count
+		@more_game = (@user.games_count > FetchGame)
+		@games = @user.games[0..(limit -1)]
 
     @blogs = @user.blogs.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
     @albums = @user.active_albums.find(:all, :conditions => @cond, :offset => 0, :limit => 3)
