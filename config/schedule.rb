@@ -54,12 +54,23 @@ every :thursday, :at => '5:00am' do
 end
 
 # 关于mini blog 
-every 13.minutes do
+every 10.minutes, :at => '0:00am' do
   rake "mini_blogs:delta_index"
 end
 
-every 19.minutes do
-  rake "mini_blogs:delta_topics"
+# 这个应该不会和上面的那个delta_index枪锁
+# 这个只是对index的读操作
+every 10.minutes, :at => '0:05am' do
+  rake "mini_blogs:make_snapshot"
+end
+
+# 理论上，必须大于make_snapshot的间隔才有意义
+every 15.minutes, :at => '0:10am' do
+  rake "mini_blogs:compute_rank"
+end
+
+every 1.day do
+  rake "mini_blogs:clean_obsolete_snapshots"
 end
 
 every 30.minutes do

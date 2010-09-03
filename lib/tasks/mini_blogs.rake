@@ -27,9 +27,10 @@ namespace :mini_blogs do
     puts "#{e-s} sec to make new snapshot"
   end
 
+  # 保存2周内的，这样如果是每10分钟make snapshot，那就是保存6 * 24 * 14 个ss文件
   task :clean_obsolete_snapshots => :environment do
     s = Time.now
-    MiniBlog.clean_index_snapshots_before 1.week.ago
+    MiniBlog.clean_index_snapshots_before 2.week.ago
     e = Time.now
     puts "#{e-s} sec to clean snapshots"
   end
