@@ -1,0 +1,26 @@
+<% taggable = game.is_taggable_by? current_user %>
+
+<div class="s2m2 gameIntro">
+  <div class="title fix">
+    <div class="wrap">
+      <h2 class="fix"><strong>游戏印象</strong><span></span></h2>
+      <% if taggable %>
+        <%= link_to_function "添加印象", "Iyxzone.Game.Tag.showTagInput();", :class => 'more', :id => 'add_tag_link' %>
+      <% end %>
+    </div>
+    <em></em>
+  </div>
+  <div class="s2m2bd fix">
+    <% if taggable %>
+      <div id='tag_input' style="display:none">
+        <%= render :partial => 'user/games/tag_input', :locals => {:game => game} %>
+      </div>
+    <% end %>
+    <div id='tag_cloud'>
+      <%= render :partial => 'user/games/tag_cloud', :locals => {:game => game} %>
+    </div>
+    <% javascript_include_tag do %>
+      Iyxzone.Game.Tag.init('<%= form_authenticity_token %>');
+    <% end %>
+  </div>
+</div>

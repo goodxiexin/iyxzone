@@ -1,0 +1,711 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>个人主页V2.0</title>
+<link href="stylesheets/common.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="stylesheets/home.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="theme/yimeili/style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+
+<body class="themeBg">
+    <div id="header" class="alphaHeader">
+      <div id="navbar">
+        <div id="navwrap">
+          <div id="navmid">
+          <a title="17gaming" class="logo-top png" href="http://www.17gaming.com/home"></a>
+            <div id="navmain">
+              <ul id="navmain-title">
+                <li><a href="http://www.17gaming.com/home"><span id="navhome">首页</span></a></li>
+                <li><a href="/profiles/9"><span id="navprofile">个人主页</span></a></li>
+                <li><a href="http://www.17gaming.com/friends"><span id="navfriend">好友</span></a></li>
+                
+                
+                <li><a href="http://www.17gaming.com/mails?type=1"><span id="navinbox">站内信</span></a></li>
+                
+                 
+                
+                <li style="position: relative;"><a onclick="; return false;" id="notifications_link" href="#"><span id="navnotice">通知</span></a>
+                
+                  <div style="display: none;" id="notifications_dropdown" class="drop-box">
+                    <div id="notice-wrap">
+                      <dl id="notifications_dropdown_list" class="con s_clear"></dl>
+                      <div class="foot">
+                        <a href="http://www.17gaming.com/notifications">查看全部</a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div id="navsearch">
+              <form onsubmit="window.location.href = this.action + '?' + $(this).serialize();return false;" method="post" action="http://www.17gaming.com/search_users"><div style="margin: 0pt; padding: 0pt; display: inline;"><input type="hidden" value="iEq15w5CSkzxshBEE6UviGjVucX88y/9UDUfpqKpceY=" name="authenticity_token"></div>
+                <div class="textfield"><input type="text" value="搜索您的好友吧" onfocus="$('key').clear()" name="key" id="key"></div>
+                <input type="submit" value="" class="gobtn">
+              </form>
+            </div>
+            <div id="navextra">
+              <ul>
+                <li><a href="http://www.17gaming.com/signup_invitations">邀请</a></li>
+                <li><a onclick="; return false;" id="settings_link" href="#">设置</a>
+                  <div style="display: none;" id="settings_dropdown" class="box01 set-box">
+                    <a class="blk" href="http://www.17gaming.com/privacy_setting">隐私设置</a>
+                    <a class="blk" href="http://www.17gaming.com/password_setting/edit">密码设置</a>
+                    <a class="blk nobd" href="http://www.17gaming.com/application_setting">应用设置</a>
+                  </div>
+                </li>   
+                <li><a href="http://www.17gaming.com/logout">退出</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="alphaPage">
+            <div class="pageRoundTop unitPng"></div>
+            <div class="pageSkinV2 fix">
+                <div class="sideBar alphaSide">
+                    <div class="avatarXl">
+                        <div class="wrap">
+                        <img src="http://ss2.sinaimg.cn/orignal/3fd98981g74ab7c4f8941&690" width="230"  height="230" alt="我的头像" />
+                        </div>
+                    </div>
+                    <div class="memberProfile">
+                        <div class="wrapBg"></div>
+                        <div class="wrapCon">
+                        <div class="intro">
+                            <ul class="fix">
+                              <li><a href="#"><strong class="num">34534</strong></a><a href="#"><span>微博</span></a></li>
+                              <li><a href="#"><strong class="num">34534</strong></a><a href="#"><span>好友</span></a></li>
+                              <li class="nobd"><a href="#" class="alphaBtn">成为粉丝</a></li>
+                            </ul>
+                        </div>
+                        <div class="op">
+                            <ul class="fix">
+                              <li><a href="#"><span class="i-skin"></span>更换皮肤</a></li>
+                              <li><a href="#"><span class="i-mail"></span>发站内信</a></li>
+                              <li><a href="#"><span class="i-theme"></span>更换游戏陈列架</a></li>
+                              <li><a href="#"><span class="i-hello"></span>打个招呼</a></li>
+                              <!--li><a href="#"><span class="i-friend"></span>加为好友</a></li>
+                              <li><a href="#"><span class="i-share-friend"></span>分享好友</a></li>
+                              <li><a href="#"><span class="i-msg"></span>给他留言</a></li>
+                              <li><a href="#"><span class="i iNoFollow"></span>不做粉丝</a></li-->
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="alphaColum colImpress">
+                    	<div class="ac-r-t"><em></em></div>
+                        <div class="ac-r-m fix">
+                        	<div class="alphaTitle fix"><div class="wrap"><strong>好友印象</strong><a href="#" class="op">添加对她的评价</a></div></div>
+                            <div class="ac-bd">
+                            	<div class="jl-cutline">大家对她的印象是：</div>
+                                <div class="impress-show s_clear space">
+                                    <a class="impress-0" href="#"><span>好友印象好友印象好友印</span><b class="icon2-close"></b></a>
+                                    <a class="impress-1" href="#"><span>you</span><b class="icon2-close"></b></a>
+                                    <a class="impress-2" href="#"><span>好友印象好友印象好友印</span><b class="icon2-close"></b></a>
+                                    <a class="impress-2" href="#"><span>好友印象好友印象象</span><b class="icon2-close"></b></a>
+                                    <a class="impress-2" href="#"><span>好友印象好友印象象</span><b class="icon2-close"></b></a>
+                                    <a class="impress-3" href="#"><span>you</span><b class="icon2-close"></b></a>
+                                    <a class="impress-3" href="#"><span>youyouyou</span><b class="icon2-close"></b></a>
+                                    <a class="impress-5" href="#"><span>you</span><b class="icon2-close"></b></a>
+                                </div>
+                                
+                                <div id="tag_cloud">
+                      
+                        <div id="tag_cloud" class="impress-add s_clear space"> 
+
+                            <a class="impress-btn-0" href="#"><span>卡通</span></a>
+                            <a class="impress-btn-0" href="#"><span>卡通</span></a>
+                            <a class="impress-btn-1" href="#"><span>好友印象好友好友印</span></a>
+                            <a class="impress-btn-1" href="#"><span>好友印象好友印象友印</span></a>
+                            <a class="impress-btn-1" href="#"><span>好友印象好友印象好友印</span></a>
+                            <a class="impress-btn-2" href="#"><span>3D</span></a>
+                            <a class="impress-btn-3" href="#"><span>史诗</span></a>
+                            <a class="impress-btn-4" href="#"><span>打怪</span></a>
+
+                        </div>
+
+    <form onsubmit="" method="post" action="http://www.17gaming.com/profiles/784/tags"><div style="margin: 0pt; padding: 0pt; display: inline;"><input type="hidden" value="yMrCQVjsCOz59zJdTYelx8x7Hfb+m+e6ZwkkSjGx+Mw=" name="authenticity_token"></div>
+      <p class="space">都不贴切？自己想个</p>
+      <div class="textfield04 left space w-l"><input type="text" value="" name="tag_name" id="tag_name"></div>
+      <div class="fldbtn left space"><span class="button04"><span><button type="submit" id="tag_submit">评价</button></span></span></div>
+    </form>
+  
+  </div>
+                            </div>
+                        </div>
+                    	<div class="ac-r-b"><em></em></div>
+                    </div>
+                    <!---->
+                    <div class="alphaColum colGuild">
+                    	<div class="ac-r-t"><em></em></div>
+                        <div class="ac-r-m fix">
+                        	<div class="alphaTitle fix"><div class="wrap"><strong>我加入的公会</strong><a href="#" class="op i iArrUnFold"></a></div></div>
+                            <div style="display:none">
+                            <div class="ac-bd">
+                            	<div class="item jl-cutline fix">
+                                	<div class="avatar">
+                                    <a href="#"><img src="images/photo/photo12.png" alt="" class="imgbox01" /></a>
+                                    </div>
+                                    <div class="con">
+                                    	<div class="guildName"><a href="#">龙之谷公会龙之谷公</a></div>
+                                        <div><span class="num">500</span>个成员</div>
+                                    </div>
+                                </div>
+                            	<div class="item jl-cutline fix">
+                                	<div class="avatar">
+                                    <a href="#"><img src="images/photo/photo12.png" alt="" class="imgbox01" /></a>
+                                    </div>
+                                    <div class="con">
+                                    	<div class="guildName"><a href="#">龙之谷公会龙之谷公</a></div>
+                                        <div><span class="num">500</span>个成员</div>
+                                    </div>
+                                </div>
+                            	<div class="item jl-cutline fix">
+                                	<div class="avatar">
+                                    <a href="#"><img src="images/photo/photo12.png" alt="" class="imgbox01" /></a>
+                                    </div>
+                                    <div class="con">
+                                    	<div class="guildName"><a href="#">龙之谷公会龙之谷公</a></div>
+                                        <div><span class="num">500</span>个成员</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ac-ft"><a href="#">查看全部>></a></div>
+                            </div>
+                        </div>
+                    	<div class="ac-r-b"><em></em></div>
+                    </div>
+                    <!---->
+                    <div class="alphaColum">
+                    	<div class="ac-r-t"><em></em></div>
+                        <div class="ac-r-m fix">
+                        	<div class="alphaTitle fix"><div class="wrap"><strong>最近来访</strong><a href="#" class="op i iArrUnFold"></a></div></div>
+                        	<div class="ac-bd">
+                                <ul class="memberList fix">
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/5148">终结海涛的超神终结海涛的超神</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/haitao">Esports海涛</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/1857">电电</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/5473">鸡鸡又鸡鸡鸡鸡又鸡鸡</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/4292">顾小顾</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/2058">谦谦君子</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/16">风中雨中</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/5262">HY_Loda</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/2644">esport海涛</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/2966">DOTA爱好者</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/3021">水木鱼</a>
+                                    </li>
+                                  
+                                    <li>
+                                      <a href="#"><img src="images/photo/photo12.png" class="imgbox01" alt=""></a>
+                                      <a class="memberName" href="/profiles/2487">spartacusman</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="ac-ft"><a href="#">查看全部>></a></div>
+                        </div>
+                    	<div class="ac-r-b"><em></em></div>
+                    </div>
+                    <!---->
+                    <div class="alphaColum">
+                    	<div class="ac-r-t"><em></em></div>
+                        <div class="ac-r-m fix">
+                        	<div class="alphaTitle fix"><div class="wrap"><strong>我的好友</strong><a href="#" class="op i iArrFold"></a></div></div>
+                        	<div class="ac-bd">
+                            </div>
+                        </div>
+                    	<div class="ac-r-b"><em></em></div>
+                    </div>
+                </div>
+                <!---->
+                <div class="mainWrap">
+                    <div class="mainContent alphaContent">
+                    	<div class="acTop">
+                            <div class="acMemberInfo"><h2 class="memberName">小甲壳虫</h2></div>
+                            <div class="acNav">
+                                <ul>
+                                  <li><a href="#"><span class="home"></span><strong>主页</strong></a></li>
+                                  <li><a href="#"><span class="info"></span><strong>档案</strong></a></li>
+                                  <li class="selected"><a href="#"><span class="feed"></span><strong>新鲜事</strong></a></li>
+                                  <li><a href="#"><span class="poll"></span><strong>投票</strong></a></li>
+                                  <li><a href="#"><span class="photo"></span><strong>照片</strong></a></li>
+                                  <li><a href="#"><span class="blog"></span><strong>日志</strong></a></li>
+                                  <li><a href="#"><span class="video"></span><strong>视频</strong></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="acMain">
+                                  
+                            <div class="alphaColum acMainWrap">
+                                <div class="ac-r-m fix">
+                                <div>
+<div class="ajaxLoading"><img src="images/ajax-loader.gif"></div>
+</div>
+<!--游戏 我的微博-->
+<div class="addGame"><a href="#"><span class="i iAdd02"></span>添加游戏</a></div>
+<div class="myGameList">
+    <ul class="fix">
+      <li>
+          <a href="#">
+              <span class="gameName">大航海时代</span>
+              <span class="gameLogo"><img src="http://www.17gaming.com/images/gamepic/魔兽世界.gif?1277362198" alt="" width="70" height="100" /></span>
+          </a>
+      </li>
+      <li>
+          <a href="#">
+              <span class="gameName">大航海时代</span>
+              <span class="gameLogo"><img src="http://www.17gaming.com/images/gamepic/魔兽世界.gif?1277362198" alt="" width="70" height="100" /></span>
+          </a>
+      </li>
+      <li>
+          <a href="#">
+              <span class="gameName">大航海时代</span>
+              <span class="gameLogo"><img src="http://www.17gaming.com/images/gamepic/魔兽世界.gif?1277362198" alt="" width="70" height="100" /></span>
+          </a>
+      </li>
+      <li>
+          <a href="#">
+              <span class="gameName">大航海时代</span>
+              <span class="gameLogo"><img src="http://www.17gaming.com/images/gamepic/魔兽世界.gif?1277362198" alt="" width="70" height="100" /></span>
+          </a>
+      </li>
+      <li>
+          <a href="#">
+              <span class="gameName">大航海时代</span>
+              <span class="gameLogo"><img src="http://www.17gaming.com/images/gamepic/魔兽世界.gif?1277362198" alt="" width="70" height="100" /></span>
+          </a>
+      </li>
+      <li>
+          <a href="#">
+              <span class="gameName">大航海时代</span>
+              <span class="gameLogo"><img src="http://www.17gaming.com/images/gamepic/魔兽世界.gif?1277362198" alt="" width="70" height="100" /></span>
+          </a>
+      </li>
+      <li>
+          <a href="#">
+              <span class="gameName">大航海时代</span>
+              <span class="gameLogo"><img src="http://www.17gaming.com/images/gamepic/魔兽世界.gif?1277362198" alt="" width="70" height="100" /></span>
+          </a>
+      </li>
+    </ul>
+  <div class="moreGame"><a href="#">查看更多游戏</a></div>  
+</div>
+
+<div class="alphaTitle fix"><div class="wrap"><strong>我的微博</strong><a href="#" class="op">更多</a></div></div>
+<div class="ac-bd">
+    <div class="mBlogPostList mBlogProList">
+  
+    
+        
+  <div id="mini_blog_2635" class="item jl-cutline fix">
+    
+        <div class="feedFunc icon-state"></div>
+      
+    <div class="feedCon">
+      <div class="oriCon">
+        <a class="memberName" href="http://www.17gaming.com/mini_blogs?uid=9">小甲壳虫</a>：<a href="/mini_blogs/search?key=翻盘">#翻盘#</a>最近在浩方打了一局，我方在前期劣势，中期又少两人的情况下，艰难上演了一局3V5翻盘好戏，神牛+月女+流浪。
+      </div>
+      
+        
+      
+      
+        <div class="ft">
+          <span class="time">2010-08-23 15:49</span>
+          
+            <span><a onclick="Iyxzone.Comment.toggleBox('mini_blog', 2635, 1); return false;" id="mini_blog_comment_link_2635" href="#">回复(1)</a></span> | 
+          
+           
+            <span><a onclick="Iyxzone.Facebox.link('http://www.17gaming.com/mini_blogs/2635/new_forward?at=public', 'get', 400);; return false;" href="#">转发</a></span>
+            
+          
+            | <span><a onclick="Iyxzone.Facebox.confirm('你确定要删除这条微博吗', '确认', null, 'http://www.17gaming.com/mini_blogs/2635', 'fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=', 'delete');; return false;" href="#">删除</a></span>
+          
+        </div>
+        <div style="display: none;" id="mini_blog_comment_box_2635" class="feed-list">
+          
+
+
+  <div id="mini_blog_comments_2635">
+	  <div id="comment_10965" class="box04 word-box">
+  
+	<div class="img"><a onclick="window.open(this.href);return false;" href="http://www.17gaming.com/profiles/64226"><img src="/images/default_male_csmall.png?1281512517" alt="Default_male_csmall"></a></div>
+  <div class="word">
+    <p>
+      <a href="http://www.17gaming.com/profiles/64226">Dota_ZeiZei</a> <span>2010-08-23 18:38 -</span> 
+      <a onclick="Iyxzone.Comment.showForm('mini_blog', 2635, 'Dota_ZeiZei', 64230); return false;" href="#">回复</a>
+    </p>
+    你们3控, 如果一个控的话估计翻盘有点困难,
+  </div>
+</div>
+
+	</div>
+
+<div id="add_mini_blog_comment_2635" class="box04 comment-box">
+  <textarea onclick="Iyxzone.Comment.showForm('mini_blog', 2635, null, 9)" name="add-comment" id="add_mini_blog_comment_2635" class="textarea txt-add-comment">添加评论...</textarea>
+</div>
+
+<div style="display: none;" id="mini_blog_comment_2635" class="box04 cmt-box s_clear">
+	<div class="img"><a onclick="window.open(this.href);return false;" href="http://www.17gaming.com/profiles/9"><img src="/photos/3/4497/wagwgs_csmall.jpg?1281509483" alt="Wagwgs_csmall"></a></div>
+	<div class="cmt-con">
+    <form onsubmit="new Ajax.Request('/profiles/9', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" method="post" id="mini_blog_comment_form_2635" action="/profiles/9"><div style="margin: 0pt; padding: 0pt; display: inline;"><input type="hidden" value="fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=" name="authenticity_token"></div>
+			<input type="hidden" value="2635" name="commentable_id" id="commentable_id">
+			<input type="hidden" value="MiniBlog" name="commentable_type" id="commentable_type">
+			<input type="hidden" value="9" name="comment[recipient_id]" id="mini_blog_comment_recipient_2635">
+      <textarea rows="20" onfocus="Iyxzone.limitText($(this), 140, Iyxzone.Comment.checkLength);" onblur="Iyxzone.cancelLimitText($(this));" name="comment[content]" id="mini_blog_comment_content_2635" cols="40" class="textarea"></textarea>
+      <div class="submit s_clear">
+				<span class="button button-gray"><span><button onclick="Iyxzone.Comment.hideForm(&quot;mini_blog&quot;,2635, event)">取消</button></span></span>
+        <span class="button w-l"><span><button onclick="Iyxzone.Comment.save( &quot;mini_blog&quot;, 2635, this, event)" type="submit">发布</button></span></span>
+        <span class="left"><a onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $('mini_blog_comment_content_2635'), event); return false;" href="#" class="icon-face"></a></span>
+        <span id="mini_blog_2635_words_count">0/140</span>
+      </div>
+    </form>
+  </div>
+</div>
+
+        </div>
+      
+    </div> 
+  </div>
+
+    
+        
+  <div id="mini_blog_2623" class="item jl-cutline fix">
+    
+        <div class="feedFunc icon-state"></div>
+      
+    <div class="feedCon">
+      <div class="oriCon">
+        <a class="memberName" href="http://www.17gaming.com/mini_blogs?uid=9">小甲壳虫</a>：<img src="/images/faces/强.gif"> <a href="/mini_blogs?uid=14">@高毛</a>://好！！！
+      </div>
+      
+        
+        <div class="round02 round_r_t s-dialog">
+          <div class="round_l_t">
+            <div class="round_r_b">
+              <div class="round_l_b">
+                <div class="round_m jl-round_m"><span class="arrow-tip03"></span>
+                  <div class="round_body">
+                    <div class="mCon fix">
+                      <div class="hd">
+                        <a class="memberName" href="http://www.17gaming.com/mini_blogs?uid=52031">纯蓝之子</a>：自己买鸡遇到有人变鸟。。。突然觉得dota这个游戏真美好。。。
+                        <span class="orgTrans"><a href="http://www.17gaming.com/mini_blogs/2594">原文转发(2)</a><span class="pipe">|</span><a href="http://www.17gaming.com/mini_blogs/2594">原文评论(0)</a></span>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+      
+        <div class="ft">
+          <span class="time">2010-08-23 09:30</span>
+          
+            <span><a onclick="Iyxzone.Comment.toggleBox('mini_blog', 2623, 0); return false;" id="mini_blog_comment_link_2623" href="#">回复</a></span> | 
+          
+           
+            <span><a onclick="Iyxzone.Facebox.link('http://www.17gaming.com/mini_blogs/2623/new_forward?at=public', 'get', 400);; return false;" href="#">转发</a></span>
+            
+          
+            | <span><a onclick="Iyxzone.Facebox.confirm('你确定要删除这条微博吗', '确认', null, 'http://www.17gaming.com/mini_blogs/2623', 'fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=', 'delete');; return false;" href="#">删除</a></span>
+          
+        </div>
+        <div style="display: none;" id="mini_blog_comment_box_2623" class="feed-list">
+          
+
+
+  <div id="mini_blog_comments_2623">
+	  
+	</div>
+
+<div id="add_mini_blog_comment_2623" class="box04 comment-box">
+  <textarea onclick="Iyxzone.Comment.showForm('mini_blog', 2623, null, 9)" name="add-comment" id="add_mini_blog_comment_2623" class="textarea txt-add-comment">添加评论...</textarea>
+</div>
+
+<div style="display: none;" id="mini_blog_comment_2623" class="box04 cmt-box s_clear">
+	<div class="img"><a onclick="window.open(this.href);return false;" href="http://www.17gaming.com/profiles/9"><img src="/photos/3/4497/wagwgs_csmall.jpg?1281509483" alt="Wagwgs_csmall"></a></div>
+	<div class="cmt-con">
+    <form onsubmit="new Ajax.Request('/profiles/9', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" method="post" id="mini_blog_comment_form_2623" action="/profiles/9"><div style="margin: 0pt; padding: 0pt; display: inline;"><input type="hidden" value="fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=" name="authenticity_token"></div>
+			<input type="hidden" value="2623" name="commentable_id" id="commentable_id">
+			<input type="hidden" value="MiniBlog" name="commentable_type" id="commentable_type">
+			<input type="hidden" value="9" name="comment[recipient_id]" id="mini_blog_comment_recipient_2623">
+      <textarea rows="20" onfocus="Iyxzone.limitText($(this), 140, Iyxzone.Comment.checkLength);" onblur="Iyxzone.cancelLimitText($(this));" name="comment[content]" id="mini_blog_comment_content_2623" cols="40" class="textarea"></textarea>
+      <div class="submit s_clear">
+				<span class="button button-gray"><span><button onclick="Iyxzone.Comment.hideForm(&quot;mini_blog&quot;,2623, event)">取消</button></span></span>
+        <span class="button w-l"><span><button onclick="Iyxzone.Comment.save( &quot;mini_blog&quot;, 2623, this, event)" type="submit">发布</button></span></span>
+        <span class="left"><a onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $('mini_blog_comment_content_2623'), event); return false;" href="#" class="icon-face"></a></span>
+        <span id="mini_blog_2623_words_count">0/140</span>
+      </div>
+    </form>
+  </div>
+</div>
+
+        </div>
+      
+    </div> 
+  </div>
+
+    
+        
+  <div id="mini_blog_1741" class="item jl-cutline fix">
+    
+        <div class="feedFunc icon-state"></div>
+      
+    <div class="feedCon">
+      <div class="oriCon">
+        <a class="memberName" href="http://www.17gaming.com/mini_blogs?uid=9">小甲壳虫</a>：<a href="/mini_blogs/search?key=巫妖王">#巫妖王#</a>终于要开了<img src="/images/faces/哭.gif">
+      </div>
+      
+        
+      
+      
+        <div class="ft">
+          <span class="time">2010-08-04 13:19</span>
+          
+            <span><a onclick="Iyxzone.Comment.toggleBox('mini_blog', 1741, 0); return false;" id="mini_blog_comment_link_1741" href="#">回复</a></span> | 
+          
+           
+            <span><a onclick="Iyxzone.Facebox.link('http://www.17gaming.com/mini_blogs/1741/new_forward?at=public', 'get', 400);; return false;" href="#">转发</a></span>
+            
+          
+            | <span><a onclick="Iyxzone.Facebox.confirm('你确定要删除这条微博吗', '确认', null, 'http://www.17gaming.com/mini_blogs/1741', 'fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=', 'delete');; return false;" href="#">删除</a></span>
+          
+        </div>
+        <div style="display: none;" id="mini_blog_comment_box_1741" class="feed-list">
+          
+
+
+  <div id="mini_blog_comments_1741">
+	  
+	</div>
+
+<div id="add_mini_blog_comment_1741" class="box04 comment-box">
+  <textarea onclick="Iyxzone.Comment.showForm('mini_blog', 1741, null, 9)" name="add-comment" id="add_mini_blog_comment_1741" class="textarea txt-add-comment">添加评论...</textarea>
+</div>
+
+<div style="display: none;" id="mini_blog_comment_1741" class="box04 cmt-box s_clear">
+	<div class="img"><a onclick="window.open(this.href);return false;" href="http://www.17gaming.com/profiles/9"><img src="/photos/3/4497/wagwgs_csmall.jpg?1281509483" alt="Wagwgs_csmall"></a></div>
+	<div class="cmt-con">
+    <form onsubmit="new Ajax.Request('/profiles/9', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" method="post" id="mini_blog_comment_form_1741" action="/profiles/9"><div style="margin: 0pt; padding: 0pt; display: inline;"><input type="hidden" value="fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=" name="authenticity_token"></div>
+			<input type="hidden" value="1741" name="commentable_id" id="commentable_id">
+			<input type="hidden" value="MiniBlog" name="commentable_type" id="commentable_type">
+			<input type="hidden" value="9" name="comment[recipient_id]" id="mini_blog_comment_recipient_1741">
+      <textarea rows="20" onfocus="Iyxzone.limitText($(this), 140, Iyxzone.Comment.checkLength);" onblur="Iyxzone.cancelLimitText($(this));" name="comment[content]" id="mini_blog_comment_content_1741" cols="40" class="textarea"></textarea>
+      <div class="submit s_clear">
+				<span class="button button-gray"><span><button onclick="Iyxzone.Comment.hideForm(&quot;mini_blog&quot;,1741, event)">取消</button></span></span>
+        <span class="button w-l"><span><button onclick="Iyxzone.Comment.save( &quot;mini_blog&quot;, 1741, this, event)" type="submit">发布</button></span></span>
+        <span class="left"><a onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $('mini_blog_comment_content_1741'), event); return false;" href="#" class="icon-face"></a></span>
+        <span id="mini_blog_1741_words_count">0/140</span>
+      </div>
+    </form>
+  </div>
+</div>
+
+        </div>
+      
+    </div> 
+  </div>
+
+    
+  
+  </div>
+</div>
+<div class="ac-ft"><a href="#">查看全部视频>></a></div>
+
+                                </div>
+                                <div class="ac-r-b"><em></em></div>
+                            </div>
+                            <!---->
+                            <div class="alphaColum">
+                                <div class="ac-r-t"><em></em></div>
+                                <div class="ac-r-m fix">
+                                    <div class="alphaTitle fix"><div class="wrap"><strong>留言板(共223条)</strong></div></div>
+                                    <div class="ac-bd">
+                                    
+                                    	<div class="bookbox">
+
+<!--
+  parameters:
+    commentable: 是否能留言
+    wall: 留言版的拥有者，可以是event, 或者guild或者profile
+    recipient: 默认的收到回复的人
+-->
+
+  <div class="formcontent s_clear">
+    <form onsubmit="Iyxzone.WallMessage.save('profile', 9, 9, $('submit_btn'), this); return false;" method="post" action="/profiles/9"><div style="margin: 0pt; padding: 0pt; display: inline;"><input type="hidden" value="fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=" name="authenticity_token"></div>
+      <input type="hidden" value="Profile" name="wall_type" id="wall_type">
+      <input type="hidden" value="9" name="wall_id" id="wall_id">
+      <input type="hidden" value="9" name="comment[recipient_id]" id="comment_recipient_id">
+      <div class="rows">
+        <div class="textarea-wrap"><div class="textarea-wide">
+          <textarea rows="20" onfocus="Iyxzone.limitText($(this),140, Iyxzone.WallMessage.checkLength);" onblur="Iyxzone.cancelLimitText($(this));" name="comment[content]" id="wall_message_content_9" cols="40" class="textarea"></textarea>
+        </div></div>
+      </div>
+      <div class="buttons">
+        <span class="button"><span><button id="submit_btn" type="submit">发布</button></span></span>
+        <a onclick="Iyxzone.Emotion.Manager.toggleFaces(this, $('comment_content'), event); return false;" href="#" class="icon-face"></a>
+        <span id="wall_9_words_count">0/140</span>
+      </div>
+    </form>
+  </div>
+
+
+<div id="comments" class="feed-box">
+  
+
+<div id="comment_235" class="feed-img-list">
+  <div class="feed-list">
+  <div class="feed-img"><a onclick="window.open(this.href);return false;" href="http://www.17gaming.com/profiles/9"><img src="http://www.17gaming.com/photos/3/4497/wagwgs_cmedium.jpg?1281509483" class="imgbox01" alt="Wagwgs_cmedium"></a></div>
+    <p>
+      
+        <a onclick="new Ajax.Request('http://www.17gaming.com/wall_messages/235', {asynchronous:true, evalScripts:true, method:'delete', parameters:'authenticity_token=' + encodeURIComponent('fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=')}); return false;" href="#" class="right icon-active"></a>
+      
+      <a href="http://www.17gaming.com/profiles/9">小甲壳虫</a> 
+      2010-05-07 15:21
+      
+        <a onclick="Iyxzone.WallMessage.set('profile', 9, '小甲壳虫', 9);; return false;" href="#">回复</a>
+      
+    </p>
+    <p>回复小甲壳虫：ewt</p>
+  </div>
+</div>
+
+
+
+<div id="comment_226" class="feed-img-list">
+  <div class="feed-list">
+  <div class="feed-img"><a onclick="window.open(this.href);return false;" href="http://www.17gaming.com/profiles/9"><img src="http://www.17gaming.com/photos/3/4497/wagwgs_cmedium.jpg?1281509483" class="imgbox01" alt="Wagwgs_cmedium"></a></div>
+    <p>
+      
+        <a onclick="new Ajax.Request('http://www.17gaming.com/wall_messages/226', {asynchronous:true, evalScripts:true, method:'delete', parameters:'authenticity_token=' + encodeURIComponent('fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=')}); return false;" href="#" class="right icon-active"></a>
+      
+      <a href="http://www.17gaming.com/profiles/9">小甲壳虫</a> 
+      2010-05-06 16:26
+      
+        <a onclick="Iyxzone.WallMessage.set('profile', 9, '小甲壳虫', 9);; return false;" href="#">回复</a>
+      
+    </p>
+    <p>sdgs</p>
+  </div>
+</div>
+
+
+
+<div id="comment_225" class="feed-img-list">
+  <div class="feed-list">
+  <div class="feed-img"><a onclick="window.open(this.href);return false;" href="http://www.17gaming.com/profiles/9"><img src="http://www.17gaming.com/photos/3/4497/wagwgs_cmedium.jpg?1281509483" class="imgbox01" alt="Wagwgs_cmedium"></a></div>
+    <p>
+      
+        <a onclick="new Ajax.Request('http://www.17gaming.com/wall_messages/225', {asynchronous:true, evalScripts:true, method:'delete', parameters:'authenticity_token=' + encodeURIComponent('fnEr/3ZpMVFYbcf2O4kJzDggUTRbQgURXw9NyOell/M=')}); return false;" href="#" class="right icon-active"></a>
+      
+      <a href="http://www.17gaming.com/profiles/9">小甲壳虫</a> 
+      2010-05-06 16:23
+      
+        <a onclick="Iyxzone.WallMessage.set('profile', 9, '小甲壳虫', 9);; return false;" href="#">回复</a>
+      
+    </p>
+    <p>gsdg</p>
+  </div>
+</div>
+
+
+
+
+</div>
+</div>
+                                    </div>
+                                </div>
+                                <div class="ac-r-b"><em></em></div>
+                            </div>
+                            <!---->
+                        </div>
+                    	
+                    </div>
+                </div>
+            </div>
+            <div class="pageRoundBottom"></div>
+    </div>
+    <div id="footer">
+        <p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
+        <p><a href="#">网游公司 版权所有</a></p>
+    </div>
+    
+    
+    
+    <div class="gameIntroPop" style="position:absolute;top:500px;left:100px;display:">
+            <div class="r-t"><div class="c-r">
+                <div class="t fix"><h2>我的游戏角色</h2><a href="#">更多</a></div>
+                <div class="roleList">
+                	<ul>
+                	  <li>小甲壳虫：牛头人法师，79级，上海专区一</li>
+                	  <li>小甲壳虫：牛头人法师，79级，上海专区一</li>
+                	</ul>
+                </div>
+            </div></div>
+        	<div class="r-m">
+                <div class="bd fix">
+                	<div class="avatar"><img src="http://www.17gaming.com/images/gamepic/魔兽世界.gif?1277362198" alt="" width="70" height="100" /></div>
+                    <div class="con">
+                    	<ul>
+                    	  <li><strong>玩家打分：</strong><span>4.5</span></li>
+                    	  <li><strong>在玩好友：</strong><span>445</span></li>
+                    	  <li><strong>已有玩家：</strong><span>234</span></li>
+                    	  <li><strong>玩家关注：</strong><span>43425</span></li>
+                    	</ul>
+                    </div>
+                </div>
+                <div class="ft">
+                <a href="#"><span class="i iAdd02"></span>添加该游戏角色</a>
+                <a href="#"><span class="i iFollow"></span>关注该游戏</a>
+                </div>
+            </div>
+            <div class="r-b"><em></em></div>
+    </div>
+    
+</body>
+</html>

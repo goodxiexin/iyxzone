@@ -24,7 +24,7 @@
 
 <% content_for :side_bar do %>
   <%= render :partial => 'game_info', :locals => {:game => @game} %>  
-  <%= render :partial => 'game_tag', :locals => {:game => @game} %>
+  <%= render :partial => 'tag_panel', :locals => {:game => @game} %>
   <% if !@players.blank? or !@comrades.blank? %>
     <%= render :partial => 'players_and_comrades', :locals => {:comrades => @comrades, :players => @players, :game => @game} %>
   <% end %>

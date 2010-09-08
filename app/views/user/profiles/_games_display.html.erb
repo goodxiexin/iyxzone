@@ -1,8 +1,8 @@
 		<% games.each do |game| %>
-			<li>
-				<a href="/games/<%=game.id%>" id="game-display-<%=game.id%>" onmouseover="Iyxzone.Profile.GameDisplay.display(<%=profile.id%>,<%=game.id%>)">
+			<li id="game-display-<%= game.id %>">
+				<a href="/games/<%=game.id %>">
 					<span class="gameName"><%= game.name%></span>
-					<span class="gameLogo"><%= game_image game.name, :width=>"70", :height=>"100" %></span>
+					<span class="gameLogo"><%= game_image game.name, :width => "70", :height => "100", :onmouseout => "Iyxzone.Profile.Presentor.GameDisplay.mouseOutGamePic(#{game.id}, event);", :onmouseover => "Iyxzone.Profile.Presentor.GameDisplay.mouseOverGamePic(#{game.id}, #{profile.id}, event);" %></span>
 				</a>
 			</li>
 		<% end %>

@@ -5,7 +5,7 @@
 <% type = photos.first.class.name.underscore %>
 
 <% if !photos.blank? %>
-  <% render :layout => 'user/profiles/feed_delivery', :locals => {:icon_type => 'icon-photo', :delivery => delivery} do %>
+  <% render :layout => 'user/profiles/resource_template', :locals => {:icon_type => 'icon-photo'} do %>
     <%= profile_link poster %> 上传了 <%= photos.count %> 张照片 到相册 <%= album_link album, :class => "shine" %>
     <div class='photoFeed' id='photos_feed_<%= delivery.id %>'>
       <div class="mList fix">

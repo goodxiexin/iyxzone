@@ -1,8 +1,6 @@
 .imgCrop_wrap {
-	/* width: 500px;   @done_in_js */
-	/* height: 375px;  @done_in_js */
 	position: relative;
-	margin:0 auto;
+	/*margin:0 auto;*/
 	cursor: crosshair;
 }
 

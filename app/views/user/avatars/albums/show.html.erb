@@ -21,7 +21,7 @@
         <%= render :partial => 'album_table', :locals => {:album => @album, :photos => @photos} %>
       <% else %>
 				<% if @user == current_user %>
-					<div class='tip'>还没有图片，你赶紧<%= facebox_link '上传', new_avatar_url(:album_id => @album.id, :at => 'album'), :width => 400 %>吧</div>
+					<div class='tip'>还没有图片，你赶紧<%= link_to '上传', new_avatar_url %>吧</div>
 				<% else %>
 					<div class='tip'>还没有图片</div>
 				<% end %>

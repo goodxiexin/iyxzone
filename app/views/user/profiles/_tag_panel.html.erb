@@ -1,19 +1,26 @@
+<% taggable = profile.is_taggable_by? current_user %>
+
 <div class="alphaColum colImpress">
 	<div class="ac-r-t"><em></em></div>
 		<div class="ac-r-m fix">
-			<div class="alphaTitle fix"><div class="wrap" id="tag_cloud_header"><strong>好友印象</strong>
-				<% if profile.is_taggable_by? current_user %><%= link_to_function "添加对TA的评价", "Iyxzone.Profile.Tag.addTag(#{profile.id})", :class => "op"%><% end %>
-				</div></div>
-				<div class="ac-bd">
-					<% if user == current_user %>
-						<div class="jl-cutline">大家对你的印象是：</div>
-					<% else %>
-						<div class="jl-cutline">大家对TA的印象是：</div>
-					<% end %>
-          <div id="tag_cloud">
-						<%= render :partial => 'user/profiles/tags/tag_cloud', :locals => {:profile => profile} %>
-					</div>
+			<div class="alphaTitle fix"><div class="wrap" id="tag_cloud_header">
+        <strong>好友印象</strong>
+				<% if taggable %>
+          <%= link_to_function "添加对TA的评价", "Iyxzone.Profile.Tag.showTagInput()", :class => "op", :id => 'add_tag_link'%>
+        <% else %>
+          <%= link_to_function '', "$('profile-tag-wrap').toggle()", :class => "op i iArrUnFold" %>
+        <% end %>
+			</div></div>
+			<div class="ac-bd" id="profile-tag-wrap">
+        <% if taggable %>
+          <div id='tag_input' style="display:none">
+            <%= render :partial => 'user/profiles/tag_input', :locals => {:profile => profile} %>
+          </div>
+        <% end %>
+        <div id='tag_cloud'>
+          <%= render :partial => 'user/profiles/tag_cloud', :locals => {:profile => profile} %>
 				</div>
+			</div>
 		</div>
 	<div class="ac-r-b"><em></em></div>
 </div>

@@ -1,3 +1,10 @@
+/*
+ * 这个文件是我从外面找的
+ * 用来扩展Draggable的
+ * 我尝试写过，但是mouse event总是处理的不好
+ * 所以就用别人的把
+ */
+
 /**
  * Extend the Draggable class to allow us to pass the rendering
  * down to the Cropper object.
@@ -116,7 +123,11 @@ Cropper.Img = Class.create({
 				 * @var boolean - default true
 				 * Whether to automatically include the stylesheet (assumes it lives in the same location as the cropper JS file)
 				 */
-				autoIncludeCSS: false
+				autoIncludeCSS: false,
+        /**
+         * added by gaoxh
+         */
+        locateImgWrap: Prototype.emptyFunction
 			}, 
 			options || {}
 		);				
@@ -126,7 +137,8 @@ Cropper.Img = Class.create({
 		 */
 		this.img = $( element );
 		/**
-		 * @var obj
+	s.options.onImgLoad(this.img, this.imgWrap);
+	 * @var obj
 		 * The x & y coordinates of the click point
 		 */
 		this.clickCoords = { x: 0, y: 0 };
@@ -242,7 +254,7 @@ Cropper.Img = Class.create({
 	 * @return void
 	 */
 	onLoad: function( ) {
-		var cNamePrefix = 'imgCrop_';
+    var cNamePrefix = 'imgCrop_';
 		
 		// get the point to insert the container
 		var insertPoint = this.img.parentNode;
@@ -361,11 +373,6 @@ Cropper.Img = Class.create({
 		}
 	},
 		
-	locateImage: function(style){
-	    this.img.setStyle({width: style.width, height: style.height, left: '0px', top: '0px'});
-	    $(this.imgWrap).setStyle(style);this.setParams();
-	},
-
 	/**
 	 * Sets up all the cropper parameters, this can be used to reset the cropper when dynamically
 	 * changing the images
@@ -416,7 +423,12 @@ Cropper.Img = Class.create({
 		}
 		
 		this.setAreaCoords( startCoords, false, false, 1 );
-		
+
+    // 自己加的hook	
+    if(this.options.locateImgWrap){
+      this.options.locateImgWrap(this.imgWrap);
+    }
+	
 		if( this.options.displayOnInit && validCoordsSet ) {
 			this.selArea.show();
 			this.drawArea();
@@ -1082,95 +1094,73 @@ Cropper.Img = Class.create({
 
 
 /**
- *	Extend the Cropper.Img class to allow for presentation of a preview image of the resulting crop,
- *	the option for displayOnInit is always overridden to true when displaying a preview image
- * 
- *	Usage:
- *		@param obj Image element to attach to
- *		@param obj Optional options:
- *			- see Cropper.Img for base options
- *			- previewWrap obj HTML element that will be used as a container for the preview image
+ *	继承了Cropper.Img， 增加了preview
+ *  但是只有一个preview
  */
 Cropper.ImgWithPreview = Class.create(Cropper.Img, {
 	
-	/**
-	 * Implements the abstract method from Cropper.Img to initialize preview image settings.
-	 * Will only attach a preview image is the previewWrap element is defined and the minWidth
-	 * & minHeight options are set.
-	 * 
-	 * @see Croper.Img.subInitialize
-	 */
 	subInitialize: function() {
-		/**
-		* Whether or not we've attached a preview image
-		* @var boolean
-		*/
 		this.hasPreviewImg = false;
-		if( typeof(this.options.previewWrap) != 'undefined' && this.options.minWidth > 0 && this.options.minHeight > 0 ) {
-			/**
-			 * The preview image wrapper element
-			 * @var obj HTML element
-			 */
-			this.previewWrap = $( this.options.previewWrap );
-			/**
-			 * The preview image element
-			 * @var obj HTML IMG element
-			 */
-			this.previewImg = this.img.cloneNode( false );
-			// set the ID of the preview image to be unique
-			this.previewImg.id = 'imgCrop_' + this.previewImg.id;
-			
-			// set the displayOnInit option to true so we display the select area at the same time as the thumbnail
+		if( typeof(this.options.previewWrap) != 'undefined' && this.options.previewWidth > 0 && this.options.previewHeight > 0 ) {
 			this.options.displayOnInit = true;
-
 			this.hasPreviewImg = true;
-			
-			this.previewWrap.addClassName( 'imgCrop_previewWrap' );
-			
-			this.previewWrap.setStyle({ 
-				width: this.options.minWidth + 'px',
-				height: this.options.minHeight + 'px'
-			});
-			
-			this.previewWrap.appendChild( this.previewImg );
+		  this.setPreviewWrap();
 		}
 	},
 	
-	/**
-	 * Implements the abstract method from Cropper.Img to draw the preview image
-	 * 
-	 * @see Croper.Img.subDrawArea
-	 */
 	subDrawArea: function() {
 		if( this.hasPreviewImg ) {
-			// get the ratio of the select area to the src image
-			var calcWidth = this.calcW(),
-			    calcHeight = this.calcH();
-			// ratios for the dimensions of the preview image
-			var dimRatio = { 
-				x: this.imgW / calcWidth, 
-				y: this.imgH / calcHeight 
-			}; 
-			//ratios for the positions within the preview
-			var posRatio = { 
-				x: calcWidth / this.options.minWidth, 
-				y: calcHeight / this.options.minHeight 
-			};
-			
-			// setting the positions in an obj before apply styles for rendering speed increase
-			var calcPos = {
-				w: Math.ceil( this.options.minWidth * dimRatio.x ) + 'px',
-				h: Math.ceil( this.options.minHeight * dimRatio.y ) + 'px',
-				x: '-' + Math.ceil( this.areaCoords.x1 / posRatio.x )  + 'px',
-				y: '-' + Math.ceil( this.areaCoords.y1 / posRatio.y ) + 'px'
-			};
-			
-			var previewStyle = this.previewImg.style;
-			previewStyle.width = calcPos.w;
-			previewStyle.height= calcPos.h;
-			previewStyle.left = calcPos.x;
-			previewStyle.top = calcPos.y;
-		}
-	}
-	
+      // get the ratio of the select area to the src image
+      var calcWidth = this.calcW(),
+          calcHeight = this.calcH();
+      // ratios for the dimensions of the preview image
+      var dimRatio = { 
+        x: this.imgW / calcWidth, 
+        y: this.imgH / calcHeight 
+      }; 
+      //ratios for the positions within the preview
+      var posRatio = { 
+        x: calcWidth / this.options.previewWidth,
+        y: calcHeight / this.options.previewHeight,
+      };
+      
+      // setting the positions in an obj before apply styles for rendering speed increase
+      var calcPos = {
+        w: Math.ceil( this.options.previewWidth * dimRatio.x ) + 'px',
+        h: Math.ceil( this.options.previewHeight * dimRatio.y ) + 'px',
+        x: '-' + Math.ceil( this.areaCoords.x1 / posRatio.x )  + 'px',
+        y: '-' + Math.ceil( this.areaCoords.y1 / posRatio.y ) + 'px'
+      };
+      
+      var previewStyle = this.previewImg.style;
+      previewStyle.width = calcPos.w;
+      previewStyle.height= calcPos.h;
+      previewStyle.left = calcPos.x;
+      previewStyle.top = calcPos.y;
+    }
+  },
+
+  setPreviewWrap: function(){
+    this.previewWrap = $(this.options.previewWrap);
+    this.previewImg = this.img.cloneNode( false );
+    this.previewImg.id = 'imgCrop_' + this.previewImg.id;
+    this.previewWrap.addClassName( 'imgCrop_previewWrap' );
+    this.previewWrap.setStyle({ 
+      width: this.options.previewWidth+ 'px',
+      height: this.options.previewHeight + 'px'
+    });
+    this.previewWrap.appendChild( this.previewImg );
+  },
+
+  reset: function($super){
+    // reset previewWrap
+    if(this.options.previewWrap){
+      $(this.options.previewWrap).update('');
+      this.setPreviewWrap();
+    }
+
+    // reset Other
+    $super();
+  }    
+
 });

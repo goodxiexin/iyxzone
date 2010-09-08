@@ -16,7 +16,7 @@
 <% content_for :left do %>
 	<div class="avatarXl">
 		<div class="wrap">
-			<%= avatar_image @user, :size => 'clarge' %>
+			<%= avatar_image @user, :size => 'max' %>
 		</div>
 	</div>
 	<%= render :partial => "user/profiles/operations", :locals => {:user => @user, :profile => @profile, :relationship => @relationship} %>
@@ -41,15 +41,18 @@
 <div class='acMain'>
 	<div class="alphaColum acMainWrap" >
 		<div class="ac-r-m fix" id="profile-main-content">
-			<%= render :partial => "home_tab_info", :locals => {:user => @user, :profile=> @profile, :mini_blogs => @mini_blogs, :games => @games, :more_game => @more_game} %>
+			<%= render :partial => "home_tab_info", :locals => {:user => @user, :profile=> @profile, :mini_blogs => @mini_blogs, :games => @games} %>
 		</div>
 		<div class="ac-r-b"><em></em></div>
 	</div>
 	<div class="alphaColum">
 		<div class="ac-r-t"><em></em></div>
 		<div class="ac-r-m fix">
-			<div class="alphaTitle fix"><div class="wrap"><strong>留言板(共<%=@profile.comments_count%>条)</strong></div></div>
-			<div class="ac-bd">
+			<div class="alphaTitle fix"><div class="wrap">
+        <strong>留言板(共<%=@profile.comments_count%>条)</strong>
+        <%= link_to_function '', "$('profile-wall-wrap').toggle()", :class => "op i iArrUnFold"%>
+      </div></div>
+			<div class="ac-bd" id="profile-wall-wrap">
 				<%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user, :messages => @messages} %>
 			</div>
 		</div>
@@ -60,6 +63,7 @@
 <% unless @reply_to.nil? %>
   <%= onload_javascript_tag "Iyxzone.WallMessage.set('#{@reply_to.login}', #{@reply_to.id})" %>
 <% end %>
-<% javascript_tag do %>
-  Iyxzone.Profile.init(<%= @profile.id %>);
+
+<% onload_javascript_tag do %>
+  Iyxzone.Profile.Presentor.init(<%= @profile.id %>);
 <% end %>

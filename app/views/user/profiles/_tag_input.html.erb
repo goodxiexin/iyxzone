@@ -1,0 +1,17 @@
+<div class='impress-add s_clear space'> 
+  <% all_tags = profile.tags.limit(16).map(&:name) %>
+  <% if all_tags.size == 16 %>
+    <% tags = all_tags %>
+  <% else %>
+    <% tags = all_tags.concat((profile.user.gender == 'female') ? Tag::DEFAULLT_FEMALE_TAGS : Tag::DEFAULT_MALE_TAGS)[0..15] %>
+  <% end %>
+  <% tags.each do |name| %>
+    <%= link_to_function "<span>#{name}</span>", "Iyxzone.Profile.Tag.addTag(#{profile.id}, '#{name}');", :class => "impress-btn-#{rand(4)}" %>
+  <% end %>
+</div>
+<% form_for :tag, :html => {:onsubmit => "Iyxzone.Profile.Tag.submitForm(#{profile.id}, 'tag_name'); return false"} do |f| %>
+  <p class='space'>都不贴切？自己想个</p>
+  <div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
+  <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
+<% end %>
+<%= javascript_tag "Iyxzone.Profile.Tag.init('#{form_authenticity_token}');" %>

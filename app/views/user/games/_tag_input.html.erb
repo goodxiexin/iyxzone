@@ -1,0 +1,12 @@
+<div class='impress-add s_clear space'> 
+  <% all_tags = game.tags.limit(16).map(&:name) %>
+  <% all_tags.each do |name| %>
+    <%= link_to_function "<span>#{name}</span>", "Iyxzone.Game.Tag.addTag(#{game.id}, '#{name}');", :class => "impress-btn-#{rand(4)}" %>
+  <% end %>
+</div>
+<% form_for :tag, :html => {:onsubmit => "Iyxzone.Game.Tag.submitForm(#{game.id}, 'tag_name'); return false"} do |f| %>
+  <p class='space'>都不贴切？自己想个</p>
+  <div class='textfield04 left space'><%= text_field_tag 'tag_name', ''%></div>
+  <div class="fldbtn left space"><span class="button04"><span><button id='tag_submit' type="submit">评价</button></span></span></div>
+<% end %>
+<%= javascript_tag "Iyxzone.Game.Tag.init('#{form_authenticity_token}');" %>

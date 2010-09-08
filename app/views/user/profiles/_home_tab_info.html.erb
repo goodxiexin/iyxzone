@@ -3,8 +3,8 @@
     <ul class="fix" id="game-list">
 			<%= render :partial => 'user/profiles/games_display', :locals => {:user => user, :profile=> profile, :games => games} %>
 		</ul>
-	<% if more_game %>
-		<div class="moreGame" id='more-game-button'><%= link_to_function "查看更多游戏", "Iyxzone.Profile.moreGames(#{profile.id})"%></div>
+	<% if games.count < user.games_count %>
+		<div class="moreGame" id='more-game-button'><%= link_to_function "查看更多游戏", "Iyxzone.Profile.Presentor.moreGames(#{profile.id})"%></div>
 	<% end %>
 	</div>
 <%= render :partial => 'user/profiles/recent_mini_blogs', :locals => {:user => user, :mini_blogs => mini_blogs} %>

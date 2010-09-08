@@ -86,3 +86,8 @@ end
 every 7.days do
   rake "rss:import"
 end
+
+# 关于 email domain
+every 3.days do
+  rake "emails:validate_domains"
+end

@@ -317,6 +317,8 @@ Iyxzone.Photo.Tagger = Class.create({
         y2: min
       }
     });
+
+    // 输入框的初始位置
     this.onDragging({x1: this.photo.getWidth() - min, y1: 0}, {width: min, height: min});
     
     // 开始圈人的时候就不能自动看到框框了

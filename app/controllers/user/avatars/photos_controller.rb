@@ -9,7 +9,8 @@ class User::Avatars::PhotosController < UserBaseController
   end
 
   def new
-    render :action => 'new', :layout => false
+    @photo = @album.photos.find(params[:photo_id]) if params[:photo_id]
+    render :action => 'new'
   end
 
   def edit
@@ -21,24 +22,11 @@ class User::Avatars::PhotosController < UserBaseController
 
     if @photo.save
 			responds_to_parent do
-        render :update do |page|
-          page << "Iyxzone.Facebox.close()"
-          if params[:at] == 'album'
-            page.redirect_to avatar_album_url(@album)
-          elsif params[:at] == 'profile'
-						@album.reload
-            page.replace_html 'avatar', album_cover(@album, :size => :clarge)
-          elsif params[:at] == 'first_time'
-						@album.reload
-            page.replace_html 'the_avatar_image', album_cover_image(@album, :size => :clarge)
-          end
-        end
+        render_js_code "Iyxzone.Avatar.Builder.imageUploaded(#{@photo.id}, '#{@photo.public_filename}', '#{@photo.filename}', #{@photo.width}, #{@photo.height})"
       end
     else
       responds_to_parent do
-        render :update do |page|
-          page << "$('error').innerHTML = 'There was an error uploading this icon"
-        end
+        render_js_error
       end
     end
   end
@@ -51,6 +39,15 @@ class User::Avatars::PhotosController < UserBaseController
     end
   end
 
+  def crop
+    if @photo.crop(params[:large], params[:small])
+      @album.set_cover(@photo)
+      render :json => {:code => 1}
+    else
+      render :json => {:code => 0}
+    end
+  end
+  
   def destroy
     if @photo.destroy
       render :json => {:code => 1}
@@ -69,7 +66,7 @@ protected
       @user = @album.poster
       @relationship = @user.relationship_with current_user
       require_adequate_privilege @album, @relationship
-    elsif ['edit', 'update', 'destroy', 'update_notation'].include? params[:action]
+    elsif ['crop', 'edit', 'update', 'destroy', 'update_notation'].include? params[:action]
       @album = current_user.avatar_album
       @photo = @album.photos.find(params[:id])
       require_verified @photo

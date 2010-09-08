@@ -30,11 +30,6 @@ class AvatarObserver < ActiveRecord::Observer
     end
 
     avatar.clear_cover_action
-
-    # issue avatar feeds if necessary 
-    if avatar.poster.application_setting.emit_photo_feed?
-		  avatar.deliver_feeds
-    end
 	end
 
   def before_update avatar

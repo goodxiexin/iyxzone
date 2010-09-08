@@ -16,7 +16,7 @@ class User::FeedDeliveriesController < UserBaseController
         
     if @originator.is_a? Album
       @photos = @originator.photos.nonblocked.match(:id => @feed_item.data[:ids])
-      render :json => @photos.map{|p| {:id => p.id, :url => p.public_filename(:csmall), :type => p.type.underscore}}
+      render :json => @photos.map{|p| {:id => p.id, :url => p.public_filename(:cmedium), :type => p.type.underscore}}
     elsif @originator.is_a? Blog
     end 
   end

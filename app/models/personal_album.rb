@@ -16,7 +16,7 @@ class PersonalAlbum < Album
     poster = album.poster
     fans = poster.is_idol ? poster.fans.all(:select => "users.id") : []
     friends = poster.friends.all(:select => "users.id, users.application_setting").find_all {|f| f.application_setting.recv_photo_feed?}
-    (fans + friends).uniq
+    ([poster.profile] + fans + friends).uniq
   }
 
   validates_size_of :title, :within => 1..100

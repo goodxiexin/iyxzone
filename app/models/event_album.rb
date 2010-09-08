@@ -16,7 +16,7 @@ class EventAlbum < Album
     fans = poster.is_idol ? poster.fans.all(:select => "users.id") : []
     friends = poster.friends.all(:select => "users.id, users.application_setting").find_all {|f| f.application_setting.recv_photo_feed?}
     participants = event.participants.all(:select => "users.id, users.application_setting").find_all {|p| p != poster and p.application_setting.recv_photo_feed?} 
-    (fans + friends + participants).uniq
+    ([poster.profile] + fans + friends + participants).uniq
   }
 
 end

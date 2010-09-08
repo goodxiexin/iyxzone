@@ -1,18 +1,19 @@
 Iyxzone.Profile = {
 
-  version: '1.8',
+  version: '1.9',
 
   author: ['高侠鸿'],
 	
-  GameDisplay: {},
-  
   Editor: {},
 
-  Feeder: {}
+  Feeder: {},
+
+  Tag: {},
+
+  Presentor: {}
 };
 
-// follow/unfollow idol
-Object.extend(Iyxzone.Profile, {
+Object.extend(Iyxzone.Profile.Presentor, {
 	
 	curType: null,
 
@@ -25,6 +26,8 @@ Object.extend(Iyxzone.Profile, {
 	gameIdx: 1,
 
 	gameFetchSize: 10,
+
+  GameDisplay: {},
 
   init: function(profileID){
     this.cache.set("home", { loading: false, html: null});
@@ -40,9 +43,9 @@ Object.extend(Iyxzone.Profile, {
   },
 
   moreGames: function(profileID){
-
-    new Ajax.Request('/profiles/' + profileID + '/more_games?idx=' + this.gameIdx, {
+    new Ajax.Request(Iyxzone.URL.moreGamesInProfile(profileID), {
       method: 'get',
+      parameters: {"idx": this.gameIdx},
       onLoading: function(){
         Iyxzone.changeCursor('wait');
       },
@@ -75,15 +78,11 @@ Object.extend(Iyxzone.Profile, {
   },
 
 	changeTab: function(type){
-		// when did not change type
     if(this.curType == type)
       return;
 
-
-    // save current tab info into cache
     this.cache.set(this.curType, {html: $('profile-main-content').innerHTML, loading: this.curLoading});
    
-    // restore
     var info = this.cache.get(type);
     this.curLoading = info.loading;
     this.curType = type;
@@ -95,11 +94,10 @@ Object.extend(Iyxzone.Profile, {
       return;
     }
 
-		// when still loading
     if(this.curLoading)
       return;
 
-    new Ajax.Request('/profiles/'+ this.profileID+'/change_tab', {
+    new Ajax.Request(Iyxzone.URL.changeTabInProfile(profileID), {
 			method: 'get',
 			parameters: {category: type},
       onLoading: function(){
@@ -117,7 +115,12 @@ Object.extend(Iyxzone.Profile, {
 				}
 			}.bind(this)
 		});
-	},
+	}
+
+});
+
+// follow, unfollow idol
+Object.extend(Iyxzone.Profile, {
 
   followIdol: function(idolID, idolName, profileID, btn){
     new Ajax.Request(Iyxzone.URL.followIdol(idolID), {
@@ -173,9 +176,7 @@ Object.extend(Iyxzone.Profile, {
 
 });
 
-Object.extend(Iyxzone.Profile.GameDisplay, {
-
-  gameDisplay: null,
+Object.extend(Iyxzone.Profile.Presentor.GameDisplay, {
 
 	cache: new Hash(),
 
@@ -183,74 +184,179 @@ Object.extend(Iyxzone.Profile.GameDisplay, {
 
 	curGame: null,
 
-	init: function(){
-		this.cache = new Hash();
-    this.curLoading = false;
-		if(this.gameDisplay == null){
-			this.gameDisplay = new Element('div', {'class':'gameIntroPop', 'id':'game-display-panel'});
-			this.gameDisplay.setStyle({overflow: 'hidden', display:'none'});
-		}
-    document.body.appendChild(this.gameDisplay);
-	},
-	
-  loading: function(html){
-    $('game-display-panel').innerHTML = '<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>';
+  startLoading: function(gameID, event){
+    var game = $('game-display-' + gameID)
+    var gamePic = game.down('img');
+    var img = new Element('div', {'id': 'gl-' + gameID}).update('<img src="/images/loading.gif"/>');
+    document.body.appendChild(img);
+
+    gamePic.observe('mousemove', function(event){
+      img.setStyle({
+        'position': 'absolute',
+        'left': (event.pointerX() + 10) + 'px',
+        'top': (event.pointerY() + 5) + 'px'
+      });
+    }.bind(this));
+
+    gamePic.observe('mouseout', function(event){
+      this.stopLoading(gameID, event);
+    }.bind(this));
   },
 
-  setContent: function(html){
-    $('game-display-panel').update(html);
+  stopLoading: function(gameID, event){
+    var cursor = $('gl-' + gameID);
+    var game = $('game-display-' + gameID);
+
+    if(cursor){
+      cursor.remove();
+    }
+
+    if(game){
+      gamePic = game.down('img');
+      gamePic.stopObserving('mousemove');
+    }     
   },
 
-  locate: function(gameID){
-    this.gameDisplay.setStyle({
-      position: 'absolute',
-      top: ($('game-display-' + gameID).cumulativeOffset().top + 50)  + 'px',
-      left: ($('game-display-' + gameID).cumulativeOffset().left - 160)  + 'px'
+  getGameDisplayHTML: function(){
+    if($('game-display-panel')){
+      var tmp = new Element('div');
+      tmp.appendChild($('game-display-panel'));
+      return tmp.innerHTML;
+    }else{
+      return null;
+    }
+  },
+
+  setGameDisplayHTML: function(html, gameID){
+    var tmp = new Element('div').update(html);
+    var el = tmp.childElements()[0];
+    document.body.appendChild(el);
+    el.setStyle({
+      'position': 'absolute',
+      'left': ($('game-display-' + gameID).cumulativeOffset().left - 100) + 'px',
+      'top': ($('game-display-' + gameID).cumulativeOffset().top + 50) + 'px'
     });
   },
 
-	display: function(profileID, gameID){
+  saveCurrentContext: function(){
+    this.cache.set(this.curGame, {'loading': this.curLoading, 'html': this.getGameDisplayHTML()});
+    this.curLoading = false;
+    this.curGame = null;
+  },
 
-    var info = this.cache.get(gameID);
-		this.curGame = gameID
-
-		if(info){
-      this.locate(gameID);
-      this.setContent(info.html);
-			this.gameDisplay.show();
-			$('game-display-panel').observe('mouseleave', this.disappear);
-			return;
+  mouseOverGamePic: function(gameID, profileID, event){
+    if(this.curGame == gameID){
+      return;
+    }
+    if(this.curGame){
+      this.saveCurrentContext();
     }
 
-		if(this.curLoading)
-      return;
+    this.curGame = gameID;
+    var info = this.cache.get(gameID);
+    if(info){
+      this.curLoading = info.loading;
+      var html = info.html;
+      if(html){
+        this.setGameDisplayHTML(html, gameID);
+        return;
+      }
+    }
 
-		new Ajax.Request('/profiles/' + profileID + '/game_display',{
+    if(this.curLoading){
+      this.startLoading(gameID, event);
+      return;
+    }
+
+		new Ajax.Request(Iyxzone.URL.displayGameInProfile(profileID), {
       method: 'get',
-			parameters: {game: gameID},
+			parameters: {'game_id': gameID},
       onLoading: function(){
 				this.curLoading = true;
-        this.loading();
-        this.locate(gameID);
-        this.gameDisplay.show();
+        this.startLoading(gameID, event);
+      }.bind(this),
+      onComplete: function(){
+        this.stopLoading(gameID);
       }.bind(this),
       onSuccess: function(transport){
-				var newGameInfo = new Element('div');
-				newGameInfo.update(transport.responseText);
-				if(this.curGame == gameID){
-					this.setContent(newGameInfo.innerHTML);
-					$('game-display-panel').observe('mouseleave', this.disappear);
+        var html = transport.responseText;
+        if(this.curGame == gameID){
+          this.setGameDisplayHTML(html, gameID);
+          this.curLoading = false;
 				}
-        this.cache.set(gameID, {html: newGameInfo.innerHTML});
-				this.curLoading = false;
+        this.cache.set(gameID, {'loading': false, 'html': html});
       }.bind(this)
 		});
 	},
 
-	disappear: function(event){
-		$('game-display-panel').stopObserving();
-		$('game-display-panel').hide();
-	}
+  mouseOutGamePic: function(gameID, event){
+    var to = event.relatedTarget || event.fromElement;
+    if($('game-display-panel')){
+      if($(to) && $(to) != $('game-display-panel') && !$(to).descendantOf('game-display-panel')){
+        this.saveCurrentContext();
+      }
+    }else{
+      this.saveCurrentContext();
+    }
+  },
+
+  mouseOverGamePanel: function(gameID, event){
+    // nothing to do
+  },
+
+  mouseOutGamePanel: function(gameID, event){
+    var to = event.relatedTarget || event.fromElement;
+    // prevent event bubble
+    if($(to) && $(to) != $('game-display-panel') && !$(to).descendantOf('game-display-panel'))
+      this.saveCurrentContext();
+  },
+
+  follow: function(name, gid){
+    new Ajax.Request(Iyxzone.URL.createMiniTopicAttention(), {
+      method: 'post',
+      parameters: {'name': name},
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      }.bind(this),
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          if($('follow_game_' + gid))
+            $('follow_game_' + gid).innerHTML = '<a onclick="Iyxzone.Profile.Presentor.GameDisplay.unfollow(' + json.id + ', \'' + name + '\', ' + gid + '); return false;" href="#"><span class="i iNoFollow"></span>取消关注</a>';
+          // reset cache
+          this.cache.set(gid, this.getGameDisplayHTML());
+        }else{
+          error('发生错误');
+        }
+      }.bind(this)
+    });
+
+  },
+
+  unfollow: function(id, name, gid){
+    new Ajax.Request(Iyxzone.URL.deleteMiniTopicAttention(gid), {
+      method: 'delete',
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          if($('follow_game_' + gid))
+            $('follow_game_' + gid).update('<a onclick="Iyxzone.Profile.Presentor.GameDisplay.follow(\'' + name + '\', ' + gid + '); return false;" href="#"><span class="i iFollow"></span>关注</a>');
+          this.cache.set(gid, this.getGameDisplayHTML());
+        }else{
+          error('发生错误');
+        }
+      }.bind(this)
+    });
+  }
 
 });
 
@@ -518,7 +624,7 @@ Object.extend(Iyxzone.Profile.Editor, {
     if(this.editCharactersHTML){
       frame.update(this.editCharactersHTML);
     }else{
-      new Ajax.Request('/profiles/' + profileID + '/edit?type=3', {
+      new Ajax.Request(Iyxzone.URL.editProfile(profileID, {'type': 3}), {
         method: 'get',
         onLoading: function(){
           this.loading(frame, '游戏角色信息');
@@ -792,36 +898,84 @@ Object.extend(Iyxzone.Profile.Feeder, {
 
 Object.extend(Iyxzone.Profile.Tag, {
 
-  loading: function(div){
-    div.innerHTML = "<div style='textAligin: center'><img src='/images/loading.gif'/></div>";
+  init: function(token){
+    this.token = token;
   },
 
-	deleteTag: function(profileID, tagID, token){
-    new Ajax.Request('/profiles/' + profileID + '/tags/' + tagID, {
-      method: 'delete',
-			parameters: 'authenticity_token=' + encodeURIComponent(token),
-			onLoading: function(){
-				this.loading($('tag_'+tagID));
-			}.bind(this)
-    });  
-	},
+  showTagCloud: function(){
+    $('tag_cloud').show();
+    $('tag_input').hide();
+  },
 
-	addTag: function(profileID){
-		new Ajax.Request('/profiles/' + profileID + '/tags',{
-			method: 'get',
+	showTagInput: function(){
+	  $('tag_cloud').hide();
+    $('tag_input').show();
+  },
+
+  isAdding: false,
+
+  addTag: function(profileID, name){
+    if(this.isAdding){
+      return;
+    }else{
+      this.isAdding = true;
+    }
+
+    new Ajax.Request(Iyxzone.URL.createTag('Profile', profileID), {
+      method: 'post',
+      parameters: {'tag_name': name, 'authenticity_token': this.token},
       onLoading: function(){
-        $('tag_cloud').update("<div class='ajaxLoading'><img src='/images/ajax-loader.gif' /></div>");
+        Iyxzone.disableButton($('tag_submit'), '发送');
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          this.isAdding = false;
+          this.showTagCloud();
+          $('add_tag_link').remove();
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试"); 
+          Iyxzone.enableButton($('tag_submit'), '评价');
+        }
+      }.bind(this)
+    }); 
+  },
+
+  submitForm: function(profileID, field){
+    this.addTag(profileID, $(field).value);
+  },
+
+  confirmDeletingTag: function(profileID, tagID, link){
+    Iyxzone.Facebox.confirmWithCallback("您真的要删除这个印象", null, null, function(){
+      this.deleteTag(profileID, tagID, link);
+    }.bind(this));
+  },
+
+  deleteTag: function(profileID, tagID, link){
+    new Ajax.Request(Iyxzone.URL.deleteTag(tagID, 'Profile', profileID), {
+      method: 'delete',
+      parameters: 'authenticity_token=' + encodeURIComponent(this.token),
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        $(link).writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
       }.bind(this),
-			onSuccess: function(transport){
-				$('tag_cloud').update(transport.responseText);
-			}.bind(this)
-		});
-	}
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('tag_' + tagID).remove();
+        }else{
+          error('发生错误');
+          $(link).writeAttribute('onclick', 'Iyxzone.Profile.Tag.confirmDeletingTag(' + profileID + ', ' + tagID + ', this);');
+        }
+      }.bind(this)
+    });  
+  }
 
 }); 
-
-document.observe('dom:loaded', function(){
-
-  Iyxzone.Profile.GameDisplay.init();
-
-});

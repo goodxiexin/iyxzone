@@ -18,7 +18,7 @@
                 	<div class="avatar" id='the_avatar_image'><%= avatar_image current_user, :size => :clarge %></div>
                     <div class="con">
                         <p>你没必要上传一张生活照，在这里，你不需要证明自己是地球人，嘿嘿。</p>
-                        <div class="op"><%= facebox_link "<img src=\"images/skin/upload-img.png\" />", new_avatar_url(:at => 'first_time'), :width => 400 %></div>
+                        <div class="op"><%= link_to "<img src=\"images/skin/upload-img.png\" />", new_avatar_url %></div>
                     </div>
                 </div>
                </div>

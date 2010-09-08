@@ -11,11 +11,40 @@ Iyxzone.Avatar = {
 // edit, update photo, set cover
 Object.extend(Iyxzone.Avatar, {
 
+  set: function(photoID, albumID, link){
+    new Ajax.Request(Iyxzone.URL.updateAvatar(photoID), {
+      method: 'put',
+      parameters: {'photo[is_cover]': 1},
+      onLoading: function(){
+        $(link).writeAttribute('onclick', '');
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          window.location.href = Iyxzone.URL.showAvatarAlbum(albumID);
+        }else{
+          error("发生错误");
+          $(link).writeAttribute('onclick', "Iyxzone.Avatar.confirmSetting(" + photoID + ", " + albumID + ", this);");
+        }
+      }.bind(this)
+    });
+  },
+
+  confirmSetting: function(photoID, albumID, link){
+    Iyxzone.Facebox.confirmWithCallback("你确定要将这张图片设置为头像吗?", null, null, function(){
+      this.set(photoID, albumID, link);
+    }.bind(this));
+  },
+
   updatePhoto: function(at, btn, form, photoID, albumID){
     // check description
     var desc = $('photo_notation').value;
-    if(desc.value != '' && desc.length > this.wrapHeight){
-      $('errors').innerHTML = "照片描述最长this.wrapHeight个字";
+    if(desc.value != '' && desc.length > 500){
+      $('errors').innerHTML = "照片描述最长500个字";
       return;
     }
     
@@ -69,33 +98,13 @@ Object.extend(Iyxzone.Avatar.Builder, {
 
   cropper: null,
 
-  smallPreviewOptions: null, // cropper options for small preview
+  ratio: 50, // percent img.width as area size
 
-  smallPreviewSize: null, // size of small preview
+  largePreviewOptions: null, // {x, y, width, height}
 
-  largePreviewOptions: null, // cropper options for large preview
-
-  largePreviewSize: null, // size of large preview
+  smallPreviewOptions: null, // {x, y, width, height}
 
   curMode: null, // 'large' or 'small'
-
-  origWidth: null, // origin width of img
-  
-  origHeight: null, // origin height of img
-
-  width: null, // current width of img
-
-  height: null, // current height of img
-
-  ratio: null, // ratio of img
-
-  src: null, // img src
-
-  name: null, // img filename
-
-  wrapWidth: null, // panel width
-
-  wrapHeight: null, // panel height
 
   editLarge: function(){
     if(this.curMode == 'large')
@@ -122,12 +131,14 @@ Object.extend(Iyxzone.Avatar.Builder, {
   imageSelected: function(){
     $('avatar_form').submit();
 
-    $('desc').hide();
+    var panel = $('space').up();
+    $('space').hide();
+    $('current-avatar').hide();
 
     // build avatar edit panel
     var div = new Element('div', {'class': "box04 avtEditor", 'id': 'editor'});
     div.update("<div class='ajaxLoading'><img src='/images/ajax-loader.gif'/></div>");
-    $('panel').appendChild(div);
+    panel.appendChild(div);
   
     Iyxzone.changeCursor('wait');
   },
@@ -150,7 +161,7 @@ Object.extend(Iyxzone.Avatar.Builder, {
     html += '</div>';
     html += '<div class="avtL">';
     html += '<div class="bd">';
-    html += '<a href="javascript:void(0)"><span class="i iArrLeft"></span><div id="largePreview"></div></a>';  
+    html += '<a href="javascript:void(0)"><span class="i iArrLeft"></span><div id="largePreview" class="imgCrop_previewWrap" style="width: 230px; height: 230px;"><img style="width: ' + this.width + 'px; height: ' + this.height + 'px; left: -100px; top: -100px;" src="' + this.src + '" width="' + this.width + '" height="' + this.height + '"></div></a>';
     html += '</div>';
     html += '<div class="ft"><span>大头像预览</span><a href="javascript:void(0)" class="op" onclick="Iyxzone.Avatar.Builder.editLarge();">编辑</a></div>';
     html += '</div>';
@@ -165,95 +176,38 @@ Object.extend(Iyxzone.Avatar.Builder, {
     $('editor').update(html);        
   },
 
-  calcWH: function(){
-    if(this.origWidth <= this.wrapWidth && this.origHeight <= this.wrapHeight){
-      this.ratio = 1;
-      this.width = this.origWidth;
-      this.height = this.origHeight;
-    }else if(this.origWidth <= this.wrapWidth && this.origHeight > this.wrapHeight){
-      this.ratio = this.origHeight / this.wrapHeight;
-      this.height = this.wrapHeight;
-      this.width = this.origWidth / this.ratio;
-    }else if(this.origHeight > this.wrapWidth && this.origHeight <= this.wrapHeight){
-      this.ratio = this.origWidth / this.wrapWidth;
-      this.width = this.wrapWidth;
-      this.height = this.origHeight / this.ratio;
-    }else{
-      var ratio1 = this.origWidth / this.wrapWidth;
-      var ratio2 = this.origHeight / this.wrapHeight;
-      if(ratio2 > ratio1){
-        this.ratio = ratio2;
-      }else{
-        this.ratio = ratio1;
-      }
-      this.width = this.origWidth / this.ratio;
-      this.height = this.origHeight / this.ratio;
-    }
-    alert(this.wrapWidth + " & " + this.width);
-  },
-
   imageUploaded: function(id, src, name, width, height){
-    var comp, size, x1, y1, x2, y2;
-
     Iyxzone.changeCursor('default');
 
     this.avatarID = id;
     this.src = src;
     this.name = name;
-    this.origWidth = width;
-    this.origHeight = height;
-    
-    this.calcWH();
+    this.width = width;
+    this.height = height;
 
-    this.buildEditPanel();
+    var size = width * this.ratio / 100; // size of cropper 
+    var left = (width - size) / 2;
+    var top = (height - size) / 2;
 
-    comp = (this.width < this.height) ? this.width : this.height;
-    size = (comp < this.smallPreviewSize) ? comp : this.smallPreviewSize;
-    x1 = (this.width - size) / 2;
-    y1 = (this.height - size) / 2;
-    x2 = (this.width + size) / 2;
-    y2 = (this.height + size) /2; 
+    this.buildEditPanel(src, name, width, height);
 
     this.smallPreviewOptions = {
       'previewWrap': 'smallPreview', 
-      'previewWidth': this.smallPreviewSize,
-      'previewHeight': this.smallPreviewSize,
-      'minWidth': size,
-      'minHeight': size,
-      'ratioDim': {'x': size, 'y': size},
-      'onloadCoords': {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2},
-      'locateImgWrap': function(imgWrap){
-        imgWrap.setStyle({'left': ((this.wrapWidth-this.width)/2) + 'px', 'top': ((this.wrapHeight-this.height)/2) + 'px'});
-      }.bind(this)
+      'minWidth': 50, 
+      'minHeight': 50,
+      'onloadCoords': {'x1': 100, 'y1': 100, 'x2': 150, 'y2': 150},
+      'ratioDim': {'x': 50, 'y': 50}
     };
-   
-    size = (comp < this.largePreviewSize) ? comp : this.largePreviewSize;
-    x1 = (this.width - size) / 2;
-    y1 = (this.height - size) / 2;
-    x2 = (this.width + size) / 2;
-    y2 = (this.height + size) /2; 
-
     this.largePreviewOptions = {
       'previewWrap': 'largePreview',
-      'previewWidth': this.largePreviewSize,
-      'previewHeight': this.largePreviewSize,
-      'minWidth': size,
-      'minHeight': size,
-      'ratioDim': {'x': size, 'y': size}, 
-      'onloadCoords': {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2},
-      'locateImgWrap': function(imgWrap){
-        imgWrap.setStyle({'left': ((this.wrapWidth-this.width)/2) + 'px', 'top': ((this.wrapHeight-this.height)/2) + 'px'});
-      }.bind(this)
+      'minWidth': 230, 
+      'minHeight': 230, 
+      'onloadCoords': {'x1': 100, 'y1': 100, 'x2': 330, 'y2': 330},
+      'ratioDim': {'x': 230, 'y': 230}
     };
     
     this.cropper = new Cropper.ImgWithPreview('avatar-img', this.smallPreviewOptions);
     this.curMode = 'small';
-
-    // set large preview manually
-    // 这时候的x1, y1, x2, y2是large preview的
-    $('largePreview').addClassName('imgCrop_previewWrap');
-    $('largePreview').setStyle({'width': this.largePreviewSize, 'height': this.largePreviewSize});
-    $('largePreview').update('<img src="' + this.src + '" width="' + (this.width/size)*this.largePreviewSize + '" height="' + (this.height/size)*this.largePreviewSize + '" style="left:-' + (this.largePreviewSize/size)*x1 + 'px;top:-' + (this.largePreviewSize/size)*y1 + 'px;" />');
   },
 
   resetCropper: function(options){
@@ -272,25 +226,25 @@ Object.extend(Iyxzone.Avatar.Builder, {
     smallCoords = (this.curMode == 'small') ? this.cropper.areaCoords : this.smallPreviewOptions.onloadCoords;
     largeCoords = (this.curMode == 'large') ? this.cropper.areaCoords : this.largePreviewOptions.onloadCoords;
 
-    sRatio.x = (smallCoords.x2 - smallCoords.x1) / this.smallPreviewSize;
-    sRatio.y = (smallCoords.y2 - smallCoords.y1) / this.smallPreviewSize;
-    lRatio.x = (largeCoords.x2 - largeCoords.x1) / this.largePreviewSize;
-    lRatio.y = (largeCoords.y2 - largeCoords.y1) / this.largePreviewSize;
+    sRatio.x = (smallCoords.x2 - smallCoords.x1) / 50;
+    sRatio.y = (smallCoords.y2 - smallCoords.y1) / 50;
+    lRatio.x = (largeCoords.x2 - largeCoords.x1) / 230;
+    lRatio.y = (largeCoords.y2 - largeCoords.y1) / 230;
 
     html += '<div class="tips">系统为你生成两种尺寸的头像</div>';
     html += '<div class="avtWrap fix">';
     html += '<div class="avtShowM">';
     html += '你的小头像<br/>';
-    html += '<div style="width:' + this.smallPreviewSize + 'px;height:' + this.smallPreviewSize + 'px;"><img alt="" src="' + this.src + '" style="width:' + (this.width/sRatio.x) + 'px;height:' + (this.height/sRatio.y) + 'px;left:-' + (smallCoords.x1/sRatio.x) + 'px;top:-' + (smallCoords.y1/sRatio.y) + 'px"   /></div>';
-    html += '</div>';
-    html += '<div class="avtShowL">';
+    html += '<div style="width:50px;height:50px;"><img alt="" src="' + this.src + '" style="width:' + (this.width/sRatio.x) + 'px;height:' + (this.height/sRatio.y) + 'px;left:-' + (smallCoords.x1/sRatio.x) + 'px;top:-' + (smallCoords.y1/sRatio.y) + 'px"   /></div>';
+  html += '</div>';
+  html += '<div class="avtShowL">';
     html += '你的大头像将出现在个人主页<br/>';
-    html += '<div style="width:' + this.largePreviewSize + 'px;height:' + this.largePreviewSize + 'px;"><img alt="" src="' + this.src + '" style="width:' + (this.width/lRatio.x) + 'px;height:' + (this.height/lRatio.y) + 'px;left:-' + (largeCoords.x1/lRatio.x) + 'px;top:-' + (largeCoords.y1/lRatio.y) + 'px"   /></div>';
+    html += '<div style="width:230px;height:230px;"><img alt="" src="' + this.src + '" style="width:' + (this.width/lRatio.x) + 'px;height:' + (this.height/lRatio.y) + 'px;left:-' + (largeCoords.x1/lRatio.x) + 'px;top:-' + (largeCoords.y1/lRatio.y) + 'px"   /></div>';
     html += '</div>';
     html += '</div>';
     html += '<div class="submit fix">';
     html += '<span class="button04 w-l"><span>';
-    html += '<button onclick="Iyxzone.Avatar.Builder.saveStep2(this);">保存头像</button>';
+    html += '<button onclick="Iyxzone.Avatar.Builder.saveStep2();">保存头像</button>';
     html += '</span></span>';
     html += '<span class="button04 button04-gray"><span>';
     html += '<button onclick="Iyxzone.Avatar.Builder.backToEdit();">返回编辑</button>';
@@ -305,9 +259,10 @@ Object.extend(Iyxzone.Avatar.Builder, {
     $('editor').hide();
 
     if($('save-avatar') == null){
+      var panel = $('space').up();
       var div = new Element('div', {'id': 'save-avatar', 'class': 'box04 avtResult'});
       div.update('<div class="ajaxLoading"><img src="/images/ajax-loader.gif"/></div>');
-      $('panel').appendChild(div);
+      panel.appendChild(div);
     }
 
     this.buildSavePanel();
@@ -318,30 +273,17 @@ Object.extend(Iyxzone.Avatar.Builder, {
     var smallCoords = null;
     var largeCoords = null;
     var params = "";
-    var editBtn = null;
-    var x1, y1, x2, y2;
 
     smallCoords = (this.curMode == 'small') ? this.cropper.areaCoords : this.smallPreviewOptions.onloadCoords;
     largeCoords = (this.curMode == 'large') ? this.cropper.areaCoords : this.largePreviewOptions.onloadCoords;
-    x1 = smallCoords.x1 * this.ratio;
-    x2 = smallCoords.x2 * this.ratio;
-    y1 = smallCoords.y1 * this.ratio;
-    y2 = smallCoords.y2 * this.ratio;
-    params += "small[x1]=" + x1 + "&small[x2]=" + x2 + "&small[y1]=" + y1 + "&small[y2]=" + y2;
-    x1 = largeCoords.x1 * this.ratio;
-    x2 = largeCoords.x2 * this.ratio;
-    y1 = largeCoords.y1 * this.ratio;
-    y2 = largeCoords.y2 * this.ratio;
-    params += "&large[x1]=" + x1 + "&large[x2]=" + x2 + "&large[y1]=" + y1 + "&large[y2]=" + y2;
-    params += "&authenticity_token=" + encodeURIComponent(this.token);
-    editBtn = $(btn).up().up().next().down('button');
+    params += "small[x1]=" + smallCoords.x1 + "&small[x2]=" + smallCoords.x2 + "&small[y1]=" + smallCoords.y1 + "&small[y2]=" + smallCoords.y2;
+    params += "&large[x1]=" + largeCoords.x1 + "&large[x2]=" + largeCoords.x2 + "&large[y1]=" + largeCoords.y1 + "&large[y2]=" + largeCoords.y2;
 
     new Ajax.Request(Iyxzone.URL.cropAvatar(this.avatarID), {
       method: 'put',
-      parameters: params,
+      parameters: {'small': smallCoords, 'large': largeCoords},
       onLoading: function(){
-        Iyxzone.disableButton(btn, '正在保存.');
-        Iyxzone.disableButton(editBtn, '返回编辑');        
+        
         Iyxzone.changeCursor('wait'); 
       }.bind(this),
       onComplete: function(){
@@ -350,11 +292,7 @@ Object.extend(Iyxzone.Avatar.Builder, {
       onSuccess: function(transport){
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
-          window.location.href = this.successURL;
         }else if(json.code == 0){
-          error("保存的时候发生错误");
-          Iyxzone.enableButton(btn, '正在保存.');
-          Iyxzone.enableButton(editBtn, '返回编辑');        
         }
       }.bind(this)
     });
@@ -363,15 +301,6 @@ Object.extend(Iyxzone.Avatar.Builder, {
   backToEdit: function(){
     $('save-avatar').hide();
     $('editor').show();
-  },
-
-  init: function(token, wrapWidth, wrapHeight, smallPreviewSize, largePreviewSize, successURL){
-    this.token = token;
-    this.wrapWidth = wrapWidth;
-    this.wrapHeight = wrapHeight;
-    this.smallPreviewSize = smallPreviewSize;
-    this.largePreviewSize = largePreviewSize;
-    this.successURL = successURL;
   }
 
 });

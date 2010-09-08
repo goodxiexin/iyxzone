@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>照片_编辑头像</title>
+<link href="stylesheets/common.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="stylesheets/home.css" rel="stylesheet" type="text/css" media="screen" />
+
+</head>
+
+<body>
+
+<div id="header">
+	
+    <!--navbar-->
+	<div id="navbar">
+    	<div id="navwrap">
+        	<div id="navmid">
+            	
+                <div id="navmain">
+                	
+                    <a href="#"><span id="navhome">首页</span></a>
+                    <a href="#"><span id="navprofile">个人主页</span></a>
+                    <a class="current" href="#"><span id="navfriend">好友</span></a>
+                    <a href="#"><span id="navinbox">站内信</span></a>
+                    <a href="#"><span id="navnotice">通知</span></a>
+                    
+                </div>
+                
+                <div id="navsearch">
+                
+                	<form action="">
+                    	
+                        <div class="textfield"><input value="搜索游戏或游戏达人" /></div><input type="submit" class="gobtn" value="" />
+                        
+                    </form>
+                
+                </div>
+                
+                <div id="navextra">
+                
+                	<ul>
+                    
+                    	<li><a href="#">激请</a></li>
+                        <li><a href="#">设置</a></li>
+                        <li><a href="#">退出</a></li>
+                    
+                    </ul>
+                
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!--navbar-->
+    
+</div>
+
+<div id="page" class="page_side_wrap s_clear">
+
+	<!--sidebar-->
+	<div class="sidebar">
+    
+    	<div id="appbar" class="round_title_r_t"><div class="round_title_l_t">
+            <h1 class="round_title">我的应用</h1>
+            <div class="round_r_b"><div class="round_l_b">
+        
+        	<div class="round_m"><div class="round_body">
+                
+                <div class="applist">
+                	
+                    <ul>
+                    	<li><a class="app-log" href="#">日志</a></li>
+                        <li><a class="app-video" href="#">视频</a></li>
+                    	<li><a class="app-photo" href="#">照片</a></li>
+                        <li><a class="app-status" href="#">状态</a></li>
+                        <li><a class="app-ploy" href="#">活动</a></li>
+                        <li><a class="app-vote" href="#">投票</a></li>
+                        <li><a class="app-cons" href="#">工会</a></li>
+                        <li><a class="app-game" href="#">游戏</a></li>
+                        <li><a class="app-vgame" href="#">推荐游戏</a></li>
+                    </ul>
+                </div>
+                
+        	</div></div>
+            
+        </div></div></div></div>
+    </div>
+    <!--sidebar-->
+    
+    <!--main-->
+    <div class="main">
+    
+    	<div class="content">
+        
+        	<div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+            	
+                <div class="round_m"><div class="round_body">
+                	
+                    <h1 class="app-photo">照片</h1>
+                    <div class="box02 canvas_int">
+                    	<div class="avatarEdit">
+                            <div class="multibox">
+                                <h3 class="title">修改头像</h3>
+                              </div>
+                             <p>你最好上传一张真人照片，证明你是地球人，嘿嘿</p>
+                            <div class="picUploadBtn space">
+                                  <a href="#"><img src="images/skin/upload-img.png" alt=""></a>
+                                  <div class="upFile">
+                                    <form>
+                                      <input type="file" />
+                                    </form>
+                                  </div>
+                            </div>
+                             <div class="avtCurrent">
+                                <div class="multibox">
+                                    <h3 class="title">当前头像</h3>
+                                  </div>
+                                  <div>
+                                     <img src="images/photo/photo100.jpg" alt="" />
+                                 </div>
+                             </div>
+                             <div class="box04 avtEditor">
+                                <div class="tips">拖动下方方框，调整头像显示</div>
+                                <div class="avtWrap fix">
+                                    <div class="panel">
+                                        <div class="edt"><img src="images/photo/photo100.jpg" width="200" alt="" style="top:100px;left:100px" /></div>
+                                        <div class="zoomBar">
+                                        	<ul>
+                                                <li><a href="#" class="i iMinus">-</a></li>
+                                                <li><div class="slideBar"><span><em class="btn"></em></span></div></li>
+                                                <li><a href="#" class="i iPlus">+</a></li>
+                                                <li><a href="#" class="red">重置</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="preview">
+                                        <div class="avtM">
+                                            <div class="bd">
+                                                <a href="#"><span class="i iArrLeft"></span>
+                                                <div style="width:50px;height:50px;"><img src="images/photo/photo11.png" alt="" /></div>
+                                                </a>
+                                            </div>
+                                            <div class="ft"><span>小头像预览</span><a href="#" class="op">编辑</a></div>
+                                        </div>
+                                        <div class="avtL selected">
+                                            <div class="bd">
+                                                <a href="#"><span class="i iArrLeft"></span>
+                                                <div style="width:230px;height:230px;"><img src="images/photo/photo100.jpg" width="230" height="230" alt="" /></div>
+                                                </a>
+                                            </div>
+                                            <div class="ft"><span>大头像预览</span><a href="#" class="op">编辑</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="submit fix">
+                                    <span class="button04"><span>
+                                        <button>生成头像</button>
+                                      </span></span>
+                                  </div>
+                              </div>
+                              <!---->
+                             <div class="box04 avtResult">
+                                <div class="tips">系统为你生成两种尺寸的头像</div>
+                                <div class="avtWrap fix">
+                                    <div class="avtShowM">
+                                        你的小头像<br />
+                                        <div style="width:50px;height:50px;"><img src="images/photo/photo11.png" width="100" alt="" /></div>
+                                    </div>
+                                    <div class="avtShowL">
+                                        你的大头像将出现在个人主页<br />
+                                        <div style="width:230px;height:230px;"><img src="images/photo/photo100.jpg" width="280" height="230" alt="" /></div>
+                                    </div>
+                                </div>
+                                <div class="submit fix">
+                                    <span class="button04 w-l"><span>
+                                        <button>保存头像</button>
+                                      </span></span>
+                                    <span class="button04 button04-gray"><span>
+                                        <button>返回编辑</button>
+                                      </span></span>
+                                  </div>
+                              </div>
+                        </div>
+					</div>
+                    
+        		</div></div>
+                
+            </div></div></div></div>
+        
+        </div>
+    
+    </div>
+	<!--main-->
+
+</div>
+
+<div id="footer">
+	<p>Copyright &copy; 1998-2009 Tencent. All Rights Reserved</p>
+    <p><a href="#">网游公司 版权所有</a></p>
+</div>
+</body>
+</html>

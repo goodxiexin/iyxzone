@@ -1320,6 +1320,7 @@ span.i,a.i,.i40{width:16px;height:16px;margin-right:3px;display:-moz-inline-stac
 .iTopic{background-position:-16px -327px;}
 .iToggleUp{background-position:-96px -25px}
 .iViewOrig{background-position:0 -146px}
+.iArrLeft{background:url(../images/skin/arrow.gif) no-repeat 0 -167px;width:4px;height:7px}
 .iArr02Down{background:url(../images/skin/arrow.gif) no-repeat 3px -146px}
 .iArr03{background-position:-17px -90px;width:14px;height:14px}
 .iSquare{background-position:-190px -69px}
@@ -1330,8 +1331,12 @@ a.iActBtn{width:142px;height:44px;background-position:0 -1110px}
 .iArrUnFold{background-position:-60px -764px}
 .iArrFold{background-position:-76px -764px}
 .iAdd02{background-position:-61px -742px}
+.iVerified{background-position:-16px -428px}
 /*.iSetAvatar{background-position:-18px -429px}
 */
+.iPlus{background-position:-48px -429px}
+.iMinus{background-position:-32px -429px}
+
 span.iGuild02{width:23px;height:27px;background-position:-81px -935px}
 span.iFunc02{width:19px;height:27px;background-position:-104px -935px}
 span.iRole02{width:19px;height:27px;background-position:-123px -935px}
@@ -1346,6 +1351,10 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 
 .addGameRoleBtn{background:url(../images/skin/skin2010.png) no-repeat -83px -737px;width:117px;height:22px;display:inline-block}
 .mainConTitle{border-bottom:1px solid #bdd6ad;padding:5px 15px;margin-bottom:10px}
+/*上传图片按钮*/
+.picUploadBtn{position:relative}
+.picUploadBtn .upFile{width:110px;height:34px;position:absolute;left:-2px;top:0;overflow:hidden;cursor:pointer;}
+.picUploadBtn .upFile input{width:110px;height:34px;margin-left:-20px;background:none;border:0;cursor:pointer;-moz-opacity:0;filter:alpha(opacity=0);opacity:0;}
 
 /*激活后完善信息*/
 .actEx{width:90%;margin:0 auto;color:#333}
@@ -1388,8 +1397,11 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 .actEx .starMember{height:260px;max-height:260px;overflow-x:hidden;overflow-y:auto;border:1px solid #BBD2AA;position:relative}
 .actEx .starMember .starItem{margin:10px;}
 
+.actExUpAvatar .avtEditor .tips{margin:10px 0 0 0}
+.actExUpAvatar .avtEditor .avtWrap{padding-left:320px}
+.actExUpAvatar .avtEditor .avtWrap .panel{margin-left:-320px}
 .actExUpAvatar .actExCon{padding-left:130px;}
-.actExUpAvatar .actExCon .avatar{float:left;margin-left:-120px;_display:inline;/*background:url(../images/skin/no-avatar.png) no-repeat;*/width:100px;height:100px;overflow:hidden;border:1px solid #bfd5af}
+.actExUpAvatar .actExCon .avatar{float:left;margin-left:-120px;_display:inline;width:100px;height:100px;overflow:hidden;border:1px solid #bfd5af}
 .actExUpAvatar .actExCon .con{float:left;width:100%;line-height:22px;}
 .actExUpAvatar .actExCon .con .op{margin:10px 0 0 80px}
 
@@ -1884,7 +1896,6 @@ span.sBtn button,span.sBtn a{height:25px;display:inline-block;line-height:25px;_
 
 .photoFeed .mList ul{float:left}
 .photoFeed .mList li{float:left;margin:5px;overflow:hidden;width:120px;}
-.photoFeed .mList img{width:100px;}
 .photoFeed .expand{float:left;width:23px;height:24px;display:block;font-size:0;line-height:0;text-indent:-999px;background:url(../images/skin/skin2010.png) no-repeat -98px -760px;margin-top:20px}
 .photoFeed .sList li{float:left;margin:5px;overflow:hidden;width:65px;height:65px}
 .photoFeed .sList img{width:50px;height:50px}
@@ -2017,7 +2028,49 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .gameIntroPop .ft{margin-top:10px}
 .gameIntroPop .ft a{color:#e26a00;font-weight:700;margin-right:20px}
 
+/*陌生人提示*/
+.authTips{width:80%;margin:0 auto;padding:20px;text-align:center}
 
 /*个人主页-档案*/
 .acMain .archives-box .percent-box .percent{width:200px}
 .acMain .archives-box .edit-toggle .fldid{width:80px}
+
+/*头像编辑*/
+.avatarEdit{margin:15px}
+.avatarEdit .avtCurrent{width:300px;margin-top:20px}
+.avtEditor,.avtResult{margin-top:20px}
+.avtEditor .tips,.avtResult .tips{margin:20px 20px 0 20px}
+.avtEditor .avtWrap {padding:20px 0 20px 340px}
+.avtEditor .avtWrap .panel{float:left;margin-left:-320px;_display:inline;width:300px;}
+.avtEditor .avtWrap .panel .edt{overflow:hidden;background:#888;position:relative}
+.avtEditor .avtWrap .panel .edt img{position:absolute;}
+.avtEditor .avtWrap .preview{float:left;width:100%}
+
+.avtEditor .avtM .bd a,.avtEditor .avtL .bd a{width:60px;height:60px;border:2px solid #F8FCF6;display: block;position:relative}
+.avtEditor .avtM .bd a:hover,.avtEditor .avtL .bd a:hover,.avtEditor .preview .selected .bd a{border:2px solid #c1dd7e}
+.avtEditor .avtM .bd a span.i{position:absolute;top:27px;left:-6px;visibility:hidden}
+.avtEditor .avtM .bd a:hover span.i,.avtEditor .avtL .bd a:hover span.i,.avtEditor .preview .selected .bd a span.i{visibility:visible}
+.avtEditor .avtM .bd a div,.avtEditor .avtL .bd a div{margin:5px 0 0 5px;overflow:hidden;position:relative}
+.avtEditor .avtL{margin-top:20px}
+.avtEditor .avtL .bd a{width:240px;height:240px}
+.avtEditor .avtL .bd a span.i{position:absolute;top:110px;left:-6px;visibility:hidden}
+.avtEditor .preview .ft{margin-top:10px;color:#999}
+.avtEditor .preview .selected .ft .op{visibility:hidden}
+.avtEditor .preview .ft span{margin-right:15px}
+
+.zoomBar{margin:10px 0}
+.zoomBar li{float:left;margin:0 3px;}
+.zoomBar .slideBar{width:185px;height:14px;padding-right:10px;background:url(../images/skin/btn2010.png) no-repeat right -1058px;}
+.zoomBar .slideBar span{display:block;height:14px;background:url(../images/skin/btn2010.png) no-repeat 0 -1075px;}
+.zoomBar .slideBar .btn{display:block;width:22px;height:14px;background:url(../images/skin/skin2010.png) no-repeat -45px -413px;margin-left:10px}
+.zoomBar .op{font-weight:700;font-family: Tahoma, Geneva, sans-serif;font-size:12px}
+
+.avtResult .avtWrap{padding:20px}
+.avtResult .tips{border-bottom:1px solid #ccc;padding-bottom:10px}
+.avtResult .avtShowM,.avtResult .avtShowL{float:left;width:80px;margin:30px;_display:inline;text-align:center;line-height:30px;color:#666;padding:10px 30px 30px 30px;border:1px solid #bbd2aa;background:#fff}
+.avtResult .avtShowM div,.avtResult .avtShowL div{overflow:hidden;position:relative;margin:0 auto}
+.avtResult .avtShowM img,.avtResult .avtShowL img{position:absolute;left:0;top:0}
+.avtResult .avtShowL{width:260px;margin-left:80px}
+
+
+.avatarEdit .submit{padding:0 0 20px 320px;}

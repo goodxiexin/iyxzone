@@ -347,6 +347,10 @@ Object.extend(Iyxzone.URL, {
     return this.build("/avatars/" + photoID, params);
   },
 
+  cropAvatar: function(photoID, params){
+    return this.build("/avatars/" + photoID + "/crop", params);
+  },
+
   showAvatar: function(photoID, params){
     return this.build("/avatars/" + photoID, params);
   },
@@ -362,6 +366,18 @@ Object.extend(Iyxzone.URL, {
   
   showProfile: function(profileID, params){
     return this.build("/profiles/" + profileID, params);
+  },
+
+  moreGamesInProfile: function(profileID, params){
+    return this.build("/profiles/" + profileID + "/more_games", params);
+  },
+
+  changeTabInProfile: function(profileID, params){
+    return this.build("/profiles/" + profileID + "/change_tab", params);
+  },
+
+  displayGameInProfile: function(profileID, params){
+    return this.build("/profiles/" + profileID + "/game_display", params);
   }
 
 });

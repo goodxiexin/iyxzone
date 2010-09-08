@@ -1,11 +1,54 @@
-<% facebox_tag '更改头像' do %>
-  <% rows_form_for :photo, :url => avatars_url(:at => params[:at]), :html => {:multipart => true, :target => 'upload_frame', :onsubmit=> "Iyxzone.disableButton($('new_photo_submit_btn'), '请等待..');"} do |f| %>
-    <%= hidden_field_tag "photo[is_cover]", 1 %>
-    <div class='content'>
-      <%= f.span '支持png, gif, jpg, 最大4MB' %>
-      <%= f.file_field 'uploaded_data' %>
+<%= javascript_include_tag "cropper" %>
+
+<% content_for :stylesheet_link do %>
+  <%= stylesheet_link_merged :photo %>
+<% end %>
+
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag "photo" %>
+  <%= javascript_include_tag "avatar" %>
+<% end %>
+
+<% canvas_tag do %>
+  <h1 class="app-photo">照片</h1>
+  <div class="box02 canvas_int">
+    <div class="avatarEdit" id='panel'>
+      <div class="multibox">
+        <h3 class="title">修改头像</h3>
+      </div>
+      <p>你最好上传一张真人照片，证明你是地球人，嘿嘿</p>
+      <% if @photo.nil? %>
+      <div id='desc'e
+      <div class="picUploadBtn space">
+        <a href="javascript:void(0)"><img src="/images/skin/upload-img.png" alt=""></a>
+        <div class="upFile">
+          <% form_for :photo, :url => avatars_url, :html => {:id => "avatar_form", :multipart => true, :target => "upload_frame"} do |f| %>
+            <%= f.file_field :uploaded_data, :onchange => "Iyxzone.Avatar.Builder.imageSelected();" %>
+          <% end %>
+          <iframe id='upload_frame' name='upload_frame' style='width:1px;height:1px;border:0px' src="about:blank"></iframe>
+        </div>
+      </div>
+      <div class="avtCurrent">
+        <div class="multibox">
+          <h3 class="title">当前头像</h3>
+        </div>
+        <div>
+          <%= avatar_image current_user, :size => 'max' %>
+        </div>
+      </div>
+      </div>
+      <% else %>
+      <div class="box04 avtEditor" id="editor">
+        <div class='ajaxLoading'><img src='/images/ajax-loader.gif'/></div>
+      </div>
+      <% end %>
     </div>
-    <%= f.z_submit :submit => {:text => '完成', :id => 'new_photo_submit_btn'}, :cancel => {:text => '取消', :onclick => 'Iyxzone.Facebox.close();'} %>
+  </div>
+<% end %>
+
+<% javascript_tag do %>
+  Iyxzone.Avatar.Builder.init('<%= form_authenticity_token %>', 400, 500, 50, 230, Iyxzone.URL.showProfile(<%= current_user.profile.id %>));
+  <% if !@photo.nil? %>
+    Iyxzone.Avatar.Builder.imageUploaded(<%= @photo.id %>, '<%= @photo.public_filename %>', '<%= @photofilename %>', <%= @photo.width %>, <%= @photo.height %>, Iyxzone.URL.showProfile(<%= current_user.profile.id %>))
   <% end %>
 <% end %>
-<iframe id='upload_frame' name='upload_frame' style='width:1px;height:1px;border:0px' src="about:blank"></iframe>

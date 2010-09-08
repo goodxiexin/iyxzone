@@ -10,7 +10,9 @@ Iyxzone.Game = {
 
   Presentor: {},
 
-  Tagger: Class.create({}),
+  Tag: {}, // 游戏映像
+
+  Tagger: Class.create({}), // 标记资源和哪些游戏有关
 
   Selector: Class.create({}),
 
@@ -43,7 +45,7 @@ Iyxzone.Game = {
   },
 
   follow: function(name, gid){
-    new Ajax.Request('/mini_topic_attentions', {
+    new Ajax.Request(Iyxzone.URL.createMiniTopicAttention(), {
       method: 'post',
       parameters: {'name': name},
       onLoading: function(){
@@ -65,7 +67,7 @@ Iyxzone.Game = {
   },
 
   unfollow: function(id, name, gid){
-    new Ajax.Request('/mini_topic_attentions/' + id, {
+    new Ajax.Request(Iyxzone.URL.deleteMiniTopicAttention(id), {
       method: 'delete',
       onLoading: function(){
         Iyxzone.changeCursor('wait');
@@ -1237,3 +1239,86 @@ Iyxzone.Game.Tagger = Class.create({
 
 });
 
+Object.extend(Iyxzone.Game.Tag, {
+
+  init: function(token){
+    this.token = token;
+  },
+
+  showTagCloud: function(){
+    $('tag_cloud').show();
+    $('tag_input').hide();
+  },
+
+  showTagInput: function(){
+    $('tag_cloud').hide();
+    $('tag_input').show();
+  },
+
+  isAdding: false,
+
+  addTag: function(gameID, name){
+    if(this.isAdding){
+      return;
+    }else{
+      this.isAdding = true;
+    }
+
+    new Ajax.Request(Iyxzone.URL.createTag('Game', gameID), {
+      method: 'post',
+      parameters: {'tag_name': name, 'authenticity_token': this.token},
+      onLoading: function(){
+        Iyxzone.disableButton($('tag_submit'), '发送');
+        Iyxzone.changeCursor('wait');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      },
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          this.isAdding = false;
+          this.showTagCloud();
+          $('add_tag_link').remove();
+        }else if(json.code == 0){
+          error("发生错误，请稍后再试"); 
+          Iyxzone.enableButton($('tag_submit'), '评价');
+        }
+      }.bind(this)
+    }); 
+  },
+
+  submitForm: function(gameID, field){
+    this.addTag(gameID, $(field).value);
+  },
+
+  confirmDeletingTag: function(gameID, tagID, link){
+    Iyxzone.Facebox.confirmWithCallback("您真的要删除这个印象", null, null, function(){
+      this.deleteTag(gameID, tagID, link);
+    }.bind(this));
+  },
+
+  deleteTag: function(gameID, tagID, link){
+    new Ajax.Request(Iyxzone.URL.deleteTag(tagID, 'Game', gameID), {
+      method: 'delete',
+      parameters: 'authenticity_token=' + encodeURIComponent(this.token),
+      onLoading: function(){
+        Iyxzone.changeCursor('wait');
+        $(link).writeAttribute('onclick', '');
+      },
+      onComplete: function(){
+        Iyxzone.changeCursor('default');
+      }.bind(this),
+      onSuccess: function(transport){
+        var json = transport.responseText.evalJSON();
+        if(json.code == 1){
+          $('tag_' + tagID).remove();
+        }else{
+          error('发生错误');
+          $(link).writeAttribute('onclick', 'Iyxzone.Game.Tag.confirmDeletingTag(' + gameID + ', ' + tagID + ', this);');
+        }
+      }.bind(this)
+    });  
+  }
+
+}); 

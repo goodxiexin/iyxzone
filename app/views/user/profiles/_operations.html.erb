@@ -21,7 +21,7 @@
   <% subject = get_subject user %>
   <ul class='fix'>
     <% if relationship == 'owner' %>
-	    <li><%= facebox_link "<span class='i-avatar'></span>修改头像", new_avatar_url(:at => 'profile'), :width => 400 %></li>
+	    <li><%= link_to "<span class='i-avatar'></span>修改头像", new_avatar_url %></li>
 	    <li><%= link_to "<span class='i-skin'></span>主页装扮", skins_url %></li>
     <% elsif relationship == 'friend' %>
       <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>

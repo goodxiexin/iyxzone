@@ -80,10 +80,12 @@ class AvatarAlbumTest < ActiveSupport::TestCase
 
   test "sensitive album" do
     @photo1 = PhotoFactory.create :album_id => @album.id, :type => 'Avatar'
+    @photo1.crop({:x1 => 10, :x2 => 10, :y1 => 10, :y2 => 10}, {:x1 => 10, :x2 => 10, :y1 => 10, :y2 => 10})
     @friend.reload and @fan.reload
     assert @friend.recv_feed?(@photo1)
     assert @fan.recv_feed?(@photo1)
     @photo2 = PhotoFactory.create :album_id => @album.id, :type => 'Avatar'
+    @photo2.crop({:x1 => 10, :x2 => 10, :y1 => 10, :y2 => 10}, {:x1 => 10, :x2 => 10, :y1 => 10, :y2 => 10})
     @friend.reload and @fan.reload
     assert @friend.recv_feed?(@photo2)
     assert @fan.recv_feed?(@photo2)

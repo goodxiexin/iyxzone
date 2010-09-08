@@ -5,7 +5,7 @@
 <% render :layout => 'user/feed_deliveries/feed_delivery', :locals => {:delivery => delivery, :poster => album.poster} do %>
   <%= profile_link album.poster %> <span> 更新了 <%= link_to "个人头像", avatar_album_url(album), :class => "shine"%></span>
   <p class="gray jl-con">
-		<%= photo_link avatar, :class=>'imgbox01', :size => :large %>
+		<%= photo_link avatar, :class=>'imgbox01', :size => :clarge %>
 	</p>
 	<p class="gray"><%= ftime delivery.created_at %> <%= link_to_function "评论", "Iyxzone.Comment.showForm('avatar', #{avatar.id}, null, #{avatar.poster_id});", :class => "gray"%></p>
 	  <%= render :partial => "user/comments/folded_comment_box", :locals => {:commentable => avatar , :recipient => avatar.poster} %>

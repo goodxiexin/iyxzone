@@ -60,6 +60,8 @@ Object.extend(Iyxzone.Home.Feeder, {
 
   curType: null,
 
+  // 其实有点多余，只要判断cache里面有没有就可以了
+  // 只要有，那说明不是ajax完成了，就是正在进行，无论哪种都不需要在发ajax了
   curLoading: false,
 
   userID: null,

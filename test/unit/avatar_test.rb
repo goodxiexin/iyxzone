@@ -87,6 +87,12 @@ class AvatarTest < ActiveSupport::TestCase
   test "avatar feed" do
     @photo = PhotoFactory.create :album_id => @album.id, :poster_id => @user.id, :type => 'Avatar'
     @friend.reload and @fan.reload and @idol.reload
+    assert !@friend.recv_feed?(@photo)
+    assert !@fan.recv_feed?(@photo)
+    assert !@idol.recv_feed?(@photo)
+
+    @photo.crop({:x1 => 10, :y1 => 10, :x2 => 10, :y2 => 10}, {:x1 => 10, :y1 => 10, :x2 => 10, :y2 => 10})
+    @friend.reload and @fan.reload and @idol.reload
     assert @friend.recv_feed?(@photo)
     assert @fan.recv_feed?(@photo)
     assert !@idol.recv_feed?(@photo)

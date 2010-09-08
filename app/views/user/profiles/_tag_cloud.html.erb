@@ -1,0 +1,14 @@
+<% deleteable = profile.is_tag_deleteable_by? current_user %>
+<div class='impress-show s_clear space'> 
+<% if profile.tags.blank? %>
+	还没有人进行评价
+<% else %>
+	<% tag_cloud profile, %w(css1 css2 css3 css4) do |tag, css_class| %>
+		<% if deleteable %>
+			<a href="javascript:void(0)" class="impress-<%=rand(4)%>" id='tag_<%= tag.id %>'><span class=<%= css_class %>><%= tag.name %></span><b class='icon2-close' onclick="Iyxzone.Profile.Tag.confirmDeletingTag(<%=profile.id%>, <%=tag.id%>)"></b></a>
+		<% else %>
+			<a href="javascript:void(0)" class="impress-<%=rand(4)%>"><span class=<%= css_class %>><%= tag.name %></span></a>
+		<% end %>
+	<% end %>
+<% end %>
+</div>

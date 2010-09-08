@@ -3,18 +3,19 @@
 	<div class='feed-box'>
 		<div class="home-wrap">
 			<div id ='feed_list'>
-				<%= render :partial => 'user/profiles/group_deliveries', :locals => {:feed_deliveries => feed_deliveries} %>
+				<%= render :partial => 'user/profiles/album_feed_delivery', :collection => feed_deliveries %>
 			</div>
 		</div>
 	</div>
 	<% else %>
     <% if user==current_user %>
-      <div>还没上传照片或游戏截图，赶紧去<%= link_to '弄一个', new_blog_url%>吧</div>
+      <div>还没上传照片或游戏截图，赶紧去<%= link_to '弄一个', personal_albums_url(:uid => user.id) %>吧</div>
     <% else %>
       <div>这家伙没任何照片或游戏截图</div>
     <% end %>
 	<% end %>
 </div>
-<%= if user.albums_count > 3 %>
-	<div class="ac-ft"><%= link_to "查看全部>>", videos_url(:uid => user.id)%></div>
+<% if !feed_deliveries.blank? %>
+  <div class="ac-ft"><%= link_to "查看全部>>", personal_albums_url(:uid => user.id) %></div>
 <% end %>
+

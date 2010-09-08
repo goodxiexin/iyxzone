@@ -1,7 +1,8 @@
-<div class="r-t"><div class="c-r">
-  <% subject = get_subject user %>
+<div class='gameIntroPop' id='game-display-panel' onmouseout="Iyxzone.Profile.Presentor.GameDisplay.mouseOutGamePanel(<%= game.id %>, event);">
+  <div class="r-t"><div class="c-r">
+    <% subject = get_subject user %>
 		<div class="t fix"><h2><%=subject-%>的游戏角色</h2>
-			<% if characters.count > 3 %><%= link_to_function "更多","Iyxzone.Profile.changeTab('info')" %><% end %></div>
+			<% if characters.count > 3 %><%= link_to_function "更多","Iyxzone.Profile.Presentor.changeTab('info')" %><% end %>    </div>
 		<div class="roleList">
 			<ul>
 				<% limit = (characters.count > 3) ? 2 : (characters.count - 1)%>
@@ -24,14 +25,14 @@
 				<% end %>
 			</ul>
 		</div>
-</div></div>
-<div class="r-m">
+  </div></div>
+  <div class="r-m">
 		<div class="bd fix">
 			<div class="avatar"><%= game_image game.name, :width=>"70", :height=>"100" %></div>
 				<div class="con">
 					<ul>
 						<li><strong>玩家打分：</strong><span><%="%.1f" % game.average_rating %></span></li>
-						<li><strong>在玩好友：</strong><span><%= friends.count%></span></li>
+						<li><strong>在玩好友：</strong><span><%= friends_count%></span></li>
 						<li><strong>已有玩家：</strong><span><%= game.characters_count %></span></li>
 						<li><strong>玩家关注：</strong><span><%= game.attentions_count %></span></li>
 					</ul>
@@ -42,11 +43,12 @@
       <% attention = current_user.mini_topic_attentions.find_by_topic_name game.name %>
 			<span id = 'follow_game_<%= game.id %>'>
 			<% if attention.blank? %>
-				<%= link_to_function "<span class='i iFollow'></span>关注该游戏", "Iyxzone.Game.follow('#{game.name}', #{game.id});" %>
+				<%= link_to_function "<span class='i iFollow'></span>关注该游戏", "Iyxzone.Profile.Presentor.GameDisplay.follow('#{game.name}', #{game.id});" %>
 			<% else %>
-				<%= link_to_function "<span class='i iNoFollow'></span>取消关注", "Iyxzone.Game.unfollow(#{attention.id}, '#{game.name}', #{game.id});" %>
+				<%= link_to_function "<span class='i iNoFollow'></span>取消关注", "Iyxzone.Profile.Presentor.GameDisplay.unfollow(#{attention.id}, '#{game.name}', #{game.id});" %>
 			<% end %>
 			</span>
 		</div>
+  </div>
+  <div class="r-b"><em></em></div>
 </div>
-<div class="r-b"><em></em></div>

@@ -34,7 +34,6 @@ class UserMailer < ActionMailer::Base
     sent_on     Time.now
     subject     "17Gaming(一起游戏网) - #{invitation.sender.login} 邀请您加入"
     body        :user => invitation.sender, :url => "#{SITE_URL}/invite?token=#{invitation.token}"
-    puts "done"
   end
 
   def activation user

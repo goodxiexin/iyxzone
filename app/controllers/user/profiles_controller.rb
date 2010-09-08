@@ -8,7 +8,7 @@ class User::ProfilesController < UserBaseController
 
 	FetchSize = 10
 
-	FetchGame = 10
+	FetchGame = 5
 
   def show
     # mini blogs
@@ -18,13 +18,11 @@ class User::ProfilesController < UserBaseController
     @fans = @user.fans.limit(8).all if @user.is_idol
 		@blogs = @user.blogs.for(@relationship).limit(3)
 		@albums = @user.active_albums.for(@relationship).limit(3)
-    @feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).order('created_at DESC').prefetch([{:feed_item => :originator}]).all
+    @feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).all
 		@first_fetch_size = FirstFetchSize
     @skin = @profile.skin
 		@guilds = @user.all_guilds.limit(3)
-		limit = (@user.games_count > FetchGame) ? FetchGame : @user.games_count
-		@more_game = (@user.games_count > FetchGame)
-		@games = @user.games[0..(limit -1)]
+		@games = @user.games.limit(FetchGame).all
     @reply_to = User.find(params[:reply_to]) unless params[:reply_to].blank?
     @viewings = @profile.viewings.limit(8)
     @characters = @user.characters.prefetch([:game])
@@ -74,14 +72,14 @@ class User::ProfilesController < UserBaseController
 			render :partial => "edit_info", :locals => {:user => @user, :profile => @profile, :setting => @setting, :relationship => @relationship}
 		elsif @category == 'feed'
 			@first_fetch_size = FirstFetchSize
-			@feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).order('created_at DESC').prefetch([{:feed_item => :originator}]).all
+			@feed_deliveries = @profile.feed_deliveries.limit(FirstFetchSize).all
 			render :partial => "feed_list", :locals => {:feed_deliveries => @feed_deliveries, :first_fetch_size => @first_fetch_size, :profile => @profile}
 		elsif @category == 'poll'
 			@polls = @user.polls.limit(3)
 			render :partial => "recent_polls", :locals => {:user => @user, :profile => @profile, :polls => @polls}
-		elsif @category == 'album'
-			@feed_deliveries = @profile.feed_deliveries.category(@category).limit(3).order('created_at DESC').prefetch([{:feed_item => :originator}]).all
-			render :partial => "recent_photos", :locals => {:feed_deliveries => @feed_deliveries}
+		elsif @category == 'photo'
+			@feed_deliveries = @profile.feed_deliveries.match(:item_type => ["PersonalAlbum", "EventAlbum", "GuildAlbum"]).limit(3).all
+			render :partial => "recent_photos", :locals => {:user => @user, :profile => @profile, :feed_deliveries => @feed_deliveries}
 		elsif @category == 'blog'
 			@blogs = @user.blogs.for(@relationship).limit(5)
 			render :partial => "recent_blogs", :locals => {:user => @user, :profile => @profile, :blogs => @blogs}
@@ -92,19 +90,15 @@ class User::ProfilesController < UserBaseController
 	end
 
 	def more_games
-		idx = params[:idx].to_i
-		top_limit = (idx+1) * FetchGame
-		bot_limit = idx * FetchGame
-		limit = (@user.games_count > top_limit) ? top_limit : @user.games_count
-		@games = @user.games[bot_limit..(limit -1)]
+    @games = @user.games.offset(params[:idx].to_i * FetchGame).limit(FetchGame)
 		render :partial => "games_display", :locals => {:user => @user, :profile => @profile, :games => @games}
 	end
 
 	def game_display
-		@game = Game.find(params[:game])
-		@characters = @user.characters.within(params[:game])
-		@friends = @game.characters.by(@user.friend_ids).map(&:user)
-		render :partial => "game_display", :locals => {:user => @user, :profile => @profile, :characters => @characters, :game => @game, :friends => @friends}
+		@game = Game.find(params[:game_id])
+		@characters = @user.characters.within(@game.id)
+		@friends_count = @game.characters.by(@user.friend_ids).map(&:user_id).uniq.count
+		render :partial => "game_display", :locals => {:user => @user, :profile => @profile, :characters => @characters, :game => @game, :friends_count => @friends_count}
 	end
 
 	def more_feeds

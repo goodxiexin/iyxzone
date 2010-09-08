@@ -206,7 +206,7 @@ ActionController::Routing::Routes.draw do |map|
 
     users.resources :avatar_albums, :controller => 'avatars/albums'
 
-    users.resources :avatars, :controller => 'avatars/photos'
+    users.resources :avatars, :controller => 'avatars/photos', :member => {:crop => :put}
 
     users.resources :event_albums, :controller => 'events/albums'
 
