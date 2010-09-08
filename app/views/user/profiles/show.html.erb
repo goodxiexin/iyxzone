@@ -3,9 +3,9 @@
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% if !@skin.default? %>
-<% content_for :stylesheet_link do %>
-  <%= stylesheet_link_tag "themes/#{@skin.directory}/#{@skin.css}" %>
-<% end %>
+	<% content_for :stylesheet_link do %>
+		<%= stylesheet_link_tag "themes/#{@skin.directory}/#{@skin.css}" %>
+	<% end %>
 <% end %>
 
 <% content_for :javascript_include do %>

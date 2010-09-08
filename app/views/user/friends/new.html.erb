@@ -1,118 +1,86 @@
-<% content_for :html_title, "#{@user.login}的个人主页" %>
+<% content_for :html_title, "#{@user.login} - 个人主页 - 17Gaming.com" %>
+<% content_for :html_description, "#{@user.login}的个人主页 - 17Gaming.com (一起游戏网)愿做网络游戏玩家的精神家园。" %>
+<% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
+
+<% if !@skin.default? %>
+	<% content_for :stylesheet_link do %>
+		<%= stylesheet_link_tag "themes/#{@skin.directory}/#{@skin.css}" %>
+	<% end %>
+<% end %>
+
+<% content_for :javascript_include do %>
+  <%= javascript_include_merged :profile %>
+  <%= javascript_include_tag 'sound' %>
+<% end %>
+
 <% content_for :left do %>
-  <div class="mcAvatar">
-    <a href="#"></a>
-    <div class="picwrap">
-      <div class="middle"><div class="middle-center"><div class="center" id='avatar'>
-        <%= avatar @user, :size => :large %>
-      </div></div></div>
-    </div>
-  </div>
-  <div class="profile-list menu-icon-list">
-		<% subject = get_subject(@user) %>
+	<div class="avatarXl">
+		<div class="wrap">
+			<%= avatar_image @user, :size => 'clarge' %>
+		</div>
+	</div>
+	<%= render :partial => "user/profiles/operations", :locals => {:user => @user, :profile => @profile, :relationship => @relationship} %>
+  <%= render :partial => 'user/profiles/tag_panel', :locals => {:user => @user, :profile => @profile} %>
+	<%= render :partial => 'user/profiles/guilds', :locals => {:guilds => @guilds, :user => @user} %>
+  <% unless @viewings.blank? %>
+    <%= render :partial => 'user/profiles/recent_visitors', :locals => {:viewings => @viewings, :profile => @profile} %>
+  <% end %>
+  <% unless @common_friends.blank? %>
+    <%= render :partial => 'user/profiles/common_friends', :locals => {:friends => @common_friends, :user => @user} %>
+  <% end %>
+  <% unless @friends.blank? %>
+    <%= render :partial => 'user/profiles/friends', :locals => {:friends => @friends, :user => @user} %>
+  <% end %>
+  <% if @user.is_idol and !@fans.blank? %>
+    <%= render :partial => 'user/profiles/fans', :locals => {:fans => @fans, :user => @user} %>
+  <% end %>
+	
+<% end %>
+
+
+<div class="acTop">
+	<div class="acMemberInfo"><h2 class="memberName"><%= @user.login%></h2></div>
+	<div class="acNav">
 		<ul>
-			<li><span class='icon-data'></span><%= "#{subject}的档案" %></li>
-			<li><span class='icon-game'></span><%= "#{subject}的游戏" %><span>(<%= @user.games_count %>)</span></li>
-			<li><span class='icon-photo'></span><%= "#{subject}的相册" %><span>(<%= @user.albums_count "friend"%>)</span></li>
-			<li><span class='icon-blog'></span><%= "#{subject}的日志" %><span>(<%= @user.blogs_count "friend" %>)</span></li>
-			<li><span class='icon-video'></span><%= "#{subject}的视频" %><span>(<%= @user.videos_count "friend" %>)</span></li>
-			<li><span class='icon-vote'></span><%= "#{subject}的投票" %><span>(<%= @user.polls_count%>)</span></li>
-			<li><span class='icon-act'></span><%= "#{subject}的活动" %><span>(<%= @user.events.count%>)</span></li>
-			<li><span class='icon-cons'></span><%= "#{subject}的公会" %><span>(<%= @user.guilds_count%>)</span></li>
+			<li class="selected" id='tab_home'><%= facebox_tip '<span class="home"></span><strong>主页</strong>', "加为好友才能执行此操作" %></li>
+			<li id='tab_info'><%= facebox_tip '<span class="info"></span><strong>档案</strong>', "加为好友才能执行此操作" %></li>
+			<li id='tab_feed'><%= facebox_tip '<span class="feed"></span><strong>新鲜事</strong>', "加为好友才能执行此操作" %></li>
+			<li id='tab_poll'><%= facebox_tip '<span class="poll"></span><strong>投票</strong>', "加为好友才能执行此操作" %></li>
+			<li id='tab_photo'><%= facebox_tip '<span class="photo"></span><strong>照片</strong>', "加为好友才能执行此操作" %></li>
+			<li id='tab_blog'><%= facebox_tip '<span class="blog"></span><strong>日志</strong>', "加为好友才能执行此操作" %></li>
+			<li id='tab_video'><%= facebox_tip '<span class="video"></span><strong>视频</strong>', "加为好友才能执行此操作" %></li>
 		</ul>
 	</div>
-<% end %>
-
-<% content_for :right do %>
-	<div class="multibox">
-  <div class="title">
-    <%= link_to "更多", edit_profile_url(@profile) %>
-    <b>游戏人物资料</b>
-  </div>
-  <table class="data-table jl-data-table" cellpadding='0'>
-    <tr>
-      <th>游戏名称</th>
-      <th>玩家昵称</th>
-      <th>等级</th>
-    </tr>
-    <% @user.characters.each do |c| %>
-    <tr>
-      <td><%= game_link c.game %></td>
-      <td><%= c.name %></td>
-      <td><%= c.level %></td>
-    </tr>
-    <% end %>
-  </table>
 </div>
-<% end %>
-
-<div class="box02 canvas_con">
-	<div class='multibox'>
-		<div class="tipbar space">
-		<% if @profile.about_me.blank? %>
-			<span>这家伙很懒，什么都没说...</span>
-		<% else %>
-			<span><%= @profile.about_me %></span>
-		<% end %>
+<div class='acMain'>
+	<div class="alphaColum acMainWrap" >
+		<div class="ac-r-m fix" id="profile-main-content">
+			<div class="authTips">
+				<div class="fix"><strong><%=@user.login%></strong> 只公开了一部分信息，想了解TA更多吗？加TA为好友吧！</div>
+				<div class="space20">
+				 <span class="button05"><span>
+						<%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %>
+					</span></span>
+				</div>
+			</div>
 		</div>
+		<div class="ac-r-b"><em></em></div>
 	</div>
-
-	<div class="multibox">
-		<div class="title"><b></b></div>
-		<strong>
-      <% if @user.is_idol %>
-        <%= facebox_confirm "加为粉丝", follow_idol_url(@user, :at => 'new_friend'), {:msg => "你确定要成为 #{@user.login} 的粉丝吗？这样可以在首页看到 #{@user.login} 的新鲜事", :method => :post} %>
-      <% else %>
-        <%= facebox_link "加为好友", new_friend_request_url(:friend_id => @user.id) %>
-      <% end %>
-    </strong> 
-    或者 <strong><%= link_to "发站内信", new_mail_url(:recipient_ids => [@user.id]) %>
-	</div>
-
-<% unless @common_friends.blank? %>
-	<div class="multibox">
-		<div class="title"><%= link_to '更多', common_friends_url(:uid => @user.id) %><b>共同好友</b></div>
-		<div class="photolist-box">
-			<ul class="collection s_clear">
-				<% @common_friends.each do |p| %>
-					<li>
-						<div class="middle"><div class="middle-center"><div class="center"><%= avatar p, :class => 'imgbox01' %></div></div></div>
-						<p><%= profile_link p %></p>
-					</li>
-				<% end %>
-			</ul>
+	<div class="alphaColum">
+		<div class="ac-r-t"><em></em></div>
+		<div class="ac-r-m fix">
+			<div class="alphaTitle fix"><div class="wrap"><strong>留言板(共<%=@profile.comments_count%>条)</strong></div></div>
+			<div class="ac-bd">
+				<%= render :partial => 'user/wall_messages/wall', :locals => {:wall => @profile, :recipient => @profile.user, :messages => @messages} %>
+			</div>
 		</div>
+		<div class="ac-r-b"><em></em></div>
 	</div>
-<% end %>
-
-<% if @user.is_idol %>
-  <div class="multibox">
-    <div class="title"><%= link_to '全部粉丝', other_friends_url(:uid => @user.id) %><b>粉丝团(<%= @user.fans_count %>)</b></div>
-    <div class="photolist-box">
-      <ul class="collection s_clear">
-        <% @user.fans.sort_by{rand}[0..7].each do |p| %>
-          <li>
-            <div class="middle"><div class="middle-center"><div class="center"><%= avatar p, :class => 'imgbox01' %></div></div></div>
-            <p><%= profile_link p %></p>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  </div> 
-<% else %>
-	<div class="multibox">
-		<div class="title"><%= link_to '全部好友', other_friends_url(:uid => @user.id) %><b>他的好友</b></div>
-		<div class="photolist-box">
-			<ul class="collection s_clear">
-				<% @user.friends.sort_by{rand}[0..7].each do |p| %>
-					<li>
-						<div class="middle"><div class="middle-center"><div class="center"><%= avatar p, :class => 'imgbox01' %></div></div></div>
-						<p><%= profile_link p %></p>
-					</li>
-				<% end %>
-			</ul>
-		</div>
-	</div>
-<% end %>
-
 </div>
+
+<% unless @reply_to.nil? %>
+  <%= onload_javascript_tag "Iyxzone.WallMessage.set('#{@reply_to.login}', #{@reply_to.id})" %>
+<% end %>
+<% javascript_tag do %>
+  Iyxzone.Profile.init(<%= @profile.id %>);
+<% end %>
