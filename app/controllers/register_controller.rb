@@ -31,7 +31,10 @@ class RegisterController < ApplicationController
       render_not_found
     else
       @as_fan = @sender.invite_fan_code == params[:token]
-      @people = @as_fan ? @sender.fans[0..11] : @sender.friends[0..11]
+			@mini_blogs = @sender.mini_blogs.category('text').limit(3).all
+			limit = (@sender.games_count > 5) ? 5 : @sender.games_count
+			@games = @sender.games[0..(limit-1)]
+      @people = @as_fan ? @sender.fans[0..8] : @sender.friends[0..8]
       render :action => 'invite'  
     end
   end
