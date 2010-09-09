@@ -1999,9 +1999,10 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .acMain{padding:0 20px 10px 20px;}
 .acMain .acWrap{padding:0 20px}
 .acMain .addGame{background:#fff;text-align:right;padding:0 10px 10px 0}
-.alphaContent .myGameList{background:url(../images/skin/cabinet-bg.jpg) repeat-y;margin-bottom:20px}
-.alphaContent .myGameList li{height:156px;width:112px;float:left;text-align:center;}
-.alphaContent .myGameList li .gameName{display:block;color:#fff;margin:10px 0}
+/*游戏陈列架*/
+.myGameList{background:url(../images/skin/cabinet-bg.jpg) repeat-y;margin-bottom:20px}
+.myGameList li{height:156px;width:112px;float:left;text-align:center;}
+.myGameList li .gameName{display:block;color:#fff;margin:10px 0}
 .alphaContent .moreGame{background:#fff;}
 .alphaContent .moreGame a{background:url(../images/skin/alpha-skin.png) no-repeat -288px -33px;width:138px;height:27px;line-height:27px;display:block;color:#fff;text-align:center;margin:0 auto;font-weight:700}
 .alphaContent .s-dialog .arrow-dialog{_left:-17px;}
@@ -2040,10 +2041,10 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .avatarEdit .avtCurrent{width:300px;margin-top:20px}
 .avtEditor,.avtResult{margin-top:20px}
 .avtEditor .tips,.avtResult .tips{margin:20px 20px 0 20px}
-.avtEditor .avtWrap {padding:20px 0 20px 340px}
-.avtEditor .avtWrap .panel{float:left;margin-left:-320px;_display:inline;width:300px;}
-.avtEditor .avtWrap .panel .edt{overflow:hidden;background:#888;position:relative}
-.avtEditor .avtWrap .panel .edt img{position:absolute;}
+.avtEditor .avtWrap {padding:20px 0 20px 440px}
+.avtEditor .avtWrap .panel{float:left;margin-left:-420px;_display:inline;width:400px;}
+.avtEditor .avtWrap .panel .edt{width:400px;height:500px;overflow:hidden;background:#888;position:relative}
+/*.avtEditor .avtWrap .panel .edt img{position:absolute;}*/
 .avtEditor .avtWrap .preview{float:left;width:100%}
 
 .avtEditor .avtM .bd a,.avtEditor .avtL .bd a{width:60px;height:60px;border:2px solid #F8FCF6;display: block;position:relative}
@@ -2060,7 +2061,7 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 
 .zoomBar{margin:10px 0}
 .zoomBar li{float:left;margin:0 3px;}
-.zoomBar .slideBar{width:185px;height:14px;padding-right:10px;background:url(../images/skin/btn2010.png) no-repeat right -1058px;}
+.zoomBar .slideBar{width:285px;height:14px;padding-right:10px;background:url(../images/skin/btn2010.png) no-repeat right -1058px;}
 .zoomBar .slideBar span{display:block;height:14px;background:url(../images/skin/btn2010.png) no-repeat 0 -1075px;}
 .zoomBar .slideBar .btn{display:block;width:22px;height:14px;background:url(../images/skin/skin2010.png) no-repeat -45px -413px;margin-left:10px}
 .zoomBar .op{font-weight:700;font-family: Tahoma, Geneva, sans-serif;font-size:12px}
@@ -2072,5 +2073,21 @@ body.themeBg{background:#9c9c9c url(../images/skin/body-bg.jpg) no-repeat center
 .avtResult .avtShowM img,.avtResult .avtShowL img{position:absolute;left:0;top:0}
 .avtResult .avtShowL{width:260px;margin-left:80px}
 
-
 .avatarEdit .submit{padding:0 0 20px 320px;}
+
+/*邀请注册*/
+.inviteReg .sideBar{width:300px;}
+.inviteReg .mainWrap{margin:20px 0 0 -310px;*margin:20px 0 0 -310px !important;}
+.inviteReg .mainWrap .mainContent{margin:0 20px 0 330px;}
+.inviteReg h1{font-size:16px;font-weight:700;margin:10px 0 20px 0}
+
+.inviteReg{background:none}
+.inviteReg .avatarXl{position:relative;left:0;top:0;zoom:1;margin-left:10px}
+.inviteReg .ivtSlogon{margin:20px;}
+.inviteReg .ivtSlogon p{font-size:14px;font-weight:700;margin:10px 0;line-height:22px}
+.inviteReg .ivtSlogon .ft{text-align:center;margin:20px 0;}
+.inviteReg .myGameList{margin-left:10px}
+.inviteReg .ivtMyMBlog{float:left;width:330px}
+.inviteReg .ivtMyFriends{float:right;width:230px}
+.inviteReg .ivtMyFriends .collection li{color:#333}
+

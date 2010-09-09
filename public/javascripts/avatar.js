@@ -150,7 +150,7 @@ Object.extend(Iyxzone.Avatar.Builder, {
     html += '</div>';
     html += '<div class="avtL">';
     html += '<div class="bd">';
-    html += '<a href="javascript:void(0)"><span class="i iArrLeft"></span><div id="largePreview"></div></a>';  
+    html += '<a href="javascript:void(0)"><span class="i iArrLeft"></span><div id="largePreview" style="width:' + this.largePreviewSize + "px;height:" + this.largePreviewSize + 'px"></div></a>';  
     html += '</div>';
     html += '<div class="ft"><span>大头像预览</span><a href="javascript:void(0)" class="op" onclick="Iyxzone.Avatar.Builder.editLarge();">编辑</a></div>';
     html += '</div>';
@@ -189,7 +189,6 @@ Object.extend(Iyxzone.Avatar.Builder, {
       this.width = this.origWidth / this.ratio;
       this.height = this.origHeight / this.ratio;
     }
-    alert(this.wrapWidth + " & " + this.width);
   },
 
   imageUploaded: function(id, src, name, width, height){
@@ -252,8 +251,8 @@ Object.extend(Iyxzone.Avatar.Builder, {
     // set large preview manually
     // 这时候的x1, y1, x2, y2是large preview的
     $('largePreview').addClassName('imgCrop_previewWrap');
-    $('largePreview').setStyle({'width': this.largePreviewSize, 'height': this.largePreviewSize});
-    $('largePreview').update('<img src="' + this.src + '" width="' + (this.width/size)*this.largePreviewSize + '" height="' + (this.height/size)*this.largePreviewSize + '" style="left:-' + (this.largePreviewSize/size)*x1 + 'px;top:-' + (this.largePreviewSize/size)*y1 + 'px;" />');
+    var img = new Element('img', {'src': this.src, 'width': (this.width/size)*this.largePreviewSize, 'height': (this.height/size)*this.largePreviewSize, 'style': "left: -" + (this.largePreviewSize/size)*x1 + 'px;top:-' + (this.largePreviewSize/size)*y1 + 'px;'});
+    $('largePreview').appendChild(img);
   },
 
   resetCropper: function(options){
