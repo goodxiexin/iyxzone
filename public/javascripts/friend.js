@@ -146,14 +146,14 @@ Object.extend(Iyxzone.Friend.Request, {
 
 //战友
 Iyxzone.Comrade = {
-  version: '1.0',
+  version: '1.2',
   author: ['高侠鸿'],
   Suggestor: {}
 };
 
 Object.extend(Iyxzone.Friend.Suggestor, {
 
-  newSuggestion: function(suggestionID, token, nicerLayout){
+  newSuggestion: function(suggestionID, token, nicerLayout, link){
     // consturct except parameters
     var url = '/friend_suggestions/new';
     var exceptIDs = [];
@@ -173,6 +173,9 @@ Object.extend(Iyxzone.Friend.Suggestor, {
     new Ajax.Request(url, {
       method: 'get',
       parameters: {sid: suggestionID, authenticity_token: encodeURIComponent(token), nicer: nicerLayout},
+      onLoading: function(){
+        $(link).writeAttribute('onclick', '');
+      },
       onSuccess: function(transport){
         var card = $('friend_suggestion_' + suggestionID);
         var temp_parent = new Element('div');
@@ -189,7 +192,7 @@ Object.extend(Iyxzone.Friend.Suggestor, {
 
 Object.extend(Iyxzone.Comrade.Suggestor, {
 
-  newSuggestion: function(serverID, suggestionID, token){
+  newSuggestion: function(serverID, suggestionID, token, link){
     var url = 'friend_suggestions/new';
     var exceptIDs = [];
     var suggestions = $('server_' + serverID + '_suggestions').childElements();
@@ -208,6 +211,9 @@ Object.extend(Iyxzone.Comrade.Suggestor, {
     new Ajax.Request(url, {
       method: 'get',
       parameters: {sid: suggestionID, server_id: serverID, authenticity_token: encodeURIComponent(token)},
+      onLoading: function(){
+        $(link).writeAttribute('onclick', '');
+      },
       onSuccess: function(transport){
         var card = $('comrade_suggestion_' + suggestionID);
         var temp_parent = new Element('div');

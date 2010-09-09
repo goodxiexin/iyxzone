@@ -6,97 +6,16 @@ require "iconv"
 
 namespace :users do
 
-  desc "改邮件"
-  task :change_email => :environment do
-    User.all(:select => "id, email").group_by{|u| u.email.downcase}.select{|email, users| users.count > 1}.each do |email, users|
-      users.shift
-      puts "#{email}: destroy #{users.map(&:id).join(", ")}"
-      users.map(&:id).each do |id|
-        User.destroy(id)
-      end
-    end
+  desc "build main index"
+  task :main_index => :environment do
+    User.build_main_index
+    `chown deployer:deployer #{File.join(RAILS_ROOT, User.index_dir)}` 
   end
 
-  desc "改名字"
-  task :change_login_name => :environment do
-    changed = File.open("changed1.log", "w")
-    failed = File.open("failed1.log", "w")
-    s = [0x4E00].pack("U")
-    e = [0x9FA5].pack("U")
-    reg = /^[a-zA-Z0-9_#{s}-#{e}]+$/
-
-    # 先去掉特殊字符
-    User.all.select{|u| !(u.login =~ reg)}.each do |u|
-      r = /^[ \=】【\$\t\~\.\-\,。，\(\)、\^\~\`\!\?？！\\\/\*\@\·\>\<a-zA-Z0-9_#{s}-#{e}]+$/
-      if r =~ u.login
-        # 将空格换成_
-        new_login = u.login.gsub(/[ \=】【\$\t\.\,\-。，\(\)、\^\~\`\\\/\!\?！？\*\@\·\>\<]/, '_')
-        if new_login.split(//).count > 30
-					new_login = "用户#{u.id}"
-				end
-				if User.exists? :login => new_login
-					new_login = "用户#{u.id}"
-				end
-				puts "#{u.id}: #{u.login} => #{new_login}"
-        u.login = new_login
-        u.save
-        record = InvalidName.create :user_id => u.id
-        UserMailer.deliver_change_nickname u, record.token
-      elsif "用户#{u.id}".length > 30
-        failed.write "#{u.id}: 用户#{u.id} 名字太长\n"
-				puts "#{u.id}: 用户#{u.id} 名字太长\n"
-      elsif User.exists? :login => "用户#{u.id}"
-        failed.write "#{u.id}: 用户#{u.id} 已经存在\n"
-				puts "#{u.id}: 用户#{u.id} 已经存在\n"
-      else
-        changed.write "#{u.id}: #{u.login} => 用户#{u.id}\n"
-        puts "#{u.id}: #{u.login} => 用户#{u.id}\n"
-        u.login = "用户#{u.id}"
-        u.save
-        record = InvalidName.create :user_id => u.id
-        UserMailer.deliver_change_nickname u, record.token
-      end
-    end 
-    
-    # 修改重复名字
-    changed.close
-    failed.close
-    changed = File.open("changed2.log", "w")
-    failed = File.open("failed2.log", "w")
-    User.all(:select => "id, login").group_by{|u| u.login.downcase}.select{|login, users| users.count > 1}.each do |login, users|
-      ids = users.map(&:id)
-      ids.each_with_index do |id, i|
-        u = User.find(id)
-        if i != 0
-          if "#{login}_#{i}".length > 30
-            failed.write "#{id}: #{login}_#{i} 新名字太长\n"
-						puts "#{id}: #{login}_#{i} 新名字太长\n"
-            u.login = "用户#{u.id}"
-            u.save
-            changed.write "#{id}: #{login} => #{u.login}\n"
-            puts "#{id}: #{login} => #{u.login}"
-            record = InvalidName.create :user_id => u.id
-            UserMailer.deliver_change_nickname u, record.token
-          elsif User.exists? :login => "#{login}_#{i}"
-            failed.write "#{id}: 新名字 #{login}_#{i} 已经被使用了\n"
-						puts "#{id}: 新名字 #{login}_#{i} 已经被使用了\n"
-            u.login = "用户#{u.id}"
-            u.save
-            changed.write "#{id}: #{login} => #{u.login}\n"
-            puts "#{id}: #{login} => #{u.login}"
-            record = InvalidName.create :user_id => u.id
-            UserMailer.deliver_change_nickname u, record.token
-          else
-            u.login = "#{login}_#{i}"
-            u.save
-            changed.write "#{id}: #{login} => #{u.login}\n"
-            puts "#{id}: #{login} => #{u.login}"
-            record = InvalidName.create :user_id => u.id
-            UserMailer.deliver_change_nickname u, record.token
-          end
-        end
-      end
-    end
+  desc "build delta index"
+  task :delta_index => :environment do
+    User.build_delta_index
+    `chown deployer:deployer #{File.join(RAILS_ROOT, User.index_dir)}` 
   end
 
   desc "提示那些很久没上线的人"

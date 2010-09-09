@@ -1123,6 +1123,7 @@ Iyxzone.Game.Autocompleter2 = Class.create(Autocompleter.Local, {
       new Ajax.Request(Iyxzone.URL.listGameDetails(), {
         method: 'get',
         onLoading: function(){
+          this.update.update(this.options.loadingText);
           this.isFetching = true;
         }.bind(this),
         onComplete: function(){
@@ -1192,6 +1193,7 @@ Iyxzone.Game.Tagger = Class.create({
     new Iyxzone.Game.Autocompleter2(this.relGameList.getMainInput(), this.gameList, {
       afterUpdateElement: this.afterSelectGame.bind(this),
       tipText: '输入你游戏的拼音或者名字',
+      loadingText: '正在搜索游戏...',
       emptyText: '没有匹配的游戏...',
       comp: this.relGameList.holder
     }); 

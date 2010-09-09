@@ -29,7 +29,7 @@ class Video < ActiveRecord::Base
     friends = poster.friends.all(:select => "users.id, users.application_setting").find_all {|f| f.application_setting.recv_video_feed?}
     others = [poster.profile] + video.games + poster.all_guilds
     fans = poster.is_idol ? poster.fans.all(:select => "users.id") : []
-    (friends + other + fans).uniq
+    (friends + others + fans).uniq
   }
 
   acts_as_commentable :order => 'created_at ASC', :delete_conditions => lambda {|user, video, comment| user == video.poster || user == comment.poster}, :create_conditions => lambda {|user, video| video.available_for? user.relationship_with(video.poster) }

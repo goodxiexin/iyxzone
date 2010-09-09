@@ -1,5 +1,11 @@
-1. deploy后，有新的东西要link
+1. deploy后，有新的东西要link, captcha
 
 2. rake asset
 
 3. 新的定时任务
+   users index
+	 characters index
+	 captcha
+	 snapshots
+
+4. generate captchas

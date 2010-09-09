@@ -1,17 +1,17 @@
-﻿.sperator{clear:both;margin:12px 0; background:url(../images/welcome/sperator01.gif) repeat-x;height:1px;font-size:1px;}
-.sperator-wrap{margin:12px 0;background:url(../images/welcome/sperator01.gif) repeat-x;}
+﻿.sperator{clear:both;margin:12px 0; background:url(/images/welcome/sperator01.gif) repeat-x;height:1px;font-size:1px;}
+.sperator-wrap{margin:12px 0;background:url(/images/welcome/sperator01.gif) repeat-x;}
 .sperator-wrap .sperator{margin:0;}
-.sperator-wrap .sperator-main{background:url(../images/welcome/sperator01.gif) repeat-y center top}
+.sperator-wrap .sperator-main{background:url(/images/welcome/sperator01.gif) repeat-y center top}
 
-.body_bg01{background:url(../images/skin/bg01.png) no-repeat center top}
+.body_bg01{background:url(/images/skin/bg01.png) no-repeat center top}
 .top_link{line-height:39px;text-align:right;color:#fff;overflow:hidden;}
-.welcome-box #navbar #navwrap #navmid{background:#73bd21 url(../images/welcome/top-bg.png) no-repeat 400px 0;}
+.welcome-box #navbar #navwrap #navmid{background:#73bd21 url(/images/welcome/top-bg.png) no-repeat 400px 0;}
 
-.logo-v2{background:url(../images/skin/logo-v2.png) no-repeat;top:0}
+.logo-v2{background:url(/images/skin/logo-v2.png) no-repeat;top:0}
 
 .welcome-box{width:972px;margin:0 auto;}
 .welcome-box02{width:950px;margin:0 auto;}
-.welcome-banner{margin-top:25px;background:url(../images/welcome/banner.jpg) no-repeat;width:970px;height:315px;position:relative}
+.welcome-banner{margin-top:25px;background:url(/images/welcome/banner.jpg) no-repeat;width:970px;height:315px;position:relative}
 .welcome-banner .welcome-text{height:0;font:0/0 sans-serif;overflow:hidden}
 .login-box{width:280px;height:230px;position:absolute;right:5px;top:25px;*top:33px;color:#fff;padding-top:20px}
 .login-box .rows{margin-top:10px;padding:0}
@@ -19,25 +19,25 @@
 .login-box .textfield{width:150px;border-color:#238204}
 .login-box .fldcb{line-height:20px}
 .login-box a{color:#fff;}
-.login-box .login-btn,.login-box .login-btn-hover,.login-box .reg-btn{background:url(../images/welcome/sign-btn.png) no-repeat;display:block}
+.login-box .login-btn,.login-box .login-btn-hover,.login-box .reg-btn{background:url(/images/welcome/sign-btn.png) no-repeat;display:block}
 .login-box .login-btn,.login-box .login-btn-hover{width:103px;height:34px;border:0;cursor:pointer}
 .login-box .login-btn-hover{background-position:0 -38px;}
 .login-box .idxRegTips{margin:25px 0 0 80px;line-height:16px}
 .login-box .reg-btn{width:149px;height:35px;background-position:0 -76px;}
 .login-box .reg-btn:hover{background-position:0 -115px;}
 .welcome-intro li{width:317px;height:271px;float:left;margin:10px 2px;position:relative}
-.welcome-intro li.item-1{background:url(../images/welcome/intro_01.png) no-repeat;}
-.welcome-intro li.item-2{background:url(../images/welcome/intro_02.png) no-repeat;}
-.welcome-intro li.item-3{background:url(../images/welcome/intro_03.png) no-repeat;}
+.welcome-intro li.item-1{background:url(/images/welcome/intro_01.png) no-repeat;}
+.welcome-intro li.item-2{background:url(/images/welcome/intro_02.png) no-repeat;}
+.welcome-intro li.item-3{background:url(/images/welcome/intro_03.png) no-repeat;}
 .welcome-intro li .con{position:absolute;bottom:5px;width:230px;margin-left:40px;line-height:18px}
 .welcome-intro li h2{font-size:16px;font-weight:700;color:#238204;margin-bottom:2px}
 /**/
 .signBox2{margin:20px auto}
-.signBox2 .banner{float:left;width:417px;height:356px;margin:30px 0 0 60px;_margin:30px 0 0 30px;background:url(../images/welcome/sign2-banner.jpg) no-repeat;font-size:0;line-height:0;text-indent:-999px}
+.signBox2 .banner{float:left;width:417px;height:356px;margin:30px 0 0 60px;_margin:30px 0 0 30px;background:url(/images/welcome/sign2-banner.jpg) no-repeat;font-size:0;line-height:0;text-indent:-999px}
 .login2{width:280px;height:420px;float:right;margin:20px 60px 0 0;_margin:20px 30px 0 0}
 .login2 .errorMsg{border:1px solid #ffd496;position:relative;margin-bottom:20px;zoom:1;}
 .login2 .errorMsg a{text-decoration:underline}
-.login2 .errorMsg .arrDown{position:absolute;bottom:-11px;_bottom:-13px;left:20px;width:20px;height:12px;background:url(../images/skin/skin2010.png) no-repeat -17px -414px}
+.login2 .errorMsg .arrDown{position:absolute;bottom:-11px;_bottom:-13px;left:20px;width:20px;height:12px;background:url(/images/skin/skin2010.png) no-repeat -17px -414px}
 .login2 .errorMsg .wrap{border:1px solid #fff;background:#fff5c3;padding:10px}
 .login2 .login-box{position:relative;top:0;right:0;color:#333;width:240px;margin:0 auto;zoom:1;height:auto}
 .login2 .login-box .rows{margin-bottom:15px}
@@ -48,20 +48,20 @@
 .login2 .login-box .idxRegTips {margin-top:10px}
 
 
-.footer-shine{width:970px;height:69px;margin:20px auto;background:url(../images/welcome/footer-bg.png) no-repeat;position:relative}
+.footer-shine{width:970px;height:69px;margin:20px auto;background:url(/images/welcome/footer-bg.png) no-repeat;position:relative}
 .footer-shine .logo{position:absolute;top:10px;left:20px}
 .footer-shine .logo h2{font-size:0;line-height:0;text-indent:-999px}
 .footer-shine .con{text-align:center;line-height:24px;padding-top:10px}
 .footer-shine .con a{color:#333}
-.footer-shine .company-logo{width:51px;height:51px;position:absolute;top:-15px;right:45px;background:url(../images/welcome/company-logo.png) no-repeat;font:0/0 sans-serif;text-indent:-9999px;*text-indent:0;overflow:hidden}
+.footer-shine .company-logo{width:51px;height:51px;position:absolute;top:-15px;right:45px;background:url(/images/welcome/company-logo.png) no-repeat;font:0/0 sans-serif;text-indent:-9999px;*text-indent:0;overflow:hidden}
 .footer-shine .cyberpolice{position:absolute;top:15px;right:130px;}
-.footer-shine .r-c{width:10px;height:69px;background:url(../images/welcome/footer-bg.png) no-repeat right 0;position:absolute;top:0;right:0}
+.footer-shine .r-c{width:10px;height:69px;background:url(/images/welcome/footer-bg.png) no-repeat right 0;position:absolute;top:0;right:0}
 
-.regist-box .t{background:url(../images/welcome/registBg01.png) no-repeat;}
-.regist-box{width:672px;margin:13px auto 0;color:#7E7F80;background:url(../images/welcome/regist02.png) repeat-y}
-.regist-box .b{background:url(../images/welcome/regist03.png) no-repeat 0 bottom;}
-.regist-box .regist-content{padding:20px;background:url(../images/welcome/registBg01.png) no-repeat;}
-.regist-box .logo .status{padding-left:24px;margin-top:20px;line-height:29px; background:url(../images/icons/homeIcons.gif) no-repeat 0 -1295px;}
+.regist-box .t{background:url(/images/welcome/registBg01.png) no-repeat;}
+.regist-box{width:672px;margin:13px auto 0;color:#7E7F80;background:url(/images/welcome/regist02.png) repeat-y}
+.regist-box .b{background:url(/images/welcome/regist03.png) no-repeat 0 bottom;}
+.regist-box .regist-content{padding:20px;background:url(/images/welcome/registBg01.png) no-repeat;}
+.regist-box .logo .status{padding-left:24px;margin-top:20px;line-height:29px; background:url(/images/icons/homeIcons.gif) no-repeat 0 -1295px;}
 .regist-box .help{padding-left:101px;_height:1px;line-height:22px;position:relative;margin-top:20px}
 .regist-box .help .prompt{width:75px;position:absolute;left:19px;top:0;height:22px;line-height:normal;font-weight:bold;font-size:16px;overflow:hidden;color:#BF3A00}
 .regist-box .help h1{color:#BF3A00}
@@ -79,28 +79,28 @@
 .regist-box .regist-prompt p.btn{margin-bottom:15px;}
 .regist-box .answer-box{padding:22px 43px;line-height:21px;}
 .regist-box .answer-box ul{padding-left:32px;}
-.regist-box .answer-box h3{padding-left:21px;background:url(../images/icons/homeIcons.gif) no-repeat 0 -1358px;color:#25700D}
+.regist-box .answer-box h3{padding-left:21px;background:url(/images/icons/homeIcons.gif) no-repeat 0 -1358px;color:#25700D}
 
 .regist-box .edit .con p.foot {border-bottom:1px solid #9ACE5F;line-height:30px;margin:0 20px;}
-.regist-box .edit .con p.foot a.reg-role-add{background:url(../images/welcome/reg-role-add.png) no-repeat;width:162px;height:34px;display:block;margin:10px auto;}
+.regist-box .edit .con p.foot a.reg-role-add{background:url(/images/welcome/reg-role-add.png) no-repeat;width:162px;height:34px;display:block;margin:10px auto;}
 
 #footer{width:972px;margin:0 auto;padding:15px 0;}
 
 /*box-v2*/
 .box-v2 .t,.box-v2 .b{position:relative}
-.box-v2 .t,.box-v2 .b,.box-v2 .t span,.box-v2 .b span{background:url(../images/skin/boxv2.png) no-repeat}
+.box-v2 .t,.box-v2 .b,.box-v2 .t span,.box-v2 .b span{background:url(/images/skin/boxv2.png) no-repeat}
 .box-v2 .t span,.box-v2 .b span{position:absolute;right:0;width:20px;display:block}
 .box-v2 .t{background-position:0 0;height:25px}
 .box-v2 .t span{background-position:right 0;height:25px}
 .box-v2 .b{background-position:0 bottom;height:30px}
 .box-v2 .b span{background-position:right bottom;bottom:0;height:30px;}
 
-.box-v2 .t strong{position:absolute;left:15px;top:6px;display:block;background:url(../images/skin/skin2010.png) no-repeat}
+.box-v2 .t strong{position:absolute;left:15px;top:6px;display:block;background:url(/images/skin/skin2010.png) no-repeat}
 .box-v2 .t strong.get-pws{width:53px;height:13px;background-position:0 -69px;}
 .box-v2 .m{border-left:1px solid #bdd6ad;border-right:1px solid #bdd6ad;background:#f8fcf6;}
 
 /*index 20100702*/
-.idxMessage .t,.idxCommend .t,.idxCommend .pipe,.idxCommend .memberShow .subTitle,.idxTopic,.idxTopic .wrap,.idxTopic .r-c{background:url(../images/welcome/idx-skin.png) no-repeat}
+.idxMessage .t,.idxCommend .t,.idxCommend .pipe,.idxCommend .memberShow .subTitle,.idxTopic,.idxTopic .wrap,.idxTopic .r-c{background:url(/images/welcome/idx-skin.png) no-repeat}
 .idxMessage,.idxCommend,.idxTopic{margin-top:20px}
 .idxMessage .t{width:87px;height:52px;float:left;background-position:0 0;font-size:0;line-height:0;text-indent:-999px}
 .idxMessage .bd{float:left}
@@ -133,7 +133,7 @@
 .idxTopic .t{padding:23px 0 0 160px;font-size:14px;color:#073811}
 .idxTopic .r-c{background-position:-104px 0;width:19px;height:104px;position:absolute;right:0;top:7px}
 .idxTopic .list{width:97%;margin:20px auto;}
-.idxTopic .list li{width:33%;float:left;background:url(../images/welcome/sperator01.gif) repeat-y right}
+.idxTopic .list li{width:33%;float:left;background:url(/images/welcome/sperator01.gif) repeat-y right}
 .idxTopic .list li .time{color:#666}
 .idxTopic .list li .con{position:relative}
 .idxTopic .list li .m-con{height:100px;overflow:hidden}

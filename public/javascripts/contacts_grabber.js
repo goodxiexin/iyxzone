@@ -208,7 +208,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
     table.down('tbody').childElements().each(function(tr){
       var box = tr.down('input');
       if(box.type == 'checkbox' && box.checked){
-        invitees.push(tr.childElements()[2].down('span').innerHTML);
+        invitees.push(tr.childElements()[2].down('strong').innerHTML);
       }
     });
 
@@ -239,7 +239,7 @@ Object.extend(Iyxzone.ContactsGrabber, {
 
           if(contacts.length == 0){
             notice("发送成功，页面将跳转到下一步");
-            window.location.href = Iyxzone.URL.listSignupInvitaiton();
+            window.location.href = Iyxzone.URL.listSignupInvitation();
           }else{
             this.showNotFriend();
           }

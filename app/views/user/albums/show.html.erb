@@ -29,7 +29,9 @@
       <%= render :partial => 'album_desc', :locals => {:user => @user, :album => @album} %>
       <div class='page-foot s_clear'>
         <%= render :partial => 'user/resources/foot_func', :locals => {:resource => @album, :commentable => true, :viewable => false, :diggable => false, :comment_opts => {:commentable => @album, :recipient => @user}, :reply_to => @reply_to} %>
-        <%= render :partial => 'user/resources/randoms', :locals => {:title => "#{get_subject @user}的其他相册", :randoms => @random_albums} %>
+        <% if !@random_albums.blank? %>
+          <%= render :partial => 'user/resources/randoms', :locals => {:title => "#{get_subject @user}的其他相册", :randoms => @random_albums} %>
+        <% end %>
       </div>
 		</div>
   </div>

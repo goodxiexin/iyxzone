@@ -10,13 +10,11 @@ namespace :mini_blogs do
 
   task :main_index => :environment do
     MiniBlog.build_main_index
-
     `chown deployer:deployer #{File.join(RAILS_ROOT, MiniBlog.index_dir)}`
   end
 
   task :delta_index => :environment do
     MiniBlog.build_delta_index 
-
     `chown deployer:deployer #{File.join(RAILS_ROOT, MiniBlog.index_dir)}`
   end
   

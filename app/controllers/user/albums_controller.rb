@@ -53,6 +53,7 @@ class User::AlbumsController < UserBaseController
   end
 
   def edit
+    @game_infos = @album.games.map {|g| {:id => g.id, :name => g.name, :pinyin => g.pinyin}}.to_json
     render :action => 'edit', :layout => false
   end
 
