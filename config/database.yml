@@ -46,3 +46,15 @@ production:
   username: root
   password: 20041065
   socket: /var/run/mysqld/mysqld.sock
+
+staging:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: dayday3_staging
+  pool: 5
+  username: root
+  password: 20041065
+  socket: /var/run/mysqld/mysqld.sock
+
+
