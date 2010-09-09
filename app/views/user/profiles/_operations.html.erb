@@ -25,7 +25,7 @@
 	    <li><%= link_to "<span class='i-skin'></span>主页装扮", skins_url %></li>
     <% elsif relationship == 'friend' %>
       <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>
-      <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('wall_message_content_#{profile.id}').positionedOffset().top - 20);$('wall_message_content_#{profile.id}').focus();" %></li>
+      <li><%= link_to_function "<span class='i-msg'></span>给#{subject}留言", "window.scrollTo(0, $('comment_content').positionedOffset().top - 20);$('comment_content').focus();" %></li>
       <li><%= facebox_link "<span class='i-hello'></span>打个招呼", new_poke_url(:recipient_id => user.id), :width => 450 %></li>
     <% else %>
       <li><%= link_to "<span class='i-mail'></span>发站内信", new_mail_url(:recipient_ids => [user.id]) %></li>

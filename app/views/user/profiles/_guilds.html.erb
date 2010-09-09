@@ -8,7 +8,7 @@
 				<% guilds.each do |guild| %>
 					<div class="item jl-cutline fix">
 						<div class="avatar">
-							<%= album_cover_image guild.album %>
+							<%= album_cover_image guild.album, :size => :cmedium %>
 						</div>
 						<div class="con">
 							<div class="guildName"><%= guild_link guild %></div>

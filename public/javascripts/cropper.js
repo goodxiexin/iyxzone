@@ -1121,7 +1121,7 @@ Cropper.ImgWithPreview = Class.create(Cropper.Img, {
       //ratios for the positions within the preview
       var posRatio = { 
         x: calcWidth / this.options.previewWidth,
-        y: calcHeight / this.options.previewHeight,
+        y: calcHeight / this.options.previewHeight
       };
       
       // setting the positions in an obj before apply styles for rendering speed increase

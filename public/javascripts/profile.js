@@ -97,7 +97,7 @@ Object.extend(Iyxzone.Profile.Presentor, {
     if(this.curLoading)
       return;
 
-    new Ajax.Request(Iyxzone.URL.changeTabInProfile(profileID), {
+    new Ajax.Request(Iyxzone.URL.changeTabInProfile(this.profileID), {
 			method: 'get',
 			parameters: {category: type},
       onLoading: function(){
@@ -190,7 +190,7 @@ Object.extend(Iyxzone.Profile.Presentor.GameDisplay, {
     var img = new Element('div', {'id': 'gl-' + gameID}).update('<img src="/images/loading.gif"/>');
     document.body.appendChild(img);
 
-    gamePic.observe('mousemove', function(event){
+    gamePic.observe('mousemove', function(event){3.2
       img.setStyle({
         'position': 'absolute',
         'left': (event.pointerX() + 10) + 'px',
@@ -337,7 +337,7 @@ Object.extend(Iyxzone.Profile.Presentor.GameDisplay, {
   },
 
   unfollow: function(id, name, gid){
-    new Ajax.Request(Iyxzone.URL.deleteMiniTopicAttention(gid), {
+    new Ajax.Request(Iyxzone.URL.deleteMiniTopicAttention(id), {
       method: 'delete',
       onLoading: function(){
         Iyxzone.changeCursor('wait');
@@ -970,6 +970,7 @@ Object.extend(Iyxzone.Profile.Tag, {
         var json = transport.responseText.evalJSON();
         if(json.code == 1){
           $('tag_' + tagID).remove();
+          Iyxzone.Facebox.close();
         }else{
           error('发生错误');
           $(link).writeAttribute('onclick', 'Iyxzone.Profile.Tag.confirmDeletingTag(' + profileID + ', ' + tagID + ', this);');

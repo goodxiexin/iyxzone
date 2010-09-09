@@ -9,13 +9,13 @@ namespace :users do
   desc "build main index"
   task :main_index => :environment do
     User.build_main_index
-    `chown deployer:deployer #{File.join(RAILS_ROOT, User.index_dir)}` 
+    `chown deployer:deployer #{User.index_dir} -R` 
   end
 
   desc "build delta index"
   task :delta_index => :environment do
     User.build_delta_index
-    `chown deployer:deployer #{File.join(RAILS_ROOT, User.index_dir)}` 
+    `chown deployer:deployer #{User.index_dir} -R` 
   end
 
   desc "提示那些很久没上线的人"

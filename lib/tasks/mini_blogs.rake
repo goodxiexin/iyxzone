@@ -10,18 +10,19 @@ namespace :mini_blogs do
 
   task :main_index => :environment do
     MiniBlog.build_main_index
-    `chown deployer:deployer #{File.join(RAILS_ROOT, MiniBlog.index_dir)}`
+    `chown deployer:deployer #{MiniBlog.index_dir} -R`
   end
 
   task :delta_index => :environment do
     MiniBlog.build_delta_index 
-    `chown deployer:deployer #{File.join(RAILS_ROOT, MiniBlog.index_dir)}`
+    `chown deployer:deployer #{MiniBlog.index_dir} -R`
   end
   
   task :make_snapshot => :environment do
     s = Time.now
     MiniBlog.make_index_snapshot
     e = Time.now
+    `chown deployer:deployer #{File.join(MiniBlog.index_dir, "snapshots")} -R`
     puts "#{e-s} sec to make new snapshot"
   end
 
