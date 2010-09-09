@@ -1,4 +1,4 @@
-﻿body.themeBg{background:#000 url(/images/themes/wenxin/body-bg.jpg) no-repeat center 0;}
+﻿body.themeBg{background:#fdf4e5 url(/images/themes/wenxin/body-bg.jpg) no-repeat center 0;}
 .alphaHeader{background-image:url(/images/themes/wenxin/alpha-header.png);}
 
 .alphaTitle{background:url(/images/themes/wenxin/alpha-skin.png) no-repeat right -47px;}
@@ -12,4 +12,4 @@
 
 .alphaContent .moreGame a {background:url(/images/themes/wenxin/alpha-skin.png) no-repeat 0 -92px;}
 
-#footer,#footer a{color:#fff}
+#footer,#footer a{color:#333}
