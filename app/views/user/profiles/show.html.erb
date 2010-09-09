@@ -3,9 +3,9 @@
 <% content_for :html_keywords, "#{@user.login}, 17Gaming, 一起游戏, 一起游戏网, 网络游戏玩家, 游戏社区, 社交网站, 网络游戏社区" %>
 
 <% if !@skin.default? %>
-<% content_for :stylesheet_link do %>
-  <%= stylesheet_link_tag "themes/#{@skin.directory}/#{@skin.css}" %>
-<% end %>
+	<% content_for :stylesheet_link do %>
+		<%= stylesheet_link_tag "themes/#{@skin.directory}/#{@skin.css}" %>
+	<% end %>
 <% end %>
 
 <% content_for :javascript_include do %>
@@ -41,7 +41,7 @@
 <div class='acMain'>
 	<div class="alphaColum acMainWrap" >
 		<div class="ac-r-m fix" id="profile-main-content">
-			<%= render :partial => "home_tab_info", :locals => {:user => @user, :profile=> @profile, :mini_blogs => @mini_blogs, :games => @games} %>
+			<%= render :partial => "user/profiles/home_tab_info", :locals => {:user => @user, :profile=> @profile, :mini_blogs => @mini_blogs, :games => @games} %>
 		</div>
 		<div class="ac-r-b"><em></em></div>
 	</div>

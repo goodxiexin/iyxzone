@@ -4,24 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>邀请好友注册</title>
 <%= stylesheet_link_tag "common", "home" %>
-<style type="text/css">
-#canvas .canvas_wrap .canvas_l {width:200px;}
-#canvas .canvas_wrap .canvas_main .canvas_main_c {margin-left:200px;}
-#canvas .canvas_wrap .canvas_main {margin-left:-200px;}
-#canvas .canvas_wrap .canvas_m {margin-right:-260px;}
-#canvas .canvas_wrap .canvas_m .canvas_c {margin-right:260px;}
-#canvas .canvas_wrap .canvas_r {width:260px;}
-#leftsidebar .mcAvatar {width:150px;height:190px;margin-top:10px}
-.mcAvatar a {width:160px}
-a,.menu-icon-list li a span,.photolist-box li{color:#333}
-#navbar .top_link {line-height:39px;}
-.invite-reg h2{font-size:16px;font-weight:700;color:#333;margin:10px 0}
-.invite-reg p{font-size:14px;font-weight:700;line-height:24px;margin:10px 0 0 0;}
-.go-reg{text-align:center;line-height:30px;color:#666;margin:20px 0}
-.go-reg a{text-decoration:underline;color:#666;}
-.go-reg .btn{background:url(images/welcome/invite-reg.png) no-repeat;width:160px;height:27px;display:inline-block}
-.photolist-box li{width:80px}
-</style>
 </head>
 <body>
 <div id="header">
@@ -39,86 +21,102 @@ a,.menu-icon-list li a span,.photolist-box li{color:#333}
   <!--navbar-->
 </div>
 <div id="page">
-  <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-    <div class="round_m"><div class="round_body canvas_wrap s_clear">
-      <div id="leftsidebar" class="canvas_l">
-        <div class="mcAvatar">
-          <a href="#"></a>
-          <div class="picwrap">
-            <div class="middle"><div class="middle-center"><div class="center">
-              <%= avatar_image @sender, :size => :clarge %>
-            </div></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="canvas_main"><div class="canvas_main_c s_clear">
-        <div class="canvas_m">
-          <div class="canvas_c">
-            <div class="invite-reg canvas_con">
-              <h2>
-                我是<%= @sender.login %>，邀请你来17gaming.com
-              </h2>
-              <div class="profile-list menu-icon-list s_clear">
-                <ul>
-                  <li><a href="#"><span class="icon-game"></span>我的游戏<span>(<%= @sender.games_count %>)</span></a></li>
-                  <li><a href="#"><span class="icon-blog"></span>我的日志<span>(<%= @sender.blogs_count %>)</span></a></li>
-                  <li><a href="#"><span class="icon-photo"></span>我的照片<span>(<%= @sender.photos_count %>)</span></a></li>
-                  <li><a href="#"><span class="icon-video"></span>我的视频<span>(<%= @sender.videos_count %>)</span></a></li>
-                  <li><a href="#"><span class="icon-cons"></span>我的公会<span>(<%= @sender.guilds_count %>)</span></a></li>
-                </ul>
-              </div>
-              <p>一起游戏网(17gaming)是让网络游戏玩家分享游戏心情，共享心得体验,重拾昔日情意的社交平台。</p>
-              <p>我们期待您的加入，与我们共建网络游戏玩家的精神家园。</p>
-              <div class="go-reg space20" style='width: 250px; margin: 20px auto'>
-                <span class='button04'><span><button onclick="window.location.href = '<%= signup_url(:invite_token => params[:token]) %>'"><b>注册并成为<%= @as_fan ? "粉丝" : "好友" %></b></button></span></span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="rightsidebar" class="canvas_r">
-          <div class="multibox space">
-            <div class="title">
-              <b>我的游戏资料</b>
-            </div>
-            <table class="data-table jl-data-table" cellpadding="0">
-              <tr>
-                <th class="name">游戏名称</th>
-                <th class="id">玩家昵称</th>
-                <th class="level">等级</th>
-              </tr>
-              <% @sender.characters.each do |c| %>
-              <tr>
-                <td class="name"><a href="#"><%= c.game.name %></a></td>
-                <td class="id"><a href="#"><%= c.name %></a></td>
-                <td class="level"><%= c.level %>级</td>
-              </tr>
-              <% end %>
-            </table>
-          </div>
-          <div class="multibox">
-            <div class="title">
-              <% if !@as_fan %>
-                <b>我的好友</b>
-              <% else %>
-                <b>我的粉丝团</b>
-              <% end %>
-            </div>
-            <div class="photolist-box">
-              <ul class="collection s_clear">
-                <% @people.each do |f| %>
-                  <li>
-                    <div class="middle"><div class="middle-center"><div class="center"><%= avatar_image f, :class => "imgbox01" %></div></div></div>
-                    <p><%= f.login %></p>
-                  </li>
-                <% end %>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div></div>
-  </div></div></div></div>
+  <div class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
+    <div class="round_m"><div class="round_body s_clear">
+      <div class="pageSkinV2 inviteReg fix">
+				<div class="sideBar">
+				
+						<div class="avatarXl">
+								<div class="wrap">
+									<%= avatar_image @sender, :size => :max %>
+								</div>
+						</div>
+						<div class="ivtSlogon">
+								<div class="bd">
+										<p>一起游戏网(17gaming)是让网络游戏玩家分享游戏心情，共享心得体验,重拾昔日情意的社交平台。</p>
+										<p>我们期待您的加入，与我们共建网络游戏玩家的精神家园。</p>
+								</div>
+								<div class="ft">
+										<span class='button05'><span><%= link_to "<b>注册并成为 #{@as_fan ? "粉丝" : "好友"}</b>", signup_url(:invite_token => params[:token]) %></span></span>
+										<div class="clear space">
+											<!--或者去 <a href="#">李大海的个人主页</a> -->
+										</div>
+								</div>
+						 </div>
+						
+				</div>
+        
+				<div class="mainWrap">
+						<div class="mainContent">
+								<h1>我是<%= @sender.login%>，邀请你来一起游戏网（17Gaming.com）</h1>
+								<div class="ivtMyGame">
+										<div class="tab tab01">
+												<ul>
+														 <li><span><b>我在玩的游戏</b></span></li>
+												</ul>
+										</div>
+										<div class="myGameList">
+											<ul class="fix">
+												<% @games.each do |game| %>
+													<li>
+														<a href="/games/<%=game.id%>" id="game-display-<%=game.id%>">
+															<span class="gameName"><%= game.name%></span>
+															<span class="gameLogo"><%= game_image game.name, :width=>"70", :height=>"100" %></span>
+														</a>
+													</li>
+												<% end %>
+											</ul>
+										</div>
+								</div>
+								<div class="ivtMyMBlog">
+									<div class="tab tab01">
+										<ul>
+											<li><span><b>我发布的微博</b></span></li>
+										</ul>
+									</div>
+									<div class="mBlogPostList mBlogProList">
+										<% if !@mini_blogs.blank? %>
+											<% @mini_blogs.each do |mb| %>
+												<% render :layout => 'user/mini_blogs/mini_blog', :locals => {:mini_blog => mb, :at => 'public', :with_foot => false} do %>
+													<div class="feedFunc icon-state"></div>
+												<% end %>
+											<% end %>
+										<% else %>
+												<div class='space'>我还没来得及写游戏微博</div>
+										<% end %>
+									</div>
+								</div>
+
+								<div class="ivtMyFriends">
+										<div class="tab tab01">
+											<ul>
+												<li><span>
+												<% if !@as_fan %>
+													<b>我的好友</b>
+												<% else %>
+													<b>我的粉丝团</b>
+												<% end %>
+												</span></li>
+											</ul>
+										</div>
+										<div class="photolist-box">
+												<ul class="collection s_clear">
+													<% @people.each do |f| %>
+														<li>
+															<div class="middle"><div class="middle-center"><div class="center"><%= avatar_image f, :class => "imgbox01" %></div></div></div>
+															<p><%= f.login %></p>
+														</li>
+													<% end %>
+												</ul>
+										</div>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div></div>
+		</div></div></div></div>
 </div>
+
 <div id="footer">
 <%= copyright %>
 </div>

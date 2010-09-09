@@ -1,4 +1,5 @@
 def add_skin name, desc
+	puts "start..."
   image_path = File.join(RAILS_ROOT, name, "images")
   style_path = File.join(RAILS_ROOT, name, "style.css")
   to_image_path = File.join(RAILS_ROOT, 'public', 'images', 'themes', name);

@@ -1,53 +1,15 @@
-﻿body{background:#191919;color:#999}
-a.gray:link,a.gray:visited,a.gray:active,.multibox .data-table a{color:#999}
-a,.menu-icon-list li a span{color:#999}
-.shine, a.shine:link, a.shine:visited, a.shine:active {color:#a05c00;}
-.piclist .jl-picitem a{color:#a05c00}
-.box02 {background:none;border:0}
-.box04 {background:#242424;border:0;}
-.textarea,textarea{background:#3b3b3b;border:none}
+﻿body.themeBg{background:#171928 url(/images/themes/aion/body-bg.jpg) no-repeat center 0;}
+.alphaHeader{background-image:url(/images/themes/aion/alpha-header.png);}
 
-#header{width:100%;background:url(/images/themes/aion/top_bg.png) repeat-x;height:40px;}
-.logo-top{background-image:url(/images/themes/aion/logo.png);top:0}
-#navbar{width:950px;margin:0 auto;background:none}
-#navbar a{color:#666}
-#navbar #navwrap {background:none}
-#navbar #navwrap #navmid{background:none}
-#navbar #navsearch .textfield{border-color:#355c1b;background:#fff}
-#navbar #navsearch .gobtn {background:url(/images/themes/aion/go.png) no-repeat;height:20px}
-#navbar #navmain #navmain-title a.current,#navbar #navmain #navmain-title a.current:hover,#navbar #navmain #navmain-title a:hover{background:none}
+.alphaTitle{background:url(/images/themes/aion/alpha-skin.png) no-repeat right -47px;}
+.alphaTitle div.wrap{background:url(/images/themes/aion/alpha-skin.png) no-repeat 0 0;}
+.iArrUnFold{background:url(/images/themes/aion/alpha-skin.png) no-repeat 0 -134px;}
+.iArrFold{background:url(/images/themes/aion/alpha-skin.png) no-repeat -16px -134px;}
 
-#leftsidebar .avatarbox {border-bottom:1px solid #10100f;}
-#leftsidebar .avatarbox a {color:#999}
-.s-dialog a{color:#a05c00}
-.banner{width:100%;background:url(/images/themes/aion/banner_bg.png) repeat-x;}
-.banner .con{width:100%;height:326px;margin:0 auto;background:url(/images/themes/aion/banner.jpg) no-repeat center top;}
-.round_l_t, .round_r_t, .round_l_b, .round_r_b, .round_title_l_t, .round_title_r_t {background-image:none;}
-.round_m{background:transparent;border:0}
-.round_l_b{padding:0}
-.round02 .round_l_b,.round04 .round_l_b{padding:0 0 6px}
-#page{background:url(/images/themes/aion/body_bg.jpg) repeat-y center 0;width:100%;margin:0;padding-top:6px} 
-#canvas{width:950px;margin:0 auto;padding-bottom:80px}
-#canvas .tipbar {background:#1b1b1b;border-color:#060606}
-#canvas .canvas_con .multibox .title,#rightsidebar .multibox .title{background:url(/images/themes/aion/title_bg.png) no-repeat;height:32px;line-height:32px;border:0;padding:0 10px;color:#eee}
-#canvas #rightsidebar .multibox .title{background:url(/images/themes/aion/title_bg02.png) no-repeat;}
-.multibox .title a{color:#eee}
-.bookbox h3{color:#8c8c8c}
+.alphaPage .pageSkinV2{background-image:url(/images/themes/aion/page-bg-alpha.png);}
+.alphaPage .pageRoundTop{background-image:url(/images/themes/aion/page-round-alpha.png);}
+.alphaPage .pageRoundBottom{background-image:url(/images/themes/aion/page-round-alpha.png)}
 
-.jl-cutline{background:url(/images/themes/aion/dotline.png) repeat-x center bottom;}
-.arrow-dialog {background:url(/images/themes/aion/roundBoxbg03.png) no-repeat;}
-.round02, .round02 .round_l_t, .round02 .round_l_b, .round02 .round_r_b {background-image:url(/images/themes/aion/roundBoxbg02.png);}
-.round04, .round04 .round_l_t, .round04 .round_l_b, .round04 .round_r_b {background-image:url(/images/themes/aion/roundBoxbg04.png);}
-.round02 .round_m {background:#1c1c1a;border-left:1px solid #181817;border-right:1px solid #181817;margin:0 -6px 0 0;color:#a05c00}
-.round04 .round_m {background:#262626;border-left:1px solid #161615;border-right:1px solid #161615;margin:0 -6px 0 0}
-.feed-list-box h4 {background:url(/images/themes/aion/date-cutline.png) repeat-x;}
-.feed-list-box h4 span{background:#1B1B1B}
-a.jl-more {background:url(/images/themes/aion/arr-more.gif) no-repeat;color:#a05c00}
-.jl-my-gold .green {color:#df6505;}
-.button,.button span {background-image:url(/images/themes/aion/btns01.png);}
-.button span button{color:#9b9b9a}
-.bookbox .textarea-wrap .textarea-wide textarea {background:url(/images/themes/aion/textarea_bg.jpg) no-repeat right -70px;border:1px solid #000}
-.multibox .diary-box {border-bottom:1px dashed #4d4d4d;}
-.feed-img-list {border-top:1px dashed #5d5d5d;}
-#footer{background:url(/images/themes/aion/bottom_bd.png) repeat-x;width:100%;padding:30px 0;line-height:22px}
+.alphaContent .moreGame a {background:url(/images/themes/aion/alpha-skin.png) no-repeat 0 -92px;}
 
+#footer,#footer a{color:#fff}

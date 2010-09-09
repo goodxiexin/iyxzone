@@ -1,0 +1,15 @@
+﻿body.themeBg{background:#fdfffe url(body-bg.jpg) no-repeat center 0;}
+.alphaHeader{background-image:url(alpha-header.png);}
+
+.alphaTitle{background:url(alpha-skin.png) no-repeat right -47px;}
+.alphaTitle div.wrap{background:url(alpha-skin.png) no-repeat 0 0;}
+.iArrUnFold{background:url(alpha-skin.png) no-repeat 0 -134px;}
+.iArrFold{background:url(alpha-skin.png) no-repeat -16px -134px;}
+
+.alphaPage .pageSkinV2{background-image:url(page-bg-alpha.png);}
+.alphaPage .pageRoundTop{background-image:url(page-round-alpha.png);}
+.alphaPage .pageRoundBottom{background-image:url(page-round-alpha.png)}
+
+.alphaContent .moreGame a {background:url(alpha-skin.png) no-repeat 0 -92px;}
+
+#footer,#footer a{color:#333}

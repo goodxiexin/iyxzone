@@ -1,5 +1,5 @@
 <% content_for :body do %>
-<body>
+<body class='themeBg' style="background-position:0 168px">
   <div class='theme-head'>
     <div class="wrap">
 		  <div class="theme-center">
@@ -11,40 +11,83 @@
     </div>
   </div>
   <div class='theme-body'>
-    <%= render :partial => 'layouts/navbar' %>
-    <div class='banner'>
-      <div class='con'></div>
-      <div class='foot'></div>
-    </div>
-    <div id="page">
-      <div id="canvas" class="round_r_t"><div class="round_l_t"><div class="round_r_b"><div class="round_l_b">
-        <div class="round_m"><div class="round_body canvas_wrap s_clear">
-          <div id="leftsidebar" class="canvas_l">
-            <%= yield :left %>
-          </div>
-          <div class="canvas_main"><div class="canvas_main_c s_clear">
-            <div class="canvas_m">
-              <div class="canvas_c">
-              <% flash.each do |key, msg| %>
-                <div class="<%=key%>-msg" id="notice_<%=key%>">
-                  <span class="icon-<%= key %>"></span>
-                  <%= msg %>
-                </div>
-                <script type="text/javascript">
-                  setTimeout("new Effect.Fade('notice_<%= key %>');", 5000);
-                </script>
+    <div id="header" class="alphaHeader">
+      <div id="navbar">
+        <div id="navwrap">
+          <div id="navmid">
+          <%= link_to '', home_url(), :class => "logo-top png", :title => "17gaming" %>
+            <div id="navmain">
+              <ul id="navmain-title">
+                <li><%= link_to '<span id="navhome">首页</span>', home_url %></li>
+                <li><%= link_to '<span id="navprofile">个人主页</span>', profile_url(current_user.profile)  %></li>
+                <li><%= link_to '<span id="navfriend">好友</span>', friends_url  %></li>
+                <% unread_mails_count = current_user.unread_recv_mails.count %>
+                <% if unread_mails_count == 0 %>
+                <li><%= link_to '<span id="navinbox">站内信</span>', mails_url(:type => 1) %></li>
+                <% else %>
+                <li><%= link_to "<span id='navinbox'>站内信<em class='notice-bubble'><strong>#{unread_mails_count}</strong></em></span>", mails_url(:type => 1) %></li>
+                <% end %>
+                <% notifications_count = current_user.notifications.unread.count %> 
+                <% if notifications_count == 0 %>
+                <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知</span>", "", :id => "notifications_link" %>
+                <% else %>
+                  <li style="position:relative"><%= link_to_function "<span id='navnotice'>通知<em class='notice-bubble'><strong>#{notifications_count}</strong></em></span>", "", :id => "notifications_link" %>
+                <% end %>
+                  <div class="drop-box" id='notifications_dropdown' style="display:none">
+                    <div id="notice-wrap">
+                      <dl class="con s_clear" id='notifications_dropdown_list'></dl>
+                      <div class="foot">
+                        <%= link_to "查看全部", notifications_url %>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div id="navsearch">
+              <% form_tag search_users_url, :onsubmit => "window.location.href = this.action + '?' + $(this).serialize();return false;" do %>
+                <div class="textfield"><%= text_field_tag 'key', "搜索您的好友吧", :onfocus => "$('key').clear()" %></div>
+                <input type="submit" class="gobtn" value="" />
               <% end %>
-              <%= yield %>
-              </div>
             </div>
-            <div id="rightsidebar" class="canvas_r">
-              <%= yield :right %>
+            <div id="navextra">
+              <ul>
+                <li><%= link_to "邀请", signup_invitations_url %></li>
+                <li><%= link_to_function "设置", "", :id => "settings_link" %>
+                  <div class='box01 set-box' id='settings_dropdown' style="display:none">
+                    <%= link_to "隐私设置", privacy_setting_url, :class => "blk" %>
+                    <%= link_to "密码设置", edit_password_setting_url, :class => "blk" %>
+                    <%= link_to "应用设置", application_setting_url, :class => "blk nobd"%>
+                  </div>
+                </li>   
+                <li><%= link_to "退出", logout_url %></li>
+              </ul>
             </div>
-          </div></div>
-        </div></div>
-      </div></div></div></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <%= render :partial => 'layouts/footer' %>
+<%= javascript_tag "
+  new Iyxzone.Menu.AjaxDropdown('notifications_link', 'notifications_dropdown', 'notifications_dropdown_list', '#{first_five_notifications_url}');
+  new Iyxzone.Menu.Dropdown('settings_link', 'settings_dropdown');
+" %>
+    <div class="alphaPage">
+      <div class="pageRoundTop"></div>
+      <div class="pageSkinV2 fix">
+        <div class="sideBar alphaSide">
+			  	<%= yield :left %>
+				</div>
+        <div class="mainWrap">
+					<div class="mainContent alphaContent">
+						<%= yield %>
+					</div>
+				</div>
+			</div>
+			<div class="pageRoundBottom"></div>
+		</div>
+
+  <%= render :partial => 'layouts/imbar' %>
+  <%= render :partial => 'layouts/footer' %>
   </div>
 </body>
 <% end -%>

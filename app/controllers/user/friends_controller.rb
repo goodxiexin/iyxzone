@@ -16,9 +16,16 @@ class User::FriendsController < UserBaseController
     end
   end
 
+  # 游戏名人是不会有这个页面的，因为他们是名人，所有人可访问他们的主页
   def new
 		@common_friends = @user.common_friends_with(current_user).sort_by{rand}[0..7]
-    render :action => 'new', :layout => 'app2'
+    @friends = @user.friends.limit(8)
+		@guilds = @user.all_guilds.limit(3)
+    @skin = @profile.skin
+    @viewings = @profile.viewings.limit(8)
+    @messages = @profile.comments.nonblocked.paginate :page => params[:page], :per_page => 10
+    @remote = {:update => 'comments', :url => {:controller => 'user/wall_messages', :action => 'index', :wall_id => @profile.id, :wall_type => 'Profile'}}
+    render :action => 'new', :layout => 'app4'
   end
 
   def other
